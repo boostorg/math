@@ -450,7 +450,7 @@ namespace boost
                                         static_cast<T>(rhs.R_component_2()),
                                         static_cast<T>(rhs.R_component_3()),
                                         static_cast<T>(rhs.R_component_4())));
-            };
+            }
         }
         
         
