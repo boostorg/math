@@ -14,6 +14,17 @@
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/math/special_functions/sinhc.hpp>
 
+#include <boost/config.hpp>
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std {
+    using ::abs;
+    using ::tanh;
+    using ::log;
+    using ::sinh;
+    using ::sin;
+    using ::sqrt;
+}
+#endif
 
 #define BOOST_INCLUDE_MAIN  // for testing, include rather than link
 #include <boost/test/test_tools.hpp>

@@ -13,6 +13,15 @@
 
 #include <boost/math/quaternion.hpp>
 
+#include <boost/config.hpp>
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std {
+    using ::sqrt;
+    using ::atan;
+    using ::log;
+    using ::exp;
+}
+#endif
 
 // explicit (if ludicrous) instanciation
 #ifndef __GNUC__
