@@ -78,9 +78,14 @@ big_whole  operator &amp;( big_whole const &amp;lhs, big_whole const &amp;rhs );
 big_whole  operator |( big_whole const &amp;lhs, big_whole const &amp;rhs );
 big_whole  operator ^( big_whole const &amp;lhs, big_whole const &amp;rhs );
 
-big_whole &amp;  operator &amp;=( big_whole &amp;lhs, big_whole const &amp;rhs );
-big_whole &amp;  operator |=( big_whole &amp;lhs, big_whole const &amp;rhs );
-big_whole &amp;  operator ^=( big_whole &amp;lhs, big_whole const &amp;rhs );
+big_whole  operator &gt;&gt;( big_whole const &amp;value, big_whole const &amp;shift );
+big_whole  operator &lt;&lt;( big_whole const &amp;value, big_whole const &amp;shift );
+
+big_whole &amp;  operator  &amp;=( big_whole &amp;lhs, big_whole const &amp;rhs );
+big_whole &amp;  operator  |=( big_whole &amp;lhs, big_whole const &amp;rhs );
+big_whole &amp;  operator  ^=( big_whole &amp;lhs, big_whole const &amp;rhs );
+big_whole &amp;  operator &gt;&gt;=( big_whole &amp;lhs, big_whole const &amp;rhs );
+big_whole &amp;  operator &lt;&lt;=( big_whole &amp;lhs, big_whole const &amp;rhs );
 
 }
 }
@@ -400,12 +405,20 @@ boost::math::swap( boost::math::big_whole &amp;a, boost::math::big_whole &amp;b 
 	    <code>boost::math::big_whole  boost::math::operator |( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
 	    <code>boost::math::big_whole  boost::math::operator ^( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
 	<dd>
-		<strong>Returns:</strong> for each operator <var>$$</var>, an object <var>x</var>, where each bit <var>x<sub>i</sub></var> has the value <code><var>lhs<sub>i</sub></var> <var>$$</var> <var>rhs<sub>i</sub></var></code><br>
+		<strong>Returns:</strong> for each operator <var>$$</var>, an object <var>x</var>, where each bit <var>x<sub>i</sub></var> has the value <code><var>lhs<sub>i</sub></var> <var>$$</var> <var>rhs<sub>i</sub></var></code> (<var>&amp;</var> represents AND, <var>|</var> for OR, and <var>^</var> for EXCLUSIVE-OR)<br>
+		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
+
+	<dt><code>boost::math::big_whole  boost::math::operator &gt;&gt;( boost::math::big_whole const &amp;value, boost::math::big_whole const &amp;shift );</code><br>
+	    <code>boost::math::big_whole  boost::math::operator &lt;&lt;( boost::math::big_whole const &amp;value, boost::math::big_whole const &amp;shift );</code>
+	<dd>
+		<strong>Returns:</strong> <var>value</var> * 2<sup><var>x</var></sup>, where <var>x</var> is -<var>shift</var> for the left-shift operator (<var>&gt;&gt;</var>) and +<var>shift</var> for the right-shift operator (<var>&lt;&lt;</var>)<br>
 		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
 
 	<dt><code>boost::math::big_whole &amp;  boost::math::operator &amp;=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
 	    <code>boost::math::big_whole &amp;  boost::math::operator |=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
-	    <code>boost::math::big_whole &amp;  boost::math::operator ^=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
+	    <code>boost::math::big_whole &amp;  boost::math::operator ^=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>boost::math::big_whole &amp;  boost::math::operator &gt;&gt;=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>boost::math::big_whole &amp;  boost::math::operator &lt;&lt;=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
 	<dd>
 		<strong>Effects:</strong> for <code>operator <var>$$</var>=</code>, calls <code><var>lhs</var> = <var>lhs</var> <var>$$</var> <var>rhs</var></code><br>
 		<strong>Returns:</strong> <var>lhs</var>
@@ -526,7 +539,7 @@ boost::math::operator &gt;&gt;( std::basic_istream&lt;Ch, Tr&gt; &amp;is, boost:
 
 <hr>
 
-<p>Revised: 9 February 2004</p>
+<p>Revised: 11 February 2004</p>
 
 <p>Copyright 2004 Daryle Walker.  Use, modification, and distribution are subject to the Boost Software License, Version 1.0.  (See accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at &lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)</p>
 </body>

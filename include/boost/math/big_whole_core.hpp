@@ -17,6 +17,7 @@
 #include <cstddef>    // for NULL, std::size_t
 #include <limits>     // for std::numeric_limits
 #include <memory>     // for std::auto_ptr
+#include <stdexcept>  // for std::underflow_error, std::overflow_error
 #include <valarray>   // for std::valarray, std::slice
 
 
@@ -45,9 +46,14 @@ big_whole  operator &( big_whole const &lhs, big_whole const &rhs );
 big_whole  operator |( big_whole const &lhs, big_whole const &rhs );
 big_whole  operator ^( big_whole const &lhs, big_whole const &rhs );
 
-big_whole &  operator &=( big_whole &lhs, big_whole const &rhs );
-big_whole &  operator |=( big_whole &lhs, big_whole const &rhs );
-big_whole &  operator ^=( big_whole &lhs, big_whole const &rhs );
+big_whole  operator >>( big_whole const &value, big_whole const &shift );
+big_whole  operator <<( big_whole const &value, big_whole const &shift );
+
+big_whole &  operator  &=( big_whole &lhs, big_whole const &rhs );
+big_whole &  operator  |=( big_whole &lhs, big_whole const &rhs );
+big_whole &  operator  ^=( big_whole &lhs, big_whole const &rhs );
+big_whole &  operator >>=( big_whole &lhs, big_whole const &rhs );
+big_whole &  operator <<=( big_whole &lhs, big_whole const &rhs );
 
 
 //  Arbitrary-length whole-number object class declaration  ------------------//
@@ -152,9 +158,11 @@ protected:
 
 private:
     // The non-assignment operators are the primary routines
-    friend  self_type operator &( self_type const &lhs, self_type const &rhs );
-    friend  self_type operator |( self_type const &lhs, self_type const &rhs );
-    friend  self_type operator ^( self_type const &lhs, self_type const &rhs );
+    friend  self_type operator  &( self_type const &, self_type const & );
+    friend  self_type operator  |( self_type const &, self_type const & );
+    friend  self_type operator  ^( self_type const &, self_type const & );
+    friend  self_type operator >>( self_type const &, self_type const & );
+    friend  self_type operator <<( self_type const &, self_type const & );
 
     // More member types
     enum bit_operation { reset_bit, set_bit, flip_bit };
@@ -1230,6 +1238,150 @@ operator ^
     }
 }
 
+big_whole
+operator >>
+(
+    big_whole const &  value,
+    big_whole const &  shift
+)
+{
+    typedef big_whole::size_type              size_type;
+    typedef std::numeric_limits<size_type>  size_limits;
+    typedef big_whole::limits_type          limits_type;
+    typedef big_whole::va_type                  va_type;
+    typedef big_whole::word_type              word_type;
+
+    if ( size_type const  vl = value.length() )
+    {
+        size_type const  sl = shift.length();
+
+        if ( !sl )
+        {
+            return value;
+        }
+        else if ( sl > static_cast<size_type>(size_limits::digits) )
+        {
+            throw std::underflow_error( "shift amount too large" );
+        }
+        else
+        {
+            size_type const  ss = shift.to_uintmax();
+
+            if ( ss >= vl )
+            {
+                return big_whole();
+            }
+            else
+            {
+                using std::slice;
+
+                big_whole        temp;
+                size_type const  si = ss / limits_type::digits;
+                size_type const  sj = ss % limits_type::digits;
+                va_type const &  v = *value.x_;
+                va_type          major_shift = v[ slice(si, v.size() - si, 1) ];
+
+                if ( sj )
+                {
+                    word_type const   upper_mask = limits_type::max() >> sj;
+                    va_type          minor_shift = major_shift.shift( 1 );
+
+                    major_shift >>= sj;
+                    minor_shift <<= limits_type::digits - sj;
+
+                    major_shift &= upper_mask;
+                    minor_shift &= ~upper_mask;
+
+                    major_shift |= minor_shift;
+                }
+
+                temp.x_.reset( new va_type(major_shift[ slice(0,
+                 big_whole::wlength(major_shift), 1) ]) );
+
+                return temp;
+            }
+        }
+    }
+    else
+    {
+        return value;
+    }
+}
+
+big_whole
+operator <<
+(
+    big_whole const &  value,
+    big_whole const &  shift
+)
+{
+    typedef big_whole::size_type              size_type;
+    typedef std::numeric_limits<size_type>  size_limits;
+    typedef big_whole::limits_type          limits_type;
+    typedef big_whole::va_type                  va_type;
+    typedef big_whole::word_type              word_type;
+
+    if ( size_type const  vl = value.length() )
+    {
+        size_type const  sl = shift.length();
+        char const       error_msg[] = "shift amount too large";
+
+        if ( !sl )
+        {
+            return value;
+        }
+        else if ( sl > static_cast<size_type>(size_limits::digits) )
+        {
+            throw std::overflow_error( error_msg );
+        }
+        else
+        {
+            size_type const  ss = shift.to_uintmax();
+
+            if ( ss > size_limits::max() - vl )
+            {
+                throw std::overflow_error( error_msg );
+            }
+            else
+            {
+                using std::slice;
+
+                big_whole        temp;
+                size_type const  vw = big_whole::words_for_bits( vl );
+                size_type const  si = ss / limits_type::digits;
+                size_type const  sj = ss % limits_type::digits;
+                va_type const &  v = *value.x_;
+                va_type          major_shift( vw + si + (0 != sj) );
+
+                major_shift[ slice(si, vw, 1) ] = v[ slice(0, vw, 1) ];
+
+                if ( sj )
+                {
+                    word_type const   lower_mask = ( 1u << sj ) - 1;
+                    va_type          minor_shift = major_shift.shift( -1 );
+
+                    major_shift <<= sj;
+                    minor_shift >>= limits_type::digits - sj;
+
+                    major_shift &= ~lower_mask;
+                    minor_shift &= lower_mask;
+
+                    major_shift |= minor_shift;
+                }
+
+                temp.x_.reset( new va_type(major_shift[ slice(0,
+                 big_whole::wlength(major_shift), 1) ]) );
+
+                return temp;
+            }
+        }
+    }
+    else
+    {
+        return value;
+    }
+}
+
 #define BOOST_PRIVATE_MIXED_ASSIGN_OP( Op )  \
     inline                                   \
     big_whole &                              \
@@ -1245,6 +1397,8 @@ operator ^
 BOOST_PRIVATE_MIXED_ASSIGN_OP( & )
 BOOST_PRIVATE_MIXED_ASSIGN_OP( | )
 BOOST_PRIVATE_MIXED_ASSIGN_OP( ^ )
+BOOST_PRIVATE_MIXED_ASSIGN_OP( >> )
+BOOST_PRIVATE_MIXED_ASSIGN_OP( << )
 
 #undef BOOST_PRIVATE_MIXED_ASSIGN_OP
 

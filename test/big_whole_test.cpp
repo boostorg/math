@@ -7,7 +7,7 @@
 //  See <http://www.boost.org/libs/math/> for the library's home page.
 
 //  Revision History
-//   09 Feb 2004  Initial version (Daryle Walker)
+//   11 Feb 2004  Initial version (Daryle Walker)
 
 #include <boost/math/big_whole.hpp>  // for boost::math::big_whole, etc.
 #include <boost/test/unit_test.hpp>  // for main, BOOST_CHECK_EQUAL, etc.
@@ -274,6 +274,9 @@ bigwhole_reverse_unit_test
 )
 {
     using boost::math::big_whole;
+    using std::size_t;
+
+    typedef std::valarray<size_t>  va_size_t;
 
     // Non-zero tests
     big_whole const  x1( 1 );
@@ -321,6 +324,22 @@ bigwhole_reverse_unit_test
     BOOST_CHECK( !x4.reverse() );
     BOOST_CHECK( !x4.reverse(0) );
     BOOST_CHECK( !x4.reverse(2 * wlimits_type::digits) );
+
+    // Multi-word tests
+    size_t const     x5_i[] = { wlimits_type::digits - 1, wlimits_type::digits + 1 };
+    size_t const     x5_s = sizeof( x5_i ) / sizeof( x5_i[0] );
+    va_size_t const  x5_v( x5_i, x5_s );
+    big_whole        x5( x5_v );
+
+    BOOST_CHECK_EQUAL( 5u, x5.reverse().to_uintmax() );
+
+    BOOST_CHECK_EQUAL( 5u, x5.reverse(wlimits_type::digits + 1).to_uintmax() );
+    BOOST_CHECK_EQUAL( 2u, x5.reverse(wlimits_type::digits).to_uintmax() );
+    BOOST_CHECK_EQUAL( 1u, x5.reverse(wlimits_type::digits - 1).to_uintmax() );
+    BOOST_CHECK_EQUAL( 0u, x5.reverse(wlimits_type::digits - 2).to_uintmax() );
+    BOOST_CHECK_EQUAL( 0u, x5.reverse(wlimits_type::digits - 3).to_uintmax() );
+    BOOST_CHECK_EQUAL( 10u, x5.reverse(wlimits_type::digits + 2).to_uintmax() );
+    BOOST_CHECK_EQUAL( 20u, x5.reverse(wlimits_type::digits + 3).to_uintmax() );
 }
 
 // Unit test for resetting every bit
@@ -1326,6 +1345,149 @@ bigwhole_bitwise_xor_unit_test
     BOOST_CHECK_EQUAL( de, d ^ e ); BOOST_CHECK_EQUAL( ed, e ^ d );
 }
 
+// Unit test for left-shift (value-decreasing)
+void
+bigwhole_left_shift_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::size_t;
+
+    typedef std::valarray<size_t>  va_size_t;
+
+    size_t const     ei[] = { wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const     es = sizeof( ei ) / sizeof( ei[0] );
+    va_size_t const  ev( ei, es );
+    size_t const     e1i[] = { 1, wlimits_type::digits + 3 };
+    size_t const     e1s = sizeof( e1i ) / sizeof( e1i[0] );
+    va_size_t const  e1v( e1i, e1s );
+    size_t const     fi[] = { 1, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 2 };
+    size_t const     fs = sizeof( fi ) / sizeof( fi[0] );
+    va_size_t const  fv( fi, fs );
+
+    big_whole const  z;
+    big_whole const  a( 1 );
+    big_whole const  b( 5 );
+    big_whole const  c( 10 );
+    big_whole const  d( 100 );
+    big_whole const  e( ev ), e1( e1v );
+    big_whole const  f( fv );
+
+    // shifting zero
+    BOOST_CHECK( !(z >> z) );
+    BOOST_CHECK( !(z >> a) );
+    BOOST_CHECK( !(z >> d) );
+
+    // zero-shift
+    BOOST_CHECK_EQUAL( z, z >> z );
+    BOOST_CHECK_EQUAL( a, a >> z );
+    BOOST_CHECK_EQUAL( b, b >> z );
+    BOOST_CHECK_EQUAL( c, c >> z );
+    BOOST_CHECK_EQUAL( d, d >> z );
+    BOOST_CHECK_EQUAL( e, e >> z );
+    BOOST_CHECK_EQUAL( f, f >> z );
+
+    // single-word shifts
+    BOOST_CHECK_EQUAL( z, a >> a );
+
+    BOOST_CHECK_EQUAL( z, b >> 3 );
+    BOOST_CHECK_EQUAL( a, b >> 2 );
+    BOOST_CHECK_EQUAL( 2, b >> 1 );
+
+    BOOST_CHECK_EQUAL( b, c >> 1 );
+    BOOST_CHECK_EQUAL( 2, c >> 2 );
+    BOOST_CHECK_EQUAL( a, c >> 3 );
+    BOOST_CHECK_EQUAL( z, c >> 4 );
+
+    BOOST_CHECK_EQUAL( 50, d >> 1 );
+    BOOST_CHECK_EQUAL( 25, d >> 2 );
+    BOOST_CHECK_EQUAL( 12, d >> 3 );
+    BOOST_CHECK_EQUAL( 6, d >> 4 );
+    BOOST_CHECK_EQUAL( 3, d >> 5 );
+    BOOST_CHECK_EQUAL( a, d >> 6 );
+    BOOST_CHECK_EQUAL( z, d >> 7 );
+
+    // over shifts
+    BOOST_CHECK_EQUAL( z, a >> 4 );
+    BOOST_CHECK_EQUAL( z, b >> 10 );
+    BOOST_CHECK_EQUAL( z, c >> 25 );
+    BOOST_CHECK_EQUAL( z, d >> 1000 );
+    BOOST_CHECK_EQUAL( z, e >> (3 * wlimits_type::digits) );
+    BOOST_CHECK_EQUAL( z, f >> (2 * wlimits_type::digits) );
+
+    // multi-word shifts
+    BOOST_CHECK_EQUAL( e1, e >> wlimits_type::digits );
+    BOOST_CHECK_EQUAL( 8, e >> (2 * wlimits_type::digits) );
+    BOOST_CHECK_EQUAL( 4, e1 >> (wlimits_type::digits + 1) );
+    BOOST_CHECK_EQUAL( b, f >> wlimits_type::digits );
+    BOOST_CHECK_EQUAL( 11, f >> (wlimits_type::digits - 1) );
+}
+
+// Unit test for right-shift (value-increasing)
+void
+bigwhole_right_shift_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::size_t;
+
+    typedef std::valarray<size_t>  va_size_t;
+
+    size_t const     ei[] = { wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const     es = sizeof( ei ) / sizeof( ei[0] );
+    va_size_t const  ev( ei, es );
+    size_t const     e1i[] = { 1, wlimits_type::digits + 3 };
+    size_t const     e1s = sizeof( e1i ) / sizeof( e1i[0] );
+    va_size_t const  e1v( e1i, e1s );
+    size_t const     fi[] = { 1, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 2 };
+    size_t const     fs = sizeof( fi ) / sizeof( fi[0] );
+    va_size_t const  fv( fi, fs );
+
+    big_whole const  z;
+    big_whole const  a( 1 );
+    big_whole const  b( 5 );
+    big_whole const  c( 10 );
+    big_whole const  d( 100 );
+    big_whole const  e( ev ), e1( e1v );
+    big_whole const  f( fv );
+
+    // shifting zero
+    BOOST_CHECK( !(z << z) );
+    BOOST_CHECK( !(z << a) );
+    BOOST_CHECK( !(z << d) );
+
+    // zero-shift
+    BOOST_CHECK_EQUAL( z, z << z );
+    BOOST_CHECK_EQUAL( a, a << z );
+    BOOST_CHECK_EQUAL( b, b << z );
+    BOOST_CHECK_EQUAL( c, c << z );
+    BOOST_CHECK_EQUAL( d, d << z );
+    BOOST_CHECK_EQUAL( e, e << z );
+    BOOST_CHECK_EQUAL( f, f << z );
+
+    // single-word shifts
+    BOOST_CHECK_EQUAL( 2, a << a );
+    BOOST_CHECK_EQUAL( 32, a << b );
+
+    BOOST_CHECK_EQUAL( c, b << a );
+    BOOST_CHECK_EQUAL( 20, b << 2 );
+    BOOST_CHECK_EQUAL( 160, b << b );
+
+    BOOST_CHECK_EQUAL( 20, c << a );
+    BOOST_CHECK_EQUAL( 320, c << b );
+    BOOST_CHECK_EQUAL( 10240, c << c );
+
+    BOOST_CHECK_EQUAL( 200, d << a );
+    BOOST_CHECK_EQUAL( 3200, d << b );
+    BOOST_CHECK_EQUAL( 102400ul, d << c );
+
+    // multi-word shifts
+    BOOST_CHECK_EQUAL( e, e1 << wlimits_type::digits );
+    BOOST_CHECK_EQUAL( 2 | (( a | c ) << ( wlimits_type::digits - 1 )), f );
+}
+
 
 // Unit test program
 boost::unit_test_framework::test_suite *
@@ -1357,6 +1519,9 @@ init_unit_test_suite
     test->add( BOOST_TEST_CASE(bigwhole_bitwise_and_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_bitwise_or_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_bitwise_xor_unit_test) );
+
+    test->add( BOOST_TEST_CASE(bigwhole_left_shift_unit_test) );
+    test->add( BOOST_TEST_CASE(bigwhole_right_shift_unit_test) );
 
     return test;
 }
