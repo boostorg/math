@@ -50,7 +50,7 @@ R4_matrix<TYPE_FLOAT>    quaternions_to_R4_rotation(::std::pair< ::boost::math::
     if    (norme_carre0 <= numeric_limits<TYPE_FLOAT>::epsilon())
     {
         ::std::string            error_reporting("Argument to quaternions_to_R4_rotation is too small!");
-        ::std::underflow_error    bad_argument(error_reporting);
+        ::std::underflow_error   bad_argument(error_reporting);
         
         throw(bad_argument);
     }
@@ -65,7 +65,7 @@ R4_matrix<TYPE_FLOAT>    quaternions_to_R4_rotation(::std::pair< ::boost::math::
     if    (norme_carre1 <= numeric_limits<TYPE_FLOAT>::epsilon())
     {
         ::std::string            error_reporting("Argument to quaternions_to_R4_rotation is too small!");
-        ::std::underflow_error    bad_argument(error_reporting);
+        ::std::underflow_error   bad_argument(error_reporting);
         
         throw(bad_argument);
     }
@@ -149,7 +149,7 @@ template<typename TYPE_FLOAT>
     if    (!is_R4_rotation_matrix(rot))
     {
         ::std::string        error_reporting("Argument to R4_rotation_to_quaternions is not an R^4 rotation matrix!");
-        ::std::range_error    bad_argument(error_reporting);
+        ::std::range_error   bad_argument(error_reporting);
         
         throw(bad_argument);
     }

@@ -6,22 +6,23 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 
 
-#define BOOST_INCLUDE_MAIN  // for testing, include rather than link
-#include <boost/test/test_tools.hpp>
-
-
-#include <boost/config.hpp>
+#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_suite_ex.hpp>
 
 #include "quaternion_mi1.h"
 #include "quaternion_mi2.h"
 
-int    test_main(int, char *[])
 
+boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
 {
+    ::boost::unit_test_framework::unit_test_log::instance().
+            set_log_threshold_level_by_name("messages");
     
-    quaternion_mi1();
+    boost::unit_test_framework::test_suite *    test =
+        BOOST_TEST_SUITE("quaternion_multiple_inclusion_test");
     
-    quaternion_mi2();
+    test->add(BOOST_TEST_CASE(&quaternion_mi1));
+    test->add(BOOST_TEST_CASE(&quaternion_mi2));
     
-    return(::boost::exit_success);
+    return(test);
 }

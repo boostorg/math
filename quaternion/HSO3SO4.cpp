@@ -16,7 +16,7 @@
 
 const int    number_of_intervals = 5;
 
-const float  pi = ::std::atan(1.0f)*4;
+const float    pi = ::std::atan(1.0f)*4;
 
 
 
@@ -45,7 +45,7 @@ void    test_SO3_spherical()
     ::std::cout << "Testing spherical:" << ::std::endl;
     ::std::cout << ::std::endl;
     
-    const float  rho = 1.0f;
+    const float    rho = 1.0f;
     
     float        theta;
     float        phi1;
@@ -101,7 +101,7 @@ void    test_SO3_semipolar()
     ::std::cout << "Testing semipolar:" << ::std::endl;
     ::std::cout << ::std::endl;
     
-    const float  rho = 1.0f;
+    const float    rho = 1.0f;
     
     float        alpha;
     float        theta1;
@@ -349,8 +349,8 @@ void    test_SO4_spherical()
     ::std::cout << "Testing spherical:" << ::std::endl;
     ::std::cout << ::std::endl;
     
-    const float  rho1 = 1.0f;
-    const float  rho2 = 1.0f;
+    const float    rho1 = 1.0f;
+    const float    rho2 = 1.0f;
     
     float        theta1;
     float        phi11;

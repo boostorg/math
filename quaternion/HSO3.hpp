@@ -417,7 +417,7 @@ inline bool                                is_R3_rotation_matrix(R3_matrix<TYPE_
 
 
 template<typename TYPE_FLOAT>
-::boost::math::quaternion<TYPE_FLOAT>    R3_rotation_to_quaternion( R3_matrix<TYPE_FLOAT> const & rot,
+::boost::math::quaternion<TYPE_FLOAT>    R3_rotation_to_quaternion(    R3_matrix<TYPE_FLOAT> const & rot,
                                                                     ::boost::math::quaternion<TYPE_FLOAT> const * hint = 0)
 {
     using    ::boost::math::abs;

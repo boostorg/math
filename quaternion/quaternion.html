@@ -22,6 +22,7 @@
 			<li><a href="#Other member functions"><code>quaternion</code> value operations</a>
 			<li><a href="#quaternion transcendentals"><code>quaternion</code> transcendentals</a>
 			<li><a href="#History">History</a>
+			<li><a href="#ToDo">To Do</a>
 		</ul>
 		<p></p>
 		<p>Quaternions are a relative of complex numbers.</p>
@@ -30,19 +31,14 @@
 		<p><font color="#000000">In practical terms, a quaternion is simply a quadruple of real numbers <img src="graphics/quaternion_blurb.html12.jpeg" width="52" height="16" naturalsizeflag="3" align=absmiddle></font><font color="#000000">, which we can write in the form <img src="graphics/quaternion_blurb.html13.jpeg" width="104" height="14" naturalsizeflag="3" align=absmiddle></font><font color="#000000">, where <img src="graphics/quaternion_blurb.html14.jpeg" width="6" height="11" naturalsizeflag="3" align=absmiddle></font><font color="#000000"> is the same object as for complex numbers, and <img src="graphics/quaternion_blurb.html15.jpeg" width="8" height="13" naturalsizeflag="3" align=absmiddle></font><font color="#000000"> and <img src="graphics/quaternion_blurb.html16.jpeg" width="9" height="12" naturalsizeflag="3" align=absmiddle></font><font color="#000000"> are distinct objects which play essentially the same kind of role as <img src="graphics/quaternion_blurb.html17.jpeg" width="6" height="11" naturalsizeflag="3" align=absmiddle></font><font color="#000000">.</font></p>
 		<p><font color="#000000">An addition and a multiplication is defined on the set of quaternions, which generalize their real and complex counterparts. The main novelty here is that <strong>the multiplication is not commutative</strong> (<cite>i.e.</cite> there are quaternions <img src="graphics/quaternion_blurb.html18.jpeg" width="9" height="9" naturalsizeflag="3" align=absmiddle></font><font color="#000000"> and <img src="graphics/quaternion_blurb.html19.jpeg" width="9" height="11" naturalsizeflag="3" align=absmiddle></font><font color="#000000"> such that <img src="graphics/quaternion_blurb.html20.jpeg" width="43" height="12" naturalsizeflag="3" align=absmiddle></font><font color="#000000">). A good mnemotechnical way of remembering things is by using the formula <img src="graphics/quaternion_blurb.html21.jpeg" width="111" height="14" naturalsizeflag="3" align=absmiddle></font><font color="#000000">.</font></p>
 		<p><font color="#000000">Quaternions (and their kin) are described in far more details in this other <a href="TQE.pdf">document</a> (with <a href="TQE_EA.pdf">errata and addenda</a>).</font></p>
-		<p><font color="#000000">Some traditional constructs, such as the exponential, carry over without too much change into the realms of quaternions, but other, such as taking a square root, do not (the fact that the exponential has a closed form is a result of the author, but the fact that the exponential exists at all for quaternions is known since quite a long time ago).</font></p>
+		<p><font color="#000000">Some traditional constructs, such as the exponential, carry over without too much change into the realms of quaternions, but other, such as taking a square root, do not.</font></p>
 		<h2><a name="Acknowledgements"></a>Acknowledgements</h2>
 		<p>The mathematical text has been typeset with <a href="http://www.nisus-soft.com/">Nisus Writer</a>. Jens Maurer has helped with portability and standard adherence, and was the Review Manager for this library. More acknowledgements in the History section. Thank you to all who contributed to the discution about this library.</p>
 		<h2><a name="Header File"></a>Header File</h2>
 		<p>The interface and implementation are both supplied by the header file <a href="../../../boost/math/quaternion.hpp">quaternion.h</a>.</p>
 		<h2><a name="Test Program"></a>Test Program</h2>
-		<p>The <a href="quaternion_test.cpp">quaternion_test.cpp</a> test program tests quaternions specializations for float, double and long double (<a href="output.txt">sample output</a>).</p>
-		<p>It has been compiled and runs without error with the following C++ compilers:</p>
-		<blockquote>
-			<ul>
-				<li>MetroWerk's CodeWarrior Pro 6 on a Mac on a PowerPC G3
-			</ul>
-		</blockquote>
+		<p>The <a href="quaternion_test.cpp">quaternion_test.cpp</a> test program tests quaternions specializations for float, double and long double (<a href="output.txt">sample output</a>, with message output enabled).</p>
+		<p>If you define the symbol BOOST_QUATERNION_TEST_VERBOSE, you will get additional output (<a href="output_more.txt">verbose output</a>); this will only be helpfull if you enable message output at the same time, of course (by uncommenting the relevant line in the test or by adding --log_level=messages to your command line,...). In that case, and if you are running interactively, you may in addition define the symbol BOOST_INTERACTIVE_TEST_INPUT_ITERATOR to interactively test the input operator with input of your choice from the standard input (instead of hard-coding it in the test).</p>
 		<h2><a name="Synopsis"></a>Synopsis</h2>
 		<pre><code>namespace boost
 {
@@ -610,7 +606,11 @@ template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<strong>cylindrical</stron
 		</blockquote>
 		<h2><a name="History"></a>History</h2>
 		<ul>
+			<li>1.5.7 - 24/02/2003: transitionned to the unit test framework; &lt;boost/config.hpp&gt; now included by the library header (rather than the test files).
+			<li>1.5.6 - 15/10/2002: Gcc2.95.x and stlport on linux compatibility by Alkis Evlogimenos (alkis@routescience.com).
+
 			<li>1.5.5 - 27/09/2002: Microsoft VCPP 7 compatibility, by Michael Stevens (michael@acfr.usyd.edu.au); requires the /Za compiler option.
+
 			<li>1.5.4 - 19/09/2002: fixed problem with multiple inclusion (in different translation units); attempt at an improved compatibility with Microsoft compilers, by Michael Stevens (michael@acfr.usyd.edu.au) and Fredrick Blomqvist (fredrik@blomqvist.nu); other compatibility fixes.	
 			<li>1.5.3 - 01/02/2002: bugfix and Gcc 2.95.3 compatibility by Douglas Gregor (gregod@cs.rpi.edu).
 
@@ -621,11 +621,20 @@ template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<strong>cylindrical</stron
 			<li>1.5.0 - 26/03/2001: boostification, inlining of all operators except input, output and <code>pow</code>, fixed exception safety of some members (template version) and output operator, added <code>spherical</code>, <code>semipolar</code>, <code>multipolar</code>, <code>cylindrospherical</code> and <code>cylindrical</code>.
 			<li>1.4.0 - 09/01/2001: added <code>tan</code> and <code>tanh</code>.			<li>1.3.1 - 08/01/2001: cosmetic fixes.
 			<li>1.3.0 - 12/07/2000: <code>pow</code> now uses Maarten Hilferink's (mhilferink@tip.nl) algorithm.			<li>1.2.0 - 25/05/2000: fixed the division operators and output; changed many signatures.
-			<li>1.1.0 - 23/05/2000: changed <code>sinc</code> into <code>sinc_pi</code>; added <code>sin</code>, <code>cos</code>, <code>sinh</code>, <code>cosh</code>.			<li>1.0.0 - 10/08/1999: first public version.
+			<li>1.1.0 - 23/05/2000: changed <code>sinc</code> into <code>sinc_pi</code>; added <code>sin</code>, <code>cos</code>, <code>sinh</code>, <code>cosh</code>.	
+			<li>1.0.0 - 10/08/1999: first public version.
+
+		</ul>
+		<h2><a name="ToDo"></a>To Do</h2>
+		<ul>
+			<li>Improve testing.
+			<li>Rewrite input operatore using Spirit (creates a dependency).
+			<li>Put in place an Expression Template mechanism (perhaps borrowing from uBlas).
+			<li>Use uBlas for the link with rotations (and move from the <a href="HSO3SO4.cpp">example</a> implementation to an efficient one).
 		</ul>
 		<hr>
-		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->19 Sep 2002<!--webbot bot="Timestamp" endspan i-checksum="18778" --></p>
-		<p>&copy; Copyright Hubert Holin 2001, 2002. Permission to copy, use, modify, sell and distribute this document is granted provided this copyright notice appears in all copies. This software is provided &quot;as is&quot; without express or implied&nbsp; warranty, and with no claim as to its suitability for any purpose.</p>
+		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->24 Feb 2003<!--webbot bot="Timestamp" endspan i-checksum="18778" --></p>
+		<p>&copy; Copyright Hubert Holin 2001-2003. Permission to copy, use, modify, sell and distribute this document is granted provided this copyright notice appears in all copies. This software is provided &quot;as is&quot; without express or implied&nbsp; warranty, and with no claim as to its suitability for any purpose.</p>
 	</body>
 
 </html>
