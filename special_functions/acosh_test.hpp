@@ -52,11 +52,9 @@ void    acosh_test(const char * more_blurb)
     {
         T    x = static_cast<T>(i-50)/static_cast<T>(5);
         
-        BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-            (
-                acosh_error_evaluator(x),
-                static_cast<T>(4)
-            ));
+        BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+            (acosh_error_evaluator(x))
+            (static_cast<T>(4)));
     }
 }
 

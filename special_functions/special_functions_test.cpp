@@ -79,6 +79,14 @@ boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
 #undef    BOOST_SPECIAL_FUNCTIONS_COMMON_TEST
 
 #undef    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR
+	
+    BOOST_MESSAGE("Results of special functions test.");
+    BOOST_MESSAGE(" ");
+    BOOST_MESSAGE("(C) Copyright Hubert Holin 2003-2005.");
+    BOOST_MESSAGE("Distributed under the Boost Software License, Version 1.0.");
+    BOOST_MESSAGE("(See accompanying file LICENSE_1_0.txt or copy at");
+    BOOST_MESSAGE("http://www.boost.org/LICENSE_1_0.txt)");
+    BOOST_MESSAGE(" ");
     
     
 #ifdef    BOOST_SPECIAL_FUNCTIONS_TEST_VERBOSE

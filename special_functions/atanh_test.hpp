@@ -57,23 +57,17 @@ void    atanh_test(const char * more_blurb)
     BOOST_MESSAGE("Testing atanh in the real domain for "
         << more_blurb << ".");
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(atanh<T>(static_cast<T>(0))),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(atanh<T>(static_cast<T>(0))))
+        (numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(atanh<T>(static_cast<T>(3)/5) - log(static_cast<T>(2))),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(atanh<T>(static_cast<T>(3)/5) - log(static_cast<T>(2))))
+        (numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(atanh<T>(static_cast<T>(-3)/5) + log(static_cast<T>(2))),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(atanh<T>(static_cast<T>(-3)/5) + log(static_cast<T>(2))))
+        (numeric_limits<T>::epsilon()));
     
     for    (int i = 0; i <= 100; i++)
     {
@@ -85,11 +79,9 @@ void    atanh_test(const char * more_blurb)
                 (abs(y+static_cast<T>(1)) >= numeric_limits<T>::epsilon())
             )
         {
-            BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-                (
-                    atanh_error_evaluator(x),
-                    static_cast<T>(4)
-                ));
+            BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+                (atanh_error_evaluator(x))
+                (static_cast<T>(4)));
         }
     }
 }

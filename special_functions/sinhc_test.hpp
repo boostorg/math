@@ -31,11 +31,9 @@ void    sinhc_pi_test(const char * more_blurb)
     BOOST_MESSAGE("Testing sinhc_pi in the real domain for "
         << more_blurb << ".");
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(sinhc_pi<T>(static_cast<T>(0))-static_cast<T>(1)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(sinhc_pi<T>(static_cast<T>(0))-static_cast<T>(1)))
+        (numeric_limits<T>::epsilon()));
 }
 
 
@@ -53,12 +51,10 @@ void    sinhc_pi_complex_test(const char * more_blurb)
     BOOST_MESSAGE("Testing sinhc_pi in the complex domain for "
         << more_blurb << ".");
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(sinhc_pi<T>(::std::complex<T>(0, 1))-
-                ::std::complex<T>(sin(static_cast<T>(1)))),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(sinhc_pi<T>(::std::complex<T>(0, 1))-
+             ::std::complex<T>(sin(static_cast<T>(1)))))
+        (numeric_limits<T>::epsilon()));
 }
 
 
