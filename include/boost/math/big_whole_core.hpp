@@ -156,6 +156,13 @@ protected:
 
     static  int  do_compare( va_type const &lhs, va_type const &rhs );
 
+    static  va_type  do_and( va_type const &lhs, va_type const &rhs );
+    static  va_type  do_or( va_type const &lhs, va_type const &rhs );
+    static  va_type  do_xor( va_type const &lhs, va_type const &rhs );
+
+    static  va_type  do_lshift( va_type const &b, size_type e );
+    static  va_type  do_rshift( va_type const &b, size_type e );
+
 private:
     // The non-assignment operators are the primary routines
     friend  self_type operator  &( self_type const &, self_type const & );
@@ -883,6 +890,137 @@ big_whole::do_compare
     return 0;
 }
 
+big_whole::va_type
+big_whole::do_and
+(
+    big_whole::va_type const &  lhs,
+    big_whole::va_type const &  rhs
+)
+{
+    va_type           temp( std::min(lhs.size(), rhs.size()) );
+    std::slice const  sl( 0, temp.size(), 1 );
+
+    temp  = lhs[ sl ];
+    temp &= rhs[ sl ];
+
+    return temp;
+}
+
+big_whole::va_type
+big_whole::do_or
+(
+    big_whole::va_type const &  lhs,
+    big_whole::va_type const &  rhs
+)
+{
+    using std::slice;
+
+    size_type const  ls = lhs.size();
+    size_type const  rs = rhs.size();
+    va_type          temp( std::max(ls, rs) );
+
+    temp[ slice(0, ls, 1) ]  = lhs;
+    temp[ slice(0, rs, 1) ] |= rhs;
+
+    return temp;
+}
+
+big_whole::va_type
+big_whole::do_xor
+(
+    big_whole::va_type const &  lhs,
+    big_whole::va_type const &  rhs
+)
+{
+    using std::slice;
+
+    size_type const  ls = lhs.size();
+    size_type const  rs = rhs.size();
+    va_type          temp( std::max(ls, rs) );
+
+    temp[ slice(0, ls, 1) ]  = lhs;
+    temp[ slice(0, rs, 1) ] ^= rhs;
+
+    return temp;
+}
+
+big_whole::va_type
+big_whole::do_lshift
+(
+    big_whole::va_type const &  b,
+    std::size_t                 e
+)
+{
+    va_type  temp = b;
+
+    if ( size_type const  ei = e / limits_type::digits )
+    {
+        size_type const  ts = temp.size();
+        size_type const  new_size = ( ei > ts ) ? 0 : ( ts - ei );
+        va_type const    temp1 = temp[ std::slice(ei, new_size, 1) ];
+
+        temp.resize( temp1.size() );
+        temp = temp1;
+    }
+
+    if ( size_type const  ej = e % limits_type::digits )
+    {
+        word_type const  mask = limits_type::max() >> ej;
+        word_type const  rsa = limits_type::digits - ej;
+        va_type const    temp2 = ~mask & ( temp.shift(1) << rsa );
+
+        temp >>= ej;
+        temp &= mask;
+        temp |= temp2;
+    }
+
+    return temp;
+}
+
+big_whole::va_type
+big_whole::do_rshift
+(
+    big_whole::va_type const &  b,
+    std::size_t                 e
+)
+{
+    using std::slice;
+
+    va_type  temp = b;
+
+    if ( size_type const  ej = e % limits_type::digits )
+    {
+        size_type const  ts = temp.size();
+        va_type          temp1( 1 + ts );
+
+        temp1[ slice(0, ts, 1) ] = temp;
+
+        word_type const  mask = ( 1u << ej ) - 1u;
+        word_type const  rsa = limits_type::digits - ej;
+        va_type const    temp2 = mask & ( temp1.shift(-1) >> rsa );
+
+        temp1 <<= ej;
+        temp1 &= ~mask;
+        temp1 |= temp2;
+
+        temp.resize( temp1.size() );
+        temp = temp1;
+    }
+
+    if ( size_type const  ei = e / limits_type::digits )
+    {
+        size_type const  ts = temp.size();
+        va_type          temp3( ei + ts );
+
+        temp3[ slice(ei, ts, 1) ] = temp;
+
+        temp.resize( temp3.size() );
+        temp = temp3;
+    }
+
+    return temp;
+}
+
 
 //  Arbitrary-length whole-number helper member function definitions  --------//
 
@@ -1124,8 +1262,7 @@ operator &
     big_whole const &  rhs
 )
 {
-    typedef big_whole::va_type      va_type;
-    typedef big_whole::size_type  size_type;
+    typedef big_whole::va_type  va_type;
 
     if ( va_type const * const  l = lhs.x_.get() )
     {
@@ -1133,17 +1270,7 @@ operator &
         {
             big_whole  temp;
 
-            temp.x_.reset( new va_type(std::min( l->size(), r->size() )) );
-
-            va_type &  t = *temp.x_;
-
-            if ( size_type const  s = t.size() )
-            {
-                std::slice const  sl( 0, s, 1 );
-
-                t  = ( *l )[ sl ];
-                t &= ( *r )[ sl ];
-            }
+            temp.x_.reset( new va_type(big_whole::do_and( *l, *r )) );
 
             return temp;
         }
@@ -1165,25 +1292,15 @@ operator |
     big_whole const &  rhs
 )
 {
-    typedef big_whole::va_type      va_type;
-    typedef big_whole::size_type  size_type;
+    typedef big_whole::va_type  va_type;
 
     if ( va_type const * const  l = lhs.x_.get() )
     {
         if ( va_type const * const  r = rhs.x_.get() )
         {
-            using std::slice;
+            big_whole  temp;
 
-            big_whole        temp;
-            size_type const  ls = l->size();
-            size_type const  rs = r->size();
-
-            temp.x_.reset( new va_type(std::max( ls, rs )) );
-
-            va_type &  t = *temp.x_;
-
-            t[ slice(0, ls, 1) ]  = *l;
-            t[ slice(0, rs, 1) ] |= *r;
+            temp.x_.reset( new va_type(big_whole::do_or( *l, *r )) );
 
             return temp;
         }
@@ -1205,25 +1322,15 @@ operator ^
     big_whole const &  rhs
 )
 {
-    typedef big_whole::va_type      va_type;
-    typedef big_whole::size_type  size_type;
+    typedef big_whole::va_type  va_type;
 
     if ( va_type const * const  l = lhs.x_.get() )
     {
         if ( va_type const * const  r = rhs.x_.get() )
         {
-            using std::slice;
+            big_whole  temp;
 
-            big_whole        temp;
-            size_type const  ls = l->size();
-            size_type const  rs = r->size();
-
-            temp.x_.reset( new va_type(std::max( ls, rs )) );
-
-            va_type &  t = *temp.x_;
-
-            t[ slice(0, ls, 1) ]  = *l;
-            t[ slice(0, rs, 1) ] ^= *r;
+            temp.x_.reset( new va_type(big_whole::do_xor( *l, *r )) );
 
             return temp;
         }
@@ -1247,59 +1354,24 @@ operator >>
 {
     typedef big_whole::size_type              size_type;
     typedef std::numeric_limits<size_type>  size_limits;
-    typedef big_whole::limits_type          limits_type;
     typedef big_whole::va_type                  va_type;
-    typedef big_whole::word_type              word_type;
 
-    if ( size_type const  vl = value.length() )
+    if ( va_type const * const  v = value.x_.get() )
     {
         size_type const  sl = shift.length();
 
-        if ( !sl )
+        if ( sl <= static_cast<size_type>(size_limits::digits) )
         {
-            return value;
-        }
-        else if ( sl > static_cast<size_type>(size_limits::digits) )
-        {
-            throw std::underflow_error( "shift amount too large" );
+            big_whole        temp;
+            size_type const  s = shift.to_uintmax();
+
+            temp.x_.reset( new va_type(big_whole::do_lshift( *v, s )) );
+
+            return temp;
         }
         else
         {
-            size_type const  ss = shift.to_uintmax();
-
-            if ( ss >= vl )
-            {
-                return big_whole();
-            }
-            else
-            {
-                using std::slice;
-
-                big_whole        temp;
-                size_type const  si = ss / limits_type::digits;
-                size_type const  sj = ss % limits_type::digits;
-                va_type const &  v = *value.x_;
-                va_type          major_shift = v[ slice(si, v.size() - si, 1) ];
-
-                if ( sj )
-                {
-                    word_type const   upper_mask = limits_type::max() >> sj;
-                    va_type          minor_shift = major_shift.shift( 1 );
-
-                    major_shift >>= sj;
-                    minor_shift <<= limits_type::digits - sj;
-
-                    major_shift &= upper_mask;
-                    minor_shift &= ~upper_mask;
-
-                    major_shift |= minor_shift;
-                }
-
-                temp.x_.reset( new va_type(major_shift[ slice(0,
-                 big_whole::wlength(major_shift), 1) ]) );
-
-                return temp;
-            }
+            throw std::underflow_error( "shift amount too large" );
         }
     }
     else
@@ -1317,63 +1389,24 @@ operator <<
 {
     typedef big_whole::size_type              size_type;
     typedef std::numeric_limits<size_type>  size_limits;
-    typedef big_whole::limits_type          limits_type;
     typedef big_whole::va_type                  va_type;
-    typedef big_whole::word_type              word_type;
 
-    if ( size_type const  vl = value.length() )
+    if ( va_type const * const  v = value.x_.get() )
     {
         size_type const  sl = shift.length();
-        char const       error_msg[] = "shift amount too large";
 
-        if ( !sl )
+        if ( sl <= static_cast<size_type>(size_limits::digits) )
         {
-            return value;
-        }
-        else if ( sl > static_cast<size_type>(size_limits::digits) )
-        {
-            throw std::overflow_error( error_msg );
+            big_whole        temp;
+            size_type const  s = shift.to_uintmax();
+
+            temp.x_.reset( new va_type(big_whole::do_rshift( *v, s )) );
+
+            return temp;
         }
         else
         {
-            size_type const  ss = shift.to_uintmax();
-
-            if ( ss > size_limits::max() - vl )
-            {
-                throw std::overflow_error( error_msg );
-            }
-            else
-            {
-                using std::slice;
-
-                big_whole        temp;
-                size_type const  vw = big_whole::words_for_bits( vl );
-                size_type const  si = ss / limits_type::digits;
-                size_type const  sj = ss % limits_type::digits;
-                va_type const &  v = *value.x_;
-                va_type          major_shift( vw + si + (0 != sj) );
-
-                major_shift[ slice(si, vw, 1) ] = v[ slice(0, vw, 1) ];
-
-                if ( sj )
-                {
-                    word_type const   lower_mask = ( 1u << sj ) - 1;
-                    va_type          minor_shift = major_shift.shift( -1 );
-
-                    major_shift <<= sj;
-                    minor_shift >>= limits_type::digits - sj;
-
-                    major_shift &= ~lower_mask;
-                    minor_shift &= lower_mask;
-
-                    major_shift |= minor_shift;
-                }
-
-                temp.x_.reset( new va_type(major_shift[ slice(0,
-                 big_whole::wlength(major_shift), 1) ]) );
-
-                return temp;
-            }
+            throw std::overflow_error( "shift amount too large" );
         }
     }
     else
