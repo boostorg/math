@@ -276,33 +276,33 @@ namespace detail
     }
 
     // Function objects to find the best way of computing GCD or LCM
+    template < typename T, bool IsSpecialized, bool IsSigned >
+    struct gcd_optimal_evaluator_helper
+    {
+        T  operator ()( T const &a, T const &b )
+        {
+            return gcd_euclidean( a, b );
+        }
+    };
+
+    template < typename T >
+    struct gcd_optimal_evaluator_helper< T, true, true >
+    {
+        T  operator ()( T const &a, T const &b )
+        {
+            return gcd_integer( a, b );
+        }
+    };
+
     template < typename T >
     struct gcd_optimal_evaluator
     {
-        template < bool IsSpecialized, bool IsSigned >
-        struct helper
-        {
-            T  operator ()( T const &a, T const &b )
-            {
-                return gcd_euclidean( a, b );
-            }
-        };
-
-        template <  >
-        struct helper< true, true >
-        {
-            T  operator ()( T const &a, T const &b )
-            {
-                return gcd_integer( a, b );
-            }
-        };
-
         T  operator ()( T const &a, T const &b )
         {
             typedef ::std::numeric_limits<T>  limits_type;
 
-            typedef helper<limits_type::is_specialized, limits_type::is_signed>
-              helper_type;
+            typedef gcd_optimal_evaluator_helper<T, limits_type::is_specialized,
+             limits_type::is_signed>  helper_type;
 
             helper_type  solver;
 
@@ -310,33 +310,33 @@ namespace detail
         }
     };
 
+    template < typename T, bool IsSpecialized, bool IsSigned >
+    struct lcm_optimal_evaluator_helper
+    {
+        T  operator ()( T const &a, T const &b )
+        {
+            return lcm_euclidean( a, b );
+        }
+    };
+
+    template < typename T >
+    struct lcm_optimal_evaluator_helper< T, true, true >
+    {
+        T  operator ()( T const &a, T const &b )
+        {
+            return lcm_integer( a, b );
+        }
+    };
+
     template < typename T >
     struct lcm_optimal_evaluator
     {
-        template < bool IsSpecialized, bool IsSigned >
-        struct helper
-        {
-            T  operator ()( T const &a, T const &b )
-            {
-                return lcm_euclidean( a, b );
-            }
-        };
-
-        template <  >
-        struct helper< true, true >
-        {
-            T  operator ()( T const &a, T const &b )
-            {
-                return lcm_integer( a, b );
-            }
-        };
-
         T  operator ()( T const &a, T const &b )
         {
             typedef ::std::numeric_limits<T>  limits_type;
 
-            typedef helper<limits_type::is_specialized, limits_type::is_signed>
-              helper_type;
+            typedef lcm_optimal_evaluator_helper<T, limits_type::is_specialized,
+             limits_type::is_signed>  helper_type;
 
             helper_type  solver;
 
@@ -347,6 +347,7 @@ namespace detail
     // Functions to find the GCD or LCM in the best way
     template < typename T >
     inline
+    T
     gcd_optimal
     (
         T const &  a,
@@ -360,6 +361,7 @@ namespace detail
 
     template < typename T >
     inline
+    T
     lcm_optimal
     (
         T const &  a,
