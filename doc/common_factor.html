@@ -5,9 +5,12 @@
 </head>
 
 <body bgcolor="white" text="black" link="blue" alink="red" vlink="purple">
-<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)"
-align="middle" width="277" height="86">Greatest Common Divisor and Least
-Common Multiple</h1>
+<h1>
+<img src="../../../c++boost.gif" alt="c++boost.gif (8819 bytes)"
+align="left" width="277" height="86">Greatest Common Divisor<br>
+&nbsp;Least
+Common Multiple<br>
+&nbsp;</h1>
 
 <p>The class and function templates in <cite><a
 href="../../../boost/math/common_factor.hpp">&lt;boost/math/common_factor.hpp&gt;</a>
@@ -35,8 +38,7 @@ programming problems.</p>
 
 <h2><a name="synopsis">Synopsis</a></h2>
 
-<blockquote><pre>
-namespace boost
+<blockquote><pre>namespace boost
 {
 namespace math
 {
@@ -62,8 +64,7 @@ template &lt; unsigned long Value1, unsigned long Value2 &gt;
 
 <h2><a name="gcd_obj">GCD Function Object</a></h2>
 
-<blockquote><pre>
-template &lt; typename IntegerType &gt;
+<blockquote><pre>template &lt; typename IntegerType &gt;
 class boost::math::gcd_evaluator
 {
 public:
@@ -93,8 +94,7 @@ class template.</p>
 
 <h2><a name="lcm_obj">LCM Function Object</a></h2>
 
-<blockquote><pre>
-template &lt; typename IntegerType &gt;
+<blockquote><pre>template &lt; typename IntegerType &gt;
 class boost::math::lcm_evaluator
 {
 public:
@@ -126,8 +126,7 @@ class template.</p>
 
 <h2><a name="run_gcd_lcm">Run-time GCD &amp; LCM Determination</a></h2>
 
-<blockquote><pre>
-template &lt; typename IntegerType &gt;
+<blockquote><pre>template &lt; typename IntegerType &gt;
 IntegerType  boost::math::gcd( IntegerType const &amp;a, IntegerType const &amp;b );
 
 template &lt; typename IntegerType &gt;
@@ -146,8 +145,7 @@ href="#lcm_obj">lcm_evaluator</a></code> class templates, respectively.</p>
 
 <h2><a name="ct_gcd_lcm">Compile-time GCD &amp; LCM Determination</a></h2>
 
-<blockquote><pre>
-template &lt; unsigned long Value1, unsigned long Value2 &gt;
+<blockquote><pre>template &lt; unsigned long Value1, unsigned long Value2 &gt;
 struct boost::math::static_gcd
 {
     static unsigned long const  value = <em>implementation_defined</em>;
@@ -170,8 +168,7 @@ multiple is beyond the range of an <code>unsigned long</code>.</p>
 
 <h2><a name="example">Example</a></h2>
 
-<blockquote><pre>
-#include &lt;boost/math/common_factor.hpp&gt;
+<blockquote><pre>#include &lt;boost/math/common_factor.hpp&gt;
 #include &lt;algorithm&gt;
 #include &lt;iterator&gt;
 
