@@ -114,7 +114,9 @@ void    atanh_manual_check()
         
         float        yf = tanh(xf);
         double       yd = tanh(xd);
+        (void) &yd;        // avoid "unused variable" warning
         long double  yl = tanh(xl);
+        (void) &yl;        // avoid "unused variable" warning
         
         if    (
                 std::numeric_limits<float>::has_infinity &&
