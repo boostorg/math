@@ -21,80 +21,83 @@
 
 namespace boost
 {
-    // This is the "Hyperbolic Sinus Cardinal" of index Pi.
-    
-    template<typename T>
-    inline T    sinhc_pi(const T x)
+    namespace math
     {
-        using    ::std::abs;
-        using    ::std::sinh;
-        using    ::std::sqrt;
+        // This is the "Hyperbolic Sinus Cardinal" of index Pi.
         
-        using    ::std::numeric_limits;
-        
-        static T const    e1 = numeric_limits<T>::epsilon();
-        static T const    e2 = sqrt(e1);
-        static T const    e3 = sqrt(e2);
-        
-        if    (abs(x) > e3)
+        template<typename T>
+        inline T    sinhc_pi(const T x)
         {
-            return(sinh(x)/x);
-        }
-        else
-        {
-            T    result = static_cast<T>(1);
+            using    ::std::abs;
+            using    ::std::sinh;
+            using    ::std::sqrt;
             
-            if    (abs(x) > e1)
+            using    ::std::numeric_limits;
+            
+            static T const    e1 = numeric_limits<T>::epsilon();
+            static T const    e2 = sqrt(e1);
+            static T const    e3 = sqrt(e2);
+            
+            if    (abs(x) > e3)
             {
-                T    x2 = x*x;
-                
-                result += x2/static_cast<T>(6);
-                
-                if    (abs(x) > e2)
-                {
-                    result += (x2*x2)/static_cast<T>(120);
-                }
+                return(sinh(x)/x);
             }
-            
-            return(result);
-        }
-    }
-    
-    
-    template<typename T, template<typename> class U>
-    inline U<T>    sinhc_pi(const U<T> x)
-    {
-        using    ::std::abs;
-        using    ::std::sinh;
-        using    ::std::sqrt;
-        
-        using    ::std::numeric_limits;
-        
-        static T const    e1 = numeric_limits<T>::epsilon();
-        static T const    e2 = sqrt(e1);
-        static T const    e3 = sqrt(e2);
-        
-        if    (abs(x) > e3)
-        {
-            return(sinh(x)/x);
-        }
-        else
-        {
-            U<T>    result = static_cast< U<T> >(1);
-            
-            if    (abs(x) > e1)
+            else
             {
-                U<T>    x2 = x*x;
+                T    result = static_cast<T>(1);
                 
-                result += x2/static_cast<T>(6);
-                
-                if    (abs(x) > e2)
+                if    (abs(x) > e1)
                 {
-                    result += (x2*x2)/static_cast<T>(120);
+                    T    x2 = x*x;
+                    
+                    result += x2/static_cast<T>(6);
+                    
+                    if    (abs(x) > e2)
+                    {
+                        result += (x2*x2)/static_cast<T>(120);
+                    }
                 }
+                
+                return(result);
             }
+        }
+        
+        
+        template<typename T, template<typename> class U>
+        inline U<T>    sinhc_pi(const U<T> x)
+        {
+            using    ::std::abs;
+            using    ::std::sinh;
+            using    ::std::sqrt;
             
-            return(result);
+            using    ::std::numeric_limits;
+            
+            static T const    e1 = numeric_limits<T>::epsilon();
+            static T const    e2 = sqrt(e1);
+            static T const    e3 = sqrt(e2);
+            
+            if    (abs(x) > e3)
+            {
+                return(sinh(x)/x);
+            }
+            else
+            {
+                U<T>    result = static_cast< U<T> >(1);
+                
+                if    (abs(x) > e1)
+                {
+                    U<T>    x2 = x*x;
+                    
+                    result += x2/static_cast<T>(6);
+                    
+                    if    (abs(x) > e2)
+                    {
+                        result += (x2*x2)/static_cast<T>(120);
+                    }
+                }
+                
+                return(result);
+            }
         }
     }
 }
