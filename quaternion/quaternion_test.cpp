@@ -58,7 +58,7 @@ using    ::boost::math::sinhc_pi;
   
 // Provide standard floating point abs() overloads for MSVC
 #ifdef    BOOST_MSVC
-#if        (BOOST_MSVC < 1300) || defined(_MSC_EXTENSIONS)
+#if        (BOOST_MSVC < 1300) || (defined(_MSC_EXTENSIONS) && BOOST_MSVC < 1310)
 inline float        abs(float v)
 {
     return(fabs(v));
@@ -73,7 +73,7 @@ inline long double    abs(long double v)
 {
     return(fabs(v));
 }
-#endif    /* (BOOST_MSVC < 1300) || defined(_MSC_EXTENSIONS) */
+#endif    /* need abs */
 #endif    /* BOOST_MSVC */
 
 
