@@ -18,7 +18,7 @@
 #ifndef __GNUC__
 template    class ::boost::math::octonion<int>;
 #else
-// gcc 3.0 doesn't like the absolutely-qualified namespace
+// gcc doesn't like the absolutely-qualified namespace
 template class boost::math::octonion<int>;
 #endif
 
@@ -70,36 +70,38 @@ int    test_main(int, char *[])
     
     
     // using default constructor
-    ::boost::math::octonion<float>            o0;
+    ::boost::math::octonion<float>          o0;
     
-    ::boost::math::octonion<float>            oa[2];
+    ::boost::math::octonion<float>          oa[2];
     
     // using constructor "O seen as R^8"
-    ::boost::math::octonion<float>            o1(1,2,3,4,5,6,7,8);
+    ::boost::math::octonion<float>          o1(1,2,3,4,5,6,7,8);
     
-    ::std::complex<double>                    c0(9,10);
+    ::std::complex<double>                  c0(9,10);
     
     // using constructor "O seen as C^4"
-    ::boost::math::octonion<double>           o2(c0);
+    ::boost::math::octonion<double>         o2(c0);
     
-    ::boost::math::quaternion<long double>    q0(11,12,13,14);
+    ::boost::math::quaternion<long double>  q0(11,12,13,14);
     
     // using constructor "O seen as H^2"
-    ::boost::math::octonion<long double>      o3(q0);
+    ::boost::math::octonion<long double>    o3(q0);
     
     // using UNtemplated copy constructor
-    ::boost::math::octonion<float>            o4(o1);
+    ::boost::math::octonion<float>          o4(o1);
     
     // using templated copy constructor
-    ::boost::math::octonion<long double>      o5(o2);
+    ::boost::math::octonion<long double>    o5(o2);
     
     // using UNtemplated assignment operator
     o5 = o3;
+    oa[0] = o0;
     
     // using templated assignment operator
     o5 = o2;
+    oa[1] = o5;
     
-    float                                     f0(15);
+    float                                   f0(15);
     
     // using converting assignment operator
     o0 = f0;
@@ -134,9 +136,9 @@ int    test_main(int, char *[])
     // using -= (const octonion<X> &)
     o3 -= o4;
     
-    double                                    d0(16);
-    ::std::complex<double>                    c1(17,18);
-    ::boost::math::quaternion<double>         q1(19,20,21,22);
+    double                                  d0(16);
+    ::std::complex<double>                  c1(17,18);
+    ::boost::math::quaternion<double>       q1(19,20,21,22);
     
     // using *= (const T &)
     o2 *= d0;
@@ -150,8 +152,8 @@ int    test_main(int, char *[])
     // using *= (const octonion<X> &)
     o2 *= o4;
     
-    long double                               l0(23);
-    ::std::complex<long double>               c2(24,25);
+    long double                             l0(23);
+    ::std::complex<long double>             c2(24,25);
     
     // using /= (const T &)
     o5 /= l0;
@@ -166,25 +168,25 @@ int    test_main(int, char *[])
     o5 /= o5;
     
     // using + (const T &, const octonion<T> &)
-    ::boost::math::octonion<float>            o6 = f0+o0;
+    ::boost::math::octonion<float>          o6 = f0+o0;
     
     // using + (const octonion<T> &, const T &)
-    ::boost::math::octonion<float>            o7 = o0+f0;
+    ::boost::math::octonion<float>          o7 = o0+f0;
     
     // using + (const ::std::complex<T> &, const quaternion<T> &)
-    ::boost::math::octonion<double>           o8 = c0+o2;
+    ::boost::math::octonion<double>         o8 = c0+o2;
     
     // using + (const octonion<T> &, const ::std::complex<T> &)
-    ::boost::math::octonion<double>           o9 = o2+c0;
+    ::boost::math::octonion<double>         o9 = o2+c0;
     
     // using + (const ::boost::math::quaternion<T>, const octonion<T> &)
-    ::boost::math::octonion<long double>      o10 = q0+o3;
+    ::boost::math::octonion<long double>    o10 = q0+o3;
     
     // using + (const octonion<T> &, const ::boost::math::quaternion<T> &)
-    ::boost::math::octonion<long double>      o11 = o3+q0;
+    ::boost::math::octonion<long double>    o11 = o3+q0;
     
     // using + (const quaternion<T> &,const quaternion<T> &)
-    ::boost::math::octonion<float>            o12 = o0+o4;
+    ::boost::math::octonion<float>          o12 = o0+o4;
     
     // using - (const T &, const octonion<T> &)
     o6 = f0-o0;
@@ -454,21 +456,21 @@ int    test_main(int, char *[])
                         h1, h2, h3, h4, h5, h6)
                 << ::std::endl;
     
-    double                                real_1(1);
-    ::std::complex<double>                complex_1(1);
-    ::std::complex<double>                complex_i(0,1);
-    ::boost::math::quaternion<double>     quaternion_1(1);
-    ::boost::math::quaternion<double>     quaternion_i(0,1);
-    ::boost::math::quaternion<double>     quaternion_j(0,0,1);
-    ::boost::math::quaternion<double>     quaternion_k(0,0,0,1);
-    ::boost::math::octonion<double>       octonion_1(1);
-    ::boost::math::octonion<double>       octonion_i(0,1);
-    ::boost::math::octonion<double>       octonion_j(0,0,1);
-    ::boost::math::octonion<double>       octonion_k(0,0,0,1);
-    ::boost::math::octonion<double>       octonion_e_prime(0,0,0,0,1);
-    ::boost::math::octonion<double>       octonion_i_prime(0,0,0,0,0,1);
-    ::boost::math::octonion<double>       octonion_j_prime(0,0,0,0,0,0,1);
-    ::boost::math::octonion<double>       octonion_k_prime(0,0,0,0,0,0,0,1);
+    double                               real_1(1);
+    ::std::complex<double>               complex_1(1);
+    ::std::complex<double>               complex_i(0,1);
+    ::boost::math::quaternion<double>    quaternion_1(1);
+    ::boost::math::quaternion<double>    quaternion_i(0,1);
+    ::boost::math::quaternion<double>    quaternion_j(0,0,1);
+    ::boost::math::quaternion<double>    quaternion_k(0,0,0,1);
+    ::boost::math::octonion<double>      octonion_1(1);
+    ::boost::math::octonion<double>      octonion_i(0,1);
+    ::boost::math::octonion<double>      octonion_j(0,0,1);
+    ::boost::math::octonion<double>      octonion_k(0,0,0,1);
+    ::boost::math::octonion<double>      octonion_e_prime(0,0,0,0,1);
+    ::boost::math::octonion<double>      octonion_i_prime(0,0,0,0,0,1);
+    ::boost::math::octonion<double>      octonion_j_prime(0,0,0,0,0,0,1);
+    ::boost::math::octonion<double>      octonion_k_prime(0,0,0,0,0,0,0,1);
     
     
     ::std::cout << ::std::endl;
@@ -621,16 +623,16 @@ int    test_main(int, char *[])
         }
     
     
-    #define    BOOST_OCTONION_TRENSCENDENTALS_TEST(type)        \
-                                                                \
-        for    (int idx = 1; idx < 8; ++idx)                    \
-        {                                                       \
-            ::boost::math::octonion<type>    toto =             \
-                4*::std::atan(static_cast<type>(1))*            \
-                index_i_element<type>(idx);                     \
-                                                                \
-            BOOST_TEST(abs(exp(toto)+static_cast<type>(1)) <=   \
-                2*numeric_limits<type>::epsilon());             \
+    #define    BOOST_OCTONION_TRENSCENDENTALS_TEST(type)                \
+                                                                        \
+        for    (int idx = 1; idx < 8; ++idx)                            \
+        {                                                               \
+            ::boost::math::octonion<type>    toto =                     \
+                static_cast<type>(4)*::std::atan(static_cast<type>(1))* \
+                index_i_element<type>(idx);                             \
+                                                                        \
+            BOOST_TEST(abs(exp(toto)+static_cast<type>(1)) <=           \
+                2*numeric_limits<type>::epsilon());                     \
         }
     
     
