@@ -19,7 +19,13 @@
 #define TEST_HSO3_HPP
 
 #include <algorithm>
+
+#if    defined(__GNUC__) && (__GNUC__ < 3)
+#include <boost/limits.hpp>
+#else
 #include <limits>
+#endif
+
 #include <stdexcept>
 #include <string>
 
@@ -69,7 +75,7 @@ R3_matrix<TYPE_FLOAT>    quaternion_to_R3_rotation(::boost::math::quaternion<TYP
     if    (norme_carre <= numeric_limits<TYPE_FLOAT>::epsilon())
     {
         ::std::string            error_reporting("Argument to quaternion_to_R3_rotation is too small!");
-        ::std::underflow_error    bad_argument(error_reporting);
+        ::std::underflow_error   bad_argument(error_reporting);
         
         throw(bad_argument);
     }
@@ -127,7 +133,7 @@ namespace
         
         TYPE_FLOAT *        where = ::std::max_element(minors, minors+9);
         
-        TYPE_FLOAT            det = *where;
+        TYPE_FLOAT          det = *where;
         
         if    (det <= numeric_limits<TYPE_FLOAT>::epsilon())
         {
@@ -264,7 +270,7 @@ namespace
         if    (vecnormsqr <= numeric_limits<TYPE_FLOAT>::epsilon())
         {
             ::std::string            error_reporting("Underflow error in find_orthogonal_vector!");
-            ::std::underflow_error    processing_error(error_reporting);
+            ::std::underflow_error   processing_error(error_reporting);
             
             throw(processing_error);
         }
@@ -342,7 +348,7 @@ namespace
             default:
                 
                 ::std::string        error_reporting("Impossible condition in find_invariant_vector");
-                ::std::logic_error    processing_error(error_reporting);
+                ::std::logic_error   processing_error(error_reporting);
                 
                 throw(processing_error);
                 
@@ -354,7 +360,7 @@ namespace
         if    (vecnorm <= numeric_limits<TYPE_FLOAT>::epsilon())
         {
             ::std::string            error_reporting("Underflow error in find_orthogonal_vector!");
-            ::std::underflow_error    processing_error(error_reporting);
+            ::std::underflow_error   processing_error(error_reporting);
             
             throw(processing_error);
         }
@@ -414,17 +420,17 @@ template<typename TYPE_FLOAT>
 ::boost::math::quaternion<TYPE_FLOAT>    R3_rotation_to_quaternion( R3_matrix<TYPE_FLOAT> const & rot,
                                                                     ::boost::math::quaternion<TYPE_FLOAT> const * hint = 0)
 {
+    using    ::boost::math::abs;
+    
     using    ::std::abs;
     using    ::std::sqrt;
     
     using    ::std::numeric_limits;
     
-    using    ::boost::math::abs;
-    
     if    (!is_R3_rotation_matrix(rot))
     {
         ::std::string        error_reporting("Argument to R3_rotation_to_quaternion is not an R^3 rotation matrix!");
-        ::std::range_error    bad_argument(error_reporting);
+        ::std::range_error   bad_argument(error_reporting);
         
         throw(bad_argument);
     }

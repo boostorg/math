@@ -21,15 +21,6 @@ namespace std {
 }
 #endif
 
-// explicit (if ludicrous) instanciation
-#ifndef __GNUC__
-template    class ::boost::math::octonion<int>;
-#else
-// gcc doesn't like the absolutely-qualified namespace
-template class boost::math::octonion<int>;
-#endif
-
-
 #define BOOST_INCLUDE_MAIN  // for testing, include rather than link
 #include <boost/test/test_tools.hpp>
 
