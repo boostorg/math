@@ -1288,7 +1288,7 @@ namespace boost
             s << '('    << q.R_component_1() << ','
                         << q.R_component_2() << ','
                         << q.R_component_3() << ','
-                        << q.R_component_4() << ')' << ::std::ends;
+                        << q.R_component_4() << ')';
             
             return os << s.str();
         }

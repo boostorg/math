@@ -3365,7 +3365,7 @@ namespace boost
                         << o.R_component_5() << ','
                         << o.R_component_6() << ','
                         << o.R_component_7() << ','
-                        << o.R_component_8() << ')' << ::std::ends;
+                        << o.R_component_8() << ')';
             
             return os << s.str();
         }
