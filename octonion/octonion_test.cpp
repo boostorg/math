@@ -632,15 +632,15 @@ int    test_main(int, char *[])
     }
     
     
-#define    BOOST_OCTONION_TRENSCENDENTALS_TEST(type)                \
+#define    BOOST_OCTONION_TRANSCENDENTALS_TEST(type)                \
                                                                     \
     ::std::cout << "Testing exp." << std::endl;                     \
                                                                     \
     for    (int idx = 1; idx < 8; ++idx)                            \
     {                                                               \
         ::boost::math::octonion<type>    toto =                     \
-            static_cast<type>(4)*::std::atan(static_cast<type>(1))* \
-            index_i_element<type>(idx);                             \
+            static_cast<type>(4)*static_cast<type>(::std::atan(     \
+            static_cast<type>(1)))*index_i_element<type>(idx);      \
                                                                     \
         BOOST_TEST(abs(exp(toto)+static_cast<type>(1)) <=           \
             2*numeric_limits<type>::epsilon());                     \
@@ -660,7 +660,7 @@ int    test_main(int, char *[])
     ::std::cout << "Testing " << #type << "." << std::endl; \
                                                             \
     BOOST_OCTONION_MULTIPLICATION_TEST(type)                \
-    BOOST_OCTONION_TRENSCENDENTALS_TEST(type)
+    BOOST_OCTONION_TRANSCENDENTALS_TEST(type)
 #endif
     
     
@@ -672,7 +672,7 @@ int    test_main(int, char *[])
 #undef    BOOST_OCTONION_TEST
     
 #undef    BOOST_OCTONION_MULTIPLICATION_TEST
-#undef    BOOST_OCTONION_TRENSCENDENTALS_TEST
+#undef    BOOST_OCTONION_TRANSCENDENTALS_TEST
     
     return(::boost::exit_success);
 }

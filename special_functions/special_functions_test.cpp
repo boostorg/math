@@ -21,11 +21,12 @@
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
     using ::abs;
-    using ::tanh;
+    using ::cosh;
     using ::log;
-    using ::sinh;
     using ::sin;
+    using ::sinh;
     using ::sqrt;
+    using ::tanh;
 }
 #endif
 

@@ -39,9 +39,14 @@ namespace boost
         template<typename T>
         inline T    sinc_pi(const T x)
         {
+#ifdef BOOST_NO_STDC_NAMESPACE
+            using    ::abs;
+            using    ::sin;
+#else
             using    ::std::abs;
             using    ::std::sin;
             using    ::std::sqrt;
+#endif
             
             using    ::std::numeric_limits;
             
@@ -80,9 +85,11 @@ namespace boost
         template<typename T, template<typename> class U>
         inline U<T>    sinc_pi(const U<T> x)
         {
+#ifndef BOOST_NO_STDC_NAMESPACE
             using    ::std::abs;
             using    ::std::sin;
             using    ::std::sqrt;
+#endif
             
             using    ::std::numeric_limits;
             

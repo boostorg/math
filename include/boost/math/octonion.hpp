@@ -3423,7 +3423,9 @@ namespace boost
         template<typename T>
         inline T                                abs(const octonion<T> & o)
         {
+#ifndef BOOST_NO_STDC_NAMESPACE
             using    ::std::sqrt;
+#endif
             
             BOOST_OCTONION_VALARRAY_LOADER
             
@@ -3488,8 +3490,13 @@ namespace boost
                                                             T const & phi5,
                                                             T const & phi6)
         {
+#ifdef BOOST_NO_STDC_NAMESPACE
+            using ::cos;
+            using ::sin;
+#else
             using ::std::cos;
             using ::std::sin;
+#endif
             
             //T    a = cos(theta)*cos(phi1)*cos(phi2)*cos(phi3)*cos(phi4)*cos(phi5)*cos(phi6);
             //T    b = sin(theta)*cos(phi1)*cos(phi2)*cos(phi3)*cos(phi4)*cos(phi5)*cos(phi6);
@@ -3543,8 +3550,13 @@ namespace boost
                                                              T const & rho4,
                                                              T const & theta4)
         {
+#ifdef BOOST_NO_STDC_NAMESPACE
+            using ::cos;
+            using ::sin;
+#else
             using ::std::cos;
             using ::std::sin;
+#endif
             
             T    a = rho1*cos(theta1);
             T    b = rho1*sin(theta1);
@@ -3569,8 +3581,13 @@ namespace boost
                                                               T const & h5,
                                                               T const & h6)
         {
+#ifdef BOOST_NO_STDC_NAMESPACE
+            using ::cos;
+            using ::sin;
+#else
             using ::std::cos;
             using ::std::sin;
+#endif
             
             T    a = r*cos(angle);
             T    b = r*sin(angle);
@@ -3582,8 +3599,13 @@ namespace boost
         template<typename T>
         inline octonion<T>                        exp(octonion<T> const & o)
         {
+#ifdef BOOST_NO_STDC_NAMESPACE
+            using    ::exp;
+            using    ::cos;
+#else
             using    ::std::exp;
             using    ::std::cos;
+#endif
             
             using    ::boost::math::sinc_pi;
             
@@ -3604,9 +3626,15 @@ namespace boost
         template<typename T>
         inline octonion<T>                        cos(octonion<T> const & o)
         {
+#ifdef BOOST_NO_STDC_NAMESPACE
+            using    ::sin;
+            using    ::cos;
+            using    ::cosh;
+#else
             using    ::std::sin;
             using    ::std::cos;
             using    ::std::cosh;
+#endif
             
             using    ::boost::math::sinhc_pi;
             
@@ -3625,9 +3653,15 @@ namespace boost
         template<typename T>
         inline octonion<T>                        sin(octonion<T> const & o)
         {
+#ifdef BOOST_NO_STDC_NAMESPACE
+            using    ::sin;
+            using    ::cos;
+            using    ::cosh;
+#else
             using    ::std::sin;
             using    ::std::cos;
             using    ::std::cosh;
+#endif
             
             using    ::boost::math::sinhc_pi;
             

@@ -39,9 +39,14 @@ namespace boost
         template<typename T>
         inline T    sinhc_pi(const T x)
         {
+#ifdef BOOST_NO_STDC_NAMESPACE
+            using    ::abs;
+            using    ::sinh;
+#else
             using    ::std::abs;
             using    ::std::sinh;
             using    ::std::sqrt;
+#endif
             
             using    ::std::numeric_limits;
             
@@ -80,9 +85,11 @@ namespace boost
         template<typename T, template<typename> class U>
         inline U<T>    sinhc_pi(const U<T> x)
         {
+#ifndef BOOST_NO_STDC_NAMESPACE
             using    ::std::abs;
             using    ::std::sinh;
             using    ::std::sqrt;
+#endif
             
             using    ::std::numeric_limits;
             
