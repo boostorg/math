@@ -1,6 +1,6 @@
 //  Boost math_fwd.hpp header file  ------------------------------------------//
 
-//  (C) Copyright boost.org 2001.  Permission to copy, use, modify, sell
+//  (C) Copyright boost.org 2001-2002.  Permission to copy, use, modify, sell
 //  and distribute this software is granted provided this copyright
 //  notice appears in all copies.  This software is provided "as is" without
 //  express or implied warranty, and with no claim as to its suitability for
@@ -75,15 +75,23 @@ template < >
 
 //  From <boost/math/common_factor.hpp>  -------------------------------------//
 
-template < typename IntegerType >
-    class gcd_evaluator;
-template < typename IntegerType >
-    class lcm_evaluator;
+// Only #includes other headers
+
+
+//  From <boost/math/common_factor_ct.hpp>  ----------------------------------//
 
 template < unsigned long Value1, unsigned long Value2 >
     struct static_gcd;
 template < unsigned long Value1, unsigned long Value2 >
     struct static_lcm;
+
+
+//  From <boost/math/common_factor_rt.hpp>  ----------------------------------//
+
+template < typename IntegerType >
+    class gcd_evaluator;
+template < typename IntegerType >
+    class lcm_evaluator;
 
 // Also has a couple of function templates
 
