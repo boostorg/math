@@ -70,6 +70,8 @@ big_whole  and_not( big_whole const &amp;a, big_whole const &amp;b );
 big_whole  operator !( big_whole const &amp;w );
 big_whole  operator +( big_whole const &amp;w );
 big_whole  operator -( big_whole const &amp;w );
+big_whole  operator ++( big_whole &amp;w, int );
+big_whole  operator --( big_whole &amp;w, int );
 
 bool  operator ==( big_whole const &amp;lhs, big_whole const &amp;rhs );
 bool  operator !=( big_whole const &amp;lhs, big_whole const &amp;rhs );
@@ -180,6 +182,9 @@ public:
     big_whole &amp;  operator =( big_whole const &amp;rhs );
 
     operator <em>bool_type</em>() const;
+
+    big_whole &amp;  operator ++();
+    big_whole &amp;  operator --();
 
 };
 </pre></blockquote>
@@ -385,6 +390,19 @@ public:
 		<strong>Returns:</strong> if <code>this-&gt;any()</code>, then some non-zero/non-null/true value, otherwise a zero/null/false value<br>
 		<strong>Note:</strong> <code><em>bool_type</em></code> is an unspecified built-in type that supports Boolean semantics and should have a minimum of common non-Boolean semantics (this probably excludes <code>bool</code> since that type [mistakenly?] fully participates in integral and/or numeric operations)<br>
 		<strong>Rationale:</strong> Boolean (output) conversion
+
+	<dt><code>big_whole &amp;  operator ++();</code>
+	<dd>
+		<strong>Effects:</strong> increases the internal value by one<br>
+		<strong>Returns:</strong> <code>*this</code><br>
+		<strong>Rationale:</strong> pre-increment
+
+	<dt><code>big_whole &amp;  operator --();</code>
+	<dd>
+		<strong>Effects:</strong> decreases the internal value by one<br>
+		<strong>Returns:</strong> <code>*this</code><br>
+		<strong>Throws:</strong> <code>std::range_error</code> if the internal value is currently zero (because the next lower value, -1, cannot be represented by this type)<br>
+		<strong>Rationale:</strong> pre-decrement
 </dl>
 
 <h3><a name="c_nm_funcs">Non-Member Functions &amp; Operators</a></h3>
@@ -429,6 +447,12 @@ boost::math::and_not( boost::math::big_whole const &amp;a, boost::math::big_whol
 		<strong>Returns:</strong> the additive inverse of <var>w</var>, if it is representable<br>
 		<strong>Throws:</strong> <code>std::range_error</code> if the inverse cannot be represented (which is true for any nonzero value since <code>big_whole</code> can only store nonnegative values)<br>
 		<strong>Note:</strong> calls <code>big_whole::negate_self()</code>
+
+	<dt><code>boost::math::big_whole  boost::math::operator ++( boost::math::big_whole &amp;w, int );</code><br>
+	    <code>boost::math::big_whole  boost::math::operator --( boost::math::big_whole &amp;w, int );</code>
+	<dd>
+		<strong>Effects:</strong> for operator <code><var>$$</var></code>, calls <code><var>w</var>.operator <var>$$</var>()</code><br>
+		<strong>Returns:</strong> a copy of <var>w</var> before the change
 
 	<dt><code>bool  boost::math::operator ==( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
 	    <code>bool  boost::math::operator !=( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>

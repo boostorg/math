@@ -1635,6 +1635,81 @@ bigwhole_unary_plus_minus_unit_test
     BOOST_CHECK_THROW( -c, range_error );
 }
 
+// Unit test for ++ and -- operators
+void
+bigwhole_double_plus_minus_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::range_error;
+    using boost::math::and_not;
+
+    typedef std::valarray<std::size_t>  va_size_t;
+
+    big_whole const  z = 0;
+    big_whole const  aa = wlimits_type::max();
+    big_whole const  bb( va_size_t(wlimits_type::digits, 1) );
+
+    // pre-increment
+    big_whole  a = z;
+    big_whole  b = aa;
+
+    BOOST_CHECK_EQUAL( 1, ++a );
+    BOOST_CHECK_EQUAL( 2, ++a );
+
+    BOOST_CHECK_EQUAL( bb, ++b );
+    BOOST_CHECK_EQUAL( bb | 1, ++b );
+
+    // post-increment
+    a.assign( 0 );
+    b.assign( aa );
+
+    BOOST_CHECK_EQUAL( 0, a++ );
+    BOOST_CHECK_EQUAL( 1, a++ );
+    BOOST_CHECK_EQUAL( 2, a );
+
+    BOOST_CHECK_EQUAL( aa, b++ );
+    BOOST_CHECK_EQUAL( bb, b++ );
+    BOOST_CHECK_EQUAL( bb | 1, b );
+
+    // decrement errors
+    a.assign( 0 );
+
+    BOOST_CHECK_THROW( --a, range_error );
+    BOOST_CHECK( !a );
+    BOOST_CHECK_THROW( a--, range_error );
+    BOOST_CHECK( !a );
+
+    // pre-decrement
+    a.assign( 4 );
+    b.assign( bb | 1 );
+
+    BOOST_CHECK_EQUAL( 3, --a );
+    BOOST_CHECK_EQUAL( 2, --a );
+    BOOST_CHECK_EQUAL( 1, --a );
+    BOOST_CHECK_EQUAL( 0, --a );
+
+    BOOST_CHECK_EQUAL( bb, --b );
+    BOOST_CHECK_EQUAL( aa, --b );
+    BOOST_CHECK_EQUAL( and_not(aa, 1), --b );
+
+    // post-decrement
+    a.assign( 4 );
+    b.assign( bb | 1 );
+
+    BOOST_CHECK_EQUAL( 4, a-- );
+    BOOST_CHECK_EQUAL( 3, a-- );
+    BOOST_CHECK_EQUAL( 2, a-- );
+    BOOST_CHECK_EQUAL( 1, a-- );
+    BOOST_CHECK_EQUAL( 0, a );
+
+    BOOST_CHECK_EQUAL( bb | 1, b-- );
+    BOOST_CHECK_EQUAL( bb, b-- );
+    BOOST_CHECK_EQUAL( aa, b-- );
+    BOOST_CHECK_EQUAL( and_not(aa, 1), b );
+}
+
 
 // Unit test program
 boost::unit_test_framework::test_suite *
@@ -1673,6 +1748,7 @@ init_unit_test_suite
     test->add( BOOST_TEST_CASE(bigwhole_bitwise_and_not_unit_test) );
 
     test->add( BOOST_TEST_CASE(bigwhole_unary_plus_minus_unit_test) );
+    test->add( BOOST_TEST_CASE(bigwhole_double_plus_minus_unit_test) );
 
     return test;
 }

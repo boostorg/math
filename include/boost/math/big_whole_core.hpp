@@ -17,7 +17,7 @@
 #include <cstddef>    // for NULL, std::size_t
 #include <limits>     // for std::numeric_limits
 #include <memory>     // for std::auto_ptr
-#include <stdexcept>  // for std::length_error, std::overflow_error
+#include <stdexcept>  // for std::length_error, std::overflow_error, etc.
 #include <valarray>   // for std::valarray, std::slice
 
 
@@ -38,6 +38,8 @@ big_whole  and_not( big_whole const &a, big_whole const &b );
 big_whole  operator !( big_whole const &w );
 big_whole  operator +( big_whole const &w );
 big_whole  operator -( big_whole const &w );
+big_whole  operator ++( big_whole &w, int );
+big_whole  operator --( big_whole &w, int );
 
 bool  operator ==( big_whole const &lhs, big_whole const &rhs );
 bool  operator !=( big_whole const &lhs, big_whole const &rhs );
@@ -139,6 +141,9 @@ public:
     self_type &  operator =( self_type const &rhs );
 
     operator bool_type() const;
+
+    self_type &  operator ++();
+    self_type &  operator --();
 
 protected:
     // Member types
@@ -739,6 +744,60 @@ big_whole::operator big_whole::bool_type
 ) const
 {
     return this->any() ? &dummy::d : NULL;
+}
+
+big_whole &
+big_whole::operator ++()
+{
+    if ( va_type * const  v = this->x_.get() )
+    {
+        size_type const     vs = v->size();
+        bool             carry = true;
+
+        for ( size_type  i = 0 ; carry && (i < vs) ; ++i )
+        {
+            carry = ( 0u == ++(*v)[i] );
+        }
+
+        if ( carry )
+        {
+            v->resize( 1 + vs, 0u );
+            ( *v )[ vs ] = 1u;
+        }
+    }
+    else
+    {
+        this->x_.reset( new va_type(1u, 1) );
+    }
+
+    return *this;
+}
+
+big_whole &
+big_whole::operator --()
+{
+    if ( va_type * const  v = this->x_.get() )
+    {
+        size_type const      vs = v->size();
+        bool             borrow = true;
+
+        for ( size_type  i = 0 ; borrow && (i < vs) ; ++i )
+        {
+            borrow = ( 0u == (*v)[i]-- );
+        }
+
+        if ( borrow )
+        {
+            this->x_.reset();
+            self_type::negativity_fail();
+        }
+    }
+    else
+    {
+        self_type::negativity_fail();
+    }
+
+    return *this;
 }
 
 
@@ -1392,6 +1451,24 @@ BOOST_PRIVATE_UNARY_OP( +, same_self )
 BOOST_PRIVATE_UNARY_OP( -, negate_self )
 
 #undef BOOST_PRIVATE_UNARY_OP
+
+#define BOOST_PRIVATE_POST_OP( Op )  \
+    big_whole                        \
+    operator Op                      \
+    (                                \
+        big_whole &  w,              \
+        int                          \
+    )                                \
+    {                                \
+        big_whole const  old = w;    \
+        w.operator Op();             \
+        return old;                  \
+    }
+
+BOOST_PRIVATE_POST_OP( ++ )
+BOOST_PRIVATE_POST_OP( -- )
+
+#undef BOOST_PRIVATE_POST_OP
 
 #define BOOST_PRIVATE_COMPARE_OP( Op )   \
     inline                               \
