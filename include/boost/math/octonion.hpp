@@ -683,7 +683,7 @@ namespace boost
         template<>    class octonion<long double>;
         
         
-        // helper templates for converting copy constructors
+        // helper templates for converting copy constructors (declaration)
         
         namespace detail
         {
@@ -691,17 +691,7 @@ namespace boost
             template<   typename T,
                         typename U
                     >
-            octonion<T>    octonion_type_converter(octonion<U> const & rhs)
-            {
-                return(octonion<T>( static_cast<T>(rhs.R_component_1()),
-                                    static_cast<T>(rhs.R_component_2()),
-                                    static_cast<T>(rhs.R_component_3()),
-                                    static_cast<T>(rhs.R_component_4()),
-                                    static_cast<T>(rhs.R_component_5()),
-                                    static_cast<T>(rhs.R_component_6()),
-                                    static_cast<T>(rhs.R_component_7()),
-                                    static_cast<T>(rhs.R_component_8())));
-            }
+            octonion<T>    octonion_type_converter(octonion<U> const & rhs);
         }
         
         
@@ -4728,6 +4718,28 @@ namespace boost
             else    /* n < 0 */
             {
                 return(pow(octonion<T>(1)/o,-n));
+            }
+        }
+        
+        
+        // helper templates for converting copy constructors (definition)
+        
+        namespace detail
+        {
+            
+            template<   typename T,
+                        typename U
+                    >
+            octonion<T>    octonion_type_converter(octonion<U> const & rhs)
+            {
+                return(octonion<T>( static_cast<T>(rhs.R_component_1()),
+                                    static_cast<T>(rhs.R_component_2()),
+                                    static_cast<T>(rhs.R_component_3()),
+                                    static_cast<T>(rhs.R_component_4()),
+                                    static_cast<T>(rhs.R_component_5()),
+                                    static_cast<T>(rhs.R_component_6()),
+                                    static_cast<T>(rhs.R_component_7()),
+                                    static_cast<T>(rhs.R_component_8())));
             }
         }
     }
