@@ -10,20 +10,23 @@
 #ifndef BOOST_QUATERNION_HPP
 #define BOOST_QUATERNION_HPP
 
-#include <boost/config.hpp>
+
 #include <complex>
-#include <iosfwd>                                   // for the "<<" and ">>" operators
-#include <sstream>                                  // for the "<<" operator
+#include <iosfwd>                                    // for the "<<" and ">>" operators
+#include <sstream>                                    // for the "<<" operator
 
 #ifdef    BOOST_NO_STD_LOCALE
 #else
-    #include <locale>                               // for the "<<" operator
+    #include <locale>                                    // for the "<<" operator
 #endif /* BOOST_NO_STD_LOCALE */
 
 #include <valarray>
 
+
+#include <boost/config.hpp>
+
 #include <boost/math/special_functions/sinc.hpp>    // for the Sinus cardinal
-#include <boost/math/special_functions/sinhc.hpp>   // for the Hyperbolic Sinus cardinal
+#include <boost/math/special_functions/sinhc.hpp>    // for the Hyperbolic Sinus cardinal
 
 
 namespace boost
@@ -438,7 +441,7 @@ namespace boost
         namespace detail
         {
             
-            template<    typename T,
+            template<   typename T,
                         typename U
                     >
             quaternion<T>    quaternion_type_converter(quaternion<U> const & rhs)
@@ -1232,14 +1235,14 @@ namespace boost
                                                                 quaternion<T> & q)
 #endif /* defined(__GNUC__) && (__GNUC__ < 3) */
         {
+#if defined(__GNUC__) && __GNUC__ < 3
+            typedef char    charT;
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
+            
 #ifdef    BOOST_NO_STD_LOCALE
 #else
             const ::std::ctype<charT> & ct = ::std::use_facet< ::std::ctype<charT> >(is.getloc());
 #endif /* BOOST_NO_STD_LOCALE */
-            
-#if defined(__GNUC__) && __GNUC__ < 3
-            typedef char    charT;
-#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
             
             T    a = T();
             T    b = T();
@@ -1570,14 +1573,14 @@ namespace boost
         }
         
         
-#define    BOOST_QUATERNION_VALARRAY_LOADER    \
+#define    BOOST_QUATERNION_VALARRAY_LOADER  \
             using    ::std::valarray;        \
-                                            \
-            valarray<T>    temp(4);            \
-                                            \
-            temp[0] = q.R_component_1();    \
-            temp[1] = q.R_component_2();    \
-            temp[2] = q.R_component_3();    \
+                                             \
+            valarray<T>    temp(4);          \
+                                             \
+            temp[0] = q.R_component_1();     \
+            temp[1] = q.R_component_2();     \
+            temp[2] = q.R_component_3();     \
             temp[3] = q.R_component_4();
         
         
