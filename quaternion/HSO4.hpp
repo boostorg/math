@@ -180,3 +180,4 @@ template<typename TYPE_FLOAT>
 }
 
 #endif /* TEST_HSO4_HPP */
+

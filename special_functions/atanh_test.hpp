@@ -162,3 +162,4 @@ void    atanh_manual_check()
     
     BOOST_MESSAGE(" ");
 }
+

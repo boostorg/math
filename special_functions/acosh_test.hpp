@@ -82,3 +82,4 @@ void    acosh_manual_check()
     
     BOOST_MESSAGE(" ");
 }
+

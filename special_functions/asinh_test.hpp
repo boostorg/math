@@ -82,3 +82,4 @@ void    asinh_manual_check()
     
     BOOST_MESSAGE(" ");
 }
+
