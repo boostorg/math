@@ -35,6 +35,9 @@ void  swap( big_whole &a, big_whole &b );
 
 big_whole  and_not( big_whole const &a, big_whole const &b );
 
+big_whole  abs( big_whole const &w );
+short      sgn( big_whole const &w );
+
 big_whole  operator !( big_whole const &w );
 big_whole  operator +( big_whole const &w );
 big_whole  operator -( big_whole const &w );
@@ -1429,6 +1432,26 @@ and_not
     {
         return a;
     }
+}
+
+inline
+big_whole
+abs
+(
+    big_whole const &  w
+)
+{
+    return w;
+}
+
+inline
+short
+sgn
+(
+    big_whole const &  w
+)
+{
+    return w ? +1 : 0;
 }
 
 

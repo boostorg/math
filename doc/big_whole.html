@@ -67,6 +67,9 @@ void  swap( big_whole &amp;a, big_whole &amp;b );
 
 big_whole  and_not( big_whole const &amp;a, big_whole const &amp;b );
 
+big_whole  abs( big_whole const &amp;w );
+short      sgn( big_whole const &amp;w );
+
 big_whole  operator !( big_whole const &amp;w );
 big_whole  operator +( big_whole const &amp;w );
 big_whole  operator -( big_whole const &amp;w );
@@ -428,6 +431,28 @@ boost::math::and_not( boost::math::big_whole const &amp;a, boost::math::big_whol
 <p><strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code></p>
 
 <p><strong>Rationale:</strong> a method to compute <code><var>a</var> &amp; ~<var>b</var></code> without the need for the bitwise-complement operator (<code>big_whole</code> cannot have that operator because it gives a result approaching infinity for any input)</p>
+
+<blockquote><pre>
+boost::math::big_whole
+boost::math::abs( boost::math::big_whole const &amp;w );
+</pre></blockquote>
+
+<p><strong>Returns:</strong> the absolute value of <var>w</var></p>
+
+<p><strong>Note:</strong> since <code>big_whole</code> only supports nonnegative values, this function always returns a copy of <var>w</var></p>
+
+<p><strong>Rationale:</strong> finding the absolute value with a function profile used in the standard</p>
+
+<blockquote><pre>
+short
+boost::math::sgn( boost::math::big_whole const &amp;w );
+</pre></blockquote>
+
+<p><strong>Returns:</strong> -1, 0, or +1 depending on <var>w</var> being negative, zero, or positive, respectively</p>
+
+<p><strong>Note:</strong> since <code>big_whole</code> only supports nonnegative values, this function only returns zero or one</p>
+
+<p><strong>Rationale:</strong> finding the sign of a number</p>
 
 <h4><a name="c_nm_ops">Operators</a></h4>
 

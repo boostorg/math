@@ -1710,6 +1710,42 @@ bigwhole_double_plus_minus_unit_test
     BOOST_CHECK_EQUAL( and_not(aa, 1), b );
 }
 
+// Unit test for the abs and sgn functions
+void
+bigwhole_abs_sgn_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+
+    typedef std::valarray<std::size_t>  va_size_t;
+
+    big_whole const  z = 0;
+    big_whole const  o = 1;
+    big_whole const  a = wlimits_type::max();
+    big_whole const  b( va_size_t(wlimits_type::digits, 1) );
+    big_whole const  c = b | o;
+    big_whole const  d = c << ( 2 * wlimits_type::digits + 3 );
+
+    BOOST_CHECK_EQUAL( z, abs(z) );
+    BOOST_CHECK_EQUAL( 0, sgn(z) );
+
+    BOOST_CHECK_EQUAL( o, abs(o) );
+    BOOST_CHECK_EQUAL( +1, sgn(o) );
+
+    BOOST_CHECK_EQUAL( a, abs(a) );
+    BOOST_CHECK_EQUAL( +1, sgn(a) );
+
+    BOOST_CHECK_EQUAL( b, abs(b) );
+    BOOST_CHECK_EQUAL( +1, sgn(b) );
+
+    BOOST_CHECK_EQUAL( c, abs(c) );
+    BOOST_CHECK_EQUAL( +1, sgn(c) );
+
+    BOOST_CHECK_EQUAL( d, abs(d) );
+    BOOST_CHECK_EQUAL( +1, sgn(d) );
+}
+
 
 // Unit test program
 boost::unit_test_framework::test_suite *
@@ -1749,6 +1785,7 @@ init_unit_test_suite
 
     test->add( BOOST_TEST_CASE(bigwhole_unary_plus_minus_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_double_plus_minus_unit_test) );
+    test->add( BOOST_TEST_CASE(bigwhole_abs_sgn_unit_test) );
 
     return test;
 }
