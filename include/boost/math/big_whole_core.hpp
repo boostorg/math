@@ -34,6 +34,13 @@ void  swap( big_whole &a, big_whole &b );
 
 big_whole  operator !( big_whole const &w );
 
+bool  operator ==( big_whole const &lhs, big_whole const &rhs );
+bool  operator !=( big_whole const &lhs, big_whole const &rhs );
+bool  operator < ( big_whole const &lhs, big_whole const &rhs );
+bool  operator > ( big_whole const &lhs, big_whole const &rhs );
+bool  operator <=( big_whole const &lhs, big_whole const &rhs );
+bool  operator >=( big_whole const &lhs, big_whole const &rhs );
+
 
 //  Arbitrary-length whole-number object class declaration  ------------------//
 
@@ -70,6 +77,8 @@ public:
     mask_type   to_bit_vector() const;
     index_type  to_bit_indices() const;
 
+    bool  is_even() const;
+
     // Bit-twiddling operations
     void  reset();
     void  reset( std::size_t from, std::size_t to );
@@ -103,6 +112,9 @@ public:
     // Self-operator mutators
     void  not_self();
 
+    // Object-accessing operations
+    int  compare( self_type const &other ) const;
+
     // Operators
     self_type &  operator =( self_type const &rhs );
 
@@ -127,6 +139,8 @@ protected:
     static  std::size_t  blength( word_type w );
 
     static  word_type  count_set_bits_for_word( word_type w );
+
+    static  int  do_compare( va_type const &lhs, va_type const &rhs );
 
 private:
     // More member types
@@ -335,6 +349,15 @@ big_whole::to_bit_indices
     }
 
     return temp;
+}
+
+bool
+big_whole::is_even
+(
+) const
+{
+    return !this->x_.get() || !this->x_->size() || ( 0u == (1u
+     & ( *this->x_ )[ 0 ]) );
 }
 
 
@@ -617,6 +640,20 @@ big_whole::not_self
 }
 
 
+//  Arbitrary-length whole-number object-accessing member definitions  -------//
+
+inline
+int
+big_whole::compare
+(
+    big_whole const &  other
+) const
+{
+    return this->x_.get() ? ( other.x_.get() ? self_type::do_compare(*this->x_,
+     *other.x_) : (this->any() ? +1 : 0) ) : ( other.any() ? -1 : 0 );
+}
+
+
 //  Arbitrary-length whole-number member operator definitions  ---------------//
 
 inline
@@ -778,6 +815,53 @@ big_whole::count_set_bits_for_word
     }
 
     return c;
+}
+
+int
+big_whole::do_compare
+(
+    big_whole::va_type const &  lhs,
+    big_whole::va_type const &  rhs
+)
+{
+    using std::size_t;
+
+    size_t const  l_size = lhs.size();
+    size_t const  r_size = rhs.size();
+
+    for ( size_t  i = l_size ; i > r_size ; --i )
+    {
+        if ( lhs[i - 1] )
+        {
+            return +1;
+        }
+    }
+
+    for ( size_t  j = r_size ; j > l_size ; --j )
+    {
+        if ( rhs[j - 1] )
+        {
+            return -1;
+        }
+    }
+
+    for ( size_t  k = std::min(l_size, r_size) ; k > 0 ; --k )
+    {
+        size_t const     kk = k - 1;
+        word_type const  lw = lhs[ kk ];
+        word_type const  rw = rhs[ kk ];
+
+        if ( lw < rw )
+        {
+            return -1;
+        }
+        else if ( lw > rw )
+        {
+            return +1;
+        }
+    }
+
+    return 0;
 }
 
 
@@ -994,6 +1078,72 @@ operator !
     big_whole  temp( w );
 
     return temp.not_self(), temp;
+}
+
+inline
+bool
+operator ==
+(
+    big_whole const &  lhs,
+    big_whole const &  rhs
+)
+{
+    return lhs.compare( rhs ) == 0;
+}
+
+inline
+bool
+operator !=
+(
+    big_whole const &  lhs,
+    big_whole const &  rhs
+)
+{
+    return lhs.compare( rhs ) != 0;
+}
+
+inline
+bool
+operator <
+(
+    big_whole const &  lhs,
+    big_whole const &  rhs
+)
+{
+    return lhs.compare( rhs ) < 0;
+}
+
+inline
+bool
+operator >
+(
+    big_whole const &  lhs,
+    big_whole const &  rhs
+)
+{
+    return lhs.compare( rhs ) > 0;
+}
+
+inline
+bool
+operator <=
+(
+    big_whole const &  lhs,
+    big_whole const &  rhs
+)
+{
+    return lhs.compare( rhs ) <= 0;
+}
+
+inline
+bool
+operator >=
+(
+    big_whole const &  lhs,
+    big_whole const &  rhs
+)
+{
+    return lhs.compare( rhs ) >= 0;
 }
 
 

@@ -66,6 +66,13 @@ void  swap( big_whole &amp;a, big_whole &amp;b );
 
 big_whole  operator !( big_whole const &amp;w );
 
+bool  operator ==( big_whole const &amp;lhs, big_whole const &amp;rhs );
+bool  operator !=( big_whole const &amp;lhs, big_whole const &amp;rhs );
+bool  operator &lt; ( big_whole const &amp;lhs, big_whole const &amp;rhs );
+bool  operator &gt; ( big_whole const &amp;lhs, big_whole const &amp;rhs );
+bool  operator &lt;=( big_whole const &amp;lhs, big_whole const &amp;rhs );
+bool  operator &gt;=( big_whole const &amp;lhs, big_whole const &amp;rhs );
+
 }
 }
 
@@ -112,6 +119,8 @@ public:
     std::valarray&lt;bool&gt;         to_bit_vector() const;
     std::valarray&lt;std::size_t&gt;  to_bit_indices() const;
 
+    bool  is_even() const;
+
     // Bit-twiddling operations
     void  reset();
     void  reset( std::size_t from, std::size_t to );
@@ -143,6 +152,9 @@ public:
 
     // Self-operator mutators
     void  not_self();
+
+    // Object-accessing operations
+    int  compare( big_whole const &amp;other ) const;
 
     // Operators
     big_whole &amp;  operator =( big_whole const &amp;rhs );
@@ -201,6 +213,12 @@ public:
 		<strong>Returns:</strong> the places of the set bits for the numeric value stored in <code>*this</code><br>
 		<strong>Rationale:</strong> break down to a set-bit index list
 
+	<dt><code>bool  is_even() const;</code>
+	<dd>
+		<strong>Returns:</strong> whether the numeric value stored in <code>*this</code> is even (or odd if not)<br>
+		<strong>Note:</strong> same as <code>*this % 2 == 0</code>, but is probably implemented more efficiently<br>
+		<strong>Rationale:</strong> simple even/odd test
+
 	<dt><code>std::size_t  length() const;</code>
 	<dd>
 		<strong>Returns:</strong> the smallest nonnegative integer, <var>n</var>, such that 2<sup><var>n</var></sup> is greater than the numeric value stored in <code>*this</code> (returns 0 if <code>*this</code> represents zero)<br>
@@ -245,6 +263,11 @@ public:
 	<dd>
 		<strong>Returns:</strong> 0 if <code>*this</code> represents zero; otherwise, <code>this-&gt;reverse( this-&gt;length() - 1 )</code><br>
 		<strong>Rationale:</strong> shorthand for the most common case of bit-order reversal (minimal amount for all significant bits)
+
+	<dt><code>int  compare( big_whole const &amp;other ) const;</code>
+	<dd>
+		<strong>Returns:</strong> zero if <code>*this</code> and <var>other</var> represent the same value, a positive number if <code>*this</code> is the greater, and a negative number if <code>*this</code> is the lesser (<i>i.e.</i> <var>other</var> is the greater)<br>
+		<strong>Rationale:</strong> equality/ordered comparison core routine
 </dl>
 
 <h4><a name="c_bw_mutate">Mutating Member Functions</a></h4>
@@ -345,6 +368,7 @@ boost::math::swap( boost::math::big_whole &amp;a, boost::math::big_whole &amp;b 
 
 <p><strong>Rationale:</strong> exchanges the state of two objects; can use in standard(-like) algorithms with ADL</p>
 
+
 <h4><a name="c_nm_ops">Operators</a></h4>
 
 <dl>
@@ -352,6 +376,16 @@ boost::math::swap( boost::math::big_whole &amp;a, boost::math::big_whole &amp;b 
 	<dd>
 		<strong>Returns:</strong> 1 if <var>w</var> represents zero, 0 otherwise<br>
 		<strong>Note:</strong> calls <code>big_whole::not_self()</code>
+
+	<dt><code>bool  boost::math::operator ==( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>bool  boost::math::operator !=( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>bool  boost::math::operator &lt;( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>bool  boost::math::operator &gt;( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>bool  boost::math::operator &lt;=( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>bool  boost::math::operator &gt;=( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
+	<dd>
+		<strong>Returns:</strong> whether the given relation applies to <var>lhs</var> and <var>rhs</var><br>
+		<strong>Note:</strong> calls <code>big_whole::compare()</code>
 </dl>
 
 <h3><a name="c_limits">Numeric Limits</a></h3>
@@ -435,7 +469,7 @@ boost::math::operator &gt;&gt;( std::basic_istream&lt;Ch, Tr&gt; &amp;is, boost:
 
 <hr>
 
-<p>Revised: 6 February 2004</p>
+<p>Revised: 9 February 2004</p>
 
 <p>Copyright 2004 Daryle Walker.  Use, modification, and distribution are subject to the Boost Software License, Version 1.0.  (See accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at &lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)</p>
 </body>

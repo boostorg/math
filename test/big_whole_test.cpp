@@ -7,7 +7,7 @@
 //  See <http://www.boost.org/libs/math/> for the library's home page.
 
 //  Revision History
-//   06 Feb 2004  Initial version (Daryle Walker)
+//   09 Feb 2004  Initial version (Daryle Walker)
 
 #include <boost/math/big_whole.hpp>  // for boost::math::big_whole, etc.
 #include <boost/test/unit_test.hpp>  // for main, BOOST_CHECK_EQUAL, etc.
@@ -34,17 +34,17 @@ equal_valarrays
     std::valarray<T> const &  rhs
 )
 {
-    using std::valarray;
-
     if ( lhs.size() == rhs.size() )
     {
-        valarray<std::size_t>  s( lhs.size() );
+        std::valarray<std::size_t>  s( lhs.size() );
 
         s[ lhs == rhs ] = 1;
         return s.sum() == s.size();
     }
-
-    return false;
+    else
+    {
+        return false;
+    }
 }
 
 // Helper function to insert values into sets
@@ -894,6 +894,10 @@ bigwhole_group_bit_assign_unit_test
 )
 {
     using boost::math::big_whole;
+    using std::size_t;
+
+    typedef std::valarray<size_t>  va_size_t;
+    typedef std::set<size_t>       st_size_t;
 
     // no segment is zero
     big_whole  x( 255 );
@@ -965,6 +969,138 @@ bigwhole_group_bit_assign_unit_test
 
     x.bits_assign( 11, 45, big_whole() );
     BOOST_CHECK_EQUAL( 0u, x.to_uintmax() );
+
+    // multiple words
+    size_t const     t11_old_i[] = { 0,  2 * wlimits_type::digits + 1 };
+    size_t const     t11_old_s = sizeof( t11_old_i ) / sizeof( t11_old_i[0] );
+    va_size_t const  t11_old( t11_old_i, t11_old_s );
+    st_size_t        t11_new( t11_old_i, t11_old_i + t11_old_s );
+
+    x.reconfigure( t11_old );
+    BOOST_CHECK( equal_valarrays(t11_old, x.to_bit_indices()) );
+    BOOST_CHECK( equal_valarrays(set_to_valarray( t11_new ), t11_old) );
+
+    x.bits_assign( wlimits_type::digits - 1, wlimits_type::digits + 2, big_whole(7) );
+    insert_value_range( t11_new, wlimits_type::digits - 1, wlimits_type::digits + 1 );
+    BOOST_CHECK( equal_valarrays(x.to_bit_indices(), set_to_valarray( t11_new )) );
+}
+
+// Unit test for checking if an object is even/odd
+void
+bigwhole_is_even_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::size_t;
+
+    typedef std::valarray<size_t>  va_size_t;
+
+    // zero
+    big_whole  a;
+
+    BOOST_CHECK_EQUAL( 0u, a.to_uintmax() );
+    BOOST_CHECK( a.is_even() );
+
+    // non-zero odd
+    a.assign( 5 );
+    BOOST_CHECK_EQUAL( 5u, a.to_uintmax() );
+    BOOST_CHECK( !a.is_even() );
+
+    // non-zero even
+    a.assign( 18 );
+    BOOST_CHECK_EQUAL( 18u, a.to_uintmax() );
+    BOOST_CHECK( a.is_even() );
+
+    // multi-word odd
+    size_t const     t3_i[] = { 0, wlimits_type::digits + 1 };
+    size_t const     t3_s = sizeof( t3_i ) / sizeof( t3_i[0] );
+    va_size_t const  t3( t3_i, t3_s );
+
+    a.reconfigure( t3 );
+    BOOST_CHECK( equal_valarrays(t3, a.to_bit_indices()) );
+    BOOST_CHECK( !a.is_even() );
+
+    // multi-word even
+    size_t const     t4_i = 2 * wlimits_type::digits + 3;
+    va_size_t const  t4( t4_i, 1 );
+
+    a.reconfigure( t4 );
+    BOOST_CHECK( equal_valarrays(t4, a.to_bit_indices()) );
+    BOOST_CHECK( a.is_even() );
+}
+
+// Unit test for comparisons
+void
+bigwhole_compare_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+
+    typedef std::valarray<std::size_t>  va_size_t;
+
+    big_whole const  z;
+    big_whole const  a( 7 );
+    big_whole const  b( 100 );
+    big_whole const  c( va_size_t(2 * wlimits_type::digits + 3, 1) );
+
+    // "compare" directly
+    BOOST_CHECK( z.compare(z) == 0 );
+    BOOST_CHECK( z.compare(a) < 0 );
+    BOOST_CHECK( z.compare(b) < 0 );
+    BOOST_CHECK( z.compare(c) < 0 );
+
+    BOOST_CHECK( a.compare(z) > 0 );
+    BOOST_CHECK( a.compare(a) == 0 );
+    BOOST_CHECK( a.compare(b) < 0 );
+    BOOST_CHECK( a.compare(c) < 0 );
+
+    BOOST_CHECK( b.compare(z) > 0 );
+    BOOST_CHECK( b.compare(a) > 0 );
+    BOOST_CHECK( b.compare(b) == 0 );
+    BOOST_CHECK( b.compare(c) < 0 );
+
+    BOOST_CHECK( c.compare(z) > 0 );
+    BOOST_CHECK( c.compare(a) > 0 );
+    BOOST_CHECK( c.compare(b) > 0 );
+    BOOST_CHECK( c.compare(c) == 0 );
+
+    // use ==
+    BOOST_CHECK( z == z ); BOOST_CHECK( !(z == a) ); BOOST_CHECK( !(z == b) ); BOOST_CHECK( !(z == c) );
+    BOOST_CHECK( !(a == z) ); BOOST_CHECK( a == a ); BOOST_CHECK( !(a == b) ); BOOST_CHECK( !(a == c) );
+    BOOST_CHECK( !(b == z) ); BOOST_CHECK( !(b == a) ); BOOST_CHECK( b == b ); BOOST_CHECK( !(b == c) );
+    BOOST_CHECK( !(c == z) ); BOOST_CHECK( !(c == a) ); BOOST_CHECK( !(c == b) ); BOOST_CHECK( c == c );
+
+    // use !=
+    BOOST_CHECK( !(z != z) ); BOOST_CHECK( z != a ); BOOST_CHECK( z != b ); BOOST_CHECK( z != c );
+    BOOST_CHECK( a != z ); BOOST_CHECK( !(a != a) ); BOOST_CHECK( a != b ); BOOST_CHECK( a != c );
+    BOOST_CHECK( b != z ); BOOST_CHECK( b != a ); BOOST_CHECK( !(b != b) ); BOOST_CHECK( b != c );
+    BOOST_CHECK( c != z ); BOOST_CHECK( c != a ); BOOST_CHECK( c != b ); BOOST_CHECK( !(c != c) );
+
+    // use <
+    BOOST_CHECK( !(z < z) ); BOOST_CHECK( z < a ); BOOST_CHECK( z < b ); BOOST_CHECK( z < c );
+    BOOST_CHECK( !(a < z) ); BOOST_CHECK( !(a < a) ); BOOST_CHECK( a < b ); BOOST_CHECK( a < c );
+    BOOST_CHECK( !(b < z) ); BOOST_CHECK( !(b < a) ); BOOST_CHECK( !(b < b) ); BOOST_CHECK( b < c );
+    BOOST_CHECK( !(c < z) ); BOOST_CHECK( !(c < a) ); BOOST_CHECK( !(c < b) ); BOOST_CHECK( !(c < c) );
+
+    // use >
+    BOOST_CHECK( !(z > z) ); BOOST_CHECK( !(z > a) ); BOOST_CHECK( !(z > b) ); BOOST_CHECK( !(z > c) );
+    BOOST_CHECK( a > z ); BOOST_CHECK( !(a > a) ); BOOST_CHECK( !(a > b) ); BOOST_CHECK( !(a > c) );
+    BOOST_CHECK( b > z ); BOOST_CHECK( b > a ); BOOST_CHECK( !(b > b) ); BOOST_CHECK( !(b > c) );
+    BOOST_CHECK( c > z ); BOOST_CHECK( c > a ); BOOST_CHECK( c > b ); BOOST_CHECK( !(c > c) );
+
+    // use <=
+    BOOST_CHECK( z <= z ); BOOST_CHECK( z <= a ); BOOST_CHECK( z <= b ); BOOST_CHECK( z <= c );
+    BOOST_CHECK( !(a <= z) ); BOOST_CHECK( a <= a ); BOOST_CHECK( a <= b ); BOOST_CHECK( a <= c );
+    BOOST_CHECK( !(b <= z) ); BOOST_CHECK( !(b <= a) ); BOOST_CHECK( b <= b ); BOOST_CHECK( b <= c );
+    BOOST_CHECK( !(c <= z) ); BOOST_CHECK( !(c <= a) ); BOOST_CHECK( !(c <= b) ); BOOST_CHECK( c <= c );
+
+    // use >=
+    BOOST_CHECK( z >= z ); BOOST_CHECK( !(z >= a) ); BOOST_CHECK( !(z >= b) ); BOOST_CHECK( !(z >= c) );
+    BOOST_CHECK( a >= z ); BOOST_CHECK( a >= a ); BOOST_CHECK( !(a >= b) ); BOOST_CHECK( !(a >= c) );
+    BOOST_CHECK( b >= z ); BOOST_CHECK( b >= a ); BOOST_CHECK( b >= b ); BOOST_CHECK( !(b >= c) );
+    BOOST_CHECK( c >= z ); BOOST_CHECK( c >= a ); BOOST_CHECK( c >= b ); BOOST_CHECK( c >= c );
 }
 
 
@@ -991,6 +1127,9 @@ init_unit_test_suite
     test->add( BOOST_TEST_CASE(bigwhole_single_bit_flip_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_group_bit_flip_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_group_bit_assign_unit_test) );
+
+    test->add( BOOST_TEST_CASE(bigwhole_is_even_unit_test) );
+    test->add( BOOST_TEST_CASE(bigwhole_compare_unit_test) );
 
     return test;
 }
