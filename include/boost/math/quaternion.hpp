@@ -15,15 +15,14 @@
 #include <iosfwd>                                    // for the "<<" and ">>" operators
 #include <sstream>                                    // for the "<<" operator
 
-#ifdef    BOOST_NO_STD_LOCALE
-#else
+#include <boost/config.hpp> // for BOOST_NO_STD_LOCALE
+#ifndef    BOOST_NO_STD_LOCALE
     #include <locale>                                    // for the "<<" operator
 #endif /* BOOST_NO_STD_LOCALE */
 
 #include <valarray>
 
 
-#include <boost/config.hpp>
 
 #include <boost/math/special_functions/sinc.hpp>    // for the Sinus cardinal
 #include <boost/math/special_functions/sinhc.hpp>    // for the Hyperbolic Sinus cardinal
