@@ -7,7 +7,7 @@
 //  See <http://www.boost.org/libs/math/> for the library's home page.
 
 //  Revision History
-//   05 Feb 2004  Initial version (Daryle Walker)
+//   06 Feb 2004  Initial version (Daryle Walker)
 
 #include <boost/math/big_whole.hpp>  // for boost::math::big_whole, etc.
 #include <boost/test/unit_test.hpp>  // for main, BOOST_CHECK_EQUAL, etc.
@@ -887,6 +887,86 @@ bigwhole_group_bit_flip_unit_test
     BOOST_CHECK( equal_valarrays(set_to_valarray( a5_new ), a5.to_bit_indices()) );
 }
 
+// Unit test for assigning a group of bits to an arbitrary value
+void
+bigwhole_group_bit_assign_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+
+    // no segment is zero
+    big_whole  x( 255 );
+
+    BOOST_CHECK_EQUAL( 255u, x.to_uintmax() );
+
+    x.bits_assign( 3, 5, big_whole(2) );
+    BOOST_CHECK_EQUAL( 215u, x.to_uintmax() );
+
+    // old middle part is zero
+    x.assign( 199 );
+    BOOST_CHECK_EQUAL( 199u, x.to_uintmax() );
+
+    x.bits_assign( 3, 5, big_whole(7) );
+    BOOST_CHECK_EQUAL( 255u, x.to_uintmax() );
+
+    // new-value bits above the range are ignored
+    x.assign( 199 );
+    BOOST_CHECK_EQUAL( 199u, x.to_uintmax() );
+
+    x.bits_assign( 3, 4, big_whole(14) );
+    BOOST_CHECK_EQUAL( 215u, x.to_uintmax() );
+
+    // new middle part is zero
+    x.assign( 255 );
+    BOOST_CHECK_EQUAL( 255u, x.to_uintmax() );
+
+    x.bits_assign( 3, 5, big_whole() );
+    BOOST_CHECK_EQUAL( 199u, x.to_uintmax() );
+
+    // change the lowest bits
+    x.assign( 255 );
+    BOOST_CHECK_EQUAL( 255u, x.to_uintmax() );
+
+    x.bits_assign( 0, 2, big_whole(33) );
+    BOOST_CHECK_EQUAL( 249u, x.to_uintmax() );
+
+    // change the lowest bits to zero
+    x.assign( 255 );
+    BOOST_CHECK_EQUAL( 255u, x.to_uintmax() );
+
+    x.bits_assign( 0, 3, big_whole() );
+    BOOST_CHECK_EQUAL( 240u, x.to_uintmax() );
+
+    // change the highest bits
+    x.assign( 255 );
+    BOOST_CHECK_EQUAL( 255u, x.to_uintmax() );
+
+    x.bits_assign( 5, 7, big_whole(5) );
+    BOOST_CHECK_EQUAL( 191u, x.to_uintmax() );
+
+    // change the highest bits to zero
+    x.assign( 255 );
+    BOOST_CHECK_EQUAL( 255u, x.to_uintmax() );
+
+    x.bits_assign( 4, 7, big_whole() );
+    BOOST_CHECK_EQUAL( 15u, x.to_uintmax() );
+
+    // turn zero into a nonzero
+    x.reset();
+    BOOST_CHECK_EQUAL( 0u, x.to_uintmax() );
+
+    x.bits_assign( 8, 9, big_whole(35) );
+    BOOST_CHECK_EQUAL( 768u, x.to_uintmax() );
+
+    // keep zero a zero
+    x.reset();
+    BOOST_CHECK_EQUAL( 0u, x.to_uintmax() );
+
+    x.bits_assign( 11, 45, big_whole() );
+    BOOST_CHECK_EQUAL( 0u, x.to_uintmax() );
+}
+
 
 // Unit test program
 boost::unit_test_framework::test_suite *
@@ -910,6 +990,7 @@ init_unit_test_suite
     test->add( BOOST_TEST_CASE(bigwhole_group_bit_set_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_single_bit_flip_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_group_bit_flip_unit_test) );
+    test->add( BOOST_TEST_CASE(bigwhole_group_bit_assign_unit_test) );
 
     return test;
 }

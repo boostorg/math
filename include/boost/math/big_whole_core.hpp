@@ -39,11 +39,12 @@ big_whole  operator !( big_whole const &w );
 
 class big_whole
 {
-    typedef big_whole  self_type;
-
     struct dummy { dummy *d; };
 
-    typedef dummy * dummy::*  bool_type;
+    typedef big_whole                 self_type;
+    typedef dummy * dummy::*          bool_type;
+    typedef std::valarray<bool>         ma_type;
+    typedef std::valarray<std::size_t>  ia_type;
 
 public:
     // Lifetime management
@@ -82,6 +83,8 @@ public:
 
     void  bit_assign( std::size_t from, std::size_t to, bool value );
     void  bit_assign( std::size_t i, bool value );
+
+    void  bits_assign( std::size_t from, std::size_t to, self_type const &values );
 
     // Bit-inspecting operations
     std::size_t  length() const;
@@ -432,6 +435,53 @@ big_whole::bit_assign
 )
 {
     this->bit_change( i, value ? set_bit : reset_bit );
+}
+
+void
+big_whole::bits_assign
+(
+    std::size_t        from,
+    std::size_t        to,
+    big_whole const &  values
+)
+{
+    using std::size_t;
+
+    if ( from > to )
+    {
+        std::swap( from, to );
+    }
+
+    ia_type const  t_ids = this->to_bit_indices();
+    ia_type const  v_ids = values.to_bit_indices();
+
+    ia_type const   pre_t_ids = t_ids[ t_ids < from ];
+    ia_type const   new_v_ids = v_ids[ v_ids <= (to - from) ] + from;
+    ia_type const  post_t_ids = t_ids[ t_ids > to ];
+
+    size_t const   pre_s =  pre_t_ids.size();
+    size_t const   new_s =  new_v_ids.size();
+    size_t const  post_s = post_t_ids.size();
+
+    ia_type   new_t_ids( pre_s + new_s + post_s );
+    size_t *  new_t_ptr = &new_t_ids[ 0 ];
+
+    for ( size_t  i = 0 ; i < pre_s ; ++i, ++new_t_ptr )
+    {
+        *new_t_ptr = pre_t_ids[ i ];
+    }
+
+    for ( size_t  j = 0 ; j < new_s ; ++j, ++new_t_ptr )
+    {
+        *new_t_ptr = new_v_ids[ j ];
+    }
+
+    for ( size_t  k = 0 ; k < post_s ; ++k, ++new_t_ptr )
+    {
+        *new_t_ptr = post_t_ids[ k ];
+    }
+
+    this->reconfigure( new_t_ids );
 }
 
 

@@ -126,6 +126,8 @@ public:
     void  bit_assign( std::size_t from, std::size_t to, bool value );
     void  bit_assign( std::size_t i, bool value );
 
+    void  bits_assign( std::size_t from, std::size_t to, big_whole const &amp;values );
+
     // Bit-inspecting operations
     std::size_t  length() const;
 
@@ -300,7 +302,13 @@ public:
 	    <code>void  bit_assign( std::size_t i, bool value );</code>
 	<dd>
 		<strong>Effects:</strong> changes the internal state so some set of the bits of the represented value become <var>value</var>; the three-argument version affects the bits between the 2<sup><var>from</var></sup> and 2<sup><var>to</var></sup> places (inclusive), the two-argument version affects the bit at the 2<sup><var>i</var></sup> place<br>
-		<strong>Rationale:</strong> specific-bit(s) assignment, user-defined
+		<strong>Rationale:</strong> specific-bit(s) assignment, user-defined constant value
+
+	<dt><code>void  bits_assign( std::size_t from, std::size_t to, big_whole const &amp;values );</code>
+	<dd>
+		<strong>Precondition:</strong> <code>from &lt;= to</code><br>
+		<strong>Effects:</strong> changes the internal state so the set of bits between the 2<sup><var>from</var></sup> and 2<sup><var>to</var></sup> places (inclusive) of the represented value become (the lowest <var>to</var> - <var>from</var> + 1 bits of) <var>values</var>; in other words, <code>*this ^= (((*this / 2<sup><var>from</var></sup>) ^ <var>values</var>) * 2<sup><var>from</var></sup>) % 2<sup><var>to</var> + 1</sup></code><br>
+		<strong>Rationale:</strong> specific-bit(s) assignment, user-defined specific values
 
 	<dt><code>void  not_self();</code>
 	<dd>
@@ -427,7 +435,7 @@ boost::math::operator &gt;&gt;( std::basic_istream&lt;Ch, Tr&gt; &amp;is, boost:
 
 <hr>
 
-<p>Revised: 5 Feburary 2004</p>
+<p>Revised: 6 February 2004</p>
 
 <p>Copyright 2004 Daryle Walker.  Use, modification, and distribution are subject to the Boost Software License, Version 1.0.  (See accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at &lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)</p>
 </body>
