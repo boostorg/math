@@ -116,7 +116,11 @@ namespace boost
             else
             {
                 // approximation by taylor series in x at 0 up to order 0
+#ifdef __MWERKS__
+                U<T>    result = static_cast<U<T> >(1);
+#else
                 U<T>    result = U<T>(1);
+#endif
 
                 if    (abs(x) >= taylor_0_bound)
                 {
