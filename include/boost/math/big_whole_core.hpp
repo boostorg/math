@@ -917,7 +917,6 @@ big_whole::bit_change
     }
 }
 
-inline
 void
 big_whole::bit_change
 (
@@ -925,7 +924,47 @@ big_whole::bit_change
     big_whole::bit_operation  op
 )
 {
-    this->bit_change( i, i, op );
+    using std::size_t;
+
+    size_t const      ii = i / limits_type::digits;
+    va_type *          v = this->x_.get();
+    size_t        v_size = v ? v->size() : 0;
+
+    if ( (ii >= v_size) && (op != reset_bit) )
+    {
+        ap_type  p( new va_type(0u, ii + 1) );
+
+        if ( v && v_size )
+        {
+            ( *p )[ std::slice(0, v_size, 1) ] = *v;
+        }
+
+        this->x_.reset( p.release() );
+        v = this->x_.get();
+        v_size = v->size();
+    }
+
+    size_t const     ij = i % limits_type::digits;
+    word_type const   m = 1u << ij;
+
+    switch ( op )
+    {
+    case flip_bit:
+        ( *v )[ ii ] ^= m;
+        break;
+
+    case set_bit:
+        ( *v )[ ii ] |= m;
+        break;
+
+    case reset_bit:
+    default:
+        if ( ii < v_size )
+        {
+            ( *v )[ ii ] &= ~m;
+        }
+        break;
+    }
 }
 
 
