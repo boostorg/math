@@ -1,0 +1,434 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>Boost Arbitrary-length Whole-number Library</title>
+</head>
+<body>
+<h1><img src="../../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="middle" width="277" height="86">Arbitrary-length Whole-number Library</h1>
+
+<p>The headers <cite><a href="../../../boost/math/big_whole_core.hpp">boost/math/big_whole_core.hpp</a></cite> and <cite><a href="../../../boost/math/big_whole.hpp">boost/math/big_whole.hpp</a></cite> cover the definition of and operations for unlimited-length nonnegative integers (only memory constraints should limit the numbers supported).</p>
+
+<h2><a name="contents">Contents</a></h2>
+
+<ol>
+	<li><a href="#contents">Contents</a></li>
+	<li><a href="#rationale">Rationale</a></li>
+	<li><a href="#core">Core Definition and Routines</a>
+		<ul>
+			<li><a href="#c_header">Header Synopsis</a></li>
+			<li><a href="#c_bigwhole">Unlimited-Length Nonnegative Integer Type</a>
+				<ul>
+					<li><a href="#c_bw_ctr">Constructors</a></li>
+					<li><a href="#c_bw_observe">Observer Member Functions</a></li>
+					<li><a href="#c_bw_mutate">Mutating Member Functions</a></li>
+					<li><a href="#c_bw_ops">Operators</a></li>
+				</ul></li>
+			<li><a href="#c_nm_funcs">Non-Member Functions &amp; Operators</a>
+				<ul>
+					<li><a href="#c_nm_ops">Operators</a></li>
+				</ul></li>
+			<li><a href="#c_limits">Numeric Limits</a></li>
+		</ul></li>
+	<li><a href="#additional">Additional Routines</a>
+		<ul>
+			<li><a href="#a_header">Header Synopsis</a></li>
+			<li><a href="#a_io_ops">Input &amp; Output Operators</a></li>
+		</ul></li>
+	<li><a href="#refer">References</a></li>
+	<li><a href="#credits">Credits</a>
+		<ul>
+			<li><a href="#contributors">Contributors</a></li>
+			<li><a href="#history">History</a></li>
+		</ul></li>
+</ol>
+
+<h2><a name="rationale">Rationale</a></h2>
+
+<p>Various &quot;bignum&quot; classes provide objects that model numbers beyond the limits of the built-in numeric types.  The class provided in this library gives a portable implementation of nonnegative integers (also known as &quot;whole&quot; numbers).  The implementation tries to lean towards good performance, but it's probably not as good as the various highly-refined &quot;bignum&quot; types available.</p>
+
+<h2><a name="core">Core Definition and Routines</a></h2>
+
+<p>The <cite><a href="../../../boost/math/big_whole_core.hpp">boost/math/big_whole_core.hpp</a></cite> header contains the declaration for the unlimited-length nonnegative integer type and declarations for various core routines.</p>
+
+<h3><a name="c_header">Header Synopsis</a></h3>
+
+<blockquote><pre>
+#include &lt;limits&gt;  <i>// for std::numeric_limits</i>
+
+namespace boost
+{
+namespace math
+{
+
+class big_whole;
+
+void  swap( big_whole &amp;a, big_whole &amp;b );
+
+big_whole  operator !( big_whole const &amp;w );
+
+}
+}
+
+namespace std
+{
+
+template &lt; &gt;  class numeric_limits&lt; boost::math::big_whole &gt;;
+
+}
+</pre></blockquote>
+
+<h3><a name="c_bigwhole">Unlimited-Length Nonnegative Integer Type</a></h3>
+
+<p>Objects from the <code>boost::math::big_whole</code> class represent unlimited-length nonnegative integers.  Even though the implemenation is advanced, objects from this type can be passed around like any other value-based type.  The usual mathematical functions and operators are provided.  These objects have a binary (<i>i.e.</i> radix-2) representation, so various bit-twiddling functions and operators are also provided.</p>
+
+<blockquote><pre>
+#include &lt;boost/cstdint.hpp&gt;  <i>// for boost::uintmax_t</i>
+#include &lt;cstddef&gt;            <i>// for std::size_t</i>
+#include &lt;valarray&gt;           <i>// for std::valarray</i>
+
+class boost::math::big_whole
+{
+public:
+    // Lifetime management
+    big_whole();
+    big_whole( big_whole const &amp;other );
+
+    big_whole( boost::uintmax_t v );
+
+    explicit  big_whole( std::valarray&lt;bool&gt; const &amp;b );
+    explicit  big_whole( std::valarray&lt;std::size_t&gt; const &amp;i );
+
+    // Object-mutating operations
+    void  swap( big_whole &amp;other );
+
+    void  assign( big_whole const &amp;other );
+    void  assign( boost::uintmax_t v );
+
+    void  reconfigure( std::valarray&lt;bool&gt; const &amp;b );
+    void  reconfigure( std::valarray&lt;std::size_t&gt; const &amp;i );
+
+    // Value-accessing operations
+    uintmax_t                   to_uintmax() const;
+    std::valarray&lt;bool&gt;         to_bit_vector() const;
+    std::valarray&lt;std::size_t&gt;  to_bit_indices() const;
+
+    // Bit-twiddling operations
+    void  reset();
+    void  reset( std::size_t from, std::size_t to );
+    void  reset( std::size_t i );
+
+    void  set( std::size_t from, std::size_t to );
+    void  set( std::size_t i );
+
+    void  flip( std::size_t from, std::size_t to );
+    void  flip( std::size_t i );
+
+    void  bit_assign( std::size_t from, std::size_t to, bool value );
+    void  bit_assign( std::size_t i, bool value );
+
+    // Bit-inspecting operations
+    std::size_t  length() const;
+
+    std::size_t  count() const;
+    bool         any() const;
+    bool         none() const;
+
+    bool       test( std::size_t i ) const;
+    big_whole  tests( std::size_t from, std::size_t to ) const;
+
+    big_whole  reverse( std::size_t cap ) const;
+    big_whole  reverse() const;
+
+    // Self-operator mutators
+    void  not_self();
+
+    // Operators
+    big_whole &amp;  operator =( big_whole const &amp;rhs );
+
+    operator <em>bool_type</em>() const;
+
+};
+</pre></blockquote>
+
+<h4><a name="c_bw_ctr">Constructors</a></h4>
+
+<p><strong>Note:</strong> the automatically-defined destructor is used.</p>
+
+<dl>
+	<dt><code>big_whole();</code>
+	<dd>
+		<strong>Effects:</strong> sets the internal state such that the stored numerical value is zero (using a minimal amount of memory)<br>
+		<strong>Rationale:</strong> standard default-state creation
+
+	<dt><code>big_whole( big_whole &amp;other );</code>
+	<dd>
+		<strong>Effects:</strong> sets the internal state such that the stored numerical value is the same as the numerical value stored in <var>other</var><br>
+		<strong>Rationale:</strong> standard creation via copying
+
+	<dt><code>big_whole( boost::uintmax_t v );</code>
+	<dd>
+		<strong>Effects:</strong> sets the internal state such that the stored numerical value is the same as <var>v</var><br>
+		<strong>Rationale:</strong> creation via conversion
+
+	<dt><code>explicit  big_whole( std::valarray&lt;bool&gt; const &amp;b );</code>
+	<dd>
+		<strong>Effects:</strong> sets the internal state such that the stored numerical value has the same bit pattern as <var>b</var><br>
+		<strong>Rationale:</strong> creation via bit-pattern
+
+	<dt><code>explicit  big_whole( std::valarray&lt;std::size_t&gt; const &amp;i );</code>
+	<dd>
+		<strong>Effects:</strong> sets the internal state such that the stored numerical value has its set bits at the positions given by <var>i</var><br>
+		<strong>Rationale:</strong> creation via set-bit-location specification
+</dl>
+
+<h4><a name="c_bw_observe">Observer Member Functions</a></h4>
+
+<dl>
+	<dt><code>boost::uintmax_t  to_uintmax() const;</code>
+	<dd>
+		<strong>Returns:</strong> the numeric value stored in <code>*this</code>, reduced modulo 2<sup><code>std::numeric_limits&lt; boost::uintmax_t &gt;::digits</code></sup><br>
+		<strong>Rationale:</strong> explicit reverse conversion
+
+	<dt><code>std::valarray&lt;bool&gt;  to_bit_vector() const;</code>
+	<dd>
+		<strong>Returns:</strong> the bit pattern for the numeric value stored in <code>*this</code><br>
+		<strong>Rationale:</strong> break down to a bit pattern
+
+	<dt><code>std::valarray&lt;std::size_t&gt;  to_bit_indices() const;</code>
+	<dd>
+		<strong>Returns:</strong> the places of the set bits for the numeric value stored in <code>*this</code><br>
+		<strong>Rationale:</strong> break down to a set-bit index list
+
+	<dt><code>std::size_t  length() const;</code>
+	<dd>
+		<strong>Returns:</strong> the smallest nonnegative integer, <var>n</var>, such that 2<sup><var>n</var></sup> is greater than the numeric value stored in <code>*this</code> (returns 0 if <code>*this</code> represents zero)<br>
+		<strong>Note:</strong> same as <code>this-&gt;to_bit_vector().size()</code> or (for nonzero length) <code>1 + this-&gt;to_bit_indices().max()</code>, but is probably implemented more efficiently<br>
+		<strong>Rationale:</strong> size of bit-pattern vector
+
+	<dt><code>std::size_t  count() const;</code>
+	<dd>
+		<strong>Returns:</strong> the number of set bits in the numeric value stored in <code>*this</code><br>
+		<strong>Note:</strong> same as <code>this-&gt;to_bit_indices().size()</code>, but is probably implemented more efficiently<br>
+		<strong>Rationale:</strong> size of set-bit index list
+
+	<dt><code>bool  any() const;</code>
+	<dd>
+		<strong>Returns:</strong> whether any bits in the numeric value stored in <code>*this</code> are set<br>
+		<strong>Note:</strong> same as <code>this-&gt;count() &gt; 0</code>, but is probably implemented more efficiently<br>
+		<strong>Rationale:</strong> reversed zero test
+
+	<dt><code>bool  none() const;</code>
+	<dd>
+		<strong>Returns:</strong> whether no bits in the numeric value stored in <code>*this</code> are set<br>
+		<strong>Note:</strong> same as <code>!this-&gt;any()</code><br>
+		<strong>Rationale:</strong> zero test
+
+	<dt><code>bool  test( std::size_t i ) const;</code>
+	<dd>
+		<strong>Returns:</strong> whether the bit corresponding to the 2<sup><var>i</var></sup> place for the numeric value stored in <code>*this</code> is set<br>
+		<strong>Rationale:</strong> inspect a specific bit
+
+	<dt><code>big_whole  tests( std::size_t from, std::size_t to ) const;</code>
+	<dd>
+		<strong>Precondition:</strong> <code>from &lt;= to</code><br>
+		<strong>Returns:</strong> states of the bits corresponding between the 2<sup><var>from</var></sup> and 2<sup><var>to</var></sup> places (inclusive) for the numeric value stored in <code>*this</code>; equivalent to <code>(*this % 2<sup><var>to</var> + 1</sup>) / 2<sup><var>from</var></sup></code><br>
+		<strong>Rationale:</strong> inspect a set of bits at once
+
+	<dt><code>big_whole  reverse( std::size_t cap ) const;</code>
+	<dd>
+		<strong>Returns:</strong> a copy of the lowest <var>cap</var> + 1 bits (<i>i.e.</i> apply a modulo 2<sup><var>cap</var> + 1</sup>) of <code>*this</code> in reverse order (<i>e.g.</i> for <var>n</var> ranging from 0 to <var>cap</var>, the bit in the 2<sup><var>n</var></sup> place now appears in the 2<sup><var>cap</var> - <var>n</var></sup> place)<br>
+		<strong>Rationale:</strong> generate bit-pattern palidromes
+
+	<dt><code>big_whole  reverse() const;</code>
+	<dd>
+		<strong>Returns:</strong> 0 if <code>*this</code> represents zero; otherwise, <code>this-&gt;reverse( this-&gt;length() - 1 )</code><br>
+		<strong>Rationale:</strong> shorthand for the most common case of bit-order reversal (minimal amount for all significant bits)
+</dl>
+
+<h4><a name="c_bw_mutate">Mutating Member Functions</a></h4>
+
+<dl>
+	<dt><code>void  swap( big_whole &amp;other );</code>
+	<dd>
+		<strong>Effects:</strong> <code>*this</code> takes ownership of <var>other</var>'s state; <var>other</var> takes ownership of the state <code>*this</code> had before this member function call<br>
+		<strong>Rationale:</strong> standard class-type-specific swap member-function refinement
+
+	<dt><code>void  assign( big_whole const &amp;other );</code>
+	<dd>
+		<strong>Effects:</strong> sets the internal state to a copy of <var>other</var>'s state<br>
+		<strong>Postconditions:</strong> <code>*this == <var>other</var></code><br>
+		<strong>Rationale:</strong> member-function repackaging of copy operation
+
+	<dt><code>void  assign( uintmax_t v );</code>
+	<dd>
+		<strong>Effects:</strong> sets the internal state to give a numeric value equivalent to <var>v</var><br>
+		<strong>Postconditions:</strong> <code>*this == big_whole( <var>v</var> )</code><br>
+		<strong>Rationale:</strong> converting copy operation
+
+	<dt><code>void  reconfigure( std::valarray&lt;bool&gt; const &amp;b );</code>
+	<dd>
+		<strong>Effects:</strong> sets the internal state to give a numeric value that has the bit pattern given by <var>b</var><br>
+		<strong>Postconditions:</strong> <code>*this == big_whole( <var>b</var> )</code><br>
+		<strong>Rationale:</strong> re-configuring copy operation with a bit pattern
+
+	<dt><code>void  reconfigure( std::valarray&lt;std::size_t&gt; const &amp;i );</code>
+	<dd>
+		<strong>Effects:</strong> sets the internal state to give a numeric value that has only the bit positions given by <var>i</var> set<br>
+		<strong>Postconditions:</strong> <code>*this == big_whole( <var>i</var> )</code><br>
+		<strong>Rationale:</strong> re-configuring copy operation with a list of the set bits
+
+	<dt><code>void  reset();</code><br>
+	    <code>void  reset( std::size_t from, std::size_t to );</code><br>
+	    <code>void  reset( std::size_t i );</code>
+	<dd>
+		<strong>Effects:</strong> changes the internal state so some set of the bits of the represented value become zero; the zero-argument version affects all bits, the two-argument version affects the bits between the 2<sup><var>from</var></sup> and 2<sup><var>to</var></sup> places (inclusive), the one-argument version affects the bit at the 2<sup><var>i</var></sup> place<br>
+		<strong>Rationale:</strong> specific-bit(s) assignment, unsetting
+
+	<dt><code>void  set( std::size_t from, std::size_t to );</code><br>
+	    <code>void  set( std::size_t i );</code>
+	<dd>
+		<strong>Effects:</strong> changes the internal state so some set of the bits of the represented value become one; the two-argument version affects the bits between the 2<sup><var>from</var></sup> and 2<sup><var>to</var></sup> places (inclusive), the one-argument version affects the bit at the 2<sup><var>i</var></sup> place<br>
+		<strong>Rationale:</strong> specific-bit(s) assignment, setting
+
+	<dt><code>void  flip( std::size_t from, std::size_t to );</code><br>
+	    <code>void  flip( std::size_t i );</code>
+	<dd>
+		<strong>Effects:</strong> changes the internal state so some set of the bits of the represented value become inverted (zeroes become ones, ones become zeroes); the two-argument version affects the bits between the 2<sup><var>from</var></sup> and 2<sup><var>to</var></sup> places (inclusive), the one-argument version affects the bit at the 2<sup><var>i</var></sup> place<br>
+		<strong>Rationale:</strong> specific-bit(s) assignment, inverting
+
+	<dt><code>void  bit_assign( std::size_t from, std::size_t to, bool value );</code><br>
+	    <code>void  bit_assign( std::size_t i, bool value );</code>
+	<dd>
+		<strong>Effects:</strong> changes the internal state so some set of the bits of the represented value become <var>value</var>; the three-argument version affects the bits between the 2<sup><var>from</var></sup> and 2<sup><var>to</var></sup> places (inclusive), the two-argument version affects the bit at the 2<sup><var>i</var></sup> place<br>
+		<strong>Rationale:</strong> specific-bit(s) assignment, user-defined
+
+	<dt><code>void  not_self();</code>
+	<dd>
+		<strong>Effects:</strong> changes the internal state so a value of zero becomes one and any nonzero value becomes zero<br>
+		<strong>Rationale:</strong> doing <code>x = !x</code> without the copying
+</dl>
+
+<h4><a name="c_bw_ops">Operators</a></h4>
+
+<dl>
+	<dt><code>big_whole &amp;  operator =( big_whole const &amp;rhs );</code>
+	<dd>
+		<strong>Effects:</strong> calls <code>this-&gt;assign( <var>rhs</var> )</code><br>
+		<strong>Returns:</strong> <code>*this</code><br>
+		<strong>Rationale:</strong> standard copy-assignment operation
+
+	<dt><code>operator <em>bool_type</em>() const;</code>
+	<dd>
+		<strong>Returns:</strong> if <code>this-&gt;any()</code>, then some non-zero/non-null/true value, otherwise a zero/null/false value<br>
+		<strong>Note:</strong> <code><em>bool_type</em></code> is an unspecified built-in type that supports Boolean semantics and should have a minimum of common non-Boolean semantics (this probably excludes <code>bool</code> since that type [mistakenly?] fully participates in integral and/or numeric operations)<br>
+		<strong>Rationale:</strong> Boolean (output) conversion
+</dl>
+
+<h3><a name="c_nm_funcs">Non-Member Functions &amp; Operators</a></h3>
+
+<blockquote><pre>
+void
+boost::math::swap( boost::math::big_whole &amp;a, boost::math::big_whole &amp;b );
+</pre></blockquote>
+
+<p><strong>Effects:</strong> calls <code><var>a</var>.swap( <var>b</var> )</code></p>
+
+<p><strong>Postconditions:</strong> <var>a</var> has the state that <var>b</var> had before the function call; <var>b</var> has the state <var>a</var> had before the function call</p>
+
+<p><strong>Rationale:</strong> exchanges the state of two objects; can use in standard(-like) algorithms with ADL</p>
+
+<h4><a name="c_nm_ops">Operators</a></h4>
+
+<dl>
+	<dt><code>boost::math::big_whole  boost::math::operator !( boost::math::big_whole const &amp;w );</code>
+	<dd>
+		<strong>Returns:</strong> 1 if <var>w</var> represents zero, 0 otherwise<br>
+		<strong>Note:</strong> calls <code>big_whole::not_self()</code>
+</dl>
+
+<h3><a name="c_limits">Numeric Limits</a></h3>
+
+<p>A <code>std::numeric_limits&lt; boost::math::big_whole &gt;</code> specialization is provided, with the appropiate entries filled.</p>
+
+<h2><a name="additional">Additional Routines</a></h2>
+
+<p>The <cite><a href="../../../boost/math/big_whole.hpp">boost/math/big_whole.hpp</a></cite> header includes the core header and contains the declarations for routines that work with unlimited-length nonnegative integers but are not needed for pure computation contexts (like the input and output routines).</p>
+
+<h3><a name="a_header">Header Synopsis</a></h3>
+
+<blockquote><pre>
+#include &lt;iosfwd&gt;                         <i>// for std::basic_ostream and std::basic_istream (declarations)</i>
+#include &lt;boost/math/big_whole_core.hpp&gt;  <i>// for boost::math::big_whole</i>
+
+namespace boost
+{
+namespace math
+{
+
+template &lt; typename Ch, class Tr &gt;
+    std::basic_ostream&lt;Ch, Tr&gt; &amp;  operator &lt;&lt;( std::basic_ostream&lt;Ch, Tr&gt; &amp;os, big_whole const &amp;w );
+
+template &lt; typename Ch, class Tr &gt;
+    std::basic_istream&lt;Ch, Tr&gt; &amp;  operator &gt;&gt;( std::basic_istream&lt;Ch, Tr&gt; &amp;is, big_whole &amp;w );
+
+}
+}
+</pre></blockquote>
+
+<h3><a name="a_io_ops">Input &amp; Output Operators</a></h3>
+
+<blockquote><pre>
+template &lt; typename Ch, class Tr &gt;
+std::basic_ostream&lt;Ch, Tr&gt; &amp;
+boost::math::operator &lt;&lt;( std::basic_ostream&lt;Ch, Tr&gt; &amp;os, boost::math::big_whole const &amp;w );
+</pre></blockquote>
+
+<p><strong>Effects:</strong> writes characters, forming a string representation of the nonnegative integer <var>w</var>, to <var>os</var>; should use the standard numeric I/O options</p>
+
+<p><strong>Returns:</strong> <var>os</var></p>
+
+<p><strong>Rationale:</strong> enables <code>big_whole</code> objects to be written by streaming</p>
+
+<blockquote><pre>
+template &lt; typename Ch, class Tr &gt;
+std::basic_istream&lt;Ch, Tr&gt; &amp;
+boost::math::operator &gt;&gt;( std::basic_istream&lt;Ch, Tr&gt; &amp;is, boost::math::big_whole &amp;w );
+</pre></blockquote>
+
+<p><strong>Effects:</strong> reads characters, hopefully forming a string representation of a nonnegative integer, from <var>is</var>, saving any successful result in <var>w</var>; should use the standard numeric I/O options</p>
+
+<p><strong>Returns:</strong> <var>is</var></p>
+
+<p><strong>Rationale:</strong> enables <code>big_whole</code> objects to be read by streaming</p>
+
+<h2><a name="refer">References</a></h2>
+
+<ul>
+	<li>The arbitrary-length whole-number library core routine header: <cite><a href="../../../boost/math/big_whole_core.hpp">boost/math/big_whole_core.hpp</a></cite></li>
+	<li>The arbitrary-length whole-number library extra routine header: <cite><a href="../../../boost/math/big_whole.hpp">boost/math/big_whole.hpp</a></cite></li>
+	<li>Some test code: <cite><a href="../test/big_whole_test.cpp">big_whole_test.cpp</a></cite></li>
+</ul>
+
+<h2><a name="credits">Credits</a></h2>
+
+<h3><a name="contributors">Contributors</a></h3>
+
+<dl>
+	<dt><a href="../../../people/daryle_walker.html">Daryle Walker</a>
+	<dd>Started the library.
+</dl>
+
+<h3><a name="history">History</a></h3>
+
+<dl>
+	<dt>30 Jan 2004, Daryle Walker
+	<dd>Initial version
+</dl>
+
+<hr>
+
+<p>Revised: 5 Feburary 2004</p>
+
+<p>Copyright 2004 Daryle Walker.  Use, modification, and distribution are subject to the Boost Software License, Version 1.0.  (See accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at &lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)</p>
+</body>
+</html>
