@@ -48,6 +48,7 @@ test_main
 #endif
 
     typedef CONTROL_INT_TYPE  int_type;
+    typedef unsigned CONTROL_INT_TYPE uint_type;
 
     // GCD tests
     cout << "Doing tests on gcd." << endl;
@@ -68,6 +69,18 @@ test_main
     BOOST_TEST( gcd<int_type>(  3,   7) ==  1 );
     BOOST_TEST( gcd<int_type>(  8,   9) ==  1 );
     BOOST_TEST( gcd<int_type>(  7,  49) ==  7 );
+
+    // GCD tests
+    cout << "Doing tests on unsigned-gcd." << endl;
+
+    BOOST_TEST( gcd<uint_type>(  1u,   1u) ==  1u );
+    BOOST_TEST( gcd<uint_type>(  0u,   0u) ==  0u );
+    BOOST_TEST( gcd<uint_type>(  7u,   0u) ==  7u );
+    BOOST_TEST( gcd<uint_type>(  0u,   9u) ==  9u );
+    BOOST_TEST( gcd<uint_type>( 42u,  30u) ==  6u );
+    BOOST_TEST( gcd<uint_type>(  3u,   7u) ==  1u );
+    BOOST_TEST( gcd<uint_type>(  8u,   9u) ==  1u );
+    BOOST_TEST( gcd<uint_type>(  7u,  49u) ==  7u );
 
     cout << "Doing tests on static_gcd." << endl;
 
@@ -99,6 +112,17 @@ test_main
     BOOST_TEST( lcm<int_type>(  3,   7) == 21 );
     BOOST_TEST( lcm<int_type>(  8,   9) == 72 );
     BOOST_TEST( lcm<int_type>(  7,  49) == 49 );
+
+    cout << "Doing tests on unsigned-lcm." << endl;
+
+    BOOST_TEST( lcm<uint_type>(  1u,   1u) ==  1u );
+    BOOST_TEST( lcm<uint_type>(  0u,   0u) ==  0u );
+    BOOST_TEST( lcm<uint_type>(  6u,   0u) ==  0u );
+    BOOST_TEST( lcm<uint_type>(  0u,   7u) ==  0u );
+    BOOST_TEST( lcm<uint_type>( 18u,  30u) == 90u );
+    BOOST_TEST( lcm<uint_type>(  3u,   7u) == 21u );
+    BOOST_TEST( lcm<uint_type>(  8u,   9u) == 72u );
+    BOOST_TEST( lcm<uint_type>(  7u,  49u) == 49u );
 
     cout << "Doing tests on static_lcm." << endl;
 
