@@ -457,15 +457,14 @@ boost::math::and_not( boost::math::big_whole const &amp;a, boost::math::big_whol
 
 	<dt><code>boost::math::big_whole  boost::math::operator &gt;&gt;( boost::math::big_whole const &amp;value, boost::math::big_whole const &amp;shift );</code>
 	<dd>
-		<strong>Returns:</strong> <var>value</var> / 2<sup><var>shift</var></sup><br>
-		<strong>Throws:</strong> <code>std::underflow_error</code> if <var>shift</var> cannot be completely represented by a <code>std::size_t</code> object<br>
+		<strong>Returns:</strong> floor( <var>value</var> / 2<sup><var>shift</var></sup> )<br>
+		<strong>Throws:</strong> <code>std::length_error</code> if <var>shift</var> cannot be completely represented by a <code>std::size_t</code> object<br>
 		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
 
 	<dt><code>boost::math::big_whole  boost::math::operator &lt;&lt;( boost::math::big_whole const &amp;value, boost::math::big_whole const &amp;shift );</code>
 	<dd>
-		<strong>Precondition:</strong> the bit-place indices of any set bits in <var>value</var> must be less than or equal to <code>std::numeric_limits&lt; std::size_t &gt;::max() - <var>shift</var></code><br>
 		<strong>Returns:</strong> <var>value</var> * 2<sup><var>shift</var></sup><br>
-		<strong>Throws:</strong> <code>std::overflow_error</code> if <var>shift</var> cannot be completely represented by a <code>std::size_t</code> object<br>
+		<strong>Throws:</strong> <code>std::length_error</code> if <var>shift</var> cannot be completely represented by a <code>std::size_t</code> object; <code>std::overflow_error</code> if any of the set bits in the returned object would have a bit-place index beyond <code>std::size_t</code>'s maximum value<br>
 		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
 
 	<dt><code>boost::math::big_whole &amp;  boost::math::operator &amp;=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
@@ -593,7 +592,7 @@ boost::math::operator &gt;&gt;( std::basic_istream&lt;Ch, Tr&gt; &amp;is, boost:
 
 <hr>
 
-<p>Revised: 12 February 2004</p>
+<p>Revised: 13 February 2004</p>
 
 <p>Copyright 2004 Daryle Walker.  Use, modification, and distribution are subject to the Boost Software License, Version 1.0.  (See accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at &lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)</p>
 </body>

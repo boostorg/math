@@ -7,7 +7,7 @@
 //  See <http://www.boost.org/libs/math/> for the library's home page.
 
 //  Revision History
-//   12 Feb 2004  Initial version (Daryle Walker)
+//   13 Feb 2004  Initial version (Daryle Walker)
 
 #include <boost/math/big_whole.hpp>  // for boost::math::big_whole, etc.
 #include <boost/test/unit_test.hpp>  // for main, BOOST_CHECK_EQUAL, etc.
@@ -16,8 +16,16 @@
 #include <cstddef>    // for std::size_t
 #include <limits>     // for std::numeric_limits
 #include <set>        // for std::set
-#include <stdexcept>  // for std::range_error
+#include <stdexcept>  // for std::range_error, std::length_error, etc.
 #include <valarray>   // for std::valarray
+
+
+// Control to allow extremely large memory allocations
+#ifdef CONTROL_USE_BIG_MEMORY
+#define PRIVATE_USE_BIG_MEMORY  1
+#else
+#define PRIVATE_USE_BIG_MEMORY  0
+#endif
 
 
 // Use internal knowledge of big_whole (i.e. cheat) to force situations
@@ -1354,8 +1362,11 @@ bigwhole_left_shift_unit_test
 {
     using boost::math::big_whole;
     using std::size_t;
+    using std::length_error;
 
     typedef std::valarray<size_t>  va_size_t;
+
+    typedef std::numeric_limits<size_t>  size_limits;
 
     size_t const     ei[] = { wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
     size_t const     es = sizeof( ei ) / sizeof( ei[0] );
@@ -1423,6 +1434,22 @@ bigwhole_left_shift_unit_test
     BOOST_CHECK_EQUAL( 4, e1 >> (wlimits_type::digits + 1) );
     BOOST_CHECK_EQUAL( b, f >> wlimits_type::digits );
     BOOST_CHECK_EQUAL( 11, f >> (wlimits_type::digits - 1) );
+
+    // exceptions (hope we don't get any out-of-memory exceptions)
+    va_size_t const  si( size_limits::digits, 1 );
+    big_whole const  s( si );
+    big_whole const  t( size_limits::max() );  // == s - 1
+    big_whole const  u = s | 1;  // == s + 1
+
+    BOOST_CHECK_NO_THROW( z >> s );
+    BOOST_CHECK_THROW( a >> s, length_error );
+    BOOST_CHECK_THROW( f >> s, length_error );
+    BOOST_CHECK_NO_THROW( z >> t );
+    BOOST_CHECK_NO_THROW( a >> t );
+    BOOST_CHECK_NO_THROW( f >> t );
+    BOOST_CHECK_NO_THROW( z >> u );
+    BOOST_CHECK_THROW( a >> u, length_error );
+    BOOST_CHECK_THROW( f >> u, length_error );
 }
 
 // Unit test for right-shift (value-increasing)
@@ -1433,8 +1460,12 @@ bigwhole_right_shift_unit_test
 {
     using boost::math::big_whole;
     using std::size_t;
+    using std::length_error;
+    using std::overflow_error;
 
     typedef std::valarray<size_t>  va_size_t;
+
+    typedef std::numeric_limits<size_t>  size_limits;
 
     size_t const     ei[] = { wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
     size_t const     es = sizeof( ei ) / sizeof( ei[0] );
@@ -1487,6 +1518,29 @@ bigwhole_right_shift_unit_test
     // multi-word shifts
     BOOST_CHECK_EQUAL( e, e1 << wlimits_type::digits );
     BOOST_CHECK_EQUAL( 2 | (( a | c ) << ( wlimits_type::digits - 1 )), f );
+
+    // exceptions (hope we don't get any out-of-memory exceptions)
+    va_size_t const  si( size_limits::digits, 1 );
+    big_whole const  s( si );
+    big_whole const  t( size_limits::max() );
+    big_whole const  u = s | 1;
+
+    BOOST_CHECK_NO_THROW( z << s );
+    BOOST_CHECK_THROW( a << s, length_error );
+    BOOST_CHECK_THROW( f << s, length_error );
+
+    #if PRIVATE_USE_BIG_MEMORY
+    // This needs a lot of memory, so it shouldn't be regularly
+    // tested.  Worse, what happens if a std::bad_alloc occurs?
+    BOOST_CHECK_NO_THROW( a << t );
+    #endif
+
+    BOOST_CHECK_THROW( 2 << t, overflow_error );
+    BOOST_CHECK_THROW( f << t, overflow_error );
+
+    BOOST_CHECK_NO_THROW( z << u );
+    BOOST_CHECK_THROW( a << u, length_error );
+    BOOST_CHECK_THROW( f << u, length_error );
 }
 
 // Unit test for bitwise-and, bitwise-complementing the second value

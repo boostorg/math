@@ -17,7 +17,7 @@
 #include <cstddef>    // for NULL, std::size_t
 #include <limits>     // for std::numeric_limits
 #include <memory>     // for std::auto_ptr
-#include <stdexcept>  // for std::underflow_error, std::overflow_error
+#include <stdexcept>  // for std::length_error, std::overflow_error
 #include <valarray>   // for std::valarray, std::slice
 
 
@@ -157,6 +157,7 @@ protected:
 
     static  size_type  wlength( va_type const &v );
     static  size_type  blength( word_type w );
+    static  size_type  do_length( va_type const &v );
 
     static  word_type  count_set_bits_for_word( word_type w );
 
@@ -554,15 +555,12 @@ big_whole::length
 {
     if ( va_type const * const  v = this->x_.get() )
     {
-        if ( size_type const  o = self_type::wlength(*v) )
-        {
-            size_type const  oo = o - 1;
-
-            return self_type::blength( (*v)[oo] ) + oo * limits_type::digits;
-        }
+        return self_type::do_length( *v );
     }
-
-    return 0;
+    else
+    {
+        return 0;
+    }
 }
 
 std::size_t
@@ -866,6 +864,25 @@ big_whole::blength
     return i;
 }
 
+std::size_t
+big_whole::do_length
+(
+    va_type const &  v
+)
+{
+    if ( size_type const  vl = self_type::wlength(v) )
+    {
+        size_type const  vl_o = vl - 1;
+        size_type const  bl = self_type::blength( v[vl_o] );
+
+        return bl + vl_o * limits_type::digits;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 big_whole::word_type
 big_whole::count_set_bits_for_word
 (
@@ -988,22 +1005,23 @@ big_whole::do_lshift
     std::size_t                 e
 )
 {
-    va_type  temp = b;
+    va_type          temp = b;
+    size_type const     d = limits_type::digits;
 
-    if ( size_type const  ei = e / limits_type::digits )
+    if ( size_type const  ei = e / d )
     {
-        size_type const  ts = temp.size();
+        size_type const        ts = temp.size();
         size_type const  new_size = ( ei > ts ) ? 0 : ( ts - ei );
-        va_type const    temp1 = temp[ std::slice(ei, new_size, 1) ];
+        va_type const       temp1 = temp[ std::slice(ei, new_size, 1) ];
 
         temp.resize( temp1.size() );
         temp = temp1;
     }
 
-    if ( size_type const  ej = e % limits_type::digits )
+    if ( size_type const  ej = e % d )
     {
-        word_type const  mask = limits_type::max() >> ej;
-        word_type const  rsa = limits_type::digits - ej;
+        word_type const    rsa = d - ej;
+        word_type const   mask = ( 1u << rsa ) - 1u;
         va_type const    temp2 = ~mask & ( temp.shift(1) << rsa );
 
         temp >>= ej;
@@ -1011,7 +1029,7 @@ big_whole::do_lshift
         temp |= temp2;
     }
 
-    return temp;
+    return self_type::do_trim( temp );
 }
 
 big_whole::va_type
@@ -1021,19 +1039,32 @@ big_whole::do_rshift
     std::size_t                 e
 )
 {
+    using std::overflow_error;
     using std::slice;
 
-    va_type  temp = b;
+    typedef std::numeric_limits<size_type>  size_limits;
 
-    if ( size_type const  ej = e % limits_type::digits )
+    va_type          temp   = b;
+    char const        msg[] = "value has set bits beyond maximum index";
+    size_type const     d   = limits_type::digits;
+
+    if ( size_type const  ej = e % d )
     {
+        size_type const  t_length = self_type::do_length( temp );
+
+        if ( t_length > size_limits::max() - ej + 1 )
+        {
+            throw overflow_error( msg );
+        }
+
         size_type const  ts = temp.size();
-        va_type          temp1( 1 + ts );
+        bool const       need_extra = ( ts * d - t_length < ej );
+        va_type          temp1( ts + static_cast<size_type>(need_extra) );
 
         temp1[ slice(0, ts, 1) ] = temp;
 
         word_type const  mask = ( 1u << ej ) - 1u;
-        word_type const  rsa = limits_type::digits - ej;
+        word_type const  rsa = d - ej;
         va_type const    temp2 = mask & ( temp1.shift(-1) >> rsa );
 
         temp1 <<= ej;
@@ -1044,8 +1075,15 @@ big_whole::do_rshift
         temp = temp1;
     }
 
-    if ( size_type const  ei = e / limits_type::digits )
+    if ( size_type const  ei = e / d )
     {
+        size_type const  t_length = self_type::do_length( temp );
+
+        if ( t_length > size_limits::max() - ei * d + 1 )
+        {
+            throw overflow_error( msg );
+        }
+
         size_type const  ts = temp.size();
         va_type          temp3( ei + ts );
 
@@ -1055,7 +1093,7 @@ big_whole::do_rshift
         temp = temp3;
     }
 
-    return temp;
+    return self_type::do_trim( temp );
 }
 
 big_whole::va_type
@@ -1492,7 +1530,7 @@ operator >>
         }
         else
         {
-            throw std::underflow_error( "shift amount too large" );
+            throw std::length_error( "shift amount too large" );
         }
     }
     else
@@ -1527,7 +1565,7 @@ operator <<
         }
         else
         {
-            throw std::overflow_error( "shift amount too large" );
+            throw std::length_error( "shift amount too large" );
         }
     }
     else
