@@ -7,7 +7,8 @@
 
 
 #include <boost/test/unit_test.hpp>
-#include <boost/test/unit_test_suite_ex.hpp>
+#include <boost/test/unit_test_log.hpp>
+#include <boost/test/test_case_template.hpp>
 
 #include "quaternion_mi1.h"
 #include "quaternion_mi2.h"
@@ -15,11 +16,19 @@
 
 boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
 {
-    ::boost::unit_test_framework::unit_test_log::instance().
-            set_log_threshold_level_by_name("messages");
+    ::boost::unit_test::unit_test_log.
+        set_threshold_level(::boost::unit_test::log_messages);
     
     boost::unit_test_framework::test_suite *    test =
         BOOST_TEST_SUITE("quaternion_multiple_inclusion_test");
+    
+    BOOST_MESSAGE("Results of quaternion (multiple inclusion) test.");
+    BOOST_MESSAGE(" ");
+    BOOST_MESSAGE("(C) Copyright Hubert Holin 2003-2005.");
+    BOOST_MESSAGE("Distributed under the Boost Software License, Version 1.0.");
+    BOOST_MESSAGE("(See accompanying file LICENSE_1_0.txt or copy at");
+    BOOST_MESSAGE("http://www.boost.org/LICENSE_1_0.txt)");
+    BOOST_MESSAGE(" ");
     
     test->add(BOOST_TEST_CASE(&quaternion_mi1));
     test->add(BOOST_TEST_CASE(&quaternion_mi2));

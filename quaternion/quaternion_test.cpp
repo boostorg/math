@@ -7,22 +7,39 @@
 
 
 #include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <functional>
 
 
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
-
+#include <boost/mpl/list.hpp>
 
 #include <boost/test/unit_test.hpp>
-#include <boost/test/unit_test_suite_ex.hpp>
+#include <boost/test/unit_test_log.hpp>
+#include <boost/test/test_case_template.hpp>
 
 
 #include <boost/math/quaternion.hpp>
 
-#if defined(__GNUC__) && (__GNUC__ < 3)
+
+template<typename T>
+struct string_type_name;
+
+#define DEFINE_TYPE_NAME(Type)              \
+template<> struct string_type_name<Type>    \
+{                                           \
+    static char const * _()                 \
+    {                                       \
+        return #Type;                       \
+    }                                       \
+}
+
+DEFINE_TYPE_NAME(float);
+DEFINE_TYPE_NAME(double);
+DEFINE_TYPE_NAME(long double);
+
+
+typedef boost::mpl::list<float,double,long double>  test_types;
+
+
+#if BOOST_WORKAROUND(__GNUC__, < 3)
     // gcc 2.x ignores function scope using declarations,
     // put them in the scope of the enclosing namespace instead:
 using   ::std::sqrt;
@@ -39,7 +56,7 @@ using   ::std::tanh;
 using   ::std::numeric_limits;
 
 using   ::boost::math::abs;
-#endif  /* defined(__GNUC__) && (__GNUC__ < 3) */
+#endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
 
 #ifdef  BOOST_NO_STDC_NAMESPACE
 using   ::sqrt;
@@ -75,8 +92,7 @@ using   ::boost::math::sinhc_pi;
 #endif  /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
   
 // Provide standard floating point abs() overloads for MSVC
-#ifdef    BOOST_MSVC
-#if        (BOOST_MSVC < 1300) || (defined(_MSC_EXTENSIONS) && BOOST_MSVC < 1310)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) || (defined(_MSC_EXTENSIONS) && BOOST_MSVC < 1310)
 inline float        abs(float v)
 {
     return(fabs(v));
@@ -91,17 +107,16 @@ inline long double    abs(long double v)
 {
     return(fabs(v));
 }
-#endif    /* need abs */
-#endif    /* BOOST_MSVC */
+#endif /* BOOST_WORKAROUND(BOOST_MSVC) */
 
 
 // explicit (if ludicrous) instanciation
-#ifndef __GNUC__
+#if !BOOST_WORKAROUND(__GNUC__, < 3)
 template    class ::boost::math::quaternion<int>;
 #else
 // gcc doesn't like the absolutely-qualified namespace
 template class boost::math::quaternion<int>;
-#endif
+#endif /* !BOOST_WORKAROUND(__GNUC__) */
 
 
 
@@ -462,321 +477,276 @@ void    quaternion_manual_test()
 }
 
 
-template<typename T>
-void    multiplication_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(multiplication_test, T)
 {
-#if defined(__GNUC__) && (__GNUC__ < 3)
-#else   /* defined(__GNUC__) && (__GNUC__ < 3) */
+#if     BOOST_WORKAROUND(__GNUC__, < 3)
+#else   /* BOOST_WORKAROUND(__GNUC__, < 3) */
     using ::std::numeric_limits;
     
     using ::boost::math::abs;
-#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
+#endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing multiplication for " << more_blurb << ".");
+    BOOST_MESSAGE("Testing multiplication for "
+        << string_type_name<T>::_() << ".");
     
-    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(::boost::math::quaternion<T>(1,0,0,0)*
-                ::boost::math::quaternion<T>(1,0,0,0)-static_cast<T>(1)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::quaternion<T>(1,0,0,0)*
+             ::boost::math::quaternion<T>(1,0,0,0)-static_cast<T>(1)))
+        (numeric_limits<T>::epsilon()));
     
-    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(::boost::math::quaternion<T>(0,1,0,0)*
-                ::boost::math::quaternion<T>(0,1,0,0)+static_cast<T>(1)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::quaternion<T>(0,1,0,0)*
+             ::boost::math::quaternion<T>(0,1,0,0)+static_cast<T>(1)))
+        (numeric_limits<T>::epsilon()));
     
-    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(::boost::math::quaternion<T>(0,0,1,0)*
-                ::boost::math::quaternion<T>(0,0,1,0)+static_cast<T>(1)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::quaternion<T>(0,0,1,0)*
+             ::boost::math::quaternion<T>(0,0,1,0)+static_cast<T>(1)))
+        (numeric_limits<T>::epsilon()));
     
-    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(::boost::math::quaternion<T>(0,0,0,1)*
-                ::boost::math::quaternion<T>(0,0,0,1)+static_cast<T>(1)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::quaternion<T>(0,0,0,1)*
+             ::boost::math::quaternion<T>(0,0,0,1)+static_cast<T>(1)))
+        (numeric_limits<T>::epsilon()));
     
-    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(::boost::math::quaternion<T>(0,1,0,0)*
-                ::boost::math::quaternion<T>(0,0,1,0)-
-                ::boost::math::quaternion<T>(0,0,0,1)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::quaternion<T>(0,1,0,0)*
+             ::boost::math::quaternion<T>(0,0,1,0)-
+             ::boost::math::quaternion<T>(0,0,0,1)))
+        (numeric_limits<T>::epsilon()));
     
-    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(::boost::math::quaternion<T>(0,0,1,0)*
-                ::boost::math::quaternion<T>(0,1,0,0)+
-                ::boost::math::quaternion<T>(0,0,0,1)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::quaternion<T>(0,0,1,0)*
+             ::boost::math::quaternion<T>(0,1,0,0)+
+             ::boost::math::quaternion<T>(0,0,0,1)))
+        (numeric_limits<T>::epsilon()));
     
-    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(::boost::math::quaternion<T>(0,0,1,0)*
-                ::boost::math::quaternion<T>(0,0,0,1)-
-                ::boost::math::quaternion<T>(0,1,0,0)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::quaternion<T>(0,0,1,0)*
+             ::boost::math::quaternion<T>(0,0,0,1)-
+             ::boost::math::quaternion<T>(0,1,0,0)))
+        (numeric_limits<T>::epsilon()));
     
-    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(::boost::math::quaternion<T>(0,0,0,1)*
-                ::boost::math::quaternion<T>(0,0,1,0)+
-                ::boost::math::quaternion<T>(0,1,0,0)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::quaternion<T>(0,0,0,1)*
+             ::boost::math::quaternion<T>(0,0,1,0)+
+             ::boost::math::quaternion<T>(0,1,0,0)))
+        (numeric_limits<T>::epsilon()));
     
-    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(::boost::math::quaternion<T>(0,0,0,1)*
-                ::boost::math::quaternion<T>(0,1,0,0)-
-                ::boost::math::quaternion<T>(0,0,1,0)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::quaternion<T>(0,0,0,1)*
+             ::boost::math::quaternion<T>(0,1,0,0)-
+             ::boost::math::quaternion<T>(0,0,1,0)))
+        (numeric_limits<T>::epsilon()));
     
-    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(::boost::math::quaternion<T>(0,1,0,0)*
-                ::boost::math::quaternion<T>(0,0,0,1)+
-                ::boost::math::quaternion<T>(0,0,1,0)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::quaternion<T>(0,1,0,0)*
+             ::boost::math::quaternion<T>(0,0,0,1)+
+             ::boost::math::quaternion<T>(0,0,1,0)))
+        (numeric_limits<T>::epsilon()));
 }
 
 
-template<typename T>
-void    exp_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(exp_test, T)
 {
-#if defined(__GNUC__) && (__GNUC__ < 3)
-#else   /* defined(__GNUC__) && (__GNUC__ < 3) */
+#if     BOOST_WORKAROUND(__GNUC__, < 3)
+#else   /* BOOST_WORKAROUND(__GNUC__, < 3) */
     using ::std::numeric_limits;
     
     using ::std::atan;
     
     using ::boost::math::abs;
-#endif  /* defined(__GNUC__) && (__GNUC__ < 3) */
+#endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing exp for " << more_blurb << ".");
+    BOOST_MESSAGE("Testing exp for "
+        << string_type_name<T>::_() << ".");
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(exp(::boost::math::quaternion<T>
-                (0,4*atan(static_cast<T>(1)),0,0))+static_cast<T>(1)),
-            2*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(exp(::boost::math::quaternion<T>
+             (0,4*atan(static_cast<T>(1)),0,0))+static_cast<T>(1)))
+        (2*numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(exp(::boost::math::quaternion<T>
-                (0,0,4*atan(static_cast<T>(1)),0))+static_cast<T>(1)),
-            2*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(exp(::boost::math::quaternion<T>
+             (0,0,4*atan(static_cast<T>(1)),0))+static_cast<T>(1)))
+        (2*numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(exp(::boost::math::quaternion<T>
-                (0,0,0,4*atan(static_cast<T>(1))))+static_cast<T>(1)),
-            2*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(exp(::boost::math::quaternion<T>
+             (0,0,0,4*atan(static_cast<T>(1))))+static_cast<T>(1)))
+        (2*numeric_limits<T>::epsilon()));
 }
 
 
-template<typename T>
-void    cos_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(cos_test, T)
 {
-#if defined(__GNUC__) && (__GNUC__ < 3)
-#else   /* defined(__GNUC__) && (__GNUC__ < 3) */
+#if     BOOST_WORKAROUND(__GNUC__, < 3)
+#else   /* BOOST_WORKAROUND(__GNUC__, < 3) */
     using ::std::numeric_limits;
     
     using ::std::log;
     
     using ::boost::math::abs;
-#endif  /* defined(__GNUC__) && (__GNUC__ < 3) */
+#endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing cos for " << more_blurb << ".");
+    BOOST_MESSAGE("Testing cos for "
+        << string_type_name<T>::_() << ".");
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(static_cast<T>(4)*cos(::boost::math::quaternion<T>
-                (0,log(static_cast<T>(2)),0,0))-static_cast<T>(5)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(static_cast<T>(4)*cos(::boost::math::quaternion<T>
+             (0,log(static_cast<T>(2)),0,0))-static_cast<T>(5)))
+        (4*numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(static_cast<T>(4)*cos(::boost::math::quaternion<T>
-                (0,0,log(static_cast<T>(2)),0))-static_cast<T>(5)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(static_cast<T>(4)*cos(::boost::math::quaternion<T>
+             (0,0,log(static_cast<T>(2)),0))-static_cast<T>(5)))
+        (4*numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(static_cast<T>(4)*cos(::boost::math::quaternion<T>
-                (0,0,0,log(static_cast<T>(2))))-static_cast<T>(5)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(static_cast<T>(4)*cos(::boost::math::quaternion<T>
+             (0,0,0,log(static_cast<T>(2))))-static_cast<T>(5)))
+        (4*numeric_limits<T>::epsilon()));
 }
 
 
-template<typename T>
-void    sin_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(sin_test, T)
 {
-#if defined(__GNUC__) && (__GNUC__ < 3)
-#else   /* defined(__GNUC__) && (__GNUC__ < 3) */
+#if     BOOST_WORKAROUND(__GNUC__, < 3)
+#else   /* BOOST_WORKAROUND(__GNUC__, < 3) */
     using ::std::numeric_limits;
     
     using ::std::log;
     
     using ::boost::math::abs;
-#endif  /* defined(__GNUC__) && (__GNUC__ < 3) */
+#endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing sin for " << more_blurb << ".");
+    BOOST_MESSAGE("Testing sin for "
+        << string_type_name<T>::_() << ".");
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(static_cast<T>(4)*sin(::boost::math::quaternion<T>
-                (0,log(static_cast<T>(2)),0,0))
-                -::boost::math::quaternion<T>(0,3,0,0)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(static_cast<T>(4)*sin(::boost::math::quaternion<T>
+             (0,log(static_cast<T>(2)),0,0))
+             -::boost::math::quaternion<T>(0,3,0,0)))
+        (4*numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(static_cast<T>(4)*sin(::boost::math::quaternion<T>
-                (0,0,log(static_cast<T>(2)),0))
-                -::boost::math::quaternion<T>(0,0,3,0)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(static_cast<T>(4)*sin(::boost::math::quaternion<T>
+             (0,0,log(static_cast<T>(2)),0))
+             -::boost::math::quaternion<T>(0,0,3,0)))
+        (4*numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(static_cast<T>(4)*sin(::boost::math::quaternion<T>
-                (0,0,0,log(static_cast<T>(2))))
-                -::boost::math::quaternion<T>(0,0,0,3)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(static_cast<T>(4)*sin(::boost::math::quaternion<T>
+             (0,0,0,log(static_cast<T>(2))))
+             -::boost::math::quaternion<T>(0,0,0,3)))
+        (4*numeric_limits<T>::epsilon()));
 }
 
 
-template<typename T>
-void    cosh_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(cosh_test, T)
 {
-#if defined(__GNUC__) && (__GNUC__ < 3)
-#else   /* defined(__GNUC__) && (__GNUC__ < 3) */
+#if     BOOST_WORKAROUND(__GNUC__, < 3)
+#else   /* BOOST_WORKAROUND(__GNUC__, < 3) */
     using ::std::numeric_limits;
     
     using ::std::atan;
     
     using ::boost::math::abs;
-#endif  /* defined(__GNUC__) && (__GNUC__ < 3) */
+#endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing cosh for " << more_blurb << ".");
+    BOOST_MESSAGE("Testing cosh for "
+        << string_type_name<T>::_() << ".");
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(cosh(::boost::math::quaternion<T>
-                (0,4*atan(static_cast<T>(1)),0,0))
-                +static_cast<T>(1)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(cosh(::boost::math::quaternion<T>
+             (0,4*atan(static_cast<T>(1)),0,0))
+             +static_cast<T>(1)))
+        (4*numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(cosh(::boost::math::quaternion<T>
-                (0,0,4*atan(static_cast<T>(1)),0))
-                +static_cast<T>(1)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(cosh(::boost::math::quaternion<T>
+             (0,0,4*atan(static_cast<T>(1)),0))
+             +static_cast<T>(1)))
+        (4*numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(cosh(::boost::math::quaternion<T>
-                (0,0,0,4*atan(static_cast<T>(1))))
-                +static_cast<T>(1)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(cosh(::boost::math::quaternion<T>
+             (0,0,0,4*atan(static_cast<T>(1))))
+             +static_cast<T>(1)))
+        (4*numeric_limits<T>::epsilon()));
 }
 
 
-template<typename T>
-void    sinh_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(sinh_test, T)
 {
-#if defined(__GNUC__) && (__GNUC__ < 3)
-#else   /* defined(__GNUC__) && (__GNUC__ < 3) */
+#if     BOOST_WORKAROUND(__GNUC__, < 3)
+#else   /* BOOST_WORKAROUND(__GNUC__, < 3) */
     using ::std::numeric_limits;
     
     using ::std::atan;
     
     using ::boost::math::abs;
-#endif  /* defined(__GNUC__) && (__GNUC__ < 3) */
+#endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing sinh for " << more_blurb << ".");
+    BOOST_MESSAGE("Testing sinh for "
+        << string_type_name<T>::_() << ".");
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(sinh(::boost::math::quaternion<T>
-                (0,2*atan(static_cast<T>(1)),0,0))
-                -::boost::math::quaternion<T>(0,1,0,0)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(sinh(::boost::math::quaternion<T>
+             (0,2*atan(static_cast<T>(1)),0,0))
+             -::boost::math::quaternion<T>(0,1,0,0)))
+        (4*numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(sinh(::boost::math::quaternion<T>
-                (0,0,2*atan(static_cast<T>(1)),0))
-                -::boost::math::quaternion<T>(0,0,1,0)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(sinh(::boost::math::quaternion<T>
+             (0,0,2*atan(static_cast<T>(1)),0))
+             -::boost::math::quaternion<T>(0,0,1,0)))
+        (4*numeric_limits<T>::epsilon()));
     
-    BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(sinh(::boost::math::quaternion<T>
-                (0,0,0,2*atan(static_cast<T>(1))))
-                -::boost::math::quaternion<T>(0,0,0,1)),
-            4*numeric_limits<T>::epsilon()
-        ));
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+        (abs(sinh(::boost::math::quaternion<T>
+             (0,0,0,2*atan(static_cast<T>(1))))
+             -::boost::math::quaternion<T>(0,0,0,1)))
+        (4*numeric_limits<T>::epsilon()));
 }
 
 
 boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
 {
-    //::boost::unit_test_framework::unit_test_log::instance().
-    //    set_log_threshold_level_by_name("messages");
+    ::boost::unit_test::unit_test_log.
+        set_threshold_level(::boost::unit_test::log_messages);
     
     boost::unit_test_framework::test_suite *    test =
         BOOST_TEST_SUITE("quaternion_test");
     
-#define    BOOST_QUATERNION_COMMON_GENERATOR(fct,type)             \
-    test->add(BOOST_TEST_CASE(::boost::bind(static_cast            \
-        < void (*) (const char *) >(&fct##_test<type>), #type)));
+    BOOST_MESSAGE("Results of quaternion test.");
+    BOOST_MESSAGE(" ");
+    BOOST_MESSAGE("(C) Copyright Hubert Holin 2003-2005.");
+    BOOST_MESSAGE("Distributed under the Boost Software License, Version 1.0.");
+    BOOST_MESSAGE("(See accompanying file LICENSE_1_0.txt or copy at");
+    BOOST_MESSAGE("http://www.boost.org/LICENSE_1_0.txt)");
+    BOOST_MESSAGE(" ");
+    
+#define    BOOST_QUATERNION_COMMON_GENERATOR(fct)   \
+    test->add(BOOST_TEST_CASE_TEMPLATE(fct##_test, test_types));
     
     
-#define    BOOST_QUATERNION_TEST(type)                        \
-    BOOST_QUATERNION_COMMON_GENERATOR(multiplication,type)    \
-    BOOST_QUATERNION_COMMON_GENERATOR(exp,type)               \
-    BOOST_QUATERNION_COMMON_GENERATOR(cos,type)               \
-    BOOST_QUATERNION_COMMON_GENERATOR(sin,type)               \
-    BOOST_QUATERNION_COMMON_GENERATOR(cosh,type)              \
-    BOOST_QUATERNION_COMMON_GENERATOR(sinh,type)
+#define    BOOST_QUATERNION_TEST                      \
+    BOOST_QUATERNION_COMMON_GENERATOR(multiplication) \
+    BOOST_QUATERNION_COMMON_GENERATOR(exp)            \
+    BOOST_QUATERNION_COMMON_GENERATOR(cos)            \
+    BOOST_QUATERNION_COMMON_GENERATOR(sin)            \
+    BOOST_QUATERNION_COMMON_GENERATOR(cosh)           \
+    BOOST_QUATERNION_COMMON_GENERATOR(sinh)
     
     
-    BOOST_QUATERNION_TEST(float)
-    BOOST_QUATERNION_TEST(double)
-    BOOST_QUATERNION_TEST(long double)
+    BOOST_QUATERNION_TEST
     
     
 #undef    BOOST_QUATERNION_TEST
@@ -786,10 +756,11 @@ boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
     
 #ifdef BOOST_QUATERNION_TEST_VERBOSE
     
-    quaternion_manual_test();
+    test->add(BOOST_TEST_CASE(quaternion_manual_test));
     
 #endif    /* BOOST_QUATERNION_TEST_VERBOSE */
     
-    return(test);
+    return test;
 }
 
+#undef DEFINE_TYPE_NAME

@@ -7,22 +7,38 @@
 
 
 #include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <functional>
 
 
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
-
+#include <boost/mpl/list.hpp>
 
 #include <boost/test/unit_test.hpp>
-#include <boost/test/unit_test_suite_ex.hpp>
+#include <boost/test/unit_test_log.hpp>
+#include <boost/test/test_case_template.hpp>
 
 
 #include <boost/math/octonion.hpp>
 
-#if defined(__GNUC__) && (__GNUC__ < 3)
+
+template<typename T>
+struct string_type_name;
+
+#define DEFINE_TYPE_NAME(Type)              \
+template<> struct string_type_name<Type>    \
+{                                           \
+    static char const * _()                 \
+    {                                       \
+        return #Type;                       \
+    }                                       \
+}
+
+DEFINE_TYPE_NAME(float);
+DEFINE_TYPE_NAME(double);
+DEFINE_TYPE_NAME(long double);
+
+
+typedef boost::mpl::list<float,double,long double>  test_types;
+
+#if BOOST_WORKAROUND(__GNUC__, < 3)
     // gcc 2.x ignores function scope using declarations,
     // put them in the scope of the enclosing namespace instead:
 using   ::std::sqrt;
@@ -39,7 +55,7 @@ using   ::std::tanh;
 using   ::std::numeric_limits;
 
 using   ::boost::math::abs;
-#endif  /* defined(__GNUC__) && (__GNUC__ < 3) */
+#endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
 
 
 #ifdef  BOOST_NO_STDC_NAMESPACE
@@ -76,8 +92,7 @@ using   ::boost::math::sinhc_pi;
 #endif  /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
   
 // Provide standard floating point abs() overloads for MSVC
-#ifdef    BOOST_MSVC
-#if        (BOOST_MSVC < 1300) || (defined(_MSC_EXTENSIONS) && BOOST_MSVC < 1310)
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) || (defined(_MSC_EXTENSIONS) && BOOST_MSVC < 1310)
 inline float        abs(float v)
 {
     return(fabs(v));
@@ -92,17 +107,16 @@ inline long double    abs(long double v)
 {
     return(fabs(v));
 }
-#endif    /* need abs */
-#endif    /* BOOST_MSVC */
+#endif /* BOOST_WORKAROUND(BOOST_MSVC) */
 
 
 // explicit (if ludicrous) instanciation
-#ifndef __GNUC__
+#if !BOOST_WORKAROUND(__GNUC__, < 3)
 template    class ::boost::math::octonion<int>;
 #else
 // gcc doesn't like the absolutely-qualified namespace
 template class boost::math::octonion<int>;
-#endif
+#endif /* !BOOST_WORKAROUND(__GNUC__) */
 
 
 namespace
@@ -642,90 +656,89 @@ void    octonion_manual_test()
 }
 
 
-template<typename T>
-void    multiplication_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(multiplication_test, T)
 {
-#if defined(__GNUC__) && (__GNUC__ < 3)
-#else   /* defined(__GNUC__) && (__GNUC__ < 3) */
+#if     BOOST_WORKAROUND(__GNUC__, < 3)
+#else   /* BOOST_WORKAROUND(__GNUC__, < 3) */
     using ::std::numeric_limits;
     
     using ::boost::math::abs;
-#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
+#endif /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing multiplication for " << more_blurb << ".");
+    BOOST_MESSAGE("Testing multiplication for "
+        << string_type_name<T>::_() << ".");
     
-    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-        (
-            abs(::boost::math::octonion<T>(1,0,0,0,0,0,0,0)*
-                ::boost::math::octonion<T>(1,0,0,0,0,0,0,0)-
-                static_cast<T>(1)),
-            numeric_limits<T>::epsilon()
-        ));
+    BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+        (abs(::boost::math::octonion<T>(1,0,0,0,0,0,0,0)*
+             ::boost::math::octonion<T>(1,0,0,0,0,0,0,0)-
+             static_cast<T>(1)))
+        (numeric_limits<T>::epsilon()));
     
     for    (int idx = 1; idx < 8; ++idx)
     {
         ::boost::math::octonion<T>    toto = index_i_element<T>(idx);
         
-        BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(), 2,
-            (
-                abs(toto*toto+static_cast<T>(1)),
-                numeric_limits<T>::epsilon()
-            ));
+        BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
+            (abs(toto*toto+static_cast<T>(1)))
+            (numeric_limits<T>::epsilon()));
     }
 }
 
 
-template<typename T>
-void    exp_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(exp_test, T)
 {
-#if defined(__GNUC__) && (__GNUC__ < 3)
-#else   /* defined(__GNUC__) && (__GNUC__ < 3) */
+#if     BOOST_WORKAROUND(__GNUC__, < 3)
+#else   /* BOOST_WORKAROUND(__GNUC__, < 3) */
     using ::std::numeric_limits;
     
     using ::std::atan;
     
     using ::boost::math::abs;
-#endif  /* defined(__GNUC__) && (__GNUC__ < 3) */
+#endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing exp for " << more_blurb << ".");
+    BOOST_MESSAGE("Testing exp for "
+        << string_type_name<T>::_() << ".");
     
     for    (int idx = 1; idx < 8; ++idx)
     {
         ::boost::math::octonion<T>    toto =
             static_cast<T>(4)*atan(static_cast<T>(1))*index_i_element<T>(idx);
             
-        BOOST_CHECK_PREDICATE(::std::less_equal<T>(), 2,
-            (
-                abs(exp(toto)+static_cast<T>(1)),
-                2*numeric_limits<T>::epsilon()
-            ));
+        BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+            (abs(exp(toto)+static_cast<T>(1)))
+            (2*numeric_limits<T>::epsilon()));
     }
 }
 
 
 boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
 {
-    //::boost::unit_test_framework::unit_test_log::instance().
-    //    set_log_threshold_level_by_name("messages");
+    ::boost::unit_test::unit_test_log.
+        set_threshold_level(::boost::unit_test::log_messages);
     
     boost::unit_test_framework::test_suite *    test =
         BOOST_TEST_SUITE("octonion_test");
     
-#define    BOOST_OCTONION_COMMON_GENERATOR(fct,type)               \
-    test->add(BOOST_TEST_CASE(::boost::bind(static_cast            \
-        < void (*) (const char *) >(&fct##_test<type>), #type)));
+    BOOST_MESSAGE("Results of octonion test.");
+    BOOST_MESSAGE(" ");
+    BOOST_MESSAGE("(C) Copyright Hubert Holin 2003-2005.");
+    BOOST_MESSAGE("Distributed under the Boost Software License, Version 1.0.");
+    BOOST_MESSAGE("(See accompanying file LICENSE_1_0.txt or copy at");
+    BOOST_MESSAGE("http://www.boost.org/LICENSE_1_0.txt)");
+    BOOST_MESSAGE(" ");
+    
+#define    BOOST_OCTONION_COMMON_GENERATOR(fct) \
+    test->add(BOOST_TEST_CASE_TEMPLATE(fct##_test, test_types));
     
     
-#define    BOOST_OCTONION_TEST(type)                        \
-    BOOST_OCTONION_COMMON_GENERATOR(multiplication,type)    \
-    BOOST_OCTONION_COMMON_GENERATOR(exp,type)
+#define    BOOST_OCTONION_TEST                      \
+    BOOST_OCTONION_COMMON_GENERATOR(multiplication) \
+    BOOST_OCTONION_COMMON_GENERATOR(exp)
     
     
-    BOOST_OCTONION_TEST(float)
-    BOOST_OCTONION_TEST(double)
-    BOOST_OCTONION_TEST(long double)
+    BOOST_OCTONION_TEST
     
     
 #undef    BOOST_OCTONION_TEST
@@ -735,9 +748,11 @@ boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
     
 #ifdef BOOST_OCTONION_TEST_VERBOSE
     
-    octonion_manual_test();
+    test->add(BOOST_TEST_CASE(octonion_manual_test));
     
 #endif    /* BOOST_OCTONION_TEST_VERBOSE */
     
-    return(test);
+    return test;
 }
+
+#undef DEFINE_TYPE_NAME
