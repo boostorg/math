@@ -178,6 +178,14 @@ public:
     big_whole  reverse( std::size_t cap ) const;
     big_whole  reverse() const;
 
+    std::size_t  search_tested_bit( std::size_t from, bool value, bool increase_indices ) const;
+    std::size_t  next_tested_bit( std::size_t from, bool value ) const;
+    std::size_t  previous_tested_bit( std::size_t from, bool value ) const;
+    std::size_t  next_set_bit( std::size_t from ) const;
+    std::size_t  next_reset_bit( std::size_t from ) const;
+    std::size_t  previous_set_bit( std::size_t from ) const;
+    std::size_t  previous_reset_bit( std::size_t from ) const;
+
     // Self-operator mutators
     void  not_self();
     void  same_self();
@@ -185,6 +193,10 @@ public:
 
     // Object-accessing operations
     int  compare( big_whole const &amp;other ) const;
+
+    bool  intersects( big_whole const &amp;other ) const;
+
+    std::size_t  scale() const;
 
     // Operators
     big_whole &amp;  operator =( big_whole const &amp;rhs );
@@ -297,10 +309,56 @@ public:
 		<strong>Returns:</strong> 0 if <code>*this</code> represents zero; otherwise, <code>this-&gt;reverse( this-&gt;length() - 1 )</code><br>
 		<strong>Rationale:</strong> shorthand for the most common case of bit-order reversal (minimal amount for all significant bits)
 
+	<dt><code>std::size_t  search_tested_bit( std::size_t from, bool value, bool increase_indices ) const;</code>
+	<dd>
+		<strong>Returns:</strong> if <var>increase_indices</var> is TRUE, then <code>this-&gt;next_tested_bit( <var>from</var>, <var>value</var> )</code>, else <code>this-&gt;previous_tested_bit( <var>from</var>, <var>value</var> )</code><br>
+		<strong>Rationale:</strong> most general bit-searching routine
+
+	<dt><code>std::size_t  next_tested_bit( std::size_t from, bool value ) const;</code>
+	<dd>
+		<strong>Returns:</strong> the index of the first bit after <var>from</var> that is equal to <var>value</var>, 0 if such a bit cannot be found<br>
+		<strong>Rationale:</strong> forward searching for a specific bit value
+
+	<dt><code>std::size_t  previous_tested_bit( std::size_t from, bool value ) const;</code>
+	<dd>
+		<strong>Returns:</strong> the index of the first bit before <var>from</var> that is equal to <var>value</var>, the maximum <code>std::size_t</code> value if such a bit cannot be found<br>
+		<strong>Rationale:</strong> backward searching for a specific bit value
+
+	<dt><code>std::size_t  next_set_bit( std::size_t from ) const;</code>
+	<dd>
+		<strong>Returns:</strong> <code>this-&gt;next_tested_bit( <var>from</var>, true )</code><br>
+		<strong>Rationale:</strong> forward searching for a TRUE bit
+
+	<dt><code>std::size_t  next_reset_bit( std::size_t from ) const;</code>
+	<dd>
+		<strong>Returns:</strong> <code>this-&gt;next_tested_bit( <var>from</var>, false )</code><br>
+		<strong>Rationale:</strong> forward searching for a FALSE bit
+
+	<dt><code>std::size_t  previous_set_bit( std::size_t from ) const;</code>
+	<dd>
+		<strong>Returns:</strong> <code>this-&gt;previous_tested_bit( <var>from</var>, true )</code><br>
+		<strong>Rationale:</strong> backward searching for a TRUE bit
+
+	<dt><code>std::size_t  previous_reset_bit( std::size_t from ) const;</code>
+	<dd>
+		<strong>Returns:</strong> <code>this-&gt;previous_tested_bit( <var>from</var>, false )</code><br>
+		<strong>Rationale:</strong> backward searching for a FALSE bit
+
 	<dt><code>int  compare( big_whole const &amp;other ) const;</code>
 	<dd>
 		<strong>Returns:</strong> zero if <code>*this</code> and <var>other</var> represent the same value, a positive number if <code>*this</code> is the greater, and a negative number if <code>*this</code> is the lesser (<i>i.e.</i> <var>other</var> is the greater)<br>
 		<strong>Rationale:</strong> equality/ordered comparison core routine
+
+	<dt><code>bool  intersects( big_whole const &amp;other ) const;</code>
+	<dd>
+		<strong>Returns:</strong> whether there is at least one bit place that is set in both <code>*this</code> and <var>other</var><br>
+		<strong>Note:</strong> same as <code>(*this &amp; <var>other</var>) != 0</code>, but is probably implemented more efficiently<br>
+		<strong>Rationale:</strong> simple bit-set intersection test
+
+	<dt><code>std::size_t  scale() const;</code>
+	<dd>
+		<strong>Returns:</strong> zero if <code>*this</code> represents zero, otherwise the smallest nonnegative integer <var>x</var> such that <code>*this &gt;&gt; <var>x</var></code> is odd<br>
+		<strong>Rationale:</strong> find number of trailing zeroes
 </dl>
 
 <h4><a name="c_bw_mutate">Mutating Member Functions</a></h4>
@@ -659,7 +717,7 @@ boost::math::operator &gt;&gt;( std::basic_istream&lt;Ch, Tr&gt; &amp;is, boost:
 
 <hr>
 
-<p>Revised: 14 February 2004</p>
+<p>Revised: 16 February 2004</p>
 
 <p>Copyright 2004 Daryle Walker.  Use, modification, and distribution are subject to the Boost Software License, Version 1.0.  (See accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at &lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)</p>
 </body>

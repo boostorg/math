@@ -7,7 +7,7 @@
 //  See <http://www.boost.org/libs/math/> for the library's home page.
 
 //  Revision History
-//   14 Feb 2004  Initial version (Daryle Walker)
+//   16 Feb 2004  Initial version (Daryle Walker)
 
 #include <boost/math/big_whole.hpp>  // for boost::math::big_whole, etc.
 #include <boost/test/unit_test.hpp>  // for main, BOOST_CHECK_EQUAL, etc.
@@ -1863,6 +1863,202 @@ bigwhole_binary_plus_minus_unit_test
     BOOST_CHECK_EQUAL( fe2, f - e );
 }
 
+// Unit test for intersects
+void
+bigwhole_intersects_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::size_t;
+
+    typedef std::valarray<size_t>  va_size_t;
+
+    size_t const     di[] = { wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const     ds = sizeof( di ) / sizeof( di[0] );
+    va_size_t const  dv( di, ds );
+    size_t const     ei[] = { 1, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1 };
+    size_t const     es = sizeof( ei ) / sizeof( ei[0] );
+    va_size_t const  ev( ei, es );
+
+    big_whole const  z;
+    big_whole const  a( 7 );
+    big_whole const  b( 12 );
+    big_whole const  c( 100 );
+    big_whole const  d( dv );
+    big_whole const  e( ev );
+
+    // self-intersects
+    BOOST_CHECK( !z.intersects(z) );
+    BOOST_CHECK(  a.intersects(a) );
+    BOOST_CHECK(  b.intersects(b) );
+    BOOST_CHECK(  c.intersects(c) );
+    BOOST_CHECK(  d.intersects(d) );
+    BOOST_CHECK(  e.intersects(e) );
+
+    // zero-intersects
+    BOOST_CHECK( !z.intersects(a) ); BOOST_CHECK( !a.intersects(z) );
+    BOOST_CHECK( !z.intersects(b) ); BOOST_CHECK( !b.intersects(z) );
+    BOOST_CHECK( !z.intersects(c) ); BOOST_CHECK( !c.intersects(z) );
+    BOOST_CHECK( !z.intersects(d) ); BOOST_CHECK( !d.intersects(z) );
+    BOOST_CHECK( !z.intersects(e) ); BOOST_CHECK( !e.intersects(z) );
+
+    // various combinations
+    bool const  ab = true, ac = true, ad = false, ae = true;
+    bool const  ba = ab, bc = true, bd = false, be = false;
+    bool const  ca = ac, cb = bc, cd = false, ce = false;
+    bool const  da = ad, db = bd, dc = cd, de = true;
+    bool const  ea = ae, eb = be, ec = ce, ed = de;
+
+    BOOST_CHECK_EQUAL( ab, a.intersects(b) ); BOOST_CHECK_EQUAL( ba, b.intersects(a) );
+    BOOST_CHECK_EQUAL( ac, a.intersects(c) ); BOOST_CHECK_EQUAL( ca, c.intersects(a) );
+    BOOST_CHECK_EQUAL( ad, a.intersects(d) ); BOOST_CHECK_EQUAL( da, d.intersects(a) );
+    BOOST_CHECK_EQUAL( ae, a.intersects(e) ); BOOST_CHECK_EQUAL( ea, e.intersects(a) );
+
+    BOOST_CHECK_EQUAL( bc, b.intersects(c) ); BOOST_CHECK_EQUAL( cb, c.intersects(b) );
+    BOOST_CHECK_EQUAL( bd, b.intersects(d) ); BOOST_CHECK_EQUAL( db, d.intersects(b) );
+    BOOST_CHECK_EQUAL( be, b.intersects(e) ); BOOST_CHECK_EQUAL( eb, e.intersects(b) );
+
+    BOOST_CHECK_EQUAL( cd, c.intersects(d) ); BOOST_CHECK_EQUAL( dc, d.intersects(c) );
+    BOOST_CHECK_EQUAL( ce, c.intersects(e) ); BOOST_CHECK_EQUAL( ec, e.intersects(c) );
+
+    BOOST_CHECK_EQUAL( de, d.intersects(e) ); BOOST_CHECK_EQUAL( ed, e.intersects(d) );
+}
+
+// Unit test for bit searching
+void
+bigwhole_bit_search_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::size_t;
+
+    typedef std::valarray<size_t>  va_size_t;
+
+    typedef std::numeric_limits<size_t>  size_limits;
+
+    size_t const     wd = wlimits_type::digits;
+    size_t const     ei[] = { wd + 1, 2 * wd + 3 };
+    size_t const     es = sizeof( ei ) / sizeof( ei[0] );
+    va_size_t const  ev( ei, es );
+
+    big_whole const  z;
+    big_whole const  a( 1 );
+    big_whole const  b( 5 );
+    big_whole const  e( ev );
+
+    // limit violations
+    BOOST_CHECK_EQUAL( size_limits::min(), z.next_set_bit(size_limits::max()) );
+    BOOST_CHECK_EQUAL( size_limits::min(), a.next_set_bit(size_limits::max()) );
+    BOOST_CHECK_EQUAL( size_limits::min(), b.next_set_bit(size_limits::max()) );
+    BOOST_CHECK_EQUAL( size_limits::min(), e.next_set_bit(size_limits::max()) );
+
+    BOOST_CHECK_EQUAL( size_limits::min(), z.next_reset_bit(size_limits::max()) );
+    BOOST_CHECK_EQUAL( size_limits::min(), a.next_reset_bit(size_limits::max()) );
+    BOOST_CHECK_EQUAL( size_limits::min(), b.next_reset_bit(size_limits::max()) );
+    BOOST_CHECK_EQUAL( size_limits::min(), e.next_reset_bit(size_limits::max()) );
+
+    BOOST_CHECK_EQUAL( size_limits::max(), z.previous_set_bit(size_limits::min()) );
+    BOOST_CHECK_EQUAL( size_limits::max(), a.previous_set_bit(size_limits::min()) );
+    BOOST_CHECK_EQUAL( size_limits::max(), b.previous_set_bit(size_limits::min()) );
+    BOOST_CHECK_EQUAL( size_limits::max(), e.previous_set_bit(size_limits::min()) );
+
+    BOOST_CHECK_EQUAL( size_limits::max(), z.previous_reset_bit(size_limits::min()) );
+    BOOST_CHECK_EQUAL( size_limits::max(), a.previous_reset_bit(size_limits::min()) );
+    BOOST_CHECK_EQUAL( size_limits::max(), b.previous_reset_bit(size_limits::min()) );
+    BOOST_CHECK_EQUAL( size_limits::max(), e.previous_reset_bit(size_limits::min()) );
+
+    // checking zero
+    BOOST_CHECK_EQUAL( 1u, z.next_reset_bit(0) );
+    BOOST_CHECK_EQUAL( size_limits::min(), z.next_set_bit(0) );
+    BOOST_CHECK_EQUAL( 23u, z.previous_reset_bit(24) );
+    BOOST_CHECK_EQUAL( size_limits::max(), z.previous_set_bit(24) );
+
+    // more checks
+    BOOST_CHECK_EQUAL( 1u, a.next_reset_bit(0) );
+    BOOST_CHECK_EQUAL( size_limits::min(), a.next_set_bit(0) );
+    BOOST_CHECK_EQUAL( 23u, a.previous_reset_bit(24) );
+    BOOST_CHECK_EQUAL( 0u, a.previous_set_bit(24) );
+
+    BOOST_CHECK_EQUAL( 1u, b.next_reset_bit(0) );
+    BOOST_CHECK_EQUAL( 2u, b.next_set_bit(0) );
+    BOOST_CHECK_EQUAL( 3u, b.next_reset_bit(1) );
+    BOOST_CHECK_EQUAL( 2u, b.next_set_bit(1) );
+    BOOST_CHECK_EQUAL( 3u, b.next_reset_bit(2) );
+    BOOST_CHECK_EQUAL( size_limits::min(), b.next_set_bit(2) );
+    BOOST_CHECK_EQUAL( 4u, b.next_reset_bit(3) );
+    BOOST_CHECK_EQUAL( size_limits::min(), b.next_set_bit(3) );
+
+    BOOST_CHECK_EQUAL( 3u, b.previous_reset_bit(4) );
+    BOOST_CHECK_EQUAL( 2u, b.previous_set_bit(4) );
+    BOOST_CHECK_EQUAL( 1u, b.previous_reset_bit(3) );
+    BOOST_CHECK_EQUAL( 2u, b.previous_set_bit(3) );
+    BOOST_CHECK_EQUAL( 1u, b.previous_reset_bit(2) );
+    BOOST_CHECK_EQUAL( 0u, b.previous_set_bit(2) );
+    BOOST_CHECK_EQUAL( size_limits::max(), b.previous_reset_bit(1) );
+    BOOST_CHECK_EQUAL( 0u, b.previous_set_bit(1) );
+
+    BOOST_CHECK_EQUAL( 1u, e.next_reset_bit(0) );
+    BOOST_CHECK_EQUAL( wd + 1u, e.next_set_bit(0) );
+
+    BOOST_CHECK_EQUAL( size_limits::max(), e.previous_set_bit(wd + 1) );
+    BOOST_CHECK_EQUAL( wd, e.previous_reset_bit(wd + 1) );
+    BOOST_CHECK_EQUAL( wd + 2, e.next_reset_bit(wd + 1) );
+    BOOST_CHECK_EQUAL( 2 * wd + 3, e.next_set_bit(wd + 1) );
+
+    BOOST_CHECK_EQUAL( wd + 1, e.previous_set_bit(3 * wd / 2 + 4) );
+    BOOST_CHECK_EQUAL( 3 * wd / 2 + 3, e.previous_reset_bit(3 * wd / 2 + 4) );
+    BOOST_CHECK_EQUAL( 3 * wd / 2 + 5, e.next_reset_bit(3 * wd / 2 + 4) );
+    BOOST_CHECK_EQUAL( 2 * wd + 3, e.next_set_bit(3 * wd / 2 + 4) );
+
+    BOOST_CHECK_EQUAL( wd + 1, e.previous_set_bit(2 * wd + 3) );
+    BOOST_CHECK_EQUAL( 2 * wd + 2, e.previous_reset_bit(2 * wd + 3) );
+    BOOST_CHECK_EQUAL( 2 * wd + 4, e.next_reset_bit(2 * wd + 3) );
+    BOOST_CHECK_EQUAL( size_limits::min(), e.next_set_bit(2 * wd + 3) );
+
+    BOOST_CHECK_EQUAL( 2 * wd + 3, e.previous_set_bit(size_limits::max()) );
+    BOOST_CHECK_EQUAL( size_limits::max() - 1, e.previous_reset_bit(size_limits::max()) );
+}
+
+// Unit test for the scale factor
+void
+bigwhole_scale_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::size_t;
+
+    typedef std::valarray<size_t>  va_size_t;
+
+    size_t const     wd = wlimits_type::digits;
+    size_t const     ei[] = { wd + 1, 2 * wd + 3 };
+    size_t const     es = sizeof( ei ) / sizeof( ei[0] );
+    va_size_t const  ev( ei, es );
+    size_t const     fi[] = { 1, wd - 1, wd, wd + 2 };
+    size_t const     fs = sizeof( fi ) / sizeof( fi[0] );
+    va_size_t const  fv( fi, fs );
+
+    big_whole const  z;
+    big_whole const  a( 1 );
+    big_whole const  b( 5 );
+    big_whole const  c( 10 );
+    big_whole const  d( 100 );
+    big_whole const  e( ev );
+    big_whole const  f( fv );
+
+    BOOST_CHECK_EQUAL( 0u, z.scale() );
+    BOOST_CHECK_EQUAL( 0u, a.scale() );
+    BOOST_CHECK_EQUAL( 0u, b.scale() );
+    BOOST_CHECK_EQUAL( 1u, c.scale() );
+    BOOST_CHECK_EQUAL( 2u, d.scale() );
+    BOOST_CHECK_EQUAL( wd + 1u, e.scale() );
+    BOOST_CHECK_EQUAL( 1u, (e >> wd).scale() );
+    BOOST_CHECK_EQUAL( wd + 5u, (e << 4).scale() );
+    BOOST_CHECK_EQUAL( 1u, f.scale() );
+}
+
 
 // Unit test program
 boost::unit_test_framework::test_suite *
@@ -1904,6 +2100,10 @@ init_unit_test_suite
     test->add( BOOST_TEST_CASE(bigwhole_double_plus_minus_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_abs_sgn_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_binary_plus_minus_unit_test) );
+
+    test->add( BOOST_TEST_CASE(bigwhole_intersects_unit_test) );
+    test->add( BOOST_TEST_CASE(bigwhole_bit_search_unit_test) );
+    test->add( BOOST_TEST_CASE(bigwhole_scale_unit_test) );
 
     return test;
 }

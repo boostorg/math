@@ -13,7 +13,7 @@
 
 #include <boost/cstdint.hpp>  // for boost::uintmax_t
 
-#include <algorithm>  // for std::swap, std::min, std::max
+#include <algorithm>  // for std::swap, std::min, std::max, std::find
 #include <cstddef>    // for NULL, std::size_t
 #include <limits>     // for std::numeric_limits
 #include <memory>     // for std::auto_ptr
@@ -137,6 +137,15 @@ public:
     self_type  reverse( size_type cap ) const;
     self_type  reverse() const;
 
+    size_type  search_tested_bit( size_type from, bool value,
+     bool increase_indices ) const;
+    size_type  next_tested_bit( size_type from, bool value ) const;
+    size_type  previous_tested_bit( size_type from, bool value ) const;
+    size_type  next_set_bit( size_type from ) const;
+    size_type  next_reset_bit( size_type from ) const;
+    size_type  previous_set_bit( size_type from ) const;
+    size_type  previous_reset_bit( size_type from ) const;
+
     // Self-operator mutators
     void  not_self();
     void  same_self();
@@ -144,6 +153,10 @@ public:
 
     // Object-accessing operations
     int  compare( self_type const &other ) const;
+
+    bool  intersects( self_type const &other ) const;
+
+    size_type  scale() const;
 
     // Operators
     self_type &  operator =( self_type const &rhs );
@@ -385,26 +398,27 @@ big_whole::to_bit_indices
     {
         if ( size_type const  s = v->size() )
         {
-            int const        d = limits_type::digits;
-            index_type       temp2( s * d );
-            word_type const  mask = 1;
-            size_type        bits_used = 0;
-
-            for ( size_type  i = 0, ii = 0 ; i < s ; ++i, ii += d )
+            if ( size_type const  c
+             = v->apply(self_type::count_set_bits_for_word).sum() )
             {
-                for ( int  j = 0, jj = ii ; j < d ; ++j, ++jj )
+                size_type const  d = limits_type::digits;
+                word_type const  m = 1u;
+
+                temp.resize( c );
+
+                for ( size_type  i = 0, cc = 0, ii = 0 ; (i < s) && (cc < c)
+                 ; ++i, ii += d )
                 {
-                    if ( (mask << j) & (*v)[i] )
+                    word_type const  vi = ( *v )[ i ];
+
+                    for ( size_type  j = 0, jj = ii ; j < d ; ++j, ++jj )
                     {
-                        temp2[ bits_used++ ] = jj;
+                        if ( (vi >> j) & m )
+                        {
+                            temp[ cc++ ] = jj;
+                        }
                     }
                 }
-            }
-
-            if ( bits_used )
-            {
-                temp.resize( bits_used );
-                temp = temp2[ std::slice(0, bits_used, 1) ];
             }
         }
     }
@@ -679,6 +693,130 @@ big_whole::reverse
     return this->any() ? this->reverse( this->length() - 1 ) : *this;
 }
 
+inline
+std::size_t
+big_whole::search_tested_bit
+(
+    std::size_t  from,
+    bool         value,
+    bool         increase_indices
+) const
+{
+    return increase_indices ? this->next_tested_bit( from, value )
+     : this->previous_tested_bit( from, value );
+}
+
+inline
+std::size_t
+big_whole::next_tested_bit
+(
+    std::size_t  from,
+    bool         value
+) const
+{
+    return value ? this->next_set_bit( from ) : this->next_reset_bit( from );
+}
+
+inline
+std::size_t
+big_whole::previous_tested_bit
+(
+    std::size_t  from,
+    bool         value
+) const
+{
+    return value ? this->previous_set_bit( from )
+     : this->previous_reset_bit( from );
+}
+
+std::size_t
+big_whole::next_set_bit
+(
+    std::size_t  from
+) const
+{
+    typedef std::numeric_limits<size_type>  size_limits;
+
+    index_type const  bi1 = this->to_bit_indices();
+    index_type const  bi2 = bi1[ bi1 > from ];
+
+    return bi2.size() ? bi2.min() : size_limits::min();
+}
+
+std::size_t
+big_whole::next_reset_bit
+(
+    std::size_t  from
+) const
+{
+    typedef std::numeric_limits<size_type>  size_limits;
+
+    mask_type const  bv = this->to_bit_vector();
+    size_type const  bs = bv.size();
+
+    if ( from >= size_limits::max() )
+    {
+        return size_limits::min();
+    }
+
+    while ( ++from < bs )
+    {
+        if ( !bv[from] )
+        {
+            return from;
+        }
+    }
+
+    return from;
+}
+
+std::size_t
+big_whole::previous_set_bit
+(
+    std::size_t  from
+) const
+{
+    typedef std::numeric_limits<size_type>  size_limits;
+
+    index_type const  bi1 = this->to_bit_indices();
+    index_type const  bi2 = bi1[ bi1 < from ];
+
+    return bi2.size() ? bi2.max() : size_limits::max();
+}
+
+std::size_t
+big_whole::previous_reset_bit
+(
+    std::size_t  from
+) const
+{
+    typedef std::numeric_limits<size_type>  size_limits;
+
+    mask_type const  bv = this->to_bit_vector();
+    size_type const  bs = bv.size();
+
+    if ( from <= size_limits::min() )
+    {
+        return size_limits::max();
+    }
+    else if ( from > bs )
+    {
+        return from - 1;
+    }
+
+    for ( size_type  i = from ; i > 0 ; --i )
+    {
+        size_type const  ii = i - 1;
+
+        if ( !bv[ii] )
+        {
+            return ii;
+        }
+    }
+
+    return size_limits::max();
+}
+
 
 //  Arbitrary-length whole-number self-operator member definitions  ----------//
 
@@ -737,6 +875,40 @@ big_whole::compare
     {
         return other.any() ? -1 : 0;
     }
+}
+
+bool
+big_whole::intersects
+(
+    big_whole const &  other
+) const
+{
+    if ( va_type const * const  t = this->x_.get() )
+    {
+        if ( va_type const * const  o = other.x_.get() )
+        {
+            size_type const  s = std::min( t->size(), o->size() );
+
+            for ( size_type  i = 0 ; i < s ; ++i )
+            {
+                if ( (*t)[i] & (*o)[i] )
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+inline
+std::size_t
+big_whole::scale
+(
+) const
+{
+    return ( this->any() && this->is_even() ) ? this->next_set_bit( 0 ) : 0;
 }
 
 
