@@ -23,6 +23,17 @@ namespace boost
 {
     namespace math
     {
+#if defined(__GNUC__) && (__GNUC__ < 3)
+        // gcc 2.x ignores function scope using declarations,
+        // put them in the scope of the enclosing namespace instead:
+        using    ::std::valarray;
+        using    ::std::sqrt;
+        using    ::std::cos;
+        using    ::std::sin;
+        using    ::std::exp;
+        using    ::std::cosh;
+#endif
+        
     #define    BOOST_QUATERNION_ACCESSOR_GENERATOR(type)                \
             type                    real() const                        \
             {                                                           \

@@ -23,6 +23,17 @@ namespace boost
 {
     namespace math
     {
+#if defined(__GNUC__) && (__GNUC__ < 3)
+        // gcc 2.x ignores function scope using declarations,
+        // put them in the scope of the enclosing namespace instead:
+        
+        using    ::std::abs;
+        using    ::std::sqrt;
+        using    ::std::sinh;
+        
+        using    ::std::numeric_limits;
+#endif
+        
         // This is the "Hyperbolic Sinus Cardinal" of index Pi.
         
         template<typename T>
@@ -34,26 +45,29 @@ namespace boost
             
             using    ::std::numeric_limits;
             
-            static T const    e1 = numeric_limits<T>::epsilon();
-            static T const    e2 = sqrt(e1);
-            static T const    e3 = sqrt(e2);
+            static T const    taylor_0_bound = numeric_limits<T>::epsilon();
+            static T const    taylor_2_bound = sqrt(taylor_0_bound);
+            static T const    taylor_n_bound = sqrt(taylor_2_bound);
             
-            if    (abs(x) > e3)
+            if    (abs(x) >= taylor_n_bound)
             {
                 return(sinh(x)/x);
             }
             else
             {
+                // approximation by taylor series in x at 0 up to order 0
                 T    result = static_cast<T>(1);
                 
-                if    (abs(x) > e1)
+                if    (abs(x) >= taylor_0_bound)
                 {
                     T    x2 = x*x;
                     
+                    // approximation by taylor series in x at 0 up to order 2
                     result += x2/static_cast<T>(6);
                     
-                    if    (abs(x) > e2)
+                    if    (abs(x) >= taylor_2_bound)
                     {
+                        // approximation by taylor series in x at 0 up to order 4
                         result += (x2*x2)/static_cast<T>(120);
                     }
                 }
@@ -72,26 +86,29 @@ namespace boost
             
             using    ::std::numeric_limits;
             
-            static T const    e1 = numeric_limits<T>::epsilon();
-            static T const    e2 = sqrt(e1);
-            static T const    e3 = sqrt(e2);
+            static T const    taylor_0_bound = numeric_limits<T>::epsilon();
+            static T const    taylor_2_bound = sqrt(taylor_0_bound);
+            static T const    taylor_n_bound = sqrt(taylor_2_bound);
             
-            if    (abs(x) > e3)
+            if    (abs(x) >= taylor_n_bound)
             {
                 return(sinh(x)/x);
             }
             else
             {
+                // approximation by taylor series in x at 0 up to order 0
                 U<T>    result = static_cast< U<T> >(1);
                 
-                if    (abs(x) > e1)
+                if    (abs(x) >= taylor_0_bound)
                 {
                     U<T>    x2 = x*x;
                     
+                    // approximation by taylor series in x at 0 up to order 2
                     result += x2/static_cast<T>(6);
                     
-                    if    (abs(x) > e2)
+                    if    (abs(x) >= taylor_2_bound)
                     {
+                        // approximation by taylor series in x at 0 up to order 4
                         result += (x2*x2)/static_cast<T>(120);
                     }
                 }

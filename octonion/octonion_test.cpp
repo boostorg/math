@@ -13,13 +13,6 @@
 
 #include <boost/math/octonion.hpp>
 
-#include <boost/config.hpp>
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std {
-    using ::sqrt;
-    using ::atan;
-}
-#endif
 
 // explicit (if ludicrous) instanciation
 #ifndef __GNUC__
@@ -321,7 +314,7 @@ int    test_main(int, char *[])
                     << o0 << " ." << ::std::endl;
     }
 #else
-    ::std::istringstream                bogus("(1,2,3,4,5,6,7,8)");
+    ::std::istringstream                    bogus("(1,2,3,4,5,6,7,8)");
     
     bogus >> o0;
     
@@ -404,14 +397,14 @@ int    test_main(int, char *[])
     
     ::std::cout << ::std::endl;
     
-    float                            rho = ::std::sqrt(4096.0f);
-    float                            theta = ::std::atan(1.0f);
-    float                            phi1 = ::std::atan(1.0f);
-    float                            phi2 = ::std::atan(1.0f);
-    float                            phi3 = ::std::atan(1.0f);
-    float                            phi4 = ::std::atan(1.0f);
-    float                            phi5 = ::std::atan(1.0f);
-    float                            phi6 = ::std::atan(1.0f);
+    float rho = ::std::sqrt(4096.0f);
+    float theta = ::std::atan(1.0f);
+    float phi1 = ::std::atan(1.0f);
+    float phi2 = ::std::atan(1.0f);
+    float phi3 = ::std::atan(1.0f);
+    float phi4 = ::std::atan(1.0f);
+    float phi5 = ::std::atan(1.0f);
+    float phi6 = ::std::atan(1.0f);
     
     ::std::cout << "The value of the octonion represented "
                 << "in spherical form by "
@@ -424,14 +417,14 @@ int    test_main(int, char *[])
                         phi1, phi2, phi3, phi4, phi5, phi6)
                 << ::std::endl;
     
-    float                            rho1 = 1;
-    float                            rho2 = 2;
-    float                            rho3 = ::std::sqrt(2.0f);
-    float                            rho4 = ::std::sqrt(8.0f);
-    float                            theta1 = 0;
-    float                            theta2 = ::std::atan(1.0f)*2;
-    float                            theta3 = ::std::atan(1.0f);
-    float                            theta4 = ::std::atan(::std::sqrt(3.0f));
+    float rho1 = 1;
+    float rho2 = 2;
+    float rho3 = ::std::sqrt(2.0f);
+    float rho4 = ::std::sqrt(8.0f);
+    float theta1 = 0;
+    float theta2 = ::std::atan(1.0f)*2;
+    float theta3 = ::std::atan(1.0f);
+    float theta4 = ::std::atan(::std::sqrt(3.0f));
     
     ::std::cout << "The value of the octonion represented "
                 << "in multipolar form by "
@@ -444,14 +437,14 @@ int    test_main(int, char *[])
                         rho3, theta3, rho4, theta4)
                 << ::std::endl;
     
-    float                            r = ::std::sqrt(2.0f);
-    float                            angle = ::std::atan(1.0f);
-    float                            h1 = 3;
-    float                            h2 = 4;
-    float                            h3 = 5;
-    float                            h4 = 6;
-    float                            h5 = 7;
-    float                            h6 = 8;
+    float r = ::std::sqrt(2.0f);
+    float angle = ::std::atan(1.0f);
+    float h1 = 3;
+    float h2 = 4;
+    float h3 = 5;
+    float h4 = 6;
+    float h5 = 7;
+    float h6 = 8;
     
     ::std::cout << "The value of the octonion represented "
                 << "in cylindrical form by "
@@ -612,40 +605,56 @@ int    test_main(int, char *[])
     
     using ::boost::math::abs;
     
-    #define    BOOST_OCTONION_MULTIPLICATION_TEST(type)                 \
-                                                                        \
-        BOOST_CRITICAL_TEST(abs(                                        \
-            ::boost::math::octonion<type>(1,0,0,0,0,0,0,0)*             \
-            ::boost::math::octonion<type>(1,0,0,0,0,0,0,0)-             \
-            static_cast<type>(1)) <=                                    \
-            numeric_limits<type>::epsilon());                           \
-                                                                        \
-        for    (int idx = 1; idx < 8; ++idx)                            \
-        {                                                               \
-            ::boost::math::octonion<type>    toto =                     \
-                index_i_element<type>(idx);                             \
-                                                                        \
-            BOOST_CRITICAL_TEST(abs(toto*toto+static_cast<type>(1)) <=  \
-                numeric_limits<type>::epsilon());                       \
-        }
+#define    BOOST_OCTONION_MULTIPLICATION_TEST(type)                 \
+                                                                    \
+    ::std::cout << "Testing multiplication." << std::endl;          \
+                                                                    \
+    BOOST_CRITICAL_TEST(abs(                                        \
+        ::boost::math::octonion<type>(1,0,0,0,0,0,0,0)*             \
+        ::boost::math::octonion<type>(1,0,0,0,0,0,0,0)-             \
+        static_cast<type>(1)) <=                                    \
+        numeric_limits<type>::epsilon());                           \
+                                                                    \
+    for    (int idx = 1; idx < 8; ++idx)                            \
+    {                                                               \
+        ::boost::math::octonion<type>    toto =                     \
+            index_i_element<type>(idx);                             \
+                                                                    \
+        BOOST_CRITICAL_TEST(abs(toto*toto+static_cast<type>(1)) <=  \
+            numeric_limits<type>::epsilon());                       \
+    }
     
     
-    #define    BOOST_OCTONION_TRENSCENDENTALS_TEST(type)                \
-                                                                        \
-        for    (int idx = 1; idx < 8; ++idx)                            \
-        {                                                               \
-            ::boost::math::octonion<type>    toto =                     \
-                static_cast<type>(4)*::std::atan(static_cast<type>(1))* \
-                index_i_element<type>(idx);                             \
-                                                                        \
-            BOOST_TEST(abs(exp(toto)+static_cast<type>(1)) <=           \
-                2*numeric_limits<type>::epsilon());                     \
-        }
+#define    BOOST_OCTONION_TRENSCENDENTALS_TEST(type)                \
+                                                                    \
+    ::std::cout << "Testing exp." << std::endl;                     \
+                                                                    \
+    for    (int idx = 1; idx < 8; ++idx)                            \
+    {                                                               \
+        ::boost::math::octonion<type>    toto =                     \
+            static_cast<type>(4)*::std::atan(static_cast<type>(1))* \
+            index_i_element<type>(idx);                             \
+                                                                    \
+        BOOST_TEST(abs(exp(toto)+static_cast<type>(1)) <=           \
+            2*numeric_limits<type>::epsilon());                     \
+    }
     
     
-    #define    BOOST_OCTONION_TEST(type)            \
-        BOOST_OCTONION_MULTIPLICATION_TEST(type)    \
-        BOOST_OCTONION_TRENSCENDENTALS_TEST(type)
+#if defined(__GNUC__) || defined(__COMO__) || \
+    (defined(__MWERKS__) && (__MWERKS__ <= 0x2301))
+#define    BOOST_OCTONION_TEST(type)                        \
+                                                            \
+    ::std::cout << "Testing " << #type << "." << std::endl; \
+                                                            \
+    BOOST_OCTONION_MULTIPLICATION_TEST(type)
+#else
+#define    BOOST_OCTONION_TEST(type)                        \
+                                                            \
+    ::std::cout << "Testing " << #type << "." << std::endl; \
+                                                            \
+    BOOST_OCTONION_MULTIPLICATION_TEST(type)                \
+    BOOST_OCTONION_TRENSCENDENTALS_TEST(type)
+#endif
     
     
     BOOST_OCTONION_TEST(float)
@@ -653,10 +662,10 @@ int    test_main(int, char *[])
     BOOST_OCTONION_TEST(long double)
     
     
-    #undef    BOOST_OCTONION_TEST
+#undef    BOOST_OCTONION_TEST
     
-    #undef    BOOST_OCTONION_MULTIPLICATION_TEST
-    #undef    BOOST_OCTONION_TRENSCENDENTALS_TEST
+#undef    BOOST_OCTONION_MULTIPLICATION_TEST
+#undef    BOOST_OCTONION_TRENSCENDENTALS_TEST
     
     return(::boost::exit_success);
 }
