@@ -7,7 +7,7 @@
 //  See <http://www.boost.org/libs/math/> for the library's home page.
 
 //  Revision History
-//   13 Feb 2004  Initial version (Daryle Walker)
+//   14 Feb 2004  Initial version (Daryle Walker)
 
 #include <boost/math/big_whole.hpp>  // for boost::math::big_whole, etc.
 #include <boost/test/unit_test.hpp>  // for main, BOOST_CHECK_EQUAL, etc.
@@ -1746,6 +1746,123 @@ bigwhole_abs_sgn_unit_test
     BOOST_CHECK_EQUAL( +1, sgn(d) );
 }
 
+// Unit test for binary + and - operators
+void
+bigwhole_binary_plus_minus_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::range_error;
+
+    typedef std::valarray<std::size_t>  va_size_t;
+
+    int const        wd = wlimits_type::digits;
+    big_whole const  z;
+    big_whole const  a = !z;
+    big_whole const  b = wlimits_type::max();
+    big_whole const  c( va_size_t(wd, 1) );
+    big_whole const  d = a | c;
+    big_whole const  e = a << ( wd + 3 );
+    big_whole const  f = d << ( 2 * wd + 3 );
+
+    // same-add
+    BOOST_CHECK_EQUAL( z, z + z );
+    BOOST_CHECK_EQUAL( a << 1, a + a );
+    BOOST_CHECK_EQUAL( b << 1, b + b );
+    BOOST_CHECK_EQUAL( c << 1, c + c );
+    BOOST_CHECK_EQUAL( d << 1, d + d );
+    BOOST_CHECK_EQUAL( e << 1, e + e );
+    BOOST_CHECK_EQUAL( f << 1, f + f );
+
+    // same-subtract
+    BOOST_CHECK_EQUAL( z, z - z );
+    BOOST_CHECK_EQUAL( z, a - a );
+    BOOST_CHECK_EQUAL( z, b - b );
+    BOOST_CHECK_EQUAL( z, c - c );
+    BOOST_CHECK_EQUAL( z, d - d );
+    BOOST_CHECK_EQUAL( z, e - e );
+    BOOST_CHECK_EQUAL( z, f - f );
+
+    // zero-add
+    BOOST_CHECK_EQUAL( a, z + a );  BOOST_CHECK_EQUAL( a, a + z );
+    BOOST_CHECK_EQUAL( b, z + b );  BOOST_CHECK_EQUAL( b, b + z );
+    BOOST_CHECK_EQUAL( c, z + c );  BOOST_CHECK_EQUAL( c, c + z );
+    BOOST_CHECK_EQUAL( d, z + d );  BOOST_CHECK_EQUAL( d, d + z );
+    BOOST_CHECK_EQUAL( e, z + e );  BOOST_CHECK_EQUAL( e, e + z );
+    BOOST_CHECK_EQUAL( f, z + f );  BOOST_CHECK_EQUAL( f, f + z );
+
+    // zero-subtract
+    BOOST_CHECK_THROW( z - a, range_error );  BOOST_CHECK_EQUAL( a, a - z );
+    BOOST_CHECK_THROW( z - b, range_error );  BOOST_CHECK_EQUAL( b, b - z );
+    BOOST_CHECK_THROW( z - c, range_error );  BOOST_CHECK_EQUAL( c, c - z );
+    BOOST_CHECK_THROW( z - d, range_error );  BOOST_CHECK_EQUAL( d, d - z );
+    BOOST_CHECK_THROW( z - e, range_error );  BOOST_CHECK_EQUAL( e, e - z );
+    BOOST_CHECK_THROW( z - f, range_error );  BOOST_CHECK_EQUAL( f, f - z );
+
+    // more bad subtractions
+    BOOST_CHECK_THROW( a - b, range_error );  BOOST_CHECK_THROW( a - c, range_error );
+    BOOST_CHECK_THROW( a - d, range_error );  BOOST_CHECK_THROW( a - e, range_error );
+    BOOST_CHECK_THROW( a - f, range_error );  BOOST_CHECK_THROW( b - c, range_error );
+    BOOST_CHECK_THROW( b - d, range_error );  BOOST_CHECK_THROW( b - e, range_error );
+    BOOST_CHECK_THROW( b - f, range_error );  BOOST_CHECK_THROW( c - d, range_error );
+    BOOST_CHECK_THROW( c - e, range_error );  BOOST_CHECK_THROW( c - f, range_error );
+    BOOST_CHECK_THROW( d - e, range_error );  BOOST_CHECK_THROW( d - f, range_error );
+    BOOST_CHECK_THROW( e - f, range_error );
+
+    // additions
+    big_whole const  ab1 = c, ac1 = d, ad1 = 3 ^ d, ae1 = a | e, af1 = a | f;
+    big_whole const  ba1 = ab1, bc1 = b | c, bd1 = c << 1, be1 = b | e, bf1 = b | f;
+    big_whole const  ca1 = ac1, cb1 = bc1, cd1 = 3 ^ (d << 1), ce1 = c | e, cf1 = c | f;
+    big_whole const  da1 = ad1, db1 = bd1, dc1 = cd1, de1 = d | e, df1 = d | f;
+    big_whole const  ea1 = ae1, eb1 = be1, ec1 = ce1, ed1 = de1, ef1 = e | f;
+    big_whole const  fa1 = af1, fb1 = bf1, fc1 = cf1, fd1 = df1, fe1 = ef1;
+
+    BOOST_CHECK_EQUAL( ab1, a + b );  BOOST_CHECK_EQUAL( ba1, b + a );
+    BOOST_CHECK_EQUAL( ac1, a + c );  BOOST_CHECK_EQUAL( ca1, c + a );
+    BOOST_CHECK_EQUAL( ad1, a + d );  BOOST_CHECK_EQUAL( da1, d + a );
+    BOOST_CHECK_EQUAL( ae1, a + e );  BOOST_CHECK_EQUAL( ea1, e + a );
+    BOOST_CHECK_EQUAL( af1, a + f );  BOOST_CHECK_EQUAL( fa1, f + a );
+
+    BOOST_CHECK_EQUAL( bc1, b + c );  BOOST_CHECK_EQUAL( cb1, c + b );
+    BOOST_CHECK_EQUAL( bd1, b + d );  BOOST_CHECK_EQUAL( db1, d + b );
+    BOOST_CHECK_EQUAL( be1, b + e );  BOOST_CHECK_EQUAL( eb1, e + b );
+    BOOST_CHECK_EQUAL( bf1, b + f );  BOOST_CHECK_EQUAL( fb1, f + b );
+
+    BOOST_CHECK_EQUAL( cd1, c + d );  BOOST_CHECK_EQUAL( dc1, d + c );
+    BOOST_CHECK_EQUAL( ce1, c + e );  BOOST_CHECK_EQUAL( ec1, e + c );
+    BOOST_CHECK_EQUAL( cf1, c + f );  BOOST_CHECK_EQUAL( fc1, f + c );
+
+    BOOST_CHECK_EQUAL( de1, d + e );  BOOST_CHECK_EQUAL( ed1, e + d );
+    BOOST_CHECK_EQUAL( df1, d + f );  BOOST_CHECK_EQUAL( fd1, f + d );
+
+    BOOST_CHECK_EQUAL( ef1, e + f );  BOOST_CHECK_EQUAL( fe1, f + e );
+
+    // subtractions
+    big_whole const  six = 6, seven = 7, eight = 8, one = a, maxd = b;
+
+    big_whole const  ba2 = a ^ b;
+    big_whole const  cb2 = a, ca2 = b;
+    big_whole const  dc2 = a, db2 = a << 1, da2 = c;
+    big_whole const  ed2 = b | ( six << wd );
+    big_whole const  ec2 = seven << wd, eb2 = ec2 | a;
+    big_whole const  ea2 = b | ( seven << wd );
+    big_whole const  fe2 = ( (( (eight << wd) | seven ) << wd) | (maxd ^ seven) ) << wd;
+    big_whole const  fd2 = ( (( (( eight << wd ) | seven) << wd ) | (maxd ^ one)) << wd ) | maxd;
+    big_whole const  fc2 = ( (( (eight << wd) | seven ) << wd) | maxd ) << wd;
+    big_whole const  fb2 = ( (( (( eight << wd ) | seven) << wd ) | maxd) << wd ) | one;
+    big_whole const  fa2 = ( (( (( eight << wd ) | seven) << wd ) | maxd) << wd ) | maxd;
+
+    BOOST_CHECK_EQUAL( ba2, b - a );  BOOST_CHECK_EQUAL( ca2, c - a );
+    BOOST_CHECK_EQUAL( cb2, c - b );  BOOST_CHECK_EQUAL( da2, d - a );
+    BOOST_CHECK_EQUAL( db2, d - b );  BOOST_CHECK_EQUAL( dc2, d - c );
+    BOOST_CHECK_EQUAL( ea2, e - a );  BOOST_CHECK_EQUAL( eb2, e - b );
+    BOOST_CHECK_EQUAL( ec2, e - c );  BOOST_CHECK_EQUAL( ed2, e - d );
+    BOOST_CHECK_EQUAL( fa2, f - a );  BOOST_CHECK_EQUAL( fb2, f - b ); 
+    BOOST_CHECK_EQUAL( fc2, f - c );  BOOST_CHECK_EQUAL( fd2, f - d );
+    BOOST_CHECK_EQUAL( fe2, f - e );
+}
+
 
 // Unit test program
 boost::unit_test_framework::test_suite *
@@ -1786,6 +1903,7 @@ init_unit_test_suite
     test->add( BOOST_TEST_CASE(bigwhole_unary_plus_minus_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_double_plus_minus_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_abs_sgn_unit_test) );
+    test->add( BOOST_TEST_CASE(bigwhole_binary_plus_minus_unit_test) );
 
     return test;
 }

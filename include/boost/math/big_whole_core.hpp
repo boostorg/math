@@ -58,11 +58,16 @@ big_whole  operator ^( big_whole const &lhs, big_whole const &rhs );
 big_whole  operator >>( big_whole const &value, big_whole const &shift );
 big_whole  operator <<( big_whole const &value, big_whole const &shift );
 
+big_whole  operator +( big_whole const &augend, big_whole const &addend );
+big_whole  operator -( big_whole const &minuend, big_whole const &subtrahend );
+
 big_whole &  operator  &=( big_whole &lhs, big_whole const &rhs );
 big_whole &  operator  |=( big_whole &lhs, big_whole const &rhs );
 big_whole &  operator  ^=( big_whole &lhs, big_whole const &rhs );
 big_whole &  operator >>=( big_whole &lhs, big_whole const &rhs );
 big_whole &  operator <<=( big_whole &lhs, big_whole const &rhs );
+big_whole &  operator  +=( big_whole &lhs, big_whole const &rhs );
+big_whole &  operator  -=( big_whole &lhs, big_whole const &rhs );
 
 
 //  Arbitrary-length whole-number object class declaration  ------------------//
@@ -184,6 +189,10 @@ protected:
 
     static  va_type  do_trim( va_type const &v );
 
+    static  va_type  do_add( va_type const &augend, va_type const &addend );
+    static  va_type  do_subtract( va_type const &minuend, va_type const
+     &subtrahend );
+
 private:
     // The non-assignment operators are the primary routines
     friend  self_type operator  &( self_type const &, self_type const & );
@@ -191,6 +200,8 @@ private:
     friend  self_type operator  ^( self_type const &, self_type const & );
     friend  self_type operator >>( self_type const &, self_type const & );
     friend  self_type operator <<( self_type const &, self_type const & );
+    friend  self_type operator  +( self_type const &, self_type const & );
+    friend  self_type operator  -( self_type const &, self_type const & );
 
     // There are some non-operator primary routines
     friend  self_type and_not( self_type const &, self_type const & );
@@ -1206,6 +1217,73 @@ big_whole::do_trim
     return v[ std::slice(0, self_type::wlength( v ), 1) ];
 }
 
+big_whole::va_type
+big_whole::do_add
+(
+    big_whole::va_type const &  augend,
+    big_whole::va_type const &  addend
+)
+{
+    using std::slice;
+
+    va_type    sum( 1 + std::max(augend.size(), addend.size()) );
+    va_type    temp( sum.size() );
+    mask_type  carries( temp.size() );
+
+    sum[ slice(0, augend.size(), 1) ]  = augend;
+    temp[ slice(0, addend.size(), 1) ] = addend;
+
+    do
+    {
+        carries = ( sum > limits_type::max() - temp );
+
+        sum += temp;
+
+        temp[  carries ] = 1;
+        temp[ !carries ] = 0;
+        temp             = temp.shift( -1 );
+    }
+    while ( temp.max() );
+
+    return self_type::do_trim( sum );
+}
+
+big_whole::va_type
+big_whole::do_subtract
+(
+    big_whole::va_type const &  minuend,
+    big_whole::va_type const &  subtrahend
+)
+{
+    using std::slice;
+
+    if ( self_type::do_compare(minuend, subtrahend) < 0 )
+    {
+        self_type::negativity_fail();
+    }
+
+    va_type    difference( 1 + std::max(minuend.size(), subtrahend.size()) );
+    va_type    temp( difference.size() );
+    mask_type  borrows( temp.size() );
+
+    difference[ slice(0, minuend.size(), 1) ] = minuend;
+    temp[ slice(0, subtrahend.size(), 1) ]    = subtrahend;
+
+    do
+    {
+        borrows = ( difference < temp );
+
+        difference -= temp;
+
+        temp[  borrows ] = 1;
+        temp[ !borrows ] = 0;
+        temp             = temp.shift( -1 );
+    }
+    while( temp.max() );
+
+    return self_type::do_trim( difference );
+}
+
 
 //  Arbitrary-length whole-number helper member function definitions  --------//
 
@@ -1674,6 +1752,67 @@ operator <<
     }
 }
 
+big_whole
+operator +
+(
+    big_whole const &  augend,
+    big_whole const &  addend
+)
+{
+    typedef big_whole::va_type  va_type;
+
+    if ( va_type const * const  l = augend.x_.get() )
+    {
+        if ( va_type const * const  r = addend.x_.get() )
+        {
+            big_whole  sum;
+
+            sum.x_.reset( new va_type(big_whole::do_add( *l, *r )) );
+
+            return sum;
+        }
+        else
+        {
+            return augend;
+        }
+    }
+    else
+    {
+        return addend;
+    }
+}
+
+big_whole
+operator -
+(
+    big_whole const &  minuend,
+    big_whole const &  subtrahend
+)
+{
+    typedef big_whole::va_type  va_type;
+
+    if ( va_type const * const  l = minuend.x_.get() )
+    {
+        if ( va_type const * const  r = subtrahend.x_.get() )
+        {
+            big_whole  difference;
+
+            difference.x_.reset( new va_type(big_whole::do_subtract( *l,
+             *r )) );
+
+            return difference;
+        }
+        else
+        {
+            return minuend;
+        }
+    }
+    else
+    {
+        return -subtrahend;
+    }
+}
+
 #define BOOST_PRIVATE_MIXED_ASSIGN_OP( Op )  \
     inline                                   \
     big_whole &                              \
@@ -1691,6 +1830,8 @@ BOOST_PRIVATE_MIXED_ASSIGN_OP( | )
 BOOST_PRIVATE_MIXED_ASSIGN_OP( ^ )
 BOOST_PRIVATE_MIXED_ASSIGN_OP( >> )
 BOOST_PRIVATE_MIXED_ASSIGN_OP( << )
+BOOST_PRIVATE_MIXED_ASSIGN_OP( + )
+BOOST_PRIVATE_MIXED_ASSIGN_OP( - )
 
 #undef BOOST_PRIVATE_MIXED_ASSIGN_OP
 

@@ -90,11 +90,16 @@ big_whole  operator ^( big_whole const &amp;lhs, big_whole const &amp;rhs );
 big_whole  operator &gt;&gt;( big_whole const &amp;value, big_whole const &amp;shift );
 big_whole  operator &lt;&lt;( big_whole const &amp;value, big_whole const &amp;shift );
 
+big_whole  operator +( big_whole const &amp;augend, big_whole const &amp;addend );
+big_whole  operator -( big_whole const &amp;minuend, big_whole const &amp;subtrahend );
+
 big_whole &amp;  operator  &amp;=( big_whole &amp;lhs, big_whole const &amp;rhs );
 big_whole &amp;  operator  |=( big_whole &amp;lhs, big_whole const &amp;rhs );
 big_whole &amp;  operator  ^=( big_whole &amp;lhs, big_whole const &amp;rhs );
 big_whole &amp;  operator &gt;&gt;=( big_whole &amp;lhs, big_whole const &amp;rhs );
 big_whole &amp;  operator &lt;&lt;=( big_whole &amp;lhs, big_whole const &amp;rhs );
+big_whole &amp;  operator  +=( big_whole &amp;lhs, big_whole const &amp;rhs );
+big_whole &amp;  operator  -=( big_whole &amp;lhs, big_whole const &amp;rhs );
 
 }
 }
@@ -516,11 +521,24 @@ boost::math::sgn( boost::math::big_whole const &amp;w );
 		<strong>Throws:</strong> <code>std::length_error</code> if <var>shift</var> cannot be completely represented by a <code>std::size_t</code> object; <code>std::overflow_error</code> if any of the set bits in the returned object would have a bit-place index beyond <code>std::size_t</code>'s maximum value<br>
 		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
 
+	<dt><code>boost::math::big_whole  boost::math::operator +( boost::math::big_whole const &amp;augend, boost::math::big_whole const &amp;addend );</code>
+	<dd>
+		<strong>Returns:</strong> the sum of <var>augend</var> and <var>addend</var><br>
+		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
+
+	<dt><code>boost::math::big_whole  boost::math::operator -( boost::math::big_whole const &amp;minuend, boost::math::big_whole const &amp;subtrahend );</code>
+	<dd>
+		<strong>Returns:</strong> the difference between <var>minuend</var> and <var>subtrahend</var><br>
+		<strong>Throws:</strong> <code>std::range_error</code> if the difference cannot be represented, <i>i.e.</i> the <var>minuend</var> is less than the <var>subtrahend</var><br>
+		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
+
 	<dt><code>boost::math::big_whole &amp;  boost::math::operator &amp;=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
 	    <code>boost::math::big_whole &amp;  boost::math::operator |=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
 	    <code>boost::math::big_whole &amp;  boost::math::operator ^=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
 	    <code>boost::math::big_whole &amp;  boost::math::operator &gt;&gt;=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
-	    <code>boost::math::big_whole &amp;  boost::math::operator &lt;&lt;=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
+	    <code>boost::math::big_whole &amp;  boost::math::operator &lt;&lt;=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>boost::math::big_whole &amp;  boost::math::operator +=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>boost::math::big_whole &amp;  boost::math::operator -=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
 	<dd>
 		<strong>Effects:</strong> for <code>operator <var>$$</var>=</code>, calls <code><var>lhs</var> = <var>lhs</var> <var>$$</var> <var>rhs</var></code><br>
 		<strong>Returns:</strong> <var>lhs</var>
@@ -641,7 +659,7 @@ boost::math::operator &gt;&gt;( std::basic_istream&lt;Ch, Tr&gt; &amp;is, boost:
 
 <hr>
 
-<p>Revised: 13 February 2004</p>
+<p>Revised: 14 February 2004</p>
 
 <p>Copyright 2004 Daryle Walker.  Use, modification, and distribution are subject to the Boost Software License, Version 1.0.  (See accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at &lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)</p>
 </body>
