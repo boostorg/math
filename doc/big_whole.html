@@ -65,6 +65,8 @@ class big_whole;
 
 void  swap( big_whole &amp;a, big_whole &amp;b );
 
+big_whole  and_not( big_whole const &amp;a, big_whole const &amp;b );
+
 big_whole  operator !( big_whole const &amp;w );
 
 bool  operator ==( big_whole const &amp;lhs, big_whole const &amp;rhs );
@@ -382,6 +384,16 @@ boost::math::swap( boost::math::big_whole &amp;a, boost::math::big_whole &amp;b 
 
 <p><strong>Rationale:</strong> exchanges the state of two objects; can use in standard(-like) algorithms with ADL</p>
 
+<blockquote><pre>
+boost::math::big_whole
+boost::math::and_not( boost::math::big_whole const &amp;a, boost::math::big_whole const &amp;b );
+</pre></blockquote>
+
+<p><strong>Returns:</strong> an object with a set of bits such that a particular bit is set only if the corresponding bit in <var>a</var> is set and the corresponding bit in <var>b</var> is <em>un</em>set</p>
+
+<p><strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code></p>
+
+<p><strong>Rationale:</strong> a method to compute <code><var>a</var> &amp; ~<var>b</var></code> without the need for the bitwise-complement operator (<code>big_whole</code> cannot have that operator because it gives a result approaching infinity for any input)</p>
 
 <h4><a name="c_nm_ops">Operators</a></h4>
 
@@ -424,8 +436,9 @@ boost::math::swap( boost::math::big_whole &amp;a, boost::math::big_whole &amp;b 
 
 	<dt><code>boost::math::big_whole  boost::math::operator &lt;&lt;( boost::math::big_whole const &amp;value, boost::math::big_whole const &amp;shift );</code>
 	<dd>
+		<strong>Precondition:</strong> the bit-place indices of any set bits in <var>value</var> must be less than or equal to <code>std::numeric_limits&lt; std::size_t &gt;::max() - <var>shift</var></code><br>
 		<strong>Returns:</strong> <var>value</var> * 2<sup><var>shift</var></sup><br>
-		<strong>Throws:</strong> <code>std::overflow_error</code> if <var>shift</var> cannot be completely represented by a <code>std::size_t</code> object or if the resulting value has set bits at indices beyond <code>std::size_t</code>'s range<br>
+		<strong>Throws:</strong> <code>std::overflow_error</code> if <var>shift</var> cannot be completely represented by a <code>std::size_t</code> object<br>
 		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
 
 	<dt><code>boost::math::big_whole &amp;  boost::math::operator &amp;=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
@@ -553,7 +566,7 @@ boost::math::operator &gt;&gt;( std::basic_istream&lt;Ch, Tr&gt; &amp;is, boost:
 
 <hr>
 
-<p>Revised: 11 February 2004</p>
+<p>Revised: 12 February 2004</p>
 
 <p>Copyright 2004 Daryle Walker.  Use, modification, and distribution are subject to the Boost Software License, Version 1.0.  (See accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at &lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)</p>
 </body>

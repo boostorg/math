@@ -7,7 +7,7 @@
 //  See <http://www.boost.org/libs/math/> for the library's home page.
 
 //  Revision History
-//   11 Feb 2004  Initial version (Daryle Walker)
+//   12 Feb 2004  Initial version (Daryle Walker)
 
 #include <boost/math/big_whole.hpp>  // for boost::math::big_whole, etc.
 #include <boost/test/unit_test.hpp>  // for main, BOOST_CHECK_EQUAL, etc.
@@ -1488,6 +1488,69 @@ bigwhole_right_shift_unit_test
     BOOST_CHECK_EQUAL( 2 | (( a | c ) << ( wlimits_type::digits - 1 )), f );
 }
 
+// Unit test for bitwise-and, bitwise-complementing the second value
+void
+bigwhole_bitwise_and_not_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::size_t;
+    using boost::math::and_not;
+
+    typedef std::valarray<size_t>  va_size_t;
+
+    size_t const     di[] = { wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const     ds = sizeof( di ) / sizeof( di[0] );
+    va_size_t const  dv( di, ds );
+    size_t const     ei[] = { 1, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1 };
+    size_t const     es = sizeof( ei ) / sizeof( ei[0] );
+    va_size_t const  ev( ei, es );
+
+    big_whole const  z;
+    big_whole const  a( 7 );
+    big_whole const  b( 12 );
+    big_whole const  c( 100 );
+    big_whole const  d( dv );
+    big_whole const  e( ev );
+
+    // self-and
+    BOOST_CHECK_EQUAL( z, and_not(z, z) );
+    BOOST_CHECK_EQUAL( z, and_not(a, a) );
+    BOOST_CHECK_EQUAL( z, and_not(b, b) );
+    BOOST_CHECK_EQUAL( z, and_not(c, c) );
+    BOOST_CHECK_EQUAL( z, and_not(d, d) );
+    BOOST_CHECK_EQUAL( z, and_not(e, e) );
+
+    // zero-and
+    BOOST_CHECK_EQUAL( z, and_not(z, a) ); BOOST_CHECK_EQUAL( a, and_not(a, z) );
+    BOOST_CHECK_EQUAL( z, and_not(z, b) ); BOOST_CHECK_EQUAL( b, and_not(b, z) );
+    BOOST_CHECK_EQUAL( z, and_not(z, c) ); BOOST_CHECK_EQUAL( c, and_not(c, z) );
+    BOOST_CHECK_EQUAL( z, and_not(z, d) ); BOOST_CHECK_EQUAL( d, and_not(d, z) );
+    BOOST_CHECK_EQUAL( z, and_not(z, e) ); BOOST_CHECK_EQUAL( e, and_not(e, z) );
+
+    // various combinations
+    big_whole const  ab = 3, ac = 3, ad = a, ae = 5;
+    big_whole const  ba = 8, bc = 8, bd = b, be = b;
+    big_whole const  ca = 96, cb = 96, cd = c, ce = c;
+    big_whole const  da = d, db = d, dc = d, de( va_size_t(di + 1, ds - 1) );
+    big_whole const  ea( va_size_t(ei + 1, es - 1) ), eb = e, ec = e, ed( va_size_t(ei, es - 1) );
+
+    BOOST_CHECK_EQUAL( ab, and_not(a, b) ); BOOST_CHECK_EQUAL( ba, and_not(b, a) );
+    BOOST_CHECK_EQUAL( ac, and_not(a, c) ); BOOST_CHECK_EQUAL( ca, and_not(c, a) );
+    BOOST_CHECK_EQUAL( ad, and_not(a, d) ); BOOST_CHECK_EQUAL( da, and_not(d, a) );
+    BOOST_CHECK_EQUAL( ae, and_not(a, e) ); BOOST_CHECK_EQUAL( ea, and_not(e, a) );
+
+    BOOST_CHECK_EQUAL( bc, and_not(b, c) ); BOOST_CHECK_EQUAL( cb, and_not(c, b) );
+    BOOST_CHECK_EQUAL( bd, and_not(b, d) ); BOOST_CHECK_EQUAL( db, and_not(d, b) );
+    BOOST_CHECK_EQUAL( be, and_not(b, e) ); BOOST_CHECK_EQUAL( eb, and_not(e, b) );
+
+    BOOST_CHECK_EQUAL( cd, and_not(c, d) ); BOOST_CHECK_EQUAL( dc, and_not(d, c) );
+    BOOST_CHECK_EQUAL( ce, and_not(c, e) ); BOOST_CHECK_EQUAL( ec, and_not(e, c) );
+
+    BOOST_CHECK_EQUAL( de, and_not(d, e) ); BOOST_CHECK_EQUAL( ed, and_not(e, d) );
+}
+
 
 // Unit test program
 boost::unit_test_framework::test_suite *
@@ -1522,6 +1585,8 @@ init_unit_test_suite
 
     test->add( BOOST_TEST_CASE(bigwhole_left_shift_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_right_shift_unit_test) );
+
+    test->add( BOOST_TEST_CASE(bigwhole_bitwise_and_not_unit_test) );
 
     return test;
 }

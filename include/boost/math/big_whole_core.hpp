@@ -33,6 +33,8 @@ class big_whole;
 
 void  swap( big_whole &a, big_whole &b );
 
+big_whole  and_not( big_whole const &a, big_whole const &b );
+
 big_whole  operator !( big_whole const &w );
 
 bool  operator ==( big_whole const &lhs, big_whole const &rhs );
@@ -163,6 +165,8 @@ protected:
     static  va_type  do_lshift( va_type const &b, size_type e );
     static  va_type  do_rshift( va_type const &b, size_type e );
 
+    static  va_type  do_andnot( va_type const &a, va_type const &b );
+
 private:
     // The non-assignment operators are the primary routines
     friend  self_type operator  &( self_type const &, self_type const & );
@@ -170,6 +174,9 @@ private:
     friend  self_type operator  ^( self_type const &, self_type const & );
     friend  self_type operator >>( self_type const &, self_type const & );
     friend  self_type operator <<( self_type const &, self_type const & );
+
+    // There are some non-operator primary routines
+    friend  self_type and_not( self_type const &, self_type const & );
 
     // More member types
     enum bit_operation { reset_bit, set_bit, flip_bit };
@@ -1021,6 +1028,35 @@ big_whole::do_rshift
     return temp;
 }
 
+big_whole::va_type
+big_whole::do_andnot
+(
+    big_whole::va_type const &  a,
+    big_whole::va_type const &  b
+)
+{
+    using std::slice;
+
+    size_type const    as = a.size();
+    size_type const    bs = b.size();
+    va_type          temp = a;
+
+    if ( as > bs )
+    {
+        temp[ slice(0, bs, 1) ] &= ~b;
+    }
+    else if ( as < bs )
+    {
+        temp &= ~b[ slice(0, as, 1) ];
+    }
+    else
+    {
+        temp &= ~b;
+    }
+
+    return temp;
+}
+
 
 //  Arbitrary-length whole-number helper member function definitions  --------//
 
@@ -1217,6 +1253,36 @@ swap
 )
 {
     a.swap( b );
+}
+
+big_whole
+and_not
+(
+    big_whole const &  a,
+    big_whole const &  b
+)
+{
+    typedef big_whole::va_type  va_type;
+
+    if ( va_type const * const  ap = a.x_.get() )
+    {
+        if ( va_type const * const  bp = b.x_.get() )
+        {
+            big_whole  temp;
+
+            temp.x_.reset( new va_type(big_whole::do_andnot( *ap, *bp )) );
+
+            return temp;
+        }
+        else
+        {
+            return a;
+        }
+    }
+    else
+    {
+        return a;
+    }
 }
 
 
