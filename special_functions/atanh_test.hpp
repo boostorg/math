@@ -8,14 +8,14 @@
 
 #include <functional>
 #include <iomanip>
-#include <iostream>
+//#include <iostream>
 
 
 #include <boost/math/special_functions/atanh.hpp>
 
 
 #include <boost/test/unit_test.hpp>
-
+#include <boost/test/test_case_template.hpp>
 
 template<typename T>
 T    atanh_error_evaluator(T x)
@@ -42,8 +42,7 @@ T    atanh_error_evaluator(T x)
 }
 
 
-template<typename T>
-void    atanh_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(atanh_test, T)
 {
     using    ::std::abs;
     using    ::std::tanh;
@@ -55,7 +54,7 @@ void    atanh_test(const char * more_blurb)
     
     
     BOOST_MESSAGE("Testing atanh in the real domain for "
-        << more_blurb << ".");
+        << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
         (abs(atanh<T>(static_cast<T>(0))))
@@ -95,6 +94,7 @@ void    atanh_manual_check()
     using    ::std::numeric_limits;
     
     
+    BOOST_MESSAGE(" ");
     BOOST_MESSAGE("atanh");
     
     for    (int i = 0; i <= 100; i++)

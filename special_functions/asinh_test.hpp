@@ -42,11 +42,10 @@ T    asinh_error_evaluator(T x)
 }
 
 
-template<typename T>
-void    asinh_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(asinh_test, T)
 {
     BOOST_MESSAGE("Testing asinh in the real domain for "
-        << more_blurb << ".");
+        << string_type_name<T>::_() << ".");
     
     for    (int i = 0; i <= 100; i++)
     {
@@ -61,6 +60,7 @@ void    asinh_test(const char * more_blurb)
 
 void    asinh_manual_check()
 {
+    BOOST_MESSAGE(" ");
     BOOST_MESSAGE("asinh");
     
     for    (int i = 0; i <= 100; i++)

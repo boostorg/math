@@ -7,15 +7,34 @@
 
 
 #include <iomanip>
-#include <iostream>
-#include <functional>
 
 
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
+#include <boost/mpl/list.hpp>
+
+#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_log.hpp>
+#include <boost/test/test_case_template.hpp>
 
 
-#include <boost/test/unit_test_suite_ex.hpp>
+template<typename T>
+struct string_type_name;
+
+#define DEFINE_TYPE_NAME(Type)              \
+template<> struct string_type_name<Type>    \
+{                                           \
+    static char const * _()                 \
+    {                                       \
+        return #Type;                       \
+    }                                       \
+}
+
+DEFINE_TYPE_NAME(float);
+DEFINE_TYPE_NAME(double);
+DEFINE_TYPE_NAME(long double);
+
+
+typedef boost::mpl::list<float,double,long double>  test_types;
+
 
 
 #include "sinc_test.hpp"
@@ -28,58 +47,12 @@
 
 boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
 {
-    //::boost::unit_test_framework::unit_test_log::instance().
-    //    set_log_threshold_level_by_name("messages");
+    ::boost::unit_test::unit_test_log.
+        set_threshold_level(::boost::unit_test::log_messages);
     
     boost::unit_test_framework::test_suite *    test =
         BOOST_TEST_SUITE("special_functions_test");
     
-#define    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(fct,type)    \
-    test->add(BOOST_TEST_CASE(::boost::bind(static_cast          \
-        < void (*) (const char *) >(&fct##_test<type>), #type)));
-    
-    
-#define    BOOST_SPECIAL_FUNCTIONS_COMMON_TEST(type)        \
-    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(atanh,type)    \
-    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(asinh,type)    \
-    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(acosh,type)    \
-    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(sinc_pi,type)  \
-    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(sinhc_pi,type)
-    
-    
-#define    BOOST_SPECIAL_FUNCTIONS_TEMPLATE_TEMPLATE_TEST(type)      \
-    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(sinc_pi_complex,type)   \
-    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(sinhc_pi_complex,type)
-    
-    
-#ifdef    BOOST_NO_TEMPLATE_TEMPLATES
-
-#define    BOOST_SPECIAL_FUNCTIONS_TEST(type)                                 \
-    BOOST_SPECIAL_FUNCTIONS_COMMON_TEST(type)                                 \
-    BOOST_MESSAGE("Warning: no template templates; curtailed functionality.");
-    
-#else    /* BOOST_NO_TEMPLATE_TEMPLATES */
-
-#define    BOOST_SPECIAL_FUNCTIONS_TEST(type)            \
-    BOOST_SPECIAL_FUNCTIONS_COMMON_TEST(type)            \
-    BOOST_SPECIAL_FUNCTIONS_TEMPLATE_TEMPLATE_TEST(type)
-    
-#endif    /* BOOST_NO_TEMPLATE_TEMPLATES */
-    
-    
-    BOOST_SPECIAL_FUNCTIONS_TEST(float)
-    BOOST_SPECIAL_FUNCTIONS_TEST(double)
-    BOOST_SPECIAL_FUNCTIONS_TEST(long double)
-    
-    
-#undef    BOOST_SPECIAL_FUNCTIONS_TEST
-
-#undef    BOOST_SPECIAL_FUNCTIONS_TEMPLATE_TEMPLATE_TEST
-    
-#undef    BOOST_SPECIAL_FUNCTIONS_COMMON_TEST
-
-#undef    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR
-	
     BOOST_MESSAGE("Results of special functions test.");
     BOOST_MESSAGE(" ");
     BOOST_MESSAGE("(C) Copyright Hubert Holin 2003-2005.");
@@ -87,6 +60,48 @@ boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
     BOOST_MESSAGE("(See accompanying file LICENSE_1_0.txt or copy at");
     BOOST_MESSAGE("http://www.boost.org/LICENSE_1_0.txt)");
     BOOST_MESSAGE(" ");
+    
+#define BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(fct)   \
+    test->add(BOOST_TEST_CASE_TEMPLATE(fct##_test, test_types));
+    
+    
+#define BOOST_SPECIAL_FUNCTIONS_COMMON_TEST             \
+    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(atanh)     \
+    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(asinh)     \
+    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(acosh)     \
+    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(sinc_pi)   \
+    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(sinhc_pi)
+    
+#define BOOST_SPECIAL_FUNCTIONS_TEMPLATE_TEMPLATE_TEST          \
+    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(sinc_pi_complex)   \
+    BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(sinhc_pi_complex)
+    
+    
+#ifdef  BOOST_NO_TEMPLATE_TEMPLATES
+
+#define BOOST_SPECIAL_FUNCTIONS_TEST    \
+    BOOST_SPECIAL_FUNCTIONS_COMMON_TEST \
+    BOOST_MESSAGE("Warning: no template templates; curtailed functionality.");
+    
+#else   /* BOOST_NO_TEMPLATE_TEMPLATES */
+
+#define BOOST_SPECIAL_FUNCTIONS_TEST                \
+    BOOST_SPECIAL_FUNCTIONS_COMMON_TEST             \
+    BOOST_SPECIAL_FUNCTIONS_TEMPLATE_TEMPLATE_TEST
+    
+#endif  /* BOOST_NO_TEMPLATE_TEMPLATES */
+    
+    
+    BOOST_SPECIAL_FUNCTIONS_TEST
+    
+    
+#undef  BOOST_SPECIAL_FUNCTIONS_TEST
+    
+#undef  BOOST_SPECIAL_FUNCTIONS_TEMPLATE_TEMPLATE_TEST
+    
+#undef  BOOST_SPECIAL_FUNCTIONS_COMMON_TEST
+    
+#undef  BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR
     
     
 #ifdef    BOOST_SPECIAL_FUNCTIONS_TEST_VERBOSE
@@ -101,14 +116,14 @@ boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
     
     BOOST_MESSAGE(" ");
     
-    atanh_manual_check();
-    asinh_manual_check();
-    acosh_manual_check();
-    sinc_pi_manual_check();
-    sinhc_pi_manual_check();
+    test->add(BOOST_TEST_CASE(atanh_manual_check));
+    test->add(BOOST_TEST_CASE(asinh_manual_check));
+    test->add(BOOST_TEST_CASE(acosh_manual_check));
+    test->add(BOOST_TEST_CASE(sinc_pi_manual_check));
+    test->add(BOOST_TEST_CASE(sinhc_pi_manual_check));
     
 #endif    /* BOOST_SPECIAL_FUNCTIONS_TEST_VERBOSE */
     
-    return(test);
+    return test;
 }
 

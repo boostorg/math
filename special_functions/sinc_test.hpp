@@ -18,8 +18,7 @@
 #include <boost/test/unit_test.hpp>
 
 
-template<typename T>
-void    sinc_pi_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(sinc_pi_test, T)
 {
     using    ::std::abs;
         
@@ -29,7 +28,7 @@ void    sinc_pi_test(const char * more_blurb)
     
     
     BOOST_MESSAGE("Testing sinc_pi in the real domain for "
-        << more_blurb << ".");
+        << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
         (abs(sinc_pi<T>(static_cast<T>(0))-static_cast<T>(1)))
@@ -37,8 +36,7 @@ void    sinc_pi_test(const char * more_blurb)
 }
 
 
-template<typename T>
-void    sinc_pi_complex_test(const char * more_blurb)
+BOOST_TEST_CASE_TEMPLATE_FUNCTION(sinc_pi_complex_test, T)
 {
     using    ::std::abs;
     using    ::std::sinh;
@@ -49,7 +47,7 @@ void    sinc_pi_complex_test(const char * more_blurb)
     
     
     BOOST_MESSAGE("Testing sinc_pi in the complex domain for "
-        << more_blurb << ".");
+        << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
         (abs(sinc_pi<T>(::std::complex<T>(0, 1))-
@@ -63,6 +61,7 @@ void    sinc_pi_manual_check()
     using    ::boost::math::sinc_pi;
     
     
+    BOOST_MESSAGE(" ");
     BOOST_MESSAGE("sinc_pi");
     
     for    (int i = 0; i <= 100; i++)
