@@ -20,6 +20,12 @@ namespace std {
     using ::atan;
     using ::log;
     using ::exp;
+    using ::cos;
+    using ::sin;
+    using ::tan;
+    using ::cosh;
+    using ::sinh;
+    using ::tanh;
 }
 #endif
 
