@@ -278,6 +278,7 @@ namespace detail
     }
 
     // Function objects to find the best way of computing GCD or LCM
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     template < typename T, bool IsSpecialized, bool IsSigned >
     struct gcd_optimal_evaluator_helper_t
@@ -346,7 +347,18 @@ namespace detail
             return solver( a, b );
         }
     };
+#else // BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+    template < typename T >
+    struct gcd_optimal_evaluator
+    {
+        T  operator ()( T const &a, T const &b )
+        {
+            return gcd_integer( a, b );
+        }
+    };
+#endif
 
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     template < typename T, bool IsSpecialized, bool IsSigned >
     struct lcm_optimal_evaluator_helper_t
@@ -415,6 +427,16 @@ namespace detail
             return solver( a, b );
         }
     };
+#else // BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+    template < typename T >
+    struct lcm_optimal_evaluator
+    {
+        T  operator ()( T const &a, T const &b )
+        {
+            return lcm_integer( a, b );
+        }
+    };
+#endif
 
     // Functions to find the GCD or LCM in the best way
     template < typename T >
