@@ -18,6 +18,7 @@
 #include <boost/math/special_functions/sinhc.hpp>
 
 #include <boost/config.hpp>
+#include <boost/cstdlib.hpp>  // for exit_success
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
     using ::abs;
