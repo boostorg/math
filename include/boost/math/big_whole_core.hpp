@@ -53,8 +53,8 @@ public:
 
     big_whole( uintmax_t v );
 
-    explicit  big_whole( std::valarray<bool> const &b );
-    explicit  big_whole( std::valarray<std::size_t> const &i );
+    explicit  big_whole( ma_type const &b );
+    explicit  big_whole( ia_type const &i );
 
     // Object-mutating operations
     void  swap( self_type &other );
@@ -62,13 +62,13 @@ public:
     void  assign( self_type const &other );
     void  assign( uintmax_t v );
 
-    void  reconfigure( std::valarray<bool> const &b );
-    void  reconfigure( std::valarray<std::size_t> const &i );
+    void  reconfigure( ma_type const &b );
+    void  reconfigure( ia_type const &i );
 
     // Value-accessing operations
-    uintmax_t                   to_uintmax() const;
-    std::valarray<bool>         to_bit_vector() const;
-    std::valarray<std::size_t>  to_bit_indices() const;
+    uintmax_t  to_uintmax() const;
+    ma_type    to_bit_vector() const;
+    ia_type    to_bit_indices() const;
 
     // Bit-twiddling operations
     void  reset();
@@ -84,7 +84,8 @@ public:
     void  bit_assign( std::size_t from, std::size_t to, bool value );
     void  bit_assign( std::size_t i, bool value );
 
-    void  bits_assign( std::size_t from, std::size_t to, self_type const &values );
+    void  bits_assign( std::size_t from, std::size_t to,
+     self_type const &values );
 
     // Bit-inspecting operations
     std::size_t  length() const;
@@ -119,8 +120,8 @@ protected:
     static  std::size_t  words_for_bits( std::size_t bits );
 
     static  va_type  uintmax_to_va( uintmax_t v );
-    static  va_type  bit_vector_to_va( std::valarray<bool> const &b );
-    static  va_type  bit_indices_to_va( std::valarray<std::size_t> const &i );
+    static  va_type  bit_vector_to_va( ma_type const &b );
+    static  va_type  bit_indices_to_va( ia_type const &i );
 
     static  std::size_t  wlength( va_type const &v );
     static  std::size_t  blength( word_type w );
@@ -284,10 +285,8 @@ big_whole::to_bit_vector
 (
 ) const
 {
-    using std::valarray;
-
-    valarray<std::size_t> const  indices = this->to_bit_indices();
-    valarray<bool>               temp;
+    ia_type const  indices = this->to_bit_indices();
+    ma_type        temp;
 
     if ( indices.size() )
     {
@@ -303,19 +302,18 @@ big_whole::to_bit_indices
 (
 ) const
 {
-    using std::valarray;
     using std::size_t;
 
-    valarray<size_t>  temp;
+    ia_type  temp;
 
     if ( va_type const * const  v = this->x_.get() )
     {
         if ( size_t const  s = v->size() )
         {
-            int const         d = limits_type::digits;
-            valarray<size_t>  temp2( s * d );
-            word_type const   mask = 1;
-            size_t            bits_used = 0;
+            int const        d = limits_type::digits;
+            ia_type          temp2( s * d );
+            word_type const  mask = 1;
+            size_t           bits_used = 0;
 
             for ( size_t i = 0, ii = 0 ; i < s ; ++i, ii += d )
             {
@@ -569,16 +567,13 @@ big_whole::tests
     std::size_t  to
 ) const
 {
-    using std::valarray;
-    using std::size_t;
-
     if ( from > to )
     {
         std::swap( from, to );
     }
 
-    valarray<size_t> const      ids = this->to_bit_indices();
-    valarray<size_t>        new_ids = ids[ (ids >= from) && (ids <= to) ];
+    ia_type const      ids = this->to_bit_indices();
+    ia_type        new_ids = ids[ (ids >= from) && (ids <= to) ];
 
     if ( new_ids.size() )
     {
@@ -594,11 +589,8 @@ big_whole::reverse
     std::size_t  cap
 ) const
 {
-    using std::valarray;
-    using std::size_t;
-
-    valarray<size_t> const      ids = this->to_bit_indices();
-    valarray<size_t> const  new_ids = ids[ ids <= cap ];
+    ia_type const      ids = this->to_bit_indices();
+    ia_type const  new_ids = ids[ ids <= cap ];
 
     return self_type( cap - new_ids );
 }
@@ -729,7 +721,7 @@ big_whole::bit_indices_to_va
     std::valarray<std::size_t> const &  i
 )
 {
-    std::valarray<bool>  temp;
+    ma_type  temp;
 
     if ( i.size() )
     {
@@ -888,7 +880,8 @@ big_whole::bit_change
             switch ( op )
             {
             case flip_bit:
-                ( *v )[ ids ] = static_cast<va_type>( (*v)[ids] ) ^ limits_type::max();
+                ( *v )[ ids ] = static_cast<va_type>( (*v)[ids] )
+                 ^ limits_type::max();
                 break;
 
             case set_bit:
