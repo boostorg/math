@@ -32,6 +32,7 @@
 	<li><a href="#additional">Additional Routines</a>
 		<ul>
 			<li><a href="#a_header">Header Synopsis</a></li>
+			<li><a href="#a_bit_conv">Bit-String Conversion Functions</a></li>
 			<li><a href="#a_io_ops">Input &amp; Output Operators</a></li>
 		</ul></li>
 	<li><a href="#refer">References</a></li>
@@ -422,12 +423,18 @@ boost::math::swap( boost::math::big_whole &amp;a, boost::math::big_whole &amp;b 
 
 <blockquote><pre>
 #include &lt;iosfwd&gt;                         <i>// for std::basic_ostream and std::basic_istream (declarations)</i>
+#include &lt;string&gt;                         <i>// for std::basic_string</i>
 #include &lt;boost/math/big_whole_core.hpp&gt;  <i>// for boost::math::big_whole</i>
 
 namespace boost
 {
 namespace math
 {
+
+template &lt; typename Ch, class Tr, class Al &gt;
+    std::basic_string&lt;Ch, Tr, Al&gt;  bigwhole_to_bitstring( big_whole const &amp;w, Ch zero_char, Ch one_char );
+template &lt; typename Ch, class Tr, class Al &gt;
+    void  copy_bigwhole_to_bitstring( std::basic_string&lt;Ch, Tr, Al&gt; &amp;s, big_whole const &amp;w, Ch zero_char, Ch one_char );
 
 template &lt; typename Ch, class Tr &gt;
     std::basic_ostream&lt;Ch, Tr&gt; &amp;  operator &lt;&lt;( std::basic_ostream&lt;Ch, Tr&gt; &amp;os, big_whole const &amp;w );
@@ -438,6 +445,34 @@ template &lt; typename Ch, class Tr &gt;
 }
 }
 </pre></blockquote>
+
+<h3><a name="a_bit_conv">Bit-String Conversion Functions</a></h3>
+
+<blockquote><pre>
+template &lt; typename Ch, class Tr, class Al &gt;
+std::basic_string&lt;Ch, Tr, Al&gt;
+boost::math::bigwhole_to_bitstring( boost::math::big_whole const &amp;w, Ch zero_char, Ch one_char );
+</pre></blockquote>
+
+<p><strong>Returns:</strong> a minimal-length string for the base-2 representation of <var>w</var>, where <var>zero_char</var> and <var>one_char</var> are used to represent the unset and set bits, respectively</p>
+
+<p><strong>Rationale:</strong> provides a base-2 representation of a <code>big_whole</code> object which is suitable for text processing</p>
+
+<blockquote><pre>
+template &lt; typename Ch, class Tr, class Al &gt;
+void
+boost::math::copy_bigwhole_to_bitstring
+(
+    std::basic_string&lt;Ch, Tr, Al&gt; &amp;s,
+    boost::math::big_whole const &amp;w,
+    Ch zero_char,
+    Ch one_char
+);
+</pre></blockquote>
+
+<p><strong>Effects:</strong> assigns to <var>s</var> the result of <code>bigwhole_to_bitstring</code> using <var>w</var>, <var>zero_char</var>, and <var>one_char</var> as parameters</p>
+
+<p><strong>Rationale:</strong> same as <code>bigwhole_to_bitstring</code>, but without the need to explicitly specify the template parameters</p>
 
 <h3><a name="a_io_ops">Input &amp; Output Operators</a></h3>
 

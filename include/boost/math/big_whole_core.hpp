@@ -655,15 +655,27 @@ big_whole::not_self
 
 //  Arbitrary-length whole-number object-accessing member definitions  -------//
 
-inline
 int
 big_whole::compare
 (
     big_whole const &  other
 ) const
 {
-    return this->x_.get() ? ( other.x_.get() ? self_type::do_compare(*this->x_,
-     *other.x_) : (this->any() ? +1 : 0) ) : ( other.any() ? -1 : 0 );
+    if ( va_type const * const  t = this->x_.get() )
+    {
+        if ( va_type const * const  o = other.x_.get() )
+        {
+            return self_type::do_compare( *t, *o );
+        }
+        else
+        {
+            return this->any() ? +1 : 0;
+        }
+    }
+    else
+    {
+        return other.any() ? -1 : 0;
+    }
 }
 
 
@@ -1093,71 +1105,26 @@ operator !
     return temp.not_self(), temp;
 }
 
-inline
-bool
-operator ==
-(
-    big_whole const &  lhs,
-    big_whole const &  rhs
-)
-{
-    return lhs.compare( rhs ) == 0;
-}
+#define BOOST_PRIVATE_COMPARE_OP( Op )   \
+    inline                               \
+    bool                                 \
+    operator Op                          \
+    (                                    \
+        big_whole const &  lhs,          \
+        big_whole const &  rhs           \
+    )                                    \
+    {                                    \
+        return lhs.compare( rhs ) Op 0;  \
+    }
 
-inline
-bool
-operator !=
-(
-    big_whole const &  lhs,
-    big_whole const &  rhs
-)
-{
-    return lhs.compare( rhs ) != 0;
-}
+BOOST_PRIVATE_COMPARE_OP( == )
+BOOST_PRIVATE_COMPARE_OP( != )
+BOOST_PRIVATE_COMPARE_OP( < )
+BOOST_PRIVATE_COMPARE_OP( > )
+BOOST_PRIVATE_COMPARE_OP( <= )
+BOOST_PRIVATE_COMPARE_OP( >= )
 
-inline
-bool
-operator <
-(
-    big_whole const &  lhs,
-    big_whole const &  rhs
-)
-{
-    return lhs.compare( rhs ) < 0;
-}
-
-inline
-bool
-operator >
-(
-    big_whole const &  lhs,
-    big_whole const &  rhs
-)
-{
-    return lhs.compare( rhs ) > 0;
-}
-
-inline
-bool
-operator <=
-(
-    big_whole const &  lhs,
-    big_whole const &  rhs
-)
-{
-    return lhs.compare( rhs ) <= 0;
-}
-
-inline
-bool
-operator >=
-(
-    big_whole const &  lhs,
-    big_whole const &  rhs
-)
-{
-    return lhs.compare( rhs ) >= 0;
-}
+#undef BOOST_PRIVATE_COMPARE_OP
 
 big_whole
 operator &
