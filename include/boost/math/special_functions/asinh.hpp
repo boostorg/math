@@ -12,7 +12,7 @@
 
 
 #include <cmath>
-#include <boost/limits.hpp>
+#include <limits>
 #include <string>
 #include <stdexcept>
 

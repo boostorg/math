@@ -457,7 +457,7 @@ explicit		<strong>octonion</strong>(octonion&lt;double&gt; const &amp; a_recopie
 		<blockquote>
 			<p>Long double specialization version.</p>
 			<p>A default constructor is provided for each form, which initializes each component to the default values for their type (<cite>i.e.</cite> zero for floating numbers). This constructor can also accept one to eight base type arguments. A constructor is also provided to build octonions from one to four complex numbers sharing the same base type, and another taking one or two quaternionssharing the same base type. The unspecialized template also sports a templarized copy constructor, while the specialized forms have copy constructors from the other two specializations, which are explicit when a risk of precision loss exists. For the unspecialized form, the base type's constructors must not throw.</p>
-			<p>Destructors and untemplated copy constructors (from the same type) are provided by the compiler.</p>
+			<p>Destructors and untemplated copy constructors (from the same type) are provided by the compiler. Converting copy constructors make use of a templated helper function in a &quot;detail&quot; subnamespace.</p>
 		</blockquote>
 		<h3><a name="Other member functions"></a>Other member functions</h3>
 		<pre><code>T			<strong>real</strong>() const;
@@ -710,15 +710,19 @@ template&lt;typename T&gt;	inline octonion&lt;T&gt;	<strong>cylindrical</strong>
 		</blockquote>
 		<h2><a name="History"></a>History</h2>
 		<ul>
+			<li>1.5.5 - 27/09/2002: Microsoft VCPP 7 compatibility, by Michael Stevens (michael@acfr.usyd.edu.au); requires the /Za compiler option.
+			<li>1.5.4 - 19/09/2002: fixed problem with multiple inclusion (in different translation units); attempt at an improved compatibility with Microsoft compilers, by Michael Stevens (michael@acfr.usyd.edu.au) and Fredrick Blomqvist (fredrik@blomqvist.nu); other compatibility fixes.	
 			<li>1.5.3 - 01/02/2002: bugfix and Gcc 2.95.3 compatibility by Douglas Gregor (gregod@cs.rpi.edu).
+
 			<li>1.5.2 - 07/07/2001: introduced <code>namespace math</code>.
+
 			<li>1.5.1 - 07/06/2001: (end of Boost review) now includes <code>&lt;boost/math/special_functions/sinc.hpp&gt;</code> and <code>&lt;boost/math/special_functions/sinhc.hpp&gt;</code> instead of <code>&lt;boost/special_functions.hpp&gt;</code>; corrected bug in <code>sin</code> (Daryle Walker); removed check for self-assignment (Gary Powel); made converting functions <code>explicit</code> (Gary Powel); added overflow guards for division operators and <code>abs</code> (Peter Schmitteckert); added <code>sup</code> and <code>l1</code>; used Vesa Karvonen's CPP metaprograming technique to simplify code. 
 			<li>1.5.0 - 23/03/2001: boostification, inlining of all operators except input, output and <code>pow</code>, fixed exception safety of some members (template version).
 			<li>1.4.0 - 09/01/2001: added <code>tan</code> and <code>tanh</code>.			<li>1.3.1 - 08/01/2001: cosmetic fixes.
 			<li>1.3.0 - 12/07/2000: <code>pow</code> now uses Maarten Hilferink's (mhilferink@tip.nl) algorithm.			<li>1.2.0 - 25/05/2000: fixed the division operators and output; changed many signatures.			<li>1.1.0 - 23/05/2000: changed <code>sinc</code> into <code>sinc_pi</code>; added <code>sin</code>, <code>cos</code>, <code>sinh</code>, <code>cosh</code>.			<li>1.0.0 - 10/08/1999: first public version.
 		</ul>
 		<hr>
-		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->01 Feb 2002<!--webbot bot="Timestamp" endspan i-checksum="18778" --></p>
+		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->19 Sep 2002<!--webbot bot="Timestamp" endspan i-checksum="18778" --></p>
 		<p>&copy; Copyright Hubert Holin 2001, 2002. Permission to copy, use, modify, sell and distribute this document is granted provided this copyright notice appears in all copies. This software is provided &quot;as is&quot; without express or implied&nbsp; warranty, and with no claim as to its suitability for any purpose.</p>
 	</body>
 

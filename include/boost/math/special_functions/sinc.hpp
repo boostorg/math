@@ -12,7 +12,7 @@
 
 
 #include <cmath>
-#include <boost/limits.hpp>
+#include <limits>
 #include <string>
 #include <stdexcept>
 
@@ -23,7 +23,7 @@ namespace boost
 {
     namespace math
     {
-#if defined(__GNUC__) && (__GNUC__ < 3)
+#if        defined(__GNUC__) && (__GNUC__ < 3)
         // gcc 2.x ignores function scope using declarations,
         // put them in the scope of the enclosing namespace instead:
         
@@ -32,21 +32,22 @@ namespace boost
         using    ::std::sin;
         
         using    ::std::numeric_limits;
-#endif
+#endif    /* defined(__GNUC__) && (__GNUC__ < 3) */
         
         // This is the "Sinus Cardinal" of index Pi.
         
         template<typename T>
         inline T    sinc_pi(const T x)
         {
-#ifdef BOOST_NO_STDC_NAMESPACE
+#ifdef    BOOST_NO_STDC_NAMESPACE
             using    ::abs;
             using    ::sin;
-#else
+            using    ::sqrt;
+#else    /* BOOST_NO_STDC_NAMESPACE */
             using    ::std::abs;
             using    ::std::sin;
             using    ::std::sqrt;
-#endif
+#endif    /* BOOST_NO_STDC_NAMESPACE */
             
             using    ::std::numeric_limits;
             
@@ -82,14 +83,20 @@ namespace boost
         }
         
         
+#ifdef    BOOST_NO_TEMPLATE_TEMPLATES
+#else    /* BOOST_NO_TEMPLATE_TEMPLATES */
         template<typename T, template<typename> class U>
         inline U<T>    sinc_pi(const U<T> x)
         {
-#ifndef BOOST_NO_STDC_NAMESPACE
+#ifdef    BOOST_NO_STDC_NAMESPACE
+            using    ::abs;
+            using    ::sin;
+            using    ::sqrt;
+#else    /* BOOST_NO_STDC_NAMESPACE */
             using    ::std::abs;
             using    ::std::sin;
             using    ::std::sqrt;
-#endif
+#endif    /* BOOST_NO_STDC_NAMESPACE */
             
             using    ::std::numeric_limits;
             
@@ -123,6 +130,7 @@ namespace boost
                 return(result);
             }
         }
+#endif    /* BOOST_NO_TEMPLATE_TEMPLATES */
     }
 }
 

@@ -6,6 +6,9 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 
 
+#define    BOOST_SPECIAL_FUNCTIONS_TEST_VERBOSE    0
+
+
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -17,19 +20,6 @@
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/math/special_functions/sinhc.hpp>
 
-#include <boost/config.hpp>
-#include <boost/cstdlib.hpp>  // for exit_success
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std {
-    using ::abs;
-    using ::cosh;
-    using ::log;
-    using ::sin;
-    using ::sinh;
-    using ::sqrt;
-    using ::tanh;
-}
-#endif
 
 #define BOOST_INCLUDE_MAIN  // for testing, include rather than link
 #include <boost/test/test_tools.hpp>
@@ -131,6 +121,151 @@ int    test_main(int, char *[])
     
     // tests for evaluation by humans
     
+#if    BOOST_SPECIAL_FUNCTIONS_TEST_VERBOSE
+    ::std::cout << "epsilon" << ::std::endl;
+    
+    ::std::cout << ::std::setw(15) << numeric_limits<float>::epsilon()
+                << ::std::setw(15) << numeric_limits<double>::epsilon()
+                << ::std::setw(15) << numeric_limits<long double>::epsilon()
+                << ::std::endl;
+    
+    ::std::cout << ::std::endl << ::std::endl;
+    
+    ::std::cout << "atanh" << ::std::endl;
+    
+    for    (int i = 0; i <= 100; i++)
+    {
+        float          xf = static_cast<float>(i-50)/static_cast<float>(5);
+        double         xd = static_cast<double>(i-50)/static_cast<double>(5);
+        long double    xl = static_cast<long double>(i-50)/static_cast<long double>(5);
+        
+        float          yf = tanh(xf);
+        double         yd = tanh(xd);
+        long double    yl = tanh(xl);
+        
+        if    (
+                std::numeric_limits<float>::has_infinity &&
+                std::numeric_limits<double>::has_infinity &&
+                std::numeric_limits<long double>::has_infinity
+            )
+        {
+            ::std:: cout << ::std::setw(15)
+                         << atanh_error_evaluator(xf)
+                         << ::std::setw(15)
+                         << atanh_error_evaluator(xd)
+                         << ::std::setw(15)
+                         << atanh_error_evaluator(xl)
+                         << ::std::endl;
+        }
+        else
+        {
+            if    (
+                    (abs(yf-static_cast<float>(1)) <
+                        numeric_limits<float>::epsilon())||
+                    (abs(yf+static_cast<float>(1)) <
+                        numeric_limits<float>::epsilon())||
+                    (abs(yf-static_cast<double>(1)) <
+                        numeric_limits<double>::epsilon())||
+                    (abs(yf+static_cast<double>(1)) <
+                        numeric_limits<double>::epsilon())||
+                    (abs(yf-static_cast<long double>(1)) <
+                        numeric_limits<long double>::epsilon())||
+                    (abs(yf+static_cast<long double>(1)) <
+                        numeric_limits<long double>::epsilon())
+                )
+            {
+                ::std::cout << "Platform's numerics may lack precision."
+                            << ::std::endl;
+            }
+            else
+            {
+                ::std:: cout << ::std::setw(15)
+                             << atanh_error_evaluator(xf)
+                             << ::std::setw(15)
+                             << atanh_error_evaluator(xd)
+                             << ::std::setw(15)
+                             << atanh_error_evaluator(xl)
+                             << ::std::endl;
+            }
+        }
+    }
+    
+    ::std::cout << ::std::endl << ::std::endl;
+    
+    ::std::cout << "asinh" << ::std::endl;
+    
+    for    (int i = 0; i <= 100; i++)
+    {
+        float          xf = static_cast<float>(i-50)/static_cast<float>(5);
+        double         xd = static_cast<double>(i-50)/static_cast<double>(5);
+        long double    xl = static_cast<long double>(i-50)/static_cast<long double>(5);
+        
+        ::std:: cout << ::std::setw(15)
+                     << asinh_error_evaluator(xf)
+                     << ::std::setw(15)
+                     << asinh_error_evaluator(xd)
+                     << ::std::setw(15)
+                     << asinh_error_evaluator(xl)
+                     << ::std::endl;
+    }
+    
+    ::std::cout << ::std::endl << ::std::endl;
+    
+    ::std::cout << "acosh" << ::std::endl;
+    
+    for    (int i = 0; i <= 100; i++)
+    {
+        float          xf = static_cast<float>(i-50)/static_cast<float>(5);
+        double         xd = static_cast<double>(i-50)/static_cast<double>(5);
+        long double    xl = static_cast<long double>(i-50)/static_cast<long double>(5);
+        
+        ::std:: cout << ::std::setw(15)
+                     << acosh_error_evaluator(xf)
+                     << ::std::setw(15)
+                     << acosh_error_evaluator(xd)
+                     << ::std::setw(15)
+                     << acosh_error_evaluator(xl)
+                     << ::std::endl;
+    }
+    
+    ::std::cout << ::std::endl << ::std::endl;
+    
+    ::std::cout << "sinc_pi" << ::std::endl;
+    
+    for    (int i = 0; i <= 100; i++)
+    {
+        ::std::cout << ::std::setw(15)
+                    << sinc_pi<float>(static_cast<float>(i-50)/
+                                                static_cast<float>(50))
+                    << ::std::setw(15)
+                    << sinc_pi<double>(static_cast<double>(i-50)/
+                                                static_cast<double>(50))
+                    << ::std::setw(15)
+                    << sinc_pi<long double>(static_cast<long double>(i-50)/
+                                                static_cast<long double>(50))
+                    << ::std::endl;
+    }
+    
+    ::std::cout << ::std::endl << ::std::endl;
+    
+    ::std::cout << "sinhc_pi" << ::std::endl;
+    
+    for    (int i = 0; i <= 100; i++)
+    {
+        ::std::cout << ::std::setw(15)
+                    << sinhc_pi<float>(static_cast<float>(i-50)/
+                                                static_cast<float>(50))
+                    << ::std::setw(15)
+                    << sinhc_pi<double>(static_cast<double>(i-50)/
+                                                static_cast<double>(50))
+                    << ::std::setw(15)
+                    << sinhc_pi<long double>(static_cast<long double>(i-50)/
+                                                static_cast<long double>(50))
+                    << ::std::endl;
+    }
+    
+    ::std::cout << ::std::endl << ::std::endl;
+#endif    /* BOOST_SPECIAL_FUNCTIONS_TEST_VERBOSE */
     
     
     // tests for evaluation by scripts
@@ -226,16 +361,18 @@ int    test_main(int, char *[])
         numeric_limits<type>::epsilon());
     
     
-#if defined(__GNUC__) || defined(__COMO__) || \
-    (defined(__MWERKS__) && (__MWERKS__ <= 0x2301))
-#define    BOOST_SPECIAL_FUNCTIONS_TEST(type)               \
-    ::std::cout << "Testing " << #type << "." << std::endl; \
-    BOOST_SPECIAL_FUNCTIONS_TEST_ATANH(type)                \
-    BOOST_SPECIAL_FUNCTIONS_TEST_ASINH(type)                \
-    BOOST_SPECIAL_FUNCTIONS_TEST_ACOSH(type)                \
-    BOOST_SPECIAL_FUNCTIONS_TEST_SINC_PI(type)              \
-    BOOST_SPECIAL_FUNCTIONS_TEST_SINHC_PI(type)
-#else
+#ifdef    BOOST_NO_TEMPLATE_TEMPLATES
+#define    BOOST_SPECIAL_FUNCTIONS_TEST(type)                       \
+    ::std::cout << "Testing " << #type << "." << std::endl;         \
+    BOOST_SPECIAL_FUNCTIONS_TEST_ATANH(type)                        \
+    BOOST_SPECIAL_FUNCTIONS_TEST_ASINH(type)                        \
+    BOOST_SPECIAL_FUNCTIONS_TEST_ACOSH(type)                        \
+    BOOST_SPECIAL_FUNCTIONS_TEST_SINC_PI(type)                      \
+    BOOST_SPECIAL_FUNCTIONS_TEST_SINHC_PI(type)                     \
+    ::std::cout <<                                                  \
+    "Warning: no template templates; curtailed functionality." <<   \
+    ::std::endl;
+#else    /* BOOST_NO_TEMPLATE_TEMPLATES */
 #define    BOOST_SPECIAL_FUNCTIONS_TEST(type)               \
     ::std::cout << "Testing " << #type << "." << std::endl; \
     BOOST_SPECIAL_FUNCTIONS_TEST_ATANH(type)                \
@@ -245,7 +382,7 @@ int    test_main(int, char *[])
     BOOST_SPECIAL_FUNCTIONS_TEST_SINHC_PI(type)             \
     BOOST_SPECIAL_FUNCTIONS_TEST_SINC_PI_FOR_C(type)        \
     BOOST_SPECIAL_FUNCTIONS_TEST_SINHC_PI_FOR_C(type)
-#endif
+#endif    /* BOOST_NO_TEMPLATE_TEMPLATES */
     
     
     BOOST_SPECIAL_FUNCTIONS_TEST(float)

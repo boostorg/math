@@ -9,21 +9,81 @@
 #define    BOOST_INTERACTIVE_TEST_INPUT_ITERATOR    0
 
 
+#define BOOST_INCLUDE_MAIN  // for testing, include rather than link
+#include <boost/test/test_tools.hpp>
+
+
+#include <boost/config.hpp>
+
+
 #include <iostream>
+#include <sstream>
+
 
 #include <boost/math/octonion.hpp>
 
-#include <boost/config.hpp>
-#include <boost/cstdlib.hpp>  // for exit_success
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std {
-    using ::sqrt;
-    using ::atan;
-}
-#endif
 
-#define BOOST_INCLUDE_MAIN  // for testing, include rather than link
-#include <boost/test/test_tools.hpp>
+#ifdef    BOOST_NO_STDC_NAMESPACE
+using    ::sqrt;
+using    ::atan;
+using    ::log;
+using    ::exp;
+using    ::cos;
+using    ::sin;
+using    ::tan;
+using    ::cosh;
+using    ::sinh;
+using    ::tanh;
+#endif    /* BOOST_NO_STDC_NAMESPACE */
+
+#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+using    ::boost::math::real;
+using    ::boost::math::unreal;
+using    ::boost::math::sup;
+using    ::boost::math::l1;
+using    ::boost::math::abs;
+using    ::boost::math::norm;
+using    ::boost::math::conj;
+using    ::boost::math::exp;
+using    ::boost::math::pow;
+using    ::boost::math::cos;
+using    ::boost::math::sin;
+using    ::boost::math::tan;
+using    ::boost::math::cosh;
+using    ::boost::math::sinh;
+using    ::boost::math::tanh;
+using    ::boost::math::sinc_pi;
+using    ::boost::math::sinhc_pi;
+#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
+  
+// Provide standard floating point abs() overloads for MSVC
+#ifdef    BOOST_MSVC
+#if        (BOOST_MSVC < 1300) || defined(_MSC_EXTENSIONS)
+inline float        abs(float v)
+{
+    return(fabs(v));
+}
+
+inline double        abs(double v)
+{
+    return(fabs(v));
+}
+
+inline long double    abs(long double v)
+{
+    return(fabs(v));
+}
+#endif    /* (BOOST_MSVC < 1300) || defined(_MSC_EXTENSIONS) */
+#endif    /* BOOST_MSVC */
+
+
+// explicit (if ludicrous) instanciation
+#ifndef __GNUC__
+template    class ::boost::math::octonion<int>;
+#else
+// gcc doesn't like the absolutely-qualified namespace
+template class boost::math::octonion<int>;
+#endif
 
 
 namespace
@@ -313,7 +373,7 @@ int    test_main(int, char *[])
                     << o0 << " ." << ::std::endl;
     }
 #else
-    ::std::istringstream                    bogus("(1,2,3,4,5,6,7,8)");
+    ::std::istringstream                bogus("(1,2,3,4,5,6,7,8)");
     
     bogus >> o0;
     
@@ -383,8 +443,10 @@ int    test_main(int, char *[])
                 << "the hyperbolic tangent is "
                 << tanh(o0) << ::std::endl;
     
-#if !defined(__GNUC__) && !defined(__COMO__)
-    // somehow, this does not work with either gcc or Comeau :-(
+#ifdef    BOOST_NO_TEMPLATE_TEMPLATES
+    ::std::cout << "no template templates, can't compute cardinal functions"
+                << ::std::endl;
+#else    /* BOOST_NO_TEMPLATE_TEMPLATES */
     ::std::cout << "the value of "
                 << "the Sinus Cardinal (of index pi) is "
                 << sinc_pi(o0) << ::std::endl;
@@ -392,18 +454,18 @@ int    test_main(int, char *[])
     ::std::cout << "the value of "
                 << "the Hyperbolic Sinus Cardinal (of index pi) is "
                 << sinhc_pi(o0) << ::std::endl;
-#endif
+#endif    /* BOOST_NO_TEMPLATE_TEMPLATES */
     
     ::std::cout << ::std::endl;
     
-    float rho = ::std::sqrt(4096.0f);
-    float theta = ::std::atan(1.0f);
-    float phi1 = ::std::atan(1.0f);
-    float phi2 = ::std::atan(1.0f);
-    float phi3 = ::std::atan(1.0f);
-    float phi4 = ::std::atan(1.0f);
-    float phi5 = ::std::atan(1.0f);
-    float phi6 = ::std::atan(1.0f);
+    float                            rho = ::std::sqrt(4096.0f);
+    float                            theta = ::std::atan(1.0f);
+    float                            phi1 = ::std::atan(1.0f);
+    float                            phi2 = ::std::atan(1.0f);
+    float                            phi3 = ::std::atan(1.0f);
+    float                            phi4 = ::std::atan(1.0f);
+    float                            phi5 = ::std::atan(1.0f);
+    float                            phi6 = ::std::atan(1.0f);
     
     ::std::cout << "The value of the octonion represented "
                 << "in spherical form by "
@@ -416,14 +478,14 @@ int    test_main(int, char *[])
                         phi1, phi2, phi3, phi4, phi5, phi6)
                 << ::std::endl;
     
-    float rho1 = 1;
-    float rho2 = 2;
-    float rho3 = ::std::sqrt(2.0f);
-    float rho4 = ::std::sqrt(8.0f);
-    float theta1 = 0;
-    float theta2 = ::std::atan(1.0f)*2;
-    float theta3 = ::std::atan(1.0f);
-    float theta4 = ::std::atan(::std::sqrt(3.0f));
+    float                            rho1 = 1;
+    float                            rho2 = 2;
+    float                            rho3 = ::std::sqrt(2.0f);
+    float                            rho4 = ::std::sqrt(8.0f);
+    float                            theta1 = 0;
+    float                            theta2 = ::std::atan(1.0f)*2;
+    float                            theta3 = ::std::atan(1.0f);
+    float                            theta4 = ::std::atan(::std::sqrt(3.0f));
     
     ::std::cout << "The value of the octonion represented "
                 << "in multipolar form by "
@@ -436,14 +498,14 @@ int    test_main(int, char *[])
                         rho3, theta3, rho4, theta4)
                 << ::std::endl;
     
-    float r = ::std::sqrt(2.0f);
-    float angle = ::std::atan(1.0f);
-    float h1 = 3;
-    float h2 = 4;
-    float h3 = 5;
-    float h4 = 6;
-    float h5 = 7;
-    float h6 = 8;
+    float                            r = ::std::sqrt(2.0f);
+    float                            angle = ::std::atan(1.0f);
+    float                            h1 = 3;
+    float                            h2 = 4;
+    float                            h3 = 5;
+    float                            h4 = 6;
+    float                            h5 = 7;
+    float                            h6 = 8;
     
     ::std::cout << "The value of the octonion represented "
                 << "in cylindrical form by "
@@ -624,36 +686,27 @@ int    test_main(int, char *[])
     }
     
     
-#define    BOOST_OCTONION_TRANSCENDENTALS_TEST(type)                \
+#define    BOOST_OCTONION_TRENSCENDENTALS_TEST(type)                \
                                                                     \
     ::std::cout << "Testing exp." << std::endl;                     \
                                                                     \
     for    (int idx = 1; idx < 8; ++idx)                            \
     {                                                               \
         ::boost::math::octonion<type>    toto =                     \
-            static_cast<type>(4)*static_cast<type>(::std::atan(     \
-            static_cast<type>(1)))*index_i_element<type>(idx);      \
+            static_cast<type>(4)*::std::atan(static_cast<type>(1))* \
+            index_i_element<type>(idx);                             \
                                                                     \
         BOOST_TEST(abs(exp(toto)+static_cast<type>(1)) <=           \
             2*numeric_limits<type>::epsilon());                     \
     }
     
     
-#if defined(__GNUC__) || defined(__COMO__) || \
-    (defined(__MWERKS__) && (__MWERKS__ <= 0x2301))
-#define    BOOST_OCTONION_TEST(type)                        \
-                                                            \
-    ::std::cout << "Testing " << #type << "." << std::endl; \
-                                                            \
-    BOOST_OCTONION_MULTIPLICATION_TEST(type)
-#else
 #define    BOOST_OCTONION_TEST(type)                        \
                                                             \
     ::std::cout << "Testing " << #type << "." << std::endl; \
                                                             \
     BOOST_OCTONION_MULTIPLICATION_TEST(type)                \
-    BOOST_OCTONION_TRANSCENDENTALS_TEST(type)
-#endif
+    BOOST_OCTONION_TRENSCENDENTALS_TEST(type)
     
     
     BOOST_OCTONION_TEST(float)
@@ -664,7 +717,7 @@ int    test_main(int, char *[])
 #undef    BOOST_OCTONION_TEST
     
 #undef    BOOST_OCTONION_MULTIPLICATION_TEST
-#undef    BOOST_OCTONION_TRANSCENDENTALS_TEST
+#undef    BOOST_OCTONION_TRENSCENDENTALS_TEST
     
     return(::boost::exit_success);
 }

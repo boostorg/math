@@ -380,7 +380,7 @@ explicit		<strong>quaternion</strong>(quaternion&lt;double&gt; const &amp; a_rec
 		<blockquote>
 			<p>Long double specialization version.</p>
 			<p>A default constructor is provided for each form, which initializes each component to the default values for their type (<cite>i.e.</cite> zero for floating numbers). This constructor can also accept one to four base type arguments. A constructor is also provided to build quaternions from one or two complex numbers sharing the same base type. The unspecialized template also sports a templarized copy constructor, while the specialized forms have copy constructors from the other two specializations, which are explicit when a risk of precision loss exists. For the unspecialized form, the base type's constructors must not throw.</p>
-			<p>Destructors and untemplated copy constructors (from the same type) are provided by the compiler.</p>
+			<p>Destructors and untemplated copy constructors (from the same type) are provided by the compiler. Converting copy constructors make use of a templated helper function in a &quot;detail&quot; subnamespace.</p>
 		</blockquote>
 		<h3><a name="Other member functions"></a>Other member functions</h3>
 		<pre><code>T			<strong>real</strong>() const;
@@ -567,7 +567,7 @@ template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<strong>cylindrical</stron
 		<p>In this version of our implementation of quaternions, there is no analogue of the complex value operation <code>arg</code> as the situation is somewhat more complicated. Unit quaternions are linked both to rotations in R^3 and in R^4, and the correspondences are not too complicated, but there is currently a lack of standard (<cite>de facto</cite> or <cite>de jure</cite>) matrix library with which the conversions could work. This should be remedied in a further revision. In the mean time, an example of how this could be done is presented here <a href="HSO3.hpp">for R^3</a>, and here <a href="HSO4.hpp">for R^4</a> (<a href="HSO3SO4.cpp">example</a> test file).</p>
 		<h2><a name="quaternion transcendentals"></a><code>quaternion</code> transcendentals</h2>
 		<p>There is no <code>log</code> or <code>sqrt</code> provided for quaternions in this implementation, and <code>pow</code> is likewise restricted to integral powers of the exponent. There are several reasons to this: on the one hand, the equivalent of analytic continuation for quaternions (&quot;branch cuts&quot;) remains to be investigated thoroughly (by me, at any rate...), and we wish to avoid the nonsense introduced in the standard by exponentiations of complexes by complexes (which is well defined, but not in the standard...). Talking of nonsense, saying that <code>pow(0,0)</code> is &quot;implementation defined&quot; is just plain brain-dead...</p>
-		<p>We do, however provide several transcendentals, chief among which is the exponential. That it allows for a &quot;closed formula&quot; is a result of the author (the existence and definition of the exponential, on the quaternions among others, on the other hand, is a few centuries old). Basically, any converging power series with real coefficients which allows for a closed formula in C can be transposed to H. More transcendentals of this type could be added in a further revision upon request. It should be noted that it is these functions which force the dependency upon the <a href="../../../boost/math/special_functions/sinc.hpp">boost/math/<code>special_functions/sinc.hpp</code></a> and the <a href="../../../boost/math/special_functions/sinhc.hpp">boost/math/<code>special_functions/sinhc.hpp</code></a> headers.</p>
+		<p>We do, however provide several transcendentals, chief among which is the exponential. This author claims the complete proof of  the &quot;closed formula&quot; as his own, as well as its independant invention (there are claims to prior invention of the formula, such as one by Professor Shoemake, and it is possible that the formula had been known a couple of centuries back, but in absence of bibliographical reference, the matter is pending, awaiting further investigation; on the other hand, the definition and existence of the exponential on the quaternions, is of course a fact known for a very long time). Basically, any converging power series with real coefficients which allows for a closed formula in C can be transposed to H. More transcendentals of this type could be added in a further revision upon request. It should be noted that it is these functions which force the dependency upon the <a href="../../../boost/math/special_functions/sinc.hpp">boost/math/<code>special_functions/sinc.hpp</code></a> and the <a href="../../../boost/math/special_functions/sinhc.hpp">boost/math/<code>special_functions/sinhc.hpp</code></a> headers.</p>
 		<h3><a name="exp"></a>exp</h3>
 		<pre><code>template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<strong>exp</strong>(quaternion&lt;T&gt; const &amp; q);</code></pre>
 		<blockquote>
@@ -610,9 +610,12 @@ template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<strong>cylindrical</stron
 		</blockquote>
 		<h2><a name="History"></a>History</h2>
 		<ul>
+			<li>1.5.5 - 27/09/2002: Microsoft VCPP 7 compatibility, by Michael Stevens (michael@acfr.usyd.edu.au); requires the /Za compiler option.
+			<li>1.5.4 - 19/09/2002: fixed problem with multiple inclusion (in different translation units); attempt at an improved compatibility with Microsoft compilers, by Michael Stevens (michael@acfr.usyd.edu.au) and Fredrick Blomqvist (fredrik@blomqvist.nu); other compatibility fixes.	
 			<li>1.5.3 - 01/02/2002: bugfix and Gcc 2.95.3 compatibility by Douglas Gregor (gregod@cs.rpi.edu).
-			
+
 			<li>1.5.2 - 07/07/2001: introduced <code>namespace math</code>.
+
 			<li>1.5.1 - 07/06/2001: (end of Boost review) now includes <code>&lt;boost/math/special_functions/sinc.hpp&gt;</code> and <code>&lt;boost/math/special_functions/sinhc.hpp&gt;</code> instead of <code>&lt;boost/special_functions.hpp&gt;</code>; corrected bug in <code>sin</code> (Daryle Walker); removed check for self-assignment (Gary Powel); made converting functions <code>explicit</code> (Gary Powel); added overflow guards for division operators and <code>abs</code> (Peter Schmitteckert); added <code>sup</code> and <code>l1</code>; used Vesa Karvonen's CPP metaprograming technique to simplify code.
 
 			<li>1.5.0 - 26/03/2001: boostification, inlining of all operators except input, output and <code>pow</code>, fixed exception safety of some members (template version) and output operator, added <code>spherical</code>, <code>semipolar</code>, <code>multipolar</code>, <code>cylindrospherical</code> and <code>cylindrical</code>.
@@ -621,7 +624,7 @@ template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<strong>cylindrical</stron
 			<li>1.1.0 - 23/05/2000: changed <code>sinc</code> into <code>sinc_pi</code>; added <code>sin</code>, <code>cos</code>, <code>sinh</code>, <code>cosh</code>.			<li>1.0.0 - 10/08/1999: first public version.
 		</ul>
 		<hr>
-		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->01 Feb 2002<!--webbot bot="Timestamp" endspan i-checksum="18778" --></p>
+		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->19 Sep 2002<!--webbot bot="Timestamp" endspan i-checksum="18778" --></p>
 		<p>&copy; Copyright Hubert Holin 2001, 2002. Permission to copy, use, modify, sell and distribute this document is granted provided this copyright notice appears in all copies. This software is provided &quot;as is&quot; without express or implied&nbsp; warranty, and with no claim as to its suitability for any purpose.</p>
 	</body>
 

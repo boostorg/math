@@ -8,27 +8,74 @@
 
 #define    BOOST_INTERACTIVE_TEST_INPUT_ITERATOR    0
 
+
+#define BOOST_INCLUDE_MAIN  // for testing, include rather than link
+#include <boost/test/test_tools.hpp>
+
+
+#include <boost/config.hpp>
+
+
 #include <iostream>
 #include <sstream>
 
+
 #include <boost/math/quaternion.hpp>
 
-#include <boost/config.hpp>
-#include <boost/cstdlib.hpp>  // for exit_success
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std {
-    using ::sqrt;
-    using ::atan;
-    using ::log;
-    using ::exp;
-    using ::cos;
-    using ::sin;
-    using ::tan;
-    using ::cosh;
-    using ::sinh;
-    using ::tanh;
+
+#ifdef    BOOST_NO_STDC_NAMESPACE
+using    ::sqrt;
+using    ::atan;
+using    ::log;
+using    ::exp;
+using    ::cos;
+using    ::sin;
+using    ::tan;
+using    ::cosh;
+using    ::sinh;
+using    ::tanh;
+#endif    /* BOOST_NO_STDC_NAMESPACE */
+
+#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+using    ::boost::math::real;
+using    ::boost::math::unreal;
+using    ::boost::math::sup;
+using    ::boost::math::l1;
+using    ::boost::math::abs;
+using    ::boost::math::norm;
+using    ::boost::math::conj;
+using    ::boost::math::exp;
+using    ::boost::math::pow;
+using    ::boost::math::cos;
+using    ::boost::math::sin;
+using    ::boost::math::tan;
+using    ::boost::math::cosh;
+using    ::boost::math::sinh;
+using    ::boost::math::tanh;
+using    ::boost::math::sinc_pi;
+using    ::boost::math::sinhc_pi;
+#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
+  
+// Provide standard floating point abs() overloads for MSVC
+#ifdef    BOOST_MSVC
+#if        (BOOST_MSVC < 1300) || defined(_MSC_EXTENSIONS)
+inline float        abs(float v)
+{
+    return(fabs(v));
 }
-#endif
+
+inline double        abs(double v)
+{
+    return(fabs(v));
+}
+
+inline long double    abs(long double v)
+{
+    return(fabs(v));
+}
+#endif    /* (BOOST_MSVC < 1300) || defined(_MSC_EXTENSIONS) */
+#endif    /* BOOST_MSVC */
+
 
 // explicit (if ludicrous) instanciation
 #ifndef __GNUC__
@@ -37,10 +84,6 @@ template    class ::boost::math::quaternion<int>;
 // gcc doesn't like the absolutely-qualified namespace
 template class boost::math::quaternion<int>;
 #endif
-
-
-#define BOOST_INCLUDE_MAIN  // for testing, include rather than link
-#include <boost/test/test_tools.hpp>
 
 
 int    test_main(int, char *[])
@@ -237,7 +280,7 @@ int    test_main(int, char *[])
                     << q0 << " ." << ::std::endl;
     }
 #else
-    ::std::istringstream                    bogus("(1,2,3,4)");
+    ::std::istringstream                bogus("(1,2,3,4)");
     
     bogus >> q0;
     
@@ -307,8 +350,10 @@ int    test_main(int, char *[])
                 << "the hyperbolic tangent is "
                 << tanh(q0) << ::std::endl;
     
-#if !defined(__GNUC__) && !defined(__COMO__)
-    // somehow, this does not work with either gcc or Comeau :-(
+#ifdef    BOOST_NO_TEMPLATE_TEMPLATES
+    ::std::cout << "no template templates, can't compute cardinal functions"
+                << ::std::endl;
+#else    /* BOOST_NO_TEMPLATE_TEMPLATES */
     ::std::cout << "the value of "
                 << "the Sinus Cardinal (of index pi) is "
                 << sinc_pi(q0) << ::std::endl;
@@ -316,14 +361,14 @@ int    test_main(int, char *[])
     ::std::cout << "the value of "
                 << "the Hyperbolic Sinus Cardinal (of index pi) is "
                 << sinhc_pi(q0) << ::std::endl;
-#endif
+#endif    /* BOOST_NO_TEMPLATE_TEMPLATES */
     
     ::std::cout << ::std::endl;
     
-    float rho = ::std::sqrt(8.0f);
-    float theta = ::std::atan(1.0f);
-    float phi1 = ::std::atan(1.0f);
-    float phi2 = ::std::atan(1.0f);
+    float                            rho = ::std::sqrt(8.0f);
+    float                            theta = ::std::atan(1.0f);
+    float                            phi1 = ::std::atan(1.0f);
+    float                            phi2 = ::std::atan(1.0f);
     
     ::std::cout << "The value of the quaternion represented "
                 << "in spherical form by "
@@ -343,10 +388,10 @@ int    test_main(int, char *[])
                 << ::boost::math::semipolar(rho, alpha, phi1, phi2)
                 << ::std::endl;
     
-    float rho1 = 1;
-    float rho2 = 2;
-    float theta1 = 0;
-    float theta2 = ::std::atan(1.0f)*2;
+    float                            rho1 = 1;
+    float                            rho2 = 2;
+    float                            theta1 = 0;
+    float                            theta2 = ::std::atan(1.0f)*2;
     
     ::std::cout << "The value of the quaternion represented "
                 << "in multipolar form by "
@@ -356,24 +401,23 @@ int    test_main(int, char *[])
                 << ::boost::math::multipolar(rho1, theta1, rho2, theta2)
                 << ::std::endl;
     
-    float t = 5;
-    float radius = ::std::sqrt(2.0f);
-    float longitude = ::std::atan(1.0f);
-    float lattitude = ::std::atan(::std::sqrt(3.0f));
+    float                            t = 5;
+    float                            radius = ::std::sqrt(2.0f);
+    float                            longitude = ::std::atan(1.0f);
+    float                            lattitude = ::std::atan(::std::sqrt(3.0f));
     
     ::std::cout << "The value of the quaternion represented "
                 << "in cylindrospherical form by "
                 << "t = " << t << " , radius = " << radius
                 << " , longitude = " << longitude << " , latitude = "
                 << lattitude << " is "
-                << ::boost::math::cylindrospherical(t, radius,
-                                                    longitude, lattitude)
+                << ::boost::math::cylindrospherical(t, radius, longitude, lattitude)
                 << ::std::endl;
     
-    float r = ::std::sqrt(2.0f);
-    float angle = ::std::atan(1.0f);
-    float h1 = 3;
-    float h2 = 4;
+    float                            r = ::std::sqrt(2.0f);
+    float                            angle = ::std::atan(1.0f);
+    float                            h1 = 3;
+    float                            h2 = 4;
     
     ::std::cout << "The value of the quaternion represented "
                 << "in cylindrical form by "
@@ -599,21 +643,12 @@ int    test_main(int, char *[])
     BOOST_QUATERNION_SINH_TEST(type)
     
     
-#if defined(__GNUC__) || defined(__COMO__) || \
-    (defined(__MWERKS__) && (__MWERKS__ <= 0x2301))
-#define    BOOST_QUATERNION_TEST(type)                      \
-                                                            \
-    ::std::cout << "Testing " << #type << "." << std::endl; \
-                                                            \
-    BOOST_QUATERNION_MULTIPLICATION_TEST(type)
-#else
 #define    BOOST_QUATERNION_TEST(type)                      \
                                                             \
     ::std::cout << "Testing " << #type << "." << std::endl; \
                                                             \
     BOOST_QUATERNION_MULTIPLICATION_TEST(type)              \
     BOOST_QUATERNION_TRENSCENDENTALS_TEST(type)
-#endif
     
     
     BOOST_QUATERNION_TEST(float)

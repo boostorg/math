@@ -12,18 +12,18 @@
 
 #include <boost/config.hpp>
 #include <complex>
-#include <iosfwd>                                    // for the "<<" and ">>" operators
-#include <sstream>                                    // for the "<<" operator
+#include <iosfwd>                                   // for the "<<" and ">>" operators
+#include <sstream>                                  // for the "<<" operator
 
-#ifdef BOOST_NO_STD_LOCALE
+#ifdef    BOOST_NO_STD_LOCALE
 #else
-#include <locale>                                    // for the "<<" operator
-#endif
+    #include <locale>                               // for the "<<" operator
+#endif /* BOOST_NO_STD_LOCALE */
 
 #include <valarray>
 
 #include <boost/math/special_functions/sinc.hpp>    // for the Sinus cardinal
-#include <boost/math/special_functions/sinhc.hpp>    // for the Hyperbolic Sinus cardinal
+#include <boost/math/special_functions/sinhc.hpp>   // for the Hyperbolic Sinus cardinal
 
 
 namespace boost
@@ -34,7 +34,10 @@ namespace boost
         // gcc 2.95.x uses expression templates for valarray calculations, but
         // the result is not conforming. We need BOOST_GET_VALARRAY to get an
         // actual valarray result when we need to call a member function
-#define    BOOST_GET_VALARRAY(T,x)    ::std::valarray<T>(x)
+    #define    BOOST_GET_VALARRAY(T,x)    ::std::valarray<T>(x)
+        // gcc 2.95.x has an "std::ios" class that is similar to 
+        // "std::ios_base", so we just use a #define
+    #define    BOOST_IOS_BASE    ::std::ios
         // gcc 2.x ignores function scope using declarations,
         // put them in the scope of the enclosing namespace instead:
         using    ::std::valarray;
@@ -43,9 +46,9 @@ namespace boost
         using    ::std::sin;
         using    ::std::exp;
         using    ::std::cosh;
-#endif
-    
-    #define    BOOST_QUATERNION_ACCESSOR_GENERATOR(type)                \
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
+
+#define    BOOST_QUATERNION_ACCESSOR_GENERATOR(type)                    \
             type                    real() const                        \
             {                                                           \
                 return(a);                                              \
@@ -87,17 +90,7 @@ namespace boost
             }
         
         
-    #define    BOOST_QUATERNION_MEMBER_ASSIGNMENT_GENERATOR(type)                           \
-            quaternion<type> &        operator = (quaternion<type> const & a_affecter)      \
-            {                                                                               \
-                a = a_affecter.a;                                                           \
-                b = a_affecter.b;                                                           \
-                c = a_affecter.c;                                                           \
-                d = a_affecter.d;                                                           \
-                                                                                            \
-                return(*this);                                                              \
-            }                                                                               \
-                                                                                            \
+#define    BOOST_QUATERNION_MEMBER_ASSIGNMENT_GENERATOR(type)                               \
             template<typename X>                                                            \
             quaternion<type> &        operator = (quaternion<X> const  & a_affecter)        \
             {                                                                               \
@@ -105,6 +98,16 @@ namespace boost
                 b = static_cast<type>(a_affecter.R_component_2());                          \
                 c = static_cast<type>(a_affecter.R_component_3());                          \
                 d = static_cast<type>(a_affecter.R_component_4());                          \
+                                                                                            \
+                return(*this);                                                              \
+            }                                                                               \
+                                                                                            \
+            quaternion<type> &        operator = (quaternion<type> const & a_affecter)      \
+            {                                                                               \
+                a = a_affecter.a;                                                           \
+                b = a_affecter.b;                                                           \
+                c = a_affecter.c;                                                           \
+                d = a_affecter.d;                                                           \
                                                                                             \
                 return(*this);                                                              \
             }                                                                               \
@@ -129,7 +132,7 @@ namespace boost
             }
         
         
-    #define    BOOST_QUATERNION_MEMBER_DATA_GENERATOR(type)   \
+#define    BOOST_QUATERNION_MEMBER_DATA_GENERATOR(type)       \
             type    a;                                        \
             type    b;                                        \
             type    c;                                        \
@@ -423,14 +426,35 @@ namespace boost
         };
         
         
-        // quaternion specialization
+        // declaration of quaternion specialization
         
         template<>    class quaternion<float>;
         template<>    class quaternion<double>;
         template<>    class quaternion<long double>;
         
         
-    #define    BOOST_QUATERNION_CONSTRUCTOR_GENERATOR(type)                                             \
+        // helper templates for converting copy constructors
+        
+        namespace detail
+        {
+            
+            template<    typename T,
+                        typename U
+                    >
+            quaternion<T>    quaternion_type_converter(quaternion<U> const & rhs)
+            {
+                return(quaternion<T>(   static_cast<T>(rhs.R_component_1()),
+                                        static_cast<T>(rhs.R_component_2()),
+                                        static_cast<T>(rhs.R_component_3()),
+                                        static_cast<T>(rhs.R_component_4())));
+            };
+        }
+        
+        
+        // implementation of quaternion specialization
+        
+        
+#define    BOOST_QUATERNION_CONSTRUCTOR_GENERATOR(type)                                                 \
             explicit            quaternion( type const & requested_a = static_cast<type>(0),            \
                                             type const & requested_b = static_cast<type>(0),            \
                                             type const & requested_c = static_cast<type>(0),            \
@@ -452,15 +476,15 @@ namespace boost
             }
         
         
-    #define    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_1(type)         \
+#define    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_1(type)             \
             quaternion<type> &        operator += (type const & rhs) \
             {                                                        \
                 a += rhs;                                            \
                                                                      \
                 return(*this);                                       \
             }
-        
-    #define    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_2(type)                         \
+    
+#define    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_2(type)                             \
             quaternion<type> &        operator += (::std::complex<type> const & rhs) \
             {                                                                        \
                 a += rhs.real();                                                     \
@@ -468,8 +492,8 @@ namespace boost
                                                                                      \
                 return(*this);                                                       \
             }
-        
-    #define    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_3(type)                  \
+    
+#define    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_3(type)                      \
             template<typename X>                                              \
             quaternion<type> &        operator += (quaternion<X> const & rhs) \
             {                                                                 \
@@ -480,16 +504,16 @@ namespace boost
                                                                               \
                 return(*this);                                                \
             }
-        
-    #define    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_1(type)         \
+    
+#define    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_1(type)             \
             quaternion<type> &        operator -= (type const & rhs) \
             {                                                        \
                 a -= rhs;                                            \
                                                                      \
                 return(*this);                                       \
             }
-        
-    #define    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_2(type)                         \
+    
+#define    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_2(type)                             \
             quaternion<type> &        operator -= (::std::complex<type> const & rhs) \
             {                                                                        \
                 a -= rhs.real();                                                     \
@@ -497,8 +521,8 @@ namespace boost
                                                                                      \
                 return(*this);                                                       \
             }
-        
-    #define    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_3(type)                  \
+    
+#define    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_3(type)                      \
             template<typename X>                                              \
             quaternion<type> &        operator -= (quaternion<X> const & rhs) \
             {                                                                 \
@@ -509,8 +533,8 @@ namespace boost
                                                                               \
                 return(*this);                                                \
             }
-        
-    #define    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_1(type)         \
+    
+#define    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_1(type)             \
             quaternion<type> &        operator *= (type const & rhs) \
             {                                                        \
                 a *= rhs;                                            \
@@ -520,8 +544,8 @@ namespace boost
                                                                      \
                 return(*this);                                       \
             }
-        
-    #define    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_2(type)                         \
+    
+#define    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_2(type)                             \
             quaternion<type> &        operator *= (::std::complex<type> const & rhs) \
             {                                                                        \
                 type    ar = rhs.real();                                             \
@@ -539,8 +563,8 @@ namespace boost
                                                                                      \
                 return(*this);                                                       \
             }
-        
-    #define    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_3(type)                  \
+    
+#define    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_3(type)                      \
             template<typename X>                                              \
             quaternion<type> &        operator *= (quaternion<X> const & rhs) \
             {                                                                 \
@@ -561,8 +585,15 @@ namespace boost
                                                                               \
                 return(*this);                                                \
             }
-        
-    #define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_1(type)         \
+    
+// There is quite a lot of repetition in the code below. This is intentional.
+// The last conditional block is the normal form, and the others merely
+// consist of workarounds for various compiler deficiencies. Hopefuly, when
+// more compilers are conformant and we can retire support for those that are
+// not, we will be able to remove the clutter. This is makes the situation
+// (painfully) explicit.
+    
+#define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_1(type)             \
             quaternion<type> &        operator /= (type const & rhs) \
             {                                                        \
                 a /= rhs;                                            \
@@ -572,19 +603,53 @@ namespace boost
                                                                      \
                 return(*this);                                       \
             }
-    
+
 #if defined(__GNUC__) && (__GNUC__ < 3)
+    #define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_2(type)                                            \
+            quaternion<type> &        operator /= (::std::complex<type> const & rhs)                    \
+            {                                                                                           \
+                using    ::std::valarray;                                                               \
+                                                                                                        \
+                valarray<type>    tr(2);                                                                \
+                                                                                                        \
+                tr[0] = rhs.real();                                                                     \
+                tr[1] = rhs.imag();                                                                     \
+                                                                                                        \
+                type            mixam = BOOST_GET_VALARRAY(type,static_cast<type>(1)/abs(tr)).max();    \
+                                                                                                        \
+                tr *= mixam;                                                                            \
+                                                                                                        \
+                valarray<type>    tt(4);                                                                \
+                                                                                                        \
+                tt[0] = +a*tr[0]+b*tr[1];                                                               \
+                tt[1] = -a*tr[1]+b*tr[0];                                                               \
+                tt[2] = +c*tr[0]-d*tr[1];                                                               \
+                tt[3] = +c*tr[1]+d*tr[0];                                                               \
+                                                                                                        \
+                tr *= tr;                                                                               \
+                                                                                                        \
+                tt *= (mixam/tr.sum());                                                                 \
+                                                                                                        \
+                a = tt[0];                                                                              \
+                b = tt[1];                                                                              \
+                c = tt[2];                                                                              \
+                d = tt[3];                                                                              \
+                                                                                                        \
+                return(*this);                                                                          \
+            }
+#elif    defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
     #define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_2(type)                         \
             quaternion<type> &        operator /= (::std::complex<type> const & rhs) \
             {                                                                        \
                 using    ::std::valarray;                                            \
+                using    ::std::abs;                                                 \
                                                                                      \
                 valarray<type>    tr(2);                                             \
                                                                                      \
                 tr[0] = rhs.real();                                                  \
                 tr[1] = rhs.imag();                                                  \
                                                                                      \
-                type mixam = BOOST_GET_VALARRAY(type,static_cast<type>(1)/abs(tr)).max();          \
+                type            mixam = static_cast<type>(1)/abs(tr).max();          \
                                                                                      \
                 tr *= mixam;                                                         \
                                                                                      \
@@ -639,14 +704,51 @@ namespace boost
                                                                                      \
                 return(*this);                                                       \
             }
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */ /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
     
 #if defined(__GNUC__) && (__GNUC__ < 3)
+    #define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_3(type)                                            \
+            template<typename X>                                                                        \
+            quaternion<type> &        operator /= (quaternion<X> const & rhs)                           \
+            {                                                                                           \
+                using    ::std::valarray;                                                               \
+                                                                                                        \
+                valarray<type>    tr(4);                                                                \
+                                                                                                        \
+                tr[0] = static_cast<type>(rhs.R_component_1());                                         \
+                tr[1] = static_cast<type>(rhs.R_component_2());                                         \
+                tr[2] = static_cast<type>(rhs.R_component_3());                                         \
+                tr[3] = static_cast<type>(rhs.R_component_4());                                         \
+                                                                                                        \
+                type            mixam = BOOST_GET_VALARRAY(type,static_cast<type>(1)/abs(tr)).max();    \
+                                                                                                        \
+                tr *= mixam;                                                                            \
+                                                                                                        \
+                valarray<type>    tt(4);                                                                \
+                                                                                                        \
+                tt[0] = +a*tr[0]+b*tr[1]+c*tr[2]+d*tr[3];                                               \
+                tt[1] = -a*tr[1]+b*tr[0]-c*tr[3]+d*tr[2];                                               \
+                tt[2] = -a*tr[2]+b*tr[3]+c*tr[0]-d*tr[1];                                               \
+                tt[3] = -a*tr[3]-b*tr[2]+c*tr[1]+d*tr[0];                                               \
+                                                                                                        \
+                tr *= tr;                                                                               \
+                                                                                                        \
+                tt *= (mixam/tr.sum());                                                                 \
+                                                                                                        \
+                a = tt[0];                                                                              \
+                b = tt[1];                                                                              \
+                c = tt[2];                                                                              \
+                d = tt[3];                                                                              \
+                                                                                                        \
+                return(*this);                                                                          \
+            }
+#elif    defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
     #define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_3(type)                  \
             template<typename X>                                              \
             quaternion<type> &        operator /= (quaternion<X> const & rhs) \
             {                                                                 \
                 using    ::std::valarray;                                     \
+                using    ::std::abs;                                          \
                                                                               \
                 valarray<type>    tr(4);                                      \
                                                                               \
@@ -655,7 +757,7 @@ namespace boost
                 tr[2] = static_cast<type>(rhs.R_component_3());               \
                 tr[3] = static_cast<type>(rhs.R_component_4());               \
                                                                               \
-                type            mixam = BOOST_GET_VALARRAY(type,static_cast<type>(1)/abs(tr)).max();   \
+                type            mixam = static_cast<type>(1)/abs(tr).max();   \
                                                                               \
                 tr *= mixam;                                                  \
                                                                               \
@@ -713,33 +815,33 @@ namespace boost
                                                                               \
                 return(*this);                                                \
             }
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */ /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
     
-    #define    BOOST_QUATERNION_MEMBER_ADD_GENERATOR(type)   \
-            BOOST_QUATERNION_MEMBER_ADD_GENERATOR_1(type)    \
-            BOOST_QUATERNION_MEMBER_ADD_GENERATOR_2(type)    \
-            BOOST_QUATERNION_MEMBER_ADD_GENERATOR_3(type)
+#define    BOOST_QUATERNION_MEMBER_ADD_GENERATOR(type)   \
+        BOOST_QUATERNION_MEMBER_ADD_GENERATOR_1(type)    \
+        BOOST_QUATERNION_MEMBER_ADD_GENERATOR_2(type)    \
+        BOOST_QUATERNION_MEMBER_ADD_GENERATOR_3(type)
         
-    #define    BOOST_QUATERNION_MEMBER_SUB_GENERATOR(type)   \
-            BOOST_QUATERNION_MEMBER_SUB_GENERATOR_1(type)    \
-            BOOST_QUATERNION_MEMBER_SUB_GENERATOR_2(type)    \
-            BOOST_QUATERNION_MEMBER_SUB_GENERATOR_3(type)
+#define    BOOST_QUATERNION_MEMBER_SUB_GENERATOR(type)   \
+        BOOST_QUATERNION_MEMBER_SUB_GENERATOR_1(type)    \
+        BOOST_QUATERNION_MEMBER_SUB_GENERATOR_2(type)    \
+        BOOST_QUATERNION_MEMBER_SUB_GENERATOR_3(type)
         
-    #define    BOOST_QUATERNION_MEMBER_MUL_GENERATOR(type)   \
-            BOOST_QUATERNION_MEMBER_MUL_GENERATOR_1(type)    \
-            BOOST_QUATERNION_MEMBER_MUL_GENERATOR_2(type)    \
-            BOOST_QUATERNION_MEMBER_MUL_GENERATOR_3(type)
+#define    BOOST_QUATERNION_MEMBER_MUL_GENERATOR(type)   \
+        BOOST_QUATERNION_MEMBER_MUL_GENERATOR_1(type)    \
+        BOOST_QUATERNION_MEMBER_MUL_GENERATOR_2(type)    \
+        BOOST_QUATERNION_MEMBER_MUL_GENERATOR_3(type)
         
-    #define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR(type)   \
-            BOOST_QUATERNION_MEMBER_DIV_GENERATOR_1(type)    \
-            BOOST_QUATERNION_MEMBER_DIV_GENERATOR_2(type)    \
-            BOOST_QUATERNION_MEMBER_DIV_GENERATOR_3(type)
-            
-    #define    BOOST_QUATERNION_MEMBER_ALGEBRAIC_GENERATOR(type)   \
-            BOOST_QUATERNION_MEMBER_ADD_GENERATOR(type)            \
-            BOOST_QUATERNION_MEMBER_SUB_GENERATOR(type)            \
-            BOOST_QUATERNION_MEMBER_MUL_GENERATOR(type)            \
-            BOOST_QUATERNION_MEMBER_DIV_GENERATOR(type)
+#define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR(type)   \
+        BOOST_QUATERNION_MEMBER_DIV_GENERATOR_1(type)    \
+        BOOST_QUATERNION_MEMBER_DIV_GENERATOR_2(type)    \
+        BOOST_QUATERNION_MEMBER_DIV_GENERATOR_3(type)
+        
+#define    BOOST_QUATERNION_MEMBER_ALGEBRAIC_GENERATOR(type)   \
+        BOOST_QUATERNION_MEMBER_ADD_GENERATOR(type)            \
+        BOOST_QUATERNION_MEMBER_SUB_GENERATOR(type)            \
+        BOOST_QUATERNION_MEMBER_MUL_GENERATOR(type)            \
+        BOOST_QUATERNION_MEMBER_DIV_GENERATOR(type)
         
         
         template<>
@@ -754,13 +856,17 @@ namespace boost
             // UNtemplated copy constructor
             // (this is taken care of by the compiler itself)
             
-            // explicit copy constructors (converters)
+            // explicit copy constructors (precision-loosing converters)
             
-            // (outline implementation necessary)
-            explicit            quaternion(quaternion<double> const & a_recopier);
+            explicit            quaternion(quaternion<double> const & a_recopier)
+            {
+                *this = detail::quaternion_type_converter<float, double>(a_recopier);
+            }
             
-            // (outline implementation necessary)
-            explicit            quaternion(quaternion<long double> const & a_recopier);
+            explicit            quaternion(quaternion<long double> const & a_recopier)
+            {
+                *this = detail::quaternion_type_converter<float, long double>(a_recopier);
+            }
             
             // destructor
             // (this is taken care of by the compiler itself)
@@ -813,13 +919,17 @@ namespace boost
             
             // converting copy constructor
             
-            // (outline implementation)
-            explicit                quaternion(quaternion<float> const & a_recopier);
+            explicit                quaternion(quaternion<float> const & a_recopier)
+            {
+                *this = detail::quaternion_type_converter<double, float>(a_recopier);
+            }
             
-            // explicit copy constructors (converters)
+            // explicit copy constructors (precision-loosing converters)
             
-            // (outline implementation necessary)
-            explicit                quaternion(quaternion<long double> const & a_recopier);
+            explicit                quaternion(quaternion<long double> const & a_recopier)
+            {
+                *this = detail::quaternion_type_converter<double, long double>(a_recopier);
+            }
             
             // destructor
             // (this is taken care of by the compiler itself)
@@ -872,11 +982,15 @@ namespace boost
             
             // converting copy constructors
             
-            // (outline implementation)
-            explicit                    quaternion(quaternion<float> const & a_recopier);
+            explicit                    quaternion(quaternion<float> const & a_recopier)
+            {
+                *this = detail::quaternion_type_converter<long double, float>(a_recopier);
+            }
             
-            // (outline implementation)
-            explicit                    quaternion(quaternion<double> const & a_recopier);
+            explicit                    quaternion(quaternion<double> const & a_recopier)
+            {
+                *this = detail::quaternion_type_converter<long double, double>(a_recopier);
+            }
             
             // destructor
             // (this is taken care of by the compiler itself)
@@ -915,100 +1029,69 @@ namespace boost
         };
         
         
-    #undef    BOOST_QUATERNION_MEMBER_ALGEBRAIC_GENERATOR
-    #undef    BOOST_QUATERNION_MEMBER_ADD_GENERATOR
-    #undef    BOOST_QUATERNION_MEMBER_SUB_GENERATOR
-    #undef    BOOST_QUATERNION_MEMBER_MUL_GENERATOR
-    #undef    BOOST_QUATERNION_MEMBER_DIV_GENERATOR
-    #undef    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_1
-    #undef    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_2
-    #undef    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_3
-    #undef    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_1
-    #undef    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_2
-    #undef    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_3
-    #undef    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_1
-    #undef    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_2
-    #undef    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_3
-    #undef    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_1
-    #undef    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_2
-    #undef    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_3
+#undef    BOOST_QUATERNION_MEMBER_ALGEBRAIC_GENERATOR
+#undef    BOOST_QUATERNION_MEMBER_ADD_GENERATOR
+#undef    BOOST_QUATERNION_MEMBER_SUB_GENERATOR
+#undef    BOOST_QUATERNION_MEMBER_MUL_GENERATOR
+#undef    BOOST_QUATERNION_MEMBER_DIV_GENERATOR
+#undef    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_1
+#undef    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_2
+#undef    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_3
+#undef    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_1
+#undef    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_2
+#undef    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_3
+#undef    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_1
+#undef    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_2
+#undef    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_3
+#undef    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_1
+#undef    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_2
+#undef    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_3
         
-    #undef    BOOST_QUATERNION_CONSTRUCTOR_GENERATOR
-        
-        
-    #undef    BOOST_QUATERNION_MEMBER_ASSIGNMENT_GENERATOR
-        
-    #undef    BOOST_QUATERNION_MEMBER_DATA_GENERATOR
-        
-    #undef    BOOST_QUATERNION_ACCESSOR_GENERATOR
+#undef    BOOST_QUATERNION_CONSTRUCTOR_GENERATOR
         
         
-        // outline implementations
+#undef    BOOST_QUATERNION_MEMBER_ASSIGNMENT_GENERATOR
         
-    #define    BOOST_QUATERNION_COPY_CONSTRUCTOR_BODY(type)    \
-        :   a(static_cast<type>(a_recopier.R_component_1())),  \
-            b(static_cast<type>(a_recopier.R_component_2())),  \
-            c(static_cast<type>(a_recopier.R_component_3())),  \
-            d(static_cast<type>(a_recopier.R_component_4()))   \
-        {                                                      \
-        }                                                      \
+#undef    BOOST_QUATERNION_MEMBER_DATA_GENERATOR
         
-        quaternion<float>::quaternion(quaternion<double> const & a_recopier)
-        BOOST_QUATERNION_COPY_CONSTRUCTOR_BODY(float)
-        
-        quaternion<float>::quaternion(quaternion<long double> const & a_recopier)
-        BOOST_QUATERNION_COPY_CONSTRUCTOR_BODY(float)
-        
-        quaternion<double>::quaternion(quaternion<float> const & a_recopier)
-        BOOST_QUATERNION_COPY_CONSTRUCTOR_BODY(double)
-        
-        quaternion<double>::quaternion(quaternion<long double> const & a_recopier)
-        BOOST_QUATERNION_COPY_CONSTRUCTOR_BODY(double)
-        
-        quaternion<long double>::quaternion(quaternion<float> const & a_recopier)
-        BOOST_QUATERNION_COPY_CONSTRUCTOR_BODY(long double)
-        
-        quaternion<long double>::quaternion(quaternion<double> const & a_recopier)
-        BOOST_QUATERNION_COPY_CONSTRUCTOR_BODY(long double)
-        
-    #undef    BOOST_QUATERNION_COPY_CONSTRUCTOR_BODY
+#undef    BOOST_QUATERNION_ACCESSOR_GENERATOR
         
         
         // operators
         
-    #define    BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)  \
+#define    BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)      \
         {                                                    \
             quaternion<T>    res(lhs);                       \
             res op##= rhs;                                   \
             return(res);                                     \
         }
         
-    #define    BOOST_QUATERNION_OPERATOR_GENERATOR_1_L(op)                                              \
+#define    BOOST_QUATERNION_OPERATOR_GENERATOR_1_L(op)                                                  \
         template<typename T>                                                                            \
         inline quaternion<T>    operator op (T const & lhs, quaternion<T> const & rhs)                  \
         BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)
         
-    #define    BOOST_QUATERNION_OPERATOR_GENERATOR_1_R(op)                                              \
+#define    BOOST_QUATERNION_OPERATOR_GENERATOR_1_R(op)                                                  \
         template<typename T>                                                                            \
         inline quaternion<T>    operator op (quaternion<T> const & lhs, T const & rhs)                  \
         BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)
         
-    #define    BOOST_QUATERNION_OPERATOR_GENERATOR_2_L(op)                                              \
+#define    BOOST_QUATERNION_OPERATOR_GENERATOR_2_L(op)                                                  \
         template<typename T>                                                                            \
         inline quaternion<T>    operator op (::std::complex<T> const & lhs, quaternion<T> const & rhs)  \
         BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)
         
-    #define    BOOST_QUATERNION_OPERATOR_GENERATOR_2_R(op)                                              \
+#define    BOOST_QUATERNION_OPERATOR_GENERATOR_2_R(op)                                                  \
         template<typename T>                                                                            \
         inline quaternion<T>    operator op (quaternion<T> const & lhs, ::std::complex<T> const & rhs)  \
         BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)
         
-    #define    BOOST_QUATERNION_OPERATOR_GENERATOR_3(op)                                                \
+#define    BOOST_QUATERNION_OPERATOR_GENERATOR_3(op)                                                    \
         template<typename T>                                                                            \
         inline quaternion<T>    operator op (quaternion<T> const & lhs, quaternion<T> const & rhs)      \
         BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)
         
-    #define    BOOST_QUATERNION_OPERATOR_GENERATOR(op) \
+#define    BOOST_QUATERNION_OPERATOR_GENERATOR(op)     \
         BOOST_QUATERNION_OPERATOR_GENERATOR_1_L(op)    \
         BOOST_QUATERNION_OPERATOR_GENERATOR_1_R(op)    \
         BOOST_QUATERNION_OPERATOR_GENERATOR_2_L(op)    \
@@ -1022,15 +1105,15 @@ namespace boost
         BOOST_QUATERNION_OPERATOR_GENERATOR(/)
 
 
-    #undef    BOOST_QUATERNION_OPERATOR_GENERATOR
+#undef    BOOST_QUATERNION_OPERATOR_GENERATOR
         
-    #undef    BOOST_QUATERNION_OPERATOR_GENERATOR_1_L
-    #undef    BOOST_QUATERNION_OPERATOR_GENERATOR_1_R
-    #undef    BOOST_QUATERNION_OPERATOR_GENERATOR_2_L
-    #undef    BOOST_QUATERNION_OPERATOR_GENERATOR_2_R
-    #undef    BOOST_QUATERNION_OPERATOR_GENERATOR_3
+#undef    BOOST_QUATERNION_OPERATOR_GENERATOR_1_L
+#undef    BOOST_QUATERNION_OPERATOR_GENERATOR_1_R
+#undef    BOOST_QUATERNION_OPERATOR_GENERATOR_2_L
+#undef    BOOST_QUATERNION_OPERATOR_GENERATOR_2_R
+#undef    BOOST_QUATERNION_OPERATOR_GENERATOR_3
 
-    #undef    BOOST_QUATERNION_OPERATOR_GENERATOR_BODY
+#undef    BOOST_QUATERNION_OPERATOR_GENERATOR_BODY
         
         
         template<typename T>
@@ -1107,9 +1190,9 @@ namespace boost
         }
         
         
-    #define    BOOST_QUATERNION_NOT_EQUAL_GENERATOR  \
-        {                                            \
-            return(!(lhs == rhs));                   \
+#define    BOOST_QUATERNION_NOT_EQUAL_GENERATOR  \
+        {                                        \
+            return(!(lhs == rhs));               \
         }
         
         template<typename T>
@@ -1132,7 +1215,7 @@ namespace boost
         inline bool                                operator != (quaternion<T> const & lhs, quaternion<T> const & rhs)
         BOOST_QUATERNION_NOT_EQUAL_GENERATOR
         
-    #undef    BOOST_QUATERNION_NOT_EQUAL_GENERATOR
+#undef    BOOST_QUATERNION_NOT_EQUAL_GENERATOR
         
         
         // Note:    we allow the following formats, whith a, b, c, and d reals
@@ -1147,16 +1230,16 @@ namespace boost
         template<typename T, typename charT, class traits>
         ::std::basic_istream<charT,traits> &    operator >> (    ::std::basic_istream<charT,traits> & is,
                                                                 quaternion<T> & q)
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
         {
 #ifdef    BOOST_NO_STD_LOCALE
 #else
             const ::std::ctype<charT> & ct = ::std::use_facet< ::std::ctype<charT> >(is.getloc());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
             
 #if defined(__GNUC__) && __GNUC__ < 3
             typedef char    charT;
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
             
             T    a = T();
             T    b = T();
@@ -1173,11 +1256,11 @@ namespace boost
             
             if    (!is.good())    goto finish;
             
-#if defined(__GNUC__) && __GNUC__ < 3
+#ifdef    BOOST_NO_STD_LOCALE
             cc = ch;
 #else
             cc = ct.narrow(ch, char());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
             
             if    (cc == '(')                            // read "(", possible: (a), (a,b), (a,b,c), (a,b,c,d), (a,(c)), (a,(c,d)), ((a)), ((a),c), ((a),(c)), ((a),(c,d)), ((a,b)), ((a,b),c), ((a,b),(c)), ((a,b,),(c,d,))
             {
@@ -1185,11 +1268,11 @@ namespace boost
                 
                 if    (!is.good())    goto finish;
                 
-#if defined(__GNUC__) && __GNUC__ < 3
+#ifdef    BOOST_NO_STD_LOCALE
                 cc = ch;
 #else
                 cc = ct.narrow(ch, char());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
                 
                 if    (cc == '(')                        // read "((", possible: ((a)), ((a),c), ((a),(c)), ((a),(c,d)), ((a,b)), ((a,b),c), ((a,b),(c)), ((a,b,),(c,d,))
                 {
@@ -1205,11 +1288,11 @@ namespace boost
                     
                     if    (!is.good())    goto finish;
                     
-#if defined(__GNUC__) && __GNUC__ < 3
+#ifdef    BOOST_NO_STD_LOCALE
                     cc = ch;
 #else
                     cc = ct.narrow(ch, char());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
                     
                     if        (cc == ')')                    // format: ((a)) or ((a,b))
                     {
@@ -1227,11 +1310,11 @@ namespace boost
                         
                         if    (!is.good())    goto finish;
                         
-#if defined(__GNUC__) && __GNUC__ < 3
+#ifdef    BOOST_NO_STD_LOCALE
                         cc = ch;
 #else
                         cc = ct.narrow(ch, char());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
                         
                         if    (cc == ')')                    // format: ((a),c), ((a),(c)), ((a),(c,d)), ((a,b),c), ((a,b),(c)) or ((a,b,),(c,d,))
                         {
@@ -1243,7 +1326,7 @@ namespace boost
                             is.setstate(::std::ios::failbit);
 #else
                             is.setstate(::std::ios_base::failbit);
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
                         }
                     }
                     else                                // error
@@ -1252,7 +1335,7 @@ namespace boost
                         is.setstate(::std::ios::failbit);
 #else
                         is.setstate(::std::ios_base::failbit);
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
                     }
                 }
                 else                                // read "(a", possible: (a), (a,b), (a,b,c), (a,b,c,d), (a,(c)), (a,(c,d))
@@ -1267,11 +1350,11 @@ namespace boost
                     
                     if    (!is.good())    goto finish;
                     
-#if defined(__GNUC__) && __GNUC__ < 3
+#ifdef    BOOST_NO_STD_LOCALE
                     cc = ch;
 #else
                     cc = ct.narrow(ch, char());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
                     
                     if        (cc == ')')                    // format: (a)
                     {
@@ -1283,11 +1366,11 @@ namespace boost
                         
                         if    (!is.good())    goto finish;
                         
-#if defined(__GNUC__) && __GNUC__ < 3
+#ifdef    BOOST_NO_STD_LOCALE
                         cc = ch;
 #else
                         cc = ct.narrow(ch, char());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
                         
                         if    (cc == '(')                // read "(a,(", possible: (a,(c)), (a,(c,d))
                         {
@@ -1304,11 +1387,11 @@ namespace boost
                             
                             if    (!is.good())    goto finish;
                             
-#if defined(__GNUC__) && __GNUC__ < 3
+#ifdef    BOOST_NO_STD_LOCALE
                             cc = ch;
 #else
                             cc = ct.narrow(ch, char());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
                             
                             if    (cc == ')')                // format: (a,(c)) or (a,(c,d))
                             {
@@ -1320,7 +1403,7 @@ namespace boost
                                 is.setstate(::std::ios::failbit);
 #else
                                 is.setstate(::std::ios_base::failbit);
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
                             }
                         }
                         else                        // read "(a,b", possible: (a,b), (a,b,c), (a,b,c,d)
@@ -1335,11 +1418,11 @@ namespace boost
                             
                             if    (!is.good())    goto finish;
                             
-#if defined(__GNUC__) && __GNUC__ < 3
+#ifdef    BOOST_NO_STD_LOCALE
                             cc = ch;
 #else
                             cc = ct.narrow(ch, char());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
                             
                             if    (cc == ')')                // format: (a,b)
                             {
@@ -1355,11 +1438,11 @@ namespace boost
                                 
                                 if    (!is.good())    goto finish;
                                 
-#if defined(__GNUC__) && __GNUC__ < 3
+#ifdef    BOOST_NO_STD_LOCALE
                                 cc = ch;
 #else
                                 cc = ct.narrow(ch, char());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
                                 
                                 if        (cc == ')')        // format: (a,b,c)
                                 {
@@ -1375,11 +1458,11 @@ namespace boost
                                     
                                     if    (!is.good())    goto finish;
                                     
-#if defined(__GNUC__) && __GNUC__ < 3
+#ifdef    BOOST_NO_STD_LOCALE
                                     cc = ch;
 #else
                                     cc = ct.narrow(ch, char());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
                                     
                                     if    (cc == ')')        // format: (a,b,c,d)
                                     {
@@ -1391,7 +1474,7 @@ namespace boost
                                         is.setstate(::std::ios::failbit);
 #else
                                         is.setstate(::std::ios_base::failbit);
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
                                     }
                                 }
                                 else                    // error
@@ -1400,7 +1483,7 @@ namespace boost
                                     is.setstate(::std::ios::failbit);
 #else
                                     is.setstate(::std::ios_base::failbit);
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
                                 }
                             }
                             else                        // error
@@ -1409,7 +1492,7 @@ namespace boost
                                 is.setstate(::std::ios::failbit);
 #else
                                 is.setstate(::std::ios_base::failbit);
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
                             }
                         }
                     }
@@ -1419,7 +1502,7 @@ namespace boost
                         is.setstate(::std::ios::failbit);
 #else
                         is.setstate(::std::ios_base::failbit);
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
                     }
                 }
             }
@@ -1447,19 +1530,19 @@ namespace boost
         template<typename T, typename charT, class traits>
         ::std::basic_ostream<charT,traits> &    operator << (    ::std::basic_ostream<charT,traits> & os,
                                                                 quaternion<T> const & q)
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
         {
 #if defined(__GNUC__) && __GNUC__ < 3
             ::std::ostringstream                        s;
 #else
             ::std::basic_ostringstream<charT,traits>    s;
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
             
             s.flags(os.flags());
 #ifdef    BOOST_NO_STD_LOCALE
 #else
             s.imbue(os.getloc());
-#endif
+#endif /* BOOST_NO_STD_LOCALE */
             s.precision(os.precision());
             
             s << '('    << q.R_component_1() << ','
@@ -1487,46 +1570,58 @@ namespace boost
         }
         
         
-    #define    BOOST_QUATERNION_VALARRAY_LOADER \
-            using    ::std::valarray;           \
-                                                \
-            valarray<T>    temp(4);             \
-                                                \
-            temp[0] = q.R_component_1();        \
-            temp[1] = q.R_component_2();        \
-            temp[2] = q.R_component_3();        \
+#define    BOOST_QUATERNION_VALARRAY_LOADER    \
+            using    ::std::valarray;        \
+                                            \
+            valarray<T>    temp(4);            \
+                                            \
+            temp[0] = q.R_component_1();    \
+            temp[1] = q.R_component_2();    \
+            temp[2] = q.R_component_3();    \
             temp[3] = q.R_component_4();
         
         
         template<typename T>
         inline T                                sup(quaternion<T> const & q)
         {
+#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+            using    ::std::abs;
+#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
+            
             BOOST_QUATERNION_VALARRAY_LOADER
             
 #if defined(__GNUC__) && __GNUC__ < 3
             return(BOOST_GET_VALARRAY(T, abs(temp)).max());
 #else
             return(abs(temp).max());
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
         }
         
         
         template<typename T>
         inline T                                l1(quaternion<T> const & q)
         {
+#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+            using    ::std::abs;
+#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
+            
             BOOST_QUATERNION_VALARRAY_LOADER
             
 #if defined(__GNUC__) && __GNUC__ < 3
             return(BOOST_GET_VALARRAY(T, abs(temp)).sum());
 #else
             return(abs(temp).sum());
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
         }
         
         
         template<typename T>
         inline T                                abs(quaternion<T> const & q)
         {
+#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+            using    ::std::abs;
+#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
+            
             using    ::std::sqrt;
             
             BOOST_QUATERNION_VALARRAY_LOADER
@@ -1535,7 +1630,7 @@ namespace boost
             T            maxim = BOOST_GET_VALARRAY(T, abs(temp)).max();    // overflow protection
 #else
             T            maxim = abs(temp).max();    // overflow protection
-#endif
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
             
             if    (maxim == static_cast<T>(0))
             {
@@ -1556,7 +1651,7 @@ namespace boost
         }
         
         
-    #undef    BOOST_QUATERNION_VALARRAY_LOADER
+#undef    BOOST_QUATERNION_VALARRAY_LOADER
         
         
         // Note:    This is the Cayley norm, not the Euclidian norm...
@@ -1696,7 +1791,7 @@ namespace boost
             
             T    z = abs(unreal(q));
             
-            T    w = sinc_pi<T>(z);
+            T    w = sinc_pi(z);
             
             return(u*quaternion<T>(cos(z),
                 w*q.R_component_2(), w*q.R_component_3(),
@@ -1772,7 +1867,7 @@ namespace boost
         
         template<typename T>
         quaternion<T>                            pow(quaternion<T> const & q,
-                                                     int n)
+                                                    int n)
         {
             if        (n > 1)
             {
@@ -1807,8 +1902,8 @@ namespace boost
 
 
 #if defined(__GNUC__) && (__GNUC__ < 3)
-#undef    BOOST_GET_VALARRAY
-#endif
+    #undef    BOOST_GET_VALARRAY
+#endif /* defined(__GNUC__) && (__GNUC__ < 3) */
 
 
 #endif /* BOOST_QUATERNION_HPP */
