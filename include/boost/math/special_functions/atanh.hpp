@@ -17,6 +17,9 @@
 #include <stdexcept>
 
 
+#include <boost/config.hpp>
+
+
 // This is the inverse of the hyperbolic tangent function.
 
 namespace boost
@@ -210,12 +213,12 @@ namespace boost
             
             using    ::std::numeric_limits;
             
-            typedef    detail::atanh_helper1_t<T, ::std::numeric_limits<T>::has_infinity>    helper1_type;
-            typedef    detail::atanh_helper2_t<T, ::std::numeric_limits<T>::has_quiet_NaN>    helper2_type;
+            typedef  detail::atanh_helper1_t<T, ::std::numeric_limits<T>::has_infinity>    helper1_type;
+            typedef  detail::atanh_helper2_t<T, ::std::numeric_limits<T>::has_quiet_NaN>    helper2_type;
             
             
-            T const            one = static_cast<T>(1);
-            T const            two = static_cast<T>(2);
+            T const           one = static_cast<T>(1);
+            T const           two = static_cast<T>(2);
             
             static T const    taylor_2_bound = sqrt(numeric_limits<T>::epsilon());
             static T const    taylor_n_bound = sqrt(taylor_2_bound);

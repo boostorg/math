@@ -17,6 +17,9 @@
 #include <stdexcept>
 
 
+#include <boost/config.hpp>
+
+
 // This is the inverse of the hyperbolic sine function.
 
 namespace boost

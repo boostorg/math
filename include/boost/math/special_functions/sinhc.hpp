@@ -17,6 +17,9 @@
 #include <stdexcept>
 
 
+#include <boost/config.hpp>
+
+
 // These are the the "Hyperbolic Sinus Cardinal" functions.
 
 namespace boost

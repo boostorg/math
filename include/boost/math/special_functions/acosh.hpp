@@ -17,6 +17,9 @@
 #include <stdexcept>
 
 
+#include <boost/config.hpp>
+
+
 // This is the inverse of the hyperbolic cosine function.
 
 namespace boost
@@ -63,7 +66,7 @@ namespace boost
                 else
                 {
                     ::std::string        error_reporting("Argument to atanh is strictly greater than +1 or strictly smaller than -1!");
-                    ::std::domain_error    bad_argument(error_reporting);
+                    ::std::domain_error  bad_argument(error_reporting);
                     
                     throw(bad_argument);
                 }
@@ -122,7 +125,7 @@ namespace boost
                 static T    get_NaN()
                 {
                     ::std::string        error_reporting("Argument to acosh is greater than or equal to +1!");
-                    ::std::domain_error    bad_argument(error_reporting);
+                    ::std::domain_error  bad_argument(error_reporting);
                     
                     throw(bad_argument);
                 }

@@ -17,6 +17,9 @@
 #include <stdexcept>
 
 
+#include <boost/config.hpp>
+
+
 // These are the the "Sinus Cardinal" functions.
 
 namespace boost
