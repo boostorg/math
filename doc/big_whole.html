@@ -401,17 +401,31 @@ boost::math::swap( boost::math::big_whole &amp;a, boost::math::big_whole &amp;b 
 		<strong>Returns:</strong> whether the given relation applies to <var>lhs</var> and <var>rhs</var><br>
 		<strong>Note:</strong> calls <code>big_whole::compare()</code>
 
-	<dt><code>boost::math::big_whole  boost::math::operator &amp;( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
-	    <code>boost::math::big_whole  boost::math::operator |( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
-	    <code>boost::math::big_whole  boost::math::operator ^( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
+	<dt><code>boost::math::big_whole  boost::math::operator &amp;( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
 	<dd>
-		<strong>Returns:</strong> for each operator <var>$$</var>, an object <var>x</var>, where each bit <var>x<sub>i</sub></var> has the value <code><var>lhs<sub>i</sub></var> <var>$$</var> <var>rhs<sub>i</sub></var></code> (<var>&amp;</var> represents AND, <var>|</var> for OR, and <var>^</var> for EXCLUSIVE-OR)<br>
+		<strong>Returns:</strong> an object produced by a bitwise-AND combination of the bits in <var>lhs</var> and <var>rhs</var> (a bit in the result is set if both the corresponding bits in <var>lhs</var> and <var>rhs</var> are set, otherwise the bit is unset)<br>
 		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
 
-	<dt><code>boost::math::big_whole  boost::math::operator &gt;&gt;( boost::math::big_whole const &amp;value, boost::math::big_whole const &amp;shift );</code><br>
-	    <code>boost::math::big_whole  boost::math::operator &lt;&lt;( boost::math::big_whole const &amp;value, boost::math::big_whole const &amp;shift );</code>
+	<dt><code>boost::math::big_whole  boost::math::operator |( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
 	<dd>
-		<strong>Returns:</strong> <var>value</var> * 2<sup><var>x</var></sup>, where <var>x</var> is -<var>shift</var> for the left-shift operator (<var>&gt;&gt;</var>) and +<var>shift</var> for the right-shift operator (<var>&lt;&lt;</var>)<br>
+		<strong>Returns:</strong> an object produced by a bitwise-OR combination of the bits in <var>lhs</var> and <var>rhs</var> (a bit in the result is set if at least one of the corresponding bits in <var>lhs</var> or <var>rhs</var> is set, otherwise the bit is unset)<br>
+		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
+
+	<dt><code>boost::math::big_whole  boost::math::operator ^( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
+	<dd>
+		<strong>Returns:</strong> an object produced by a bitwise-XOR combination of the bits in <var>lhs</var> and <var>rhs</var> (a bit in the result is set if the corresponding bits in <var>lhs</var> and <var>rhs</var> differ, otherwise the bit is unset)<br>
+		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
+
+	<dt><code>boost::math::big_whole  boost::math::operator &gt;&gt;( boost::math::big_whole const &amp;value, boost::math::big_whole const &amp;shift );</code>
+	<dd>
+		<strong>Returns:</strong> <var>value</var> / 2<sup><var>shift</var></sup><br>
+		<strong>Throws:</strong> <code>std::underflow_error</code> if <var>shift</var> cannot be completely represented by a <code>std::size_t</code> object<br>
+		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
+
+	<dt><code>boost::math::big_whole  boost::math::operator &lt;&lt;( boost::math::big_whole const &amp;value, boost::math::big_whole const &amp;shift );</code>
+	<dd>
+		<strong>Returns:</strong> <var>value</var> * 2<sup><var>shift</var></sup><br>
+		<strong>Throws:</strong> <code>std::overflow_error</code> if <var>shift</var> cannot be completely represented by a <code>std::size_t</code> object or if the resulting value has set bits at indices beyond <code>std::size_t</code>'s range<br>
 		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
 
 	<dt><code>boost::math::big_whole &amp;  boost::math::operator &amp;=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
