@@ -16,6 +16,7 @@
 #include <cstddef>    // for std::size_t
 #include <limits>     // for std::numeric_limits
 #include <set>        // for std::set
+#include <stdexcept>  // for std::range_error
 #include <valarray>   // for std::valarray
 
 
@@ -1551,6 +1552,35 @@ bigwhole_bitwise_and_not_unit_test
     BOOST_CHECK_EQUAL( de, and_not(d, e) ); BOOST_CHECK_EQUAL( ed, and_not(e, d) );
 }
 
+// Unit test for unary + and - operators
+void
+bigwhole_unary_plus_minus_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::range_error;
+
+    big_whole const  z;
+    big_whole const  a = !z;
+    big_whole const  b = a << ( wlimits_type::digits + 3 );
+    big_whole const  c = a | b;
+
+    // plus
+    BOOST_CHECK_EQUAL( z, +z );
+    BOOST_CHECK_EQUAL( a, +a );
+    BOOST_CHECK_EQUAL( b, +b );
+    BOOST_CHECK_EQUAL( c, +c );
+
+    // minus (hope we don't get any out-of-memory exceptions)
+    BOOST_CHECK_NO_THROW( -z );
+    BOOST_CHECK_EQUAL( z, -z );
+
+    BOOST_CHECK_THROW( -a, range_error );
+    BOOST_CHECK_THROW( -b, range_error );
+    BOOST_CHECK_THROW( -c, range_error );
+}
+
 
 // Unit test program
 boost::unit_test_framework::test_suite *
@@ -1587,6 +1617,8 @@ init_unit_test_suite
     test->add( BOOST_TEST_CASE(bigwhole_right_shift_unit_test) );
 
     test->add( BOOST_TEST_CASE(bigwhole_bitwise_and_not_unit_test) );
+
+    test->add( BOOST_TEST_CASE(bigwhole_unary_plus_minus_unit_test) );
 
     return test;
 }

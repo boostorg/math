@@ -36,6 +36,8 @@ void  swap( big_whole &a, big_whole &b );
 big_whole  and_not( big_whole const &a, big_whole const &b );
 
 big_whole  operator !( big_whole const &w );
+big_whole  operator +( big_whole const &w );
+big_whole  operator -( big_whole const &w );
 
 bool  operator ==( big_whole const &lhs, big_whole const &rhs );
 bool  operator !=( big_whole const &lhs, big_whole const &rhs );
@@ -127,6 +129,8 @@ public:
 
     // Self-operator mutators
     void  not_self();
+    void  same_self();
+    void  negate_self();
 
     // Object-accessing operations
     int  compare( self_type const &other ) const;
@@ -166,6 +170,10 @@ protected:
     static  va_type  do_rshift( va_type const &b, size_type e );
 
     static  va_type  do_andnot( va_type const &a, va_type const &b );
+
+    static  void  negativity_fail();
+
+    static  va_type  do_trim( va_type const &v );
 
 private:
     // The non-assignment operators are the primary routines
@@ -666,6 +674,28 @@ big_whole::not_self
     this->x_.reset( this->any() ? NULL : new va_type(1u, 1) );
 }
 
+inline
+void
+big_whole::same_self
+(
+)
+{
+    this->x_.reset( this->none() ? NULL : new va_type(self_type::do_trim(
+     *this->x_ )) );
+}
+
+inline
+void
+big_whole::negate_self
+(
+)
+{
+    if ( this->any() )
+    {
+        self_type::negativity_fail();
+    }
+}
+
 
 //  Arbitrary-length whole-number object-accessing member definitions  -------//
 
@@ -1057,6 +1087,25 @@ big_whole::do_andnot
     return temp;
 }
 
+inline
+void
+big_whole::negativity_fail
+(
+)
+{
+    throw std::range_error( "negative value was needed" );
+}
+
+inline
+big_whole::va_type
+big_whole::do_trim
+(
+    big_whole::va_type const &  v
+)
+{
+    return v[ std::slice(0, self_type::wlength( v ), 1) ];
+}
+
 
 //  Arbitrary-length whole-number helper member function definitions  --------//
 
@@ -1288,17 +1337,23 @@ and_not
 
 //  Arbitrary-length whole-number non-member operator definitions  -----------//
 
-inline
-big_whole
-operator !
-(
-    big_whole const &  w
-)
-{
-    big_whole  temp( w );
+#define BOOST_PRIVATE_UNARY_OP( Op, Method )  \
+    inline                                    \
+    big_whole                                 \
+    operator Op                               \
+    (                                         \
+        big_whole const &  w                  \
+    )                                         \
+    {                                         \
+        big_whole  temp( w );                 \
+        return temp. Method (), temp;         \
+    }
 
-    return temp.not_self(), temp;
-}
+BOOST_PRIVATE_UNARY_OP( !, not_self )
+BOOST_PRIVATE_UNARY_OP( +, same_self )
+BOOST_PRIVATE_UNARY_OP( -, negate_self )
+
+#undef BOOST_PRIVATE_UNARY_OP
 
 #define BOOST_PRIVATE_COMPARE_OP( Op )   \
     inline                               \

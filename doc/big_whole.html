@@ -68,6 +68,8 @@ void  swap( big_whole &amp;a, big_whole &amp;b );
 big_whole  and_not( big_whole const &amp;a, big_whole const &amp;b );
 
 big_whole  operator !( big_whole const &amp;w );
+big_whole  operator +( big_whole const &amp;w );
+big_whole  operator -( big_whole const &amp;w );
 
 bool  operator ==( big_whole const &amp;lhs, big_whole const &amp;rhs );
 bool  operator !=( big_whole const &amp;lhs, big_whole const &amp;rhs );
@@ -168,6 +170,8 @@ public:
 
     // Self-operator mutators
     void  not_self();
+    void  same_self();
+    void  negate_self();
 
     // Object-accessing operations
     int  compare( big_whole const &amp;other ) const;
@@ -353,6 +357,18 @@ public:
 	<dd>
 		<strong>Effects:</strong> changes the internal state so a value of zero becomes one and any nonzero value becomes zero<br>
 		<strong>Rationale:</strong> doing <code>x = !x</code> without the copying
+
+	<dt><code>void  same_self();</code>
+	<dd>
+		<strong>Effects:</strong> none (may secretly optimize storage....)<br>
+		<strong>Rationale:</strong> doing <code>x = +x</code> without the copying
+
+	<dt><code>void  negate_self();</code>
+	<dd>
+		<strong>Effects:</strong> changes the internal value to its additive inverse<br>
+		<strong>Throws:</strong> <code>std::range_error</code> if the inverse cannot be represented<br>
+		<strong>Note:</strong> since this type can only store nonnegative values, all stored positive values will throw; the sole representable nonpositive value, zero, is the only one that does not throw (but it transforms to itself)<br>
+		<strong>Rationale:</strong> doing <code>x = -x</code> without the copying
 </dl>
 
 <h4><a name="c_bw_ops">Operators</a></h4>
@@ -402,6 +418,17 @@ boost::math::and_not( boost::math::big_whole const &amp;a, boost::math::big_whol
 	<dd>
 		<strong>Returns:</strong> 1 if <var>w</var> represents zero, 0 otherwise<br>
 		<strong>Note:</strong> calls <code>big_whole::not_self()</code>
+
+	<dt><code>boost::math::big_whole  boost::math::operator +( boost::math::big_whole const &amp;w );</code>
+	<dd>
+		<strong>Returns:</strong> <var>w</var><br>
+		<strong>Note:</strong> calls <code>big_whole::same_self()</code>
+
+	<dt><code>boost::math::big_whole  boost::math::operator -( boost::math::big_whole const &amp;w );</code>
+	<dd>
+		<strong>Returns:</strong> the additive inverse of <var>w</var>, if it is representable<br>
+		<strong>Throws:</strong> <code>std::range_error</code> if the inverse cannot be represented (which is true for any nonzero value since <code>big_whole</code> can only store nonnegative values)<br>
+		<strong>Note:</strong> calls <code>big_whole::negate_self()</code>
 
 	<dt><code>bool  boost::math::operator ==( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
 	    <code>bool  boost::math::operator !=( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
