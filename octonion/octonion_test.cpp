@@ -13,6 +13,13 @@
 
 #include <boost/math/octonion.hpp>
 
+#include <boost/config.hpp>
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std {
+    using ::sqrt;
+    using ::atan;
+}
+#endif
 
 // explicit (if ludicrous) instanciation
 #ifndef __GNUC__

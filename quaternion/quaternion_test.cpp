@@ -13,6 +13,21 @@
 
 #include <boost/math/quaternion.hpp>
 
+#include <boost/config.hpp>
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std {
+    using ::sqrt;
+    using ::atan;
+    using ::log;
+    using ::exp;
+    using ::cos;
+    using ::sin;
+    using ::tan;
+    using ::cosh;
+    using ::sinh;
+    using ::tanh;
+}
+#endif
 
 // explicit (if ludicrous) instanciation
 #ifndef __GNUC__
