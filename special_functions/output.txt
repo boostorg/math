@@ -1,25 +1,24 @@
-Testing float.
-Testing atanh in the real domain.
-Testing asinh in the real domain.
-Testing acosh in the real domain.
-Testing sinc_pi in the real domain.
-Testing sinhc_pi in the real domain.
-Testing sinc_pi in the complex domain.
-Testing sinhc_pi in the complex domain.
-Testing double.
-Testing atanh in the real domain.
-Testing asinh in the real domain.
-Testing acosh in the real domain.
-Testing sinc_pi in the real domain.
-Testing sinhc_pi in the real domain.
-Testing sinc_pi in the complex domain.
-Testing sinhc_pi in the complex domain.
-Testing long double.
-Testing atanh in the real domain.
-Testing asinh in the real domain.
-Testing acosh in the real domain.
-Testing sinc_pi in the real domain.
-Testing sinhc_pi in the real domain.
-Testing sinc_pi in the complex domain.
-Testing sinhc_pi in the complex domain.
-no errors detected
+Running 21 test cases...
+Testing atanh in the real domain for float.
+Testing asinh in the real domain for float.
+Testing acosh in the real domain for float.
+Testing sinc_pi in the real domain for float.
+Testing sinhc_pi in the real domain for float.
+Testing sinc_pi in the complex domain for float.
+Testing sinhc_pi in the complex domain for float.
+Testing atanh in the real domain for double.
+Testing asinh in the real domain for double.
+Testing acosh in the real domain for double.
+Testing sinc_pi in the real domain for double.
+Testing sinhc_pi in the real domain for double.
+Testing sinc_pi in the complex domain for double.
+Testing sinhc_pi in the complex domain for double.
+Testing atanh in the real domain for long double.
+Testing asinh in the real domain for long double.
+Testing acosh in the real domain for long double.
+Testing sinc_pi in the real domain for long double.
+Testing sinhc_pi in the real domain for long double.
+Testing sinc_pi in the complex domain for long double.
+Testing sinhc_pi in the complex domain for long double.
+
+*** No errors detected
