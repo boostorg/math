@@ -1103,6 +1103,229 @@ bigwhole_compare_unit_test
     BOOST_CHECK( c >= z ); BOOST_CHECK( c >= a ); BOOST_CHECK( c >= b ); BOOST_CHECK( c >= c );
 }
 
+// Unit test for bitwise-and
+void
+bigwhole_bitwise_and_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::size_t;
+
+    typedef std::valarray<size_t>  va_size_t;
+
+    size_t const     di[] = { wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const     ds = sizeof( di ) / sizeof( di[0] );
+    va_size_t const  dv( di, ds );
+    size_t const     ei[] = { 1, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1 };
+    size_t const     es = sizeof( ei ) / sizeof( ei[0] );
+    va_size_t const  ev( ei, es );
+
+    big_whole const  z;
+    big_whole const  a( 7 );
+    big_whole const  b( 12 );
+    big_whole const  c( 100 );
+    big_whole const  d( dv );
+    big_whole const  e( ev );
+
+    // self-and
+    BOOST_CHECK_EQUAL( z, z & z );
+    BOOST_CHECK_EQUAL( a, a & a );
+    BOOST_CHECK_EQUAL( b, b & b );
+    BOOST_CHECK_EQUAL( c, c & c );
+    BOOST_CHECK_EQUAL( d, d & d );
+    BOOST_CHECK_EQUAL( e, e & e );
+
+    // zero-and
+    BOOST_CHECK_EQUAL( z, z & a ); BOOST_CHECK_EQUAL( z, a & z );
+    BOOST_CHECK_EQUAL( z, z & b ); BOOST_CHECK_EQUAL( z, b & z );
+    BOOST_CHECK_EQUAL( z, z & c ); BOOST_CHECK_EQUAL( z, c & z );
+    BOOST_CHECK_EQUAL( z, z & d ); BOOST_CHECK_EQUAL( z, d & z );
+    BOOST_CHECK_EQUAL( z, z & e ); BOOST_CHECK_EQUAL( z, e & z );
+
+    // various combinations
+    word_type const  ab = 4, ac = 4, ad = 0, ae = 2;
+    word_type const  ba = ab, bc = 4, bd = 0, be = 0;
+    word_type const  ca = ac, cb = bc, cd = 0, ce = 0;
+    word_type const  da = ad, db = bd, dc = cd;
+    word_type const  ea = ae, eb = be, ec = ce;
+    big_whole const  de( va_size_t(wlimits_type::digits + 1, 1) ), ed( de );
+
+    BOOST_CHECK_EQUAL( ab, a & b ); BOOST_CHECK_EQUAL( ba, b & a );
+    BOOST_CHECK_EQUAL( ac, a & c ); BOOST_CHECK_EQUAL( ca, c & a );
+    BOOST_CHECK_EQUAL( ad, a & d ); BOOST_CHECK_EQUAL( da, d & a );
+    BOOST_CHECK_EQUAL( ae, a & e ); BOOST_CHECK_EQUAL( ea, e & a );
+
+    BOOST_CHECK_EQUAL( bc, b & c ); BOOST_CHECK_EQUAL( cb, c & b );
+    BOOST_CHECK_EQUAL( bd, b & d ); BOOST_CHECK_EQUAL( db, d & b );
+    BOOST_CHECK_EQUAL( be, b & e ); BOOST_CHECK_EQUAL( eb, e & b );
+
+    BOOST_CHECK_EQUAL( cd, c & d ); BOOST_CHECK_EQUAL( dc, d & c );
+    BOOST_CHECK_EQUAL( ce, c & e ); BOOST_CHECK_EQUAL( ec, e & c );
+
+    BOOST_CHECK_EQUAL( de, d & e ); BOOST_CHECK_EQUAL( ed, e & d );
+}
+
+// Unit test for bitwise-or
+void
+bigwhole_bitwise_or_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::size_t;
+
+    typedef std::valarray<size_t>  va_size_t;
+
+    size_t const     di[] = { wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const     ds = sizeof( di ) / sizeof( di[0] );
+    va_size_t const  dv( di, ds );
+    size_t const     ei[] = { 1, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1 };
+    size_t const     es = sizeof( ei ) / sizeof( ei[0] );
+    va_size_t const  ev( ei, es );
+
+    big_whole const  z;
+    big_whole const  a( 7 );
+    big_whole const  b( 12 );
+    big_whole const  c( 100 );
+    big_whole const  d( dv );
+    big_whole const  e( ev );
+
+    // self-or
+    BOOST_CHECK_EQUAL( z, z | z );
+    BOOST_CHECK_EQUAL( a, a | a );
+    BOOST_CHECK_EQUAL( b, b | b );
+    BOOST_CHECK_EQUAL( c, c | c );
+    BOOST_CHECK_EQUAL( d, d | d );
+    BOOST_CHECK_EQUAL( e, e | e );
+
+    // zero-or
+    BOOST_CHECK_EQUAL( a, z | a ); BOOST_CHECK_EQUAL( a, a | z );
+    BOOST_CHECK_EQUAL( b, z | b ); BOOST_CHECK_EQUAL( b, b | z );
+    BOOST_CHECK_EQUAL( c, z | c ); BOOST_CHECK_EQUAL( c, c | z );
+    BOOST_CHECK_EQUAL( d, z | d ); BOOST_CHECK_EQUAL( d, d | z );
+    BOOST_CHECK_EQUAL( e, z | e ); BOOST_CHECK_EQUAL( e, e | z );
+
+    // various combinations
+    size_t const  ed_i[] = { 1, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const  ed_s = sizeof( ed_i ) / sizeof( ed_i[0] );
+    size_t const  ec_i[] = { 1, 2, 5, 6, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1 };
+    size_t const  ec_s = sizeof( ec_i ) / sizeof( ec_i[0] );
+    size_t const  eb_i[] = { 1, 2, 3, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1 };
+    size_t const  eb_s = sizeof( eb_i ) / sizeof( eb_i[0] );
+    size_t const  ea_i[] = { 0, 1, 2, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1 };
+    size_t const  ea_s = sizeof( ea_i ) / sizeof( ea_i[0] );
+    size_t const  dc_i[] = { 2, 5, 6, wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const  dc_s = sizeof( dc_i ) / sizeof( dc_i[0] );
+    size_t const  db_i[] = { 2, 3, wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const  db_s = sizeof( db_i ) / sizeof( db_i[0] );
+    size_t const  da_i[] = { 0, 1, 2, wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const  da_s = sizeof( da_i ) / sizeof( da_i[0] );
+
+    va_size_t const  ed_v( ed_i, ed_s ), ec_v( ec_i, ec_s ), eb_v( eb_i, eb_s );
+    va_size_t const  ea_v( ea_i, ea_s ), dc_v( dc_i, dc_s ), db_v( db_i, db_s );
+    va_size_t const  da_v( da_i, da_s );
+
+    big_whole const  ed( ed_v ), ec( ec_v ), eb( eb_v ), ea( ea_v );
+    big_whole const  de( ed ), dc( dc_v ), db( db_v ), da( da_v );
+    big_whole const  ce( ec ), cd( dc ), be( eb ), bd( db ), ae( ea ), ad( da );
+    word_type const  cb = 108, ca = 103, bc = cb, ba = 15, ac = ca, ab = ba;
+
+    BOOST_CHECK_EQUAL( ab, a | b ); BOOST_CHECK_EQUAL( ba, b | a );
+    BOOST_CHECK_EQUAL( ac, a | c ); BOOST_CHECK_EQUAL( ca, c | a );
+    BOOST_CHECK_EQUAL( ad, a | d ); BOOST_CHECK_EQUAL( da, d | a );
+    BOOST_CHECK_EQUAL( ae, a | e ); BOOST_CHECK_EQUAL( ea, e | a );
+
+    BOOST_CHECK_EQUAL( bc, b | c ); BOOST_CHECK_EQUAL( cb, c | b );
+    BOOST_CHECK_EQUAL( bd, b | d ); BOOST_CHECK_EQUAL( db, d | b );
+    BOOST_CHECK_EQUAL( be, b | e ); BOOST_CHECK_EQUAL( eb, e | b );
+
+    BOOST_CHECK_EQUAL( cd, c | d ); BOOST_CHECK_EQUAL( dc, d | c );
+    BOOST_CHECK_EQUAL( ce, c | e ); BOOST_CHECK_EQUAL( ec, e | c );
+
+    BOOST_CHECK_EQUAL( de, d | e ); BOOST_CHECK_EQUAL( ed, e | d );
+}
+
+// Unit test for bitwise-xor
+void
+bigwhole_bitwise_xor_unit_test
+(
+)
+{
+    using boost::math::big_whole;
+    using std::size_t;
+
+    typedef std::valarray<size_t>  va_size_t;
+
+    size_t const     di[] = { wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const     ds = sizeof( di ) / sizeof( di[0] );
+    va_size_t const  dv( di, ds );
+    size_t const     ei[] = { 1, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1 };
+    size_t const     es = sizeof( ei ) / sizeof( ei[0] );
+    va_size_t const  ev( ei, es );
+
+    big_whole const  z;
+    big_whole const  a( 7 );
+    big_whole const  b( 12 );
+    big_whole const  c( 100 );
+    big_whole const  d( dv );
+    big_whole const  e( ev );
+
+    // self-or
+    BOOST_CHECK_EQUAL( z, z ^ z );
+    BOOST_CHECK_EQUAL( z, a ^ a );
+    BOOST_CHECK_EQUAL( z, b ^ b );
+    BOOST_CHECK_EQUAL( z, c ^ c );
+    BOOST_CHECK_EQUAL( z, d ^ d );
+    BOOST_CHECK_EQUAL( z, e ^ e );
+
+    // zero-or
+    BOOST_CHECK_EQUAL( a, z ^ a ); BOOST_CHECK_EQUAL( a, a ^ z );
+    BOOST_CHECK_EQUAL( b, z ^ b ); BOOST_CHECK_EQUAL( b, b ^ z );
+    BOOST_CHECK_EQUAL( c, z ^ c ); BOOST_CHECK_EQUAL( c, c ^ z );
+    BOOST_CHECK_EQUAL( d, z ^ d ); BOOST_CHECK_EQUAL( d, d ^ z );
+    BOOST_CHECK_EQUAL( e, z ^ e ); BOOST_CHECK_EQUAL( e, e ^ z );
+
+    // various combinations
+    size_t const  ed_i[] = { 1, wlimits_type::digits - 1, wlimits_type::digits, 2 * wlimits_type::digits + 3 };
+    size_t const  ed_s = sizeof( ed_i ) / sizeof( ed_i[0] );
+    size_t const  ec_i[] = { 1, 2, 5, 6, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1 };
+    size_t const  ec_s = sizeof( ec_i ) / sizeof( ec_i[0] );
+    size_t const  eb_i[] = { 1, 2, 3, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1 };
+    size_t const  eb_s = sizeof( eb_i ) / sizeof( eb_i[0] );
+    size_t const  ea_i[] = { 0, 2, wlimits_type::digits - 1, wlimits_type::digits, wlimits_type::digits + 1 };
+    size_t const  ea_s = sizeof( ea_i ) / sizeof( ea_i[0] );
+    size_t const  dc_i[] = { 2, 5, 6, wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const  dc_s = sizeof( dc_i ) / sizeof( dc_i[0] );
+    size_t const  db_i[] = { 2, 3, wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const  db_s = sizeof( db_i ) / sizeof( db_i[0] );
+    size_t const  da_i[] = { 0, 1, 2, wlimits_type::digits + 1, 2 * wlimits_type::digits + 3 };
+    size_t const  da_s = sizeof( da_i ) / sizeof( da_i[0] );
+
+    va_size_t const  ed_v( ed_i, ed_s ), ec_v( ec_i, ec_s ), eb_v( eb_i, eb_s );
+    va_size_t const  ea_v( ea_i, ea_s ), dc_v( dc_i, dc_s ), db_v( db_i, db_s );
+    va_size_t const  da_v( da_i, da_s );
+
+    big_whole const  ed( ed_v ), ec( ec_v ), eb( eb_v ), ea( ea_v );
+    big_whole const  de( ed ), dc( dc_v ), db( db_v ), da( da_v );
+    big_whole const  ce( ec ), cd( dc ), be( eb ), bd( db ), ae( ea ), ad( da );
+    word_type const  cb = 104, ca = 99, bc = cb, ba = 11, ac = ca, ab = ba;
+
+    BOOST_CHECK_EQUAL( ab, a ^ b ); BOOST_CHECK_EQUAL( ba, b ^ a );
+    BOOST_CHECK_EQUAL( ac, a ^ c ); BOOST_CHECK_EQUAL( ca, c ^ a );
+    BOOST_CHECK_EQUAL( ad, a ^ d ); BOOST_CHECK_EQUAL( da, d ^ a );
+    BOOST_CHECK_EQUAL( ae, a ^ e ); BOOST_CHECK_EQUAL( ea, e ^ a );
+
+    BOOST_CHECK_EQUAL( bc, b ^ c ); BOOST_CHECK_EQUAL( cb, c ^ b );
+    BOOST_CHECK_EQUAL( bd, b ^ d ); BOOST_CHECK_EQUAL( db, d ^ b );
+    BOOST_CHECK_EQUAL( be, b ^ e ); BOOST_CHECK_EQUAL( eb, e ^ b );
+
+    BOOST_CHECK_EQUAL( cd, c ^ d ); BOOST_CHECK_EQUAL( dc, d ^ c );
+    BOOST_CHECK_EQUAL( ce, c ^ e ); BOOST_CHECK_EQUAL( ec, e ^ c );
+
+    BOOST_CHECK_EQUAL( de, d ^ e ); BOOST_CHECK_EQUAL( ed, e ^ d );
+}
+
 
 // Unit test program
 boost::unit_test_framework::test_suite *
@@ -1130,6 +1353,10 @@ init_unit_test_suite
 
     test->add( BOOST_TEST_CASE(bigwhole_is_even_unit_test) );
     test->add( BOOST_TEST_CASE(bigwhole_compare_unit_test) );
+
+    test->add( BOOST_TEST_CASE(bigwhole_bitwise_and_unit_test) );
+    test->add( BOOST_TEST_CASE(bigwhole_bitwise_or_unit_test) );
+    test->add( BOOST_TEST_CASE(bigwhole_bitwise_xor_unit_test) );
 
     return test;
 }

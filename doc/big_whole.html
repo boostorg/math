@@ -73,6 +73,14 @@ bool  operator &gt; ( big_whole const &amp;lhs, big_whole const &amp;rhs );
 bool  operator &lt;=( big_whole const &amp;lhs, big_whole const &amp;rhs );
 bool  operator &gt;=( big_whole const &amp;lhs, big_whole const &amp;rhs );
 
+big_whole  operator &amp;( big_whole const &amp;lhs, big_whole const &amp;rhs );
+big_whole  operator |( big_whole const &amp;lhs, big_whole const &amp;rhs );
+big_whole  operator ^( big_whole const &amp;lhs, big_whole const &amp;rhs );
+
+big_whole &amp;  operator &amp;=( big_whole &amp;lhs, big_whole const &amp;rhs );
+big_whole &amp;  operator |=( big_whole &amp;lhs, big_whole const &amp;rhs );
+big_whole &amp;  operator ^=( big_whole &amp;lhs, big_whole const &amp;rhs );
+
 }
 }
 
@@ -386,6 +394,20 @@ boost::math::swap( boost::math::big_whole &amp;a, boost::math::big_whole &amp;b 
 	<dd>
 		<strong>Returns:</strong> whether the given relation applies to <var>lhs</var> and <var>rhs</var><br>
 		<strong>Note:</strong> calls <code>big_whole::compare()</code>
+
+	<dt><code>boost::math::big_whole  boost::math::operator &amp;( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>boost::math::big_whole  boost::math::operator |( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>boost::math::big_whole  boost::math::operator ^( boost::math::big_whole const &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
+	<dd>
+		<strong>Returns:</strong> for each operator <var>$$</var>, an object <var>x</var>, where each bit <var>x<sub>i</sub></var> has the value <code><var>lhs<sub>i</sub></var> <var>$$</var> <var>rhs<sub>i</sub></var></code><br>
+		<strong>Note:</strong> <code>friend</code>ly with <code>big_whole</code>
+
+	<dt><code>boost::math::big_whole &amp;  boost::math::operator &amp;=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>boost::math::big_whole &amp;  boost::math::operator |=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code><br>
+	    <code>boost::math::big_whole &amp;  boost::math::operator ^=( boost::math::big_whole &amp;lhs, boost::math::big_whole const &amp;rhs );</code>
+	<dd>
+		<strong>Effects:</strong> for <code>operator <var>$$</var>=</code>, calls <code><var>lhs</var> = <var>lhs</var> <var>$$</var> <var>rhs</var></code><br>
+		<strong>Returns:</strong> <var>lhs</var>
 </dl>
 
 <h3><a name="c_limits">Numeric Limits</a></h3>

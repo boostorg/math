@@ -13,7 +13,7 @@
 
 #include <boost/cstdint.hpp>  // for boost::uintmax_t
 
-#include <algorithm>  // for std::swap, std::min
+#include <algorithm>  // for std::swap, std::min, std::max
 #include <cstddef>    // for NULL, std::size_t
 #include <limits>     // for std::numeric_limits
 #include <memory>     // for std::auto_ptr
@@ -40,6 +40,14 @@ bool  operator < ( big_whole const &lhs, big_whole const &rhs );
 bool  operator > ( big_whole const &lhs, big_whole const &rhs );
 bool  operator <=( big_whole const &lhs, big_whole const &rhs );
 bool  operator >=( big_whole const &lhs, big_whole const &rhs );
+
+big_whole  operator &( big_whole const &lhs, big_whole const &rhs );
+big_whole  operator |( big_whole const &lhs, big_whole const &rhs );
+big_whole  operator ^( big_whole const &lhs, big_whole const &rhs );
+
+big_whole &  operator &=( big_whole &lhs, big_whole const &rhs );
+big_whole &  operator |=( big_whole &lhs, big_whole const &rhs );
+big_whole &  operator ^=( big_whole &lhs, big_whole const &rhs );
 
 
 //  Arbitrary-length whole-number object class declaration  ------------------//
@@ -143,6 +151,11 @@ protected:
     static  int  do_compare( va_type const &lhs, va_type const &rhs );
 
 private:
+    // The non-assignment operators are the primary routines
+    friend  self_type operator &( self_type const &lhs, self_type const &rhs );
+    friend  self_type operator |( self_type const &lhs, self_type const &rhs );
+    friend  self_type operator ^( self_type const &lhs, self_type const &rhs );
+
     // More member types
     enum bit_operation { reset_bit, set_bit, flip_bit };
 
@@ -1145,6 +1158,144 @@ operator >=
 {
     return lhs.compare( rhs ) >= 0;
 }
+
+big_whole
+operator &
+(
+    big_whole const &  lhs,
+    big_whole const &  rhs
+)
+{
+    typedef big_whole::va_type  va_type;
+
+    if ( va_type const * const  l = lhs.x_.get() )
+    {
+        if ( va_type const * const  r = rhs.x_.get() )
+        {
+            big_whole  temp;
+
+            temp.x_.reset( new va_type(std::min( l->size(), r->size() )) );
+
+            va_type &  t = *temp.x_;
+
+            if ( std::size_t const  s = t.size() )
+            {
+                std::slice const  sl( 0, s, 1 );
+
+                t  = ( *l )[ sl ];
+                t &= ( *r )[ sl ];
+            }
+
+            return temp;
+        }
+        else
+        {
+            return rhs;
+        }
+    }
+    else
+    {
+        return lhs;
+    }
+}
+
+big_whole
+operator |
+(
+    big_whole const &  lhs,
+    big_whole const &  rhs
+)
+{
+    typedef big_whole::va_type  va_type;
+
+    if ( va_type const * const  l = lhs.x_.get() )
+    {
+        if ( va_type const * const  r = rhs.x_.get() )
+        {
+            using std::size_t;
+            using std::slice;
+
+            big_whole     temp;
+            size_t const  ls = l->size();
+            size_t const  rs = r->size();
+
+            temp.x_.reset( new va_type(std::max( ls, rs )) );
+
+            va_type &  t = *temp.x_;
+
+            t[ slice(0, ls, 1) ]  = *l;
+            t[ slice(0, rs, 1) ] |= *r;
+
+            return temp;
+        }
+        else
+        {
+            return lhs;
+        }
+    }
+    else
+    {
+        return rhs;
+    }
+}
+
+big_whole
+operator ^
+(
+    big_whole const &  lhs,
+    big_whole const &  rhs
+)
+{
+    typedef big_whole::va_type  va_type;
+
+    if ( va_type const * const  l = lhs.x_.get() )
+    {
+        if ( va_type const * const  r = rhs.x_.get() )
+        {
+            using std::size_t;
+            using std::slice;
+
+            big_whole     temp;
+            size_t const  ls = l->size();
+            size_t const  rs = r->size();
+
+            temp.x_.reset( new va_type(std::max( ls, rs )) );
+
+            va_type &  t = *temp.x_;
+
+            t[ slice(0, ls, 1) ]  = *l;
+            t[ slice(0, rs, 1) ] ^= *r;
+
+            return temp;
+        }
+        else
+        {
+            return lhs;
+        }
+    }
+    else
+    {
+        return rhs;
+    }
+}
+
+#define BOOST_PRIVATE_MIXED_ASSIGN_OP( Op )  \
+    inline                                   \
+    big_whole &                              \
+    operator Op##=                           \
+    (                                        \
+        big_whole &        lhs,              \
+        big_whole const &  rhs               \
+    )                                        \
+    {                                        \
+        return lhs = lhs Op rhs;             \
+    }
+
+BOOST_PRIVATE_MIXED_ASSIGN_OP( & )
+BOOST_PRIVATE_MIXED_ASSIGN_OP( | )
+BOOST_PRIVATE_MIXED_ASSIGN_OP( ^ )
+
+#undef BOOST_PRIVATE_MIXED_ASSIGN_OP
 
 
 }  // namespace math
