@@ -56,10 +56,11 @@ class big_whole
 {
     struct dummy { dummy *d; };
 
-    typedef big_whole                    self_type;
-    typedef dummy * dummy::*             bool_type;
-    typedef std::valarray<bool>          mask_type;
-    typedef std::valarray<std::size_t>  index_type;
+    typedef big_whole                  self_type;
+    typedef dummy * dummy::*           bool_type;
+    typedef std::size_t                size_type;
+    typedef std::valarray<bool>        mask_type;
+    typedef std::valarray<size_type>  index_type;
 
 public:
     // Lifetime management
@@ -89,32 +90,31 @@ public:
 
     // Bit-twiddling operations
     void  reset();
-    void  reset( std::size_t from, std::size_t to );
-    void  reset( std::size_t i );
+    void  reset( size_type from, size_type to );
+    void  reset( size_type i );
 
-    void  set( std::size_t from, std::size_t to );
-    void  set( std::size_t i );
+    void  set( size_type from, size_type to );
+    void  set( size_type i );
 
-    void  flip( std::size_t from, std::size_t to );
-    void  flip( std::size_t i );
+    void  flip( size_type from, size_type to );
+    void  flip( size_type i );
 
-    void  bit_assign( std::size_t from, std::size_t to, bool value );
-    void  bit_assign( std::size_t i, bool value );
+    void  bit_assign( size_type from, size_type to, bool value );
+    void  bit_assign( size_type i, bool value );
 
-    void  bits_assign( std::size_t from, std::size_t to,
-     self_type const &values );
+    void  bits_assign( size_type from, size_type to, self_type const &values );
 
     // Bit-inspecting operations
-    std::size_t  length() const;
+    size_type  length() const;
 
-    std::size_t  count() const;
-    bool         any() const;
-    bool         none() const;
+    size_type  count() const;
+    bool       any() const;
+    bool       none() const;
 
-    bool       test( std::size_t i ) const;
-    self_type  tests( std::size_t from, std::size_t to ) const;
+    bool       test( size_type i ) const;
+    self_type  tests( size_type from, size_type to ) const;
 
-    self_type  reverse( std::size_t cap ) const;
+    self_type  reverse( size_type cap ) const;
     self_type  reverse() const;
 
     // Self-operator mutators
@@ -137,14 +137,14 @@ protected:
     typedef std::numeric_limits<word_type>  limits_type;
 
     // Helper functions
-    static  std::size_t  words_for_bits( std::size_t bits );
+    static  size_type  words_for_bits( size_type bits );
 
     static  va_type  uintmax_to_va( uintmax_t v );
     static  va_type  bit_vector_to_va( mask_type const &b );
     static  va_type  bit_indices_to_va( index_type const &i );
 
-    static  std::size_t  wlength( va_type const &v );
-    static  std::size_t  blength( word_type w );
+    static  size_type  wlength( va_type const &v );
+    static  size_type  blength( word_type w );
 
     static  word_type  count_set_bits_for_word( word_type w );
 
@@ -160,8 +160,8 @@ private:
     enum bit_operation { reset_bit, set_bit, flip_bit };
 
     // Object-specific helper functions
-    void  bit_change( std::size_t from, std::size_t to, bit_operation op );
-    void  bit_change( std::size_t i, bit_operation op );
+    void  bit_change( size_type from, size_type to, bit_operation op );
+    void  bit_change( size_type i, bit_operation op );
 
     // Member data
     ap_type  x_;
@@ -292,7 +292,7 @@ big_whole::to_uintmax
 
         if ( va_type const * const  v = this->x_.get() )
         {
-            for ( std::size_t i = v->size() ; i > 0 ; --i )
+            for ( size_type  i = v->size() ; i > 0 ; --i )
             {
                 temp <<= limits_type::digits;
                 temp |= static_cast<uintmax_t>( (*v)[i - 1] );
@@ -329,22 +329,20 @@ big_whole::to_bit_indices
 (
 ) const
 {
-    using std::size_t;
-
     index_type  temp;
 
     if ( va_type const * const  v = this->x_.get() )
     {
-        if ( size_t const  s = v->size() )
+        if ( size_type const  s = v->size() )
         {
             int const        d = limits_type::digits;
             index_type       temp2( s * d );
             word_type const  mask = 1;
-            size_t           bits_used = 0;
+            size_type        bits_used = 0;
 
-            for ( size_t i = 0, ii = 0 ; i < s ; ++i, ii += d )
+            for ( size_type  i = 0, ii = 0 ; i < s ; ++i, ii += d )
             {
-                for ( int j = 0, jj = ii ; j < d ; ++j, ++jj )
+                for ( int  j = 0, jj = ii ; j < d ; ++j, ++jj )
                 {
                     if ( (mask << j) & (*v)[i] )
                     {
@@ -479,8 +477,6 @@ big_whole::bits_assign
     big_whole const &  values
 )
 {
-    using std::size_t;
-
     if ( from > to )
     {
         std::swap( from, to );
@@ -493,24 +489,24 @@ big_whole::bits_assign
     index_type const   new_v_ids = v_ids[ v_ids <= (to - from) ] + from;
     index_type const  post_t_ids = t_ids[ t_ids > to ];
 
-    size_t const   pre_s =  pre_t_ids.size();
-    size_t const   new_s =  new_v_ids.size();
-    size_t const  post_s = post_t_ids.size();
+    size_type const   pre_s =  pre_t_ids.size();
+    size_type const   new_s =  new_v_ids.size();
+    size_type const  post_s = post_t_ids.size();
 
-    index_type  new_t_ids( pre_s + new_s + post_s );
-    size_t *    new_t_ptr = &new_t_ids[ 0 ];
+    index_type   new_t_ids( pre_s + new_s + post_s );
+    size_type *  new_t_ptr = &new_t_ids[ 0 ];
 
-    for ( size_t  i = 0 ; i < pre_s ; ++i, ++new_t_ptr )
+    for ( size_type  i = 0 ; i < pre_s ; ++i, ++new_t_ptr )
     {
         *new_t_ptr = pre_t_ids[ i ];
     }
 
-    for ( size_t  j = 0 ; j < new_s ; ++j, ++new_t_ptr )
+    for ( size_type  j = 0 ; j < new_s ; ++j, ++new_t_ptr )
     {
         *new_t_ptr = new_v_ids[ j ];
     }
 
-    for ( size_t  k = 0 ; k < post_s ; ++k, ++new_t_ptr )
+    for ( size_type  k = 0 ; k < post_s ; ++k, ++new_t_ptr )
     {
         *new_t_ptr = post_t_ids[ k ];
     }
@@ -528,11 +524,9 @@ big_whole::length
 {
     if ( va_type const * const  v = this->x_.get() )
     {
-        using std::size_t;
-
-        if ( size_t const  o = self_type::wlength(*v) )
+        if ( size_type const  o = self_type::wlength(*v) )
         {
-            size_t const  oo = o - 1;
+            size_type const  oo = o - 1;
 
             return self_type::blength( (*v)[oo] ) + oo * limits_type::digits;
         }
@@ -583,10 +577,8 @@ big_whole::test
 {
     if ( va_type const * const  v = this->x_.get() )
     {
-        using std::size_t;
-
-        size_t const  wi = i / limits_type::digits;
-        size_t const  wj = i % limits_type::digits;
+        size_type const  wi = i / limits_type::digits;
+        size_type const  wj = i % limits_type::digits;
 
         return ( v->size() > wi ) ? ( (*v)[wi] & (1u << wj) ) : false;
     }
@@ -719,17 +711,15 @@ big_whole::uintmax_to_va
     uintmax_t  v
 )
 {
-    using std::size_t;
-
     int const  d = std::numeric_limits<uintmax_t>::digits;
 
     // NOTE: this test should be optimized during compile-time
 
     if ( d > limits_type::digits )
     {
-        size_t const  s = self_type::words_for_bits( d );
-        va_type       temp( 0u, s );
-        size_t        words_used = 0;
+        size_type const  s = self_type::words_for_bits( d );
+        va_type          temp( s );
+        size_type        words_used = 0;
 
         for ( ; v && (words_used < s) ; ++words_used )
         {
@@ -751,23 +741,21 @@ big_whole::bit_vector_to_va
     std::valarray<bool> const &  b
 )
 {
-    using std::size_t;
-
     va_type  temp;
 
-    if ( size_t const  bs = b.size() )
+    if ( size_type const  bs = b.size() )
     {
         word_type const  m = 1;
         int const        d = limits_type::digits;
 
         temp.resize( self_type::words_for_bits(bs), 0u );
 
-        for ( size_t i = 0 ; i < bs ; ++i )
+        for ( size_type  i = 0 ; i < bs ; ++i )
         {
             if ( b[i] )
             {
-                size_t const  wi = i / d;
-                size_t const  wj = i % d;
+                size_type const  wi = i / d;
+                size_type const  wj = i % d;
 
                 temp[ wi ] |= ( m << wj );
             }
@@ -800,7 +788,7 @@ big_whole::wlength
     big_whole::va_type const &  v
 )
 {
-    std::size_t  i = v.size();
+    size_type  i = v.size();
 
     while ( i && !v[i - 1] )
     {
@@ -849,12 +837,10 @@ big_whole::do_compare
     big_whole::va_type const &  rhs
 )
 {
-    using std::size_t;
+    size_type const  l_size = lhs.size();
+    size_type const  r_size = rhs.size();
 
-    size_t const  l_size = lhs.size();
-    size_t const  r_size = rhs.size();
-
-    for ( size_t  i = l_size ; i > r_size ; --i )
+    for ( size_type  i = l_size ; i > r_size ; --i )
     {
         if ( lhs[i - 1] )
         {
@@ -862,7 +848,7 @@ big_whole::do_compare
         }
     }
 
-    for ( size_t  j = r_size ; j > l_size ; --j )
+    for ( size_type  j = r_size ; j > l_size ; --j )
     {
         if ( rhs[j - 1] )
         {
@@ -870,9 +856,9 @@ big_whole::do_compare
         }
     }
 
-    for ( size_t  k = std::min(l_size, r_size) ; k > 0 ; --k )
+    for ( size_type  k = std::min(l_size, r_size) ; k > 0 ; --k )
     {
-        size_t const     kk = k - 1;
+        size_type const  kk = k - 1;
         word_type const  lw = lhs[ kk ];
         word_type const  rw = rhs[ kk ];
 
@@ -900,7 +886,6 @@ big_whole::bit_change
     big_whole::bit_operation  op
 )
 {
-    using std::size_t;
     using std::slice;
 
     if ( from > to )
@@ -908,20 +893,20 @@ big_whole::bit_change
         std::swap( from, to );
     }
 
-    size_t const  fi = from / limits_type::digits;
-    size_t const  fj = from % limits_type::digits;
-    size_t const  ti = to / limits_type::digits;
-    size_t const  tj = to % limits_type::digits;
+    size_type const  fi = from / limits_type::digits;
+    size_type const  fj = from % limits_type::digits;
+    size_type const  ti = to / limits_type::digits;
+    size_type const  tj = to % limits_type::digits;
 
     va_type *  v = this->x_.get();
-    size_t     v_size = v ? v->size() : 0;
+    size_type  v_size = v ? v->size() : 0;
 
     word_type const  fm = ~( (1u << fj) - 1u );
     word_type const  tm = ( 1u << tj ) | ( (1u << tj) - 1u );
 
     if ( (ti >= v_size) && (op != reset_bit) )
     {
-        ap_type  p( new va_type(0u, ti + 1) );
+        ap_type  p( new va_type(ti + 1) );
 
         if ( v && v_size )
         {
@@ -979,8 +964,8 @@ big_whole::bit_change
         }
 
         // middle affected word(s), if any
-        size_t const  start = fi + 1;
-        size_t const  stop = std::min( v_size, ti );
+        size_type const  start = fi + 1;
+        size_type const  stop = std::min( v_size, ti );
 
         if ( stop > start )
         {
@@ -1033,15 +1018,13 @@ big_whole::bit_change
     big_whole::bit_operation  op
 )
 {
-    using std::size_t;
-
-    size_t const      ii = i / limits_type::digits;
-    va_type *          v = this->x_.get();
-    size_t        v_size = v ? v->size() : 0;
+    size_type const      ii = i / limits_type::digits;
+    va_type *             v = this->x_.get();
+    size_type        v_size = v ? v->size() : 0;
 
     if ( (ii >= v_size) && (op != reset_bit) )
     {
-        ap_type  p( new va_type(0u, ii + 1) );
+        ap_type  p( new va_type(ii + 1) );
 
         if ( v && v_size )
         {
@@ -1053,7 +1036,7 @@ big_whole::bit_change
         v_size = v->size();
     }
 
-    size_t const     ij = i % limits_type::digits;
+    size_type const  ij = i % limits_type::digits;
     word_type const   m = 1u << ij;
 
     switch ( op )
@@ -1133,7 +1116,8 @@ operator &
     big_whole const &  rhs
 )
 {
-    typedef big_whole::va_type  va_type;
+    typedef big_whole::va_type      va_type;
+    typedef big_whole::size_type  size_type;
 
     if ( va_type const * const  l = lhs.x_.get() )
     {
@@ -1145,7 +1129,7 @@ operator &
 
             va_type &  t = *temp.x_;
 
-            if ( std::size_t const  s = t.size() )
+            if ( size_type const  s = t.size() )
             {
                 std::slice const  sl( 0, s, 1 );
 
@@ -1173,18 +1157,18 @@ operator |
     big_whole const &  rhs
 )
 {
-    typedef big_whole::va_type  va_type;
+    typedef big_whole::va_type      va_type;
+    typedef big_whole::size_type  size_type;
 
     if ( va_type const * const  l = lhs.x_.get() )
     {
         if ( va_type const * const  r = rhs.x_.get() )
         {
-            using std::size_t;
             using std::slice;
 
-            big_whole     temp;
-            size_t const  ls = l->size();
-            size_t const  rs = r->size();
+            big_whole        temp;
+            size_type const  ls = l->size();
+            size_type const  rs = r->size();
 
             temp.x_.reset( new va_type(std::max( ls, rs )) );
 
@@ -1213,18 +1197,18 @@ operator ^
     big_whole const &  rhs
 )
 {
-    typedef big_whole::va_type  va_type;
+    typedef big_whole::va_type      va_type;
+    typedef big_whole::size_type  size_type;
 
     if ( va_type const * const  l = lhs.x_.get() )
     {
         if ( va_type const * const  r = rhs.x_.get() )
         {
-            using std::size_t;
             using std::slice;
 
-            big_whole     temp;
-            size_t const  ls = l->size();
-            size_t const  rs = r->size();
+            big_whole        temp;
+            size_type const  ls = l->size();
+            size_type const  rs = r->size();
 
             temp.x_.reset( new va_type(std::max( ls, rs )) );
 

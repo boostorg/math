@@ -58,8 +58,8 @@ bigwhole_to_bitstring
 
     std::valarray<size_t> const    sz = w.to_bit_indices();
     size_t const                   s = sz.size();
-    size_t const                   max_index = sz.max();
-    size_t const                   char_count = 1 + max_index;
+    size_t const                   char_count = 1 + ( s ? sz.max() : 0 );
+    size_t const                   max_index = char_count - 1;
     std::basic_string<Ch, Tr, Al>  str( char_count, zero_char );
 
     for ( size_t  i = 0 ; i < s ; ++i )
