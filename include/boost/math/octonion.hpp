@@ -969,7 +969,7 @@ namespace boost
                 tr[0] = rhs.real();                                                                     \
                 tr[1] = rhs.imag();                                                                     \
                                                                                                         \
-                type            mixam = BOOST_GET_VALARRAY(type,static_cast<type>(1)/abs(tr)).max();    \
+                type            mixam = (BOOST_GET_VALARRAY(type,static_cast<type>(1)/abs(tr)).max)();  \
                                                                                                         \
                 tr *= mixam;                                                                            \
                                                                                                         \
@@ -1011,7 +1011,7 @@ namespace boost
                 tr[0] = rhs.real();                                                     \
                 tr[1] = rhs.imag();                                                     \
                                                                                         \
-                type            mixam = static_cast<type>(1)/abs(tr).max();             \
+                type            mixam = static_cast<type>(1)/(abs(tr).max)();           \
                                                                                         \
                 tr *= mixam;                                                            \
                                                                                         \
@@ -1052,7 +1052,7 @@ namespace boost
                 tr[0] = rhs.real();                                                     \
                 tr[1] = rhs.imag();                                                     \
                                                                                         \
-                type            mixam = static_cast<type>(1)/abs(tr).max();             \
+                type            mixam = static_cast<type>(1)/(abs(tr).max)();           \
                                                                                         \
                 tr *= mixam;                                                            \
                                                                                         \
@@ -1097,7 +1097,7 @@ namespace boost
                 tr[2] = static_cast<type>(rhs.R_component_3());                                      \
                 tr[3] = static_cast<type>(rhs.R_component_4());                                      \
                                                                                                      \
-                type            mixam = BOOST_GET_VALARRAY(type,static_cast<type>(1)/abs(tr)).max(); \
+                type           mixam = (BOOST_GET_VALARRAY(type,static_cast<type>(1)/abs(tr)).max)();\
                                                                                                      \
                 tr *= mixam;                                                                         \
                                                                                                      \
@@ -1141,7 +1141,7 @@ namespace boost
                 tr[2] = static_cast<type>(rhs.R_component_3());                                      \
                 tr[3] = static_cast<type>(rhs.R_component_4());                                      \
                                                                                                      \
-                type            mixam = static_cast<type>(1)/abs(tr).max();                          \
+                type            mixam = static_cast<type>(1)/(abs(tr).max)();                        \
                                                                                                      \
                 tr *= mixam;                                                                         \
                                                                                                      \
@@ -1184,7 +1184,7 @@ namespace boost
                 tr[2] = static_cast<type>(rhs.R_component_3());                                      \
                 tr[3] = static_cast<type>(rhs.R_component_4());                                      \
                                                                                                      \
-                type            mixam = static_cast<type>(1)/abs(tr).max();                          \
+                type            mixam = static_cast<type>(1)/(abs(tr).max)();                        \
                                                                                                      \
                 tr *= mixam;                                                                         \
                                                                                                      \
@@ -1234,7 +1234,7 @@ namespace boost
                 tr[6] = static_cast<type>(rhs.R_component_7());                                      \
                 tr[7] = static_cast<type>(rhs.R_component_8());                                      \
                                                                                                      \
-                type            mixam = BOOST_GET_VALARRAY(type,static_cast<type>(1)/abs(tr)).max(); \
+                type           mixam = (BOOST_GET_VALARRAY(type,static_cast<type>(1)/abs(tr)).max)();\
                                                                                                      \
                 tr *= mixam;                                                                         \
                                                                                                      \
@@ -1283,7 +1283,7 @@ namespace boost
                 tr[6] = static_cast<type>(rhs.R_component_7());                                      \
                 tr[7] = static_cast<type>(rhs.R_component_8());                                      \
                                                                                                      \
-                type            mixam = static_cast<type>(1)/abs(tr).max();                          \
+                type            mixam = static_cast<type>(1)/(abs(tr).max)();                        \
                                                                                                      \
                 tr *= mixam;                                                                         \
                                                                                                      \
@@ -1331,7 +1331,7 @@ namespace boost
                 tr[6] = static_cast<type>(rhs.R_component_7());                                      \
                 tr[7] = static_cast<type>(rhs.R_component_8());                                      \
                                                                                                      \
-                type            mixam = static_cast<type>(1)/abs(tr).max();                          \
+                type            mixam = static_cast<type>(1)/(abs(tr).max)();                        \
                                                                                                      \
                 tr *= mixam;                                                                         \
                                                                                                      \
@@ -4405,9 +4405,9 @@ namespace boost
             BOOST_OCTONION_VALARRAY_LOADER
             
 #if defined(__GNUC__) && __GNUC__ < 3
-            return(BOOST_GET_VALARRAY(T, abs(temp)).max());
+            return((BOOST_GET_VALARRAY(T, abs(temp)).max)());
 #else
-            return(abs(temp).max());
+            return((abs(temp).max)());
 #endif /* defined(__GNUC__) && (__GNUC__ < 3) */
         }
         
@@ -4441,9 +4441,9 @@ namespace boost
             BOOST_OCTONION_VALARRAY_LOADER
             
 #if defined(__GNUC__) && __GNUC__ < 3
-            T            maxim = BOOST_GET_VALARRAY(T,abs(temp)).max();    // overflow protection
+            T            maxim = (BOOST_GET_VALARRAY(T,abs(temp)).max)();    // overflow protection
 #else
-            T            maxim = abs(temp).max();    // overflow protection
+            T            maxim = (abs(temp).max)();    // overflow protection
 #endif /* defined(__GNUC__) && (__GNUC__ < 3) */
             
             if    (maxim == static_cast<T>(0))
