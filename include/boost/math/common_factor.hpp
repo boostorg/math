@@ -134,7 +134,8 @@ namespace detail
     struct static_gcd_helper_t
     {
         BOOST_STATIC_CONSTANT( unsigned long, value
-         = static_gcd_helper2_t<Value1>::helper<Value2>::value );
+         = static_gcd_helper2_t<Value1>::BOOST_NESTED_TEMPLATE
+         helper<Value2>::value );
     };
 #endif
 
@@ -192,7 +193,8 @@ namespace detail
     struct static_lcm_helper_t
     {
         BOOST_STATIC_CONSTANT( unsigned long, value
-         = static_lcm_helper2_t<Value1>::helper<Value2>::value );
+         = static_lcm_helper2_t<Value1>::BOOST_NESTED_TEMPLATE
+         helper<Value2>::value );
     };
 #endif
 
@@ -276,8 +278,9 @@ namespace detail
     }
 
     // Function objects to find the best way of computing GCD or LCM
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     template < typename T, bool IsSpecialized, bool IsSigned >
-    struct gcd_optimal_evaluator_helper
+    struct gcd_optimal_evaluator_helper_t
     {
         T  operator ()( T const &a, T const &b )
         {
@@ -286,13 +289,47 @@ namespace detail
     };
 
     template < typename T >
-    struct gcd_optimal_evaluator_helper< T, true, true >
+    struct gcd_optimal_evaluator_helper_t< T, true, true >
     {
         T  operator ()( T const &a, T const &b )
         {
             return gcd_integer( a, b );
         }
     };
+#else
+    template < bool IsSpecialized, bool IsSigned >
+    struct gcd_optimal_evaluator_helper2_t
+    {
+        template < typename T >
+        struct helper
+        {
+            T  operator ()( T const &a, T const &b )
+            {
+                return gcd_euclidean( a, b );
+            }
+        };
+    };
+
+    template < >
+    struct gcd_optimal_evaluator_helper2_t< true, true >
+    {
+        template < typename T >
+        struct helper
+        {
+            T  operator ()( T const &a, T const &b )
+            {
+                return gcd_integer( a, b );
+            }
+        };
+    };
+
+    template < typename T, bool IsSpecialized, bool IsSigned >
+    struct gcd_optimal_evaluator_helper_t
+        : gcd_optimal_evaluator_helper2_t<IsSpecialized, IsSigned>
+           ::BOOST_NESTED_TEMPLATE helper<T>
+    {
+    };
+#endif
 
     template < typename T >
     struct gcd_optimal_evaluator
@@ -301,8 +338,8 @@ namespace detail
         {
             typedef ::std::numeric_limits<T>  limits_type;
 
-            typedef gcd_optimal_evaluator_helper<T, limits_type::is_specialized,
-             limits_type::is_signed>  helper_type;
+            typedef gcd_optimal_evaluator_helper_t<T,
+             limits_type::is_specialized, limits_type::is_signed>  helper_type;
 
             helper_type  solver;
 
@@ -310,8 +347,9 @@ namespace detail
         }
     };
 
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     template < typename T, bool IsSpecialized, bool IsSigned >
-    struct lcm_optimal_evaluator_helper
+    struct lcm_optimal_evaluator_helper_t
     {
         T  operator ()( T const &a, T const &b )
         {
@@ -320,13 +358,47 @@ namespace detail
     };
 
     template < typename T >
-    struct lcm_optimal_evaluator_helper< T, true, true >
+    struct lcm_optimal_evaluator_helper_t< T, true, true >
     {
         T  operator ()( T const &a, T const &b )
         {
             return lcm_integer( a, b );
         }
     };
+#else
+    template < bool IsSpecialized, bool IsSigned >
+    struct lcm_optimal_evaluator_helper2_t
+    {
+        template < typename T >
+        struct helper
+        {
+            T  operator ()( T const &a, T const &b )
+            {
+                return lcm_euclidean( a, b );
+            }
+        };
+    };
+
+    template < >
+    struct lcm_optimal_evaluator_helper2_t< true, true >
+    {
+        template < typename T >
+        struct helper
+        {
+            T  operator ()( T const &a, T const &b )
+            {
+                return lcm_integer( a, b );
+            }
+        };
+    };
+
+    template < typename T, bool IsSpecialized, bool IsSigned >
+    struct lcm_optimal_evaluator_helper_t
+        : lcm_optimal_evaluator_helper2_t<IsSpecialized, IsSigned>
+           ::BOOST_NESTED_TEMPLATE helper<T>
+    {
+    };
+#endif
 
     template < typename T >
     struct lcm_optimal_evaluator
@@ -335,8 +407,8 @@ namespace detail
         {
             typedef ::std::numeric_limits<T>  limits_type;
 
-            typedef lcm_optimal_evaluator_helper<T, limits_type::is_specialized,
-             limits_type::is_signed>  helper_type;
+            typedef lcm_optimal_evaluator_helper_t<T,
+             limits_type::is_specialized, limits_type::is_signed>  helper_type;
 
             helper_type  solver;
 
