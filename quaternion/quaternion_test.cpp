@@ -16,10 +16,10 @@
 
 // explicit (if ludicrous) instanciation
 #ifndef __GNUC__
-template    class ::boost::quaternion<int>;
+template    class ::boost::math::quaternion<int>;
 #else
 // gcc doesn't like the absolutely-qualified namespace
-template class boost::quaternion<int>;
+template class boost::math::quaternion<int>;
 #endif
 
 #define BOOST_INCLUDE_MAIN  // for testing, include rather than link
@@ -33,23 +33,23 @@ int    test_main(int, char *[])
     
     
     // using default constructor
-    ::boost::quaternion<float>            q0;
+    ::boost::math::quaternion<float>        q0;
     
-    ::boost::quaternion<float>            qa[2];
+    ::boost::math::quaternion<float>        qa[2];
     
     // using constructor "H seen as R^4"
-    ::boost::quaternion<double>           q1(1,2,3,4);
+    ::boost::math::quaternion<double>       q1(1,2,3,4);
     
-    ::std::complex<float>                 c0(5,6);
+    ::std::complex<float>                   c0(5,6);
     
     // using constructor "H seen as C^2"
-    ::boost::quaternion<float>            q2(c0);
+    ::boost::math::quaternion<float>        q2(c0);
     
     // using UNtemplated copy constructor
-    ::boost::quaternion<float>            q3(q2);
+    ::boost::math::quaternion<float>        q3(q2);
     
     // using templated copy constructor
-    ::boost::quaternion<long double>      q4(q3);
+    ::boost::math::quaternion<long double>  q4(q3);
     
     // using UNtemplated assignment operator
     q3 = q0;
@@ -57,7 +57,7 @@ int    test_main(int, char *[])
     // using templated assignment operator
     q4 = q0;
     
-    float                                 f0(7);
+    float                                   f0(7);
     
     // using converting assignment operator
     q2 = f0;
@@ -83,8 +83,8 @@ int    test_main(int, char *[])
     // using -= (const quaternion<X> &)
     q3 -= q2;
     
-    double                                d0(8);
-    ::std::complex<double>                c1(9,10);
+    double                                  d0(8);
+    ::std::complex<double>                  c1(9,10);
     
     // using *= (const T &)
     q1 *= d0;
@@ -95,8 +95,8 @@ int    test_main(int, char *[])
     // using *= (const quaternion<X> &)
     q1 *= q1;
     
-    long double                           l0(11);
-    ::std::complex<long double>           c2(12,13);
+    long double                             l0(11);
+    ::std::complex<long double>             c2(12,13);
     
     // using /= (const T &)
     q4 /= l0;
@@ -108,19 +108,19 @@ int    test_main(int, char *[])
     q4 /= q1;
     
     // using + (const T &, const quaternion<T> &)
-    ::boost::quaternion<float>            q5 = f0+q2;
+    ::boost::math::quaternion<float>        q5 = f0+q2;
     
     // using + (const quaternion<T> &, const T &)
-    ::boost::quaternion<float>            q6 = q2+f0;
+    ::boost::math::quaternion<float>        q6 = q2+f0;
     
     // using + (const ::std::complex<T> &, const quaternion<T> &)
-    ::boost::quaternion<float>            q7 = c0+q2;
+    ::boost::math::quaternion<float>        q7 = c0+q2;
     
     // using + (const quaternion<T> &, const ::std::complex<T> &)
-    ::boost::quaternion<float>            q8 = q2+c0;
+    ::boost::math::quaternion<float>        q8 = q2+c0;
     
     // using + (const quaternion<T> &,const quaternion<T> &)
-    ::boost::quaternion<float>            q9 = q2+q3;
+    ::boost::math::quaternion<float>        q9 = q2+q3;
     
     // using - (const T &, const quaternion<T> &)
     q5 = f0-q2;
@@ -218,7 +218,7 @@ int    test_main(int, char *[])
                     << q0 << " ." << ::std::endl;
     }
 #else
-    ::std::istringstream                  bogus("(1,2,3,4)");
+    ::std::istringstream                bogus("(1,2,3,4)");
     
     bogus >> q0;
     
@@ -298,75 +298,79 @@ int    test_main(int, char *[])
                 << "the Hyperbolic Sinus Cardinal (of index pi) is "
                 << sinhc_pi(q0) << ::std::endl;
 #endif
-
+    
     ::std::cout << ::std::endl;
     
-    float                                 rho = ::std::sqrt(8.0f);
-    float                                 theta = ::std::atan(1.0f);
-    float                                 phi1 = ::std::atan(1.0f);
-    float                                 phi2 = ::std::atan(1.0f);
+    float                         rho = ::std::sqrt(8.0f);
+    float                         theta = ::std::atan(1.0f);
+    float                         phi1 = ::std::atan(1.0f);
+    float                         phi2 = ::std::atan(1.0f);
     
     ::std::cout << "The value of the quaternion represented "
                 << "in spherical form by "
                 << "rho = " << rho << " , theta = " << theta
                 << " , phi1 = " << phi1 << " , phi2 = " << phi2
-                << " is " << ::boost::spherical(rho, theta, phi1, phi2)
+                << " is "
+                << ::boost::math::spherical(rho, theta, phi1, phi2)
                 << ::std::endl;
     
-    float                                 alpha = ::std::atan(1.0f);
+    float                         alpha = ::std::atan(1.0f);
     
     ::std::cout << "The value of the quaternion represented "
                 << "in semipolar form by "
                 << "rho = " << rho << " , alpha = " << alpha
                 << " , phi1 = " << phi1 << " , phi2 = " << phi2
-                << " is " << ::boost::semipolar(rho, alpha, phi1, phi2)
+                << " is "
+                << ::boost::math::semipolar(rho, alpha, phi1, phi2)
                 << ::std::endl;
     
-    float                                 rho1 = 1;
-    float                                 rho2 = 2;
-    float                                 theta1 = 0;
-    float                                 theta2 = ::std::atan(1.0f)*2;
+    float                         rho1 = 1;
+    float                         rho2 = 2;
+    float                         theta1 = 0;
+    float                         theta2 = ::std::atan(1.0f)*2;
     
     ::std::cout << "The value of the quaternion represented "
                 << "in multipolar form by "
                 << "rho1 = " << rho1 << " , theta1 = " << theta1
                 << " , rho2 = " << rho2 << " , theta2 = " << theta2
-                << " is " << ::boost::multipolar(rho1, theta1, rho2, theta2)
+                << " is "
+                << ::boost::math::multipolar(rho1, theta1, rho2, theta2)
                 << ::std::endl;
     
-    float                                 t = 5;
-    float                                 radius = ::std::sqrt(2.0f);
-    float                                 longitude = ::std::atan(1.0f);
-    float                                 lattitude =
-                                              ::std::atan(::std::sqrt(3.0f));
+    float                         t = 5;
+    float                         radius = ::std::sqrt(2.0f);
+    float                         longitude = ::std::atan(1.0f);
+    float                         lattitude = ::std::atan(::std::sqrt(3.0f));
     
     ::std::cout << "The value of the quaternion represented "
                 << "in cylindrospherical form by "
                 << "t = " << t << " , radius = " << radius
                 << " , longitude = " << longitude << " , latitude = "
                 << lattitude << " is "
-                << ::boost::cylindrospherical(t, radius, longitude, lattitude)
+                << ::boost::math::cylindrospherical(t, radius,
+                        longitude, lattitude)
                 << ::std::endl;
     
-    float                                 r = ::std::sqrt(2.0f);
-    float                                 angle = ::std::atan(1.0f);
-    float                                 h1 = 3;
-    float                                 h2 = 4;
+    float                         r = ::std::sqrt(2.0f);
+    float                         angle = ::std::atan(1.0f);
+    float                         h1 = 3;
+    float                         h2 = 4;
     
     ::std::cout << "The value of the quaternion represented "
                 << "in cylindrical form by "
                 << "r = " << r << " , angle = " << angle
                 << " , h1 = " << h1 << " , h2 = " << h2
-                << " is " << ::boost::cylindrical(r, angle, h1, h2)
+                << " is "
+                << ::boost::math::cylindrical(r, angle, h1, h2)
                 << ::std::endl;
     
-    double                                real_1(1);
-    ::std::complex<double>                complex_1(1);
-    ::std::complex<double>                complex_i(0,1);
-    ::boost::quaternion<double>           quaternion_1(1);
-    ::boost::quaternion<double>           quaternion_i(0,1);
-    ::boost::quaternion<double>           quaternion_j(0,0,1);
-    ::boost::quaternion<double>           quaternion_k(0,0,0,1);
+    double                                  real_1(1);
+    ::std::complex<double>                  complex_1(1);
+    ::std::complex<double>                  complex_i(0,1);
+    ::boost::math::quaternion<double>       quaternion_1(1);
+    ::boost::math::quaternion<double>       quaternion_i(0,1);
+    ::boost::math::quaternion<double>       quaternion_j(0,0,1);
+    ::boost::math::quaternion<double>       quaternion_k(0,0,0,1);
     
     ::std::cout << ::std::endl;
     
@@ -407,404 +411,144 @@ int    test_main(int, char *[])
         
     using ::std::numeric_limits;
     
-    using ::boost::abs;
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<float>(1,0,0,0)*
-        ::boost::quaternion<float>(1,0,0,0)-
-        static_cast<float>(1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<float>(0,1,0,0)*
-        ::boost::quaternion<float>(0,1,0,0)+
-        static_cast<float>(1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<float>(0,0,1,0)*
-        ::boost::quaternion<float>(0,0,1,0)+
-        static_cast<float>(1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<float>(0,0,0,1)*
-        ::boost::quaternion<float>(0,0,0,1)+
-        static_cast<float>(1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<float>(0,1,0,0)*
-        ::boost::quaternion<float>(0,0,1,0)-
-        ::boost::quaternion<float>(0,0,0,1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<float>(0,0,1,0)*
-        ::boost::quaternion<float>(0,1,0,0)+
-        ::boost::quaternion<float>(0,0,0,1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<float>(0,0,1,0)*
-        ::boost::quaternion<float>(0,0,0,1)-
-        ::boost::quaternion<float>(0,1,0,0)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<float>(0,0,0,1)*
-        ::boost::quaternion<float>(0,0,1,0)+
-        ::boost::quaternion<float>(0,1,0,0)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<float>(0,0,0,1)*
-        ::boost::quaternion<float>(0,1,0,0)-
-        ::boost::quaternion<float>(0,0,1,0)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<float>(0,1,0,0)*
-        ::boost::quaternion<float>(0,0,0,1)+
-        ::boost::quaternion<float>(0,0,1,0)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        exp(::boost::quaternion<float>(0,4*::std::atan(1.0),0,0))+
-        static_cast<float>(1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        exp(::boost::quaternion<float>(0,0,4*::std::atan(1.0),0))+
-        static_cast<float>(1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        exp(::boost::quaternion<float>(0,0,0,4*::std::atan(1.0)))+
-        static_cast<float>(1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<float>(4)*
-        cos(::boost::quaternion<float>(0,::std::log(2.0),0,0))-
-        static_cast<float>(5)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<float>(4)*
-        cos(::boost::quaternion<float>(0,0,::std::log(2.0),0))-
-        static_cast<float>(5)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<float>(4)*
-        cos(::boost::quaternion<float>(0,0,0,::std::log(2.0)))-
-        static_cast<float>(5)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<float>(4)*
-        sin(::boost::quaternion<float>(0,::std::log(2.0),0,0))-
-        ::boost::quaternion<float>(0,3,0,0)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<float>(4)*
-        sin(::boost::quaternion<float>(0,0,::std::log(2.0),0))-
-        ::boost::quaternion<float>(0,0,3,0)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<float>(4)*
-        sin(::boost::quaternion<float>(0,0,0,::std::log(2.0)))-
-        ::boost::quaternion<float>(0,0,0,3)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        cosh(::boost::quaternion<float>(0,4*::std::atan(1.0),0,0))+
-        static_cast<float>(1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        cosh(::boost::quaternion<float>(0,0,4*::std::atan(1.0),0))+
-        static_cast<float>(1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        cosh(::boost::quaternion<float>(0,0,0,4*::std::atan(1.0)))+
-        static_cast<float>(1)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        sinh(::boost::quaternion<float>(0,2*::std::atan(1.0),0,0))-
-        ::boost::quaternion<float>(0,1,0,0)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        sinh(::boost::quaternion<float>(0,0,2*::std::atan(1.0),0))-
-        ::boost::quaternion<float>(0,0,1,0)) <=
-        numeric_limits<float>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        sinh(::boost::quaternion<float>(0,0,0,2*::std::atan(1.0)))-
-        ::boost::quaternion<float>(0,0,0,1)) <=
-        numeric_limits<float>::epsilon());
-    
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<double>(1,0,0,0)*
-        ::boost::quaternion<double>(1,0,0,0)-
-        static_cast<double>(1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<double>(0,1,0,0)*
-        ::boost::quaternion<double>(0,1,0,0)+
-        static_cast<double>(1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<double>(0,0,1,0)*
-        ::boost::quaternion<double>(0,0,1,0)+
-        static_cast<double>(1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<double>(0,0,0,1)*
-        ::boost::quaternion<double>(0,0,0,1)+
-        static_cast<double>(1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<double>(0,1,0,0)*
-        ::boost::quaternion<double>(0,0,1,0)-
-        ::boost::quaternion<double>(0,0,0,1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<double>(0,0,1,0)*
-        ::boost::quaternion<double>(0,1,0,0)+
-        ::boost::quaternion<double>(0,0,0,1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<double>(0,0,1,0)*
-        ::boost::quaternion<double>(0,0,0,1)-
-        ::boost::quaternion<double>(0,1,0,0)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<double>(0,0,0,1)*
-        ::boost::quaternion<double>(0,0,1,0)+
-        ::boost::quaternion<double>(0,1,0,0)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<double>(0,0,0,1)*
-        ::boost::quaternion<double>(0,1,0,0)-
-        ::boost::quaternion<double>(0,0,1,0)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<double>(0,1,0,0)*
-        ::boost::quaternion<double>(0,0,0,1)+
-        ::boost::quaternion<double>(0,0,1,0)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        exp(::boost::quaternion<double>(0,4*::std::atan(1.0),0,0))+
-        static_cast<double>(1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        exp(::boost::quaternion<double>(0,0,4*::std::atan(1.0),0))+
-        static_cast<double>(1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        exp(::boost::quaternion<double>(0,0,0,4*::std::atan(1.0)))+
-        static_cast<double>(1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<double>(4)*
-        cos(::boost::quaternion<double>(0,::std::log(2.0),0,0))-
-        static_cast<double>(5)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<double>(4)*
-        cos(::boost::quaternion<double>(0,0,::std::log(2.0),0))-
-        static_cast<double>(5)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<double>(4)*
-        cos(::boost::quaternion<double>(0,0,0,::std::log(2.0)))-
-        static_cast<double>(5)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<double>(4)*
-        sin(::boost::quaternion<double>(0,::std::log(2.0),0,0))-
-        ::boost::quaternion<double>(0,3,0,0)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<double>(4)*
-        sin(::boost::quaternion<double>(0,0,::std::log(2.0),0))-
-        ::boost::quaternion<double>(0,0,3,0)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<double>(4)*
-        sin(::boost::quaternion<double>(0,0,0,::std::log(2.0)))-
-        ::boost::quaternion<double>(0,0,0,3)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        cosh(::boost::quaternion<double>(0,4*::std::atan(1.0),0,0))+
-        static_cast<double>(1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        cosh(::boost::quaternion<double>(0,0,4*::std::atan(1.0),0))+
-        static_cast<double>(1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        cosh(::boost::quaternion<double>(0,0,0,4*::std::atan(1.0)))+
-        static_cast<double>(1)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        sinh(::boost::quaternion<double>(0,2*::std::atan(1.0),0,0))-
-        ::boost::quaternion<double>(0,1,0,0)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        sinh(::boost::quaternion<double>(0,0,2*::std::atan(1.0),0))-
-        ::boost::quaternion<double>(0,0,1,0)) <=
-        numeric_limits<double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        sinh(::boost::quaternion<double>(0,0,0,2*::std::atan(1.0)))-
-        ::boost::quaternion<double>(0,0,0,1)) <=
-        numeric_limits<double>::epsilon());
-    
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<long double>(1,0,0,0)*
-        ::boost::quaternion<long double>(1,0,0,0)-
-        static_cast<long double>(1)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<long double>(0,1,0,0)*
-        ::boost::quaternion<long double>(0,1,0,0)+
-        static_cast<long double>(1)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<long double>(0,0,1,0)*
-        ::boost::quaternion<long double>(0,0,1,0)+
-        static_cast<long double>(1)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<long double>(0,0,0,1)*
-        ::boost::quaternion<long double>(0,0,0,1)+
-        static_cast<long double>(1)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<long double>(0,1,0,0)*
-        ::boost::quaternion<long double>(0,0,1,0)-
-        ::boost::quaternion<long double>(0,0,0,1)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<long double>(0,0,1,0)*
-        ::boost::quaternion<long double>(0,1,0,0)+
-        ::boost::quaternion<long double>(0,0,0,1)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<long double>(0,0,1,0)*
-        ::boost::quaternion<long double>(0,0,0,1)-
-        ::boost::quaternion<long double>(0,1,0,0)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<long double>(0,0,0,1)*
-        ::boost::quaternion<long double>(0,0,1,0)+
-        ::boost::quaternion<long double>(0,1,0,0)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<long double>(0,0,0,1)*
-        ::boost::quaternion<long double>(0,1,0,0)-
-        ::boost::quaternion<long double>(0,0,1,0)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(::boost::quaternion<long double>(0,1,0,0)*
-        ::boost::quaternion<long double>(0,0,0,1)+
-        ::boost::quaternion<long double>(0,0,1,0)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        exp(::boost::quaternion<long double>(0,4*::std::atan(1.0),0,0))+
-        static_cast<long double>(1)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        exp(::boost::quaternion<long double>(0,0,4*::std::atan(1.0),0))+
-        static_cast<long double>(1)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        exp(::boost::quaternion<long double>(0,0,0,4*::std::atan(1.0)))+
-        static_cast<long double>(1)) <=
-        numeric_limits<long double>::epsilon());
-    
-#if 0
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<long double>(4)*
-        cos(::boost::quaternion<long double>(0,::std::log(2.0),0,0))-
-        static_cast<long double>(5)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<long double>(4)*
-        cos(::boost::quaternion<long double>(0,0,::std::log(2.0),0))-
-        static_cast<long double>(5)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<long double>(4)*
-        cos(::boost::quaternion<long double>(0,0,0,::std::log(2.0)))-
-        static_cast<long double>(5)) <=
-        numeric_limits<long double>::epsilon());
-
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<long double>(4)*
-        sin(::boost::quaternion<long double>(0,::std::log(2.0),0,0))-
-        ::boost::quaternion<long double>(0,3,0,0)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<long double>(4)*
-        sin(::boost::quaternion<long double>(0,0,::std::log(2.0),0))-
-        ::boost::quaternion<long double>(0,0,3,0)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        static_cast<long double>(4)*
-        sin(::boost::quaternion<long double>(0,0,0,::std::log(2.0)))-
-        ::boost::quaternion<long double>(0,0,0,3)) <=
-        numeric_limits<long double>::epsilon());
-#endif
-    
-    BOOST_CRITICAL_TEST(abs(
-        cosh(::boost::quaternion<long double>(0,4*::std::atan(1.0),0,0))+
-        static_cast<long double>(1)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        cosh(::boost::quaternion<long double>(0,0,4*::std::atan(1.0),0))+
-        static_cast<long double>(1)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        cosh(::boost::quaternion<long double>(0,0,0,4*::std::atan(1.0)))+
-        static_cast<long double>(1)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        sinh(::boost::quaternion<long double>(0,2*::std::atan(1.0),0,0))-
-        ::boost::quaternion<long double>(0,1,0,0)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        sinh(::boost::quaternion<long double>(0,0,2*::std::atan(1.0),0))-
-        ::boost::quaternion<long double>(0,0,1,0)) <=
-        numeric_limits<long double>::epsilon());
-    
-    BOOST_CRITICAL_TEST(abs(
-        sinh(::boost::quaternion<long double>(0,0,0,2*::std::atan(1.0)))-
-        ::boost::quaternion<long double>(0,0,0,1)) <=
-        numeric_limits<long double>::epsilon());
+    using ::boost::math::abs;
+    
+    #define    BOOST_QUATERNION_MULTIPLICATION_TEST(type)                   \
+                                                                            \
+        BOOST_CRITICAL_TEST(abs(::boost::math::quaternion<type>(1,0,0,0)*   \
+            ::boost::math::quaternion<type>(1,0,0,0)-                       \
+            static_cast<type>(1)) <=                                        \
+            numeric_limits<type>::epsilon());                               \
+                                                                            \
+        BOOST_CRITICAL_TEST(abs(::boost::math::quaternion<type>(0,1,0,0)*   \
+            ::boost::math::quaternion<type>(0,1,0,0)+                       \
+            static_cast<type>(1)) <=                                        \
+            numeric_limits<type>::epsilon());                               \
+                                                                            \
+        BOOST_CRITICAL_TEST(abs(::boost::math::quaternion<type>(0,0,1,0)*   \
+            ::boost::math::quaternion<type>(0,0,1,0)+                       \
+            static_cast<type>(1)) <=                                        \
+            numeric_limits<type>::epsilon());                               \
+                                                                            \
+        BOOST_CRITICAL_TEST(abs(::boost::math::quaternion<type>(0,0,0,1)*   \
+            ::boost::math::quaternion<type>(0,0,0,1)+                       \
+            static_cast<type>(1)) <=                                        \
+            numeric_limits<type>::epsilon());                               \
+                                                                            \
+        BOOST_CRITICAL_TEST(abs(::boost::math::quaternion<type>(0,1,0,0)*   \
+            ::boost::math::quaternion<type>(0,0,1,0)-                       \
+            ::boost::math::quaternion<type>(0,0,0,1)) <=                    \
+            numeric_limits<type>::epsilon());                               \
+                                                                            \
+        BOOST_CRITICAL_TEST(abs(::boost::math::quaternion<type>(0,0,1,0)*   \
+            ::boost::math::quaternion<type>(0,1,0,0)+                       \
+            ::boost::math::quaternion<type>(0,0,0,1)) <=                    \
+            numeric_limits<type>::epsilon());                               \
+                                                                            \
+        BOOST_CRITICAL_TEST(abs(::boost::math::quaternion<type>(0,0,1,0)*   \
+            ::boost::math::quaternion<type>(0,0,0,1)-                       \
+            ::boost::math::quaternion<type>(0,1,0,0)) <=                    \
+            numeric_limits<type>::epsilon());                               \
+                                                                            \
+        BOOST_CRITICAL_TEST(abs(::boost::math::quaternion<type>(0,0,0,1)*   \
+            ::boost::math::quaternion<type>(0,0,1,0)+                       \
+            ::boost::math::quaternion<type>(0,1,0,0)) <=                    \
+            numeric_limits<type>::epsilon());                               \
+                                                                            \
+        BOOST_CRITICAL_TEST(abs(::boost::math::quaternion<type>(0,0,0,1)*   \
+            ::boost::math::quaternion<type>(0,1,0,0)-                       \
+            ::boost::math::quaternion<type>(0,0,1,0)) <=                    \
+            numeric_limits<type>::epsilon());                               \
+                                                                            \
+        BOOST_CRITICAL_TEST(abs(::boost::math::quaternion<type>(0,1,0,0)*   \
+            ::boost::math::quaternion<type>(0,0,0,1)+                       \
+            ::boost::math::quaternion<type>(0,0,1,0)) <=                    \
+            numeric_limits<type>::epsilon());
+    
+    
+    #define    BOOST_QUATERNION_TRENSCENDENTALS_TEST(type)                  \
+                                                                            \
+        BOOST_TEST(abs(                                                     \
+            exp(::boost::math::quaternion<type>(0,4*::std::atan(1.0),0,0))+   \
+            static_cast<type>(1)) <= 2*numeric_limits<type>::epsilon());    \
+                                                                            \
+        BOOST_TEST(abs(                                                     \
+            exp(::boost::math::quaternion<type>(0,0,4*::std::atan(1.0),0))+   \
+            static_cast<type>(1)) <= 2*numeric_limits<type>::epsilon());    \
+                                                                            \
+        BOOST_TEST(abs(                                                     \
+            exp(::boost::math::quaternion<type>(0,0,0,4*::std::atan(1.0)))+   \
+            static_cast<type>(1)) <= 2*numeric_limits<type>::epsilon());    \
+                                                                            \
+        BOOST_TEST(abs(static_cast<type>(4)*                                \
+            cos(::boost::math::quaternion<type>(0,::std::log(2.0),0,0))-      \
+            static_cast<type>(5)) <= 4*numeric_limits<type>::epsilon());    \
+                                                                            \
+        BOOST_TEST(abs(static_cast<type>(4)*                                \
+            cos(::boost::math::quaternion<type>(0,0,::std::log(2.0),0))-      \
+            static_cast<type>(5)) <= 4*numeric_limits<type>::epsilon());    \
+                                                                            \
+        BOOST_TEST(abs(static_cast<type>(4)*                                \
+            cos(::boost::math::quaternion<type>(0,0,0,::std::log(2.0)))-      \
+            static_cast<type>(5)) <= 4*numeric_limits<type>::epsilon());    \
+                                                                            \
+        BOOST_TEST(abs(static_cast<type>(4)*                                \
+            sin(::boost::math::quaternion<type>(0,::std::log(2.0),0,0))-      \
+            ::boost::math::quaternion<type>(0,3,0,0)) <=                    \
+            4*numeric_limits<type>::epsilon());                             \
+                                                                            \
+        BOOST_TEST(abs(static_cast<type>(4)*                                \
+            sin(::boost::math::quaternion<type>(0,0,::std::log(2.0),0))-      \
+            ::boost::math::quaternion<type>(0,0,3,0)) <=                    \
+            4*numeric_limits<type>::epsilon());                             \
+                                                                            \
+        BOOST_TEST(abs(static_cast<type>(4)*                                \
+            sin(::boost::math::quaternion<type>(0,0,0,::std::log(2.0)))-      \
+            ::boost::math::quaternion<type>(0,0,0,3)) <=                    \
+            4*numeric_limits<type>::epsilon());                             \
+                                                                            \
+        BOOST_TEST(abs(                                                     \
+            cosh(::boost::math::quaternion<type>(0,4*::std::atan(1.0),0,0))+  \
+            static_cast<type>(1)) <= 4*numeric_limits<type>::epsilon());    \
+                                                                            \
+        BOOST_TEST(abs(                                                     \
+            cosh(::boost::math::quaternion<type>(0,0,4*::std::atan(1.0),0))+  \
+            static_cast<type>(1)) <= 4*numeric_limits<type>::epsilon());    \
+                                                                            \
+        BOOST_TEST(abs(                                                     \
+            cosh(::boost::math::quaternion<type>(0,0,0,4*::std::atan(1.0)))+  \
+            static_cast<type>(1)) <= 4*numeric_limits<type>::epsilon());    \
+                                                                            \
+        BOOST_TEST(abs(                                                     \
+            sinh(::boost::math::quaternion<type>(0,2*::std::atan(1.0),0,0))-  \
+            ::boost::math::quaternion<type>(0,1,0,0)) <=                    \
+            4*numeric_limits<type>::epsilon());                             \
+                                                                            \
+        BOOST_TEST(abs(                                                     \
+            sinh(::boost::math::quaternion<type>(0,0,2*::std::atan(1.0),0))-  \
+            ::boost::math::quaternion<type>(0,0,1,0)) <=                    \
+            4*numeric_limits<type>::epsilon());                             \
+                                                                            \
+        BOOST_TEST(abs(                                                     \
+            sinh(::boost::math::quaternion<type>(0,0,0,2*::std::atan(1.0)))-  \
+            ::boost::math::quaternion<type>(0,0,0,1)) <=                    \
+            4*numeric_limits<type>::epsilon());
+    
+    
+    #define    BOOST_QUATERNION_TEST(type)            \
+        BOOST_QUATERNION_MULTIPLICATION_TEST(type)    \
+        BOOST_QUATERNION_TRENSCENDENTALS_TEST(type)
+    
+    
+    BOOST_QUATERNION_TEST(float)
+    BOOST_QUATERNION_TEST(double)
+    BOOST_QUATERNION_TEST(long double)
+    
+    
+    #undef    BOOST_QUATERNION_TEST
+    
+    #undef    BOOST_QUATERNION_MULTIPLICATION_TEST
+    #undef    BOOST_QUATERNION_TRENSCENDENTALS_TEST
     
     
     return(::boost::exit_success);

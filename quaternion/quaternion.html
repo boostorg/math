@@ -46,134 +46,143 @@
 		<h2><a name="Synopsis"></a>Synopsis</h2>
 		<pre><code>namespace boost
 {
-
-	template&lt;typename T&gt; class <a href="#quaternion">quaternion</a>;
-	template&lt;&gt;           class <a href="#quaternion<float>">quaternion&lt;float&gt;</a>;
-	template&lt;&gt;           class <a href="#quaternion<double>">quaternion&lt;double&gt;</a>; 
-	template&lt;&gt;           class <a href="#quaternion<long double>">quaternion&lt;long double&gt;</a>; 
 	
-	// operators
-
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+	namespace math
+	{
 	
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator *</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator *</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator *</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator *</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator *</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator /</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator /</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator /</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator /</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator /</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs); 
-	
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (quaternion&lt;T&gt; const &amp; q);
-	template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (quaternion&lt;T&gt; const &amp; q); 
-	
-	template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator ==</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator ==</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
-	template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator ==</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator ==</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator ==</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	
-	template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator !=</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator !=</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
-	template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator !=</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator !=</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
-	template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator !=</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs); 
-	
-	template&lt;typename T, typename charT, class traits&gt;
-	::std::basic_istream&lt;charT,traits&gt; &amp;	<a href="#quaternion non-member operations">operator &gt;&gt;</a> (::std::basic_istream&lt;charT,traits&gt; &amp; is, quaternion&lt;T&gt; &amp; q);
-	
-	template&lt;typename T, typename charT, class traits&gt;
-	::std::basic_ostream&lt;charT,traits&gt; &amp;	<a href="#quaternion non-member operations">operator &lt;&lt;</a> (::std::basic_ostream&lt;charT,traits&gt; &amp; os, quaternion&lt;T&gt; const &amp; q);
-	
-	// values
-	
-	template&lt;typename T&gt;	inline T		<a href="#quaternion value operations">real</a>(quaternion&lt;T&gt; const &amp; q);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">unreal</a>(quaternion&lt;T&gt; const &amp; q);
-	
-	template&lt;typename T&gt;	inline T		<a href="#quaternion value operations">sup</a>(quaternion&lt;T&gt; const &amp; q);
-	template&lt;typename T&gt;	inline T		<a href="#quaternion value operations">l1</a>(quaternion&lt;T&gt; const &amp; q);
-	template&lt;typename T&gt;	inline T		<a href="#quaternion value operations">abs</a>(quaternion&lt;T&gt; const &amp; q);
-	template&lt;typename T&gt;	inline T		<a href="#quaternion value operations">norm</a>(quaternion&lt;T&gt;const  &amp; q);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">conj</a>(quaternion&lt;T&gt; const &amp; q);
-	
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">spherical</a>(T const &amp; rho, T const &amp; theta, T const &amp; phi1, T const &amp; phi2);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">semipolar</a>(T const &amp; rho, T const &amp; alpha, T const &amp; theta1, T const &amp; theta2);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">multipolar</a>(T const &amp; rho1, T const &amp; theta1, T const &amp; rho2, T const &amp; theta2);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">cylindrospherical</a>(T const &amp; t, T const &amp; radius, T const &amp; longitude, T const &amp; latitude);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">cylindrical</a>(T const &amp; r, T const &amp; angle, T const &amp; h1, T const &amp; h2);
-	
-	// transcendentals
-	
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#exp">exp</a>(quaternion&lt;T&gt; const &amp; q);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#cos">cos</a>(quaternion&lt;T&gt; const &amp; q);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#sin">sin</a>(quaternion&lt;T&gt; const &amp; q);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#tan">tan</a>(quaternion&lt;T&gt; const &amp; q);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#cosh">cosh</a>(quaternion&lt;T&gt; const &amp; q);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#sinh">sinh</a>(quaternion&lt;T&gt; const &amp; q);
-	template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#tanh">tanh</a>(quaternion&lt;T&gt; const &amp; q);
-	
-	template&lt;typename T&gt;	quaternion&lt;T&gt;		<a href="#pow">pow</a>(quaternion&lt;T&gt; const &amp; q, int n);
+		template&lt;typename T&gt; class <a href="#quaternion">quaternion</a>;
+		template&lt;&gt;           class <a href="#quaternion<float>">quaternion&lt;float&gt;</a>;
+		template&lt;&gt;           class <a href="#quaternion<double>">quaternion&lt;double&gt;</a>; 
+		template&lt;&gt;           class <a href="#quaternion<long double>">quaternion&lt;long double&gt;</a>; 
+		
+		// operators
+		
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator *</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator *</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator *</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator *</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator *</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator /</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator /</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator /</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator /</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator /</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs); 
+		
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator +</a> (quaternion&lt;T&gt; const &amp; q);
+		template&lt;typename T&gt; inline quaternion&lt;T&gt; <a href="#quaternion non-member operations">operator -</a> (quaternion&lt;T&gt; const &amp; q); 
+		
+		template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator ==</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator ==</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
+		template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator ==</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator ==</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator ==</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		
+		template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator !=</a> (T const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator !=</a> (quaternion&lt;T&gt; const &amp; lhs, T const &amp; rhs);
+		template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator !=</a> (::std::complex&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator !=</a> (quaternion&lt;T&gt; const &amp; lhs, ::std::complex&lt;T&gt; const &amp; rhs);
+		template&lt;typename T&gt; inline bool <a href="#quaternion non-member operations">operator !=</a> (quaternion&lt;T&gt; const &amp; lhs, quaternion&lt;T&gt; const &amp; rhs); 
+		
+		template&lt;typename T, typename charT, class traits&gt;
+		::std::basic_istream&lt;charT,traits&gt; &amp;	<a href="#quaternion non-member operations">operator &gt;&gt;</a> (::std::basic_istream&lt;charT,traits&gt; &amp; is, quaternion&lt;T&gt; &amp; q);
+		
+		template&lt;typename T, typename charT, class traits&gt;
+		::std::basic_ostream&lt;charT,traits&gt; &amp;	<a href="#quaternion non-member operations">operator &lt;&lt;</a> (::std::basic_ostream&lt;charT,traits&gt; &amp; os, quaternion&lt;T&gt; const &amp; q);
+		
+		// values
+		
+		template&lt;typename T&gt;	inline T		<a href="#quaternion value operations">real</a>(quaternion&lt;T&gt; const &amp; q);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">unreal</a>(quaternion&lt;T&gt; const &amp; q);
+		
+		template&lt;typename T&gt;	inline T		<a href="#quaternion value operations">sup</a>(quaternion&lt;T&gt; const &amp; q);
+		template&lt;typename T&gt;	inline T		<a href="#quaternion value operations">l1</a>(quaternion&lt;T&gt; const &amp; q);
+		template&lt;typename T&gt;	inline T		<a href="#quaternion value operations">abs</a>(quaternion&lt;T&gt; const &amp; q);
+		template&lt;typename T&gt;	inline T		<a href="#quaternion value operations">norm</a>(quaternion&lt;T&gt;const  &amp; q);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">conj</a>(quaternion&lt;T&gt; const &amp; q);
+		
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">spherical</a>(T const &amp; rho, T const &amp; theta, T const &amp; phi1, T const &amp; phi2);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">semipolar</a>(T const &amp; rho, T const &amp; alpha, T const &amp; theta1, T const &amp; theta2);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">multipolar</a>(T const &amp; rho1, T const &amp; theta1, T const &amp; rho2, T const &amp; theta2);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">cylindrospherical</a>(T const &amp; t, T const &amp; radius, T const &amp; longitude, T const &amp; latitude);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#quaternion value operations">cylindrical</a>(T const &amp; r, T const &amp; angle, T const &amp; h1, T const &amp; h2);
+		
+		// transcendentals
+		
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#exp">exp</a>(quaternion&lt;T&gt; const &amp; q);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#cos">cos</a>(quaternion&lt;T&gt; const &amp; q);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#sin">sin</a>(quaternion&lt;T&gt; const &amp; q);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#tan">tan</a>(quaternion&lt;T&gt; const &amp; q);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#cosh">cosh</a>(quaternion&lt;T&gt; const &amp; q);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#sinh">sinh</a>(quaternion&lt;T&gt; const &amp; q);
+		template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<a href="#tanh">tanh</a>(quaternion&lt;T&gt; const &amp; q);
+		
+		template&lt;typename T&gt;	quaternion&lt;T&gt;		<a href="#pow">pow</a>(quaternion&lt;T&gt; const &amp; q, int n);
+		
+	}
 	
 }</code></pre>
 		<h2><a name="Template class quaternion"></a>Template class <code>quaternion</code></h2>
 		<pre><code>namespace boost
 {
-	
-<a name="quaternion"></a>	template&lt;typename T&gt;
-	class quaternion
+	namespace math
 	{
-	public:
 	
-	typedef T <a href="#value_type">value_type</a>;
-	
-	explicit		<a href="#Constructors">quaternion</a>(T const &amp; requested_a = T(), T const &amp; requested_b = T(), T const &amp; requested_c = T(), T const &amp; requested_d = T());
-	explicit		<a href="#Constructors">quaternion</a>(::std::complex&lt;T&gt; const &amp; z0, ::std::complex&lt;T&gt; const &amp; z1 = ::std::complex&lt;T&gt;());
-	template&lt;typename X&gt; explicit	<a href="#Constructors">quaternion</a>(quaternion&lt;X&gt; const &amp; a_recopier);
-	
-	T			<a href="#Other member functions">real</a>() const;
-	quaternion&lt;T&gt;		<a href="#Other member functions">unreal</a>() const;
-	T			<a href="#Other member functions">R_component_1</a>() const;
-	T			<a href="#Other member functions">R_component_2</a>() const;
-	T			<a href="#Other member functions">R_component_3</a>() const;
-	T			<a href="#Other member functions">R_component_4</a>() const;
-	::std::complex&lt;T&gt;	<a href="#Other member functions">C_component_1</a>() const;
-	::std::complex&lt;T&gt;	<a href="#Other member functions">C_component_2</a>() const;
-	
-	quaternion&lt;T&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;T&gt; const  &amp; a_affecter);
-	template&lt;typename X&gt;	quaternion&lt;T&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;X&gt; const  &amp; a_affecter);
-	quaternion&lt;T&gt; &amp;	<a href="#Assignment operators">operator =</a> (T const  &amp; a_affecter);
-	quaternion&lt;T&gt; &amp;	<a href="#Assignment operators">operator =</a> (::std::complex&lt;T&gt; const &amp; a_affecter);
-	
-	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator +=</a> (T const &amp; rhs);
-	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator +=</a> (::std::complex&lt;T&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator +=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator -=</a> (T const &amp; rhs);
-	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator -=</a> (::std::complex&lt;T&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator -=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator *=</a> (T const &amp; rhs);
-	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator *=</a> (::std::complex&lt;T&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator *=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator /=</a> (T const &amp; rhs);
-	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator /=</a> (::std::complex&lt;T&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator /=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
+<a name="quaternion"></a>		template&lt;typename T&gt;
+		class quaternion
+		{
+		public:
+			
+			typedef T <a href="#value_type">value_type</a>;
+			
+			explicit		<a href="#Constructors">quaternion</a>(T const &amp; requested_a = T(), T const &amp; requested_b = T(), T const &amp; requested_c = T(), T const &amp; requested_d = T());
+			explicit		<a href="#Constructors">quaternion</a>(::std::complex&lt;T&gt; const &amp; z0, ::std::complex&lt;T&gt; const &amp; z1 = ::std::complex&lt;T&gt;());
+			template&lt;typename X&gt; explicit	<a href="#Constructors">quaternion</a>(quaternion&lt;X&gt; const &amp; a_recopier);
+			
+			T			<a href="#Other member functions">real</a>() const;
+			quaternion&lt;T&gt;		<a href="#Other member functions">unreal</a>() const;
+			T			<a href="#Other member functions">R_component_1</a>() const;
+			T			<a href="#Other member functions">R_component_2</a>() const;
+			T			<a href="#Other member functions">R_component_3</a>() const;
+			T			<a href="#Other member functions">R_component_4</a>() const;
+			::std::complex&lt;T&gt;	<a href="#Other member functions">C_component_1</a>() const;
+			::std::complex&lt;T&gt;	<a href="#Other member functions">C_component_2</a>() const;
+			
+			quaternion&lt;T&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;T&gt; const  &amp; a_affecter);
+			template&lt;typename X&gt;	quaternion&lt;T&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;X&gt; const  &amp; a_affecter);
+			quaternion&lt;T&gt; &amp;	<a href="#Assignment operators">operator =</a> (T const  &amp; a_affecter);
+			quaternion&lt;T&gt; &amp;	<a href="#Assignment operators">operator =</a> (::std::complex&lt;T&gt; const &amp; a_affecter);
+			
+			quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator +=</a> (T const &amp; rhs);
+			quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator +=</a> (::std::complex&lt;T&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator +=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator -=</a> (T const &amp; rhs);
+			quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator -=</a> (::std::complex&lt;T&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator -=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator *=</a> (T const &amp; rhs);
+			quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator *=</a> (::std::complex&lt;T&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator *=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator /=</a> (T const &amp; rhs);
+			quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator /=</a> (::std::complex&lt;T&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;T&gt; &amp;	<a href="#Other member operators">operator /=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+		};
+		
 	}
 
 }</code></pre>
@@ -182,136 +191,145 @@
 		<pre><code>namespace boost
 {
 	
-<a name="quaternion<float>"></a>	template&lt;&gt;
-	class quaternion&lt;float&gt;
+	namespace math
 	{
-	public:
+		
+<a name="quaternion<float>"></a>			template&lt;&gt;
+		class quaternion&lt;float&gt;
+		{
+		public:
+			
+			typedef float <a href="#value_type">value_type</a>;
+			
+			explicit		<a href="#Constructors">quaternion</a>(float const &amp; requested_a = 0.0f, float const &amp; requested_b = 0.0f, float const &amp; requested_c = 0.0f, float const &amp; requested_d = 0.0f);
+			explicit		<a href="#Constructors">quaternion</a>(::std::complex&lt;float&gt; const &amp; z0, ::std::complex&lt;float&gt; const &amp; z1 = ::std::complex&lt;float&gt;());
+			explicit		<a href="#Constructors">quaternion</a>(quaternion&lt;double&gt; const &amp; a_recopier);
+			explicit		<a href="#Constructors">quaternion</a>(quaternion&lt;long double&gt; const &amp; a_recopier);
+			
+			float			<a href="#Other member functions">real</a>() const;
+			quaternion&lt;float&gt;	<a href="#Other member functions">unreal</a>() const;
+			float			<a href="#Other member functions">R_component_1</a>() const;
+			float			<a href="#Other member functions">R_component_2</a>() const;
+			float			<a href="#Other member functions">R_component_3</a>() const;
+			float			<a href="#Other member functions">R_component_4</a>() const;
+			::std::complex&lt;float&gt;	<a href="#Other member functions">C_component_1</a>() const;
+			::std::complex&lt;float&gt;	<a href="#Other member functions">C_component_2</a>() const;
+			
+			quaternion&lt;float&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;float&gt; const &amp; a_affecter);
+			template&lt;typename X&gt;	quaternion&lt;float&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;X&gt;const  &amp; a_affecter);
+			quaternion&lt;float&gt; &amp;	<a href="#Assignment operators">operator =</a> (float const &amp; a_affecter);
+			quaternion&lt;float&gt; &amp;	<a href="#Assignment operators">operator =</a> (::std::complex&lt;float&gt; const &amp; a_affecter);
+			
+			quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator +=</a> (float const &amp; rhs);
+			quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator +=</a> (::std::complex&lt;float&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator +=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator -=</a> (float const &amp; rhs);
+			quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator -=</a> (::std::complex&lt;float&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator -=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator *=</a> (float const &amp; rhs);
+			quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator *=</a> (::std::complex&lt;float&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator *=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator /=</a> (float const &amp; rhs);
+			quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator /=</a> (::std::complex&lt;float&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator /=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+		};
+		
+		
+<a name="quaternion<double>"></a>		template&lt;&gt;
+		class quaternion&lt;double&gt;
+		{
+		public:
+			
+			typedef double <a href="#value_type">value_type</a>;
+			
+			explicit		<a href="#Constructors">quaternion</a>(double const &amp; requested_a = 0.0, double const &amp; requested_b = 0.0, double const &amp; requested_c = 0.0, double const &amp; requested_d = 0.0);
+			explicit		<a href="#Constructors">quaternion</a>(::std::complex&lt;double&gt; const &amp; z0, ::std::complex&lt;double&gt; const &amp; z1 = ::std::complex&lt;double&gt;());
+			explicit		<a href="#Constructors">quaternion</a>(quaternion&lt;float&gt; const &amp; a_recopier);
+			explicit		<a href="#Constructors">quaternion</a>(quaternion&lt;long double&gt; const &amp; a_recopier);
+			
+			double			<a href="#Other member functions">real</a>() const;
+			quaternion&lt;double&gt;	<a href="#Other member functions">unreal</a>() const;
+			double			<a href="#Other member functions">R_component_1</a>() const;
+			double			<a href="#Other member functions">R_component_2</a>() const;
+			double			<a href="#Other member functions">R_component_3</a>() const;
+			double			<a href="#Other member functions">R_component_4</a>() const;
+			::std::complex&lt;double&gt;	<a href="#Other member functions">C_component_1</a>() const;
+			::std::complex&lt;double&gt;	<a href="#Other member functions">C_component_2</a>() const;
+			
+			quaternion&lt;double&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;double&gt; const &amp; a_affecter);
+			template&lt;typename X&gt;	quaternion&lt;double&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;X&gt; const &amp; a_affecter);
+			quaternion&lt;double&gt; &amp;	<a href="#Assignment operators">operator =</a> (double const &amp; a_affecter);
+			quaternion&lt;double&gt; &amp;	<a href="#Assignment operators">operator =</a> (::std::complex&lt;double&gt; const &amp; a_affecter);
+			
+			quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator +=</a> (double const &amp; rhs);
+			quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator +=</a> (::std::complex&lt;double&gt; const &amp; rhs);
+			template&lt;typename X&gt; quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator +=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator -=</a> (double const &amp; rhs);
+			quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator -=</a> (::std::complex&lt;double&gt; const &amp; rhs);
+			template&lt;typename X&gt; quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator -=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator *=</a> (double const &amp; rhs);
+			quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator *=</a> (::std::complex&lt;double&gt; const &amp; rhs);
+			template&lt;typename X&gt; quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator *=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator /=</a> (double const &amp; rhs);
+			quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator /=</a> (::std::complex&lt;double&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator /=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+		};
+		
+		
+<a name="quaternion<long double>"></a>		template&lt;&gt;
+		class quaternion&lt;long double&gt;
+		{
+		public:
+			
+			typedef long double <a href="#value_type">value_type</a>;
+			
+			explicit			<a href="#Constructors">quaternion</a>(long double const &amp; requested_a = 0.0L, long double const &amp; requested_b = 0.0L, long double const &amp; requested_c = 0.0L, long double const &amp; requested_d = 0.0L);
+			explicit			<a href="#Constructors">quaternion</a>(	::std::complex&lt;long double&gt; const &amp; z0, ::std::complex&lt;long double&gt; const &amp; z1 = ::std::complex&lt;long double&gt;());
+			explicit			<a href="#Constructors">quaternion</a>(quaternion&lt;float&gt; const &amp; a_recopier);
+			explicit			<a href="#Constructors">quaternion</a>(quaternion&lt;double&gt; const &amp; a_recopier);
+			
+			long double			<a href="#Other member functions">real</a>() const;
+			quaternion&lt;long double&gt;		<a href="#Other member functions">unreal</a>() const;
+			long double			<a href="#Other member functions">R_component_1</a>() const;
+			long double			<a href="#Other member functions">R_component_2</a>() const;
+			long double			<a href="#Other member functions">R_component_3</a>() const;
+			long double			<a href="#Other member functions">R_component_4</a>() const;
+			::std::complex&lt;long double&gt;	<a href="#Other member functions">C_component_1</a>() const;
+			::std::complex&lt;long double&gt;	<a href="#Other member functions">C_component_2</a>() const;
+			
+			quaternion&lt;long double&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;long double&gt; const &amp; a_affecter);
+			template&lt;typename X&gt;	quaternion&lt;long double&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;X&gt; const &amp; a_affecter);
+			quaternion&lt;long double&gt; &amp;	<a href="#Assignment operators">operator =</a> (long double const &amp; a_affecter);
+			quaternion&lt;long double&gt; &amp;	<a href="#Assignment operators">operator =</a> (::std::complex&lt;long double&gt; const &amp; a_affecter);
+			
+			quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator +=</a> (long double const &amp; rhs);
+			quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator +=</a> (::std::complex&lt;long double&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator +=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator -=</a> (long double const &amp; rhs);
+			quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator -=</a> (::std::complex&lt;long double&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator -=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator *=</a> (long double const &amp; rhs);
+			quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator *=</a> (::std::complex&lt;long double&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator *=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+			quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator /=</a> (long double const &amp; rhs);
+			quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator /=</a> (::std::complex&lt;long double&gt; const &amp; rhs);
+			template&lt;typename X&gt;	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator /=</a> (quaternion&lt;X&gt; const &amp; rhs);
+			
+		};
+		
+	}
 	
-	typedef float <a href="#value_type">value_type</a>;
-	
-	explicit		<a href="#Constructors">quaternion</a>(float const &amp; requested_a = 0.0f, float const &amp; requested_b = 0.0f, float const &amp; requested_c = 0.0f, float const &amp; requested_d = 0.0f);
-	explicit		<a href="#Constructors">quaternion</a>(::std::complex&lt;float&gt; const &amp; z0, ::std::complex&lt;float&gt; const &amp; z1 = ::std::complex&lt;float&gt;());
-	explicit		<a href="#Constructors">quaternion</a>(quaternion&lt;double&gt; const &amp; a_recopier);
-	explicit		<a href="#Constructors">quaternion</a>(quaternion&lt;long double&gt; const &amp; a_recopier);
-	
-	float			<a href="#Other member functions">real</a>() const;
-	quaternion&lt;float&gt;	<a href="#Other member functions">unreal</a>() const;
-	float			<a href="#Other member functions">R_component_1</a>() const;
-	float			<a href="#Other member functions">R_component_2</a>() const;
-	float			<a href="#Other member functions">R_component_3</a>() const;
-	float			<a href="#Other member functions">R_component_4</a>() const;
-	::std::complex&lt;float&gt;	<a href="#Other member functions">C_component_1</a>() const;
-	::std::complex&lt;float&gt;	<a href="#Other member functions">C_component_2</a>() const;
-	
-	quaternion&lt;float&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;float&gt; const &amp; a_affecter);
-	template&lt;typename X&gt;	quaternion&lt;float&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;X&gt;const  &amp; a_affecter);
-	quaternion&lt;float&gt; &amp;	<a href="#Assignment operators">operator =</a> (float const &amp; a_affecter);
-	quaternion&lt;float&gt; &amp;	<a href="#Assignment operators">operator =</a> (::std::complex&lt;float&gt; const &amp; a_affecter);
-	
-	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator +=</a> (float const &amp; rhs);
-	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator +=</a> (::std::complex&lt;float&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator +=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator -=</a> (float const &amp; rhs);
-	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator -=</a> (::std::complex&lt;float&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator -=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator *=</a> (float const &amp; rhs);
-	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator *=</a> (::std::complex&lt;float&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator *=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator /=</a> (float const &amp; rhs);
-	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator /=</a> (::std::complex&lt;float&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;float&gt; &amp;	<a href="#Other member operators">operator /=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	};
-	
-	
-<a name="quaternion<double>"></a>	template&lt;&gt;
-	class quaternion&lt;double&gt;
-	{
-	public:
-	
-	typedef double <a href="#value_type">value_type</a>;
-	
-	explicit		<a href="#Constructors">quaternion</a>(double const &amp; requested_a = 0.0, double const &amp; requested_b = 0.0, double const &amp; requested_c = 0.0, double const &amp; requested_d = 0.0);
-	explicit		<a href="#Constructors">quaternion</a>(::std::complex&lt;double&gt; const &amp; z0, ::std::complex&lt;double&gt; const &amp; z1 = ::std::complex&lt;double&gt;());
-	explicit		<a href="#Constructors">quaternion</a>(quaternion&lt;float&gt; const &amp; a_recopier);
-	explicit		<a href="#Constructors">quaternion</a>(quaternion&lt;long double&gt; const &amp; a_recopier);
-	
-	double			<a href="#Other member functions">real</a>() const;
-	quaternion&lt;double&gt;	<a href="#Other member functions">unreal</a>() const;
-	double			<a href="#Other member functions">R_component_1</a>() const;
-	double			<a href="#Other member functions">R_component_2</a>() const;
-	double			<a href="#Other member functions">R_component_3</a>() const;
-	double			<a href="#Other member functions">R_component_4</a>() const;
-	::std::complex&lt;double&gt;	<a href="#Other member functions">C_component_1</a>() const;
-	::std::complex&lt;double&gt;	<a href="#Other member functions">C_component_2</a>() const;
-	
-	quaternion&lt;double&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;double&gt; const &amp; a_affecter);
-	template&lt;typename X&gt;	quaternion&lt;double&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;X&gt; const &amp; a_affecter);
-	quaternion&lt;double&gt; &amp;	<a href="#Assignment operators">operator =</a> (double const &amp; a_affecter);
-	quaternion&lt;double&gt; &amp;	<a href="#Assignment operators">operator =</a> (::std::complex&lt;double&gt; const &amp; a_affecter);
-	
-	quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator +=</a> (double const &amp; rhs);
-	quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator +=</a> (::std::complex&lt;double&gt; const &amp; rhs);
-	template&lt;typename X&gt; quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator +=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator -=</a> (double const &amp; rhs);
-	quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator -=</a> (::std::complex&lt;double&gt; const &amp; rhs);
-	template&lt;typename X&gt; quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator -=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator *=</a> (double const &amp; rhs);
-	quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator *=</a> (::std::complex&lt;double&gt; const &amp; rhs);
-	template&lt;typename X&gt; quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator *=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator /=</a> (double const &amp; rhs);
-	quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator /=</a> (::std::complex&lt;double&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;double&gt; &amp;	<a href="#Other member operators">operator /=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	};
-	
-	
-<a name="quaternion<long double>"></a>	template&lt;&gt;
-	class quaternion&lt;long double&gt;
-	{
-	public:
-	
-	typedef long double <a href="#value_type">value_type</a>;
-	
-	explicit			<a href="#Constructors">quaternion</a>(long double const &amp; requested_a = 0.0L, long double const &amp; requested_b = 0.0L, long double const &amp; requested_c = 0.0L, long double const &amp; requested_d = 0.0L);
-	explicit			<a href="#Constructors">quaternion</a>(	::std::complex&lt;long double&gt; const &amp; z0, ::std::complex&lt;long double&gt; const &amp; z1 = ::std::complex&lt;long double&gt;());
-	explicit			<a href="#Constructors">quaternion</a>(quaternion&lt;float&gt; const &amp; a_recopier);
-	explicit			<a href="#Constructors">quaternion</a>(quaternion&lt;double&gt; const &amp; a_recopier);
-	
-	long double			<a href="#Other member functions">real</a>() const;
-	quaternion&lt;long double&gt;		<a href="#Other member functions">unreal</a>() const;
-	long double			<a href="#Other member functions">R_component_1</a>() const;
-	long double			<a href="#Other member functions">R_component_2</a>() const;
-	long double			<a href="#Other member functions">R_component_3</a>() const;
-	long double			<a href="#Other member functions">R_component_4</a>() const;
-	::std::complex&lt;long double&gt;	<a href="#Other member functions">C_component_1</a>() const;
-	::std::complex&lt;long double&gt;	<a href="#Other member functions">C_component_2</a>() const;
-	
-	quaternion&lt;long double&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;long double&gt; const &amp; a_affecter);
-	template&lt;typename X&gt;	quaternion&lt;long double&gt; &amp;	<a href="#Assignment operators">operator =</a> (quaternion&lt;X&gt; const &amp; a_affecter);
-	quaternion&lt;long double&gt; &amp;	<a href="#Assignment operators">operator =</a> (long double const &amp; a_affecter);
-	quaternion&lt;long double&gt; &amp;	<a href="#Assignment operators">operator =</a> (::std::complex&lt;long double&gt; const &amp; a_affecter);
-	
-	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator +=</a> (long double const &amp; rhs);
-	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator +=</a> (::std::complex&lt;long double&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator +=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator -=</a> (long double const &amp; rhs);
-	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator -=</a> (::std::complex&lt;long double&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator -=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator *=</a> (long double const &amp; rhs);
-	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator *=</a> (::std::complex&lt;long double&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator *=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	
-	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator /=</a> (long double const &amp; rhs);
-	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator /=</a> (::std::complex&lt;long double&gt; const &amp; rhs);
-	template&lt;typename X&gt;	quaternion&lt;long double&gt; &amp;	<a href="#Other member operators">operator /=</a> (quaternion&lt;X&gt; const &amp; rhs);
-	};
 }</code></pre>
 		<p></p>
 		<h2><a name="quaternion typedefs"></a><code>quaternion</code> typedefs</h2>
@@ -592,14 +610,17 @@ template&lt;typename T&gt;	inline quaternion&lt;T&gt;	<strong>cylindrical</stron
 		</blockquote>
 		<h2><a name="History"></a>History</h2>
 		<ul>
+			<li>1.5.2- 07/07/2001: introduced <code>namespace math</code>.
+
 			<li>1.5.1 - 07/06/2001: (end of Boost review) now includes <code>&lt;boost/math/special_functions/sinc.hpp&gt;</code> and <code>&lt;boost/math/special_functions/sinhc.hpp&gt;</code> instead of <code>&lt;boost/special_functions.hpp&gt;</code>; corrected bug in <code>sin</code> (Daryle Walker); removed check for self-assignment (Gary Powel); made converting functions <code>explicit</code> (Gary Powel); added overflow guards for division operators and <code>abs</code> (Peter Schmitteckert); added <code>sup</code> and <code>l1</code>; used Vesa Karvonen's CPP metaprograming technique to simplify code.
+
 			<li>1.5.0 - 26/03/2001: boostification, inlining of all operators except input, output and <code>pow</code>, fixed exception safety of some members (template version) and output operator, added <code>spherical</code>, <code>semipolar</code>, <code>multipolar</code>, <code>cylindrospherical</code> and <code>cylindrical</code>.
 			<li>1.4.0 - 09/01/2001: added <code>tan</code> and <code>tanh</code>.			<li>1.3.1 - 08/01/2001: cosmetic fixes.
 			<li>1.3.0 - 12/07/2000: <code>pow</code> now uses Maarten Hilferink's (mhilferink@tip.nl) algorithm.			<li>1.2.0 - 25/05/2000: fixed the division operators and output; changed many signatures.
 			<li>1.1.0 - 23/05/2000: changed <code>sinc</code> into <code>sinc_pi</code>; added <code>sin</code>, <code>cos</code>, <code>sinh</code>, <code>cosh</code>.			<li>1.0.0 - 10/08/1999: first public version.
 		</ul>
 		<hr>
-		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->06 July 2001<!--webbot bot="Timestamp" endspan i-checksum="18774" --></p>
+		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->07 July 2001<!--webbot bot="Timestamp" endspan i-checksum="32118" --></p>
 		<p>&copy; Copyright Hubert Holin 2001. Permission to copy, use, modify, sell and distribute this document is granted provided this copyright notice appears in all copies. This software is provided &quot;as is&quot; without express or implied&nbsp; warranty, and with no claim as to its suitability for any purpose.</p>
 	</body>
 
