@@ -41,10 +41,10 @@ class big_whole
 {
     struct dummy { dummy *d; };
 
-    typedef big_whole                 self_type;
-    typedef dummy * dummy::*          bool_type;
-    typedef std::valarray<bool>         ma_type;
-    typedef std::valarray<std::size_t>  ia_type;
+    typedef big_whole                    self_type;
+    typedef dummy * dummy::*             bool_type;
+    typedef std::valarray<bool>          mask_type;
+    typedef std::valarray<std::size_t>  index_type;
 
 public:
     // Lifetime management
@@ -53,8 +53,8 @@ public:
 
     big_whole( uintmax_t v );
 
-    explicit  big_whole( ma_type const &b );
-    explicit  big_whole( ia_type const &i );
+    explicit  big_whole( mask_type const &b );
+    explicit  big_whole( index_type const &i );
 
     // Object-mutating operations
     void  swap( self_type &other );
@@ -62,13 +62,13 @@ public:
     void  assign( self_type const &other );
     void  assign( uintmax_t v );
 
-    void  reconfigure( ma_type const &b );
-    void  reconfigure( ia_type const &i );
+    void  reconfigure( mask_type const &b );
+    void  reconfigure( index_type const &i );
 
     // Value-accessing operations
-    uintmax_t  to_uintmax() const;
-    ma_type    to_bit_vector() const;
-    ia_type    to_bit_indices() const;
+    uintmax_t   to_uintmax() const;
+    mask_type   to_bit_vector() const;
+    index_type  to_bit_indices() const;
 
     // Bit-twiddling operations
     void  reset();
@@ -120,8 +120,8 @@ protected:
     static  std::size_t  words_for_bits( std::size_t bits );
 
     static  va_type  uintmax_to_va( uintmax_t v );
-    static  va_type  bit_vector_to_va( ma_type const &b );
-    static  va_type  bit_indices_to_va( ia_type const &i );
+    static  va_type  bit_vector_to_va( mask_type const &b );
+    static  va_type  bit_indices_to_va( index_type const &i );
 
     static  std::size_t  wlength( va_type const &v );
     static  std::size_t  blength( word_type w );
@@ -285,8 +285,8 @@ big_whole::to_bit_vector
 (
 ) const
 {
-    ia_type const  indices = this->to_bit_indices();
-    ma_type        temp;
+    index_type const  indices = this->to_bit_indices();
+    mask_type         temp;
 
     if ( indices.size() )
     {
@@ -304,14 +304,14 @@ big_whole::to_bit_indices
 {
     using std::size_t;
 
-    ia_type  temp;
+    index_type  temp;
 
     if ( va_type const * const  v = this->x_.get() )
     {
         if ( size_t const  s = v->size() )
         {
             int const        d = limits_type::digits;
-            ia_type          temp2( s * d );
+            index_type       temp2( s * d );
             word_type const  mask = 1;
             size_t           bits_used = 0;
 
@@ -450,19 +450,19 @@ big_whole::bits_assign
         std::swap( from, to );
     }
 
-    ia_type const  t_ids = this->to_bit_indices();
-    ia_type const  v_ids = values.to_bit_indices();
+    index_type const  t_ids = this->to_bit_indices();
+    index_type const  v_ids = values.to_bit_indices();
 
-    ia_type const   pre_t_ids = t_ids[ t_ids < from ];
-    ia_type const   new_v_ids = v_ids[ v_ids <= (to - from) ] + from;
-    ia_type const  post_t_ids = t_ids[ t_ids > to ];
+    index_type const   pre_t_ids = t_ids[ t_ids < from ];
+    index_type const   new_v_ids = v_ids[ v_ids <= (to - from) ] + from;
+    index_type const  post_t_ids = t_ids[ t_ids > to ];
 
     size_t const   pre_s =  pre_t_ids.size();
     size_t const   new_s =  new_v_ids.size();
     size_t const  post_s = post_t_ids.size();
 
-    ia_type   new_t_ids( pre_s + new_s + post_s );
-    size_t *  new_t_ptr = &new_t_ids[ 0 ];
+    index_type  new_t_ids( pre_s + new_s + post_s );
+    size_t *    new_t_ptr = &new_t_ids[ 0 ];
 
     for ( size_t  i = 0 ; i < pre_s ; ++i, ++new_t_ptr )
     {
@@ -572,8 +572,8 @@ big_whole::tests
         std::swap( from, to );
     }
 
-    ia_type const      ids = this->to_bit_indices();
-    ia_type        new_ids = ids[ (ids >= from) && (ids <= to) ];
+    index_type const      ids = this->to_bit_indices();
+    index_type        new_ids = ids[ (ids >= from) && (ids <= to) ];
 
     if ( new_ids.size() )
     {
@@ -589,8 +589,8 @@ big_whole::reverse
     std::size_t  cap
 ) const
 {
-    ia_type const      ids = this->to_bit_indices();
-    ia_type const  new_ids = ids[ ids <= cap ];
+    index_type const      ids = this->to_bit_indices();
+    index_type const  new_ids = ids[ ids <= cap ];
 
     return self_type( cap - new_ids );
 }
@@ -721,7 +721,7 @@ big_whole::bit_indices_to_va
     std::valarray<std::size_t> const &  i
 )
 {
-    ma_type  temp;
+    mask_type  temp;
 
     if ( i.size() )
     {
