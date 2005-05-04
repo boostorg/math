@@ -16,6 +16,7 @@
 #include <sstream>                                    // for the "<<" operator
 
 #include <boost/config.hpp> // for BOOST_NO_STD_LOCALE
+#include <boost/detail/workaround.hpp>
 #ifndef    BOOST_NO_STD_LOCALE
     #include <locale>                                    // for the "<<" operator
 #endif /* BOOST_NO_STD_LOCALE */
