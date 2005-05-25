@@ -91,8 +91,10 @@ using   ::boost::math::sinc_pi;
 using   ::boost::math::sinhc_pi;
 #endif  /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
   
-// Provide standard floating point abs() overloads for MSVC
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) || (defined(_MSC_EXTENSIONS) && BOOST_MSVC < 1310)
+// Provide standard floating point abs() overloads if older Microsoft
+// library is used with _MSC_EXTENSIONS defined. This code also works
+// for the Intel compiler using the Microsoft library.
+#if defined(_MSC_EXTENSIONS) && defined(_MSC_VER) && _MSC_VER < 1310
 inline float        abs(float v)
 {
     return(fabs(v));
