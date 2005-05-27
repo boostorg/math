@@ -94,7 +94,8 @@ using   ::boost::math::sinhc_pi;
 // Provide standard floating point abs() overloads if older Microsoft
 // library is used with _MSC_EXTENSIONS defined. This code also works
 // for the Intel compiler using the Microsoft library.
-#if defined(_MSC_EXTENSIONS) && defined(_MSC_VER) && _MSC_VER < 1310
+#if defined(_MSC_EXTENSIONS) && BOOST_WORKAROUND(_MSC_VER, < 1310)
+#if !((__INTEL__ && _WIN32) && BOOST_WORKAROUND(__MWERKS__, >= 0x3201))
 inline float        abs(float v)
 {
     return(fabs(v));
@@ -109,7 +110,8 @@ inline long double    abs(long double v)
 {
     return(fabs(v));
 }
-#endif /* BOOST_WORKAROUND(BOOST_MSVC) */
+#endif /* !((__INTEL__ && _WIN32) && BOOST_WORKAROUND(__MWERKS__, >= 0x3201)) */
+#endif /* defined(_MSC_EXTENSIONS) && BOOST_WORKAROUND(_MSC_VER, < 1310) */
 
 
 // explicit (if ludicrous) instanciation
