@@ -1,0 +1,1441 @@
+//  Boost math/cayley_element.hpp header file  -------------------------------//
+
+//  Copyright 2005 Daryle Walker.  Use, modification, and distribution are
+//  subject to the Boost Software License, Version 1.0.  (See accompanying file
+//  LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
+
+//  See <http://www.boost.org/libs/math/> for the library's home page.
+
+/** \file
+    \brief Cayley-Dickson hypercomplex element classes
+
+    The main class, boost::math::cayley_element, represents a unit for one
+    hypercomplex basis.  The class boost::math::negated_cayley_element and
+    class template boost::math::scaled_cayley_element represent the results
+    of most types of manipulations with cayley_element, like negation or
+    multiplication.  Operations like addition, subtraction, and the
+    transcedentals are not included because they need a general hypercomplex
+    type to represent the results.  Such hypercomplex types should include:
+    conversion constructors for the element types, mixed arithmetic and equality
+    operators, transcedental functions, and element-on-element and
+    element-on-scalar addition and subtraction operators.  The last category
+    of operators could be in a sub-namespace where it has to be explicitly
+    injected into the computing workspaces, so those operators won't clash with
+    another hypercomplex type that does the same service.  With a single such
+    hypercomplex type, users should be working only with cayley_element and use
+    various arithmetic operations to implicitly utilize the other types:
+
+    \code
+typedef boost::math::cayley_element  e;
+using namespace  hypercomplex;
+using namespace  hypercomplex::mixed_ops;
+my_hypercomplex_t const  x = ( 2.0 + e(1) - 3.0 * e(4) ) / -e(13);
+    \endcode
+ */
+
+#ifndef BOOST_MATH_CAYLEY_ELEMENT_HPP
+#define BOOST_MATH_CAYLEY_ELEMENT_HPP
+
+#include <algorithm>  // for std::max, std::swap
+#include <cmath>      // for std::abs, std::atan2, std::pow
+#include <cstddef>    // for std::size_t, NULL
+#include <cstdlib>    // for std::abs
+
+
+namespace boost
+{
+namespace math
+{
+
+
+//  Forward declarations  ----------------------------------------------------//
+
+// Cayley-Dickson hypercomplex element types
+class cayley_element;
+
+class negated_cayley_element;
+
+template < typename RealType >
+    class scaled_cayley_element;
+
+
+//  Cayley algebra element classes declarations  -----------------------------//
+
+//! Represents a Cayley-Dickson hypercomplex element unit
+/** Represents a unit (\e i.e. length and direction +1) for a Cayley-Dickson
+    hypercomplex element.  The desired basis is determined at run-time.
+ */
+class cayley_element
+{
+    struct dummy { dummy *d; };
+    typedef dummy * dummy::*  bool_type;
+    typedef cayley_element    self_type;
+
+public:
+    // Types
+    //! Type for enumerating hypercomplex bases
+    /** Represents an index for an individual basis.  0 is for the real numbers,
+        1 for imaginary units, 2 and 3 for the quaternion units, 4 through 7 for
+        the octonion units, \e etc.
+     */
+    typedef std::size_t  index_type;
+    //! Type for enumerating Cayley-Dickson construction levels
+    /** Represents a level that a basis can belong to.  0 is for real numbers,
+        1 for complex numbers, 2 for quaternions, 3 for octonions, \e etc.
+     */
+    typedef std::size_t  rung_type;
+
+    // Index <-> range conversion functions
+    //! Compute the minimum rung a basis can belong to
+    static  rung_type  minimum_rung_for_index( index_type i );
+    //! Compute the maximum basis index for a given rung
+    static  index_type  maximum_index_for_rung( rung_type r );
+
+    // Lifetime management (use automatic destructor and copy constructor)
+    //! Create an element with the given basis
+    explicit  cayley_element( index_type b );
+
+    // Accessors
+    //! Returns this element's basis
+    index_type  basis() const;
+
+    //! Returns the (minimum) rung for this element's basis
+    rung_type  minimum_rung() const;
+
+    // Mutators
+    //! Changes the element's basis
+    void  basis( index_type b );
+
+    // Operators (use automatic assignment)
+    //! Converts this element to a Boolean value
+    operator bool_type() const;
+
+    //! Changes the basis to a higher index
+    self_type &  operator <<=( std::size_t r );
+    //! Changes the basis to a lower index
+    self_type &  operator >>=( std::size_t r );
+
+    // Self-serving mutators for unary operators & condition operations
+    //! Applies *this = +(*this)
+    self_type &  same_self();
+
+    //! Applies *this = sgn( *this );
+    self_type &  sign_self();
+
+private:
+    // Member data
+    index_type  b_;
+
+};  // boost::math::cayley_element
+
+//! Represents hypercomplex units with a sign (positive or negative)
+/** Represents an extension of boost::math::cayley_element by giving run-time
+    control over a unit's direction, either positive or negative.  (The length
+    stays at 1.)
+ */
+class negated_cayley_element
+{
+    struct dummy { dummy *d; };
+    typedef dummy * dummy::*        bool_type;
+    typedef negated_cayley_element  self_type;
+
+public:
+    // Types
+    //! Type for enumerating hypercomplex bases
+    /** \see boost::math::cayley_element::index_type */
+    typedef cayley_element::index_type  index_type;
+    //! Type for enumerating Cayley-Dickson construction levels
+    /** \see boost::math::cayley_element::rung_type */
+    typedef cayley_element::rung_type  rung_type;
+
+    // Lifetime management (use automatic destructor and copy constructor)
+    //! Create an element with the given basis and sign
+    explicit  negated_cayley_element( index_type b, bool is_negative = false );
+    //! Convert a basic element
+    negated_cayley_element( cayley_element const &c );
+
+    // Accessors
+    //! Returns this element's basis
+    index_type  basis() const;
+    //! Returns whether or not this element is negative
+    bool        negative() const;
+
+    //! Returns the (minimum) rung for this element's basis
+    rung_type  minimum_rung() const;
+
+    // Mutators
+    //! Changes the element's basis
+    void  basis( index_type b );
+    //! Changes the element's sign
+    void  negative( bool is_negative );
+
+    // Operators (use automatic assignment)
+    //! Converts this element to a Boolean value
+    operator bool_type() const;
+
+    //! Multiplies this element by another
+    self_type &  operator *=( self_type const &r );
+    //! Divides this element by another
+    self_type &  operator /=( self_type const &r );
+
+    //! Changes the basis to a higher index
+    self_type &  operator <<=( std::size_t r );
+    //! Changes the basis to a lower index
+    self_type &  operator >>=( std::size_t r );
+
+    // Self-serving mutators for unary operators & condition operations
+    //! Applies *this = +(*this);
+    self_type &  same_self();
+    //! Applies *this = -(*this);
+    self_type &  negate_self();
+
+    //! Applies *this = conj( *this );
+    self_type &  conjugate_self();
+    //! Applies *this = sgn( *this );
+    self_type &  sign_self();
+    //! Applies *this = reciprocal( *this );
+    self_type &  reciprocate_self();
+
+private:
+    // Member data
+    cayley_element  e_;
+    bool            n_;
+
+};  // boost::math::negated_cayley_element
+
+//! Represents hypercomplex elements as a unit and a real scale
+/** Represents an extension of boost::math::cayley_element by giving run-time
+    control over an element's length \e via a scale factor.  This may include
+    direction if the scale's type allows negative values.
+
+    \param RealType  The type used for representing scale factors.  It should
+                     represent (a subset of) real numbers.  It must support
+                     default construction, where said default value must
+                     represent zero.  It must support Boolean conversion, where
+                     zero represents \c False and non-zero values represent
+                     \c True.  If the type only represents nonnegative values,
+                     then it cannot be used for element-multiplication,
+                     element-division, reciprocation, negation, or conjugation.
+                     If the type uses the "quotient & remainder" style of
+                     division (instead of "'exact' quotient" style), then it
+                     cannot be used for division or reciprocation.  Otherwise,
+                     \c RealType should support all the arithmetic and equality
+                     operators.  Operations with \c scaled_cayley_element are
+                     \em not guaranteed if a computation based on \c RealType
+                     generates an overflow, underflow, not-a-number, infinity,
+                     or other irregular result.
+ */
+template < typename RealType >
+class scaled_cayley_element
+{
+    struct dummy { dummy *d; };
+    typedef dummy * dummy::*                 bool_type;
+    typedef scaled_cayley_element<RealType>  self_type;
+
+public:
+    // Template parameters
+    //! Type for the scalar coefficient
+    /** Represents the scale factor applied to a hypercomplex element.  This
+        alias exposes the type for later meta-programming.
+        \see std::complex::value_type
+     */
+    typedef RealType  value_type;
+
+    // Other types
+    //! Type for enumerating hypercomplex bases
+    /** \see boost::math::cayley_element::index_type */
+    typedef cayley_element::index_type  index_type;
+    //! Type for enumerating Cayley-Dickson construction levels
+    /** \see boost::math::cayley_element::rung_type */
+    typedef cayley_element::rung_type  rung_type;
+
+    // Lifetime management (use automatic destructor and copy constructor)
+    //! Create an element with the given basis and scale
+    scaled_cayley_element( index_type b, value_type scale );
+    //! Cross-version conversion
+    template < typename RealType2 >
+        scaled_cayley_element( scaled_cayley_element<RealType2> const &c );
+    //! Convert a signed element
+    scaled_cayley_element( negated_cayley_element const &c );
+    //! Convert a basic element
+    scaled_cayley_element( cayley_element const &c );
+    //! Default constructor; convert a real scalar
+    scaled_cayley_element( value_type r = value_type() );
+
+    // Accessors
+    //! Returns this element's basis
+    index_type  basis() const;
+    //! Returns this element's scale factor
+    value_type  scale() const;
+
+    //! Returns the (minimum) rung for this element's basis
+    rung_type  minimum_rung() const;
+
+    // Mutators
+    //! Changes the element's basis
+    void  basis( index_type b );
+    //! Changes the element's scale (length and/or orientation)
+    void  scale( value_type s );
+
+    // Operators (use automatic assignment)
+    //! Converts this element to a Boolean value
+    operator bool_type() const;
+
+    //! Multiplies this element by a scalar
+    self_type &  operator *=( value_type const &r );
+    //! Divides this element by a scalar
+    self_type &  operator /=( value_type const &r );
+
+    //! Multiplies this element by another
+    self_type &  operator *=( self_type const &r );
+    //! Divides this element by another
+    self_type &  operator /=( self_type const &r );
+
+    //! Changes the basis to a higher index
+    self_type &  operator <<=( std::size_t r );
+    //! Changes the basis to a lower index
+    self_type &  operator >>=( std::size_t r );
+
+    // Self-serving mutators for unary operators & condition operations
+    //! Applies *this = !(*this);
+    self_type &  not_self();
+    //! Applies *this = +(*this);
+    self_type &  same_self();
+    //! Applies *this = -(*this);
+    self_type &  negate_self();
+
+    //! Applies *this = conj( *this );
+    self_type &  conjugate_self();
+    //! Applies *this = sgn( *this );
+    self_type &  sign_self();
+    //! Applies *this = reciprocal( *this );
+    self_type &  reciprocate_self();
+
+private:
+    // Member data
+    cayley_element  e_;
+    value_type      s_;
+
+};  // boost::math::scaled_cayley_element
+
+
+//  Cayley algebra elements component member function definitions  -----------//
+
+/** \return  The index for this element's basis */
+inline  cayley_element::index_type
+cayley_element::basis() const
+{ return this->b_; }
+
+/** \param b  The index for the new basis
+    \post     this->basis() == \a b
+    \see      index_type
+ */
+inline  void
+cayley_element::basis( index_type b )
+{ this->b_ = b; }
+
+/** \see  cayley_element::basis() */
+inline  negated_cayley_element::index_type
+negated_cayley_element::basis() const
+{ return this->e_.basis(); }
+
+/** \see  cayley_element::basis(index_type) */
+inline  void
+negated_cayley_element::basis( index_type b )
+{ this->e_.basis( b ); }
+
+/** \return  \c True if this element is negative, \c False if positive */
+inline  bool
+negated_cayley_element::negative() const
+{ return this->n_; }
+
+/** \param is_negative  The new sign, using \c False for positive (original
+                        orientation) and \c True for negative (reverse
+                        orientation)
+    \post               this->negative() == \a is_negative
+ */
+inline  void
+negated_cayley_element::negative( bool is_negative )
+{ this->n_ = is_negative; }
+
+/** \see  cayley_element::basis() */
+template < typename T >
+inline  typename scaled_cayley_element<T>::index_type
+scaled_cayley_element<T>::basis() const
+{ return this->e_.basis(); }
+
+/** \see  cayley_element::basis(index_type) */
+template < typename T >
+inline  void
+scaled_cayley_element<T>::basis( index_type b )
+{ this->e_.basis( b ); }
+
+/** \return  The coefficient for this element */
+template < typename T >
+inline  typename scaled_cayley_element<T>::value_type
+scaled_cayley_element<T>::scale() const
+{ return this->s_; }
+
+/** \param s  The new coefficient
+    \pre      \a s should not be irregular (\e e.g. not-a-number)
+    \post     this->scale() == \a s
+    \see      value_type
+ */
+template < typename T >
+inline  void
+scaled_cayley_element<T>::scale( value_type s )
+{ this->s_ = s; }
+
+
+//  Cayley algebra elements rung/index member function definitions  ----------//
+
+/** Computes the minimum rung for a given basis.  Groupings are based on powers
+    of 2, so the result is the exponent for the smallest power of 2 greater than
+    the given basis index.
+
+    \param i  The basis index to be analyzed.
+    \return   The minimum rung \a i can belong to.
+ */
+cayley_element::rung_type
+cayley_element::minimum_rung_for_index( index_type i )
+{ rung_type r = 0; for ( ; i ; i >>=1 ) ++r; return r; }
+
+/** Computes the maximum basis index for a given rung.  Since groupings are
+    based on powers of 2 (zero-based), the result is one less than 2 taken to
+    the power of the rung value.
+
+    \param r  The rung level to be analyzed.
+    \return   The maximum basis index \a r can support.
+ */
+inline  cayley_element::index_type
+cayley_element::maximum_index_for_rung( rung_type r )
+{ return ( static_cast<index_type>(1) << r ) - 1u; }
+
+/** \return  The smallest rung level that can support this element's basis */
+inline  cayley_element::rung_type
+cayley_element::minimum_rung() const
+{ return self_type::minimum_rung_for_index( this->b_ ); }
+
+/** \see  cayley_element::minimum_rung() */
+inline  negated_cayley_element::rung_type
+negated_cayley_element::minimum_rung() const
+{ return this->e_.minimum_rung(); }
+
+/** \see  cayley_element::minimum_rung() */
+template < typename T >
+inline  typename scaled_cayley_element<T>::rung_type
+scaled_cayley_element<T>::minimum_rung() const
+{ return this->e_.minimum_rung(); }
+
+
+//  Cayley algebra elements Boolean conversion member operator definitions  --//
+
+/** Performs Boolean conversion.  Since all objects of this type have an
+    implicit coefficient of 1, all objects convert to \c True.  It enables an
+    element to be used in a Boolean context for certain C++ expressions or
+    statements.
+
+    \return  \c True if the coefficient is non-zero, \c False if it is.  The
+             actual return type is a unspecified built-in numeric or pointer
+             type using the built-in Boolean rules (non-zero/null to \c True,
+             zero/null to \c False).
+ */
+inline
+cayley_element::operator bool_type() const 
+{ return &self_type::dummy::d; }
+
+/** Performs Boolean conversion.  Since all objects of this type have an
+    implicit coefficient of either -1 or +1, all objects convert to \c True.
+
+    \see cayley_element::operator bool_type()
+ */
+inline
+negated_cayley_element::operator bool_type() const 
+{ return &self_type::dummy::d; }
+
+/** Performs Boolean conversion.
+
+    \return  this->scale() != 0
+
+    \see cayley_element::operator bool_type()
+ */
+template < typename T >
+inline
+scaled_cayley_element<T>::operator bool_type() const
+{ return /*this->s_*/ ( this->s_ != T() ) ? &self_type::dummy::d : NULL; }
+
+
+//  Cayley algebra elements constructor definitions  -------------------------//
+
+/** Constructs an element with the given basis.  It is a unit for that basis, so
+    it has a coefficent of 1 (by definition).
+
+    \param b  The index of the basis to use
+
+    \post  this->basis() == \a b
+
+    \see index_type
+ */
+inline
+cayley_element::cayley_element
+(
+    index_type  b
+)
+    : b_( b )
+{}
+
+/** Constructs an element with the given basis and optional sign.  The element
+    is a unit, but in a selectable orientation, giving a coefficent of either +1
+    or -1.  Not using the \a is_negative parameter has an effect similar to the
+    ::boost::math::cayley_element::cayley_element(index_type) constructor.
+
+    \param b            The index of the basis to use
+    \param is_negative  Whether or not the element should be negated unit.  If
+                        it is omitted, it defaults to \c False.  A \c False
+                        value results in a positive unit, use \c True for a
+                        negative unit (\e i.e. reversed orientation).
+
+    \post  this->basis() == \a b && this->negative() == \a is_negative
+
+    \see index_type
+ */
+inline
+negated_cayley_element::negated_cayley_element
+(
+    index_type  b,
+    bool        is_negative  // = false
+)
+    : e_( b ), n_( is_negative )
+{}
+
+/** Constructs an element by converting a basic unit element.  This unit keeps
+    the same basis and coefficent (of +1).
+
+    \param c  The basic unit element to convert
+
+    \post  this->basis() == c.basis() && not this->negative()
+
+    \see boost::math::cayley_element
+ */
+inline
+negated_cayley_element::negated_cayley_element
+(
+    cayley_element const &  c
+)
+    : e_( c ), n_( false )
+{}
+
+/** Constructs an element with the given basis and scale coefficent.
+
+    \param b      The index of the basis to use
+    \param scale  The scalar length of the element.  It may be negative, if the
+                  type allows it, to reverse the orientation.
+
+    \post  this->basis() == \a b && this->scale() == \a scale
+
+    \see index_type
+    \see value_type
+ */
+template < typename T >
+inline
+scaled_cayley_element<T>::scaled_cayley_element
+(
+    index_type  b,
+    value_type  scale
+)
+    : e_( b ), s_( scale )
+{}
+
+/** Constructs an element by converting from a scaled element with another
+    scalar type.  This element copies the basis index and coefficent.  By the
+    rules of C++, this constructor template is \e not used for the copy
+    constructor.  The automatically-defined copy constructor is used when the
+    source and new elements have the same \c value_type.
+
+    \param c  The scaled element to convert
+
+    \pre  The \c value_type for \a c must be convertible to this element's
+          \c value_type, and the conversion should be as value-preserving
+          as possible.
+
+    \post  this->basis() == c.basis() && this->scale() == c.scale()
+ */
+template < typename T >
+template < typename U >
+inline
+scaled_cayley_element<T>::scaled_cayley_element
+(
+    scaled_cayley_element<U> const &  c
+)
+    : e_( c.basis() ), s_( c.scale() )
+{}
+
+/** Constructs an element by converting a signed unit element.  This element
+    keeps the same basis and coefficent (of either -1 or +1).
+
+    \param c  The signed unit element to convert
+
+    \pre  if \c value_type does not support negative values, then c.negative()
+          must not be \c True
+
+    \post  this->basis() == c.basis() && this->scale() ==
+           value_type(c.negative() ? -1 : +1)
+
+    \see boost::math::negated_cayley_element
+ */
+template < typename T >
+inline
+scaled_cayley_element<T>::scaled_cayley_element
+(
+    negated_cayley_element const &  c
+)
+    : e_( c.basis() ), s_( c.negative() ? -1 : +1 )
+{}
+
+/** Constructs an element by converting a basic unit element.  This element
+    keeps the same basis and coefficent (of +1).
+
+    \param c  The basic unit element to convert
+
+    \post  this->basis() == c.basis() && this->scale() == value_type(+1)
+
+    \see boost::math::cayley_element
+ */
+template < typename T >
+inline
+scaled_cayley_element<T>::scaled_cayley_element
+(
+    cayley_element const &  c
+)
+    : e_( c ), s_( 1 )
+{}
+
+/** Constructs an element by converting a real scalar.  It also acts as the
+    default constructor, with a basis index and coefficent of zero in that case.
+
+    \param r  The scalar to convert.  If it is omitted, it defaults to zero.
+
+    \post  this->basis() == 0 && this->scale() == \a r
+
+    \see value_type
+ */
+template < typename T >
+inline
+scaled_cayley_element<T>::scaled_cayley_element
+(
+    value_type  r  // = value_type()
+)
+    : e_( 0 ), s_( r )
+{}
+
+
+//  Cayley algebra elements equality operator function definitions  ----------//
+
+template < typename T >
+inline  bool
+operator ==
+(
+    scaled_cayley_element<T> const &  l,
+    scaled_cayley_element<T> const &  r
+)
+{
+    // if both scales are zero, then they're equal, no matter the bases
+    return ( l.scale() == r.scale() ) && ( /*!l.scale()*/(l.scale() == T()) || (l.basis()
+     == r.basis()) );
+}
+
+inline  bool
+operator ==( negated_cayley_element const &l, negated_cayley_element const &r )
+{ return ( l.basis() == r.basis() ) && ( l.negative() == r.negative() ); }
+
+inline  bool
+operator ==( cayley_element const &l, cayley_element const &r )
+{ return l.basis() == r.basis(); }
+
+template < typename T >
+inline  bool
+operator !=
+(
+    scaled_cayley_element<T> const &  l,
+    scaled_cayley_element<T> const &  r
+)
+{ return !( l == r ); }
+
+inline  bool
+operator !=( negated_cayley_element const &l, negated_cayley_element const &r )
+{ return !( l == r ); }
+
+inline  bool
+operator !=( cayley_element const &l, cayley_element const &r )
+{ return !( l == r ); }
+
+
+//  Cayley algebra elements unary operator function definitions  -------------//
+
+template < typename T >
+inline  bool
+operator !( scaled_cayley_element<T> const &x )
+{ return x ? false : true; }
+
+inline  bool
+operator !( negated_cayley_element const &x )
+{ return false; }
+
+inline  bool
+operator !( cayley_element const &x )
+{ return false; }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator +( scaled_cayley_element<T> const &x )
+{ return x; }
+
+inline  negated_cayley_element
+operator +( negated_cayley_element const &x )
+{ return x; }
+
+inline  cayley_element
+operator +( cayley_element const &x )
+{ return x; }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator -( scaled_cayley_element<T> const &x )
+{ return scaled_cayley_element<T>( x.basis(), -x.scale() ); }
+
+inline  negated_cayley_element
+operator -( negated_cayley_element const &x )
+{ return negated_cayley_element( x.basis(), !x.negative() ); }
+
+inline  negated_cayley_element
+operator -( cayley_element const &x )
+{ return negated_cayley_element( x.basis(), true ); }
+
+
+//  Cayley algebra elements unary-action member function definitions  --------//
+
+/** Transforms this element to itself (\e i.e. no change)
+
+    \return  A reference to this element
+
+    \post  *this == +old_this
+
+    \see  operator +(cayley_element const &)
+ */
+inline  cayley_element &
+cayley_element::same_self()
+{ this->b_ = +this->b_; return *this; }
+
+/** \see  cayley_element::same_self() */
+inline  negated_cayley_element &
+negated_cayley_element::same_self()
+{ this->e_.same_self(); return *this; }
+
+/** Transforms this element to its negative (\e i.e. additive inverse)
+
+    \return  A reference to this element
+
+    \post  *this == -old_this
+
+    \see  operator -(negated_cayley_element const &)
+ */
+inline  negated_cayley_element &
+negated_cayley_element::negate_self()
+{ this->n_ = !this->n_; return *this; }
+
+/** Transforms this element to its logical negation.  The canoical \c False
+    value for the coefficent is zero, for \c True it's +1.
+
+    \return  A reference to this element
+
+    \post  static_cast<bool>(*this) == !static_cast<bool>(old_this)
+
+    \see  operator !(scaled_cayley_element<T> const &)
+ */
+template < typename T >
+inline  scaled_cayley_element<T> &
+scaled_cayley_element<T>::not_self()
+{ this->s_ = !this->s_; return *this; }
+
+/** \see  cayley_element::same_self() */
+template < typename T >
+inline  scaled_cayley_element<T> &
+scaled_cayley_element<T>::same_self()
+{ this->e_.same_self(); this->s_ = +this->s_; return *this; }
+
+/** \see  negated_cayley_element::negate_self() */
+template < typename T >
+inline  scaled_cayley_element<T> &
+scaled_cayley_element<T>::negate_self()
+{ this->s_ = -this->s_; return *this; }
+
+
+//  Cayley algebra elements condition function definitions  ------------------//
+
+inline  int
+dot_product( cayley_element const &l, cayley_element const &r )
+{ return l.basis() == r.basis(); }
+
+inline  int
+dot_product( negated_cayley_element const &l, negated_cayley_element const &r )
+{
+    return ( l.basis() == r.basis() ) ? ( (l.negative() == r.negative()) ? +1
+     : -1 ) : 0;
+}
+
+template < typename T >
+inline  T
+dot_product
+(
+    scaled_cayley_element<T> const &  l,
+    scaled_cayley_element<T> const &  r
+)
+{ return ( l.basis() == r.basis() ) ? ( l.scale() * r.scale() ) : T(); }
+
+inline  negated_cayley_element
+conj( cayley_element const &x )
+{ return x.basis() ? -x : +x; }
+
+inline  negated_cayley_element
+conj( negated_cayley_element const &x )
+{ return x.basis() ? -x : +x; }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+conj( scaled_cayley_element<T> const &x )
+{ return x.basis() ? -x : +x; }
+
+inline  int
+abs( cayley_element const & )
+{ return 1; }
+
+inline  int
+abs( negated_cayley_element const & )
+{ return 1; }
+
+template < typename T >
+inline  T
+abs( scaled_cayley_element<T> const &x )
+{ using std::abs; return abs( x.scale() ); }
+
+inline  double
+arg( cayley_element const &x )
+{ return x.basis() ? std::atan2( 1.0, 0.0 ) : std::atan2( 0.0, 1.0 ); }
+
+inline  double
+arg( negated_cayley_element const &x )
+{
+    return x.basis() ? std::atan2( 1.0, 0.0 ) : std::atan2( 0.0, x.negative()
+     ? -1.0 : +1.0 );
+}
+
+template < typename T >
+inline  T
+arg( scaled_cayley_element<T> const &x )
+{
+    using std::atan2;
+
+    return /*x.scale()*/ ( x.scale() != T() ) ? ( x.basis() ? atan2(abs( x ), T()) : atan2(T(),
+     x.scale()) ) : T();
+}
+
+inline  int
+norm( cayley_element const & )
+{ return 1; }
+
+inline  int
+norm( negated_cayley_element const & )
+{ return 1; }
+
+template < typename T >
+inline  T
+norm( scaled_cayley_element<T> const &x )
+{ return x.scale() * x.scale(); }
+
+inline  cayley_element
+sgn( cayley_element const &x )
+{ return x; }
+
+inline  negated_cayley_element
+sgn( negated_cayley_element const &x )
+{ return x; }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+sgn( scaled_cayley_element<T> const &x )
+{ return /*x.scale()*/ ( x.scale() != T() ) ? negated_cayley_element( x.basis(), x.scale() < T() ) : x; }
+
+inline  negated_cayley_element
+reciprocal( cayley_element const &x )
+{ return conj( x ); }
+
+inline  negated_cayley_element
+reciprocal( negated_cayley_element const &x )
+{ return conj( x ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+reciprocal( scaled_cayley_element<T> const &x )
+{
+    return scaled_cayley_element<T>( x.basis(), static_cast<T>(x.basis() ? -1
+     : +1) / x.scale() );
+}
+
+inline  int
+sup( cayley_element const &x )
+{ return abs( x ); }
+
+inline  int
+sup( negated_cayley_element const &x )
+{ return abs( x ); }
+
+template < typename T >
+inline  T
+sup( scaled_cayley_element<T> const &x )
+{ return abs( x ); }
+
+inline  int
+ll( cayley_element const &x )
+{ return abs( x ); }
+
+inline  int
+ll( negated_cayley_element const &x )
+{ return abs( x ); }
+
+template < typename T >
+inline  T
+ll( scaled_cayley_element<T> const &x )
+{ return abs( x ); }
+
+
+//  Cayley algebra elements condition member function definitions  -----------//
+
+/** Transforms this element to its unit element
+
+    \return  A reference to this element
+
+    \post  *this == sgn( old_this )
+
+    \see  sgn(cayley_element const &)
+ */
+inline  cayley_element &
+cayley_element::sign_self()
+{ return *this; }
+
+/** Transforms this element to its conjugate
+
+    \return  A reference to this element
+
+    \post  *this == conj( old_this )
+
+    \see  conj(negated_cayley_element const &)
+ */
+inline  negated_cayley_element &
+negated_cayley_element::conjugate_self()
+{ return this->basis() ? this->negate_self() : this->same_self(); }
+
+/** \see  cayley_element::sign_self() */
+inline  negated_cayley_element &
+negated_cayley_element::sign_self()
+{ return *this; }
+
+/** Transforms this element to its reciprocal (\e i.e. multiplicative inverse)
+
+    \return  A reference to this element
+
+    \post  *this == reciprocal( old_this )
+
+    \see  reciprocal(negated_cayley_element const &)
+ */
+inline  negated_cayley_element &
+negated_cayley_element::reciprocate_self()
+{ return this->conjugate_self(); }
+
+/** \see  negated_cayley_element::conjugate_self() */
+template < typename T >
+inline  scaled_cayley_element<T> &
+scaled_cayley_element<T>::conjugate_self()
+{ return this->basis() ? this->negate_self() : this->same_self(); }
+
+/** \see  cayley_element::sign_self() */
+template < typename T >
+scaled_cayley_element<T> &
+scaled_cayley_element<T>::sign_self()
+{
+    if ( /*this->s_*/ this->s_ != T() )
+    {
+        this->s_ = static_cast<T>( (this->s_ < T()) ? -1 : +1 );
+    }
+
+    return *this;
+}
+
+/** \see  negated_cayley_element::reciprocate_self() */
+template < typename T >
+scaled_cayley_element<T> &
+scaled_cayley_element<T>::reciprocate_self()
+{
+    T const  ss = this->s_;
+
+    this->s_ /= ss;  // separate in case "ss * ss" overflows
+    this->s_ /= ss;
+
+    return this->conjugate_self();
+}
+
+
+//  Cayley algebra elements scalar-multiplicative operator definitions  ------//
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator *( T const &l, scaled_cayley_element<T> const &r )
+{ return scaled_cayley_element<T>( r.basis(), l * r.scale() ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator *( scaled_cayley_element<T> const &l, T const &r )
+{ return scaled_cayley_element<T>( l.basis(), l.scale() * r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator /( T const &l, scaled_cayley_element<T> const &r )
+{ return l * reciprocal( r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator /( scaled_cayley_element<T> const &l, T const &r )
+{ return scaled_cayley_element<T>( l.basis(), l.scale() / r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator *( T const &l, negated_cayley_element const &r )
+{ return scaled_cayley_element<T>( r.basis(), r.negative() ? -l : +l ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator *( negated_cayley_element const &l, T const &r )
+{ return scaled_cayley_element<T>( l.basis(), l.negative() ? -r : +r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator /( T const &l, negated_cayley_element const &r )
+{ return l * reciprocal( r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator /( negated_cayley_element const &l, T const &r )
+{
+    return scaled_cayley_element<T>( l.basis(), static_cast<T>(l.negative()
+     ? -1 : +1) / r );
+}
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator *( T const &l, cayley_element const &r )
+{ return scaled_cayley_element<T>( r.basis(), l ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator *( cayley_element const &l, T const &r )
+{ return scaled_cayley_element<T>( l.basis(), r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator /( T const &l, cayley_element const &r )
+{ return l * reciprocal( r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator /( cayley_element const &l, T const &r )
+{ return scaled_cayley_element<T>( l.basis(), static_cast<T>(1) / r ); }
+
+
+//  Cayley algebra elements multiplicative operator definitions  -------------//
+
+negated_cayley_element
+operator *( negated_cayley_element const &l, negated_cayley_element const &r )
+{
+    cayley_element::index_type  offset = 0u, li = l.basis(), ri = r.basis();
+    bool                        is_neg = ( l.negative() != r.negative() );
+
+    // The base case is simple real-scalar multiplication, but we
+    // don't explicitly do it since every coefficient is 1, which
+    // give coefficient products of 1.  Otherwise, we got rung-n
+    // Cayley numbers.  Each one can be divided into 2 rung-(n-1)
+    // halves.  The product is, with l=(ll;lh), r=(rl;rh), built
+    // l * r = ( ll * rl - rh' * lh ; lh * rl'+ rh * ll )
+    // where x' is the conjugate of x.  Since each factor has only
+    // one non-zero component, exactly one of the 4 sub-products
+    // is non-zero.  We proceed only with the non-zero sub-product
+    // until we have two reals left.
+
+    for ( cayley_element::rung_type n
+     = cayley_element::minimum_rung_for_index(std::max( li, ri )) ; n ; --n )
+    {
+        cayley_element::index_type const  half_size = 1u << ( n - 1u );
+        bool const                        lower_l = ( li < half_size );
+        bool const                        lower_r = ( ri < half_size );
+
+        // shift from upper half to lower half
+        if ( !lower_r )  ri -= half_size;
+        if ( !lower_l )  li -= half_size;
+
+        // upper v. lower of result depends on halves used
+        if ( lower_l != lower_r )  offset += half_size;
+
+        // using upper-left half always conjugates the right-half
+        if ( !lower_l && ri )  is_neg = !is_neg;
+
+        // using upper-right half always reverses multiply order
+        if ( !lower_r )  std::swap( li, ri );
+
+        // one of the sub-products is negated
+        if ( !lower_l && !lower_r )  is_neg = !is_neg;
+    }
+
+    return negated_cayley_element( offset, is_neg );
+}
+
+inline  negated_cayley_element
+operator *( negated_cayley_element const &l, cayley_element const &r )
+{ return l * negated_cayley_element( r ); }
+
+inline  negated_cayley_element
+operator *( cayley_element const &l, negated_cayley_element const &r )
+{ return negated_cayley_element( l ) * r; }
+
+inline  negated_cayley_element
+operator *( cayley_element const &l, cayley_element const &r )
+{ return negated_cayley_element( l ) * negated_cayley_element( r ); }
+
+template < typename T >
+scaled_cayley_element<T>
+operator *
+(
+    scaled_cayley_element<T> const &  l,
+    scaled_cayley_element<T> const &  r
+)
+{
+    T const                       s = l.scale() * r.scale();
+    cayley_element const          ll( l.basis() ), rr( r.basis() );
+    negated_cayley_element const  e = ll * rr;
+
+    return scaled_cayley_element<T>( e.basis(), e.negative() ? -s : +s );
+}
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator *( scaled_cayley_element<T> const &l, cayley_element const &r )
+{ return l * scaled_cayley_element<T>( r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator *( cayley_element const &l, scaled_cayley_element<T> const &r )
+{ return scaled_cayley_element<T>( l ) * r; }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator *( scaled_cayley_element<T> const &l, negated_cayley_element const &r )
+{ return l * scaled_cayley_element<T>( r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator *( negated_cayley_element const &l, scaled_cayley_element<T> const &r )
+{ return scaled_cayley_element<T>( l ) * r; }
+
+inline  negated_cayley_element
+operator /( cayley_element const &l, cayley_element const &r )
+{ return l * reciprocal( r ); }
+
+inline  negated_cayley_element
+operator /( cayley_element const &l, negated_cayley_element const &r )
+{ return l * reciprocal( r ); }
+
+inline  negated_cayley_element
+operator /( negated_cayley_element const &l, cayley_element const &r )
+{ return l * reciprocal( r ); }
+
+inline  negated_cayley_element
+operator /( negated_cayley_element const &l, negated_cayley_element const &r )
+{ return l * reciprocal( r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator /
+(
+    scaled_cayley_element<T> const &  l,
+    scaled_cayley_element<T> const &  r
+)
+{ return l * reciprocal( r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator /( scaled_cayley_element<T> const &l, cayley_element const &r )
+{ return l / scaled_cayley_element<T>( r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator /( cayley_element const &l, scaled_cayley_element<T> const &r )
+{ return scaled_cayley_element<T>( l ) / r; }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator /( scaled_cayley_element<T> const &l, negated_cayley_element const &r )
+{ return l / scaled_cayley_element<T>( r ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator /( negated_cayley_element const &l, scaled_cayley_element<T> const &r )
+{ return scaled_cayley_element<T>( l ) / r; }
+
+
+//  Cayley algebra elements multiplicative member operator definitions  ------//
+
+/** Multiplies this element by another.  This element is the multiplicand and
+    later stores the product.  (Order matters for element multiplication.)
+
+    \param r  The multiplier
+
+    \post  *this == old_this * \a r
+
+    \return  A reference to this element
+ */
+inline  negated_cayley_element &
+negated_cayley_element::operator *=( negated_cayley_element const &r )
+{ return *this = *this * r; }
+
+/** Divides this element by another.  This element is the dividend and later
+    stores the quotient.
+
+    \param r  The divisor
+
+    \post  *this == old_this / \a r
+
+    \return  A reference to this element
+ */
+inline  negated_cayley_element &
+negated_cayley_element::operator /=( negated_cayley_element const &r )
+{ return *this = *this / r; }
+
+/** Multiplies this element by a real scalar.  This element is the multiplicand
+    and later stores the product.
+
+    \param r  The multiplier
+
+    \post  *this == old_this * \a r
+
+    \return  A reference to this element
+
+    \see  value_type
+ */
+template < typename T >
+inline  scaled_cayley_element<T> &
+scaled_cayley_element<T>::operator *=( value_type const &r )
+{ this->s_ *= r; return *this; }
+
+/** Divides this element by a real scalar.  This element is the dividend and
+    later stores the quotient.
+
+    \param r  The divisor
+
+    \pre  \a r != 0
+
+    \post  *this == old_this / \a r
+
+    \return  A reference to this element
+
+    \see  value_type
+ */
+template < typename T >
+inline  scaled_cayley_element<T> &
+scaled_cayley_element<T>::operator /=( value_type const &r )
+{ this->s_ /= r; return *this; }
+
+/** \see  negated_cayley_element::operator*=(negated_cayley_element const &) */
+template < typename T >
+inline  scaled_cayley_element<T> &
+scaled_cayley_element<T>::operator *=( self_type const &r )
+{ return *this = *this * r; }
+
+/** \see  negated_cayley_element::operator/=(negated_cayley_element const &)
+
+    \pre  \a r != 0
+ */
+template < typename T >
+inline  scaled_cayley_element<T> &
+scaled_cayley_element<T>::operator /=( self_type const &r )
+{ return *this = *this / r; }
+
+
+//  Cayley algebra elements shift operator definitions  ----------------------//
+
+inline  cayley_element
+operator <<( cayley_element const &l, std::size_t r )
+{ return cayley_element( l.basis() + r ); }
+
+inline  cayley_element
+operator >>( cayley_element const &l, std::size_t r )
+{ return cayley_element( l.basis() - r ); }
+
+inline  negated_cayley_element
+operator <<( negated_cayley_element const &l, std::size_t r )
+{ return negated_cayley_element( l.basis() + r, l.negative() ); }
+
+inline  negated_cayley_element
+operator >>( negated_cayley_element const &l, std::size_t r )
+{ return negated_cayley_element( l.basis() - r, l.negative() ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator <<( scaled_cayley_element<T> const &l, std::size_t r )
+{ return scaled_cayley_element<T>( l.basis() + r, l.scale() ); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+operator >>( scaled_cayley_element<T> const &l, std::size_t r )
+{ return scaled_cayley_element<T>( l.basis() - r, l.scale() ); }
+
+
+//  Cayley algebra elements shift member operator definitions  ---------------//
+
+/** Changes the element's basis by increasing the basis index.
+
+    \param r  The desired index increase
+
+    \pre  this->basis() + \a r <= std::numeric_limits<std::size_t>::max()
+
+    \post  this->basis() == old_this.basis() + \a r
+
+    \return  A reference to this element
+ */
+inline  cayley_element &
+cayley_element::operator <<=( std::size_t r )
+{ this->b_ += r; return *this; }
+
+/** Changes the element's basis by decreasing the basis index.
+
+    \param r  The desired index decrease
+
+    \pre  this->basis() >= \a r
+
+    \post  this->basis() == old_this.basis() - \a r
+
+    \return  A reference to this element
+ */
+inline  cayley_element &
+cayley_element::operator >>=( std::size_t r )
+{ this->b_ -= r; return *this; }
+
+/** \see  cayley_element::operator<<=(std::size_t) */
+inline  negated_cayley_element &
+negated_cayley_element::operator <<=( std::size_t r )
+{ this->e_ <<= r; return *this; }
+
+/** \see  cayley_element::operator>>=(std::size_t) */
+inline  negated_cayley_element &
+negated_cayley_element::operator >>=( std::size_t r )
+{ this->e_ >>= r; return *this; }
+
+/** \see  cayley_element::operator<<=(std::size_t) */
+template < typename T >
+inline  scaled_cayley_element<T> &
+scaled_cayley_element<T>::operator <<=( std::size_t r )
+{ this->e_ <<= r; return *this; }
+
+/** \see  cayley_element::operator>>=(std::size_t) */
+template < typename T >
+inline  scaled_cayley_element<T> &
+scaled_cayley_element<T>::operator >>=( std::size_t r )
+{ this->e_ >>= r; return *this; }
+
+
+//  Cayley algebra elements component function definitions  ------------------//
+
+inline  int
+real( cayley_element const &x )
+{ return !x.basis(); }
+
+inline  int
+real( negated_cayley_element const &x )
+{ return x.basis() ? 0 : ( x.negative() ? -1 : +1 ); }
+
+template < typename T >
+inline  T
+real( scaled_cayley_element<T> const &x )
+{ return x.basis() ? T() : x.scale(); }
+
+inline  int
+imag( cayley_element const &x )
+{ return x.basis() == 1u; }
+
+inline  int
+imag( negated_cayley_element const &x )
+{ return ( x.basis() == 1u ) ? ( x.negative() ? -1 : +1 ) : 0; }
+
+template < typename T >
+inline  T
+imag( scaled_cayley_element<T> const &x )
+{ return ( x.basis() == 1u ) ? x.scale() : T(); }
+
+template < typename T >
+inline  scaled_cayley_element<T>
+unreal( scaled_cayley_element<T> const &x )
+{ return x.basis() ? x : scaled_cayley_element<T>(); }
+
+inline  scaled_cayley_element<int>
+unreal( negated_cayley_element const &x )
+{ return unreal( static_cast< scaled_cayley_element<int> >(x) ); }
+
+inline  scaled_cayley_element<int>
+unreal( cayley_element const &x )
+{ return unreal( static_cast< scaled_cayley_element<int> >(x) ); }
+
+
+//  Cayley algebra elements integer-power function definitions  --------------//
+
+negated_cayley_element
+pow( negated_cayley_element const &b, int e )
+{
+    bool const  final_negate = ( b.negative() && (e % 2) );
+
+    if ( cayley_element::index_type const  n = b.basis() )
+    {
+        bool const              s = ( e < 0 );
+        unsigned const          a = static_cast<unsigned>( s ? -e : +e );
+        negated_cayley_element  r( (a & 1u) ? n : 0u, a & 2u );
+
+        if ( s )
+        {
+            r.reciprocate_self();
+        }
+
+        return final_negate ? -r : r;
+    }
+    else
+    {
+        // have +1 or -1
+        return negated_cayley_element( 0u, final_negate );
+    }
+}
+
+inline  negated_cayley_element
+pow( cayley_element const &b, int e )
+{
+    return pow( negated_cayley_element(b), e );
+}
+
+template < typename T >
+inline  scaled_cayley_element<T>
+pow( scaled_cayley_element<T> const &b, int e )
+{
+    using std::pow;
+
+    return pow( b.scale(), e ) * pow( cayley_element(b.basis()), e );
+}
+
+
+}  // namespace math
+}  // namespace boost
+
+
+#endif  // BOOST_MATH_CAYLEY_ELEMENT_HPP
