@@ -58,6 +58,115 @@ class negated_cayley_element;
 template < typename RealType >
     class scaled_cayley_element;
 
+// Condition functions
+//! Finds the dot product of two basic elements
+int  dot_product( cayley_element const &l, cayley_element const &r );
+//! Finds the dot product of two signed elements
+int  dot_product( negated_cayley_element const &l,
+      negated_cayley_element const &r );
+//! Finds the dot product of two scaled elements
+template < typename T >
+  T  dot_product( scaled_cayley_element<T> const &l,
+      scaled_cayley_element<T> const &r );
+
+//! Finds the hypercomplex conjugate of a basic element
+negated_cayley_element      conj( cayley_element const &x );
+//! Finds the hypercomplex conjugate of a signed element
+negated_cayley_element      conj( negated_cayley_element const &x );
+//! Finds the hypercomplex conjugate of a scaled element
+template < typename T >
+  scaled_cayley_element<T>  conj( scaled_cayley_element<T> const &x );
+
+//! Finds the magnitude of a basic element
+int  abs( cayley_element const &x );
+//! Finds the magnitude of a signed element
+int  abs( negated_cayley_element const &x );
+//! Finds the magnitude of a scaled element
+template < typename T >
+  T  abs( scaled_cayley_element<T> const &x );
+
+//! Finds the vector angle of a basic element
+double  arg( cayley_element const &x );
+//! Finds the vector angle of a signed element
+double  arg( negated_cayley_element const &x );
+//! Finds the vector angle of a scaled element
+template < typename T >
+  T     arg( scaled_cayley_element<T> const &x );
+
+//! Finds the Cayley-norm of a basic element
+int  norm( cayley_element const &x );
+//! Finds the Cayley-norm of a signed element
+int  norm( negated_cayley_element const &x );
+//! Finds the Cayley-norm of a scaled element
+template < typename T >
+  T  norm( scaled_cayley_element<T> const &x );
+
+//! Finds the sign of a basic element
+cayley_element              sgn( cayley_element const &x );
+//! Finds the sign of a signed element
+negated_cayley_element      sgn( negated_cayley_element const &x );
+//! Finds the sign of a scaled element
+template < typename T >
+  scaled_cayley_element<T>  sgn( scaled_cayley_element<T> const &x );
+
+//! Finds the reciprocal of a basic element
+negated_cayley_element      reciprocal( cayley_element const &x );
+//! Finds the reciprocal of a signed element
+negated_cayley_element      reciprocal( negated_cayley_element const &x );
+//! Finds the reciprocal of a scaled element
+template < typename T >
+  scaled_cayley_element<T>  reciprocal( scaled_cayley_element<T> const &x );
+
+//! Finds the infinity-norm of a basic element
+int  sup( cayley_element const &x );
+//! Finds the infinity-norm of a signed element
+int  sup( negated_cayley_element const &x );
+//! Finds the infinity-norm of a scaled element
+template < typename T >
+  T  sup( scaled_cayley_element<T> const &x );
+
+//! Finds the 1-norm of a basic element
+int  ll( cayley_element const &x );
+//! Finds the 1-norm of a signed element
+int  ll( negated_cayley_element const &x );
+//! Finds the 1-norm of a scaled element
+template < typename T >
+  T  ll( scaled_cayley_element<T> const &x );
+
+// Component functions
+//! Extracts the real component of a basic element
+int  real( cayley_element const &x );
+//! Extracts the real component of a signed element
+int  real( negated_cayley_element const &x );
+//! Extracts the real component of a scaled element
+template < typename T >
+  T  real( scaled_cayley_element<T> const &x );
+
+//! Extracts the imaginary (complex) component of a basic element
+int  imag( cayley_element const &x );
+//! Extracts the imaginary (complex) component of a signed element
+int  imag( negated_cayley_element const &x );
+//! Extracts the imaginary (complex) component of a scaled element
+template < typename T >
+  T  imag( scaled_cayley_element<T> const &x );
+
+//! Extracts the unreal components of a scaled element
+template < typename T >
+  scaled_cayley_element<T>  unreal( scaled_cayley_element<T> const &x );
+//! Extracts the unreal components of a signed element
+scaled_cayley_element<int>  unreal( negated_cayley_element const &x );
+//! Extracts the unreal components of a basic element
+scaled_cayley_element<int>  unreal( cayley_element const &x );
+
+// Integer-power functions
+//! Raises a signed element to an integer power
+negated_cayley_element      pow( negated_cayley_element const &b, int e );
+//! Raises a basic element to an integer power
+negated_cayley_element      pow( cayley_element const &b, int e );
+//! Raises a scaled element to an integer power
+template < typename T >
+  scaled_cayley_element<T>  pow( scaled_cayley_element<T> const &b, int e );
+
 
 //  Cayley algebra element classes declarations  -----------------------------//
 
@@ -215,15 +324,16 @@ private:
                      zero represents \c False and non-zero values represent
                      \c True.  If the type only represents nonnegative values,
                      then it cannot be used for element-multiplication,
-                     element-division, reciprocation, negation, or conjugation.
-                     If the type uses the "quotient & remainder" style of
-                     division (instead of "'exact' quotient" style), then it
-                     cannot be used for division or reciprocation.  Otherwise,
-                     \c RealType should support all the arithmetic and equality
-                     operators.  Operations with \c scaled_cayley_element are
-                     \em not guaranteed if a computation based on \c RealType
-                     generates an overflow, underflow, not-a-number, infinity,
-                     or other irregular result.
+                     element-division, reciprocation, negation, conjugation, or
+                     power.  If the type uses the "quotient & remainder" style
+                     of division (instead of "'exact' quotient" style), then it
+                     cannot be used for division, reciprocation, or power (with
+                     negative exponents).  Otherwise, \c RealType should support
+                     all the arithmetic and equality operators.  Operations with
+                     \c scaled_cayley_element are \em not guaranteed if a
+                     computation based on \c RealType generates an overflow,
+                     underflow, not-a-number, infinity, or other irregular
+                     result.
  */
 template < typename RealType >
 class scaled_cayley_element
@@ -772,10 +882,27 @@ scaled_cayley_element<T>::negate_self()
 
 //  Cayley algebra elements condition function definitions  ------------------//
 
+/** Computes the Euclidean inner-product of two elements.  It works
+    component-wise like the vector dot-product.  It is commutative and the
+    result is a scalar.
+
+    \param l  The left-side factor
+    \param r  The right-side factor
+
+    \return  \f$l \cdot r = \sum_i {l_i r_i} = \frac{ \bar{l}r
+             + \bar{r}l }{ 2 }\f$
+
+    \relates  cayley_element
+ */
 inline  int
 dot_product( cayley_element const &l, cayley_element const &r )
 { return l.basis() == r.basis(); }
 
+/** \overload
+
+    \relates  negated_cayley_element
+    \see  int dot_product(cayley_element const &, cayley_element const &)
+ */
 inline  int
 dot_product( negated_cayley_element const &l, negated_cayley_element const &r )
 {
@@ -783,6 +910,11 @@ dot_product( negated_cayley_element const &l, negated_cayley_element const &r )
      : -1 ) : 0;
 }
 
+/** \overload
+
+    \relates  scaled_cayley_element
+    \see  int dot_product(cayley_element const &, cayley_element const &)
+ */
 template < typename T >
 inline  T
 dot_product
@@ -792,36 +924,112 @@ dot_product
 )
 { return ( l.basis() == r.basis() ) ? ( l.scale() * r.scale() ) : T(); }
 
+/** Computes the conjugate of an element.  The conjugate of a hypercomplex
+    number negates all the unreal components.  It is a (linear) involution,
+    \e i.e. it's its own inverse (\f$\bar{\bar{x}} = x\f$), that is a core
+    element of Cayley-Dickson construction.
+
+    \param x  The element to be analyzed
+
+    \return  \f$\bar{x}\f$, which is the identity function for a real \a x
+             (\e i.e. \f$x \textrm{ if } x \in \mathbb{R}\f$), otherwise it
+             expands as \f$\overline{(x_l \oplus x_h)} = (\overline{x_l} \oplus
+             {-x_h})\f$
+
+    \relates  cayley_element
+ */
 inline  negated_cayley_element
 conj( cayley_element const &x )
 { return x.basis() ? -x : +x; }
 
+/** \overload
+
+    \relates  negated_cayley_element
+    \see  negated_cayley_element conj(cayley_element const &)
+ */
 inline  negated_cayley_element
 conj( negated_cayley_element const &x )
 { return x.basis() ? -x : +x; }
 
+/** \overload
+
+    \relates  scaled_cayley_element
+    \see  negated_cayley_element conj(cayley_element const &)
+ */
 template < typename T >
 inline  scaled_cayley_element<T>
 conj( scaled_cayley_element<T> const &x )
 { return x.basis() ? -x : +x; }
 
+/** Computes the absolute value of an element.  If the components were
+    coordinates of a point in Euclidean hyperspace, then the absolute value
+    would be the distance from the origin, also the length of a vector from the
+    origin to the element's point.  It is also the 2-norm.  By definition, a
+    unit element will always have a length of one.
+
+    \param x  The element to be analyzed
+
+    \return  \f$|x| = \|x\|_2 = \sqrt{\sum_i {|x_i|^2}}\f$
+
+    \relates  cayley_element
+ */
 inline  int
 abs( cayley_element const & )
 { return 1; }
 
+/** \overload
+    Even if the sign is negative (\e i.e. the orientation is reversed), the
+    magnitude of a unit element remains 1.
+
+    \relates  negated_cayley_element
+    \see  int abs(cayley_element const &)
+ */
 inline  int
 abs( negated_cayley_element const & )
 { return 1; }
 
+/** \overload
+    The magnitude is equivalent to the absolute value of the scale.
+
+    \pre  The \c value_type for \a x must support a function named "abs" that
+          takes one argument, which needs to convert from \c value_type, and
+          returns a \c value_type.  The function should return the absolute
+          value of its argument.  The function needs to be found in the "std"
+          name-space or discovered by argument-dependent name lookup on
+          \c value_type.
+
+    \relates  scaled_cayley_element
+    \see  int abs(cayley_element const &)
+ */
 template < typename T >
 inline  T
 abs( scaled_cayley_element<T> const &x )
 { using std::abs; return abs( x.scale() ); }
 
+/** Computes the angle of an element.  Treating the element like a point/vector
+    (see the  int abs(cayley_element const &)  notes), the angle is taken from
+    the real unit vector towards the element vector, measured on the plane the
+    two vectors share.  Therefore, the angle ranges from zero to \f$\pi\f$.  A
+    purely real element has an angle of zero if positive, or \f$\pi\f$ if
+    negative.  A purely unreal element has an angle of \f$\pi / 2\f$.  A zero
+    element is considered to have an angle of zero.
+
+    \param x  The element to be analyzed
+
+    \return  \f$\arg x = \arccos {\frac{\Re(x)}{|x|}}
+                       = \arctan {\frac{|\mathfrak{Ur}(x)|}{\Re(x)}}\f$
+
+    \relates  cayley_element
+ */
 inline  double
 arg( cayley_element const &x )
 { return x.basis() ? std::atan2( 1.0, 0.0 ) : std::atan2( 0.0, 1.0 ); }
 
+/** \overload
+
+    \relates  negated_cayley_element
+    \see  double arg(cayley_element const &)
+ */
 inline  double
 arg( negated_cayley_element const &x )
 {
@@ -829,6 +1037,21 @@ arg( negated_cayley_element const &x )
      ? -1.0 : +1.0 );
 }
 
+/** \overload
+
+    \pre  The \c value_type for \a x must support a function named "atan2" that
+          takes two arguments, which need to convert from \c value_type, and
+          returns a \c value_type.  The function should return the arc-tangent
+          value of its arguments, where the first argument is the y-coordinate
+          and the second argument is the x-coordinate.  (Unlike the
+          single-argument "atan" function with y/x, this function works when the
+          x-coordinate is zero.)  The function needs to be found in the "std"
+          name-space or discovered by argument-dependent name lookup on
+          \c value_type.
+
+    \relates  scaled_cayley_element
+    \see  double arg(cayley_element const &)
+ */
 template < typename T >
 inline  T
 arg( scaled_cayley_element<T> const &x )
@@ -839,40 +1062,103 @@ arg( scaled_cayley_element<T> const &x )
      x.scale()) ) : T();
 }
 
+/** Computes the Cayley norm of an element.  This norm does \em not follow the
+    rules of conventional norms.  It happens to equal the square of the
+    element's magnitude.  It is the product of an element and its conjugate (in
+    either order, so it equals the Cayley-norm of the conjugate).
+
+    \param x  The element to be analyzed
+
+    \return  \f$|x|^2 = x \bar{x} = \sum_i {|x_i|^2} = x \cdot x\f$
+
+    \relates  cayley_element
+ */
 inline  int
 norm( cayley_element const & )
 { return 1; }
 
+/** \overload
+
+    \relates  negated_cayley_element
+    \see  int norm(cayley_element const &)
+ */
 inline  int
 norm( negated_cayley_element const & )
 { return 1; }
 
+/** \overload
+
+    \relates  scaled_cayley_element
+    \see  int norm(cayley_element const &)
+ */
 template < typename T >
 inline  T
 norm( scaled_cayley_element<T> const &x )
 { return x.scale() * x.scale(); }
 
+/** Computes the sign of an element.  The sign of a hypercomplex value retains
+    the original's direction, but has a length of one.  A zero element has a
+    sign of zero.  Note that unit and zero elements are unchanged via this
+    function.
+
+    \param x  The element to be analyzed
+
+    \return  \f$\mathrm{sgn}(x) = \frac{x}{|x|}\f$
+
+    \relates  cayley_element
+ */
 inline  cayley_element
 sgn( cayley_element const &x )
 { return x; }
 
+/** \overload
+
+    \relates  negated_cayley_element
+    \see  cayley_element sgn(cayley_element const &)
+ */
 inline  negated_cayley_element
 sgn( negated_cayley_element const &x )
 { return x; }
 
+/** \overload
+
+    \relates  scaled_cayley_element
+    \see  cayley_element sgn(cayley_element const &)
+ */
 template < typename T >
 inline  scaled_cayley_element<T>
 sgn( scaled_cayley_element<T> const &x )
 { return /*x.scale()*/ ( x.scale() != T() ) ? negated_cayley_element( x.basis(), x.scale() < T() ) : x; }
 
+/** Computes the multiplicative inverse of an element.
+
+    \param x  The element to be analyzed
+
+    \return  \f$x^{-1} = \frac{1}{x} = \frac{\bar{x}}{|x|^2}\f$
+
+    \relates  cayley_element
+ */
 inline  negated_cayley_element
 reciprocal( cayley_element const &x )
 { return conj( x ); }
 
+/** \overload
+
+    \relates  negated_cayley_element
+    \see  negated_cayley_element reciprocal(cayley_element const &)
+ */
 inline  negated_cayley_element
 reciprocal( negated_cayley_element const &x )
 { return conj( x ); }
 
+/** \overload
+
+    \pre  The coefficient for \a x must be invertible.  For instance, it cannot
+          be zero.
+
+    \relates  scaled_cayley_element
+    \see  negated_cayley_element reciprocal(cayley_element const &)
+ */
 template < typename T >
 inline  scaled_cayley_element<T>
 reciprocal( scaled_cayley_element<T> const &x )
@@ -881,27 +1167,66 @@ reciprocal( scaled_cayley_element<T> const &x )
      : +1) / x.scale() );
 }
 
+/** Computes the supremum-, or infinity-, norm of an element.  It is equal to
+    the largest absolute value of a component.
+
+    \param x  The element to be analyzed
+
+    \return  \f$\|x\|_\infty = \lim_{n \rightarrow \infty} \sqrt[n]{\sum_i
+             {|x_i|^n}} = \max_i |x_i|\f$
+
+    \relates  cayley_element
+ */
 inline  int
 sup( cayley_element const &x )
 { return abs( x ); }
 
+/** \overload
+
+    \relates  negated_cayley_element
+    \see  int sup(cayley_element const &)
+ */
 inline  int
 sup( negated_cayley_element const &x )
 { return abs( x ); }
 
+/** \overload
+
+    \relates  scaled_cayley_element
+    \see  int sup(cayley_element const &)
+ */
 template < typename T >
 inline  T
 sup( scaled_cayley_element<T> const &x )
 { return abs( x ); }
 
+/** Computes the 1-norm of an element.  It is equal to the sum of the absolute
+    values of each component.
+
+    \param x  The element to be analyzed
+
+    \return  \f$\|x\|_1 = \sum_i |x_i|\f$
+
+    \relates  cayley_element
+ */
 inline  int
 ll( cayley_element const &x )
 { return abs( x ); }
 
+/** \overload
+
+    \relates  negated_cayley_element
+    \see  int ll(cayley_element const &)
+ */
 inline  int
 ll( negated_cayley_element const &x )
 { return abs( x ); }
 
+/** \overload
+
+    \relates  scaled_cayley_element
+    \see  int ll(cayley_element const &)
+ */
 template < typename T >
 inline  T
 ll( scaled_cayley_element<T> const &x )
@@ -1351,41 +1676,100 @@ scaled_cayley_element<T>::operator >>=( std::size_t r )
 
 //  Cayley algebra elements component function definitions  ------------------//
 
+/** Since a unit element is purely real or purely unreal, this function returns
+    either 1 or 0.
+
+    \param x  The element to be analyzed
+
+    \return  \f$x_0 = \Re(x) = x \cdot 1 = \frac{x + \bar{x}}{2}\f$
+
+    \relates  cayley_element
+ */
 inline  int
 real( cayley_element const &x )
 { return !x.basis(); }
 
+/** \overload
+    Now signs are considered, the result may be -1, 0, or +1.
+
+    \relates  negated_cayley_element
+    \see  int real(cayley_element const &)
+ */
 inline  int
 real( negated_cayley_element const &x )
 { return x.basis() ? 0 : ( x.negative() ? -1 : +1 ); }
 
+/** \overload
+    Now the scale is the coefficent, so the result is the scale or zero.
+
+    \relates  scaled_cayley_element
+    \see  int real(cayley_element const &)
+ */
 template < typename T >
 inline  T
 real( scaled_cayley_element<T> const &x )
 { return x.basis() ? T() : x.scale(); }
 
+/** Similar to real(\a x), this function returns either 1 or 0.
+
+    \param x  The element to be analyzed
+
+    \return  \f$x_1 = \Im(x) = x \cdot \imath\f$
+
+    \relates  cayley_element
+    \see  int real(cayley_element const &)
+ */
 inline  int
 imag( cayley_element const &x )
 { return x.basis() == 1u; }
 
+/** \overload
+
+    \relates  negated_cayley_element
+    \see  int imag(cayley_element const &)
+ */
 inline  int
 imag( negated_cayley_element const &x )
 { return ( x.basis() == 1u ) ? ( x.negative() ? -1 : +1 ) : 0; }
 
+/** \overload
+
+    \relates  scaled_cayley_element
+    \see  int imag(cayley_element const &)
+ */
 template < typename T >
 inline  T
 imag( scaled_cayley_element<T> const &x )
 { return ( x.basis() == 1u ) ? x.scale() : T(); }
 
+/** Since an element is purely real or purely unreal, this function returns
+    either zero or \a x.
+
+    \param x  The element to be analyzed
+
+    \return  \f$\mathfrak{Ur}(x) = \frac{x - \bar{x}}{2}\f$
+
+    \relates  scaled_cayley_element
+ */
 template < typename T >
 inline  scaled_cayley_element<T>
 unreal( scaled_cayley_element<T> const &x )
 { return x.basis() ? x : scaled_cayley_element<T>(); }
 
+/** \overload
+
+    \relates  negated_cayley_element
+    \see  scaled_cayley_element<T> unreal(scaled_cayley_element<T> const &)
+ */
 inline  scaled_cayley_element<int>
 unreal( negated_cayley_element const &x )
 { return unreal( static_cast< scaled_cayley_element<int> >(x) ); }
 
+/** \overload
+
+    \relates  cayley_element
+    \see  scaled_cayley_element<T> unreal(scaled_cayley_element<T> const &)
+ */
 inline  scaled_cayley_element<int>
 unreal( cayley_element const &x )
 { return unreal( static_cast< scaled_cayley_element<int> >(x) ); }
@@ -1393,6 +1777,19 @@ unreal( cayley_element const &x )
 
 //  Cayley algebra elements integer-power function definitions  --------------//
 
+/** Raises an element to an integer power, only supporting "int" as the
+    exponent's type.  Use this function in piecemeal for integer exponents
+    that require a type with an expanded range than "int".  Powers of 1 stay 1;
+    powers of -1 alternate between +1 and -1; and powers of unreal unit elements
+    alternate sign and alternate basis with a cycle of 4.
+
+    \param b  The element to be exponentiated
+    \param e  The exponent
+
+    \return  \f$b^e\f$
+
+    \relates  negated_cayley_element
+ */
 negated_cayley_element
 pow( negated_cayley_element const &b, int e )
 {
@@ -1418,12 +1815,25 @@ pow( negated_cayley_element const &b, int e )
     }
 }
 
+/** \overload
+    Without signs, there are fewer cycles to consider.
+
+    \relates  cayley_element
+    \see  negated_cayley_element pow(negated_cayley_element const &, int)
+ */
 inline  negated_cayley_element
 pow( cayley_element const &b, int e )
 {
     return pow( negated_cayley_element(b), e );
 }
 
+/** \overload
+    The basis and sign cycle as before, but a non-unit or non-zero scale
+    strictly changes as \f$|b|^e\f$ (without cycles).
+
+    \relates  scaled_cayley_element
+    \see  negated_cayley_element pow(negated_cayley_element const &, int)
+ */
 template < typename T >
 inline  scaled_cayley_element<T>
 pow( scaled_cayley_element<T> const &b, int e )
