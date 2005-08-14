@@ -1,0 +1,1465 @@
+\documentclass{book}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\title{The Quaternionic Exponential \\ (and beyond)}
+\author{Hubert HOLIN\thanks{Contact at
+$<$mailto:Hubert.Holin@Bigfoot.com$>$ or
+$<$http://www.bigfoot.com/\%7eHubert.Holin$>$}}
+\date{08/12/1999}  % plus the errata and addenda from 23/03/2001
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{scholie}[theorem]{Scholie}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newcommand{\funcDef}[5]{
+  \begin{tabular}{rccc}
+    {#1}: & {#2} & $\to$     & {#4} \\
+          & {#3} & $\mapsto$ & {#5}
+  \end{tabular}
+}
+\newcommand{\Funcify}[1]{\mathop{\mathrm{#1}}}
+\newcommand{\Bl}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\Fc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\Ck}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\fcT}{\Fc{T}}
+\newcommand{\fcN}{\Fc{N}}
+\newcommand{\Trace}[1]{\ensuremath{{\fcT}_{\Bl{#1}}}}
+\newcommand{\Norm}[1]{\ensuremath{{\fcN}_{\Bl{#1}}}}
+\newcommand{\fnRe}{\Funcify{Re}}
+\newcommand{\fnIm}{\Funcify{Im}}
+\newcommand{\fnUr}{\Funcify{Ur}}
+\newcommand{\fnVect}{\Funcify{Vect}}
+\newcommand{\fnId}{\Funcify{Id}}
+\newcommand{\fnSinc}{\Funcify{sinc}}
+\newcommand{\fnSinhc}{\Funcify{sinhc}}
+\newcommand{\fnSincPi}{{\fnSinc}_{\pi}}
+\newcommand{\fnSinhcPi}{{\fnSinhc}_{\pi}}
+\newcommand{\setN}{\Bl{N}}
+\newcommand{\setZ}{\Bl{Z}}
+\newcommand{\setQ}{\Bl{Q}}
+\newcommand{\setR}{\Bl{R}}
+\newcommand{\setC}{\Bl{C}}
+\newcommand{\setH}{\Bl{H}}
+\newcommand{\setO}{\Bl{O}}
+\newcommand{\setX}{\Bl{X}}
+\newcommand{\xsetA}{\Bl{A}}
+\newcommand{\xsetE}{\Bl{E}}
+\newcommand{\xsetF}{\Bl{F}}
+\newcommand{\setS}{\Bl{S}}
+\newcommand{\cBasis}{\Fc{C}}
+\newcommand{\cMatrix}{\Fc{M}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\chapter*{Motivation}
+\addcontentsline{toc}{chapter}{Motivation}
+\label{part:N}
+
+I felt the need to take a closer look at quaternions when, some time
+back, I was looking for new applications to Harthong-Reeb circles (on
+which I was working at the time), and came across~\cite{Pletincks:1989ds}.
+That paper, on one hand, did indicate one potential application
+for that method, but, on the other hand, alluded to some odd
+constructions involving quaternions, the validity of which was
+propitiously left in the shadows.  The present text is therefore a
+compilation of many well-known but apparently scattered results about
+quaternions (and related entities), as well as some new developments,
+notably the explicit formula for the quaternionic exponential (and
+friends).  Incidentally, these results enables one to solve the problem
+found in~\cite{Pletincks:1989ds}, but without the unsalvageable
+constructions.
+
+\chapter{Quaternions redux}
+\label{part:I}
+
+\section{What to find here}
+\label{part:I.1}
+
+This chapter only contains a quick-and-dirty (but sufficient for most
+uses) presentation of the quaternions, along with their most classical
+properties, inspired very largely by~\cite{Leborgne:1982hf},
+\cite{Lelong-Ferrand:1978gq} and~\cite{Berger:1990ce}.
+This approach, however, obscures the deep relationship which
+links the quaternions, the complex and real numbers and more exotic
+things known as octonions; this relationship will be the thrust of the
+next chapter.
+
+It should be said that other important uses of quaternions exist
+ (\cite{Gurlebeck:1989mb},~\ldots), but that they will not be touched
+upon here.  As well, quaternionic analysis (\cite{Sudbery:1979ei})
+and geometry (\cite{Salamon:1982sg}), though perhaps not as vibrant
+as their complex counterparts, do keep evolving; though these
+usually involve fairly sophisticated mathematical machinery,
+very nice results can also be had with very elementary ones
+ (\cite{Casteljau:1987bc},~\ldots).  All are beyond the scope of
+this article, however.
+
+\section{The nature of the Beast}
+\label{part:I.2}
+
+Let $\setH = \setR^{4}$ with the usual four-dimensional vector
+space structure over \setR.  We define $e = (1,0,0,0)$, $i =
+(0,1,0,0)$, $j = (0,0,1,0)$ and $k = (0,0,0,1)$.
+ 
+The first important thing we need is a multiplication, denoted $*$,
+which we \emph{define\/} to be a (non-commutative) \setR-bilinear
+operation on \setH such that $i*i = j*j = k*k = -e$, $i*j =
+-(j*i) = k$, $j*k = -(k*j) = i$, $k*i = -(i*k) = j$ and $e$ is its
+neutral element.
+
+The second important thing we need is the \emph{conjugation\/} on
+\setH (and we will usually denote by $\bar{q}$ the conjugate of
+$q$) which we define by  $(\alpha, \beta, \gamma, \delta) \mapsto
+(\alpha, -\beta, -\gamma, -\delta)$.  Important properties are that
+$\overline{q * q'} = \overline{q'} * \overline{q}$, that $\bar{e} = e$,
+that $q * \bar{q} = \bar{q} * q \in \setR \cdot e$ and that $q +
+\bar{q} \in \setR \cdot e$.  Actually $q * \bar{q} = 0$ if and only
+if $q = 0$, as is easily seen.
+ 
+A straightforward verification then shows that $(\setH, +, *,
+\cdot)$ is an effectively non-commutative, but associative,
+\setR-algebra with unit $e$, and that $[\setR \to
+\setH, x \mapsto (x, 0, 0, 0)]$ and $[\setC \to \setH, z
+\mapsto (\fnRe z, \fnIm z, 0, 0)]$  are algebra
+homomorphisms, bijective from their sources onto their images.  The
+image of the conjugate of a complex number is also seen to be the
+conjugate (in \setH) of the image of that complex, by the above
+function.  We will therefore assimilate \setH to a superset of
+ (both) \setR and \setC, and identify $e$ with $1$ and $i$
+with its complex counterpart.  We see at once that the operations we
+have defined on \setH extend their counterparts on \setC
+and \setR.  The multiplication can then be memorized thru the
+well-known formula: 
+\[
+i*i = j*j = k*k = i*j*k = -1
+\]
+
+It is important to notice that given any quaternion $q$ and any
+\emph{real\/} number $x$, we always have $q * x = x * q = x \cdot q$.
+
+We will usually write a quaternion under the form $q = \alpha + \beta i
++ \gamma j + \delta k$ with $\alpha$, $\beta$, $\gamma$ and $\delta$
+reals, omitting the ``$\cdot$'' when multiplying a quaternion by a real
+number (as per the vector space structure).  We will also omit
+the ``$*$'' when multiplying a quaternion by a real number, from the
+left as well as from the right.  When no confusion may arise, we will do
+away entirely with the ``$*$''.
+
+With the above notations, the conjugate of $q = \alpha + \beta i +
+\gamma j + \delta k$ will then simply be $\bar{q} = \alpha - \beta i -
+\gamma j - \delta k$.
+
+Looking at \setH as a 4-dimensional \setR-vector space, it
+is easy to see the usual euclidian scalar product is equal to the
+following:
+\begin{eqnarray*}
+(p | q) & = & (p + q)\overline{(p + q)} - p\bar{p} - q\bar{q}  \\
+        & = & \frac{1}{2} (p\bar{q} + q\bar{p})                \\
+        & = & \frac{1}{2} (\bar{p}q + \bar{q}p)
+\end{eqnarray*}
+
+All the same, the usual euclidian norm on $\setR^{4}$, coincides
+with $[q \mapsto \|q\| = \sqrt{q * \bar{q}}]$, and of course $(q | q) =
+\|q\|^{2} = \alpha^{2} + \beta^{2} + \gamma^{2} + \delta^{2}$.  Note
+that, if $q \neq 0$ then $q^{-1} = {(q * \bar{q})}^{-1} * \bar{q} =
+\bar{q} * {(q * \bar{q})}^{-1}$.  For the quaternions, we will also use a
+notation compatible with real and complex numbers and define $|q|$ as
+$\|q\|$ (of course, if $q$ is actually complex, $|q|$ has exactly the
+value of the modulus of $q$).
+
+It is important to remember that $(\setH, +, *, \cdot, ||)$ is a
+Banach \setR-algebra.  The norm is better than what we might
+expect, though, as we have $|p * q| = |p| |q|$ instead of just $|p * q|
+\leq |p| |q|$.\footnote{We ask for a norm of a Banach algebra to verify
+$|p * q| \leq |p| |q|$ and not just that there exists some positive $k$
+such that $|p * q| \leq k |p| |q|$.  The superior case for the norm, $|p
+* q| = |p| |q|$, also applies to real numbers, complex numbers and
+octonions.}
+
+We will call the real and unreal parts of quaternion, respectively,
+$\fnRe q = \frac{1}{2} (q + \bar{q})$ and $\fnUr q =
+\frac{1}{2} (q - \bar{q})$.  We will say that a quaternion is pure if
+its real part is zero.  For a complex number, the quaternionic real part
+is what is already known as the complex real part, and the unreal part
+is just the imaginary part multiplied by $i$.
+
+\section{Quaternions' kin}
+\label{part:I.3}
+
+As we have just seen, quaternions are related to both real numbers and
+complex numbers.  As we shall see in some details in the next chapter,
+quaternions are actually part of an infinite family of
+sets\footnote{Actually, several families, but we will focus on just one
+here; for others, see~\cite{Dixon:1994rh}.} which we will call the
+Cayley ladder, some of which we will introduce here as we will have some
+need of them for our purposes.
+
+First relative in that family, beyond the quaternions, are the
+octonions. We denote by \setO the set $\setR^{8}$, with its
+usual vector space structure on \setR, we identify $1 =
+(1,0,0,0,0,0,0,0)$, $i = (0,1,0,0,0,0,0,0)$, $j = (0,0,1,0,0,0,0,0)$ and
+$k = (0,0,0,1,0,0,0,0)$ and we define $e' = (0,0,0,0,1,0,0,0)$, $i' =
+(0,0,0,0,0,1,0,0)$, $j' = (0,0,0,0,0,0,1,0)$ and $k' =
+(0,0,0,0,0,0,0,1)$.  We now consider \setO to be a super-set of
+\setH. We can now define a multiplication on \setO by the
+following table (the value at line $n$ and column $m$ is
+the product of the element in the left column by the element in the top
+row; for instance $i * i' = -e'$):
+
+\begin{tabular}{c|cccccccc}
+      & $1$  & $i$   & $j$   & $k$   & $e'$ & $i'$  & $j'$  & $k'$  \\
+\hline
+ $1$  & $1$  & $i$   & $j$   & $k$   & $e'$ & $i'$  & $j'$  & $k'$  \\
+ $i$  & $i$  & $-1$  & $k$   & $-j$  & $i'$ & $-e'$ & $-k'$ & $j'$  \\
+ $j$  & $j$  & $-k$  & $-1$  & $i$   & $j'$ & $k'$  & $-e'$ & $-i'$ \\
+ $k$  & $k$  & $j$   & $-i$  & $-1$  & $k'$ & $-j'$ & $i'$  & $-e'$ \\
+ $e'$ & $e'$ & $-i'$ & $-j'$ & $-k'$ & $-1$ & $i$   & $j$   & $k$   \\
+ $i'$ & $i'$ & $e'$  & $-k'$ & $j'$  & $-i$ & $-1$  & $-k$  & $j$   \\
+ $j'$ & $j'$ & $k'$  & $e'$  & $-i'$ & $-j$ & $k$   & $-1$  & $-i$  \\
+ $k'$ & $k'$ & $-j'$ & $i'$  & $e'$  & $-k$ & $-j$  & $i$   & $-1$
+\end{tabular}
+
+Other presentations, perhaps more useful, exist (\cite{Dixon:ex}). 
+This multiplication still has a unit ($1$), but is no longer associative
+ (for instance $i' * (e' * j) = +k \neq -k = (i' * e') * j$).  Real
+numbers still commute with every octonion.  We define a conjugation by
+$\overline{\alpha + \beta i + \gamma j + \delta k + \epsilon e' + \zeta
+i' + \eta j' + \theta k'} = \alpha - \beta i - \gamma j - \delta k -
+\epsilon e' - \zeta i' - \eta j' - \theta k'$, a scalar product and a
+norm which, as with the quaternions turn out to be exactly the euclidian
+scalar product and euclidian norm on $\setR^{8}$.  Again, we have
+just extended the quaternionic operations.  As with complex numbers and
+quaternions, we have $|o * o'| = |o| |o'|$ for any two octonions $o$ and
+$o'$, and an octonion $o$ is invertible if and only if it is non-zero,
+and then $o^{-1} = \frac{1}{|o|^{2}} \bar{o}$.
+
+Beyond even the octonions, we find $\setR^{16}$, which appears not
+to have any agreed-upon name.  We shall here call them hexadecimalions,
+and denote the set by \setX (after the C/C++ notation\ldots).  We
+have the usual vector space structure on \setR, we identify $1$,
+\ldots, $k'$ with $(1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)$,~\ldots,
+$(0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0)$ respectively, and define $e''$,
+$i''$, $j''$, $k''$, $e'''$, $i'''$, $j'''$, $k'''$ as
+$(0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0)$,~\ldots,
+$(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)$ respectively.  We define a
+multiplication on  \setX as explicited in the next chapter, for
+which $1$ is still a unit and for which reals commute with every
+hexadecimalion.  We define as well a conjugation, a scalar product and a
+norm (for details, see next chapter), which once again coincide with the
+euclidian scalar product and euclidian norm on $\setR^{16}$.  These
+all extend the octonionic case.  However, the product has even fewer
+properties than in the octonionic case (the algebra is no longer even
+alternative\footnote{We will define this in the next chapter.}, as for
+instance $(i + e''') * ((i + e''') * j) = -2j + 2k \neq -2j = ((i +
+e''') * (i + e''')) * j$), and the norm is not even an algebra norm any
+longer, as for instance ${\|(i + j'') * (e' + k''')\|}^{2} = 8 > 4 =
+{\|i + j''\|}^{2} {\|e' + k'''\|}^{2}$.
+
+\section{Quaternions and rotations}
+\label{part:I.4}
+
+It is pleasant to think that perhaps the relationship between
+quaternions and rotations has been stumbled upon while running a
+check-list of classical constructs on the then-newly discovered
+quaternions.  At any rate, the easiest way to explain that link is thru
+interior automorphisms.
+
+More precisely, given a \emph{non-zero\/} quaternion $q = \alpha + \beta i
++ \gamma j + \delta k$, we can consider the interior automorphism:
+\funcDef{$\lambda_{q}$}
+  {\setH}{$p$}
+  {\setH}{$(q)p(q^{-1})$}
+
+These objects have several fundamental properties: $\lambda_{q q'} =
+\lambda_{q} \circ \lambda_{q'}$ and $\lambda_{q}(q) = q$, $\lambda_{q}$
+leaves \setR invariant (since reals commute with all
+quaternions), and $\lambda_{q}$ respects the norm on \setH.
+
+It is interesting to see $\lambda_{q}$ as an \setR-linear
+function on \setH.  As it preserves the norm, it preserves the
+scalar product, and hence $\lambda_{q} \in \mathrm{O}(4, \setH)$. 
+Then, as it leaves \setR globally invariant, it must leave its
+orthogonal (i.e.\ the unreals) globally invariant.
+
+Consider now the matrix of $\lambda_{q}$; expressed in the canonical
+basis $\cBasis = (1, i, j, k)$ that matrix is:
+\[
+\cMatrix(\lambda_{q}, \cBasis, \cBasis) = \frac{1}{{\|q\|}^{2}}
+  \left[ \begin{array}{cccc}
+    \alpha^2+\beta^2+\gamma^2+\delta^2 & 0                                  & 0                                  & 0                                  \\
+    0                                  & \alpha^2+\beta^2-\gamma^2-\delta^2 & -2\alpha\delta+2\beta\gamma        & +2\alpha\gamma+2\beta\delta        \\
+    0                                  & +2\alpha\delta+2\beta\gamma        & \alpha^2-\beta^2+\gamma^2-\delta^2 & -2\alpha\beta+2\gamma\delta        \\
+    0                                  & -2\alpha\gamma+2\beta\delta        & +2\alpha\beta+2\gamma\delta        & \alpha^2-\beta^2-\gamma^2+\delta^2
+  \end{array} \right]
+\]
+
+It is quite obvious\footnote{We will note $\mathrm{M}(U, n, m)$ the set of
+matrices, $n$ rows by $m$ columns, with elements in $U$.} that
+$\Fc{Q}:[\setR^{4} - \{0\} \to \mathrm{M}(\setR, 4, 4); q
+\mapsto \cMatrix(\lambda_{q}, \cBasis, \cBasis)]$ is
+continuous, and a group homomorphism.  As we have seen,
+$\Fc{Q}(\setR^{4} - \{0\}) \subset \mathrm{O}(4, \setR)$,
+and as $\Fc{Q}(1) = \mathrm{I}_{4}$, the identity
+matrix\footnote{More generally, we will denote by $\mathrm{I}_{n}$ the
+identity matrix on $\setR^{n}$.} on $\setH = \setR^{4}$,
+$\Fc{Q}(\setR^{4} - \{0\})$ must actually be included in the
+connected component of $\mathrm{I}_{4}$ in $\mathrm{O}(4, \setR)$,
+and that is $\mathrm{SO}(4, \setR)$, i.e., $\lambda_{q}$
+is a rotation on $\setR^{4}$, and hence on \setR, where it
+is the identity $\mathrm{I}_{1}$, and thus must also be a rotation on
+$\{0\} \times \setR^{3}$, i.e.\ the unreals.  We can find a
+far simpler (if somewhat tedious) proof of that by simply computing the
+determinant of $\cMatrix(\lambda_{q}, \cBasis, \cBasis)$,
+which of course turns out to be $1$ (also see next section)\ldots.
+
+We can therefore extract a rotation matrix on $\setR^{3}$ from
+$\cMatrix(\lambda_{q}, \cBasis, \cBasis)$:
+\[
+\rho_{q} = \frac{1}{\alpha^2+\beta^2+\gamma^2+\delta^2}
+  \left[ \begin{array}{ccc}
+    \alpha^2+\beta^2-\gamma^2-\delta^2 & -2\alpha\delta+2\beta\gamma        & +2\alpha\gamma+2\beta\delta        \\
+    +2\alpha\delta+2\beta\gamma        & \alpha^2-\beta^2+\gamma^2-\delta^2 & -2\alpha\beta+2\gamma\delta        \\
+    -2\alpha\gamma+2\beta\delta        & +2\alpha\beta+2\gamma\delta        & \alpha^2-\beta^2-\gamma^2+\delta^2
+  \end{array} \right]
+\]
+
+Let us introduce $\Fc{R}:[\setR^{4} - \{0\} \to
+\mathrm{M}(\setR, 3, 3); q \mapsto \rho_{q}]$.  It is trivial to see
+that $\Fc{Q}$ and $\Fc{R}$ are both $C^{\infty }$ (because
+they are rational).  It is important to note that they are both
+\setR-homogeneous of degree $0$, which means that given any
+non-zero real number $x$, $\lambda_{q}$ and $\lambda_{xq}$ are
+identical, and therefore yield identical rotations (i.e.\ 
+$\rho_{q} = \rho_{xq}$).
+
+A fundamental result is that $\Fc{R}$ is surjective.  There are at
+least two well-known ways to prove this.
+
+The easiest way also has the advantage of being completely constructive:
+we just compute the elements of the rotation $\rho_{q}$.
+
+This is possible because we always know one invariant vector.  Indeed
+ (as an immediate consequence of $\lambda_{q}(q) = q$):
+\[
+  \rho_{q}
+  \left[ \begin{array}{c} \beta \\ \gamma \\ \delta \end{array} \right]
+  =
+  \left[ \begin{array}{c} \beta \\ \gamma \\ \delta \end{array} \right]
+\]
+
+Furthermore, the angle, $\theta \in [0; \pi]$, is given by considering
+the trace of $\rho_{q}$:
+\[
+  1 + 2 \cos \theta = \frac{3\alpha^2 - \beta^2 - \gamma^2 - \delta^2}
+    {\alpha^2 + \beta^2 + \gamma^2 + \delta^2}
+\]
+
+We now exploit the homogeneity of $\Fc{R}$, which implies that
+$\Fc{R}(\setH - \{0\}) = \Fc{R}(\setS^{3})$, and
+therefore that we can restrict our search to \emph{unit\/} quaternions. 
+For unit quaternions, the trace relation simplifies to $1 + \cos \theta
+= 2 \alpha^{2}$.
+
+Therefore, the identity rotation $\mathrm{I}_{3}$ is associated with $q
+= \pm 1$ (which we already knew), and these unit quaternions only.
+
+Let $(\vec{\imath}, \vec{\jmath}, \vec{k})$ be the canonical basis of
+$\setR^{3}$.  Consider now a rotation $r \neq \mathrm{I}_{3}$
+ (hence $\theta \in ]0; \pi]$), it possesses a unique rotation axis, and
+a unique unit vector $\vec{u} = x \vec{\imath} + y \vec{\jmath} + z \vec{k}$
+directing that axis such that $r(\vec{a}) = (\cos \theta)[\vec{a} -
+(\vec{u} \cdot \vec{a}) \vec{u}] + (\sin \theta)(\vec{u} \wedge \vec{a})
++ (\vec{u} \cdot \vec{a}) \vec{u}$ for all $\vec{a} \in \setR^{3}$.
+ It follows that $r$ is associated with the two unit quaternions
+\[
+  q = \pm \left[ \begin{array}{c}
+      \cos \frac{\theta}{2} \\
+    x \sin \frac{\theta}{2} \\
+    y \sin \frac{\theta}{2} \\
+    z \sin \frac{\theta}{2} 
+  \end{array} \right]
+\]
+and these two unit quaternions only.
+
+The second method is non-constructive, but has the advantage of
+highlighting the regularity of the connection between rotations and
+quaternions, which is harder to read using the first method.
+
+We once again exploit the homogeneity of $\Fc{R}$ and use unit
+quaternions.  Given that we know that in fact
+$\Fc{R}(\setS^{3}) \subset \mathrm{SO}(3, \setR)$, we can
+consider $\Fc{R}|^{\mathrm{SO}(3, \setR)}_{\setS^{3}}$
+which is $C^{\infty }$ (because it is rational).  It is slightly
+tedious, but possible, to prove that in fact
+$\Fc{R}|^{\mathrm{SO}(3, \setR)}_{\setS^{3}}$ is a local
+diffeomorphism at $1$.  It is also a group homomorphism (stemming from
+the fact that $\lambda_{q q'} = \lambda_{q} \circ \lambda_{q'}$).  Since
+in a connected topological group, every neighborhood of the neutral
+element is a generator of the whole group (\cite{Pichon:1973oh}),
+$\Fc{R}|^{\mathrm{SO}(3, \setR)}_{\setS^{3}}$ is
+surjective upon the connected component of $\mathrm{I}_{3} =
+\Fc{R}(1)$ in $\mathrm{SO}(3, \setR)$, i.e.\ upon
+$\mathrm{SO}(3, \setR)$, and of course is everywhere a local
+diffeomorphism (though it is of course not a global diffeomorphism).
+
+Combining these two approaches, one finds a global $C^{\infty
+}$-diffeomorphism between $\mathrm{SO}(3, \setR)$ and
+$\setR\mathrm{P}^{3}$ (which is nothing more than $\setS^{3}$
+where every couple of opposite points have been identified).
+
+Another thing worth noting is that $\Fc{R}|^{\mathrm{SO}(3,
+\setR)}_{\setS^{3}}$ is more than just a locally diffeomorphic
+bijection.  If we call $\sigma_{\setS^{3}}$ the positive Borel
+measure on $\setS^{3}$ induced by $\setH = \setR^{4}$ and
+$\sigma_{\mathrm{SO}(3, \setR)}$ that induced on $\mathrm{SO}(3,
+\setR)$ by $\mathrm{M}(\setR, 3, 3)$ (by assimilation of the
+rotations with their matrix in the canonical basis of $\setR^{3}$),
+seen as $\setR^{9}$, then we can compute\footnote{A fact that is
+supposed to be found, but is not, in~\cite{Misner:1973es}.} that
+$\Fc{R}* \sigma_{\mathrm{SO}(3, \setR)} = 16 \sqrt{2}
+\sigma_{\setS^{3}}$.  Furthermore, $\Fc{R}|^{\mathrm{SO}(3,
+\setR)}_{\setS^{3}}$ actually has no critical point.
+
+\section{Miscellany}
+\label{part:I.5}
+
+As we have seen, the main power of the quaternions is their ability to
+pleasantly parameter $\mathrm{SO}(3, \setR)$.  It should be said
+that what is, perhaps their greatest strengths in this regard, with
+respect to other parameterization of $\mathrm{SO}(3, \setR)$ such
+as Euler angles, is that $\Fc{R}|^{\mathrm{SO}(3,
+\setR)}_{\setS^{3}}$ has no critical points (no ``Gimbal
+Lock''), and that the composition of rotations is extremely simple to
+compute in terms of the parameter.  Also and they can be shown to allow
+interpolations of orientations under constraints (such has having one
+axis stay ``horizontal'').
+
+Quaternions also allow a nice parameterization of $\mathrm{SO}(4,
+\setR)$ (\cite{Berger:1990ce} the application $\setS^{3}
+\times \setS^{3} \to \mathrm{SO}(4, \setR), (s, r) \mapsto [q
+\mapsto sq\bar{r}]$ is a continuous group homomorphism, surjective, with
+kernel $\{(1, 1), (-1, -1)\}$).
+
+Quaternions have other uses, though.  For instance, they can be also be
+used to parameter $\mathrm{SU}(2, \setC)$.  More precisely, an
+isomorphism exists between $\{0\} \times \setS^{3}$ and
+$\mathrm{SU}(2, \setC)$ (consider, the application
+\funcDef{$\Psi$}
+  {\setH}{$q = \alpha + \beta i + \gamma j + \delta k$}
+  {$\mathrm{M}(\setC, 2, 2)$}{$\left[ \begin{array}{cc}
+                                      u & -\bar{v} \\
+                                      v &  \bar{u} \\
+                                    \end{array} \right]$}
+with $u = \alpha + \delta i$ and $v = \gamma + \beta i$ is a ring
+isomorphism from \setH on a sub-ring of $\mathrm{M}(\setC,
+2, 2)$, which induces an isomorphism).  There are also applications of
+quaternions to the Riemann sphere (\cite{Lelong-Ferrand:1978gq}).
+
+It should be mentioned that research exists to find more efficient
+algorithm for the product of quaternions (\cite{Howell:1975ft}),
+but has so far not reached a conclusion, one way or the other.
+
+Given the power of the quaternions, the question naturally arises as to
+whether something similar can be done for rotations on spaces of higher
+dimensions (the multiplication being commutative on the reals and
+complex numbers, interiors automorphisms are just the identity).  The
+answer to that question is partly positive, but it should be now stated
+that the right tool, in general, for that problem turns out to be
+Clifford algebras rather than Cayley algebras.
+
+When we turn to the octonions, the multiplication is not only not
+associative, it is no longer even associative.  Fortunately, the
+sub-algebra engendered by any two elements (and the unity) is still
+associative, and therefore interior automorphism do not depend on the
+order in which the products are carried out.  The interesting fact is
+that, as with the quaternions, the interior automorphisms leave
+\setR invariant, and induce a rotation, on $\setR^{7}$ this
+time.  The catch is that $\mathrm{SO}(7, \setR)$ is a
+21-dimentional manifold, whereas the interior automorphisms we just
+described only have 7 degrees of freedom.  In short, we do not get all
+the rotations on $\setR^{7}$ by this method.  It is still useful,
+though, for theoretical purposes.
+
+Beyond the even the octonions, the hexadecimalions have two different
+flavors of interior automorphism, $p \mapsto ((q)p)(q^{-1})$ and $p
+\mapsto (q)(p(q^{-1}))$, neither of which is, in general, a rotation (on
+either $\setR^{16}$ or $\setR^{15}$).  The average of the two
+is not a rotation either, by the way\ldots.
+
+Interior automorphisms having apparently reached the limits of their
+usefulness, we turn now to something else, with the same objects.  It
+turns out that we can find rotations with even simpler constructions!
+
+Let $x = \alpha \in \setR$, then $\mathrm{M}_{x} = \cMatrix([y
+\mapsto xy], 1, 1) = \cMatrix([y \mapsto yx], 1, 1) = [\alpha]$,
+hence ${}^{\mathrm{t}}\mathrm{M}_{x}\mathrm{M}_{x} = |x|
+\mathrm{I}_{1}$, and $\det \mathrm{M}_{x} = x$.  Therefore if $|x| = 1$,
+we find that $\mathrm{M}_{x} \in \mathrm{O}(1, \setR)$, and we of
+course get all two elements of $\mathrm{O}(1, \setR)$ that
+way\ldots but $\mathrm{M}_{x} \in \mathrm{SO}(1, \setR)$ only if $x
+= 1$!  Obviously, given $x \in \setR$ and $x' \in \setR$,
+$\mathrm{M}_{x x'} = \mathrm{M}_{x} \mathrm{M}_{x'} = \mathrm{M}_{x'}
+\mathrm{M}_{x}$.
+
+Let $c = \alpha + \beta i \in \setC$, then $\mathrm{M}_{c} =
+\cMatrix([z \mapsto cz], (1, i), (1, i)) = \cMatrix([z \mapsto
+zc], (1, i), (1, i)) = \left[ \begin{array}{cc}
+  \alpha & -\beta \\
+  +\beta & \alpha
+\end{array} \right]$, hence ${}^{\mathrm{t}}\mathrm{M}_{c}\mathrm{M}_{c}
+= |c| \mathrm{I}_{2}$, and $\det \mathrm{M}_{c} = \alpha^{2} +
+\beta^{2}$.  Therefore if $|c| = 1$, $\mathrm{M}_{c} \in \mathrm{SO}(2,
+\setR)$, and we get all rotations on $\setR^{2}$ that way, as
+is well-known.  And given $c \in \setC$ and $c' \in \setC$, we
+still have $\mathrm{M}_{c c'} = \mathrm{M}_{c} \mathrm{M}_{c'} =
+\mathrm{M}_{c'} \mathrm{M}_{c}$.
+
+Let now $q = \alpha + \beta i + \gamma j + \delta k \in \setH$,
+then:
+\[
+  \mathrm{M}^{G}_{q}
+    = \cMatrix([p \mapsto qp], (1, i, j, k), (1, i, j, k))
+    = \left[ \begin{array}{cccc}
+      \alpha  & -\beta  & -\gamma & -\delta \\
+      +\beta  & \alpha  & -\delta & +\gamma \\
+      +\gamma & +\delta & \alpha  & -\beta  \\
+      +\delta & -\gamma & +\beta  & \alpha
+    \end{array} \right]
+\]
+and
+\[
+  \mathrm{M}^{D}_{q}
+    = \cMatrix([p \mapsto pq], (1, i, j, k), (1, i, j, k))
+    = \left[ \begin{array}{cccc}
+      \alpha  & -\beta  & -\gamma & -\delta \\
+      +\beta  & \alpha  & +\delta & -\gamma \\
+      +\gamma & -\delta & \alpha  & +\beta  \\
+      +\delta & +\gamma & -\beta  & \alpha
+    \end{array} \right]
+,\]
+hence ${}^{\mathrm{t}} \mathrm{M}^{G}_{q} \mathrm{M}^{G}_{q} =
+{}^{\mathrm{t}} \mathrm{M}^{D}_{q} \mathrm{M}^{D}_{q} = |q|
+\mathrm{I}_{4}$, and $\det \mathrm{M}^{G}_{q} = \det \mathrm{M}^{D}_{q}
+= {(\alpha^{2} + \beta^{2} + \gamma^{2} + \delta^{2})}^{2}$.  Therefore if
+$|q| = 1$, $\mathrm{M}^{G}_{q} \in \mathrm{SO}(4, \setR)$ and
+$\mathrm{M}^{D}_{q} \in \mathrm{SO}(4, \setR)$, but we only get a
+tiny fraction of $\mathrm{SO}(4, \setR)$ that way.
+
+This, of course can be used as an alternate proof that the interior
+automorphisms on the quaternions actually induce rotations on
+$\setR^{4}$.
+
+It is interesting to note that given $q \in \setH$ and $q' \in
+\setH$, we still have $\mathrm{M}^{G}_{q q'} = \mathrm{M}^{G}_{q}
+\mathrm{M}^{G}_{q'}$ and $\mathrm{M}^{D}_{q q'} = \mathrm{M}^{D}_{q'}
+\mathrm{M}^{D}_{q}$, though we now sometimes have $\mathrm{M}^{G}_{q}
+\mathrm{M}^{G}_{q'} \neq \mathrm{M}^{G}_{q'} \mathrm{M}^{G}_{q}$ and
+$\mathrm{M}^{D}_{q'} \mathrm{M}^{D}_{q} \neq \mathrm{M}^{D}_{q}
+\mathrm{M}^{D}_{q'}$.
+
+Turning to the octonions, let $o = \alpha  + \beta  i + \gamma  j +
+\delta  k + \epsilon  e' + \zeta  i' + \eta  j' + \theta  k' \in
+\setO$, then:
+\[
+  \mathrm{M}^{G}_{o}
+    = \cMatrix([o' \mapsto o o'], (1, i, j, k, e', i', j', k'),
+       (1, i, j, k, e', i', j', k'))
+    = \left[ \begin{array}{cccccccc}
+         \alpha &    -\beta &   -\gamma &   -\delta
+                & -\epsilon &    -\zeta &    -\eta  & -\theta   \\
+         +\beta &    \alpha &   -\delta &   +\gamma
+                &    -\zeta & +\epsilon &   +\theta & -\eta     \\
+        +\gamma &   +\delta &    \alpha &    -\beta
+                &     -\eta &   -\theta & +\epsilon & +\zeta    \\
+        +\delta &   -\gamma &    +\beta &    \alpha
+                &   -\theta &     +\eta &    -\zeta & +\epsilon \\
+      +\epsilon &    +\zeta &     +\eta &   +\theta
+                &    \alpha &    -\beta &   -\gamma & -\delta   \\
+         +\zeta & -\epsilon &   +\theta &     -\eta
+                &    +\beta &    \alpha &   +\delta & -\gamma   \\
+          +\eta & -  \theta & -\epsilon &    +\zeta
+                &   +\gamma &   -\delta &    \alpha & +\beta    \\
+        +\theta &     +\eta &    -\zeta & -\epsilon
+                &   +\delta &   +\gamma &    -\beta & \alpha
+    \end{array} \right]
+\]
+and
+\[
+  \mathrm{M}^{D}_{o}
+    = \cMatrix([o' \mapsto o' o], (1, i, j, k, e', i', j', k'),
+       (1, i, j, k, e', i', j', k'))
+    = \left[ \begin{array}{cccccccc}
+         \alpha &    -\beta &   -\gamma &   -\delta
+                & -\epsilon &    -\zeta &    -\eta  & -\theta   \\
+         +\beta &    \alpha &   +\delta &   -\gamma
+                &    +\zeta & -\epsilon &   -\theta & +\eta     \\
+        +\gamma &   -\delta &    \alpha &    +\beta
+                &     +\eta &   +\theta & -\epsilon & -\zeta    \\
+        +\delta &   +\gamma &    -\beta &    \alpha
+                &   +\theta &     -\eta &    +\zeta & -\epsilon \\
+      +\epsilon &    -\zeta &     -\eta &   -\theta
+                &    \alpha &    +\beta &   +\gamma & +\delta   \\
+         +\zeta & +\epsilon &   -\theta &     +\eta
+                &    -\beta &    \alpha &   -\delta & +\gamma   \\
+          +\eta & +  \theta & +\epsilon &    -\zeta
+                &   -\gamma &   +\delta &    \alpha & -\beta    \\
+        +\theta &     -\eta &    +\zeta & +\epsilon
+                &   -\delta &   -\gamma &    +\beta & \alpha
+    \end{array} \right]
+,\]
+hence ${}^{\mathrm{t}} \mathrm{M}^{G}_{o} \mathrm{M}^{G}_{o} =
+{}^{\mathrm{t}} \mathrm{M}^{D}_{o} \mathrm{M}^{D}_{o} = |o|
+\mathrm{I}_{8}$, and $\det \mathrm{M}^{G}_{o} = \det \mathrm{M}^{D}_{o}
+= {(\alpha^{2} + \beta^{2} + \gamma^{2} + \delta^{2} + \epsilon^{2} +
+\zeta^{2} + \eta^{2} + \theta^{2})}^{4}$.  Therefore if $|o| = 1$,
+$\mathrm{M}^{G}_{o} \in \mathrm{SO}(8, \setR)$ and
+$\mathrm{M}^{D}_{o} \in \mathrm{SO}(8, \setR)$.  Again, we only get
+a very tiny fraction of $\mathrm{SO}(8, \setR)$ that way.
+
+Also, and contrary to the case for the real numbers, the complex numbers
+and the quaternions, in general $\mathrm{M}^{G}_{o o'} \neq
+\mathrm{M}^{G}_{o} \mathrm{M}^{G}_{o'}$ and $\mathrm{M}^{D}_{o o'} \neq
+\mathrm{M}^{D}_{o'} \mathrm{M}^{D}_{o}$, due to the non-associativity of
+the product on \setO.  For instance, $i' e' = -i$, but
+$\mathrm{M}^{G}_{i'} \mathrm{M}^{G}_{e'} \neq \mathrm{M}^{G}_{-i}$.
+
+If we try to do the same thing with hexadecimalions, we find that
+neither $\cMatrix([l \mapsto hl], (1, i, j, k, e', i', j', k', e'',
+i'', j'', k'', e''', i''', j''', k'''), (1, i, j, k, e', i', j', k',
+e'', i'', j'', k'', e''', i''', j''', k'''))$ nor its right-hand version
+are rotation in general, even if $\|l\| = 1$.  That trail ends here as
+well!
+
+\chapter{Building the Quaternions}
+\label{part:II}
+
+\section{What to find here}
+\label{part:II.1}
+
+This chapter, except for Section~\ref{part:II.5}, only consists of
+well-known classical results (\cite{Bourbaki:sc},~\cite{Lang:1971vf},
+\ldots).  Some have been slightly restated (usually with
+simplifications) from their original sources, but hardly anything new is
+presented here.  In case the sources disagree on definitions,~\cite{Bourbaki:sc}
+will take precedence.
+
+\section[Cayley \& alternate algebras]{Cayley algebra, alternative
+algebra}
+\label{part:II.2}
+
+Some of the structures we will be considering will not even be
+associative.  To save what may be, a weaker structure, which is
+interesting in its own right is presented first.  An algebra
+\xsetE is said to be \emph{alternative\/} if the following trilinear
+application, known as the \emph{associator\/} of \xsetE, is
+alternating (which means its value is zero if two of its arguments are
+identical):
+\funcDef{$\mathrm{a}$}
+  {$\xsetE \times \xsetE \times \xsetE$}{$(x, y, z)$}
+  {\xsetE}{$x * (y * z) - (x * y) * z$}
+
+This notion is interesting as, though an alternative algebra is not as
+wieldy as an associative algebra, it is such that every sub-algebra
+engendered by any two elements \emph{is\/} associative.  It also implies that an
+alternative algebra is a \emph{division\/} algebra (which means that for any $x
+\in \xsetE, x \neq 0$, the applications $\xsetE \to \xsetE;
+y \mapsto x * y$ and $\xsetE \to \xsetE; y \mapsto y * x$ are
+bijective, or that elements are ``simplifiable'').  In particular the
+inverse of a non-zero element (if it exists) is unique in such an
+algebra.
+
+The meat of this chapter is the following structure.
+
+Let \xsetA be a commutative ring, and \xsetE an algebra over
+\xsetA, not necessarily commutative or associative, but having a
+unit element $e$ (remember that since \xsetE is an
+\xsetA-algebra, then $(\forall \lambda \in \xsetA) (\forall x
+\in \xsetE) \lambda \cdot x = (\lambda \cdot e) * x = x * (\lambda
+\cdot e)$).
+
+A \emph{conjugation\/} over \xsetE is any (there may be none)
+bijective, \xsetA-linear, function $\sigma: \xsetE \to
+\xsetE$ such that:
+\begin{enumerate}
+\item $\sigma(e) = e$.
+\item $(\forall (x, y) \in \xsetE^{2}) \sigma(x * y) = \sigma(y) *
+      \sigma(x)$ (\emph{beware\/} the inversion of $x$ and $y$!).
+\item $(\forall x \in \xsetE) (x + \sigma(x)) \in \xsetA \cdot
+      e$ and $(\forall x \in \xsetE) (x * \sigma(x)) \in \xsetA
+      \cdot e$.
+\end{enumerate}
+
+These properties imply\footnote{$(x + \sigma(x)) \in \xsetA \cdot e
+\Rightarrow x * \sigma(x) = x * (x + \sigma(x)) - x * x = (x +
+\sigma(x)) * x - x * x = \sigma(x) * x$.} $(\forall x \in \xsetE) x
+* \sigma(x) = \sigma(x) * x$, and\footnote{Given $x \in \xsetE$,
+there exists $\alpha \in \xsetA$ such that $x + \sigma(x) = \alpha
+\cdot e$; the \xsetA-linearity of $\sigma$ then implies $\sigma(x)
++ \sigma \circ \sigma(x) = \sigma(x + \sigma(x)) = \alpha \cdot
+\sigma(e)$, and finally, $\sigma(e) = e$.} $(\forall x \in \xsetE)
+\sigma \circ \sigma(x) = x$.
+
+We will also write $\bar{x}$ for $\sigma(x)$.
+
+If \xsetE is such an algebra, and if $\sigma$ is a conjugation
+over \xsetE, the structure $(\xsetE, +, *, \cdot, \sigma)$ is
+said to be a cayley algebra over \xsetA.  On such a structure, it
+is convenient to consider the cayley trace and cayley norm (an
+unfortunate misnomer as it is actually quadratic\ldots), defined
+respectively by $\Trace{\xsetE}(x) = x + \sigma(x)$ and
+$\Norm{\xsetE}(x) = x * \sigma(x)$.
+
+Note that if $(\xsetE, +, *)$ has no zero divisors, for instance if
+it is a field, then $\Norm{\xsetE}(x) = 0$ if and only if $x
+= 0$.
+
+We have the important relations:
+\begin{itemize}
+\item $\Trace{\xsetE}(\sigma(x))
+  = \Trace{\xsetE}(x)$
+\item $\Norm{\xsetE}(\sigma(x))
+  = \Norm{\xsetE}(x)$
+\item $\fcT(x * y) = \fcT(y * x)$
+\item $\Trace{\xsetE}(x * \sigma(y))
+  = \Trace{\xsetE}(y * \sigma(x))
+  = \Trace{\xsetE}(x) * \Trace{\xsetE}(y)
+    - \Trace{\xsetE}(x * y)
+  = \Norm{\xsetE}(x + y) - \Norm{\xsetE}(x)
+    - \Norm{\xsetE}(y)$
+\end{itemize}
+
+It is interesting to note that $\fcT(x * y) = \fcT(y * x)$
+regardless of whether or not \xsetE is associative or commutative.
+ For the cayley norm, no such broad result seem to
+hold;\footnote{Indeed, we have seen that such an equality does not hold
+for hexadecimalions!} however if \xsetE is alternative, then we
+also have $\Norm{\xsetE}(x * y) = \Norm{\xsetE}(x)
+\Norm{\xsetE}(y)$.
+
+Finally, the following lemma will be useful for our purposes:
+\begin{lemma}[Complexo\"{\i}d]\label{lemma:complexoid}
+  Given $x \in \xsetE$, $\fnVect_{\xsetA}(e, x)$,
+    the \xsetA-module spanned by $x$ and $e$, is stable for $*$;
+    it is a sub-cayley algebra of \xsetE which is associative and
+    commutative.  If $x \not\in \xsetA \cdot e$, let
+    $y = \alpha \cdot e + \beta \cdot x$,
+    $\mathrm{M}^{G}_{y} = \cMatrix([u \mapsto y * u], (e, x), (e, x))$
+    and $\mathrm{M}^{D}_{y} = \cMatrix([u \mapsto u * y], (e, x), (e, x))$;
+    then (with $\mathrm{T} \cdot e = \Trace{\xsetE}(x)$ and
+    $\mathrm{N} \cdot e = \Norm{\xsetE}(x)$)
+  \[
+    \mathrm{M}_{y}
+      = \mathrm{M}^{G}_{y}
+      = \mathrm{M}^{D}_{y}
+      = \left[ \begin{array}{cc}
+          \alpha & -\beta \mathrm{N}          \\
+          \beta  & \beta \mathrm{T} + \alpha
+        \end{array} \right]
+  .\]
+  Given $z \in \fnVect(e, x)$, we have
+    $\mathrm{M}_{y * z}
+    = \mathrm{M}_{y} \mathrm{M}_{z}
+    = \mathrm{M}_{z} \mathrm{M}_{y}
+    = \mathrm{M}_{z * y}$.
+
+  This is a simple consequence of the fact that
+    $x * x = \mathrm{T} \cdot x - \mathrm{N} \cdot e$, with
+    $\mathrm{T} \cdot e = \Trace{\xsetE}(x)$ and
+    $\mathrm{N} \cdot e = \Norm{\xsetE}(x)$!
+\end{lemma}
+
+This lemma allows us, in particular, to define unambiguously the $n$th
+power, with $n \in \setN$, of any $x \in \xsetE$ by the usual
+recursion rules, we will write the result, as usual $x^{n}$.  It also
+trivially induces the following scholie: 
+\begin{scholie}[Powers]\label{scholie:powers}
+  Given $x \in \xsetE$,
+    and $n \in \setN$,
+  $x^{n} \in \fnVect_{\xsetA}(e, x)$,
+    and $\Norm{\xsetE}(x^{n}) = {(\Norm{\xsetE}(x))}^{n}$.
+\end{scholie}
+
+\section{The Cayley doubling procedure}
+\label{part:II.3}
+
+It should be noted that this is simply the plain vanilla version of the
+doubling process;\footnote{The general procedure involves abitrary
+coefficients which parameterize the operations.} it will suffice here,
+however.
+
+Let \xsetA be a commutative ring, and $(\xsetE, +, *, \cdot,
+\sigma)$ a cayley algebra over \xsetA, not necessarily commutative
+or associative, with unit element $e$.  Let $\xsetF = \xsetE
+\times \xsetE$ and $e_{\xsetF} = (e, 0) \in \xsetF$;
+furthermore, let:
+\begin{itemize}
+  \item \funcDef{$+_{\xsetF}$}
+    {$\xsetF \times \xsetF$}{$((x, y), (x', y'))$}
+    {\xsetF}{$(x + x', y + y')$}
+  \item \funcDef{$*_{\xsetF}$}
+    {$\xsetF \times \xsetF$}{$((x, y), (x', y'))$}
+    {\xsetF}{$(x * x' - \overline{y'} * y, y * \overline{x'} + y' * x)$}
+  \item \funcDef{$\cdot_{\xsetF}$}
+    {$\xsetA \times \xsetF$}{$(\lambda, (x, y))$}
+    {\xsetF}{$(\lambda \cdot x, \lambda \cdot y)$}
+  \item \funcDef{$\sigma_{\xsetF}$}
+    {\xsetF}{$(x, y)$}
+    {\xsetF}{$(\sigma(x), -y)$}
+\end{itemize}
+
+\begin{proposition}[Structure]\label{proposition:structure}
+  $(\xsetF, +_{\xsetF}, *_{\xsetF}, \cdot_{\xsetF})$ is
+  an \xsetA-algebra, with unit $e_{\xsetF}$, and
+  $\sigma_{\xsetF}$ is a conjugation over \xsetF; \xsetF
+  is associative if and only if \xsetE is both associative and
+  commutative; \xsetF is alternative if and only if \xsetE
+  is associative.  Furthermore, $\Trace{\xsetF}((x, y))
+  = \Trace{\xsetE}(x)$ and $\Norm{\xsetF}((x, y))
+  = \Norm{\xsetE}(x) + \Norm{\xsetE}(y)$.
+\end{proposition}
+
+Keep in mind that since \xsetF is also an \xsetA-algebra
+then $(\forall \lambda \in \xsetA) (\forall (x, y) \in \xsetF)
+\lambda \cdot_{\xsetF} (x, y) = (\lambda \cdot_{\xsetF}
+e_{\xsetF}) *_{\xsetF} (x, y) = (x, y) *_{\xsetF} (\lambda
+\cdot_{\xsetF} e_{\xsetF})$.  It is interesting to note that, if
+\xsetE is associative, we still have $\Norm{\xsetF}((x,
+y) *_{\xsetF} (x', y')) = \Norm{\xsetF}((x, y))
+\Norm{\xsetF}((x', y'))$, even if \xsetF is not
+associative.
+
+Given the proposition, we can (and will) identify \xsetE with
+$\xsetE \times \{0_{\xsetE}\}$.  Alternatively, we can identify
+\xsetF with a superset of \xsetE.  It is also possible to
+identify \xsetA with a subset of \xsetE (and hence of
+\xsetF as well), in that case we have noted that all elements of
+\xsetA commute with all elements of \xsetE, for the
+multiplication in \xsetE, as well as with all elements of
+\xsetF, for the multiplication in \xsetF, even though
+\xsetE or \xsetF might not be commutative.  With this
+identification, $\fcT$ and $\fcN$ have value in
+\xsetA.
+
+\section{\setR, \setC, \setH, \setO, \setX,~\ldots}
+\label{part:II.4}
+
+We now consider $\xsetA = \setR$ and $\xsetE = \setR$, with $\sigma(x)
+= x$ and $e = 1$, then $\Norm{\setR}(x) = x^{2}$ is always
+positive (and zero if and only $x = 0$, as \setR is a field).  When we
+build \xsetF as above, we get exactly \setC, and $\sigma_{\xsetF}$ is
+the usual conjugation on \setC.  We define $i = (0; 1)$, and as stated
+earlier, we identify \setR with $\setR \times \{0\}$.  As is well
+known, \setC is a commutative field, in particular, real numbers
+commute with complex numbers.  Due to our identifications,
+$\Trace{\setC}$ and $\Norm{\setC}$ have values in \setR,
+and actually, if $z = x + i y$ then $\Norm{\setC}(z) =
+\Norm{\setR}(x) + \Norm{\setR}(y) = x^{2} + y^{2} =
+|z|^{2} \geq 0$, and $\Norm{\setC}(z) = 0$ if and only if $z =
+0$.  We lose some of the original properties of \setR as we build
+\setC, for instance we lose the existence of an order compatible with
+the multiplication; we do get new and interesting properties at the same
+time, of course.
+
+LetÕs do the doubling again, this time with $\xsetA = \setR$ and
+$\xsetE = \setC$, with the usual conjugation, and this time we get
+exactly \setH, the conjugation being the same as defined earlier, given
+the definition of $j = (0; 1)$ and $k = (0; i)$, and the identification
+of \setC with $\setC \times \{0\}$.  Once again, we note that, as
+predicted, for quaternion multiplication, real numbers commute with
+quaternions, though some quaternions do not commute (for instance $i * j
+\neq j * i$).  As already stated \setH is a (non-commutative) field. 
+Once again, due to our new identifications, \Trace{H} and \Norm{H} have
+values in \setR, and actually, \Norm{H} is always positive and
+$\Norm{H}(q) = 0$ if and only if $q = 0$.  We keep losing original
+properties, most notably the commutativity, when we go from \setC to
+\setH, but the new properties we gain, notably the link with rotations
+in $\setR^{3}$, which we saw earlier, still makes it worthwhile.  We
+also see that $\Trace{H}(q) = 2 \fnRe q$ and $\Norm{H}(q) =
+\|q\|^{2} = |q|^{2}$, as defined earlier.
+
+There being not such thing as too much of a good thing, letÕs do the
+doubling once again, this time with $\xsetA = \setR$ and $\xsetE =
+\setH$, and the conjugation just built on \setH.  What the process
+yields this time is known as the set of (Cayley) octonions, whose symbol
+is \setO.  We, as is now usual, identify \setH with $\setH \times
+\{0\}$.  Yet again, we note that, for octonion multiplication, real
+numbers commute with octonions, though some octonions do not commute (as
+some quaternions already do not commute).  Yet again, due to our new
+identifications, \Trace{O} and \Norm{O} have values in \setR, and
+actually, \Norm{O} is always positive and $\Norm{O}(o) = 0$ if and only
+if $o = 0$.  The situation keeps deteriorating, though, as this time the
+algebra is not associative anymore (but it is still associative). 
+Octonions do have uses, apart from being an example of a non-associative
+algebra.  They can be used to find a basis of non-vanishing vector field
+on $\setS^{7}$ (the euclidian unit sphere in $\setR^{8}$), in the same
+way quaternions can be used to find one on $\setS^{3}$, and complexes
+are used to find one on $\setS^{1}$.  They also see use in theoretical
+physics (\cite{Dixon:1994rh}).  Octonions still are a division
+algebra, and non-zero octonions $O$ have ${[\Norm{O}(O)]}^{-1}
+\sigma_{\setO}(O)$ for inverse.  Despite the non-associativity of the
+multiplication, we still have $\Norm{O}(o * o') = \Norm{O}(o)
+\Norm{O}(o')$, since the multiplication \emph{is\/} associative on \setH.
+
+We can keep doubling \emph{ad nauseam}, but things really get unwieldy. 
+At the stage after octonions, the hexadecimalions, \setX, the algebra
+is not even alternating.  This author does not know of any use the
+ulterior echelons may have been put to, if any.
+
+\section[The full Cayley ladder]{The full Cayley ladder all at once}
+\label{part:II.5}
+
+One might wonder if the whole doubling procedure might be ``carried out
+to infinity''.  As it turns out, it can, after a fashion.  We will
+present here a special version\footnote{That is, the object built by our
+``plain vanilla'' version of the Cayley doubling procedure.} of the
+global object, for simplicity.
+
+Let \xsetA be a commutative ring, whose unit element will be called $e$.
+
+Let us call $\Fc{A}_{0} = \xsetA$ and $\sigma_{0}$ the identity over
+\xsetA.  It is quite obvious that $(\xsetA, +, \times, \times, \sigma)$
+is a cayley algebra over \xsetA.  Using the doubling procedure, we build
+$\Fc{A}_{1} = \xsetA \times \xsetA$ and $\sigma_{1}$, and by induction
+we build $\Fc{A}_{n}$ and $\sigma_{n}$ for all $n \in \setN$.
+
+Consider $\xsetA[X]$ the set of polynomials (in one indeterminate $X$)
+with coefficients in \xsetA.  We already have an \xsetA-algebra
+structure, which we will denote by $(\xsetA[X], +, \cdot, \times)$, and
+is the usual commutative algebra.  We readily identify $\Fc{A}_{0} =
+\xsetA$ with constant polynomials, through an homomorphism of
+\xsetA-modules $\Fc{J}_{0}$.  It is trivial to see that $\Fc{A}_{n}$
+identifies with polynomials of degree less or equal to $2^{n} - 1$, thru
+the trivial \xsetA-modules isomorphism $\Fc{J}_{n}$.  Let us call
+$I_{n}: \Fc{A}_{n} \to \Fc{A}_{n + 1}, x \mapsto (x, 0)$ the canonical
+identification.  Then $(\forall n \in \setN) \Fc{J}_{n + 1} \circ I_{n}
+= \Fc{J}_{n}$, which means our identifications are all coherent.
+
+So every element of every rung of the Cayley ``ladder,'' build by
+successively doubling the preceding rung and begun by \xsetA, \emph{a
+finite number of times}, can be identified uniquely with some polynomial
+with coefficients in \xsetA, and conversely every element of $\xsetA[X]$
+can be seen a some unique element of the Cayley ladder.  As the
+multiplication we will define differs, in general, from the polynomial
+multiplication, we will choose a new symbol for our construction.
+
+Let $\Ck{C}(\xsetA)$ be some set equipotent to $\xsetA[X]$, the set of
+polynomials in one indeterminate $X$ over \xsetA, thru a bijection
+$\Ck{I}: \Ck{C}(\xsetA) \mapsto \xsetA[X]$.  This bijection induces an
+\xsetA-module on $\Ck{C}(\xsetA)$, from $(\xsetA[X], +, \cdot)$, which
+we will denote by $(\Ck{C}(\xsetA), +, \cdot)$, and we identify
+$\Fc{A}_{n}$ with $\Ck{I}^{-1}(\Fc{J}_{n}(\Fc{A}_{n}))$.
+
+We will now define a multiplication on $\Ck{C}(\xsetA)$, which we will
+denote by ``$*$''.  Let $\Ck{p} \in \Ck{C}(\xsetA)$ and $\Ck{q} \in
+\Ck{C}(\xsetA)$; let $P = \Ck{I}(\Ck{p})$ and $Q = \Ck{I}(\Ck{q})$, then
+there exists (at least) one $n \in \setN$ such that $P \in
+\Fc{J}_{n}(\Fc{A}_{n})$ and $Q \in \Fc{J}_{n}(\Fc{A}_{n})$.  We chose
+the smallest such $n$.  We now find the only $p_{n} \in \Fc{A}_{n}$ such
+that $P = \Fc{J}_{n}(p_{n})$ and the only $q_{n} \in \Fc{A}_{n}$ such
+that $Q = \Fc{J}_{n}(q_{n})$.  Finally $\Ck{I}(\Ck{p} * \Ck{q}) =
+\Fc{J}_{n}(p_{n} *_{\Fc{A}_{n}} q_{n})$.  We note that for all $n' > n$,
+we do have $P \in \Fc{J}_{n'}(\Fc{A}_{n'})$ and $Q \in
+\Fc{J}_{n'}(\Fc{A}_{n'})$ and there are unique $p_{n'} \in \Fc{A}_{n'}$
+such that $P = \Fc{J}_{n'}(p_{n'})$ and $q_{n'} \in \Fc{A}_{n'}$ such
+that $Q = \Fc{J}_{n'}(q_{n'})$, but thanks to the coherence of the
+identifications we also have $\Fc{J}_{n}(p_{n} *_{\Fc{A}_{n}} q_{n}) =
+\Fc{J}_{n'}(p_{n'} *_{\Fc{A}_{n'}} q_{n'})$.
+
+It is easy to verify that $(\Ck{C}(\xsetA), +, \cdot, *)$ is an
+\xsetA-algebra.  However, in general $\Ck{I}(\Ck{p} * \Ck{q}) \neq
+\Ck{I}(\Ck{p}) \times \Ck{I}(\Ck{q})$.  For instance if $\xsetA =
+\setR$ then $X^{1} = \Ck{I}(i)$, $X^{2} = \Ck{I}(j)$, and $X^{3} =
+\Ck{I}(k)$, and thus $\Ck{I}(i) = X^{1} \neq X^{5} = X^{2} \times X^{3}
+= \Ck{I}(j) \times \Ck{I}(k)$.  So \Ck{I} is \emph{not}, in general, an
+algebra isomorphism between $(\Ck{C}(\xsetA), +, \cdot, *)$ and
+$(\xsetA[X], +, \cdot, \times)$, as stated earlier.
+
+We likewise define the conjugation $\sigma$, and the cayley trace and
+``norm,'' over $\Ck{C}(\xsetA)$ through the identifications
+$\Fc{J}_{n}$, with values in $\Fc{A}_{0}$.  It is now easy to check that
+$(\Ck{C}(\xsetA), +, \cdot, *, \sigma)$ is a cayley algebra over \xsetA
+ (usually not commutative or associative), which, through the
+identifications, contains all the rungs of the cayley doubling procedure
+starting with \xsetA.  Elements of \xsetA commute with all elements of
+$\Ck{C}(\xsetA)$, for $*$.
+
+We will shortly use the fact that if $\Ck{I}(\Ck{p}) = \alpha_{0} +
+\alpha_{1} X + \cdots + \alpha_{2^{n} - 1} X^{2^{n} - 1} =
+\Fc{J}_{n}(p_{n})$, then $\Ck{I}(\Ck{p} * \Ck{p}) = \Fc{J}_{n}(p_{n}
+*_{\Fc{A}_{n}} p_{n}) = (\alpha^{2}_{0} - (\alpha^{2}_{1} + \cdots +
+\alpha^{2}_{2^{n} - 1})) + 2 \alpha_{1} \alpha_{0} X + \cdots + 2
+\alpha_{2^{n} - 1} \alpha_{0} X^{2^{n} - 1}$; this is simply proved by
+recurrence.
+
+As a first example of Cayley ladders, let us consider
+$(\Ck{C}(\frac{\setZ}{2 \setZ}), +, \times, *, \fnId)$.  It is a
+commutative and associative cayley algebra, the conjugation being the
+identity on $\Ck{C}(\frac{\setZ}{2 \setZ})$; however it has zero
+divisors, as for instance $\Ck{I}^{-1}(1 + X) * \Ck{I}^{-1}(1 + X) = 0$,
+but if $\Ck{p} \in \Ck{C}(\frac{\setZ}{2 \setZ})$ and $\Ck{I}(\Ck{p})$
+has an odd number of 1 then $\Ck{I}(\Ck{p} * \Ck{p}) = 1$.
+
+The second, perhaps more interesting example, is $\Ck{C}(\setR)$, which
+we have actually used already.  In that case we can see that if $\Ck{a}
+\in \Ck{C}(\setR)$, then $\Norm{\Ck{C}(\setR)}(\Ck{a})$ is always
+positive, and $\Norm{\Ck{C}(\setR)}(\Ck{a}) = 0$ if and only if $\Ck{a}
+= 0$; furthermore, $\Ck{a} \neq 0 \Rightarrow
+[{(\Norm{\Ck{C}(\setR)}(\Ck{a}))}^{-1} \sigma(\Ck{a})] * \Ck{a} = \Ck{a}
+* [{(\Norm{\Ck{C}(\setR)}(\Ck{a}))}^{-1} \sigma(\Ck{a})] = 1$.  It is
+also possible in this case to compute square roots!  Indeed, let $x \in
+\Fc{A}_{n}$, with $\Fc{J}_{n}(x) = A_{0} + A_{1} X + \cdots + A_{2^{n} -
+1} X^{2^{n} - 1}$; we seek $y \in \Fc{A}_{n}$ with $\Fc{J}_{n}(y) =
+\alpha_{0} + \alpha_{1} X + \cdots + \alpha_{2^{n} - 1} X^{2^{n} - 1}$
+such that $y * y = x$.  This amounts to solving, in $\setR^{2^{n}}$ the
+system:
+\[
+\left\{
+\begin{array}{rcl}
+  \alpha^{2}_{0} - (\alpha^{2}_{1} + \cdots
+        + \alpha^{2}_{2^{n} - 1}) &    =   & A_{0}         \\
+          2 \alpha_{1} \alpha_{0} &    =   & A_{1}         \\
+                                  & \vdots &               \\
+  2 \alpha_{2^{n} - 1} \alpha_{0} &    =   & A_{2^{n} - 1}
+\end{array}
+\right.
+\]
+This system is easily solved by considering first the case $x = 0$, for
+which there is a unique solution $y = 0$, second the subcase $x \in
+\setR^{*}_{+}$ for which there are exactly two solutions given by $y =
+\pm \sqrt{x}$, third the subcase $x \not\in \setR$ (if $n \geq 1$, of
+course) for which there are also exactly two solution given by
+$\Fc{J}_{n}(y) = \alpha_{0} + \frac{A_{1}}{2 \alpha_{0}} X + \cdots +
+\frac{A_{2^{n} - 1}}{2 \alpha_{0}} X^{2^{n} - 1}$ with $\alpha_{0} = \pm
+\sqrt{\frac{\fnRe x + |x|}{2}}$, and finally the case $x \in
+\setR^{*}_{-}$, for which the solutions are all the $y \in \Fc{A}_{n}$
+such that $\Fc{R}(y) = 0$ and $|y| = |x|$.
+
+This means that the solutions to $y^{2} = x$, where $x \not\in
+\setR_{-}$ are the same in every rung of the real Cayley ladder (that
+is, there are exactly two, opposite solutions, belonging to the same
+rung), and the solution to $y^{2} = 0$ is always $y = 0$, in whatever
+rung of the Cayley ladder.  However, solutions to $y^{2} = x$ for $x \in
+\setR^{*}_{-}$ differ depending upon the precise rung: in \setR there
+is no solution, in \setC there are exactly two, opposite, solutions, in
+\setH and above there is an innumerable number of solutions (full
+spheres)!
+
+Note that in any case a $y$ such that $y^{2} = x$ commutes with $x$, but
+that two such solutions need not commute with each other!
+
+At least two topologies are interesting to consider on $\Ck{C}(\setR)$:
+the norm topology induced by the square root of \fcN, the Cayley
+``norm'' on $\Ck{C}(\setR)$ (we will write $\|c\| = \sqrt{\fcN(c)}$),
+which we will call \fcT, and the strict inductive limit topology
+ (\cite{Khoan:1972ld}) defined by the rungs $\Ck{C}_{n} =
+\Fc{J}_{n}(\Fc{A}_{n})$ of $\Ck{C}(\setR)$ on which we consider the
+norms $q_{n} = 2^{\sup(0, n - 2)} \|\cdot\|$, which we will call
+$\Trace{\infty}$.
+
+The problem with $\|\cdot\|$ is that it is not an algebra norm, as
+evidenced by the hexadecimalions.  Furthermore, $(\Ck{C}(\setR),
+\fcT)$ is not complete, its completion being $\ell^{2}(\setR)$ with
+its usual topology.
+
+On the other hand, $(\Ck{C}(\setR), \Trace{\infty})$ is complete, and
+the product is (trivially) separately continuous (\cite{Bourbaki:do}),
+but it is not known if it is continuous.
+
+For both topologies, any finite-dimensional vector space is closed and
+the restriction to that vector space is just the usual (euclidian)
+topology.
+
+At any rate, given $x \in \Ck{C}(\setR)$, the Powers Scholie proves
+that $(\fnVect_{\setR}(1, x), \| \|)$ is a commutative
+\setR-Banach algebra (of dimension 1 if and only if $x \in \setR$).
+
+As a final thought, since $\Ck{C}(\xsetA)$ is an \xsetA-Cayley algebra,
+we can perform the Cayley doubling procedure on it!  And again, and so
+on and so forth\ldots.  We can actually perform an infinity of doubling
+as above, and embed all these doublings in what, essentially, is
+$\xsetA[X, Y]$.  And then we can start all over again\ldots.  As we can
+readily see, there is no ``ultimate'' step\ldots.  What seems to be
+going on is that we can build an object for any \emph{finite\/} ordinal
+ (\cite{Exbrayat:1971pk}), and we have built an object,
+which we have called $\Ck{C}(\xsetA)$, for the first infinite ordinal
+$\omega$.  We have then seen that the doubling of $\Ck{C}(\xsetA)$
+yields the object corresponding to $\omega^{*}$ (the successor of
+$\omega$).  The next infinite ordinal with no predecessor ($2 \omega$)
+corresponds to $\xsetA[X, Y]$.  Further on (corresponding to
+$\omega^{2}$), we find the set of polynomials in an indeterminate number
+of indeterminates (i.e.\footnote{Recall that if $X$ is a
+mono\"{\i}d (~\cite{Bourbaki:sc}) and $Y$ is a set, $X^{[Y]}$ is
+the set of functions from $Y$ to $X$ which take values different from
+the neutral element of $X$ only for a finite numbers of elements of
+$Y$.}\ $\xsetA^{[\setN^{[\setN]}]}$).  It is not clear, however, in
+which way we can extend the construction to any set of ordinals
+ (i.e.\ there is no clear transfinite ``recurrence formula'').
+
+\chapter{The Exponential}
+\label{part:III}
+
+\section{What to find here}
+\label{part:III.1}
+
+This chapter is mostly designed to prove the explicit formula for the
+exponential in $\Ck{C}(\setR)$, and give several related results.  As
+far as I known, these results are new.
+
+There are many notions of the exponential, and many ways to see several
+of them.  These, of course, agree when various different definitions can
+be put forward for the same object to be exponentiated.  We will be
+concerned here mainly with the analystÕs point of view, and define the
+exponential of quaternions thru the use of the usual power series
+ (\cite{Beardon:1979ek},~\ldots).  It is known that the approach
+detailed in~\cite{Pham:1996gf} could also be used, at least for
+quaternions, though I believe it would then be necessary to derive the
+power series representation (or the intermediary differential
+representation we will also use) to achieve our present goal.  It
+remains to be seen if it can also be carried over to the whole of
+$\Ck{C}(\setR)$.
+
+\section{Definition}
+\label{part:III.2}
+
+Given $x \in \Ck{C}(\setR)$, we will call \emph{exponential\/} of $x$,
+and we will write $\exp x$ the element of $\Ck{C}(\setR)$ given by
+$\sum^{+\infty}_{n = 0} \frac{x^{n}}{n!}$.  The unambiguity and
+existence of $\exp x$ is given by the fact that
+$(\fnVect_{\setR}(1, x), \| \|)$ is a commutative \setR-Banach
+algebra, as we have said earlier.  This, of course agrees with the
+definition on \setR and \setC. We must bear in mind that $\exp x \in
+\fnVect_{\setR}(1, x)$.
+
+We see at once that $(\forall x \in \Ck{C}(\setR)) \exp \overline{x} =
+\overline{\exp x}$.  The exponential is continuous when restricted to
+each rung of $\Ck{C}(\setR)$, and has its values into the same rung (we
+will give a more precise result later on).
+
+\section{Links with differentiation}
+\label{part:III.3}
+
+Differentiating a function of one or several quaternions (or higher in
+the Cayley ladder) is quite problematic.  Of course, since
+$\fnVect_{\setR}(1, x)$ is commutative, there is no ambiguity in
+defining $\frac{f(y) - f(x)}{y - x}$ if $y \in \fnVect_{\setR}(1,
+x)$, and we can therefore differentiate
+$\exp|_{\fnVect_{\setR}(1, x)}$ with respect to some $y \in
+\fnVect_{\setR}(1, x)$ and find that it is once again
+$\exp|_{\fnVect_{\setR}(1, x)}$.
+
+It is more fruitful, however, to differentiate a function of a
+\emph{real\/} variable, with values in some topological \setR-vector
+space.
+
+Let us therefore consider, for some $x \in \Ck{C}(\setR)$, the function
+$e_{x}: [\setR \to \Ck{C}(\setR), t \mapsto \exp tx]$.  It is clear
+that $e_{x}$ takes its values in $\fnVect_{\setR}(1, x)$, is
+differentiable and $e'_{x}(t) = x e_{x}(t) = e_{x}(t) x$, and of course
+$e_{x}(0) = 1$.  This, of course proves that $e_{x}$ is the unique
+solution to $f' = x f, f(0) = 1$ in $\cBasis^{1}(\setR,
+\fnVect_{\setR}(1, x))$, the set of one-time continuously
+differentiable functions from \setR to $\fnVect_{\setR}(1, x)$. 
+Given any rung \Fc{E} of $\Ck{C}(\setR)$ such that $x \in \Fc{E}$,
+$e_{x}$ is still the unique solution to $f' = x f, f(0) = 1$ in
+$\cBasis^{1}(\setR, \Fc{E})$.
+
+The perhaps surprising phenomenon is when we consider the equation $f' =
+x f, f(0) = \gamma$ in $\cBasis^{1}(\setR, \Fc{E})$ for some rung \Fc{E}
+of $\Ck{C}(\setR)$ such that $x \in \Fc{E}$, and $\gamma \in \Fc{E}$. 
+If $\Fc{E} = \setR$ or $\Fc{E} = \setC$, then of course the solution
+is $e_{x}(t) \gamma$, and it turns out this is still true if $\Fc{E} =
+\setH$, because of the associativity of the quaternionic product (this,
+actually, is how one can navigate the unit sphere of the quaternions,
+which is useful for interpolating between orientations, and was the
+problem under examination in~\cite{Pletincks:1989ds}).  It is
+interesting to note that this is \emph{still\/} true if $\Fc{E} = \setO$
+because of the alternative nature of that algebra.  This stops to be
+true with hexadecimalions, however.  Indeed, consider $x = i + e'''$ and
+$\gamma = j$, and let $\mathrm{g}(t) = e_{x}(t) \gamma$.  We will
+shortly see that $e_{i + e'''}(\frac{\pi \sqrt{2}}{4}) =
+\frac{\sqrt{2}}{2} (i + e''')$, from which we can deduce
+$\mathrm{g}(\frac{\pi \sqrt{2}}{4}) = \frac{\sqrt{2}}{2} (i + e''') j$
+and $\mathrm{g}'(\frac{\pi \sqrt{2}}{4}) = ((i + e''')
+\frac{\sqrt{2}}{2} (i + e''')) j = -\sqrt{2} j$ whereas $(i + e''')
+\mathrm{g}(\frac{\pi}{2}) = (i + e''') (\frac{\sqrt{2}}{2} (i + e''') j)
+= \sqrt{2}(-j + k''')$, and therefore $\mathrm{g}'(\frac{\pi}{2}) \neq
+(i + e''') \mathrm{g}(\frac{\pi}{2})$.  Numerical integration procedures
+will yield the solution to the differential equation, and therefore not
+the exponential function, unless care has been taken to chose the
+starting point correctly.
+
+\section[The exponential formula]{The closed formula for the exponential
+in $\Ck{C}(\setR)$}
+\label{part:III.4}
+
+We now give the main result of this work.  Note that it is closed only
+in that we assume the exponential and classical trigonometric functions
+on \setR to be givens.\footnote{A family of special functions will be
+of interest here, that of the ``Sinus Cardinal'' functions, defined for
+some parameter $a \in \setR^{*}_{+}$ by $\fnSinc_{a}: [\setR \to
+\setR, x \mapsto \frac{\sin \pi x / a}{\pi x / a}]$.  We will, by
+similitude, define the ``Hyperbolic Sinus Cardinal'' family of functions
+defined for some parameter $a \in \setR^{*}_{+}$ by
+$\fnSinhc_{a}: [\setR \to \setR, x \mapsto \frac{\sinh \pi x /
+a}{\pi x / a}]$.  These functions are entire functions on all of
+\setR.}
+
+\begin{theorem}[Exponential]\label{theorem:exponential}
+If $x \in \Ck{C}(\setR)$ then $\exp x = \mathrm{e}^{\fnRe x}
+[\cos \|\fnUr x\| + (\fnSincPi \|\fnUr x\|)
+ (\fnUr x)]$.
+
+Let $y \in \Ck{C}(\setR)$ such that $\fnRe y = 0, \|y\| = 1$;
+then $y^{2} = [\fcT(y) - \bar{y}] y = -\fcN(y) = -1$.  Therefore, in
+$\fnVect_{\setR}(1, y)$ computations are carried out exactly as
+in \setC, with $y$ taking the place of $i$.  More precisely, $[\setC
+\to \fnVect_{\setR}(1, y), a + ib \mapsto a + by]$ is a Banach
+isomorphism.
+
+Let now $x \in \Ck{C}(\setR)$.  If $x \in \setR$, we see
+the result is trivially true.  Assume, then that $x \not\in \setR$, and
+let $\hat{x} = \frac{\fnUr x}{\|\fnUr x\|}$.  Then
+$\fnRe \hat{x} = 0, \|\hat{x}\| = 1, x = \fnRe x +
+\|\fnUr x\| \hat{x}$, and of course $\fnVect_{\setR}(1, x)
+= \fnVect_{\setR}(1, \hat{x})$.  The previous identification then
+allows us to find $\exp x = \mathrm{e}^{\fnRe x} [\cos
+\|\fnUr x\| + (\sin \|\fnUr x\|) \hat{x}]$.
+\end{theorem}
+
+As an example, we have, as announced earlier, $\exp \frac{\pi
+\sqrt{2}}{4} (i + e''') = \frac{\sqrt{2}}{2} (i + e''')$.
+
+\section[Exponential properties]{Some properties of the exponential and
+further consequences}
+\label{part:III.5}
+
+We compute at once $\|\exp x\| = \mathrm{e}^{| \fnRe x|}$.
+
+As should be expected when we lose the benefit of commutativity, the
+exponential of a sum is in general different from the product of the
+exponentials; for instance we have $(\exp i) (\exp j) = {(\cos 1)}^{2} + i
+(\sin 1) (\cos 1) + j (\sin 1) (\cos 1) + k {(\sin 1)}^{2}$ whereas $\exp
+(i + j) = (\cos \sqrt{2}) + \frac{\sqrt{2}}{2} (i + j)$.  We also see
+immediately that the exponential is not injective on any rung \Fc{E} of
+$\Ck{C}(\setR)$ containing \setC, as it is already not injective on
+\setC!  We, however also lose the periodicity when \Fc{E} contains
+\setH, as the periods would make an additive subgroup of \Fc{E} but the
+solutions of $\exp x = 1$ on \setH are exactly the set $2 \pi . \setN
+. \{0\} \times \setS^{2}$ (with $\setS^{2}$ the unit sphere of
+$\setR^{3}$); the rest is number theory (and trying to fit square pegs
+into round holes).  We have more details on the surjectivity of the
+exponential:
+\begin{corollary}[surjectivity]\label{corollary:surjectivity}
+If \Fc{E} is a rung of $\Ck{C}(\setR)$ containing \setC, then the
+exponential is a surjection from \Fc{E} onto $ \Fc{E} -\{0\}$.
+
+We first note that given any $x \in \Ck{C}(\setR)$, $\|\exp x\| =
+\mathrm{e}^{| \fnRe x|}$ proves that the exponential never take
+the value 0 on $\Ck{C}(\setR)$.
+
+Let now $y \in \Fc{E}, y \neq 0$.  If $y \in \setR$ we know we can
+solve our problem (in \setR if $y > 0$, in \setC if $y < 0$).  Assume
+therefore that $y \not\in \setR$.  We can find $\rho \in \setR$ such
+that $\mathrm{e}^{\rho} = \|y\|$.  Let $\tilde{y} = \frac{y}{\|y\|}$;
+$\|\tilde{y}\| = 1$ and $\tilde{y} \not\in \setR$, so let $\hat{y} =
+\frac{\fnUr \tilde{y}}{\|\fnUr \tilde{y}\|}$, so that
+$\tilde{y} = \fnRe \tilde{y} + \|\fnUr \tilde{y}\|
+\hat{y}$, $\fnRe \tilde{y} \neq 0$ and
+${(\fnRe \tilde{y})}^{2} + {\|\fnUr \tilde{y}\|}^{2} = 1$. 
+Let $\theta \in ]0; \pi[$; the unique number such that $\cos \theta =
+\fnRe \tilde{y}$ and $\sin \theta = \|\fnUr \tilde{y}\|$. 
+We see that $\exp (\rho + \theta \hat{y}) = y$.
+\end{corollary}
+
+We can likewise find closed formul\ae\ for other interesting entire
+functions (defining $\cos x = \sum^{+\infty}_{n = 0} \frac{{(-1)}^{n} x^{2
+n}}{(2 n)!}$, $\sin x = \sum^{+\infty}_{n = 0} \frac{{(-1)}^{n} x^{2 n +
+1}}{(2 n + 1)!}$, $\cosh x = \sum^{+\infty}_{n = 0} \frac{x^{2 n}}{(2
+n)!}$, $\sinh x = \sum^{+\infty}_{n = 0} \frac{x^{2 n + 1}}{(2 n +
+1)!}$), to wit:
+\[
+  \begin{array}{rcl}
+     \cos x & = &  (\cos \fnRe x) (\cosh \|\fnUr x\|)
+       -  (\sin \fnRe x) (\fnSinhcPi \|\fnUr x\|)
+       (\fnUr x) \\
+     \sin x & = &  (\sin \fnRe x) (\cosh \|\fnUr x\|)
+       +  (\cos \fnRe x) (\fnSinhcPi \|\fnUr x)\|)
+       (\fnUr x) \\
+    \cosh x & = & (\cosh \fnRe x)  (\cos \|\fnUr x\|)
+       + (\sinh \fnRe x)  (\fnSincPi \|\fnUr x\|)
+       (\fnUr x) \\
+    \sinh x & = & (\sinh \fnRe x)  (\cos \|\fnUr x\|)
+       + (\cosh \fnRe x)  (\fnSincPi \|\fnUr x\|)
+       (\fnUr x)
+  \end{array}
+\]
+and of course many other such.
+
+\section{Conclusion}
+\label{part:III.6}
+
+We have found a closed formula for the exponential, for quaternions,
+octonions, and beyond.
+
+An interesting application of this formula is navigation on the unit
+sphere of the quaternions, leading to an algorithm for the interpolation
+of orientations, but which, in general, does not preserve the
+horizontal.  This can also be achieved, however, and has been
+implemented by the author and a colleague (\cite{Holin:lq}).
+
+\appendix
+\chapter{Addenda}
+\label{part:A}
+
+\section{More structure}
+\label{part:A.1}
+
+It is interesting to note that \setC, \setH and \setO are (left)
+vector spaces over \setC.
+
+The basis of \setH as a left \setC-vector space is $(1, j)$, and the
+basis of \setO as a left \setC-vector space is $(1, j, e', j')$. 
+However, if $q = \alpha  + \beta  i + \gamma  j + \delta  k \in \setH$,
+then $q = (\alpha  + \beta  i) + (\gamma + \delta  i) j$, but if $o =
+\alpha + \beta i + \gamma j + \delta k + \epsilon e' + \zeta i' + \eta
+j' + \theta k' \in \setO$ then $o = (\alpha + \beta i) + (\gamma +
+\delta i) j + (\epsilon + \zeta i) e' + (\eta - \theta i) j'$ (note the
+minus sign in the last factor).
+
+If we write $q = \Gamma + \Delta j$, with $\Delta \in \setC$ and
+$\Gamma \in \setC$, then $\overline{q} = \overline{\Gamma} - \Delta j$,
+and if we also have $p = \mathrm{A} + \mathrm{B} j$, with $\mathrm{A}
+\in \setC$ and $\mathrm{B} \in \setC$, then $p q = (\mathrm{A} \Gamma
+- \mathrm{B} \overline{\Delta}) + (\mathrm{A} \Delta + \mathrm{B}
+\overline{\Gamma}) j$.  In particular, if $z \in \setC$ then $j z =
+\overline{z} j$.
+
+Things break down when we want to consider \setO as a structure over
+\setH, however.  Indeed, there is no widely-accepted generalization of
+vector field where the role of the scalars is taken by a non-commutative
+structure, as is the case with \setH as most interesting properties of
+vector spaces fail to remain true in that case, in general (though by
+requiring the scalars to be merely a commutative ring instead of a full
+blown field, quite a few properties remain true; this structure is known
+as a module).
+
+However, if $o = \alpha + \beta i + \gamma j + \delta k + \epsilon e' +
+\zeta i' + \eta j' + \theta k' \in \setO$, then it is also true that $o
+= (\alpha + \beta i + \gamma j + \delta k) + (\epsilon + \zeta i + \eta
+j + \theta k) e'$.
+
+\section{More Geometry}
+\label{part:A.2}
+
+Another interesting way to see \setH is as $\setR \times \setR^{3}$. 
+In this case, if $q_{1} = (t_{1}, V_{1}) \in \setR \times \setR^{3}$
+and $q_{2} = (t_{2}, V_{2}) \in \setR \times \setR^{3}$, then the
+quaternionic product can be expressed as $q_{1} q_{2} = (t_{1} t_{2} -
+V_{1} \cdot V_{2}, t_{1} V_{2} + t_{2} V_{1} + V_{1} \wedge V_{2})$,
+with ``$\cdot$'' the scalar product on $\setR^{3}$ and ``$\wedge$'' the
+vector product in $\setR^{3}$.
+
+\section[Quaternions for rotations]{Finding the quaternions for a given
+rotation of $\setR^{3}$}
+\label{part:A.3}
+
+If we are given the rotation in term of vector and angle in $[0; +\pi]$,
+then this has been solved in the main text (if the angle is in $[-\pi;
+0]$, we just take the opposite of both the angle and vector; the
+identity and its opposite are trivial to solve).  The opposite
+quaternion is also a solution, of course.
+
+If we are simply given a rotation matrix, then, essentially, we first
+find its elements (vector and angle), and use the procedure above.  To
+find an invariant vector, we simply solve the linear system which
+defines them.  For the angle, we first find its cosine using the trace. 
+Then we build a vector orthogonal to the invariant vector we found
+ (always possible starting from one of the canonical basis vector and
+using some classical orthonormalization procedure) to check the sign of
+the angle.
+
+If we are given a succession of rotation, it may be advantageous in
+applications to chose among the successions of pairs of opposite
+solutions that for which the distance between successive quaternions is
+the smallest.
+
+\section{More rotations}
+\label{part:A.4}
+
+We have considered $[\setH \to \setH, p \mapsto p q]$ and $d_q =
+[\setH \to \setH, p \mapsto q p]$ in Chapter~\ref{part:I} and seen,
+through some amount of computation, that they gave rise to rotations on
+$\setR^{4}$, when $|q| = 1$.
+
+We present here another take on the same subject, aimed at giving
+effective methods of parameterizing $\mathrm{SO}(4, \setR)$.
+
+It is also interesting to consider $g_q = [\setH \to \setH, p \mapsto
+p \overline{q}]$, as both $g_q$ and $d_q$ are \setC-linear operators on
+\setH, which trivially verify $g_{q q'} = g_q \circ g_{q'}$ and $d_{q
+q'} = d_q \circ d_{q'}$.  We can also very simply verify that $(g_{q}(p)
+| g_{q}(p')) = \|q\|^{2} (p | p') = (d_{q}(p) | d_{q}(p'))$.  Obviously
+$g_{1}$ and $d_{1}$ are both the identity on \setH.  Considering them
+now as \setR-linear operators on \setH, we see that their determinant
+in the canonical basis must stay of the same sign on $\setS^{3}$, hence
+must stay positive (since $1 \in \setS^{3}$), therefore must be always
+equal to 1 on $\setS^{3}$.
+
+Hence $[\setS^{3} \to \mathrm{SO}(4, \setR), q \mapsto g_{q}]$ and
+$[\setS^{3} \to \mathrm{SO}(4, \setR), q \mapsto d_{q}]$ are both
+group homeomorphism, sending 1 to the identity.
+
+Using the same kind of topological argument as in the case of
+$\mathrm{SO}(3, \setR)$, we get the parameterization of $\mathrm{SO}(4,
+\setR)$ that we announced (\cite{Berger:1990ce},~\cite{Godbillon:1971th})
+simply by considering $(p, q) \mapsto d_{p} \circ g_{q}$,
+save for the determination of the kernel.  We will, however, aim
+here for a more constructive approach to surjectivity.
+
+Given $r$ a rotation of $\setR^{4}$, we seek $p \in \setS^{3}$ and $q
+\in \setS^{3}$ such that for any quaternion $s$ we have $p s
+\overline{q} = r(s)$.  Hence, by applying that to $s = 1$, we find that
+necessarily $p = r(1) q$ (since $\overline{q} = q^{-1}$ as $|q| = 1$). 
+Therefore we are led to solve $q s \overline{q} = \rho(s)$ for all $s$,
+with $\rho(s) = \overline{r(1)} r(s)$ (as $|r(t)| = |t|$ for all
+quaternion $t$, since $r$ is a rotation, and hence $|r(1)| = 1$).  But
+then $\rho(\mu) = \overline{r(1)} r(\mu) = \mu \overline{r(1)} r(1) =
+\mu$ for all $\mu \in \setR$, which means \setR is invariant, and we
+know that $\rho$ is a rotation $\setR^{4}$, as the composition of $r$,
+which is one by hypothesis, and the multiplication on the left by a unit
+quaternion, which is one also as we have seen in the main text.  This
+means we are simply back to solving on $\setS^{3}$ the equation
+$\rho_{q} = \cMatrix(\rho, \cBasis, \cBasis)$ (with $q \mapsto \rho_{q}$ as
+presented in Chapter~\ref{part:I}).
+
+Finally, given two unit quaternions $p = \alpha + \beta i + \gamma j +
+\delta k$ and $q = \epsilon + \zeta i + \eta j + \theta k$, the rotation
+matrix on $\setR^{4}$ is given explicitly by:
+\[
+  \left[ \begin{array}{cccc}
+     \alpha \epsilon + \beta \zeta + \gamma \eta + \delta \theta
+       & +\alpha \zeta - \beta \epsilon - \gamma \theta + \delta \eta
+       & +\alpha \eta + \beta \theta - \gamma \epsilon - \delta \zeta
+       & +\alpha \theta - \beta \eta + \gamma \zeta - \delta \epsilon \\
+    -\alpha \zeta + \beta \epsilon - \gamma \theta + \delta \eta
+       &  \alpha \epsilon + \beta \zeta - \gamma \eta - \delta \theta
+       & -\alpha \theta + \beta \eta + \gamma \zeta - \delta \epsilon
+       & +\alpha \eta + \beta \theta + \gamma \epsilon + \delta \zeta \\
+    -\alpha \eta + \beta \theta + \gamma \epsilon - \delta \zeta
+       & +\alpha \theta + \beta \eta + \gamma \zeta + \delta \epsilon
+       &  \alpha \epsilon - \beta \zeta + \gamma \eta - \delta \theta
+       & -\alpha \zeta - \beta \epsilon + \gamma \theta + \delta \eta \\
+    -\alpha \theta - \beta \eta + \gamma \zeta + \delta \epsilon
+       & -\alpha \eta + \beta \theta - \gamma \epsilon + \delta \zeta
+       & +\alpha \zeta + \beta \epsilon + \gamma \theta + \delta \eta
+       &  \alpha \epsilon - \beta \zeta - \gamma \eta + \delta \theta
+  \end{array} \right]
+\]
+
+\bibliographystyle{alpha}
+\bibliography{HyperComplex}
+\end{document}
