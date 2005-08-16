@@ -7,7 +7,7 @@
 //  See <http://www.boost.org/libs/math/> for the library's home page.
 
 //  Revision History
-//   23 Jul 2005  Initial version (Daryle Walker)
+//   16 Aug 2005  Initial version (Daryle Walker)
 
 #define BOOST_AUTO_TEST_MAIN  "cayley element test"
 
@@ -387,6 +387,8 @@ BOOST_AUTO_UNIT_TEST( cayley_condition_function_test )
     using boost::math::sgn;
     using boost::math::reciprocal;
     using boost::bad_rational;
+    using boost::math::sup;
+    using boost::math::l1;
 
     // dot product
     BOOST_CHECK_EQUAL( 1, dot_product(ce( 5 ), ce( 5 )) );
@@ -548,24 +550,24 @@ BOOST_AUTO_UNIT_TEST( cayley_condition_function_test )
     BOOST_CHECK_THROW( reciprocal(cr_type( t10 )), bad_rational );
 
     // other norms (supremum [inf-norm] and 1-norm)
-    BOOST_CHECK_EQUAL( sup(t1), 1 );  BOOST_CHECK_EQUAL( ll(t1), 1 );
-    BOOST_CHECK_EQUAL( sup(t2), 1 );  BOOST_CHECK_EQUAL( ll(t2), 1 );
+    BOOST_CHECK_EQUAL( sup(t1), 1 );  BOOST_CHECK_EQUAL( l1(t1), 1 );
+    BOOST_CHECK_EQUAL( sup(t2), 1 );  BOOST_CHECK_EQUAL( l1(t2), 1 );
 
-    BOOST_CHECK_EQUAL( sup(t1a), 1 );  BOOST_CHECK_EQUAL( ll(t1a), 1 );
-    BOOST_CHECK_EQUAL( sup(t2a), 1 );  BOOST_CHECK_EQUAL( ll(t2a), 1 );
-    BOOST_CHECK_EQUAL( sup(t3), 1 );   BOOST_CHECK_EQUAL( ll(t3), 1 );
-    BOOST_CHECK_EQUAL( sup(t4), 1 );   BOOST_CHECK_EQUAL( ll(t4), 1 );
+    BOOST_CHECK_EQUAL( sup(t1a), 1 );  BOOST_CHECK_EQUAL( l1(t1a), 1 );
+    BOOST_CHECK_EQUAL( sup(t2a), 1 );  BOOST_CHECK_EQUAL( l1(t2a), 1 );
+    BOOST_CHECK_EQUAL( sup(t3), 1 );   BOOST_CHECK_EQUAL( l1(t3), 1 );
+    BOOST_CHECK_EQUAL( sup(t4), 1 );   BOOST_CHECK_EQUAL( l1(t4), 1 );
 
-    BOOST_CHECK_EQUAL( sup(t1b), 1 );  BOOST_CHECK_EQUAL( ll(t1b), 1 );
-    BOOST_CHECK_EQUAL( sup(t2b), 1 );  BOOST_CHECK_EQUAL( ll(t2b), 1 );
-    BOOST_CHECK_EQUAL( sup(t3a), 1 );  BOOST_CHECK_EQUAL( ll(t3a), 1 );
-    BOOST_CHECK_EQUAL( sup(t4a), 1 );  BOOST_CHECK_EQUAL( ll(t4a), 1 );
-    BOOST_CHECK_EQUAL( sup(t5), 6 );   BOOST_CHECK_EQUAL( ll(t5), 6 );
-    BOOST_CHECK_EQUAL( sup(t6), 8 );   BOOST_CHECK_EQUAL( ll(t6), 8 );
-    BOOST_CHECK_EQUAL( sup(t7), 9 );   BOOST_CHECK_EQUAL( ll(t7), 9 );
-    BOOST_CHECK_EQUAL( sup(t8), 12 );  BOOST_CHECK_EQUAL( ll(t8), 12 );
-    BOOST_CHECK_EQUAL( sup(t9), 0 );   BOOST_CHECK_EQUAL( ll(t9), 0 );
-    BOOST_CHECK_EQUAL( sup(t10), 0 );  BOOST_CHECK_EQUAL( ll(t10), 0 );
+    BOOST_CHECK_EQUAL( sup(t1b), 1 );  BOOST_CHECK_EQUAL( l1(t1b), 1 );
+    BOOST_CHECK_EQUAL( sup(t2b), 1 );  BOOST_CHECK_EQUAL( l1(t2b), 1 );
+    BOOST_CHECK_EQUAL( sup(t3a), 1 );  BOOST_CHECK_EQUAL( l1(t3a), 1 );
+    BOOST_CHECK_EQUAL( sup(t4a), 1 );  BOOST_CHECK_EQUAL( l1(t4a), 1 );
+    BOOST_CHECK_EQUAL( sup(t5), 6 );   BOOST_CHECK_EQUAL( l1(t5), 6 );
+    BOOST_CHECK_EQUAL( sup(t6), 8 );   BOOST_CHECK_EQUAL( l1(t6), 8 );
+    BOOST_CHECK_EQUAL( sup(t7), 9 );   BOOST_CHECK_EQUAL( l1(t7), 9 );
+    BOOST_CHECK_EQUAL( sup(t8), 12 );  BOOST_CHECK_EQUAL( l1(t8), 12 );
+    BOOST_CHECK_EQUAL( sup(t9), 0 );   BOOST_CHECK_EQUAL( l1(t9), 0 );
+    BOOST_CHECK_EQUAL( sup(t10), 0 );  BOOST_CHECK_EQUAL( l1(t10), 0 );
 }
 
 // Self-conditioning member functions

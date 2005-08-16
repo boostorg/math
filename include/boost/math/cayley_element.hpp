@@ -126,12 +126,12 @@ template < typename T >
   T  sup( scaled_cayley_element<T> const &x );
 
 //! Finds the 1-norm of a basic element
-int  ll( cayley_element const &x );
+int  l1( cayley_element const &x );
 //! Finds the 1-norm of a signed element
-int  ll( negated_cayley_element const &x );
+int  l1( negated_cayley_element const &x );
 //! Finds the 1-norm of a scaled element
 template < typename T >
-  T  ll( scaled_cayley_element<T> const &x );
+  T  l1( scaled_cayley_element<T> const &x );
 
 // Component functions
 //! Extracts the real component of a basic element
@@ -1210,26 +1210,26 @@ sup( scaled_cayley_element<T> const &x )
     \relates  cayley_element
  */
 inline  int
-ll( cayley_element const &x )
+l1( cayley_element const &x )
 { return abs( x ); }
 
 /** \overload
 
     \relates  negated_cayley_element
-    \see  int ll(cayley_element const &)
+    \see  int l1(cayley_element const &)
  */
 inline  int
-ll( negated_cayley_element const &x )
+l1( negated_cayley_element const &x )
 { return abs( x ); }
 
 /** \overload
 
     \relates  scaled_cayley_element
-    \see  int ll(cayley_element const &)
+    \see  int l1(cayley_element const &)
  */
 template < typename T >
 inline  T
-ll( scaled_cayley_element<T> const &x )
+l1( scaled_cayley_element<T> const &x )
 { return abs( x ); }
 
 
