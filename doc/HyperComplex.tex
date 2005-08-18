@@ -1,10 +1,26 @@
 \documentclass{book}
+\usepackage{amsmath}
 \usepackage{amsfonts}
-\usepackage{hyperref}
-\title{The Quaternionic Exponential \\ (and beyond)}
-\author{Hubert HOLIN\thanks{Contact at
-$<$mailto:Hubert.Holin@Bigfoot.com$>$ or
-$<$http://www.bigfoot.com/\%7eHubert.Holin$>$}}
+\usepackage{url}
+\usepackage{xspace}
+\usepackage{dsfont}
+\usepackage[colorlinks=true,%
+            linkcolor=blue,%
+            anchorcolor=blue,%
+            citecolor=blue,%
+            pagecolor=blue,]{hyperref}
+
+\title{%
+  The Quaternionic Exponential\\
+  (and beyond)%
+}
+\author{%
+  Hubert HOLIN%
+  \medskip\\%
+  \small\url{mailto:Hubert.Holin@Bigfoot.com}\\
+  \small\url{http://www.bigfoot.com/~Hubert.Holin}%
+}
+ 
 \date{08/12/1999}  % plus the errata and addenda from 23/03/2001
 
 \newtheorem{theorem}{Theorem}[section]
@@ -14,15 +30,19 @@ $<$http://www.bigfoot.com/\%7eHubert.Holin$>$}}
 \newtheorem{corollary}[theorem]{Corollary}
 
 \newcommand{\funcDef}[5]{
-  \begin{tabular}{rccc}
-    {#1}: & {#2} & $\to$     & {#4} \\
-          & {#3} & $\mapsto$ & {#5}
-  \end{tabular}
+  \begin{array}{rccc}
+    {#1}: & {#2} & \to     & {#4} \\
+          & {#3} & \mapsto & {#5}
+  \end{array}
 }
 \newcommand{\Funcify}[1]{\mathop{\mathrm{#1}}}
-\newcommand{\Bl}[1]{\ensuremath{\mathbb{#1}}}
-\newcommand{\Fc}[1]{\ensuremath{\mathcal{#1}}}
-\newcommand{\Ck}[1]{\ensuremath{\mathfrak{#1}}}
+% Usually \xspace does a good job when deciding whether to add a space or not.
+% In the rare case that you want to force \xspace to not add a space append a
+% pair of braces after the command. E.g., \Fc{N}{} is typeset like
+% \ensuremath{\mathfrak{N}}. 
+\newcommand{\Bl}[1]{\ensuremath{\mathds{#1}}\xspace}
+\newcommand{\Fc}[1]{\ensuremath{\mathcal{#1}}\xspace}
+\newcommand{\Ck}[1]{\ensuremath{\mathfrak{#1}}\xspace}
 \newcommand{\fcT}{\Fc{T}}
 \newcommand{\fcN}{\Fc{N}}
 \newcommand{\Trace}[1]{\ensuremath{{\fcT}_{\Bl{#1}}}}
@@ -50,6 +70,21 @@ $<$http://www.bigfoot.com/\%7eHubert.Holin$>$}}
 \newcommand{\setS}{\Bl{S}}
 \newcommand{\cBasis}{\Fc{C}}
 \newcommand{\cMatrix}{\Fc{M}}
+
+% a comma that allows linebreaks - used for overlong tuples
+% (A perfectionist would probably imitate the url package's implementation and
+% add potential line breaks after math punctuation characters. But I am not
+% familiar enough with low level TeX programming and the following gets the
+% job done.)
+% The optional argument is passed on to \linebreak. Default is \lbc[1].
+\newcommand{\lbc}[1][1]{,\linebreak[#1]}
+
+\newcommand{\sst}{\scriptstyle}
+
+% Special spacing for the "C++" logo
+\newcommand{\Cpp}{C\nolinebreak %
+  \hspace{-0.05em}\raisebox{0.4ex}{\tiny\bf +}\nolinebreak %
+  \hspace{-0.1em}\raisebox{0.4ex}{\tiny\bf +}\xspace}
 
 \begin{document}
 \maketitle
@@ -210,19 +245,20 @@ following table (the value at line $n$ and column $m$ is
 the product of the element in the left column by the element in the top
 row; for instance $i * i' = -e'$):
 
-\begin{tabular}{c|cccccccc}
-      & $1$  & $i$   & $j$   & $k$   & $e'$ & $i'$  & $j'$  & $k'$  \\
-\hline
- $1$  & $1$  & $i$   & $j$   & $k$   & $e'$ & $i'$  & $j'$  & $k'$  \\
- $i$  & $i$  & $-1$  & $k$   & $-j$  & $i'$ & $-e'$ & $-k'$ & $j'$  \\
- $j$  & $j$  & $-k$  & $-1$  & $i$   & $j'$ & $k'$  & $-e'$ & $-i'$ \\
- $k$  & $k$  & $j$   & $-i$  & $-1$  & $k'$ & $-j'$ & $i'$  & $-e'$ \\
- $e'$ & $e'$ & $-i'$ & $-j'$ & $-k'$ & $-1$ & $i$   & $j$   & $k$   \\
- $i'$ & $i'$ & $e'$  & $-k'$ & $j'$  & $-i$ & $-1$  & $-k$  & $j$   \\
- $j'$ & $j'$ & $k'$  & $e'$  & $-i'$ & $-j$ & $k$   & $-1$  & $-i$  \\
- $k'$ & $k'$ & $-j'$ & $i'$  & $e'$  & $-k$ & $-j$  & $i$   & $-1$
-\end{tabular}
-
+\begin{align*}
+  \begin{array}{c|cccccccc}
+    & 1  & i   & j   & k   & e' & i'  & j'  & k'  \\
+    \hline
+    1  & 1  & i   & j   & k   & e' & i'  & j'  & k'  \\
+    i  & i  & -1  & k   & -j  & i' & -e' & -k' & j'  \\
+    j  & j  & -k  & -1  & i   & j' & k'  & -e' & -i' \\
+    k  & k  & j   & -i  & -1  & k' & -j' & i'  & -e' \\
+    e' & e' & -i' & -j' & -k' & -1 & i   & j   & k   \\
+    i' & i' & e'  & -k' & j'  & -i & -1  & -k  & j   \\
+    j' & j' & k'  & e'  & -i' & -j & k   & -1  & -i  \\
+    k' & k' & -j' & i'  & e'  & -k & -j  & i   & -1
+  \end{array}
+\end{align*}
 Other presentations, perhaps more useful, exist (\cite{Dixon:ex}). 
 This multiplication still has a unit ($1$), but is no longer associative
  (for instance $i' * (e' * j) = +k \neq -k = (i' * e') * j$).  Real
@@ -239,13 +275,17 @@ and then $o^{-1} = \frac{1}{|o|^{2}} \bar{o}$.
 
 Beyond even the octonions, we find $\setR^{16}$, which appears not
 to have any agreed-upon name.  We shall here call them hexadecimalions,
-and denote the set by \setX (after the C/C++ notation\ldots).  We
-have the usual vector space structure on \setR, we identify $1$,
-\ldots, $k'$ with $(1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)$,~\ldots,
-$(0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0)$ respectively, and define $e''$,
-$i''$, $j''$, $k''$, $e'''$, $i'''$, $j'''$, $k'''$ as
-$(0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0)$,~\ldots,
-$(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)$ respectively.  We define a
+and denote the set by \setX (after the C/\Cpp notation\ldots).  We
+have the usual vector space structure on \setR, we identify
+$1,\ldots, k'$ with
+$(1\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc
+0\lbc 0\lbc 0\lbc 0), \ldots\lbc
+(0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 1\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc
+0\lbc 0\lbc 0)$ respectively, and define
+$e''$, $i''$, $j''$, $k''$, $e'''$, $i'''$, $j'''$, $k'''$ as
+$(0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 1\lbc 0\lbc 0\lbc 0\lbc
+0\lbc 0\lbc 0\lbc 0), \ldots\lbc (0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc
+0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 0\lbc 1)$ respectively.  We define a
 multiplication on  \setX as explicited in the next chapter, for
 which $1$ is still a unit and for which reals commute with every
 hexadecimalion.  We define as well a conjugation, a scalar product and a
@@ -270,9 +310,9 @@ interior automorphisms.
 
 More precisely, given a \emph{non-zero\/} quaternion $q = \alpha + \beta i
 + \gamma j + \delta k$, we can consider the interior automorphism:
-\funcDef{$\lambda_{q}$}
-  {\setH}{$p$}
-  {\setH}{$(q)p(q^{-1})$}
+\begin{align*}
+  \funcDef{\lambda_{q}}{\setH}{p}{\setH}{(q)p(q^{-1})}
+\end{align*}
 
 These objects have several fundamental properties: $\lambda_{q q'} =
 \lambda_{q} \circ \lambda_{q'}$ and $\lambda_{q}(q) = q$, $\lambda_{q}$
@@ -287,15 +327,28 @@ orthogonal (i.e.\ the unreals) globally invariant.
 
 Consider now the matrix of $\lambda_{q}$; expressed in the canonical
 basis $\cBasis = (1, i, j, k)$ that matrix is:
-\[
-\cMatrix(\lambda_{q}, \cBasis, \cBasis) = \frac{1}{{\|q\|}^{2}}
-  \left[ \begin{array}{cccc}
-    \alpha^2+\beta^2+\gamma^2+\delta^2 & 0                                  & 0                                  & 0                                  \\
-    0                                  & \alpha^2+\beta^2-\gamma^2-\delta^2 & -2\alpha\delta+2\beta\gamma        & +2\alpha\gamma+2\beta\delta        \\
-    0                                  & +2\alpha\delta+2\beta\gamma        & \alpha^2-\beta^2+\gamma^2-\delta^2 & -2\alpha\beta+2\gamma\delta        \\
-    0                                  & -2\alpha\gamma+2\beta\delta        & +2\alpha\beta+2\gamma\delta        & \alpha^2-\beta^2-\gamma^2+\delta^2
-  \end{array} \right]
-\]
+\begin{align*}
+  \cMatrix(\lambda_{q}, \cBasis, \cBasis) =
+  \tfrac{1}{{\|q\|}^{2}}
+  \begin{bmatrix}
+    \sst \alpha^2+\beta^2+\gamma^2+\delta^2 &
+    \sst 0                                  &
+    \sst 0                                  &
+    \sst 0                                  \\
+    \sst 0                                  &
+    \sst \alpha^2+\beta^2-\gamma^2-\delta^2 &
+    \sst -2\alpha\delta+2\beta\gamma        &
+    \sst +2\alpha\gamma+2\beta\delta        \\
+    \sst 0                                  &
+    \sst +2\alpha\delta+2\beta\gamma        &
+    \sst \alpha^2-\beta^2+\gamma^2-\delta^2 &
+    \sst -2\alpha\beta+2\gamma\delta        \\
+    \sst 0                                  &
+    \sst -2\alpha\gamma+2\beta\delta        &
+    \sst +2\alpha\beta+2\gamma\delta        &
+    \sst \alpha^2-\beta^2-\gamma^2+\delta^2
+  \end{bmatrix}
+\end{align*}
 
 It is quite obvious\footnote{We will note $\mathrm{M}(U, n, m)$ the set of
 matrices, $n$ rows by $m$ columns, with elements in $U$.} that
@@ -318,14 +371,20 @@ which of course turns out to be $1$ (also see next section)\ldots.
 
 We can therefore extract a rotation matrix on $\setR^{3}$ from
 $\cMatrix(\lambda_{q}, \cBasis, \cBasis)$:
-\[
-\rho_{q} = \frac{1}{\alpha^2+\beta^2+\gamma^2+\delta^2}
-  \left[ \begin{array}{ccc}
-    \alpha^2+\beta^2-\gamma^2-\delta^2 & -2\alpha\delta+2\beta\gamma        & +2\alpha\gamma+2\beta\delta        \\
-    +2\alpha\delta+2\beta\gamma        & \alpha^2-\beta^2+\gamma^2-\delta^2 & -2\alpha\beta+2\gamma\delta        \\
-    -2\alpha\gamma+2\beta\delta        & +2\alpha\beta+2\gamma\delta        & \alpha^2-\beta^2-\gamma^2+\delta^2
-  \end{array} \right]
-\]
+\begin{align*}
+  \rho_{q} = \tfrac{1}{\alpha^2+\beta^2+\gamma^2+\delta^2}
+  \begin{bmatrix}
+    \sst \alpha^2+\beta^2-\gamma^2-\delta^2 &
+    \sst -2\alpha\delta+2\beta\gamma        &
+    \sst +2\alpha\gamma+2\beta\delta        \\
+    \sst +2\alpha\delta+2\beta\gamma        &
+    \sst \alpha^2-\beta^2+\gamma^2-\delta^2 &
+    \sst -2\alpha\beta+2\gamma\delta        \\
+    \sst -2\alpha\gamma+2\beta\delta        &
+    \sst +2\alpha\beta+2\gamma\delta        &
+    \sst \alpha^2-\beta^2-\gamma^2+\delta^2
+  \end{bmatrix}
+\end{align*}
 
 Let us introduce $\Fc{R}:[\setR^{4} - \{0\} \to
 \mathrm{M}(\setR, 3, 3); q \mapsto \rho_{q}]$.  It is trivial to see
@@ -448,12 +507,14 @@ Quaternions have other uses, though.  For instance, they can be also be
 used to parameter $\mathrm{SU}(2, \setC)$.  More precisely, an
 isomorphism exists between $\{0\} \times \setS^{3}$ and
 $\mathrm{SU}(2, \setC)$ (consider, the application
-\funcDef{$\Psi$}
-  {\setH}{$q = \alpha + \beta i + \gamma j + \delta k$}
-  {$\mathrm{M}(\setC, 2, 2)$}{$\left[ \begin{array}{cc}
+\begin{align*}
+\funcDef{\Psi}
+  {\setH}{q = \alpha + \beta i + \gamma j + \delta k}
+  {\mathrm{M}(\setC, 2, 2)}{\left[ \begin{array}{cc}
                                       u & -\bar{v} \\
                                       v &  \bar{u} \\
-                                    \end{array} \right]$}
+                                    \end{array} \right]}
+\end{align*}
 with $u = \alpha + \delta i$ and $v = \gamma + \beta i$ is a ring
 isomorphism from \setH on a sub-ring of $\mathrm{M}(\setC,
 2, 2)$, which induces an isomorphism).  There are also applications of
@@ -564,58 +625,60 @@ $\mathrm{M}^{D}_{q'} \mathrm{M}^{D}_{q} \neq \mathrm{M}^{D}_{q}
 Turning to the octonions, let $o = \alpha  + \beta  i + \gamma  j +
 \delta  k + \epsilon  e' + \zeta  i' + \eta  j' + \theta  k' \in
 \setO$, then:
-\[
-  \mathrm{M}^{G}_{o}
-    = \cMatrix([o' \mapsto o o'], (1, i, j, k, e', i', j', k'),
-       (1, i, j, k, e', i', j', k'))
-    = \left[ \begin{array}{cccccccc}
-         \alpha &    -\beta &   -\gamma &   -\delta
-                & -\epsilon &    -\zeta &    -\eta  & -\theta   \\
-         +\beta &    \alpha &   -\delta &   +\gamma
-                &    -\zeta & +\epsilon &   +\theta & -\eta     \\
-        +\gamma &   +\delta &    \alpha &    -\beta
-                &     -\eta &   -\theta & +\epsilon & +\zeta    \\
-        +\delta &   -\gamma &    +\beta &    \alpha
-                &   -\theta &     +\eta &    -\zeta & +\epsilon \\
-      +\epsilon &    +\zeta &     +\eta &   +\theta
-                &    \alpha &    -\beta &   -\gamma & -\delta   \\
-         +\zeta & -\epsilon &   +\theta &     -\eta
-                &    +\beta &    \alpha &   +\delta & -\gamma   \\
-          +\eta & -  \theta & -\epsilon &    +\zeta
-                &   +\gamma &   -\delta &    \alpha & +\beta    \\
-        +\theta &     +\eta &    -\zeta & -\epsilon
-                &   +\delta &   +\gamma &    -\beta & \alpha
-    \end{array} \right]
-\]
+\begin{multline*}
+  \mathrm{M}^{G}_{o} =
+  \cMatrix([o' \mapsto o o'], (1, i, j, k, e', i', j', k'),
+  (1, i, j, k, e', i', j', k'))\\
+  =
+  \begin{bmatrix}
+    \alpha &    -\beta &   -\gamma &   -\delta
+    & -\epsilon &    -\zeta &    -\eta  & -\theta   \\
+    +\beta &    \alpha &   -\delta &   +\gamma
+    &    -\zeta & +\epsilon &   +\theta & -\eta     \\
+    +\gamma &   +\delta &    \alpha &    -\beta
+    &     -\eta &   -\theta & +\epsilon & +\zeta    \\
+    +\delta &   -\gamma &    +\beta &    \alpha
+    &   -\theta &     +\eta &    -\zeta & +\epsilon \\
+    +\epsilon &    +\zeta &     +\eta &   +\theta
+    &    \alpha &    -\beta &   -\gamma & -\delta   \\
+    +\zeta & -\epsilon &   +\theta &     -\eta
+    &    +\beta &    \alpha &   +\delta & -\gamma   \\
+    +\eta & -  \theta & -\epsilon &    +\zeta
+    &   +\gamma &   -\delta &    \alpha & +\beta    \\
+    +\theta &     +\eta &    -\zeta & -\epsilon
+    &   +\delta &   +\gamma &    -\beta & \alpha
+  \end{bmatrix}
+\end{multline*}
 and
-\[
+\begin{multline*}
   \mathrm{M}^{D}_{o}
-    = \cMatrix([o' \mapsto o' o], (1, i, j, k, e', i', j', k'),
-       (1, i, j, k, e', i', j', k'))
-    = \left[ \begin{array}{cccccccc}
-         \alpha &    -\beta &   -\gamma &   -\delta
-                & -\epsilon &    -\zeta &    -\eta  & -\theta   \\
-         +\beta &    \alpha &   +\delta &   -\gamma
-                &    +\zeta & -\epsilon &   -\theta & +\eta     \\
-        +\gamma &   -\delta &    \alpha &    +\beta
-                &     +\eta &   +\theta & -\epsilon & -\zeta    \\
-        +\delta &   +\gamma &    -\beta &    \alpha
-                &   +\theta &     -\eta &    +\zeta & -\epsilon \\
-      +\epsilon &    -\zeta &     -\eta &   -\theta
-                &    \alpha &    +\beta &   +\gamma & +\delta   \\
-         +\zeta & +\epsilon &   -\theta &     +\eta
-                &    -\beta &    \alpha &   -\delta & +\gamma   \\
-          +\eta & +  \theta & +\epsilon &    -\zeta
-                &   -\gamma &   +\delta &    \alpha & -\beta    \\
-        +\theta &     -\eta &    +\zeta & +\epsilon
-                &   -\delta &   -\gamma &    +\beta & \alpha
-    \end{array} \right]
-,\]
+  = \cMatrix([o' \mapsto o' o], (1, i, j, k, e', i', j', k'),
+  (1, i, j, k, e', i', j', k'))\\
+  =
+  \begin{bmatrix}
+    \alpha &    -\beta &   -\gamma &   -\delta
+    & -\epsilon &    -\zeta &    -\eta  & -\theta   \\
+    +\beta &    \alpha &   +\delta &   -\gamma
+    &    +\zeta & -\epsilon &   -\theta & +\eta     \\
+    +\gamma &   -\delta &    \alpha &    +\beta
+    &     +\eta &   +\theta & -\epsilon & -\zeta    \\
+    +\delta &   +\gamma &    -\beta &    \alpha
+    &   +\theta &     -\eta &    +\zeta & -\epsilon \\
+    +\epsilon &    -\zeta &     -\eta &   -\theta
+    &    \alpha &    +\beta &   +\gamma & +\delta   \\
+    +\zeta & +\epsilon &   -\theta &     +\eta
+    &    -\beta &    \alpha &   -\delta & +\gamma   \\
+    +\eta & +  \theta & +\epsilon &    -\zeta
+    &   -\gamma &   +\delta &    \alpha & -\beta    \\
+    +\theta &     -\eta &    +\zeta & +\epsilon
+    &   -\delta &   -\gamma &    +\beta & \alpha
+  \end{bmatrix}\,,
+\end{multline*}
 hence ${}^{\mathrm{t}} \mathrm{M}^{G}_{o} \mathrm{M}^{G}_{o} =
 {}^{\mathrm{t}} \mathrm{M}^{D}_{o} \mathrm{M}^{D}_{o} = |o|
 \mathrm{I}_{8}$, and $\det \mathrm{M}^{G}_{o} = \det \mathrm{M}^{D}_{o}
-= {(\alpha^{2} + \beta^{2} + \gamma^{2} + \delta^{2} + \epsilon^{2} +
-\zeta^{2} + \eta^{2} + \theta^{2})}^{4}$.  Therefore if $|o| = 1$,
+= (\alpha^{2} + \beta^{2} + \gamma^{2} + \delta^{2} + \epsilon^{2} +
+\zeta^{2} + \eta^{2} + \theta^{2})^{4}$.  Therefore if $|o| = 1$,
 $\mathrm{M}^{G}_{o} \in \mathrm{SO}(8, \setR)$ and
 $\mathrm{M}^{D}_{o} \in \mathrm{SO}(8, \setR)$.  Again, we only get
 a very tiny fraction of $\mathrm{SO}(8, \setR)$ that way.
@@ -628,9 +691,13 @@ the product on \setO.  For instance, $i' e' = -i$, but
 $\mathrm{M}^{G}_{i'} \mathrm{M}^{G}_{e'} \neq \mathrm{M}^{G}_{-i}$.
 
 If we try to do the same thing with hexadecimalions, we find that
-neither $\cMatrix([l \mapsto hl], (1, i, j, k, e', i', j', k', e'',
-i'', j'', k'', e''', i''', j''', k'''), (1, i, j, k, e', i', j', k',
-e'', i'', j'', k'', e''', i''', j''', k'''))$ nor its right-hand version
+neither 
+$\cMatrix([l \mapsto hl]\lbc%
+(1\lbc i\lbc j\lbc k\lbc e'\lbc i'\lbc j'\lbc k'\lbc e''\lbc
+i''\lbc j''\lbc k''\lbc e'''\lbc i'''\lbc j'''\lbc k''')\lbc%
+(1\lbc i\lbc j\lbc k\lbc e'\lbc i'\lbc j'\lbc k'\lbc
+e''\lbc i''\lbc j''\lbc k''\lbc e'''\lbc i'''\lbc j'''\lbc k'''))$
+nor its right-hand version
 are rotation in general, even if $\|l\| = 1$.  That trail ends here as
 well!
 
@@ -658,9 +725,11 @@ interesting in its own right is presented first.  An algebra
 application, known as the \emph{associator\/} of \xsetE, is
 alternating (which means its value is zero if two of its arguments are
 identical):
-\funcDef{$\mathrm{a}$}
-  {$\xsetE \times \xsetE \times \xsetE$}{$(x, y, z)$}
-  {\xsetE}{$x * (y * z) - (x * y) * z$}
+\begin{align*}
+  \funcDef{\mathrm{a}}
+  {\xsetE \times \xsetE \times \xsetE}{(x, y, z)}
+  {\xsetE}{x * (y * z) - (x * y) * z}
+\end{align*}
 
 This notion is interesting as, though an alternative algebra is not as
 wieldy as an associative algebra, it is such that every sub-algebra
@@ -796,20 +865,22 @@ Let \xsetA be a commutative ring, and $(\xsetE, +, *, \cdot,
 or associative, with unit element $e$.  Let $\xsetF = \xsetE
 \times \xsetE$ and $e_{\xsetF} = (e, 0) \in \xsetF$;
 furthermore, let:
-\begin{itemize}
-  \item \funcDef{$+_{\xsetF}$}
-    {$\xsetF \times \xsetF$}{$((x, y), (x', y'))$}
-    {\xsetF}{$(x + x', y + y')$}
-  \item \funcDef{$*_{\xsetF}$}
-    {$\xsetF \times \xsetF$}{$((x, y), (x', y'))$}
-    {\xsetF}{$(x * x' - \overline{y'} * y, y * \overline{x'} + y' * x)$}
-  \item \funcDef{$\cdot_{\xsetF}$}
-    {$\xsetA \times \xsetF$}{$(\lambda, (x, y))$}
-    {\xsetF}{$(\lambda \cdot x, \lambda \cdot y)$}
-  \item \funcDef{$\sigma_{\xsetF}$}
-    {\xsetF}{$(x, y)$}
-    {\xsetF}{$(\sigma(x), -y)$}
-\end{itemize}
+\[
+\begin{array}{c}
+  \funcDef{+_{\xsetF}}
+    {\xsetF \times \xsetF}{((x, y), (x', y'))}
+    {\xsetF}{(x + x', y + y')} \\
+  \funcDef{*_{\xsetF}}
+    {\xsetF \times \xsetF}{((x, y), (x', y'))}
+    {\xsetF}{(x * x' - \overline{y'} * y, y * \overline{x'} + y' * x)} \\
+  \funcDef{\cdot_{\xsetF}}
+    {\xsetA \times \xsetF}{(\lambda, (x, y))}
+    {\xsetF}{(\lambda \cdot x, \lambda \cdot y)} \\
+  \funcDef{\sigma_{\xsetF}}
+    {\xsetF}{(x, y)}
+    {\xsetF}{(\sigma(x), -y)}
+\end{array}
+\]
 
 \begin{proposition}[Structure]\label{proposition:structure}
   $(\xsetF, +_{\xsetF}, *_{\xsetF}, \cdot_{\xsetF})$ is
@@ -844,7 +915,13 @@ multiplication in \xsetE, as well as with all elements of
 identification, $\fcT$ and $\fcN$ have value in
 \xsetA.
 
-\section{\setR, \setC, \setH, \setO, \setX,~\ldots}
+\section{%
+  \texorpdfstring{%
+    \setR, \setC, \setH, \setO, \setX, \dots%
+  }{%
+    R, C, H, O, X, \dots%
+  }%
+}
 \label{part:II.4}
 
 We now consider $\xsetA = \setR$ and $\xsetE = \setR$, with $\sigma(x)
@@ -1439,26 +1516,26 @@ presented in Chapter~\ref{part:I}).
 Finally, given two unit quaternions $p = \alpha + \beta i + \gamma j +
 \delta k$ and $q = \epsilon + \zeta i + \eta j + \theta k$, the rotation
 matrix on $\setR^{4}$ is given explicitly by:
-\[
-  \left[ \begin{array}{cccc}
-     \alpha \epsilon + \beta \zeta + \gamma \eta + \delta \theta
-       & +\alpha \zeta - \beta \epsilon - \gamma \theta + \delta \eta
-       & +\alpha \eta + \beta \theta - \gamma \epsilon - \delta \zeta
-       & +\alpha \theta - \beta \eta + \gamma \zeta - \delta \epsilon \\
-    -\alpha \zeta + \beta \epsilon - \gamma \theta + \delta \eta
-       &  \alpha \epsilon + \beta \zeta - \gamma \eta - \delta \theta
-       & -\alpha \theta + \beta \eta + \gamma \zeta - \delta \epsilon
-       & +\alpha \eta + \beta \theta + \gamma \epsilon + \delta \zeta \\
-    -\alpha \eta + \beta \theta + \gamma \epsilon - \delta \zeta
-       & +\alpha \theta + \beta \eta + \gamma \zeta + \delta \epsilon
-       &  \alpha \epsilon - \beta \zeta + \gamma \eta - \delta \theta
-       & -\alpha \zeta - \beta \epsilon + \gamma \theta + \delta \eta \\
-    -\alpha \theta - \beta \eta + \gamma \zeta + \delta \epsilon
-       & -\alpha \eta + \beta \theta - \gamma \epsilon + \delta \zeta
-       & +\alpha \zeta + \beta \epsilon + \gamma \theta + \delta \eta
-       &  \alpha \epsilon - \beta \zeta - \gamma \eta + \delta \theta
-  \end{array} \right]
-\]
+\begin{align*}
+  \begin{bmatrix}
+    \sst \alpha \epsilon + \beta \zeta + \gamma \eta + \delta \theta  &
+    \sst +\alpha \zeta - \beta \epsilon - \gamma \theta + \delta \eta &
+    \sst +\alpha \eta + \beta \theta - \gamma \epsilon - \delta \zeta &
+    \sst +\alpha \theta - \beta \eta + \gamma \zeta - \delta \epsilon \\
+    \sst -\alpha \zeta + \beta \epsilon - \gamma \theta + \delta \eta &
+    \sst \alpha \epsilon + \beta \zeta - \gamma \eta - \delta \theta  &
+    \sst -\alpha \theta + \beta \eta + \gamma \zeta - \delta \epsilon &
+    \sst +\alpha \eta + \beta \theta + \gamma \epsilon + \delta \zeta \\
+    \sst -\alpha \eta + \beta \theta + \gamma \epsilon - \delta \zeta &
+    \sst +\alpha \theta + \beta \eta + \gamma \zeta + \delta \epsilon &
+    \sst \alpha \epsilon - \beta \zeta + \gamma \eta - \delta \theta  &
+    \sst -\alpha \zeta - \beta \epsilon + \gamma \theta + \delta \eta \\
+    \sst -\alpha \theta - \beta \eta + \gamma \zeta + \delta \epsilon &
+    \sst -\alpha \eta + \beta \theta - \gamma \epsilon + \delta \zeta &
+    \sst +\alpha \zeta + \beta \epsilon + \gamma \theta + \delta \eta &
+    \sst \alpha \epsilon - \beta \zeta - \gamma \eta + \delta \theta
+   \end{bmatrix}
+\end{align*}
 
 \bibliographystyle{alpha}
 \bibliography{HyperComplex}
