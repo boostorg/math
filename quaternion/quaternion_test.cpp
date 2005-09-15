@@ -18,7 +18,6 @@
 
 #include <boost/math/quaternion.hpp>
 
-
 template<typename T>
 struct string_type_name;
 
@@ -37,6 +36,15 @@ DEFINE_TYPE_NAME(long double);
 
 
 typedef boost::mpl::list<float,double,long double>  test_types;
+
+// Apple GCC 4.0 uses the "double double" format for its long double,
+// which means that epsilon is VERY small but useless for
+// comparisons. So, don't do those comparisons.
+#if defined(__APPLE_CC__) && defined(__GNUC__) && __GNUC__ == 4
+typedef boost::mpl::list<float,double>  near_eps_test_types;
+#else
+typedef boost::mpl::list<float,double,long double>  near_eps_test_types;
+#endif
 
 
 #if BOOST_WORKAROUND(__GNUC__, < 3)
@@ -739,15 +747,18 @@ boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
     
 #define    BOOST_QUATERNION_COMMON_GENERATOR(fct)   \
     test->add(BOOST_TEST_CASE_TEMPLATE(fct##_test, test_types));
+
+#define    BOOST_QUATERNION_COMMON_GENERATOR_NEAR_EPS(fct)   \
+    test->add(BOOST_TEST_CASE_TEMPLATE(fct##_test, near_eps_test_types));
     
     
 #define    BOOST_QUATERNION_TEST                      \
     BOOST_QUATERNION_COMMON_GENERATOR(multiplication) \
-    BOOST_QUATERNION_COMMON_GENERATOR(exp)            \
-    BOOST_QUATERNION_COMMON_GENERATOR(cos)            \
-    BOOST_QUATERNION_COMMON_GENERATOR(sin)            \
-    BOOST_QUATERNION_COMMON_GENERATOR(cosh)           \
-    BOOST_QUATERNION_COMMON_GENERATOR(sinh)
+    BOOST_QUATERNION_COMMON_GENERATOR_NEAR_EPS(exp)            \
+    BOOST_QUATERNION_COMMON_GENERATOR_NEAR_EPS(cos)            \
+    BOOST_QUATERNION_COMMON_GENERATOR_NEAR_EPS(sin)            \
+    BOOST_QUATERNION_COMMON_GENERATOR_NEAR_EPS(cosh)           \
+    BOOST_QUATERNION_COMMON_GENERATOR_NEAR_EPS(sinh)
     
     
     BOOST_QUATERNION_TEST
@@ -756,7 +767,7 @@ boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
 #undef    BOOST_QUATERNION_TEST
     
 #undef    BOOST_QUATERNION_COMMON_GENERATOR
-    
+#undef BOOST_QUATERNION_COMMON_GENERATOR_NEAR_EPS
     
 #ifdef BOOST_QUATERNION_TEST_VERBOSE
     
