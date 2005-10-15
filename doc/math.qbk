@@ -1,0 +1,240 @@
+[article Boost.Math TR1 Additions
+    [copyright 2005 John Maddock]
+    [purpose Various special functions and complex number algorithms]
+    [license
+        Distributed under the Boost Software License, Version 1.0.
+        (See accompanying file LICENSE_1_0.txt or copy at
+        <ulink url="http://www.boost.org/LICENSE_1_0.txt">
+            http://www.boost.org/LICENSE_1_0.txt
+        </ulink>)
+    ]
+    [authors [Maddock, John]]
+    [category math]
+    [last-revision $Date$]
+]
+
+[def __effects [*Effects: ]]
+[def __formula [*Formula: ]]
+[def __exm1 '''<code>e<superscript>x</superscript> - 1</code>''']
+[def __ex '''<code>e<superscript>x</superscript></code>''']
+[def __te '''2&amp;#025B;''']
+
+[section:intro Introduction]
+
+This addition to the Boost.Math library provides two features which are part of 
+the forthcoming Technical Report on C++ Standard Library Extensions:
+
+* Additional real number special functions (log1p, expm1 and hypot).
+* The complex number inverse trigonometric and inverse hyper-trigonometric functions.
+
+Both of these features are also part of the existing C99 standard, but not the current 
+C++ standard.
+
+[endsect]
+
+[section:C99 Selected C99 Special Functions]
+
+[section:log1p log1p]
+
+[h4 Header:]
+
+   #include <boost/math/special_functions/log1p.hpp>
+
+[h4 Synopsis:]
+
+   template <class T>
+   T log1p(T x);
+   
+__effects returns the natural logarithm of `x+1`.
+
+There are many situations where it is desirable to compute `log(x+1)`. 
+However, for small `x` then `x+1` suffers from catastrophic cancellation errors 
+so that `x+1 == 1` and `log(x+1) == 0`, when in fact for very small x, the 
+best approximation to `log(x+1)` would be `x`.  `log1p` calculates the best
+approximation to `log(1+x)` using a Taylor series expansion for accuracy 
+(less than __te).
+Note that there are faster methods available, for example using the equivalence:
+
+   log(1+x) == (log(1+x) * x) / ((1-x) - 1)
+
+However, experience has shown that these methods tend to fail quite spectacularly
+once the compiler's optimizations are turned on.  In contrast, the series expansion
+method seems to be reasonably immune optimizer-induced errors.
+
+Finally when BOOST_HAS_LOG1P is defined then the `float/double/long double` 
+specializations of this template simply forward to the platform's 
+native implementation of this function.
+
+[endsect]
+
+[section:expm1 expm1]
+
+[h4 Header:]
+
+   #include <boost/math/special_functions/expm1.hpp>
+
+[h4 Synopsis:]
+
+   template <class T>
+   T expm1(T t);
+
+__effects returns __exm1.
+
+For small x, then __ex is very close to 1, as a result calculating __exm1 results
+in catastrophic cancellation errors when x is small.  `expm1` calculates __exm1 using
+a series expansion when x is small (giving an accuracy of less than __te).
+
+Finally when BOOST_HAS_EXPM1 is defined then the `float/double/long double` 
+specializations of this template simply forward to the platform's 
+native implementation of this function.
+
+[endsect]
+
+[section:hypot hypot]
+
+[h4 Header:]
+
+   #include <boost/math/special_functions/hypot.hpp>
+
+[h4 Synopsis:]
+
+   template <class T>
+   T hypot(T x, T y);
+   
+__effects computes [$hypot.png] in such a way as to avoid undue underflow and overflow.
+
+When calculating [$hypot.png] it's quite easy for the intermediate terms to either
+overflow or underflow, even though the result is in fact perfectly representable.
+One possible alternative form is [$hypot2.png], but that can overflow or underflow
+if x and y are of very differing magnitudes.  The `hypot` function takes care of 
+all the special cases for you, so you don't have to.
+
+[endsect]
+
+[endsect]
+
+[section:inverse_complex Complex Number Inverse Trigonometric Functions]
+
+The following complex number algorithms are the inverses of trigonometric functions currently
+present in the C++ standard.  Equivalents to these functions are part of the C99 standard, and
+will be part of the forthcoming Technical Report on C++ Standard Library Extensions.
+
+Although there are deceptively simple formulae available for all of these functions, a naive
+implementation that used these formulae would fail catastrophically for some input
+values.  The Boost versions of these functions have been implemented using the methodology
+described in "Implementing the Complex Arcsine and Arccosine Functions Using Exception Handling"
+by T. E. Hull Thomas F. Fairgrieve and Ping Tak Peter Tang, ACM Transactions on Mathematical Software, 
+Vol. 23, No. 3, September 1997.  This means that the functions are well defined over the entire
+complex number range, and produce accurate values even at the extremes of that range, where as a naive
+formula would cause overflow or underflow to occur during the calculation, even though the result is  
+actually a representable value.  The maximum theoretical relative error for all of these functions 
+is less than 9.5E for every machine-representable point in the complex plane.  Please refer to 
+comments in the header files themselves and to the above mentioned paper for more information
+on the implementation methodology.
+
+[section:asin asin]
+
+[h4 Header:]
+
+   #include <boost/math/complex/asin.hpp>
+
+[h4 Synopsis:]
+
+   template<class T> 
+   std::complex<T> asin(const std::complex<T>& z);
+   
+__effects returns the inverse sine of the complex number z.
+
+__formula [$asin.png]
+
+[endsect]
+
+[section:acos acos]
+
+[h4 Header:]
+
+   #include <boost/math/complex/acos.hpp>
+
+[h4 Synopsis:]
+
+   template<class T> 
+   std::complex<T> acos(const std::complex<T>& z);
+   
+__effects returns the inverse cosine of the complex number z.
+
+__formula [$acos.png]
+
+[endsect]
+
+[section:atan atan]
+
+[h4 Header:]
+
+   #include <boost/math/complex/atan.hpp>
+
+[h4 Synopsis:]
+
+   template<class T> 
+   std::complex<T> atan(const std::complex<T>& z);
+   
+__effects returns the inverse tangent of the complex number z.
+
+__formula [$atan.png]
+
+[endsect]
+
+[section:asinh asinh]
+
+[h4 Header:]
+
+   #include <boost/math/complex/asinh.hpp>
+
+[h4 Synopsis:]
+
+   template<class T> 
+   std::complex<T> asinh(const std::complex<T>& z);
+   
+__effects returns the inverse hyperbolic sine of the complex number z.
+
+__formula [$asinh.png]
+
+[endsect]
+
+[section:acosh acosh]
+
+[h4 Header:]
+
+   #include <boost/math/complex/acosh.hpp>
+
+[h4 Synopsis:]
+
+   template<class T> 
+   std::complex<T> acosh(const std::complex<T>& z);
+   
+__effects returns the inverse hyperbolic cosine of the complex number z.
+
+__formula [$acosh.png]
+
+[endsect]
+
+[section:atanh atanh]
+
+[h4 Header:]
+
+   #include <boost/math/complex/atanh.hpp>
+
+[h4 Synopsis:]
+
+   template<class T> 
+   std::complex<T> atanh(const std::complex<T>& z);
+   
+__effects returns the inverse hyperbolic tangent of the complex number z.
+
+__formula [$atanh.png]
+
+[endsect]
+
+[endsect]
+
+
+
