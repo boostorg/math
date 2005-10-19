@@ -10,7 +10,7 @@
 // inverse trig complex functions, it also contains all the includes
 // that we need to implement all these functions.
 //
-#include <complex>
+#include <boost/config/no_tr1/complex.hpp>
 #include <boost/limits.hpp>
 #include <math.h> // isnan where available
 #include <cmath>
