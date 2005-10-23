@@ -564,35 +564,35 @@ void check_spots(const T&)
    }
 
    result = boost::math::atanh(ct(one, zero));
-   BOOST_CHECK(result.real() == infinity);
-   BOOST_CHECK(result.imag() == zero);
+   BOOST_CHECK_EQUAL(result.real(), infinity);
+   BOOST_CHECK_EQUAL(result.imag(), zero);
 
    result = boost::math::atanh(ct(-one, zero));
-   BOOST_CHECK(result.real() == -infinity);
-   BOOST_CHECK(result.imag() == zero);
+   BOOST_CHECK_EQUAL(result.real(), -infinity);
+   BOOST_CHECK_EQUAL(result.imag(), zero);
 
    result = boost::math::atanh(ct(-one, -zero));
-   BOOST_CHECK(result.real() == -infinity);
-   BOOST_CHECK(result.imag() == zero);
+   BOOST_CHECK_EQUAL(result.real(), -infinity);
+   BOOST_CHECK_EQUAL(result.imag(), zero);
 
    result = boost::math::atanh(ct(one, -zero));
-   BOOST_CHECK(result.real() == infinity);
-   BOOST_CHECK(result.imag() == zero);
+   BOOST_CHECK_EQUAL(result.real(), infinity);
+   BOOST_CHECK_EQUAL(result.imag(), zero);
 
    result = boost::math::atanh(ct(pi, infinity));
-   BOOST_CHECK(result.real() == zero);
+   BOOST_CHECK_EQUAL(result.real(), zero);
    BOOST_CHECK_CLOSE(result.imag(), half_pi, eps*200);
 
    result = boost::math::atanh(ct(pi, -infinity));
-   BOOST_CHECK(result.real() == zero);
+   BOOST_CHECK_EQUAL(result.real(), zero);
    BOOST_CHECK_CLOSE(result.imag(), -half_pi, eps*200);
 
    result = boost::math::atanh(ct(-pi, -infinity));
-   BOOST_CHECK(result.real() == zero);
+   BOOST_CHECK_EQUAL(result.real(), zero);
    BOOST_CHECK_CLOSE(result.imag(), -half_pi, eps*200);
 
    result = boost::math::atanh(ct(-pi, infinity));
-   BOOST_CHECK(result.real() == zero);
+   BOOST_CHECK_EQUAL(result.real(), zero);
    BOOST_CHECK_CLOSE(result.imag(), half_pi, eps*200);
 
    if(test_nan)
@@ -744,14 +744,20 @@ void test_boundaries()
 
 int test_main(int, char*[])
 {
+   std::cout << "Running complex trig sanity checks for type float." << std::endl;
    test_inverse_trig(float(0));
+   std::cout << "Running complex trig sanity checks for type double." << std::endl;
    test_inverse_trig(double(0));
    //test_inverse_trig((long double)(0));
 
+   std::cout << "Running complex trig spot checks for type float." << std::endl;
    check_spots(float(0));
+   std::cout << "Running complex trig spot checks for type double." << std::endl;
    check_spots(double(0));
+   std::cout << "Running complex trig spot checks for type long double." << std::endl;
    check_spots((long double)(0));
    
+   std::cout << "Running complex trig boundary and accuracy tests." << std::endl;
    test_boundaries();
    return 0;
 }
