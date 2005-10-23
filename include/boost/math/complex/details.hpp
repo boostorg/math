@@ -17,17 +17,6 @@
 
 namespace boost{ namespace math{ namespace detail{
 
-template <class T>
-inline std::complex<T> mult_i(const std::complex<T>& t)
-{
-   return std::complex<T>(-t.imag(), t.real());
-}
-
-template <class T>
-inline std::complex<T> mult_minus_i(const std::complex<T>& t)
-{
-   return std::complex<T>(t.imag(), -t.real());
-}
 
 template <class T>
 inline bool test_is_nan(T t)
@@ -41,6 +30,23 @@ template<> inline bool test_is_nan<double>(double t) { return isnan(t); }
 template<> inline bool test_is_nan<long double>(long double t) { return isnan(t); }
 #endif
 
+template <class T>
+inline T mult_minus_one(const T& t)
+{
+   return test_is_nan(t) ? t : -t;
+}
+
+template <class T>
+inline std::complex<T> mult_i(const std::complex<T>& t)
+{
+   return std::complex<T>(mult_minus_one(t.imag()), t.real());
+}
+
+template <class T>
+inline std::complex<T> mult_minus_i(const std::complex<T>& t)
+{
+   return std::complex<T>(t.imag(), mult_minus_one(t.real()));
+}
 
 } } } // namespaces
 
