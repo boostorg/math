@@ -92,9 +92,13 @@ T expm1(T x)
 #endif
 
 #ifdef BOOST_HAS_EXPM1
+#  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
 inline float expm1(float x){ return ::expm1f(x); }
-inline double expm1(double x){ return ::expm1(x); }
 inline long double expm1(long double x){ return ::expm1l(x); }
+#else
+inline float expm1(float x){ return ::expm1(x); }
+#endif
+inline double expm1(double x){ return ::expm1(x); }
 #endif
 
 } } // namespaces

@@ -93,9 +93,13 @@ T log1p(T x)
 #endif
 
 #ifdef BOOST_HAS_LOG1P
+#  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
 inline float log1p(float x){ return ::log1pf(x); }
-inline double log1p(double x){ return ::log1p(x); }
 inline long double log1p(long double x){ return ::log1pl(x); }
+#else
+inline float log1p(float x){ return ::log1p(x); }
+#endif
+inline double log1p(double x){ return ::log1p(x); }
 #endif
 
 } } // namespaces
