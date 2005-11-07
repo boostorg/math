@@ -39,7 +39,7 @@ std::complex<T> acos(const std::complex<T>& z)
    static const T half = static_cast<T>(0.5L);
    static const T a_crossover = static_cast<T>(1.5L);
    static const T b_crossover = static_cast<T>(0.6417L);
-   static const T pi = static_cast<T>(3.141592653589793238462643383279502884197L);
+   static const T s_pi = static_cast<T>(3.141592653589793238462643383279502884197L);
    static const T half_pi = static_cast<T>(1.57079632679489661923132169163975144L);
    static const T log_two = static_cast<T>(0.69314718055994530941723212145817657L);
    static const T quarter_pi = static_cast<T>(0.78539816339744830961566084581987572L);
@@ -224,7 +224,7 @@ std::complex<T> acos(const std::complex<T>& z)
    // Finish off by working out the sign of the result:
    //
    if(z.real() < 0)
-      real = pi - real;
+      real = s_pi - real;
    if(z.imag() > 0)
       imag = -imag;
 

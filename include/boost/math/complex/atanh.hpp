@@ -42,7 +42,7 @@ std::complex<T> atanh(const std::complex<T>& z)
    static const T one = static_cast<T>(1.0L);
    static const T two = static_cast<T>(2.0L);
    static const T four = static_cast<T>(4.0L);
-   //static const T zero = static_cast<T>(0);
+   static const T zero = static_cast<T>(0);
    static const T a_crossover = static_cast<T>(0.3L);
 
    T x = std::fabs(z.real());
@@ -186,7 +186,7 @@ std::complex<T> atanh(const std::complex<T>& z)
          // we can simply neglect the y^2 terms:
          BOOST_ASSERT(x >= safe_lower);
          BOOST_ASSERT(x <= safe_upper);
-         BOOST_ASSERT(y <= safe_lower);
+         //BOOST_ASSERT(y <= safe_lower);
          T xm1 = x - one;
          real = std::log(1 + two*x + x*x) - std::log(xm1*xm1);
       }
@@ -214,7 +214,12 @@ std::complex<T> atanh(const std::complex<T>& z)
          if(y <= safe_lower)
             imag = std::atan2(two*y, one);
          else
-            imag = std::atan2(two*y, one - y*y);
+         {
+            if((y == zero) && (x == zero))
+               imag = 0;
+            else
+               imag = std::atan2(two*y, one - y*y);
+         }
       }
       else
       {
