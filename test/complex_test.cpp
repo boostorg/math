@@ -37,7 +37,7 @@ namespace std{ using ::sqrt; using ::tan; using ::tanh; }
 // to the other component.
 //
 template <class T>
-void check_complex(const std::complex<T>& a, const std::complex<T>& b, int max_error)
+void check_complex(const std::complex<T>& a, const std::complex<T>& b, int max_error, int line_num = 0)
 {
    //
    // a is the expected value, b is what was actually found,
@@ -51,10 +51,12 @@ void check_complex(const std::complex<T>& a, const std::complex<T>& b, int max_e
       {
          if(boost::math::fabs(b) > std::numeric_limits<T>::epsilon())
          {
+            BOOST_MESSAGE("Error from complex_test.cpp, line " << line_num << ", with type: " << typeid(T).name());
             BOOST_ERROR("Expected {0,0} but got: " << b);
          }
          else
          {
+            BOOST_MESSAGE("Error from complex_test.cpp, line " << line_num << ", with type: " << typeid(T).name());
             BOOST_MESSAGE("Expected {0,0} but got: " << b);
          }
       }
@@ -62,13 +64,23 @@ void check_complex(const std::complex<T>& a, const std::complex<T>& b, int max_e
    }
    else if(b == zero)
    {
-      BOOST_ERROR("Found {0,0} but expected: " << a);
-      return;
+      if(boost::math::fabs(a) > std::numeric_limits<T>::epsilon())
+      {
+         BOOST_MESSAGE("Error from complex_test.cpp, line " << line_num << ", with type: " << typeid(T).name());
+         BOOST_ERROR("Found {0,0} but expected: " << a);
+         return;
+      }
+      else
+      {
+         BOOST_MESSAGE("Error from complex_test.cpp, line " << line_num << ", with type: " << typeid(T).name());
+         BOOST_MESSAGE("Found {0,0} but expected: " << a);
+      }
    }
 
    T rel = boost::math::fabs((b-a)/b) / std::numeric_limits<T>::epsilon();
    if( rel > max_error)
    {
+      BOOST_MESSAGE("Error from complex_test.cpp, line " << line_num << ", with type: " << typeid(T).name());
       BOOST_ERROR("Error in result exceeded permitted limit of " << max_error << " (actual relative error was " << rel << "e).  Found " << b << " expected " << a);
    }
 }
@@ -109,11 +121,11 @@ void test_inverse_trig(T)
          std::complex<T> val(x, y);
          std::complex<T> result = std::cos(boost::math::acos(val));
          BOOST_MESSAGE("Testing cos(acos(z)), z = [" << x << "," << y << "]");
-         check_complex(val, result, 50);
+         check_complex(val, result, 50, __LINE__);
          // asin:
          result = std::sin(boost::math::asin(val));
          BOOST_MESSAGE("Testing sin(asin(z)), z = [" << x << "," << y << "]");
-         check_complex(val, result, 5);
+         check_complex(val, result, 5, __LINE__);
       }
    }
 
@@ -126,13 +138,13 @@ void test_inverse_trig(T)
          std::complex<T> val(x, y);
          std::complex<T> result = std::sinh(boost::math::asinh(val));
          BOOST_MESSAGE("Testing sinh(asinh(z)), z = [" << x << "," << y << "]");
-         check_complex(val, result, 5);
+         check_complex(val, result, 5, __LINE__);
          // acosh:
          if(!((y == 0) && (x <= 1))) // can't test along the branch cut
          {
             result = std::cosh(boost::math::acosh(val));
             BOOST_MESSAGE("Testing cosh(acosh(z)), z = [" << x << "," << y << "]");
-            check_complex(val, result, 60);
+            check_complex(val, result, 60, __LINE__);
          }
          //
          // There is a problem in testing atan and atanh:
@@ -146,21 +158,21 @@ void test_inverse_trig(T)
          // The following heuristic is designed to make the best of a bad job,
          // using atan(tan(z)) where possible and tan(atan(z)) when it's not.
          //
-         static const int tanh_error = 15;
+         static const int tanh_error = 20;
          if((0 != x) && (0 != y) && ((std::fabs(y) < 1) || (std::fabs(x) < 1)))
          {
             // atanh:
             val = boost::math::atanh(val);
             result = boost::math::atanh(std::tanh(val));
             BOOST_MESSAGE("Testing atanh(tanh(z)), z = [" << val.real()< "," << val.imag() << "]");
-            check_complex(val, result, tanh_error);
+            check_complex(val, result, tanh_error, __LINE__);
             // atan:
             if(!((x == 0) && (std::fabs(y) == 1))) // we can't test infinities here
             {
                val = boost::math::atan(std::complex<T>(x, y));
                result = boost::math::atan(std::tan(val));
                BOOST_MESSAGE("Testing atan(tan(z)), z = [" << val.real() << "," << val.imag() << "]");
-               check_complex(val, result, tanh_error);
+               check_complex(val, result, tanh_error, __LINE__);
             }
          }
          else
@@ -168,13 +180,13 @@ void test_inverse_trig(T)
             // atanh:
             result = std::tanh(boost::math::atanh(val));
             BOOST_MESSAGE("Testing tanh(atanh(z)), z = [" << x << "," << y << "]");
-            check_complex(val, result, tanh_error);
+            check_complex(val, result, tanh_error, __LINE__);
             // atan:
             if(!((x == 0) && (std::fabs(y) == 1))) // we can't test infinities here
             {
                result = std::tan(boost::math::atan(val));
                BOOST_MESSAGE("Testing tan(atan(z)), z = [" << x << "," << y << "]");
-               check_complex(val, result, tanh_error);
+               check_complex(val, result, tanh_error, __LINE__);
             }
          }
       }
@@ -212,16 +224,16 @@ void check_spots(const T&)
    // C99 spot tests for acos:
    //
    result = boost::math::acos(ct(zero));
-   check_complex(ct(half_pi), result, 2);
+   check_complex(ct(half_pi), result, 2, __LINE__);
    
    result = boost::math::acos(ct(mzero));
-   check_complex(ct(half_pi), result, 2);
+   check_complex(ct(half_pi), result, 2, __LINE__);
    
    result = boost::math::acos(ct(zero, mzero));
-   check_complex(ct(half_pi), result, 2);
+   check_complex(ct(half_pi), result, 2, __LINE__);
    
    result = boost::math::acos(ct(mzero, mzero));
-   check_complex(ct(half_pi), result, 2);
+   check_complex(ct(half_pi), result, 2, __LINE__);
    
    if(test_nan)
    {
@@ -702,15 +714,15 @@ void do_test_boundaries(float x, float y)
    std::complex<float> r1 = boost::math::asin(std::complex<float>(x, y));
    std::complex<double> dr = boost::math::asin(std::complex<double>(x, y));
    std::complex<float> r2(static_cast<float>(dr.real()), static_cast<float>(dr.imag()));
-   check_complex(r2, r1, 3);
+   check_complex(r2, r1, 5, __LINE__);
    r1 = boost::math::acos(std::complex<float>(x, y));
    dr = boost::math::acos(std::complex<double>(x, y));
    r2 = std::complex<float>(std::complex<double>(dr.real(), dr.imag()));
-   check_complex(r2, r1, 3);
+   check_complex(r2, r1, 5, __LINE__);
    r1 = boost::math::atanh(std::complex<float>(x, y));
    dr = boost::math::atanh(std::complex<double>(x, y));
    r2 = std::complex<float>(std::complex<double>(dr.real(), dr.imag()));
-   check_complex(r2, r1, 3);
+   check_complex(r2, r1, 5, __LINE__);
 }
 
 void test_boundaries(float x, float y)
