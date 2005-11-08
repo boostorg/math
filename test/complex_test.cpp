@@ -15,6 +15,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <typeinfo>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std{ using ::sqrt; using ::tan; using ::tanh; }
