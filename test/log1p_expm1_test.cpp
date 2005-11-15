@@ -538,7 +538,7 @@ void test(T)
 {
    //static const T factor = std::numeric_limits<T>::epsilon() * 100;
    static const T two = 2;
-   static const T factor = std::pow(two, 1-std::numeric_limits<T>::digits) * 100;
+   static const T factor = std::pow(two, 1-std::numeric_limits<T>::digits) * 110;
    for(unsigned i = 0; i < sizeof(data)/sizeof(data[0]); ++i)
    {
       T input_value = static_cast<T>(data[i][0]);
@@ -569,9 +569,10 @@ int test_main(int, char* [])
    test(double(0));
    //
    // The long double version of these tests fails on some platforms
-   // due to poor std lib support:
+   // due to poor std lib support (not enough digits returned from 
+   // std::log and std::exp):
    //
-#if !defined(__CYGWIN__)
+#if !defined(__CYGWIN__) && !defined(__FreeBSD__)
    std::cout << "Running long double tests" << std::endl;
    test((long double)(0));
 #endif

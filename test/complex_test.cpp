@@ -204,6 +204,7 @@ void check_spots(const T&)
 {
    typedef std::complex<T> ct;
    ct result;
+   static const T two = 2.0;
    T eps = std::pow(two, 1-std::numeric_limits<T>::digits); // numeric_limits<>::epsilon way too small to be useful on Darwin.
    static const T zero = 0;
    static const T mzero = -zero;
