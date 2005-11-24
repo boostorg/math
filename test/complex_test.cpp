@@ -625,31 +625,31 @@ void check_spots(const T&)
    BOOST_CHECK_CLOSE(result.imag(), half_pi, eps*200);
 
    result = boost::math::atanh(ct(infinity, -pi));
-   BOOST_CHECK(result.real() == zero);
+   BOOST_CHECK_EQUAL(result.real(), zero);
    BOOST_CHECK_CLOSE(result.imag(), -half_pi, eps*200);
 
    result = boost::math::atanh(ct(-infinity, -pi));
-   BOOST_CHECK(result.real() == zero);
+   BOOST_CHECK_EQUAL(result.real(), zero);
    BOOST_CHECK_CLOSE(result.imag(), -half_pi, eps*200);
 
    result = boost::math::atanh(ct(-infinity, pi));
-   BOOST_CHECK(result.real() == zero);
+   BOOST_CHECK_EQUAL(result.real(), zero);
    BOOST_CHECK_CLOSE(result.imag(), half_pi, eps*200);
 
    result = boost::math::atanh(ct(infinity, infinity));
-   BOOST_CHECK(result.real() == zero);
+   BOOST_CHECK_EQUAL(result.real(), zero);
    BOOST_CHECK_CLOSE(result.imag(), half_pi, eps*200);
 
    result = boost::math::atanh(ct(infinity, -infinity));
-   BOOST_CHECK(result.real() == zero);
+   BOOST_CHECK_EQUAL(result.real(), zero);
    BOOST_CHECK_CLOSE(result.imag(), -half_pi, eps*200);
 
    result = boost::math::atanh(ct(-infinity, -infinity));
-   BOOST_CHECK(result.real() == zero);
+   BOOST_CHECK_EQUAL(result.real(), zero);
    BOOST_CHECK_CLOSE(result.imag(), -half_pi, eps*200);
 
    result = boost::math::atanh(ct(-infinity, infinity));
-   BOOST_CHECK(result.real() == zero);
+   BOOST_CHECK_EQUAL(result.real(), zero);
    BOOST_CHECK_CLOSE(result.imag(), half_pi, eps*200);
 
    if(test_nan)

@@ -572,9 +572,14 @@ int test_main(int, char* [])
    // due to poor std lib support (not enough digits returned from 
    // std::log and std::exp):
    //
-#if !defined(__CYGWIN__) && !defined(__FreeBSD__)
+#if !defined(__CYGWIN__) && !defined(__FreeBSD__) && !(defined(__GNUC__) && defined(__sun))
    std::cout << "Running long double tests" << std::endl;
    test((long double)(0));
+#else
+   std::cout << "<note>The long double tests have been disabled on this platform "
+      "either because the long double overloads of the usual math functions are "
+      "not available at all, or because they are too inaccurate for these tests "
+      "to pass.</note>" << std::cout;
 #endif
    return 0;
 }
