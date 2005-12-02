@@ -538,7 +538,7 @@ void test(T)
 {
    //static const T factor = std::numeric_limits<T>::epsilon() * 100;
    static const T two = 2;
-   static const T factor = std::pow(two, 1-std::numeric_limits<T>::digits) * 110;
+   static const T factor = std::pow(two, 1-std::numeric_limits<T>::digits) * 200;
    for(unsigned i = 0; i < sizeof(data)/sizeof(data[0]); ++i)
    {
       T input_value = static_cast<T>(data[i][0]);
