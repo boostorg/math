@@ -50,8 +50,8 @@ std::complex<T> atanh(const std::complex<T>& z)
 
    T real, imag;  // our results
 
-   T safe_upper = std::sqrt((std::numeric_limits<T>::max)()) / two;
-   T safe_lower = std::sqrt((std::numeric_limits<T>::min)());
+   T safe_upper = detail::safe_max(two);
+   T safe_lower = detail::safe_min(static_cast<T>(2));
 
    //
    // Begin by handling the special cases specified in C99:
@@ -131,13 +131,13 @@ std::complex<T> atanh(const std::complex<T>& z)
       // without either overflow or underflow in the squared terms.
       //
       T alpha = 0;
-      if(x > safe_upper)
+      if(x >= safe_upper)
       {
          if((x == std::numeric_limits<T>::infinity()) || (y == std::numeric_limits<T>::infinity()))
          {
             alpha = 0;
          }
-         else if(y > safe_upper)
+         else if(y >= safe_upper)
          {
             // Big x and y: divide alpha through by x*y:
             alpha = (two/y) / (x/y + y/x);
@@ -153,7 +153,7 @@ std::complex<T> atanh(const std::complex<T>& z)
             alpha = two/x;
          }
       }
-      else if(y > safe_upper)
+      else if(y >= safe_upper)
       {
          if(x > one)
          {
@@ -226,7 +226,10 @@ std::complex<T> atanh(const std::complex<T>& z)
          //
          // y^2 is negligible:
          //
-         imag = std::atan2(two*y, 1 - x*x);
+         if((y == zero) && (x == one))
+            imag = 0;
+         else
+            imag = std::atan2(two*y, 1 - x*x);
       }
       imag /= two;
       if(z.imag() < 0)

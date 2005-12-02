@@ -106,8 +106,8 @@ std::complex<T> acos(const std::complex<T>& z)
       // fortunately the quantities M and u identified by Hull et al (figure 3), 
       // match with the max() and min() methods of numeric_limits<T>.
       //
-      T safe_max = std::sqrt((std::numeric_limits<T>::max)()) / T(8);
-      T safe_min = static_cast<T>(4) * std::sqrt((std::numeric_limits<T>::min)());
+      T safe_max = detail::safe_max(static_cast<T>(8));
+      T safe_min = detail::safe_min(static_cast<T>(4));
 
       T xp1 = one + x;
       T xm1 = x - one;

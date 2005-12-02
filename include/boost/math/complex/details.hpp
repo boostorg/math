@@ -10,13 +10,17 @@
 // inverse trig complex functions, it also contains all the includes
 // that we need to implement all these functions.
 //
+#include <boost/config.hpp>
 #include <boost/config/no_tr1/complex.hpp>
 #include <boost/limits.hpp>
 #include <math.h> // isnan where available
 #include <cmath>
 
-namespace boost{ namespace math{ namespace detail{
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{ using ::sqrt; }
+#endif
 
+namespace boost{ namespace math{ namespace detail{
 
 template <class T>
 inline bool test_is_nan(T t)
@@ -46,6 +50,29 @@ template <class T>
 inline std::complex<T> mult_minus_i(const std::complex<T>& t)
 {
    return std::complex<T>(t.imag(), mult_minus_one(t.real()));
+}
+
+template <class T>
+inline T safe_max(T t)
+{
+   return std::sqrt((std::numeric_limits<T>::max)()) / t;
+}
+inline long double safe_max(long double t)
+{
+   // long double sqrt often returns infinity due to
+   // insufficient internal precision:
+   return std::sqrt((std::numeric_limits<double>::max)()) / t;
+}
+template <class T>
+inline T safe_min(T t)
+{
+   return std::sqrt((std::numeric_limits<T>::min)()) * t;
+}
+inline long double safe_min(long double t)
+{
+   // long double sqrt often returns zero due to
+   // insufficient internal precision:
+   return std::sqrt((std::numeric_limits<double>::min)()) * t;
 }
 
 } } } // namespaces
