@@ -26,7 +26,7 @@ template <class T>
 inline bool test_is_nan(T t)
 {
    // Comparisons with Nan's always fail:
-   return !(t <= std::numeric_limits<T>::infinity()) || !(t >= -std::numeric_limits<T>::infinity());
+   return std::numeric_limits<T>::has_infinity && (!(t <= std::numeric_limits<T>::infinity()) || !(t >= -std::numeric_limits<T>::infinity()));
 }
 #ifdef isnan
 template<> inline bool test_is_nan<float>(float t) { return isnan(t); }

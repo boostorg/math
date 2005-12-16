@@ -62,7 +62,7 @@ inline std::complex<T> asin(const std::complex<T>& z)
    {
       if(detail::test_is_nan(y))
          return std::complex<T>(x, x);
-      if(y == std::numeric_limits<T>::infinity())
+      if(std::numeric_limits<T>::has_infinity && (y == std::numeric_limits<T>::infinity()))
       {
          real = x;
          imag = std::numeric_limits<T>::infinity();
@@ -77,7 +77,7 @@ inline std::complex<T> asin(const std::complex<T>& z)
          real = 0;
          imag = y;
       }
-      else if(x == std::numeric_limits<T>::infinity())
+      else if(std::numeric_limits<T>::has_infinity && (x == std::numeric_limits<T>::infinity()))
       {
          real = y;
          imag = std::numeric_limits<T>::infinity();
@@ -85,7 +85,7 @@ inline std::complex<T> asin(const std::complex<T>& z)
       else
          return std::complex<T>(y, y);
    }
-   else if(x == std::numeric_limits<T>::infinity())
+   else if(std::numeric_limits<T>::has_infinity && (x == std::numeric_limits<T>::infinity()))
    {
       if(y == std::numeric_limits<T>::infinity())
       {
@@ -98,7 +98,7 @@ inline std::complex<T> asin(const std::complex<T>& z)
          imag = std::numeric_limits<T>::infinity();
       }
    }
-   else if(y == std::numeric_limits<T>::infinity())
+   else if(std::numeric_limits<T>::has_infinity && (y == std::numeric_limits<T>::infinity()))
    {
       real = 0;
       imag = std::numeric_limits<T>::infinity();

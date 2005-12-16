@@ -59,7 +59,7 @@ std::complex<T> acos(const std::complex<T>& z)
    // but doing it this way prevents overflow/underflow arithmetic
    // in the main body of the logic, which may trip up some machines:
    //
-   if(x == std::numeric_limits<T>::infinity())
+   if(std::numeric_limits<T>::has_infinity && (x == std::numeric_limits<T>::infinity()))
    {
       if(y == std::numeric_limits<T>::infinity())
       {
@@ -83,7 +83,7 @@ std::complex<T> acos(const std::complex<T>& z)
          return std::complex<T>(x, (z.imag() < 0) ? std::numeric_limits<T>::infinity() :  -std::numeric_limits<T>::infinity());
       return std::complex<T>(x, x);
    }
-   else if(y == std::numeric_limits<T>::infinity())
+   else if(std::numeric_limits<T>::has_infinity && (y == std::numeric_limits<T>::infinity()))
    {
       real = half_pi;
       imag = std::numeric_limits<T>::infinity();

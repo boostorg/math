@@ -24,9 +24,9 @@ std::complex<T> atan(const std::complex<T>& x)
    if(x.real() == 0)
    {
       if(x.imag() == 1)
-         return std::complex<T>(0, std::numeric_limits<T>::infinity());
+         return std::complex<T>(0, std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : static_cast<T>(HUGE_VAL));
       if(x.imag() == -1)
-         return std::complex<T>(0, -std::numeric_limits<T>::infinity());
+         return std::complex<T>(0, std::numeric_limits<T>::has_infinity ? -std::numeric_limits<T>::infinity() : -static_cast<T>(HUGE_VAL));
    }
    return ::boost::math::detail::mult_minus_i(::boost::math::atanh(::boost::math::detail::mult_i(x)));
 }

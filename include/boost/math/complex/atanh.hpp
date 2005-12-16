@@ -60,7 +60,7 @@ std::complex<T> atanh(const std::complex<T>& z)
    {
       if(detail::test_is_nan(y))
          return std::complex<T>(x, x);
-      else if(y == std::numeric_limits<T>::infinity())
+      else if(std::numeric_limits<T>::has_infinity && (y == std::numeric_limits<T>::infinity()))
          return std::complex<T>(0, ((z.imag() < 0) ? -half_pi : half_pi));
       else
          return std::complex<T>(x, x);
@@ -69,7 +69,7 @@ std::complex<T> atanh(const std::complex<T>& z)
    {
       if(x == 0)
          return std::complex<T>(x, y);
-      if(x == std::numeric_limits<T>::infinity())
+      if(std::numeric_limits<T>::has_infinity && (x == std::numeric_limits<T>::infinity()))
          return std::complex<T>(0, y);
       else
          return std::complex<T>(y, y);
@@ -133,7 +133,9 @@ std::complex<T> atanh(const std::complex<T>& z)
       T alpha = 0;
       if(x >= safe_upper)
       {
-         if((x == std::numeric_limits<T>::infinity()) || (y == std::numeric_limits<T>::infinity()))
+         // this is really a test for infinity, 
+         // but we may not have the necessary numeric_limits support:
+         if((x > (std::numeric_limits<T>::max)()) || (y > (std::numeric_limits<T>::max)()))
          {
             alpha = 0;
          }
