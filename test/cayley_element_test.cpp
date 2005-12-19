@@ -7,13 +7,13 @@
 //  See <http://www.boost.org/libs/math/> for the library's home page.
 
 //  Revision History
-//   16 Aug 2005  Initial version (Daryle Walker)
+//   18 Dec 2005  Initial version (Daryle Walker)
 
-#define BOOST_AUTO_TEST_MAIN  "cayley element test"
+#define BOOST_TEST_MAIN  "cayley element test"
 
 #include <boost/math/cayley_element.hpp>  // for boost:...:cayley_element, etc.
 
-#include <boost/test/auto_unit_test.hpp>             // for BOOST_CHECK_EQUAL
+#include <boost/test/unit_test.hpp>                  // for BOOST_CHECK_EQUAL
 #include <boost/test/floating_point_comparison.hpp>  // for BOOST_CHECK_CLOSE
 
 #include <boost/rational.hpp>  // for boost::rational
@@ -48,7 +48,7 @@ BOOST_TEST_DONT_PRINT_LOG_VALUE( cr_type );
 
 
 // Element constructors, accessors, mutators, and Boolean conversion
-BOOST_AUTO_UNIT_TEST( cayley_constructor_test )
+BOOST_AUTO_TEST_CASE( cayley_constructor_test )
 {
     {
         ce  t1( 3 );
@@ -131,7 +131,7 @@ BOOST_AUTO_UNIT_TEST( cayley_constructor_test )
 }
 
 // Rung & index counting
-BOOST_AUTO_UNIT_TEST( cayley_rung_index_test )
+BOOST_AUTO_TEST_CASE( cayley_rung_index_test )
 {
     BOOST_CHECK_EQUAL( 0u, ce::maximum_index_for_rung(0) );
     BOOST_CHECK_EQUAL( 0u, ce::minimum_rung_for_index(0) );
@@ -179,7 +179,7 @@ BOOST_AUTO_UNIT_TEST( cayley_rung_index_test )
 }
 
 // Equality operators
-BOOST_AUTO_UNIT_TEST( cayley_equal_op_test )
+BOOST_AUTO_TEST_CASE( cayley_equal_op_test )
 {
     ce const  t1( 0 ), t2( 1 ), t3( 0 );
 
@@ -292,7 +292,7 @@ BOOST_AUTO_UNIT_TEST( cayley_equal_op_test )
 }
 
 // Unary operators
-BOOST_AUTO_UNIT_TEST( cayley_unary_op_test )
+BOOST_AUTO_TEST_CASE( cayley_unary_op_test )
 {
     ce const  t1( 0 ), t2( 1 );
 
@@ -343,7 +343,7 @@ BOOST_AUTO_UNIT_TEST( cayley_unary_op_test )
 }
 
 // Unary-operator-like member functions
-BOOST_AUTO_UNIT_TEST( cayley_unary_self_test )
+BOOST_AUTO_TEST_CASE( cayley_unary_self_test )
 {
     ce const  t1( 0 );
     ce        t2 = t1;
@@ -377,7 +377,7 @@ BOOST_AUTO_UNIT_TEST( cayley_unary_self_test )
 }
 
 // Condition functions
-BOOST_AUTO_UNIT_TEST( cayley_condition_function_test )
+BOOST_AUTO_TEST_CASE( cayley_condition_function_test )
 {
     using boost::math::dot_product;
     using boost::math::conj;
@@ -571,7 +571,7 @@ BOOST_AUTO_UNIT_TEST( cayley_condition_function_test )
 }
 
 // Self-conditioning member functions
-BOOST_AUTO_UNIT_TEST( cayley_condition_self_test )
+BOOST_AUTO_TEST_CASE( cayley_condition_self_test )
 {
     using boost::math::conj;
     using boost::math::sgn;
@@ -648,7 +648,7 @@ BOOST_AUTO_UNIT_TEST( cayley_condition_self_test )
 }
 
 // Scalar multiplication and division
-BOOST_AUTO_UNIT_TEST( cayley_scalar_muldiv_op_test )
+BOOST_AUTO_TEST_CASE( cayley_scalar_muldiv_op_test )
 {
     using boost::bad_rational;
 
@@ -695,7 +695,7 @@ BOOST_AUTO_UNIT_TEST( cayley_scalar_muldiv_op_test )
 }
 
 // Element multiplication and division
-BOOST_AUTO_UNIT_TEST( cayley_element_muldiv_op_test )
+BOOST_AUTO_TEST_CASE( cayley_element_muldiv_op_test )
 {
     using std::size_t;
     using boost::bad_rational;
@@ -850,7 +850,7 @@ BOOST_AUTO_UNIT_TEST( cayley_element_muldiv_op_test )
 }
 
 // Scalar multiplication and division member functions
-BOOST_AUTO_UNIT_TEST( cayley_scalar_muldiv_self_test )
+BOOST_AUTO_TEST_CASE( cayley_scalar_muldiv_self_test )
 {
     using boost::bad_rational;
 
@@ -892,7 +892,7 @@ BOOST_AUTO_UNIT_TEST( cayley_scalar_muldiv_self_test )
 }
 
 // Element multiplication and division member functions
-BOOST_AUTO_UNIT_TEST( cayley_element_muldiv_self_test )
+BOOST_AUTO_TEST_CASE( cayley_element_muldiv_self_test )
 {
     // signed elements
     nce const  c1( 0 ), c2( 0, true ), c3( 1 ), c4( 2, true );
@@ -938,7 +938,7 @@ BOOST_AUTO_UNIT_TEST( cayley_element_muldiv_self_test )
 }
 
 // Shifting
-BOOST_AUTO_UNIT_TEST( cayley_element_shift_op_test )
+BOOST_AUTO_TEST_CASE( cayley_element_shift_op_test )
 {
     // basic elements
     BOOST_CHECK_EQUAL( ce(0) << 2, ce(2) );
@@ -963,7 +963,7 @@ BOOST_AUTO_UNIT_TEST( cayley_element_shift_op_test )
 }
 
 // Shifting member functions
-BOOST_AUTO_UNIT_TEST( cayley_element_shift_self_test )
+BOOST_AUTO_TEST_CASE( cayley_element_shift_self_test )
 {
     // basic elements
     ce const  c1( 0 ), c2( 1 ), c3( 10 );
@@ -1003,7 +1003,7 @@ BOOST_AUTO_UNIT_TEST( cayley_element_shift_self_test )
 }
 
 // Component functions
-BOOST_AUTO_UNIT_TEST( cayley_element_component_test )
+BOOST_AUTO_TEST_CASE( cayley_element_component_test )
 {
     ce const       c1( 0 ), c2( 1 ), c3( 2 );
     nce const      c4( 0 ), c5( 1, true ), c6( 3 );
@@ -1044,7 +1044,7 @@ BOOST_AUTO_UNIT_TEST( cayley_element_component_test )
 }
 
 // Element to integer scalar power
-BOOST_AUTO_UNIT_TEST( cayley_element_integer_power_test )
+BOOST_AUTO_TEST_CASE( cayley_element_integer_power_test )
 {
     ce const   c1( 0 ), c2( 1 ), c3( 2 );
     nce const  c1a( c1 ), c2a( c2 ), c3a( c3 ), c4 = -c1, c5 = -c2, c6 = -c3;
