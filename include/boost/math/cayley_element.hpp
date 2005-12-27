@@ -355,8 +355,9 @@ template < typename T >
 
 //  Cayley algebra element classes declarations  -----------------------------//
 
-//! Represents a Cayley-Dickson hypercomplex element unit
-/** Represents a unit (\e i.e. length and direction +1) for a Cayley-Dickson
+/** \brief  Represents a Cayley-Dickson hypercomplex element unit
+
+    Represents a unit (\e i.e. length and direction +1) for a Cayley-Dickson
     hypercomplex element.  The desired basis is determined at run-time.
  */
 class cayley_element
@@ -367,14 +368,16 @@ class cayley_element
 
 public:
     // Types
-    //! Type for enumerating hypercomplex bases
-    /** Represents an index for an individual basis.  0 is for the real numbers,
+    /** \brief  Type for enumerating hypercomplex bases
+
+        Represents an index for an individual basis.  0 is for the real numbers,
         1 for imaginary units, 2 and 3 for the quaternion units, 4 through 7 for
         the octonion units, \e etc.
      */
     typedef std::size_t  index_type;
-    //! Type for enumerating Cayley-Dickson construction levels
-    /** Represents a level that a basis can belong to.  0 is for real numbers,
+    /** \brief  Type for enumerating Cayley-Dickson construction levels
+
+        Represents a level that a basis can belong to.  0 is for real numbers,
         1 for complex numbers, 2 for quaternions, 3 for octonions, \e etc.
      */
     typedef std::size_t  rung_type;
@@ -422,8 +425,9 @@ private:
 
 };  // boost::math::cayley_element
 
-//! Represents hypercomplex units with a sign (positive or negative)
-/** Represents an extension of boost::math::cayley_element by giving run-time
+/** \brief  Represents hypercomplex units with a sign (positive or negative)
+
+    Represents an extension of boost::math::cayley_element by giving run-time
     control over a unit's direction, either positive or negative.  (The length
     stays at 1.)
  */
@@ -435,11 +439,13 @@ class negated_cayley_element
 
 public:
     // Types
-    //! Type for enumerating hypercomplex bases
-    /** \see boost::math::cayley_element::index_type */
+    /** \brief  Type for enumerating hypercomplex bases
+        \see boost::math::cayley_element::index_type 
+     */
     typedef cayley_element::index_type  index_type;
-    //! Type for enumerating Cayley-Dickson construction levels
-    /** \see boost::math::cayley_element::rung_type */
+    /** \brief  Type for enumerating Cayley-Dickson construction levels
+        \see boost::math::cayley_element::rung_type
+     */
     typedef cayley_element::rung_type  rung_type;
 
     // Lifetime management (use automatic destructor and copy constructor)
@@ -497,8 +503,9 @@ private:
 
 };  // boost::math::negated_cayley_element
 
-//! Represents hypercomplex elements as a unit and a real scale
-/** Represents an extension of boost::math::cayley_element by giving run-time
+/** \brief  Represents hypercomplex elements as a unit and a real scale
+
+    Represents an extension of boost::math::cayley_element by giving run-time
     control over an element's length \e via a scale factor.  This may include
     direction if the scale's type allows negative values.
 
@@ -529,19 +536,22 @@ class scaled_cayley_element
 
 public:
     // Template parameters
-    //! Type for the scalar coefficient
-    /** Represents the scale factor applied to a hypercomplex element.  This
+    /** \brief  Type for the scalar coefficient
+
+        Represents the scale factor applied to a hypercomplex element.  This
         alias exposes the type for later meta-programming.
         \see std::complex::value_type
      */
     typedef RealType  value_type;
 
     // Other types
-    //! Type for enumerating hypercomplex bases
-    /** \see boost::math::cayley_element::index_type */
+    /** \brief  Type for enumerating hypercomplex bases
+        \see boost::math::cayley_element::index_type
+     */
     typedef cayley_element::index_type  index_type;
-    //! Type for enumerating Cayley-Dickson construction levels
-    /** \see boost::math::cayley_element::rung_type */
+    /** \brief  Type for enumerating Cayley-Dickson construction levels
+        \see boost::math::cayley_element::rung_type
+     */
     typedef cayley_element::rung_type  rung_type;
 
     // Lifetime management (use automatic destructor and copy constructor)
