@@ -757,7 +757,7 @@ negated_cayley_element::operator bool_type() const
 template < typename T >
 inline
 scaled_cayley_element<T>::operator bool_type() const
-{ return /*this->s_*/ ( this->s_ != T() ) ? &self_type::dummy::d : NULL; }
+{ return this->s_ ? &self_type::dummy::d : NULL; }
 
 
 //  Cayley algebra elements constructor definitions  -------------------------//
@@ -948,7 +948,7 @@ operator ==
 )
 {
     // if both scales are zero, then they're equal, no matter the bases
-    return ( l.scale() == r.scale() ) && ( /*!l.scale()*/(l.scale() == T()) || (l.basis()
+    return ( l.scale() == r.scale() ) && ( !l.scale() || (l.basis()
      == r.basis()) );
 }
 
@@ -1355,7 +1355,7 @@ arg( scaled_cayley_element<T> const &x )
 {
     using std::atan2;
 
-    return /*x.scale()*/ ( x.scale() != T() ) ? ( x.basis() ? atan2(abs( x ), T()) : atan2(T(),
+    return x.scale() ? ( x.basis() ? atan2(abs( x ), T()) : atan2(T(),
      x.scale()) ) : T();
 }
 
@@ -1425,7 +1425,7 @@ sgn( negated_cayley_element const &x )
 template < typename T >
 inline  scaled_cayley_element<T>
 sgn( scaled_cayley_element<T> const &x )
-{ return /*x.scale()*/ ( x.scale() != T() ) ? negated_cayley_element( x.basis(), x.scale() < T() ) : x; }
+{ return x.scale() ? negated_cayley_element( x.basis(), x.scale() < T() ) : x; }
 
 /** Computes the multiplicative inverse of an element.
 
@@ -1584,7 +1584,7 @@ template < typename T >
 scaled_cayley_element<T> &
 scaled_cayley_element<T>::sign_self()
 {
-    if ( /*this->s_*/ this->s_ != T() )
+    if ( this->s_ )
     {
         this->s_ = static_cast<T>( (this->s_ < T()) ? -1 : +1 );
     }
