@@ -559,10 +559,13 @@ void test(T)
    static const T m_one = -1;
    BOOST_CHECK_EQUAL(boost::math::log1p(zero), zero);
    BOOST_CHECK_EQUAL(boost::math::log1p(-zero), zero);
-   BOOST_CHECK_EQUAL(boost::math::log1p(m_one), -std::numeric_limits<T>::infinity());
    BOOST_CHECK_EQUAL(boost::math::expm1(zero), zero);
-   BOOST_CHECK_EQUAL(boost::math::expm1(-std::numeric_limits<T>::infinity()), m_one);
-   BOOST_CHECK_EQUAL(boost::math::expm1(std::numeric_limits<T>::infinity()), std::numeric_limits<T>::infinity());
+   if(std::numeric_limits<T>::has_infinity)
+   {
+      BOOST_CHECK_EQUAL(boost::math::log1p(m_one), -std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(boost::math::expm1(-std::numeric_limits<T>::infinity()), m_one);
+      BOOST_CHECK_EQUAL(boost::math::expm1(std::numeric_limits<T>::infinity()), std::numeric_limits<T>::infinity());
+   }
 }
 
 
