@@ -49,4 +49,4 @@ typename Functor::result_type kahan_sum_series(Functor& func, int bits)
 
 } } } // namespaces
 
-#endif // BOOST_MATH_HYPOT_INCLUDED
+#endif // BOOST_MATH_SERIES_INCLUDED
