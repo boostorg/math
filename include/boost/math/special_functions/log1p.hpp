@@ -7,6 +7,7 @@
 #define BOOST_MATH_LOG1P_INCLUDED
 
 #include <cmath>
+#include <math.h> // platform's ::log1p
 #include <boost/limits.hpp>
 #include <boost/math/special_functions/detail/series.hpp>
 
