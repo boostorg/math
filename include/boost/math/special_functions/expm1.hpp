@@ -7,6 +7,7 @@
 #define BOOST_MATH_EXPM1_INCLUDED
 
 #include <cmath>
+#include <math.h> // platform's ::expm1
 #include <boost/limits.hpp>
 #include <boost/math/special_functions/detail/series.hpp>
 
