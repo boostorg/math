@@ -84,6 +84,20 @@ T expm1(T x)
    T result = detail::kahan_sum_series(s, std::numeric_limits<T>::digits + 2);
    return result;
 }
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+inline float expm1(float z)
+{
+   return expm1<float>(z);
+}
+inline double expm1(double z)
+{
+   return expm1<double>(z);
+}
+inline long double expm1(long double z)
+{
+   return expm1<long double>(z);
+}
+#endif
 
 #ifdef expm1
 #  ifndef BOOST_HAS_expm1

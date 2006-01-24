@@ -84,8 +84,24 @@ T log1p(T x)
    if(a < std::numeric_limits<T>::epsilon())
       return x;
    detail::log1p_series<T> s(x);
-   return detail::kahan_sum_series(s, std::numeric_limits<T>::digits + 2); 
+   return detail::kahan_sum_series(s, std::numeric_limits<T>::digits + 2);
 }
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+// these overloads work around a type deduction bug:
+inline float log1p(float z)
+{
+   return log1p<float>(z);
+}
+inline double log1p(double z)
+{
+   return log1p<double>(z);
+}
+inline long double log1p(long double z)
+{
+   return log1p<long double>(z);
+}
+#endif
+
 #ifdef log1p
 #  ifndef BOOST_HAS_LOG1P
 #     define BOOST_HAS_LOG1P
