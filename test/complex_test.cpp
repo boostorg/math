@@ -110,6 +110,8 @@ bool check_complex(const std::complex<T>& a, const std::complex<T>& b, int max_e
 template <class T>
 void test_inverse_trig(T)
 {
+   using namespace std;
+
    static const T interval = static_cast<T>(2.0L/128.0L);
 
    T x, y;
@@ -123,7 +125,7 @@ void test_inverse_trig(T)
          // acos:
          std::complex<T> val(x, y), inter, result;
          inter = boost::math::acos(val);
-         result = std::cos(inter);
+         result = cos(inter);
          if(!check_complex(val, result, 50))
          {
             std::cout << "Error in testing inverse complex cos for type " << typeid(T).name() << std::endl;
@@ -133,7 +135,7 @@ void test_inverse_trig(T)
          }
          // asin:
          inter = boost::math::asin(val);
-         result = std::sin(inter);
+         result = sin(inter);
          if(!check_complex(val, result, 5))
          {
             std::cout << "Error in testing inverse complex sin for type " << typeid(T).name() << std::endl;
@@ -152,7 +154,7 @@ void test_inverse_trig(T)
          // asinh:
          std::complex<T> val(x, y), inter, result;
          inter = boost::math::asinh(val);
-         result = std::sinh(inter);
+         result = sinh(inter);
          if(!check_complex(val, result, 5))
          {
             std::cout << "Error in testing inverse complex sinh for type " << typeid(T).name() << std::endl;
@@ -164,7 +166,7 @@ void test_inverse_trig(T)
          if(!((y == 0) && (x <= 1))) // can't test along the branch cut
          {
             inter = boost::math::acosh(val);
-            result = std::cosh(inter);
+            result = cosh(inter);
             if(!check_complex(val, result, 60))
             {
                std::cout << "Error in testing inverse complex cosh for type " << typeid(T).name() << std::endl;
@@ -190,7 +192,7 @@ void test_inverse_trig(T)
          {
             // atanh:
             val = boost::math::atanh(val);
-            inter = std::tanh(val);
+            inter = tanh(val);
             result = boost::math::atanh(inter);
             if(!check_complex(val, result, tanh_error))
             {
@@ -204,7 +206,7 @@ void test_inverse_trig(T)
             {
                val = std::complex<T>(x, y);
                val = boost::math::atan(val);
-               inter = std::tan(val);
+               inter = tan(val);
                result = boost::math::atan(inter);
                if(!check_complex(val, result, tanh_error))
                {
@@ -219,7 +221,7 @@ void test_inverse_trig(T)
          {
             // atanh:
             inter = boost::math::atanh(val);
-            result = std::tanh(inter);
+            result = tanh(inter);
             if(!check_complex(val, result, tanh_error))
             {
                std::cout << "Error in testing inverse complex atanh for type " << typeid(T).name() << std::endl;
@@ -231,7 +233,7 @@ void test_inverse_trig(T)
             if(!((x == 0) && (std::fabs(y) == 1))) // we can't test infinities here
             {
                inter = boost::math::atan(val);
-               result = std::tan(inter);
+               result = tan(inter);
                if(!check_complex(val, result, tanh_error))
                {
                   std::cout << "Error in testing inverse complex atan for type " << typeid(T).name() << std::endl;
@@ -268,11 +270,15 @@ void check_spots(const T&)
    T infinity = std::numeric_limits<T>::infinity();
    bool test_infinity = std::numeric_limits<T>::has_infinity;
    T nan = 0;
+   bool test_nan = false;
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+   // numeric_limits reports that a quiet NaN is present
+   // but an attempt to access it will terminate the program!!!!
    if(std::numeric_limits<T>::has_quiet_NaN)
       nan = std::numeric_limits<T>::quiet_NaN();
-   bool test_nan = false;
    if(boost::math::detail::test_is_nan(nan))
       test_nan = true;
+#endif
 
    //
    // C99 spot tests for acos:
@@ -850,4 +856,6 @@ int test_main(int, char*[])
    test_boundaries();
    return 0;
 }
+
+
 
