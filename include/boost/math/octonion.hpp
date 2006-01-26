@@ -44,7 +44,7 @@ namespace boost
                                                                         \
             octonion<type>                unreal() const                \
             {                                                           \
-                return(octonion(static_cast<type>(0),b,c,d,e,f,g,h));   \
+                return( octonion<type>(static_cast<type>(0),b,c,d,e,f,g,h));   \
             }                                                           \
                                                                         \
             type                            R_component_1() const       \
