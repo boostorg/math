@@ -279,6 +279,10 @@ void check_spots(const T&)
    if(boost::math::detail::test_is_nan(nan))
       test_nan = true;
 #endif
+#if defined(__DECCXX) && !defined(_IEEE_FP)
+   // Tru64 cxx traps infinities unless the -ieee option is used:
+   test_infinity = false;
+#endif
 
    //
    // C99 spot tests for acos:
