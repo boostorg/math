@@ -1,0 +1,314 @@
+
+[def __asinh [link boost_math.math_special_functions.asinh asinh]]
+[def __acosh [link boost_math.math_special_functions.acosh acosh]]
+[def __atanh [link boost_math.math_special_functions.atanh atanh]]
+[def __sinc_pi [link boost_math.math_special_functions.sinc_pi sinc_pi]]
+[def __sinhc_pi [link boost_math.math_special_functions.sinhc_pi sinhc_pi]]
+
+[def __log1p [link boost_math.math_special_functions.log1p log1p]]
+[def __expm1 [link boost_math.math_special_functions.expm1 expm1]]
+[def __hypot [link boost_math.math_special_functions.hypot hypot]]
+
+[def __form1 [^\[0;+'''&#x221E;'''\[]]
+[def __form2 [^\]-'''&#x221E;''';+1\[]]
+[def __form3 [^\]-'''&#x221E;''';-1\[]]
+[def __form4 [^\]+1;+'''&#x221E;'''\[]]
+[def __form5 `[^\[-1;-1+'''&#x03B5;'''\[]]
+[def __form6 '''&#x03B5;''']
+[def __form7 [^\]+1-'''&#x03B5;''';+1\]]]
+
+[def __effects [*Effects: ]]
+[def __formula [*Formula: ]]
+[def __exm1 '''<code>e<superscript>x</superscript> - 1</code>''']
+[def __ex '''<code>e<superscript>x</superscript></code>''']
+[def __te '''2&#x03B5;''']
+
+
+[section Math Special Functions]
+
+[section Overview]
+
+The Special Functions library currently provides eight templated special functions, 
+in namespace boost. Two of these (__sinc_pi and __sinhc_pi) are needed by our 
+implementation of quaternions and octonions.
+
+The functions __acosh, __asinh and __atanh are entirely classical, 
+the function __sinc_pi sees heavy use in signal processing tasks, 
+and the function __sinhc_pi is an ad'hoc function whose naming is modelled on 
+__sinc_pi and hyperbolic functions.
+
+The functions __log1p, __expm1 and __hypot are all part of the C99 standard
+but not yet C++.  Two of these (__log1p and __hypot) were needed for the
+[link boost_math.inverse_complex complex number inverse trigonometric functions].
+
+The functions implemented here can throw standard exceptions, but no 
+exception specification has been made.
+
+[endsect]
+
+[section Header Files]
+
+The interface and implementation for each function (or forms of a function) 
+are both supplied by one header file:
+
+* [@../../boost/math/special_functions/acosh.hpp acosh.hpp]
+* [@../../boost/math/special_functions/asinh.hpp asinh.hpp]
+* [@../../boost/math/special_functions/atanh.hpp atanh.hpp]
+* [@../../boost/math/special_functions/expm1.hpp expm1.hpp]
+* [@../../boost/math/special_functions/hypot.hpp hypot.hpp]
+* [@../../boost/math/special_functions/log1p.hpp log1p.hpp]
+* [@../../boost/math/special_functions/sinc.hpp sinc.hpp]
+* [@../../boost/math/special_functions/sinhc.hpp sinhc.hpp] 
+    
+[endsect]
+
+[section Synopsis]
+
+   namespace boost{ namespace math{
+
+   template<typename T>
+   T __acosh(const T x);
+
+   template<typename T>
+   T __asinh(const T x);
+
+   template<typename T>
+   T __atanh(const T x);
+   
+   template<typename T>
+   T __expm1(const T x);
+   
+   template<typename T>
+   T __hypot(const T x);
+   
+   template<typename T>
+   T __log1p(const T x);
+
+   template<typename T>
+   T __sinc_pi(const T x);
+
+   template<typename T, template<typename> class U>
+   U<T> __sinc_pi(const U<T> x);
+
+   template<typename T>
+   T __sinhc_pi(const T x);
+
+   template<typename T, template<typename> class U>
+   U<T> __sinhc_pi(const U<T> x);
+
+   }
+   }
+
+[endsect]
+
+[section acosh]
+
+   template<typename T> 
+   T acosh(const T x);
+
+Computes the reciprocal of (the restriction to the range of __form1) 
+[link boost_math.background_information_and_white_papers.the_inverse_hyperbolic_functions 
+the hyperbolic cosine function], at x. Values returned are positive. Generalised 
+Taylor series are used near 1 and Laurent series are used near the 
+infinity to ensure accuracy.
+
+If x is in the range __form2 a quiet NaN is returned (if the system allows, 
+otherwise a `domain_error` exception is generated).
+
+[endsect]
+
+[section asinh]
+
+   template<typename T> 
+   T asinh(const T x);
+
+Computes the reciprocal of 
+[link boost_math.background_information_and_white_papers.the_inverse_hyperbolic_functions
+the hyperbolic sine function]. 
+Taylor series are used at the origin and Laurent series are used near the 
+infinity to ensure accuracy.
+
+[endsect]
+
+[section atanh]
+
+   template<typename T> 
+   T atanh(const T x);
+
+Computes the reciprocal of 
+[link boost_math.background_information_and_white_papers.the_inverse_hyperbolic_functions
+the hyperbolic tangent function], at x. 
+Taylor series are used at the origin to ensure accuracy.
+
+If x is in the range 
+__form3
+or in the range 
+__form4
+a quiet NaN is returned 
+(if the system allows, otherwise a `domain_error` exception is generated).
+
+If x is in the range 
+__form5, 
+minus infinity is returned 
+(if the system allows, otherwise an `out_of_range` exception 
+is generated), with 
+__form6
+denoting numeric_limits<T>::epsilon().
+
+If x is in the range 
+__form7, 
+plus infinity is returned (if the system allows, 
+otherwise an `out_of_range` exception is generated), with 
+__form6
+denoting 
+numeric_limits<T>::epsilon().
+
+[endsect]
+
+[section:expm1 expm1]
+
+   template <class T>
+   T expm1(T t);
+
+__effects returns __exm1.
+
+For small x, then __ex is very close to 1, as a result calculating __exm1 results
+in catastrophic cancellation errors when x is small.  `expm1` calculates __exm1 using
+a series expansion when x is small (giving an accuracy of less than __te).
+
+Finally when BOOST_HAS_EXPM1 is defined then the `float/double/long double` 
+specializations of this template simply forward to the platform's 
+native implementation of this function.
+
+[endsect]
+
+[section:hypot hypot]
+
+   template <class T>
+   T hypot(T x, T y);
+   
+__effects computes [$../../libs/math/doc/images/hypot.png] in such a way as to avoid undue underflow and overflow.
+
+When calculating [$../../libs/math/doc/images/hypot.png] it's quite easy for the intermediate terms to either
+overflow or underflow, even though the result is in fact perfectly representable.
+One possible alternative form is [$../../libs/math/doc/images/hypot2.png], but that can overflow or underflow
+if x and y are of very differing magnitudes.  The `hypot` function takes care of 
+all the special cases for you, so you don't have to.
+
+[endsect]
+
+[section:log1p log1p]
+
+   template <class T>
+   T log1p(T x);
+   
+__effects returns the natural logarithm of `x+1`.
+
+There are many situations where it is desirable to compute `log(x+1)`. 
+However, for small `x` then `x+1` suffers from catastrophic cancellation errors 
+so that `x+1 == 1` and `log(x+1) == 0`, when in fact for very small x, the 
+best approximation to `log(x+1)` would be `x`.  `log1p` calculates the best
+approximation to `log(1+x)` using a Taylor series expansion for accuracy 
+(less than __te).
+Note that there are faster methods available, for example using the equivalence:
+
+   log(1+x) == (log(1+x) * x) / ((1-x) - 1)
+
+However, experience has shown that these methods tend to fail quite spectacularly
+once the compiler's optimizations are turned on.  In contrast, the series expansion
+method seems to be reasonably immune optimizer-induced errors.
+
+Finally when BOOST_HAS_LOG1P is defined then the `float/double/long double` 
+specializations of this template simply forward to the platform's 
+native implementation of this function.
+
+[endsect]
+
+[section sinc_pi]
+
+   template<typename T> 
+   T sinc_pi(const T x);
+
+   template<typename T, template<typename> class U> 
+   U<T> sinc_pi(const U<T> x);
+
+Computes 
+[link boost_math.background_information_and_white_papers.sinus_cardinal_and_hyperbolic_sinus_cardinal_functions 
+the Sinus Cardinal] of x. The second form is for complexes, 
+quaternions, octonions... Taylor series are used at the origin 
+to ensure accuracy.
+
+[endsect]
+
+[section sinhc_pi]
+
+   template<typename T> 
+   T sinhc_pi(const T x);
+
+   template<typename T, template<typename> class U> 
+   U<T> sinhc_pi(const U<T> x);
+
+Computes 
+[link boost_math.background_information_and_white_papers.sinus_cardinal_and_hyperbolic_sinus_cardinal_functions
+the Hyperbolic Sinus Cardinal] of x. The second form is for 
+complexes, quaternions, octonions... Taylor series are used at the origin 
+to ensure accuracy.
+
+[endsect]
+
+[section Test Programs]
+
+The [@../../libs/math/special_functions/special_functions_test.cpp 
+special_functions_test.cpp] 
+and [@../../libs/math/test/log1p_expm1_test.cpp log1p_expm1_test.cpp] test programs test the functions for 
+float, double and long double arguments ([@../../libs/math/special_functions/output.txt sample output], with message 
+output enabled).
+
+If you define the symbol BOOST_SPECIAL_FUNCTIONS_TEST_VERBOSE, you will 
+get additional output 
+([@../../libs/math/special_functions/output_more.txt verbose output]), 
+which may prove useful for 
+tuning on your platform (the library use "reasonable" tolerances, 
+which may prove to be too strict for your platform); this will only be 
+helpfull if you enable message output at the same time, of course 
+(by uncommenting the relevant line in the test or by adding `--log_level=messages` 
+to your command line,...).
+
+[endsect]
+
+[section Acknowledgements]
+
+The mathematical text has been typeset with [@http://www.nisus-soft.com/ 
+Nisus Writer], and the 
+illustrations have been made with [@http://www.pacifict.com/
+Graphing Calculator]. Jens Maurer 
+was the Review Manager for this library. More acknowledgements in the 
+History section. Thank you to all who contributed to the discution 
+about this library.
+
+[endsect]
+
+[section History]
+
+* 1.5.0 - 17/12/2005: John Maddock added __log1p, __expm1 and __hypot.  Converted documentation to Quickbook Format.
+* 1.4.2 - 03/02/2003: transitionned to the unit test framework; <boost/config.hpp> now included by the library headers (rather than the test files).
+* 1.4.1 - 18/09/2002: improved compatibility with Microsoft compilers.
+* 1.4.0 - 14/09/2001: added (after rewrite) __acosh and __asinh, which were submited by Eric Ford; applied changes for Gcc 2.9.x suggested by John Maddock; improved accuracy; sanity check for test file, related to accuracy.
+* 1.3.2 - 07/07/2001: introduced namespace math.
+* 1.3.1 - 07/06/2001:(end of Boost review) split special_functions.hpp into atanh.hpp, sinc.hpp and sinhc.hpp; improved efficiency of __atanh with compile-time technique (Daryle Walker); improved accuracy of all functions near zero (Peter Schmitteckert).
+* 1.3.0 - 26/03/2001: support for complexes & all, for cardinal functions.
+* 1.2.0 - 31/01/2001: minor modifications for Koenig lookup.
+* 1.1.0 - 23/01/2001: boostification.
+* 1.0.0 - 10/08/1999: first public version. 
+
+[endsect]
+
+[section To Do]
+
+* Add more functions.
+* Improve test of each function. 
+
+[endsect]    
+[endsect]
+
+

@@ -1,0 +1,89 @@
+
+[def __form1 [^\]-1;1\[]]
+[def __form2 [^\[0;+'''&#x221E;'''\[]]
+[def __form3 [^\[+1;+'''&#x221E;'''\[]]
+[def __form4 [^\]-'''&#x221E;''';0\]]]
+[def __form5 [^x '''&#x2265;''' 0]]
+
+
+[section Background Information and White Papers]
+
+[section The Inverse Hyperbolic Functions]
+
+The exponential funtion is defined, for all object for which this makes sense, 
+as the power series 
+[$../../libs/math/special_functions/graphics/special_functions_blurb1.jpeg], 
+with ['[^n! = 1x2x3x4x5...xn]] (and ['[^0! = 1]] by definition) being the factorial of ['[^n]]. 
+In particular, the exponential function is well defined for real numbers, 
+complex number, quaternions, octonions, and matrices of complex numbers, 
+among others.
+
+[: ['[*Graph of exp on R]] ]
+
+[: [$../../libs/math/special_functions/graphics/exp_on_R.png] ]
+
+[: ['[*Real and Imaginary parts of exp on C]]]
+[: [$../../libs/math/special_functions/graphics/Im_exp_on_C.png]]
+
+The hyperbolic functions are defined as power series which 
+can be computed (for reals, complex, quaternions and octonions) as:
+
+Hyperbolic cosine: [$../../libs/math/special_functions/graphics/special_functions_blurb5.jpeg]
+
+Hyperbolic sine: [$../../libs/math/special_functions/graphics/special_functions_blurb6.jpeg]
+
+Hyperbolic tangent: [$../../libs/math/special_functions/graphics/special_functions_blurb7.jpeg]
+
+[: ['[*Trigonometric functions on R (cos: purple; sin: red; tan: blue)]]]
+[: [$../../libs/math/special_functions/graphics/trigonometric.png]]
+
+[: ['[*Hyperbolic functions on r (cosh: purple; sinh: red; tanh: blue)]]]
+[: [$../../libs/math/special_functions/graphics/hyperbolic.png]]
+
+The hyperbolic sine is one to one on the set of real numbers, 
+with range the full set of reals, while the hyperbolic tangent is 
+also one to one on the set of real numbers but with range __form1, and 
+therefore both have inverses. The hyperbolic cosine is one to one from __form2 
+onto __form3 (and from __form4 onto __form3); the inverse function we use 
+here is defined on __form3 with range __form2.
+
+The inverse of the hyperbolic tangent is called the Argument hyperbolic tangent, 
+and can be computed as [$../../libs/math/special_functions/graphics/special_functions_blurb15.jpeg].
+
+The inverse of the hyperbolic sine is called the Argument hyperbolic sine, 
+and can be computed (for __form5) as [$../../libs/math/special_functions/graphics/special_functions_blurb17.jpeg].
+
+The inverse of the hyperbolic cosine is called the Argument hyperbolic cosine, 
+and can be computed as [$../../libs/math/special_functions/graphics/special_functions_blurb18.jpeg].
+
+[endsect]
+
+[section Sinus Cardinal and Hyperbolic Sinus Cardinal Functions]
+
+The Sinus Cardinal family of functions (indexed by the family of indices [^a > 0]) 
+is defined by 
+[$../../libs/math/special_functions/graphics/special_functions_blurb20.jpeg]; 
+it sees heavy use in signal processing tasks.
+
+By analogy, the Hyperbolic Sinus Cardinal family of functions 
+(also indexed by the family of indices [^a > 0]) is defined by 
+[$../../libs/math/special_functions/graphics/special_functions_blurb22.jpeg].
+
+These two families of functions are composed of entire functions.
+
+[: ['[*Sinus Cardinal of index pi (purple) and Hyperbolic Sinus Cardinal of index pi (red) on R]]]
+[: [$../../libs/math/special_functions/graphics/sinc_pi_and_sinhc_pi_on_R.png]]
+
+[endsect]
+
+[section The Quaternionic Exponential]
+
+Please refer to the following PDF's:
+
+*[@../../libs/math/quaternion/TQE.pdf The Quaternionic Exponential (and beyond)]
+*[@../../libs/math/quaternion/TQE_EA.pdf The Quaternionic Exponential (and beyond) ERRATA & ADDENDA]
+
+[endsect]
+
+[endsect]
+
