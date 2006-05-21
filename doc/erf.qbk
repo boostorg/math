@@ -1,0 +1,132 @@
+[section The Error Functions]
+
+[caution __caution ]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/erf.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T erf(T z);
+   
+   template <class T>
+   T erfc(T z);
+   
+   }} // namespaces
+
+[h4 Description]
+
+   template <class T>
+   T erf(T z);
+   
+Returns the error function of z:
+
+[$../equations/erf1.png]
+
+[$../graphs/erf1.png]
+
+   template <class T>
+   T erfc(T z);
+   
+Returns the complement of the error function of z:
+
+[$../equations/erf2.png]
+
+[$../graphs/erf2.png]
+
+[h4 Accuracy]
+
+[table Errors In the Function erf(z)
+[[Mantissa Size] [Platform and Compiler] [z < 0.5]  [0.5 < z < 8] [z > 8]]
+[[53] [Win32, Visual C++ 8] [Peek=0 Mean=0\n\n GSL Peek=2.0 Mean=0.3 \n\nCephes Peek=1.1 Mean=0.7]  [Peek=0.9 Mean=0.09 \n\nGSL Peek=2.3 Mean=0.3 \n\nCephes Peek=1.3 Mean=0.2] [Peek=0 Mean=0\n\nGSL Peek=0 Mean=0 \n\nCephes Peek=0 Mean=0]]
+[[64] [RedHat Linux IA32, gcc-3.3] [Peek=0.7 Mean=0.07\n\n Native Peek=0.9 Mean=0.2]  [Peek=0.9 Mean=0.2\n\n Native Peek=0.9 Mean=0.07] [Peek=0 Mean=0\n\n Native Peek=0 Mean=0]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=0.7 Mean=0.07\n\n Native Peek=0 Mean=0]  [Peek=0.9 Mean=0.1\n\n Native Peek=0.5 Mean=0.03] [Peek=0 Mean=0\n\n Native Peek=0 Mean=0]]
+[[113] [HPUX IA64, aCC A.06.06] [Peek=0.8 Mean=0.1\n\n Native Peek=0.9 Mean=0.2]  [Peek=0.9 Mean=0.1\n\n Native Peek=0.5 Mean=0.02] [Peek=0 Mean=0\n\n Native Peek=0 Mean=0]]
+]
+
+[table Errors In the Function erfc(z)
+[[Mantissa Size] [Platform and Compiler] [z < 0.5]  [0.5 < z < 8] [z > 8]]
+[[53] [Win32, Visual C++ 8] [Peek=0.7 Mean=0.06 \n\nGSL Peek=1.0 Mean=0.4 \n\nCephes Peek=0.7 Mean=0.06]  [Peek=0.99 Mean=0.3\n\nGSL Peek=2.6 Mean=0.6 \n\nCephes Peek=3.6 Mean=0.7] [Peek=1.0 Mean=0.2\n\nGSL Peek=3.9 Mean=0.4 \n\nCephes Peek=2.7 Mean=0.4]]
+[[64] [RedHat Linux IA32, gcc-3.3] [Peek=0 Mean=0\n\n Native Peek=0 Mean=0]  [Peek=1.4 Mean=0.3\n\n Native Peek=1.3 Mean=0.3] [Peek=1.6 Mean=0.4\n\n Native Peek=1.3 Mean=0.4]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=0 Mean=0\n\n Native Peek=0 Mean=0]  [Peek=1.4 Mean=0.3\n\n Native Peek=0 Mean=0] [Peek=1.5 Mean=0.4\n\n Native Peek=0 Mean=0] ]
+[[113] [HPUX IA64, aCC A.06.06] [Peek=0 Mean=0\n\n Native Peek=0 Mean=0]  [Peek=1.5 Mean=0.3\n\n Native Peek=0.9 Mean=0.08] [Peek=1.6 Mean=0.4\n\n Native Peek=0.9 Mean=0.1]]
+]
+
+[h4 Testing]
+
+The tests for these functions come in two parts: basic sanity checks uses
+spot values calculated using Mathworld's online calculator, while accuracy 
+checks use high-precision test values calculated at 1000-bit precision with
+NTL::RR and this implementation.  Note that the generic and type-specific
+versions of these functions use differing implementations internally, so this
+gives us reasonably independent test data.  Using our test data to test other
+known "good" implementations also provides an additional sanity check. 
+
+One 
+should note that our tests rely on decimal to binary conversion of floating
+point numbers, and assume that the result will be correctly rounded.  In practice
+it appears that in a few very rare cases the test data may be incorrect in the last bit:
+this depends upon the compiler and standard library used, and means that the 
+relative errors quoted above have to treated somewhat circumspectly.  Using
+binary or hexadecimal coded test data would remove this issue (or at least
+confirm whether it is actually an issue or not), but would make the test data
+unportable, so is not used at present.
+
+[h4 Implementation]
+
+All versions of these functions first use the usual reflection formulas
+to make their arguments positive:
+
+   erf(-z) = 1 - erf(z);
+   
+   erfc(-z) = 2 - erfc(z);  // prefered when -z < -0.5
+   
+   erfc(-z) = 1 + erf(z);   // prefered when -0.5 <= -z < 0
+
+The generic versions of these functions are implemented in terms of
+the incomplete gamma function.
+
+When the mantissa size is recognised (currently for 53, 64 and 113-bit reals,
+plus single precision handled via promotion to double)
+then a series of rational approximations are used.
+
+For `z <= 0.5` then a rational approximation to erf is used, based on the 
+observation that:
+
+   erf(z)/z ~ 1.12....
+   
+Therefore erf is calculated using:
+
+   erf(z) = z * (1.125F + R(z));
+   
+Where the rational approximation R(z) is optimised for absolute error: as
+long as it's absolute error is small enough compared to 1.125 then any 
+roundoff error incured during the computation of R(z) will effectively 
+dissappear from the result.  As a result the error for erf and erfc in this
+region is very low: the last bit is incorrect in only a very small number of 
+cases.
+
+For `z > 0.5` we observe that over a small interval [a, b) then:
+
+   erfc(z) * exp(z*z) * z ~ c
+   
+for some constant c.
+
+Therefore for `z > 0.5` we calculate erfc using:
+
+   erfc(z) = exp(-z*z) * (c + R(z)) / z;
+   
+Again R(z) is optimised for absolute error, and the constant `c` is
+the average of `erfc(z) * exp(z*z) * z` taken at the endpoints of the range.
+Once again as long as the absolute error in R(z) is small
+compared to `c` then `c + R(z)` will be correctly rounded, and the error
+in the result will depend only on the accuracy of the exp function.  In practice
+in all but a very small number of cases the error is confined to the last bit
+of the result.
+
+[endsect]
+

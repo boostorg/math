@@ -1,0 +1,89 @@
+[section Floating Point Classification: Infinities and NaN's]
+
+[h4 Synopsis]
+
+   #define FP_ZERO        /* implementation specific value */
+   #define FP_NORMAL      /* implementation specific value */
+   #define FP_INFINITE    /* implementation specific value */
+   #define FP_NAN         /* implementation specific value */
+   #define FP_SUBNORMAL   /* implementation specific value */
+
+   template <class T>
+   int fpclassify(T t);
+
+   template <class T>
+   bool isfinite(T z);
+
+   template <class T>
+   bool isinf(T t);
+
+   template <class T>
+   bool isnan(T t);
+
+   template <class T>
+   bool isnormal(T t);
+
+[h4 Description]
+
+These functions provide the same functionality as the macros with the same
+name in C99, indeed if the C99 macros are available, then these functions
+are implemented in terms of them, otherwise they rely on std::numeric_limits<>
+to function.
+
+Note that the definition of these functions ['does not suppress the definition
+of these names as macros by math.h] on those platforms that already provide
+these as macros.  That mean that the following have differing meanings:
+
+   using namespace boost::math;
+   
+   // This might call a global macro if defined, 
+   // might not work if the type of z is unsupported 
+   // by the std lib:
+   isnan(z);
+   //
+   // This calls the boost version, works for any type 
+   // that has numeric_limits support :
+   (isnan)(z); 
+   //
+   // As above but with namespace qualification.
+   (boost::math::isnan)(z); 
+   //
+   // This will cause a compiler error is isnan is a native macro:
+   boost::math::isnan(z);
+   
+Detailed descriptions for each of these functions follows: 
+
+   template <class T>
+   int fpclassify(T t);
+   
+Returns an integer value that classifies the value /t/:
+
+[table
+[[FP_ZERO] [If /t/ is zero.]]
+[[FP_NORMAL] [If /t/ is a non-zero, non-denormalised finite value.]]
+[[FP_INFINITE] [If /t/ is plus or minus infinity.]]
+[[FP_NAN] [If /t/ is a NaN.]]
+[[FP_SUBNORMAL] [If /t/ is a denormalised number.]]
+]
+
+   template <class T>
+   bool isfinite(T z);
+
+Returns true only if /z/ is not an infinity or a NaN.
+
+   template <class T>
+   bool isinf(T t);
+
+Returns true only if /z/ is plus or minus infinity.
+
+   template <class T>
+   bool isnan(T t);
+
+Returns true only if /z/ is a NaN.
+
+   template <class T>
+   bool isnormal(T t);
+
+Returns true only if /z/ is a normal number (not zero, infinite, NaN, or denomalised).
+
+[endsect]

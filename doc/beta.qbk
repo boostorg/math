@@ -1,0 +1,108 @@
+[section The Beta Function]
+
+[caution __caution ]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/beta.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T beta(T a, T b);
+   
+   }} // namespaces
+
+[h4 Description]
+
+The beta function is defined by:
+
+[$../equations/beta1.png]
+
+[$../graphs/beta.png]
+
+And for small values:
+
+[$../graphs/beta-small.png]
+
+There are effectively two versions of this function internally: a fully
+generic version that is slow, but reasonably accurate, and a much more
+efficient approximation that is used where the number of digits in the mantissa
+of T correspond to a certain __lanczos.  In practice any built in
+floating point type you will encounter has an appropriate __lanczos
+defined for it.  It is also possible, given enough machine time, to generate
+further __lanczos's using the program libs/math/tools/lanczos_generator.cpp.
+
+[h4 Accuracy]
+
+The following table shows peek errors for various domains of input arguments,
+plus comparisons to other open source implementations where available.  Note that
+only results for the widest floating point type on the system are given as
+narrower types have __zero_error.
+
+[table Peek Errors In the Beta Function
+[[Mantissa Size] [Platform and Compiler] [Errors in range\n0.4 < a,b < 100]  [Errors in range\n1e-6 < a,b < 36]]
+[[53] [Win32, Visual C++ 8] [Peek=99 Mean=22\n\n(GSL Peek=1178 Mean=238)\n(Cephes=1612)]  [Peek=10.7 Mean=2.6\n\n(GSL Peek=12 Mean=2.0)\n(Cephes=174)]]
+[[64] [Red Hat Linux IA32, g++ 3.4.4] [Peek=112.1 Mean=26.9]  [Peek=15.8 Mean=3.6]]
+[[64] [Red Hat Linux IA64, g++ 3.4.4] [Peek=61.4 Mean=19.5]  [Peek=12.2 Mean=3.6]]
+[[113] [HPUX IA64, aCC A.06.06] [Peek=42.03 Mean=13.94]  [Peek=9.8 Mean=3.1]]
+]
+
+Note that the worst errors occur when a or b are large, and that 
+when this is the case the result is very close to zero, so absolute
+errors will be very small.
+
+[h4 Testing]
+
+A mixture of spot tests of exact values, and randomly generated test data are
+used: the test data was computed using NTL::RR at 1000-bit precision.
+
+[h4 Implementation]
+
+Traditional methods of evaluating the beta function either involve evaluating
+the gamma functions directly, or taking logarithms and then 
+exponentiating the result.  However, the former is prone to overflows
+for even very modest arguments, while the latter is prone to cancellation
+errors.  As an alternative, if we regard the gamma function as a white-box
+containing the __lanczos then we can combine the power terms:
+
+[$../equations/beta2.png]
+
+which is almost the ideal solution, however almost all of the error occurs
+in evaluating the power terms when /a/ or /b/ are large.  If we assume that /a > b/
+then the larger of the two power terms can be reduced by a factor of /b/, which
+immediately cuts the maximum error in half:
+
+[$../equations/beta3.png]
+
+This may not be the final solution, but it is very competitive compared to
+other implementation methods.
+
+The generic implementation - where no __lanczos approximation is available - is
+implemented in a very similar way to the generic version of the gamma function.
+Again in order to avoid numerical overflow the power terms that prefix the series and
+continued fraction parts are collected together into:
+
+[$../equations/beta8.png]
+
+where la, lb and lc are the integration limits used for a, b, and a+b.
+
+There are a few special cases worth mentioning:
+
+When /a/ or /b/ are less than one, we can use the recurrence relations:
+
+[$../equations/beta4.png]
+
+[$../equations/beta5.png]
+
+To move to a more favorable region where they are both greater than 1.
+
+In addition:
+
+[$../equations/beta7.png]
+
+
+[endsect]
+

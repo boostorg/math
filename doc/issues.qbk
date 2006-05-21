@@ -1,0 +1,43 @@
+[section Known Issues, and Todo List]
+
+[h4 tgamma]
+
+* Can the __lanczos be optimized any further?  (low priority)
+
+[h4 lgamma]
+
+* Improve accuracy near 1 and 2 with either Chebyshev or rational
+approximation. (High priority).
+
+[h4 erf/erfc]
+
+* Rewrite using either Chebyshev or rational
+approximation. (High priority).
+
+[h4 Incomplete gamma]
+
+* Implement Temme's asymptotic expansion for large a and z,
+this one is mainly an issue of performance rather than accuracy (medium priority).
+* Double check behavior of the upper fraction when a is very small and z -> 1 (Medium Priority).
+* Double check behavior of the upper fraction when a is very small and z -> 0 (Medium Priority).
+* Double check for opportunities to chain series expansions together, passing
+the result of one into the initial value of the next (Medium Priority).
+* Investigate asymptotic expansions for large a small z and large z small a
+(see A&S) (low priority).
+
+
+[h4 Beta Function]
+
+* No known issues?
+
+[h4 Incomplete Beta]
+
+* Investigate Didonato and Morris' asymptotic expansion for large a and b 
+(medium priority).
+* Double check for opportunities to chain series expansions together, passing
+the result of one into the initial value of the next (Medium Priority).
+* Investigate Didonato and Morris' asymptotic expansion for small a and b 
+(low priority).
+
+[endsect]
+

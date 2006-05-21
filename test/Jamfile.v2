@@ -1,0 +1,22 @@
+
+# bring in the rules for testing
+import testing ;
+
+project 
+    : requirements 
+      <toolset>gcc:<cxxflags>-Wno-missing-braces
+    ;
+
+run log1p_expm1_test.cpp ;
+run powm1_sqrtp1m1_test.cpp ;
+run test_beta.cpp ; 
+run test_classify.cpp ;
+run test_erf.cpp ;
+run test_gamma.cpp ;
+run test_ibeta.cpp ;
+
+
+
+
+
+

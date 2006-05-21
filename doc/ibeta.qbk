@@ -1,0 +1,122 @@
+[section The Incomplete Beta Function]
+
+[caution __caution ]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/gamma.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T beta(T a, T b, T x);
+   
+   template <class T>
+   T betac(T a, T b, T x);
+   
+   template <class T>
+   T ibeta(T a, T b, T x);
+   
+   template <class T>
+   T ibetac(T a, T b, T x);
+   
+   }} // namespaces
+   
+[h4 Description]
+
+There are four incomplete beta functions: two are normalised versions
+that return values in the range [0, 1], and two are non-normalised and
+return values in the range [0, beta(a, b)].  Users interested in statistical
+applications should use the normalised versions (ibeta and ibetac).
+
+All of these function require /a > 0/, /b > 0/ and /0 <= x <= 1/.
+
+   template <class T>
+   T beta(T a, T b, T x);
+
+Returns the full (non-normalised) incomplete beta function of a, b and x:
+
+[$../equations/ibeta1.png]
+
+   template <class T>
+   T betac(T a, T b, T x);
+
+Returns the full (non-normalised) complement of the incomplete beta function of a, b and x:
+
+[$../equations/ibeta2.png]
+
+   template <class T>
+   T ibeta(T a, T b, T x);
+
+Returns the normalised incomplete beta function of a, b and x:
+
+[$../equations/ibeta3.png]
+
+   template <class T>
+   T ibetac(T a, T zb, T x);
+   
+Returns the normalised complement of the incomplete beta function of a, b and x:
+
+[$../equations/ibeta4.png]
+
+[h4 Accuracy]
+
+The following tables give peek and mean relative errors in over various domains of
+a, b and x, along with comparisons to other open source implementations where available.  
+Note that only results for the widest floating point type on the system are given as
+narrower types have __zero_error.
+
+[table Errors In the Function beta(a, b, x)
+[[Mantissa Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[53] [Win32, Visual C++ 8] [Peek=39 Mean=2.9] [Peek=91 Mean=12.7] [Peek=635 Mean=25]]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peek=49.2 Mean=4.2] [Peek=180.7 Mean=30.1] [Peek~68,580 Mean=2,816]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=49.2 Mean=3.2] [Peek=67.1 Mean=13.4] [Peek~68,380 Mean=2,760]]
+[[113] [HPUX IA64, aCC A.06.06] [Peek=27.3 Mean=3.6] [Peek=49.8 Mean=9.1] [Peek~60,900 Mean=2,920]]
+]
+
+[table Errors In the Function betac(a,b,x)
+[[Mantissa Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[53] [Win32, Visual C++ 8] [Peek=12.0 Mean=2.4] [Peek=91 Mean=15] [Peek=3718 Mean=113]]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peek=19.8 Mean=3.8] [Peek=295.1 Mean=33.9] [Peek~104,400 Mean=5,468]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=19.8 Mean=2.6] [Peek=63.5 Mean=13.6] [Peek~104,500 Mean=5,444]]
+[[113] [HPUX IA64, aCC A.06.06] [Peek=15.6 Mean=3.5] [Peek=39.8 Mean=8.9] [Peek~89,780 Mean=4,946]]
+]
+
+[table Errors In the Function ibeta(a,b,x)
+[[Mantissa Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[53] [Win32, Visual C++ 8] [Peek=42.3 Mean=2.9\n\n(GSL Peek=682 Mean=32.5)\n(Cephes Peek=42.7 Mean=7.0)]  [Peek=108 Mean=16.6\n\n(GSL Peek=690 Mean=151)\n(Cephes Peek=1545 Mean=218)] [Peek=4109 Mean=203\n\n(GSL Peek~390000 Mean~18000)\n(Cephes Peek~560000 Mean~20000)]]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peek=48.4 Mean=3.7] [Peek=270.7 Mean=26.8] [Peek~53,560 Mean=2,948]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=47.3 Mean=3.0] [Peek=112.9 Mean=14.3] [Peek~53,560 Mean=2,893]]
+[[113] [HPUX IA64, aCC A.06.06] [Peek=20.9 Mean=2.6] [Peek=88.1 Mean=14.3] [Peek~25,920 Mean=1,671]]
+]
+
+[table Errors In the Function ibetac(a,b,x)
+[[Mantissa Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[53] [Win32, Visual C++ 8] [Peek=13.9 Mean=2.0]  [Peek=56.2 Mean=14] [Peek=2670 Mean=159]]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peek=20.6 Mean=3.6] [Peek=221.7 Mean=25.8] [Peek~91,790 Mean=3,047]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=15.2 Mean=2.2] [Peek=73.9 Mean=11.9] [Peek~91,790 Mean=3,029]]
+[[113] [HPUX IA64, aCC A.06.06] [Peek=9.9 Mean=2.6] [Peek=117.7 Mean=15.1] [Peek~27,860 Mean=1,195]]
+]
+
+[h4 Testing]
+
+There are two sets of tests: spot tests compare values taken from Mathworld's
+online calculator with this implementation: they provide a basic "sanity check"
+for the implementation, with one spot-test in each implementation-domain 
+(see implementation notes below). 
+ 
+Accuracy tests use data generated at very high precision
+(with NTL's RR class set at 1000-bit precision), using the "textbook"
+continued fraction representation (fraction 1 below).
+Note that this continued fraction is /not/ used in the implementation,
+and therefore we have test data that is fully independent of the code.  
+
+[h4 Implementation]
+
+Under construction: refer to 
+[@http://portal.acm.org/citation.cfm?doid=131766.131776 "Algorithm 708; significant digit computation of the incomplete beta function ratios", DiDonato and Morris, ACM, 1992.]
+
+[endsect]
+

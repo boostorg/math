@@ -1,0 +1,70 @@
+[section The Error Function Inverses]
+
+[caution __caution ]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/erf.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T erf_inv(T p);
+   
+   template <class T>
+   T erfc_inv(T p);
+   
+   }} // namespaces
+
+[h4 Description]
+
+   template <class T>
+   T erf_inv(T z);
+   
+Returns the inverse error function of z, that is a value x such that:
+
+   p = erf(x);
+
+[$../graphs/erf_inv1.png]
+
+   template <class T>
+   T erfc_inv(T z);
+   
+Returns the inverse of the complement of the error function of z, that is a
+value x such that:
+
+   p = erfc(x);
+
+[$../graphs/erf_inv2.png]
+
+[h4 Accuracy]
+
+These functions are deliberately "detuned" to be not too accurate in order to avoid
+undue iterations during their calculation.  The relative error in these functions
+will be similar for all types T at around 3 to 15 epsilon.
+
+[h4 Testing]
+
+There are two sets of tests: 
+
+* Basic sanity checks attempt to "round-trip" from
+/x/ to /p/ and back again.  These tests have quite
+generous tolerances: in general both the error functions and their
+inverses change so rapidly in some places, that round tripping to more than a couple
+of significant digits isn't possible.  This is especially true when
+/p/ is very near one: in this case there isn't enough 
+"information content" in the input to the inverse function to get
+back where you started.
+* Accuracy checks using high precision test values.  These measure
+the accuracy of the result, given /exact/ input values.
+
+[h4 Implementation]
+
+These functions use a rational approximation to calculate an initial
+approximation to the result, then clean up the value using Halley iteration.
+No more than 3 iterations are required in practice.
+
+[endsect]
+

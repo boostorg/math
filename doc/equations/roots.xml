@@ -1,0 +1,200 @@
+<?xml version='1.0'?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN'
+  'http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd'
+  [<!ENTITY mathml 'http://www.w3.org/1998/Math/MathML'>]>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<!-- MathML created with MathCast Equation Editor version 0.83 -->
+</head>
+<body>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <msub>
+      <mi>x</mi>
+      <mrow>
+        <mi>N</mi>
+        <mo>+</mo>
+        <mn>1</mn>
+      </mrow>
+    </msub>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <msub>
+      <mi>x</mi>
+      <mi>N</mi>
+    </msub>
+    <mo>&minus;</mo>
+    <mfrac>
+      <mrow>
+        <mi>f</mi>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+      <mrow>
+        <mi>f</mi>
+        <mo>&prime;</mo>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <msub>
+      <mi>x</mi>
+      <mrow>
+        <mi>N</mi>
+        <mo>+</mo>
+        <mn>1</mn>
+      </mrow>
+    </msub>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <msub>
+      <mi>x</mi>
+      <mi>N</mi>
+    </msub>
+    <mo>&minus;</mo>
+    <mfrac>
+      <mrow>
+        <mn>2</mn>
+        <mi>f</mi>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+        </mfenced>
+        <mi>f</mi>
+        <mo>&prime;</mo>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+      <mrow>
+        <mn>2</mn>
+        <msup>
+          <mfenced>
+            <mrow>
+              <mi>f</mi>
+              <mo>&prime;</mo>
+              <mfenced>
+                <mrow>
+                  <mi>x</mi>
+                </mrow>
+              </mfenced>
+            </mrow>
+          </mfenced>
+          <mn>2</mn>
+        </msup>
+        <mo>&minus;</mo>
+        <mi>f</mi>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+        </mfenced>
+        <mi>f</mi>
+        <mo>&Prime;</mo>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <msub>
+      <mi>x</mi>
+      <mrow>
+        <mi>N</mi>
+        <mo>+</mo>
+        <mn>1</mn>
+      </mrow>
+    </msub>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <msub>
+      <mi>x</mi>
+      <mi>N</mi>
+    </msub>
+    <mo>&minus;</mo>
+    <mfrac>
+      <mrow>
+        <mi>f</mi>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+      <mrow>
+        <mi>f</mi>
+        <mo>&prime;</mo>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+    </mfrac>
+    <mo>&minus;</mo>
+    <mfrac>
+      <mrow>
+        <mi>f</mi>
+        <mo>&Prime;</mo>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+        </mfenced>
+        <msup>
+          <mfenced>
+            <mrow>
+              <mi>f</mi>
+              <mfenced>
+                <mrow>
+                  <mi>x</mi>
+                </mrow>
+              </mfenced>
+            </mrow>
+          </mfenced>
+          <mn>2</mn>
+        </msup>
+      </mrow>
+      <mrow>
+        <mn>2</mn>
+        <msup>
+          <mfenced>
+            <mrow>
+              <mi>f</mi>
+              <mo>&prime;</mo>
+              <mfenced>
+                <mrow>
+                  <mi>x</mi>
+                </mrow>
+              </mfenced>
+            </mrow>
+          </mfenced>
+          <mn>3</mn>
+        </msup>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>
+</body>
+</html>

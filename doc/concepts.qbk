@@ -1,0 +1,66 @@
+[section Using With NTL]
+
+The special functions and tools in this library can be used with NTL::RR and
+to a lesser extent with NTL::quad_float.  In order to do so you will need to
+apply the following patch to NTL: libs/math/tools/ntl.diff
+This patch adds trivial converting constructors to NTL::RR and NTL::quad_float,
+and forces conversions to RR to proceed via `long double` rather than `double`.
+The latter change is essential to accurately measure relative errors between
+high precision calculations (using NTL::RR) and fixed precision calculations
+(using `long double`).  These occur, if for example, you are generating additional
+__lanczos's.
+
+You will also need to include NTL via the header `<boost/math/tools/ntl.hpp>`
+and include that header /before/ you include any of the special function headers.
+Rationale: the header `<boost/math/tools/ntl.hpp>` includes some traits classes
+and boilerplate code (mostly runtime substitutes for numeric_limits) that are
+required by the special functions.  Unfortunately, some of the stricter compilers
+require these definitions to be seen before the templates that will use them are
+parsed.
+
+Finally there is a high precision __lanczos suitable for use with NTL::RR, when
+used at 1000-bit precision in libs/math/tools/ntl_rr_lanczos.hpp.  The approximation
+has a theoretical precision of > 90 decimal digits, and an experimental precision 
+of > 100 decimal digits.  To use that approximation, just include that header, before
+any of the special function headers (if you don't use it, you'll get a slower, but
+fully generic implementation for all of the gamma-like functions).
+
+[endsect]
+
+[section Using With Boost.Interval]
+
+There are currently problems comparing two intervals that make it hard to use
+Boost.Interval with this library.  It should be just about possible to make it
+work "as is", but this needs more investigation, and a simple, easy to use solution.
+
+[endsect]
+
+[section Conceptual Requirements]
+
+TODO.
+
+See boost/math/concepts/real_concept.hpp for the current concept-architype
+test case.
+
+Basically requires:
+
+* The usual arithmetic operations.
+* The usual comparison operations.
+* The usual math functions (those in <cmath>).
+* Either `std::numeric_limits` support (the easy way), or a small number
+helper functions that provide the same functionality at runtime
+rather than compile time (see boost/math/tools/precision.hpp).
+* Promotion from the builtin floating point types to T, and the function 
+`real_cast` that converts from T to a narrower floating point type
+(see boost/math/tools/real_cast.hpp).
+
+For efficient and accurate results, a __lanczos is also highly desireable.
+You may be able to adapt an existing approximation from 
+boost/math/special_functions/lanczos.hpp: you will need change
+static_cast's to lexical_cast's, and the constants to /strings/ 
+(in order to ensure the coefficients aren't truncated
+to long double) and then specialise lanczos_traits for type T.  Otherwise
+you may have to hack libs/math/tools/lanczos_generator.cpp to find a suitable
+approximation for your type T.
+
+[endsect]

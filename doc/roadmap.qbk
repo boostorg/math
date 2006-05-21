@@ -1,0 +1,30 @@
+[section Roadmap]
+
+[h4 Milestone 1: Released March 31st 2006]
+
+* Implement gamma/beta/erf functions along with their incomplete counterparts.
+* Generate high quality test data, against which future improvements can be judged.
+* Provide tools for the evaluation of infinite series, continued fractions, and
+rational functions.
+* Provide tools for testing against tabulated test data, and collecting statistics
+on error rates.
+* Provide sufficient docs for people to be able to find their way around the library.
+
+[h4 Milestone 2]
+
+* Implement Newtons method for root finding.
+* Implement Chebyshev approximation generation, and evaluation.
+* Implement Rational function generation??
+* Implement the inverse incomplete gamma and beta functions.
+* Improve erf/erfc, improve lgamma near 1 and 2.
+* Find a way to integrate the statistical results generated from
+the test data with Boost.Test: really needs a database of expected
+results, indexed by test, floating point type, platform, and compiler.
+
+[h4 Milestone 3]
+
+* Implement the main probability distribution and density functions.
+* Implement digamma (differentiate the __lanczos).
+* Release??
+
+[endsect]

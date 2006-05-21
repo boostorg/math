@@ -1,0 +1,40 @@
+[section Rational Function Evaluation]
+
+[caution __caution ]
+
+[h4 synopsis]
+
+``
+#include <boost/math/tools/rational.hpp>
+``
+
+   template <class T, class U, class V>
+   V evaluate_rational(const T* num, const U* denom, V z, unsigned count);
+
+[h4 Description]
+
+Evaluates the rational function (the ratio of two polynomials) described by
+the coefficients stored in /num/ and /demom/.
+
+Both polynomials most have order /count-1/ with /count/ coefficients.
+
+Array /num/ describes the numerator, and /demon/ the denominator.
+
+Coefficients should be stored such that the coefficients for the x^i terms
+are in num[i] and denom[i].
+
+The types of the coefficients and of variable
+/v/ may differ as long as /*num/ and /*denom/ are convertible to type /V/.
+This allows, for example, for one or both of the coefficient tables
+to be a table of integers if this is appropriate.
+
+[h4 Implementation]
+
+Evaluation is by Horners method: with the two polynomials being evaluated
+in parallel to make the most of the processors floating point pipeline.
+If /v/ is greater than one, then the polynomials are evaluated in reverse
+order as polynomials in ['1\/v]: this avoids unnecessary numerical overflow when the
+coefficients are large.
+
+[endsect]
+
