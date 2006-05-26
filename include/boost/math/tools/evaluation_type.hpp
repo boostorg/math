@@ -32,6 +32,16 @@ struct evaluation<float>
       double, float>::type type;
 };
 
+//
+// We don't promote to long double precision if the platform
+// doesn't have long double versions of the C std lib functions.
+//
+// If we did promote in this case we could pass out-of-range values
+// to the C std lib without realising that we were doing so, 
+// as numeric_limits<long double> would give us no clue that we were
+// about to go out of range for a double.
+//
+#if !defined(__CYGWIN__)
 template<>
 struct evaluation<double>
 {
@@ -40,6 +50,7 @@ struct evaluation<double>
       long double,
       double>::type type;
 };
+#endif
 
 }}} // namespaces
 

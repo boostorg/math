@@ -30,6 +30,9 @@ template <class T, class L>
 T beta_imp(T a, T b, const L& l)
 {
    using namespace std;
+
+   if((a <= 0) || (b <= 0))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the beta function.");
    
    T result;
 
@@ -95,6 +98,9 @@ template <class T>
 T beta_imp(T a, T b, const lanczos::undefined_lanczos& l)
 {
    using namespace std;
+
+   if((a <= 0) || (b <= 0))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the beta function.");
 
    T result;
 
@@ -551,10 +557,10 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
    T fract;
    T y = 1 - x;
 
-   BOOST_ASSERT(a > 0);
-   BOOST_ASSERT(b > 0);
-   BOOST_ASSERT(x >= 0);
-   BOOST_ASSERT(x <= 1);
+   if((a <= 0) || (b <= 0))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete beta function.");
+   if((x < 0) || (x > 1))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Parameter x outside the range [0,1] in the incomplete beta function.");
 
    if(x == 0)
       return (invert ? (normalised ? 1 : beta_imp(a, b, l)) : 0);
@@ -719,7 +725,7 @@ T beta(T a, T b)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return static_cast<T>(detail::beta_imp(static_cast<value_type>(a), static_cast<value_type>(b), evaluation_type()));
+   return tools::checked_narrowing_cast<T>(detail::beta_imp(static_cast<value_type>(a), static_cast<value_type>(b), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
@@ -727,7 +733,7 @@ T beta(T a, T b, T x)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return static_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), false, false));
+   return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), false, false), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
@@ -735,7 +741,7 @@ T betac(T a, T b, T x)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return static_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, false));
+   return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, false), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
@@ -743,7 +749,7 @@ T ibeta(T a, T b, T x)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return static_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), false, true));
+   return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), false, true), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
@@ -751,7 +757,7 @@ T ibetac(T a, T b, T x)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return static_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, true));
+   return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, true), BOOST_CURRENT_FUNCTION);
 }
 
 }} // namespaces

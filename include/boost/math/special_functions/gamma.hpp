@@ -12,11 +12,13 @@
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/real_cast.hpp>
+#include <boost/math/tools/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/special_functions/sqrtp1m1.hpp>
 #include <boost/math/special_functions/lanczos.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/assert.hpp>
 #include <cmath>
@@ -114,6 +116,8 @@ T gamma_imp(T z, const L& l)
 {
    using namespace std;
 
+   T result = 1;
+
 #ifdef BOOST_MATH_INSTRUMENT
    static bool b = false;
    if(!b)
@@ -124,14 +128,21 @@ T gamma_imp(T z, const L& l)
 #endif
 
    if((z <= 0) && (floor(z) == z))
-      return std::numeric_limits<T>::quiet_NaN();
+      return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of tgamma at a negative integer.");
    if(z <= -20)
    {
-      return -boost::math::constants::pi<T>() / (gamma_imp(-z, l) * sinpx(z));
+      result = gamma_imp(-z, l) * sinpx(z);
+      if((fabs(result) < 1) && (tools::max_value(result) * fabs(result) < boost::math::constants::pi<T>()))
+         return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
+      result = -boost::math::constants::pi<T>() / result;
+      if(result == 0)
+         return tools::underflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too small to represent.");
+      if(boost::math::fpclassify(result) == FP_SUBNORMAL)
+         return tools::denorm_error<T>(result, BOOST_CURRENT_FUNCTION, "Result of tgamma is denormalized.");
+      return result;
    }
 
    // shift z to > 1:
-   T result = 1;
    while(z < 1)
    {
       result /= z;
@@ -144,6 +155,8 @@ T gamma_imp(T z, const L& l)
       T zgh = (z + L::g() - boost::math::constants::half<T>());
       T hp = pow(zgh, (z / 2) - T(0.25));
       result *= hp / exp(zgh);
+      if(tools::max_value(hp) / hp < result)
+         return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
       result *= hp;
    }
    else
@@ -176,7 +189,7 @@ T lgamma_imp(T z, const L& l, int* sign = 0)
    {
       // reflection formula:
       if(floor(z) == z)
-         return std::numeric_limits<T>::quiet_NaN();
+         return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of lgamma at a negative integer.");
 
       T t = sinpx(z);
       z = -z;
@@ -299,14 +312,22 @@ T lower_gamma_series(T a, T z, int bits)
 // sums added together:
 //
 template <class T>
-T gamma_imp(T z, const lanczos::undefined_lanczos&)
+T gamma_imp(T z, const lanczos::undefined_lanczos& l)
 {
    using namespace std;
+   if((z <= 0) && (floor(z) == z))
+      return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of tgamma at a negative integer.");
    if(z <= -20)
    {
-      if(floor(z) == z)
-         return std::numeric_limits<T>::quiet_NaN();
-      return -boost::math::constants::pi<T>() / (tgamma(-z) * detail::sinpx(z));
+      T result = gamma_imp(-z, l) * sinpx(z);
+      if((fabs(result) < 1) && (tools::max_value(result) * fabs(result) < boost::math::constants::pi<T>()))
+         return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
+      result = -boost::math::constants::pi<T>() / result;
+      if(result == 0)
+         return tools::underflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too small to represent.");
+      if(boost::math::fpclassify(result) == FP_SUBNORMAL)
+         return tools::denorm_error<T>(result, BOOST_CURRENT_FUNCTION, "Result of tgamma is denormalized.");
+      return result;
    }
    //
    // The upper gamma fraction is *very* slow for z < 6, actually it's very
@@ -322,8 +343,11 @@ T gamma_imp(T z, const lanczos::undefined_lanczos&)
    prefix = prefix * pow(z / boost::math::constants::e<T>(), z);
    T sum = detail::lower_gamma_series(z, z, ::boost::math::tools::digits(z)) / z;
    sum += detail::upper_gamma_fraction(z, z, ::boost::math::tools::digits(z));
+   if(fabs(tools::max_value(sum) / prefix) < fabs(sum))
+      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
    return sum * prefix;
 }
+
 template <class T>
 T lgamma_imp(T z, const lanczos::undefined_lanczos&, int*sign)
 {
@@ -334,7 +358,7 @@ T lgamma_imp(T z, const lanczos::undefined_lanczos&, int*sign)
    if(z <= 0)
    {
       if(floor(z) == z)
-         return std::numeric_limits<T>::quiet_NaN();
+         return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of tgamma at a negative integer.");
       T t = detail::sinpx(z);
       z = -z;
       if(t < 0)
@@ -467,6 +491,13 @@ T full_igamma_prefix(T a, T z)
          prefix = exp(alz - z);
       }
    }
+   //
+   // This error handling isn't very good: it happens after the fact
+   // rather than before it...
+   //
+   if(boost::math::fpclassify(prefix) == FP_INFINITE)
+      tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of incomplete gamma function is too large to represent.");
+
    return prefix;
 }
 //
@@ -477,8 +508,11 @@ T tgamma_lower_part(T a, T z)
 {
    using namespace std;
    T prefix = full_igamma_prefix(a, z);
-   T r2 = prefix * detail::lower_gamma_series(a, z, boost::math::tools::digits(a)) / a;
-   return r2;
+   T r2 = detail::lower_gamma_series(a, z, boost::math::tools::digits(a)) / a;
+   if(tools::max_value(r2) / prefix < r2)
+      tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of incomplete gamma function is too large to represent.");
+   prefix *= r2;
+   return prefix;
 }
 //
 // Full upper integral:
@@ -507,9 +541,8 @@ T tgamma_upper_part(T a, T z)
 template <class T>
 T tgamma_imp(T a, T z)
 {
-   // TODO proper domain error checking, handle infinity on z:
-   BOOST_ASSERT(a > 0);
-   BOOST_ASSERT(z >= 0);
+   if((a <= 0) || (z < 0))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete gamma function.");
 
    using namespace std;
 
@@ -536,9 +569,8 @@ T tgamma_imp(T a, T z)
 template <class T>
 T tgamma_lower_imp(T a, T z)
 {
-   // TODO proper domain error checking, handle infinity on z:
-   BOOST_ASSERT(a > 0);
-   BOOST_ASSERT(z >= 0);
+   if((a <= 0) || (z < 0))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete gamma function.");
 
    if(z < (std::max)(a+1, T(10)))
    {
@@ -702,9 +734,8 @@ T regularised_gamma_prefix(T a, T z, const lanczos::undefined_lanczos&)
 template <class T, class L>
 T gamma_Q_imp(T a, T z, const L& l)
 {
-   // TODO proper domain error checking, handle infinity on z:
-   BOOST_ASSERT(a > 0);
-   BOOST_ASSERT(z >= 0);
+   if((a <= 0) || (z < 0))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete gamma function.");
 
    using namespace std;
 
@@ -730,9 +761,8 @@ T gamma_Q_imp(T a, T z, const L& l)
 template <class T, class L>
 T gamma_P_imp(T a, T z, const L& l)
 {
-   // TODO proper domain error checking, handle infinity on z:
-   BOOST_ASSERT(a > 0);
-   BOOST_ASSERT(z >= 0);
+   if((a <= 0) || (z < 0))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete gamma function.");
 
    using namespace std;
 
@@ -756,7 +786,7 @@ inline T tgamma(T z)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return static_cast<T>(detail::gamma_imp(static_cast<value_type>(z), evaluation_type()));
+   return tools::checked_narrowing_cast<T>(detail::gamma_imp(static_cast<value_type>(z), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
@@ -764,7 +794,7 @@ inline T lgamma(T z, int* sign)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return static_cast<T>(detail::lgamma_imp(static_cast<value_type>(z), evaluation_type(), sign));
+   return tools::checked_narrowing_cast<T>(detail::lgamma_imp(static_cast<value_type>(z), evaluation_type(), sign), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
@@ -778,7 +808,7 @@ inline T tgammap1m1(T z)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return static_cast<T>(detail::tgammap1m1_imp(static_cast<value_type>(z), evaluation_type()));
+   return tools::checked_narrowing_cast<T>(detail::tgammap1m1_imp(static_cast<value_type>(z), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 //
@@ -788,14 +818,14 @@ template <class T>
 inline T tgamma(T a, T z)
 {
    typedef typename boost::math::tools::evaluation<T>::type eval_type;
-   return static_cast<T>(detail::tgamma_imp(static_cast<eval_type>(a), static_cast<eval_type>(z)));
+   return tools::checked_narrowing_cast<T>(detail::tgamma_imp(static_cast<eval_type>(a), static_cast<eval_type>(z)), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
 inline T tgamma_lower(T a, T z)
 {
    typedef typename boost::math::tools::evaluation<T>::type eval_type;
-   return static_cast<T>(detail::tgamma_lower_imp(static_cast<eval_type>(a), static_cast<eval_type>(z)));
+   return tools::checked_narrowing_cast<T>(detail::tgamma_lower_imp(static_cast<eval_type>(a), static_cast<eval_type>(z)), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
@@ -803,10 +833,10 @@ inline T gamma_Q(T a, T z)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return static_cast<T>(
+   return tools::checked_narrowing_cast<T>(
       detail::gamma_Q_imp(static_cast<value_type>(a), 
       static_cast<value_type>(z), 
-      evaluation_type()));
+      evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
@@ -814,10 +844,10 @@ inline T gamma_P(T a, T z)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return static_cast<T>(
+   return tools::checked_narrowing_cast<T>(
       detail::gamma_P_imp(static_cast<value_type>(a), 
       static_cast<value_type>(z), 
-      evaluation_type()));
+      evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 

@@ -70,23 +70,8 @@ void test_cbrt(T, const char* name)
 
 }
 
-template <class T>
-void test_spots(T)
-{
-   //
-   // basic sanity checks, tolerance is 10 decimal places expressed as a persentage:
-   //
-   T tolerance = std::pow(10.0, -8);
-   //BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(0.125)), static_cast<T>(0.859683795198666182606970553478), tolerance);
-}
-
 int test_main(int, char* [])
 {
-   //test_spots(0.0F);
-   test_spots(0.0);
-   test_spots(0.0L);
-   test_spots(boost::math::concepts::real_concept(0.1));
-
    test_cbrt(0.1F, "float");
    test_cbrt(0.1, "double");
    test_cbrt(0.1L, "long double");

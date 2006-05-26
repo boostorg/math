@@ -332,6 +332,10 @@ private:
 template <class T>
 T gamma_P_inv(T a, T p)
 {
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument less than 0 in the incomplete gamma function inverse.");
+   if((p < 0) || (p > 1))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse.");
    if(p == 1)
       return tools::max_value(p);
    if(p == 0)
@@ -350,6 +354,10 @@ T gamma_P_inv(T a, T p)
 template <class T>
 T gamma_Q_inv(T a, T q)
 {
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument less than 0 in the incomplete gamma function inverse.");
+   if((q < 0) || (q > 1))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse.");
    if(q == 0)
       return tools::max_value(q);
    if(q == 1)
