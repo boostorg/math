@@ -125,96 +125,160 @@ T temme_method_2_ibeta_inverse(T a, T b, T z, T r, T theta)
 
    T s = sin(theta);
    T c = cos(theta);
-   T s_2 = s * s;
-   T s_3 = s_2 * s;
-   T s_4 = s_2 * s_2;
-   T s_5 = s_3 * s_2;
-   T s_6 = s_3 * s_3;
-   T s_7 = s_4 * s_3;
-   T s_8 = s_4 * s_4;
-   T s_9 = s_4 * s_5;
-   T s_10 = s_5 * s_5;
-   T s_12 = s_6 * s_6;
-   T s_14 = s_7 * s_7;
-   T c_2 = c * c;
-   T c_3 = c_2 * c;
-   T c_4 = c_2 * c_2;
-   T c_5 = c_2 * c_3;
-   T c_6 = c_3 * c_3;
-   T c_7 = c_4 * c_3;
-   T eta_2 = eta0 * eta0;
-   T eta_3 = eta_2 * eta0;
-   T eta_4 = eta_2 * eta_2;
-
-   T e1 = (2 * s_2 - 1) / (3 * s * c);
-   e1 -= (5 * s_4 - 5 * s_2 - 1) * eta0 / (36 * s_2 * c_2);
-   e1 += (46 * s_6 - 69 * s_4 + 21 * s_2 + 1) * eta_2 / (1620 * s_3 * c_3);
-   e1 -= (-2 * s_2 - 62 * s_6 + 31 * s_8 + 33 * s_4 + 7) * eta_3 / (6480 * s_4 * c_4);
-   e1 += (88 * s_6 - 52 * s_2 - 115 * s_8 + 46 * s_10 - 17 * s_4 + 25) * eta_4 / (90720 * s_5 * c_5);
-
-   T e2 = -(52 * s_6 - 78 * s_4 + 12 * s_2 + 7) / (405 * s_3 * c_3);
-   e2 += (2 * s_2 - 370 * s_6 + 185 * s_8 + 183 * s_4 - 7) * eta0 / (2592 * s_4 * c_4);
-   e2 -= (776 * s_2 + 10240 * s_6 - 13525 * s_8 - 533 + 5410 * s_10 - 1835 * s_4) * eta_2 / (204120 * s_5 * c_5);
-   e2 += (3747 * s_2 + 15071 * s_12 - 15821 * s_6 + 45588 * s_8 - 45213 * s_10 - 3372 * s_4 - 1579) * eta_3 / (2099520 * s_6 * c_6);
-
-   T e3 = (3704 * s_10 - 9260 * s_8 + 6686 * s_6 - 769 * s_4 - 1259 * s_2 + 449) / (102060 * s_5 * c_5);
-   e3 -= (750479 * s_12 - 151557 * s_2 - 727469 * s_6 + 2239932 * s_8 - 2251437 * s_10 + 140052 * s_4 + 63149) * eta0 / (20995200 * s_6 * c_6);
-   e3 += (729754 * s_14 - 78755 * s_2 - 2554139 * s_12 + 146879 * s_6 - 1602610 * s_8 + 3195183 * s_10 + 105222 * s_4 + 29233) * eta_2 / (36741600 * s_7 * c_7);
-
-   T eta = eta0 + e1 / r + e2 / (r*r) + e3 / (r*r*r);
    //
-   // Now back solve for x:
+   // Now we need to purturb eta0 to get eta, which we do by
+   // evaluating the polynomial in 1/r at the bottom of page 151,
+   // to do this we first need the error terms e1, e2 e3
+   // which we'll fill into the array "terms".  Since these
+   // terms are themselves polynomials, we'll need another
+   // array "workspace" to calculate those...
+   //
+   T terms[4] = { eta0 };
+   T workspace[6];
+   //
+   // some powers of sin(theta)cos(theta) that we'll need later:
+   //
+   T sc = s * c;
+   T sc_2 = sc * sc;
+   T sc_3 = sc_2 * sc;
+   T sc_4 = sc_2 * sc_2;
+   T sc_5 = sc_2 * sc_3;
+   T sc_6 = sc_3 * sc_3;
+   T sc_7 = sc_4 * sc_3;
+   //
+   // Calculate e1 and put it in terms[1], see the middle of page 151:
+   //
+   workspace[0] = (2 * s * s - 1) / (3 * s * c);
+   static const int co1[] = { -1, -5, 5 };
+   workspace[1] = -tools::evaluate_even_polynomial(co1, s, 3) / (36 * sc_2);
+   static const int co2[] = { 1, 21, -69, 46 };
+   workspace[2] = tools::evaluate_even_polynomial(co2, s, 4) / (1620 * sc_3);
+   static const int co3[] = { 7, -2, 33, -62, 31 };
+   workspace[3] = -tools::evaluate_even_polynomial(co3, s, 5) / (6480 * sc_4);
+   static const int co4[] = { 25, -52, -17, 88, -115, 46 };
+   workspace[4] = tools::evaluate_even_polynomial(co4, s, 6) / (90720 * sc_5);
+   terms[1] = tools::evaluate_polynomial(workspace, eta0, 5);
+   //
+   // Now evaluate e2 and put it in terms[2]:
+   //
+   static const int co5[] = { 7, 12, -78, 52 };
+   workspace[0] = -tools::evaluate_even_polynomial(co5, s, 4) / (405 * sc_3);
+   static const int co6[] = { -7, 2, 183, -370, 185 };
+   workspace[1] = tools::evaluate_even_polynomial(co6, s, 5) / (2592 * sc_4);
+   static const int co7[] = { -533, 776, -1835, 10240, -13525, 5410 };
+   workspace[2] = -tools::evaluate_even_polynomial(co7, s, 6) / (204120 * sc_5);
+   static const int co8[] = { -1579, 3747, -3372, -15821, 45588, -45213, 15071 };
+   workspace[3] = -tools::evaluate_even_polynomial(co7, s, 6) / (2099520 * sc_6);
+   terms[2] = tools::evaluate_polynomial(workspace, eta0, 4);
+   //
+   // And e3, and put it in terms[3]:
+   //
+   static const int co9[] = {449, -1259, -769, 6686, -9260, 3704 };
+   workspace[0] = tools::evaluate_even_polynomial(co9, s, 6) / (102060 * sc_5);
+   static const int co10[] = { 63149, -151557, 140052, -727469, 2239932, -2251437, 750479 };
+   workspace[1] = -tools::evaluate_even_polynomial(co10, s, 7) / (20995200 * sc_6);
+   static const int co11[] = { 29233, -78755, 105222, 146879, -1602610, 3195183, -2554139, 729754 };
+   workspace[2] = tools::evaluate_even_polynomial(co11, s, 8) / (36741600 * sc_7);
+   terms[3] = tools::evaluate_polynomial(workspace, eta0, 3);
+   //
+   // Bring the correction terms together to evaluate eta, 
+   // this is the last equation on page 151:
+   //
+   T eta = tools::evaluate_polynomial(terms, 1/r, 4);
+   //
+   // Now that we have eta we need to back solve for x,
+   // we seek the value of x that gives eta in Eq 3.2.
+   // The two methods used are described in section 5.
+   //
+   // Begin by defining a few variables we'll need later:
    //
    T x;
+   T s_2 = s * s;
+   T c_2 = c * c;
+   T alpha = c / s;
+   alpha *= alpha;
+   T lu = (-(eta * eta) / (2 * s_2) + log(s_2) + c_2 * log(c_2) / s_2);
+   //
+   // Temme doesn't specify what value to switch on here, 
+   // but this seems to work pretty well:
+   //
    if(fabs(eta) < 0.7)
    {
-      eta_2 = eta * eta;
-      eta_3 = eta_2 * eta;
-      eta_4 = eta_2 * eta_2;
-      x = s_2 + s * c * eta + (1 - 2 * s_2) * eta_2 / 3 + (13 * s_4 - 13 * s_2 + 1) * eta_3 / (36 * s * c) + (46 * s_6 - 69 * s_4 + 21 * s_2 + 1) * eta_4 / (270 * s_2 * c_2);
+      //
+      // Small eta use the expansion Temme gives in the second equation
+      // of section 5, it's a polynomial in eta:
+      //
+      workspace[0] = s * s;
+      workspace[1] = s * c;
+      workspace[2] = (1 - 2 * workspace[0]) / 3;
+      static const int co3[] = { 1, -13, 13 };
+      workspace[3] = tools::evaluate_polynomial(co3, workspace[0], 3) / (36 * s * c);
+      static const int co4[] = { 1, 21, -69, 46 };
+      workspace[4] = tools::evaluate_polynomial(co4, workspace[0], 4) / (270 * workspace[0] * c * c);
+      x = tools::evaluate_polynomial(workspace, eta, 5);
 #ifdef BOOST_INSTRUMENT
       std::cout << "Estimating x with Temme method 2 (small eta): " << x << std::endl;
 #endif
    }
    else
    {
-      T alpha = c_2 / s_2;
-      T u = exp((-(eta * eta) / (2 * s_2) + log(s_2) + c_2 * log(c_2) / s_2));
-      T u_2 = u * u;
-      T u_3 = u_2 * u;
-      T u_4 = u_2 * u_2;
-      T u_5 = u_3 * u_2;
-
-      x = u + alpha * u + 3 * alpha * (3 * alpha + 1) * u_3 / 6;
-      x += 4 * alpha * (4 * alpha + 1) * (4 * alpha + 2) * u_4 / 24;
-      x += 5 * alpha * (5 * alpha + 1) * (5 * alpha + 2) * (5 * alpha + 3) * u_5 / 120;
       //
-      // This approximation to x so far is straight out of Temme's paper
-      // but isn't all that accurate, need to clean it up with some
-      // Newton-Raphson iterations to stand any chance of being close
-      // to the incomplete Beta inverse.  This is still *much* cheaper
-      // than iterating on the full incomplete beta:
+      // If eta is large we need to solve Eq 3.2 more directly,
+      // begin by getting an initial approximation for x from
+      // the last equation on page 155, this is a polynomial in u:
+      //
+      T u = exp(lu);
+      workspace[0] = u;
+      workspace[1] = alpha;
+      workspace[2] = 0;
+      workspace[3] = 3 * alpha * (3 * alpha + 1) / 6;
+      workspace[4] = 4 * alpha * (4 * alpha + 1) * (4 * alpha + 2) / 24;
+      workspace[5] = 5 * alpha * (5 * alpha + 1) * (5 * alpha + 2) * (5 * alpha + 3) / 120;
+      x = tools::evaluate_polynomial(workspace, u, 6);
+      //
+      // At this point we may or may not have the right answer, Eq-3.2 has
+      // two solutions for x for any given eta, however the mapping in 3.2
+      // is 1:1 with the sign of eta and x-sin^2(theta) being the same.
+      // So we can check if we have the right root of 3.2, and if not
+      // switch x for 1-x.  This transformation is motivated by the fact
+      // that the distribution is *almost* symetric so 1-x will be in the right
+      // ball park for the solution:
       //
       if((x - s_2) * eta < 0)
          x = 1 - x;
-      T lower, upper;
-      if(eta < 0)
-      {
-         lower = 0;
-         upper = s_2;
-      }
-      else
-      {
-         lower = s_2;
-         upper = 1;
-      }
-      u = (-eta * eta / 2 + s_2 * log(s_2) + c_2 * log(c_2)) / s_2;
-      x = tools::newton_raphson_iterate(
-         temme_root_finder<T>(-u, alpha), x, lower, upper, (2 * tools::digits(x)) / 3);
 #ifdef BOOST_INSTRUMENT
       std::cout << "Estimating x with Temme method 2 (large eta): " << x << std::endl;
 #endif
    }
+   //
+   // The final step is a few Newton-Raphson iterations to
+   // clean up our approximation for x, this is pretty cheap
+   // in general, and very cheap compared to an incomplete beta
+   // evaluation.  The limits set on x come from the observation
+   // that the sign of eta and x-sin^2(theta) are the same.
+   //
+   T lower, upper;
+   if(eta < 0)
+   {
+      lower = 0;
+      upper = s_2;
+   }
+   else
+   {
+      lower = s_2;
+      upper = 1;
+   }
+   //
+   // If our initial approximation is out of bounds then bisect:
+   //
+   if((x < lower) || (x > upper))
+      x = (lower+upper) / 2;
+   //
+   // And iterate:
+   //
+   x = tools::newton_raphson_iterate(
+      temme_root_finder<T>(-lu, alpha), x, lower, upper, (2 * tools::digits(x)) / 3);
+
    return x;
 }
 
