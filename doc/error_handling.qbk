@@ -1,0 +1,137 @@
+[section Error Handling]
+
+[caution __caution ]
+
+[h4 synopsis]
+
+``
+#include <boost/math/tools/error_handling.hpp>
+``
+
+   template <class T>
+   T __domain_error(const char* function, const char* message);
+   
+   template <class T>
+   T __pole_error(const char* function, const char* message);
+   
+   template <class T>
+   T __overflow_error(const char* function, const char* message);
+   
+   template <class T>
+   T __underflow_error(const char* function, const char* message);
+   
+   template <class T>
+   T __denorm_error(T const& t, const char* function, const char* message);
+   
+   template <class T, class U>
+   T __checked_narrowing_cast(U const& val, const char* function);
+
+The functions in this header are designed to be user-replacable error
+handlers that define how errors are handled by the special functions
+in this library.  There are also some preprocessor defines that can be 
+set to activate the throwing of C++ exceptions from the default
+versions of the functions.  The various kind of errors are described 
+in more detail below.
+
+[#domain_error][h4 Domain Errors]
+
+When a special function is passed an argument that is outside the range
+of values for which that function is defined, then the function returns
+the result of:
+
+   boost::math::tools::domain_error<T>(FunctionName, Message);
+   
+Where
+`T` is the floating point type passed to the function, `FunctionName` is the 
+name of the function, and `Message` is an error message describing the problem.
+
+The default behaviour of this function is to return a NaN.  However, if type
+`T` does not support NaN's or if the macro BOOST_MATH_THROW_ON_DOMAIN_ERROR
+is defined when building the library, then a std::domain_error C++ exception 
+is thrown.
+
+[#pole_error][h4 Evaluation at a pole]
+
+When a special function is passed an argument that is at a pole
+without a well defined residual value, then the function returns
+the result of:
+
+   boost::math::tools::pole_error<T>(FunctionName, Message);
+   
+Where
+`T` is the floating point type passed to the function, `FunctionName` is the 
+name of the function, and `Message` is an error message describing the problem.
+
+The default behaviour of this function is to return the result of
+`domain_error<T>(FunctionName, Message)`.
+
+[#overflow_error][h4 Numeric Overflow]
+
+When the result of a special function is too large to fit in the argument
+floating point type, then the function returns the result of:
+
+   boost::math::tools::overflow_error<T>(FunctionName, Message);
+   
+Where
+`T` is the floating point type passed to the function, `FunctionName` is the 
+name of the function, and `Message` is an error message describing the problem.
+
+The default version of this function returns 
+`std::numeric_limits<T>::infinity()`.  However if the type `T` doesn't
+support infinities, or the macro BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+is defined when building the library, then a `std::overflow_error` 
+C++ exception is thrown.
+
+[#underflow_error][h4 Numeric Underflow]
+
+If the result of a special function is known to be non-zero, but the
+calculated result underflows to zero, then the function returns the result of:
+
+   boost::math::tools::underflow_error<T>(FunctionName, Message);
+   
+Where
+`T` is the floating point type passed to the function, `FunctionName` is the 
+name of the function, and `Message` is an error message describing the problem.
+
+The default version of this function returns 
+zero.  However if the macro BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
+is defined when building the library, then a `std::underflow_error` 
+C++ exception is thrown.
+
+[#denorm_error][h4 Denormalisation Errors]
+
+If the result of a special function is a denormalised value /z/ then the function
+returns the result of:
+
+   boost::math::tools::denorm_error<T>(z, FunctionName, Message);
+   
+Where
+`T` is the floating point type passed to the function, `FunctionName` is the 
+name of the function, and `Message` is an error message describing the problem.
+
+The default version of this function returns 
+/z/.  However if the macro BOOST_MATH_THROW_ON_DENORM_ERROR
+is defined when building the library, then a `std::underflow_error` 
+C++ exception is thrown.
+
+[#checked_narrowing_cast][h4 Errors from typecasts]
+
+Many special functions evaluate their results at a higher precision
+than their arguments in order to ensure full machine precision in 
+the result: for example a function passed a float argument may evaluate
+it's result using double precision internally.  Many of the errors listed
+above may therefore occur not during evaluation, but when converting 
+the result to the narrower result type.  The function:
+
+   template <class T, class U>
+   T checked_narrowing_cast(U const& val, const char* function);
+   
+Is used to perform these conversions, and will call the error handlers
+listed above on [link overflow_error overflow], 
+[link underflow_error underflow] or [link denorm_error denormalisation].
+
+Obviously if T and U are the same type or if T is at least as wide as U, 
+then no checks are performed.
+
+[endsect]
+

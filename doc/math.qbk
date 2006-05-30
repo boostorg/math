@@ -29,6 +29,12 @@
                construction, the code is fully functional and robust, but 
                interfaces, library structure, and function names may be 
                changed without notice.]
+               
+[def __domain_error [link domain_error domain_error]]
+[def __pole_error [link pole_error pole_error]]
+[def __overflow_error [link overflow_error overflow_error]]
+[def __underflow_error [link underflow_error underflow_error]]
+[def __denorm_error [link denorm_error denorm_error]]
 
 [section:intro Introduction]
 
@@ -68,6 +74,7 @@ data and/or data for output to an external graphing application.
 [include beta.qbk]
 [include ibeta.qbk]
 [include fpclassify.qbk]
+[include error_handling.qbk]
 
 [endsect]
 

@@ -1,4 +1,4 @@
-[section Rational Function Evaluation]
+[section Polynomial and Rational Function Evaluation]
 
 [caution __caution ]
 
@@ -8,11 +8,52 @@
 #include <boost/math/tools/rational.hpp>
 ``
 
+   template <class T, class U>
+   U evaluate_polynomial(const T* poly, U z, std::size_t count);
+   
+   template <class T, class U>
+   U evaluate_even_polynomial(const T* poly, U z, std::size_t count);
+   
+   template <class T, class U>
+   U evaluate_odd_polynomial(const T* poly, U z, std::size_t count);
+   
    template <class T, class U, class V>
    V evaluate_rational(const T* num, const U* denom, V z, unsigned count);
 
 [h4 Description]
 
+   template <class T, class U>
+   U evaluate_polynomial(const T* poly, U z, std::size_t count);
+
+Evaluates the polynomial described by
+the coefficients stored in /poly/.
+
+The polynomial most have order /count-1/ with /count/ coefficients.
+
+Coefficients should be stored such that the coefficients for the x^i terms
+are in poly[i].
+
+The types of the coefficients and of variable
+/z/ may differ as long as /*poly/ is convertible to type /U/.
+This allows, for example, for the coefficient table
+to be a table of integers if this is appropriate.
+
+   template <class T, class U>
+   U evaluate_even_polynomial(const T* poly, U z, std::size_t count);
+
+As above, but evaluates an even polynomial: one where all the powers
+of /z/ are even numbers.  Equivalent to calling 
+`evaluate_polynomial(poly, z*z, count)`.
+
+   template <class T, class U>
+   U evaluate_odd_polynomial(const T* poly, U z, std::size_t count);
+
+As above but evaluates a polynomial where all the powers are odd numbers.
+Equivalent to `evaluate_polynomial(poly+1, z*z, count-1) * z + poly[0]`.
+
+   template <class T, class U, class V>
+   V evaluate_rational(const T* num, const U* denom, V z, unsigned count);
+   
 Evaluates the rational function (the ratio of two polynomials) described by
 the coefficients stored in /num/ and /demom/.
 

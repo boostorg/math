@@ -295,16 +295,15 @@ int test_main(int, char* [])
 #endif
    //test_spots(0.0F);
    test_spots(0.0);
-   //test_spots(0.0L);
-   //test_spots(boost::math::concepts::real_concept(0.1));
+   test_spots(0.0L);
+   test_spots(boost::math::concepts::real_concept(0.1));
 
-#ifndef __HP_aCC
-   //test_beta(0.1F, "float");
-#endif
+   test_beta(0.1F, "float");
    test_beta(0.1, "double");
-   //test_beta(0.1L, "long double");
-   //test_beta(boost::math::concepts::real_concept(0.1), "real_concept");
+   test_beta(0.1L, "long double");
+   test_beta(boost::math::concepts::real_concept(0.1), "real_concept");
    return 0;
 }
+
 
 
