@@ -52,33 +52,31 @@ T relative_error(T a, T b)
       static_cast<T>((std::numeric_limits<double>::min)()));
 #else
    T min_val = tools::min_value(a);
+   T max_val = tools::max_value(a);
 #endif
 
    if((a != 0) && (b != 0))
    {
       // TODO: use isfinite:
-      if(std::numeric_limits<T>::is_specialized && (b > (std::numeric_limits<T>::max)()))
+      if(b > max_val)
       {
-         if(a > (std::numeric_limits<T>::max)())
-            return 0;
+         if(a > max_val)
+            return 0;  // one infinity is as good as another!
       }
       // if the result is denormalised, treat all denorms as equivalent:
-      if(std::numeric_limits<T>::is_specialized)
-      {
-         if((a < min_val) && (a > 0))
-            a = min_val;
-         else if((a > -min_val) && (a < 0))
-            a = -min_val;
-         if((b < min_val) && (b > 0))
-            b = min_val;
-         else if((b > -min_val) && (b < 0))
-            b = -min_val;
-      }
+      if((a < min_val) && (a > 0))
+         a = min_val;
+      else if((a > -min_val) && (a < 0))
+         a = -min_val;
+      if((b < min_val) && (b > 0))
+         b = min_val;
+      else if((b > -min_val) && (b < 0))
+         b = -min_val;
       return (std::max)(fabs((a-b)/a), fabs((a-b)/b));
    }
 
    // handle special case where one or both are zero:
-   if(!std::numeric_limits<T>::is_specialized)
+   if(min_val == 0)
       return fabs(a-b);
    if(fabs(a) < min_val)
       a = min_val;

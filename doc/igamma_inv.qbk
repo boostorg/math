@@ -62,10 +62,7 @@ the accuracy of the result, given exact input values.
 
 These two functions share a common implementation.
 
-First negative values for /p/ and /q/ are mapped to positive values
-using the usual reflection formulae for the incomplete gamma function.
-
-Then an initial approximation is computed using the methodology described
+First an initial approximation is computed using the methodology described
 in:
 
 [@http://portal.acm.org/citation.cfm?id=23109&coll=portal&dl=ACM 
@@ -75,7 +72,9 @@ Function Ratios and their Inverse, ACM Trans. Math. Software 12 (1986), 377-393.
 Finally, the last few bits are cleaned up using Halley iteration, the iteration
 limit is set to 2/3 of the number of bits in T, which by experiment is
 sufficient to ensure that the inverses are at least as accurate as the normal
-incomplete gamma functions.
+incomplete gamma functions.  In testing no more than 3 iterations are required
+to produce a result as accurate as the forward incomplete gamma function, and
+in many cases only one iteration is required.
 
 [endsect]
 

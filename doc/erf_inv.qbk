@@ -27,7 +27,7 @@ Returns the inverse error function of z, that is a value x such that:
 
    p = erf(x);
 
-[$../graphs/erf_inv1.png]
+[$../graphs/erf_inv.png]
 
    template <class T>
    T erfc_inv(T z);
@@ -37,7 +37,7 @@ value x such that:
 
    p = erfc(x);
 
-[$../graphs/erf_inv2.png]
+[$../graphs/erfc_inv.png]
 
 [h4 Accuracy]
 

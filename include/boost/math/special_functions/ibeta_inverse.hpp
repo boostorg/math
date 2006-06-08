@@ -277,16 +277,29 @@ T temme_method_2_ibeta_inverse(T a, T b, T z, T r, T theta)
    // And iterate:
    //
    x = tools::newton_raphson_iterate(
-      temme_root_finder<T>(-lu, alpha), x, lower, upper, (2 * tools::digits(x)) / 3);
+      temme_root_finder<T>(-lu, alpha), x, lower, upper, tools::digits(x) / 2);
 
    return x;
 }
-
+//
+// See: 
+// "Asymptotic Inversion of the Incomplete Beta Function"
+// N.M. Temme
+// Journal of Computation and Applied Mathematics 41 (1992) 145-157.
+// Section 4.
+//
 template <class T>
 T temme_method_3_ibeta_inverse(T a, T b, T z)
 {
+   //
+   // Begin by getting an initial approximation for the quantity
+   // eta from the dominant part of the incomplete beta:
+   //
    T eta0 = boost::math::gamma_Q_inv(b, z);
    eta0 /= a;
+   //
+   // Define the variables and powers we'll need later on:
+   //
    T mu = b / a;
    T w = sqrt(1 + mu);
    T w_2 = w * w;
@@ -306,7 +319,17 @@ T temme_method_3_ibeta_inverse(T a, T b, T z)
    T w1_2 = w1 * w1;
    T w1_3 = w1 * w1_2;
    T w1_4 = w1_2 * w1_2;
-
+   //
+   // Now we need to compute the purturbation error terms that
+   // convert eta0 to eta, these are all polynomials of polynomials.
+   // Probably these should be re-written to use tabulated data 
+   // (see examples above), but it's less of a win in this case as we
+   // need to calculate the individual powers for the denominator terms
+   // anyway, so we might as well use them for the numerator-polynomials 
+   // as well....
+   //
+   // Refer to p154-p155 for the details of these expansions:
+   //
    T e1 = (w + 2) * (w - 1) / (3 * w);
    e1 += (w_3 + 9 * w_2 + 21 * w + 5) * d / (36 * w_2 * w1);
    e1 -= (w_4 - 13 * w_3 + 69 * w_2 + 167 * w + 46) * d_2 / (1620 * w1_2 * w_3);
@@ -321,10 +344,27 @@ T temme_method_3_ibeta_inverse(T a, T b, T z)
    T e3 = -((3592 * w_7 + 8375 * w_6 - 1323 * w_5 - 29198 * w_4 - 89578 * w_3 - 154413 * w_2 - 116063 * w - 29632) * (w - 1)) / (816480 * w_5 * w1_2);
    e3 -= (442043 * w_9 + 2054169 * w_8 + 3803094 * w_7 + 3470754 * w_6 + 2141568 * w_5 - 2393568 * w_4 - 19904934 * w_3 - 34714674 * w_2 - 23128299 * w - 5253353) * d / (146966400 * w_6 * w1_3);
    e3 -= (116932 * w_10 + 819281 * w_9 + 2378172 * w_8 + 4341330 * w_7 + 6806004 * w_6 + 10622748 * w_5 + 18739500 * w_4 + 30651894 * w_3 + 30869976 * w_2 + 15431867 * w + 2919016) * d_2 / (146966400 * w1_4 * w_7);
-
+   //
+   // Combine eta0 and the error terms to compute eta (Second eqaution p155):
+   //
    T eta = eta0 + e1 / a + e2 / (a * a) + e3 / (a * a * a);
    //
-   // Now solve for x:
+   // Now we need to solve Eq 4.2 to obtain x.  For any given value of
+   // eta there are two solutions to this equation, and since the distribtion
+   // may be very skewed, these are not related by x ~ 1-x we used when 
+   // implementing section 3 above.  However we know that:
+   //
+   //  cross < x <= 1       ; iff eta < mu
+   //          x == cross   ; iff eta == mu
+   //     0 <= x < cross    ; iff eta > mu
+   //
+   // Where cross == 1 / (1 + mu)
+   // Many thanks to Prof Temme for clarifying this point.
+   //
+   // Therefore we'll just jump straight into Newton iterations
+   // to solve Eq 4.2 using these bounds, and simple bisection 
+   // as the first guess, in practice this converges pretty quickly
+   // and we only need a few digits correct anyway:
    //
    T u = eta - mu * log(eta) + (1 + mu) * log(1 + mu) - mu;
    T cross = 1 / (1 + mu);
@@ -332,14 +372,9 @@ T temme_method_3_ibeta_inverse(T a, T b, T z)
    T upper = eta < mu ? 1 : cross;
    T x = (lower + upper) / 2;
    x = tools::newton_raphson_iterate(
-      temme_root_finder<T>(u, mu), x, lower, upper, (2 * tools::digits(x)) / 3);
+      temme_root_finder<T>(u, mu), x, lower, upper, tools::digits(x) / 2);
 #ifdef BOOST_INSTRUMENT
-   T x2 = tools::newton_raphson_iterate(
-      temme_root_finder<T>(u, mu), 0.001, T(0), T(1), tools::digits(x) / 2);
-   T x3 = tools::newton_raphson_iterate(
-      temme_root_finder<T>(u, mu), 0.999, T(0), T(1), tools::digits(x) / 2);
-   std::cout << "mu = " << mu << " eta = " << eta << " u = " << exp(u) << std::endl;
-   std::cout << "Estimating x with Temme method 3: " << x << " (x2 = " << x2 << " x3 = " << x3 << ")" << std::endl;
+   std::cout << "Estimating x with Temme method 3: " << x << std::endl;
 #endif
    return x;
 }

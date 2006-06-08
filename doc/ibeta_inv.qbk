@@ -1,0 +1,115 @@
+[section The Incomplete Beta Function Inverses]
+
+[caution __caution ]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/beta.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T ibeta_inv(T a, T b, T p);
+   
+   template <class T>
+   T ibetac_inv(T a, T b, T q);
+   
+   }} // namespaces
+   
+[h4 Description]
+
+There are two incomplete beta function inverses which return the inverses
+of ibeta and ibetac respectively.
+
+Both of these function require /a,b > 0/ and /0 <= p,q <= 1/.
+
+   template <class T>
+   T ibeta_inv(T a, T b, T p);
+
+Returns a value x such that: `p = ibeta(a, b, x);`
+
+   template <class T>
+   T ibetac_inv(T a, T b, T q);
+   
+Returns a value x such that: `q = ibetac(a, b, x);`
+
+[h4 Accuracy]
+
+The accuracy of these functions doesn't vary much by platform or by
+the type T.  Given that these functions are computed by iterative methods,
+they are deliberately "detuned" so as not to be too accurate: it is in
+any case impossible for these function to be more accurate than the
+regular forward incomplete beta functions.
+
+[h4 Testing]
+
+There are two sets of tests: 
+
+* Basic sanity checks attempt to "round-trip" from
+/a, b/ and /x/ to /p/ or /q/ and back again.  These tests have quite
+generous tolerances: in general both the incomplete beta and it's
+inverses change so rapidly, that round tripping to more than a couple
+of significant digits isn't possible.  This is especially true when
+/p/ or /q/ is very near one: in this case there isn't enough 
+"information content" in the input to the inverse function to get
+back where you started.
+* Accuracy checks using high precision test values.  These measure
+the accuracy of the result, given exact input values.
+
+[h4 Implementation]
+
+These two functions share a common implementation.
+
+First an initial approximation to x is computed then the
+last few bits are cleaned up using Halley iteration.  The iteration
+limit is set to 2/3 of the number of bits in T, which by experiment is
+sufficient to ensure that the inverses are at least as accurate as the normal
+incomplete beta functions.  For `a+b > 5` then up to 5 iterations may be
+required in extreme cases, although normally only one or two are required.
+Further the number of iterations requires decreases with increasing /a/ and
+/b/ (which generally form the more important use cases).  
+For `1 <= a+b <= 5` up to 9 iterations may be required, and for very small
+/a/ and /b/ there appears to be no good method for obtaining an initial
+guess, which means that in extreme cases for `a,b << 1` up to 20 iterations
+may be required: the function is very expensive to compute in that case.
+
+The initial guesses used for iteration are obtained as follows:
+
+For `a+b < 5` the following power series is used:
+
+[$../equations/ibeta_inv1.png]
+
+It is generally accurate to no more than 2 significant digits.
+
+For `a+b >= 5` the initial guess is computed using the methods described in:
+
+Asymptotic Inversion of the Incomplete Beta Function, by N. M. Temme.
+Journal of Computational and Applied Mathematics 41 (1992) 145-157.
+
+The nearly symetrical case (section 2 of the paper) is used for
+
+[$../equations/ibeta_inv2.png]
+
+and involves solving the inverse error function first.  The method is accurate
+to at least 2 decimal digits when `a = 5` rising to at least 8 digits when
+`a = 1e5`.
+
+The general error function case (section 3 of the paper) is used for
+
+[$../equations/ibeta_inv3.png]
+
+and again expresses the inverse incomplete beta in terms of the 
+inverse of the error function.  The method is accurate to at least 
+2 decimal digits when `a+b = 5` rising to 11 digits when `a+b = 1e5`.
+
+Finally the for all other cases where `a+b > 5` the method of section
+4 of the paper is used.  This expresses the inverse incomplete beta in terms
+of the inverse of the incomplete gamma function, and is therefore significantly
+more expensive to compute than the other cases.  However the method is accurate 
+to at least 3 decimal digits when `a = 5` rising to at least 10 digits when 
+`a = 1e5`.
+
+[endsect]
+

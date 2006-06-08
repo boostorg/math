@@ -7,6 +7,7 @@
 #define BOOST_MATH_SPECIAL_BETA_HPP
 
 #include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
@@ -545,6 +546,97 @@ T rising_factorial_ratio(T a, T b, int k)
    return result;
 }
 //
+// Routine for a > 15, b < 1
+//
+template <class T, class L>
+T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool normalised)
+{
+   using namespace std;
+   //
+   // This is DiDonato and Morris's BGRAT routine, see Eq's 9 through 9.6.
+   //
+   // Some values we'll need later, these are Eq 9.1:
+   //
+   T bm1 = b - 1;
+   T t = a + bm1 / 2;
+   T lx, u;
+   if(y < 0.35)
+      lx = boost::math::log1p(-y);
+   else
+      lx = log(x);
+   u = -t * lx;
+   // and from from 9.2:
+   T prefix;
+   T h = regularised_gamma_prefix(b, u, l);
+   if(h == 0)
+      return s0;
+   if(normalised)
+   {
+      prefix = h / tgamma_delta_ratio_imp(a, b, l);
+      prefix /= pow(t, b);
+   }
+   else
+   {
+      prefix = full_igamma_prefix(b, u) / pow(t, b);
+   }
+   prefix *= mult;
+   //
+   // now we need the quantity Pn, unfortunatately this is computed
+   // recursively, and requires a full history of all the previous values
+   // so no choice but to declare a big table and hope it's big enough...
+   //
+   T p[30] = { 1 };  // see 9.3.
+   //
+   // Now an initial value for J, see 9.6:
+   //
+   T j = gamma_Q(b, u) / h;
+   //
+   // Now we can start to pull things together and evaluate the sum in Eq 9:
+   //
+   T sum = s0 + prefix * j;  // Value at N = 0
+   // some variables we'll need:
+   unsigned tnp1 = 1; // 2*N+1 
+   T lx2 = lx / 2;
+   lx2 *= lx2;
+   T lxp = 1;
+   T t4 = 4 * t * t;
+   T b2n = b; 
+
+   for(unsigned n = 1; n < 30; ++n)
+   {
+      //
+      // begin by evaluating the next Pn from Eq 9.4:
+      //
+      tnp1 += 2;
+      p[n] = 0;
+      T mbn = b - n;
+      unsigned tmp1 = 3;
+      for(unsigned m = 1; m < n; ++m)
+      {
+         mbn = m * b - n;
+         p[n] += mbn * p[n-m] / unchecked_factorial<T>(tmp1);
+         tmp1 += 2;
+      }
+      p[n] /= n;
+      p[n] += bm1 / unchecked_factorial<T>(tnp1);
+      //
+      // Now we want Jn from Jn-1 using Eq 9.6:
+      //
+      j = (b2n * (b2n + 1) * j + (u + b2n + 1) * lxp) / t4;
+      lxp *= lx2;
+      b2n += 2;
+      //
+      // pull it together with Eq 9:
+      //
+      T r = prefix * p[n] * j;
+      sum += r;
+      if(fabs(r) < tools::epsilon(r) * sum)
+         break;
+   }
+   return sum;
+}
+
+//
 // The incomplete beta function implementation:
 // This is just a big bunch of spagetti code to divide up the
 // input range and select the right implementation method for
@@ -591,7 +683,6 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             }
             else
             {
-               // TODO BGRAT here ?????
                // sidestep on a, and then use the series representation:
                T prefix;
                if(!normalised)
@@ -603,7 +694,14 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
                   prefix = 1;
                }
                fract = ibeta_a_step(a, b, x, y, 20, l, normalised);
-               fract += prefix * ibeta_series(a + 20, b, x, l, normalised);
+               if(!invert)
+                  fract = beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, l, normalised);
+               else
+               {
+                  fract -= (normalised ? 1 : beta_imp(a, b, l));
+                  invert = false;
+                  fract = -beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, l, normalised);
+               }
             }
          }
       }
@@ -624,12 +722,17 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             }
             else if(a >= 15)
             {
-               // TODO: BGRAT here????
-               fract = ibeta_series(a, b, x, l, normalised);
+               if(!invert)
+                  fract = beta_small_b_large_a_series(a, b, x, y, T(0), T(1), l, normalised);
+               else
+               {
+                  fract = -(normalised ? 1 : beta_imp(a, b, l));
+                  invert = false;
+                  fract = -beta_small_b_large_a_series(a, b, x, y, fract, T(1), l, normalised);
+               }
             }
             else
             {
-               // TODO: BGRAT here????
                // sidestep to improve errors:
                T prefix;
                if(!normalised)
@@ -641,7 +744,14 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
                   prefix = 1;
                }
                fract = ibeta_a_step(a, b, x, y, 20, l, normalised);
-               fract += prefix * ibeta_series(a + 20, b, x, l, normalised);
+               if(!invert)
+                  fract = beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, l, normalised);
+               else
+               {
+                  fract -= (normalised ? 1 : beta_imp(a, b, l));
+                  invert = false;
+                  fract = -beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, l, normalised);
+               }
             }
          }
       }

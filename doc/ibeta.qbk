@@ -54,6 +54,8 @@ Returns the normalised incomplete beta function of a, b and x:
 
 [$../equations/ibeta3.png]
 
+[$../graphs/ibeta.png]
+
    template <class T>
    T ibetac(T a, T zb, T x);
    

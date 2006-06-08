@@ -73,6 +73,7 @@ data and/or data for output to an external graphing application.
 [include erf_inv.qbk]
 [include beta.qbk]
 [include ibeta.qbk]
+[include ibeta_inv.qbk]
 [include fpclassify.qbk]
 [include error_handling.qbk]
 

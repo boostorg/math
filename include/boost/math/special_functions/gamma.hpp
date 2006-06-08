@@ -779,6 +779,66 @@ T gamma_P_imp(T a, T z, const L& l)
    }
 }
 
+template <class T, class L>
+T tgamma_delta_ratio_imp(T z, T delta, const L&)
+{
+   if((z <= 0) || (z + delta <= 0))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments.");
+
+   T zgh = z + L::g() - constants::half<T>();
+   T result;
+   if(fabs(delta) < 10)
+   {
+      result = exp((constants::half<T>() - z) * boost::math::log1p(delta / zgh));
+   }
+   else
+   {
+      result = pow(zgh / (zgh + delta), z - constants::half<T>());
+   }
+   result *= pow(constants::e<T>() / (zgh + delta), delta);
+   result *= L::lanczos_sum(z) / L::lanczos_sum(z + delta);
+   return result;
+}
+
+template <class T>
+T tgamma_delta_ratio_imp(T z, T delta, const lanczos::undefined_lanczos&)
+{
+   if((z <= 0) || (z + delta <= 0))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments.");
+
+   //
+   // The upper gamma fraction is *very* slow for z < 6, actually it's very
+   // slow to converge everywhere but recursing until z > 6 gets rid of the 
+   // worst of it's behaviour.
+   //
+   T prefix = 1;
+   T zd = z + delta;
+   while((zd < 6) && (z < 6))
+   {
+      prefix /= z;
+      prefix *= zd;
+      z += 1;
+      zd += 1;
+   }
+   if(delta < 10)
+   {
+      prefix *= exp(-z * boost::math::log1p(delta / z));
+   }
+   else
+   {
+      prefix *= pow(z / zd, z);
+   }
+   prefix *= pow(constants::e<T>() / zd, delta);
+   T sum = detail::lower_gamma_series(z, z, ::boost::math::tools::digits(z)) / z;
+   sum += detail::upper_gamma_fraction(z, z, ::boost::math::tools::digits(z));
+   T sumd = detail::lower_gamma_series(zd, zd, ::boost::math::tools::digits(z)) / zd;
+   sumd += detail::upper_gamma_fraction(zd, zd, ::boost::math::tools::digits(z));
+   sum /= sumd;
+   if(fabs(tools::max_value(sum) / prefix) < fabs(sum))
+      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
+   return sum * prefix;
+}
+
 } // namespace detail
 
 template <class T>
@@ -848,6 +908,22 @@ inline T gamma_P(T a, T z)
       detail::gamma_P_imp(static_cast<value_type>(a), 
       static_cast<value_type>(z), 
       evaluation_type()), BOOST_CURRENT_FUNCTION);
+}
+
+// ratios of gamma functions:
+template <class T>
+inline T tgamma_delta_ratio(T z, T delta)
+{
+   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<T>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(z), static_cast<value_type>(delta), evaluation_type()), BOOST_CURRENT_FUNCTION);
+}
+template <class T>
+inline T tgamma_ratio(T a, T b)
+{
+   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<T>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b - a), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 

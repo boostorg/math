@@ -20,6 +20,18 @@ U evaluate_polynomial(const T* poly, U z, std::size_t count)
    return sum;
 }
 
+template <class T, class U>
+inline U evaluate_even_polynomial(const T* poly, U z, std::size_t count)
+{
+   return evaluate_polynomial(poly, z*z, count);
+}
+
+template <class T, class U>
+inline U evaluate_odd_polynomial(const T* poly, U z, std::size_t count)
+{
+   return poly[0] + z * evaluate_polynomial(poly+1, z*z, count-1);
+}
+
 template <class T, class U, class V>
 V evaluate_rational(const T* num, const U* denom, V z, std::size_t count)
 {
