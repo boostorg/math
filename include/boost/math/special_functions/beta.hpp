@@ -166,7 +166,7 @@ template <class T>
 struct ibeta_series_t
 {
    typedef T result_type;
-   ibeta_series_t(T a_, T b_, T x_) : result(1), x(x_), apn(a_), poch(1-b_), n(1) {}
+   ibeta_series_t(T a_, T b_, T x_, T mult) : result(mult), x(x_), apn(a_), poch(1-b_), n(1) {}
    T operator()()
    {
       T r = result / apn;
@@ -182,7 +182,7 @@ private:
 };
 
 template <class T, class L>
-T ibeta_series(T a, T b, T x, const L&, bool normalised)
+T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised)
 {
    using namespace std;
 
@@ -208,14 +208,14 @@ T ibeta_series(T a, T b, T x, const L&, bool normalised)
       // Non-normalised, just compute the power:
       result = pow(x, a);
    }
-   ibeta_series_t<T> s(a, b, x);
-   return result * boost::math::tools::sum_series(s, boost::math::tools::digits(x));
+   ibeta_series_t<T> s(a, b, x, result);
+   return boost::math::tools::sum_series(s, boost::math::tools::digits(x), s0);
 }
 //
 // Incomplete Beta series again, this time without Lanczos support:
 //
 template <class T>
-T ibeta_series(T a, T b, T x, const boost::math::lanczos::undefined_lanczos&, bool normalised)
+T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczos&, bool normalised)
 {
    using namespace std;
 
@@ -268,8 +268,8 @@ T ibeta_series(T a, T b, T x, const boost::math::lanczos::undefined_lanczos&, bo
       // non-normalised, just compute the power:
       result = pow(x, a);
    }
-   ibeta_series_t<T> s(a, b, x);
-   return result * boost::math::tools::sum_series(s, boost::math::tools::digits(x));
+   ibeta_series_t<T> s(a, b, x, result);
+   return boost::math::tools::sum_series(s, boost::math::tools::digits(x), s0);
 }
 //
 // Compute the leading power terms in the incomplete Beta:
@@ -671,7 +671,16 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
       {
          // Both a,b < 1:
          if((a >= (std::min)(T(0.2), b)) || (pow(x, a) <= 0.9))
-            fract = ibeta_series(a, b, x, l, normalised);
+         {
+            if(!invert)
+               fract = ibeta_series(a, b, x, T(0), l, normalised);
+            else
+            {
+               fract = -(normalised ? 1 : beta_imp(a, b, l));
+               invert = false;
+               fract = -ibeta_series(a, b, x, fract, l, normalised);
+            }
+         }
          else 
          {
             std::swap(a, b);
@@ -679,7 +688,14 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             invert = !invert;
             if(y >= 0.3)
             {
-               fract = ibeta_series(a, b, x, l, normalised);
+               if(!invert)
+                  fract = ibeta_series(a, b, x, T(0), l, normalised);
+               else
+               {
+                  fract = -(normalised ? 1 : beta_imp(a, b, l));
+                  invert = false;
+                  fract = -ibeta_series(a, b, x, fract, l, normalised);
+               }
             }
             else
             {
@@ -709,7 +725,16 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
       {
          // One of a, b < 1 only:
          if((b <= 1) || ((x < 0.1) && (pow(b * x, a) <= 0.7)))
-            fract = ibeta_series(a, b, x, l, normalised);
+         {
+            if(!invert)
+               fract = ibeta_series(a, b, x, T(0), l, normalised);
+            else
+            {
+               fract = -(normalised ? 1 : beta_imp(a, b, l));
+               invert = false;
+               fract = -ibeta_series(a, b, x, fract, l, normalised);
+            }
+         }
          else 
          {
             std::swap(a, b);
@@ -718,7 +743,14 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
 
             if(y >= 0.3)
             {
-               fract = ibeta_series(a, b, x, l, normalised);
+               if(!invert)
+                  fract = ibeta_series(a, b, x, T(0), l, normalised);
+               else
+               {
+                  fract = -(normalised ? 1 : beta_imp(a, b, l));
+                  invert = false;
+                  fract = -ibeta_series(a, b, x, fract, l, normalised);
+               }
             }
             else if(a >= 15)
             {
@@ -779,7 +811,14 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
       {
          if(b * x <= 0.7)
          {
-            fract = ibeta_series(a, b, x, l, normalised);
+            if(!invert)
+               fract = ibeta_series(a, b, x, T(0), l, normalised);
+            else
+            {
+               fract = -(normalised ? 1 : beta_imp(a, b, l));
+               invert = false;
+               fract = -ibeta_series(a, b, x, fract, l, normalised);
+            }
          }
          else if(a > 15)
          {
@@ -798,7 +837,7 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
                prefix = 1;
             }
             fract = ibeta_a_step(bbar, a, y, x, n, l, normalised);
-            fract += ibeta_series(a, bbar, x, l, normalised);
+            fract += ibeta_series(a, bbar, x, T(0), l, normalised);
             fract /= prefix;
          }
          else if(normalised)
@@ -812,7 +851,14 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             T bbar = b - n;
             fract = ibeta_a_step(bbar, a, y, x, n, l, normalised);
             fract += ibeta_a_step(a, bbar, x, y, 20, l, normalised);
-            fract += ibeta_series(a+20, bbar, x, l, normalised);
+            if(invert)
+               fract -= (normalised ? 1 : beta_imp(a, b, l));
+            fract = ibeta_series(a+20, bbar, x, fract, l, normalised);
+            if(invert)
+            {
+               fract = -fract;
+               invert = false;
+            }
          }
          else
             fract = ibeta_fraction2(a, b, x, y, l, normalised);
