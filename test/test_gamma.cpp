@@ -374,7 +374,7 @@ template <class T>
 void test_spots(T)
 {
    //
-   // basic sanity checks, tolerance is 10 decimal places expressed as a persentage:
+   // basic sanity checks, tolerance is 10 decimal places expressed as a percentage:
    //
    T tolerance = std::pow(10.0, -8);
    BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(3.5)), static_cast<T>(3.3233509704478425512), tolerance);

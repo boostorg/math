@@ -173,7 +173,7 @@ void test_spots(T, const char* t)
 {
    std::cout << "Testing basic sanity checks for type " << t << std::endl;
    //
-   // basic sanity checks, tolerance is 10 decimal places expressed as a persentage:
+   // basic sanity checks, tolerance is 10 decimal places expressed as a percentage:
    //
    T tolerance = std::pow(10.0, -8);
    BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(0.125)), static_cast<T>(0.859683795198666182606970553478), tolerance);

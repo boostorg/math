@@ -179,7 +179,7 @@ template <class T>
 void test_spots(T)
 {
    //
-   // basic sanity checks, tolerance is 10 decimal places expressed as a persentage,
+   // basic sanity checks, tolerance is 10 decimal places expressed as a percentage,
    // One check per domain of the implementation:
    //
    T tolerance = std::pow(10.0, -8);
