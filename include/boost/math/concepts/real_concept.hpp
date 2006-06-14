@@ -240,7 +240,7 @@ inline float real_cast<float, concepts::real_concept>(concepts::real_concept r)
 template <>
 inline double real_cast<double, concepts::real_concept>(concepts::real_concept r)
 {
-   static_cast<double>(return r.value());
+   return static_cast<double>(r.value());
 }
 template <>
 inline long double real_cast<long double, concepts::real_concept>(concepts::real_concept r)

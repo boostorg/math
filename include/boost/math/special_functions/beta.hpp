@@ -28,7 +28,7 @@ namespace detail{
 // Implementation of Beta(a,b) using the Lanczos approximation:
 //
 template <class T, class L>
-T beta_imp(T a, T b, const L& l)
+T beta_imp(T a, T b, const L&)
 {
    using namespace std;
 

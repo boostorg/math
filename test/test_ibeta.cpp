@@ -25,16 +25,20 @@ void print_test_result(const boost::math::tools::test_result<T>& result,
    T eps = pow(T(2), 1-boost::math::tools::digits(worst[0]));
    std::cout << setprecision(4);
    std::cout << test << "(" << name << ") Max = " << (result.stat.max)()/eps
-      << " RMS Mean=" << result.stat.rms()/eps 
-      << "\n    worst case at row: " 
-      << row << "\n    { ";
-   for(unsigned i = 0; i < worst.size(); ++i)
+      << " RMS Mean=" << result.stat.rms()/eps;
+   if((result.stat.max)() != 0)
    {
-      if(i)
-         std::cout << ", ";
-      std::cout << worst[i];
+      std::cout << "\n    worst case at row: " 
+         << row << "\n    { ";
+      for(unsigned i = 0; i < worst.size(); ++i)
+      {
+         if(i)
+            std::cout << ", ";
+         std::cout << worst[i];
+      }
+      std::cout << " }";
    }
-   std::cout << " }" << std::endl;
+   std::cout << std::endl;
 }
 
 

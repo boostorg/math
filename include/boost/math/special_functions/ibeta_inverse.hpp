@@ -21,10 +21,21 @@ struct temme_root_finder
 {
    temme_root_finder(const T t_, const T a_) : t(t_), a(a_) {}
 
-   std::tr1::tuple<T, T> operator()(const T& x)
+   std::tr1::tuple<T, T> operator()(T x)
    {
-      T f = log(x) + a * log(1 - x) + t;
-      T f1 = (1 / x) - (a / (1 - x));
+      T y = 1 - x;
+      if(y == 0)
+      {
+         T big = tools::max_value(y) / 4;
+         return std::tr1::make_tuple(-big, -big);
+      }
+      if(x == 0)
+      {
+         T big = tools::max_value(y) / 4;
+         return std::tr1::make_tuple(-big, big);
+      }
+      T f = log(x) + a * log(y) + t;
+      T f1 = (1 / x) - (a / (y));
       return std::tr1::make_tuple(f, f1);
    }
 private:
@@ -114,7 +125,7 @@ T temme_method_1_ibeta_inverse(T a, T b, T z)
 // Section 3.
 //
 template <class T>
-T temme_method_2_ibeta_inverse(T a, T b, T z, T r, T theta)
+T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
 {
    //
    // Get first estimate for eta, see Eq 3.9 and 3.10, 
@@ -289,13 +300,17 @@ T temme_method_2_ibeta_inverse(T a, T b, T z, T r, T theta)
 // Section 4.
 //
 template <class T>
-T temme_method_3_ibeta_inverse(T a, T b, T z)
+T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
 {
    //
    // Begin by getting an initial approximation for the quantity
    // eta from the dominant part of the incomplete beta:
    //
-   T eta0 = boost::math::gamma_Q_inv(b, z);
+   T eta0;
+   if(p < q)
+      eta0 = boost::math::gamma_Q_inv(b, p);
+   if(p > q)
+      eta0 = boost::math::gamma_P_inv(b, q);
    eta0 /= a;
    //
    // Define the variables and powers we'll need later on:
@@ -366,6 +381,8 @@ T temme_method_3_ibeta_inverse(T a, T b, T z)
    // as the first guess, in practice this converges pretty quickly
    // and we only need a few digits correct anyway:
    //
+   if(eta <= 0)
+      eta = tools::min_value(eta);
    T u = eta - mu * log(eta) + (1 + mu) * log(1 + mu) - mu;
    T cross = 1 / (1 + mu);
    T lower = eta < mu ? cross : 0;
@@ -379,70 +396,13 @@ T temme_method_3_ibeta_inverse(T a, T b, T z)
    return x;
 }
 
-template <class T>
-T estimate_mathworld_inverse_beta(T a, T b, T p)
-{
-   T ap1 = a + 1;
-   T bm1 = b - 1;
-   T result = pow(a * p * boost::math::beta(a, b), 1/a);
-   T lbase = result;
-   result += (bm1 / ap1) * lbase * lbase;
-   result += (bm1 * (a * a + 3 * b * a - a + 5 * b - 4)) / (2 * ap1 * ap1 * (a + 2)) * lbase * lbase * lbase;
-#ifdef BOOST_INSTRUMENT
-   std::cout << "Estimating x with Mathworld Asymptotic: " << result << std::endl;
-#endif
-   return result;
-}
-
-template <class T>
-T estimate_inverse_beta(T a, T b, T p)
-{
-   using namespace std;
-   if(p == 1)
-      return 1;
-   if(p == 0)
-      return 0;
-
-   T x;
-
-   if(a + b > 5)
-   {
-      T minv = (std::min)(a, b);
-      T maxv = (std::max)(a, b);
-      if((sqrt(minv) > (maxv - minv)) && (minv > 5))
-      {
-         x = temme_method_1_ibeta_inverse(a, b, p);
-      }
-      T r = a + b;
-      T theta = asin(sqrt(a / r));
-      T s2t = minv / r;
-      if((s2t >= 0.2) && (s2t <= 0.8) && (minv >= 10))
-      {
-         x = temme_method_2_ibeta_inverse(a, b, p, r, theta);
-      }
-      x = temme_method_3_ibeta_inverse(a, b, p);
-   }
-   else
-   {
-      x = estimate_mathworld_inverse_beta(a, b, p);
-   }
-
-   // clean up just in case:
-   if(x > 1)
-      x = 0.9999F;
-   if(x < 0)
-      x = 0.00000005F;
-
-   return x;
-}
-
 template <class T, class L>
 struct ibeta_roots
 {
    ibeta_roots(T _a, T _b, T t, bool inv = false) 
       : a(_a), b(_b), target(t), invert(inv) {}
 
-   std::tr1::tuple<T, T, T> operator()(const T& x)
+   std::tr1::tuple<T, T, T> operator()(T x)
    {
       T f = ibeta_imp(a, b, x, L(), invert, true) - target;
       T f1 = invert ? 
@@ -450,9 +410,13 @@ struct ibeta_roots
                : ibeta_power_terms(a, b, x, 1 - x, L(), true);
       T y = 1 - x;
       if(y == 0)
-         y = tools::min_value(x) * 8;
+         y = tools::min_value(x) * 64;
+      if(x == 0)
+         x = tools::min_value(x) * 64;
       f1 /= y * x;
-      T f2 = f1 * (-y * a + (b - 2) * x + 1) / (y * x);
+      T f2 = f1 * (-y * a + (b - 2) * x + 1);
+      if(fabs(f2) < y * x * tools::max_value(y))
+         f2 /= (y * x);
       if(invert)
          f2 = -f2;
 
@@ -468,106 +432,345 @@ private:
 };
 
 template <class T, class L>
-T inverse_ibeta_imp(T a, T b, T z, T guess, bool invert, int bits, L const &)
+T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
 {
-   //
-   // Handle special cases first:
-   //
-   if(z == 1)
-      return invert ? 0 : 1;
-   if(z == 0)
-      return invert ? 1 : 0;
-   //
-   // We need a good estimate of the error in the incomplete beta function
-   // so that we don't set the desired precision too high.  Assume that 3-bits
-   // are lost each time the arguments increase by a factor of 10:
-   //
-   using namespace std;
-   int bits_lost = static_cast<int>(tools::real_cast<float>(ceil(log10((std::max)(a, b))) * 3));
-   if(bits_lost < 0)
-      bits_lost = 3;
-   else
-      bits_lost += 3;
-   int precision = (std::min)(tools::digits(z) - bits_lost, bits);
+   using namespace std;  // For ADL of math functions.
 
-   T min = 0;
-   T max = 1;
-   T x;
-   if(z > 0.5)
+   //
+   // The flag invert is set to true if we swap a for b and p for q,
+   // in which case the result has to be subtracted from 1:
+   //
+   bool invert = false;
+   //
+   // Depending upon which approximation method we use, we may end up
+   // calculating either x or y initially (where y = 1-x):
+   //
+   T x, y;
+   //
+   // For some of the methods we can put tighter bounds 
+   // on the result than simply [0,1]:
+   //
+   T lower = 0;
+   T upper = 1;
+   //
+   // Handle trivial cases first:
+   //
+   if(q == 0)
+      return 1;
+   else if(p == 0)
+      return 0;
+   else if((a == 1) && (b == 1))
+      return p;
+   else if(a + b > 5)
    {
-      invert = !invert;
-      z = 1 - z;
+      //
+      // When a+b is large then we can use one of Prof Temme's
+      // asymptotic expansions, begin by swapping things around 
+      // so that p < 0.5, we do this to avoid cancellations errors
+      // when p is large.
+      //
+      if(p > 0.5)
+      {
+         std::swap(a, b);
+         std::swap(p, q);
+         invert = !invert;
+      }
+      T minv = (std::min)(a, b);
+      T maxv = (std::max)(a, b);
+      if((sqrt(minv) > (maxv - minv)) && (minv > 5))
+      {
+         //
+         // When a and b differ by a small amount
+         // the curve is quite symmetrical and we can use an error
+         // function to approximate the inverse. This is the cheapest
+         // of the three Temme expantions, and the calculated value
+         // for x will never be much larger than p, so we don't have
+         // to worry about cancellation as long as p is small.
+         //
+         x = temme_method_1_ibeta_inverse(a, b, p);
+         y = 1 - x;
+      }
+      else
+      {
+         T r = a + b;
+         T theta = asin(sqrt(a / r));
+         T lambda = minv / r;
+         if((lambda >= 0.2) && (lambda <= 0.8) && (lambda >= 10))
+         {
+            //
+            // The second error function case is the next cheapest
+            // to use, it brakes down when the result is likely to be
+            // very small, if a+b is also small, but we can use a 
+            // cheaper expansion there in any case.  As before x won't
+            // be much larger than p, so as long as p is small we should 
+            // be free of cancellation error.
+            //
+            T ppa = pow(p, 1/a);
+            if((ppa < 0.0025) && (a + b < 200))
+            {
+               x = ppa * pow(a * boost::math::beta(a, b), 1/a);
+            }
+            else
+               x = temme_method_2_ibeta_inverse(a, b, p, r, theta);
+            y = 1 - x;
+         }
+         else
+         {
+            //
+            // If we get here then a and b are very different in magnitude
+            // and we need to use the third of Temme's methods which
+            // involves inverting the incomplete gamma.  This is much more
+            // expensive than the other methods.  We also can only use this
+            // method when a > b, which can lead to cancellation errors
+            // if we really want y (as we will when x is close to 1), so
+            // a different expansion is used in that case.
+            //
+            if(a < b)
+            {
+               std::swap(a, b);
+               std::swap(p, q);
+               invert = !invert;
+            }
+            T qpb = pow(q, 1/b);
+            if(qpb > 1e-3)
+            {
+               x = temme_method_3_ibeta_inverse(a, b, p, q);
+               y = 1 - x;
+            }
+            else
+            {
+               if(qpb < tools::min_value(x))
+                  y = pow(b * q * boost::math::beta(a, b), 1/b);
+               else
+                  y = qpb * pow(b * boost::math::beta(a, b), 1/b);
+               x = 1 - y;
+            }
+         }
+      }
    }
-   bool swapx = false;
-   if(guess > 0.9)
+   else if((a < 1) && (b < 1))
    {
-      invert = !invert;
-      guess = 1 - guess;
+      //
+      // Both a and b less than 1,
+      // there is a point of inflection at xs:
+      //
+      T xs = (1 - a) / (2 - a - b);
+      //
+      // Now we need to ensure that we start our iteration from the
+      // right side of the inflection point:
+      //
+      T fs = boost::math::ibeta(a, b, xs) - p;
+      if(fs < 0)
+      {
+         std::swap(a, b);
+         std::swap(p, q);
+         invert = true;
+         xs = 1 - xs;
+      }
+      T xg = pow(a * p * boost::math::beta(a, b), 1/a);
+      x = xg / (1 + xg);
+      y = 1 / (1 + xg);
+      //
+      // And finally we know that our result is below the inflection
+      // point, so set an upper limit on our search:
+      //
+      if(x > xs)
+         x = xs;
+      upper = xs;
+   }
+   else if((a > 1) && (b > 1))
+   {
+      //
+      // Small a and b, both greater than 1,
+      // there is a point of inflection at xs,
+      // and it's complement is xs2, we must always
+      // start our iteration from the right side of the
+      // point of inflection.
+      //
+      T xs = (a - 1) / (a + b - 2);
+      T xs2 = (b - 1) / (a + b - 2);
+      T ps = boost::math::ibeta(a, b, xs) - p;
+
+      if(ps < 0)
+      {
+         std::swap(a, b);
+         std::swap(p, q);
+         std::swap(xs, xs2);
+         invert = true;
+      }
+      //
+      // Estimate x and y, using expm1 to get a good estimate
+      // for y when it's very small:
+      //
+      T lx = log(p * a * boost::math::beta(a, b)) / a;
+      x = exp(lx);
+      y = x < 0.9 ? 1 - x : -boost::math::expm1(lx);
+
+      if((b < a) && (x < 0.2))
+      {
+         //
+         // Under a limited range of circustances we can improve
+         // our estimate for x, frankly it's clear if this has much effect!
+         //
+         T ap1 = a - 1;
+         T bm1 = b - 1;
+         T a_2 = a * a;
+         T a_3 = a * a_2;
+         T b_2 = b * b;
+         T terms[5] = { 0, 1 };
+         terms[2] = bm1 / ap1;
+         ap1 *= ap1;
+         terms[3] = bm1 * (3 * a * b + 5 * b + a_2 - a - 4) / (2 * (a + 2) * ap1);
+         ap1 *= (a + 1);
+         terms[4] = bm1 * (33 * a * b_2 + 31 * b_2 + 8 * a_2 * b_2 - 30 * a * b - 47 * b + 11 * a_2 * b + 6 * a_3 * b + 18 + 4 * a - a_3 + a_2 * a_2 - 10 * a_2)
+                    / (3 * (a + 3) * (a + 2) * ap1);
+         x = tools::evaluate_polynomial(terms, x, 5);
+      }
+      //
+      // And finally we know that our result is below the inflection
+      // point, so set an upper limit on our search:
+      //
+      if(x > xs)
+         x = xs;
+      upper = xs;
+   }
+   else /*if((a <= 1) != (b <= 1))*/
+   {
+      //
+      // If all else fails we get here, only one of a and b
+      // is above 1, and a+b is small.  Start by swapping
+      // things around so that we have a concave curve with b > a
+      // and no points of inflection in [0,1].  As long as we expect
+      // x to be small then we can use the simple (and cheap) power 
+      // term to estimate x, but when we expect x to be large then
+      // this greatly underestimates x and leaves us trying to
+      // iterate "round the corner" which may take almost forever...
+      // so use Temme's inverse gamma function case in that case,
+      // this works really rather well (albeit expensively) even though
+      // strictly speaking we're outside it's defined range.
+      // 
+      if(b < a)
+      {
+         std::swap(a, b);
+         std::swap(p, q);
+         invert = true;
+      }
+      if(pow(p, 1/a) < 0.1)
+      {
+         x = pow(p * a * boost::math::beta(a, b), 1 / a);
+         if(x == 0)
+            x = boost::math::tools::min_value(y);
+         y = 1 - x;
+      }
+      else
+      {
+         y = temme_method_3_ibeta_inverse(b, a, q, p);
+         if(y == 0)
+            y = boost::math::tools::min_value(y);
+         x = 1 - y;
+      }
+   }
+
+   //
+   // Now we have a guess for x (and for y) we can set things up for
+   // iteration.  If x > 0.5 it pays to swap things round:
+   //
+   if(x > 0.5)
+   {
       std::swap(a, b);
-      swapx = true;
-   }
-   x = tools::halley_iterate(ibeta_roots<T, L>(a, b, z, invert), guess, min, max, precision);
-   if(swapx)
-   {
-      x = 1 - x;
-   }
-#ifdef BOOST_INSTRUMENT
-   if(swapx)
-   {
+      std::swap(p, q);
+      std::swap(x, y);
       invert = !invert;
-      guess = 1 - guess;
-      std::swap(a, b);
+      T l = 1 - upper;
+      T u = 1 - lower;
+      lower = l;
+      upper = u;
    }
-   std::cout << "Found x: " << x << std::endl;
-   std::cout << "Forward Error: " << fabs(((invert ? ibetac(a, b, guess) : ibeta(a, b, guess)) - z) / z) << std::endl;
-   if(fabs(x - guess) > 0.1)
-      std::cout << "Guess was inaccurate... " << std::endl;
-#endif
-   return x;
+   //
+   // lower bound for our search:
+   //
+   // We're not interested in denormalised answers as these tend to
+   // these tend to take up lots of iterations, given that we can't get
+   // accurate derivatives in this area (they tend to be infinite).
+   //
+   if(lower == 0)
+   {
+      if(invert)
+      {
+         //
+         // We're not interested in answers smaller than machine epsilon:
+         //
+         lower = boost::math::tools::epsilon(x);
+         if(x < lower)
+            x = lower;
+      }
+      else
+         lower = boost::math::tools::min_value(x);
+      if(x < lower)
+         x = lower;
+   }
+   //
+   // Now iterate, we can use either p or q as the target here
+   // depending on which is smaller:
+   //
+   x = boost::math::tools::halley_iterate(
+      boost::math::detail::ibeta_roots<T, L>(a, b, (p < q ? p : q), (p < q ? false : true)), x, lower, upper, boost::math::tools::digits(x) / 2);
+   //
+   // We don't really want these asserts here, but they are useful for sanity
+   // checking that we have the limits right, uncomment if you suspect bugs *only*.
+   //
+   //BOOST_ASSERT(x != upper);
+   //BOOST_ASSERT((x != lower) || (x == boost::math::tools::min_value(x)) || (x == boost::math::tools::epsilon(x)));
+   //
+   // Tidy up, if we "lower" was too high then zero is the best answer we have:
+   //
+   if(x == lower)
+      x = 0;
+   return invert ? 1-x : x;
 }
 
 } // namespace detail
 
 template <class T>
-T ibeta_inv(T a, T b, T x)
+T ibeta_inv(T a, T b, T p)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
 
    if((a <= 0) || (b <= 0))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete beta function inverse.");
-   if((x < 0) || (x > 1))
+   if((p < 0) || (p > 1))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument p outside the range [0,1] in the incomplete beta function inverse.");
 
-   T guess;
-   if(x > 0.5)
-      guess = 1 - detail::estimate_inverse_beta(b, a, 1 - x);
-   else
-      guess = detail::estimate_inverse_beta(a, b, x);
-   if((guess == 0) && (x != 0))
-      guess = 0.00005f;
-   return tools::checked_narrowing_cast<T>(detail::inverse_ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), static_cast<value_type>(guess), false, tools::digits(x), evaluation_type()), BOOST_CURRENT_FUNCTION);
+   return tools::checked_narrowing_cast<T>(
+      detail::ibeta_inv_imp(
+         static_cast<value_type>(a), 
+         static_cast<value_type>(b), 
+         static_cast<value_type>(p), 
+         static_cast<value_type>(1 - p), 
+         evaluation_type()), 
+      BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
-T ibetac_inv(T a, T b, T x)
+T ibetac_inv(T a, T b, T q)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
 
    if((a <= 0) || (b <= 0))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete beta function inverse.");
-   if((x < 0) || (x > 1))
+   if((q < 0) || (q > 1))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument p outside the range [0,1] in the incomplete beta function inverse.");
 
-   T guess;
-   if(x > 0.5)
-      guess = detail::estimate_inverse_beta(a, b, 1 - x);
-   else
-      guess = 1 - detail::estimate_inverse_beta(b, a, x);
-   if((guess == 1) && (x != 0))
-      guess = 0.99F;
-   return tools::checked_narrowing_cast<T>(detail::inverse_ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), static_cast<value_type>(guess), true, tools::digits(x), evaluation_type()), BOOST_CURRENT_FUNCTION);
+   return tools::checked_narrowing_cast<T>(
+      detail::ibeta_inv_imp(
+         static_cast<value_type>(a), 
+         static_cast<value_type>(b), 
+         static_cast<value_type>(1 - q), 
+         static_cast<value_type>(q), 
+         evaluation_type()), 
+      BOOST_CURRENT_FUNCTION);
 }
 
 }} // namespaces

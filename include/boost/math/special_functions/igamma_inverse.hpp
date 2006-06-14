@@ -343,12 +343,16 @@ T gamma_P_inv(T a, T p)
    T guess = detail::estimate_inverse_gamma(a, p, 1 - p);
    if((guess == 0) && (p != 0))
       guess = tools::min_value(guess);
-   return tools::halley_iterate(
+   T lower = tools::min_value(guess);
+   guess = tools::halley_iterate(
       detail::gamma_P_inverse_func<T>(a, p, false), 
       guess,
-      T(0),
+      lower,
       tools::max_value(a),
       (tools::digits(a) * 2) / 3);
+   if(guess == lower)
+      return 0;
+   return guess;
 }
 
 template <class T>
@@ -365,12 +369,16 @@ T gamma_Q_inv(T a, T q)
    T guess = detail::estimate_inverse_gamma(a, 1 - q, q);
    if((guess == 0) && (q != 1))
       guess = tools::min_value(guess);
-   return tools::halley_iterate(
+   T lower = tools::min_value(guess);
+   guess = tools::halley_iterate(
       detail::gamma_P_inverse_func<T>(a, q, true), 
       guess,
-      T(0),
+      lower,
       tools::max_value(a),
       (tools::digits(a) * 2) / 3);
+   if(guess == lower)
+      return 0;
+   return guess;
 }
 
 }} // namespaces

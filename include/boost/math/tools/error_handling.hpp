@@ -106,7 +106,7 @@ inline T denorm_error(T const& t, const char* function, const char* message)
 namespace detail{
 
 template <class T, class U>
-inline T checked_narrowing_cast(U const& val, const char* function, const boost::mpl::true_*)
+inline T checked_narrowing_cast(U const& val, const char* , const boost::mpl::true_*)
 {
    return val;
 }
