@@ -645,9 +645,16 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
       // term to estimate x, but when we expect x to be large then
       // this greatly underestimates x and leaves us trying to
       // iterate "round the corner" which may take almost forever...
-      // so use Temme's inverse gamma function case in that case,
+      //
+      // We could use Temme's inverse gamma function case in that case,
       // this works really rather well (albeit expensively) even though
       // strictly speaking we're outside it's defined range.
+      //
+      // However it's expensive to compute, and an alternative approach
+      // which models the curve as a distorted quarter circle is much
+      // cheaper to compute, and still keeps the number of iterations
+      // required down to a reasonable level.  With thanks to Prof Temme
+      // for this suggestion.
       // 
       if(b < a)
       {
@@ -664,12 +671,14 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
       }
       else /*if(pow(q, 1/b) < 0.1)*/
       {
+         // model a distorted quarter circle:
          y = pow(1 - pow(p, b*beta(a, b)), 1/b);
          if(y == 0)
             y = boost::math::tools::min_value(y);
          x = 1 - y;
       }
       /*
+      // heavyweight solution that appears to be no longer required...?
       else
       {
          y = temme_method_3_ibeta_inverse(b, a, q, p);
