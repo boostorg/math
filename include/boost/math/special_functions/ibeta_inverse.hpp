@@ -309,7 +309,7 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
    T eta0;
    if(p < q)
       eta0 = boost::math::gamma_Q_inv(b, p);
-   if(p > q)
+   else
       eta0 = boost::math::gamma_P_inv(b, q);
    eta0 /= a;
    //
@@ -655,20 +655,28 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
          std::swap(p, q);
          invert = true;
       }
-      if(pow(p, 1/a) < 0.1)
+      if(pow(p, 1/a) < 0.5)
       {
          x = pow(p * a * boost::math::beta(a, b), 1 / a);
          if(x == 0)
             x = boost::math::tools::min_value(y);
          y = 1 - x;
       }
+      else /*if(pow(q, 1/b) < 0.1)*/
+      {
+         y = pow(1 - pow(p, b*beta(a, b)), 1/b);
+         if(y == 0)
+            y = boost::math::tools::min_value(y);
+         x = 1 - y;
+      }
+      /*
       else
       {
          y = temme_method_3_ibeta_inverse(b, a, q, p);
          if(y == 0)
             y = boost::math::tools::min_value(y);
          x = 1 - y;
-      }
+      }*/
    }
 
    //
