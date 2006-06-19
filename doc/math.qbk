@@ -36,6 +36,9 @@
 [def __underflow_error [link underflow_error underflow_error]]
 [def __denorm_error [link denorm_error denorm_error]]
 
+[template super[x]'''<superscript>'''[x]'''</superscript>''']
+[template sub[x]'''<subscript>'''[x]'''</subscript>''']
+
 [section:intro Introduction]
 
 This library is work in progress, it is intended to fulfil two needs:
