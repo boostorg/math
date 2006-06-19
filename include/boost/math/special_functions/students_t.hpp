@@ -45,9 +45,13 @@ namespace boost
 			FPT z = dd/(dd + t * t);
 			// Calculate probability of Student's t using the incomplete beta function.
 			FPT result = (static_cast<FPT>(0.5) * ibeta(dd * static_cast<FPT>(0.5), static_cast<FPT>(0.5), z));
-			// Expect 0 <= probability result <= 1.
-			// TODO or is it 0 < probability result < 1. 
-			// TODO boost_assert or other check here?
+			// Check 0 <= probability result <= 1.
+			BOOST_ASSERT(result >= static_cast<FPT>(0))
+			BOOST_ASSERT(result <= static_cast<FPT>(1.))
+	  	// Numerical errors might cause it to drift slightly < 0 or > 1.
+	  	// This might cause trouble later.
+	  	// Might also consider constraining to fit the range 0 to 1
+	  	// by changing any value just outside to the limit 0 or 1?
 			return (t > static_cast<FPT>(0)) ? static_cast<FPT>(1.)	- result : result;
 		} // students_t
 	} // namespace math
