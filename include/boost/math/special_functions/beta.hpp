@@ -837,7 +837,7 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
                prefix = 1;
             }
             fract = ibeta_a_step(bbar, a, y, x, n, l, normalised);
-            fract += ibeta_series(a, bbar, x, T(0), l, normalised);
+            fract = beta_small_b_large_a_series(a,  bbar, x, y, fract, T(1), l, normalised);
             fract /= prefix;
          }
          else if(normalised)
@@ -853,7 +853,8 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             fract += ibeta_a_step(a, bbar, x, y, 20, l, normalised);
             if(invert)
                fract -= (normalised ? 1 : beta_imp(a, b, l));
-            fract = ibeta_series(a+20, bbar, x, fract, l, normalised);
+            //fract = ibeta_series(a+20, bbar, x, fract, l, normalised);
+            fract = beta_small_b_large_a_series(a+20,  bbar, x, y, fract, T(1), l, normalised);
             if(invert)
             {
                fract = -fract;
