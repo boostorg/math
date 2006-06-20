@@ -70,6 +70,7 @@ data and/or data for output to an external graphing application.
 
 [include tgamma.qbk]
 [include lgamma.qbk]
+[include gamma_ratios.qbk]
 [include igamma.qbk]
 [include igamma_inv.qbk]
 [include erf.qbk]

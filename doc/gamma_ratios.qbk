@@ -1,0 +1,70 @@
+[section Ratios of Gamma Functions]
+
+[caution __caution ]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/gamma.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T tgamma_ratio(T a, T b);
+   
+   template <class T>
+   T tgamma_delta_ratio(T a, T delta);
+   
+   }} // namespaces
+   
+[h4 Description]
+
+   template <class T> 
+   T tgamma_ratio(T a, T b);
+   
+Returns the ratio of gamma functions:
+
+[$../equations/gamma_ratio0.png]
+
+Internally this just calls `tgamma_delta_ratio(a, b-a)`.
+   
+   template <class T>
+   T tgamma_delta_ratio(T a, T delta);
+   
+Returns the ratio of gamma functions:
+
+[$../equations/gamma_ratio1.png]
+
+[h4 Accuracy]
+
+[table Errors In the Function tgamma_delta_ratio(a, delta)
+[[Mantissa Size] [Platform and Compiler] [20 < a < 80\nand\ndelta < 1]]
+[[53] [Win32, Visual C++ 8] [Peek=16.9 Mean=1.7] ]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peek=49.2 Mean=4.2]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=49.2 Mean=3.2]]
+[[113] [HPUX IA64, aCC A.06.06] [Peek=27.3 Mean=3.6] ]
+]
+
+[table Errors In the Function tgamma_ratio(a, b)
+[[Mantissa Size] [Platform and Compiler] [6 < a,b < 50]]
+[[53] [Win32, Visual C++ 8] [Peek=34 Mean=9] ]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peek=49.2 Mean=4.2]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=49.2 Mean=3.2]]
+[[113] [HPUX IA64, aCC A.06.06] [Peek=27.3 Mean=3.6] ]
+]
+
+[h4 Testing]
+
+Accuracy tests use data generated at very high precision
+(with NTL's RR class set at 1000-bit precision) and using this
+implementation.  
+
+[h4 Implementation]
+
+The inplementation of these functions is very similar to that of 
+[link beta the beta function], and is based on combining similar power terms
+to improve accuracy and avoid spurious overflow/underflow.
+
+[endsect]
+
