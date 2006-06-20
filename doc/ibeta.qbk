@@ -117,8 +117,54 @@ and therefore we have test data that is fully independent of the code.
 
 [h4 Implementation]
 
-Under construction: refer to 
+This implementation is closely based upon 
 [@http://portal.acm.org/citation.cfm?doid=131766.131776 "Algorithm 708; significant digit computation of the incomplete beta function ratios", DiDonato and Morris, ACM, 1992.]
+
+All four of these functions share a common implementation: this is passed both
+x and y, and can return either p or q where these are related by:
+
+[$../equations/ibeta_inv5.png]
+
+so at any point we can swap a for b, x for y and p for q if this results in
+a more favourable position.  Generally such swaps are performed so that we always
+compute a value less than 0.9, when required this can then be subtracted from 1
+without undue cancellation error.
+
+The following continued fraction representation is found in many textbooks
+but is not used in this implementation - it's both slower and less accurate than
+the alternatives - however it is used to generate test data:
+
+[$../equations/ibeta5.png]
+
+The following continued fraction is due to Didonato and Morris, and is used
+in this implementation when a and b are both greater than 1:
+
+[$../equations/ibeta6.png]
+
+For smallish b and x then a series representation can be used:
+
+[$../equations/ibeta7.png]
+
+When b << a then the transition from 0 to 1 occurs very close to x = 1
+and some care has to be taken over the method of computation, in that case
+the following series representation is used:
+
+[$../equations/ibeta8.png]
+[/[$../equations/ibeta9.png]]
+
+Where Q(a,x) is an incomplete gamma function.  Note that this method relies
+on keeping a table of all the p[sub n] previously computed, which does limit
+the precision of the method depending upon the size of the table used.
+
+Finally we can sidestep difficult areas, or move to an area with a more
+efficient means of computation, by using the duplication formulae:
+
+[$../equations/ibeta10.png]
+[$../equations/ibeta11.png]
+
+The domains of a, b and x for which the various methods are used are identical
+to those described in Didonato and Morris' paper.
+
 
 [endsect]
 
