@@ -19,15 +19,15 @@
 
 
 template <class T, class Seq>
-void print_test_result(const boost::math::tools::test_result<T>& result, 
+void print_test_result(const boost::math::tools::test_result<T>& result,
                        const Seq& worst, int row, const char* name, const char* test)
 {
    using namespace std;
    T eps = pow(T(2), 1-boost::math::tools::digits(worst[0]));
    std::cout << setprecision(4);
    std::cout << test << "(" << name << ") Max = " << (result.stat.max)()/eps
-      << " RMS Mean=" << result.stat.rms()/eps 
-      << "\n    worst case at row: " 
+      << " RMS Mean =" << result.stat.rms()/eps
+      << "\n    worst case at row: "
       << row << "\n    { ";
    for(unsigned i = 0; i < worst.size(); ++i)
    {
@@ -56,16 +56,16 @@ void do_test_gamma(const T& data, const char* type_name, const char* test_name)
    // test tgamma against data:
    //
    result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(funcp, boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
+      data,
+      boost::lambda::bind(funcp, boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[1]));
    print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::tgamma");
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::tgamma;
       result = boost::math::tools::test(
-         data, 
-         boost::lambda::bind(funcp, boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
+         data,
+         boost::lambda::bind(funcp, boost::lambda::ret<value_type>(boost::lambda::_1[0])),
          boost::lambda::ret<value_type>(boost::lambda::_1[1]));
       print_test_result(result, data[result.worst_case], result.worst_case, type_name, "other::tgamma");
    }
@@ -75,16 +75,16 @@ void do_test_gamma(const T& data, const char* type_name, const char* test_name)
    //
    funcp = boost::math::lgamma;
    result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(funcp, boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
+      data,
+      boost::lambda::bind(funcp, boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[2]));
    print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::lgamma");
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::lgamma;
       result = boost::math::tools::test(
-         data, 
-         boost::lambda::bind(funcp, boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
+         data,
+         boost::lambda::bind(funcp, boost::lambda::ret<value_type>(boost::lambda::_1[0])),
          boost::lambda::ret<value_type>(boost::lambda::_1[2]));
       print_test_result(result, data[result.worst_case], result.worst_case, type_name, "other::lgamma");
    }
@@ -111,8 +111,8 @@ void do_test_gammap1m1(const T& data, const char* type_name, const char* test_na
    // test tgammap1m1 against data:
    //
    result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(funcp, boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
+      data,
+      boost::lambda::bind(funcp, boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[1]));
    print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::tgammap1m1");
    std::cout << std::endl;
@@ -140,8 +140,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    if(data[0][2] > 0)
    {
       result = boost::math::tools::test(
-         data, 
-         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])), 
+         data,
+         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
          ret<value_type>(_1[2]));
       print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::tgamma");
       //
@@ -149,8 +149,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       //
       funcp = boost::math::tgamma_lower;
       result = boost::math::tools::test(
-         data, 
-         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])), 
+         data,
+         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
          ret<value_type>(_1[4]));
       print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::tgamma_lower");
    }
@@ -159,8 +159,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    //
    funcp = boost::math::gamma_Q;
    result = boost::math::tools::test(
-      data, 
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])), 
+      data,
+      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
       ret<value_type>(_1[3]));
    print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::gamma_Q");
 #if defined(TEST_CEPHES) || defined(TEST_GSL)
@@ -171,8 +171,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    {
       funcp = other::gamma_Q;
       result = boost::math::tools::test(
-         data, 
-         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])), 
+         data,
+         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
          ret<value_type>(_1[3]));
       print_test_result(result, data[result.worst_case], result.worst_case, type_name, "other::gamma_Q");
    }
@@ -182,8 +182,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    //
    funcp = boost::math::gamma_P;
    result = boost::math::tools::test(
-      data, 
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])), 
+      data,
+      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
       ret<value_type>(_1[5]));
    print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::gamma_P");
 #if defined(TEST_CEPHES) || defined(TEST_GSL)
@@ -194,8 +194,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    {
       funcp = other::gamma_P;
       result = boost::math::tools::test(
-         data, 
-         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])), 
+         data,
+         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
          ret<value_type>(_1[5]));
       print_test_result(result, data[result.worst_case], result.worst_case, type_name, "other::gamma_P");
    }
@@ -214,8 +214,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    for(unsigned i = 0; i < data.size(); ++i)
    {
       //
-      // These inverse tests are thrown off if the output of the 
-      // incomplete gamma is too close to 1: basically there is insuffient 
+      // These inverse tests are thrown off if the output of the
+      // incomplete gamma is too close to 1: basically there is insuffient
       // information left in the value we're using as input to the inverse
       // to be able to get back to the original value.
       //
@@ -276,8 +276,8 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
    // test gamma_P_inv(T, T) against data:
    //
    result = boost::math::tools::test(
-      data, 
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])), 
+      data,
+      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
       ret<value_type>(_1[2]));
    print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::gamma_P_inv");
    //
@@ -285,12 +285,12 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
    //
    funcp = boost::math::gamma_Q_inv;
    result = boost::math::tools::test(
-      data, 
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])), 
+      data,
+      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
       ret<value_type>(_1[3]));
    print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::gamma_Q_inv");
 }
-   
+
 template <class T>
 void test_gamma(T, const char* name)
 {
@@ -299,7 +299,7 @@ void test_gamma(T, const char* name)
    //
    // The contents are as follows, each row of data contains
    // three items, input value, gamma and lgamma:
-   // 
+   //
    // gamma and lgamma at integer and half integer values:
    // boost::array<boost::array<T, 3>, N> factorials;
    //
@@ -331,7 +331,7 @@ void test_gamma(T, const char* name)
    do_test_gamma(near_1, name, "near 1");
    do_test_gamma(near_2, name, "near 2");
    do_test_gamma(near_m10, name, "near -10");
-   do_test_gamma(near_m55, name, "near -55"); 
+   do_test_gamma(near_m55, name, "near -55");
 
    //
    // And now tgammap1m1 which computes gamma(1+dz)-1:
