@@ -34,7 +34,7 @@
 namespace boost{ namespace math{ 
    
 //
-// forward declarations:
+// Forward declarations:
 //
 template <class T>
 T tgamma(T z);
@@ -77,9 +77,8 @@ inline bool is_odd(T v)
 template <class T>
 T sinpx(T z)
 {
-   // add hock function calculates x*sin(pi*x)
-   // taking extra care near when x is near
-   // a whole number.
+   // add hoc function calculates x*sin(pi*x),
+   // taking extra care near when x is near a whole number.
    using namespace std;
    int sign = 1;
    if(z < 0)
@@ -109,7 +108,7 @@ T sinpx(T z)
    return sign*z*result;
 }
 //
-// tgamma(z), with lanczos support:
+// tgamma(z), with Lanczos support:
 //
 template <class T, class L>
 T gamma_imp(T z, const L& l)
@@ -926,9 +925,7 @@ inline T tgamma_ratio(T a, T b)
    return tools::checked_narrowing_cast<T>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b - a), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
-
 } // namespace math
-
 } // namespace boost
 
 #include <boost/math/special_functions/igamma_inverse.hpp>

@@ -17,7 +17,6 @@
 // A recent review of calculating t quantiles is at:
 // http://www.mth.kcl.ac.uk/~shaww/web_page/papers/Tdistribution06.pdf
 
-
 #ifndef BOOST_MATH_SPECIAL_STUDENTS_T_HPP
 #define BOOST_MATH_SPECIAL_STUDENTS_T_HPP
 
@@ -28,26 +27,27 @@ namespace boost
 {
 	namespace math
 	{
-		//	template <class DFT, class FPT> FPT students_t(DFT df, FPT t); // Declaration.
+		template <class DFT, class FPT>
+		FPT students_t(DFT degrees_of_freedom, FPT t); // Declaration.
 
 		template <class DFT, class FPT>
-		FPT students_t(DFT df, FPT t)
+		FPT students_t(DFT degrees_of_freedom, FPT t)
 		{ // Probability of Student's t implementation.
 			using boost::math::ibeta; // ibeta(a, b, x)
 			using boost::math::tools::domain_error;
 
 			// Degrees of freedom argument may be integral, signed, or unsigned, or floating point.
-			if(df <= DFT(0))
+			if(degrees_of_freedom <= DFT(0))
 			{ // Degrees of freedom must not be negative!
 				domain_error<DFT>(BOOST_CURRENT_FUNCTION, "Negative degrees of freedom argument to the students_t function!");
 			}
-			FPT dd = static_cast<FPT>(df); // In case df was an integral type.
+			FPT dd = static_cast<FPT>(degrees_of_freedom); // In case degrees_of_freedom was an integral type.
 			FPT z = dd/(dd + t * t);
 			// Calculate probability of Student's t using the incomplete beta function.
 			FPT result = (static_cast<FPT>(0.5) * ibeta(dd * static_cast<FPT>(0.5), static_cast<FPT>(0.5), z));
 			// Check 0 <= probability result <= 1.
-			BOOST_ASSERT(result >= static_cast<FPT>(0))
-			BOOST_ASSERT(result <= static_cast<FPT>(1.))
+			BOOST_ASSERT(result >= static_cast<FPT>(0));
+			BOOST_ASSERT(result <= static_cast<FPT>(1.));
 	  	// Numerical errors might cause it to drift slightly < 0 or > 1.
 	  	// This might cause trouble later.
 	  	// Might also consider constraining to fit the range 0 to 1

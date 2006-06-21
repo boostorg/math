@@ -27,14 +27,14 @@
 
 // For very large values of both degrees_of_freedom1 and degrees_of_freedom2, greater than 10^5, a normal approximation is used.
 // If only one of degrees_of_freedom1 or degrees_of_freedom2 is greater than 10^5 then a chi sq 2 approximation is used,
-// see Abramowitz and Stegun (1965).
-// TODO???
+// see Abramowitz and Stegun (1965) Eq 26.6.12 and 26.6.13 on p947.
 
 namespace boost
 {
 	namespace math
 	{
-		//	template <class DFT, class FPT> FPT students_t(DFT degrees_of_freedom1, DFT degrees_of_freedom2, FPT x); // Declaration.
+		template <class DFT, class FPT>
+		FPT fisher(DFT degrees_of_freedom1, DFT degrees_of_freedom2, FPT x); // Declaration.
 
 		template <class DFT, class FPT>
 		FPT fisher(DFT degrees_of_freedom1, DFT degrees_of_freedom2, FPT x)
