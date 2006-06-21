@@ -50,7 +50,11 @@ void raise_error(const char* function, const char* message, const T& val)
    msg += ": ";
    msg += message;
 
-   msg = (boost::format(msg) % val).str();
+   int prec = std::numeric_limits<T>::digits10+2;
+   if(prec)
+      msg = (boost::format(msg) % boost::io::group(std::setprecision(prec), val)).str();
+   else
+      msg = (boost::format(msg) % val).str();
 
    E e(msg);
    boost::throw_exception(e);
@@ -106,7 +110,7 @@ inline T pole_error(const char* function, const char* message)
 template <class T>
 inline T pole_error(const char* function, const char* message, const T& val)
 {
-   return domain_error<T>(function, message ? message : "Evaluation at pole %.4g", val);
+   return domain_error<T>(function, message ? message : "Evaluation at pole %1%", val);
 }
 //
 // Result too large to be represented in type T:
