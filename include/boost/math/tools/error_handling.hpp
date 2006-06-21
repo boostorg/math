@@ -12,6 +12,7 @@
 #include <boost/throw_exception.hpp>
 #include <boost/limits.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/format.hpp>
 // we don't use this one directly, but our clients will use it:
 #include <boost/current_function.hpp>
 
@@ -36,6 +37,25 @@ void raise_error(const char* function, const char* message)
    boost::throw_exception(e);
 }
 
+template <class E, class T>
+void raise_error(const char* function, const char* message, const T& val)
+{
+   if(function == 0)
+      function = "Unkown function";
+   if(message == 0)
+      message = "Cause unknown";
+
+   std::string msg("Error in function ");
+   msg += function;
+   msg += ": ";
+   msg += message;
+
+   msg = (boost::format(msg) % val).str();
+
+   E e(msg);
+   boost::throw_exception(e);
+}
+
 } // namespace
 
 //
@@ -48,8 +68,29 @@ inline T domain_error(const char* function, const char* message)
 #ifndef BOOST_MATH_THROW_ON_DOMAIN_ERROR
    if(std::numeric_limits<T>::has_quiet_NaN)
       return std::numeric_limits<T>::quiet_NaN();
+   //
+   // If T doesn't have a quite NaN, we want to fall through and throw
+   // an exception:
+   //
 #endif
    detail::raise_error<std::domain_error>(function, message ? message : "Domain Error");
+   // we don't get here:
+   return 0;
+}
+
+template <class T>
+inline T domain_error(const char* function, const char* message, const T& val)
+{
+   errno = EDOM;
+#ifndef BOOST_MATH_THROW_ON_DOMAIN_ERROR
+   if(std::numeric_limits<T>::has_quiet_NaN)
+      return std::numeric_limits<T>::quiet_NaN();
+   //
+   // If T doesn't have a quite NaN, we want to fall through and throw
+   // an exception:
+   //
+#endif
+   detail::raise_error<std::domain_error>(function, message ? message : "Domain Error", val);
    // we don't get here:
    return 0;
 }
@@ -60,6 +101,12 @@ template <class T>
 inline T pole_error(const char* function, const char* message)
 {
    return domain_error<T>(function, message ? message : "Evaluation at pole");
+}
+
+template <class T>
+inline T pole_error(const char* function, const char* message, const T& val)
+{
+   return domain_error<T>(function, message ? message : "Evaluation at pole %.4g", val);
 }
 //
 // Result too large to be represented in type T:
