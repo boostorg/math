@@ -41,17 +41,17 @@ Returns the ratio of gamma functions:
 [table Errors In the Function tgamma_delta_ratio(a, delta)
 [[Mantissa Size] [Platform and Compiler] [20 < a < 80\nand\ndelta < 1]]
 [[53] [Win32, Visual C++ 8] [Peek=16.9 Mean=1.7] ]
-[[64] [Redhat Linux IA32, gcc-3.4.4] [Peek=49.2 Mean=4.2]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=49.2 Mean=3.2]]
-[[113] [HPUX IA64, aCC A.06.06] [Peek=27.3 Mean=3.6] ]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peek=24 Mean=2.7]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=12.8 Mean=1.8]]
+[[113] [HPUX IA64, aCC A.06.06] [Peek=21.4 Mean=2.3] ]
 ]
 
 [table Errors In the Function tgamma_ratio(a, b)
 [[Mantissa Size] [Platform and Compiler] [6 < a,b < 50]]
 [[53] [Win32, Visual C++ 8] [Peek=34 Mean=9] ]
-[[64] [Redhat Linux IA32, gcc-3.4.4] [Peek=49.2 Mean=4.2]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=49.2 Mean=3.2]]
-[[113] [HPUX IA64, aCC A.06.06] [Peek=27.3 Mean=3.6] ]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peek=91 Mean=23]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=35.6 Mean=9.3]]
+[[113] [HPUX IA64, aCC A.06.06] [Peek=43.9 Mean=13.2] ]
 ]
 
 [h4 Testing]
