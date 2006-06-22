@@ -8,6 +8,7 @@
 
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/array.hpp>
+#include <cmath>
 
 namespace boost{ namespace math{
 
@@ -274,14 +275,14 @@ inline unsigned max_factorial()
 template <class T>
 T factorial(unsigned i)
 {
-   using namspace std;
+   using namespace std;
 
    if(i <= max_factorial<T>())
       return unchecked_factorial<T>(i);
    T result = boost::math::tgamma(i+1);
    if(result > tools::max_value(result))
       return result; // overflowed value, tgamma will have signalled the error already
-   return floor(result + 0.5)
+   return floor(result + 0.5);
 }
 
 template<>

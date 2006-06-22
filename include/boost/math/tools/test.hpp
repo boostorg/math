@@ -50,6 +50,9 @@ T relative_error(T a, T b)
    T min_val = (std::max)(
       tools::min_value(a), 
       static_cast<T>((std::numeric_limits<double>::min)()));
+   T max_val = (std::min)(
+      tools::max_value(a), 
+      static_cast<T>((std::numeric_limits<double>::max)()));
 #else
    T min_val = tools::min_value(a);
    T max_val = tools::max_value(a);

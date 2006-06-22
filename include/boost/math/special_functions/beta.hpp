@@ -12,6 +12,7 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/tools/roots.hpp>
+#include <cmath>
 
 namespace boost{ namespace math{
 
@@ -548,6 +549,34 @@ T rising_factorial_ratio(T a, T b, int k)
 //
 // Routine for a > 15, b < 1
 //
+// Begin by figuring out how large our table of Pn's should be,
+// quoted accuracies are "guestimates" based on empiracal observation.
+// Note that the table size should never exceed the size of our 
+// tables of factorials.
+//
+template <class T>
+struct Pn_size
+{
+   // This is likely to be enough for ~100 digit accuracy
+   // but it's hard to quantify exactly:
+   BOOST_STATIC_CONSTANT(unsigned, value = 100);
+};
+template <>
+struct Pn_size<float>
+{
+   BOOST_STATIC_CONSTANT(unsigned, value = 15); // ~8-15 digit accuracy
+};
+template <>
+struct Pn_size<double>
+{
+   BOOST_STATIC_CONSTANT(unsigned, value = 30); // 16-20 digit accuracy
+};
+template <>
+struct Pn_size<long double>
+{
+   BOOST_STATIC_CONSTANT(unsigned, value = 50); // ~35-50 digit accuracy
+};
+
 template <class T, class L>
 T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool normalised)
 {
@@ -585,7 +614,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
    // recursively, and requires a full history of all the previous values
    // so no choice but to declare a big table and hope it's big enough...
    //
-   T p[30] = { 1 };  // see 9.3.
+   T p[ ::boost::math::detail::Pn_size<T>::value ] = { 1 };  // see 9.3.
    //
    // Now an initial value for J, see 9.6:
    //
@@ -602,8 +631,19 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
    T t4 = 4 * t * t;
    T b2n = b; 
 
-   for(unsigned n = 1; n < 30; ++n)
+   for(unsigned n = 1; n < sizeof(p)/sizeof(p[0]); ++n)
    {
+      /*
+      // debugging code, enable this if you want to determine whether
+      // the table of Pn's is large enough...
+      //
+      static int max_count = 2;
+      if(n > max_count)
+      {
+         max_count = n;
+         std::cerr << "Max iterations in BGRAT was " << n << std::endl;
+      }
+      */
       //
       // begin by evaluating the next Pn from Eq 9.4:
       //
@@ -630,8 +670,16 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
       //
       T r = prefix * p[n] * j;
       sum += r;
-      if(fabs(r) < tools::epsilon(r) * sum)
-         break;
+      if(r > 1)
+      {
+         if(fabs(r) < fabs(tools::epsilon(r) * sum))
+            break;
+      }
+      else
+      {
+         if(fabs(r / tools::epsilon(r)) < fabs(sum))
+            break;
+      }
    }
    return sum;
 }
