@@ -12,6 +12,7 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/tools/roots.hpp>
+#include <boost/static_assert.hpp>
 #include <cmath>
 
 namespace boost{ namespace math{
@@ -560,21 +561,25 @@ struct Pn_size
    // This is likely to be enough for ~100 digit accuracy
    // but it's hard to quantify exactly:
    BOOST_STATIC_CONSTANT(unsigned, value = 100);
+   BOOST_STATIC_ASSERT(::boost::math::max_factorial<T>::value >= 100);
 };
 template <>
 struct Pn_size<float>
 {
    BOOST_STATIC_CONSTANT(unsigned, value = 15); // ~8-15 digit accuracy
+   BOOST_STATIC_ASSERT(::boost::math::max_factorial<float>::value >= 15);
 };
 template <>
 struct Pn_size<double>
 {
    BOOST_STATIC_CONSTANT(unsigned, value = 30); // 16-20 digit accuracy
+   BOOST_STATIC_ASSERT(::boost::math::max_factorial<double>::value >= 30);
 };
 template <>
 struct Pn_size<long double>
 {
    BOOST_STATIC_CONSTANT(unsigned, value = 50); // ~35-50 digit accuracy
+   BOOST_STATIC_ASSERT(::boost::math::max_factorial<long double>::value >= 50);
 };
 
 template <class T, class L>
