@@ -61,18 +61,9 @@ void test_spots(FPT)
 	// but these are as yet undiscovered for chi-sqr.
 	
 	// Best source of accurate values is
-	// Mathworld online calculator (40 decimal digits precision)
+	// Mathworld online calculator (40 decimal digits precision, suitable for up to 128-bit significands)
 	// http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=GammaRegularized
-
-   BOOST_CHECK_CLOSE(
-      chisqr(
-         static_cast<FPT>(5.),  // degrees_of_freedom - as floating-point.
-         static_cast<FPT>(11.0705)),  // chisqr
-      static_cast<FPT>(0.049999955428043634554692855618402756029434129418384), // probability.
-			// Source Mathworld online calculator (50 decimal digits precision)
-			// http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=GammaRegularized
-			// Q(5.0/2, 11.0705/2) = 0.049999955428043634554692855618402756029434129418384
-			tolerance);
+	// GammaRegularized is same as gamma incomplete, gamma or gamma_Q(a, x) or Q(a, z).
 
    BOOST_CHECK_CLOSE(
       chisqr(
