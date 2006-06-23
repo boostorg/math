@@ -7,14 +7,15 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-
 // Basic sanity test for chisqr Cumulative Distribution Function.
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
+// #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
+#  pragma warning(disable: 4512) // assignment operator could not be generated.
+#  pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
 #endif
 
 #include <boost/math/special_functions/chisqr.hpp>
@@ -102,18 +103,37 @@ void test_spots(FPT)
          static_cast<FPT>(5.)),  // chisqr
       static_cast<FPT>(0.999999999999999999814527311613020069945), // probability.
 			tolerance);
+
+	 // Try bad argument for degrees_of_freedom.
+   //BOOST_CHECK_CLOSE(
+   //   chisqr(
+   //      static_cast<FPT>(-1),  // degrees_of_freedom - as floating-point.
+   //      static_cast<FPT>(-2.)),  // chisqr
+   //   static_cast<FPT>(0.999999999999999999), // probability.
+			//tolerance);
+
+	 // Try bad argument for chisqr.
+   //BOOST_CHECK_CLOSE(
+   //   chisqr(
+   //      static_cast<FPT>(1),  // degrees_of_freedom - as floating-point.
+   //      static_cast<FPT>(-2.)),  // chisqr
+   //   static_cast<FPT>(0.999999999999999999), // probability.
+			//tolerance);
+
+
+
 } // template <class FPT>void test_spots(FPT)
 
 int test_main(int, char* [])
 {
 	// Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
-   test_spots(0.0F); // Test float.
-   test_spots(0.0); // Test double.
-   test_spots(0.0L); // Test long double.
-   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+	test_spots(0.0F); // Test float.
+	test_spots(0.0); // Test double.
+	test_spots(0.0L); // Test long double.
+	test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 
-   return 0;
+	return 0;
 } // int test_main(int, char* [])
 
 /*
@@ -124,5 +144,13 @@ Running 1 test case...
 
 *** No errors detected
 Press any key to continue . . .
+
+unknown location(0):
+
+fatal error in "test_main_caller( argc, argv )": std::domain_error: Error in function float __cdecl boost::math::chisqr<float,float>(float,float): degrees of freedom argument is -1, but must be > 0 !
+
+..\..\..\..\..\..\boost-sandbox\libs\math_functions\test\test_chisqr.cpp(112): last checkpoint
+
+
 
 */
