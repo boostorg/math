@@ -24,7 +24,7 @@ template <class E>
 void raise_error(const char* function, const char* message)
 {
    if(function == 0)
-      function = "Unkown function";
+      function = "Unknown function";
    if(message == 0)
       message = "Cause unknown";
 
@@ -41,7 +41,7 @@ template <class E, class T>
 void raise_error(const char* function, const char* message, const T& val)
 {
    if(function == 0)
-      function = "Unkown function";
+      function = "Unknown function";
    if(message == 0)
       message = "Cause unknown";
 
