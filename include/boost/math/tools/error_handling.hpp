@@ -50,11 +50,8 @@ void raise_error(const char* function, const char* message, const T& val)
    msg += ": ";
    msg += message;
 
-   int prec = std::numeric_limits<T>::digits10+2;
-   if(prec)
-      msg = (boost::format(msg) % boost::io::group(std::setprecision(prec), val)).str();
-   else
-      msg = (boost::format(msg) % val).str();
+   int prec = 2 + (tools::digits(val) * 30103UL) / 100000UL;
+   msg = (boost::format(msg) % boost::io::group(std::setprecision(prec), val)).str();
 
    E e(msg);
    boost::throw_exception(e);
