@@ -84,7 +84,7 @@ T log1p(T x)
    if(a < std::numeric_limits<T>::epsilon())
       return x;
    detail::log1p_series<T> s(x);
-   return tools::sum_series(s, tools::digits(x) + 2);
+   return tools::sum_series(s, tools::digits<T>() + 2);
 }
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 // these overloads work around a type deduction bug:

@@ -23,7 +23,7 @@ void print_test_result(const boost::math::tools::test_result<T>& result,
                        T worst, const char* name, const char* test)
 {
    using namespace std;
-   T eps = pow(T(2), 1-boost::math::tools::digits(worst));
+   T eps = pow(T(2), 1-boost::math::tools::digits<T>());
    std::cout << setprecision(4);
    std::cout << test << "(" << name << ") Max = " << (result.stat.max)()/eps
       << " RMS Mean=" << result.stat.rms()/eps << " worst case at point: " << worst << std::endl;
@@ -101,8 +101,8 @@ void test_spots(T)
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), static_cast<T>(1)), static_cast<T>(0.25), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(1e-50), static_cast<T>(4)), static_cast<T>(1e50), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), static_cast<T>(1e-50)), static_cast<T>(1e50), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), static_cast<T>(20)), static_cast<T>(0.00002823263692828910220214568040654997176736), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(0.0125), static_cast<T>(0.000023)), static_cast<T>(43558.24045647538375006349016083320744662), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), static_cast<T>(20)), static_cast<T>(0.00002823263692828910220214568040654997176736L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(0.0125), static_cast<T>(0.000023)), static_cast<T>(43558.24045647538375006349016083320744662L), tolerance);
 }
 
 int test_main(int, char* [])

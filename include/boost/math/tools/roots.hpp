@@ -12,6 +12,7 @@
 #include <boost/tr1/tuple.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
+#include <boost/throw_exception.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -145,8 +146,8 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
 
    T factor = static_cast<T>(ldexp(1.0, 1 - digits));
    T delta = 1;
-   T delta1 = tools::max_value(f0);
-   T delta2 = tools::max_value(f0);
+   T delta1 = tools::max_value<T>();
+   T delta2 = tools::max_value<T>();
 
    boost::uintmax_t count(max_iter);
 
@@ -264,7 +265,7 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
          {
             T denom = 2 * f0;
             T num = 2 * f1 - f0 * (f2 / f1);
-            if((fabs(num) < 1) && (fabs(denom) >= fabs(num) * tools::max_value(denom)))
+            if((fabs(num) < 1) && (fabs(denom) >= fabs(num) * tools::max_value<T>()))
             {
                // possible overflow, use Newton step:
                delta = f0 / f1;
@@ -347,8 +348,8 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& ma
 
    T factor = static_cast<T>(ldexp(1.0, 1 - digits));
    T delta = 0;
-   T delta1 = tools::max_value(f0);
-   T delta2 = tools::max_value(f0);
+   T delta1 = tools::max_value<T>();
+   T delta2 = tools::max_value<T>();
 
 #ifdef BOOST_INSTRUMENT
    std::cout << "Schroeder iteration, limit = " << factor << std::endl;

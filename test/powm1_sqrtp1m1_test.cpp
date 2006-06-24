@@ -1571,7 +1571,7 @@ void test_powm1_sqrtp1m1(T, const char* name)
 
    typedef T (*func_t)(const T&);
    func_t f = &boost::math::sqrtp1m1<T>;
-   T eps = ldexp(T(1.0), 1-boost::math::tools::digits(T()));
+   T eps = ldexp(T(1.0), 1-boost::math::tools::digits<T>());
 
    boost::math::tools::test_result<T> result = boost::math::tools::test(
       sqrtp1m1_data, 

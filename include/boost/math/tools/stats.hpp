@@ -17,8 +17,8 @@ class stats
 {
 public:
    stats() 
-      : m_min(tools::max_value(T())),
-        m_max(-tools::max_value(T())),
+      : m_min(tools::max_value<T>()),
+        m_max(-tools::max_value<T>()),
         m_total(0),
         m_squared_total(0),
         m_count(0)

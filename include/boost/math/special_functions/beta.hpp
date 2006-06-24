@@ -142,12 +142,12 @@ T beta_imp(T a, T b, const lanczos::undefined_lanczos& l)
    T lc = (std::max)(T(10), a+b);
 
    // calculate the fraction parts:
-   T sa = detail::lower_gamma_series(a, la, ::boost::math::tools::digits(a)) / a;
-   sa += detail::upper_gamma_fraction(a, la, ::boost::math::tools::digits(a));
-   T sb = detail::lower_gamma_series(b, lb, ::boost::math::tools::digits(b)) / b;
-   sb += detail::upper_gamma_fraction(b, lb, ::boost::math::tools::digits(b));
-   T sc = detail::lower_gamma_series(c, lc, ::boost::math::tools::digits(c)) / c;
-   sc += detail::upper_gamma_fraction(c, lc, ::boost::math::tools::digits(c));
+   T sa = detail::lower_gamma_series(a, la, ::boost::math::tools::digits<T>()) / a;
+   sa += detail::upper_gamma_fraction(a, la, ::boost::math::tools::digits<T>());
+   T sb = detail::lower_gamma_series(b, lb, ::boost::math::tools::digits<T>()) / b;
+   sb += detail::upper_gamma_fraction(b, lb, ::boost::math::tools::digits<T>());
+   T sc = detail::lower_gamma_series(c, lc, ::boost::math::tools::digits<T>()) / c;
+   sc += detail::upper_gamma_fraction(c, lc, ::boost::math::tools::digits<T>());
 
    // and the exponent part:
    result = exp(lc - la - lb) * pow(la/lc, a) * pow(lb/lc, b);
@@ -211,7 +211,7 @@ T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised)
       result = pow(x, a);
    }
    ibeta_series_t<T> s(a, b, x, result);
-   return boost::math::tools::sum_series(s, boost::math::tools::digits(x), s0);
+   return boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), s0);
 }
 //
 // Incomplete Beta series again, this time without Lanczos support:
@@ -234,12 +234,12 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
       T lc = (std::max)(T(10), a+b);
 
       // calculate the gamma parts:
-      T sa = detail::lower_gamma_series(a, la, ::boost::math::tools::digits(a)) / a;
-      sa += detail::upper_gamma_fraction(a, la, ::boost::math::tools::digits(a));
-      T sb = detail::lower_gamma_series(b, lb, ::boost::math::tools::digits(b)) / b;
-      sb += detail::upper_gamma_fraction(b, lb, ::boost::math::tools::digits(b));
-      T sc = detail::lower_gamma_series(c, lc, ::boost::math::tools::digits(c)) / c;
-      sc += detail::upper_gamma_fraction(c, lc, ::boost::math::tools::digits(c));
+      T sa = detail::lower_gamma_series(a, la, ::boost::math::tools::digits<T>()) / a;
+      sa += detail::upper_gamma_fraction(a, la, ::boost::math::tools::digits<T>());
+      T sb = detail::lower_gamma_series(b, lb, ::boost::math::tools::digits<T>()) / b;
+      sb += detail::upper_gamma_fraction(b, lb, ::boost::math::tools::digits<T>());
+      T sc = detail::lower_gamma_series(c, lc, ::boost::math::tools::digits<T>()) / c;
+      sc += detail::upper_gamma_fraction(c, lc, ::boost::math::tools::digits<T>());
 
       // and their combined power-terms:
       T b1 = (x * lc) / la;
@@ -248,12 +248,12 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
       T lb1 = a * log(b1);
       T lb2 = b * log(b2);
 
-      if((lb1 >= tools::log_max_value(b1)) 
-         || (lb1 <= tools::log_min_value(b1))
-         || (lb2 >= tools::log_max_value(b1)) 
-         || (lb2 <= tools::log_min_value(b1))
-         || (e1 >= tools::log_max_value(b1)) 
-         || (e1 <= tools::log_min_value(b1)) )
+      if((lb1 >= tools::log_max_value<T>()) 
+         || (lb1 <= tools::log_min_value<T>())
+         || (lb2 >= tools::log_max_value<T>()) 
+         || (lb2 <= tools::log_min_value<T>())
+         || (e1 >= tools::log_max_value<T>()) 
+         || (e1 <= tools::log_min_value<T>()) )
       {
          T p = lb1 + lb2 - e1;
          result = exp(p);
@@ -271,7 +271,7 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
       result = pow(x, a);
    }
    ibeta_series_t<T> s(a, b, x, result);
-   return boost::math::tools::sum_series(s, boost::math::tools::digits(x), s0);
+   return boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), s0);
 }
 //
 // Compute the leading power terms in the incomplete Beta:
@@ -359,10 +359,10 @@ T ibeta_power_terms(T a,
       T b2 = (y * cgh) / bgh;
       T l1 = a * log(b1);
       T l2 = b * log(b2);
-      if((l1 >= tools::log_max_value(l1))
-         || (l1 <= tools::log_min_value(l1)) 
-         || (l2 >= tools::log_max_value(l1))
-         || (l2 <= tools::log_min_value(l1)) 
+      if((l1 >= tools::log_max_value<T>())
+         || (l1 <= tools::log_min_value<T>()) 
+         || (l2 >= tools::log_max_value<T>())
+         || (l2 <= tools::log_min_value<T>()) 
          )
       {
          // Oops, overflow, sidestep:
@@ -422,12 +422,12 @@ T ibeta_power_terms(T a,
    T lb = (std::max)(T(10), b);
    T lc = (std::max)(T(10), a+b);
    // gamma function partials:
-   T sa = detail::lower_gamma_series(a, la, ::boost::math::tools::digits(a)) / a;
-   sa += detail::upper_gamma_fraction(a, la, ::boost::math::tools::digits(a));
-   T sb = detail::lower_gamma_series(b, lb, ::boost::math::tools::digits(b)) / b;
-   sb += detail::upper_gamma_fraction(b, lb, ::boost::math::tools::digits(b));
-   T sc = detail::lower_gamma_series(c, lc, ::boost::math::tools::digits(c)) / c;
-   sc += detail::upper_gamma_fraction(c, lc, ::boost::math::tools::digits(c));
+   T sa = detail::lower_gamma_series(a, la, ::boost::math::tools::digits<T>()) / a;
+   sa += detail::upper_gamma_fraction(a, la, ::boost::math::tools::digits<T>());
+   T sb = detail::lower_gamma_series(b, lb, ::boost::math::tools::digits<T>()) / b;
+   sb += detail::upper_gamma_fraction(b, lb, ::boost::math::tools::digits<T>());
+   T sc = detail::lower_gamma_series(c, lc, ::boost::math::tools::digits<T>()) / c;
+   sc += detail::upper_gamma_fraction(c, lc, ::boost::math::tools::digits<T>());
    // gamma function powers combined with incomplete beta powers:
 
    T b1 = (x * lc) / la;
@@ -436,12 +436,12 @@ T ibeta_power_terms(T a,
    T lb1 = a * log(b1);
    T lb2 = b * log(b2);
 
-   if((lb1 >= tools::log_max_value(lb1))
-      || (lb1 <= tools::log_min_value(lb1))
-      || (lb2 >= tools::log_max_value(lb1))
-      || (lb2 <= tools::log_min_value(lb1))
-      || (e1 >= tools::log_max_value(lb1))
-      || (e1 <= tools::log_min_value(lb1))
+   if((lb1 >= tools::log_max_value<T>())
+      || (lb1 <= tools::log_min_value<T>())
+      || (lb2 >= tools::log_max_value<T>())
+      || (lb2 <= tools::log_min_value<T>())
+      || (e1 >= tools::log_max_value<T>())
+      || (e1 <= tools::log_min_value<T>())
       )
    {
       result = exp(lb1 + lb2 - e1);
@@ -499,7 +499,7 @@ T ibeta_fraction2(T a, T b, T x, T y, const L& l, bool normalised)
       return result;
 
    ibeta_fraction2_t<T> f(a, b, x);
-   T fract = boost::math::tools::continued_fraction_b(f, boost::math::tools::digits(x));
+   T fract = boost::math::tools::continued_fraction_b(f, boost::math::tools::digits<T>());
    return result / fract;
 }
 //
@@ -677,12 +677,12 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
       sum += r;
       if(r > 1)
       {
-         if(fabs(r) < fabs(tools::epsilon(r) * sum))
+         if(fabs(r) < fabs(tools::epsilon<T>() * sum))
             break;
       }
       else
       {
-         if(fabs(r / tools::epsilon(r)) < fabs(sum))
+         if(fabs(r / tools::epsilon<T>()) < fabs(sum))
             break;
       }
    }

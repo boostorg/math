@@ -22,7 +22,7 @@ void print_test_result(const boost::math::tools::test_result<T>& result,
                        const Seq& worst, int row, const char* name, const char* test)
 {
    using namespace std; // To aid selection of the right pow.
-   T eps = pow(T(2), 1-boost::math::tools::digits(worst[0]));
+   T eps = pow(T(2), 1-boost::math::tools::digits<T>());
    std::cout << std::setprecision(4);
    std::cout << test << "(" << name << ") Max = " << (result.stat.max)()/eps
       << " RMS Mean=" << result.stat.rms()/eps;
@@ -120,8 +120,8 @@ void test_inverses(const T& data)
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
-   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::tools::digits(value_type(0))/2)) * 100;
-   if(boost::math::tools::digits(value_type(0)) < 50)
+   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::tools::digits<value_type>()/2)) * 100;
+   if(boost::math::tools::digits<value_type>() < 50)
       precision = 1;   // 1% or two decimal digits, all we can hope for when the input is truncated
 
    for(unsigned i = 0; i < data.size(); ++i)
@@ -134,7 +134,7 @@ void test_inverses(const T& data)
       //
       if(data[i][5] == 0)
          BOOST_CHECK_EQUAL(boost::math::ibeta_inv(data[i][0], data[i][1], data[i][5]), value_type(0));
-      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value(data[i][5])))
+      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()))
       {
          value_type inv = boost::math::ibeta_inv(data[i][0], data[i][1], data[i][5]);
          BOOST_CHECK_CLOSE(data[i][2], inv, precision);
@@ -144,7 +144,7 @@ void test_inverses(const T& data)
 
       if(data[i][6] == 0)
          BOOST_CHECK_EQUAL(boost::math::ibetac_inv(data[i][0], data[i][1], data[i][6]), value_type(1));
-      else if((1 - data[i][6] > 0.001) && (fabs(data[i][6]) >= boost::math::tools::min_value(data[i][6])))
+      else if((1 - data[i][6] > 0.001) && (fabs(data[i][6]) >= boost::math::tools::min_value<value_type>()))
       {
          value_type inv = boost::math::ibetac_inv(data[i][0], data[i][1], data[i][6]);
          BOOST_CHECK_CLOSE(data[i][2], inv, precision);

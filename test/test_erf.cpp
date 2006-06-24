@@ -23,7 +23,7 @@ void print_test_result(const boost::math::tools::test_result<T>& result,
                        T worst, const char* name, const char* test)
 {
    using namespace std;
-   T eps = pow(T(2), 1-boost::math::tools::digits(worst));
+   T eps = pow(T(2), 1-boost::math::tools::digits<T>());
    std::cout << setprecision(4);
    std::cout << test << "(" << name << ") Max = " << (result.stat.max)()/eps
       << " RMS Mean=" << result.stat.rms()/eps << " worst case at point: " << worst << std::endl;
@@ -192,11 +192,11 @@ void test_spots(T, const char* t)
    BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(-0.5)), static_cast<T>(-0.520499877813046537682746653892), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(0)), static_cast<T>(0), tolerance);
 
-   tolerance = boost::math::tools::epsilon(tolerance) * 100 * 200; // 200 eps %.
+   tolerance = boost::math::tools::epsilon<T>() * 100 * 200; // 200 eps %.
 #if defined(__CYGWIN__)
    // some platforms long double is only reliably accurate to double precision:
    if(sizeof(T) == sizeof(long double))
-      tolerance = boost::math::tools::epsilon(double(0)) * 100 * 200; // 200 eps %.
+      tolerance = boost::math::tools::epsilon<double>() * 100 * 200; // 200 eps %.
 #endif
   
    for(T i = -0.95; i < 1; i += 0.125)

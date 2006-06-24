@@ -86,7 +86,7 @@ template <class T>
 T get_ibeta_fraction1(T a, T b, T x)
 {
    ibeta_fraction1_t<T> f(a, b, x);
-   T fract = boost::math::tools::continued_fraction_a(f, boost::math::tools::digits(x));
+   T fract = boost::math::tools::continued_fraction_a(f, boost::math::tools::digits<T>());
    T denom = (a * (fract + 1));
    T num = pow(x, a) * pow(1 - x, b);
    if(num == 0)

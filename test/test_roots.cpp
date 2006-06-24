@@ -45,12 +45,12 @@ struct ibeta_roots_2   // for second order algorithms
                : boost::math::detail::ibeta_power_terms(a, b, x, 1 - x, L(), true);
       T y = 1 - x;
       if(y == 0)
-         y = boost::math::tools::min_value(x) * 8;
+         y = boost::math::tools::min_value<T>() * 8;
       f1 /= y * x;
 
       // make sure we don't have a zero derivative:
       if(f1 == 0)
-         f1 = (invert ? -1 : 1) * boost::math::tools::min_value(f1) * 64;
+         f1 = (invert ? -1 : 1) * boost::math::tools::min_value<T>() * 64;
 
       return std::tr1::make_tuple(f, f1);
    }
@@ -73,7 +73,7 @@ struct ibeta_roots_3   // for third order algorithms
                : boost::math::detail::ibeta_power_terms(a, b, x, 1 - x, L(), true);
       T y = 1 - x;
       if(y == 0)
-         y = boost::math::tools::min_value(x) * 8;
+         y = boost::math::tools::min_value<T>() * 8;
       f1 /= y * x;
       T f2 = f1 * (-y * a + (b - 2) * x + 1) / (y * x);
       if(invert)
@@ -81,7 +81,7 @@ struct ibeta_roots_3   // for third order algorithms
 
       // make sure we don't have a zero derivative:
       if(f1 == 0)
-         f1 = (invert ? -1 : 1) * boost::math::tools::min_value(f1) * 64;
+         f1 = (invert ? -1 : 1) * boost::math::tools::min_value<T>() * 64;
 
       return std::tr1::make_tuple(f, f1, f2);
    }
@@ -225,8 +225,8 @@ void test_inverses(const T& data)
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
-   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::tools::digits(value_type(0))/2)) * 100;
-   if(boost::math::tools::digits(value_type(0)) < 50)
+   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::tools::digits<value_type>()/2)) * 100;
+   if(boost::math::tools::digits<value_type>() < 50)
       precision = 1;   // 1% or two decimal digits, all we can hope for when the input is truncated
 
    for(unsigned i = 0; i < data.size(); ++i)
@@ -244,7 +244,7 @@ void test_inverses(const T& data)
          BOOST_CHECK_EQUAL(inverse_ibeta_newton(data[i][0], data[i][1], data[i][5]), value_type(0));
          BOOST_CHECK_EQUAL(inverse_ibeta_bisect(data[i][0], data[i][1], data[i][5]), value_type(0));
       }
-      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value(data[i][5])))
+      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()))
       {
          value_type inv = inverse_ibeta_halley(data[i][0], data[i][1], data[i][5]);
          BOOST_CHECK_CLOSE(data[i][2], inv, precision);

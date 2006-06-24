@@ -43,7 +43,7 @@ T sqrtp1m1(const T& val)
    if(fabs(val) > 0.75)
       return sqrt(1 + val) - 1;
    detail::sqrtp1m1_series<T> gen(val);
-   return tools::kahan_sum_series(gen, ::boost::math::tools::digits(val));
+   return tools::kahan_sum_series(gen, ::boost::math::tools::digits<T>());
 }
 
 } } // namespaces

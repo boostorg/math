@@ -293,10 +293,10 @@ struct gamma_P_inverse_func
       T f = !invert ? boost::math::gamma_P(a, x) : boost::math::gamma_Q(a, x);
       T f1 = static_cast<T>(boost::math::detail::regularised_gamma_prefix(value_type(a), value_type(x), evaluation_type()));
       T f2;
-      if((x < 1) && (tools::max_value(f1) * x < fabs(f1)))
+      if((x < 1) && (tools::max_value<T>() * x < fabs(f1)))
       {
          // overflow:
-         f1 = tools::max_value(f1) / 2;
+         f1 = tools::max_value<T>() / 2;
          f2 = -f1;
       }
       else
@@ -304,10 +304,10 @@ struct gamma_P_inverse_func
          f1 /= x;
          T div = (a - x - 1) / x;
          f2 = f1;
-         if((fabs(div) > 1) && (tools::max_value(f2) / fabs(div) < f2))
+         if((fabs(div) > 1) && (tools::max_value<T>() / fabs(div) < f2))
          {
             // overflow:
-            f2 = tools::max_value(f1) / 2;
+            f2 = tools::max_value<T>() / 2;
          }
          else
          {
@@ -337,19 +337,19 @@ T gamma_P_inv(T a, T p)
    if((p < 0) || (p > 1))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse.");
    if(p == 1)
-      return tools::max_value(p);
+      return tools::max_value<T>();
    if(p == 0)
       return 0;
    T guess = detail::estimate_inverse_gamma(a, p, 1 - p);
    if((guess == 0) && (p != 0))
-      guess = tools::min_value(guess);
-   T lower = tools::min_value(guess);
+      guess = tools::min_value<T>();
+   T lower = tools::min_value<T>();
    guess = tools::halley_iterate(
       detail::gamma_P_inverse_func<T>(a, p, false), 
       guess,
       lower,
-      tools::max_value(a),
-      (tools::digits(a) * 2) / 3);
+      tools::max_value<T>(),
+      (tools::digits<T>() * 2) / 3);
    if(guess == lower)
       return 0;
    return guess;
@@ -363,19 +363,19 @@ T gamma_Q_inv(T a, T q)
    if((q < 0) || (q > 1))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse.");
    if(q == 0)
-      return tools::max_value(q);
+      return tools::max_value<T>();
    if(q == 1)
       return 0;
    T guess = detail::estimate_inverse_gamma(a, 1 - q, q);
    if((guess == 0) && (q != 1))
-      guess = tools::min_value(guess);
-   T lower = tools::min_value(guess);
+      guess = tools::min_value<T>();
+   T lower = tools::min_value<T>();
    guess = tools::halley_iterate(
       detail::gamma_P_inverse_func<T>(a, q, true), 
       guess,
       lower,
-      tools::max_value(a),
-      (tools::digits(a) * 2) / 3);
+      tools::max_value<T>(),
+      (tools::digits<T>() * 2) / 3);
    if(guess == lower)
       return 0;
    return guess;

@@ -26,12 +26,12 @@ struct temme_root_finder
       T y = 1 - x;
       if(y == 0)
       {
-         T big = tools::max_value(y) / 4;
+         T big = tools::max_value<T>() / 4;
          return std::tr1::make_tuple(-big, -big);
       }
       if(x == 0)
       {
-         T big = tools::max_value(y) / 4;
+         T big = tools::max_value<T>() / 4;
          return std::tr1::make_tuple(-big, big);
       }
       T f = log(x) + a * log(y) + t;
@@ -288,7 +288,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
    // And iterate:
    //
    x = tools::newton_raphson_iterate(
-      temme_root_finder<T>(-lu, alpha), x, lower, upper, tools::digits(x) / 2);
+      temme_root_finder<T>(-lu, alpha), x, lower, upper, tools::digits<T>() / 2);
 
    return x;
 }
@@ -382,14 +382,14 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
    // and we only need a few digits correct anyway:
    //
    if(eta <= 0)
-      eta = tools::min_value(eta);
+      eta = tools::min_value<T>();
    T u = eta - mu * log(eta) + (1 + mu) * log(1 + mu) - mu;
    T cross = 1 / (1 + mu);
    T lower = eta < mu ? cross : 0;
    T upper = eta < mu ? 1 : cross;
    T x = (lower + upper) / 2;
    x = tools::newton_raphson_iterate(
-      temme_root_finder<T>(u, mu), x, lower, upper, tools::digits(x) / 2);
+      temme_root_finder<T>(u, mu), x, lower, upper, tools::digits<T>() / 2);
 #ifdef BOOST_INSTRUMENT
    std::cout << "Estimating x with Temme method 3: " << x << std::endl;
 #endif
@@ -410,19 +410,19 @@ struct ibeta_roots
                : ibeta_power_terms(a, b, x, 1 - x, L(), true);
       T y = 1 - x;
       if(y == 0)
-         y = tools::min_value(x) * 64;
+         y = tools::min_value<T>() * 64;
       if(x == 0)
-         x = tools::min_value(x) * 64;
+         x = tools::min_value<T>() * 64;
       f1 /= y * x;
       T f2 = f1 * (-y * a + (b - 2) * x + 1);
-      if(fabs(f2) < y * x * tools::max_value(y))
+      if(fabs(f2) < y * x * tools::max_value<T>())
          f2 /= (y * x);
       if(invert)
          f2 = -f2;
 
       // make sure we don't have a zero derivative:
       if(f1 == 0)
-         f1 = (invert ? -1 : 1) * tools::min_value(f1) * 64;
+         f1 = (invert ? -1 : 1) * tools::min_value<T>() * 64;
 
       return std::tr1::make_tuple(f, f1, f2);
    }
@@ -539,7 +539,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
             }
             else
             {
-               if(qpb < tools::min_value(x))
+               if(qpb < tools::min_value<T>())
                   y = pow(b * q * boost::math::beta(a, b), 1/b);
                else
                   y = qpb * pow(b * boost::math::beta(a, b), 1/b);
@@ -666,7 +666,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
       {
          x = pow(p * a * boost::math::beta(a, b), 1 / a);
          if(x == 0)
-            x = boost::math::tools::min_value(y);
+            x = boost::math::tools::min_value<T>();
          y = 1 - x;
       }
       else /*if(pow(q, 1/b) < 0.1)*/
@@ -674,7 +674,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
          // model a distorted quarter circle:
          y = pow(1 - pow(p, b*beta(a, b)), 1/b);
          if(y == 0)
-            y = boost::math::tools::min_value(y);
+            y = boost::math::tools::min_value<T>();
          x = 1 - y;
       }
       /*
@@ -683,7 +683,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
       {
          y = temme_method_3_ibeta_inverse(b, a, q, p);
          if(y == 0)
-            y = boost::math::tools::min_value(y);
+            y = boost::math::tools::min_value<T>();
          x = 1 - y;
       }*/
    }
@@ -717,12 +717,12 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
          //
          // We're not interested in answers smaller than machine epsilon:
          //
-         lower = boost::math::tools::epsilon(x);
+         lower = boost::math::tools::epsilon<T>();
          if(x < lower)
             x = lower;
       }
       else
-         lower = boost::math::tools::min_value(x);
+         lower = boost::math::tools::min_value<T>();
       if(x < lower)
          x = lower;
    }
@@ -731,13 +731,13 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
    // depending on which is smaller:
    //
    x = boost::math::tools::halley_iterate(
-      boost::math::detail::ibeta_roots<T, L>(a, b, (p < q ? p : q), (p < q ? false : true)), x, lower, upper, boost::math::tools::digits(x) / 2);
+      boost::math::detail::ibeta_roots<T, L>(a, b, (p < q ? p : q), (p < q ? false : true)), x, lower, upper, boost::math::tools::digits<T>() / 2);
    //
    // We don't really want these asserts here, but they are useful for sanity
    // checking that we have the limits right, uncomment if you suspect bugs *only*.
    //
    //BOOST_ASSERT(x != upper);
-   //BOOST_ASSERT((x != lower) || (x == boost::math::tools::min_value(x)) || (x == boost::math::tools::epsilon(x)));
+   //BOOST_ASSERT((x != lower) || (x == boost::math::tools::min_value<T>()) || (x == boost::math::tools::epsilon<T>()));
    //
    // Tidy up, if we "lower" was too high then zero is the best answer we have:
    //

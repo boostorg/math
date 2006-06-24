@@ -12,14 +12,10 @@
 #include <iostream>
 #include <iomanip>
 
-#ifdef NTL_config__H
-#include <NTL/RR.h>
-#endif
-
 namespace boost{ namespace math{ namespace tools{
 
 template <class T>
-int digits(const T&)
+int digits(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -30,7 +26,7 @@ int digits(const T&)
 }
 
 template <class T>
-T max_value(T const&)
+T max_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -41,7 +37,7 @@ T max_value(T const&)
 }
 
 template <class T>
-T min_value(T const&)
+T min_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -52,7 +48,7 @@ T min_value(T const&)
 }
 
 template <class T>
-T log_max_value(T const&)
+T log_max_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -65,7 +61,7 @@ T log_max_value(T const&)
 }
 
 template <class T>
-T log_min_value(T const&)
+T log_min_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -78,7 +74,7 @@ T log_min_value(T const&)
 }
 
 template <class T>
-T epsilon(T const&)
+T epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);

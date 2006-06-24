@@ -87,7 +87,7 @@ typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, 
    typedef typename traits::value_type value_type;
 
    result_type factor = 1 / pow(result_type(2), bits);
-   result_type tiny = tools::min_value(factor);
+   result_type tiny = tools::min_value<result_type>();
 
    value_type v = g();
 
@@ -122,7 +122,7 @@ typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, 
    typedef typename traits::value_type value_type;
 
    result_type factor = 1 / pow(result_type(2), bits);
-   result_type tiny = tools::min_value(factor);
+   result_type tiny = tools::min_value<result_type>();
 
    value_type v = g();
 
@@ -175,7 +175,7 @@ typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, 
    typedef typename traits::value_type value_type;
 
    result_type factor = 1 / pow(result_type(2), bits);
-   result_type tiny = tools::min_value(factor);
+   result_type tiny = tools::min_value<result_type>();
 
    value_type v = g();
 
@@ -211,7 +211,7 @@ typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, 
    typedef typename traits::value_type value_type;
 
    result_type factor = 1 / pow(result_type(2), bits);
-   result_type tiny = tools::min_value(factor);
+   result_type tiny = tools::min_value<result_type>();
 
    value_type v = g();
 

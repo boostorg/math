@@ -17,7 +17,7 @@ void print_test_result(const boost::math::tools::test_result<T>& result,
                        const Seq& worst, int row, const char* name, const char* test)
 {
    using namespace std;
-   T eps = pow(T(2), 1-boost::math::tools::digits(worst[0]));
+   T eps = pow(T(2), 1-boost::math::tools::digits<T>());
    std::cout << setprecision(4);
    std::cout << test << "(" << name << ") Max = " << (result.stat.max)()/eps
       << " RMS Mean=" << result.stat.rms()/eps 

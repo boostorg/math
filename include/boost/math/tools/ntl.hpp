@@ -91,13 +91,14 @@ inline NTL::RR real_cast<NTL::RR, NTL::RR>(NTL::RR t)
    return t;
 }
 
-int digits(NTL::RR const &)
+template<>
+int digits<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 {
    return NTL::RR::precision();
 }
 
 template <>
-NTL::RR max_value<NTL::RR>(NTL::RR const&)
+NTL::RR max_value<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 {
    static bool has_init = false;
    static NTL::RR val;
@@ -111,7 +112,7 @@ NTL::RR max_value<NTL::RR>(NTL::RR const&)
 }
 
 template <>
-NTL::RR min_value<NTL::RR>(NTL::RR const&)
+NTL::RR min_value<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 {
    static bool has_init = false;
    static NTL::RR val;
@@ -125,7 +126,7 @@ NTL::RR min_value<NTL::RR>(NTL::RR const&)
 }
 
 template <>
-NTL::RR log_max_value<NTL::RR>(NTL::RR const&)
+NTL::RR log_max_value<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 {
    static bool has_init = false;
    static NTL::RR val;
@@ -140,7 +141,7 @@ NTL::RR log_max_value<NTL::RR>(NTL::RR const&)
 }
 
 template <>
-NTL::RR log_min_value<NTL::RR>(NTL::RR const&)
+NTL::RR log_min_value<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 {
    static bool has_init = false;
    static NTL::RR val;
@@ -155,16 +156,32 @@ NTL::RR log_min_value<NTL::RR>(NTL::RR const&)
 }
 
 template <>
-NTL::RR epsilon<NTL::RR>(NTL::RR const& x)
+NTL::RR epsilon<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 {
-   static const NTL::RR val = pow(NTL::RR(2.0), NTL::RR(1-digits(x)));
-   return val;
+   return ldexp(NTL::RR(1), NTL::RR(1-digits<NTL::RR>()));
 }
 
 void setprecision(std::ostream& os, NTL::RR, int p)
 {
    NTL::RR::SetOutputPrecision(p);
 }
+
+//
+// The number of digits precision in RR can vary with each call
+// so we need to recalculate these with each call:
+//
+template<> inline NTL::RR pi<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
+{ 
+   NTL::RR result;
+   ComputePi(result);
+   return result; 
+}
+template<> inline NTL::RR e<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
+{ 
+   NTL::RR result = 1;
+   return exp(result); 
+}
+
 
 template <>
 inline float real_cast<float, NTL::quad_float>(NTL::quad_float t)
@@ -195,39 +212,40 @@ inline NTL::quad_float real_cast<NTL::quad_float, NTL::RR>(NTL::RR t)
    return to_quad_float(t);
 }
 
-int digits(NTL::quad_float const &)
+template<>
+int digits<NTL::quad_float>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::quad_float))
 {
    return 106;
 }
 
 template <>
-NTL::quad_float max_value<NTL::quad_float>(NTL::quad_float const& f)
+NTL::quad_float max_value<NTL::quad_float>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::quad_float))
 {
-   return max_value(f.hi);
+   return max_value<double>();
 }
 
 template <>
-NTL::quad_float min_value<NTL::quad_float>(NTL::quad_float const& f)
+NTL::quad_float min_value<NTL::quad_float>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::quad_float))
 {
-   return min_value(f.hi);
+   return min_value<double>();
 }
 
 template <>
-NTL::quad_float log_max_value<NTL::quad_float>(NTL::quad_float const& f)
+NTL::quad_float log_max_value<NTL::quad_float>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::quad_float))
 {
-   return log_max_value(f.hi);
+   return log_max_value<double>();
 }
 
 template <>
-NTL::quad_float log_min_value<NTL::quad_float>(NTL::quad_float const& f)
+NTL::quad_float log_min_value<NTL::quad_float>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::quad_float))
 {
-   return log_min_value(f.hi);
+   return log_min_value<double>();
 }
 
 template <>
-NTL::quad_float epsilon<NTL::quad_float>(NTL::quad_float const& x)
+NTL::quad_float epsilon<NTL::quad_float>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::quad_float))
 {
-   static const NTL::quad_float val = pow(NTL::quad_float(2.0), NTL::quad_float(1-digits(x)));
+   static const NTL::quad_float val = pow(NTL::quad_float(2.0), NTL::quad_float(1-2*digits<double>()));
    return val;
 }
 

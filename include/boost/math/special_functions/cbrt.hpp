@@ -42,7 +42,7 @@ T cbrt(T z)
    T min = static_cast<T>(ldexp(0.5, exp/3));
    T max = static_cast<T>(ldexp(2.0, exp/3));
    T guess = static_cast<T>(ldexp(1.0, exp/3));
-   int digits = (tools::digits(z)) / 2;
+   int digits = (tools::digits<T>()) / 2;
    return sign * tools::halley_iterate(detail::cbrt_functor<T>(z), guess, min, max, digits);
 }
 

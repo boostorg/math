@@ -48,14 +48,14 @@ T relative_error(T a, T b)
    // the range of a double:
    //
    T min_val = (std::max)(
-      tools::min_value(a), 
+      tools::min_value<T>(), 
       static_cast<T>((std::numeric_limits<double>::min)()));
    T max_val = (std::min)(
-      tools::max_value(a), 
+      tools::max_value<T>(), 
       static_cast<T>((std::numeric_limits<double>::max)()));
 #else
-   T min_val = tools::min_value(a);
-   T max_val = tools::max_value(a);
+   T min_val = tools::min_value<T>();
+   T max_val = tools::max_value<T>();
 #endif
 
    if((a != 0) && (b != 0))

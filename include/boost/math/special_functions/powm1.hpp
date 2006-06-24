@@ -72,12 +72,12 @@ T powm1(const T a, const T z)
       if(fabs(a-1) < fabs(z))
       {
          detail::powp1m1_series<T> gen(a-1, z);
-         result =  tools::kahan_sum_series(gen, ::boost::math::tools::digits(z));
+         result =  tools::kahan_sum_series(gen, ::boost::math::tools::digits<T>());
       }
       else
       {
          detail::powm1_series<T> gen(a, z);
-         result =  tools::kahan_sum_series(gen, ::boost::math::tools::digits(z));
+         result =  tools::kahan_sum_series(gen, ::boost::math::tools::digits<T>());
       }
    }
    return result;

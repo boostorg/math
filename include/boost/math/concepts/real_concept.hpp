@@ -227,7 +227,8 @@ std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>&
 
 namespace tools{
 
-int digits(const concepts::real_concept &)
+template <>
+int digits<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return std::numeric_limits<long double>::digits;
 }
@@ -249,31 +250,31 @@ inline long double real_cast<long double, concepts::real_concept>(concepts::real
 }
 
 template <>
-concepts::real_concept max_value<concepts::real_concept>(concepts::real_concept const& arg)
+concepts::real_concept max_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
-   return max_value<long double>(arg.value());
+   return max_value<long double>();
 }
 
 template <>
-concepts::real_concept min_value<concepts::real_concept>(concepts::real_concept const& arg)
+concepts::real_concept min_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
-   return min_value<long double>(arg.value());
+   return min_value<long double>();
 }
 
 template <>
-concepts::real_concept log_max_value<concepts::real_concept>(concepts::real_concept const& arg)
+concepts::real_concept log_max_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
-   return log_max_value<long double>(arg.value());
+   return log_max_value<long double>();
 }
 
 template <>
-concepts::real_concept log_min_value<concepts::real_concept>(concepts::real_concept const& arg)
+concepts::real_concept log_min_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
-   return log_min_value<long double>(arg.value());
+   return log_min_value<long double>();
 }
 
 template <>
-concepts::real_concept epsilon(concepts::real_concept const&)
+concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return std::numeric_limits<long double>::epsilon();
 }

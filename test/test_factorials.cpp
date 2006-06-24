@@ -18,7 +18,7 @@ void test_spots(T)
    // basic sanity checks, tolerance is 10 decimal places expressed as a percentage,
    // One check per domain of the implementation:
    //
-   T tolerance = boost::math::tools::epsilon(T()) * 100 * 2;  // 2 eps as a persent
+   T tolerance = boost::math::tools::epsilon<T>() * 100 * 2;  // 2 eps as a persent
    BOOST_CHECK_CLOSE(
       ::boost::math::factorial<T>(0),
       static_cast<T>(1), tolerance);
@@ -38,14 +38,14 @@ void test_spots(T)
       ::boost::math::unchecked_factorial<T>(10),
       static_cast<T>(3628800L), tolerance);
 
-   tolerance = boost::math::tools::epsilon(T()) * 100 * 20;  // 20 eps as a persent
+   tolerance = boost::math::tools::epsilon<T>() * 100 * 20;  // 20 eps as a persent
    unsigned i = boost::math::max_factorial<T>::value;
    BOOST_CHECK_CLOSE(
       ::boost::math::unchecked_factorial<T>(i),
       boost::math::tgamma(static_cast<T>(i+1)), tolerance);
 
    i += 10;
-   while(boost::math::lgamma(static_cast<T>(i+1)) < boost::math::tools::log_max_value(T()))
+   while(boost::math::lgamma(static_cast<T>(i+1)) < boost::math::tools::log_max_value<T>())
    {
       BOOST_CHECK_CLOSE(
          ::boost::math::factorial<T>(i),

@@ -50,7 +50,7 @@ void raise_error(const char* function, const char* message, const T& val)
    msg += ": ";
    msg += message;
 
-   int prec = 2 + (tools::digits(val) * 30103UL) / 100000UL;
+   int prec = 2 + (tools::digits<T>() * 30103UL) / 100000UL;
    msg = (boost::format(msg) % boost::io::group(std::setprecision(prec), val)).str();
 
    E e(msg);
@@ -162,12 +162,12 @@ inline T checked_narrowing_cast(U const& val, const char* , const boost::mpl::tr
 template <class T, class U>
 inline T checked_narrowing_cast(U const& val, const char* function, const boost::mpl::false_*)
 {
-   if(val > tools::max_value(T(0)))
+   if(val > tools::max_value<T>())
       return tools::overflow_error<T>(function, 0);
    T result = static_cast<T>(val);
    if((result == 0) && (val != 0))
       return tools::underflow_error<T>(function, 0);
-   if((fabs(result) < tools::min_value(result)) && (fabs(val) > tools::min_value(val)))
+   if((fabs(result) < tools::min_value<T>()) && (fabs(val) >= tools::min_value<U>()))
       return tools::denorm_error<T>(result, function, 0);
    return result;
 }

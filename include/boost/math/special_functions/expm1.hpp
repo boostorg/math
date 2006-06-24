@@ -74,10 +74,10 @@ T expm1(T x)
    T a = fabs(x);
    if(a > T(0.5L))
       return exp(x) - T(1);
-   if(a < tools::epsilon(x))
+   if(a < tools::epsilon<T>())
       return x;
    detail::expm1_series<T> s(x);
-   T result = tools::sum_series(s, tools::digits(x) + 2);
+   T result = tools::sum_series(s, tools::digits<T>() + 2);
    return result;
 }
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))

@@ -23,7 +23,7 @@ void print_test_result(const boost::math::tools::test_result<T>& result,
                        const Seq& worst, int row, const char* name, const char* test)
 {
    using namespace std;
-   T eps = pow(T(2), 1-boost::math::tools::digits(worst[0]));
+   T eps = pow(T(2), 1-boost::math::tools::digits<T>());
    std::cout << setprecision(4);
    std::cout << test << "(" << name << ") Max = " << (result.stat.max)()/eps
       << " RMS Mean =" << result.stat.rms()/eps
@@ -207,8 +207,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
-   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::tools::digits(value_type(0))/2)) * 100;
-   if(boost::math::tools::digits(value_type(0)) < 50)
+   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::tools::digits<value_type>()/2)) * 100;
+   if(boost::math::tools::digits<value_type>() < 50)
       precision = 1;   // 1% or two decimal digits, all we can hope for when the input is truncated
 
    for(unsigned i = 0; i < data.size(); ++i)
@@ -221,13 +221,13 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       //
       if(data[i][5] == 0)
          BOOST_CHECK_EQUAL(boost::math::gamma_P_inv(data[i][0], data[i][5]), value_type(0));
-      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value(data[i][5])))
+      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()))
       {
          value_type inv = boost::math::gamma_P_inv(data[i][0], data[i][5]);
          BOOST_CHECK_CLOSE(data[i][1], inv, precision);
       }
       else if(1 == data[i][5])
-         BOOST_CHECK_EQUAL(boost::math::gamma_P_inv(data[i][0], data[i][5]), boost::math::tools::max_value(data[i][5]));
+         BOOST_CHECK_EQUAL(boost::math::gamma_P_inv(data[i][0], data[i][5]), boost::math::tools::max_value<value_type>());
       else
       {
          // not enough bits in our input to get back to x, but we should be in
@@ -237,8 +237,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       }
 
       if(data[i][3] == 0)
-         BOOST_CHECK_EQUAL(boost::math::gamma_Q_inv(data[i][0], data[i][3]), boost::math::tools::max_value(data[i][3]));
-      else if((1 - data[i][3] > 0.001) && (fabs(data[i][3]) >= boost::math::tools::min_value(data[i][3])))
+         BOOST_CHECK_EQUAL(boost::math::gamma_Q_inv(data[i][0], data[i][3]), boost::math::tools::max_value<value_type>());
+      else if((1 - data[i][3] > 0.001) && (fabs(data[i][3]) >= boost::math::tools::min_value<value_type>()))
       {
          value_type inv = boost::math::gamma_Q_inv(data[i][0], data[i][3]);
          BOOST_CHECK_CLOSE(data[i][1], inv, precision);
@@ -423,11 +423,11 @@ void test_spots(T)
    //BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(3), static_cast<T>(6)), static_cast<T>(12.724961860971380343), tolerance);
    //BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(7), static_cast<T>(9)), static_cast<T>(2.8326711932871945905), tolerance);
 
-   tolerance = boost::math::tools::epsilon(tolerance) * 100 * 200; // 200 eps %.
+   tolerance = boost::math::tools::epsilon<T>() * 100 * 200; // 200 eps %.
 #if defined(__CYGWIN__)
    // some platforms long double is only reliably accurate to double precision:
    if(sizeof(T) == sizeof(long double))
-      tolerance = boost::math::tools::epsilon(double(0)) * 100 * 200; // 200 eps %.
+      tolerance = boost::math::tools::epsilon<double>() * 100 * 200; // 200 eps %.
 #endif
 #if 0
    // this is way too slow...

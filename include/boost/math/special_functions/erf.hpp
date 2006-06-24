@@ -119,9 +119,9 @@ template <class T>
 inline T estimate_inverse_erfc(T q)
 {
    if(q == 2)
-      return -tools::max_value(q);
+      return -tools::max_value<T>();
    if(q == 0)
-      return tools::max_value(q);
+      return tools::max_value<T>();
    if(q > 1)
       return -estimate_inverse_erfc(2 - q);
    if(q == 1)
@@ -163,14 +163,14 @@ T erf_imp(T z, bool invert, const L& l, const Tag& t)
    if(!invert && (z > detail::erf_asymptotic_limit<T>()))
    {
       detail::erf_asympt_series_t<T> s(z);
-      result = boost::math::tools::sum_series(s, boost::math::tools::digits(z), 1);
+      result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), 1);
    }
    else if(z < 0.5)
    {
       T sqrt_z = z;
       z *= z;
       boost::math::detail::lower_incomplete_gamma_series<T> s(0.5, z);
-      result = boost::math::tools::sum_series(s, boost::math::tools::digits(z));
+      result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>());
       result *= sqrt_z * exp(-z) / T(0.5);
       result /= sqrt(boost::math::constants::pi<T>());
    }
@@ -798,7 +798,7 @@ T erfc_inv(T z)
    if((z < 0) || (z > 2))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument outside range [0,2] in inverse erfc function.");
    T guess = detail::estimate_inverse_erfc(z);
-   return tools::halley_iterate(detail::erf_roots<T>(z, -1), guess, -tools::max_value(z), tools::max_value(z), (tools::digits(z) * 2) / 3);
+   return tools::halley_iterate(detail::erf_roots<T>(z, -1), guess, -tools::max_value<T>(), tools::max_value<T>(), (tools::digits<T>() * 2) / 3);
 }
 
 template <class T>
@@ -807,9 +807,9 @@ T erf_inv(T z)
    if((z < -1) || (z > 1))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument outside range [-1, 1] in inverse erf function.");
    T guess = detail::estimate_inverse_erfc(1 - z);
-   if((fabs(z) != 1) && (fabs(guess) == tools::max_value(z)))
+   if((fabs(z) != 1) && (fabs(guess) == tools::max_value<T>()))
       guess = static_cast<T>((z < 0) ? -4 : 4);
-   return tools::halley_iterate(detail::erf_roots<T>(z, 1), guess, ((z > 0) ? 0 : -tools::max_value(z)), ((z < 0) ? 0 : tools::max_value(z)), (tools::digits(z) * 2) / 3);
+   return tools::halley_iterate(detail::erf_roots<T>(z, 1), guess, ((z > 0) ? 0 : -tools::max_value<T>()), ((z < 0) ? 0 : tools::max_value<T>()), (tools::digits<T>() * 2) / 3);
 }
 
 }} // namespaces

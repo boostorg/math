@@ -392,7 +392,7 @@ T factorial(unsigned i)
    if(i <= max_factorial<T>::value)
       return unchecked_factorial<T>(i);
    T result = boost::math::tgamma(static_cast<T>(i+1));
-   if(result > tools::max_value(result))
+   if(result > tools::max_value<T>())
       return result; // overflowed value, tgamma will have signalled the error already
    return floor(result + 0.5);
 }

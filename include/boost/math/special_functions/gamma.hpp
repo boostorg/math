@@ -131,7 +131,7 @@ T gamma_imp(T z, const L& l)
    if(z <= -20)
    {
       result = gamma_imp(-z, l) * sinpx(z);
-      if((fabs(result) < 1) && (tools::max_value(result) * fabs(result) < boost::math::constants::pi<T>()))
+      if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
          return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
       result = -boost::math::constants::pi<T>() / result;
       if(result == 0)
@@ -148,13 +148,13 @@ T gamma_imp(T z, const L& l)
       z += 1;
    }
    result *= L::lanczos_sum(z);
-   if(z * log(z) > tools::log_max_value(z))
+   if(z * log(z) > tools::log_max_value<T>())
    {
       // we're going to overflow unless this is done with care:
       T zgh = (z + L::g() - boost::math::constants::half<T>());
       T hp = pow(zgh, (z / 2) - T(0.25));
       result *= hp / exp(zgh);
-      if(tools::max_value(hp) / hp < result)
+      if(tools::max_value<T>() / hp < result)
          return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
       result *= hp;
    }
@@ -319,7 +319,7 @@ T gamma_imp(T z, const lanczos::undefined_lanczos& l)
    if(z <= -20)
    {
       T result = gamma_imp(-z, l) * sinpx(z);
-      if((fabs(result) < 1) && (tools::max_value(result) * fabs(result) < boost::math::constants::pi<T>()))
+      if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
          return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
       result = -boost::math::constants::pi<T>() / result;
       if(result == 0)
@@ -340,9 +340,9 @@ T gamma_imp(T z, const lanczos::undefined_lanczos& l)
       z += 1;
    }
    prefix = prefix * pow(z / boost::math::constants::e<T>(), z);
-   T sum = detail::lower_gamma_series(z, z, ::boost::math::tools::digits(z)) / z;
-   sum += detail::upper_gamma_fraction(z, z, ::boost::math::tools::digits(z));
-   if(fabs(tools::max_value(sum) / prefix) < fabs(sum))
+   T sum = detail::lower_gamma_series(z, z, ::boost::math::tools::digits<T>()) / z;
+   sum += detail::upper_gamma_fraction(z, z, ::boost::math::tools::digits<T>());
+   if(fabs(tools::max_value<T>() / prefix) < fabs(sum))
       return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
    return sum * prefix;
 }
@@ -374,8 +374,8 @@ T lgamma_imp(T z, const lanczos::undefined_lanczos&, int*sign)
    {
       T limit = (std::max)(z+1, T(10));
       T prefix = z * log(limit) - limit;
-      T sum = detail::lower_gamma_series(z, limit, ::boost::math::tools::digits(z)) / z;
-      sum += detail::upper_gamma_fraction(z, limit, ::boost::math::tools::digits(z));
+      T sum = detail::lower_gamma_series(z, limit, ::boost::math::tools::digits<T>()) / z;
+      sum += detail::upper_gamma_fraction(z, limit, ::boost::math::tools::digits<T>());
       result = log(sum) + prefix;
    }
    if(sign)
@@ -412,7 +412,7 @@ T tgammap1m1_imp(T dz,
    // algebra isn't easy for the general case....
    //
    T result = gamma_imp(1 + dz, l) - 1;
-   if(std::pow(2.0, boost::math::tools::digits(dz)) * result 
+   if(std::pow(2.0, boost::math::tools::digits<T>()) * result 
       < std::pow(2.0, std::numeric_limits<long double>::digits))
    {
       // Cancellation errors mean that we have 
@@ -462,7 +462,7 @@ T full_igamma_prefix(T a, T z)
 
    if(z >= 1)
    {
-      if((alz < tools::log_max_value(z)) && (-z > tools::log_min_value(z)))
+      if((alz < tools::log_max_value<T>()) && (-z > tools::log_min_value<T>()))
       {
          prefix = pow(z, a) * exp(-z);
       }
@@ -477,11 +477,11 @@ T full_igamma_prefix(T a, T z)
    }
    else
    {
-      if(alz > tools::log_min_value(z))
+      if(alz > tools::log_min_value<T>())
       {
          prefix = pow(z, a) * exp(-z);
       }
-      else if(z/a < tools::log_max_value(z))
+      else if(z/a < tools::log_max_value<T>())
       {
          prefix = pow(z / exp(z/a), a);
       }
@@ -507,8 +507,8 @@ T tgamma_lower_part(T a, T z)
 {
    using namespace std;
    T prefix = full_igamma_prefix(a, z);
-   T r2 = detail::lower_gamma_series(a, z, boost::math::tools::digits(a)) / a;
-   if(tools::max_value(r2) / prefix < r2)
+   T r2 = detail::lower_gamma_series(a, z, boost::math::tools::digits<T>()) / a;
+   if(tools::max_value<T>() / prefix < r2)
       tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of incomplete gamma function is too large to represent.");
    prefix *= r2;
    return prefix;
@@ -525,13 +525,13 @@ T tgamma_upper_part(T a, T z)
       T result = tgammap1m1(a) - powm1(z, a);
       result /= a;
       detail::small_gamma2_series<T> s(a, z);
-      result -= pow(z, a) * tools::sum_series(s, boost::math::tools::digits(z));
+      result -= pow(z, a) * tools::sum_series(s, boost::math::tools::digits<T>());
       return result;
    }
    else
    {
       T prefix = full_igamma_prefix(a, z);
-      return (prefix == 0) ? 0 : prefix * detail::upper_gamma_fraction(a, z, boost::math::tools::digits(a));
+      return (prefix == 0) ? 0 : prefix * detail::upper_gamma_fraction(a, z, boost::math::tools::digits<T>());
    }
 }
 //
@@ -592,7 +592,7 @@ T log1pmx(T x)
 {
    boost::math::detail::log1p_series<T> s(x);
    s();
-   return boost::math::tools::sum_series(s, tools::digits(x) + 2);
+   return boost::math::tools::sum_series(s, tools::digits<T>() + 2);
 }
 //
 // Compute (z^a)(e^-z)/tgamma(a)
@@ -617,7 +617,7 @@ T regularised_gamma_prefix(T a, T z, const L& l)
       //
       // TODO: is this still required?  Lanczos approx should be better now?
       //
-      if(z <= tools::log_min_value(z))
+      if(z <= tools::log_min_value<T>())
       {
          // Oh dear, have to use logs, should be free of cancellation errors though:
          return exp(a * log(z) - z - lgamma_imp(a, l));
@@ -644,23 +644,23 @@ T regularised_gamma_prefix(T a, T z, const L& l)
       //
       T alz = a * log(z / agh);
       T amz = a - z;
-      if(((std::min)(alz, amz) <= tools::log_min_value(z)) || ((std::max)(alz, amz) >= tools::log_max_value(z)))
+      if(((std::min)(alz, amz) <= tools::log_min_value<T>()) || ((std::max)(alz, amz) >= tools::log_max_value<T>()))
       {
          T amza = amz / a;
-         if(((std::min)(alz, amz)/2 > tools::log_min_value(z)) && ((std::max)(alz, amz)/2 < tools::log_max_value(z)))
+         if(((std::min)(alz, amz)/2 > tools::log_min_value<T>()) && ((std::max)(alz, amz)/2 < tools::log_max_value<T>()))
          {
             // compute square root of the result and then square it:
             T sq = pow(z / agh, a / 2) * exp(amz / 2);
             prefix = sq * sq;
          }
-         else if(((std::min)(alz, amz)/4 > tools::log_min_value(z)) && ((std::max)(alz, amz)/4 < tools::log_max_value(z)) && (z > a))
+         else if(((std::min)(alz, amz)/4 > tools::log_min_value<T>()) && ((std::max)(alz, amz)/4 < tools::log_max_value<T>()) && (z > a))
          {
             // compute the 4th root of the result then square it twice:
             T sq = pow(z / agh, a / 4) * exp(amz / 4);
             prefix = sq * sq;
             prefix *= prefix;
          }
-         else if((amza > tools::log_min_value(z)) && (amza < tools::log_max_value(z)))
+         else if((amza > tools::log_min_value<T>()) && (amza < tools::log_max_value<T>()))
          {
             prefix = pow((z * exp(amza)) / agh, a);
          }
@@ -686,8 +686,8 @@ T regularised_gamma_prefix(T a, T z, const lanczos::undefined_lanczos&)
    using namespace std;
 
    T limit = (std::max)(T(10), a);
-   T sum = detail::lower_gamma_series(a, limit, ::boost::math::tools::digits(z)) / a;
-   sum += detail::upper_gamma_fraction(a, limit, ::boost::math::tools::digits(z));
+   T sum = detail::lower_gamma_series(a, limit, ::boost::math::tools::digits<T>()) / a;
+   sum += detail::upper_gamma_fraction(a, limit, ::boost::math::tools::digits<T>());
 
    if(a < 10)
    {
@@ -706,10 +706,10 @@ T regularised_gamma_prefix(T a, T z, const lanczos::undefined_lanczos&)
    T amz = a - z;
    T alzoa = a * log(zoa);
    T prefix;
-   if(((std::min)(alzoa, amz) <= tools::log_min_value(z)) || ((std::max)(alzoa, amz) >= tools::log_max_value(z)))
+   if(((std::min)(alzoa, amz) <= tools::log_min_value<T>()) || ((std::max)(alzoa, amz) >= tools::log_max_value<T>()))
    {
       T amza = amz / a;
-      if((amza <= tools::log_min_value(z)) || (amza >= tools::log_max_value(z)))
+      if((amza <= tools::log_min_value<T>()) || (amza >= tools::log_max_value<T>()))
       {
          prefix = exp(alzoa + amz);
       }
@@ -750,11 +750,11 @@ T gamma_Q_imp(T a, T z, const L& l)
       if(z < a+1)
       {
          T result = 1;
-         T r2 = prefix * detail::lower_gamma_series(a, z, boost::math::tools::digits(a)) / a;
+         T r2 = prefix * detail::lower_gamma_series(a, z, boost::math::tools::digits<T>()) / a;
          return result - r2;
       }
       else
-         return (prefix == 0) ? 0 : prefix * detail::upper_gamma_fraction(a, z, boost::math::tools::digits(a));
+         return (prefix == 0) ? 0 : prefix * detail::upper_gamma_fraction(a, z, boost::math::tools::digits<T>());
    }
 }
 template <class T, class L>
@@ -768,12 +768,12 @@ T gamma_P_imp(T a, T z, const L& l)
    T prefix = regularised_gamma_prefix(a, z, l);
    if(z < a+1)
    {
-      return (prefix == 0) ? 0 : prefix * detail::lower_gamma_series(a, z, boost::math::tools::digits(a)) / a;
+      return (prefix == 0) ? 0 : prefix * detail::lower_gamma_series(a, z, boost::math::tools::digits<T>()) / a;
    }
    else
    {
       T result = 1;
-      T r2 = prefix * detail::upper_gamma_fraction(a, z, boost::math::tools::digits(a));
+      T r2 = prefix * detail::upper_gamma_fraction(a, z, boost::math::tools::digits<T>());
       return result - r2;
    }
 }
@@ -832,12 +832,12 @@ T tgamma_delta_ratio_imp(T z, T delta, const lanczos::undefined_lanczos&)
       prefix *= pow(z / zd, z);
    }
    prefix *= pow(constants::e<T>() / zd, delta);
-   T sum = detail::lower_gamma_series(z, z, ::boost::math::tools::digits(z)) / z;
-   sum += detail::upper_gamma_fraction(z, z, ::boost::math::tools::digits(z));
-   T sumd = detail::lower_gamma_series(zd, zd, ::boost::math::tools::digits(z)) / zd;
-   sumd += detail::upper_gamma_fraction(zd, zd, ::boost::math::tools::digits(z));
+   T sum = detail::lower_gamma_series(z, z, ::boost::math::tools::digits<T>()) / z;
+   sum += detail::upper_gamma_fraction(z, z, ::boost::math::tools::digits<T>());
+   T sumd = detail::lower_gamma_series(zd, zd, ::boost::math::tools::digits<T>()) / zd;
+   sumd += detail::upper_gamma_fraction(zd, zd, ::boost::math::tools::digits<T>());
    sum /= sumd;
-   if(fabs(tools::max_value(sum) / prefix) < fabs(sum))
+   if(fabs(tools::max_value<T>() / prefix) < fabs(sum))
       return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
    return sum * prefix;
 }

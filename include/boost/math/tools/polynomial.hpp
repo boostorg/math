@@ -9,6 +9,7 @@
 #include <vector>
 #include <boost/assert.hpp>
 #include <boost/math/tools/rational.hpp>
+#include <boost/math/tools/real_cast.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 
