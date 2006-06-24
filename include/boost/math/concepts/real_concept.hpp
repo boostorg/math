@@ -176,6 +176,8 @@ real_concept exp(real_concept a)
 { return std::exp(a.value()); }
 real_concept fabs(real_concept a)
 { return std::fabs(a.value()); }
+real_concept abs(real_concept a)
+{ return std::abs(a.value()); }
 real_concept floor(real_concept a)
 { return std::floor(a.value()); }
 real_concept modf(real_concept a, real_concept* ipart)

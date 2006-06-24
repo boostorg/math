@@ -91,7 +91,7 @@ inline T domain_error(const char* function, const char* message, const T& val)
    // an exception:
    //
 #endif
-   detail::raise_error<std::domain_error>(function, message ? message : "Domain Error", val);
+   detail::raise_error<std::domain_error>(function, message ? message : "Domain Error on value %1%", val);
    // we don't get here:
    return 0;
 }
@@ -149,6 +149,26 @@ inline T denorm_error(T const& t, const char* function, const char* message)
    detail::raise_error<std::underflow_error>(function, message ? message : "Denormalized value");
 #endif
    return t;
+}
+//
+// Computed result is garbage / internal error:
+//
+template <class T>
+inline T logic_error(const char* function, const char* message)
+{
+   errno = EDOM;
+   detail::raise_error<std::logic_error>(function, message ? message : "Internal logic error");
+   // we don't get here:
+   return 0;
+}
+
+template <class T>
+inline T logic_error(const char* function, const char* message, const T& val)
+{
+   errno = EDOM;
+   detail::raise_error<std::logic_error>(function, message ? message : "Internal logic error, computed value was %1%", val);
+   // we don't get here:
+   return 0;
 }
 
 namespace detail{
