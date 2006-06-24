@@ -127,7 +127,7 @@ T gamma_imp(T z, const L& l)
 #endif
 
    if((z <= 0) && (floor(z) == z))
-      return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of tgamma at a negative integer.");
+      return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of tgamma at a negative integer %1%.", z);
    if(z <= -20)
    {
       result = gamma_imp(-z, l) * sinpx(z);
@@ -188,7 +188,7 @@ T lgamma_imp(T z, const L& l, int* sign = 0)
    {
       // reflection formula:
       if(floor(z) == z)
-         return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of lgamma at a negative integer.");
+         return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of lgamma at a negative integer %1%.", z);
 
       T t = sinpx(z);
       z = -z;
@@ -315,7 +315,7 @@ T gamma_imp(T z, const lanczos::undefined_lanczos& l)
 {
    using namespace std;
    if((z <= 0) && (floor(z) == z))
-      return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of tgamma at a negative integer.");
+      return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of tgamma at a negative integer %1%.", z);
    if(z <= -20)
    {
       T result = gamma_imp(-z, l) * sinpx(z);
@@ -357,7 +357,7 @@ T lgamma_imp(T z, const lanczos::undefined_lanczos&, int*sign)
    if(z <= 0)
    {
       if(floor(z) == z)
-         return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of tgamma at a negative integer.");
+         return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, "Evaluation of tgamma at a negative integer %1%.", z);
       T t = detail::sinpx(z);
       z = -z;
       if(t < 0)
@@ -540,8 +540,10 @@ T tgamma_upper_part(T a, T z)
 template <class T>
 T tgamma_imp(T a, T z)
 {
-   if((a <= 0) || (z < 0))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete gamma function.");
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a);
+   if(z < 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument z to the incomplete gamma function must be >= 0 (got z=%1%).", z);
 
    using namespace std;
 
@@ -568,8 +570,10 @@ T tgamma_imp(T a, T z)
 template <class T>
 T tgamma_lower_imp(T a, T z)
 {
-   if((a <= 0) || (z < 0))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete gamma function.");
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a);
+   if(z < 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument z to the incomplete gamma function must be >= 0 (got z=%1%).", z);
 
    if(z < (std::max)(a+1, T(10)))
    {
@@ -733,8 +737,10 @@ T regularised_gamma_prefix(T a, T z, const lanczos::undefined_lanczos&)
 template <class T, class L>
 T gamma_Q_imp(T a, T z, const L& l)
 {
-   if((a <= 0) || (z < 0))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete gamma function.");
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a);
+   if(z < 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument z to the incomplete gamma function must be >= 0 (got z=%1%).", z);
 
    using namespace std;
 
@@ -760,8 +766,10 @@ T gamma_Q_imp(T a, T z, const L& l)
 template <class T, class L>
 T gamma_P_imp(T a, T z, const L& l)
 {
-   if((a <= 0) || (z < 0))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete gamma function.");
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a);
+   if(z < 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument z to the incomplete gamma function must be >= 0 (got z=%1%).", z);
 
    using namespace std;
 
@@ -783,8 +791,10 @@ T tgamma_delta_ratio_imp(T z, T delta, const L&)
 {
    using namespace std;
 
-   if((z <= 0) || (z + delta <= 0))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments.");
+   if(z <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments (got a=%1%).", z);
+   if(z+delta <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments (got b=%1%).", z+delta);
 
    T zgh = z + L::g() - constants::half<T>();
    T result;
@@ -806,8 +816,10 @@ T tgamma_delta_ratio_imp(T z, T delta, const lanczos::undefined_lanczos&)
 {
    using namespace std;
 
-   if((z <= 0) || (z + delta <= 0))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments.");
+   if(z <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments (got a=%1%).", z);
+   if(z+delta <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments (got b=%1%).", z+delta);
 
    //
    // The upper gamma fraction is *very* slow for z < 6, actually it's very

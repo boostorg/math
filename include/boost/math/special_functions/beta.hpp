@@ -34,8 +34,10 @@ T beta_imp(T a, T b, const L&)
 {
    using namespace std;
 
-   if((a <= 0) || (b <= 0))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the beta function.");
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The arguments to the beta function must be greater than zero (got a=%1%).", a);
+   if(b <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The arguments to the beta function must be greater than zero (got b=%1%).", b);
    
    T result;
 
@@ -102,8 +104,10 @@ T beta_imp(T a, T b, const lanczos::undefined_lanczos& l)
 {
    using namespace std;
 
-   if((a <= 0) || (b <= 0))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the beta function.");
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The arguments to the beta function must be greater than zero (got a=%1%).", a);
+   if(b <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The arguments to the beta function must be greater than zero (got b=%1%).", b);
 
    T result;
 
@@ -702,10 +706,12 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
    T fract;
    T y = 1 - x;
 
-   if((a <= 0) || (b <= 0))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete beta function.");
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function must be greater than zero (got a=%1%).", a);
+   if(b <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function must be greater than zero (got b=%1%).", b);
    if((x < 0) || (x > 1))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Parameter x outside the range [0,1] in the incomplete beta function.");
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Parameter x outside the range [0,1] in the incomplete beta function (got x=%1%).", x);
 
    if(x == 0)
       return (invert ? (normalised ? 1 : beta_imp(a, b, l)) : 0);

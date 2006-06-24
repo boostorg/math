@@ -796,7 +796,7 @@ template <class T>
 T erfc_inv(T z)
 {
    if((z < 0) || (z > 2))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument outside range [0,2] in inverse erfc function.");
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument outside range [0,2] in inverse erfc function (got p=%1%).", z);
    T guess = detail::estimate_inverse_erfc(z);
    return tools::halley_iterate(detail::erf_roots<T>(z, -1), guess, -tools::max_value<T>(), tools::max_value<T>(), (tools::digits<T>() * 2) / 3);
 }
@@ -805,7 +805,7 @@ template <class T>
 T erf_inv(T z)
 {
    if((z < -1) || (z > 1))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument outside range [-1, 1] in inverse erf function.");
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument outside range [-1, 1] in inverse erf function (got p=%1%).", z);
    T guess = detail::estimate_inverse_erfc(1 - z);
    if((fabs(z) != 1) && (fabs(guess) == tools::max_value<T>()))
       guess = static_cast<T>((z < 0) ? -4 : 4);

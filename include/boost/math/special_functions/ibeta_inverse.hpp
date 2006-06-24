@@ -754,10 +754,12 @@ T ibeta_inv(T a, T b, T p)
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
 
-   if((a <= 0) || (b <= 0))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete beta function inverse.");
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a);
+   if(b <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b);
    if((p < 0) || (p > 1))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument p outside the range [0,1] in the incomplete beta function inverse.");
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument p outside the range [0,1] in the incomplete beta function inverse (got p=%1%).", p);
 
    return tools::checked_narrowing_cast<T>(
       detail::ibeta_inv_imp(
@@ -775,10 +777,12 @@ T ibetac_inv(T a, T b, T q)
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
 
-   if((a <= 0) || (b <= 0))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Negative argument to the incomplete beta function inverse.");
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a);
+   if(b <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b);
    if((q < 0) || (q > 1))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument p outside the range [0,1] in the incomplete beta function inverse.");
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument q outside the range [0,1] in the incomplete beta function inverse (got q=%1%).", q);
 
    return tools::checked_narrowing_cast<T>(
       detail::ibeta_inv_imp(
