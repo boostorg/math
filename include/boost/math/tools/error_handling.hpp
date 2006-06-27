@@ -15,6 +15,7 @@
 #include <boost/format.hpp>
 // we don't use this one directly, but our clients will use it:
 #include <boost/current_function.hpp>
+#include <boost/math/tools/precision.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -129,7 +130,11 @@ inline T overflow_error(const char* function, const char* message)
 // called only when we know the result is not actually zero:
 //
 template <class T>
+#ifdef BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
 inline T underflow_error(const char* function, const char* message)
+#else
+inline T underflow_error(const char* , const char* ) // warning suppressed version
+#endif
 {
    errno = ERANGE;
 #ifdef BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
@@ -141,7 +146,11 @@ inline T underflow_error(const char* function, const char* message)
 // Result is denormalised:
 //
 template <class T>
+#ifdef BOOST_MATH_THROW_ON_DENORM_ERROR
 inline T denorm_error(T const& t, const char* function, const char* message)
+#else
+inline T denorm_error(T const& t, const char* , const char* ) // error suppressed version
+#endif
 {
    // don't set errno here???
 #ifdef BOOST_MATH_THROW_ON_DENORM_ERROR

@@ -9,6 +9,7 @@
 #include <NTL/RR.h>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/constants/constants.hpp>
 
 namespace NTL{
 
@@ -158,7 +159,7 @@ NTL::RR log_min_value<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 template <>
 NTL::RR epsilon<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 {
-   return ldexp(NTL::RR(1), NTL::RR(1-digits<NTL::RR>()));
+   return ldexp(NTL::RR(1), 1-digits<NTL::RR>());
 }
 
 void setprecision(std::ostream& os, NTL::RR, int p)
@@ -166,10 +167,14 @@ void setprecision(std::ostream& os, NTL::RR, int p)
    NTL::RR::SetOutputPrecision(p);
 }
 
+} // namespace tools
+
 //
 // The number of digits precision in RR can vary with each call
 // so we need to recalculate these with each call:
 //
+namespace constants{
+
 template<> inline NTL::RR pi<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 { 
    NTL::RR result;
@@ -182,7 +187,9 @@ template<> inline NTL::RR e<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
    return exp(result); 
 }
 
+} // namespace constants
 
+namespace tools{
 template <>
 inline float real_cast<float, NTL::quad_float>(NTL::quad_float t)
 {
