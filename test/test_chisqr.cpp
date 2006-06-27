@@ -9,7 +9,7 @@
 
 // Basic sanity test for chisqr Cumulative Distribution Function.
 
-// #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
+#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
@@ -18,7 +18,7 @@
 #  pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
 #endif
 
-#include <boost/math/special_functions/chisqr.hpp>
+#include <boost/math/special_functions/chisqr.hpp> // for chisqr
 	using ::boost::math::chisqr;
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 	using ::boost::math::concepts::real_concept;
@@ -26,6 +26,9 @@
 #include <boost/test/included/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
 
+#include <iostream>
+  using std::cout;
+  using std::endl;
 #include <limits>
   using std::numeric_limits;
 
@@ -103,30 +106,38 @@ void test_spots(FPT)
          static_cast<FPT>(5.)),  // chisqr
       static_cast<FPT>(0.999999999999999999814527311613020069945), // probability.
 			tolerance);
+/*
+	 // Try bad  degrees_of_freedom argument for chisqr.
+   BOOST_CHECK_CLOSE(
+      chisqr(
+         static_cast<FPT>(1),  // degrees_of_freedom - as floating-point.
+         static_cast<FPT>(-2.)),  // chisqr
+      static_cast<FPT>(0.999999999999999999), // probability.
+			tolerance);
+   // std::domain_error: Error in function float __cdecl boost::math::detail::chisqr_imp<float>(float,float): degrees of freedom argument is -1, but must be > 0 !
 
-	 // Try bad argument for degrees_of_freedom.
-   //BOOST_CHECK_CLOSE(
-   //   chisqr(
-   //      static_cast<FPT>(-1),  // degrees_of_freedom - as floating-point.
-   //      static_cast<FPT>(-2.)),  // chisqr
-   //   static_cast<FPT>(0.999999999999999999), // probability.
-			//tolerance);
+	 // Try bad chisqr argument for chisqr.
+   BOOST_CHECK_CLOSE(
+      chisqr(
+         static_cast<FPT>(1),  // degrees_of_freedom - as floating-point.
+         static_cast<FPT>(-2.)),  // chisqr
+      static_cast<FPT>(0.999999999999999999), // probability.
+			tolerance);
+// std::domain_error: Error in function float __cdecl boost::math::detail::chisqr_imp<float>(float,float): chisqr argument is -2, but must be > 0 !
 
-	 // Try bad argument for chisqr.
-   //BOOST_CHECK_CLOSE(
-   //   chisqr(
-   //      static_cast<FPT>(1),  // degrees_of_freedom - as floating-point.
-   //      static_cast<FPT>(-2.)),  // chisqr
-   //   static_cast<FPT>(0.999999999999999999), // probability.
-			//tolerance);
-
-
+*/
 
 } // template <class FPT>void test_spots(FPT)
 
 int test_main(int, char* [])
 {
 	// Basic sanity-check spot values.
+#ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
+  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is defined to throw on domain error." << endl;
+#else
+  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
+#endif
+
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
 	test_spots(0.0F); // Test float.
 	test_spots(0.0); // Test double.
@@ -140,16 +151,49 @@ int test_main(int, char* [])
 
 Output:
 
+Compiling...
+test_chisqr.cpp
+Linking...
+Embedding manifest...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_chisqr.exe"
 Running 1 test case...
+BOOST_MATH_THROW_ON_DOMAIN_ERROR is NOT defined so NO throw on domain error.
+../../../../../../boost-sandbox/libs/math_functions/test/test_chisqr.cpp(116): error in "test_main_caller( argc, argv )": difference between chisqr( static_cast<FPT>(-1), static_cast<FPT>(-2.)){1.#QNAN} and static_cast<FPT>(0.999999999999999999){1} exceeds 0.0001%
+../../../../../../boost-sandbox/libs/math_functions/test/test_chisqr.cpp(124): error in "test_main_caller( argc, argv )": difference between chisqr( static_cast<FPT>(1), static_cast<FPT>(-2.)){1.#QNAN} and static_cast<FPT>(0.999999999999999999){1} exceeds 0.0001%
+../../../../../../boost-sandbox/libs/math_functions/test/test_chisqr.cpp(116): error in "test_main_caller( argc, argv )": difference between chisqr( static_cast<FPT>(-1), static_cast<FPT>(-2.)){1.#QNAN} and static_cast<FPT>(0.999999999999999999){1} exceeds 1e-013%
+../../../../../../boost-sandbox/libs/math_functions/test/test_chisqr.cpp(124): error in "test_main_caller( argc, argv )": difference between chisqr( static_cast<FPT>(1), static_cast<FPT>(-2.)){1.#QNAN} and static_cast<FPT>(0.999999999999999999){1} exceeds 1e-013%
+../../../../../../boost-sandbox/libs/math_functions/test/test_chisqr.cpp(116): error in "test_main_caller( argc, argv )": difference between chisqr( static_cast<FPT>(-1), static_cast<FPT>(-2.)){1.#QNAN} and static_cast<FPT>(0.999999999999999999){1} exceeds 1e-013%
+../../../../../../boost-sandbox/libs/math_functions/test/test_chisqr.cpp(124): error in "test_main_caller( argc, argv )": difference between chisqr( static_cast<FPT>(1), static_cast<FPT>(-2.)){1.#QNAN} and static_cast<FPT>(0.999999999999999999){1} exceeds 1e-013%
+unknown location(0): fatal error in "test_main_caller( argc, argv )": std::domain_error: Error in function class boost::math::concepts::real_concept __cdecl boost::math::detail::chisqr_imp<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept,class boost::math::concepts::real_concept): degrees of freedom argument is -1, but must be > 0 !
+..\..\..\..\..\..\boost-sandbox\libs\math_functions\test\test_chisqr.cpp(116): last checkpoint
+*** 7 failures detected in test suite "Test Program"
+Project : error PRJ0019: A tool returned an error code from "Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_chisqr.exe""
 
-*** No errors detected
-Press any key to continue . . .
 
-unknown location(0):
+Compiling...
+test_chisqr.cpp
+Linking...
+Embedding manifest...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_chisqr.exe"
+Running 1 test case...
+BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
+unknown location(0): fatal error in "test_main_caller( argc, argv )": std::domain_error: Error in function float __cdecl boost::math::detail::chisqr_imp<float>(float,float): degrees of freedom argument is -1, but must be > 0 !
+..\..\..\..\..\..\boost-sandbox\libs\math_functions\test\test_chisqr.cpp(116): last checkpoint
+*** 1 failure detected in test suite "Test Program"
+Project : error PRJ0019: A tool returned an error code from "Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_chisqr.exe""
 
-fatal error in "test_main_caller( argc, argv )": std::domain_error: Error in function float __cdecl boost::math::chisqr<float,float>(float,float): degrees of freedom argument is -1, but must be > 0 !
+Compiling...
+test_chisqr.cpp
+Linking...
+Embedding manifest...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_chisqr.exe"
+Running 1 test case...
+BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
+unknown location(0): fatal error in "test_main_caller( argc, argv )": std::domain_error: Error in function float __cdecl boost::math::detail::chisqr_imp<float>(float,float): chisqr argument is -2, but must be > 0 !
+..\..\..\..\..\..\boost-sandbox\libs\math_functions\test\test_chisqr.cpp(116): last checkpoint
+*** 1 failure detected in test suite "Test Program"
+Project : error PRJ0019: A tool returned an error code from "Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_chisqr.exe""
 
-..\..\..\..\..\..\boost-sandbox\libs\math_functions\test\test_chisqr.cpp(112): last checkpoint
 
 
 
