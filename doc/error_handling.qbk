@@ -2,17 +2,19 @@
 
 [caution __caution ]
 
+[def __format [@../../libs/format/index.html Boost.Format]]
+
 [h4 synopsis]
 
 ``
 #include <boost/math/tools/error_handling.hpp>
 ``
-
-   template <class T>
-   T __domain_error(const char* function, const char* message);
    
    template <class T>
-   T __pole_error(const char* function, const char* message);
+   T __domain_error(const char* function, const char* message, const T& val);
+   
+   template <class T>
+   T __pole_error(const char* function, const char* message, const T& val);
    
    template <class T>
    T __overflow_error(const char* function, const char* message);
@@ -22,6 +24,9 @@
    
    template <class T>
    T __denorm_error(T const& t, const char* function, const char* message);
+   
+   template <class T>
+   T __logic_error(const char* function, const char* message, const T& val);
    
    template <class T, class U>
    T __checked_narrowing_cast(U const& val, const char* function);
@@ -39,31 +44,51 @@ When a special function is passed an argument that is outside the range
 of values for which that function is defined, then the function returns
 the result of:
 
-   boost::math::tools::domain_error<T>(FunctionName, Message);
+   boost::math::tools::domain_error<T>(FunctionName, Message, Val);
    
 Where
 `T` is the floating point type passed to the function, `FunctionName` is the 
-name of the function, and `Message` is an error message describing the problem.
+name of the function, `Message` is an error message describing the problem, 
+and Val is the value that was out of range.
 
 The default behaviour of this function is to return a NaN.  However, if type
 `T` does not support NaN's or if the macro BOOST_MATH_THROW_ON_DOMAIN_ERROR
 is defined when building the library, then a std::domain_error C++ exception 
 is thrown.
 
+Note that in order to support information rich error messages when throwing
+exceptions, `Message` must contain
+a __format recognised format specifier: the argument `Val` is inserted into
+the error message according to the specifier used.
+
+For example if `Message` contains a "%1%" then it is replaced by the value of
+`Val` to the full precision of T, where as "%.3g" would contain the value of
+`Val` to 3 digits.  See the __format documentation for more details.
+   
 [#pole_error][h4 Evaluation at a pole]
 
 When a special function is passed an argument that is at a pole
 without a well defined residual value, then the function returns
 the result of:
 
-   boost::math::tools::pole_error<T>(FunctionName, Message);
+   boost::math::tools::pole_error<T>(FunctionName, Message, Val);
    
 Where
 `T` is the floating point type passed to the function, `FunctionName` is the 
-name of the function, and `Message` is an error message describing the problem.
+name of the function, `Message` is an error message describing the problem, 
+and `Val` is the value of the argument that is at a pole.
 
 The default behaviour of this function is to return the result of
-`domain_error<T>(FunctionName, Message)`.
+`domain_error<T>(FunctionName, Message, Val)`.
+
+Note that in order to support information rich error messages when throwing
+exceptions, `Message` must contain
+a __format recognised format specifier: the argument `val` is inserted into
+the error message according to the specifier used.
+
+For example if `Message` contains a "%1%" then it is replaced by the value of
+`val` to the full precision of T, where as "%.3g" would contain the value of
+`val` to 3 digits.  See the __format documentation for more details.
 
 [#overflow_error][h4 Numeric Overflow]
 
@@ -113,6 +138,29 @@ The default version of this function returns
 /z/.  However if the macro BOOST_MATH_THROW_ON_DENORM_ERROR
 is defined when building the library, then a `std::underflow_error` 
 C++ exception is thrown.
+
+[#logic_error][h4 Internal Logic Errors]
+
+When a special function calculates a result that is known to be erronious,
+or where the result is incalculable then it calls:
+
+   boost::math::tools::logic_error<T>(FunctionName, Message, Val);
+   
+Where
+`T` is the floating point type passed to the function, `FunctionName` is the 
+name of the function, `Message` is an error message describing the problem,
+and `Val` is the erronious value.
+
+The default behaviour of this function is to throw a `std::logic_error`.
+
+Note that in order to support information rich error messages when throwing
+exceptions, `Message` must contain
+a __format recognised format specifier: the argument `val` is inserted into
+the error message according to the specifier used.
+
+For example if `Message` contains a "%1%" then it is replaced by the value of
+`val` to the full precision of T, where as "%.3g" would contain the value of
+`val` to 3 digits.  See the __format documentation for more details.
 
 [#checked_narrowing_cast][h4 Errors from typecasts]
 

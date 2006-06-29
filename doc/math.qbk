@@ -35,6 +35,8 @@
 [def __overflow_error [link overflow_error overflow_error]]
 [def __underflow_error [link underflow_error underflow_error]]
 [def __denorm_error [link denorm_error denorm_error]]
+[def __logic_error [link logic_error logic_error]]
+[def __checked_narrowing_cast [link checked_narrowing_cast checked_narrowing_cast]]
 
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
 [template sub[x]'''<subscript>'''[x]'''</subscript>''']
@@ -107,6 +109,7 @@ data and/or data for output to an external graphing application.
 
 [include lanczos.qbk]
 [include error.qbk]
+[include promotion.qbk]
 
 [endsect]
 

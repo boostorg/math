@@ -12,18 +12,18 @@ on error rates.
 
 [h4 Milestone 2]
 
-* Implement Newtons method for root finding.
+* Implement Newtons method for root finding (Done).
 * Implement Chebyshev approximation generation, and evaluation.
-* Implement Rational function generation??
-* Implement the inverse incomplete gamma and beta functions.
-* Improve erf/erfc, improve lgamma near 1 and 2.
+* Implement Rational function generation.
+* Implement the inverse incomplete gamma and beta functions (Done).
+* Improve erf/erfc, improve lgamma near 1 and 2 (Done for erf/erfc).
 * Find a way to integrate the statistical results generated from
 the test data with Boost.Test: really needs a database of expected
 results, indexed by test, floating point type, platform, and compiler.
 
 [h4 Milestone 3]
 
-* Implement the main probability distribution and density functions.
+* Implement the main probability distribution and density functions (under construction).
 * Implement digamma (differentiate the __lanczos).
 * Release??
 

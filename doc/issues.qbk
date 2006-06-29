@@ -12,14 +12,14 @@ approximation. (High priority).
 [h4 erf/erfc]
 
 * Rewrite using either Chebyshev or rational
-approximation. (High priority).
+approximation. (High priority).  Done.
 
 [h4 Incomplete gamma]
 
 * Implement Temme's asymptotic expansion for large a and z,
 this one is mainly an issue of performance rather than accuracy (medium priority).
-* Double check behavior of the upper fraction when a is very small and z -> 1 (Medium Priority).
-* Double check behavior of the upper fraction when a is very small and z -> 0 (Medium Priority).
+* Double check behavior of the upper fraction when a is very small and z -> 1 (Medium Priority) Confirmed as an issue.
+* Double check behavior of the upper fraction when a is very small and z -> 0 (Medium Priority) Confirmed as an issue.
 * Double check for opportunities to chain series expansions together, passing
 the result of one into the initial value of the next (Medium Priority).
 * Investigate asymptotic expansions for large a small z and large z small a
@@ -35,9 +35,31 @@ the result of one into the initial value of the next (Medium Priority).
 * Investigate Didonato and Morris' asymptotic expansion for large a and b 
 (medium priority).
 * Double check for opportunities to chain series expansions together, passing
-the result of one into the initial value of the next (Medium Priority).
+the result of one into the initial value of the next (Medium Priority) Done.
 * Investigate Didonato and Morris' asymptotic expansion for small a and b 
-(low priority).
+(low priority) Done.
+
+[h4 Inverse Erf]
+
+* Replace current iterative scheme with direct rational approximation (medium priority).
+
+[h4 Inverse Gamma]
+
+* Investigate whether we can skip iteration altogether if the first approximation
+is good enough (Medium Priority).
+
+[h4 Inverse Incomplete Beta]
+
+* None known.
+
+[h4 Factorials]
+
+* None known.
+
+[h4 Error handling]
+
+* Remove versions of __domain_error, __pole_error and __logic_error that
+don't take a value argument (they're undocumented and legacy only).
 
 [endsect]
 
