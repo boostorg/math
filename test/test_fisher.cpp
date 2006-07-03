@@ -12,7 +12,11 @@
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
+#  pragma warning(disable: 4512) // assignment operator could not be generated.
+#  pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
 #endif
+
+#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/special_functions/fisher.hpp>
@@ -277,6 +281,24 @@ void test_spots(FPT)
    //      static_cast<FPT>(999.)),  // F
    //   static_cast<FPT>(0.0000666666666666666666666666), // probability.
 			//tolerance);
+
+// Inverse tests
+
+      BOOST_CHECK_CLOSE(
+      ::boost::math::fisher_c_inv(
+         static_cast<FPT>(2.),  // df1
+         static_cast<FPT>(2.),  // df2
+         static_cast<FPT>(0.03333333333333333333333333333333333333333)),  // probability
+      static_cast<FPT>(29.), // F expected.
+			tolerance);
+
+      BOOST_CHECK_CLOSE(
+      ::boost::math::fisher_inv(
+         static_cast<FPT>(2.),  // df1
+         static_cast<FPT>(2.),  // df2
+         static_cast<FPT>(1 - 0.03333333333333333333333333333333333333333)),  // probability
+      static_cast<FPT>(29.), // F expected.
+			tolerance);
 
 
 // Also note limit cases for F(1, infinity) == normal distribution
