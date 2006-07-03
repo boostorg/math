@@ -16,7 +16,7 @@ template <class T>
 class stats
 {
 public:
-   stats() 
+   stats()
       : m_min(tools::max_value<T>()),
         m_max(-tools::max_value<T>()),
         m_total(0),
@@ -38,7 +38,7 @@ public:
    T total()const{ return m_total; }
    T mean()const{ return m_total / static_cast<T>(m_count); }
    boost::uintmax_t count()const{ return m_count; }
-   T variance()const 
+   T variance()const
    {
       using namespace std;
 
@@ -47,7 +47,7 @@ public:
       t /= m_count;
       return t;
    }
-   T variance1()const 
+   T variance1()const
    {
       using namespace std;
 
@@ -78,6 +78,8 @@ private:
    boost::uintmax_t m_count;
 };
 
-} } } // namespaces
+} // namespace tools
+} // namespace math
+} // namespace boost
 
-#endif 
+#endif

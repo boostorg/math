@@ -18,8 +18,8 @@ namespace boost{ namespace math{ namespace tools{
 template <class T>
 struct test_result
 {
-   boost::math::tools::stats<T> stat;   // statistics for the test
-   unsigned worst_case;                 // index of the worst case test
+   boost::math::tools::stats<T> stat;   // Statistics for the test.
+   unsigned worst_case;                 // Index of the worst case test.
 
    test_result& operator+=(const test_result& t)
    {
@@ -43,15 +43,15 @@ T relative_error(T a, T b)
    using namespace std;
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    //
-   // If math.h has no long double support we can't rely 
-   // on the math functions generating exponents outside 
+   // If math.h has no long double support we can't rely
+   // on the math functions generating exponents outside
    // the range of a double:
    //
    T min_val = (std::max)(
-      tools::min_value<T>(), 
+      tools::min_value<T>(),
       static_cast<T>((std::numeric_limits<double>::min)()));
    T max_val = (std::min)(
-      tools::max_value<T>(), 
+      tools::max_value<T>(),
       static_cast<T>((std::numeric_limits<double>::max)()));
 #else
    T min_val = tools::min_value<T>();
@@ -66,7 +66,7 @@ T relative_error(T a, T b)
          if(a > max_val)
             return 0;  // one infinity is as good as another!
       }
-      // if the result is denormalised, treat all denorms as equivalent:
+      // If the result is denormalised, treat all denorms as equivalent:
       if((a < min_val) && (a > 0))
          a = min_val;
       else if((a > -min_val) && (a < 0))
@@ -78,7 +78,7 @@ T relative_error(T a, T b)
       return (std::max)(fabs((a-b)/a), fabs((a-b)/b));
    }
 
-   // handle special case where one or both are zero:
+   // Handle special case where one or both are zero:
    if(min_val == 0)
       return fabs(a-b);
    if(fabs(a) < min_val)
@@ -123,9 +123,9 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
       value_type expected = expect_func(row);
       value_type err = relative_error(point, expected);
 #ifdef BOOST_INSTRUMENT
-      if(err != 0) 
+      if(err != 0)
       {
-         std::cout << row[0] << " " << err;  
+         std::cout << row[0] << " " << err;
          if(std::numeric_limits<value_type>::is_specialized)
          {
             std::cout << " (" << err / std::numeric_limits<value_type>::epsilon() << "eps)";
@@ -152,7 +152,9 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
    return result;
 }
 
-} } } // namespaces
+} // namespace tools
+} // namespace math
+} // namespace boost
 
 #endif
 

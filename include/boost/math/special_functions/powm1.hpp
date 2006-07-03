@@ -83,7 +83,8 @@ T powm1(const T a, const T z)
    return result;
 }
 
-} } // namespaces
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_POWM1
 

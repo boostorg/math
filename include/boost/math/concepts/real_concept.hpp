@@ -14,7 +14,10 @@
 #ifndef BOOST_MATH_REAL_CONCEPT_HPP
 #define BOOST_MATH_REAL_CONCEPT_HPP
 
-namespace boost{ namespace math{ namespace concepts{
+namespace boost{ namespace math{
+
+namespace concepts
+{
 
 class real_concept
 {
@@ -181,9 +184,9 @@ real_concept abs(real_concept a)
 real_concept floor(real_concept a)
 { return std::floor(a.value()); }
 real_concept modf(real_concept a, real_concept* ipart)
-{ 
+{
    long double ip;
-   long double result = std::modf(a.value(), &ip); 
+   long double result = std::modf(a.value(), &ip);
    *ipart = ip;
    return result;
 }
@@ -281,9 +284,10 @@ concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_
    return std::numeric_limits<long double>::epsilon();
 }
 
-}
+} // namespace tools
 
-} } // namespaces
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_REAL_CONCEPT_HPP
 

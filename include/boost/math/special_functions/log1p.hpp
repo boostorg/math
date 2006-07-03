@@ -43,7 +43,7 @@ struct log1p_series
    T operator()()
    {
       m_prod *= m_mult;
-      return m_prod / ++k; 
+      return m_prod / ++k;
    }
 
    int count()const
@@ -59,7 +59,7 @@ private:
    log1p_series& operator=(const log1p_series&);
 };
 
-} // namespace
+} // namespace detail
 
 //
 // Algorithm log1p is part of C99, but is not yet provided by many compilers.
@@ -119,7 +119,8 @@ inline float log1p(float x){ return ::log1p(x); }
 inline double log1p(double x){ return ::log1p(x); }
 #endif
 
-} } // namespaces
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_HYPOT_INCLUDED
 

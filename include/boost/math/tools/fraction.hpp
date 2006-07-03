@@ -14,56 +14,62 @@
 
 namespace boost{ namespace math{ namespace tools{
 
-namespace detail{
-
-template <class T>
-struct is_pair : public boost::false_type{};
-
-template <class T, class U>
-struct is_pair<std::pair<T,U> > : public boost::true_type{};
-
-template <class Gen>
-struct fraction_traits_simple
+namespace detail
 {
-   typedef typename Gen::result_type result_type;
-   typedef typename Gen::result_type value_type;
 
-   static result_type a(const value_type& v)
-   {
-      return 1;
-   }
-   static result_type b(const value_type& v)
-   {
-      return v;
-   }
-};
+	template <class T>
+	struct is_pair : public boost::false_type{};
 
-template <class Gen>
-struct fraction_traits_pair
-{
-   typedef typename Gen::result_type value_type;
-   typedef typename value_type::first_type result_type;
+	template <class T, class U>
+	struct is_pair<std::pair<T,U> > : public boost::true_type{};
 
-   static result_type a(const value_type& v)
-   {
-      return v.first;
-   }
-   static result_type b(const value_type& v)
-   {
-      return v.second;
-   }
-};
+	template <class Gen>
+	struct fraction_traits_simple
+	{
+		 typedef typename Gen::result_type result_type;
+		 typedef typename Gen::result_type value_type;
 
-template <class Gen>
-struct fraction_traits 
-   : public boost::mpl::if_c< 
-      is_pair<typename Gen::result_type>::value, 
-      fraction_traits_pair<Gen>, 
-      fraction_traits_simple<Gen> >::type
-{
-};
+		 static result_type a(const value_type& v)
+		 {
+				return 1;
+		 }
+		 static result_type b(const value_type& v)
+		 {
+				return v;
+		 }
+	};
+
+	template <class Gen>
+	struct fraction_traits_pair
+	{
+		 typedef typename Gen::result_type value_type;
+		 typedef typename value_type::first_type result_type;
+
+		 static result_type a(const value_type& v)
+		 {
+				return v.first;
+		 }
+		 static result_type b(const value_type& v)
+		 {
+				return v.second;
+		 }
+	};
+
+	template <class Gen>
+	struct fraction_traits
+		 : public boost::mpl::if_c<
+				is_pair<typename Gen::result_type>::value,
+				fraction_traits_pair<Gen>,
+				fraction_traits_simple<Gen> >::type
+	{
+	};
 
 } // namespace detail
+
+// Note all before are also in namespace detail too.
+
+// TODO move } // namespace detail to end??
+
 
 //
 // continued_fraction_b
@@ -243,6 +249,8 @@ typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, 
    return a0/f;
 }
 
-} } } // namespaces
+} // namespace tools
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_TOOLS_FRACTION_INCLUDED

@@ -9,6 +9,7 @@
 #include <boost/limits.hpp>
 #include <boost/assert.hpp>
 #include <boost/static_assert.hpp>
+
 #include <iostream>
 #include <iomanip>
 
@@ -90,6 +91,8 @@ void setprecision(std::ostream& os, T, int p)
    os << std::setprecision(p);
 }
 
-} } } // namespaces
+} // namespace tools
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_TOOLS_PRECISION_INCLUDED

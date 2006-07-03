@@ -13,25 +13,28 @@
 // This algorithm computes sqrt(1+x)-1 for small x only:
 //
 
-namespace boost{ namespace math{ namespace detail{
+namespace boost{ namespace math{
 
-template <class T>
-struct sqrtp1m1_series
+namespace detail
 {
-   typedef T result_type;
-   sqrtp1m1_series(T z_) : result(z_/2), z(z_), k(1){}
-   T operator()()
-   {
-      T r = result;
-      result *= z * (k - T(0.5));
-      ++k;
-      result /= -k;
-      return r;
-   }
-private:
-   T result, z;
-   int k;
-};
+
+	template <class T>
+	struct sqrtp1m1_series
+	{
+		 typedef T result_type;
+		 sqrtp1m1_series(T z_) : result(z_/2), z(z_), k(1){}
+		 T operator()()
+		 {
+				T r = result;
+				result *= z * (k - T(0.5));
+				++k;
+				result /= -k;
+				return r;
+		 }
+	private:
+		 T result, z;
+		 int k;
+	};
 
 } // namespace detail
 
@@ -46,7 +49,8 @@ T sqrtp1m1(const T& val)
    return tools::kahan_sum_series(gen, ::boost::math::tools::digits<T>());
 }
 
-} } // namespaces
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_SQRTP1M1
 

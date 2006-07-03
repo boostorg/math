@@ -45,6 +45,7 @@
 #include <boost/math/special_functions/gamma.hpp> // for gamma.
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/error_handling.hpp> // for domain_error, logic_error.
+#include <boost/math/tools/promotion.hpp> // for promotion
 
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/type_traits/is_integral.hpp>
@@ -56,51 +57,17 @@ namespace boost
 	namespace math
 	{
       namespace detail
-			{
-				// If either T or U is an integer type, 
-				// pretend it was a double (for the purposes of further analysis).
-				// Then pick the wider of the two floating-point types
-				// as the actual signature to forward to.
-				// For example:
-				// foo(int, short) -> foo(double, double);
-				// foo(int, float) -> foo(double, double);
-				// foo(int, double) -> foo(double, double);
-				// foo(double, float) -> foo(double, double);
-				// foo(any-int-or-float-type, long double) -> foo(long double, long double);
-				// but float foo(float, float) is unchanged.
+			{ // Implementations called by actual functions 
+        // with arguments that, if necessary,
+        // have been promoted from ArithmeticType to RealType.
 
-         template <class T>
-         struct promote_arg
-         { // if T integral, then promote to double.
-            typedef typename mpl::if_<is_integral<T>, double, T>::type type;
-         };
-
-         template <class T, class U>
-         struct promote_arg2 
-         { // Promote, if necessary, & pick the wider of the two floating-point types.
-           // for both parameter types, if integral promote to double.
-            typedef typename promote_arg<T>::type TP; // Perhaps promoted.
-            typedef typename promote_arg<U>::type UP; // Perhaps promoted.
-
-            typedef typename mpl::if_c<
-               is_floating_point<TP>::value && is_floating_point<UP>::value,
-               typename mpl::if_c<
-                  is_same<long double, TP>::value || is_same<long double, UP>::value,
-                  long double,
-                  typename mpl::if_c<
-                     is_same<double, TP>::value || is_same<double, UP>::value,
-                     double,
-                     float
-                  >::type
-               >::type,
-               typename mpl::if_<is_convertible<TP, UP>, UP, TP>::type
-            >::type type;
-         }; // promote_arg2
-
-		   template <class FPT>
-		   FPT chisqr_imp(FPT degrees_of_freedom, FPT chisqr)
+		   template <class RealType>
+		   RealType chisqr_imp(RealType degrees_of_freedom, RealType chisqr)
 		   { 
-        // Implementation of Probability of CHISQR chisqr.
+         // Implementation of probability of chisqr.
+         // Returns the area under the left hand tail (from 0 to x)
+         // of the Chi square probability density function
+         // with v degrees of freedom.
 
 			   using boost::math::gamma_Q; // gamma_Q(degrees_of_freedom/2, chisqr/2)
 			   using boost::math::tools::domain_error;
@@ -109,39 +76,173 @@ namespace boost
 			   // Degrees of freedom argument may be integral, signed or unsigned, or floating-point, or User Defined real.
 			   if(degrees_of_freedom <= 0)
 			   { // Degrees of freedom must be > 0!
-				   return domain_error<FPT>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
+				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
 			   }
 			   if(chisqr < 0)
 			   { // chisqr must be > 0!
-				   return domain_error<FPT>(BOOST_CURRENT_FUNCTION, "chisqr argument is %1%, but must be > 0 !", chisqr);
+				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "chisqr argument is %1%, but must be > 0 !", chisqr);
 			   }
 
-			   // Calculate probability of chisqr using the incomplete beta function.
-			   FPT probability = gamma_Q(degrees_of_freedom / 2, chisqr / 2);
+			   // Calculate probability of chisqr using the incomplete gamma integral function.
+			   RealType probability = gamma_Q(degrees_of_freedom / 2, chisqr / 2);
 			   // Expect 0 <= probability <= 1.
 	  	   // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
 	  	   // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
 			   if (probability < 0)
 			   {
-				   logic_error<FPT>(BOOST_CURRENT_FUNCTION, "probability %1% is < 0, so has been constrained to zero !", probability);
+				   logic_error<RealType>(BOOST_CURRENT_FUNCTION, "probability %1% is < 0, so has been constrained to zero !", probability);
 				   return 0; // Constrain to zero, if logic_error does not throw.
 			   }
 			   if(probability > 1)
 			   {
-				   logic_error<FPT>(BOOST_CURRENT_FUNCTION, "probability %1% is > 1, so has been constrained to unity!", probability);
+				   logic_error<RealType>(BOOST_CURRENT_FUNCTION, "probability %1% is > 1, so has been constrained to unity!", probability);
 				   return 1; // Constrain to unity, if logic_error does not throw.
 			   }
 			   return probability;
 		   } // chisqr_imp
-      } // namespace detail
 
-		template <class DFT, class FPT>
-      inline typename detail::promote_arg2<FPT, DFT>::type // return type is the wider of the two (?promoted) floating point types.
-         chisqr(DFT degrees_of_freedom, FPT chisqr)
+		   template <class RealType>
+		   RealType chisqrc_imp(RealType degrees_of_freedom, RealType chisqr)
+		   { 
+         // Implementation of probability of chisqr complemented.
+         // Returns the area under the right hand tail (from x to infinity)
+         // of the chisqr probability density function
+         // with v degrees of freedom:
+
+			   using boost::math::gamma_Q_c; // gamma_Q(degrees_of_freedom/2, chisqr/2)
+			   using boost::math::tools::domain_error;
+			   using boost::math::tools::logic_error;
+
+			   // Degrees of freedom argument may be integral, signed or unsigned, or floating-point, or User Defined real.
+			   if(degrees_of_freedom <= 0)
+			   { // Degrees of freedom must be > 0!
+				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
+			   }
+			   if(chisqr < 0)
+			   { // chisqr must be > 0!
+				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "chisqr argument is %1%, but must be > 0 !", chisqr);
+			   }
+
+			   // Calculate probability of chisqr using the incomplete beta function.
+			   RealType probability = gamma_Q_c(degrees_of_freedom / 2, chisqr / 2);
+			   // Expect 0 <= probability <= 1.
+	  	   // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
+	  	   // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
+			   if (probability < 0)
+			   {
+				   logic_error<RealType>(BOOST_CURRENT_FUNCTION, "probability %1% is < 0, so has been constrained to zero !", probability);
+				   return 0; // Constrain to zero, if logic_error does not throw.
+			   }
+			   if(probability > 1)
+			   {
+				   logic_error<RealType>(BOOST_CURRENT_FUNCTION, "probability %1% is > 1, so has been constrained to unity!", probability);
+				   return 1; // Constrain to unity, if logic_error does not throw.
+			   }
+			   return probability;
+		   } // chisqr_imp
+
+		   template <class RealType>
+		   RealType chisqr_inv_imp(RealType degrees_of_freedom, RealType probability)
+		   { 
+         // Implementation of inverse of chisqr distribution.
+         // Finds the chisqr argument x such that the integral
+         // from x to infinity of the chisqr density 
+         // is equal to the given cumulative probability y.
+
+			   using boost::math::gamma_Q; // gamma_Q(degrees_of_freedom/2, chisqr/2)
+			   using boost::math::tools::domain_error;
+			   using boost::math::tools::logic_error;
+
+			   // Degrees of freedom argument may be integral, signed or unsigned, or floating-point, or User Defined real.
+			   if(degrees_of_freedom <= 0)
+			   { // Degrees of freedom must be > 0!
+				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
+			   }
+			   if((probability < 0) || (probability > 1))
+			   { // chisqr must be > 0!
+				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability argument is %1%, but must be >= 0 and =< 1 !", chisqr);
+			   }
+
+			   // Calculate chisqr from probability & degrees_of_freedom using the inverse gamma integral function.
+			   RealType chisqr = gamma_Q_inv(degrees_of_freedom / 2, probability) * 2;
+			   // Expect chisqr > 0.
+	  	   // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
+	  	   // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
+			   if (chisqr < 0)
+			   {
+				   logic_error<RealType>(BOOST_CURRENT_FUNCTION, "chisqr %1% is < 0, so has been constrained to zero !", probability);
+				   return 0; // Constrain to zero, if logic_error does not throw.
+			   }
+			   return probability;
+		   } // chisqr_inv_imp
+
+		   template <class RealType>
+		   RealType chisqr_df_inv_imp(RealType chisqr, RealType probability)
+		   { 
+         // Implementation of inverse (complemented?) chisqr distribution.
+         // Finds the degress_fo_freedom argument x such that the 
+         // integral from x to infinity of the chisqr density 
+         // is equal to the given cumulative probability y.
+
+			   using boost::math::gamma_Q_inv; // gamma_Q(degrees_of_freedom/2, chisqr/2)
+			   using boost::math::tools::domain_error;
+			   using boost::math::tools::logic_error;
+
+			   // Degrees of freedom argument may be integral, signed or unsigned, or floating-point, or User Defined real.
+			   if(chisqr <= 0)
+			   { // Degrees of freedom must be > 0!
+				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "chisqr argument is %1%, but must be > 0 !", degrees_of_freedom);
+			   }
+			   if ((probability < 0) || (probability > 1))
+			   { // chisqr must be > 0!
+				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability argument is %1%, but must be >= 0 and =< 1 !", chisqr);
+			   }
+
+			   // Calculate degrees_of_freedom from probability & chisqr using the inverse gamma integral function??
+			   RealType degrees_of_freedom = gamma_Q_inv(chisqr / 2, probability) * 2;// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+			   // Expect degrees_of_freedom >= 0.
+			   if (degrees_of_freedom < 0)
+			   {
+				   logic_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees_of_freedom %1% is < 0, so has been constrained to zero !", probability);
+				   return 0; // Constrain to zero, if logic_error does not throw.
+			   }
+			   return probability;
+		   } // chisqr_inv_imp
+     } // namespace detail
+
+  	template <class ArithmeticType, class RealType> // probability chisqr(degrees_of_freedom, chisqr)
+    inline typename tools::promote_arg2<RealType, ArithmeticType>::type
+      // return type is the wider of the two (?promoted) floating point types.
+         chisqr(ArithmeticType degrees_of_freedom, RealType chisqr)
 		{ 
-         typedef typename detail::promote_arg2<FPT, DFT>::type promote_type; // Arguments type.
+         typedef typename tools::promote_arg2<RealType, ArithmeticType>::type promote_type; // Arguments type.
          return detail::chisqr_imp(static_cast<promote_type>(degrees_of_freedom), static_cast<promote_type>(chisqr));
 		} // chisqr
+
+		template <class ArithmeticType, class RealType> // complement probability chisqr_c(degrees_of_freedom, chisqr)
+      inline typename tools::promote_arg2<RealType, ArithmeticType>::type
+         chisqr_c(ArithmeticType degrees_of_freedom, RealType chisqr)
+		{ 
+         typedef typename tools::promote_arg2<RealType, ArithmeticType>::type promote_type; // Arguments type.
+         return detail::chisqr_c_imp(static_cast<promote_type>(degrees_of_freedom), static_cast<promote_type>(chisqr));
+		} // chisqr_c
+
+		template <class ArithmeticType, class RealType> // chisqr = chisqr_inv(degrees_of_freedom,  probability)
+      inline typename tools::promote_arg2<RealType, ArithmeticType>::type
+         chisqr_inv(ArithmeticType degrees_of_freedom, RealType probability)
+		{ 
+         typedef typename tools::promote_arg2<RealType, ArithmeticType>::type promote_type; // Arguments type.
+         return detail::chisqr_inv_imp(static_cast<promote_type>(degrees_of_freedom), static_cast<promote_type>(probability));
+		} // chisqr_inv
+
+		template <class ArithmeticType, class RealType> // degrees_of_freedom = chisqr_inv_df(chisqr, probability)
+      inline typename tools::promote_arg2<RealType, RealType>::type // <RealType, ArithmeticType> but both RealType.
+         chisqr_df_inv(RealType chisqr, RealType probability)
+		{ 
+         typedef typename tools::promote_arg2<RealType, ArithmeticType>::type promote_type; // Arguments type.
+         return detail::chisqr_df_inv_imp(static_cast<promote_type>(chisqr), static_cast<promote_type>(probability));
+		} // chisqr_inv_df
+
 	} // namespace math
 } // namespace boost
 

@@ -9,7 +9,9 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/roots.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+namespace boost{ namespace math{
+
+namespace detail{
 
 template <class T>
 T estimate_inverse_s(T p, T q)
@@ -17,7 +19,7 @@ T estimate_inverse_s(T p, T q)
    //
    // Computation of the Incomplete Gamma Function Ratios and their Inverse
    // ARMIDO R. DIDONATO and ALFRED H. MORRIS, JR.
-   // ACM Transactions on Mathematical Software, Vol. 12, No. 4, 
+   // ACM Transactions on Mathematical Software, Vol. 12, No. 4,
    // December 1986, Pages 377-393.
    //
    // See equation 32.
@@ -46,7 +48,7 @@ T didonato_SN(T a, T x, unsigned N, T tolerance = 0)
    //
    // Computation of the Incomplete Gamma Function Ratios and their Inverse
    // ARMIDO R. DIDONATO and ALFRED H. MORRIS, JR.
-   // ACM Transactions on Mathematical Software, Vol. 12, No. 4, 
+   // ACM Transactions on Mathematical Software, Vol. 12, No. 4,
    // December 1986, Pages 377-393.
    //
    // See equation 34.
@@ -73,7 +75,7 @@ T didonato_FN(T p, T a, T x, unsigned N, T tolerance)
    //
    // Computation of the Incomplete Gamma Function Ratios and their Inverse
    // ARMIDO R. DIDONATO and ALFRED H. MORRIS, JR.
-   // ACM Transactions on Mathematical Software, Vol. 12, No. 4, 
+   // ACM Transactions on Mathematical Software, Vol. 12, No. 4,
    // December 1986, Pages 377-393.
    //
    // See equation 34.
@@ -92,7 +94,7 @@ T estimate_inverse_gamma(T a, T p, T q)
    //
    // Computation of the Incomplete Gamma Function Ratios and their Inverse
    // ARMIDO R. DIDONATO and ALFRED H. MORRIS, JR.
-   // ACM Transactions on Mathematical Software, Vol. 12, No. 4, 
+   // ACM Transactions on Mathematical Software, Vol. 12, No. 4,
    // December 1986, Pages 377-393.
    //
    using namespace std;
@@ -160,9 +162,9 @@ T estimate_inverse_gamma(T a, T p, T q)
          T c2 = (a - 1) * (1 + c1);
          T c3 = (a - 1) * (-(c1_2 / 2) + (a - 2) * c1 + (3 * a - 5) / 2);
          T c4 = (a - 1) * ((c1_3 / 3) - (3 * a - 5) * c1_2 / 2 + (a_2 - 6 * a + 7) * c1 + (11 * a_2 - 46 * a + 47) / 6);
-         T c5 = (a - 1) * (-(c1_4 / 4) 
-                           + (11 * a - 17) * c1_3 / 6 
-                           + (-3 * a_2 + 13 * a -13) * c1_2 
+         T c5 = (a - 1) * (-(c1_4 / 4)
+                           + (11 * a - 17) * c1_3 / 6
+                           + (-3 * a_2 + 13 * a -13) * c1_2
                            + (2 * a_3 - 25 * a_2 + 72 * a - 61) * c1 / 2
                            + (25 * a_3 - 195 * a_2 + 477 * a - 379) / 12);
 
@@ -182,7 +184,7 @@ T estimate_inverse_gamma(T a, T p, T q)
       T s_4 = s_2 * s_2;
       T s_5 = s_4 * s;
       T ra = sqrt(a);
-      
+
       T w = a + s * ra + (s * s -1) / 3;
       w += (s_3 - 7 * s) / (36 * ra);
       w -= (3 * s_4 + 7 * s_2 - 16) / (810 * a);
@@ -217,9 +219,9 @@ T estimate_inverse_gamma(T a, T p, T q)
                T c2 = (a - 1) * (1 + c1);
                T c3 = (a - 1) * (-(c1_2 / 2) + (a - 2) * c1 + (3 * a - 5) / 2);
                T c4 = (a - 1) * ((c1_3 / 3) - (3 * a - 5) * c1_2 / 2 + (a_2 - 6 * a + 7) * c1 + (11 * a_2 - 46 * a + 47) / 6);
-               T c5 = (a - 1) * (-(c1_4 / 4) 
-                                 + (11 * a - 17) * c1_3 / 6 
-                                 + (-3 * a_2 + 13 * a -13) * c1_2 
+               T c5 = (a - 1) * (-(c1_4 / 4)
+                                 + (11 * a - 17) * c1_3 / 6
+                                 + (-3 * a_2 + 13 * a -13) * c1_2
                                  + (2 * a_3 - 25 * a_2 + 72 * a - 61) * c1 / 2
                                  + (25 * a_3 - 195 * a_2 + 477 * a - 379) / 12);
 
@@ -263,7 +265,7 @@ T estimate_inverse_gamma(T a, T p, T q)
 template <class T>
 struct gamma_P_inverse_func
 {
-   gamma_P_inverse_func(T a_, T p_, bool inv) : a(a_), p(p_), invert(inv) 
+   gamma_P_inverse_func(T a_, T p_, bool inv) : a(a_), p(p_), invert(inv)
    {
       //
       // If p is too near 1 then P(x) - p suffers from cancellation
@@ -329,6 +331,7 @@ private:
 
 } // namespace detail
 
+
 template <class T>
 T gamma_P_inv(T a, T p)
 {
@@ -345,7 +348,7 @@ T gamma_P_inv(T a, T p)
       guess = tools::min_value<T>();
    T lower = tools::min_value<T>();
    guess = tools::halley_iterate(
-      detail::gamma_P_inverse_func<T>(a, p, false), 
+      detail::gamma_P_inverse_func<T>(a, p, false),
       guess,
       lower,
       tools::max_value<T>(),
@@ -371,7 +374,7 @@ T gamma_Q_inv(T a, T q)
       guess = tools::min_value<T>();
    T lower = tools::min_value<T>();
    guess = tools::halley_iterate(
-      detail::gamma_P_inverse_func<T>(a, q, true), 
+      detail::gamma_P_inverse_func<T>(a, q, true),
       guess,
       lower,
       tools::max_value<T>(),
@@ -381,7 +384,8 @@ T gamma_Q_inv(T a, T q)
    return guess;
 }
 
-}} // namespaces
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_IGAMMA_INVERSE_HPP
 

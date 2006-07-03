@@ -37,7 +37,7 @@ struct evaluation<float>
 // doesn't have long double versions of the C std lib functions.
 //
 // If we did promote in this case we could pass out-of-range values
-// to the C std lib without realising that we were doing so, 
+// to the C std lib without realising that we were doing so,
 // as numeric_limits<long double> would give us no clue that we were
 // about to go out of range for a double.
 //
@@ -52,7 +52,9 @@ struct evaluation<double>
 };
 #endif
 
-}}} // namespaces
+} // namespace tools
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_TOOLS_EVALUATION_TYPE_HPP
 

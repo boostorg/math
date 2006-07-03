@@ -8,22 +8,25 @@
 
 #include <boost/math/tools/roots.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+namespace boost{ namespace math{
 
-template <class T>
-struct cbrt_functor
+namespace detail
 {
-   cbrt_functor(T const& target) : a(target){}
-   std::tr1::tuple<T, T, T> operator()(T const& z)
-   {
-      T sqr = z * z;
-      return std::tr1::make_tuple(sqr * z - a, 3 * sqr, 6 * z);
-   }
-private:
-   T a;
-};
 
-} // namespace
+	template <class T>
+	struct cbrt_functor
+	{
+		 cbrt_functor(T const& target) : a(target){}
+		 std::tr1::tuple<T, T, T> operator()(T const& z)
+		 {
+				T sqr = z * z;
+				return std::tr1::make_tuple(sqr * z - a, 3 * sqr, 6 * z);
+		 }
+	private:
+		 T a;
+	};
+
+} // namespace detail
 
 template <class T>
 T cbrt(T z)
@@ -46,7 +49,8 @@ T cbrt(T z)
    return sign * tools::halley_iterate(detail::cbrt_functor<T>(z), guess, min, max, digits);
 }
 
-}} // namespaces
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_SF_CBRT_HPP
 

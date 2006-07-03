@@ -91,7 +91,7 @@ int fpclassify BOOST_NO_MACRO_EXPAND(T t)
       return FP_NAN;
 #endif
    // std::fabs broken on a few systems especially for long long!!!!
-   T at = (t < T(0)) ? -t : t; 
+   T at = (t < T(0)) ? -t : t;
 
    // Use a process of exclusion to figure out
    // what kind of type we have, this relies on
@@ -134,7 +134,7 @@ inline int fpclassify BOOST_NO_MACRO_EXPAND(long double t)
 #endif
 
 #elif defined(_MSC_VER)
-// This only works for type double, for both float 
+// This only works for type double, for both float
 // and long double it gives misleading answers.
 int fpclassify BOOST_NO_MACRO_EXPAND(double t)
 {
@@ -187,7 +187,8 @@ inline bool isnormal BOOST_NO_MACRO_EXPAND(T t)
    return (::boost::math::fpclassify)(t) == FP_NORMAL;
 }
 
-} } // namespaces
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_FPCLASSIFY_HPP
 

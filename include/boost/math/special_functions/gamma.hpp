@@ -21,6 +21,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/assert.hpp>
+
 #include <cmath>
 #include <algorithm>
 
@@ -31,9 +32,9 @@
 #endif
 
 
-namespace boost{ namespace math{ 
-   
-//
+namespace boost{ namespace math{
+
+// TODO remove these after adding math_fwd.hpp
 // Forward declarations:
 //
 template <class T>
@@ -51,7 +52,7 @@ template <class T>
 T gamma_Q(T a, T z);
 template <class T>
 T gamma_P(T a, T z);
-   
+
 namespace detail{
 
 template <class T>
@@ -330,7 +331,7 @@ T gamma_imp(T z, const lanczos::undefined_lanczos& l)
    }
    //
    // The upper gamma fraction is *very* slow for z < 6, actually it's very
-   // slow to converge everywhere but recursing until z > 6 gets rid of the 
+   // slow to converge everywhere but recursing until z > 6 gets rid of the
    // worst of it's behaviour.
    //
    T prefix = 1;
@@ -389,7 +390,7 @@ T lgamma_imp(T z, const lanczos::undefined_lanczos&, int*sign)
 template <class T, class L>
 T tgammap1m1_imp(T dz, const L&)
 {
-   // 
+   //
    using namespace std;
 
    T zgh = (L::g() + T(0.5) + dz) / boost::math::constants::e<T>();
@@ -403,7 +404,7 @@ T tgammap1m1_imp(T dz, const L&)
 }
 
 template <class T>
-T tgammap1m1_imp(T dz, 
+T tgammap1m1_imp(T dz,
                  const ::boost::math::lanczos::undefined_lanczos& l)
 {
    //
@@ -412,10 +413,10 @@ T tgammap1m1_imp(T dz,
    // algebra isn't easy for the general case....
    //
    T result = gamma_imp(1 + dz, l) - 1;
-   if(std::pow(2.0, boost::math::tools::digits<T>()) * result 
+   if(std::pow(2.0, boost::math::tools::digits<T>()) * result
       < std::pow(2.0, std::numeric_limits<long double>::digits))
    {
-      // Cancellation errors mean that we have 
+      // Cancellation errors mean that we have
       // fewer good digits left in the result than
       // there are digits in a long double.  To limit
       // the damage, call the long double version:
@@ -628,7 +629,7 @@ T regularised_gamma_prefix(T a, T z, const L& l)
       }
       else
       {
-         // direct calculation, no danger of overflow as gamma(a) < 1/a 
+         // direct calculation, no danger of overflow as gamma(a) < 1/a
          // for small a.
          return pow(z, a) * exp(-z) / gamma_imp(a, l);
       }
@@ -731,7 +732,7 @@ T regularised_gamma_prefix(T a, T z, const lanczos::undefined_lanczos&)
 }
 
 //
-// regularised incomplete gamma, divide through by Lanczos 
+// regularised incomplete gamma, divide through by Lanczos
 // approximation and combine terms:
 //
 template <class T, class L>
@@ -750,7 +751,7 @@ T gamma_Q_imp(T a, T z, const L& l)
       T result = tgamma_upper_part(a, z);
       return result / tga;
    }
-   else 
+   else
    {
       T prefix = regularised_gamma_prefix(a, z, l);
       if(z < a+1)
@@ -823,7 +824,7 @@ T tgamma_delta_ratio_imp(T z, T delta, const lanczos::undefined_lanczos&)
 
    //
    // The upper gamma fraction is *very* slow for z < 6, actually it's very
-   // slow to converge everywhere but recursing until z > 6 gets rid of the 
+   // slow to converge everywhere but recursing until z > 6 gets rid of the
    // worst of it's behaviour.
    //
    T prefix = 1;
@@ -909,8 +910,8 @@ inline T gamma_Q(T a, T z)
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(
-      detail::gamma_Q_imp(static_cast<value_type>(a), 
-      static_cast<value_type>(z), 
+      detail::gamma_Q_imp(static_cast<value_type>(a),
+      static_cast<value_type>(z),
       evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
@@ -920,8 +921,8 @@ inline T gamma_P(T a, T z)
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(
-      detail::gamma_P_imp(static_cast<value_type>(a), 
-      static_cast<value_type>(z), 
+      detail::gamma_P_imp(static_cast<value_type>(a),
+      static_cast<value_type>(z),
       evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 

@@ -6,20 +6,21 @@
 #ifndef BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
 #define BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
 
-#include <utility>
-#include <cmath>
-#include <stdexcept>
 #include <boost/tr1/tuple.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
 #include <boost/throw_exception.hpp>
+
+#include <utility>
+#include <cmath>
+#include <stdexcept>
 
 namespace boost{ namespace math{ namespace tools{
 
 namespace detail{
 
 template <class F, class T>
-void handle_zero_derivative(F f, 
+void handle_zero_derivative(F f,
                             T& last_f0,
                             const T& f0,
                             T& delta,
@@ -30,7 +31,7 @@ void handle_zero_derivative(F f,
 {
    if(last_f0 == 0)
    {
-      // this must be the first iteration, pretend that we had a 
+      // this must be the first iteration, pretend that we had a
       // previous one at either min or max:
       if(result == min)
       {
@@ -97,7 +98,7 @@ T bisect(F f, T min, T max, int digits, boost::uintmax_t& max_iter)
       std::logic_error e("No change of sign in boost::math::tools::bisect, either there is no root to find, or there are multiple roots in the interval.");
       boost::throw_exception(e);
    }
-   
+
    boost::uintmax_t count = max_iter;
 
    do
@@ -140,7 +141,7 @@ template <class F, class T>
 T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
 {
    using namespace std;
-   
+
    T f0(0), f1, last_f0(0);
    T result = guess;
 
@@ -228,7 +229,7 @@ template <class F, class T>
 T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
 {
    using namespace std;
-   
+
    T f0(0), f1, f2;
    T result = guess;
 
@@ -342,7 +343,7 @@ template <class F, class T>
 T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
 {
    using namespace std;
-   
+
    T f0(0), f1, f2, last_f0(0);
    T result = guess;
 
@@ -439,7 +440,10 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits)
    return schroeder_iterate(f, guess, min, max, digits, m);
 }
 
-}}} // namespaces
+} // namespace tools
+} // namespace math
+} // namespace boost
+
 
 #endif // BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
 

@@ -11,7 +11,8 @@
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace NTL{
+namespace NTL
+{
 
    inline quad_float pow(quad_float a, quad_float b)
    {
@@ -54,7 +55,7 @@ namespace NTL{
       r.e += exp;
       return r;
    }
-}
+} // namespace NTL
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -175,21 +176,23 @@ void setprecision(std::ostream& os, NTL::RR, int p)
 //
 namespace constants{
 
-template<> inline NTL::RR pi<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
-{ 
-   NTL::RR result;
-   ComputePi(result);
-   return result; 
-}
-template<> inline NTL::RR e<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
-{ 
-   NTL::RR result = 1;
-   return exp(result); 
-}
+	template<> inline NTL::RR pi<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
+	{
+		 NTL::RR result;
+		 ComputePi(result);
+		 return result;
+	}
+	template<> inline NTL::RR e<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
+	{
+		 NTL::RR result = 1;
+		 return exp(result);
+	}
 
 } // namespace constants
 
-namespace tools{
+namespace tools
+{
+
 template <>
 inline float real_cast<float, NTL::quad_float>(NTL::quad_float t)
 {
@@ -261,9 +264,9 @@ void setprecision(std::ostream& os, NTL::quad_float, int p)
    NTL::quad_float::SetOutputPrecision(p);
 }
 
-}}} // namespaces
-
-
+} // namespace tools
+} // namespace math
+} // namespaceboost
 #endif // BOOST_MATH_TOOLS_NTL_HPP
 
 

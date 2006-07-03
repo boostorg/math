@@ -9,7 +9,10 @@
 #include <boost/config.hpp>
 #include <boost/lexical_cast.hpp>
 
-namespace boost{ namespace math{ namespace constants{
+namespace boost{ namespace math{
+
+namespace constants
+{
 
 #define BOOST_DEFINE_MATH_CONSTANT(name, x, y, exp)\
    template <class T> inline T name(BOOST_EXPLICIT_TEMPLATE_TYPE(T))\
@@ -29,6 +32,8 @@ BOOST_DEFINE_MATH_CONSTANT(e, 2.718281828459045235360287471352662497757247093699
 BOOST_DEFINE_MATH_CONSTANT(half, 0.5, 0, 0)
 BOOST_DEFINE_MATH_CONSTANT(euler, 0.577215664901532860606512090082402431042159335939923598805, 76723488486, 0)
 
-} } } // namespaces
+} // namespace constants
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_CONSTANTS_CONSTANTS_INCLUDED

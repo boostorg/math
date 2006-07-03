@@ -21,7 +21,6 @@
 namespace std{ using ::exp; using ::fabs; }
 #endif
 
-
 namespace boost{ namespace math{
 
 namespace detail{
@@ -43,7 +42,7 @@ struct expm1_series
       ++k;
       m_term *= m_x;
       m_term /= k;
-      return m_term; 
+      return m_term;
    }
 
    int count()const
@@ -59,7 +58,7 @@ private:
    expm1_series& operator=(const expm1_series&);
 };
 
-} // namespace
+} // namespace detail
 
 //
 // Algorithm expm1 is part of C99, but is not yet provided by many compilers.
@@ -112,7 +111,8 @@ inline float expm1(float x){ return ::expm1(x); }
 inline double expm1(double x){ return ::expm1(x); }
 #endif
 
-} } // namespaces
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_HYPOT_INCLUDED
 

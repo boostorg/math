@@ -64,8 +64,9 @@ V evaluate_rational(const T* num, const U* denom, V z, std::size_t count)
    return s1 / s2;
 }
 
-
-}}} // namespaces
+} // namespace tools
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_TOOLS_RATIONAL_HPP
 

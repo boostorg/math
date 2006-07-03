@@ -42,7 +42,7 @@ private:
    T t, a;
 };
 //
-// See: 
+// See:
 // "Asymptotic Inversion of the Incomplete Beta Function"
 // N.M. Temme
 // Journal of Computation and Applied Mathematics 41 (1992) 145-157.
@@ -78,7 +78,7 @@ T temme_method_1_ibeta_inverse(T a, T b, T z)
    workspace[3] = T(-1) / 192;
    workspace[4] = -B * r2 / 3840;
    terms[1] = tools::evaluate_polynomial(workspace, eta0, 5);
-   // Eq Following 2.17: 
+   // Eq Following 2.17:
    workspace[0] = B * r2 * (3 * B - 2) / 12;
    workspace[1] = (20 * B_2 - 12 * B + 1) / 128;
    workspace[2] = B * r2 * (20 * B - 1) / 960;
@@ -118,7 +118,7 @@ T temme_method_1_ibeta_inverse(T a, T b, T z)
    return x;
 }
 //
-// See: 
+// See:
 // "Asymptotic Inversion of the Incomplete Beta Function"
 // N.M. Temme
 // Journal of Computation and Applied Mathematics 41 (1992) 145-157.
@@ -128,7 +128,7 @@ template <class T>
 T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
 {
    //
-   // Get first estimate for eta, see Eq 3.9 and 3.10, 
+   // Get first estimate for eta, see Eq 3.9 and 3.10,
    // but note there is a typo in Eq 3.10:
    //
    T eta0 = boost::math::erfc_inv(2 * z);
@@ -192,7 +192,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
    workspace[2] = tools::evaluate_even_polynomial(co11, s, 8) / (36741600 * sc_7);
    terms[3] = tools::evaluate_polynomial(workspace, eta0, 3);
    //
-   // Bring the correction terms together to evaluate eta, 
+   // Bring the correction terms together to evaluate eta,
    // this is the last equation on page 151:
    //
    T eta = tools::evaluate_polynomial(terms, 1/r, 4);
@@ -210,7 +210,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
    alpha *= alpha;
    T lu = (-(eta * eta) / (2 * s_2) + log(s_2) + c_2 * log(c_2) / s_2);
    //
-   // Temme doesn't specify what value to switch on here, 
+   // Temme doesn't specify what value to switch on here,
    // but this seems to work pretty well:
    //
    if(fabs(eta) < 0.7)
@@ -293,7 +293,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
    return x;
 }
 //
-// See: 
+// See:
 // "Asymptotic Inversion of the Incomplete Beta Function"
 // N.M. Temme
 // Journal of Computation and Applied Mathematics 41 (1992) 145-157.
@@ -337,10 +337,10 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
    //
    // Now we need to compute the purturbation error terms that
    // convert eta0 to eta, these are all polynomials of polynomials.
-   // Probably these should be re-written to use tabulated data 
+   // Probably these should be re-written to use tabulated data
    // (see examples above), but it's less of a win in this case as we
    // need to calculate the individual powers for the denominator terms
-   // anyway, so we might as well use them for the numerator-polynomials 
+   // anyway, so we might as well use them for the numerator-polynomials
    // as well....
    //
    // Refer to p154-p155 for the details of these expansions:
@@ -366,7 +366,7 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
    //
    // Now we need to solve Eq 4.2 to obtain x.  For any given value of
    // eta there are two solutions to this equation, and since the distribtion
-   // may be very skewed, these are not related by x ~ 1-x we used when 
+   // may be very skewed, these are not related by x ~ 1-x we used when
    // implementing section 3 above.  However we know that:
    //
    //  cross < x <= 1       ; iff eta < mu
@@ -377,7 +377,7 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
    // Many thanks to Prof Temme for clarifying this point.
    //
    // Therefore we'll just jump straight into Newton iterations
-   // to solve Eq 4.2 using these bounds, and simple bisection 
+   // to solve Eq 4.2 using these bounds, and simple bisection
    // as the first guess, in practice this converges pretty quickly
    // and we only need a few digits correct anyway:
    //
@@ -399,14 +399,14 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
 template <class T, class L>
 struct ibeta_roots
 {
-   ibeta_roots(T _a, T _b, T t, bool inv = false) 
+   ibeta_roots(T _a, T _b, T t, bool inv = false)
       : a(_a), b(_b), target(t), invert(inv) {}
 
    std::tr1::tuple<T, T, T> operator()(T x)
    {
       T f = ibeta_imp(a, b, x, L(), invert, true) - target;
-      T f1 = invert ? 
-               -ibeta_power_terms(b, a, 1 - x, x, L(), true) 
+      T f1 = invert ?
+               -ibeta_power_terms(b, a, 1 - x, x, L(), true)
                : ibeta_power_terms(a, b, x, 1 - x, L(), true);
       T y = 1 - x;
       if(y == 0)
@@ -447,7 +447,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
    //
    T x, y;
    //
-   // For some of the methods we can put tighter bounds 
+   // For some of the methods we can put tighter bounds
    // on the result than simply [0,1]:
    //
    T lower = 0;
@@ -465,7 +465,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
    {
       //
       // When a+b is large then we can use one of Prof Temme's
-      // asymptotic expansions, begin by swapping things around 
+      // asymptotic expansions, begin by swapping things around
       // so that p < 0.5, we do this to avoid cancellations errors
       // when p is large.
       //
@@ -500,9 +500,9 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
             //
             // The second error function case is the next cheapest
             // to use, it brakes down when the result is likely to be
-            // very small, if a+b is also small, but we can use a 
+            // very small, if a+b is also small, but we can use a
             // cheaper expansion there in any case.  As before x won't
-            // be much larger than p, so as long as p is small we should 
+            // be much larger than p, so as long as p is small we should
             // be free of cancellation error.
             //
             T ppa = pow(p, 1/a);
@@ -641,7 +641,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
       // is above 1, and a+b is small.  Start by swapping
       // things around so that we have a concave curve with b > a
       // and no points of inflection in [0,1].  As long as we expect
-      // x to be small then we can use the simple (and cheap) power 
+      // x to be small then we can use the simple (and cheap) power
       // term to estimate x, but when we expect x to be large then
       // this greatly underestimates x and leaves us trying to
       // iterate "round the corner" which may take almost forever...
@@ -655,7 +655,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
       // cheaper to compute, and still keeps the number of iterations
       // required down to a reasonable level.  With thanks to Prof Temme
       // for this suggestion.
-      // 
+      //
       if(b < a)
       {
          std::swap(a, b);
@@ -763,11 +763,11 @@ T ibeta_inv(T a, T b, T p)
 
    return tools::checked_narrowing_cast<T>(
       detail::ibeta_inv_imp(
-         static_cast<value_type>(a), 
-         static_cast<value_type>(b), 
-         static_cast<value_type>(p), 
-         static_cast<value_type>(1 - p), 
-         evaluation_type()), 
+         static_cast<value_type>(a),
+         static_cast<value_type>(b),
+         static_cast<value_type>(p),
+         static_cast<value_type>(1 - p),
+         evaluation_type()),
       BOOST_CURRENT_FUNCTION);
 }
 
@@ -786,15 +786,16 @@ T ibetac_inv(T a, T b, T q)
 
    return tools::checked_narrowing_cast<T>(
       detail::ibeta_inv_imp(
-         static_cast<value_type>(a), 
-         static_cast<value_type>(b), 
-         static_cast<value_type>(1 - q), 
-         static_cast<value_type>(q), 
-         evaluation_type()), 
+         static_cast<value_type>(a),
+         static_cast<value_type>(b),
+         static_cast<value_type>(1 - q),
+         static_cast<value_type>(q),
+         evaluation_type()),
       BOOST_CURRENT_FUNCTION);
 }
 
-}} // namespaces
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_IGAMMA_INVERSE_HPP
 

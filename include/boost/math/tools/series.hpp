@@ -101,14 +101,14 @@ typename Functor::result_type sum_series(Functor& func, int bits, boost::uintmax
 
 //
 // Algorithm kahan_sum_series invokes Functor func until the N'th
-// term is too small to have any effect on the total, the terms 
+// term is too small to have any effect on the total, the terms
 // are added using the Kahan summation method.
 //
 // CAUTION: Optimizing compilers combined with extended-precision
 // machine registers conspire to render this algorithm partly broken:
 // double rounding of intermediate terms (first to a long double machine
 // register, and then to a double result) cause the rounding error computed
-// by the algorithm to be off by up to 1ulp.  However this occurs rarely, and 
+// by the algorithm to be off by up to 1ulp.  However this occurs rarely, and
 // in any case the result is still much better than a naive summation.
 //
 template <class Functor>
@@ -181,8 +181,8 @@ public:
       T tmp,dum;
       tmp=wksp[1];
       wksp[1]=term;
-      for (j=1;j<=nterm-1;j++) 
-      {      
+      for (j=1;j<=nterm-1;j++)
+      {
          dum=wksp[j+1];
          wksp[j+1]=0.5*(wksp[j]+tmp);
          tmp=dum;
@@ -205,6 +205,8 @@ private:
    int nterm;
 };
 */
-} } } // namespaces
+} // namespace tools
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_TOOLS_SERIES_INCLUDED

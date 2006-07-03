@@ -264,7 +264,7 @@ inline double unchecked_factorial(unsigned i)
 template <>
 struct max_factorial<double>
 {
-   BOOST_STATIC_CONSTANT(unsigned, 
+   BOOST_STATIC_CONSTANT(unsigned,
       value = ::boost::math::max_factorial<long double>::value);
 };
 
@@ -413,6 +413,7 @@ inline double factorial<double>(unsigned i)
    return tools::overflow_error<double>(BOOST_CURRENT_FUNCTION, 0);
 }
 
-}} // namespaces
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_SP_FACTORIALS_HPP

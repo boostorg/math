@@ -17,6 +17,7 @@
 
 namespace boost{ namespace math{
 
+// TODO remove after math_fwd.hpp
 template <class T>
 T beta(T a, T b);
 template <class T>
@@ -38,13 +39,13 @@ T beta_imp(T a, T b, const L&)
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The arguments to the beta function must be greater than zero (got a=%1%).", a);
    if(b <= 0)
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The arguments to the beta function must be greater than zero (got b=%1%).", b);
-   
+
    T result;
 
    T prefix = 1;
    T c = a + b;
 
-   // special cases:
+   // Special cases:
    if(c == a)
       return boost::math::tgamma(b);
    else if(c == b)
@@ -54,7 +55,7 @@ T beta_imp(T a, T b, const L&)
    else if(a == 1)
       return 1/b;
 
-   // if a or b are less than 1, shift to greater than 1:
+   // If a or b are less than 1, shift to greater than 1:
    if(a < 1)
    {
       prefix *= c / a;
@@ -78,7 +79,7 @@ T beta_imp(T a, T b, const L&)
    T ambh = a - T(0.5) - b;
    if((fabs(b * ambh) < (cgh * 100)) && (a > 100))
    {
-      // special case where the base of the power term is close to 1
+      // Special case where the base of the power term is close to 1
       // compute (1+x)^y instead:
       result *= exp(ambh * boost::math::log1p(-b / cgh));
    }
@@ -89,11 +90,11 @@ T beta_imp(T a, T b, const L&)
    result *= pow((agh * bgh) / (cgh * cgh), b);
    result *= sqrt(boost::math::constants::e<T>() / bgh);
 
-   // if a and b were originally less than 1 we need to scale the result:
+   // If a and b were originally less than 1 we need to scale the result:
    result *= prefix;
 
    return result;
-}
+} // template <class T, class L> beta_imp(T a, T b, const L&)
 
 //
 // Generic implementation of Beta(a,b) without Lanczos approximation support
@@ -155,7 +156,7 @@ T beta_imp(T a, T b, const lanczos::undefined_lanczos& l)
 
    // and the exponent part:
    result = exp(lc - la - lb) * pow(la/lc, a) * pow(lb/lc, b);
-   
+
    // and combine:
    result *= sa * sb / sc;
 
@@ -163,7 +164,8 @@ T beta_imp(T a, T b, const lanczos::undefined_lanczos& l)
    result *= prefix;
 
    return result;
-}
+} // template <class T>T beta_imp(T a, T b, const lanczos::undefined_lanczos& l)
+
 
 //
 // Series approximation to the incomplete beta:
@@ -252,11 +254,11 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
       T lb1 = a * log(b1);
       T lb2 = b * log(b2);
 
-      if((lb1 >= tools::log_max_value<T>()) 
+      if((lb1 >= tools::log_max_value<T>())
          || (lb1 <= tools::log_min_value<T>())
-         || (lb2 >= tools::log_max_value<T>()) 
+         || (lb2 >= tools::log_max_value<T>())
          || (lb2 <= tools::log_min_value<T>())
-         || (e1 >= tools::log_max_value<T>()) 
+         || (e1 >= tools::log_max_value<T>())
          || (e1 <= tools::log_min_value<T>()) )
       {
          T p = lb1 + lb2 - e1;
@@ -271,12 +273,13 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
    }
    else
    {
-      // non-normalised, just compute the power:
+      // Non-normalised, just compute the power:
       result = pow(x, a);
    }
    ibeta_series_t<T> s(a, b, x, result);
    return boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), s0);
 }
+
 //
 // Compute the leading power terms in the incomplete Beta:
 //
@@ -289,10 +292,10 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
 // horrendous cancellation errors.
 //
 template <class T, class L>
-T ibeta_power_terms(T a, 
-                        T b, 
-                        T x, 
-                        T y, 
+T ibeta_power_terms(T a,
+                        T b,
+                        T x,
+                        T y,
                         const L&,
                         bool normalised)
 {
@@ -318,7 +321,7 @@ T ibeta_power_terms(T a,
    // l1 and l2 are the base of the exponents minus one:
    T l1 = (x * b - y * agh) / agh;
    T l2 = (y * a - x * bgh) / bgh;
-   if(((std::min)(a, b) > 5) 
+   if(((std::min)(a, b) > 5)
       && ((std::min)(fabs(l1), fabs(l2)) < 0.2))
    {
       // when the base of the exponent is very near 1 we get really
@@ -344,14 +347,14 @@ T ibeta_power_terms(T a,
       else if(fabs(l1) < fabs(l2))
       {
          // first base near 1:
-         T l = a * boost::math::log1p(l1) 
+         T l = a * boost::math::log1p(l1)
             + b * log((y * cgh) / bgh);
          result *= exp(l);
       }
       else
       {
          // second base near 1:
-         T l = b * boost::math::log1p(l2) 
+         T l = b * boost::math::log1p(l2)
             + a * log((x * cgh) / agh);
          result *= exp(l);
       }
@@ -364,9 +367,9 @@ T ibeta_power_terms(T a,
       T l1 = a * log(b1);
       T l2 = b * log(b2);
       if((l1 >= tools::log_max_value<T>())
-         || (l1 <= tools::log_min_value<T>()) 
+         || (l1 <= tools::log_min_value<T>())
          || (l2 >= tools::log_max_value<T>())
-         || (l2 <= tools::log_min_value<T>()) 
+         || (l2 <= tools::log_min_value<T>())
          )
       {
          // Oops, overflow, sidestep:
@@ -402,10 +405,10 @@ T ibeta_power_terms(T a,
 // This version is generic, slow, and does not use the Lanczos approximation.
 //
 template <class T>
-T ibeta_power_terms(T a, 
-                        T b, 
-                        T x, 
-                        T y, 
+T ibeta_power_terms(T a,
+                        T b,
+                        T x,
+                        T y,
                         const boost::math::lanczos::undefined_lanczos&,
                         bool normalised)
 {
@@ -483,7 +486,7 @@ struct ibeta_fraction2_t
       bN += ((a + m) * (a - (a + b) * x + 1 + m *(2 - x))) / (a + 2*m + 1);
 
       ++m;
-      
+
       return std::make_pair(aN, bN);
    }
 
@@ -492,7 +495,7 @@ private:
    int m;
 };
 //
-// evaluate the incomplete beta via the continued fraction representation:
+// Evaluate the incomplete beta via the continued fraction representation:
 //
 template <class T, class L>
 T ibeta_fraction2(T a, T b, T x, T y, const L& l, bool normalised)
@@ -513,7 +516,7 @@ template <class T, class L>
 T ibeta_a_step(T a, T b, T x, T y, int k, const L& l, bool normalised)
 {
    T prefix = ibeta_power_terms(a, b, x, y, l, normalised)/a;
-   if(prefix == 0) 
+   if(prefix == 0)
       return prefix;
    T sum = 1;
    T term = 1;
@@ -556,7 +559,7 @@ T rising_factorial_ratio(T a, T b, int k)
 //
 // Begin by figuring out how large our table of Pn's should be,
 // quoted accuracies are "guestimates" based on empiracal observation.
-// Note that the table size should never exceed the size of our 
+// Note that the table size should never exceed the size of our
 // tables of factorials.
 //
 template <class T>
@@ -633,12 +636,12 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
    //
    T sum = s0 + prefix * j;  // Value at N = 0
    // some variables we'll need:
-   unsigned tnp1 = 1; // 2*N+1 
+   unsigned tnp1 = 1; // 2*N+1
    T lx2 = lx / 2;
    lx2 *= lx2;
    T lxp = 1;
    T t4 = 4 * t * t;
-   T b2n = b; 
+   T b2n = b;
 
    for(unsigned n = 1; n < sizeof(p)/sizeof(p[0]); ++n)
    {
@@ -691,7 +694,8 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
       }
    }
    return sum;
-}
+} // template <class T, class L>T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool normalised)
+
 
 //
 // The incomplete beta function implementation:
@@ -740,7 +744,7 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
                fract = -ibeta_series(a, b, x, fract, l, normalised);
             }
          }
-         else 
+         else
          {
             std::swap(a, b);
             std::swap(x, y);
@@ -758,7 +762,7 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             }
             else
             {
-               // sidestep on a, and then use the series representation:
+               // Sidestep on a, and then use the series representation:
                T prefix;
                if(!normalised)
                {
@@ -794,7 +798,7 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
                fract = -ibeta_series(a, b, x, fract, l, normalised);
             }
          }
-         else 
+         else
          {
             std::swap(a, b);
             std::swap(x, y);
@@ -824,7 +828,7 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             }
             else
             {
-               // sidestep to improve errors:
+               // Sidestep to improve errors:
                T prefix;
                if(!normalised)
                {
@@ -902,7 +906,7 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
          else if(normalised)
          {
             // the formula here for the non-normalised case is tricky to figure
-            // out (for me!!), and requires two pochhammer calculations rather 
+            // out (for me!!), and requires two pochhammer calculations rather
             // than one, so leave it for now....
             int n = static_cast<int>(boost::math::tools::real_cast<long double>(floor(b)));
             if(n == b)
@@ -927,14 +931,14 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
          fract = ibeta_fraction2(a, b, x, y, l, normalised);
    }
    return invert ? (normalised ? 1 : beta_imp(a, b, l)) - fract : fract;
-}
+} // template <class T, class L>T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
 
 } // namespace detail
 
 //
-// The actual function entrypoints now follow, these just figure out
-// which Lanczos approximation to use and forward to the implementation
-// functions:
+// The actual function entry-points now follow, these just figure out
+// which Lanczos approximation to use
+// and forward to the implementation functions:
 //
 template <class T>
 T beta(T a, T b)
@@ -976,7 +980,8 @@ T ibetac(T a, T b, T x)
    return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, true), BOOST_CURRENT_FUNCTION);
 }
 
-}} // namespaces
+} // namespace math
+} // namespace boost
 
 #include <boost/math/special_functions/ibeta_inverse.hpp>
 

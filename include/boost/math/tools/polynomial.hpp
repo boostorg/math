@@ -6,10 +6,11 @@
 #ifndef BOOST_MATH_TOOLS_POLYNOMIAL_HPP
 #define BOOST_MATH_TOOLS_POLYNOMIAL_HPP
 
-#include <vector>
 #include <boost/assert.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
+
+#include <vector>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -33,7 +34,7 @@ public:
    {
       m_data.push_back(point);
    }
-   
+
    // copy:
    polynomial(const polynomial& p)
       : m_data(p.m_data) { }
@@ -224,7 +225,9 @@ std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT, traits
    return os;
 }
 
-}}} // namespaces
+} // namespace tools
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_TOOLS_POLYNOMIAL_HPP
 

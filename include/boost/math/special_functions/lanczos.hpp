@@ -12,6 +12,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/math/tools/evaluation_type.hpp>
 #include <boost/math/tools/rational.hpp>
+
 #include <limits.h>
 
 namespace boost{ namespace math{ namespace lanczos{
@@ -20,14 +21,12 @@ namespace boost{ namespace math{ namespace lanczos{
 // Individual lanczos approximations start here.
 //
 // Optimal values for G for each N are taken from
-// http://web.mala.bc.ca/pughg/phdThesis/phdThesis.pdf
-// As are the theoretical error bounds.
+// http://web.mala.bc.ca/pughg/phdThesis/phdThesis.pdf,
+// as are the theoretical error bounds.
 //
 // Constants calculated using the method described by Godfrey
-// http://my.fit.edu/~gabdo/gamma.txt and elaberated by Toth at
+// http://my.fit.edu/~gabdo/gamma.txt and elaborated by Toth at
 // http://www.rskey.org/gamma.htm using NTL::RR at 1000 bit precision.
-//
-
 //
 // Lanczos Coefficients for N=6 G=5.581
 // Max experimental error (with arbitary precision arithmetic) 9.516e-12
@@ -1157,7 +1156,7 @@ struct undefined_lanczos
 };
 
 //
-// lanczos_traits, specialise this to point tgamma etc to 
+// lanczos_traits, specialise this to point tgamma etc to
 // the necessary data for type T:
 //
 template <class T>
@@ -1211,7 +1210,7 @@ template<>
 struct lanczos_traits<long double>
 {
    typedef long double value_type;
-   typedef 
+   typedef
       boost::mpl::if_c<
          (BOOST_MATH_LDBL_DIGITS < 52),
             lanczos6m24,
@@ -1227,7 +1226,9 @@ struct lanczos_traits<long double>
       >::type evaluation_type;
 };
 
-} } } // namespaces
+} // namespace lanczos
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_LANCZOS
 

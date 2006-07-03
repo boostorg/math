@@ -6,8 +6,6 @@
 #ifndef BOOST_MATH_TOOLS_TEST_DATA_HPP
 #define BOOST_MATH_TOOLS_TEST_DATA_HPP
 
-#include <set>
-#include <vector>
 #include <boost/assert.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>
@@ -16,6 +14,9 @@
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/tr1/random.hpp>
 #include <boost/tr1/tuple.hpp>
+
+#include <set>
+#include <vector>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -82,18 +83,18 @@ parameter_info<T> make_power_param(T basis, int start_exponent, int end_exponent
 namespace detail{
 
 template <class Seq, class Item, int N>
-inline void unpack_and_append_tuple(Seq& s, 
-                                    const Item& data, 
-                                    const boost::integral_constant<int, N>&, 
+inline void unpack_and_append_tuple(Seq& s,
+                                    const Item& data,
+                                    const boost::integral_constant<int, N>&,
                                     const boost::false_type&)
 {
    // termimation condition nothing to do here
 }
 
 template <class Seq, class Item, int N>
-inline void unpack_and_append_tuple(Seq& s, 
-                                    const Item& data, 
-                                    const boost::integral_constant<int, N>&, 
+inline void unpack_and_append_tuple(Seq& s,
+                                    const Item& data,
+                                    const boost::integral_constant<int, N>&,
                                     const boost::true_type&)
 {
    // extract the N'th element, append, and recurse:
@@ -300,7 +301,7 @@ private:
 };
 
 //
-// This code exists to bemuse the compiler's optimizer and force a 
+// This code exists to bemuse the compiler's optimizer and force a
 // truncation to float-precision only:
 //
 template <class T>
@@ -671,7 +672,7 @@ std::basic_ostream<charT, traits>& write_csv(std::basic_ostream<charT, traits>& 
 
 template <class T>
 std::ostream& write_code(std::ostream& os,
-                         const test_data<T>& data, 
+                         const test_data<T>& data,
                          const char* name)
 {
    typedef typename test_data<T>::const_iterator it_type;
@@ -708,7 +709,9 @@ std::ostream& write_code(std::ostream& os,
    return os;
 }
 
-}}} // namespaces
+} // namespace tools
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_TOOLS_TEST_DATA_HPP
 

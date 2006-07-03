@@ -33,7 +33,7 @@ T hypot(T x, T y)
 #endif
 
    //
-   // normalize x and y, so that both are positive and x >= y:
+   // Normalize x and y, so that both are positive and x >= y:
    //
    x = (std::fabs)(x);
    y = (std::fabs)(y);
@@ -44,10 +44,10 @@ T hypot(T x, T y)
       || (y == std::numeric_limits<T>::infinity())))
       return std::numeric_limits<T>::infinity();
 
-   if(y > x) 
+   if(y > x)
       (std::swap)(x, y);
    //
-   // figure out overflow and underflow limits:
+   // Figure out overflow and underflow limits:
    //
    T safe_upper = (std::sqrt)((std::numeric_limits<T>::max)()) / 2;
    T safe_lower = (std::sqrt)((std::numeric_limits<T>::min)());
@@ -79,7 +79,8 @@ T hypot(T x, T y)
    return (std::sqrt)(x*x + y*y);
 }
 
-} } // namespaces
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_HYPOT_INCLUDED
 
