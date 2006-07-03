@@ -19,8 +19,8 @@
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
 #  if !(defined _SCL_SECURE_NO_DEPRECATE) || (_SCL_SECURE_NO_DEPRECATE == 0)
-#     pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
-      // #define _SCL_SECURE_NO_DEPRECATE = 1 // avoid C4996 warning.
+#    pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
+     // #define _SCL_SECURE_NO_DEPRECATE = 1 // avoid C4996 warning.
 #  endif
 //#  pragma warning(disable: 4244) // conversion from 'double' to 'float', possible loss of data.
 #endif
@@ -40,20 +40,22 @@
 #include <limits>
   using std::numeric_limits;
 
-template <class FPT>
-void test_spots(FPT)
+template <class RealType>
+void test_spots(RealType T)
 {
-  // Basic sanity checks, tolerance is about numeric_limits<FPT>::digits10 decimal places,
+  // Basic sanity checks, tolerance is about numeric_limits<RealType>::digits10 decimal places,
 	// expressed as a percentage (so -2) for BOOST_CHECK_CLOSE,
 
-	int decdigits = numeric_limits<FPT>::digits10;	// guaranteed for type FPT, eg 6 for float, 15 for double,
+	int decdigits = numeric_limits<RealType>::digits10;	// guaranteed for type RealType, eg 6 for float, 15 for double,
+  cout << decdigits << " guaranteed decimal digits for type " << typeid(T).name() << endl;
 	decdigits -= 6; // Perhaps allow some decimal digits margin of numerical error.
-	FPT tolerance = static_cast<FPT>(std::pow(10., -(decdigits-2))); // (-2 so as %)
+	RealType tolerance = static_cast<RealType>(std::pow(10., -(decdigits-2))); // (-2 so as %)
 	tolerance *= 1; // Allow some bit(s) small margin (2 means + or - 1 bit) of numerical error.
+  // Formula oesn't work well with float AND double - for tolerance 1e-7% for double, float is 100%
 
-	cout << "tolerance = " << tolerance << " %" << endl;
+	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
 
-	// FPT tolerance = static_cast<FPT>(std::pow(10., -(6-2))); // 1e-6 (as %)
+	// RealType tolerance = static_cast<RealType>(std::pow(10., -(6-2))); // 1e-6 (as %)
 	// Some tests only pass at 1e-5 because probability value is less accurate,
 	// a digit in 6th decimal place, although calculated using 
 	// a t-distribution generator (calimed 6 decimal digits) at
@@ -63,9 +65,9 @@ void test_spots(FPT)
 
    //BOOST_CHECK_CLOSE(
    //   ::boost::math::students_t(
-   //      static_cast<FPT>(5.),  // df
-   //      static_cast<FPT>(-2.)),  // t
-   //   static_cast<FPT>(0.050970), // probability.
+   //      static_cast<RealType>(5.),  // df
+   //      static_cast<RealType>(-2.)),  // t
+   //   static_cast<RealType>(0.050970), // probability.
 	//tolerance); // need 5-2
 
 	// http://en.wikipedia.org/wiki/Student%27s_t_distribution#Table_of_selected_values
@@ -73,7 +75,7 @@ void test_spots(FPT)
 
 	// http://www.mth.kcl.ac.uk/~shaww/web_page/papers/Tdistribution06.pdf refers to:
 
-	// A lookup table of quantiles of the FPT distribution
+	// A lookup table of quantiles of the RealType distribution
   // for 1 to 25 in steps of 0.1 is provided in CSV form at:
   // www.mth.kcl.ac.uk/~shaww/web_page/papers/Tsupp/tquantiles.csv
 	// gives accurate t of -3.1824463052837 and 3 degrees of freedom.
@@ -85,167 +87,167 @@ void test_spots(FPT)
 
    BOOST_CHECK_CLOSE(
       ::boost::math::students_t(
-         static_cast<FPT>(2.),  // degrees_of_freedom
-         static_cast<FPT>(-6.96455673428326)),  // t
-      static_cast<FPT>(0.01), // probability.
+         static_cast<RealType>(2.),  // degrees_of_freedom
+         static_cast<RealType>(-6.96455673428326)),  // t
+      static_cast<RealType>(0.01), // probability.
+			tolerance); // % 
+
+   BOOST_CHECK_CLOSE(
+      ::boost::math::students_t(
+         static_cast<RealType>(5.),  // degrees_of_freedom
+         static_cast<RealType>(-3.36492999890721)),  // t
+      static_cast<RealType>(0.01), // probability.
 			tolerance);
 
    BOOST_CHECK_CLOSE(
       ::boost::math::students_t(
-         static_cast<FPT>(5.),  // degrees_of_freedom
-         static_cast<FPT>(-3.36492999890721)),  // t
-      static_cast<FPT>(0.01), // probability.
+         static_cast<RealType>(1.),  // degrees_of_freedom
+         static_cast<RealType>(-31830.988607907)),  // t
+      static_cast<RealType>(0.00001), // probability.
 			tolerance);
 
    BOOST_CHECK_CLOSE(
       ::boost::math::students_t(
-         static_cast<FPT>(1.),  // degrees_of_freedom
-         static_cast<FPT>(-31830.988607907)),  // t
-      static_cast<FPT>(0.00001), // probability.
+         static_cast<RealType>(25.),  // degrees_of_freedom
+         static_cast<RealType>(-5.2410429995425)),  // t
+      static_cast<RealType>(0.00001), // probability.
 			tolerance);
 
    BOOST_CHECK_CLOSE(
       ::boost::math::students_t(
-         static_cast<FPT>(25.),  // degrees_of_freedom
-         static_cast<FPT>(-5.2410429995425)),  // t
-      static_cast<FPT>(0.00001), // probability.
-			tolerance);
-
-   BOOST_CHECK_CLOSE(
-      ::boost::math::students_t(
-         static_cast<FPT>(1.),  // degrees_of_freedom
-         static_cast<FPT>(-63661.97723)),  // t
-      static_cast<FPT>(0.000005), // probability.
+         static_cast<RealType>(1.),  // degrees_of_freedom
+         static_cast<RealType>(-63661.97723)),  // t
+      static_cast<RealType>(0.000005), // probability.
 			tolerance);
 
     BOOST_CHECK_CLOSE(
       ::boost::math::students_t(
-         static_cast<FPT>(5.),  // degrees_of_freedom
-         static_cast<FPT>(-17.89686614)),  // t
-      static_cast<FPT>(0.000005), // probability.
+         static_cast<RealType>(5.),  // degrees_of_freedom
+         static_cast<RealType>(-17.89686614)),  // t
+      static_cast<RealType>(0.000005), // probability.
 			tolerance);
 
     BOOST_CHECK_CLOSE(
       ::boost::math::students_t(
-         static_cast<FPT>(25.),  // degrees_of_freedom
-         static_cast<FPT>(-5.510848412)),  // t
-      static_cast<FPT>(0.000005), // probability.
+         static_cast<RealType>(25.),  // degrees_of_freedom
+         static_cast<RealType>(-5.510848412)),  // t
+      static_cast<RealType>(0.000005), // probability.
 			tolerance);
 
   BOOST_CHECK_CLOSE(
       ::boost::math::students_t(
-         static_cast<FPT>(10.),  // degrees_of_freedom
-         static_cast<FPT>(-1.812461123)),  // t
-      static_cast<FPT>(0.05), // probability.
+         static_cast<RealType>(10.),  // degrees_of_freedom
+         static_cast<RealType>(-1.812461123)),  // t
+      static_cast<RealType>(0.05), // probability.
 			tolerance);
 
   BOOST_CHECK_CLOSE(
       ::boost::math::students_t(
-         static_cast<FPT>(10.),  // degrees_of_freedom
-         static_cast<FPT>(1.812461123)),  // t
-      static_cast<FPT>(0.95), // probability.
+         static_cast<RealType>(10.),  // degrees_of_freedom
+         static_cast<RealType>(1.812461123)),  // t
+      static_cast<RealType>(0.95), // probability.
 			tolerance);
 
   BOOST_CHECK_CLOSE(
       ::boost::math::students_t(
-         static_cast<FPT>(10.),  // degrees_of_freedom
-         static_cast<FPT>(9.751995491)),  // t
-      static_cast<FPT>(0.999999), // probability.
+         static_cast<RealType>(10.),  // degrees_of_freedom
+         static_cast<RealType>(9.751995491)),  // t
+      static_cast<RealType>(0.999999), // probability.
 			tolerance);
 
   BOOST_CHECK_CLOSE(
       ::boost::math::students_t(
-         static_cast<FPT>(10.),  // degrees_of_freedom - for ALL degrees_of_freedom!
-         static_cast<FPT>(0.)),  // t
-      static_cast<FPT>(0.5), // probability.
+         static_cast<RealType>(10.),  // degrees_of_freedom - for ALL degrees_of_freedom!
+         static_cast<RealType>(0.)),  // t
+      static_cast<RealType>(0.5), // probability.
 			tolerance);
 
 	// Student's t Inverse function tests.
   // Special cases
 
   BOOST_CHECK_EQUAL(boost::math::students_t_inv(
-         static_cast<FPT>(1.),  // degrees_of_freedom (ignored).
-         static_cast<FPT>(0)),  //  probability == half - special case.
-         -numeric_limits<FPT>::infinity()); // t == -infinity.
+         static_cast<RealType>(1.),  // degrees_of_freedom (ignored).
+         static_cast<RealType>(0)),  //  probability == half - special case.
+         -numeric_limits<RealType>::infinity()); // t == -infinity.
 			
   BOOST_CHECK_EQUAL(boost::math::students_t_inv(
-         static_cast<FPT>(1.),  // degrees_of_freedom (ignored).
-         static_cast<FPT>(1)),  //  probability == half - special case.
-         +numeric_limits<FPT>::infinity()); // t == +infinity.
+         static_cast<RealType>(1.),  // degrees_of_freedom (ignored).
+         static_cast<RealType>(1)),  //  probability == half - special case.
+         +numeric_limits<RealType>::infinity()); // t == +infinity.
 
   BOOST_CHECK_EQUAL(boost::math::students_t_inv(
-         static_cast<FPT>(1.),  // degrees_of_freedom (ignored).
-         static_cast<FPT>(0.5)),  //  probability == half - special case.
-         static_cast<FPT>(0)); // t == zero.
+         static_cast<RealType>(1.),  // degrees_of_freedom (ignored).
+         static_cast<RealType>(0.5)),  //  probability == half - special case.
+         static_cast<RealType>(0)); // t == zero.
 
   BOOST_CHECK_CLOSE(boost::math::students_t_inv(
-         static_cast<FPT>(1.),  // degrees_of_freedom (ignored).
-         static_cast<FPT>(0.5)),  //  probability == half - special case.
-      static_cast<FPT>(0), // t == zero.
+         static_cast<RealType>(1.),  // degrees_of_freedom (ignored).
+         static_cast<RealType>(0.5)),  //  probability == half - special case.
+      static_cast<RealType>(0), // t == zero.
 			tolerance);
 
    BOOST_CHECK_CLOSE( // Tests of p middling.
       ::boost::math::students_t(
-         static_cast<FPT>(5.),  // degrees_of_freedom
-         static_cast<FPT>(-0.559429644)),  // t
-      static_cast<FPT>(0.3), // probability.
+         static_cast<RealType>(5.),  // degrees_of_freedom
+         static_cast<RealType>(-0.559429644)),  // t
+      static_cast<RealType>(0.3), // probability.
 			tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::students_t_inv(
-         static_cast<FPT>(5.),  // degrees_of_freedom
-         static_cast<FPT>(0.3)),  // probability.
-      static_cast<FPT>(-0.559429644), // t
+         static_cast<RealType>(5.),  // degrees_of_freedom
+         static_cast<RealType>(0.3)),  // probability.
+      static_cast<RealType>(-0.559429644), // t
 			tolerance);
 
    BOOST_CHECK_CLOSE( // Tests of p high.
       ::boost::math::students_t(
-         static_cast<FPT>(5.),  // degrees_of_freedom
-         static_cast<FPT>(1.475884049)),  // t
-      static_cast<FPT>(0.9), // probability.
+         static_cast<RealType>(5.),  // degrees_of_freedom
+         static_cast<RealType>(1.475884049)),  // t
+      static_cast<RealType>(0.9), // probability.
 			tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::students_t_inv(
-         static_cast<FPT>(5.),  // degrees_of_freedom
-         static_cast<FPT>(0.9)),  // probability.
-      static_cast<FPT>(1.475884049), // t
+         static_cast<RealType>(5.),  // degrees_of_freedom
+         static_cast<RealType>(0.9)),  // probability.
+      static_cast<RealType>(1.475884049), // t
 			tolerance);
 
    BOOST_CHECK_CLOSE( // Tests of p low.
       ::boost::math::students_t(
-         static_cast<FPT>(5.),  // degrees_of_freedom
-         static_cast<FPT>(-1.475884049)),  // t
-      static_cast<FPT>(0.1), // probability.
+         static_cast<RealType>(5.),  // degrees_of_freedom
+         static_cast<RealType>(-1.475884049)),  // t
+      static_cast<RealType>(0.1), // probability.
 			tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::students_t_inv(
-         static_cast<FPT>(5.),  // degrees_of_freedom
-         static_cast<FPT>(0.1)),  // probability.
-      static_cast<FPT>(-1.475884049), // t
+         static_cast<RealType>(5.),  // degrees_of_freedom
+         static_cast<RealType>(0.1)),  // probability.
+      static_cast<RealType>(-1.475884049), // t
 			tolerance);
 
    BOOST_CHECK_CLOSE(
       ::boost::math::students_t(
-         static_cast<FPT>(2.),  // degrees_of_freedom
-         static_cast<FPT>(-6.96455673428326)),  // t
-      static_cast<FPT>(0.01), // probability.
+         static_cast<RealType>(2.),  // degrees_of_freedom
+         static_cast<RealType>(-6.96455673428326)),  // t
+      static_cast<RealType>(0.01), // probability.
 			tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::students_t_inv(
-         static_cast<FPT>(2.),  // degrees_of_freedom
-         static_cast<FPT>(0.01)),  // probability.
-      static_cast<FPT>(-6.96455673428326), // t
+         static_cast<RealType>(2.),  // degrees_of_freedom
+         static_cast<RealType>(0.01)),  // probability.
+      static_cast<RealType>(-6.96455673428326), // t
 			tolerance);
 
-} // template <class FPT>void test_spots(FPT)
+} // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
 {
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
-   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
-  // test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
-   //test_spots(0.0L); // Test long double.
-   //test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
+  test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
+  test_spots(0.0L); // Test long double.
+  test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 
    return 0;
 } // int test_main(int, char* [])
