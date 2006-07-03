@@ -107,7 +107,7 @@ void test_spots(FPT)
       static_cast<FPT>(0.999999999999999999814527311613020069945), // probability.
 			tolerance);
 /*
-	 // Try bad  degrees_of_freedom argument for chisqr.
+	 // Try bad degrees_of_freedom argument for chisqr.
    BOOST_CHECK_CLOSE(
       chisqr(
          static_cast<FPT>(1),  // degrees_of_freedom - as floating-point.
