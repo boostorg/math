@@ -68,23 +68,23 @@ namespace detail
 
 //
 // An argument is outside it's allowed range:
-//
-template <class T>
-inline T domain_error(const char* function, const char* message)
-{
-   errno = EDOM;
-#ifndef BOOST_MATH_THROW_ON_DOMAIN_ERROR
-   if(std::numeric_limits<T>::has_quiet_NaN)
-      return std::numeric_limits<T>::quiet_NaN();
-   //
-   // If T doesn't have a quiet NaN,
-   // we want to fall through and throw an exception:
-   //
-#endif
-   detail::raise_error<std::domain_error>(function, message ? message : "Domain Error");
-   // We don't get here:
-   return 0;
-}
+// 2 argument version to be retired in favour of 3 argument version.
+//template <class T>
+//inline T domain_error(const char* function, const char* message)
+//{
+//   errno = EDOM;
+//#ifndef BOOST_MATH_THROW_ON_DOMAIN_ERROR
+//   if(std::numeric_limits<T>::has_quiet_NaN)
+//      return std::numeric_limits<T>::quiet_NaN();
+//   //
+//   // If T doesn't have a quiet NaN,
+//   // we want to fall through and throw an exception:
+//   //
+//#endif
+//   detail::raise_error<std::domain_error>(function, message ? message : "Domain Error");
+//   // We don't get here:
+//   return 0;
+//}
 
 template <class T>
 inline T domain_error(const char* function, const char* message, const T& val)
@@ -105,11 +105,12 @@ inline T domain_error(const char* function, const char* message, const T& val)
 //
 // Evaluation at a pole, this is currently treated the same as a domain error:
 //
-template <class T>
-inline T pole_error(const char* function, const char* message)
-{
-   return domain_error<T>(function, message ? message : "Evaluation at pole");
-}
+// 2 argument version to be retired in favour of 3 argument version.
+//template <class T>
+//inline T pole_error(const char* function, const char* message)
+//{
+//   return domain_error<T>(function, message ? message : "Evaluation at pole");
+//}
 
 template <class T>
 inline T pole_error(const char* function, const char* message, const T& val)
@@ -168,14 +169,16 @@ inline T denorm_error(T const& t, const char* , const char* ) // Error suppresse
 //
 // Computed result is garbage / internal error:
 //
-template <class T>
-inline T logic_error(const char* function, const char* message)
-{
-   errno = EDOM;
-   detail::raise_error<std::logic_error>(function, message ? message : "Internal logic error");
-   // We don't get here:
-   return 0;
-}
+// 2 argument version to be retired in favour of 3 argument version.
+
+//template <class T>
+//inline T logic_error(const char* function, const char* message)
+//{
+//   errno = EDOM;
+//   detail::raise_error<std::logic_error>(function, message ? message : "Internal logic error");
+//   // We don't get here:
+//   return 0;
+//}
 
 template <class T>
 inline T logic_error(const char* function, const char* message, const T& val)
