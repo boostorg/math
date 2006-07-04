@@ -102,14 +102,14 @@ namespace boost
 		   } // chisqr_imp
 
 		   template <class RealType>
-		   RealType chisqrc_imp(RealType degrees_of_freedom, RealType chisqr)
+		   RealType chisqr_c_imp(RealType degrees_of_freedom, RealType chisqr)
 		   { 
          // Implementation of probability of chisqr complemented.
          // Returns the area under the right hand tail (from x to infinity)
          // of the chisqr probability density function
          // with v degrees of freedom:
 
-			   using boost::math::gamma_Q_c; // gamma_Q(degrees_of_freedom/2, chisqr/2)
+			   using boost::math::gamma_Q; // gamma_Q(degrees_of_freedom/2, chisqr/2)
 			   using boost::math::tools::domain_error;
 			   using boost::math::tools::logic_error;
 
@@ -124,7 +124,7 @@ namespace boost
 			   }
 
 			   // Calculate probability of chisqr using the incomplete beta function.
-			   RealType probability = gamma_Q_c(degrees_of_freedom / 2, chisqr / 2);
+			   RealType probability = gamma_Q(degrees_of_freedom / 2, chisqr / 2);
 			   // Expect 0 <= probability <= 1.
 	  	   // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
 	  	   // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
@@ -159,8 +159,8 @@ namespace boost
 				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
 			   }
 			   if((probability < 0) || (probability > 1))
-			   { // chisqr must be > 0!
-				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability argument is %1%, but must be >= 0 and =< 1 !", chisqr);
+			   { // probability must be > 0!
+				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability argument is %1%, but must be >= 0 and =< 1 !", probability);
 			   }
 
 			   // Calculate chisqr from probability & degrees_of_freedom using the inverse gamma integral function.
@@ -190,8 +190,8 @@ namespace boost
 
 			   // Degrees of freedom argument may be integral, signed or unsigned, or floating-point, or User Defined real.
 			   if(chisqr <= 0)
-			   { // Degrees of freedom must be > 0!
-				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "chisqr argument is %1%, but must be > 0 !", degrees_of_freedom);
+			   { // chisqr must be > 0!
+				   return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "chisqr argument is %1%, but must be > 0 !", chisqr);
 			   }
 			   if ((probability < 0) || (probability > 1))
 			   { // chisqr must be > 0!
@@ -237,7 +237,7 @@ namespace boost
 
 		template <class ArithmeticType, class RealType> // degrees_of_freedom = chisqr_inv_df(chisqr, probability)
       inline typename tools::promote_arg2<RealType, RealType>::type // <RealType, ArithmeticType> but both RealType.
-         chisqr_df_inv(RealType chisqr, RealType probability)
+         chisqr_df_inv(RealType chisqr, ArithmeticType probability)
 		{ 
          typedef typename tools::promote_arg2<RealType, ArithmeticType>::type promote_type; // Arguments type.
          return detail::chisqr_df_inv_imp(static_cast<promote_type>(chisqr), static_cast<promote_type>(probability));

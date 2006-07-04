@@ -23,40 +23,40 @@ namespace std{ using ::exp; using ::fabs; }
 
 namespace boost{ namespace math{
 
-namespace detail{
-//
-// Functor expm1_series returns the next term in the Taylor series
-// x^k / k!
-// each time that operator() is invoked.
-//
-template <class T>
-struct expm1_series
+namespace detail
 {
-   typedef T result_type;
+  // Functor expm1_series returns the next term in the Taylor series
+  // x^k / k!
+  // each time that operator() is invoked.
+  //
+  template <class T>
+  struct expm1_series
+  {
+     typedef T result_type;
 
-   expm1_series(T x)
-      : k(0), m_x(x), m_term(1) {}
+     expm1_series(T x)
+        : k(0), m_x(x), m_term(1) {}
 
-   T operator()()
-   {
-      ++k;
-      m_term *= m_x;
-      m_term /= k;
-      return m_term;
-   }
+     T operator()()
+     {
+        ++k;
+        m_term *= m_x;
+        m_term /= k;
+        return m_term;
+     }
 
-   int count()const
-   {
-      return k;
-   }
+     int count()const
+     {
+        return k;
+     }
 
-private:
-   int k;
-   const T m_x;
-   T m_term;
-   expm1_series(const expm1_series&);
-   expm1_series& operator=(const expm1_series&);
-};
+  private:
+     int k;
+     const T m_x;
+     T m_term;
+     expm1_series(const expm1_series&);
+     expm1_series& operator=(const expm1_series&);
+  };
 
 } // namespace detail
 
@@ -79,6 +79,7 @@ T expm1(T x)
    T result = tools::sum_series(s, tools::digits<T>() + 2);
    return result;
 }
+
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 inline float expm1(float z)
 {

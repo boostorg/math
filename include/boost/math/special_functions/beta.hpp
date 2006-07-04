@@ -18,12 +18,12 @@
 namespace boost{ namespace math{
 
 // TODO remove after math_fwd.hpp
-template <class T>
-T beta(T a, T b);
-template <class T>
-T ibeta(T a, T b, T x);
-template <class T>
-T ibetac(T a, T b, T x);
+//template <class T>
+//T beta(T a, T b);
+//template <class T>
+//T ibeta(T a, T b, T x);
+//template <class T>
+//T ibetac(T a, T b, T x);
 
 namespace detail{
 

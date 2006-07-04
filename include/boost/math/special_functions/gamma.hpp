@@ -37,21 +37,21 @@ namespace boost{ namespace math{
 // TODO remove these after adding math_fwd.hpp
 // Forward declarations:
 //
-template <class T>
-T tgamma(T z);
-template <class T>
-T lgamma(T z, int* sign);
-template <class T>
-T lgamma(T x);
-template <class T>
-T tgammap1m1(T z);template <class T>
-T tgamma(T a, T z);
-template <class T>
-T tgamma_lower(T a, T z);
-template <class T>
-T gamma_Q(T a, T z);
-template <class T>
-T gamma_P(T a, T z);
+//template <class T>
+//T tgamma(T z);
+//template <class T>
+//T lgamma(T z, int* sign);
+//template <class T>
+//T lgamma(T x);
+//template <class T>
+//T tgammap1m1(T z);template <class T>
+//T tgamma(T a, T z);
+//template <class T>
+//T tgamma_lower(T a, T z);
+//template <class T>
+//T gamma_Q(T a, T z);
+//template <class T>
+//T gamma_P(T a, T z);
 
 namespace detail{
 
@@ -78,7 +78,7 @@ inline bool is_odd(T v)
 template <class T>
 T sinpx(T z)
 {
-   // add hoc function calculates x*sin(pi*x),
+   // Ad hoc function calculates x * sin(pi * x),
    // taking extra care near when x is near a whole number.
    using namespace std;
    int sign = 1;
@@ -107,7 +107,7 @@ T sinpx(T z)
       dist = 1 - dist;
    T result = sin(dist*boost::math::constants::pi<T>());
    return sign*z*result;
-}
+} // template <class T> T sinpx(T z)
 //
 // tgamma(z), with Lanczos support:
 //

@@ -8,7 +8,7 @@
 
 #include <cmath>
 #include <boost/limits.hpp>
-#include <algorithm> // swap
+#include <algorithm> // for swap
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #  include <boost/static_assert.hpp>
@@ -19,7 +19,6 @@
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std{ using ::sqrt; using ::fabs; }
 #endif
-
 
 namespace boost{ namespace math{
 
@@ -59,7 +58,7 @@ T hypot(T x, T y)
    {
       if(y <= one)
       {
-         // y is neligible:
+         // y is negligible:
          return x;
       }
       return (std::sqrt)(x) * (std::sqrt)(y) * (std::sqrt)(x/y + y/x);
@@ -77,7 +76,8 @@ T hypot(T x, T y)
    // If we get here then x^2+y^2 will not overflow or underflow:
    //
    return (std::sqrt)(x*x + y*y);
-}
+} // template <class T> T hypot(T x, T y)
+
 
 } // namespace math
 } // namespace boost

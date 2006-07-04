@@ -30,12 +30,23 @@
 #include <boost/math/tools/roots.hpp> // for domain_error & logic_error.
 #include <boost/math/tools/promotion.hpp> // for promotion.
 
+namespace boost
+{
+	namespace math
+	{ // Forward declaration of students_t.
+    template <class ArithmeticType, class RealType>
+    typename tools::promote_arg2<RealType, ArithmeticType>::type
+     // return type is the wider of the two (?promoted) floating point types.
+    students_t(ArithmeticType degrees_of_freedom, RealType t);
+  }
+}
+
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/if.hpp>
 
-#include <limits> // 	using std::numeric_limits;
+#include <limits> // using std::numeric_limits;
 
 namespace boost
 {

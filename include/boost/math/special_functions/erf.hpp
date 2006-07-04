@@ -13,12 +13,12 @@
 namespace boost{ namespace math{
 
 // TODO remove these af using math_fwd.hpp
-template <class T>
-T erf(T z);
-template <class T>
-T erfc(T z);
-template <class T>
-T erfc_inv(T z);
+//template <class T>
+//T erf(T z);
+//template <class T>
+//T erfc(T z);
+//template <class T>
+//T erfc_inv(T z);
 
 namespace detail
 {

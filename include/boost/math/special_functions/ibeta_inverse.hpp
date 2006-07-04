@@ -432,7 +432,7 @@ private:
 };
 
 template <class T, class L>
-T ibeta_inv_imp(T a, T b, T p, T q, const L& l)
+T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */)
 {
    using namespace std;  // For ADL of math functions.
 
