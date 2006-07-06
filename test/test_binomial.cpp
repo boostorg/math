@@ -123,10 +123,10 @@ int test_main(int, char* [])
 #endif
 
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
-	//test_spots(0.0F); // Test float.
+	test_spots(0.0F); // Test float.
 	test_spots(0.0); // Test double.
-	//test_spots(0.0L); // Test long double.
-	//test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+	test_spots(0.0L); // Test long double.
+	test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 
 	return 0;
 } // int test_main(int, char* [])
@@ -135,7 +135,6 @@ int test_main(int, char* [])
 
 Output:
 
------- Build started: Project: test_binomial, Configuration: Debug Win32 ------
 Compiling...
 test_binomial.cpp
 Linking...
@@ -143,10 +142,9 @@ Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_binomial.exe
 Running 1 test case...
 BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
 *** No errors detected
-Build Time 0:05
+Build Time 0:06
 Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_binomial\Debug\BuildLog.htm"
 test_binomial - 0 error(s), 0 warning(s)
 ========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
-
 
 */
