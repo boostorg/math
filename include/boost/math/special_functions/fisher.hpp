@@ -57,16 +57,16 @@ namespace boost
 			  // ArithmeticType degrees of freedom arguments may be positive integral, signed, or unsigned, or floating-point.
 			  if(degrees_of_freedom1 <= ArithmeticType(0))
 			  { // Degrees of freedom must not be negative!
-				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 1 argument is %1%, but must be > 0 !");
+				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 1 argument is %1%, but must be > 0 !", degrees_of_freedom1);
 			  }
 			  if(degrees_of_freedom2 <= ArithmeticType(0))
 			  { // Degrees of freedom must not be negative!
-				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 2 argument is %1%, but must be > 0 !");
+				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 2 argument is %1%, but must be > 0 !", degrees_of_freedom2);
 			  }
 
 			  if(x < ArithmeticType(0))
 			  { // x must not be negative!
-				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "x argument is %1%, but must be >= 0!");
+				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "x argument is %1%, but must be >= 0!", x);
 			  }
 
 			  RealType z = (degrees_of_freedom1 * x)/(degrees_of_freedom1 * x + degrees_of_freedom2);
@@ -102,16 +102,16 @@ namespace boost
 			  // ArithmeticType degrees of freedom arguments may be positive integral, signed, or unsigned, or floating-point.
 			  if(degrees_of_freedom1 <= 0)
 			  { // Degrees of freedom must not be negative!
-				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 1 argument is %1%, but must be > 0 !");
+				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 1 argument is %1%, but must be > 0 !", degrees_of_freedom1);
 			  }
 			  if(degrees_of_freedom2 <= 0)
 			  { // Degrees of freedom must not be negative!
-				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 2 argument is %1%, but must be > 0 !");
+				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 2 argument is %1%, but must be > 0 !", degrees_of_freedom2);
 			  }
 
 			  if(x < 0)
 			  { // x must not be negative!
-				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "x argument is %1%, but must be >= 0!");
+				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "x argument is %1%, but must be >= 0!", x);
 			  }
 
 			  RealType z = (degrees_of_freedom2 * x)/(degrees_of_freedom2 * x + degrees_of_freedom1);
@@ -154,11 +154,11 @@ namespace boost
 			  // ArithmeticType degrees of freedom arguments may be positive integral, signed, or unsigned, or floating-point.
 			  if(degrees_of_freedom1 <= 0)
 			  { // Degrees of freedom must not be negative!
-				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 1 argument is %1%, but must be > 0 !");
+				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 1 argument is %1%, but must be > 0 !", degrees_of_freedom1);
 			  }
 			  if(degrees_of_freedom2 <= 0)
 			  { // Degrees of freedom must not be negative!
-				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 2 argument is %1%, but must be > 0 !");
+				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 2 argument is %1%, but must be > 0 !", degrees_of_freedom2);
 			  }
         if((probability < 0) || (probability > 1))
 			  { // chisqr must be > 0!
@@ -188,11 +188,11 @@ namespace boost
 			  // ArithmeticType degrees of freedom arguments may be positive integral, signed, or unsigned, or floating-point.
 			  if(degrees_of_freedom1 <= 0)
 			  { // Degrees of freedom must not be negative!
-				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 1 argument is %1%, but must be > 0 !");
+				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 1 argument is %1%, but must be > 0 !", degrees_of_freedom1);
 			  }
 			  if(degrees_of_freedom2 <= 0)
 			  { // Degrees of freedom must not be negative!
-				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 2 argument is %1%, but must be > 0 !");
+				  domain_error<ArithmeticType>(BOOST_CURRENT_FUNCTION, "degrees of freedom 2 argument is %1%, but must be > 0 !", degrees_of_freedom2);
 			  }
         if((probability < 0) || (probability > 1))
 			  { // chisqr must be > 0!
@@ -205,11 +205,11 @@ namespace boost
 			  return degrees_of_freedom2 * (1 - z) / (degrees_of_freedom1 * z);
 		  } // fisher_c_inv_imp
 
-    } //namespace detail
+    } // namespace detail
 
 		template <class ArithmeticType, class RealType>
       inline typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
-      // return type is the wider of the three ( possibly promoted) floating point types.
+      // return type is the wider of the three (possibly promoted) floating point types.
       fisher(ArithmeticType degrees_of_freedom1, ArithmeticType degrees_of_freedom2, RealType fisher)
 		{ 
          typedef typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type promote_type; // Arguments type.
@@ -221,7 +221,7 @@ namespace boost
       fisher_c(ArithmeticType degrees_of_freedom1, ArithmeticType degrees_of_freedom2, RealType fisher)
 		{ 
          typedef typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type promote_type; // Arguments type.
-         return detail::fisher_imp_c(static_cast<promote_type>(degrees_of_freedom1), static_cast<promote_type>(degrees_of_freedom2),static_cast<promote_type>(fisher));
+         return detail::fisher_c_imp(static_cast<promote_type>(degrees_of_freedom1), static_cast<promote_type>(degrees_of_freedom2),static_cast<promote_type>(fisher));
 		} // fisher_c(df1, df2, x)
 
 		template <class ArithmeticType, class RealType>
