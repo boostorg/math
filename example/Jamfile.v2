@@ -1,0 +1,24 @@
+
+# bring in the rules for testing
+import testing ;
+
+project 
+    : requirements 
+      <toolset>gcc:<cxxflags>-Wno-missing-braces
+      <include>../../..
+    ;
+
+run statistics_functions_example1.cpp ;
+run students_t_example1.cpp ;
+run students_t_example2.cpp ;
+run students_t_example3.cpp ;
+
+
+
+
+
+
+
+
+
+
