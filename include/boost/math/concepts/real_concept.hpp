@@ -87,25 +87,25 @@ private:
 };
 
 // Non-member arithmetic:
-real_concept operator+(const real_concept& a, const real_concept& b)
+inline real_concept operator+(const real_concept& a, const real_concept& b)
 {
    real_concept result(a);
    result += b;
    return result;
 }
-real_concept operator-(const real_concept& a, const real_concept& b)
+inline real_concept operator-(const real_concept& a, const real_concept& b)
 {
    real_concept result(a);
    result -= b;
    return result;
 }
-real_concept operator*(const real_concept& a, const real_concept& b)
+inline real_concept operator*(const real_concept& a, const real_concept& b)
 {
    real_concept result(a);
    result *= b;
    return result;
 }
-real_concept operator/(const real_concept& a, const real_concept& b)
+inline real_concept operator/(const real_concept& a, const real_concept& b)
 {
    real_concept result(a);
    result /= b;
@@ -113,114 +113,114 @@ real_concept operator/(const real_concept& a, const real_concept& b)
 }
 
 // comparison:
-bool operator == (const real_concept& a, const real_concept& b)
+inline bool operator == (const real_concept& a, const real_concept& b)
 { return a.value() == b.value(); }
-bool operator != (const real_concept& a, const real_concept& b)
+inline bool operator != (const real_concept& a, const real_concept& b)
 { return a.value() != b.value();}
-bool operator < (const real_concept& a, const real_concept& b)
+inline bool operator < (const real_concept& a, const real_concept& b)
 { return a.value() < b.value(); }
-bool operator <= (const real_concept& a, const real_concept& b)
+inline bool operator <= (const real_concept& a, const real_concept& b)
 { return a.value() <= b.value(); }
-bool operator > (const real_concept& a, const real_concept& b)
+inline bool operator > (const real_concept& a, const real_concept& b)
 { return a.value() > b.value(); }
-bool operator >= (const real_concept& a, const real_concept& b)
+inline bool operator >= (const real_concept& a, const real_concept& b)
 { return a.value() >= b.value(); }
 #if 0
 // non-member mixed compare:
 template <class T>
-bool operator == (const T& a, const real_concept& b)
+inline bool operator == (const T& a, const real_concept& b)
 {
    return a == b.value();
 }
 template <class T>
-bool operator != (const T& a, const real_concept& b)
+inline bool operator != (const T& a, const real_concept& b)
 {
    return a != b.value();
 }
 template <class T>
-bool operator < (const T& a, const real_concept& b)
+inline bool operator < (const T& a, const real_concept& b)
 {
    return a < b.value();
 }
 template <class T>
-bool operator > (const T& a, const real_concept& b)
+inline bool operator > (const T& a, const real_concept& b)
 {
    return a > b.value();
 }
 template <class T>
-bool operator <= (const T& a, const real_concept& b)
+inline bool operator <= (const T& a, const real_concept& b)
 {
    return a <= b.value();
 }
 template <class T>
-bool operator >= (const T& a, const real_concept& b)
+inline bool operator >= (const T& a, const real_concept& b)
 {
    return a >= b.value();
 }
 #endif
 // non-member functions:
-real_concept acos(real_concept a)
+inline real_concept acos(real_concept a)
 { return std::acos(a.value()); }
-real_concept cos(real_concept a)
+inline real_concept cos(real_concept a)
 { return std::cos(a.value()); }
-real_concept asin(real_concept a)
+inline real_concept asin(real_concept a)
 { return std::asin(a.value()); }
-real_concept atan(real_concept a)
+inline real_concept atan(real_concept a)
 { return std::atan(a.value()); }
-real_concept atan2(real_concept a, real_concept b)
+inline real_concept atan2(real_concept a, real_concept b)
 { return std::atan2(a.value(), b.value()); }
-real_concept ceil(real_concept a)
+inline real_concept ceil(real_concept a)
 { return std::ceil(a.value()); }
-real_concept fmod(real_concept a, real_concept b)
+inline real_concept fmod(real_concept a, real_concept b)
 { return std::fmod(a.value(), b.value()); }
-real_concept cosh(real_concept a)
+inline real_concept cosh(real_concept a)
 { return std::cosh(a.value()); }
-real_concept exp(real_concept a)
+inline real_concept exp(real_concept a)
 { return std::exp(a.value()); }
-real_concept fabs(real_concept a)
+inline real_concept fabs(real_concept a)
 { return std::fabs(a.value()); }
-real_concept abs(real_concept a)
+inline real_concept abs(real_concept a)
 { return std::abs(a.value()); }
-real_concept floor(real_concept a)
+inline real_concept floor(real_concept a)
 { return std::floor(a.value()); }
-real_concept modf(real_concept a, real_concept* ipart)
+inline real_concept modf(real_concept a, real_concept* ipart)
 {
    long double ip;
    long double result = std::modf(a.value(), &ip);
    *ipart = ip;
    return result;
 }
-real_concept frexp(real_concept a, int* expon)
+inline real_concept frexp(real_concept a, int* expon)
 { return std::frexp(a.value(), expon); }
-real_concept ldexp(real_concept a, int expon)
+inline real_concept ldexp(real_concept a, int expon)
 { return std::ldexp(a.value(), expon); }
-real_concept log(real_concept a)
+inline real_concept log(real_concept a)
 { return std::log(a.value()); }
-real_concept log10(real_concept a)
+inline real_concept log10(real_concept a)
 { return std::log10(a.value()); }
-real_concept tan(real_concept a)
+inline real_concept tan(real_concept a)
 { return std::tan(a.value()); }
-real_concept pow(real_concept a, real_concept b)
+inline real_concept pow(real_concept a, real_concept b)
 { return std::pow(a.value(), b.value()); }
-real_concept pow(real_concept a, int b)
+inline real_concept pow(real_concept a, int b)
 { return std::pow(a.value(), b); }
-real_concept sin(real_concept a)
+inline real_concept sin(real_concept a)
 { return std::sin(a.value()); }
-real_concept sinh(real_concept a)
+inline real_concept sinh(real_concept a)
 { return std::sinh(a.value()); }
-real_concept sqrt(real_concept a)
+inline real_concept sqrt(real_concept a)
 { return std::sqrt(a.value()); }
-real_concept tanh(real_concept a)
+inline real_concept tanh(real_concept a)
 { return std::tanh(a.value()); }
 
 // streaming:
 template <class charT, class traits>
-std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const real_concept& a)
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const real_concept& a)
 {
    return os << a.value();
 }
 template <class charT, class traits>
-std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>& is, real_concept& a)
+inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>& is, real_concept& a)
 {
    long double v;
    is >> v;
@@ -233,7 +233,7 @@ std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>&
 namespace tools{
 
 template <>
-int digits<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline int digits<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return std::numeric_limits<long double>::digits;
 }
@@ -255,31 +255,31 @@ inline long double real_cast<long double, concepts::real_concept>(concepts::real
 }
 
 template <>
-concepts::real_concept max_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept max_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return max_value<long double>();
 }
 
 template <>
-concepts::real_concept min_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept min_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return min_value<long double>();
 }
 
 template <>
-concepts::real_concept log_max_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept log_max_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return log_max_value<long double>();
 }
 
 template <>
-concepts::real_concept log_min_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return log_min_value<long double>();
 }
 
 template <>
-concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return std::numeric_limits<long double>::epsilon();
 }
