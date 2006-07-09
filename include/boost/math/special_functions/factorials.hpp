@@ -8,7 +8,14 @@
 
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/array.hpp>
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4127 4701)
+#endif
 #include <boost/lexical_cast.hpp>
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 #include <cmath>
 
 namespace boost{ namespace math{

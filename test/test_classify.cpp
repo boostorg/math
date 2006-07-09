@@ -7,6 +7,7 @@
 #include <math.h>
 #include <boost/limits.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 
 template <class T>
@@ -17,12 +18,15 @@ void test_classify(T t, const char* type)
    T u = 2;
    BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
    BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NORMAL);
-   t = (std::numeric_limits<T>::max)();
-   BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
-   BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NORMAL);
-   t = (std::numeric_limits<T>::min)();
-   BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
-   BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NORMAL);
+   if(std::numeric_limits<T>::is_specialized)
+   {
+      t = (std::numeric_limits<T>::max)();
+      BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
+      BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NORMAL);
+      t = (std::numeric_limits<T>::min)();
+      BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
+      BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NORMAL);
+   }
    if(std::numeric_limits<T>::has_denorm)
    {
       t /= 2;
@@ -56,26 +60,26 @@ void test_classify(T t, const char* type)
       t = (std::numeric_limits<T>::infinity)();
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_INFINITE);
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_INFINITE);
+#if !defined(__BORLANDC__) && !(defined(__DECCXX) && !defined(_IEEE_FP))
+      // divide by zero on Borland triggers a C++ exception :-(
+      // divide by zero on Compaq CXX triggers a C style signal :-(
+      t = 2;
+      u = 0;
+      t /= u;
+      BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_INFINITE);
+      BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_INFINITE);
+      t = -2;
+      t /= u;
+      BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_INFINITE);
+      BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_INFINITE);
+#else
+      std::cout << "Infinities from divide by zero not tested" << std::endl;
+#endif
    }
    else
    {
       std::cout << "Infinity not tested" << std::endl;
    }
-#if !defined(__BORLANDC__) && !(defined(__DECCXX) && !defined(_IEEE_FP))
-   // divide by zero on Borland triggers a C++ exception :-(
-   // divide by zero on Compaq CXX triggers a C style signal :-(
-   t = 2;
-   u = 0;
-   t /= u;
-   BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_INFINITE);
-   BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_INFINITE);
-   t = -2;
-   t /= u;
-   BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_INFINITE);
-   BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_INFINITE);
-#else
-   std::cout << "Infinities from divide by zero not tested" << std::endl;
-#endif
 #ifndef __BORLANDC__
    // NaN's:
    // Note that Borland throws an exception if we even try to obtain a Nan
@@ -125,12 +129,7 @@ int test_main(int, char* [] )
    test_classify(float(0), "float");
    test_classify(double(0), "double");
    test_classify((long double)(0), "long double");
-   return 0;
+   test_classify((boost::math::concepts::real_concept)(0), "real_concept");
+  return 0;
 }
-
-
-
-
-
-
 

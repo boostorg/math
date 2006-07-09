@@ -11,7 +11,14 @@
 #include <boost/limits.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/math/tools/precision.hpp>
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4996 4512)
+#endif
 #include <boost/format.hpp>
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 // We don't use this one directly,
 // but our clients will use it for BOOST_CURRENT_FUNCTION.
 #include <boost/current_function.hpp>
@@ -64,54 +71,64 @@ namespace detail
 		 boost::throw_exception(e);
 	}
 
-} // namespace detail
-
-//
-// An argument is outside it's allowed range:
-// 2 argument version to be retired in favour of 3 argument version.
-//template <class T>
-//inline T domain_error(const char* function, const char* message)
-//{
-//   errno = EDOM;
-//#ifndef BOOST_MATH_THROW_ON_DOMAIN_ERROR
-//   if(std::numeric_limits<T>::has_quiet_NaN)
-//      return std::numeric_limits<T>::quiet_NaN();
-//   //
-//   // If T doesn't have a quiet NaN,
-//   // we want to fall through and throw an exception:
-//   //
-//#endif
-//   detail::raise_error<std::domain_error>(function, message ? message : "Domain Error");
-//   // We don't get here:
-//   return 0;
-//}
-
-template <class T>
-inline T domain_error(const char* function, const char* message, const T& val)
-{
-   errno = EDOM;
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #ifndef BOOST_MATH_THROW_ON_DOMAIN_ERROR
-   if(std::numeric_limits<T>::has_quiet_NaN)
-      return std::numeric_limits<T>::quiet_NaN();
-   //
-   // If T doesn't have a quiet NaN,
-   // we want to fall through and throw an exception:
-   //
+template <class T>
+inline T domain_error_imp(const char* /*function*/, const char* /*message*/, const T&, const mpl::true_&)
+{
+   errno = ERANGE;
+   return std::numeric_limits<T>::quiet_NaN();
+}
 #endif
+
+template <class T, class U>
+inline T domain_error_imp(const char* function, const char* message, const T& val, const U&)
+{
+   errno = ERANGE;
    detail::raise_error<std::domain_error>(function, message ? message : "Domain Error on value %1%", val);
    // we don't get here:
    return 0;
 }
+#ifndef BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+template <class T>
+inline T overflow_error_imp(const char* /*function*/, const char* /*message*/, const mpl::true_&)
+{
+   errno = ERANGE;
+   return std::numeric_limits<T>::infinity();
+}
+#endif
+
+template <class T, class U>
+inline T overflow_error_imp(const char* function, const char* message, const U&)
+{
+   errno = ERANGE;
+   detail::raise_error<std::overflow_error>(function, message ? message : "Overflow");
+   // we don't get here:
+   return 0;
+}
+#endif
+
+
+} // namespace detail
+
+//
+// An argument is outside it's allowed range:
+//
+template <class T>
+inline T domain_error(const char* function, const char* message, const T& val)
+{
+#ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+   if(std::numeric_limits<T>::has_quiet_NaN)
+      return detail::domain_error_imp<T>(function, message, val, mpl::true_());
+   return detail::domain_error_imp<T>(function, message, val, mpl::false_());
+#else
+   typedef boost::mpl::bool_< ::std::numeric_limits<T>::has_quiet_NaN> tag_type;
+   return detail::domain_error_imp<T>(function, message, val, tag_type());
+#endif
+}
 //
 // Evaluation at a pole, this is currently treated the same as a domain error:
 //
-// 2 argument version to be retired in favour of 3 argument version.
-//template <class T>
-//inline T pole_error(const char* function, const char* message)
-//{
-//   return domain_error<T>(function, message ? message : "Evaluation at pole");
-//}
-
 template <class T>
 inline T pole_error(const char* function, const char* message, const T& val)
 {
@@ -123,14 +140,14 @@ inline T pole_error(const char* function, const char* message, const T& val)
 template <class T>
 inline T overflow_error(const char* function, const char* message)
 {
-   errno = ERANGE;
-#ifndef BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+#ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    if(std::numeric_limits<T>::has_infinity)
-      return std::numeric_limits<T>::infinity();
+      return detail::overflow_error_imp<T>(function, message, true_());
+   return detail::overflow_error_imp<T>(function, message, false_());
+#else
+   typedef boost::mpl::bool_< ::std::numeric_limits<T>::has_infinity> tag_type;
+   return detail::overflow_error_imp<T>(function, message, tag_type());
 #endif
-   detail::raise_error<std::overflow_error>(function, message ? message : "Overflow");
-   // we don't get here:
-   return 0;
 }
 //
 // Result too small to be represented in type T,
@@ -169,17 +186,6 @@ inline T denorm_error(T const& t, const char* , const char* ) // Error suppresse
 //
 // Computed result is garbage / internal error:
 //
-// 2 argument version to be retired in favour of 3 argument version.
-
-//template <class T>
-//inline T logic_error(const char* function, const char* message)
-//{
-//   errno = EDOM;
-//   detail::raise_error<std::logic_error>(function, message ? message : "Internal logic error");
-//   // We don't get here:
-//   return 0;
-//}
-
 template <class T>
 inline T logic_error(const char* function, const char* message, const T& val)
 {

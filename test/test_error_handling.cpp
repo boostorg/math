@@ -12,12 +12,6 @@
 
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4996) // std::char_traits<char>::copy' was declared deprecated.
-#endif
-
 // Boost
 #include <boost/math/tools/error_handling.hpp> // for domain_error.
 	using ::boost::math::tools::domain_error;

@@ -8,7 +8,14 @@
 
 #include <boost/assert.hpp>
 #include <boost/algorithm/string/trim.hpp>
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4127 4701)
+#endif
 #include <boost/lexical_cast.hpp>
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/integral_constant.hpp>

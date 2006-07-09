@@ -52,8 +52,9 @@ namespace boost{ namespace math{
 
 #define BOOST_NO_MACRO_EXPAND /**/
 
-#if defined(BOOST_HAS_FPCLASSIFY) || defined(isnan)
 namespace detail{
+
+#if defined(BOOST_HAS_FPCLASSIFY) || defined(isnan)
 
 template <class T>
 inline bool is_nan_helper(T t, const boost::true_type&)
@@ -73,11 +74,11 @@ inline bool is_nan_helper(T t, const boost::false_type&)
 {
    return false;
 }
-}
-#endif
+
+#endif // defined(BOOST_HAS_FPCLASSIFY) || defined(isnan)
 
 template <class T>
-int fpclassify BOOST_NO_MACRO_EXPAND(T t)
+int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const mpl::true_&)
 {
    // whenever possible check for Nan's first:
 #ifdef BOOST_HAS_FPCLASSIFY
@@ -99,11 +100,6 @@ int fpclassify BOOST_NO_MACRO_EXPAND(T t)
    // Nan's as unordered.  Some compilers
    // don't do this once optimisations are
    // turned on, hence the check for nan's above.
-   if(std::numeric_limits<T>::is_specialized == 0)
-   {
-      // so what do we do here?
-      return at == 0 ? FP_ZERO : FP_NORMAL;
-   }
    if(at <= (std::numeric_limits<T>::max)())
    {
       if(at >= (std::numeric_limits<T>::min)())
@@ -113,6 +109,30 @@ int fpclassify BOOST_NO_MACRO_EXPAND(T t)
    else if(at > (std::numeric_limits<T>::max)())
       return FP_INFINITE;
    return FP_NAN;
+}
+
+template <class T>
+int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const mpl::false_&)
+{
+   // 
+   // An unknown type with no numeric_limits support,
+   // so what are we supposed to do we do here?
+   //
+   return t == 0 ? FP_ZERO : FP_NORMAL;
+}
+
+}  // namespace detail
+
+template <class T>
+int fpclassify BOOST_NO_MACRO_EXPAND(T t)
+{
+#ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+   if(std::numeric_limits<T>::is_specialized)
+      return detail::fpclassify_imp(t, mpl::true_());
+   return detail::fpclassify_imp(t, mpl::false_());
+#else
+   return detail::fpclassify_imp(t, mpl::bool_< ::std::numeric_limits<T>::is_specialized>());
+#endif
 }
 
 #if defined(BOOST_HAS_FPCLASSIFY)
@@ -136,7 +156,7 @@ inline int fpclassify BOOST_NO_MACRO_EXPAND(long double t)
 #elif defined(_MSC_VER)
 // This only works for type double, for both float
 // and long double it gives misleading answers.
-int fpclassify BOOST_NO_MACRO_EXPAND(double t)
+inline int fpclassify BOOST_NO_MACRO_EXPAND(double t)
 {
    switch(::_fpclass(t))
    {

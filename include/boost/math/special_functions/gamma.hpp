@@ -6,8 +6,15 @@
 #ifndef BOOST_MATH_SF_GAMMA_HPP
 #define BOOST_MATH_SF_GAMMA_HPP
 
-#include <boost/lexical_cast.hpp>
 #include <boost/config.hpp>
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4127 4701)
+#endif
+#include <boost/lexical_cast.hpp>
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>

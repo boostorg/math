@@ -7,7 +7,15 @@
 #define BOOST_MATH_CONSTANTS_CONSTANTS_INCLUDED
 
 #include <boost/config.hpp>
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4127 4701)
+#endif
 #include <boost/lexical_cast.hpp>
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+
 
 namespace boost{ namespace math{
 
