@@ -6,19 +6,12 @@
 #ifndef BOOST_MATH_SPECIAL_ERF_HPP
 #define BOOST_MATH_SPECIAL_ERF_HPP
 
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/error_handling.hpp>
 
 namespace boost{ namespace math{
-
-// TODO remove these af using math_fwd.hpp
-//template <class T>
-//T erf(T z);
-//template <class T>
-//T erfc(T z);
-//template <class T>
-//T erfc_inv(T z);
 
 namespace detail
 {

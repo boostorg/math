@@ -83,7 +83,7 @@ namespace boost
         typedef typename promote_arg2<T1, T2>::type T12P; //
          // and then again to the result of that and the last (3rd) argument.
         typedef typename promote_arg2<T12P, T3>::type T123P;
-        typedef typename T123P type;
+        typedef T123P type;
       }; // promote_arg3
     } // namespace tools
   } // namespace math

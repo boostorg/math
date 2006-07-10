@@ -74,15 +74,15 @@ namespace detail
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #ifndef BOOST_MATH_THROW_ON_DOMAIN_ERROR
 template <class T>
-inline T domain_error_imp(const char* /*function*/, const char* /*message*/, const T&, const mpl::true_&)
+inline T domain_error_imp(const char* /*function*/, const char* /*message*/, const T&, const mpl::true_*)
 {
    errno = ERANGE;
    return std::numeric_limits<T>::quiet_NaN();
 }
 #endif
 
-template <class T, class U>
-inline T domain_error_imp(const char* function, const char* message, const T& val, const U&)
+template <class T>
+inline T domain_error_imp(const char* function, const char* message, const T& val, const void*)
 {
    errno = ERANGE;
    detail::raise_error<std::domain_error>(function, message ? message : "Domain Error on value %1%", val);
@@ -91,15 +91,15 @@ inline T domain_error_imp(const char* function, const char* message, const T& va
 }
 #ifndef BOOST_MATH_THROW_ON_OVERFLOW_ERROR
 template <class T>
-inline T overflow_error_imp(const char* /*function*/, const char* /*message*/, const mpl::true_&)
+inline T overflow_error_imp(const char* /*function*/, const char* /*message*/, mpl::bool_<true> const*)
 {
    errno = ERANGE;
    return std::numeric_limits<T>::infinity();
 }
 #endif
 
-template <class T, class U>
-inline T overflow_error_imp(const char* function, const char* message, const U&)
+template <class T>
+inline T overflow_error_imp(const char* function, const char* message, const void*)
 {
    errno = ERANGE;
    detail::raise_error<std::overflow_error>(function, message ? message : "Overflow");
@@ -119,11 +119,11 @@ inline T domain_error(const char* function, const char* message, const T& val)
 {
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    if(std::numeric_limits<T>::has_quiet_NaN)
-      return detail::domain_error_imp<T>(function, message, val, mpl::true_());
-   return detail::domain_error_imp<T>(function, message, val, mpl::false_());
+      return detail::domain_error_imp<T>(function, message, val, static_cast<mpl::true_*>(0));
+   return detail::domain_error_imp<T>(function, message, val, static_cast<mpl::false_*>(0));
 #else
    typedef boost::mpl::bool_< ::std::numeric_limits<T>::has_quiet_NaN> tag_type;
-   return detail::domain_error_imp<T>(function, message, val, tag_type());
+   return detail::domain_error_imp<T>(function, message, val, static_cast<tag_type*>(0));
 #endif
 }
 //
@@ -142,11 +142,11 @@ inline T overflow_error(const char* function, const char* message)
 {
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    if(std::numeric_limits<T>::has_infinity)
-      return detail::overflow_error_imp<T>(function, message, true_());
-   return detail::overflow_error_imp<T>(function, message, false_());
+      return detail::overflow_error_imp<T>(function, message, static_cast<mpl::true_*>(0));
+   return detail::overflow_error_imp<T>(function, message, static_cast<mpl::false_*>(0));
 #else
    typedef boost::mpl::bool_< ::std::numeric_limits<T>::has_infinity> tag_type;
-   return detail::overflow_error_imp<T>(function, message, tag_type());
+   return detail::overflow_error_imp<T>(function, message, static_cast<tag_type*>(0));
 #endif
 }
 //

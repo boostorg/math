@@ -179,7 +179,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
    static const int co7[] = { -533, 776, -1835, 10240, -13525, 5410 };
    workspace[2] = -tools::evaluate_even_polynomial(co7, s, 6) / (204120 * sc_5);
    static const int co8[] = { -1579, 3747, -3372, -15821, 45588, -45213, 15071 };
-   workspace[3] = -tools::evaluate_even_polynomial(co7, s, 6) / (2099520 * sc_6);
+   workspace[3] = -tools::evaluate_even_polynomial(co8, s, 7) / (2099520 * sc_6);
    terms[2] = tools::evaluate_polynomial(workspace, eta0, 4);
    //
    // And e3, and put it in terms[3]:

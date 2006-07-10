@@ -21,6 +21,7 @@
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/special_functions/sqrtp1m1.hpp>
@@ -40,25 +41,6 @@
 
 
 namespace boost{ namespace math{
-
-// TODO remove these after adding math_fwd.hpp
-// Forward declarations:
-//
-//template <class T>
-//T tgamma(T z);
-//template <class T>
-//T lgamma(T z, int* sign);
-//template <class T>
-//T lgamma(T x);
-//template <class T>
-//T tgammap1m1(T z);template <class T>
-//T tgamma(T a, T z);
-//template <class T>
-//T tgamma_lower(T a, T z);
-//template <class T>
-//T gamma_Q(T a, T z);
-//template <class T>
-//T gamma_P(T a, T z);
 
 namespace detail{
 
