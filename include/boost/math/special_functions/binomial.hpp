@@ -1,6 +1,7 @@
 // boost\math\special_functions\binomial.hpp
 
-// Copyright John Maddock & Paul A. Bristow 2006.
+// Copyright John Maddock 2006.
+// Copyright Paul A. Bristow 2006.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -9,7 +10,10 @@
 
 // http://en.wikipedia.org/wiki/binomial_distribution
 
-// binomial distribution is a discrete probability distribution.
+// Binomial distribution is the discrete probability distribution of
+// the number (k) of successes in a sequence of
+// n independent (yes or no, success or failure) Bernoulli trials.
+
 // It expresses the probability of a number of events occurring in a fixed time
 // if these events occur with a known average rate,
 // and are independent of the time since the last event.
@@ -20,15 +24,15 @@
 // The number of spelling mistakes a secretary makes while typing a single page.
 // The number of phone calls at a call center per minute.
 // The number of times a web server is accessed per minute.
-// The number of light bulbs that burn out in a certain amount of time.  
+// The number of light bulbs that burn out in a certain amount of time.
 // The number of roadkill found per unit length of road
 
-// http://en.wikipedia.org/wiki/binomial_distribution
+// http:/en.wikipedia.org/wiki/binomial_distribution
 
 // Given a sample of N measured values k[i],
 // we wish to estimate the value of the parameter x (mean)
-// of the binomial population from which the sample was drawn. 
-// To calculate the maximum likelihood value = 1/N sum i = 1 to N of k[i] 
+// of the binomial population from which the sample was drawn.
+// To calculate the maximum likelihood value = 1/N sum i = 1 to N of k[i]
 
 // Also could get k from probability and mean x???  TODO
 
@@ -61,13 +65,13 @@ namespace boost
   namespace math
   {
     namespace detail
-    { // Implementations called by actual functions 
+    { // Implementations called by actual functions
       // with arguments that, if necessary,
       // have been promoted from ArithmeticType to RealType.
 
       template <class RealType>
-      RealType binomial_imp(RealType k, RealType n, RealType success_fraction) 
-      { 
+      RealType binomial_imp(RealType k, RealType n, RealType success_fraction)
+      {
         using boost::math::ibeta; // Regularized incomplete beta function.
         using boost::math::tools::domain_error;
         using boost::math::tools::logic_error;
@@ -84,17 +88,17 @@ namespace boost
           return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= 0 !", n);
         }
 
-        if(n <= k)
+        if(k > n)
         { // n must be < k!
-          return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be > k !", n);
+          return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but n must be >= k !", n);
         }
-        // TODO Could use a 4 arg here for 
+        // TODO Could use a 4 arg here for
         //if(n >= k)
         //{ // n must be < k!
         //  return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be < %2% !", n, k);
         //}
         if ((success_fraction < 0) || (success_fraction > 1))
-        { // Check 0 <= probability probability <= 1.  
+        { // Check 0 <= probability probability <= 1.
           logic_error<RealType>(BOOST_CURRENT_FUNCTION, "success fraction is %1%, but must be >= 0 and <= 1 !", success_fraction);
           return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
         }
@@ -117,8 +121,8 @@ namespace boost
       } // binomial_imp
 
        template <class RealType>
-      RealType binomial_c_imp(RealType k, RealType n, RealType success_fraction) 
-      { 
+      RealType binomial_c_imp(RealType k, RealType n, RealType success_fraction)
+      {
         using boost::math::ibeta; // Regularized incomplete beta function.
         using boost::math::tools::domain_error;
         using boost::math::tools::logic_error;
@@ -139,13 +143,13 @@ namespace boost
         { // n must be < k!
           return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be > k !", n);
         }
-        // TODO Could use a 4 arg here for 
+        // TODO Could use a 4 arg here for
         //if(n >= k)
         //{ // n must be < k!
         //  return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be < %2% !", n, k);
         //}
         if ((success_fraction < 0) || (success_fraction > 1))
-        { // Check 0 <= probability probability <= 1.  
+        { // Check 0 <= probability probability <= 1.
           logic_error<RealType>(BOOST_CURRENT_FUNCTION, "success fraction is %1%, but must be >= 0 and <= 1 !", success_fraction);
           return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
         }
@@ -210,7 +214,7 @@ namespace boost
       inline typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
       // Return type is the wider of the two (perhaps promoted) floating-point types.
       binomial(ArithmeticType k, ArithmeticType n, RealType success_fraction)
-    { 
+    {
       typedef typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type promote_type; // Arguments type.
       return detail::binomial_imp(static_cast<promote_type>(k), static_cast<promote_type>(n), static_cast<promote_type>(success_fraction));
     } // binomial
@@ -220,7 +224,7 @@ namespace boost
       inline typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
       // Return type is the wider of the two (perhaps promoted) floating-point types.
       binomial_c(ArithmeticType k, ArithmeticType n, RealType success_fraction)
-    { 
+    {
       typedef typename tools::promote_arg3<ArithmeticType, RealType, ArithmeticType>::type promote_type; // Arguments type.
       return detail::binomial_c_imp(static_cast<promote_type>(k), static_cast<promote_type>(n), static_cast<promote_type>(success_fraction));
     } // binomial
@@ -230,7 +234,7 @@ namespace boost
     inline typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
     // Return type is the wider of the two (perhaps promoted) floating point types.
       binomial_inv(ArithmeticType k,  ArithmeticType n, RealType probability) // Binomial distribution inverse (k, n, p)
-    { 
+    {
       typedef typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type promote_type; // Arguments type.
       return detail::binomial_inv_imp(static_cast<promote_type>(k), static_cast<promote_type>(n),static_cast<promote_type>(probability));
     } // binomial_inv
@@ -241,6 +245,10 @@ namespace boost
 #endif // BOOST_MATH_SPECIAL_BINOMIAL_HPP
 
 /*
+
+TODO remove this
+
+
  * Returns the sum of the terms 0 through k of the Binomial
  * probability density:
  *

@@ -9,8 +9,12 @@
 
 // http://en.wikipedia.org/wiki/negative_binomial_distribution
 
-// negative_binomial distribution is a discrete probability distribution
-// .
+// negative_binomial distribution is a discrete probability distribution.
+
+// In a sequence of Bernoulli  trials or events
+// (independent, yes or no, succeed or fail) with success probability p,
+// negative_binomial is the probability that k or fewer failures
+// preceed the nth trial's success.
 
 #ifndef BOOST_MATH_SPECIAL_NEGATIVE_BINOMIAL_HPP
 #define BOOST_MATH_SPECIAL_NEGATIVE_BINOMIAL_HPP
@@ -24,7 +28,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/if.hpp>
 
-#include <limits> // 	using std::numeric_limits;
+#include <limits> // using std::numeric_limits;
 
 namespace boost
 {
@@ -35,7 +39,7 @@ namespace boost
         // with arguments that, if necessary,
         // have been promoted from ArithmeticType to RealType.
       template <class RealType>
-      RealType negative_binomial_imp(RealType k, RealType n, RealType success_fraction) 
+      RealType negative_binomial_imp(RealType k, RealType n, RealType success_probability) 
       { 
         using boost::math::ibeta; // Regularized incomplete beta function.
         using boost::math::tools::domain_error;
@@ -53,23 +57,14 @@ namespace boost
           return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= 0 !", n);
         }
 
-        if(n <= k)
-        { // n must be < k!
-          return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be > k !", n);
-        }
-        // TODO Could use a 4 arg domain_error here for 
-        //if(n >= k)
-        //{ // n must be < k!
-        //  return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be < %2% !", n, k);
-        //}
-        if ((success_fraction < 0) || (success_fraction > 1))
+        if ((success_probability < 0) || (success_probability > 1))
         { // Check 0 <= probability probability <= 1.  
-          logic_error<RealType>(BOOST_CURRENT_FUNCTION, "success fraction is %1%, but must be >= 0 and <= 1 !", success_fraction);
+          logic_error<RealType>(BOOST_CURRENT_FUNCTION, "success fraction is %1%, but must be >= 0 and <= 1 !", success_probability);
           return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
         }
 
-        RealType probability = ibeta(static_cast<RealType>(n), static_cast<RealType>(k)+1, success_fraction);
-        // Cephes nbdtr incbet(n, k+1, p);
+        RealType probability = ibeta(static_cast<RealType>(k), static_cast<RealType>(n), 1 - success_probability);
+        // Cephes nbdtr incbet(k, n, p);
         // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
         // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
         if (probability < 0)
@@ -86,7 +81,7 @@ namespace boost
       } // negative_binomial_imp
 
        template <class RealType>
-      RealType negative_binomial_c_imp(RealType k, RealType n, RealType success_fraction) 
+      RealType negative_binomial_c_imp(RealType k, RealType n, RealType success_probability) 
       { 
         using boost::math::ibeta; // Regularized incomplete beta function.
         using boost::math::tools::domain_error;
@@ -113,13 +108,13 @@ namespace boost
         //{ // n must be < k!
         //  return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be < %2% !", n, k);
         //}
-        if ((success_fraction < 0) || (success_fraction > 1))
+        if ((success_probability < 0) || (success_probability > 1))
         { // Check 0 <= probability probability <= 1.  
-          logic_error<RealType>(BOOST_CURRENT_FUNCTION, "success fraction is %1%, but must be >= 0 and <= 1 !", success_fraction);
+          logic_error<RealType>(BOOST_CURRENT_FUNCTION, "success fraction is %1%, but must be >= 0 and <= 1 !", success_probability);
           return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
         }
 
-        RealType probability = ibeta(static_cast<RealType>(k)+1, static_cast<RealType>(n), 1 - success_fraction);
+        RealType probability = ibeta(static_cast<RealType>(k)+1, static_cast<RealType>(n), 1 - success_probability);
         // Cephes nbdtrc incbet(k+1, n, 1-p);
         // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
         // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
@@ -170,32 +165,32 @@ namespace boost
         if (probability == 1)
           return +numeric_limits<RealType>::infinity();
         // Calculate quantile of negative_binomial using the inverse incomplete beta function.
-        return ibeta_inv(n, k + 1, probability); // returns success_fraction.
+        return ibeta_inv(n, k + 1, probability); // returns success_probability.
       } // negative_binomial_inv_imp
     } // namespace detail
 
     template <class ArithmeticType, class RealType> // negative_binomial distribution (k, n, x)
-    // Probability of number of events between 0 and k-1 inclusive, if expected probability of success events is success_fraction.
+    // Probability of number of events between 0 and k-1 inclusive, if expected probability of success events is success_probability.
       inline typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
       // Return type is the wider of the two (perhaps promoted) floating-point types.
-      negative_binomial(ArithmeticType k, ArithmeticType n, RealType success_fraction)
+      negative_binomial(ArithmeticType k, ArithmeticType n, RealType success_probability)
     { 
       typedef typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type promote_type; // Arguments type.
-      return detail::negative_binomial_imp(static_cast<promote_type>(k), static_cast<promote_type>(n), static_cast<promote_type>(success_fraction));
+      return detail::negative_binomial_imp(static_cast<promote_type>(k), static_cast<promote_type>(n), static_cast<promote_type>(success_probability));
     } // negative_binomial
 
     template <class ArithmeticType, class RealType> // negative_binomial distribution complement (k, n, x)
     // Probability of number of events between 0 and k-1 inclusive, if expected mean is x.
       inline typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
       // Return type is the wider of the two (perhaps promoted) floating-point types.
-      negative_binomial_c(ArithmeticType k, ArithmeticType n, RealType success_fraction)
+      negative_binomial_c(ArithmeticType k, ArithmeticType n, RealType success_probability)
     { 
       typedef typename tools::promote_arg3<ArithmeticType, RealType, ArithmeticType>::type promote_type; // Arguments type.
-      return detail::negative_binomial_c_imp(static_cast<promote_type>(k), static_cast<promote_type>(n), static_cast<promote_type>(success_fraction));
+      return detail::negative_binomial_c_imp(static_cast<promote_type>(k), static_cast<promote_type>(n), static_cast<promote_type>(success_probability));
     } // negative_binomial
 
     template <class ArithmeticType, class RealType>
-    // success_fraction if number of events between 0 and k-1 inclusive, and probability p.
+    // success_probability if number of events between 0 and k-1 inclusive, and probability p.
     inline typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
     // Return type is the wider of the two (perhaps promoted) floating point types.
       negative_binomial_inv(ArithmeticType k,  ArithmeticType n, RealType probability)
