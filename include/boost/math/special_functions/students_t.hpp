@@ -96,9 +96,10 @@ namespace boost
  		  template <class RealType>
 		  RealType students_t_inv_imp(RealType degrees_of_freedom, RealType probability)
 		  { // Inverse cumulative Distribution Function or Quintile (percentile / 100) of Student's t Probability.
-			  using boost::math::ibeta_inv; // ibeta(a, b, x)
-			  using boost::math::tools::domain_error;
-        using std::numeric_limits;
+           using boost::math::ibeta_inv; // ibeta(a, b, x)
+           using boost::math::tools::domain_error;
+           using std::numeric_limits;
+           using namespace std;  // for fabs
 
 			  // Degrees of freedom argument may be integral, signed, or unsigned, or floating point.
 			  if(degrees_of_freedom <= 0)
