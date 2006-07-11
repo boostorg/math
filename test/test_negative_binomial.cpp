@@ -12,11 +12,11 @@
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 
 #ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
-#  pragma warning(disable: 4244) // conversion from 'double' to 'const float', possible loss of data.
+//#  pragma warning(disable: 4127) // conditional expression is constant.
+//#  pragma warning(disable: 4100) // unreferenced formal parameter.
+//#  pragma warning(disable: 4512) // assignment operator could not be generated.
+//#  pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
+//#  pragma warning(disable: 4244) // conversion from 'double' to 'const float', possible loss of data.
 #endif
 
 #include <boost/math/special_functions/negative_binomial.hpp> // for negative_binomial
@@ -123,7 +123,7 @@ void test_spots(RealType)
          static_cast<RealType>(2), // n
          static_cast<RealType>(0.5)), // q
          static_cast<RealType>(0.5), // p
-			1e-6); // tolerance );
+			static_cast<RealType>(1e-6) ); // tolerance );
 
 
 } // template <class RealType>void test_spots(RealType)
@@ -150,6 +150,18 @@ int test_main(int, char* [])
 
 Output:
 
+------ Build started: Project: test_negative_binomial, Configuration: Debug Win32 ------
+Compiling...
+test_negative_binomial.cpp
+Linking...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_negative_binomial.exe"
+Running 1 test case...
+BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
+*** No errors detected
+Build Time 0:08
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_negative_binomial\Debug\BuildLog.htm"
+test_negative_binomial - 0 error(s), 0 warning(s)
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 
 
