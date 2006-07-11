@@ -42,23 +42,21 @@ namespace boost
 
    // Binomial distribution.
 
-   template <class ArithmeticType, class RealType> // Binomial distribution (k, n, x)
+   template <class AT, class RT> // Binomial distribution (k, n, x)
    // Probability of number of events between 0 and k-1 inclusive, if expected probability of success events is success_fraction.
-   typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
+   typename tools::promote_arg3<AT, AT, RT>::type
    // Return type is the wider of the two (perhaps promoted) floating-point types.
-   binomial(ArithmeticType k, ArithmeticType n, RealType success_fraction);
+   binomial(AT k, AT n, RT success_fraction);
 
-   template <class ArithmeticType, class RealType> // Binomial distribution complement (k, n, x)
+   template <class AT, class RT> // Binomial distribution complement (k, n, x)
    // Probability of number of events between 0 and k-1 inclusive, if expected mean is x.
-   typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
-   // Return type is the wider of the two (perhaps promoted) floating-point types.
-   binomial_c(ArithmeticType k, ArithmeticType n, RealType success_fraction);
+   typename tools::promote_arg3<AT, AT, RT>::type
+   binomial_c(AT k, AT n, RT success_fraction);
 
-   template <class ArithmeticType, class RealType>
+   template <class AT, class RT>
    // success_fraction if number of events between 0 and k-1 inclusive, and probability p.
-   typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
-   // Return type is the wider of the two (perhaps promoted) floating point types.
-   binomial_inv(ArithmeticType k,  ArithmeticType n, RealType probability); // Binomial distribution inverse (k, n, p)
+   typename tools::promote_arg3<AT, AT, RT>::type
+   binomial_inv(AT k,  AT n, RT probability); // Binomial distribution inverse (k, n, p)
 
    // cbrt - cube root.
    template <class RT>

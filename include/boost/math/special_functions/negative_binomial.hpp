@@ -201,24 +201,6 @@ namespace boost
     } // negative_binomial_inv
 
 
-    // http://en.wikipedia.org/wiki/negative_binomial_distribution
-
-    // Given a sample of N measured values k[i],
-    // we wish to estimate the value of the parameter x (mean)
-    // of the negative_binomial population from which the sample was drawn. 
-    // To calculate the maximum likelihood value = 1/N sum i = 1 to N of k[i] 
-
-    // Also could get k from probability and mean x???  TODO
-
-    // Also may want a function for EXACTLY k.
-
-    // And probability that there are EXACTLY k occurrences is
-    // exp(-x) * pow(x, k) / factorial(k)
-    // where x is expected occurrences (mean) during the given interval.
-    // For example, if events occur, on average, every 4 min,
-    // and we are interested in number of events occurring in 10 min,
-    // then x = 10/4 = 2.5
-
 	} // namespace math
 } // namespace boost
 
