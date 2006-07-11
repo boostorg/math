@@ -50,7 +50,7 @@ private:
 // How large z has to be in order to ensure that the series converges:
 //
 template <class T>
-float erf_asymptotic_limit_N(const T& z)
+float erf_asymptotic_limit_N(const T&)
 {
    return (std::numeric_limits<float>::max)();
 }

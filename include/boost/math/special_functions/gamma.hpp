@@ -530,6 +530,10 @@ T tgamma_upper_part(T a, T z)
 template <class T>
 T tgamma_imp(T a, T z)
 {
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4127)
+#endif
    if(a <= 0)
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a);
    if(z < 0)
@@ -553,6 +557,9 @@ T tgamma_imp(T a, T z)
    {
       return tgamma_upper_part(a, z);
    }
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 }
 //
 // Full lower integral, computing via upper integral as required:
