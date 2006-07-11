@@ -94,7 +94,7 @@ T beta_imp(T a, T b, const L&)
 // (Caution this is slow!!!):
 //
 template <class T>
-T beta_imp(T a, T b, const lanczos::undefined_lanczos& l)
+T beta_imp(T a, T b, const lanczos::undefined_lanczos& /* l */)
 {
    using namespace std;
 
