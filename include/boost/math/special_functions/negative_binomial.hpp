@@ -63,7 +63,7 @@ namespace boost
           return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
         }
 
-        RealType probability = ibeta(static_cast<RealType>(k), static_cast<RealType>(n), 1 - success_probability);
+        RealType probability = ibeta(static_cast<RealType>(k+1), static_cast<RealType>(n), 1 - success_probability);
         // Cephes nbdtr incbet(k, n, p);
         // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
         // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
