@@ -16,10 +16,16 @@
 // negative_binomial is the probability that k or fewer failures
 // preceed the nth trial's success.
 
+// TODO remove these notes.
+
+// MATHCAD cumulative negative binomial pnbinom(k, n, p)
+
+
+
 #ifndef BOOST_MATH_SPECIAL_NEGATIVE_BINOMIAL_HPP
 #define BOOST_MATH_SPECIAL_NEGATIVE_BINOMIAL_HPP
 
-#include <boost/math/special_functions/beta.hpp> // for ibeta(a, b, x).
+#include <boost/math/special_functions/beta.hpp> // for ibeta(a, b, x) == Ix(a, b).
 #include <boost/math/tools/roots.hpp> // for domain_error & logic_error.
 #include <boost/math/tools/promotion.hpp> // for promotion.
 
@@ -63,8 +69,8 @@ namespace boost
           return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
         }
 
-        RealType probability = ibeta(static_cast<RealType>(k+1), static_cast<RealType>(n), 1 - success_probability);
-        // Cephes nbdtr incbet(k, n, p);
+        RealType probability = ibeta(static_cast<RealType>(n), static_cast<RealType>(k+1), success_probability);
+        // Cephes nbdtr incbet(n, k+1, p);
         // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
         // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
         if (probability < 0)
@@ -99,22 +105,13 @@ namespace boost
           return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= 0 !", n);
         }
 
-        if (n <= k)
-        { // n must be < k!
-          return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be > k !", n);
-        }
-        // TODO Could use a 4 arg here for 
-        //if(n >= k)
-        //{ // n must be < k!
-        //  return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be < %2% !", n, k);
-        //}
         if ((success_probability < 0) || (success_probability > 1))
         { // Check 0 <= probability probability <= 1.  
           logic_error<RealType>(BOOST_CURRENT_FUNCTION, "success fraction is %1%, but must be >= 0 and <= 1 !", success_probability);
           return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
         }
 
-        RealType probability = ibeta(static_cast<RealType>(k)+1, static_cast<RealType>(n), 1 - success_probability);
+        RealType probability = ibeta(static_cast<RealType>(k+1), static_cast<RealType>(n), 1 - success_probability);
         // Cephes nbdtrc incbet(k+1, n, 1-p);
         // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
         // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
@@ -129,12 +126,16 @@ namespace boost
           return static_cast<RealType>(1.); // Constrain to unity if logic_error does not throw.
         }
         return probability;
-      } // negative_binomial_imp
+      } // negative_binomial_c_imp
 
      template <class RealType>
       RealType negative_binomial_inv_imp(RealType k, RealType n, RealType probability)
-      { // Inverse cumulative Distribution Function or Quintile (percentile / 100) of negative_binomial Probability.
+      { // Inverse cumulative Distribution Function or Quantile (percentile / 100) of negative_binomial Probability.
+        // MAthCAD pnbinom return smallest k such that negative_binomial(k, n, p) >= probability.
         // k argument may be integral, signed, or unsigned, or floating point.
+        // BUT Cephes/CodeCogs says
+        // finds argument p (0 to 1) such that cdf(k, n, p) = y
+
         // If necessary, it has already been promoted from an integral type.
 
         using boost::math::gamma_Q_inv; // gamma_Q_inv
@@ -150,11 +151,6 @@ namespace boost
         { // n must be >= 0!
           return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= 0 !", n);
         }
-        if(n <= k)
-        { // n must be <= k!
-          return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be > k !", n);
-        }
-
         if((probability < 0) || (probability > 1))
         { // probability must be >= 0 and <= 1!
           return domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability argument is %1%, but must be >= 0 and <= 1 !", probability);
@@ -165,7 +161,8 @@ namespace boost
         if (probability == 1)
           return +numeric_limits<RealType>::infinity();
         // Calculate quantile of negative_binomial using the inverse incomplete beta function.
-        return ibeta_inv(n, k + 1, probability); // returns success_probability.
+        return ibeta_inv(n, k + 1, probability); // returns quantile according to Cephes.
+        // return ibeta_inv(k + 1, n, probability); // returns quantile.
       } // negative_binomial_inv_imp
     } // namespace detail
 
