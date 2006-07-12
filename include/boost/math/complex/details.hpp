@@ -11,6 +11,7 @@
 // that we need to implement all these functions.
 //
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/config/no_tr1/complex.hpp>
 #include <boost/limits.hpp>
 #include <math.h> // isnan where available
@@ -100,3 +101,4 @@ inline float safe_min(float t)
 } } } // namespaces
 
 #endif // BOOST_MATH_COMPLEX_DETAILS_INCLUDED
+
