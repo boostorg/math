@@ -16,6 +16,13 @@
 #  include <boost/assert.hpp>
 #endif
 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x580))
+#include <boost/type_traits/remove_const.hpp>
+#define BOOST_RCT(T) typename remove_const<T>::type
+#else
+#define BOOST_RCT(T) T
+#endif
+
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std{ using ::sqrt; using ::fabs; }
 #endif
@@ -27,9 +34,9 @@ template <class T>
 T hypot(T x, T y)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT(::std::numeric_limits<T>::is_specialized);
+   BOOST_STATIC_ASSERT(::std::numeric_limits<BOOST_RCT(T)>::is_specialized);
 #else
-   BOOST_ASSERT(std::numeric_limits<T>::is_specialized);
+   BOOST_ASSERT(std::numeric_limits<BOOST_RCT(T)>::is_specialized);
 #endif
 
    //
@@ -39,18 +46,18 @@ T hypot(T x, T y)
    y = (std::fabs)(y);
 
    // special case, see C99 Annex F:
-   if(std::numeric_limits<T>::has_infinity
-      && ((x == std::numeric_limits<T>::infinity())
-      || (y == std::numeric_limits<T>::infinity())))
-      return std::numeric_limits<T>::infinity();
+   if(std::numeric_limits<BOOST_RCT(T)>::has_infinity
+      && ((x == std::numeric_limits<BOOST_RCT(T)>::infinity())
+      || (y == std::numeric_limits<BOOST_RCT(T)>::infinity())))
+      return std::numeric_limits<BOOST_RCT(T)>::infinity();
 
    if(y > x) 
       (std::swap)(x, y);
    //
    // figure out overflow and underflow limits:
    //
-   T safe_upper = (std::sqrt)((std::numeric_limits<T>::max)()) / 2;
-   T safe_lower = (std::sqrt)((std::numeric_limits<T>::min)());
+   T safe_upper = (std::sqrt)((std::numeric_limits<BOOST_RCT(T)>::max)()) / 2;
+   T safe_lower = (std::sqrt)((std::numeric_limits<BOOST_RCT(T)>::min)());
    static const T one = 1;
    //
    // Now handle special cases:
@@ -80,5 +87,7 @@ T hypot(T x, T y)
 }
 
 } } // namespaces
+
+#undef BOOST_RCT
 
 #endif // BOOST_MATH_HYPOT_INCLUDED
