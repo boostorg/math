@@ -374,82 +374,59 @@ template <class T>
 void test_spots(T)
 {
    //
-   // basic sanity checks, tolerance is 10 decimal places expressed as a percentage:
+   // basic sanity checks, tolerance is 10 epsilon expressed as a percentage:
    //
-   T tolerance = std::pow(10.0, -8);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(3.5)), static_cast<T>(3.3233509704478425512), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.1)), static_cast<T>(9.5135076986687318363), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(-0.1)), static_cast<T>(-10.686287021193193549), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(-3.2)), static_cast<T>(0.68905641200597974292), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(-52.001)), static_cast<T>(-1.2349010280547181826e-65), tolerance);
+   T tolerance = boost::math::tools::epsilon<T>() * 1000;
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(3.5)), static_cast<T>(3.3233509704478425511840640312646472177454052302295L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.125)), static_cast<T>(7.5339415987976119046992298412151336246104195881491L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(-0.125)), static_cast<T>(-8.7172188593831756100190140408231437691829605421405L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(-3.125)), static_cast<T>(1.1668538708507675587790157356605097019141636072094L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(-53249.0/1024)), static_cast<T>(-1.2646559519067605488251406578743995122462767733517e-65L), tolerance);
 
    int sign = 1;
-   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(3.5), &sign), static_cast<T>(1.2009736023470742248208170321516), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(3.5), &sign), static_cast<T>(1.2009736023470742248160218814507129957702389154682L), tolerance);
    BOOST_CHECK(sign == 1);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(0.1), &sign), static_cast<T>(2.2527126517342059598704913469682), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(0.125), &sign), static_cast<T>(2.0194183575537963453202905211670995899482809521344L), tolerance);
    BOOST_CHECK(sign == 1);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(-0.1), &sign), static_cast<T>(2.3689613327287886552092298040686), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(-0.125), &sign), static_cast<T>(2.1653002489051702517540619481440174064962195287626L), tolerance);
    BOOST_CHECK(sign == -1);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(-3.2), &sign), static_cast<T>(-0.37243213612996769536089336752751), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(-3.125), &sign), static_cast<T>(0.1543111276840418242676072830970532952413339012367L), tolerance);
    BOOST_CHECK(sign == 1);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(-52.001), &sign), static_cast<T>(-149.4570402169712972001218882919), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(-53249.0/1024), &sign), static_cast<T>(-149.43323093420259741100038126078721302600128285894L), tolerance);
    BOOST_CHECK(sign == -1);
 
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(23.912163676143750904), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(10.571838841565097875), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(0.70206451384706574415), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(3.8734332808745531497e-36), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(0.5)), static_cast<T>(0.562418231594407124279494957302), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(0.9)), static_cast<T>(0.318532103604121098738593603904), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(5)), static_cast<T>(0.00277460326041280931949083572726), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(100)), static_cast<T>(3.70174786040827892025356644813e-45), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(23.912163676143750903709045060494956383977723517065L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(10.571838841565097874621959975919877646444998907920L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(0.70206451384706574414638719662835463671916532623256L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(3.8734332808745531496973774140085644548465762343719e-36L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(0.5)), static_cast<T>(0.56241823159440712427949495730204306902676756479651L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(0.9)), static_cast<T>(0.31853210360412109873859360390443790076576777747449L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(5)), static_cast<T>(0.0027746032604128093194908357272603294120210079791437L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(100)), static_cast<T>(3.7017478604082789202535664481339075721362102520338e-45L), tolerance);
 
-   BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(0.087836323856249096291), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(13.428161158434902125), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(23.297935486152934256), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(24.000000000000000000), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(0.087836323856249096290954939505043616022276482935091L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(13.428161158434902125378040024080122353555001092080L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(23.297935486152934255853612803371645363280834673767L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(23.999999999999999999999999999999999996126566719125L), tolerance);
 
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(0.996340153172656287654543544187), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(0.440493285065212411442581665663), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(0.0292526880769610726727661331928), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(1.61393053369773047904057392250e-37), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(0.99634015317265628765454354418728984933240514654437L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(0.44049328506521241144258166566332823526854162116334L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(0.029252688076961072672766133192848109863298555259690L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(1.6139305336977304790405739225035685228527400976549e-37L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(1.5), static_cast<T>(2)), static_cast<T>(0.26146412994911062220282207597592120190281060919079L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(20.5), static_cast<T>(22)), static_cast<T>(0.34575332043467326814971590879658406632570278929072L), tolerance);
 
-   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(0.00365984682734371234545645581271), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(0.559506714934787588557418334337), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(0.970747311923038927327233866807), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(1.00000000000000000000000000000), tolerance);
-
-   //BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(1), static_cast<T>(1.5)), static_cast<T>(0.35798614547512708694), tolerance);
-   //BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(3), static_cast<T>(6)), static_cast<T>(12.724961860971380343), tolerance);
-   //BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(7), static_cast<T>(9)), static_cast<T>(2.8326711932871945905), tolerance);
-
-   tolerance = boost::math::tools::epsilon<T>() * 100 * 200; // 200 eps %.
-#if defined(__CYGWIN__)
-   // some platforms long double is only reliably accurate to double precision:
-   if(sizeof(T) == sizeof(long double))
-      tolerance = boost::math::tools::epsilon<double>() * 100 * 200; // 200 eps %.
-#endif
-#if 0
-   // this is way too slow...
-   for(T a = 0.5; a < 500; a += 2.5)
-   {
-      for(T p = 0.05; p < 1; p += 0.04)
-      {
-         T x = boost::math::gamma_P_inv(a, p);
-         T p2 = boost::math::gamma_P(a, x);
-         BOOST_CHECK_CLOSE(p2, p, tolerance);
-
-         x = boost::math::gamma_Q_inv(a, p);
-         p2 = boost::math::gamma_Q(a, x);
-         BOOST_CHECK_CLOSE(p2, p, tolerance);
-      }
-   }
-#endif
+   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(0.0036598468273437123454564558127101506675948534556288L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(0.55950671493478758855741833433667176473145837883666L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(0.97074731192303892732723386680715189013670144474031L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(0.9999999999999999999999999999999999998386069466302L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(1.5), static_cast<T>(2)), static_cast<T>(0.73853587005088937779717792402407879809718939080921L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(20.5), static_cast<T>(22)), static_cast<T>(0.65424667956532673185028409120341593367429721070928L), tolerance);
 }
 
 int test_main(int, char* [])
 {
-   //test_spots(0.0F);
+   test_spots(0.0F);
    test_spots(0.0);
    test_spots(0.0L);
    test_spots(boost::math::concepts::real_concept(0.1));

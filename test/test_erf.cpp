@@ -173,9 +173,9 @@ void test_spots(T, const char* t)
 {
    std::cout << "Testing basic sanity checks for type " << t << std::endl;
    //
-   // basic sanity checks, tolerance is 10 decimal places expressed as a percentage:
+   // basic sanity checks, tolerance is 10 epsilon expressed as a percentage:
    //
-   T tolerance = std::pow(10.0, -8);
+   T tolerance = boost::math::tools::epsilon<T>() * 1000;
    BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(0.125)), static_cast<T>(0.859683795198666182606970553478), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(0.5)), static_cast<T>(0.479500122186953462317253346108), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(1)), static_cast<T>(0.157299207050285130658779364917), tolerance);
