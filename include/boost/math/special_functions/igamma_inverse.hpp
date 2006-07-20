@@ -8,6 +8,7 @@
 
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/roots.hpp>
+#include <boost/math/tools/error_handling.hpp>
 
 namespace boost{ namespace math{
 
@@ -344,9 +345,9 @@ T gamma_P_inv(T a, T p)
    if(p == 0)
       return 0;
    T guess = detail::estimate_inverse_gamma(a, p, 1 - p);
-   if((guess == 0) && (p != 0))
-      guess = tools::min_value<T>();
    T lower = tools::min_value<T>();
+   if(guess <= lower)
+      guess = tools::min_value<T>();
    guess = tools::halley_iterate(
       detail::gamma_P_inverse_func<T>(a, p, false),
       guess,
@@ -354,7 +355,7 @@ T gamma_P_inv(T a, T p)
       tools::max_value<T>(),
       (tools::digits<T>() * 2) / 3);
    if(guess == lower)
-      return 0;
+      guess = tools::underflow_error<T>(BOOST_CURRENT_FUNCTION, "Expected result known to be non-zero, but is smaller than the smallest available number.");
    return guess;
 }
 
@@ -370,9 +371,9 @@ T gamma_Q_inv(T a, T q)
    if(q == 1)
       return 0;
    T guess = detail::estimate_inverse_gamma(a, 1 - q, q);
-   if((guess == 0) && (q != 1))
-      guess = tools::min_value<T>();
    T lower = tools::min_value<T>();
+   if(guess <= lower)
+      guess = tools::min_value<T>();
    guess = tools::halley_iterate(
       detail::gamma_P_inverse_func<T>(a, q, true),
       guess,
@@ -380,7 +381,7 @@ T gamma_Q_inv(T a, T q)
       tools::max_value<T>(),
       (tools::digits<T>() * 2) / 3);
    if(guess == lower)
-      return 0;
+      guess = tools::underflow_error<T>(BOOST_CURRENT_FUNCTION, "Expected result known to be non-zero, but is smaller than the smallest available number.");
    return guess;
 }
 

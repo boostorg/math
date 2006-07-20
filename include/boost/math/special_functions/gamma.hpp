@@ -493,102 +493,6 @@ T full_igamma_prefix(T a, T z)
    return prefix;
 }
 //
-// Full lower integral:
-//
-template <class T>
-T tgamma_lower_part(T a, T z)
-{
-   using namespace std;
-   T prefix = full_igamma_prefix(a, z);
-   T r2 = detail::lower_gamma_series(a, z, boost::math::tools::digits<T>()) / a;
-   if(tools::max_value<T>() / prefix < r2)
-      tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of incomplete gamma function is too large to represent.");
-   prefix *= r2;
-   return prefix;
-}
-//
-// Full upper integral:
-//
-template <class T>
-T tgamma_upper_part(T a, T z)
-{
-   using namespace std;
-   if((z < 1) && ((a <= 0.75) || (z < a)))
-   {
-      T result = tgammap1m1(a) - powm1(z, a);
-      result /= a;
-      detail::small_gamma2_series<T> s(a, z);
-      result -= pow(z, a) * tools::sum_series(s, boost::math::tools::digits<T>());
-      return result;
-   }
-   else
-   {
-      T prefix = full_igamma_prefix(a, z);
-      return (prefix == 0) ? 0 : prefix * detail::upper_gamma_fraction(a, z, boost::math::tools::digits<T>());
-   }
-}
-//
-// Full lower integral, computing via lower integral as required:
-//
-template <class T>
-T tgamma_imp(T a, T z)
-{
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4127)
-#endif
-   if(a <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a);
-   if(z < 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument z to the incomplete gamma function must be >= 0 (got z=%1%).", z);
-
-   using namespace std;
-
-   // TODO: Find a better heuristic here:
-   if((a < 0.75) && (z < 1) && ((a*a < z) || (a < 0.125)))
-   {
-      return tgamma_upper_part(a, z);
-   }
-   else if((z < a+1) && (a > 1))
-   {
-      T result = ::boost::math::tgamma(a);
-      if(std::numeric_limits<T>::is_specialized && (result >= (std::numeric_limits<T>::max)()))
-         return result;
-      return result - tgamma_lower_part(a, z);
-   }
-   else
-   {
-      return tgamma_upper_part(a, z);
-   }
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-}
-//
-// Full lower integral, computing via upper integral as required:
-//
-template <class T>
-T tgamma_lower_imp(T a, T z)
-{
-   if(a <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a);
-   if(z < 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument z to the incomplete gamma function must be >= 0 (got z=%1%).", z);
-
-   if(z < (std::max)(a+1, T(10)))
-   {
-      return tgamma_lower_part(a, z);
-   }
-   else
-   {
-      T result = ::boost::math::tgamma(a);
-      if(std::numeric_limits<T>::is_specialized && (result >= (std::numeric_limits<T>::max)()))
-         return result;
-      T r2 = tgamma_upper_part(a, z);
-      return result - r2;
-   }
-}
-//
 // Helper to compute log(1+x)-x:
 //
 template <class T>
@@ -729,63 +633,176 @@ T regularised_gamma_prefix(T a, T z, const lanczos::undefined_lanczos&)
    prefix /= sum;
    return prefix;
 }
-
 //
-// regularised incomplete gamma, divide through by Lanczos
-// approximation and combine terms:
+// Upper gamma fraction for very small a:
 //
 template <class T, class L>
-T gamma_Q_imp(T a, T z, const L& l)
+T tgamma_small_upper_part(T a, T x, const L& l)
+{
+   //
+   // Compute the full upper fraction (Q) when a is very small:
+   //
+   T result = tgammap1m1_imp(a, l) - powm1(x, a);
+   result /= a;
+   detail::small_gamma2_series<T> s(a, x);
+   result -= pow(x, a) * tools::sum_series(s, boost::math::tools::digits<T>());
+   return result;
+}
+//
+// Upper gamma fraction for integer a:
+//
+template <class T>
+T finite_gamma_Q(T a, T x)
+{
+   //
+   // Calculates normalised Q when a is an integer:
+   //
+   using namespace std;
+   T sum = exp(-x);
+   if(sum != 0)
+   {
+      T term = sum;
+      for(unsigned n = 1; n < a; ++n)
+      {
+         term /= n;
+         term *= x;
+         sum += term;
+      }
+   }
+   return sum;
+}
+//
+// Upper gamma fraction for half integer a:
+//
+template <class T>
+T finite_half_gamma_Q(T a, T x)
+{
+   //
+   // Calculates normalised Q when a is a half-integer:
+   //
+   using namespace std;
+   T e = erfc(sqrt(x));
+   if((e != 0) && (a > 1))
+   {
+      T term = exp(-x) / sqrt(constants::pi<T>() * x);
+      term *= x;
+      static const T half = T(1) / 2;
+      term /= half;
+      T sum = term;
+      for(unsigned n = 2; n < a; ++n)
+      {
+         term /= n - half;
+         term *= x;
+         sum += term;
+      }
+      e += sum;
+   }
+   return e;
+}
+//
+// Main incomplete gamma entry point, handles all four incomplete gamma's:
+//
+template <class T, class L>
+T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
 {
    if(a <= 0)
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a);
-   if(z < 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument z to the incomplete gamma function must be >= 0 (got z=%1%).", z);
+   if(x < 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x);
 
    using namespace std;
 
-   if((a < 0.75) && (z < 1))
+   T result;
+   if((floor(a) == a) && (a < 30) && (a <= x + 1) && (x > 0.6))
    {
-      T tga = gamma_imp(a, l);
-      T result = tgamma_upper_part(a, z);
-      return result / tga;
+      // calculate Q via finite sum:
+      invert = !invert;
+      result = finite_gamma_Q(a, x);
+      if(normalised == false)
+         result *= gamma_imp(a, l);
    }
-   else
+   else if((floor(2 * a) == 2 * a) && (a < 30) && (a <= x + 1) && (x > 0.2))
    {
-      T prefix = regularised_gamma_prefix(a, z, l);
-      if(z < a+1)
+      // calculate Q via finite sum for half integer a:
+      invert = !invert;
+      result = finite_half_gamma_Q(a, x);
+      if(normalised == false)
+         result *= gamma_imp(a, l);
+   }
+   else if(x < 0.5)
+   {
+      //
+      // Changeover criterion chosen to give a changeover at Q ~ 0.33
+      //
+      if(-0.4 / log(x) < a)
       {
-         T result = 1;
-         T r2 = prefix * detail::lower_gamma_series(a, z, boost::math::tools::digits<T>()) / a;
-         return result - r2;
+         // Compute P:
+         result = normalised ? regularised_gamma_prefix(a, x, l) : full_igamma_prefix(a, x);
+         if(result != 0)
+            result *= detail::lower_gamma_series(a, x, boost::math::tools::digits<T>()) / a;
       }
       else
-         return (prefix == 0) ? 0 : prefix * detail::upper_gamma_fraction(a, z, boost::math::tools::digits<T>());
+      {
+         // Compute Q:
+         invert = !invert;
+         result = tgamma_small_upper_part(a, x, l);
+         if(normalised)
+            result /= gamma_imp(a, l);
+      }
    }
-}
-template <class T, class L>
-T gamma_P_imp(T a, T z, const L& l)
-{
-   if(a <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a);
-   if(z < 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument z to the incomplete gamma function must be >= 0 (got z=%1%).", z);
-
-   using namespace std;
-
-   T prefix = regularised_gamma_prefix(a, z, l);
-   if(z < a+1)
+   else if(x < 1.1)
    {
-      return (prefix == 0) ? 0 : prefix * detail::lower_gamma_series(a, z, boost::math::tools::digits<T>()) / a;
+      //
+      // Changover here occurs when P ~ 0.6 or Q ~ 0.4:
+      //
+      if(x * 1.1f < a)
+      {
+         // Compute P:
+         result = normalised ? regularised_gamma_prefix(a, x, l) : full_igamma_prefix(a, x);
+         if(result != 0)
+            result *= detail::lower_gamma_series(a, x, boost::math::tools::digits<T>()) / a;
+      }
+      else
+      {
+         // Compute Q:
+         invert = !invert;
+         result = tgamma_small_upper_part(a, x, l);
+         if(normalised)
+            result /= gamma_imp(a, l);
+      }
    }
    else
    {
-      T result = 1;
-      T r2 = prefix * detail::upper_gamma_fraction(a, z, boost::math::tools::digits<T>());
-      return result - r2;
+      //
+      // Changeover here occurs at P ~ Q ~ 0.5
+      //
+      result = normalised ? regularised_gamma_prefix(a, x, l) : full_igamma_prefix(a, x);
+      if(x < a)
+      {
+         // Compute P:
+         if(result != 0)
+            result *= detail::lower_gamma_series(a, x, boost::math::tools::digits<T>()) / a;
+      }
+      else
+      {
+         // Compute Q:
+         invert = !invert;
+         if(result != 0)
+            result *= upper_gamma_fraction(a, x, tools::digits<T>());
+      }
    }
-}
 
+   if(invert)
+   {
+      T gam = normalised ? 1 : gamma_imp(a, l);
+      result = gam - result;
+   }
+
+   return result;
+}
+//
+// Ratios of two gamma functions:
+//
 template <class T, class L>
 T tgamma_delta_ratio_imp(T z, T delta, const L&)
 {
@@ -810,7 +827,9 @@ T tgamma_delta_ratio_imp(T z, T delta, const L&)
    result *= L::lanczos_sum(z) / L::lanczos_sum(z + delta);
    return result;
 }
-
+//
+// And again without Lanczos support this time:
+//
 template <class T>
 T tgamma_delta_ratio_imp(T z, T delta, const lanczos::undefined_lanczos&)
 {
@@ -892,36 +911,50 @@ inline T tgammap1m1(T z)
 template <class T>
 inline T tgamma(T a, T z)
 {
-   typedef typename boost::math::tools::evaluation<T>::type eval_type;
-   return tools::checked_narrowing_cast<T>(detail::tgamma_imp(static_cast<eval_type>(a), static_cast<eval_type>(z)), BOOST_CURRENT_FUNCTION);
+   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<T>(
+      detail::gamma_incomplete_imp(static_cast<value_type>(a),
+      static_cast<value_type>(z), false, true,
+      evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
-
+//
+// Full lower incomplete gamma:
+//
 template <class T>
 inline T tgamma_lower(T a, T z)
 {
-   typedef typename boost::math::tools::evaluation<T>::type eval_type;
-   return tools::checked_narrowing_cast<T>(detail::tgamma_lower_imp(static_cast<eval_type>(a), static_cast<eval_type>(z)), BOOST_CURRENT_FUNCTION);
+   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<T>(
+      detail::gamma_incomplete_imp(static_cast<value_type>(a),
+      static_cast<value_type>(z), false, false,
+      evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
-
+//
+// Regularised upper incomplete gamma:
+//
 template <class T>
 inline T gamma_Q(T a, T z)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(
-      detail::gamma_Q_imp(static_cast<value_type>(a),
-      static_cast<value_type>(z),
+      detail::gamma_incomplete_imp(static_cast<value_type>(a),
+      static_cast<value_type>(z), true, true,
       evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
-
+//
+// Regularised lower incomplete gamma:
+//
 template <class T>
 inline T gamma_P(T a, T z)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(
-      detail::gamma_P_imp(static_cast<value_type>(a),
-      static_cast<value_type>(z),
+      detail::gamma_incomplete_imp(static_cast<value_type>(a),
+      static_cast<value_type>(z), true, false,
       evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
@@ -945,6 +978,7 @@ inline T tgamma_ratio(T a, T b)
 } // namespace boost
 
 #include <boost/math/special_functions/igamma_inverse.hpp>
+#include <boost/math/special_functions/erf.hpp>
 
 #endif // BOOST_MATH_SF_GAMMA_HPP
 

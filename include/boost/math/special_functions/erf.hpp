@@ -160,20 +160,32 @@ T erf_imp(T z, bool invert, const L& l, const Tag& t)
       detail::erf_asympt_series_t<T> s(z);
       result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), 1);
    }
-   else if(z < 0.5)
-   {
-      T sqrt_z = z;
-      z *= z;
-      boost::math::detail::lower_incomplete_gamma_series<T> s(0.5, z);
-      result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>());
-      result *= sqrt_z * exp(-z) / T(0.5);
-      result /= sqrt(boost::math::constants::pi<T>());
-   }
    else
    {
-      result = boost::math::tgamma(T(0.5), z * z);
-      result /= sqrt(boost::math::constants::pi<T>());
-      invert = !invert;
+      T x = z * z;
+      if(x < 0.6)
+      {
+         // Compute P:
+         result = z * exp(-x);
+         result /= sqrt(boost::math::constants::pi<T>());
+         if(result != 0)
+            result *= 2 * detail::lower_gamma_series(T(0.5f), x, boost::math::tools::digits<T>());
+      }
+      else if(x < 1.1f)
+      {
+         // Compute Q:
+         invert = !invert;
+         result = tgamma_small_upper_part(T(0.5f), x, l);
+         result /= sqrt(boost::math::constants::pi<T>());
+      }
+      else
+      {
+         // Compute Q:
+         invert = !invert;
+         result = z * exp(-x);
+         result /= sqrt(boost::math::constants::pi<T>());
+         result *= upper_gamma_fraction(T(0.5f), x, tools::digits<T>());
+      }
    }
    if(invert)
       result = 1 - result;
