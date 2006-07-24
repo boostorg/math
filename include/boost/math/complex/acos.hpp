@@ -1,7 +1,6 @@
 //  (C) Copyright John Maddock 2005.
-//  Use, modification and distribution are subject to the
-//  Boost Software License, Version 1.0. (See accompanying file
-//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//  Distributed under the Boost Software License, Version 1.0. (See accompanying
+//  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MATH_COMPLEX_ACOS_INCLUDED
 #define BOOST_MATH_COMPLEX_ACOS_INCLUDED
@@ -104,7 +103,7 @@ std::complex<T> acos(const std::complex<T>& z)
       // Figure out if our input is within the "safe area" identified by Hull et al.
       // This would be more efficient with portable floating point exception handling;
       // fortunately the quantities M and u identified by Hull et al (figure 3), 
-      // match with the max() and min() methods of numeric_limits<T>.
+      // match with the max and min methods of numeric_limits<T>.
       //
       T safe_max = detail::safe_max(static_cast<T>(8));
       T safe_min = detail::safe_min(static_cast<T>(4));
@@ -189,8 +188,8 @@ std::complex<T> acos(const std::complex<T>& z)
             // 
             // E^2 > 8*sqrt(u); with:
             //
-            // E = std::numeric_limits<T>::epsilon()
-            // u = std::numeric_limits<T>::min()
+            // E =  std::numeric_limits<T>::epsilon()
+            // u = (std::numeric_limits<T>::min)()
             //
             // Hull et al provide alternative code for "bad" machines
             // but we have no way to test that here, so for now just assert
