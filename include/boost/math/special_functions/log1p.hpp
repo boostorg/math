@@ -18,10 +18,6 @@
 #  include <boost/assert.hpp>
 #endif
 
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std{ using ::fabs; using ::log; }
-#endif
-
 namespace boost{ namespace math{
 
 namespace detail
@@ -79,7 +75,7 @@ T log1p(T x)
       return log(1 + x);
    // Note that without numeric_limits specialisation support, 
    // epsilon just returns zero, and our "optimisation" will always fail:
-   if(a < std::numeric_limits<T>::epsilon())
+   if(a < tools::epsilon<T>())
       return x;
    detail::log1p_series<T> s(x);
    return tools::sum_series(s, tools::digits<T>() + 2);

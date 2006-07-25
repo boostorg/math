@@ -4,6 +4,8 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/concepts/real_concept.hpp>
+#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/sqrtp1m1.hpp>
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/tools/test.hpp>
@@ -11,8 +13,53 @@
 #include <boost/lambda/bind.hpp>
 #include <boost/array.hpp>
 
+#include "handle_test_result.hpp"
+
+//
+// DESCRIPTION:
+// ~~~~~~~~~~~~
+//
+// This file tests the functions powm1 and sqrtp1m1.  
+// The accuracy tests
+// use values generated with NTL::RR at 1000-bit precision
+// and our generic versions of these functions.
+//
+// Note that when this file is first run on a new platform many of
+// these tests will fail: the default accuracy is 1 epsilon which
+// is too tight for most platforms.  In this situation you will 
+// need to cast a human eye over the error rates reported and make
+// a judgement as to whether they are acceptable.  Either way please
+// report the results to the Boost mailing list.  Acceptable rates of
+// error are marked up below as a series of regular expressions that
+// identify the compiler/stdlib/platform/data-type/test-data/test-function
+// along with the maximum expected peek and RMS mean errors for that
+// test.
+//
+
+void expected_results()
+{
+   //
+   // Define the max and mean errors expected for
+   // various compilers and platforms.
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      ".*",                          // test type(s)
+      ".*",                          // test data group
+      ".*", 3, 2);                   // test function
+
+   //
+   // Finish off by printing out the compiler/stdlib/platform names,
+   // we do this to make it easier to mark up expected error rates.
+   //
+   std::cout << "Tests run with " << BOOST_COMPILER << ", " 
+      << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
+}
+
 template <class T>
-void test_powm1_sqrtp1m1(T, const char* name)
+void test_powm1_sqrtp1m1(T, const char* type_name)
 {
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 2>, 141> sqrtp1m1_data = {
@@ -1571,7 +1618,6 @@ void test_powm1_sqrtp1m1(T, const char* name)
 
    typedef T (*func_t)(const T&);
    func_t f = &boost::math::sqrtp1m1<T>;
-   T eps = ldexp(T(1.0), 1-boost::math::tools::digits<T>());
 
    boost::math::tools::test_result<T> result = boost::math::tools::test(
       sqrtp1m1_data, 
@@ -1579,8 +1625,8 @@ void test_powm1_sqrtp1m1(T, const char* name)
       ret<T>(_1[1]));
 
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
-      "Test results for type " << name << std::endl << std::endl;
-   std::cout << "sqrtp1m1 max error=" << ((result.stat.max)()/eps) << " at point " << sqrtp1m1_data[result.worst_case][0] << std::endl << std::endl;
+      "Test results for type " << type_name << std::endl << std::endl;
+   handle_test_result(result, sqrtp1m1_data[result.worst()], result.worst(), type_name, "boost::math::sqrtp1m1", "sqrtp1m1");
 
    typedef T (*func2_t)(T, T);
    func2_t f2 = &boost::math::powm1<T>;
@@ -1588,15 +1634,23 @@ void test_powm1_sqrtp1m1(T, const char* name)
       powm1_data, 
       bind(f2, ret<T>(_1[0]), ret<T>(_1[1])), 
       ret<T>(_1[2]));
-   std::cout << "powm1 max error=" << ((result.stat.max)()/eps) << " at point " << powm1_data[result.worst_case][0] << std::endl << std::endl;
+   handle_test_result(result, powm1_data[result.worst()], result.worst(), type_name, "boost::math::powm1", "powm1");
 }
 
-int main()
+int test_main(int, char* [])
 {
+   expected_results();
    test_powm1_sqrtp1m1(1.0F, "float");
    test_powm1_sqrtp1m1(1.0, "double");
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_powm1_sqrtp1m1(1.0L, "long double");
    test_powm1_sqrtp1m1(boost::math::concepts::real_concept(), "real_concept");
+#else
+   std::cout << "<note>The long double tests have been disabled on this platform "
+      "either because the long double overloads of the usual math functions are "
+      "not available at all, or because they are too inaccurate for these tests "
+      "to pass.</note>" << std::cout;
+#endif
    return 0;
 }
 

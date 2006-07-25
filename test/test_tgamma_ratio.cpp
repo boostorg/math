@@ -12,24 +12,88 @@
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
 
-template <class T, class Seq>
-void print_test_result(const boost::math::tools::test_result<T>& result, 
-                       const Seq& worst, int row, const char* name, const char* test)
+#include "handle_test_result.hpp"
+
+//
+// DESCRIPTION:
+// ~~~~~~~~~~~~
+//
+// This file tests the gamma ratio functions tgamma_ratio,
+// and tgamma_delta_ratio. The accuracy tests
+// use values generated with NTL::RR at 1000-bit precision
+// and our generic versions of these functions.
+//
+// Note that when this file is first run on a new platform many of
+// these tests will fail: the default accuracy is 1 epsilon which
+// is too tight for most platforms.  In this situation you will 
+// need to cast a human eye over the error rates reported and make
+// a judgement as to whether they are acceptable.  Either way please
+// report the results to the Boost mailing list.  Acceptable rates of
+// error are marked up below as a series of regular expressions that
+// identify the compiler/stdlib/platform/data-type/test-data/test-function
+// along with the maximum expected peek and RMS mean errors for that
+// test.
+//
+
+void expected_results()
 {
-   using namespace std;
-   T eps = pow(T(2), 1-boost::math::tools::digits<T>());
-   std::cout << setprecision(4);
-   std::cout << test << "(" << name << ") Max = " << (result.stat.max)()/eps
-      << " RMS Mean=" << result.stat.rms()/eps 
-      << "\n    worst case at row: " 
-      << row << "\n    { ";
-   for(unsigned i = 0; i < worst.size(); ++i)
+   //
+   // Define the max and mean errors expected for
+   // various compilers and platforms.
+   //
+   const char* largest_type;
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   if(boost::math::tools::digits<double>() == boost::math::tools::digits<long double>())
    {
-      if(i)
-         std::cout << ", ";
-      std::cout << worst[i];
+      largest_type = "(long\\s+)?double";
    }
-   std::cout << " }" << std::endl;
+   else
+   {
+      largest_type = "long double";
+   }
+#else
+   largest_type = "(long\\s+)?double";
+#endif
+
+
+   //
+   // Catch all cases come last:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*",                          // test data group
+      "boost::math::tgamma_delta_ratio[^|]*", 20, 10);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*",               // test data group
+      "boost::math::tgamma_ratio[^|]*", 40, 20);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*",                          // test data group
+      "boost::math::tgamma_delta_ratio[^|]*", 30, 15);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*",               // test data group
+      "boost::math::tgamma_ratio[^|]*", 150, 50);                 // test function
+
+   //
+   // Finish off by printing out the compiler/stdlib/platform names,
+   // we do this to make it easier to mark up expected error rates.
+   //
+   std::cout << "Tests run with " << BOOST_COMPILER << ", " 
+      << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
 template <class T>
@@ -55,14 +119,14 @@ void do_test_tgamma_delta_ratio(const T& data, const char* type_name, const char
          boost::lambda::ret<value_type>(boost::lambda::_1[0]),
          boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
       boost::lambda::ret<value_type>(boost::lambda::_1[2]));
-   print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::tgamma_delta_ratio(a, delta)");
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_delta_ratio(a, delta)", test_name);
    result = boost::math::tools::test(
       data, 
       boost::lambda::bind(funcp, 
          boost::lambda::ret<value_type>(boost::lambda::_1[0]),
          -boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
       boost::lambda::ret<value_type>(boost::lambda::_1[3]));
-   print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::tgamma_delta_ratio(a -delta)");
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_delta_ratio(a -delta)", test_name);
 }
 
 template <class T>
@@ -88,7 +152,7 @@ void do_test_tgamma_ratio(const T& data, const char* type_name, const char* test
          boost::lambda::ret<value_type>(boost::lambda::_1[0]),
          boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
       boost::lambda::ret<value_type>(boost::lambda::_1[2]));
-   print_test_result(result, data[result.worst_case], result.worst_case, type_name, "boost::math::tgamma_ratio(a, b)");
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_ratio(a, b)", test_name);
 }
 
 template <class T>
@@ -109,10 +173,19 @@ void test_tgamma_ratio(T, const char* name)
 
 int test_main(int, char* [])
 {
+   expected_results();
+
    test_tgamma_ratio(0.1F, "float");
    test_tgamma_ratio(0.1, "double");
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_tgamma_ratio(0.1L, "long double");
    test_tgamma_ratio(boost::math::concepts::real_concept(0.1), "real_concept");
+#else
+   std::cout << "<note>The long double tests have been disabled on this platform "
+      "either because the long double overloads of the usual math functions are "
+      "not available at all, or because they are too inaccurate for these tests "
+      "to pass.</note>" << std::cout;
+#endif
    return 0;
 }
 

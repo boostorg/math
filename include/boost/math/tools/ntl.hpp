@@ -163,7 +163,7 @@ NTL::RR epsilon<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
    return ldexp(NTL::RR(1), 1-digits<NTL::RR>());
 }
 
-void setprecision(std::ostream& os, NTL::RR, int p)
+void setprecision(std::ostream& /*os*/, NTL::RR, int p)
 {
    NTL::RR::SetOutputPrecision(p);
 }
@@ -259,7 +259,7 @@ NTL::quad_float epsilon<NTL::quad_float>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::
    return val;
 }
 
-void setprecision(std::ostream& os, NTL::quad_float, int p)
+void setprecision(std::ostream& /*os*/, NTL::quad_float, int p)
 {
    NTL::quad_float::SetOutputPrecision(p);
 }

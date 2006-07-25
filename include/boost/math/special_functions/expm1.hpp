@@ -10,15 +10,12 @@
 #include <math.h> // platform's ::expm1
 #include <boost/limits.hpp>
 #include <boost/math/tools/series.hpp>
+#include <boost/math/tools/precision.hpp>
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #  include <boost/static_assert.hpp>
 #else
 #  include <boost/assert.hpp>
-#endif
-
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std{ using ::exp; using ::fabs; }
 #endif
 
 namespace boost{ namespace math{

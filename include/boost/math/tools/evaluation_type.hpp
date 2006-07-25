@@ -41,7 +41,7 @@ struct evaluation<float>
 // as numeric_limits<long double> would give us no clue that we were
 // about to go out of range for a double.
 //
-#if !defined(__CYGWIN__)
+#if !defined(__CYGWIN__)  && !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 template<>
 struct evaluation<double>
 {

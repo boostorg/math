@@ -16,17 +16,86 @@
 #include <boost/lambda/bind.hpp>
 
 #include "test_beta_hooks.hpp"
+#include "handle_test_result.hpp"
 
+//
+// DESCRIPTION:
+// ~~~~~~~~~~~~
+//
+// This file tests the function beta.  There are two sets of tests, spot
+// tests which compare our results with selected values computed
+// using the online special function calculator at 
+// functions.wolfram.com, while the bulk of the accuracy tests
+// use values generated with NTL::RR at 1000-bit precision
+// and our generic versions of these functions.
+//
+// Note that when this file is first run on a new platform many of
+// these tests will fail: the default accuracy is 1 epsilon which
+// is too tight for most platforms.  In this situation you will 
+// need to cast a human eye over the error rates reported and make
+// a judgement as to whether they are acceptable.  Either way please
+// report the results to the Boost mailing list.  Acceptable rates of
+// error are marked up below as a series of regular expressions that
+// identify the compiler/stdlib/platform/data-type/test-data/test-function
+// along with the maximum expected peek and RMS mean errors for that
+// test.
+//
 
-template <class T>
-void print_test_result(const boost::math::tools::test_result<T>& result, 
-                       T worst, const char* name, const char* test)
+void expected_results()
 {
-   using namespace std;
-   T eps = pow(T(2), 1-boost::math::tools::digits<T>());
-   std::cout << setprecision(4);
-   std::cout << test << "(" << name << ") Max = " << (result.stat.max)()/eps
-      << " RMS Mean=" << result.stat.rms()/eps << " worst case at point: " << worst << std::endl;
+   //
+   // Define the max and mean errors expected for
+   // various compilers and platforms.
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "(long\\s+)?double",           // test type(s)
+      "Beta Function: Small.*",      // test data group
+      "boost::math::beta", 8, 5);    // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "(long\\s+)?double",           // test type(s)
+      "Beta Function: Medium.*",     // test data group
+      "boost::math::beta", 101, 35); // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "(long\\s+)?double",           // test type(s)
+      "Beta Function: Divergent.*",  // test data group
+      "boost::math::beta", 14, 6);   // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "real_concept",                // test type(s)
+      "Beta Function: Small.*",      // test data group
+      "boost::math::beta", 10, 6);   // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "real_concept",                // test type(s)
+      "Beta Function: Medium.*",     // test data group
+      "boost::math::beta", 60, 35);  // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "real_concept",                // test type(s)
+      "Beta Function: Divergent.*",  // test data group
+      "boost::math::beta", 15, 8);   // test function
+
+   //
+   // Finish off by printing out the compiler/stdlib/platform names,
+   // we do this to make it easier to mark up expected error rates.
+   //
+   std::cout << "Tests run with " << BOOST_COMPILER << ", " 
+      << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
 template <class T>
@@ -52,7 +121,7 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
          boost::lambda::ret<value_type>(boost::lambda::_1[0]),
          boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
       boost::lambda::ret<value_type>(boost::lambda::_1[2]));
-   print_test_result(result, data[result.worst_case][0], type_name, "boost::math::beta");
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::beta", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::beta;
@@ -62,7 +131,7 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
             boost::lambda::ret<value_type>(boost::lambda::_1[0]),
             boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
          boost::lambda::ret<value_type>(boost::lambda::_1[2]));
-      print_test_result(result, data[result.worst_case][0], type_name, "other::beta");
+      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::beta");
    }
 #endif
    std::cout << std::endl;
@@ -89,32 +158,50 @@ void test_beta(T, const char* name)
    do_test_beta(beta_exp_data, name, "Beta Function: Divergent Values");
 }
 
+#undef small // VC++ #defines small char !!!!!!
 template <class T>
 void test_spots(T)
 {
    //
-   // basic sanity checks, tolerance is 10 decimal places expressed as a percentage:
+   // basic sanity checks, tolerance is 10 epsilon expressed as a percentage:
    //
-   T tolerance = std::pow(10.0, -8);
+   T tolerance = boost::math::tools::epsilon<T>() * 10 * 100;
+   T small = boost::math::tools::epsilon<T>() / 1024;
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(1), static_cast<T>(1)), static_cast<T>(1), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(1), static_cast<T>(4)), static_cast<T>(0.25), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), static_cast<T>(1)), static_cast<T>(0.25), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(1e-50), static_cast<T>(4)), static_cast<T>(1e50), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), static_cast<T>(1e-50)), static_cast<T>(1e50), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::beta(small, static_cast<T>(4)), 1/small, tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), small), 1/small, tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), static_cast<T>(20)), static_cast<T>(0.00002823263692828910220214568040654997176736L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(0.0125), static_cast<T>(0.000023)), static_cast<T>(43558.24045647538375006349016083320744662L), tolerance);
 }
 
 int test_main(int, char* [])
 {
-   //test_spots(0.0F);
+   expected_results();
+   test_spots(0.0F);
    test_spots(0.0);
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L);
    test_spots(boost::math::concepts::real_concept(0.1));
+#else
+   std::cout << "<note>The long double tests have been disabled on this platform "
+      "either because the long double overloads of the usual math functions are "
+      "not available at all, or because they are too inaccurate for these tests "
+      "to pass.</note>" << std::cout;
+#endif
+
    test_beta(0.1F, "float");
    test_beta(0.1, "double");
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_beta(0.1L, "long double");
    test_beta(boost::math::concepts::real_concept(0.1), "real_concept");
+#else
+   std::cout << "<note>The long double tests have been disabled on this platform "
+      "either because the long double overloads of the usual math functions are "
+      "not available at all, or because they are too inaccurate for these tests "
+      "to pass.</note>" << std::cout;
+#endif
    return 0;
 }
 

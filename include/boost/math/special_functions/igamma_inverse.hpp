@@ -7,6 +7,7 @@
 #define BOOST_MATH_SPECIAL_FUNCTIONS_IGAMMA_INVERSE_HPP
 
 #include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/error_handling.hpp>
 
@@ -310,7 +311,7 @@ struct gamma_P_inverse_func
          if((fabs(div) > 1) && (tools::max_value<T>() / fabs(div) < f2))
          {
             // overflow:
-            f2 = tools::max_value<T>() / 2;
+            f2 = -tools::max_value<T>() / 2;
          }
          else
          {

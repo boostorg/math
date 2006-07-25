@@ -77,9 +77,9 @@ public:
    { m_value *= other.value(); return *this; }
    real_concept& operator/=(const real_concept& other)
    { m_value /= other.value(); return *this; }
-   real_concept operator-()
+   real_concept operator-()const
    { return -m_value; }
-   real_concept& operator+()
+   real_concept const& operator+()const
    { return *this; }
 
 private:

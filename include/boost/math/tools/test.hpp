@@ -8,6 +8,7 @@
 
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/test/test_tools.hpp>
 
 #if defined(__CYGWIN__)
 #define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
@@ -18,8 +19,23 @@ namespace boost{ namespace math{ namespace tools{
 template <class T>
 struct test_result
 {
+private:
    boost::math::tools::stats<T> stat;   // Statistics for the test.
    unsigned worst_case;                 // Index of the worst case test.
+public:
+   test_result() { worst_case = 0; }
+   void set_worst(int i){ worst_case = i; }
+   void add(const T& point){ stat.add(point); }
+   // accessors:
+   unsigned worst()const{ return worst_case; }
+   T min BOOST_PREVENT_MACRO_SUBSTITUTION()const{ return (stat.min)(); }
+   T max BOOST_PREVENT_MACRO_SUBSTITUTION()const{ return (stat.max)(); }
+   T total()const{ return stat.total(); }
+   T mean()const{ return stat.mean(); }
+   boost::uintmax_t count()const{ return stat.count(); }
+   T variance()const{ return stat.variance(); }
+   T variance1()const{ return stat.variance1(); }
+   T rms()const{ return stat.rms(); }
 
    test_result& operator+=(const test_result& t)
    {
@@ -114,7 +130,6 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
    typedef typename row_type::value_type  value_type;
 
    test_result<value_type> result;
-   result.worst_case = 0;
 
    for(unsigned i = 0; i < a.size(); ++i)
    {
@@ -138,16 +153,18 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
          std::cout << "CAUTION: Found non-finite result, when a finite value was expected at entry " << i << "\n";
          std::cout << "Found: " << point << " Expected " << expected << " Error: " << err << std::endl;
          print_row(row);
+         BOOST_ERROR("Unexpected non-finite result");
       }
       if(err > 0.5)
       {
          std::cout << "CAUTION: Gross error found at entry " << i << ".\n";
          std::cout << "Found: " << point << " Expected " << expected << " Error: " << err << std::endl;
          print_row(row);
+         BOOST_ERROR("Gross error");
       }
-      result.stat.add(err);
-      if((result.stat.max)() == err)
-         result.worst_case = i;
+      result.add(err);
+      if((result.max)() == err)
+         result.set_worst(i);
    }
    return result;
 }
