@@ -73,7 +73,6 @@ void expected_results()
 }
 
 template <class T>
-template <class T>
 void test_inverses(const T& data)
 {
    using namespace std;
@@ -140,15 +139,33 @@ template <class T>
 void test_spots(T)
 {
    //
-   // basic sanity checks, tolerance is 10 epsilon expressed as a percentage:
+   // basic sanity checks, tolerance is 100 epsilon expressed as a percentage:
    //
-   T tolerance = boost::math::tools::epsilon<T>() * 1000;
+   T tolerance = boost::math::tools::epsilon<T>() * 10000;
    BOOST_CHECK_CLOSE(
-      ::boost::math::ibeta(
-         static_cast<T>(0.015964560210704803),
-         static_cast<T>(1.1846856068586931e-005),
-         static_cast<T>(0.69176378846168518)),
-      static_cast<T>(0.0007508604820642986204162462167319506309750), tolerance);
+      ::boost::math::ibeta_inv(
+         static_cast<T>(1),
+         static_cast<T>(2),
+         static_cast<T>(0.5)),
+      static_cast<T>(0.29289321881345247559915563789515096071516406231153L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(3),
+         static_cast<T>(0.5),
+         static_cast<T>(0.5)),
+      static_cast<T>(0.92096723292382700385142816696980724853063433975470L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(20.125),
+         static_cast<T>(0.5),
+         static_cast<T>(0.5)),
+      static_cast<T>(0.98862133312917003480022776106012775747685870929920L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_inv(
+         static_cast<T>(40),
+         static_cast<T>(80),
+         static_cast<T>(0.5)),
+      static_cast<T>(0.33240456430025026300937492802591128972548660643778L), tolerance);
 }
 
 int test_main(int, char* [])

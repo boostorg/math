@@ -977,7 +977,8 @@ inline T tgamma_ratio(T a, T b)
 } // namespace math
 } // namespace boost
 
-#include <boost/math/special_functions/igamma_inverse.hpp>
+#include <boost/math/special_functions/detail/igamma_inverse.hpp>
+#include <boost/math/special_functions/detail/gamma_inva.hpp>
 #include <boost/math/special_functions/erf.hpp>
 
 #endif // BOOST_MATH_SF_GAMMA_HPP

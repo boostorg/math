@@ -73,6 +73,10 @@ initial guess is a long way from the correct value and the derivatives are close
 derivatives, and fall back to bisection in this case.  However, it is helpful
 if F is defined to return an arbitarily small value ['of the correct sign] rather
 than zero.
+* If the derivative at the current best guess for the result is infinite (or
+very close to being infinite) then these functions may terminate prematurely.
+An large first derivative leads to a very small next step, triggering the termination
+condition.  Derivative based iteration may not be appropriate in such cases.
 * These functions fall back to bisection if the next computed step would take the
 next value out of bounds.  The bounds are updated after each step to ensure this leads
 to convergenge.  However, a good initial guess backed up by asymptotically-tight

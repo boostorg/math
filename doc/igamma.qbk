@@ -125,7 +125,8 @@ naive implementation without special case handling since Legendre's continued fr
 
 [h4 Implementation]
 
-The implementation of these functions are all related since:
+These four functions share a common implementation since
+they are all related via:
 
 [$../equations/igamma5.png]
 
@@ -138,16 +139,16 @@ The lower incomplete gamma is computed from it's series representation:
 [$../equations/igamma8.png]
 
 Or by subtraction of the upper integral from either gamma(a) or 1
-when /x > max(a+1, 10)/.
+when /x > a and x > 1.1/.
 
 The upper integral is computed from Legendre's continued fraction representation:
 
 [$../equations/igamma9.png]
 
-When /x > 1/ or by subtraction of the lower integral from either gamma(a) or 1
-when /x < a+1/.
+When /x > 1.1/ or by subtraction of the lower integral from either gamma(a) or 1
+when /x < a/.
 
-For /x < 1/ computation of the upper integral is more complex as the continued 
+For /x < 1.1/ computation of the upper integral is more complex as the continued 
 fraction representation is inaccurate in this area.  However there is another 
 series representation for the lower integral:
 
@@ -168,6 +169,30 @@ gamma functions is likely to limited to approximately long double precision.
 
 The terms in square brackets in the above are evaluated as special
 functions in their own right to avoid cancellation errors.
+
+For /x < 1.1/ the crossover point where the result is ~0.5 no longer
+occurs for /x ~ y/.  Using /x * 1.1 < a/ as the crossover criterion
+for /0.5 < x <= 1.1 keeps the maximum value computed (whether
+it's the upper or lower interal) to around 0.6.   Likewise for
+/x <= 0.5/ then using /-0.4 / log(x) < a/ as the crossover criterion
+keeps the maximum value computed (whether
+it's the upper or lower interal) to around 0.7.
+
+There are two special cases used when a is an integer or half integer,
+and the crossover conditions listed above indicate that we should compute
+the upper integral Q.
+If a is an integer in the range /1 <= a < 30/ then the following 
+finite sum is used:
+
+[$../equations/igamma1f.png]
+
+While for half integers in the range /0.5 <= a < 30/ then the
+following finite sum is used:
+
+[$../equations/igamma2f.png]
+
+These are both more stable and more efficient than the continued fraction
+alternative.
 
 For the normalised incomplete gamma function's then calculation of the 
 leading power terms

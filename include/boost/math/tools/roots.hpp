@@ -17,6 +17,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
 #include <boost/throw_exception.hpp>
+#include <boost/math/special_functions/sign.hpp>
 
 #include <utility>
 #include <cmath>
@@ -51,7 +52,7 @@ void handle_zero_derivative(F f,
       last_f0 = std::tr1::get<0>(f(guess));
       delta = guess - result;
    }
-   if(last_f0 * f0 < 0)
+   if(sign(last_f0) * sign(f0) < 0)
    {
       // we've crossed over so move in opposite direction to last step:
       if(delta < 0)
@@ -112,7 +113,7 @@ T bisect(F f, T min, T max, int digits, boost::uintmax_t& max_iter)
    {
       if(fguess == 0)
          break;
-      else if(fguess * fmin < 0)
+      else if(sign(fguess) * sign(fmin) < 0)
       {
          max = guess;
          fmax = fguess;
