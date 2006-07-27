@@ -25,6 +25,7 @@ run test_fisher.cpp ;
 run test_gamma.cpp ;
 run test_ibeta.cpp ;
 run test_ibeta_inv.cpp ;
+run test_ibeta_inv_ab.cpp ;
 run test_igamma.cpp ;
 run test_igamma_inv.cpp ;
 # run test_minima.cpp ;
@@ -35,6 +36,7 @@ run test_roots.cpp ;
 run test_students_t.cpp ;
 run test_tgamma_ratio.cpp ;
 run test_toms748_solve.cpp ;
+
 
 
 

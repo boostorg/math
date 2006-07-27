@@ -977,6 +977,7 @@ T ibetac(T a, T b, T x)
 } // namespace boost
 
 #include <boost/math/special_functions/detail/ibeta_inverse.hpp>
+#include <boost/math/special_functions/detail/ibeta_inv_ab.hpp>
 
 #endif // BOOST_MATH_SPECIAL_BETA_HPP
 

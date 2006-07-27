@@ -32,6 +32,28 @@ private:
    T eps;
 };
 
+struct equal_floor
+{
+   equal_floor(){}
+   template <class T>
+   bool operator()(const T& a, const T& b)
+   {
+      using namespace std;
+      return floor(a) == floor(b);
+   }
+};
+
+struct equal_ceil
+{
+   equal_ceil(){}
+   template <class T>
+   bool operator()(const T& a, const T& b)
+   {
+      using namespace std;
+      return ceil(a) == ceil(b);
+   }
+};
+
 namespace detail{
 
 template <class F, class T>

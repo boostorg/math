@@ -4,14 +4,14 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //
-// This is not a complete header file, it is included by gamma.hpp
+// This is not a complete header file, it is included by beta.hpp
 // after it has defined it's definitions.  This inverts the incomplete
-// gamma functions P and Q on the first parameter "a" using a generic
-// root finding algorithm (TOMS Algorithm 748).
+// beta functions ibeta and ibetac on the first parameters "a"
+// and "b" using a generic root finding algorithm (TOMS Algorithm 748).
 //
 
-#ifndef BOOST_MATH_SP_DETAIL_GAMMA_INVA
-#define BOOST_MATH_SP_DETAIL_GAMMA_INVA
+#ifndef BOOST_MATH_SP_DETAIL_BETA_INV_AB
+#define BOOST_MATH_SP_DETAIL_BETA_INV_AB
 
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/cstdint.hpp>
@@ -19,20 +19,22 @@
 namespace boost{ namespace math{ namespace detail{
 
 template <class T>
-struct gamma_inva_t
+struct beta_inv_ab_t
 {
-   gamma_inva_t(T z_, T p_, bool invert_) : z(z_), p(p_), invert(invert_) {}
+   beta_inv_ab_t(T b_, T z_, T p_, bool invert_, bool swap_ab_) : b(b_), z(z_), p(p_), invert(invert_), swap_ab(swap_ab_) {}
    T operator()(T a)
    {
-      return invert ? p - boost::math::gamma_Q(a, z) : boost::math::gamma_P(a, z) - p;
+      return invert ? 
+         p - boost::math::ibetac(swap_ab ? b : a, swap_ab ? a : b, z) 
+         : boost::math::ibeta(swap_ab ? b : a, swap_ab ? a : b, z) - p;
    }
 private:
-   T z, p;
-   bool invert;
+   T b, z, p;
+   bool invert, swap_ab;
 };
 
 template <class T>
-T gamma_inva_imp(const T& z, const T& p, const T& q)
+T ibeta_inv_ab_imp(const T& b, const T& z, const T& p, const T& q, bool swap_ab)
 {
    using namespace std;  // for ADL of std lib math functions
    //
@@ -40,17 +42,17 @@ T gamma_inva_imp(const T& z, const T& p, const T& q)
    //
    if(p == 0)
    {
-      return tools::max_value<T>();
+      return swap_ab ? tools::min_value<T>() : tools::max_value<T>();
    }
    if(q == 0)
    {
-      return tools::min_value<T>();
+      return swap_ab ? tools::max_value<T>() : tools::min_value<T>();
    }
    //
    // Function object, this is the functor whose root
    // we have to solve:
    //
-   gamma_inva_t<T> f(z, (p < q) ? p : q, (p < q) ? false : true);
+   beta_inv_ab_t<T> f(b, z, (p < q) ? p : q, (p < q) ? false : true, swap_ab);
    //
    // Tolerance: full precision.
    //
@@ -63,23 +65,19 @@ T gamma_inva_imp(const T& z, const T& p, const T& q)
    // to bracket the root from there:
    //
    T guess;
-   if(z > 1.1)
+   if((p < q) != swap_ab)
    {
-      guess = z;
-   }
-   else if(z > 0.5)
-   {
-      guess = z * 1.2f;
+      guess = b * 2;
    }
    else
    {
-      guess = -0.4f / log(z);
+      guess = b / 2;
    }
    //
    // Max iterations permitted:
    //
    boost::uintmax_t max_iter = 200;
-   std::pair<T, T> r = bracket_and_solve_root(f, guess, static_cast<T>(2), false, tol, max_iter);
+   std::pair<T, T> r = bracket_and_solve_root(f, guess, static_cast<T>(5), swap_ab ? true : false, tol, max_iter);
    if(max_iter >= 200)
       tools::logic_error<T>(BOOST_CURRENT_FUNCTION, "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1", r.first);
    return (r.first + r.second) / 2;
@@ -88,19 +86,31 @@ T gamma_inva_imp(const T& z, const T& p, const T& q)
 } // namespace detail
 
 template <class T>
-inline T gamma_P_inva(T x, T p)
+inline T ibeta_inva(T b, T x, T p)
 {
-   return detail::gamma_inva_imp(x, p, 1 - p);
+   return detail::ibeta_inv_ab_imp(b, x, p, 1 - p, false);
 }
 
 template <class T>
-inline T gamma_Q_inva(T x, T q)
+inline T ibetac_inva(T b, T x, T q)
 {
-   return detail::gamma_inva_imp(x, 1 - q, q);
+   return detail::ibeta_inv_ab_imp(b, x, 1 - q, q, false);
+}
+
+template <class T>
+inline T ibeta_invb(T b, T x, T p)
+{
+   return detail::ibeta_inv_ab_imp(b, x, p, 1 - p, true);
+}
+
+template <class T>
+inline T ibetac_invb(T b, T x, T q)
+{
+   return detail::ibeta_inv_ab_imp(b, x, 1 - q, q, true);
 }
 
 } // namespace math
 } // namespace boost
 
-#endif // BOOST_MATH_SP_DETAIL_GAMMA_INVA
+#endif // BOOST_MATH_SP_DETAIL_BETA_INV_AB
 
