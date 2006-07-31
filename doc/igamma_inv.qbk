@@ -16,24 +16,57 @@
    template <class T>
    T gamma_P_inv(T a, T p);
    
+   template <class T>
+   T gamma_Q_inva(T x, T q);
+   
+   template <class T>
+   T gamma_P_inva(T x, T p);
+   
    }} // namespaces
    
 [h4 Description]
 
-There are two incomplete gamma function inverses which return the inverses
-of gamma_Q and gamma_P respectively.
+There are four incomplete gamma function inverses which either compute
+/x/ given /a/ and /p/ or /q/, or else compute /a/ given /x/ and either
+/p/ or /q/.
 
-Both of these function require /a > 0/ and /1 >= p,q >= 0/.
+[tip When people normally talk about the inverse of the incomplete
+gamma function, they are talking about inverting on parameter /x/.
+These are implemented here as gamma_P_inv and gamma_Q_inv, and are by
+far the most efficient of the inverses presented here.  \n\nThe inverse
+on the /a/ parameter finds use in some statistical
+applications but has to be computed by rather
+brute force numerical techniques and is consequently several times
+slower.]
+
 
    template <class T>
    T gamma_Q_inv(T a, T q);
 
 Returns a value x such that: `q = gamma_Q(a, x);`
 
+Requires: /a > 0/ and /1 >= p,q >= 0/.
+
    template <class T>
    T gamma_P_inv(T a, T p);
    
 Returns a value x such that: `p = gamma_P(a, x);`
+
+Requires: /a > 0/ and /1 >= p,q >= 0/.
+
+   template <class T>
+   T gamma_Q_inva(T x, T q);
+
+Returns a value a such that: `q = gamma_Q(a, x);`
+
+Requires: /x > 0/ and /1 >= p,q >= 0/.
+
+   template <class T>
+   T gamma_P_inva(T x, T p);
+   
+Returns a value a such that: `p = gamma_P(a, x);`
+
+Requires: /x > 0/ and /1 >= p,q >= 0/.
 
 [h4 Accuracy]
 
@@ -60,7 +93,7 @@ the accuracy of the result, given exact input values.
 
 [h4 Implementation]
 
-These two functions share a common implementation.
+The functions gamma_P_inv and gamma_Q_inv share a common implementation.
 
 First an initial approximation is computed using the methodology described
 in:
@@ -75,6 +108,16 @@ sufficient to ensure that the inverses are at least as accurate as the normal
 incomplete gamma functions.  In testing no more than 3 iterations are required
 to produce a result as accurate as the forward incomplete gamma function, and
 in many cases only one iteration is required.
+
+The functions gamma_P_inva and gamma_Q_inva also share a common implementation
+but are handled separately from gamma_P_inv and gamma_Q_inv.
+
+An initial approximation for /a/ is computed very crudely so that
+/gamma_P(a, x) ~ 0.5/, this value is then used as a starting point
+for a generic derivative-free root finding algorithm.  As a consequence
+these two functions are rather more expensive to compute than the 
+gamma_P_inv or gamma_Q_inv functions.  Even so, the root is usually found
+in fewer than 10 iterations.
 
 [endsect]
 

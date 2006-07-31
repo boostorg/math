@@ -16,24 +16,76 @@
    template <class T>
    T ibetac_inv(T a, T b, T q);
    
+   template <class T>
+   T ibeta_inva(T b, T x, T p);
+   
+   template <class T>
+   T ibetac_inva(T b, T x, T q);
+   
+   template <class T>
+   T ibeta_invb(T a, T x, T p);
+   
+   template <class T>
+   T ibetac_invb(T a, T x, T q);
+   
    }} // namespaces
    
 [h4 Description]
 
-There are two incomplete beta function inverses which return the inverses
-of ibeta and ibetac respectively.
+There are six incomplete beta function inverses which allow you solve for
+any of the three parameters to the incomplete beta, starting from either
+the result of the incomplete beta (p) or it's complement (q).
 
-Both of these function require /a,b > 0/ and /0 <= p,q <= 1/.
+[tip When people normally talk about the inverse of the incomplete
+beta function, they are talking about inverting on parameter /x/.
+These are implemented here as ibeta_inv and ibeta_invc, and are by
+far the most efficient of the inverses presented here.  \n\nThe inverses
+on the /a/ and /b/ parameters find use in some statistical
+applications but have to be computed by rather
+brute force numerical techniques and are consequently several times
+slower.]
 
    template <class T>
    T ibeta_inv(T a, T b, T p);
 
-Returns a value x such that: `p = ibeta(a, b, x);`
+Returns a value /x/ such that: `p = ibeta(a, b, x);`
+
+Requires:  /a,b > 0/ and /0 <= p,q <= 1/.
 
    template <class T>
    T ibetac_inv(T a, T b, T q);
    
-Returns a value x such that: `q = ibetac(a, b, x);`
+Returns a value /x/ such that: `q = ibetac(a, b, x);`
+
+Requires:  /a,b > 0/ and /0 <= p,q <= 1/.
+
+   template <class T>
+   T ibeta_inva(T b, T x, T p);
+
+Returns a value /a/ such that: `p = ibeta(a, b, x);`
+
+Requires:  /b > 0/, /0 < x < 1/ and /0 <= p,q <= 1/.
+
+   template <class T>
+   T ibetac_inva(T b, T x, T q);
+   
+Returns a value /a/ such that: `q = ibetac(a, b, x);`
+
+Requires:  /b > 0/, /0 < x < 1/ and /0 <= p,q <= 1/.
+
+   template <class T>
+   T ibeta_invb(T a, T x, T p);
+
+Returns a value /b/ such that: `p = ibeta(a, b, x);`
+
+Requires:  /a > 0/, /0 < x < 1/ and /0 <= p,q <= 1/.
+
+   template <class T>
+   T ibetac_invb(T a, T x, T q);
+   
+Returns a value /b/ such that: `q = ibetac(a, b, x);`
+
+Requires:  /a > 0/, /0 < x < 1/ and /0 <= p,q <= 1/.
 
 [h4 Accuracy]
 
@@ -58,7 +110,7 @@ back where you started.
 * Accuracy checks using high precision test values.  These measure
 the accuracy of the result, given exact input values.
 
-[h4 Implementation]
+[h4 Implementation of ibeta_inv and ibetac_inv]
 
 These two functions share a common implementation.
 
@@ -180,6 +232,18 @@ This doesn't guarentee that we will drop in on the right side of x for
 monotonic convergence, but it does get us close enough that Halley iteration
 rapidly converges on the true value.
 
+[h4 Implementation of inverses on the a and b parameters]
+
+These four functions share a common implementation.
+
+First an initial approximation is computed for /a/ or /b/ so that
+I[sub x](a, b) is near the middle of the range [0,1].  This is then
+used as a starting value for a generic root finding algorithm. The
+algorithm converges rapidly on the root once it has been
+bracketed, but bracketing the root may take several iterations.
+A better initial approximation for /a/ or /b/ would improve these
+functions quite substantially: currently 10-20 incomplete beta
+function invocations are required to find the root.
 
 [endsect]
 
