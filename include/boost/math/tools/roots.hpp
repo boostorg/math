@@ -18,6 +18,8 @@
 #include <boost/assert.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/math/special_functions/sign.hpp>
+#include <boost/math/tools/toms748_solve.hpp>
+
 
 #include <utility>
 #include <cmath>
@@ -80,69 +82,73 @@ void handle_zero_derivative(F f,
 
 } // namespace
 
-template <class F, class T>
-T bisect(F f, T min, T max, int digits, boost::uintmax_t& max_iter)
+template <class F, class T, class Tol>
+std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter)
 {
-   T guess = (max + min) / 2;
-   T factor = static_cast<T>(ldexp(1.0, 1 - digits));
-
    T fmin = f(min);
    T fmax = f(max);
-   T fguess = f(guess);
    if(fmin == 0)
-      return min;
+      return std::make_pair(min, min);
    if(fmax == 0)
-      return max;
-   if(fguess == 0)
-      return guess;
+      return std::make_pair(max, max);
 
+   //
+   // Error checking:
+   //
    if(min >= max)
    {
-      std::invalid_argument e("Arguments in wrong order in boost::math::tools::bisect");
-      boost::throw_exception(e);
+      tools::logic_error(BOOST_CURRENT_FUNCTION, 
+         "Arguments in wrong order in boost::math::tools::bisect (first arg=%1%)", min);
    }
    if(fmin * fmax >= 0)
    {
-      std::logic_error e("No change of sign in boost::math::tools::bisect, either there is no root to find, or there are multiple roots in the interval.");
-      boost::throw_exception(e);
+      tools::logic_error(BOOST_CURRENT_FUNCTION, 
+         "No change of sign in boost::math::tools::bisect, either there is no root to find, or there are multiple roots in the interval (f(min) = %1%).", fmin);
    }
 
+   //
+   // Three function invocations so far:
+   //
    boost::uintmax_t count = max_iter;
+   if(count < 3)
+      count = 0;
+   else
+      count -= 3;
 
-   do
+   while(count && (0 == tol(min, max)))
    {
-      if(fguess == 0)
+      T mid = (min + max) / 2;
+      T fmid = f(mid);
+      if((mid == max) || (mid == min))
          break;
-      else if(sign(fguess) * sign(fmin) < 0)
+      if(fmid == 0)
       {
-         max = guess;
-         fmax = fguess;
-         guess = (guess + min) / 2;
-         fguess = f(guess);
-         if(guess == max)
-            break;
+         min = max = mid;
+         break;
+      }
+      else if(sign(fmid) * sign(fmin) < 0)
+      {
+         max = mid;
+         fmax = fmid;
       }
       else
       {
-         min = guess;
-         fmin = fguess;
-         guess = (guess + max) / 2;
-         fguess = f(guess);
-         if(guess == min)
-            break;
+         min = mid;
+         fmin = fmid;
       }
-   }while(--max_iter && (max - min > factor * guess));
+      --count;
+   }
 
    max_iter -= count;
 
-   return guess;
+   return std::make_pair(min, max);
 }
 
-template <class F, class T>
-T bisect(F f, T min, T max, int digits)
+template <class F, class T, class Tol>
+std::pair<T, T> bisect(F f, T min, T max, Tol tol)
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
-   return bisect(f, min, max, digits, m);
+   return bisect(f, min, max, tol, m);
 }
 
 template <class F, class T>
@@ -451,7 +457,6 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits)
 } // namespace tools
 } // namespace math
 } // namespace boost
-
 
 #endif // BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
 

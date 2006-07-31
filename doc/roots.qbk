@@ -1,4 +1,4 @@
-[section Root Finding]
+[section Root Finding With Derivatives]
 
 [caution __caution ]
 
@@ -9,12 +9,6 @@
 ``
 
    namespace boost{ namespace math{ namespace tools{
-   
-   template <class F, class T>
-   T bisect(F f, T min, T max, int digits);
-   
-   template <class F, class T>
-   T bisect(F f, T min, T max, int digits, boost::uintmax_t& max_iter);
    
    template <class F, class T>
    T newton_raphson_iterate(F f, T guess, T min, T max, int digits);
@@ -38,8 +32,7 @@
 
 [h4 Description]
 
-These functions all perform the iterative root finding: `bisect` finds the root using
-bisection, `newton_raphson_iterate`
+These functions all perform the iterative root finding: `newton_raphson_iterate`
 performs second order [link newton Newton Raphson iteration], while `halley_iterate` and
 `schroeder_iterate` perform third order [link halley Halley] and 
 [link schroeder Schroeder] iteration respectively.
@@ -49,7 +42,6 @@ The functions all take the same parameters:
 [variablelist Parameters of the root finding functions
 [[F f] [Type F must be a callable function object that accepts one parameter and 
         returns a tuple:\n\n
-        For a first order method (bisection) returns a single value.\n\n
         For the second order iterative methods (Newton Raphson)
         the tuple should have two elements containing the evaluation
         of the function and it's first derivative.\n\n

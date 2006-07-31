@@ -253,7 +253,7 @@ T cubic_interpolate(const T& a, const T& b, const T& d,
 } // namespace detail
 
 template <class F, class T, class Tol>
-std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const T& fab, Tol tol, boost::uintmax_t& max_iter)
+std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const T& fbx, Tol tol, boost::uintmax_t& max_iter)
 {
    //
    // Main entry point and logic for Toms Algorithm 748
@@ -261,20 +261,19 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
    //
    using namespace std;  // For ADL of std math functions
 
-   boost::uintmax_t count;
+   boost::uintmax_t count = max_iter;
    T a, b, fa, fb, c, u, fu, a0, b0, d, fd, e, fe;
    static const T mu = 0.5f;
 
    // initialise a, b and fa, fb:
    a = ax;
    b = bx;
-   count = 0;
    if(a >= b)
       tools::domain_error(
          BOOST_CURRENT_FUNCTION, 
          "Parameters a and b out of order: a=%1%", a);
    fa = fax;
-   fb = fab;
+   fb = fbx;
    if(boost::math::sign(fa) * boost::math::sign(fb) > 0)
       tools::domain_error(
          BOOST_CURRENT_FUNCTION, 
@@ -289,8 +288,9 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       //
       c = detail::secant_interpolate(a, b, fa, fb);
       detail::bracket(f, a, b, c, fa, fb, d, fd);
+      --count;
 
-      if(fa != 0)
+      if(count && (fa != 0))
       {
          //
          // On the second step we take a quadratic interpolation:
@@ -299,10 +299,11 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
          e = d;
          fe = fd;
          detail::bracket(f, a, b, c, fa, fb, d, fd);
+         --count;
       }
    }
 
-   while((fa != 0) && !tol(a, b) && (++count != max_iter))
+   while(count && (fa != 0) && !tol(a, b))
    {
       // save our brackets:
       a0 = a;
@@ -330,7 +331,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       e = d;
       fe = fd;
       detail::bracket(f, a, b, c, fa, fb, d, fd);
-      if((fa == 0) || tol(a, b))
+      if((0 == --count) || (fa == 0) || tol(a, b))
          break;
       //
       // Now another interpolated step:
@@ -348,7 +349,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       // Bracket again, and check termination condition, update e:
       //
       detail::bracket(f, a, b, c, fa, fb, d, fd);
-      if((fa == 0) || tol(a, b))
+      if((0 == --count) || (fa == 0) || tol(a, b))
          break;
       //
       // Now we take a double-length secant step:
@@ -374,7 +375,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       e = d;
       fe = fd;
       detail::bracket(f, a, b, c, fa, fb, d, fd);
-      if((fa == 0) || tol(a, b))
+      if((0 == --count) || (fa == 0) || tol(a, b))
          break;
       //
       // And finally... check to see if an additional bisection step is 
@@ -388,9 +389,10 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       e = d;
       fe = fd;
       detail::bracket(f, a, b, a + (b - a) / 2, fa, fb, d, fd);
+      --count;
    } // while loop
 
-   max_iter = count;
+   max_iter -= count;
    if(fa == 0)
    {
       b = a;
@@ -405,16 +407,26 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
 template <class F, class T, class Tol>
 inline std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, Tol tol, boost::uintmax_t& max_iter)
 {
-   return toms748_solve(f, ax, bx, f(ax), f(bx), tol, max_iter);
+   max_iter -= 2;
+   std::pair<T, T> r = toms748_solve(f, ax, bx, f(ax), f(bx), tol, max_iter);
+   max_iter += 2;
+   return r;
 }
 
 template <class F, class T, class Tol>
 std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, bool rising, Tol tol, boost::uintmax_t& max_iter)
 {
+   //
+   // Set up inital brackets:
+   //
    T a = guess;
    T b = a;
    T fa = f(a);
    T fb = fa;
+   //
+   // Set up invocation count:
+   //
+   boost::uintmax_t count = max_iter - 1;
 
    if((fa < 0) == rising)
    {
@@ -424,10 +436,13 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, boo
       //
       while(sign(fb) == sign(fa))
       {
+         if(count == 0)
+            tools::logic_error(BOOST_CURRENT_FUNCTION, "Unable to bracket root, last nearest value was %1%", b);
          a = b;
          fa = fb;
          b *= factor;
          fb = f(b);
+         --count;
       }
    }
    else
@@ -438,13 +453,20 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, boo
       //
       while(sign(fb) == sign(fa))
       {
+         if(count == 0)
+            tools::logic_error(BOOST_CURRENT_FUNCTION, "Unable to bracket root, last nearest value was %1%", a);
          b = a;
          fb = fa;
          a /= factor;
          fa = f(a);
+         --count;
       }
    }
-   return toms748_solve(f, a, b, fa, fb, tol, max_iter);
+   max_iter -= count;
+   max_iter += 1;
+   std::pair<T, T> r = toms748_solve(f, a, b, fa, fb, tol, count);
+   max_iter += count;
+   return r;
 }
 
 } // namespace tools

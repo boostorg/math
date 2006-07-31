@@ -118,7 +118,8 @@ double inverse_ibeta_bisect(double a, double b, double z)
 
    double min = 0;
    double max = 1;
-   return boost::math::tools::bisect(ibeta_roots_1<double, L>(a, b, z, invert), min, max, precision);
+   boost::math::tools::eps_tolerance<double> tol(precision);
+   return boost::math::tools::bisect(ibeta_roots_1<double, L>(a, b, z, invert), min, max, tol).first;
 }
 
 double inverse_ibeta_newton(double a, double b, double z)

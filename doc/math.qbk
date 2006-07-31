@@ -92,6 +92,7 @@ data and/or data for output to an external graphing application.
 [include fraction.qbk]
 [include rational.qbk]
 [include roots.qbk]
+[include roots_without_derivatives.qbk]
 [include polynomial.qbk]
 [include relative_error.qbk]
 [include test_data.qbk]
