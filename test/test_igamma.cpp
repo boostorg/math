@@ -275,6 +275,13 @@ void test_spots(T)
    BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(0.9999999999999999999999999999999999998386069466302L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(1.5), static_cast<T>(2)), static_cast<T>(0.73853587005088937779717792402407879809718939080921L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(20.5), static_cast<T>(22)), static_cast<T>(0.65424667956532673185028409120341593367429721070928L), tolerance);
+
+   // naive check on derivative function:
+   using namespace std;  // For ADL of std functions
+   tolerance = boost::math::tools::epsilon<T>() * 5000; // 50 eps
+   BOOST_CHECK_CLOSE(::boost::math::gamma_P_derivative(static_cast<T>(20.5), static_cast<T>(22)), 
+      exp(static_cast<T>(-22)) * pow(static_cast<T>(22), static_cast<T>(19.5)) / boost::math::tgamma(static_cast<T>(20.5)), tolerance);
+
 }
 
 int test_main(int, char* [])

@@ -81,6 +81,7 @@ data and/or data for output to an external graphing application.
 [include beta.qbk]
 [include ibeta.qbk]
 [include ibeta_inv.qbk]
+[include beta_gamma_derivatives.qbk]
 [include fpclassify.qbk]
 [include error_handling.qbk]
 

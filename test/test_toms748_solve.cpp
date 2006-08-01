@@ -120,6 +120,7 @@ void run_test(T a, T b, int id)
       b, 
       boost::math::tools::eps_tolerance<double>(std::numeric_limits<double>::digits), 
       c);
+   BOOST_CHECK_EQUAL(c, toms748tester<double>::total_calls());
    total += c;
    invocations += toms748tester<double>::total_calls();
    std::cout << "Function " << id << "\nresult={" << r.first << ", " << r.second << "} total calls=" << toms748tester<double>::total_calls() << "\n\n";
@@ -135,6 +136,7 @@ void run_test(T a, T b, int id, int p)
       b, 
       boost::math::tools::eps_tolerance<double>(std::numeric_limits<double>::digits), 
       c);
+   BOOST_CHECK_EQUAL(c, toms748tester<double>::total_calls());
    total += c;
    invocations += toms748tester<double>::total_calls();
    std::cout << "Function " << id << "\nresult={" << r.first << ", " << r.second << "} total calls=" << toms748tester<double>::total_calls() << "\n\n";
@@ -150,6 +152,7 @@ void run_test(T a, T b, int id, T p1, T p2)
       b, 
       boost::math::tools::eps_tolerance<double>(std::numeric_limits<double>::digits), 
       c);
+   BOOST_CHECK_EQUAL(c, toms748tester<double>::total_calls());
    total += c;
    invocations += toms748tester<double>::total_calls();
    std::cout << "Function " << id << "\n   Result={" << r.first << ", " << r.second << "} total calls=" << toms748tester<double>::total_calls() << "\n\n";
@@ -259,7 +262,7 @@ int test_main(int, char* [])
       std::cout << std::setprecision(18);
       std::cout << "Function " << 4 << "\n   Result={" << r.first << ", " << r.second << "} total calls=" << toms748tester<double>::total_calls() << "\n\n";
       toms748tester<double>::reset();
-      BOOST_CHECK(c < 5);
+      BOOST_CHECK(c < 20);
    }
 
    return 0;

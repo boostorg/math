@@ -926,6 +926,51 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
    return invert ? (normalised ? 1 : beta_imp(a, b, l)) - fract : fract;
 } // template <class T, class L>T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
 
+template <class T, class L>
+T ibeta_derivative_imp(T a, T b, T x, const L& l)
+{
+   //
+   // start with the usual error checks:
+   //
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function must be greater than zero (got a=%1%).", a);
+   if(b <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function must be greater than zero (got b=%1%).", b);
+   if((x < 0) || (x > 1))
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Parameter x outside the range [0,1] in the incomplete beta function (got x=%1%).", x);
+   //
+   // Now the corner cases:
+   //
+   if(x == 0)
+   {
+      return (a > 1) ? 0 : 
+         (a == 1) ? 1 : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+   }
+   else if(x == 1)
+   {
+      return (b > 1) ? 0 :
+         (b == 1) ? 1 : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+   }
+   //
+   // Now the regular cases:
+   //
+   T f1 = ibeta_power_terms(a, b, x, 1 - x, l, true);
+   T y = (1 - x) * x;
+
+   if(f1 == 0)
+      return 0;
+   
+   if((tools::max_value<T>() * y < f1))
+   {
+      // overflow:
+      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+   }
+
+   f1 /= y;
+
+   return f1;
+}
+
 } // namespace detail
 
 //
@@ -971,6 +1016,14 @@ T ibetac(T a, T b, T x)
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, true), BOOST_CURRENT_FUNCTION);
+}
+
+template <class T>
+T ibeta_derivative(T a, T b, T x)
+{
+   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<T>(detail::ibeta_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 } // namespace math

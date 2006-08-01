@@ -319,6 +319,16 @@ void test_spots(T)
          static_cast<T>(1),
          static_cast<T>(0.32)),
       static_cast<T>(0.948565954109602496577407403168592262389L), tolerance);
+
+   // very naive check on derivative:
+   using namespace std;  // For ADL of std functions
+   tolerance = boost::math::tools::epsilon<T>() * 10000; // 100 eps
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta_derivative(
+         static_cast<T>(2),
+         static_cast<T>(3),
+         static_cast<T>(0.5)),
+         pow(static_cast<T>(0.5), static_cast<T>(2)) * pow(static_cast<T>(0.5), static_cast<T>(1)) / boost::math::beta(static_cast<T>(2), static_cast<T>(3)), tolerance);
 }
 
 int test_main(int, char* [])

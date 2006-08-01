@@ -873,6 +873,39 @@ T tgamma_delta_ratio_imp(T z, T delta, const lanczos::undefined_lanczos&)
    return sum * prefix;
 }
 
+template <class T, class L>
+T gamma_P_derivative_imp(T a, T x, const L& l)
+{
+   //
+   // Usual error checks first:
+   //
+   if(a <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a);
+   if(x < 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x);
+   //
+   // Now special cases:
+   //
+   if(x == 0)
+   {
+      return (a > 1) ? 0 :
+         (a == 1) ? 1 : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+   }
+   //
+   // Normal case:
+   //
+   T f1 = detail::regularised_gamma_prefix(a, x, l);
+   if((x < 1) && (tools::max_value<T>() * x < f1))
+   {
+      // overflow:
+      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+   }
+
+   f1 /= x;
+   
+   return f1;
+}
+
 } // namespace detail
 
 template <class T>
@@ -972,6 +1005,14 @@ inline T tgamma_ratio(T a, T b)
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b - a), evaluation_type()), BOOST_CURRENT_FUNCTION);
+}
+
+template <class T>
+T gamma_P_derivative(T a, T x)
+{
+   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<T>(detail::gamma_P_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(x), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 } // namespace math
