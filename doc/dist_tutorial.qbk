@@ -178,7 +178,7 @@ different from this colloquialism.  More background information can be found
 
 The formula for the interval can be expressed as:
 
-Y[sub s] +- t[sub (__alpha/2,N-1)] * s / sqrt(N)
+[$../equations/dist_tutorial4.png]
 
 Where, ['Y[sub s]] is the sample mean, /s/ is the sample standard deviation, 
 /N/ is the sample size, /__alpha/ is the desired significance level and 
@@ -192,7 +192,7 @@ From the formula it should be clear that:
 * The width increases as the confidence level gets smaller (stronger).
 
 The following example code is taken from the example program
-students_t_single_sample.cpp.
+[@../../example/students_t_single_sample.cpp students_t_single_sample.cpp].
 
 We'll begin by defining a procedure to calculate intervals for 
 various confidence levels, the procedure will print these out
@@ -333,7 +333,7 @@ on the NIST site].
 often a "traditional" method of measurement).
 
 The following example code is taken from the example program
-students_t_single_sample.cpp.
+[@../../example/students_t_single_sample.cpp students_t_single_sample.cpp].
 
 We'll begin by defining a procedure to determine which of the
 possible hypothesis are accepted or rejected at a given confidence level:
@@ -418,9 +418,9 @@ calibration and stability analysis.
    Results for Alternative Hypothesis and alpha           =  0.0500
 
    Alternative Hypothesis     Conclusion
-   Mean != 5.000            ACCEPTED
-   Mean  < 5.000            REJECTED
-   Mean  > 5.000            ACCEPTED
+   Mean != 5.000              ACCEPTED
+   Mean  < 5.000              REJECTED
+   Mean  > 5.000              ACCEPTED
 
 You will note the line that says the probability that the difference is
 due to chance is zero.  From a philosophical point of view, of course,
@@ -454,9 +454,9 @@ atomic absorption.
    Results for Alternative Hypothesis and alpha           =  0.0500
 
    Alternative Hypothesis     Conclusion
-   Mean != 38.900            REJECTED
-   Mean  < 38.900            REJECTED
-   Mean  > 38.900            REJECTED
+   Mean != 38.900             REJECTED
+   Mean  < 38.900             REJECTED
+   Mean  > 38.900             REJECTED
 
 As you can see the small number of measurements (3) has led a large uncertainty
 in the location of the true mean.  So even though there is a clear difference
@@ -482,9 +482,9 @@ we see a different output:
    Results for Alternative Hypothesis and alpha           =  0.1000
 
    Alternative Hypothesis     Conclusion
-   Mean != 38.900            ACCEPTED
-   Mean  < 38.900            ACCEPTED
-   Mean  > 38.900            REJECTED
+   Mean != 38.900             ACCEPTED
+   Mean  < 38.900             ACCEPTED
+   Mean  > 38.900             REJECTED
 
 In this case we really have a borderline result, and more data should
 be collected.
@@ -501,7 +501,8 @@ result is borderline.  At this point one might go off and collect more data,
 but first ask the question "How much more?".  The parameter estimators of the
 students_t_distribution class can provide this information.
 
-This section is based on the example code in students_t_single_sample.cpp
+This section is based on the example code in 
+[@../../example/students_t_single_sample.cpp students_t_single_sample.cpp]
 and we begin by defining a procedure that will print out a table of
 estimated sample sizes for various confidence levels:
 
@@ -593,6 +594,9 @@ In this example, we'll be using the
 Car Mileage sample data] from the 
 [@http://www.itl.nist.gov NIST website].  The data compares
 miles per gallon of US cars with miles per gallon of Japanese cars.
+
+The sample code is in 
+[@../../example/students_t_two_samples.cpp students_t_two_samples.cpp].
 
 There are two ways in which this test can be conducted: we can assume
 that the true standard deviations of the two samples are equal or not.
@@ -693,7 +697,7 @@ skip over that, and take a look at the sample output for alpha=0.05
 
    Results for Alternative Hypothesis and alpha           =  0.0500
 
-   Alternative Hypothesis     Conclusion
+   Alternative Hypothesis              Conclusion
    Sample 1 Mean != Sample 2 Mean       ACCEPTED
    Sample 1 Mean <  Sample 2 Mean       ACCEPTED
    Sample 1 Mean >  Sample 2 Mean       REJECTED
@@ -717,7 +721,11 @@ And for the combined degress of freedom we have:
 
 [$../equations/dist_tutorial3.png]
 
-Putting these into code that produces:
+Note that this is one of the rare situation where the degrees-of-freedom
+parameter to the Student's t distribution is a real number, and not an
+integer value.
+
+Putting these formulae into code we get:
 
    // Degrees of freedom:
    double v = Sd1 * Sd1 / Sn1 + Sd2 * Sd2 / Sn2;
@@ -734,7 +742,7 @@ Putting these into code that produces:
    double t_stat = (Sm1 - Sm2) / sqrt(Sd1 * Sd1 / Sn1 + Sd2 * Sd2 / Sn2);
    cout << setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
 
-Thereafter the code and the tests are performed the same as before, using
+Thereafter the code and the tests are performed the same as before.  Using
 are car mileage data again, here's what the output looks like:
 
    __________________________________________________
@@ -753,7 +761,7 @@ are car mileage data again, here's what the output looks like:
 
    Results for Alternative Hypothesis and alpha           =  0.0500
 
-   Alternative Hypothesis     Conclusion
+   Alternative Hypothesis              Conclusion
    Sample 1 Mean != Sample 2 Mean       ACCEPTED
    Sample 1 Mean <  Sample 2 Mean       ACCEPTED
    Sample 1 Mean >  Sample 2 Mean       REJECTED
@@ -763,6 +771,129 @@ a higher likelyhood that the observed difference is down to chance alone
 (7.855e-026 compared to 2.637e-030 when equal variances were assumed).
 However, the conclusion remains the same: US cars are less fuel efficient
 than Japanese models.
+
+[endsect]
+
+[section:size2 Estimating how large a sample size would have to become
+in order to give a significant Students-t test result with a two sample test]
+
+Imagine that you have compare the means of two samples with a Student's-t test
+and that the result is borderline.  The question one would like to ask is
+"How large would the two samples have to become in order for the observed
+difference to be significant?"
+
+The student's t distribution has two parameter-estimators that can be used
+for this purpose.  However, the problem domain is rather more complex
+than it is for the single sample case.  Firstly we have two sample sizes
+to deal with: this can be handled by assuming either than one of the sample
+sizes is fixed (as happens when comparing against historical data), or by
+assuming that both sample sizes are always equal.  Secondly, the estimators
+always assume that the variances of the two samples are equal, without this
+assumption it's impossible to relate the sample sizes to the number of degrees
+of freedom in any direct way.
+
+In this example, we'll be using the 
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda3531.htm
+Car Mileage sample data] from the 
+[@http://www.itl.nist.gov NIST website].  The data compares
+miles per gallon of US cars with miles per gallon of Japanese cars.
+
+The sample code is in 
+[@../../example/students_t_two_samples.cpp students_t_two_samples.cpp].
+
+We'll define a procedure that prints a table of sample size estimates
+required to obtain a range of statistical outcomes.
+
+   void two_samples_estimate_df(
+      double m1,             // m1 = Sample 1 Mean.
+      double s1,             // s1 = Sample 1 Standard Deviation.
+      unsigned n1,           // n1 = Sample 1 Size.
+      double m2,             // m2 = Sample 2 Mean.
+      double s2)             // s2 = Sample 2 Standard Deviation.
+   {
+      using namespace std;
+      using namespace boost::math;
+
+      // Print out general info:
+      cout << 
+         "_____________________________________________________________\n"
+         "Estimated sample sizes required for various confidence levels\n"
+         "_____________________________________________________________\n\n";
+      cout << setprecision(5);
+      cout << setw(40) << left << "Sample 1 Mean" << "=  " << m1 << "\n";
+      cout << setw(40) << left << "Sample 1 Standard Deviation" << "=  " << s1 << "\n";
+      cout << setw(40) << left << "Sample 1 Size" << "=  " << n1 << "\n";
+      cout << setw(40) << left << "Sample 2 Mean" << "=  " << m2 << "\n";
+      cout << setw(40) << left << "Sample 2 Standard Deviation" << "=  " << s2 << "\n";
+
+Next we define a table of confidence levels:
+
+   double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
+
+Most of the rest of the code is pretty-printing, so let's skip to
+calculation of the sample size. For each alpha value, we use
+each of the two parameter estimators to obtain the degrees of freedom
+required. The arguments are wrapped in a call to `complement(...)`
+since the significance levels are the complement of the probability:
+
+      // calculate df assuming equal sample sizes:
+      double df = students_t::estimate_two_equal_degrees_of_freedom(
+         complement(m1, s1, m2, s2, alpha[i]));
+      // convert to sample size:
+      double size = (ceil(df) + 2) / 2; 
+      // Print size:
+      cout << fixed << setprecision(0) << setw(28) << right << size;
+      // calculate df with sample 1 size fixed:
+      df = students_t::estimate_two_unequal_degrees_of_freedom(
+         complement(m1, s1, n1, m2, s2, alpha[i]));
+      // convert to sample size:
+      size = (ceil(df) + 2) - n1; 
+      // Print size:
+      cout << fixed << setprecision(0) << setw(28) << right << size << endl;
+
+And other than printing the result that's pretty much it.  Let's see some 
+sample output using the fuel efficiency data:
+
+   _____________________________________________________________
+   Estimated sample sizes required for various confidence levels
+   _____________________________________________________________
+
+   Sample 1 Mean                           =  20.14458
+   Sample 1 Standard Deviation             =  6.41470
+   Sample 1 Size                           =  249
+   Sample 2 Mean                           =  30.48101
+   Sample 2 Standard Deviation             =  6.10771
+   
+   _______________________________________________________________________
+   Confidence     Estimated Sample Size          Estimated Sample 2 Size
+    Value (%)     (With Two Equal Sizes)        (With Fixed Sample 1 Size)
+   _______________________________________________________________________
+       50.000                           1                           0
+       75.000                           2                           1
+       90.000                           3                           1
+       95.000                           4                           2
+       99.000                           6                           3
+       99.900                          10                           4
+       99.990                          14                           6
+       99.999                          18                           8
+
+So in order to achieve a 95% confidence level we would only need to
+compare 4 American cars with 4 Japanese cars.  Alternatively, comparing
+just 3 Japanese cars against the data for all 249 American cars would yield
+a 99% probability that the Japanese cars were more efficient.  However, at
+this point a word of caution is in order: comparing just 4 cars from each
+country is unlikely to win you friends and admirers.  As ever a measure of
+common sense, and some analysis of the problem domain is needed when 
+interpretting such results.
+
+Finally, you will note that the table contains some "nonesence" values
+of 0 or 1: these arise if ['there is no solution to the question posed], and
+/any/ valid value for the degrees of freedom will cause the null-hypothesis
+to fail at the significance level given.
+
+[endsect]
+
+[section:paired_t Comparing two paired samples with the Student's t distribution]
 
 [endsect]
 

@@ -77,7 +77,7 @@ void two_samples_t_test(
    cout << setw(55) << left << 
       "Results for Alternative Hypothesis and alpha" << "=  " 
       << setprecision(4) << fixed << alpha << "\n\n";
-   cout << "Alternative Hypothesis     Conclusion\n";
+   cout << "Alternative Hypothesis              Conclusion\n";
    cout << "Sample 1 Mean != Sample 2 Mean       " ;
    if(q < alpha)
       cout << "ACCEPTED\n";
@@ -160,7 +160,7 @@ void two_samples_t_test_equal_sd(
    cout << setw(55) << left << 
       "Results for Alternative Hypothesis and alpha" << "=  " 
       << setprecision(4) << fixed << alpha << "\n\n";
-   cout << "Alternative Hypothesis     Conclusion\n";
+   cout << "Alternative Hypothesis              Conclusion\n";
    cout << "Sample 1 Mean != Sample 2 Mean       " ;
    if(q < alpha)
       cout << "ACCEPTED\n";
@@ -179,16 +179,13 @@ void two_samples_t_test_equal_sd(
    cout << endl << endl;
 }
 
-void two_samples_estimate_df(double m1, double s1, unsigned n1, double m2, double s2)
+void two_samples_estimate_df(
+   double m1,             // m1 = Sample 1 Mean.
+   double s1,             // s1 = Sample 1 Standard Deviation.
+   unsigned n1,           // n1 = Sample 1 Size.
+   double m2,             // m2 = Sample 2 Mean.
+   double s2)             // s2 = Sample 2 Standard Deviation.
 {
-   //
-   // m1 = Sample 1 Mean.
-   // s1 = Sample 1 Standard Deviation.
-   // n1 = Sample 1 Size.
-   // m2 = Sample 2 Mean.
-   // s2 = Sample 2 Standard Deviation.
-   // alpha = confidence level
-   //
    using namespace std;
    using namespace boost::math;
 
