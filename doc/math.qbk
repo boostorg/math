@@ -68,6 +68,12 @@ data and/or data for output to an external graphing application.
 
 [endsect]
 
+[section Statistical Distributions and Functions]
+
+[include dist_tutorial.qbk]
+
+[endsect]
+
 [section Special Functions]
 
 [include tgamma.qbk]

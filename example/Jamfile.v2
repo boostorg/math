@@ -8,10 +8,13 @@ project
       <include>../../..
     ;
 
-run statistics_functions_example1.cpp ;
 run students_t_example1.cpp ;
 run students_t_example2.cpp ;
 run students_t_example3.cpp ;
+run students_t_single_sample.cpp ;
+run students_t_two_samples.cpp ;
+
+
 
 
 

@@ -159,9 +159,9 @@ namespace boost
    template <class T>
    T powm1(const T, const T);
 
-   template <class AT, class RT>
-   typename tools::promote_arg2<RT, AT>::type
-   students_t(AT degrees_of_freedom1, RT probability); //  probability from t.
+   //template <class AT, class RT>
+   //typename tools::promote_arg2<RT, AT>::type
+   //students_t(AT degrees_of_freedom1, RT probability); //  probability from t.
 
    template <class AT, class RT>
    typename tools::promote_arg2<RT, AT>::type

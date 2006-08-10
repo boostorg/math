@@ -29,7 +29,7 @@
 // The Students't distribution function is described at
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
 
-#include <boost/math/special_functions/students_t.hpp>
+#include <boost/math/dist/students_t.hpp>
 	using boost::math::students_t;  // Probability of students_t(df, t).
 
 #include <iostream>
@@ -41,18 +41,18 @@
 #include <cmath>
 	using std::sqrt;
 
-	// This example of a one-sided test is from:
-	// 
-	// from Statistics for Analytical Chemistry, 3rd ed. (1994), pp 59-60
-	// J. C. Miller and J. N. Miller, Ellis Horwood ISBN 0 13 0309907.
+// This example of a one-sided test is from:
+// 
+// from Statistics for Analytical Chemistry, 3rd ed. (1994), pp 59-60
+// J. C. Miller and J. N. Miller, Ellis Horwood ISBN 0 13 0309907.
 
-	// An acid-base titrimetric method has a significant indicator error and 
-	// thus tends to give results with a positive systematic error (+bias).
-	// To test this an exactly 0.1 M solution of acid is used to titrate
-	// 25.00 ml of exactly 0.1 M solution of alkali,
-	// with the following results (ml):
+// An acid-base titrimetric method has a significant indicator error and 
+// thus tends to give results with a positive systematic error (+bias).
+// To test this an exactly 0.1 M solution of acid is used to titrate
+// 25.00 ml of exactly 0.1 M solution of alkali,
+// with the following results (ml):
 
-	double reference = 25.00; // 'True' result.
+double reference = 25.00; // 'True' result.
 const int values = 6; // titrations.
 double data [values] = {25.06, 25.18, 24.87, 25.51, 25.34, 25.41};
 
@@ -80,13 +80,13 @@ int main()
 	}
 	int degrees_of_freedom = values - 1; // Use the n-1 formula.
 	sd /= degrees_of_freedom; // == variance.
-  sd= sqrt(sd);
+   sd= sqrt(sd);
 	cout << "Standard deviation = " << sd<< endl; // = 0.238279
 
 	double t = (mean - reference) * sqrt(static_cast<double>(values))/ sd; // 
 	cout << "Student's t = " << t << ", with " << degrees_of_freedom << " degrees of freedom." << endl; // = 2.34725
 
-	cout << "Probability of positive bias is " << students_t(degrees_of_freedom, t) << "."<< endl; // =  0.967108.
+	cout << "Probability of positive bias is " << cdf(students_t(degrees_of_freedom), t) << "."<< endl; // =  0.967108.
 	// A 1-sided test because only testing for a positive bias.
 	// If > 0.95 then greater than 1 in 20 conventional (arbitrary) requirement.
 

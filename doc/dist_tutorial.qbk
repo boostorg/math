@@ -1,0 +1,840 @@
+[def __alpha '''&#945;''']
+
+[section:stat_tut Statistical Functions Tutorial]
+
+This library is centred around statistical distributions, this tutorial
+will give you an overview of what they are, how they can be used, and 
+provides a few worked examples of applying the library to statistical tests.
+
+[section Overview]
+
+[h4 Headers and Namespaces]
+
+All the code in this library is inside namespace boost::math.
+
+In order to use a distribution /something/ you will need to include
+the header <boost/math/dist/something.hpp> so for example to use the
+Students t distribution include <boost/math/dist/students_t.hpp>
+
+[h4 Distributions are Objects]
+
+Each kind of distribution in this library is a class type, this does two
+things:
+
+* It encapsulates the kind of distribution in the C++ type system, 
+so for example Students-t distributions are always a different C++ type from 
+Chi-Squared distributions.
+* The distribution objects store any parameters associated with the 
+distribution: for example the students-t distribution has a ['degrees
+of freedom] parameter that controls the shape of the distribution.
+This parameter has to be provided to the students-t object when it is
+constructed.
+
+Although the distribution classes in this library are templates, there
+are typedefs on type /double/ that always take the usual name of the
+distribution.  Probably 95% of uses are covered by these typedefs:
+
+   using namespace boost::math;
+   
+   // Construct a students_t distribution with 4 degrees of freedom:
+   students_t d1(4);
+   
+   // Construct a binomial distribution
+   // with probability of success 0.3
+   // and 20 trials in total:
+   binomial d2(20, 0.3);
+   
+If you need to use the distributions with a type other than `double`
+then you can instantiate the template directly, the names of the 
+templates are the same as the `double` typedef but with `_distribution`
+appended:
+
+   // Construct a students_t distribution, of float type,
+   // with 4 degrees of freedom:
+   students_t_distribution<float> d3(4);
+   
+   // Construct a binomial distribution, of long double type,
+   // with probability of success 0.3
+   // and 20 trials in total:
+   binomial_distribution<long double> d4(20, 0.3);
+   
+The parameters passed to the distributions can be accessed via member
+functions:
+
+   d1.degrees_of_freedom();  // returns 4.0 
+   
+This is all well and good, but not very useful so far.  What we want
+is to be able to calculate the /cumulative distribution functions/ and
+/quantiles/ etc for these distributions.
+
+[h4 Generic operations common to all distributions are non-member functions]
+
+Want to calculate the PDF (Probabilty Density Function) of a distribution?
+No problem, just use:
+
+   pdf(my_dist, x);  // Returns PDF (density) at point x of distribution my_dist
+   
+Or how about the CDF (Cumulative Distribution Function):
+
+   cdf(my_dist, x);  // Returns CDF (integral) to point x of distribution my_dist
+   
+And quantiles are just the same:
+
+   quantile(my_dist, p);  // Returns the value of the random variable
+                          // x such that cdf(my_dist, x) == p.
+                          
+If you're wondering why these aren't member functions, it's to 
+make the library more easily extensible: if you want to add additional
+generic operations - let's say the /n'th moment/ - then all you have to
+do is add the appropriate non-member functions, overloaded for each
+supported distribution type.
+
+[h4 Complements are supported too]
+
+Often you don't want the value of the CDF, but it's complement, which is
+to say `1-p` rather than `p`.  You could calculate the CDF and subtract
+it from `1`, but if `p` is very close to `1` then cancellation error
+will cause you to loose significant digits.  In extreme cases `p` may
+actually be equal to `1`, even though the true value of the complement is non-zero.
+
+In this library, whenever you want to receive a complement, just wrap
+all the function arguments in a call to `complement(...)`, for example:
+
+   students_t dist(5);
+   cout << "CDF at t = 1 is " << cdf(dist, 1.0) << endl;
+   cout << "Complement of CDF at t = 1 is " << cdf(complement(dist, 1.0)) << endl;
+
+But wait, now that we have a complement, we have to be able to use it as well.
+Any function that accepts a probability as an argument can also accept a complement
+by wrapping all of its arguments in a call to `complement(...)`, for example:
+
+   students_t dist(5);
+   
+   for(double i = 10; i < 1e10; i *= 10)
+   {
+      // Calculate the quantile for a 1 in i chance:
+      double t = quantile(complement(dist, 1/i));
+      // Print it out:
+      cout << "Quantile of students-t with 5 degrees of freedom\n"
+              "for a 1 in " << i << " chance is " << t << endl;
+   }
+
+[h4 Parameters can be estimated]
+
+Sometimes it's the parameters that define the distribution that you 
+need to find.  Suppose for example you have conducted a Students-t test
+for equal means and the result is borderline.  Maybe your two samples
+differ from each other, or maybe they don't, based on the result
+of the test you can't be sure.  A legitimate question to ask then is
+"How many more measurements would I have to take before I would get
+an X% probability that the difference is real?"  Parameter estimators
+can answer questions like this, and are necessarily different for
+each distribution.  They are implemented as static member functions
+of the distributions, for example:
+
+   students_t::estimate_degrees_of_freedom(
+      5.0,        // true mean
+      6.3,        // sample mean
+      0.13,       // sample standard deviation
+      0.95);      // probabilty
+      
+Returns the number of degrees of freedom required to obtain a 95%
+probability that the observed differences in means is not down to
+chance alone.  In the case that a borderline Students-t test result
+was previously obtained, this can be used to estimate how large the sample size
+would have to become before the observed difference was considered
+significant.  It assumes, of course, that the sample mean and standard
+deviation are invariant with sample size.
+   
+[h4 Summary]
+
+* Distributions are objects, which are constructed from whatever
+parameters the distribution may have.
+* Member functions allow you to retrieve the parameters of a distribution.
+* Generic non-member functions, provide access to the properties that
+are common to all the distributions (PDF, CDF, quantile etc).
+* Complements of probabilities are calculated by wrapping the function's
+arguments in a call to `complement(...)`.
+* Functions that accept a probability can accept a complement of the
+probability as well, by wrapping the function's
+arguments in a call to `complement(...)`.
+* Static member functions allow the parameters of a distribution
+to be estimated from other information.
+
+Now that you have the basics, the next section looks at some worked examples.
+
+[endsect]
+
+[section Worked Examples]
+
+[section:mean1 Calculating confidence intervals on the mean with the students-t]
+
+Let's say you have a sample mean, you may wish to know what confidence intervals
+you can place on that mean.  Colloquially: "I want an interval that I can be
+P% sure contains the true mean".  The interval really does either contain 
+the true mean or it does not: the meaning of the confidence level is subtly 
+different from this colloquialism.  More background information can be found 
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm on the NIST site].
+
+The formula for the interval can be expressed as:
+
+Y[sub s] +- t[sub (__alpha/2,N-1)] * s / sqrt(N)
+
+Where, ['Y[sub s]] is the sample mean, /s/ is the sample standard deviation, 
+/N/ is the sample size, /__alpha/ is the desired significance level and 
+['t[sub (__alpha/2,N-1)]] is the upper critical value of the Students-t
+distribution with /N-1/ degrees of freedom.
+
+From the formula it should be clear that:
+
+* The width of the confidence interval decreases as the sample size increases.
+* The width increases as the standard deviation increase.
+* The width increases as the confidence level gets smaller (stronger).
+
+The following example code is taken from the example program
+students_t_single_sample.cpp.
+
+We'll begin by defining a procedure to calculate intervals for 
+various confidence levels, the procedure will print these out
+as a table:
+
+   // Needed includes:
+   #include <boost/math/dist/students_t.hpp>
+   #include <iostream>
+   #include <iomanip>
+   // Bring everything into global namespace for ease of use:
+   using namespace boost::math;
+   using namespace std;   
+
+   void confidence_limits_on_mean(
+      double Sm,           // Sm = Sample Mean.
+      double Sd,           // Sd = Sample Standard Deviation.
+      unsigned Sn)         // Sn = Sample Size.
+   {
+      using namespace std;
+      using namespace boost::math;
+
+      // Print out general info:
+      cout << 
+         "__________________________________\n"
+         "2-Sided Confidence Limits For Mean\n"
+         "__________________________________\n\n";
+      cout << setprecision(7);
+      cout << setw(40) << left << "Number of Observations" << "=  " << Sn << "\n";
+      cout << setw(40) << left << "Mean" << "=  " << Sm << "\n";
+      cout << setw(40) << left << "Standard Deviation" << "=  " << Sd << "\n";
+
+We'll define a table of confidence levels for which we'll compute intervals:
+
+      double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
+      
+Note that these are the complements of the probability levels: 0.5, 0.75, 0.9 .. 0.99999).
+
+Next we'll declare the distribution object we'll need, note that
+the /degrees of freedom/ parameter is the sample size less one:
+
+      students_t dist(Sn - 1);
+
+Most of what follows in the program is pretty printing, so let's focus
+on the calculation of the interval. First we need the t-statistic,
+computed using the /quantile/ function and our confidence level.  Note
+that since the confidence levels are the complement of the probability,
+we have to wrap the arguments in a call to /complement(...)/:
+
+   double T = quantile(complement(dist, alpha[i] / 2));
+   
+Now complete the picture, and get the (one-sided) width of the
+interval from the t-statistic
+by multiplying by the standard deviation, and dividing by the square
+root of the sample size:
+
+   double w = T * Sd / sqrt(double(Sn));
+
+And apart from some more pretty-printing that completes the procedure.
+
+Let's take a look at some sample output, first using the
+[@http://www.itl.nist.gov/div898/handbook/eda/section4/eda428.htm
+Heat flow data] from the NIST site.  The data set was collected 
+by Bob Zarr of NIST in January, 1990 from a heat flow meter 
+calibration and stability analysis.
+
+   __________________________________
+   2-Sided Confidence Limits For Mean
+   __________________________________
+
+   Number of Observations                  =  195
+   Mean                                    =  9.26146
+   Standard Deviation                      =  0.02278881
+
+
+   _______________________________________________________________
+   Confidence       T           Interval          Lower          Upper
+    Value (%)     Value          Width            Limit          Limit
+   _______________________________________________________________
+       50.000     0.676       1.103e-003        9.26036        9.26256
+       75.000     1.154       1.883e-003        9.25958        9.26334
+       90.000     1.653       2.697e-003        9.25876        9.26416
+       95.000     1.972       3.219e-003        9.25824        9.26468
+       99.000     2.601       4.245e-003        9.25721        9.26571
+       99.900     3.341       5.453e-003        9.25601        9.26691
+       99.990     3.973       6.484e-003        9.25498        9.26794
+       99.999     4.537       7.404e-003        9.25406        9.26886
+    
+As you can see the large sample size (195) and small standard deviation (0.023)
+have combined to give very small intervals, indeed we can be
+very confident that the true mean is 9.2.
+
+For comparison the next example data output is taken from
+['P.K.Hou, O. W. Lau & M.C. Wong, Analyst (1983) vol. 108, p 64.
+and from Statistics for Analytical Chemistry, 3rd ed. (1994), pp 54-55
+J. C. Miller and J. N. Miller, Ellis Horwood ISBN 0 13 0309907.]
+The values result from the determination of mercury by cold-vapour 
+atomic absorption.
+
+   __________________________________
+   2-Sided Confidence Limits For Mean
+   __________________________________
+
+   Number of Observations                  =  3
+   Mean                                    =  37.8000000
+   Standard Deviation                      =  0.9643650
+
+
+   _______________________________________________________________
+   Confidence       T           Interval          Lower          Upper
+    Value (%)     Value          Width            Limit          Limit
+   _______________________________________________________________
+       50.000     0.816            0.455       37.34539       38.25461
+       75.000     1.604            0.893       36.90717       38.69283
+       90.000     2.920            1.626       36.17422       39.42578
+       95.000     4.303            2.396       35.40438       40.19562
+       99.000     9.925            5.526       32.27408       43.32592
+       99.900    31.599           17.594       20.20639       55.39361
+       99.990    99.992           55.673      -17.87346       93.47346
+       99.999   316.225          176.067     -138.26683      213.86683
+    
+This time the fact that there are only three measurements leads to
+much wider intervals, indeed such large intervals that it's hard
+to be very confident in the location of the mean.
+
+[endsect]
+
+[section:diff1 Testing a sample mean for systematic difference, by comparison to a "true" mean]
+
+When calibrating or comparing a scientific instrument or measurement method of some kind, 
+we want to be answer the question "Does an observed sample mean differ from the
+"true" mean in any significant way?".  If it does, then we have evidence of
+a systematic difference.  This question can be answered with a Students-t test,
+more information can be found 
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm 
+on the NIST site].
+
+(Of course, the assignment of "true" to one mean may be quite arbitrary,
+often a "traditional" method of measurement).
+
+The following example code is taken from the example program
+students_t_single_sample.cpp.
+
+We'll begin by defining a procedure to determine which of the
+possible hypothesis are accepted or rejected at a given confidence level:
+
+   // Needed includes:
+   #include <boost/math/dist/students_t.hpp>
+   #include <iostream>
+   #include <iomanip>
+   // Bring everything into global namespace for ease of use:
+   using namespace boost::math;
+   using namespace std;   
+
+   void single_sample_t_test(double M, double Sm, double Sd, unsigned Sn, double alpha)
+   {
+      //
+      // M = true mean.
+      // Sm = Sample Mean.
+      // Sd = Sample Standard Deviation.
+      // Sn = Sample Size.
+      // alpha = Confidence Level.
+      
+Most of the procedure is pretty-printing, so let's just focus on the
+calculation, we begin by calculating the t-statistic:
+
+   // Difference in means:
+   double diff = Sm - M;
+   // Degrees of freedom:
+   unsigned v = Sn - 1;
+   // t-statistic:
+   double t_stat = diff * sqrt(double(Sn)) / Sd;
+
+Finally calculate the probability from the t-statistic. If we're interested 
+in simply whether there is a difference (either less or greater) or not,
+we don't care about the sign of the t-statistic,
+and we take the complement of the probability for comparison
+to the significance level:
+
+   students_t dist(v);
+   double q = cdf(complement(dist, fabs(t_stat)));
+   
+The procedure then prints out the results of the various tests
+that can be done, these 
+can be summarised in the following table:
+
+[table
+[[Hypothosis][Test][Code]]
+[[The Null-hypothesis: there is
+*no difference* in means]  [complement of CDF for |t| > confidence level]
+                         [``cdf(complement(dist, fabs(t))) > alpha``]]
+[[The Alternative-hypothesis: there is
+*difference* in means]  [complement of CDF for |t| < confidence level]
+                         [``cdf(complement(dist, fabs(t))) < alpha``]]
+[[The Alternative-hypothesis: the sample mean is *less* than
+the true mean.]  [CDF of t < confidence level]
+                         [``cdf(dist, t) < alpha``]]
+[[The Alternative-hypothesis: the sample mean is *greater* than
+the true mean.]  [Complement of CDF of t < confidence level]
+                         [``cdf(complement(dist, t)) < alpha``]]
+]
+
+Now that we have all the parts in place let's take a look at some 
+sample output, first using the
+[@http://www.itl.nist.gov/div898/handbook/eda/section4/eda428.htm
+Heat flow data] from the NIST site.  The data set was collected 
+by Bob Zarr of NIST in January, 1990 from a heat flow meter 
+calibration and stability analysis.
+
+   __________________________________
+   Student t test for a single sample
+   __________________________________
+
+   Number of Observations                                 =  195
+   Sample Mean                                            =  9.26146
+   Sample Standard Deviation                              =  0.02279
+   Expected True Mean                                     =  5.00000
+
+   Sample Mean - Expected Test Mean                       =  4.26146
+   Degrees of Freedom                                     =  194
+   T Statistic                                            =  2611.28380
+   Probability that difference is due to chance           =  0.000e+000
+
+   Results for Alternative Hypothesis and alpha           =  0.0500
+
+   Alternative Hypothesis     Conclusion
+   Mean != 5.000            ACCEPTED
+   Mean  < 5.000            REJECTED
+   Mean  > 5.000            ACCEPTED
+
+You will note the line that says the probability that the difference is
+due to chance is zero.  From a philosophical point of view, of course,
+the probability can never reach zero.  However, in this case the calculated
+probability is smaller than the smallest representable double precision number,
+hence the appearance of a zero here.  Whatever its "true" value is, we know it
+must be extraordinarily small, so the alternative hypothesis - that there is
+a difference in means - is accepted.
+
+For comparison the next example data output is taken from
+['P.K.Hou, O. W. Lau & M.C. Wong, Analyst (1983) vol. 108, p 64.
+and from Statistics for Analytical Chemistry, 3rd ed. (1994), pp 54-55
+J. C. Miller and J. N. Miller, Ellis Horwood ISBN 0 13 0309907.]
+The values result from the determination of mercury by cold-vapour 
+atomic absorption.
+
+   __________________________________
+   Student t test for a single sample
+   __________________________________
+
+   Number of Observations                                 =  3
+   Sample Mean                                            =  37.80000
+   Sample Standard Deviation                              =  0.96437
+   Expected True Mean                                     =  38.90000
+
+   Sample Mean - Expected Test Mean                       =  -1.10000
+   Degrees of Freedom                                     =  2
+   T Statistic                                            =  -1.97566
+   Probability that difference is due to chance           =  9.343e-002
+
+   Results for Alternative Hypothesis and alpha           =  0.0500
+
+   Alternative Hypothesis     Conclusion
+   Mean != 38.900            REJECTED
+   Mean  < 38.900            REJECTED
+   Mean  > 38.900            REJECTED
+
+As you can see the small number of measurements (3) has led a large uncertainty
+in the location of the true mean.  So even though there is a clear difference
+between the sample mean and the expected true mean, we conclude that there
+is no significant difference, and accept this null hypothesis.  However, if we
+were to lower the bar for acceptance down to alpha = 0.1 (90% confidence level)
+we see a different output:
+
+   __________________________________
+   Student t test for a single sample
+   __________________________________
+
+   Number of Observations                                 =  3
+   Sample Mean                                            =  37.80000
+   Sample Standard Deviation                              =  0.96437
+   Expected True Mean                                     =  38.90000
+
+   Sample Mean - Expected Test Mean                       =  -1.10000
+   Degrees of Freedom                                     =  2
+   T Statistic                                            =  -1.97566
+   Probability that difference is due to chance           =  9.343e-002
+
+   Results for Alternative Hypothesis and alpha           =  0.1000
+
+   Alternative Hypothesis     Conclusion
+   Mean != 38.900            ACCEPTED
+   Mean  < 38.900            ACCEPTED
+   Mean  > 38.900            REJECTED
+
+In this case we really have a borderline result, and more data should
+be collected.
+
+
+[endsect]
+
+[section:size1 Estimating how large a sample size would have to become
+in order to give a significant Students-t test result with a single sample test]
+
+Imagine you have conducted a Students-t test on a single sample in order
+to check for systematic errors in your measurements.  Imagine that the
+result is borderline.  At this point one might go off and collect more data,
+but first ask the question "How much more?".  The parameter estimators of the
+students_t_distribution class can provide this information.
+
+This section is based on the example code in students_t_single_sample.cpp
+and we begin by defining a procedure that will print out a table of
+estimated sample sizes for various confidence levels:
+
+   // Needed includes:
+   #include <boost/math/dist/students_t.hpp>
+   #include <iostream>
+   #include <iomanip>
+   // Bring everything into global namespace for ease of use:
+   using namespace boost::math;
+   using namespace std;   
+
+   void single_sample_estimate_df(
+      double M,          // M = true mean.
+      double Sm,         // Sm = Sample Mean.
+      double Sd)         // Sd = Sample Standard Deviation.
+   {
+
+Next we define a table of confidence levels:
+
+   double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
+
+Most of the rest of the code is pretty-printing, so let's skip to
+calculation of the sample size. For each alpha value, we begin
+by using the parameter estimator to obtain the degrees of freedom
+required. The arguments are wrapped in a call to `complement(...)`
+since the significance levels are the complement of the probability:
+
+   // calculate df:
+   double df = students_t::estimate_degrees_of_freedom(
+      complement(M, Sm, Sd, alpha[i]));
+   
+The sample size for that confidence level is then the number of degrees
+of freedom plus one.  However, since the degrees of freedom is returned
+as a real number we also have to take it's ceiling first (there are some
+situations where fractional degrees of freedom really do make sense,
+however this isn't one of them):
+   
+   // convert to sample size:
+   double size = ceil(df) + 1; 
+
+And other than printing the result that's pretty much it.
+
+Let's now look at some sample output using data taken from
+['P.K.Hou, O. W. Lau & M.C. Wong, Analyst (1983) vol. 108, p 64.
+and from Statistics for Analytical Chemistry, 3rd ed. (1994), pp 54-55
+J. C. Miller and J. N. Miller, Ellis Horwood ISBN 0 13 0309907.]
+The values result from the determination of mercury by cold-vapour 
+atomic absorption.  
+
+Only three measurements were made, and the Students-t test above
+gave a borderline rsult, so this example
+will show us how many samples would need to be collected:
+
+   _____________________________________________________________
+   Estimated sample sizes required for various confidence levels
+   _____________________________________________________________
+
+   True Mean                               =  5.00000
+   Sample Mean                             =  9.26146
+   Sample Standard Deviation               =  0.02279
+
+
+   _______________________________________________________________
+   Confidence      Estimated
+    Value (%)     Sample Size
+   _______________________________________________________________
+       50.000               2
+       75.000               2
+       90.000               2
+       95.000               2
+       99.000               2
+       99.900               3
+       99.990               3
+       99.999               3
+    
+So in this case, doubling the sample size could well have settled the
+issue, at least to the 95% level.
+
+[endsect]
+
+[section Comparing the means of two samples with the Students-t test]
+
+Imagine that we have two samples, and we wish to determine whether
+their means are different or not.  This situation often arises when
+determining whether a new process or treatment is better than an old one.
+
+In this example, we'll be using the 
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda3531.htm
+Car Mileage sample data] from the 
+[@http://www.itl.nist.gov NIST website].  The data compares
+miles per gallon of US cars with miles per gallon of Japanese cars.
+
+There are two ways in which this test can be conducted: we can assume
+that the true standard deviations of the two samples are equal or not.
+If the standard deviations are assumed to be equal, then the calculation
+of the t-statistic is greatly simplified, so we'll example that case first.
+In real life we should verify whether this assumption is valid with a 
+Chi-Squared test for equal variances.
+
+Begin by defining a procedure that will conduct our test assuming equal
+variances:
+
+   // Needed headers:
+   #include <boost/math/dist/students_t.hpp>
+   #include <iostream>
+   #include <iomanip>
+   // Simplify usage:
+   using namespace boost::math;
+   using namespace std;
+
+   void two_samples_t_test_equal_sd(
+           double Sm1,       // Sm1 = Sample 1 Mean.
+           double Sd1,       // Sd1 = Sample 1 Standard Deviation.
+           unsigned Sn1,     // Sn1 = Sample 1 Size.
+           double Sm2,       // Sm2 = Sample 2 Mean.
+           double Sd2,       // Sd2 = Sample 2 Standard Deviation.
+           unsigned Sn2,     // Sn2 = Sample 2 Size.
+           double alpha)     // alpha = Confidence Level.
+   {
+      
+
+Our procedure will begin by calculating the t-statistic, assuming
+equal variances the needed formualas are:
+
+[$../equations/dist_tutorial1.png]
+
+where Sp is the "pooled" standard deviation of the two samples, 
+and /v/ is the number of degrees of freedom of the two combined
+samples.  We can now write the code to calculate the t-statistic:
+
+   // Degrees of freedom:
+   double v = Sn1 + Sn2 - 2;
+   cout << setw(55) << left << "Degrees of Freedom" << "=  " << v << "\n";
+   // Pooled variance:
+   double sp = sqrt(((Sn1-1) * Sd1 * Sd1 + (Sn2-1) * Sd2 * Sd2) / v);
+   cout << setw(55) << left << "Pooled Standard Deviation" << "=  " << v << "\n";
+   // t-statistic:
+   double t_stat = (Sm1 - Sm2) / (sp * sqrt(1.0 / Sn1 + 1.0 / Sn2));
+   cout << setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
+   
+The next step is to define our distribution object, and calculate the
+complement of the probability:
+
+   students_t dist(v);
+   double q = cdf(complement(dist, fabs(t_stat)));
+   cout << setw(55) << left << "Probability that difference is due to chance" << "=  " 
+      << setprecision(3) << scientific << q << "\n\n";
+
+Here we've used the absolute value of the t-statistic, because we initially
+want to know simply whether there is a difference or not (a two sided test).
+However, we can also test whether the mean of the second sample is greater
+or less than that of the first, and all the possible tests are summed up
+in the following table:
+
+[table
+[[Hypothosis][Test][Code]]
+[[The Null-hypothesis: there is
+*no difference* in means]  [complement of CDF for |t| > confidence level]
+                         [``cdf(complement(dist, fabs(t))) > alpha``]]
+[[The Alternative-hypothesis: there is
+*difference* in means]  [complement of CDF for |t| < confidence level]
+                         [``cdf(complement(dist, fabs(t))) < alpha``]]
+[[The Alternative-hypothesis: Sample 1 Mean is *less* than
+Sample 2 Mean.]  [CDF of t < confidence level]
+                         [``cdf(dist, t) < alpha``]]
+[[The Alternative-hypothesis: Sample 1 Mean is *greater* than
+Sample 2 Mean.]  [Complement of CDF of t < confidence level]
+                         [``cdf(complement(dist, t)) < alpha``]]
+]
+
+Most of the rest of the sample program is pretty-printing, so we'll
+skip over that, and take a look at the sample output for alpha=0.05
+(95% probability level).
+
+   ________________________________________________
+   Student t test for two samples (equal variances)
+   ________________________________________________
+
+   Number of Observations (Sample 1)                      =  249
+   Sample 1 Mean                                          =  20.14458
+   Sample 1 Standard Deviation                            =  6.41470
+   Number of Observations (Sample 2)                      =  79
+   Sample 2 Mean                                          =  30.48101
+   Sample 2 Standard Deviation                            =  6.10771
+   Degrees of Freedom                                     =  326.00000
+   Pooled Standard Deviation                              =  326.00000
+   T Statistic                                            =  -12.62059
+   Probability that difference is due to chance           =  2.637e-030
+
+   Results for Alternative Hypothesis and alpha           =  0.0500
+
+   Alternative Hypothesis     Conclusion
+   Sample 1 Mean != Sample 2 Mean       ACCEPTED
+   Sample 1 Mean <  Sample 2 Mean       ACCEPTED
+   Sample 1 Mean >  Sample 2 Mean       REJECTED
+
+So with a probability that the difference is due to chance of just
+2.637e-030, we can safely conclude that there is indeed a difference.
+
+The tests on the alternative hypothesis show that the Sample 1 Mean is
+greater than that for Sample 2: in this case Sample 1 represents the 
+miles per gallon for US cars, and Sample 2 the miles per gallon for 
+Japanese cars, so we conclude that Japanese cars are on average more
+fuel efficient.
+
+Now that we have the simple case out of the way, let's look for a moment
+at the more complex one: that the standard deviations of the two samples
+are not equal.  In this case the formula for the t-statistic becomes:
+
+[$../equations/dist_tutorial2.png]
+
+And for the combined degress of freedom we have:
+
+[$../equations/dist_tutorial3.png]
+
+Putting these into code that produces:
+
+   // Degrees of freedom:
+   double v = Sd1 * Sd1 / Sn1 + Sd2 * Sd2 / Sn2;
+   v *= v;
+   double t1 = Sd1 * Sd1 / Sn1;
+   t1 *= t1;
+   t1 /=  (Sn1 - 1);
+   double t2 = Sd2 * Sd2 / Sn2;
+   t2 *= t2;
+   t2 /= (Sn2 - 1);
+   v /= (t1 + t2);
+   cout << setw(55) << left << "Degrees of Freedom" << "=  " << v << "\n";
+   // t-statistic:
+   double t_stat = (Sm1 - Sm2) / sqrt(Sd1 * Sd1 / Sn1 + Sd2 * Sd2 / Sn2);
+   cout << setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
+
+Thereafter the code and the tests are performed the same as before, using
+are car mileage data again, here's what the output looks like:
+
+   __________________________________________________
+   Student t test for two samples (unequal variances)
+   __________________________________________________
+
+   Number of Observations (Sample 1)                      =  249
+   Sample 1 Mean                                          =  20.145
+   Sample 1 Standard Deviation                            =  6.4147
+   Number of Observations (Sample 2)                      =  79
+   Sample 2 Mean                                          =  30.481
+   Sample 2 Standard Deviation                            =  6.1077
+   Degrees of Freedom                                     =  136.87
+   T Statistic                                            =  -12.946
+   Probability that difference is due to chance           =  7.855e-026
+
+   Results for Alternative Hypothesis and alpha           =  0.0500
+
+   Alternative Hypothesis     Conclusion
+   Sample 1 Mean != Sample 2 Mean       ACCEPTED
+   Sample 1 Mean <  Sample 2 Mean       ACCEPTED
+   Sample 1 Mean >  Sample 2 Mean       REJECTED
+   
+This time allowing the variances in the two samples to differ has yielded
+a higher likelyhood that the observed difference is down to chance alone
+(7.855e-026 compared to 2.637e-030 when equal variances were assumed).
+However, the conclusion remains the same: US cars are less fuel efficient
+than Japanese models.
+
+[endsect]
+
+[endsect]
+
+[endsect]
+
+
+
+
+
+[section:future Extras/Future Directions]
+
+I'm not anticipating any of the following being present in the initial
+release: we've got enough to do figuring out the math !
+
+[h4 Adding Additional Location and Scale Parameters] 
+
+In some modelling applications we require a distribution with a specific 
+location and scale:
+often this equates to a specific mean and standard deviation, although for many
+distributions the relationship between these properties and the location and 
+scale parameters are non-trivial.  
+See [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm] for more
+information.
+
+The obvious way to handle this is via an adapter template:
+
+	template <class Dist>
+	class scaled_distribution
+	{
+	   scaled_distribution(
+	     const Dist dist, 
+	     typename Dist::value_type location,
+	     typename Dist::value_type scale = 0);
+	};
+
+Which would then have its own set of overloads for the non-member accessor functions.
+
+[h4 Higher Level Hypothesis Tests]
+
+Higher level tests roughly corresponding to the Mathematica HypothesisTests
+package could be added reasonably easily, for example:
+
+	template <class InputIterator>
+	typename std::iterator_traits<InputIterator>::value_type
+	   test_equal_mean(
+	     InputIterator a,
+	     InputIterator b,
+	     typename std::iterator_traits<InputIterator>::value_type expected_mean);
+
+Returns the probability that the data in the sequence [a,b) has the mean
+/expected_mean/.
+
+[h4 Integration With Statistical Accumulators]
+
+[@http://boost-sandbox.sourceforge.net/libs/accumulators/doc/html/index.html
+Eric Niebler's accumulator framework] - also work in progress - provides the means
+to calculate various statistical properties from experimental data.  There is an
+opportunity to integrate the statistical tests with this framework at some later date:
+
+	// define an accumulator, all required statistics to calculate the test
+	// are calculated automatically:
+	accumulator_set<double, features<tag::test_expected_mean> > acc(expected_mean=4);
+	// pass our data to the accumulator:
+	acc = std::for_each(mydata.begin(), mydata.end(), acc);
+	// extract the result:
+	double p = probability(acc);
+
+[endsect]
+
+
+
+
+

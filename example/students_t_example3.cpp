@@ -29,7 +29,7 @@
 // The Students't distribution function is described at
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
 
-#include <boost/math/special_functions/students_t.hpp>
+#include <boost/math/dist/students_t.hpp>
 	using boost::math::students_t;  // Probability of students_t(df, t).
 
 #include <iostream>
@@ -87,13 +87,13 @@ int main()
 	}
 	int degrees_of_freedom = portions-1; // Use the n-1 formula.
 	sd_diffs /= degrees_of_freedom;
-  sd_diffs = sqrt(sd_diffs);
+   sd_diffs = sqrt(sd_diffs);
 	cout << "Standard deviation of differences = " << sd_diffs << endl; // 4.99166
 
-	float t = mean_diff * sqrt(static_cast<float>(portions))/ sd_diffs; // -0.70117
+	double t = mean_diff * sqrt(static_cast<double>(portions))/ sd_diffs; // -0.70117
 	cout << "Student's t = " << t << ", if " << degrees_of_freedom << " degrees of freedom." << endl; //
 
-	cout << "Probability of the means being different is " << 2.F * students_t(degrees_of_freedom, t) << "."<< endl; // 0.266846 * 2 =
+	cout << "Probability of the means being different is " << 2.F * cdf(students_t(degrees_of_freedom), t) << "."<< endl; // 0.266846 * 2 =
 	// Double the probability because using a 'two-sided test' because
 	// mean for 'Wet Oxidation' could be either greater OR LESS than for 'Direct extraction'.
 
