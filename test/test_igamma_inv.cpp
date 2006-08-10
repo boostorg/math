@@ -295,7 +295,17 @@ void test_spots(T, const char* type_name)
    T tolerance = boost::math::tools::epsilon<T>() * 10000;
    BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1e-2), static_cast<T>(1.0/128)), static_cast<T>(0.35767144525455121503672919307647515332256996883787L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1e-2), static_cast<T>(1.0/2)), static_cast<T>(4.4655350189103486773248562646452806745879516124613e-31L), tolerance);
-//   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1e-2), static_cast<T>(1.0-1.0/128)), static_cast<T>(3.8106736649978161389878528903698068142257930575497e-181L), tolerance);
+   //
+   // We can't test in this region against Mathworld's data as the results produced
+   // by functions.wolfram.com appear to be in error, and do *not* round trip with
+   // their own version of gamma_Q.  Using our output from the inverse as input to 
+   // their version of gamma_Q *does* round trip however.  It should be pointed out
+   // that the functions in this area are very sensitive with nearly infinite
+   // first derivatives, it's also questionable how useful these functions are
+   // in this part of the domain.
+   //
+   //BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1e-2), static_cast<T>(1.0-1.0/128)), static_cast<T>(3.8106736649978161389878528903698068142257930575497e-181L), tolerance);
+   //
    BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(0.5), static_cast<T>(1.0/128)), static_cast<T>(3.5379794687984498627918583429482809311448951189097L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(0.5), static_cast<T>(1.0/2)), static_cast<T>(0.22746821155978637597125832348982469815821055329511L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(0.5), static_cast<T>(1.0-1.0/128)), static_cast<T>(0.000047938431649305382237483273209405461203600840052182L), tolerance);

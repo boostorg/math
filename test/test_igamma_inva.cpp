@@ -69,9 +69,25 @@ void expected_results()
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*",                          // test data group
+      "[^|]*", 2000, 1000);             // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
       largest_type,                     // test type(s)
-      "[^|]*medium[^|]*",                   // test data group
-      "[^|]*", 20, 5);                  // test function
+      "[^|]*",                          // test data group
+      "[^|]*", 40, 20);                 // test function
+   // this one has to come last in case double *is* the widest
+   // float type:
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
+      "float|double",                   // test type(s)
+      "[^|]*",                          // test data group
+      "[^|]*", 10, 5);                 // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
@@ -153,7 +169,7 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
 }
 
 template <class T>
-void do_test_gamma_inv(const T& data, const char* type_name, const char* test_name)
+void do_test_gamma_inva(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
@@ -210,6 +226,10 @@ void test_gamma(T, const char* name)
 #  include "igamma_big_data.ipp"
 
    do_test_gamma_2(igamma_big_data, name, "Running round trip sanity checks on incomplete gamma large values");
+
+#  include "igamma_inva_data.ipp"
+
+   do_test_gamma_inva(igamma_inva_data, name, "Incomplete gamma inverses.");
 }
 
 int test_main(int, char* [])

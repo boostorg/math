@@ -4,6 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/tools/ntl.hpp>
+#include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/test.hpp>
@@ -94,8 +95,19 @@ struct gamma_inverse_generator
    }
 };
 
+struct gamma_inverse_generator_a
+{
+   std::tr1::tuple<NTL::RR, NTL::RR> operator()(const NTL::RR x, const NTL::RR p)
+   {
+      NTL::RR x1 = boost::math::gamma_P_inva(x, p);
+      NTL::RR x2 = boost::math::gamma_Q_inva(x, p);
+      std::cout << "Inverse for " << x << " " << p << std::endl;
+      return std::tr1::make_tuple(x1, x2);
+   }
+};
 
-int main(int argc, char const* argv[])
+
+int test_main(int argc, char*argv [])
 {
    NTL::RR::SetPrecision(1000);
    NTL::RR::SetOutputPrecision(100);
@@ -115,6 +127,22 @@ int main(int argc, char const* argv[])
          get_user_parameter_info(arg1, "a");
          get_user_parameter_info(arg2, "p");
          data.insert(gamma_inverse_generator(), arg1, arg2);
+
+         std::cout << "Any more data [y/n]?";
+         std::getline(std::cin, line);
+         boost::algorithm::trim(line);
+         cont = (line == "y");
+      }while(cont);
+   }
+   else if((argc >= 2) && (std::strcmp(argv[1], "-inverse_a") == 0))
+   {
+      std::cout << "Welcome.\n"
+         "This program will generate spot tests for the inverse incomplete gamma function:\n"
+         "  gamma_P_inva(a, p) and gamma_Q_inva(a, q)\n\n";
+      do{
+         get_user_parameter_info(arg1, "x");
+         get_user_parameter_info(arg2, "p");
+         data.insert(gamma_inverse_generator_a(), arg1, arg2);
 
          std::cout << "Any more data [y/n]?";
          std::getline(std::cin, line);

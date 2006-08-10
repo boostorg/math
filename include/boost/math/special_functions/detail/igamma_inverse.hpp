@@ -349,12 +349,24 @@ T gamma_P_inv(T a, T p)
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();
+   //
+   // Work out how many digits to converge to, normally this is
+   // 2/3 of the digits in T, but if the first derivative is very
+   // large convergence is slow, so we'll bump it up to full 
+   // precision to prevent premature termination of the root-finding routine.
+   //
+   unsigned digits = (tools::digits<T>() * 2) / 3;
+   if((a < 0.125) && (fabs(gamma_P_derivative(a, guess)) > 1 / sqrt(tools::epsilon<T>())))
+      digits = tools::digits<T>();
+   //
+   // Go ahead and iterate:
+   //
    guess = tools::halley_iterate(
       detail::gamma_P_inverse_func<T>(a, p, false),
       guess,
       lower,
       tools::max_value<T>(),
-      (tools::digits<T>() * 2) / 3);
+      digits);
    if(guess == lower)
       guess = tools::underflow_error<T>(BOOST_CURRENT_FUNCTION, "Expected result known to be non-zero, but is smaller than the smallest available number.");
    return guess;
@@ -375,12 +387,24 @@ T gamma_Q_inv(T a, T q)
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();
+   //
+   // Work out how many digits to converge to, normally this is
+   // 2/3 of the digits in T, but if the first derivative is very
+   // large convergence is slow, so we'll bump it up to full 
+   // precision to prevent premature termination of the root-finding routine.
+   //
+   unsigned digits = (tools::digits<T>() * 2) / 3;
+   if((a < 0.125) && (fabs(gamma_P_derivative(a, guess)) > 1 / sqrt(tools::epsilon<T>())))
+      digits = tools::digits<T>();
+   //
+   // Go ahead and iterate:
+   //
    guess = tools::halley_iterate(
       detail::gamma_P_inverse_func<T>(a, q, true),
       guess,
       lower,
       tools::max_value<T>(),
-      (tools::digits<T>() * 2) / 3);
+      digits);
    if(guess == lower)
       guess = tools::underflow_error<T>(BOOST_CURRENT_FUNCTION, "Expected result known to be non-zero, but is smaller than the smallest available number.");
    return guess;
