@@ -1,8 +1,0 @@
-
-path-constant BOOST_ROOT : ../../../../../develop/boost ;
-
-using lex ;
-using bison ;
-using testing ;
-
-
