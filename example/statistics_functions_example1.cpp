@@ -8,19 +8,29 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // Example 2 of using Thorsten Ottosen's statistics function.
+// Problems using list, so abandoned in favour of Eric Niebler's accumulator.
 
 
 //#include <boost/math/special_functions/students_t.hpp>
 //	using boost::math::students_t;  // Probability of students_t(df, t).
 
 //#define _SCL_SECURE_NO_DEPRECATE = 1 // avoid C4996 warning.
-#define _SCL_SECURE_NO_DEPRECATE = 0 // get C4996 warning.
+//#define _SCL_SECURE_NO_DEPRECATE = 0 // get C4996 warning.
+#define _SCL_SECURE_NO_DEPRECATE = 1 // no C4996 warning.
 
 #ifdef _MSC_VER// needed for Boost.Array using const double
 #  pragma warning(disable: 4510) // default constructor could not be generated.
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
 #  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
 #endif
+
+#include <boost/array.hpp>
+	using boost::array;
+#include <boost/stat/univariate.hpp> // Various basic statistics functions.
+	using boost::algorithm::mean;
+
+#include <boost/math/special_functions/students_t.hpp>
+	using boost::math::students_t;  // Probability of students_t(df, t).
 
 #include <iostream>
 	using std::cout;
@@ -38,14 +48,6 @@
 	using std::copy;
 #include <list>
 	using std::list;
-
-#include <boost/array.hpp>
-	using boost::array;
-#include <boost/stat/univariate.hpp> // Various basic statistics functions.
-	using boost::algorithm::mean;
-
-#include <boost/math/special_functions/students_t.hpp>
-	using boost::math::students_t;  // Probability of students_t(df, t).
 
 int main()
 {
@@ -106,25 +108,23 @@ int main()
  // double vsm = unsorted_median<double>(vdata.begin(), vdata.end());
 	//cout << "vector sorted_median is " << vsm << endl;
 
-	// Using contain list doesn't yet work for me - asked Thorsten Ottosen.
-	//list<double> ldata;
-	//ldata.assign(&data[0], &data[5]);
-	//BOOST_ASSERT(ldata.size() == n);
-	//copy (ldata.begin(), ldata.end(), ostream_iterator<double>(cout, " "));	cout << endl;
- // double lm = mean<double>(ldata.begin(), ldata.end());
-	//cout << "list mean is " << lm << endl;
+//	 Using contain list doesn't yet work for me - asked Thorsten Ottosen.
+	list<double> ldata;
+	ldata.assign(&data[0], &data[5]);
+	BOOST_ASSERT(ldata.size() == n);
+	copy (ldata.begin(), ldata.end(), ostream_iterator<double>(cout, " "));	cout << endl;
+  double lm = mean<double>(ldata.begin(), ldata.end());
+	cout << "list mean is " << lm << endl;
 
-	double standard = 10.11;
-	double t = (mean<double>(vdata.begin(), vdata.end()) - standard)
-	* std::sqrt(static_cast<double>(n))
-	/ std_deviation<double>(vdata.begin(), vdata.end());
-	cout << "Student's t = " << t << endl; // Student's t = -1.41421
-	double degrees_of_freedom = n-1;
-	cout.precision(5); // Useful accuracy is only a few decimal digits, but seems to give at least 5.
-	cout << "Probability of Student's t is " << students_t(degrees_of_freedom, abs(t)) << endl; // is 0.8849 , is 1 tailed.
-	// So there is insufficient evidence of a difference to meet a 95% (1 in 20) criterion.
-
-
+	//double standard = 10.11;
+	//double t = (mean<double>(vdata.begin(), vdata.end()) - standard)
+	//* std::sqrt(static_cast<double>(n))
+	/// std_deviation<double>(vdata.begin(), vdata.end());
+	//cout << "Student's t = " << t << endl; // Student's t = -1.41421
+	//double degrees_of_freedom = n-1;
+	//cout.precision(5); // Useful accuracy is only a few decimal digits, but seems to give at least 5.
+	//cout << "Probability of Student's t is " << students_t(degrees_of_freedom, abs(t)) << endl; // is 0.8849 , is 1 tailed.
+	//// So there is insufficient evidence of a difference to meet a 95% (1 in 20) criterion.
 
 	return 0;
 }  // int main()

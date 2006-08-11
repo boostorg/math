@@ -13,8 +13,8 @@ provides a few worked examples of applying the library to statistical tests.
 All the code in this library is inside namespace boost::math.
 
 In order to use a distribution /something/ you will need to include
-the header <boost/math/dist/something.hpp> so for example to use the
-Students t distribution include <boost/math/dist/students_t.hpp>
+the header <boost/math/distributions/something.hpp> so for example to use the
+Students t distribution include <boost/math/distributions/students_t.hpp>
 
 [h4 Distributions are Objects]
 
@@ -199,7 +199,7 @@ various confidence levels, the procedure will print these out
 as a table:
 
    // Needed includes:
-   #include <boost/math/dist/students_t.hpp>
+   #include <boost/math/distributions/students_t.hpp>
    #include <iostream>
    #include <iomanip>
    // Bring everything into global namespace for ease of use:
@@ -339,7 +339,7 @@ We'll begin by defining a procedure to determine which of the
 possible hypothesis are accepted or rejected at a given confidence level:
 
    // Needed includes:
-   #include <boost/math/dist/students_t.hpp>
+   #include <boost/math/distributions/students_t.hpp>
    #include <iostream>
    #include <iomanip>
    // Bring everything into global namespace for ease of use:
@@ -507,7 +507,7 @@ and we begin by defining a procedure that will print out a table of
 estimated sample sizes for various confidence levels:
 
    // Needed includes:
-   #include <boost/math/dist/students_t.hpp>
+   #include <boost/math/distributions/students_t.hpp>
    #include <iostream>
    #include <iomanip>
    // Bring everything into global namespace for ease of use:
@@ -609,7 +609,7 @@ Begin by defining a procedure that will conduct our test assuming equal
 variances:
 
    // Needed headers:
-   #include <boost/math/dist/students_t.hpp>
+   #include <boost/math/distributions/students_t.hpp>
    #include <iostream>
    #include <iomanip>
    // Simplify usage:

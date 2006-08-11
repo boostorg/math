@@ -6,12 +6,12 @@
 
 #include <iostream>
 #include <iomanip>
-#include <boost/math/dist/students_t.hpp>
+#include <boost/math/distributions/students_t.hpp>
 
 void two_samples_t_test(
-        double Sm1, 
-        double Sd1, 
-        unsigned Sn1, 
+        double Sm1,
+        double Sd1,
+        unsigned Sn1,
         double Sm2,
         double Sd2,
         unsigned Sn2,
@@ -29,14 +29,14 @@ void two_samples_t_test(
    // A Students t test applied to two sets of data.
    // We are testing the null hypothesis that the two
    // samples have the same mean and that any difference
-   // if due to chance.  
+   // if due to chance.
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda353.htm
    //
    using namespace std;
    using namespace boost::math;
 
    // Print header:
-   cout << 
+   cout <<
       "_________________________________________________\n"
       "Student t test for two samples (unequal variances)\n"
       "_________________________________________________\n\n";
@@ -69,13 +69,13 @@ void two_samples_t_test(
    //
    students_t dist(v);
    double q = cdf(complement(dist, fabs(t_stat)));
-   cout << setw(55) << left << "Probability that difference is due to chance" << "=  " 
+   cout << setw(55) << left << "Probability that difference is due to chance" << "=  "
       << setprecision(3) << scientific << q << "\n\n";
    //
    // Finally print out results of alternative hypothesis:
    //
-   cout << setw(55) << left << 
-      "Results for Alternative Hypothesis and alpha" << "=  " 
+   cout << setw(55) << left <<
+      "Results for Alternative Hypothesis and alpha" << "=  "
       << setprecision(4) << fixed << alpha << "\n\n";
    cout << "Alternative Hypothesis              Conclusion\n";
    cout << "Sample 1 Mean != Sample 2 Mean       " ;
@@ -97,9 +97,9 @@ void two_samples_t_test(
 }
 
 void two_samples_t_test_equal_sd(
-        double Sm1, 
-        double Sd1, 
-        unsigned Sn1, 
+        double Sm1,
+        double Sd1,
+        unsigned Sn1,
         double Sm2,
         double Sd2,
         unsigned Sn2,
@@ -117,14 +117,14 @@ void two_samples_t_test_equal_sd(
    // A Students t test applied to two sets of data.
    // We are testing the null hypothesis that the two
    // samples have the same mean and that any difference
-   // if due to chance.  
+   // if due to chance.
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda353.htm
    //
    using namespace std;
    using namespace boost::math;
 
    // Print header:
-   cout << 
+   cout <<
       "_______________________________________________\n"
       "Student t test for two samples (equal variances)\n"
       "_______________________________________________\n\n";
@@ -152,13 +152,13 @@ void two_samples_t_test_equal_sd(
    //
    students_t dist(v);
    double q = cdf(complement(dist, fabs(t_stat)));
-   cout << setw(55) << left << "Probability that difference is due to chance" << "=  " 
+   cout << setw(55) << left << "Probability that difference is due to chance" << "=  "
       << setprecision(3) << scientific << q << "\n\n";
    //
    // Finally print out results of alternative hypothesis:
    //
-   cout << setw(55) << left << 
-      "Results for Alternative Hypothesis and alpha" << "=  " 
+   cout << setw(55) << left <<
+      "Results for Alternative Hypothesis and alpha" << "=  "
       << setprecision(4) << fixed << alpha << "\n\n";
    cout << "Alternative Hypothesis              Conclusion\n";
    cout << "Sample 1 Mean != Sample 2 Mean       " ;
@@ -190,7 +190,7 @@ void two_samples_estimate_df(
    using namespace boost::math;
 
    // Print out general info:
-   cout << 
+   cout <<
       "_____________________________________________________________\n"
       "Estimated sample sizes required for various confidence levels\n"
       "_____________________________________________________________\n\n";
@@ -223,14 +223,14 @@ void two_samples_estimate_df(
       double df = students_t::estimate_two_equal_degrees_of_freedom(
          complement(m1, s1, m2, s2, alpha[i]));
       // convert to sample size:
-      double size = (ceil(df) + 2) / 2; 
+      double size = (ceil(df) + 2) / 2;
       // Print size:
       cout << fixed << setprecision(0) << setw(28) << right << size;
       // calculate df with sample 1 fixed:
       df = students_t::estimate_two_unequal_degrees_of_freedom(
          complement(m1, s1, n1, m2, s2, alpha[i]));
       // convert to sample size:
-      size = (ceil(df) + 2) - n1; 
+      size = (ceil(df) + 2) - n1;
       // Print size:
       cout << fixed << setprecision(0) << setw(28) << right << size << endl;
    }

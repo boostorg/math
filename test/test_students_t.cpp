@@ -28,7 +28,7 @@
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
-#include <boost/math/dist/students_t.hpp>
+#include <boost/math/distributions/students_t.hpp>
 	 using boost::math::students_t_distribution;
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/tools/test.hpp> // for real_concept
@@ -44,7 +44,7 @@ template <class RealType>
 RealType naive_pdf(RealType v, RealType t)
 {
    // Calculate the pdf of the students t in a deliberately
-   // naive way, using equation (5) from 
+   // naive way, using equation (5) from
    // http://mathworld.wolfram.com/Studentst-Distribution.html
    // This is equivalent to, but a different method
    // to the one in the actual implementation, so can be used as
@@ -67,7 +67,7 @@ void test_spots(RealType T)
    // Basic santity checks
 	RealType tolerance = static_cast<RealType>(std::pow(10., -(6-2))); // 1e-6 (as %)
 	// Some tests only pass at 1e-5 because probability value is less accurate,
-	// a digit in 6th decimal place, although calculated using 
+	// a digit in 6th decimal place, although calculated using
 	// a t-distribution generator (claimed 6 decimal digits) at
    // http://faculty.vassar.edu/lowry/VassarStats.html
 	// http://faculty.vassar.edu/lowry/tsamp.html
@@ -99,7 +99,7 @@ void test_spots(RealType T)
          students_t_distribution<RealType>(2),       // degrees_of_freedom
          static_cast<RealType>(-6.96455673428326)),  // t
          static_cast<RealType>(0.01),                // probability.
-			tolerance); // % 
+			tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
@@ -186,7 +186,7 @@ void test_spots(RealType T)
          students_t_distribution<RealType>(1.),  // degrees_of_freedom (ignored).
          static_cast<RealType>(0)),  //  probability == half - special case.
          -big); // t == -infinity.
-			
+
   BOOST_CHECK_EQUAL(boost::math::quantile(
          students_t_distribution<RealType>(1.),  // degrees_of_freedom (ignored).
          static_cast<RealType>(1)),  //  probability == half - special case.
@@ -272,7 +272,7 @@ void test_spots(RealType T)
    //
    // PDF checks, use 100eps tolerance expressed as a persent:
    //
-   tolerance = boost::math::tools::epsilon<RealType>() * 10000; 
+   tolerance = boost::math::tools::epsilon<RealType>() * 10000;
    for(unsigned i = 1; i < 20; i += 3)
    {
       for(RealType r = -10; r < 10; r += 0.125)
@@ -280,7 +280,7 @@ void test_spots(RealType T)
          //std::cout << "df=" << i << " t=" << r << std::endl;
          BOOST_CHECK_CLOSE(
             boost::math::pdf(
-               students_t_distribution<RealType>(i), 
+               students_t_distribution<RealType>(i),
                r),
             naive_pdf<RealType>(i, r),
             tolerance);

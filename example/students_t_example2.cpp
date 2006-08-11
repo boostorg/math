@@ -9,7 +9,7 @@
 // Example 2 of using Student's t
 
 // A general guide to Student's t is at
-// http://en.wikipedia.org/wiki/Student's_t-test  
+// http://en.wikipedia.org/wiki/Student's_t-test
 // (and many other elementary and advanced statistics texts).
 // It says:
 // The t statistic was invented by William Sealy Gosset
@@ -29,7 +29,7 @@
 // The Students't distribution function is described at
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
 
-#include <boost/math/dist/students_t.hpp>
+#include <boost/math/distributions/students_t.hpp>
 	using boost::math::students_t;  // Probability of students_t(df, t).
 
 #include <iostream>
@@ -42,11 +42,11 @@
 	using std::sqrt;
 
 // This example of a one-sided test is from:
-// 
+//
 // from Statistics for Analytical Chemistry, 3rd ed. (1994), pp 59-60
 // J. C. Miller and J. N. Miller, Ellis Horwood ISBN 0 13 0309907.
 
-// An acid-base titrimetric method has a significant indicator error and 
+// An acid-base titrimetric method has a significant indicator error and
 // thus tends to give results with a positive systematic error (+bias).
 // To test this an exactly 0.1 M solution of acid is used to titrate
 // 25.00 ml of exactly 0.1 M solution of alkali,
@@ -83,7 +83,7 @@ int main()
    sd= sqrt(sd);
 	cout << "Standard deviation = " << sd<< endl; // = 0.238279
 
-	double t = (mean - reference) * sqrt(static_cast<double>(values))/ sd; // 
+	double t = (mean - reference) * sqrt(static_cast<double>(values))/ sd; //
 	cout << "Student's t = " << t << ", with " << degrees_of_freedom << " degrees of freedom." << endl; // = 2.34725
 
 	cout << "Probability of positive bias is " << cdf(students_t(degrees_of_freedom), t) << "."<< endl; // =  0.967108.

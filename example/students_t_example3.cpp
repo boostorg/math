@@ -9,7 +9,7 @@
 // Example 3 of using Student's t
 
 // A general guide to Student's t is at
-// http://en.wikipedia.org/wiki/Student's_t-test  
+// http://en.wikipedia.org/wiki/Student's_t-test
 // (and many other elementary and advanced statistics texts).
 // It says:
 // The t statistic was invented by William Sealy Gosset
@@ -29,7 +29,7 @@
 // The Students't distribution function is described at
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
 
-#include <boost/math/dist/students_t.hpp>
+#include <boost/math/distributions/students_t.hpp>
 	using boost::math::students_t;  // Probability of students_t(df, t).
 
 #include <iostream>
@@ -42,7 +42,7 @@
 	using std::sqrt;
 
 // This example of a two-sided test is from:
-// B. M. Smith & M. B. Griffiths, Analyst, 1982, 107, 253, 
+// B. M. Smith & M. B. Griffiths, Analyst, 1982, 107, 253,
 // from Statistics for Analytical Chemistry, 3rd ed. (1994), pp 58-59
 // J. C. Miller and J. N. Miller, Ellis Horwood ISBN 0 13 0309907
 
@@ -105,7 +105,7 @@ int main()
 Check using http://faculty.vassar.edu/lowry/VassarStats.html
 Output from avoid data using
 Independent samples is
-n = 4, 
+n = 4,
 sum 242 and 249 total 491
 sumsq 14862 15953  30815
 SS 221  452.75  679.875

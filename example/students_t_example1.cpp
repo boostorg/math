@@ -41,7 +41,7 @@ double value[values] = {38.9, 37.4, 37.1};
 
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
 
-#include <boost/math/dist/students_t.hpp>
+#include <boost/math/distributions/students_t.hpp>
 	using boost::math::students_t;  // Probability of students_t(df, t).
 
 #include <iostream>
@@ -66,19 +66,20 @@ int main()
 
 	double degrees_of_freedom = values-1; // 3-1 = 2
 
+  cout << "Measurement 1 = " << value[0] << ", measurement 2 = " << value[1] << ", measurement 3 = " << value[2] << endl;
 	double mean = (value[0] + value[1] + value[2]) / static_cast<double>(values);
-	cout << "mean = " << mean << ", (mean - standard) = " << mean - standard  << endl;
+  cout << "Standard = " << standard << ", mean = " << mean << ", (mean - standard) = " << mean - standard  << endl;
 	double sd = sqrt(((value[0] - mean) * (value[0] - mean) + (value[1] - mean) * (value[1] - mean) + (value[2] - mean) * (value[2] - mean))/ static_cast<double>(values-1));
-	cout << "standard deviation = " << sd << endl;
+	cout << "Standard deviation = " << sd << endl;
 	if (sd == 0.)
 	{
 		cout << "Measured mean is identical to SRM value," << endl;
 		cout << "so probability of no difference between measured and standard (the 'null hypothesis') is unity." << endl;
 		return 0;
 	}
-	
+
 	double t = (mean - standard) * std::sqrt(static_cast<double>(values)) / sd;
-	cout << "Student's t = " << t << endl;
+	// cout << "Student's t = " << t << endl;
 
 	cout.precision(5); // Useful accuracy is only a few decimal digits, but seems to give at least 5.
 	cout << "Probability of Student's t is " << cdf(students_t(degrees_of_freedom), abs(t)) << endl; //  0.90657, is 1 tailed.
@@ -90,12 +91,15 @@ int main()
 /*
 
 Output is:
-Example 1 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\math_functions\example\students_t_example1.cpp Sun Jun 18 12:37:42 2006 140050727
-mean = 37.8, (mean - standard) = -1.1
-standard deviation = 0.964365
-Student's t = -1.97566
-Probability of Student's t is 0.90657
+
+Example 1 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\mat
+h_functions\example\students_t_example1.cpp Tue Jul 11 12:44:17 2006 140050727
+Measurement 1 = 38.9, measurement 2 = 37.4, measurement 3 = 37.1
+Standard = 38.9, mean = 37.8, (mean - standard) = -1.1
+Standard deviation = 0.964365
+Probability of Student's t -1.976 with 2 degrees of freedom is 0.9066 (1-tailed).
 Press any key to continue . . .
+
 
 
 */
@@ -123,7 +127,7 @@ Obselete junk?
 
 
 // http://faculty.vassar.edu/lowry/VassarStats.html
-	// calculator gives mean = 37.8, difference from 'hypothetical population mean' == SRM 38.9 is -1.1, 
+	// calculator gives mean = 37.8, difference from 'hypothetical population mean' == SRM 38.9 is -1.1,
 	// t = -1.975, 2 df, P 1-tailed = 0.093474, 2-tailed = 0.186948.
 
 Example 1 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\mat

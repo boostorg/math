@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <iomanip>
-#include <boost/math/dist/students_t.hpp>
+#include <boost/math/distributions/students_t.hpp>
 
 void confidence_limits_on_mean(double Sm, double Sd, unsigned Sn)
 {
@@ -20,18 +20,18 @@ void confidence_limits_on_mean(double Sm, double Sd, unsigned Sn)
    // 0.95, we know that if we repeat the sampling
    // 100 times, then we expect that the true mean
    // will be between out limits on 95 occations.
-   // Note: this is not the same as saying a 95% 
-   // confidence interval means that there is a 95% 
-   // probability that the interval contains the true mean. 
-   // The interval computed from a given sample either 
-   // contains the true mean or it does not. 
+   // Note: this is not the same as saying a 95%
+   // confidence interval means that there is a 95%
+   // probability that the interval contains the true mean.
+   // The interval computed from a given sample either
+   // contains the true mean or it does not.
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm
 
    using namespace std;
    using namespace boost::math;
 
    // Print out general info:
-   cout << 
+   cout <<
       "__________________________________\n"
       "2-Sided Confidence Limits For Mean\n"
       "__________________________________\n\n";
@@ -93,14 +93,14 @@ void single_sample_t_test(double M, double Sm, double Sd, unsigned Sn, double al
    // We are testing the null hypothesis that the true
    // mean of the sample is M, and that any variation is down
    // to chance.  We can also test the alternative hypothesis
-   // that any difference is not down to chance. 
+   // that any difference is not down to chance.
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm
    //
    using namespace std;
    using namespace boost::math;
 
    // Print header:
-   cout << 
+   cout <<
       "__________________________________\n"
       "Student t test for a single sample\n"
       "__________________________________\n\n";
@@ -126,13 +126,13 @@ void single_sample_t_test(double M, double Sm, double Sd, unsigned Sn, double al
    //
    students_t dist(v);
    double q = cdf(complement(dist, fabs(t_stat)));
-   cout << setw(55) << left << "Probability that difference is due to chance" << "=  " 
+   cout << setw(55) << left << "Probability that difference is due to chance" << "=  "
       << setprecision(3) << scientific << q << "\n\n";
    //
    // Finally print out results of alternative hypothesis:
    //
-   cout << setw(55) << left << 
-      "Results for Alternative Hypothesis and alpha" << "=  " 
+   cout << setw(55) << left <<
+      "Results for Alternative Hypothesis and alpha" << "=  "
       << setprecision(4) << fixed << alpha << "\n\n";
    cout << "Alternative Hypothesis     Conclusion\n";
    cout << "Mean != " << setprecision(3) << fixed << M << "            ";
@@ -164,7 +164,7 @@ void single_sample_estimate_df(double M, double Sm, double Sd)
    using namespace boost::math;
 
    // Print out general info:
-   cout << 
+   cout <<
       "_____________________________________________________________\n"
       "Estimated sample sizes required for various confidence levels\n"
       "_____________________________________________________________\n\n";
@@ -194,7 +194,7 @@ void single_sample_estimate_df(double M, double Sm, double Sd)
       // calculate df:
       double df = students_t::estimate_degrees_of_freedom(complement(M, Sm, Sd, alpha[i]));
       // convert to sample size:
-      double size = ceil(df) + 1; 
+      double size = ceil(df) + 1;
       // Print size:
       cout << fixed << setprecision(0) << setw(16) << right << size << endl;
    }

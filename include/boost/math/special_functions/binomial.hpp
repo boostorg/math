@@ -15,7 +15,7 @@
 // n independent (yes or no, success or failure) Bernoulli trials.
 
 // It expresses the probability of a number of events occurring in a fixed time
-// if these events occur with a known average rate,
+// if these events occur with a known average rate (probability of success),
 // and are independent of the time since the last event.
 
 // The binomial distribution was discovered by Siméon-Denis (1781–1840).
@@ -44,6 +44,18 @@
 // For example, if events occur, on average, every 4 min,
 // and we are interested in number of events occurring in 10 min,
 // then x = 10/4 = 2.5
+
+// http://www.itl.nist.gov/div898/handbook/eda/section3/eda366i.htm
+
+// The binomial distribution is used when there are
+// exactly two mutually exclusive outcomes of a trial.
+// These outcomes are appropriately labeled "success" and "failure".
+// The binomial distribution is used to obtain
+// the probability of observing x successes in N trials,
+// with the probability of success on a single trial denoted by p.
+// The binomial distribution assumes that p is fixed for all trials.
+
+// P(x, p, n) = n!/(x! * (n-x)!) * p^x * (1-p)^(n-x)
 
 
 #ifndef BOOST_MATH_SPECIAL_BINOMIAL_HPP
