@@ -1,6 +1,6 @@
 [library Math Toolkit
     [quickbook 1.3]
-    [copyright 2006 John Maddock]
+    [copyright 2006 John Maddock and Paul A. Bristow]
     [purpose Various Special Functions and Numerical Tools]
     [license
         Distributed under the Boost Software License, Version 1.0.
@@ -9,7 +9,7 @@
             http://www.boost.org/LICENSE_1_0.txt
         </ulink>)
     ]
-    [authors [Maddock, John]]
+    [authors [Maddock, John], [Bristow, Paul A.]]
     [category math]
     [last-revision $Date$]
 ]
@@ -127,3 +127,4 @@ data and/or data for output to an external graphing application.
 [include issues.qbk]
 
 [endsect]
+
