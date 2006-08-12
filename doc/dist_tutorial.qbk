@@ -168,6 +168,7 @@ Now that you have the basics, the next section looks at some worked examples.
 [section Worked Examples]
 
 [section:mean1 Calculating confidence intervals on the mean with the students-t]
+[#tut_mean_intervals]
 
 Let's say you have a sample mean, you may wish to know what confidence intervals
 you can place on that mean.  Colloquially: "I want an interval that I can be
@@ -258,6 +259,7 @@ Heat flow data] from the NIST site.  The data set was collected
 by Bob Zarr of NIST in January, 1990 from a heat flow meter 
 calibration and stability analysis.
 
+[pre
    __________________________________
    2-Sided Confidence Limits For Mean
    __________________________________
@@ -279,6 +281,7 @@ calibration and stability analysis.
        99.900     3.341       5.453e-003        9.25601        9.26691
        99.990     3.973       6.484e-003        9.25498        9.26794
        99.999     4.537       7.404e-003        9.25406        9.26886
+]
     
 As you can see the large sample size (195) and small standard deviation (0.023)
 have combined to give very small intervals, indeed we can be
@@ -291,6 +294,7 @@ J. C. Miller and J. N. Miller, Ellis Horwood ISBN 0 13 0309907.]
 The values result from the determination of mercury by cold-vapour 
 atomic absorption.
 
+[pre
    __________________________________
    2-Sided Confidence Limits For Mean
    __________________________________
@@ -312,7 +316,8 @@ atomic absorption.
        99.900    31.599           17.594       20.20639       55.39361
        99.990    99.992           55.673      -17.87346       93.47346
        99.999   316.225          176.067     -138.26683      213.86683
-    
+]
+
 This time the fact that there are only three measurements leads to
 much wider intervals, indeed such large intervals that it's hard
 to be very confident in the location of the mean.
@@ -320,6 +325,7 @@ to be very confident in the location of the mean.
 [endsect]
 
 [section:diff1 Testing a sample mean for systematic difference, by comparison to a "true" mean]
+[#tut_mean_test]
 
 When calibrating or comparing a scientific instrument or measurement method of some kind, 
 we want to be answer the question "Does an observed sample mean differ from the
@@ -401,6 +407,7 @@ Heat flow data] from the NIST site.  The data set was collected
 by Bob Zarr of NIST in January, 1990 from a heat flow meter 
 calibration and stability analysis.
 
+[pre
    __________________________________
    Student t test for a single sample
    __________________________________
@@ -421,6 +428,7 @@ calibration and stability analysis.
    Mean != 5.000              ACCEPTED
    Mean  < 5.000              REJECTED
    Mean  > 5.000              ACCEPTED
+]
 
 You will note the line that says the probability that the difference is
 due to chance is zero.  From a philosophical point of view, of course,
@@ -437,6 +445,7 @@ J. C. Miller and J. N. Miller, Ellis Horwood ISBN 0 13 0309907.]
 The values result from the determination of mercury by cold-vapour 
 atomic absorption.
 
+[pre
    __________________________________
    Student t test for a single sample
    __________________________________
@@ -457,6 +466,7 @@ atomic absorption.
    Mean != 38.900             REJECTED
    Mean  < 38.900             REJECTED
    Mean  > 38.900             REJECTED
+]
 
 As you can see the small number of measurements (3) has led a large uncertainty
 in the location of the true mean.  So even though there is a clear difference
@@ -465,6 +475,7 @@ is no significant difference, and accept this null hypothesis.  However, if we
 were to lower the bar for acceptance down to alpha = 0.1 (90% confidence level)
 we see a different output:
 
+[pre
    __________________________________
    Student t test for a single sample
    __________________________________
@@ -485,6 +496,7 @@ we see a different output:
    Mean != 38.900             ACCEPTED
    Mean  < 38.900             ACCEPTED
    Mean  > 38.900             REJECTED
+]
 
 In this case we really have a borderline result, and more data should
 be collected.
@@ -494,6 +506,7 @@ be collected.
 
 [section:size1 Estimating how large a sample size would have to become
 in order to give a significant Students-t test result with a single sample test]
+[#tut_mean_size]
 
 Imagine you have conducted a Students-t test on a single sample in order
 to check for systematic errors in your measurements.  Imagine that the
@@ -556,6 +569,7 @@ Only three measurements were made, and the Students-t test above
 gave a borderline rsult, so this example
 will show us how many samples would need to be collected:
 
+[pre
    _____________________________________________________________
    Estimated sample sizes required for various confidence levels
    _____________________________________________________________
@@ -577,7 +591,8 @@ will show us how many samples would need to be collected:
        99.900               3
        99.990               3
        99.999               3
-    
+]
+
 So in this case, doubling the sample size could well have settled the
 issue, at least to the 95% level.
 
@@ -601,11 +616,11 @@ The sample code is in
 There are two ways in which this test can be conducted: we can assume
 that the true standard deviations of the two samples are equal or not.
 If the standard deviations are assumed to be equal, then the calculation
-of the t-statistic is greatly simplified, so we'll example that case first.
+of the t-statistic is greatly simplified, so we'll examine that case first.
 In real life we should verify whether this assumption is valid with a 
 Chi-Squared test for equal variances.
 
-Begin by defining a procedure that will conduct our test assuming equal
+We begin by defining a procedure that will conduct our test assuming equal
 variances:
 
    // Needed headers:
@@ -665,7 +680,7 @@ in the following table:
 [[The Null-hypothesis: there is
 *no difference* in means]  [complement of CDF for |t| > confidence level]
                          [``cdf(complement(dist, fabs(t))) > alpha``]]
-[[The Alternative-hypothesis: there is
+[[The Alternative-hypothesis: there is a
 *difference* in means]  [complement of CDF for |t| < confidence level]
                          [``cdf(complement(dist, fabs(t))) < alpha``]]
 [[The Alternative-hypothesis: Sample 1 Mean is *less* than
@@ -680,6 +695,7 @@ Most of the rest of the sample program is pretty-printing, so we'll
 skip over that, and take a look at the sample output for alpha=0.05
 (95% probability level).
 
+[pre
    ________________________________________________
    Student t test for two samples (equal variances)
    ________________________________________________
@@ -701,6 +717,7 @@ skip over that, and take a look at the sample output for alpha=0.05
    Sample 1 Mean != Sample 2 Mean       ACCEPTED
    Sample 1 Mean <  Sample 2 Mean       ACCEPTED
    Sample 1 Mean >  Sample 2 Mean       REJECTED
+]
 
 So with a probability that the difference is due to chance of just
 2.637e-030, we can safely conclude that there is indeed a difference.
@@ -717,11 +734,11 @@ are not equal.  In this case the formula for the t-statistic becomes:
 
 [$../equations/dist_tutorial2.png]
 
-And for the combined degress of freedom we have:
+And for the combined degrees of freedom we have:
 
 [$../equations/dist_tutorial3.png]
 
-Note that this is one of the rare situation where the degrees-of-freedom
+Note that this is one of the rare situations where the degrees-of-freedom
 parameter to the Student's t distribution is a real number, and not an
 integer value.
 
@@ -745,6 +762,7 @@ Putting these formulae into code we get:
 Thereafter the code and the tests are performed the same as before.  Using
 are car mileage data again, here's what the output looks like:
 
+[pre
    __________________________________________________
    Student t test for two samples (unequal variances)
    __________________________________________________
@@ -765,9 +783,10 @@ are car mileage data again, here's what the output looks like:
    Sample 1 Mean != Sample 2 Mean       ACCEPTED
    Sample 1 Mean <  Sample 2 Mean       ACCEPTED
    Sample 1 Mean >  Sample 2 Mean       REJECTED
-   
+]
+
 This time allowing the variances in the two samples to differ has yielded
-a higher likelyhood that the observed difference is down to chance alone
+a higher likelihood that the observed difference is down to chance alone
 (7.855e-026 compared to 2.637e-030 when equal variances were assumed).
 However, the conclusion remains the same: US cars are less fuel efficient
 than Japanese models.
@@ -788,7 +807,7 @@ than it is for the single sample case.  Firstly we have two sample sizes
 to deal with: this can be handled by assuming either than one of the sample
 sizes is fixed (as happens when comparing against historical data), or by
 assuming that both sample sizes are always equal.  Secondly, the estimators
-always assume that the variances of the two samples are equal, without this
+always assume that the variances of the two samples are equal, as without this
 assumption it's impossible to relate the sample sizes to the number of degrees
 of freedom in any direct way.
 
@@ -851,9 +870,16 @@ since the significance levels are the complement of the probability:
       // Print size:
       cout << fixed << setprecision(0) << setw(28) << right << size << endl;
 
-And other than printing the result that's pretty much it.  Let's see some 
+Note that the parameter estimators return the number of degrees of freedom
+required - whilst we want sample size - so the number of degrees of freedom
+must be rounded up to the nearest integer, and then converted to sample size
+using ['v = Sn1 + Sn2 - 2] for /v/ degrees of freedom and sample sizes /Sn1/ 
+and /Sn2/.
+
+Other than printing the result that's pretty much it.  Let's see some 
 sample output using the fuel efficiency data:
 
+[pre
    _____________________________________________________________
    Estimated sample sizes required for various confidence levels
    _____________________________________________________________
@@ -876,17 +902,18 @@ sample output using the fuel efficiency data:
        99.900                          10                           4
        99.990                          14                           6
        99.999                          18                           8
+]
 
 So in order to achieve a 95% confidence level we would only need to
 compare 4 American cars with 4 Japanese cars.  Alternatively, comparing
 just 3 Japanese cars against the data for all 249 American cars would yield
 a 99% probability that the Japanese cars were more efficient.  However, at
 this point a word of caution is in order: comparing just 4 cars from each
-country is unlikely to win you friends and admirers.  As ever a measure of
+country is unlikely to win you many friends and admirers.  As ever a measure of
 common sense, and some analysis of the problem domain is needed when 
-interpretting such results.
+interpreting such results.
 
-Finally, you will note that the table contains some "nonesence" values
+Finally, you will note that the table contains some "nonsense" values
 of 0 or 1: these arise if ['there is no solution to the question posed], and
 /any/ valid value for the degrees of freedom will cause the null-hypothesis
 to fail at the significance level given.
@@ -894,6 +921,27 @@ to fail at the significance level given.
 [endsect]
 
 [section:paired_t Comparing two paired samples with the Student's t distribution]
+
+Imagine that we have a before and after reading for each item in the sample:
+for example we might have measured blood pressure before and after administration
+of a new drug.  We can't pool the results and compare the means before and after
+the change, because each patient will have a different baseline reading.
+Instead we calculate the difference between before and after measurements
+in each patient, and calculate the mean and standard deviation of the differences.
+To test whether a significant change has taken place, we can then test 
+the null-hypothesis that the true mean is zero using the same procedure 
+that's used in the single sample cases previously discussed.
+
+That means we can:
+
+* [link tut_mean_intervals Calculate confidence intervals of the mean], 
+if the endpoints of the interval differ in sign then we must accept 
+the null-hypothesis that there is no change.
+* [link tut_mean_test Test whether the true mean is zero], if the
+result is consistent with a true mean of zero, then we must accept the
+null-hypothesis that there is no change.
+* [link tut_mean_size Calculate how many pairs of readings we would need
+in order to obtain a significant result].
 
 [endsect]
 
@@ -964,6 +1012,7 @@ opportunity to integrate the statistical tests with this framework at some later
 	double p = probability(acc);
 
 [endsect]
+
 
 
 

@@ -43,13 +43,17 @@
 
 [section:intro Introduction]
 
-This library is work in progress, it is intended to fulfil two needs:
+This library is work in progress, it is intended to fulfil several needs:
+
+# To provide a reasonably comprehensive set of statistical distributions,
+upon which higher level statistical tests can be built.  The initial
+focus is on the central univariate distributions.
 
 # To provide a small number of high quality special functions, initially
 these will be concentrated on functions used in statistical applications.
 The functions currently implemented are the gamma/beta/erf functions
 along with the incomplete gamma and beta functions (four variants
-of each).  All the implementations
+of each) and all the possible inverses of these.  All the implementations
 are fully generic and support the use of arbitrary "real-number"
 types, although they are optimised for use with types with known-about
 mantissa sizes: typically `float`, `double` or `long double`.  Use of these
@@ -61,7 +65,9 @@ mathematical special functions, hopefully the presence of
 these will encourage other authors to contribute more special
 function implementations in the future.  Currently implemented
 are helpers for the evaluation of infinite series, continued
-fractions and rational approximations.  There are also classes 
+fractions and rational approximations.  There are also
+a fairly comprehensive set of root finding algorithms:
+both with and without derivative support.  There are also classes 
 for the manipulation of polynomials, for testing a special function
 against tabulated test data, and for the rapid generation of test
 data and/or data for output to an external graphing application.

@@ -9,22 +9,14 @@
 * Improve accuracy near 1 and 2 with either Chebyshev or rational
 approximation. (High priority).
 
-[h4 erf/erfc]
+[h4 Error function]
 
-* Rewrite using either Chebyshev or rational
-approximation. (High priority).  Done.
+* No known issues?
 
 [h4 Incomplete gamma]
 
 * Implement Temme's asymptotic expansion for large a and z,
 this one is mainly an issue of performance rather than accuracy (medium priority).
-* Double check behavior of the upper fraction when a is very small and z -> 1 (Medium Priority) Confirmed as an issue.
-* Double check behavior of the upper fraction when a is very small and z -> 0 (Medium Priority) Confirmed as an issue.
-* Double check for opportunities to chain series expansions together, passing
-the result of one into the initial value of the next (Medium Priority).
-* Investigate asymptotic expansions for large a small z and large z small a
-(see A&S) (low priority).
-
 
 [h4 Beta Function]
 
@@ -34,10 +26,6 @@ the result of one into the initial value of the next (Medium Priority).
 
 * Investigate Didonato and Morris' asymptotic expansion for large a and b 
 (medium priority).
-* Double check for opportunities to chain series expansions together, passing
-the result of one into the initial value of the next (Medium Priority) Done.
-* Investigate Didonato and Morris' asymptotic expansion for small a and b 
-(low priority) Done.
 
 [h4 Inverse Erf]
 
@@ -58,8 +46,11 @@ is good enough (Medium Priority).
 
 [h4 Error handling]
 
-* Remove versions of __domain_error, __pole_error and __logic_error that
-don't take a value argument (they're undocumented and legacy only).
+* None known.
+
+[h4 Statistical distributions]
+
+* None known.
 
 [endsect]
 
