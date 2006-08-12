@@ -320,8 +320,15 @@ int test_main(int, char* [])
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+#else
+   std::cout << "<note>The long double tests have been disabled on this platform "
+      "either because the long double overloads of the usual math functions are "
+      "not available at all, or because they are too inaccurate for these tests "
+      "to pass.</note>" << std::cout;
+#endif
 
    return 0;
 } // int test_main(int, char* [])
