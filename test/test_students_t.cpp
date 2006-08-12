@@ -183,6 +183,7 @@ void test_spots(RealType T)
          static_cast<RealType>(0.5),              // probability.
 			tolerance);
 
+
 	// Student's t Inverse function tests.
   // Special cases
 
@@ -273,10 +274,30 @@ void test_spots(RealType T)
          static_cast<RealType>(-6.96455673428326), // t
 			tolerance);
 
-   //
-   // PDF checks, use 100eps tolerance expressed as a percent:
-   //
+   
+  // Student's t pdf tests.
+  // for PDF checks, use 100eps tolerance expressed as a percent:
    tolerance = boost::math::tools::epsilon<RealType>() * 10000;
+
+  // t = 0 and degrees_of_freedom max and infinity should be 1/sqrt(2 * pi).  TODO
+      
+  // std::numeric_limits<RealType>::max() is NOT defined for Real_concept
+
+  //for (RealType df = 10; df < std::numeric_limits<RealType>::max(); df *=10)
+  //{ 
+  //  RealType d = ::boost::math::pdf(students_t_distribution<RealType>(df), static_cast<RealType>(0));
+  //  if (abs(d-  0.3989422804014326779399460599343818684759) > 1e-100)
+  //  { // too far from 1.sqrt(2*pi)
+  //    std::cout << "df = " << df << ", density = " << d << endl;
+  //  }
+  //BOOST_CHECK_CLOSE(
+  //    ::boost::math::pdf(
+  //    students_t_distribution<RealType>(df), // degrees_of_freedom  = max
+  //       static_cast<RealType>(0)),  // t == 0 where density is maximum.
+  //       static_cast<RealType>(0.3989422804014326779399460599343818684759), // probability == 1 / sqrt(2 * pi).
+		//	tolerance);
+  //}
+
    for(unsigned i = 1; i < 20; i += 3)
    {
       for(RealType r = -10; r < 10; r += 0.125)
