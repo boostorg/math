@@ -145,7 +145,7 @@ typedef students_t_distribution<double> students_t;
 template <class RealType>
 RealType pdf(const students_t_distribution<RealType>& dist, const RealType& t)
 {
-   using namespace std;  // for ADL of fabs
+   using namespace std;  // for ADL of std functions
    RealType degrees_of_freedom = dist.degrees_of_freedom();
    if(degrees_of_freedom <= 0)
    { // Degrees of freedom must be > 0!
@@ -202,7 +202,7 @@ RealType cdf(const students_t_distribution<RealType>& dist, const RealType& t)
 template <class RealType>
 RealType quantile(const students_t_distribution<RealType>& dist, const RealType& p)
 {
-   using std::numeric_limits;
+   using namespace std; // for ADL of std functions
    // Error check.
    RealType degrees_of_freedom = dist.degrees_of_freedom();
    RealType probability = p;
@@ -383,7 +383,7 @@ RealType students_t_distribution<RealType>::estimate_two_equal_degrees_of_freedo
    RealType Sd2,           // sample 2 std deviation
    RealType p,             // required probablity
    RealType q,             // 1 - required probablity
-   RealType hint = 100)    // hint to where the answer lies.
+   RealType hint /*= 100*/)    // hint to where the answer lies.
 {
    using namespace std;
    RealType result;
@@ -433,7 +433,7 @@ RealType students_t_distribution<RealType>::estimate_two_unequal_degrees_of_free
    RealType Sd2,           // sample 2 std deviation
    RealType p,             // required probablity
    RealType q,             // 1 - required probablity
-   RealType hint = 100)    // hint to where the answer lies.
+   RealType hint /*= 100*/)    // hint to where the answer lies.
 {
    using namespace std;
    RealType result;
