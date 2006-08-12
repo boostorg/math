@@ -1,4 +1,5 @@
 // students_t_example1.cpp
+
 // Copyright Paul A. Bristow 2006.
 
 // Use, modification and distribution are subject to the
@@ -39,8 +40,8 @@ double value[values] = {38.9, 37.4, 37.1};
 
 // Is there any evidence for systematic error?
 
+// The Students't distribution function is described at
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
-
 #include <boost/math/distributions/students_t.hpp>
 	using boost::math::students_t;  // Probability of students_t(df, t).
 
@@ -92,61 +93,21 @@ int main()
 
 Output is:
 
-Example 1 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\mat
-h_functions\example\students_t_example1.cpp Tue Jul 11 12:44:17 2006 140050727
+------ Build started: Project: students_t_example1, Configuration: Debug Win32 ------
+Compiling...
+students_t_example1.cpp
+Linking...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\students_t_example1.exe"
+Example 1 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\math_functions\example\students_t_example1.cpp Sat Aug 12 16:54:41 2006 140050727
 Measurement 1 = 38.9, measurement 2 = 37.4, measurement 3 = 37.1
 Standard = 38.9, mean = 37.8, (mean - standard) = -1.1
 Standard deviation = 0.964365
-Probability of Student's t -1.976 with 2 degrees of freedom is 0.9066 (1-tailed).
-Press any key to continue . . .
-
-
-
-*/
-
-/*
-Obselete junk?
-	double p = students_t(degrees_of_freedom, t);
-	p = students_t(degrees_of_freedom, t);
-	cout << "Probability of t = " << t << " is " << p << endl;
-
-	//t = 4.30; 4.30265272974946
-	//p = students_t(degrees_of_freedom, t); // 0.975 = tquantiles value
-	//cout << "Probability of t = " << t << " is " << p << endl;
-	// But MathCAD pt(2, 4.30265272974946) = 0.944426429950027 ??? expect 0.95
-
-	//t = 2.92;
-	//p = students_t(degrees_of_freedom, t); // 0.95
-	//cout << "Probability of t = " << t << " is " << p << endl;
-	//t = -2.92;
-	//p = students_t(degrees_of_freedom, t); // 0.05
-	//cout << "Probability of t = " << t << " is " << p << endl;
-
-	// Means probability(t < 1.533) = 0.9 == 90%, a one-sided or one-tailed-test.
-
-
-
-// http://faculty.vassar.edu/lowry/VassarStats.html
-	// calculator gives mean = 37.8, difference from 'hypothetical population mean' == SRM 38.9 is -1.1,
-	// t = -1.975, 2 df, P 1-tailed = 0.093474, 2-tailed = 0.186948.
-
-Example 1 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\mat
-h_functions\example\students_t_example1.cpp Sat Jun 17 11:25:02 2006 140050727
-mean = 37.8
-standard deviation = 0.964365
- Student's t = -1.97566
-Probability of t = -1.97566 is 0.0934283
-Probability of t = 4.3 is 0.974971
-Probability of t = 2.92 is 0.95
-Probability of t = -2.92 is 0.0499996
-Probability of Student's t = 0.05
-Press any key to continue . . .
-
-
+Probability of Student's t is 0.90657
+Build Time 0:03
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_example1\Debug\BuildLog.htm"
+students_t_example1 - 0 error(s), 0 warning(s)
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 
 */
-
-
-
 

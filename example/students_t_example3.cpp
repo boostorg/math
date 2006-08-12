@@ -6,7 +6,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Example 3 of using Student's t
+// Example 3 of using Student's t.
 
 // A general guide to Student's t is at
 // http://en.wikipedia.org/wiki/Student's_t-test
@@ -25,6 +25,11 @@
 // In fact, Gosset's identity was unknown not only to fellow statisticians
 // but to his employer - the company insisted on the pseudonym
 // so that it could turn a blind eye to the breach of its rules.
+
+#ifdef _MSC_VER
+#  pragma warning(disable: 4702) // unreachable code
+#endif
+// 4996 4512 
 
 // The Students't distribution function is described at
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
@@ -119,9 +124,12 @@ correlated samples: p 1-tailed 0.261635, 2-tailed 0.534327
 
 Output is:
 
-Example3 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\math
-_functions\example\students_t_example3.cpp Sat Jun 17 14:52:44 2006 140050727
-
+------ Build started: Project: students_t_example3, Configuration: Debug Win32 ------
+Compiling...
+students_t_example3.cpp
+Linking...
+Atuorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\students_t_example3.exe"
+Example3 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\math_functions\example\students_t_example3.cpp Sat Aug 12 16:57:50 2006 140050727
 Portion  wet_oxidation  Direct_extraction  difference
    0             71                 76        -5
    1             61                 68        -7
@@ -131,7 +139,32 @@ Mean difference = -1.75
 Standard deviation of differences = 4.99166
 Student's t = -0.70117, if 3 degrees of freedom.
 Probability of the means being different is 0.533692.
-Press any key to continue . . .
+Build Time 0:03
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_example3\Debug\BuildLog.htm"
+students_t_example3 - 0 error(s), 0 warning(s)
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
+------ Build started: Project: students_t_example3, Configuration: Release Win32 ------
+Compiling...
+students_t_example3.cpp
+Linking...
+Generating code
+Finished generating code
+Autorun "i:\boost-06-05-03-1300\libs\math\test\math_test\release\students_t_example3.exe"
+Example3 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\math_functions\example\students_t_example3.cpp Sat Aug 12 17:01:52 2006 140050727
+Portion  wet_oxidation  Direct_extraction  difference
+   0             71                 76        -5
+   1             61                 68        -7
+   2             50                 48         2
+   3             60                 57         3
+Mean difference = -1.75
+Standard deviation of differences = 4.99166
+Student's t = -0.70117, if 3 degrees of freedom.
+Probability of the means being different is 0.533692.
+Build Time 0:04
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_example3\Release\BuildLog.htm"
+students_t_example3 - 0 error(s), 0 warning(s)
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 
 */

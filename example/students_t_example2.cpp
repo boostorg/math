@@ -1,6 +1,6 @@
 // students_t_example2.cpp
-// Copyright Paul A. Bristow 2006.
 
+// Copyright Paul A. Bristow 2006.
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -97,8 +97,12 @@ int main()
 
 Output is:
 
-Example2 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\math
-_functions\example\students_t_example2.cpp Sat Jun 17 16:39:11 2006 140050727
+------ Build started: Project: students_t_example2, Configuration: Debug Win32 ------
+Compiling...
+students_t_example2.cpp
+Linking...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\students_t_example2.exe"
+Example2 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\math_functions\example\students_t_example2.cpp Sat Aug 12 16:55:59 2006 140050727
    0          25.06
    1          25.18
    2          24.87
@@ -109,29 +113,9 @@ Mean = 25.2283
 Standard deviation = 0.238279
 Student's t = 2.34725, with 5 degrees of freedom.
 Probability of positive bias is 0.967108.
-Press any key to continue . . .
-
-
-1>------ Build started: Project: students_t_example2, Configuration: Debug Win32 ------
-1>Compiling...
-1>students_t_example2.cpp
-1>Linking...
-1>Embedding manifest...
-1>Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\students_t_example2.exe"
-1>Example2 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\math_functions\example\students_t_example2.cpp Sat Jun 17 16:39:11 2006 140050727
-1>   0          25.06
-1>   1          25.18
-1>   2          24.87
-1>   3          25.51
-1>   4          25.34
-1>   5          25.41
-1>Mean = 25.2283
-1>Standard deviation = 0.238279
-1>Student's t = 2.34725, with 5 degrees of freedom.
-1>Probability of positive bias is 0.967108.
-1>Build Time 0:03
-1>Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_example2\Debug\BuildLog.htm"
-1>students_t_example2 - 0 error(s), 0 warning(s)
+Build Time 0:03
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_example2\Debug\BuildLog.htm"
+students_t_example2 - 0 error(s), 0 warning(s)
 ========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 */
