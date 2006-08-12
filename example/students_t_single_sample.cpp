@@ -4,6 +4,12 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifdef _MSC_VER
+#  pragma warning(disable: 4512) // assignment operator could not be generated.
+#  pragma warning(disable: 4510) // default constructor could not be generated.
+#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
+#endif
+
 #include <iostream>
 #include <iomanip>
 #include <boost/math/distributions/students_t.hpp>
@@ -232,3 +238,140 @@ int main()
    // parameter estimate:
    single_sample_estimate_df(38.9, 37.8, 0.964365);
 }
+
+/*
+
+Output:
+
+------ Build started: Project: students_t_single_sample, Configuration: Debug Win32 ------
+Compiling...
+students_t_single_sample.cpp
+Linking...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\students_t_single_sample.exe"
+__________________________________
+2-Sided Confidence Limits For Mean
+__________________________________
+Number of Observations                  =  195
+Mean                                    =  9.26146
+Standard Deviation                      =  0.02278881
+_______________________________________________________________
+Confidence       T           Interval          Lower          Upper
+ Value (%)     Value          Width            Limit          Limit
+_______________________________________________________________
+    50.000     0.676       1.103e-003        9.26036        9.26256
+    75.000     1.154       1.883e-003        9.25958        9.26334
+    90.000     1.653       2.697e-003        9.25876        9.26416
+    95.000     1.972       3.219e-003        9.25824        9.26468
+    99.000     2.601       4.245e-003        9.25721        9.26571
+    99.900     3.341       5.453e-003        9.25601        9.26691
+    99.990     3.973       6.484e-003        9.25498        9.26794
+    99.999     4.537       7.404e-003        9.25406        9.26886
+__________________________________
+Student t test for a single sample
+__________________________________
+Number of Observations                                 =  195
+Sample Mean                                            =  9.26146
+Sample Standard Deviation                              =  0.02279
+Expected True Mean                                     =  5.00000
+Sample Mean - Expected Test Mean                       =  4.26146
+Degrees of Freedom                                     =  194
+T Statistic                                            =  2611.28380
+Probability that difference is due to chance           =  0.000e+000
+Results for Alternative Hypothesis and alpha           =  0.0500
+Alternative Hypothesis     Conclusion
+Mean != 5.000            ACCEPTED
+Mean  < 5.000            REJECTED
+Mean  > 5.000            ACCEPTED
+_____________________________________________________________
+Estimated sample sizes required for various confidence levels
+_____________________________________________________________
+True Mean                               =  5.00000
+Sample Mean                             =  9.26146
+Sample Standard Deviation               =  0.02279
+_______________________________________________________________
+Confidence      Estimated
+ Value (%)     Sample Size
+_______________________________________________________________
+    50.000               2
+    75.000               2
+    90.000               2
+    95.000               2
+    99.000               2
+    99.900               3
+    99.990               3
+    99.999               3
+__________________________________
+2-Sided Confidence Limits For Mean
+__________________________________
+Number of Observations                  =  3
+Mean                                    =  37.8000000
+Standard Deviation                      =  0.9643650
+_______________________________________________________________
+Confidence       T           Interval          Lower          Upper
+ Value (%)     Value          Width            Limit          Limit
+_______________________________________________________________
+    50.000     0.816            0.455       37.34539       38.25461
+    75.000     1.604            0.893       36.90717       38.69283
+    90.000     2.920            1.626       36.17422       39.42578
+    95.000     4.303            2.396       35.40438       40.19562
+    99.000     9.925            5.526       32.27408       43.32592
+    99.900    31.599           17.594       20.20639       55.39361
+    99.990    99.992           55.673      -17.87346       93.47346
+    99.999   316.225          176.067     -138.26683      213.86683
+__________________________________
+Student t test for a single sample
+__________________________________
+Number of Observations                                 =  3
+Sample Mean                                            =  37.80000
+Sample Standard Deviation                              =  0.96437
+Expected True Mean                                     =  38.90000
+Sample Mean - Expected Test Mean                       =  -1.10000
+Degrees of Freedom                                     =  2
+T Statistic                                            =  -1.97566
+Probability that difference is due to chance           =  9.343e-002
+Results for Alternative Hypothesis and alpha           =  0.0500
+Alternative Hypothesis     Conclusion
+Mean != 38.900            REJECTED
+Mean  < 38.900            REJECTED
+Mean  > 38.900            REJECTED
+__________________________________
+Student t test for a single sample
+__________________________________
+Number of Observations                                 =  3
+Sample Mean                                            =  37.80000
+Sample Standard Deviation                              =  0.96437
+Expected True Mean                                     =  38.90000
+Sample Mean - Expected Test Mean                       =  -1.10000
+Degrees of Freedom                                     =  2
+T Statistic                                            =  -1.97566
+Probability that difference is due to chance           =  9.343e-002
+Results for Alternative Hypothesis and alpha           =  0.1000
+Alternative Hypothesis     Conclusion
+Mean != 38.900            ACCEPTED
+Mean  < 38.900            ACCEPTED
+Mean  > 38.900            REJECTED
+_____________________________________________________________
+Estimated sample sizes required for various confidence levels
+_____________________________________________________________
+True Mean                               =  38.90000
+Sample Mean                             =  37.80000
+Sample Standard Deviation               =  0.96437
+_______________________________________________________________
+Confidence      Estimated
+ Value (%)     Sample Size
+_______________________________________________________________
+    50.000               2
+    75.000               2
+    90.000               3
+    95.000               5
+    99.000               8
+    99.900              13
+    99.990              18
+    99.999              23
+Build Time 0:03
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_single_sample\Debug\BuildLog.htm"
+students_t_single_sample - 0 error(s), 0 warning(s)
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
+
+*/

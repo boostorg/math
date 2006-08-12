@@ -4,6 +4,12 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifdef _MSC_VER
+#  pragma warning(disable: 4512) // assignment operator could not be generated.
+#  pragma warning(disable: 4510) // default constructor could not be generated.
+#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
+#endif
+
 #include <iostream>
 #include <iomanip>
 #include <boost/math/distributions/students_t.hpp>
@@ -250,4 +256,75 @@ int main()
    two_samples_estimate_df(20.14458, 6.414700, 249, 30.48101, 6.107710);
 
    return 0;
-}
+} // int main()
+
+/*
+Output is
+
+------ Build started: Project: students_t_two_samples, Configuration: Debug Win32 ------
+Compiling...
+students_t_two_samples.cpp
+Linking...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\students_t_two_samples.exe"
+_________________________________________________
+Student t test for two samples (unequal variances)
+_________________________________________________
+Number of Observations (Sample 1)                      =  249
+Sample 1 Mean                                          =  20.145
+Sample 1 Standard Deviation                            =  6.4147
+Number of Observations (Sample 2)                      =  79
+Sample 2 Mean                                          =  30.481
+Sample 2 Standard Deviation                            =  6.1077
+Degrees of Freedom                                     =  136.87
+T Statistic                                            =  -12.946
+Probability that difference is due to chance           =  7.855e-026
+Results for Alternative Hypothesis and alpha           =  0.0500
+Alternative Hypothesis              Conclusion
+Sample 1 Mean != Sample 2 Mean       ACCEPTED
+Sample 1 Mean <  Sample 2 Mean       ACCEPTED
+Sample 1 Mean >  Sample 2 Mean       REJECTED
+_______________________________________________
+Student t test for two samples (equal variances)
+_______________________________________________
+Number of Observations (Sample 1)                      =  249
+Sample 1 Mean                                          =  20.14458
+Sample 1 Standard Deviation                            =  6.41470
+Number of Observations (Sample 2)                      =  79
+Sample 2 Mean                                          =  30.48101
+Sample 2 Standard Deviation                            =  6.10771
+Degrees of Freedom                                     =  326.00000
+Pooled Standard Deviation                              =  326.00000
+T Statistic                                            =  -12.62059
+Probability that difference is due to chance           =  2.637e-030
+Results for Alternative Hypothesis and alpha           =  0.0500
+Alternative Hypothesis              Conclusion
+Sample 1 Mean != Sample 2 Mean       ACCEPTED
+Sample 1 Mean <  Sample 2 Mean       ACCEPTED
+Sample 1 Mean >  Sample 2 Mean       REJECTED
+_____________________________________________________________
+Estimated sample sizes required for various confidence levels
+_____________________________________________________________
+Sample 1 Mean                           =  20.14458
+Sample 1 Standard Deviation             =  6.41470
+Sample 1 Size                           =  249
+Sample 2 Mean                           =  30.48101
+Sample 2 Standard Deviation             =  6.10771
+_______________________________________________________________________
+Confidence     Estimated Sample Size          Estimated Sample 2 Size
+ Value (%)     (With Two Equal Sizes)        (With Fixed Sample 1 Size)
+_______________________________________________________________________
+    50.000                           1                           0
+    75.000                           2                           1
+    90.000                           3                           1
+    95.000                           4                           2
+    99.000                           6                           3
+    99.900                          10                           4
+    99.990                          14                           6
+    99.999                          18                           8
+Build Time 0:03
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_two_samples\Debug\BuildLog.htm"
+students_t_two_samples - 0 error(s), 0 warning(s)
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
+*/
+
