@@ -7,6 +7,9 @@
 #ifndef BOOST_STATS_STUDENTS_T_HPP
 #define BOOST_STATS_STUDENTS_T_HPP
 
+// http://en.wikipedia.org/wiki/Student%27s_t_distribution
+// http://www.itl.nist.gov/div898/handbook/eda/section3/eda3664.htm
+
 #include <boost/math/special_functions/beta.hpp> // for ibeta(a, b, x).
 #include <boost/math/distributions/complement.hpp>
 
@@ -29,7 +32,8 @@ public:
    {
       return m_df;
    }
-   // parameter estimation:
+
+   // Parameter estimation:
    static inline RealType estimate_degrees_of_freedom(
       RealType M,            // true mean
       RealType Sm,           // sample mean
@@ -147,6 +151,7 @@ RealType pdf(const students_t_distribution<RealType>& dist, const RealType& t)
    { // Degrees of freedom must be > 0!
       return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
    }
+   // TODO fails for t == 0 and df >=1e16 for ALL fp types.
    RealType basem1 = t * t / degrees_of_freedom;
    RealType result;
    if(basem1 < 0.125)
@@ -169,6 +174,10 @@ RealType cdf(const students_t_distribution<RealType>& dist, const RealType& t)
    if(degrees_of_freedom <= 0)
    { // Degrees of freedom must be > 0!
       return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
+   }
+   if (t == 0)
+   {
+     return 0.5;
    }
    RealType z = degrees_of_freedom / (degrees_of_freedom + t * t);
    // Calculate probability of Student's t using the incomplete beta function.
