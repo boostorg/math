@@ -1,4 +1,5 @@
 // Copyright Paul A. Bristow 2006.
+// Copyright John Maddock 2006.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -8,6 +9,7 @@
 // test_students_t.cpp
 
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
+// http://www.itl.nist.gov/div898/handbook/eda/section3/eda3664.htm
 
 // Basic sanity test for Student's t probability (quintile) (0. < p < 1).
 // and Student's t probability Quintile (0. < p < 1).
@@ -18,6 +20,8 @@
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
+#  pragma warning(disable: 4510) // default constructor could not be generated.
+#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
 #  if !(defined _SCL_SECURE_NO_DEPRECATE) || (_SCL_SECURE_NO_DEPRECATE == 0)
 #    pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
      // #define _SCL_SECURE_NO_DEPRECATE = 1 // avoid C4996 warning.
@@ -270,7 +274,7 @@ void test_spots(RealType T)
 			tolerance);
 
    //
-   // PDF checks, use 100eps tolerance expressed as a persent:
+   // PDF checks, use 100eps tolerance expressed as a percent:
    //
    tolerance = boost::math::tools::epsilon<RealType>() * 10000;
    for(unsigned i = 1; i < 20; i += 3)
@@ -280,9 +284,9 @@ void test_spots(RealType T)
          //std::cout << "df=" << i << " t=" << r << std::endl;
          BOOST_CHECK_CLOSE(
             boost::math::pdf(
-               students_t_distribution<RealType>(i),
+               students_t_distribution<RealType>(static_cast<RealType>(i)),
                r),
-            naive_pdf<RealType>(i, r),
+            naive_pdf<RealType>(static_cast<RealType>(i), r),
             tolerance);
       }
    }
@@ -305,15 +309,21 @@ int test_main(int, char* [])
 
 Output:
 
+------ Build started: Project: test_students_t, Configuration: Debug Win32 ------
 Compiling...
 test_students_t.cpp
 Linking...
-Embedding manifest...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_students_t.exe"
 Running 1 test case...
-tolerance = 100 %
+Tolerance for type float is 0.0001 %
+Tolerance for type double is 0.0001 %
+Tolerance for type long double is 0.0001 %
+Tolerance for type class boost::math::concepts::real_concept is 0.0001 %
 *** No errors detected
-
+Build Time 0:07
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_students_t\Debug\BuildLog.htm"
+test_students_t - 0 error(s), 0 warning(s)
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 
 */
