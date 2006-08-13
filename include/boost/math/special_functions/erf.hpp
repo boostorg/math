@@ -7,6 +7,7 @@
 #define BOOST_MATH_SPECIAL_ERF_HPP
 
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/error_handling.hpp>
@@ -158,7 +159,9 @@ T erf_imp(T z, bool invert, const L& l, const Tag& t)
    if(!invert && (z > detail::erf_asymptotic_limit<T>()))
    {
       detail::erf_asympt_series_t<T> s(z);
-      result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), 1);
+      boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+      result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter, 1);
+      tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
    }
    else
    {

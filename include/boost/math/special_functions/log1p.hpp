@@ -9,6 +9,7 @@
 #include <cmath>
 #include <math.h> // platform's ::log1p
 #include <boost/limits.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/precision.hpp>
 
@@ -78,7 +79,10 @@ T log1p(T x)
    if(a < tools::epsilon<T>())
       return x;
    detail::log1p_series<T> s(x);
-   return tools::sum_series(s, tools::digits<T>() + 2);
+   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   T result = tools::sum_series(s, tools::digits<T>() + 2, max_iter);
+   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
+   return result;
 }
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))

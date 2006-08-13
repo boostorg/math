@@ -9,6 +9,7 @@
 #include <cmath>
 #include <math.h> // platform's ::expm1
 #include <boost/limits.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/precision.hpp>
 
@@ -73,7 +74,9 @@ T expm1(T x)
    if(a < tools::epsilon<T>())
       return x;
    detail::expm1_series<T> s(x);
-   T result = tools::sum_series(s, tools::digits<T>() + 2);
+   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   T result = tools::sum_series(s, tools::digits<T>() + 2, max_iter);
+   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
    return result;
 }
 

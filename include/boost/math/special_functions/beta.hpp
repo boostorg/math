@@ -7,6 +7,7 @@
 #define BOOST_MATH_SPECIAL_BETA_HPP
 
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/erf.hpp>
@@ -39,15 +40,23 @@ T beta_imp(T a, T b, const L&)
    T c = a + b;
 
    // Special cases:
-   if(c == a)
+   if((c == a) && (b < tools::epsilon<T>()))
       return boost::math::tgamma(b);
-   else if(c == b)
+   else if((c == b) && (a < tools::epsilon<T>()))
       return boost::math::tgamma(a);
    if(b == 1)
       return 1/a;
    else if(a == 1)
       return 1/b;
 
+   /*
+   //
+   // This code appears to be no longer necessary: it was
+   // used to offset errors introduced from the Lanczos
+   // approximation, but the current Lanczos approximations
+   // are sufficiently accurate for all z that we can ditch
+   // this.  It remains in the file for future reference...
+   //
    // If a or b are less than 1, shift to greater than 1:
    if(a < 1)
    {
@@ -61,6 +70,7 @@ T beta_imp(T a, T b, const L&)
       c += 1;
       b += 1;
    }
+   */
    if(a < b)
       std::swap(a, b);
 
@@ -80,7 +90,11 @@ T beta_imp(T a, T b, const L&)
    {
       result *= pow(agh / cgh, a - T(0.5) - b);
    }
-   result *= pow((agh * bgh) / (cgh * cgh), b);
+   if(cgh > 1e10f)
+      // this avoids possible overflow, but appears to be marginally less accurate:
+      result *= pow((agh / cgh) * (bgh / cgh), b);
+   else
+      result *= pow((agh * bgh) / (cgh * cgh), b);
    result *= sqrt(boost::math::constants::e<T>() / bgh);
 
    // If a and b were originally less than 1 we need to scale the result:
@@ -109,9 +123,9 @@ T beta_imp(T a, T b, const lanczos::undefined_lanczos& /* l */)
    T c = a + b;
 
    // special cases:
-   if(c == a)
+   if((c == a) && (b < tools::epsilon<T>()))
       return boost::math::tgamma(b);
-   else if(c == b)
+   else if((c == b) && (a < tools::epsilon<T>()))
       return boost::math::tgamma(a);
    if(b == 1)
       return 1/a;
@@ -210,7 +224,10 @@ T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised)
       result = pow(x, a);
    }
    ibeta_series_t<T> s(a, b, x, result);
-   return boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), s0);
+   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter, s0);
+   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
+   return result;
 }
 //
 // Incomplete Beta series again, this time without Lanczos support:
@@ -270,7 +287,10 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
       result = pow(x, a);
    }
    ibeta_series_t<T> s(a, b, x, result);
-   return boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), s0);
+   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter, s0);
+   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
+   return result;
 }
 
 //

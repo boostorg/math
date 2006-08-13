@@ -163,9 +163,9 @@ template <class T>
 void test_spots(T)
 {
    //
-   // basic sanity checks, tolerance is 10 epsilon expressed as a percentage:
+   // Basic sanity checks, tolerance is 20 epsilon expressed as a percentage:
    //
-   T tolerance = boost::math::tools::epsilon<T>() * 10 * 100;
+   T tolerance = boost::math::tools::epsilon<T>() * 20 * 100;
    T small = boost::math::tools::epsilon<T>() / 1024;
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(1), static_cast<T>(1)), static_cast<T>(1), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(1), static_cast<T>(4)), static_cast<T>(0.25), tolerance);

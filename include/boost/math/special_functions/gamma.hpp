@@ -6,7 +6,6 @@
 #ifndef BOOST_MATH_SF_GAMMA_HPP
 #define BOOST_MATH_SF_GAMMA_HPP
 
-#include <boost/config.hpp>
 #ifdef BOOST_MSVC
 # pragma warning(push)
 # pragma warning(disable: 4127 4701)
@@ -18,6 +17,7 @@
 #ifdef BOOST_MSVC
 # pragma warning(pop)
 #endif
+#include <boost/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
@@ -296,7 +296,10 @@ T lower_gamma_series(T a, T z, int bits)
    // lower incomplete integral. Then divide by tgamma(a)
    // to get the normalised value.
    lower_incomplete_gamma_series<T> s(a, z);
-   return boost::math::tools::sum_series(s, bits);
+   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   T result = boost::math::tools::sum_series(s, bits, max_iter);
+   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
+   return result;
 }
 
 //
@@ -500,7 +503,10 @@ T log1pmx(T x)
 {
    boost::math::detail::log1p_series<T> s(x);
    s();
-   return boost::math::tools::sum_series(s, tools::digits<T>() + 2);
+   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   T result = boost::math::tools::sum_series(s, tools::digits<T>() + 2, max_iter);
+   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
+   return result;
 }
 //
 // Compute (z^a)(e^-z)/tgamma(a)
@@ -645,7 +651,9 @@ T tgamma_small_upper_part(T a, T x, const L& l)
    T result = tgammap1m1_imp(a, l) - powm1(x, a);
    result /= a;
    detail::small_gamma2_series<T> s(a, x);
-   result -= pow(x, a) * tools::sum_series(s, boost::math::tools::digits<T>());
+   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   result -= pow(x, a) * tools::sum_series(s, boost::math::tools::digits<T>(), max_iter);
+   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
    return result;
 }
 //

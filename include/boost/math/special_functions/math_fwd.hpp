@@ -19,7 +19,7 @@
 #ifndef BOOST_MATH_SPECIAL_MATH_FWD_HPP
 #define BOOST_MATH_SPECIAL_MATH_FWD_HPP
 
-#include <boost/math/tools/promotion.hpp> // for argument promotion.
+//#include <boost/math/tools/promotion.hpp> // for argument promotion.
 
 namespace boost
 {

@@ -283,10 +283,10 @@ void test_spots(RealType T)
       
   // std::numeric_limits<RealType>::max() is NOT defined for Real_concept
 
-  //for (RealType df = 10; df < std::numeric_limits<RealType>::max(); df *=10)
+  //for (RealType df = 1e15; df < boost::math::tools::max_value<RealType>() / 11; df *=10)
   //{ 
   //  RealType d = ::boost::math::pdf(students_t_distribution<RealType>(df), static_cast<RealType>(0));
-  //  if (abs(d-  0.3989422804014326779399460599343818684759) > 1e-100)
+  //  if (abs(d-  0.3989422804014326779399460599343818684759) > 1e-14)
   //  { // too far from 1.sqrt(2*pi)
   //    std::cout << "df = " << df << ", density = " << d << endl;
   //  }
@@ -295,7 +295,7 @@ void test_spots(RealType T)
   //    students_t_distribution<RealType>(df), // degrees_of_freedom  = max
   //       static_cast<RealType>(0)),  // t == 0 where density is maximum.
   //       static_cast<RealType>(0.3989422804014326779399460599343818684759), // probability == 1 / sqrt(2 * pi).
-		//	tolerance);
+  //     tolerance);
   //}
 
    for(unsigned i = 1; i < 20; i += 3)
