@@ -10,7 +10,7 @@
 # pragma warning(push)
 # pragma warning(disable: 4127 4701)
   // For lexical_cast, until fixed in 1.35?
-  // conditional expression is constant.
+  // conditional expression is constant & 
   // Potentially uninitialized local variable 'name' used
 #endif
 #include <boost/lexical_cast.hpp>
@@ -42,6 +42,10 @@
 #include <typeinfo>
 #endif
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
+#endif
 
 namespace boost{ namespace math{
 
@@ -1025,6 +1029,10 @@ T gamma_P_derivative(T a, T x)
 
 } // namespace math
 } // namespace boost
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #include <boost/math/special_functions/detail/igamma_inverse.hpp>
 #include <boost/math/special_functions/detail/gamma_inva.hpp>
