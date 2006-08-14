@@ -105,12 +105,15 @@ int test_main(int, char* [])
 
 Output:
 
------- Build started: Project: test_error_handling, Configuration: Debug Win32 ------
+
+------ Rebuild All started: Project: test_error_handling, Configuration: Release Win32 ------
+Deleting intermediate and output files for project 'test_error_handling', configuration 'Release|Win32'
 Compiling...
 test_error_handling.cpp
 Linking...
-Embedding manifest...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_error_handling.exe"
+Generating code
+Finished generating code
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\release\test_error_handling.exe"
 Running 1 test case...
 Current function is void __cdecl test_error<float>(float)
 Message from thrown exception was:
@@ -197,9 +200,11 @@ Message from thrown exception was:
 Message from thrown exception was:
    Error in function class boost::math::concepts::real_concept __cdecl boost::math::detail::gamma_imp<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept,const struct boost::math::lanczos::undefined_lanczos &): Evaluation of tgamma at a negative integer -10123457772243.
 *** No errors detected
-Build Time 0:07
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_error_handling\Debug\BuildLog.htm"
+Build Time 0:11
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_error_handling\Release\BuildLog.htm"
 test_error_handling - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
+
+
 
 */
