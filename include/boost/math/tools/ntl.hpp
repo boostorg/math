@@ -55,6 +55,7 @@ namespace NTL
       r.e += exp;
       return r;
    }
+
 } // namespace NTL
 
 namespace boost{ namespace math{ namespace tools{
@@ -267,6 +268,45 @@ void setprecision(std::ostream& /*os*/, NTL::quad_float, int p)
 } // namespace tools
 } // namespace math
 } // namespaceboost
+
+//
+// The following *must* all occur after the definitions above
+// since we rely on them being already defined:
+//
+#include <boost/math/tools/roots.hpp>
+
+namespace NTL{
+
+   //
+   // Inverse trig functions:
+   //
+   struct asin_root
+   {
+      asin_root(NTL::RR const& target) : t(target){}
+
+      std::tr1::tuple<NTL::RR, NTL::RR> operator()(NTL::RR const& p)
+      {
+         NTL::RR f0 = sin(p) - t;
+         NTL::RR f1 = cos(p);
+         return std::tr1::make_tuple(f0, f1);
+      }
+   private:
+      NTL::RR t;
+   };
+
+   NTL::RR asin(NTL::RR z)
+   {
+      return boost::math::tools::newton_raphson_iterate(
+         asin_root(z), 
+         NTL::RR(0), 
+         NTL::RR(-boost::math::constants::pi<NTL::RR>()/2),
+         NTL::RR(boost::math::constants::pi<NTL::RR>()/2),
+         boost::math::tools::digits<NTL::RR>());
+   }
+
+} // namespace NTL
+
+
 #endif // BOOST_MATH_TOOLS_NTL_HPP
 
 
