@@ -19,6 +19,12 @@ namespace boost{ namespace math{
 template <class Dist, class RealType>
 struct complemented2_type
 {
+   complemented2_type(
+      const Dist& d, 
+      const RealType& p1)
+      : dist(d), 
+        param(p1) {}
+
    const Dist& dist;
    const RealType& param;
 };
@@ -26,6 +32,14 @@ struct complemented2_type
 template <class Dist, class RealType1, class RealType2>
 struct complemented3_type
 {
+   complemented3_type(
+      const Dist& d, 
+      const RealType1& p1,
+      const RealType2& p2)
+      : dist(d), 
+        param1(p1), 
+        param2(p2) {}
+
    const Dist& dist;
    const RealType1& param1;
    const RealType2& param2;
@@ -34,6 +48,16 @@ struct complemented3_type
 template <class Dist, class RealType1, class RealType2, class RealType3>
 struct complemented4_type
 {
+   complemented4_type(
+      const Dist& d, 
+      const RealType1& p1,
+      const RealType2& p2,
+      const RealType3& p3)
+      : dist(d), 
+        param1(p1), 
+        param2(p2), 
+        param3(p3) {}
+
    const Dist& dist;
    const RealType1& param1;
    const RealType2& param2;
@@ -43,6 +67,18 @@ struct complemented4_type
 template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4>
 struct complemented5_type
 {
+   complemented5_type(
+      const Dist& d, 
+      const RealType1& p1,
+      const RealType2& p2,
+      const RealType3& p3,
+      const RealType4& p4)
+      : dist(d), 
+        param1(p1), 
+        param2(p2), 
+        param3(p3), 
+        param4(p4) {}
+
    const Dist& dist;
    const RealType1& param1;
    const RealType2& param2;
@@ -53,6 +89,20 @@ struct complemented5_type
 template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5>
 struct complemented6_type
 {
+   complemented6_type(
+      const Dist& d, 
+      const RealType1& p1,
+      const RealType2& p2,
+      const RealType3& p3,
+      const RealType4& p4,
+      const RealType5& p5)
+      : dist(d), 
+        param1(p1), 
+        param2(p2), 
+        param3(p3), 
+        param4(p4), 
+        param5(p5) {}
+
    const Dist& dist;
    const RealType1& param1;
    const RealType2& param2;
@@ -64,6 +114,22 @@ struct complemented6_type
 template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5, class RealType6>
 struct complemented7_type
 {
+   complemented7_type(
+      const Dist& d, 
+      const RealType1& p1,
+      const RealType2& p2,
+      const RealType3& p3,
+      const RealType4& p4,
+      const RealType5& p5,
+      const RealType6& p6)
+      : dist(d), 
+        param1(p1), 
+        param2(p2), 
+        param3(p3), 
+        param4(p4), 
+        param5(p5), 
+        param6(p6) {}
+
    const Dist& dist;
    const RealType1& param1;
    const RealType2& param2;
@@ -76,43 +142,37 @@ struct complemented7_type
 template <class Dist, class RealType>
 complemented2_type<Dist, RealType> complement(const Dist& d, const RealType& r)
 {
-   complemented2_type<Dist, RealType> c = { d, r };
-   return c;
+   return complemented2_type<Dist, RealType>(d, r);
 }
 
 template <class Dist, class RealType1, class RealType2>
 complemented3_type<Dist, RealType1, RealType2> complement(const Dist& d, const RealType1& r1, const RealType2& r2)
 {
-   complemented3_type<Dist, RealType1, RealType2> c = { d, r1, r2 };
-   return c;
+   return complemented3_type<Dist, RealType1, RealType2>(d, r1, r2);
 }
 
 template <class Dist, class RealType1, class RealType2, class RealType3>
 complemented4_type<Dist, RealType1, RealType2, RealType3> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3)
 {
-   complemented4_type<Dist, RealType1, RealType2, RealType3> c = { d, r1, r2, r3 };
-   return c;
+   return complemented4_type<Dist, RealType1, RealType2, RealType3>(d, r1, r2, r3);
 }
 
 template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4>
 complemented5_type<Dist, RealType1, RealType2, RealType3, RealType4> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4)
 {
-   complemented5_type<Dist, RealType1, RealType2, RealType3, RealType4> c = { d, r1, r2, r3, r4 };
-   return c;
+   return complemented5_type<Dist, RealType1, RealType2, RealType3, RealType4>(d, r1, r2, r3, r4);
 }
 
 template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5>
 complemented6_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4, const RealType5& r5)
 {
-   complemented6_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5> c = { d, r1, r2, r3, r4, r5 };
-   return c;
+   return complemented6_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5>(d, r1, r2, r3, r4, r5);
 }
 
 template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5, class RealType6>
 complemented7_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5, RealType6> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4, const RealType5& r5, const RealType6& r6)
 {
-   complemented7_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5, RealType6> c = { d, r1, r2, r3, r4, r5, r6 };
-   return c;
+   return complemented7_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5, RealType6>(d, r1, r2, r3, r4, r5, r6);
 }
 
 } // namespace math
