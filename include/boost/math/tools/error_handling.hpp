@@ -1,4 +1,4 @@
-//  (C) Copyright John Maddock 2006.
+//  Copyright John Maddock 2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -12,13 +12,23 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/math/tools/precision.hpp>
 #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4996 4512)
+#  pragma warning(push) // Quiet warnings in boost/format.hpp
+#  pragma warning(disable: 4996) // _SCL_SECURE_NO_DEPRECATE
+#  pragma warning(disable: 4512) // assignment operator could not be generated.
 #endif
 #include <boost/format.hpp>
 #ifdef BOOST_MSVC
-#pragma warning(pop)
+#  pragma warning(pop)
 #endif
+#ifdef BOOST_MSVC
+#  pragma warning(push) // Quiet warnings in error_handling
+// May also need to quiet warnings within distributions like binomial, etc
+// depending on definition, or not, of macro BOOST_MATH_THROW_ON_DOMAIN_ERROR
+// that controls if error_handling throws, or not, 
+// that, in turn, determines if code is reachable, or not.
+#  pragma warning(disable: 4702) // unreachable code in domain_error_imp etc
+#endif
+
 // We don't use this one directly,
 // but our clients will use it for BOOST_CURRENT_FUNCTION.
 #include <boost/current_function.hpp>
@@ -72,46 +82,47 @@ namespace detail
 	}
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-#ifndef BOOST_MATH_THROW_ON_DOMAIN_ERROR
-template <class T>
-inline T domain_error_imp(const char* /*function*/, const char* /*message*/, const T&, const mpl::true_*)
-{
-   errno = ERANGE;
-   return std::numeric_limits<T>::quiet_NaN();
-}
-#endif
+  #ifndef BOOST_MATH_THROW_ON_DOMAIN_ERROR
+    template <class T>
+    inline T domain_error_imp(const char* /*function*/, const char* /*message*/, const T&, const mpl::true_*)
+    { // No throw case.
+       errno = ERANGE;
+       return std::numeric_limits<T>::quiet_NaN();
+    }
+  #endif // BOOST_MATH_THROW_ON_DOMAIN_ERROR
+  template <class T>
+  inline T domain_error_imp(const char* function, const char* message, const T& val, const void*)
+  {  // Throw case.
+     errno = ERANGE;
+     detail::raise_error<std::domain_error>(function, message ? message : "Domain Error on value %1%", val);
+     // We don't get here: (and may get warning C4702: unreachable code)
+     return 0;
+  }
 
-template <class T>
-inline T domain_error_imp(const char* function, const char* message, const T& val, const void*)
-{
-   errno = ERANGE;
-   detail::raise_error<std::domain_error>(function, message ? message : "Domain Error on value %1%", val);
-   // we don't get here:
-   return 0;
-}
-#ifndef BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-template <class T>
-inline T overflow_error_imp(const char* /*function*/, const char* /*message*/, mpl::bool_<true> const*)
-{
-   errno = ERANGE;
-   return std::numeric_limits<T>::infinity();
-}
-#endif
-
-template <class T>
-inline T overflow_error_imp(const char* function, const char* message, const void*)
-{
-   errno = ERANGE;
-   detail::raise_error<std::overflow_error>(function, message ? message : "Overflow");
-   // we don't get here:
-   return 0;
-}
-#endif
-
+  #ifndef BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+    template <class T>
+    inline T overflow_error_imp(const char* /*function*/, const char* /*message*/, mpl::bool_<true> const*)
+    { // No throw case.
+       errno = ERANGE;
+       return std::numeric_limits<T>::infinity();
+    }
+  #endif // BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+  template <class T>
+  inline T overflow_error_imp(const char* function, const char* message, const void*)
+  {  // Throw case.
+     errno = ERANGE;
+     detail::raise_error<std::overflow_error>(function, message ? message : "Overflow");
+     // We don't get here: (and may get warning C4702: unreachable code)
+     return 0;
+  }
+#endif // BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 
 } // namespace detail
 
-//
+// boost::math::tools:: Error handling functions:
+// domain_error, pole_error, overflow_error, underflow_error, denorm_error, logic_error
+// & checked_narrowing_cast.
+
 // An argument is outside it's allowed range:
 //
 template <class T>
@@ -125,7 +136,7 @@ inline T domain_error(const char* function, const char* message, const T& val)
    typedef boost::mpl::bool_< ::std::numeric_limits<T>::has_quiet_NaN> tag_type;
    return detail::domain_error_imp<T>(function, message, val, static_cast<tag_type*>(0));
 #endif
-}
+} // domain_error
 //
 // Evaluation at a pole, this is currently treated the same as a domain error:
 //
@@ -148,16 +159,16 @@ inline T overflow_error(const char* function, const char* message)
    typedef boost::mpl::bool_< ::std::numeric_limits<T>::has_infinity> tag_type;
    return detail::overflow_error_imp<T>(function, message, static_cast<tag_type*>(0));
 #endif
-}
+} // overflow_error
 //
 // Result too small to be represented in type T,
 // called only when we know the result is not actually zero:
 //
 template <class T>
 #ifdef BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
-inline T underflow_error(const char* function, const char* message)
+  inline T underflow_error(const char* function, const char* message)
 #else
-inline T underflow_error(const char* , const char* ) // Warning suppressed version.
+  inline T underflow_error(const char* , const char* ) // Warning suppressed version.
 #endif
 {
    errno = ERANGE;
@@ -165,15 +176,15 @@ inline T underflow_error(const char* , const char* ) // Warning suppressed versi
    detail::raise_error<std::underflow_error>(function, message ? message : "Underflow");
 #endif
    return 0;
-}
+} // underflow_error
 //
 // Result is denormalised:
 //
 template <class T>
 #ifdef BOOST_MATH_THROW_ON_DENORM_ERROR
-inline T denorm_error(T const& t, const char* function, const char* message)
+  inline T denorm_error(T const& t, const char* function, const char* message)
 #else
-inline T denorm_error(T const& t, const char* , const char* ) // Error suppressed version.
+  inline T denorm_error(T const& t, const char* , const char* ) // Error suppressed version.
 #endif
 {
    // Don't set errno here???
@@ -182,7 +193,7 @@ inline T denorm_error(T const& t, const char* , const char* ) // Error suppresse
    detail::raise_error<std::underflow_error>(function, message ? message : "Denormalized value");
 #endif
    return t;
-}
+} // denorm_error
 //
 // Computed result is garbage / internal error:
 //
@@ -193,11 +204,10 @@ inline T logic_error(const char* function, const char* message, const T& val)
    detail::raise_error<std::logic_error>(function, message ? message : "Internal logic error, computed value was %1%", val);
    // We don't get here:
    return 0;
-}
+} // logic_error
 
 namespace detail
 {
-
 	template <class T, class U>
 	inline T checked_narrowing_cast(U const& val, const char* , const boost::mpl::true_*)
 	{
@@ -216,7 +226,6 @@ namespace detail
 				return tools::denorm_error<T>(result, function, 0);
 		 return result;
 	}
-
 } // namespace detail
 
 template <class T, class U>
@@ -238,6 +247,11 @@ inline T checked_narrowing_cast(U const& val, const char* function)
 } // namespace tools
 } // namespace math
 } // namespace boost
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
+
 
 #endif // BOOST_MATH_TOOLS_ERROR_HANDLING_HPP
 
