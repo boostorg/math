@@ -22,11 +22,8 @@
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
 #  pragma warning(disable: 4510) // default constructor could not be generated.
 #  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-#  if !(defined _SCL_SECURE_NO_DEPRECATE) || (_SCL_SECURE_NO_DEPRECATE == 0)
-#    pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
-     // #define _SCL_SECURE_NO_DEPRECATE = 1 // avoid C4996 warning.
-#  endif
-//#  pragma warning(disable: 4244) // conversion from 'double' to 'float', possible loss of data.
+//#  pragma warning(disable: 4535) // calling _set_se_translator() requires /EHa (in Boost.test)
+// Enable C++ Exceptions Yes With SEH Exceptions (/EHa) prevents warning 4535.
 #endif
 
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
@@ -336,23 +333,23 @@ int test_main(int, char* [])
 /*
 
 Output:
-
------- Build started: Project: test_students_t, Configuration: Debug Win32 ------
+------ Build started: Project: test_students_t, Configuration: Release Win32 ------
 Compiling...
 test_students_t.cpp
 Linking...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_students_t.exe"
+Generating code
+Finished generating code
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\release\test_students_t.exe"
 Running 1 test case...
 Tolerance for type float is 0.0001 %
 Tolerance for type double is 0.0001 %
 Tolerance for type long double is 0.0001 %
 Tolerance for type class boost::math::concepts::real_concept is 0.0001 %
 *** No errors detected
-Build Time 0:07
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_students_t\Debug\BuildLog.htm"
+Build Time 0:16
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_students_t\Release\BuildLog.htm"
 test_students_t - 0 error(s), 0 warning(s)
 ========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
-
 
 */
 
