@@ -1,5 +1,5 @@
-//  (C) Copyright John Maddock 2006.
-//  (C) Copyright Paul A. Bristow 2006.
+//  Copyright John Maddock 2006.
+//  Copyright Paul A. Bristow 2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -13,6 +13,11 @@
 #include <boost/math/special_functions/beta.hpp> // for ibeta(a, b, x).
 #include <boost/math/distributions/complement.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
+#endif
+
 namespace boost{ namespace math{
 
 template <class RealType>
@@ -23,10 +28,14 @@ public:
    {
        if(m_df <= 0)
        {  // Degrees of freedom must be > 0!
-          // may or may not throw.
+         // domain_error may throw if defined BOOST_MATH_THROW_ON_DOMAIN_ERROR, else not throw.
           tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", m_df);
+          // If domain_error throws, the construction will fail.
+          // If domain_error does not throw, m_df will contain a negative value,
+          // and degrees_of_freedom() will return that value too.
+          // So code calling degrees_of_freedom() needs to check it as well.
        }
-   }
+   } // students_t_distribution
 
    RealType degrees_of_freedom()const
    {
@@ -35,11 +44,11 @@ public:
 
    // Parameter estimation:
    static inline RealType estimate_degrees_of_freedom(
-      RealType M,            // true mean
-      RealType Sm,           // sample mean
-      RealType Sd,           // sample std deviation
-      RealType p,            // required significance level
-      RealType hint = 100)   // hint to where the answer lies.
+      RealType M,            // true mean.
+      RealType Sm,           // sample mean.
+      RealType Sd,           // sample std deviation.
+      RealType p,            // required significance level.
+      RealType hint = 100)  // hint to where the answer lies.
    {
       return estimate_degrees_of_freedom_imp(M, Sm, Sd, p, 1-p, hint);
    }
@@ -58,12 +67,12 @@ public:
    }
 
    static RealType estimate_two_equal_degrees_of_freedom(
-      RealType Sm1,           // sample 1 mean
-      RealType Sd1,           // sample 1 std deviation
-      RealType Sm2,           // sample 2 mean
-      RealType Sd2,           // sample 2 std deviation
-      RealType p,             // required probablity
-      RealType hint = 100)    // hint to where the answer lies.
+      RealType Sm1,           // sample 1 mean.
+      RealType Sd1,           // sample 1 std deviation.
+      RealType Sm2,           // sample 2 mean.
+      RealType Sd2,           // sample 2 std deviation.
+      RealType p,             // required probablity..
+      RealType hint = 100)   // hint to where the answer lies.
    {
       return estimate_two_equal_degrees_of_freedom_imp(Sm1, Sd1, Sm2, Sd2, p, 1 - p, hint);
    }
@@ -81,13 +90,13 @@ public:
    }
 
    static RealType estimate_two_unequal_degrees_of_freedom(
-      RealType Sm1,           // sample 1 mean
-      RealType Sd1,           // sample 1 std deviation
-      unsigned Sn1,           // sample 1 fixed size
-      RealType Sm2,           // sample 2 mean
-      RealType Sd2,           // sample 2 std deviation
-      RealType p,             // required probablity
-      RealType hint = 100)    // hint to where the answer lies.
+      RealType Sm1,           // sample 1 mean.
+      RealType Sd1,           // sample 1 std deviation.
+      unsigned Sn1,           // sample 1 fixed size.
+      RealType Sm2,           // sample 2 mean.
+      RealType Sd2,           // sample 2 std deviation.
+      RealType p,             // required probablity.
+      RealType hint = 100)   // hint to where the answer lies.
    {
       return estimate_two_unequal_degrees_of_freedom_imp(Sm1, Sd1, Sn1, Sm2, Sd2, p, 1 - p, hint);
    }
@@ -114,26 +123,26 @@ private:
       RealType Sd,           // sample std deviation
       RealType p,            // required probablity
       RealType q,            // 1 - required probablity
-      RealType hint = 100);  // hint to where the answer lies.
+      RealType hint = 100); // hint to where the answer lies.
 
    static RealType estimate_two_equal_degrees_of_freedom_imp(
-      RealType Sm1,           // sample 1 mean
-      RealType Sd1,           // sample 1 std deviation
-      RealType Sm2,           // sample 2 mean
-      RealType Sd2,           // sample 2 std deviation
-      RealType p,             // required probablity
-      RealType q,             // 1 - required probablity
-      RealType hint = 100);   // hint to where the answer lies.
+      RealType Sm1,           // sample 1 mean.
+      RealType Sd1,           // sample 1 std deviation.
+      RealType Sm2,           // sample 2 mean.
+      RealType Sd2,           // sample 2 std deviation.
+      RealType p,             // required probablity.
+      RealType q,             // 1 - required probablity.
+      RealType hint = 100);  // hint to where the answer lies.
 
    static RealType estimate_two_unequal_degrees_of_freedom_imp(
-      RealType Sm1,           // sample 1 mean
-      RealType Sd1,           // sample 1 std deviation
-      unsigned Sn1,           // sample 1 size (fixed)
-      RealType Sm2,           // sample 2 mean
-      RealType Sd2,           // sample 2 std deviation
-      RealType p,             // required probablity
+      RealType Sm1,           // sample 1 mean.
+      RealType Sd1,           // sample 1 std deviation.
+      unsigned Sn1,           // sample 1 size (fixed).
+      RealType Sm2,           // sample 2 mean.
+      RealType Sd2,           // sample 2 std deviation.
+      RealType p,             // required probablity.
       RealType q,             // 1 - required probablity
-      RealType hint = 100);   // hint to where the answer lies.
+      RealType hint = 100);  // hint to where the answer lies.
    //
    // Data members:
    //
@@ -149,9 +158,12 @@ RealType pdf(const students_t_distribution<RealType>& dist, const RealType& t)
    RealType degrees_of_freedom = dist.degrees_of_freedom();
    if(degrees_of_freedom <= 0)
    { // Degrees of freedom must be > 0!
+     // (If BOOST_MATH_THROW_ON_DOMAIN_ERROR is NOT defined,
+     // then a negative value may be stored here
+     // so a re-check is always needed).
       return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
    }
-   // TODO fails for t == 0 and df >=1e16 for ALL fp types.
+   // TODO fails for t == 0 and df >=1e16 for ALL fp types - need to use normal distribution.
    RealType basem1 = t * t / degrees_of_freedom;
    RealType result;
    if(basem1 < 0.125)
@@ -165,7 +177,7 @@ RealType pdf(const students_t_distribution<RealType>& dist, const RealType& t)
    result /= sqrt(degrees_of_freedom) * boost::math::beta(degrees_of_freedom / 2, RealType(0.5f));
 
    return result;
-}
+} // pdf
 
 template <class RealType>
 RealType cdf(const students_t_distribution<RealType>& dist, const RealType& t)
@@ -197,7 +209,7 @@ RealType cdf(const students_t_distribution<RealType>& dist, const RealType& t)
       return static_cast<RealType>(1.); // Constrain to unity if logic_error does not throw.
    }
    return (t > 0 ? 1	- probability : probability);
-}
+} // cdf
 
 template <class RealType>
 RealType quantile(const students_t_distribution<RealType>& dist, const RealType& p)
@@ -247,7 +259,7 @@ RealType quantile(const students_t_distribution<RealType>& dist, const RealType&
 	     return sign * sqrt(degrees_of_freedom/ z - degrees_of_freedom);
      }
    }
-}
+} // quantile
 
 template <class RealType>
 RealType cdf(const complemented2_type<students_t_distribution<RealType>, RealType>& c)
@@ -481,5 +493,8 @@ RealType students_t_distribution<RealType>::estimate_two_unequal_degrees_of_free
 } // namespace math
 } // namespace boost
 
-#endif // BOOST_STATS_STUDENTS_T_HPP
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
+#endif // BOOST_STATS_STUDENTS_T_HPP
