@@ -3,6 +3,7 @@
 #define BOOST_MATH_TOOLS_CONFIG_HPP
 
 #include <boost/math/tools/error_handling.hpp>
+#include <boost/cstdint.hpp> // for boost::uintmax_t
 
 #define BOOST_MATH_MAX_ITER 1000000
 
