@@ -213,7 +213,10 @@ T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised)
       T bgh = b + L::g() - T(0.5);
       T cgh = c + L::g() - T(0.5);
       result = L::lanczos_sum_expG_scaled(c) / (L::lanczos_sum_expG_scaled(a) * L::lanczos_sum_expG_scaled(b));
-      result *= pow(cgh / bgh, b - 0.5);
+      if(a * b < bgh * 10)
+         result *= exp((b - 0.5f) * boost::math::log1p(a / bgh));
+      else
+         result *= pow(cgh / bgh, b - 0.5f);
       result *= pow(x * cgh / agh, a);
       result *= sqrt(agh / boost::math::constants::e<T>());
       result *= prefix;
@@ -245,9 +248,12 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
       T c = a + b;
 
       // figure out integration limits for the gamma function:
-      T la = (std::max)(T(10), a);
-      T lb = (std::max)(T(10), b);
-      T lc = (std::max)(T(10), a+b);
+      //T la = (std::max)(T(10), a);
+      //T lb = (std::max)(T(10), b);
+      //T lc = (std::max)(T(10), a+b);
+      T la = a + 5;
+      T lb = b + 5;
+      T lc = a + b + 5;
 
       // calculate the gamma parts:
       T sa = detail::lower_gamma_series(a, la, ::boost::math::tools::digits<T>()) / a;
@@ -276,7 +282,12 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
       }
       else
       {
-         result = pow(b1, a) * pow(b2, b) / exp(e1);
+         result = pow(b1, a);
+         if(a * b < lb * 10)
+            result *= exp(b * boost::math::log1p(a / lb));
+         else
+            result *= pow(b2, b);
+         result /= exp(e1);
       }
       // and combine the results:
       result /= sa * sb / sc;
@@ -334,39 +345,82 @@ T ibeta_power_terms(T a,
    // l1 and l2 are the base of the exponents minus one:
    T l1 = (x * b - y * agh) / agh;
    T l2 = (y * a - x * bgh) / bgh;
-   if(((std::min)(a, b) > 5)
-      && ((std::min)(fabs(l1), fabs(l2)) < 0.2))
+   if(((std::min)(fabs(l1), fabs(l2)) < 0.2))
    {
       // when the base of the exponent is very near 1 we get really
       // gross errors unless extra care is taken:
-      if((std::max)(fabs(l1), fabs(l2)) < 0.5)
+      if((l1 * l2 > 0) || ((std::min)(a, b) < 1))
       {
-         // both bases near 1:
-         if(a < b)
+         //
+         // This first branch handles the simple cases where either: 
+         //
+         // * The two power terms both go in the same direction 
+         // (towards zero or towards infinity).  In this case if either 
+         // term overflows or underflows, then the product of the two must 
+         // do so also.  
+         // *Alternatively if one exponent is less than one, then we 
+         // can't productively use it to eliminate overflow or underflow 
+         // from the other term.  Problems with spurious overflow/underflow 
+         // can't be ruled out in this case, but it is *very* unlikely 
+         // since one of the power terms will evaluate to a number close to 1.
+         //
+         if(fabs(l1) < 0.1)
+            result *= exp(a * boost::math::log1p(l1));
+         else
+            result *= pow((x * cgh) / agh, a);
+         if(fabs(l2) < 0.1)
+            result *= exp(b * boost::math::log1p(l2));
+         else
+            result *= pow((y * cgh) / bgh, b);
+      }
+      else if((std::max)(fabs(l1), fabs(l2)) < 0.5)
+      {
+         //
+         // Both exponents are near one and both the exponents are 
+         // greater than one and further these two 
+         // power terms tend in opposite directions (one towards zero, 
+         // the other towards infinity), so we have to combine the terms 
+         // to avoid any risk of overflow or underflow.
+         //
+         // We do this by moving one power term inside the other, we have:
+         //
+         //    (1 + l1)^a * (1 + l2)^b
+         //  = ((1 + l1)*(1 + l2)^(b/a))^a
+         //  = (1 + l1 + l3 + l1*l3)^a   ;  l3 = (1 + l2)^(b/a) - 1
+         //                                    = exp((b/a) * log(1 + l2)) - 1
+         //
+         // The tricky bit is deciding which term to move inside :-)
+         // By preference we move the larger term inside, so that the
+         // size of the largest exponent is reduced.  However, that can
+         // only be done as long as l3 (see above) is also small.
+         //
+         bool small_a = a < b;
+         T ratio = b / a;
+         if((small_a && (ratio * l2 < 0.1)) || (!small_a && (l1 / ratio > 0.1)))
          {
-            T l = boost::math::expm1((b/a) * boost::math::log1p(l2));
-            l = l1 + l + l * l1;
-            l = a * boost::math::log1p(l);
-            result *= exp(l);
+            T l3 = boost::math::expm1(ratio * boost::math::log1p(l2));
+            l3 = l1 + l3 + l3 * l1;
+            l3 = a * boost::math::log1p(l3);
+            result *= exp(l3);
          }
          else
          {
-            T l = boost::math::expm1((a/b) * boost::math::log1p(l1));
-            l = l2 + l + l * l2;
-            l = b * boost::math::log1p(l);
-            result *= exp(l);
+            T l3 = boost::math::expm1(boost::math::log1p(l1) / ratio);
+            l3 = l2 + l3 + l3 * l2;
+            l3 = b * boost::math::log1p(l3);
+            result *= exp(l3);
          }
       }
       else if(fabs(l1) < fabs(l2))
       {
-         // first base near 1:
+         // First base near 1 only:
          T l = a * boost::math::log1p(l1)
             + b * log((y * cgh) / bgh);
          result *= exp(l);
       }
       else
       {
-         // second base near 1:
+         // Second base near 1 only:
          T l = b * boost::math::log1p(l2)
             + a * log((x * cgh) / agh);
          result *= exp(l);
@@ -438,9 +492,12 @@ T ibeta_power_terms(T a,
    T c = a + b;
 
    // integration limits for the gamma functions:
-   T la = (std::max)(T(10), a);
-   T lb = (std::max)(T(10), b);
-   T lc = (std::max)(T(10), a+b);
+   //T la = (std::max)(T(10), a);
+   //T lb = (std::max)(T(10), b);
+   //T lc = (std::max)(T(10), a+b);
+   T la = a + 5;
+   T lb = b + 5;
+   T lc = a + b + 5;
    // gamma function partials:
    T sa = detail::lower_gamma_series(a, la, ::boost::math::tools::digits<T>()) / a;
    sa += detail::upper_gamma_fraction(a, la, ::boost::math::tools::digits<T>());
@@ -468,8 +525,15 @@ T ibeta_power_terms(T a,
    }
    else
    {
-      T p1 = pow(b1, a);
-      T p2 = pow(b2, b);
+      T p1, p2;
+      if((fabs(b1 - 1) * a < 10) && (a > 1))
+         p1 = exp(a * boost::math::log1p((x * b - y * la) / la));
+      else
+         p1 = pow(b1, a);
+      if((fabs(b2 - 1) * b < 10) && (b > 1))
+         p2 = exp(b * boost::math::log1p((y * a - x * lb) / lb));
+      else
+         p2 = pow(b2, b);
       T p3 = exp(e1);
       result = p1 * p2 / p3;
    }
