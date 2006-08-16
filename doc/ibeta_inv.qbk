@@ -14,7 +14,13 @@
    T ibeta_inv(T a, T b, T p);
    
    template <class T>
+   T ibeta_inv(T a, T b, T p, T* py);
+   
+   template <class T>
    T ibetac_inv(T a, T b, T q);
+   
+   template <class T>
+   T ibetac_inv(T a, T b, T q, T* py);
    
    template <class T>
    T ibeta_inva(T b, T x, T p);
@@ -48,14 +54,30 @@ slower.]
    template <class T>
    T ibeta_inv(T a, T b, T p);
 
-Returns a value /x/ such that: `p = ibeta(a, b, x);`
+   template <class T>
+   T ibeta_inv(T a, T b, T p, T* py);
+   
+Returns a value /x/ such that: `p = ibeta(a, b, x);` 
+and sets `*py = 1 - x` when the `py` parameter is provided and is non-null.  
+Note that internally this function computes whichever is the smaller of
+`x` and `1-x`, and therefore the value assigned to `*py` is free from 
+cancellation errors.  That means that even if the function returns `1` the
+value stored in `*py` may be non-zero, albeit very small.
 
 Requires:  /a,b > 0/ and /0 <= p,q <= 1/.
 
    template <class T>
    T ibetac_inv(T a, T b, T q);
    
+   template <class T>
+   T ibetac_inv(T a, T b, T q, T* py);
+   
 Returns a value /x/ such that: `q = ibetac(a, b, x);`
+and sets `*py = 1 - x` when the `py` parameter is provided and is non-null.  
+Note that internally this function computes whichever is the smaller of
+`x` and `1-x`, and therefore the value assigned to `*py` is free from 
+cancellation errors.  That means that even if the function returns `1` the
+value stored in `*py` may be non-zero, albeit very small.
 
 Requires:  /a,b > 0/ and /0 <= p,q <= 1/.
 
@@ -89,11 +111,12 @@ Requires:  /a > 0/, /0 < x < 1/ and /0 <= p,q <= 1/.
 
 [h4 Accuracy]
 
-The accuracy of these functions doesn't vary much by platform or by
-the type T.  Given that these functions are computed by iterative methods,
-they are deliberately "detuned" so as not to be too accurate: it is in
-any case impossible for these function to be more accurate than the
-regular forward incomplete beta functions.
+The accuracy of these functions should closely follow that
+of the regular forward incomplete beta functions.  However, 
+note that in some parts of their domain, these functions can
+be extremely sensitive to changes in input, this is particularly
+the case when the argument /p/ (or it's complement /q/) is very
+close to `0` or `1`.
 
 [h4 Testing]
 

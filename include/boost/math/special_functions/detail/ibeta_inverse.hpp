@@ -432,7 +432,7 @@ private:
 };
 
 template <class T, class L>
-T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */)
+T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
 {
    using namespace std;  // For ADL of math functions.
 
@@ -456,11 +456,20 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */)
    // Handle trivial cases first:
    //
    if(q == 0)
+   {
+      if(py) *py = 0;
       return 1;
+   }
    else if(p == 0)
+   {
+      if(py) *py = 1;
       return 0;
+   }
    else if((a == 1) && (b == 1))
+   {
+      if(py) *py = 1 - p;
       return p;
+   }
    else if(a + b > 5)
    {
       //
@@ -761,13 +770,15 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */)
    //
    if(x == lower)
       x = 0;
+   if(py)
+      *py = invert ? x : 1 - x;
    return invert ? 1-x : x;
 }
 
 } // namespace detail
 
 template <class T>
-T ibeta_inv(T a, T b, T p)
+T ibeta_inv(T a, T b, T p, T* py)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
@@ -779,18 +790,27 @@ T ibeta_inv(T a, T b, T p)
    if((p < 0) || (p > 1))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument p outside the range [0,1] in the incomplete beta function inverse (got p=%1%).", p);
 
-   return tools::checked_narrowing_cast<T>(
-      detail::ibeta_inv_imp(
+   value_type rx, ry;
+
+   rx = detail::ibeta_inv_imp(
          static_cast<value_type>(a),
          static_cast<value_type>(b),
          static_cast<value_type>(p),
          static_cast<value_type>(1 - p),
-         evaluation_type()),
-      BOOST_CURRENT_FUNCTION);
+         evaluation_type(), &ry);
+
+   if(py) *py = tools::checked_narrowing_cast<T>(ry, BOOST_CURRENT_FUNCTION);
+   return tools::checked_narrowing_cast<T>(rx, BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
-T ibetac_inv(T a, T b, T q)
+inline T ibeta_inv(T a, T b, T p)
+{
+   return ibeta_inv(a, b, p, static_cast<T*>(0));
+}
+
+template <class T>
+T ibetac_inv(T a, T b, T q, T* py)
 {
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
@@ -802,14 +822,23 @@ T ibetac_inv(T a, T b, T q)
    if((q < 0) || (q > 1))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument q outside the range [0,1] in the incomplete beta function inverse (got q=%1%).", q);
 
-   return tools::checked_narrowing_cast<T>(
-      detail::ibeta_inv_imp(
+   value_type rx, ry;
+
+   rx = detail::ibeta_inv_imp(
          static_cast<value_type>(a),
          static_cast<value_type>(b),
          static_cast<value_type>(1 - q),
          static_cast<value_type>(q),
-         evaluation_type()),
-      BOOST_CURRENT_FUNCTION);
+         evaluation_type(), &ry);
+
+   if(py) *py = tools::checked_narrowing_cast<T>(ry, BOOST_CURRENT_FUNCTION);
+   return tools::checked_narrowing_cast<T>(rx, BOOST_CURRENT_FUNCTION);
+}
+
+template <class T>
+inline T ibetac_inv(T a, T b, T q)
+{
+   return ibetac_inv(a, b, q, static_cast<T*>(0));
 }
 
 } // namespace math

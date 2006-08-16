@@ -241,15 +241,22 @@ template <class RealType>
 RealType quantile(const students_t_distribution<RealType>& dist, const RealType& p)
 {
    using namespace std; // for ADL of std functions
-   // Error check.
+   //
+   // Obtain parameters:
+   //
    RealType degrees_of_freedom = dist.degrees_of_freedom();
    RealType probability = p;
+   //
+   // Check for domain errors:
+   //
    if(degrees_of_freedom <= 0)
-   { // Degrees of freedom must be > 0!
+   { 
+      // Degrees of freedom must be > 0!
       return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
    }
    if((probability < 0) || (probability > 1))
-   { // probability must be >= 0 and <= 1!
+   { 
+      // probability must be >= 0 and <= 1!
       return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability argument is %1%, but must be >= 0 and <= 1 !", probability);
    }
    // Special cases, regardless of degrees_of_freedom.
@@ -259,32 +266,23 @@ RealType quantile(const students_t_distribution<RealType>& dist, const RealType&
      return numeric_limits<RealType>::has_infinity ? numeric_limits<RealType>::infinity() : tools::max_value<RealType>();
    if (probability == static_cast<RealType>(0.5))
      return 0;
-   // Calculate quantile of Student's t using the incomplete beta function.
-   if ((probability > RealType(0.25)) && (probability < RealType(0.75)) )
-   { // probability is middling.
-     RealType z = 1 - 2 * probability;
-     z = ibeta_inv(RealType(0.5), degrees_of_freedom / 2 , fabs(z));
-     RealType t = sqrt(degrees_of_freedom * z / (1 - z));
-     return (probability < RealType(0.5)) ? -t : t;
-   }
+   //
+   // Calculate quantile of Student's t using the incomplete beta function inverse:
+   //
+   probability = (probability > 0.5) ? 1 - probability : probability;
+   RealType t, x, y;
+   x = ibeta_inv(degrees_of_freedom / 2, RealType(0.5), 2 * probability, &y);
+   if(x == 0)
+      t = numeric_limits<RealType>::has_infinity ? numeric_limits<RealType>::infinity() : tools::max_value<RealType>();
    else
-   { // Probability is small or large, we may get overflow unless we're careful.
-     int sign = -1;
-     if (probability >= 0.5)
-     { // large and > 0.75
-	     probability = 1 - probability;
-	     sign = +1;
-     }
-     RealType z = ibeta_inv(degrees_of_freedom / 2, static_cast<RealType>(0.5), 2 * probability);
-     if ((tools::max_value<RealType>() * z) < degrees_of_freedom)
-     {
-        return sign * tools::max_value<RealType>();
-     }
-     else
-     {
-	     return sign * sqrt(degrees_of_freedom/ z - degrees_of_freedom);
-     }
-   }
+      t = sqrt(degrees_of_freedom * y / x);
+   //
+   // Figure out sign based on the size of p:
+   //
+   if(p < 0.5)
+      t = -t;
+
+   return t;
 } // quantile
 
 template <class RealType>
