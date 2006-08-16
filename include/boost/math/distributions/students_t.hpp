@@ -191,10 +191,36 @@ RealType cdf(const students_t_distribution<RealType>& dist, const RealType& t)
    {
      return 0.5;
    }
-   RealType z = degrees_of_freedom / (degrees_of_freedom + t * t);
+   //
    // Calculate probability of Student's t using the incomplete beta function.
-   // probability = ibeta(degrees_of_freedom/2, 1/2, degrees_of_freedom/ (degrees_of_freedom + t*t))
-   RealType probability = ibeta(degrees_of_freedom / 2, static_cast<RealType>(0.5), z) / 2;
+   // probability = ibeta(degrees_of_freedom / 2, 1/2, degrees_of_freedom / (degrees_of_freedom + t*t))
+   //
+   // However when t is small compared to the degrees of freedom, that formula
+   // suffers from rounding error, use the identity formula to work around 
+   // the problem:
+   //
+   // I[x](a,b) = 1 - I[1-x](b,a)
+   //
+   // and:
+   //
+   //     x = df / (df + t^2) 
+   //
+   // so:
+   //
+   // 1 - x = t^2 / (df + t^2)
+   //
+   RealType t2 = t * t;
+   RealType probability;
+   if(degrees_of_freedom > 2 * t2)
+   {
+      RealType z = t2 / (degrees_of_freedom + t * t);
+      probability = ibetac(static_cast<RealType>(0.5), degrees_of_freedom / 2, z) / 2;
+   }
+   else
+   {
+      RealType z = degrees_of_freedom / (degrees_of_freedom + t * t);
+      probability = ibeta(degrees_of_freedom / 2, static_cast<RealType>(0.5), z) / 2;
+   }
    // Check 0 <= probability probability <= 1.
    // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
    // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
