@@ -727,11 +727,29 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */)
          x = lower;
    }
    //
+   // Figure out how many digits to iterate towards:
+   //
+   int digits = boost::math::tools::digits<T>() / 2;
+   if((x < 1e-50) && ((a < 1) || (b < 1)))
+   {
+      //
+      // If we're in a region where the first derivative is very
+      // large, then we have to take care that the root-finder
+      // doesn't terminate prematurely.  We'll bump the precision
+      // up to avoid this, but we have to take care not to set the
+      // precision too high or the last few iterations will just
+      // thrash around and convergence may be slow in this case.
+      // Try 3/4 of machine epsilon:
+      //
+      digits *= 3;  
+      digits /= 2;
+   }
+   //
    // Now iterate, we can use either p or q as the target here
    // depending on which is smaller:
    //
    x = boost::math::tools::halley_iterate(
-      boost::math::detail::ibeta_roots<T, L>(a, b, (p < q ? p : q), (p < q ? false : true)), x, lower, upper, boost::math::tools::digits<T>() / 2);
+      boost::math::detail::ibeta_roots<T, L>(a, b, (p < q ? p : q), (p < q ? false : true)), x, lower, upper, digits);
    //
    // We don't really want these asserts here, but they are useful for sanity
    // checking that we have the limits right, uncomment if you suspect bugs *only*.
