@@ -108,7 +108,7 @@ NTL::RR max_value<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
    if(!has_init)
    {
       val = 1;
-      val.e = NTL_OVFBND-2;
+      val.e = NTL_OVFBND-20;
       has_init = true;
    }
    return val;
@@ -122,7 +122,7 @@ NTL::RR min_value<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
    if(!has_init)
    {
       val = 1;
-      val.e = -NTL_OVFBND+2;
+      val.e = -NTL_OVFBND+20;
       has_init = true;
    }
    return val;
