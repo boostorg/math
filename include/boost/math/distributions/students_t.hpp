@@ -272,7 +272,7 @@ RealType quantile(const students_t_distribution<RealType>& dist, const RealType&
    probability = (probability > 0.5) ? 1 - probability : probability;
    RealType t, x, y;
    x = ibeta_inv(degrees_of_freedom / 2, RealType(0.5), 2 * probability, &y);
-   if(x == 0)
+   if(degrees_of_freedom * y < tools::max_value<RealType>() * x)
       t = numeric_limits<RealType>::has_infinity ? numeric_limits<RealType>::infinity() : tools::max_value<RealType>();
    else
       t = sqrt(degrees_of_freedom * y / x);
