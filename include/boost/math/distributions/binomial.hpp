@@ -78,14 +78,6 @@
 #include <boost/math/special_functions/log1p.hpp> // for log1p
 #include <boost/math/tools/roots.hpp> // for ibeta_derivative.
 
-//#include <boost/math/tools/roots.hpp> // for domain_error & logic_error.
-//#include <boost/math/tools/promotion.hpp> // for argument promotion.
-//
-//#include <boost/type_traits/is_floating_point.hpp>
-//#include <boost/type_traits/is_integral.hpp>
-//#include <boost/type_traits/is_same.hpp>
-//#include <boost/mpl/if.hpp>
-//
 #if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 #  pragma warning(push)
 #  pragma warning(disable: 4702) // unreachable code
@@ -146,16 +138,19 @@ namespace boost
       RealType pdf(const binomial_distribution<RealType>& dist, const RealType k)
       { // Probability Density/Mass Function.
         using boost::math::tools::domain_error;
+        using namespace std; // for ADL of std functions
         // Special cases of success_fraction, regardless of k successes and regardless of n trials.
         if (dist.success_fraction() == 0)
         {
-          return 0;
-        }
-        if (dist.success_fraction() == 1)
-        {
-          return 0;
+           // probability of zero successes is 1:
+           return static_cast<RealType>(k == 0 ? 1 : 0);
         }
         RealType n = dist.trials();
+        if (dist.success_fraction() == 1)
+        {
+           // probability of n successes is 1:
+           return static_cast<RealType>(k == n ? 1 : 0);
+        }
         if(n < 0)
         { // k must be <= n!
           return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= 0 !", n);
@@ -185,13 +180,15 @@ namespace boost
           return pow(dist.success_fraction(), k);  // * pow((1 - dist.success_fraction()), (n - k)) = 1
         }
 
-        // Probability of getting exactly k successes f(k; n,p) = binomial coefficient C(n, k) = * p ^ k (1-p)^(n-k) 
-        //  n!/(k! * !(n-k)) * p ^ k * (1-p) ^ (n-k)
-        // Use binomial_coefficient function here?
-        //return exp(lgamma(n+1) - (lgamma(k+1) + lgamma(n-k+1))) // binomial coefficient C(n, k)
-        //  * pow(dist.success_fraction(), k) * pow((1 - dist.success_fraction()), (n - k));
-        // // Might use a table for binomial coefficients for small n?
-        // But get overflow for large n because lgamma(n) overflows, so instead use:
+        // Probability of getting exactly k successes 
+        // if C(n, k) is the binomial coefficient then:
+        //
+        // f(k; n,p) = C(n, k) * p^k * (1-p)^(n-k) 
+        //           = (n!/(k!(n-k)!)) * p^k * (1-p)^(n-k)
+        //           = (tgamma(n+1) / (tgamma(k+1)*tgamma(n-k+1))) * p^k * (1-p)^(n-k)
+        //           = p^k (1-p)^(n-k) / (beta(k+1, n-k+1) * (n+1))
+        //           = ibeta_derivative(k+1, n-k+1, p) / (n+1)
+        //
         using boost::math::ibeta_derivative; // a, b, x
         return ibeta_derivative(k+1, n-k+1, dist.success_fraction()) / (n+1);
 
@@ -215,21 +212,21 @@ namespace boost
         // The terms are not summed directly (at least for larger k)
         // instead the incomplete beta integral is employed,
         // according to the formula:
-        // y = bdtr( k, n, p ) = incbet( n-k, k+1, 1-p).
+        // P = I[1-p]( n-k, k+1).
+        //   = 1 - I[p](k + 1, n - k)
 
         using boost::math::tools::domain_error;
-        using std::numeric_limits;
+        using namespace std; // for ADL of std functions
 
+        RealType n = dist.trials();
+        if(n < 0)
+        { // k must be <= n!
+          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= 0 !", n);
+        }
         // k argument may be integral, signed, or unsigned, or floating-point.
         if(k < 0)
         { // k must be >= 0!
           return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "k argument is %1%, but must be >= 0 !", k);
-          //  warning C4702: unreachable code ???
-        }
-        RealType n = dist.trials();
-        if(n < k)
-        { // n must be <= k!
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= k !", n);
           //  warning C4702: unreachable code ???
         }
         if(k > n)
@@ -245,132 +242,237 @@ namespace boost
 
         // Special cases, regardless of k.
         if (p == 0)
-        { // TODO should this be very close to zero?
-          return 0;
+        { 
+           // This need explanation: the pdf is zero for all
+           // cases except when k == 0.  For zero p the probability
+           // of zero successes is one.  Therefore the cdf is always
+           // 1: the probability of k or *fewer* successes is always 1
+           // if there are never any successes!
+           return 1;
         }
         if (p == 1)
         {
+          // This is correct but needs explanation, when k = 1
+          // all the cdf and pdf values are zero *except* when
+          // k == n, and that case has been handled above already.
           return 0;
         }
-        if (k == 0)
+        if((k < 20) && (floor(k) == k))
         {
-          return pow(1 - p, n - k);
+          // For small k use a finite sum, it's cheaper
+          // than the incomplete beta:
+          RealType result = 0;
+          for(unsigned i = 0; i <= k; ++i)
+             result += pdf(dist, static_cast<RealType>(i));
+          return result;
         }
         // Calculate cdf binomial using the incomplete beta function.
-        // y = bdtr( k, n, p ) = incbet( n-k, k+1, 1-p). ibeta (a, b, x)
-        return ibeta(n - k, k + 1, 1 - p);
+        // P = I[1-p](n - k, k + 1)
+        //   = 1 - I[p](k + 1, n - k)
+        // Use of ibetac here prevents cancellation errors in calculating
+        // 1-p if p is very small, perhaps smaller than machine epsilon.
+        return ibetac(k + 1, n - k, p);
       } // binomial cdf
 
       template <class RealType>
-      RealType binomial_coefficient(RealType n, RealType k)
-      { // Binomial coefficient C(n, k)
-        using ::boost::math::lgamma;
+      RealType cdf(const complemented2_type<binomial_distribution<RealType>, RealType>& c)
+      { // Complemented Cumulative Distribution Function Binomial.
+        // The random variate k is the number of successes in n trials.
+        // k argument may be integral, signed, or unsigned, or floating point.
+        // If necessary, it has already been promoted from an integral type.
 
+        // Returns the sum of the terms k+1 through n of the Binomial Probability Density/Mass:
+        //
+        //   i=n
+        //   --  ( n )   i      n-i
+        //   >   |   |  p  (1-p)
+        //   --  ( i )
+        //   i=k+1
+
+        // The terms are not summed directly (at least for larger k)
+        // instead the incomplete beta integral is employed,
+        // according to the formula:
+        // Q = 1 -I[1-p]( n-k, k+1).
+        //   = I[p](k + 1, n - k)
+
+        using boost::math::tools::domain_error;
+        using namespace std; // for ADL of std functions
+
+        RealType const& k = c.param;
+        binomial_distribution<RealType> const& dist = c.dist;
+
+        // k argument may be integral, signed, or unsigned, or floating-point.
         if(k < 0)
         { // k must be >= 0!
           return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "k argument is %1%, but must be >= 0 !", k);
           //  warning C4702: unreachable code ???
         }
-        if(n < 0)
-        { // n must be >= 0!
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= 0 !", n);
+        RealType n = dist.trials();
+        if(k > n)
+        { // k should be <= n.  TODO is this the best - or return 1?
+          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "k argument is %1%, but should be <= n !", k);
           //  warning C4702: unreachable code ???
         }
-        // Fixed n
-        // http://functions.wolfram.com/GammaBetaErf/Binomial/03/01/01/ 
-        if (n == 0)
+        if (k == n)
         {
-          return 1;
-        }
-        if (k >= n)
-        {
-          return 1;
-        }
-        if (k == 0)
-        {
-          return 1;
-        }
-        if (k == 1)
-        {
-          return n;
-        }
-        if (k == 2)
-        {
-          return (n-1) * n/2;
-        }
-        if (k == 3)
-        {
-          return (n-2) * (n - 1) * n / 6;
-        }
-        if (k == 4)
-        {
-          return (n-3) * (n-2) * (n-1) * n / 24;
-        }
-        // more? divisor is factorial(k) MPL?
-        return exp(lgamma(n+1) - (lgamma(k+1) + lgamma(n-k+1)));
-      } //       template <class RealType> RealType binomial_coefficient(RealType n, RealType k)
-
-      template <class RealType>
-      RealType quantile(const binomial_distribution<RealType>& dist, const RealType& k, const RealType& y)
-      { // Quantile or Percent Point Binomial function.
-        // Returns the cdf y that would give k successes in n trials.
-
-        // Moshier's bdtri(k, n, y)
-        // Finds the event probability q such that the sum of the
-        // terms 0 through k of the Binomial probability density (cdf)
-        // is equal to the given cumulative probability y.
-
-        // This is accomplished using the inverse beta integral function:
-        // 1 - q = incbetinv(n-k, k+1, y)
-
-        using boost::math::tools::domain_error;
-        using boost::math::expm1;
-        using boost::math::log1p;
-        using boost::math::ibeta;
-        using boost::math::ibeta_inv;
-
-        if ((y < 0) || (y > 1))
-        { // Check 0 <= cdf <= 1. 
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability is %1%, but must be >= 0 and <= 1 !", y);
-        }
-        if (k < 0)
-        { // k must be >= 0!
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "k argument is %1%, but must be >= 0 !", k);
-        }
-        RealType n = dist.trials();
-
-        if (k > n)
-        { // n must be <= k!
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "k argument is %1%, but must be <= n !", k);
-        }
-
-        RealType p = dist.success_fraction();
-        // Special cases, regardless of k. 
-        if (p == 0)
-        {
+          // Probability of greater than n successes is necessarily zero:
           return 0;
+        }
+        RealType p = dist.success_fraction();
+
+        // Special cases, regardless of k.
+        if (p == 0)
+        { 
+           // This need explanation: the pdf is zero for all
+           // cases except when k == 0.  For zero p the probability
+           // of zero successes is one.  Therefore the cdf is always
+           // 1: the probability of *more than* k successes is always 0
+           // if there are never any successes!
+           return 0;
         }
         if (p == 1)
         {
-          return 0;
+          // This needs explanation, when p = 1
+          // we always have n successes, so the probability
+          // of more than k successes is 1 as long as k < n.
+          // The k == n case has already been handled above.
+          return 1;
         }
-        RealType dn = n - k; // Leave this optimisation to the compiler?
-        if (k == 0)
+        if((n - k < 20) && (floor(k) == k) && (floor(n) == n))
         {
-          if (y > 0.8)
-          {
-            return -expm1(log1p(y - 1) / dn);
-          }
-          else
-          {
-            return 1 - pow(y, 1 / dn);
-          }
+          // For small n-k use a finite sum, it's cheaper
+          // than the incomplete beta:
+          RealType result = 0;
+          for(RealType i = n; i > k; i -= 1)
+             result += pdf(dist, i);
+          return result;
         }
-        else
+        // Calculate cdf binomial using the incomplete beta function.
+        // Q = 1 -I[1-p](n - k, k + 1)
+        //   = I[p](k + 1, n - k)
+        // Use of ibeta here prevents cancellation errors in calculating
+        // 1-p if p is very small, perhaps smaller than machine epsilon.
+        return ibeta(k + 1, n - k, p);
+      } // binomial cdf
+
+      namespace detail{
+
+         template <class RealType>
+         struct binomial_functor
+         {
+            binomial_functor(const binomial_distribution<RealType>& d, const RealType& target, bool c = false)
+               : dist(d), t(target), complement(c) {}
+
+            RealType operator()(const RealType k)
+            {
+               if(k >= dist.trials())
+                  return 1; // any positive value will do.
+               return complement ? t - cdf(boost::math::complement(dist, k)) : cdf(dist, k) - t;
+            }
+         private:
+            const binomial_distribution<RealType>& dist;
+            RealType t;
+            bool complement;
+         };
+
+      }
+
+      template <class RealType>
+      RealType quantile(const binomial_distribution<RealType>& dist, const RealType& p)
+      { // Quantile or Percent Point Binomial function.
+        // Return the number of expected successes k for a given 
+        // probability p.
+        //
+        // Error check:
+        //
+        if ((p < 0) || (p > 1))
+        { // Check 0 <= cdf <= 1. 
+          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability is %1%, but must be >= 0 and <= 1 !", p);
+        }
+        //
+        // Special cases:
+        //
+        if(p == 0)
         {
-          RealType q = ibeta(dn, k+1, 0.5); // quantile result.
-          return ((q > 0.5) ? ibeta_inv(k+1, dn, 1 - y) : 1 - ibeta_inv(dn, k+1, y));
+           // There may actually be no answer to this question,
+           // since the probability of zero successes may be non-zero,
+           // but zero is the best we can do:
+           return 0;
         }
+        if(p == 1)
+        {
+           // probability of n or fewer successes is always one,
+           // so n is the most sensible answer here:
+           return dist.trials();
+        }
+
+        //
+        // Solve for quantile numerically:
+        //
+        detail::binomial_functor<RealType> f(dist, p);
+        tools::eps_tolerance<RealType> tol(tools::digits<RealType>());
+        boost::uintmax_t max_iter = 200;
+        std::pair<RealType, RealType> r = tools::bracket_and_solve_root(
+           f, 
+           dist.trials() / 2, 
+           static_cast<RealType>(2),
+           true,
+           tol,
+           max_iter);
+        if(max_iter >= 200)
+           tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION, "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first);
+        // return centre point of range found:
+        return r.first + (r.second - r.first) / 2;
+      } // quantile
+
+      template <class RealType>
+      RealType quantile(const complemented2_type<binomial_distribution<RealType>, RealType>& c)
+      { // Quantile or Percent Point Binomial function.
+        // Return the number of expected successes k for a given 
+        // complement of the probability q.
+        //
+        // Error check:
+        //
+        RealType q = c.param;
+        const binomial_distribution<RealType>& dist = c.dist;
+        if ((q < 0) || (q > 1))
+        { // Check 0 <= cdf <= 1. 
+          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability is %1%, but must be >= 0 and <= 1 !", q);
+        }
+        //
+        // Special cases:
+        //
+        if(q == 1)
+        {
+           // There may actually be no answer to this question,
+           // since the probability of zero successes may be non-zero,
+           // but zero is the best we can do:
+           return 0;
+        }
+        if(q == 0)
+        {
+           // probability of greater than n successes is always zero,
+           // so n is the most sensible answer here:
+           return dist.trials();
+        }
+
+        //
+        // Solve for quantile numerically:
+        //
+        detail::binomial_functor<RealType> f(dist, q, true);
+        tools::eps_tolerance<RealType> tol(tools::digits<RealType>());
+        boost::uintmax_t max_iter = 200;
+        std::pair<RealType, RealType> r = tools::bracket_and_solve_root(
+           f, 
+           dist.trials() / 2, 
+           static_cast<RealType>(2),
+           true,
+           tol,
+           max_iter);
+        if(max_iter >= 200)
+           tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION, "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first);
+        // return centre point of range found:
+        return r.first + (r.second - r.first) / 2;
       } // quantile
 
     } // namespace math
@@ -378,155 +480,3 @@ namespace boost
 
 #endif // BOOST_MATH_SPECIAL_BINOMIAL_HPP
 
-  /*
-
-  TODO remove this
-
-  Old stuff parked
-
-  // k argument may be integral, signed, or unsigned, or floating point.
-  // If necessary, it has already been promoted from an integral type.
-  //if(k < 0)
-  //{ // k must be >= 0!
-  //  return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "k argument is %1%, but must be >= 0 !", k);
-  //}
-
-  //if(k > n)
-  //{ // n must be < k!
-  //  return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but n must be >= k !", n);
-  //}
-  // TODO Could use a 4 arg here for
-  //if(n >= k)
-  //{ // n must be < k!
-  //  return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be < %2% !", n, k);
-  //}
-
-  using boost::math::ibeta; // Regularized incomplete beta function.
-  using boost::math::tools::domain_error;
-  using boost::math::tools::logic_error;
-  using std::numeric_limits;
-
-
-  RealType probability = ibeta(static_cast<RealType>(n) - static_cast<RealType>(k), static_cast<RealType>(k)+1, 1 - success_fraction);
-  // Cephes incbet(n-k, k+1, 1-p);
-  // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
-  // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
-  if (probability < 0)
-  {
-  logic_error<RealType>(BOOST_CURRENT_FUNCTION, "probability %1% is < 0, so has been constrained to zero !", probability);
-  return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
-  }
-  if(probability > 1)
-  {
-  logic_error<RealType>(BOOST_CURRENT_FUNCTION, "probability %1% is > 1, so has been constrained to unity!", probability);
-  return static_cast<RealType>(1.); // Constrain to unity if logic_error does not throw.
-  }
-
-  RealType probability = ibeta(static_cast<RealType>(k)+1, static_cast<RealType>(n) - static_cast<RealType>(k), success_fraction);
-  // Cephes incbet(k+1, n-k, p);
-  // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
-  // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
-  if (probability < 0)
-  {
-  logic_error<RealType>(BOOST_CURRENT_FUNCTION, "probability %1% is < 0, so has been constrained to zero !", probability);
-  return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
-  }
-  if(probability > 1)
-  {
-  logic_error<RealType>(BOOST_CURRENT_FUNCTION, "probability %1% is > 1, so has been constrained to unity!", probability);
-  return static_cast<RealType>(1.); // Constrain to unity if logic_error does not throw.
-  }
-  return probability;
-  } // binomial_imp
-
-  template <class ArithmeticType, class RealType> // Binomial distribution (k, n, x)
-  // Probability of number of events between 0 and k-1 inclusive, if expected probability of success events is success_fraction.
-  inline typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
-  // Return type is the wider of the two (perhaps promoted) floating-point types.
-  binomial(ArithmeticType k, ArithmeticType n, RealType success_fraction)
-  {
-  typedef typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type promote_type; // Arguments type.
-  return detail::binomial_imp(static_cast<promote_type>(k), static_cast<promote_type>(n), static_cast<promote_type>(success_fraction));
-  } // binomial
-
-  template <class ArithmeticType, class RealType> // Binomial distribution complement (k, n, x)
-  // Probability of number of events between 0 and k-1 inclusive, if expected mean is x.
-  inline typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
-  // Return type is the wider of the two (perhaps promoted) floating-point types.
-  binomial_c(ArithmeticType k, ArithmeticType n, RealType success_fraction)
-  {
-  typedef typename tools::promote_arg3<ArithmeticType, RealType, ArithmeticType>::type promote_type; // Arguments type.
-  return detail::binomial_c_imp(static_cast<promote_type>(k), static_cast<promote_type>(n), static_cast<promote_type>(success_fraction));
-  } // binomial
-
-  template <class ArithmeticType, class RealType>
-  // success_fraction if number of events between 0 and k-1 inclusive, and probability p.
-  inline typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type
-  // Return type is the wider of the two (perhaps promoted) floating point types.
-  binomial_inv(ArithmeticType k,  ArithmeticType n, RealType probability) // Binomial distribution inverse (k, n, p)
-  {
-  typedef typename tools::promote_arg3<ArithmeticType, ArithmeticType, RealType>::type promote_type; // Arguments type.
-  return detail::binomial_inv_imp(static_cast<promote_type>(k), static_cast<promote_type>(n),static_cast<promote_type>(probability));
-  } // binomial_inv
-
-
-
-  * Returns the sum of the terms 0 through k of the Binomial
-  * probability density:
-  *
-  *   k
-  *   --  ( n )   j      n-j
-  *   >   (   )  p  (1-p)
-  *   --  ( j )
-  *  j=0
-  *
-  * The terms are not summed directly; instead the incomplete
-  * beta integral is employed, according to the formula
-  *
-  * y = bdtr( k, n, p ) = incbet( n-k, k+1, 1-p ).
-  *
-  * The arguments must be positive, with p ranging from 0 to 1.
-  *   message         condition      value returned
-  * bdtr domain         k < 0            0.0
-  *                     n < k
-  *                     x < 0, x > 1
-
-
-  * Complement
-  * Returns the sum of the terms k+1 through n of the Binomial
-  * probability density:
-  *
-  *   n
-  *   --  ( n )   j      n-j
-  *   >   (   )  p  (1-p)
-  *   --  ( j )
-  *  j=k+1
-  *
-  * The terms are not summed directly; instead the incomplete
-  * beta integral is employed, according to the formula
-  *
-  * y = bdtrc( k, n, p ) = incbet( k+1, n-k, p ).
-  *
-  * The arguments must be positive, with p ranging from 0 to 1.
-  *
-  *   message         condition      value returned
-  * bdtrc domain      x<0, x>1, n<k       0.0
-
-
-  * p = bdtr( k, n, y );
-  *
-  * DESCRIPTION:
-  *
-  * Finds the event probability p such that the sum of the
-  * terms 0 through k of the Binomial probability density
-  * is equal to the given cumulative probability y.
-  *
-  * This is accomplished using the inverse beta integral
-  * function and the relation
-  *
-  * 1 - p = incbi( n-k, k+1, y ).
-  *
-  *   message         condition      value returned
-  * bdtri domain     k < 0, n <= k         0.0
-  *                  x < 0, x > 1
-  */

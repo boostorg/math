@@ -1,0 +1,244 @@
+
+[section:dist_ref Reference]
+
+[def __cdf [link cdf Cumulative Distribution Function]]
+[def __pdf [link pdf Probability Density Function]]
+[def __ccdf [link ccdf Complement of the Cumulative Distribution Function]]
+[def __quantile [link quantile quantile]]
+
+[section:nmp Non-Member Properties]
+
+Properties that are common to all distributions are accessed via non-member 
+getter functions.  This allows more of these functions to be added over time
+as the need arises.  Unfortunately the literature uses many different and
+confusing names to refer to a rather small number of actual concepts, refer
+to the [link concept_index concept index] to find the property you 
+want by the name you are most
+familiar with.  Or use the [link function_index function index]
+to go straight to the function you
+want if you already know it's name.
+
+[h4 [#concept_index]Conceptual Index]
+
+* __ccdf.
+* __cdf.
+* [link survival_inv Inverse Survival Function].
+* [link cdfPQ P].
+* [link persent Persent Point Function]
+* __pdf.
+* [link pmf Probability Mass Function].
+* [link cdfPQ Q].
+* __quantile.
+* [link quantile_c Quantile from the complement of the probability].
+* [link survival Survival Function].
+
+
+[h4 [#function_index]Function Index]
+
+* [link cdf cdf].
+* [link ccdf cdf complement].
+* [link pdf pdf].
+* [link quantile quantile].
+* [link quantile_c quantile from the complement].
+
+[h4 [#ccdf]Complement of the Cumulative Distribution Function]
+
+   template <class Distribution, class RealType>
+   RealType cdf(const unspecified_type<Distribution, RealType>& comp);
+   
+The complement of the __cdf 
+is the probability that 
+the variable takes a value greater than x.  It is equivalent
+to the integral from x to Infinity of the __pdf, or 1 minus the __cdf of x. 
+
+This is also known as the survival function.
+
+In this library it is obtained by wrapping the arguments to the `cdf`
+function in a call to `complement`, for example:
+
+   // standard normal distribution object:
+   boost::math::normal norm;
+   // print survival function for x=2.0:
+   std::cout << cdf(complement(norm, 2.0)) << std::endl;
+
+For example the following graph shows the complement of the cdf for the
+normal distribution:
+
+[$../graphs/survival.png]
+
+[h4 [#cdf]Cumulative Distribution Function]
+
+   template <class Distribution, class RealType>
+   RealType cdf(const Distribution& dist, const RealType& x);
+   
+The __cdf is the probability that 
+the variable takes a value less than or equal to x.  It is equivalent
+to the integral from -Infinity to x of the __pdf.  
+For example the following graph shows the cdf for the
+normal distribution:
+
+[$../graphs/cdf.png]
+
+[h4 [#survival_inv]Inverse Survival Function.]
+
+The inverse of the survival function, is the same as computing the 
+[link quantile_c quantile
+from the complement of the probability].
+
+[h4 [#cdfPQ]P and Q]
+
+The terms P and Q are sometimes used to refer to the __cdf
+and it's [link ccdf complement] respectively.
+Lowercase p and q are sometimes used to refer to the values returned
+by these functions.
+
+[h4 [#persent]Persent Point Function]
+
+The persent point function, also known as the persentile, is the same as
+the __quantile.
+
+[h4 [#pdf]Probabilty Density Function]
+
+   template <class Distribution, class RealType>
+   RealType pdf(const Distribution& dist, const RealType& x);
+   
+For a continuous function, the probability density function (pdf) returns 
+the probability that the variate has the value x. 
+Since for continuous distributions the probability at a single point is actually zero, 
+the probability is better expressed as the integral of the pdf between two points:
+see the __cdf.
+
+For a discrete distribution, the pdf is the probability that the 
+variate takes the value x.
+
+For example for a standard normal distribution the pdf looks like this:
+
+[$../graphs/pdf.png]
+
+[h4 [#pmf]Probabilty Mass Function]
+
+The Probability Mass Function is the same as the __pdf.
+
+The term Mass Function is usually applied to descrete distributions,
+while the term __pdf applies to continuous distributions.
+
+[h4 [#quantile]quantile]
+
+   template <class Distribution, class RealType>
+   RealType quantile(const Distribution& dist, const RealType& p);
+   
+The quantile is best viewed as the inverse of the __cdf, it returns
+a value /x/ such that `cdf(dist, x) == p`.
+
+This is also known as the /persent point function/, or a /persentile/.
+
+The following graph shows the quantile function for a standard normal
+distribution:
+
+[$../graphs/quantile.png]
+
+[h4 [#quantile_c]Quantile from the complement of the probability.]
+
+   template <class Distribution, class RealType>
+   RealType quantile(const unspecified_type<Distribution, RealType>& comp);
+   
+This is the inverse of the __ccdf.  It is calculated by wrapping
+the arguments in a call to the quantile function in a call to
+/complement/.  For example:
+
+   // define a standard normal distribution:
+   boost::math::normal norm;
+   // print the value of x for which the complement
+   // of the probability is 0.05:
+   std::cout << quantile(complement(norm, 0.05)) << std::endl;
+
+The function computes a value /x/ such that
+`cdf(complement(dist, x)) == q` where /q/ complement of the
+probability.
+
+This function is also called the inverse survival function.
+
+The following graph show the inverse survival function for the normal
+distribution:
+
+[$../graphs/survival_inv.png]
+
+[h4 [#survival]Survival Function]
+
+Refer to the __ccdf.
+
+[endsect]
+
+[section Distributions]
+
+Text here.
+
+[endsect]
+
+[endsect]
+
+[section:future Extras/Future Directions]
+
+I'm not anticipating any of the following being present in the initial
+release: we've got enough to do figuring out the math !
+
+[h4 Adding Additional Location and Scale Parameters] 
+
+In some modelling applications we require a distribution with a specific 
+location and scale:
+often this equates to a specific mean and standard deviation, although for many
+distributions the relationship between these properties and the location and 
+scale parameters are non-trivial.  
+See [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm] for more
+information.
+
+The obvious way to handle this is via an adapter template:
+
+	template <class Dist>
+	class scaled_distribution
+	{
+	   scaled_distribution(
+	     const Dist dist, 
+	     typename Dist::value_type location,
+	     typename Dist::value_type scale = 0);
+	};
+
+Which would then have its own set of overloads for the non-member accessor functions.
+
+[h4 Higher Level Hypothesis Tests]
+
+Higher level tests roughly corresponding to the Mathematica HypothesisTests
+package could be added reasonably easily, for example:
+
+	template <class InputIterator>
+	typename std::iterator_traits<InputIterator>::value_type
+	   test_equal_mean(
+	     InputIterator a,
+	     InputIterator b,
+	     typename std::iterator_traits<InputIterator>::value_type expected_mean);
+
+Returns the probability that the data in the sequence [a,b) has the mean
+/expected_mean/.
+
+[h4 Integration With Statistical Accumulators]
+
+[@http://boost-sandbox.sourceforge.net/libs/accumulators/doc/html/index.html
+Eric Niebler's accumulator framework] - also work in progress - provides the means
+to calculate various statistical properties from experimental data.  There is an
+opportunity to integrate the statistical tests with this framework at some later date:
+
+	// define an accumulator, all required statistics to calculate the test
+	// are calculated automatically:
+	accumulator_set<double, features<tag::test_expected_mean> > acc(expected_mean=4);
+	// pass our data to the accumulator:
+	acc = std::for_each(mydata.begin(), mydata.end(), acc);
+	// extract the result:
+	double p = probability(acc);
+
+[endsect]
+
+
+
+
+
+

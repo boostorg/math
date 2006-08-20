@@ -74,9 +74,10 @@ data and/or data for output to an external graphing application.
 
 [endsect]
 
-[section Statistical Distributions and Functions]
+[section:dist Statistical Distributions and Functions]
 
 [include dist_tutorial.qbk]
+[include dist_reference.qbk]
 
 [endsect]
 

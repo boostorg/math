@@ -52,6 +52,19 @@ void expected_results()
    // Define the max and mean errors expected for
    // various compilers and platforms.
    //
+   const char* largest_type;
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   if(boost::math::tools::digits<double>() == boost::math::tools::digits<long double>())
+   {
+      largest_type = "(long\\s+)?double";
+   }
+   else
+   {
+      largest_type = "long double";
+   }
+#else
+   largest_type = "(long\\s+)?double";
+#endif
 
    //
    // Catch all cases come last:
@@ -61,9 +74,23 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      ".*",                          // test type(s)
-      "Inverse Erf.*",               // test data group
-      "boost::math::erfc?_inv", 14, 4);  // test function
+      largest_type,                  // test type(s)
+      ".*",                          // test data group
+      ".*", 500, 500);               // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "float|double",                // test type(s)
+      ".*",                          // test data group
+      ".*", 5, 3);                   // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "real_concept",                // test type(s)
+      ".*",                          // test data group
+      ".*", 1000000, 500000);        // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
@@ -131,6 +158,59 @@ void test_inverses(const T& data)
 }
 
 template <class T>
+void test_inverses2(const T& data, const char* type_name, const char* test_name)
+{
+   typedef typename T::value_type row_type;
+   typedef typename row_type::value_type value_type;
+
+   typedef value_type (*pg)(value_type, value_type, value_type);
+   pg funcp = boost::math::ibeta_inva;
+
+   using namespace boost::lambda;
+
+   boost::math::tools::test_result<value_type> result;
+
+   std::cout << "Testing " << test_name << " with type " << type_name
+      << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+
+   //
+   // test ibeta_inva(T, T, T) against data:
+   //
+   result = boost::math::tools::test(
+      data,
+      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
+      ret<value_type>(_1[3]));
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibeta_inva", test_name);
+   //
+   // test ibetac_inva(T, T, T) against data:
+   //
+   funcp = boost::math::ibetac_inva;
+   result = boost::math::tools::test(
+      data,
+      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
+      ret<value_type>(_1[4]));
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibetac_inva", test_name);
+   //
+   // test ibeta_invb(T, T, T) against data:
+   //
+   funcp = boost::math::ibeta_invb;
+   result = boost::math::tools::test(
+      data,
+      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
+      ret<value_type>(_1[5]));
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibeta_invb", test_name);
+   //
+   // test ibetac_invb(T, T, T) against data:
+   //
+   funcp = boost::math::ibetac_invb;
+   result = boost::math::tools::test(
+      data,
+      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
+      ret<value_type>(_1[6]));
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibetac_invb", test_name);
+}
+
+template <class T>
 void test_beta(T, const char* name)
 {
    //
@@ -152,6 +232,21 @@ void test_beta(T, const char* name)
 #  include "ibeta_large_data.ipp"
 
    test_inverses(ibeta_large_data);
+#ifndef FULL_TEST
+   if(boost::is_floating_point<T>::value){
+#endif
+   //
+   // This accuracy test is normally only enabled for "real"
+   // floating point types and not for class real_concept.
+   // The reason is that these tests are exceptionally slow
+   // to complete when T doesn't have Lanczos support defined for it.
+   //
+#  include "ibeta_inva_data.ipp"
+
+   test_inverses2(ibeta_inva_data, name, "Inverse incomplete beta");
+#ifndef FULL_TEST
+   }
+#endif
 }
 
 int test_main(int, char* [])

@@ -32,18 +32,84 @@ using std::endl;
 #include <limits>
 using std::numeric_limits;
 
+template <class RealType>
+void test_spot(
+     RealType N,    // Number of trials
+     RealType k,    // Number of successes
+     RealType p,    // Probability of success
+     RealType P,    // CDF
+     RealType Q,    // Complement of CDF
+     RealType tol)  // Test tolerance
+{
+   boost::math::binomial_distribution<RealType> bn(N, p);
+   BOOST_CHECK_CLOSE(
+      cdf(bn, k), P, tol);
+   if((P < 0.99) && (Q < 0.99))
+   {
+      //
+      // We can only check this if P is not too close to 1,
+      // so that we can guarentee Q is free of error:
+      //
+      BOOST_CHECK_CLOSE(
+         cdf(complement(bn, k)), Q, tol);
+      if(k != 0)
+      {
+         BOOST_CHECK_CLOSE(
+            quantile(bn, P), k, tol);
+      }
+      else
+      {
+         // Just check quantile is very small:
+         BOOST_CHECK(quantile(bn, P) < boost::math::tools::epsilon<RealType>() * 10);
+      }
+      if(k != 0)
+      {
+         BOOST_CHECK_CLOSE(
+            quantile(complement(bn, Q)), k, tol);
+      }
+      else
+      {
+         // Just check quantile is very small:
+         BOOST_CHECK(quantile(complement(bn, Q)) < boost::math::tools::epsilon<RealType>() * 10);
+      }
+   }
+
+   // Double check consistency of CDF and PDF by computing 
+   // the finite sum:
+   RealType sum = 0;
+   for(unsigned i = 0; i <= k; ++i)
+      sum += pdf(bn, RealType(i));
+   BOOST_CHECK_CLOSE(
+      sum, P, tol);
+   // And complement as well:
+   sum = 0;
+   for(RealType i = N; i > k; i -= 1)
+      sum += pdf(bn, i);
+   if(P < 0.99)
+   {
+      BOOST_CHECK_CLOSE(
+         sum, Q, tol);
+   }
+   else
+   {
+      // Not enough information content in P for Q to be meaningful
+      RealType tol = (std::max)(2 * Q, boost::math::tools::epsilon<RealType>());
+      BOOST_CHECK(sum < tol);
+   }
+}
+
 template <class RealType> // Any floating-point type RealType.
 void test_spots(RealType)
 {
-  // Basic sanity checks, tolerance is about numeric_limits<RealType>::digits10 decimal places,
-  // guaranteed for type RealType, eg 6 for float, 15 for double,
-  // expressed as a percentage (so -2) for BOOST_CHECK_CLOSE,
+  // Basic sanity checks, test data is to double precision only
+  // so set tolerance to 100eps expressed as a persent, or
+  // 100eps of type double expressed as a persent, whichever
+  // is the larger.
 
-  int decdigits = numeric_limits<RealType>::digits10;
-  decdigits -= 2; // Perhaps allow some decimal digits margin of numerical error.
-  RealType tolerance = static_cast<RealType>(std::pow(10., -(decdigits-2))); // 1e-6 (-2 so as %)
-  tolerance *= 1; // Allow some bit(s) small margin (2 means + or - 1 bit) of numerical error.
-  // Typically 2e-13% = 2e-15 as fraction for double.
+  RealType tolerance = (std::max)
+      (boost::math::tools::epsilon<RealType>(),
+      static_cast<RealType>(std::numeric_limits<double>::epsilon()));
+   tolerance *= 100 * 1000;
 
   cout << "Tolerance = " << tolerance << "%." << endl;
 
@@ -55,41 +121,116 @@ void test_spots(RealType)
   // 0 <= p <= 1
   // P = pbinom(30, 500, 0.05) = 0.869147702104609
 
-  // qbinom(p, n, q)
-  // returns the inverse binomial distribution, smallest K so that pbinom(k, n, q ) >= p
-
-
-
-
-  // Test binomial using cdf spot values from MathCAD
-
   using boost::math::binomial_distribution;
   using  ::boost::math::binomial;
   using  ::boost::math::cdf;
   using  ::boost::math::pdf;
   using boost::math::binomial_coefficient;
 
-  cout.precision(17);
-  cout << endl;
+  // Test binomial using cdf spot values from MathCAD.
+  // These test quantiles and complements as well.
+  test_spot(
+     static_cast<RealType>(500),                     // Sample size, N
+     static_cast<RealType>(30),                      // Number of successes, k
+     static_cast<RealType>(0.05),                    // Probability of success, p
+     static_cast<RealType>(0.869147702104609),       // Probability of result (CDF), P
+     static_cast<RealType>(1 - 0.869147702104609),   // Q = 1 - P
+     tolerance);
 
-  BOOST_CHECK_CLOSE(
-    ::boost::math::cdf(
-    binomial_distribution<RealType>(static_cast<RealType>(500), static_cast<RealType>(0.05)), 
-    static_cast<RealType>(30)),  // k - as floating-point.
-    static_cast<RealType>(0.869147702104609), // probability.
-    tolerance);
+  test_spot(
+     static_cast<RealType>(500),                     // Sample size, N
+     static_cast<RealType>(250),                     // Number of successes, k
+     static_cast<RealType>(0.05),                    // Probability of success, p
+     static_cast<RealType>(1),                       // Probability of result (CDF), P
+     static_cast<RealType>(0),   // Q = 1 - P
+     tolerance);
 
-  BOOST_CHECK_CLOSE(
-    cdf(binomial_distribution<RealType>(static_cast<RealType>(500), static_cast<RealType>(0.05)), 
-    static_cast<RealType>(250)),  // k.
-    static_cast<RealType>(1), 
-    tolerance);
+  test_spot(
+     static_cast<RealType>(500),                     // Sample size, N
+     static_cast<RealType>(470),                     // Number of successes, k
+     static_cast<RealType>(0.95),                    // Probability of success, p
+     static_cast<RealType>(0.176470742656766),       // Probability of result (CDF), P
+     static_cast<RealType>(1 - 0.176470742656766),   // Q = 1 - P
+     tolerance * 10);                                // Note higher tolerance on this test!
 
+  test_spot(
+     static_cast<RealType>(500),                       // Sample size, N
+     static_cast<RealType>(400),                       // Number of successes, k
+     static_cast<RealType>(0.05),                      // Probability of success, p
+     static_cast<RealType>(1),                         // Probability of result (CDF), P
+     static_cast<RealType>(0),                         // Q = 1 - P
+     tolerance);
+
+  test_spot(
+     static_cast<RealType>(500),                       // Sample size, N
+     static_cast<RealType>(400),                       // Number of successes, k
+     static_cast<RealType>(0.9),                       // Probability of success, p
+     static_cast<RealType>(1.80180425681923E-11),      // Probability of result (CDF), P
+     static_cast<RealType>(1 - 1.80180425681923E-11),  // Q = 1 - P
+     tolerance);
+
+  test_spot(
+     static_cast<RealType>(500),                       // Sample size, N
+     static_cast<RealType>(5),                         // Number of successes, k
+     static_cast<RealType>(0.05),                      // Probability of success, p
+     static_cast<RealType>(9.181808267643E-7),         // Probability of result (CDF), P
+     static_cast<RealType>(1 - 9.181808267643E-7),     // Q = 1 - P
+     tolerance);
+
+  test_spot(
+     static_cast<RealType>(2),                       // Sample size, N
+     static_cast<RealType>(1),                       // Number of successes, k
+     static_cast<RealType>(0.5),                     // Probability of success, p
+     static_cast<RealType>(0.75),                    // Probability of result (CDF), P
+     static_cast<RealType>(0.25),                    // Q = 1 - P
+     tolerance);
+  
+  test_spot(
+     static_cast<RealType>(8),                       // Sample size, N
+     static_cast<RealType>(3),                       // Number of successes, k
+     static_cast<RealType>(0.25),                    // Probability of success, p
+     static_cast<RealType>(0.8861846923828125),      // Probability of result (CDF), P
+     static_cast<RealType>(1 - 0.8861846923828125),  // Q = 1 - P
+     tolerance);
+  
+  test_spot(
+     static_cast<RealType>(8),                       // Sample size, N
+     static_cast<RealType>(0),                       // Number of successes, k
+     static_cast<RealType>(0.25),                    // Probability of success, p
+     static_cast<RealType>(0.1001129150390625),      // Probability of result (CDF), P
+     static_cast<RealType>(1 - 0.1001129150390625),  // Q = 1 - P
+     tolerance);
+  
+  test_spot(
+     static_cast<RealType>(8),                       // Sample size, N
+     static_cast<RealType>(1),                       // Number of successes, k
+     static_cast<RealType>(0.25),                    // Probability of success, p
+     static_cast<RealType>(0.36708068847656244),     // Probability of result (CDF), P
+     static_cast<RealType>(1 - 0.36708068847656244), // Q = 1 - P
+     tolerance);
+  
+  test_spot(
+     static_cast<RealType>(8),                       // Sample size, N
+     static_cast<RealType>(4),                       // Number of successes, k
+     static_cast<RealType>(0.25),                    // Probability of success, p
+     static_cast<RealType>(0.9727020263671875),      // Probability of result (CDF), P
+     static_cast<RealType>(1 - 0.9727020263671875),  // Q = 1 - P
+     tolerance);
+  
+  test_spot(
+     static_cast<RealType>(8),                       // Sample size, N
+     static_cast<RealType>(7),                       // Number of successes, k
+     static_cast<RealType>(0.25),                    // Probability of success, p
+     static_cast<RealType>(0.9999847412109375),      // Probability of result (CDF), P
+     static_cast<RealType>(1 - 0.9999847412109375),  // Q = 1 - P
+     tolerance);
+  
+  // Tests on PDF follow:
   BOOST_CHECK_CLOSE(
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.75)), 
-    static_cast<RealType>(10)),  // k.
-    static_cast<RealType>(0.00992227527967770583927631378173), // 0.00992227527967770583927631378173
-    tolerance);
+     pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.75)),
+     static_cast<RealType>(10)),  // k.
+     static_cast<RealType>(0.00992227527967770583927631378173), // 0.00992227527967770583927631378173
+     tolerance);
 
   BOOST_CHECK_CLOSE(
     pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.5)), 
@@ -128,137 +269,162 @@ void test_spots(RealType)
   //20	C(20,20) * 0.25^20 * 0.75^0	0.00000000000090949470177292823791
 
 
-  //typedef boost::math::binomial_distribution<double> binomial; // Reserved name of type double.
-
-  // Examples of constructing a binomial distribution.
-  binomial mydist(20., 0.25); // Note: double values (matching the distribution definition) avoid the need for any casting.
-  //binomial mydist(static_cast<double>(20), static_cast<double>(0.25)); // same but integer 20 means casting is needed.
-  binomial my_double_dist(static_cast<double>(20), static_cast<double>(0.5));
-  binomial_distribution<RealType> my_RealType_dist(static_cast<RealType>(20), static_cast<RealType>(0.25));
-
-  cout << "mydist.trials() = " << mydist.trials() << endl;
-  cout << "mydist.success_fraction() = " << mydist.success_fraction() << endl;
-  cout << "pdf(mydist, 10.) = " << pdf(mydist, 10.) << endl;
-
-  //cout << pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.5)), static_cast<RealType>(10)) << endl;
-  cout.precision(17);
-
-  int n = static_cast<int>(mydist.trials());
-  
-  for (int k = 0; k <= n; k++)
-  {
-    cout << k << ' ' 
-    << pdf(mydist, static_cast<double>(k)) << endl;
-
-  } // for k
-
     BOOST_CHECK_CLOSE(
     pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)), 
     static_cast<RealType>(10)),  // k.
     static_cast<RealType>(0.00992227527967770583927631378173), // k=10  p = 0.25
-    1e-12); // OK at 1e-12
-    // 0.0099222752796776954 v 0.0099222752796777058
+    tolerance); 
   
     BOOST_CHECK_CLOSE( // k = 0 use different formula - only exp so more accurate.
     pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)), 
     static_cast<RealType>(0)),  // k.
     static_cast<RealType>(0.00317121193893399322405457496643), // k=0  p = 0.25
-    1e-16); // OK at 1e-16
+    tolerance); 
 
     BOOST_CHECK_CLOSE( // k = 20 use different formula - only exp so more accurate.
     pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)), 
     static_cast<RealType>(20)),  // k == n.
     static_cast<RealType>(0.00000000000090949470177292823791), // k=20  p = 0.25
-    1e-16); // OK at 1e-16
+    tolerance); 
 
     BOOST_CHECK_CLOSE( // k = 1.
     pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)), 
     static_cast<RealType>(1)),  // k.
     static_cast<RealType>(0.02114141292622662149369716644287), // k=1  p = 0.25
-    1e-13); // OK at 1e-13
+    tolerance); 
 
     // Some exact (probably) values.
     BOOST_CHECK_CLOSE( 
     pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
     static_cast<RealType>(0)),  // k.
     static_cast<RealType>(0.10011291503906250000000000000000), // k=0  p = 0.25
-    1e-16); // OK at 1e-16 (uses pow only formula).
+    tolerance); 
 
     BOOST_CHECK_CLOSE( // k = 1.
     pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
     static_cast<RealType>(1)),  // k.
     static_cast<RealType>(0.26696777343750000000000000000000), // k=1  p = 0.25
-    1e-12); // OK at 1e-
+    tolerance); 
 
     BOOST_CHECK_CLOSE( // k = 2.
     pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
     static_cast<RealType>(2)),  // k.
     static_cast<RealType>(0.31146240234375000000000000000000), // k=2  p = 0.25
-    1e-12); // OK at 1e-13
+    tolerance); 
 
     BOOST_CHECK_CLOSE( // k = 3.
     pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
     static_cast<RealType>(3)),  // k.
     static_cast<RealType>(0.20764160156250000000000000000000), // k=3  p = 0.25
-    1e-12); // OK at 1e-13
+    tolerance); 
 
     BOOST_CHECK_CLOSE( // k = 7.
     pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
     static_cast<RealType>(7)),  // k.
     static_cast<RealType>(0.00036621093750000000000000000000), // k=7  p = 0.25
-    1e-12); // OK at 1e-13
+    tolerance); 
 
     BOOST_CHECK_CLOSE( // k = 8.
     pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
     static_cast<RealType>(8)),  // k = n.
     static_cast<RealType>(0.00001525878906250000000000000000), // k=8  p = 0.25
-    1e-16); // OK at 1e-16
+    tolerance); 
 
+    // mean:
+    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5;
+    BOOST_CHECK_CLOSE(
+       mean(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)))
+       , static_cast<RealType>(8 * 0.25), tol2);
+    // variance:
+    BOOST_CHECK_CLOSE(
+       variance(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)))
+       , static_cast<RealType>(8 * 0.25 * 0.75), tol2);
 
-  // cdf checks
-  BOOST_CHECK_CLOSE(::boost::math::cdf(
-    binomial_distribution<RealType>(static_cast<RealType>(500), static_cast<RealType>(0.95)),
-    static_cast<RealType>(470)),  // k - as floating-point.
-     static_cast<RealType>(0.176470742656766), // probability.
-  tolerance * 10);
+    // special cases for PDF:
+    BOOST_CHECK_EQUAL(
+       pdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0)),
+          static_cast<RealType>(0)), static_cast<RealType>(1)
+       );
+    BOOST_CHECK_EQUAL(
+       pdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0)),
+          static_cast<RealType>(0.0001)), static_cast<RealType>(0)
+       );
+    BOOST_CHECK_EQUAL(
+       pdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1)),
+          static_cast<RealType>(0.001)), static_cast<RealType>(0)
+       );
+    BOOST_CHECK_EQUAL(
+       pdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1)),
+          static_cast<RealType>(8)), static_cast<RealType>(1)
+       );
+    BOOST_CHECK_EQUAL(
+       pdf(
+          binomial_distribution<RealType>(static_cast<RealType>(0), static_cast<RealType>(0.25)),
+          static_cast<RealType>(0)), static_cast<RealType>(1)
+       );
+    BOOST_CHECK_THROW(
+       pdf(
+          binomial_distribution<RealType>(static_cast<RealType>(-1), static_cast<RealType>(0.25)),
+          static_cast<RealType>(0)), std::domain_error
+       );
+    BOOST_CHECK_THROW(
+       pdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+          static_cast<RealType>(-1)), std::domain_error
+       );
+    BOOST_CHECK_THROW(
+       pdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+          static_cast<RealType>(9)), std::domain_error
+       );
+    BOOST_CHECK_THROW(
+       cdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+          static_cast<RealType>(-1)), std::domain_error
+       );
+    BOOST_CHECK_THROW(
+       cdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+          static_cast<RealType>(9)), std::domain_error
+       );
+    BOOST_CHECK_EQUAL(
+       cdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+          static_cast<RealType>(8)), static_cast<RealType>(1)
+       );
+    BOOST_CHECK_EQUAL(
+       cdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0)),
+          static_cast<RealType>(7)), static_cast<RealType>(1)
+       );
+    BOOST_CHECK_EQUAL(
+       cdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1)),
+          static_cast<RealType>(7)), static_cast<RealType>(0)
+       );
 
-  BOOST_CHECK_CLOSE(::boost::math::cdf(
-    binomial_distribution<RealType>(static_cast<RealType>(500), static_cast<RealType>(0.05)),
-    static_cast<RealType>(400)),  // k - as floating-point.
-     static_cast<RealType>(1), // probability.
-  tolerance);
+   if(boost::is_floating_point<RealType>::value)
+   {
+     // This is an extreme test, without Lanczos approximation support
+     // we get pretty inaccurate results from real_concept (about 5 sig digits only).
+     // So only test for accuracy with "real" floating point types:
+     BOOST_CHECK_CLOSE(::boost::math::pdf( // Really big number of trials - max()
+       binomial_distribution<RealType>(static_cast<RealType>((numeric_limits<int>::max)()), static_cast<RealType>(0.5)),
+       static_cast<RealType>((numeric_limits<int>::max)()/2)),  // half way to max
+       static_cast<RealType>(1.7217698023561394e-005), // probability.
+       tolerance);
+   }
 
-  BOOST_CHECK_CLOSE(::boost::math::cdf(
-    binomial_distribution<RealType>(static_cast<RealType>(500), static_cast<RealType>(0.9)),
-    static_cast<RealType>(400)),  // k - as floating-point.
-     static_cast<RealType>(1.80180425681923E-11), // probability.
-  tolerance);
-
-  BOOST_CHECK_CLOSE(::boost::math::cdf(
-    binomial_distribution<RealType>(static_cast<RealType>(500), static_cast<RealType>(0.05)),
-    static_cast<RealType>(5)),  // k - as floating-point.
-     static_cast<RealType>(9.181808267643E-7), // probability.
-  tolerance);
-  
-   BOOST_CHECK_CLOSE(::boost::math::cdf(
-    binomial_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(0.5)),
-    static_cast<RealType>(1)),  // k - as floating-point.
-     static_cast<RealType>(0.75), // probability.
-  tolerance);
-
-   BOOST_CHECK_CLOSE(::boost::math::pdf( // Really big number of trials - max()
-    binomial_distribution<RealType>(static_cast<RealType>(numeric_limits<int>::max()), static_cast<RealType>(0.5)),
-    static_cast<RealType>(numeric_limits<int>::max()/2)),  // half way to max
-     static_cast<RealType>(1.7217698023561394e-005), // probability.
-  tolerance * 1);
-
-  //binomial maxdist(static_cast<RealType>(numeric_limits<int>::max()), static_cast<RealType>(0.5));
-  //cout << "mean(maxdist) = " << boost::math::mean(maxdist) << endl;
   {
-   binomial my8dist(8., 0.25); // Note: double values (matching the distribution definition) avoid the need for any casting.
-   cout << "mean(my8dist) = " << boost::math::mean(my8dist) << endl; // mean(my8dist) = 2
-   cout << "my8dist.trials() = " << my8dist.trials()  << endl; // my8dist.trials() = 8
-   cout << "my8dist.success_fraction() = " << my8dist.success_fraction()  << endl; // my8dist.success_fraction() = 0.25
+    // This is a visual sanity check that everything is OK:
+    binomial my8dist(8., 0.25); // Note: double values (matching the distribution definition) avoid the need for any casting.
+    cout << "mean(my8dist) = " << boost::math::mean(my8dist) << endl; // mean(my8dist) = 2
+    cout << "my8dist.trials() = " << my8dist.trials()  << endl; // my8dist.trials() = 8
+    cout << "my8dist.success_fraction() = " << my8dist.success_fraction()  << endl; // my8dist.success_fraction() = 0.25
     BOOST_CHECK_EQUAL(my8dist.trials(), 8);
     BOOST_CHECK_EQUAL(my8dist.success_fraction(), 0.25);
     BOOST_CHECK_EQUAL(mean(my8dist), 0.25 * 8);
@@ -288,83 +454,6 @@ void test_spots(RealType)
     //8 1.52587890625e-005 1 1 0
   }
 
-
-
-  BOOST_CHECK_CLOSE(::boost::math::cdf(
-    binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
-    static_cast<RealType>(3)),  // k - as floating-point.
-     static_cast<RealType>(0.8861846923828125), // probability.
-  tolerance);
-
-  // Matching quantile is below:
-  BOOST_CHECK_CLOSE(::boost::math::quantile(
-    binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), static_cast<RealType>(3), static_cast<RealType>(0.8861846923828125)),
-   // static_cast<RealType>(3)),  // k - as floating-point.
-     static_cast<RealType>(0.25), // probability.
-  tolerance);
-  
-  BOOST_CHECK_CLOSE(::boost::math::quantile(
-    binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), static_cast<RealType>(0), static_cast<RealType>(0.1001129150390625)),
-   // static_cast<RealType>(3)),  // k - as floating-point.
-     static_cast<RealType>(0.25), // probability.
-  tolerance);
-
-  BOOST_CHECK_CLOSE(::boost::math::quantile(
-    binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), static_cast<RealType>(1), static_cast<RealType>(0.36708068847656244)),
-   // static_cast<RealType>(3)),  // k - as floating-point.
-     static_cast<RealType>(0.25), // probability.
-  tolerance);
-
-  BOOST_CHECK_CLOSE(::boost::math::quantile(
-    binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), static_cast<RealType>(4), static_cast<RealType>(0.9727020263671875)),
-   // static_cast<RealType>(3)),  // k - as floating-point.
-     static_cast<RealType>(0.25), // probability.
-  tolerance);
-
-  BOOST_CHECK_CLOSE(::boost::math::quantile(
-    binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), static_cast<RealType>(7), static_cast<RealType>(0.9999847412109375)),
-   // static_cast<RealType>(3)),  // k - as floating-point.
-     static_cast<RealType>(0.25), // probability.
-  tolerance);
-
-  cout.precision(17);
-
-
-  //  cout << cdf(my8dist, static_cast<double>(my8dist.trials())) << endl; //  k = n test
-  //  cout << binomial_coefficient<double>(20, 20) << endl; // == 1
-
-  // binomial mybigdist(numeric_limits<int>::max(), 0.5); 
-  // int k = numeric_limits<int>::max()/2;
-  // cout << k << ' ' << pdf(mybigdist, static_cast<double>(k)) << endl; // 1073741823 1.7217698023561394e-005
-
-
-  //  {
-  //    int N = 100;
-  //    binomial mybigdist(N, 0.5); 
-  //    for (int k = 0; k < N; k++)
-  //    {
-  //      cout << k << ' ' << pdf(mybigdist, static_cast<double>(k)) << endl;
-  //    }
-  //  }
-
-    // Quantile or Percent Point Binomial function.
-    // Returns the cdf that would give >= k successes in n trials.
-
-    binomial my8dist(8., 0.25); 
-
-    for (int i = 0; i < 8; i++)
-    {
-      cout << quantile(my8dist, double(i), 0.25) << endl;
-    }
-    //  0  0.082995956795328785
-    //  1  0.20113119260501
-    //  2  0.3205189672974762
-    //  3  0.44015520463476587
-    //  4  0.55984479536523413
-    //  5  0.6794810327025238
-    //  6  0.79886880739499
-    //  7  0.9170040432046711
-
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
@@ -377,10 +466,10 @@ int test_main(int, char* [])
 #endif
 
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
-//  test_spots(0.0F); // Test float.
+  test_spots(0.0F); // Test float.
   test_spots(0.0); // Test double.
-//  test_spots(0.0L); // Test long double.
-//  test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  test_spots(0.0L); // Test long double.
+  test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 
   return 0;
 } // int test_main(int, char* [])
