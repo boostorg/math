@@ -1,10 +1,19 @@
 
 [section:dist_ref Reference]
 
-[def __cdf [link cdf Cumulative Distribution Function]]
-[def __pdf [link pdf Probability Density Function]]
-[def __ccdf [link ccdf Complement of the Cumulative Distribution Function]]
-[def __quantile [link quantile quantile]]
+[def __cdf [link math.dist.cdf Cumulative Distribution Function]]
+[def __pdf [link math.dist.pdf Probability Density Function]]
+[def __ccdf [link math.dist.ccdf Complement of the Cumulative Distribution Function]]
+[def __quantile [link math.dist.quantile quantile]]
+[def __quantile_c [link math.dist.quantile_c quantile from the complement of the probabitity]]
+[def __mean [link math.dist.mean mean]]
+[def __variance [link math.dist.variance variance]]
+[def __sd [link math.dist.sd standard deviation]]
+[def __hazard [link math.dist.hazard Hazard Function]]
+[def __chf [link math.dist.chf Cumulative Hazard Function]]
+
+[def __usual_accessors __cdf, __pdf, __quantile, __hazard, 
+   __chf, __mean, __variance and __sd]
 
 [section:nmp Non-Member Properties]
 
@@ -18,33 +27,55 @@ familiar with.  Or use the [link function_index function index]
 to go straight to the function you
 want if you already know it's name.
 
+[h4 [#function_index]Function Index]
+
+* [link math.dist.cdf cdf].
+* [link math.dist.ccdf cdf complement].
+* [link math.dist.chf chf].
+* [link math.dist.hazard hazard]
+* __mean.
+* [link math.dist.pdf pdf].
+* [link math.dist.quantile quantile].
+* [link math.dist.quantile_c quantile from the complement].
+* [link math.dist.sd standard_deviation]
+* __variance
+
 [h4 [#concept_index]Conceptual Index]
 
 * __ccdf.
 * __cdf.
+* __chf
 * [link survival_inv Inverse Survival Function].
+* __hazard
+* __mean.
 * [link cdfPQ P].
 * [link persent Persent Point Function]
 * __pdf.
 * [link pmf Probability Mass Function].
 * [link cdfPQ Q].
 * __quantile.
-* [link quantile_c Quantile from the complement of the probability].
+* [link math.dist.quantile_c Quantile from the complement of the probability].
+* __sd
 * [link survival Survival Function].
+* __variance.
 
+[h4 [#math.dist.cdf]Cumulative Distribution Function]
 
-[h4 [#function_index]Function Index]
+   template <class RealType>
+   RealType cdf(const ``['Distribution-Type]``<RealType>& dist, const RealType& x);
+   
+The __cdf is the probability that 
+the variable takes a value less than or equal to x.  It is equivalent
+to the integral from -Infinity to x of the __pdf.  
+For example the following graph shows the cdf for the
+normal distribution:
 
-* [link cdf cdf].
-* [link ccdf cdf complement].
-* [link pdf pdf].
-* [link quantile quantile].
-* [link quantile_c quantile from the complement].
+[$../graphs/cdf.png]
 
-[h4 [#ccdf]Complement of the Cumulative Distribution Function]
+[h4 [#math.dist.ccdf]Complement of the Cumulative Distribution Function]
 
    template <class Distribution, class RealType>
-   RealType cdf(const unspecified_type<Distribution, RealType>& comp);
+   RealType cdf(const ``['Unspecified-Complement-Type]``<Distribution, RealType>& comp);
    
 The complement of the __cdf 
 is the probability that 
@@ -66,41 +97,42 @@ normal distribution:
 
 [$../graphs/survival.png]
 
-[h4 [#cdf]Cumulative Distribution Function]
+[h4 [#math.dist.hazard]Hazard Function]
 
-   template <class Distribution, class RealType>
-   RealType cdf(const Distribution& dist, const RealType& x);
+   template <class RealType>
+   RealType hazard(const ``['Distribution-Type]``<RealType>& dist, const RealType& x);
+
+Returns the __hazard of /x/ and distibution /dist/.
+
+[$../equations/hazard.png]
+
+[caution
+Some authors refer to this as the refer to this as the conditional failure 
+density function rather than the hazard function.]
+
+[h4 [#math.dist.chf]Cumulative Hazard Function]
+
+   template <class RealType>
+   RealType chf(const ``['Distribution-Type]``<RealType>& dist, const RealType& x);
+
+Returns the __chf of /x/ and distibution /dist/.
+
+[$../equations/chf.png]
+
+[caution 
+Some authors refer to this as simply the "Hazard Function".]
+
+[h4 [#math.dist.mean]mean]
+
+   template<class RealType>
+   RealType mean(const ``['Distribution-Type]``<RealType>& dist);
    
-The __cdf is the probability that 
-the variable takes a value less than or equal to x.  It is equivalent
-to the integral from -Infinity to x of the __pdf.  
-For example the following graph shows the cdf for the
-normal distribution:
+Returns the mean of the distribution /dist/.
 
-[$../graphs/cdf.png]
+[h4 [#math.dist.pdf]Probabilty Density Function]
 
-[h4 [#survival_inv]Inverse Survival Function.]
-
-The inverse of the survival function, is the same as computing the 
-[link quantile_c quantile
-from the complement of the probability].
-
-[h4 [#cdfPQ]P and Q]
-
-The terms P and Q are sometimes used to refer to the __cdf
-and it's [link ccdf complement] respectively.
-Lowercase p and q are sometimes used to refer to the values returned
-by these functions.
-
-[h4 [#persent]Persent Point Function]
-
-The persent point function, also known as the persentile, is the same as
-the __quantile.
-
-[h4 [#pdf]Probabilty Density Function]
-
-   template <class Distribution, class RealType>
-   RealType pdf(const Distribution& dist, const RealType& x);
+   template <class RealType>
+   RealType pdf(const ``['Distribution-Type]``<RealType>& dist, const RealType& x);
    
 For a continuous function, the probability density function (pdf) returns 
 the probability that the variate has the value x. 
@@ -115,17 +147,10 @@ For example for a standard normal distribution the pdf looks like this:
 
 [$../graphs/pdf.png]
 
-[h4 [#pmf]Probabilty Mass Function]
+[h4 [#math.dist.quantile]quantile]
 
-The Probability Mass Function is the same as the __pdf.
-
-The term Mass Function is usually applied to descrete distributions,
-while the term __pdf applies to continuous distributions.
-
-[h4 [#quantile]quantile]
-
-   template <class Distribution, class RealType>
-   RealType quantile(const Distribution& dist, const RealType& p);
+   template <class RealType>
+   RealType quantile(const ``['Distribution-Type]``<RealType>& dist, const RealType& p);
    
 The quantile is best viewed as the inverse of the __cdf, it returns
 a value /x/ such that `cdf(dist, x) == p`.
@@ -137,10 +162,10 @@ distribution:
 
 [$../graphs/quantile.png]
 
-[h4 [#quantile_c]Quantile from the complement of the probability.]
+[h4 [#math.dist.quantile_c]Quantile from the complement of the probability.]
 
    template <class Distribution, class RealType>
-   RealType quantile(const unspecified_type<Distribution, RealType>& comp);
+   RealType quantile(const ``['Unspecified-Complement-Type]``<Distribution, RealType>& comp);
    
 This is the inverse of the __ccdf.  It is calculated by wrapping
 the arguments in a call to the quantile function in a call to
@@ -163,6 +188,45 @@ distribution:
 
 [$../graphs/survival_inv.png]
 
+[h4 [#math.dist.sd]Standard Deviation]
+
+   template <class RealType>
+   RealType standard_deviation(const ``['Distribution-Type]``<RealType>& dist);
+   
+Returns the standard deviation of distribution /dist/.   
+
+[h4 [#math.dist.variance]variance]
+
+   template <class RealType>
+   RealType variance(const ``['Distribution-Type]``<RealType>& dist);
+   
+Returns the variance of the distribution /dist/.
+
+[h4 [#cdfPQ]P and Q]
+
+The terms P and Q are sometimes used to refer to the __cdf
+and it's [link math.dist.ccdf complement] respectively.
+Lowercase p and q are sometimes used to refer to the values returned
+by these functions.
+
+[h4 [#persent]Persent Point Function]
+
+The persent point function, also known as the persentile, is the same as
+the __quantile.
+
+[h4 [#survival_inv]Inverse Survival Function.]
+
+The inverse of the survival function, is the same as computing the 
+[link math.dist.quantile_c quantile
+from the complement of the probability].
+
+[h4 [#pmf]Probabilty Mass Function]
+
+The Probability Mass Function is the same as the __pdf.
+
+The term Mass Function is usually applied to descrete distributions,
+while the term __pdf applies to continuous distributions.
+
 [h4 [#survival]Survival Function]
 
 Refer to the __ccdf.
@@ -171,7 +235,281 @@ Refer to the __ccdf.
 
 [section Distributions]
 
-Text here.
+[section Binomial]
+
+   template <class RealType>
+   class binomial_distribution;
+   
+   typedef binomial_distribution<double> binomial;
+   
+   template <class RealType>
+   class binomial_distribution
+   {
+   public:
+      // construct:
+      binomial_distribution(RealType n, RealType p);
+      
+      // parameter access::
+      RealType success_fraction() const;
+      RealType trials() const;
+      
+      // Bounds on success fraction:
+      static RealType estimate_lower_bound_on_p(
+         RealType trials, 
+         RealType successes,
+         RealType probability);
+      static RealType estimate_upper_bound_on_p(
+         RealType trials, 
+         RealType successes,
+         RealType probability);
+         
+      // estimate min/max number of trials:
+      static RealType estimate_number_of_trials(
+         RealType k,     // number of events
+         RealType p,     // success fraction
+         RealType probability); // probability threshold
+         
+      template <class P1, class P2, class P3>
+      static RealType estimate_number_of_trials(
+         const ``['unspecified-complemented-type]``<P1, P2, P3>& c);
+   };
+   
+The class type `binomial_distribution` represents a binomial distribution:
+it is used when there are exactly two mutually 
+exclusive outcomes of a trial. These outcomes are labeled 
+"success" and "failure". The binomial distribution is used to obtain 
+the probability of observing x successes in N trials, with the 
+probability of success on a single trial denoted by p. The 
+binomial distribution assumes that p is fixed for all trials.
+   
+[h4 Member Functions]
+
+   binomial_distribution(RealType n, RealType p);
+
+Constructor: /n/ is the total number of trials, /p/ is the
+probability of success of a single trial.
+
+   RealType success_fraction() const;
+   
+Returns the parameter /p/ from which this distribution was constructed.
+   
+   RealType trials() const;
+   
+Returns the parameter /n/ from which this distribution was constructed.
+
+   static RealType estimate_lower_bound_on_p(
+      RealType trials, 
+      RealType successes,
+      RealType alpha);
+      
+Returns a lower bound on the success fraction:
+
+[variablelist
+[[trials][The total number of trials conducted.]]
+[[successes][The number of successes that occured.]]
+[[alpha][The largest acceptable probability that the true value of
+         the success fraction is [*less than] the value returned.]]
+]
+
+For example, if you observe /k/ successes from /n/ trials the
+best estimate for the success fraction is simply ['k/n], but if you
+want to be 95% sure that the true value is [*greater than] some value, 
+['p[sub min]], then:
+
+   p``[sub min]`` = binomial_distribution<RealType>::estimate_lower_bound_on_p(
+                       n, k, 0.05);
+
+See worked example.
+      
+   static RealType estimate_upper_bound_on_p(
+      RealType trials, 
+      RealType successes,
+      RealType alpha);
+      
+Returns an upper bound on the success fraction:
+
+[variablelist
+[[trials][The total number of trials conducted.]]
+[[successes][The number of successes that occured.]]
+[[alpha][The largest acceptable probability that the true value of
+         the success fraction is [*greater than] the value returned.]]
+]
+
+For example, if you observe /k/ successes from /n/ trials the
+best estimate for the success fraction is simply ['k/n], but if you
+want to be 95% sure that the true value is [*less than] some value, 
+['p[sub max]], then:
+
+   p``[sub max]`` = binomial_distribution<RealType>::estimate_upper_bound_on_p(
+                       n, k, 0.05);
+
+See worked example.
+
+   static RealType estimate_number_of_trials(
+      RealType k,     // number of events
+      RealType p,     // success fraction
+      RealType alpha); // probability threshold
+      
+   template <class P1, class P2, class P3>
+   static RealType estimate_number_of_trials(
+      const ``['unspecified-complemented-type]``<P1, P2, P3>& c);
+      
+These functions estimate the number of trials required to achieve a certain
+probability that [*k events or fewer will be observed].
+
+[variablelist
+[[k][The number of success observed.]]
+[[p][The probability of success for each trial.]]
+[[alpha][The maximum acceptable probability that k events or fewer will be observed.]]
+]
+
+For example:
+   
+   binomial_distribution<RealType>::estimate_number_of_trials(10, 0.5, 0.05);
+      
+Returns the smallest number of trials we must conduct to be 95% sure
+of seeing 10 events that occur with frequence one half.
+   
+While:
+
+   binomial_distribution<RealType>::estimate_number_of_trials(
+      complement(0, 1.0/1000000, 0.05));
+
+Returns the the largest number of trials we can conduct and still be 95% certain
+of not observing any events that occur with one in a million frequency.
+This is typically used in failure analysis.
+
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
+distributions are supported: __usual_accessors.
+
+However it's worth taking a moment to define what these actually mean in 
+the context of this distribution:
+
+[table Meaning of the non-member accessors
+[[Function][Example Code][Meaning]]
+[[__pdf][``pdf(binomial(n, p), k)``]
+   [The probability of obtaining [*exactly k succeses] from n trials
+   with success fraction p.]]
+[[__cdf][``cdf(binomial(n, p), k)``]
+   [The probability of obtaining [*k succeses or fewer] from n trials
+   with success fraction p.]]
+[[__ccdf][``cdf(complement(binomial(n, p), k))``]
+   [The probability of obtaining [*more than k succeses] from n trials
+   with success fraction p.]]
+[[__quantile][``quantile(binomial(n, p), P)``]
+   [The [*greatest] number of successes that may be observed from n trials
+   with success fraction p, at probability P.  Note that the value returned
+   is a real-number, and not an integer.  Depending on the use case you may
+   want to take either the floor or ceiling of the result.]]
+[[__quantile_c][``quantile(complement(binomial(n, p), P))``]
+   [The [*smallest] number of successes that may be observed from n trials
+   with success fraction p, at probability P.  Note that the value returned
+   is a real-number, and not an integer.  Depending on the use case you may
+   want to take either the floor or ceiling of the result.]]
+]
+
+[endsect]
+
+[section Normal]
+
+The normal distribution is probably the most well known statistical 
+distribution, and is also known as the Gaussian Distribution.
+A normal distribution with mean zero, and standard distribution one
+is known as the ['Standard Normal Distribution].
+
+   template <class RealType>
+   class normal_distribution;
+   
+   typedef normal_distribution<double> normal;
+   
+   template <class RealType>
+   class normal_distribution
+   {
+   public:
+      typedef RealType value_type;
+      // Construct:
+      normal_distribution(RealType mean = 0, RealType sd = 1);
+      // Accessors:
+      RealType mean()const;
+      RealType standard_deviation()const;
+   };
+   
+[h4 Member Functions]
+
+   normal_distribution(RealType mean = 0, RealType sd = 1);
+   
+Constructs a normal distribution with mean /mean/ and 
+standard deviation /sd/.
+
+   RealType mean()const;
+   
+Returns the /mean/ of this distribution.
+   
+   RealType standard_deviation()const;
+      
+Returns the /standard deviation/ of this distribution.
+
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
+distributions are supported: __usual_accessors.
+
+[endsect]
+
+[section Student's t]
+
+A statistical distribution published by William Gosset in 1908. 
+His employer, Guinness Breweries, required him to publish under a 
+pseudonym, so he chose "Student." Given N independent measurements, let
+
+[$../equations/students_t_dist.png]
+
+where /M/ is the population mean,[' ''' &#x3BC; '''] is the sample mean, and /s/ is the 
+sample variance.
+
+Student's t-distribution is defined as the distribution of the random 
+variable t which is  - very loosely - the "best" that we can do not 
+knowing the true standard deviation of the sample.
+
+The Student's t-distribution takes a single parameter: the number of
+degrees of freedom of the sample.  When the degrees of freedom is
+/one/ then this distribution is the same as the Cauchy-distribution.
+As the number of degrees of freedom tends towards infinity, then this
+distribution approaches the normal-distribution.
+
+   template <class RealType>
+   class students_t_distribution;
+   
+   typedef students_t_distribution<double> students_t;
+
+   template <class RealType>
+   class students_t_distribution
+   {
+      typedef RealType value_type;
+      // Construct:
+      students_t_distribution(const RealType& v);
+      // Accessor:
+      RealType degrees_of_freedom()const;
+   };
+   
+[h4 Member Functions]
+
+   students_t_distribution(const RealType& v);
+   
+Constructs a Student's t-distribution with /v/ degrees of freedom.
+
+   RealType degrees_of_freedom()const;
+   
+Returns the number of degrees of freedom of this distribution.
+      
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
+distributions are supported: __usual_accessors.
+
+[endsect]
 
 [endsect]
 

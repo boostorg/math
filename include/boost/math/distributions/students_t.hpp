@@ -24,6 +24,8 @@ template <class RealType>
 class students_t_distribution
 {
 public:
+   typedef RealType value_type;
+
    students_t_distribution(RealType i) : m_df(i)
    {
        if(m_df <= 0)
@@ -272,7 +274,7 @@ RealType quantile(const students_t_distribution<RealType>& dist, const RealType&
    probability = (probability > 0.5) ? 1 - probability : probability;
    RealType t, x, y;
    x = ibeta_inv(degrees_of_freedom / 2, RealType(0.5), 2 * probability, &y);
-   if(degrees_of_freedom * y < tools::max_value<RealType>() * x)
+   if(degrees_of_freedom * y > tools::max_value<RealType>() * x)
       t = numeric_limits<RealType>::has_infinity ? numeric_limits<RealType>::infinity() : tools::max_value<RealType>();
    else
       t = sqrt(degrees_of_freedom * y / x);
@@ -514,11 +516,29 @@ RealType students_t_distribution<RealType>::estimate_two_unequal_degrees_of_free
    return result;
 }
 
+template <class RealType>
+inline RealType mean(const students_t_distribution<RealType>& )
+{
+   return 0;
+}
+
+template <class RealType>
+inline RealType variance(const students_t_distribution<RealType>& dist)
+{
+   RealType v = dist.degrees_of_freedom();
+   return v / (v - 2);
+}
+
 } // namespace math
 } // namespace boost
 
 #ifdef BOOST_MSVC
 # pragma warning(pop)
 #endif
+
+// This include must be at the end, *after* the accessors
+// for this distribution have been defined, in order to
+// keep compilers that support two-phase lookup happy.
+#include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_STATS_STUDENTS_T_HPP

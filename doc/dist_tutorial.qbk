@@ -165,10 +165,20 @@ Now that you have the basics, the next section looks at some worked examples.
 
 [endsect]
 
-[section Worked Examples]
+[section:weg Worked Examples]
 
-[section:mean1 Calculating confidence intervals on the mean with the students-t]
-[#tut_mean_intervals]
+[section:st_eg Student's t]
+
+* [link tut_mean_intervals Calculating confidence intervals on the mean with the students-t.]
+* [link tut_mean_test Testing a sample mean for systematic difference, by comparison to a "true" mean.]
+* [link tut_mean_size Estimating how large a sample size would have to become
+in order to give a significant Students-t test result with a single sample test.]
+* [link two_sample_students_t Comparing the means of two samples with the Students-t test.]
+* [link st_size2 Estimating how large a sample size would have to become
+in order to give a significant Students-t test result with a two sample test.]
+* [link paired_st Comparing two paired samples with the Student's t distribution.]
+
+[h4 [#tut_mean_intervals]Calculating confidence intervals on the mean with the students-t]
 
 Let's say you have a sample mean, you may wish to know what confidence intervals
 you can place on that mean.  Colloquially: "I want an interval that I can be
@@ -322,10 +332,7 @@ This time the fact that there are only three measurements leads to
 much wider intervals, indeed such large intervals that it's hard
 to be very confident in the location of the mean.
 
-[endsect]
-
-[section:diff1 Testing a sample mean for systematic difference, by comparison to a "true" mean]
-[#tut_mean_test]
+[h4 [#tut_mean_test]Testing a sample mean for systematic difference, by comparison to a "true" mean]
 
 When calibrating or comparing a scientific instrument or measurement method of some kind, 
 we want to be answer the question "Does an observed sample mean differ from the
@@ -501,12 +508,8 @@ we see a different output:
 In this case we really have a borderline result, and more data should
 be collected.
 
-
-[endsect]
-
-[section:size1 Estimating how large a sample size would have to become
+[h4 [#tut_mean_size]Estimating how large a sample size would have to become
 in order to give a significant Students-t test result with a single sample test]
-[#tut_mean_size]
 
 Imagine you have conducted a Students-t test on a single sample in order
 to check for systematic errors in your measurements.  Imagine that the
@@ -596,9 +599,7 @@ will show us how many samples would need to be collected:
 So in this case, doubling the sample size could well have settled the
 issue, at least to the 95% level.
 
-[endsect]
-
-[section Comparing the means of two samples with the Students-t test]
+[h4 [#two_sample_students_t]Comparing the means of two samples with the Students-t test]
 
 Imagine that we have two samples, and we wish to determine whether
 their means are different or not.  This situation often arises when
@@ -791,9 +792,7 @@ a higher likelihood that the observed difference is down to chance alone
 However, the conclusion remains the same: US cars are less fuel efficient
 than Japanese models.
 
-[endsect]
-
-[section:size2 Estimating how large a sample size would have to become
+[h4 [#st_size2]Estimating how large a sample size would have to become
 in order to give a significant Students-t test result with a two sample test]
 
 Imagine that you have compare the means of two samples with a Student's-t test
@@ -918,9 +917,7 @@ of 0 or 1: these arise if ['there is no solution to the question posed], and
 /any/ valid value for the degrees of freedom will cause the null-hypothesis
 to fail at the significance level given.
 
-[endsect]
-
-[section:paired_t Comparing two paired samples with the Student's t distribution]
+[h4 [#paired_st]Comparing two paired samples with the Student's t distribution]
 
 Imagine that we have a before and after reading for each item in the sample:
 for example we might have measured blood pressure before and after administration
@@ -942,6 +939,129 @@ result is consistent with a true mean of zero, then we must accept the
 null-hypothesis that there is no change.
 * [link tut_mean_size Calculate how many pairs of readings we would need
 in order to obtain a significant result].
+
+[endsect]
+
+[section:norm_eg Normal Distribution]
+
+TODO
+
+[endsect]
+
+[section:binom_eg Binomial Distribution]
+
+* [link binom_size_eg Estimating Sample Sizes.]
+
+[h4 [#binom_size_eg]Estimating Sample Sizes.]
+
+Imagine you have a critical component, that you know will fail in 1 in
+N "uses", for some suitable definition of "use".  You may want to schedule
+routine replacement of the component so that it's chance of failure between
+routine replacements is less than P%.  If the failures follow a binomial
+distribution - each time the component is "used" it either fails or does not -
+then the static member function `binomial_distibution<>::estimate_number_of_trials`
+can be used to estimate the maximum number of "uses" of that component for some
+probability P.
+
+The example program 
+[link ../example/binomial_sample_sizes.cpp binomial_sample_sizes.cpp]
+demonstrates it's usage.  It centres around a routine that prints out
+a table of maximum sample sizes for various probability thresholds:
+
+   void estimate_max_sample_size(
+      double p,              // success ratio.
+      unsigned successes)    // Total number of observed successes permitted.
+   {
+
+The routine then declares a table of probabity thresholds, these are the
+maximum acceptible probability that /successes/ or fewer events will be
+observed.  In our example /successes/ will be always zero: since we want
+no component failures, but in other situations non-zero values may well
+make sense.
+
+   double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
+
+Much of the rest of the program is pretty-printing, the important part
+is in the calculation of maximum number of permitted trials for each
+value of alpha:
+
+   for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
+   {
+      // Confidence value:
+      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
+      // calculate trials:
+      double t = binomial::estimate_number_of_trials(complement(successes, p, alpha[i]));
+      t = floor(t);
+      // Print Trials:
+      cout << fixed << setprecision(5) << setw(15) << right << t << endl;
+   }
+
+Note that since the value of alpha is the probability of observing
+[*more than /successes/ events], we have to wrap the arguments to
+`estimate_number_of_trials` in a call to complement: remember the binomial
+distribution deals in [*/successes/ or fewer events].  Finally, since we're
+calculating the maximum number of trials permitted, we'll err on the safe
+side and take the floor of the result.  Had we been calculating the
+/minimum/ number of trials required to observe a certain number of /successes/
+then we would have taken the ceiling instead.
+
+We'll finish off by looking at some sample output, firstly for
+a 1 in 1000 chance of component failure with each use:
+
+[pre
+'''________________________
+Maximum Number of Trials
+________________________
+
+Success ratio                           =  0.001
+Maximum Number of "successes" permitted =  0
+
+
+____________________________
+Confidence        Max Number
+ Value (%)        Of Trials
+____________________________
+    50.000            692
+    75.000            287
+    90.000            105
+    95.000             51
+    99.000             10
+    99.900              0
+    99.990              0
+    99.999              0'''
+]
+
+So 51 "uses" of the component would yield a 95% chance that no
+component-failures would be observed.
+
+Compare that with a 1 in 1 million chance of component failure:
+
+[pre'''
+________________________
+Maximum Number of Trials
+________________________
+
+Success ratio                           =  0.0000010
+Maximum Number of "successes" permitted =  0
+
+
+____________________________
+Confidence        Max Number
+ Value (%)        Of Trials
+____________________________
+    50.000         693146
+    75.000         287681
+    90.000         105360
+    95.000          51293
+    99.000          10050
+    99.900           1000
+    99.990            100
+    99.999             10'''
+]
+
+In this case even 1000 uses of the component would still yield a 
+less than 1 in 1000 chance of observing a component failure 
+(99.9% chance of no failure).
 
 [endsect]
 

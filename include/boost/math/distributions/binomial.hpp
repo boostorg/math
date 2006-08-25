@@ -73,10 +73,9 @@
 #define BOOST_MATH_SPECIAL_BINOMIAL_HPP
 
 #include <boost/math/special_functions/beta.hpp> // for incomplete beta.
-#include <boost/math/distributions/complement.hpp>
-#include <boost/math/special_functions/factorials.hpp> // for factorials.
-#include <boost/math/special_functions/log1p.hpp> // for log1p
-#include <boost/math/tools/roots.hpp> // for ibeta_derivative.
+#include <boost/math/distributions/complement.hpp> // complements
+#include <boost/math/special_functions/fpclassify.hpp> // isnan.
+#include <boost/math/tools/roots.hpp> // for root finding.
 
 #if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 #  pragma warning(push)
@@ -88,23 +87,91 @@ namespace boost
 {
   namespace math
   {
+     namespace binomial_detail{
+        // common error checking routines for binomial distribution functions:
+        template <class RealType>
+        inline bool check_N(const char* function, RealType N, RealType* result)
+        {
+           if((N < 0) || !(boost::math::isfinite)(N))
+           {
+               *result = tools::domain_error<RealType>(
+                  function, 
+                  "Number of Trials argument is %1%, but must be >= 0 !", N);
+               return false;
+           }
+           return true;
+        }
+        template <class RealType>
+        inline bool check_success_fraction(const char* function, RealType p, RealType* result)
+        {
+           if((p < 0) || (p > 1) || !(boost::math::isfinite)(p))
+           {
+               *result = tools::domain_error<RealType>(
+                  function, 
+                  "Success fraction argument is %1%, but must be >= 0 and <= 1 !", p);
+               return false;
+           }
+           return true;
+        }
+        template <class RealType>
+        inline bool check_dist(const char* function, RealType N, RealType p, RealType* result)
+        {
+           return check_success_fraction(
+              function, p, result) 
+              && check_N(
+               function, N, result);
+        }
+        template <class RealType>
+        bool check_dist_and_k(const char* function, RealType N, RealType p, RealType k, RealType* result)
+        {
+           if(check_dist(function, N, p, result) == false)
+              return false;
+           if((k < 0) || !(boost::math::isfinite)(k))
+           {
+               *result = tools::domain_error<RealType>(
+                  function, 
+                  "Number of Successes argument is %1%, but must be >= 0 !", k);
+               return false;
+           }
+           if(k > N)
+           {
+               *result = tools::domain_error<RealType>(
+                  function, 
+                  "Number of Successes argument is %1%, but must be <= Number of Trials !", k);
+               return false;
+           }
+           return true;
+        }
+        template <class RealType>
+        inline bool check_dist_and_prob(const char* function, RealType N, RealType p, RealType prob, RealType* result)
+        {
+           if(check_dist(function, N, p, result) == false)
+              return false;
+           if((prob < 0) || (prob > 1) || !(boost::math::isfinite)(prob))
+           {
+               *result = tools::domain_error<RealType>(
+                  function, 
+                  "Probability argument is %1%, but must be >= 0 and <= 1 !", prob);
+               return false;
+           }
+           return true;
+        }
+     }
+
     template <class RealType>
     class binomial_distribution
     {
     public:
+      typedef RealType value_type;
+
       binomial_distribution(RealType n, RealType p) : m_n(n), m_p(p)
       {
-        if(m_n < 0)
-        { // n must be >= 0!
-          m_n = tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= 0 !", n);
-          // If domain_error does NOT throw, it will return NaN and m_n = NaN.
-        }
-
-        if ((m_p < 0) || (m_p > 1)) // success_fraction or probability of success 
-        { // Check 0 >= success fraction <= 1.
-          m_p = tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "success fraction is %1%, but must be >= 0 and <= 1 !", m_p);
-           // If domain_error does NOT throw, it will return NaN and m_p = NaN.
-        }
+         RealType r;
+         binomial_detail::check_dist(
+            BOOST_CURRENT_FUNCTION,
+            m_n,
+            m_p,
+            &r);
       } // binomial_distribution constructor.
 
       RealType success_fraction() const
@@ -115,6 +182,93 @@ namespace boost
       { // Total number of trials.
         return m_n;
       }
+
+      //
+      // Estimation of the success parameter.
+      // The best estimate is actually simply
+      // successes/trials, these functions are used
+      // to obtain confidence intervals for the success
+      // fraction:
+      //
+      static RealType estimate_lower_bound_on_p(
+         RealType trials, 
+         RealType successes,
+         RealType probability)
+      {
+        // Error checks:
+        RealType result;
+        if(false == binomial_detail::check_dist_and_k(
+           BOOST_CURRENT_FUNCTION, trials, RealType(0), successes, &result)
+            && 
+           binomial_detail::check_dist_and_prob(
+           BOOST_CURRENT_FUNCTION, trials, RealType(0), probability, &result))
+        { return result; }
+
+        return ibeta_inv(successes + 1, trials - successes, probability);
+      }
+      static RealType estimate_upper_bound_on_p(
+         RealType trials, 
+         RealType successes,
+         RealType probability)
+      {
+        // Error checks:
+        RealType result;
+        if(false == binomial_detail::check_dist_and_k(
+           BOOST_CURRENT_FUNCTION, trials, RealType(0), successes, &result)
+            && 
+           binomial_detail::check_dist_and_prob(
+           BOOST_CURRENT_FUNCTION, trials, RealType(0), probability, &result))
+        { return result; }
+
+        return ibetac_inv(successes + 1, trials - successes, probability);
+      }
+      //
+      // Estimate number of trials parameter:
+      //
+      // "How many trials do I need to be P% sure of seeing k events?"
+      //    or
+      // "How many trials can I have to be P% sure of seeing fewer than k events?"
+      //
+      static RealType estimate_number_of_trials(
+         RealType k,     // number of events
+         RealType p,     // success fraction
+         RealType probability) // probability threshold
+      {
+        // Error checks:
+        RealType result;
+        if(false == binomial_detail::check_dist_and_k(
+           BOOST_CURRENT_FUNCTION, k, p, k, &result)
+            && 
+           binomial_detail::check_dist_and_prob(
+           BOOST_CURRENT_FUNCTION, k, p, probability, &result))
+        { return result; }
+
+        result = ibetac_invb(k + 1, p, probability);  // returns n - k
+        return result + k;
+      }
+
+      template <class P1, class P2, class P3>
+      static RealType estimate_number_of_trials(
+         const complemented3_type<P1, P2, P3>& c) 
+      {
+        // extract args:
+        const RealType k = c.dist;     // number of events
+        const RealType p = c.param1;   // success fraction
+        const RealType Q = c.param2;   // probability threshold
+
+        // Error checks:
+        RealType result;
+        if(false == binomial_detail::check_dist_and_k(
+           BOOST_CURRENT_FUNCTION, k, p, k, &result)
+            && 
+           binomial_detail::check_dist_and_prob(
+           BOOST_CURRENT_FUNCTION, k, p, Q, &result))
+        { return result; }
+
+        result = ibeta_invb(k + 1, p, Q);  // returns n - k
+        return result + k;
+      }
+
     private:
         RealType m_n; // Not sure if this shouldn't be an int?
         RealType m_p; // success_fraction
@@ -123,13 +277,13 @@ namespace boost
       typedef binomial_distribution<double> binomial; // Reserved name of type double.
 
       template <class RealType>
-      RealType mean(const binomial_distribution<RealType>& dist)
+      inline RealType mean(const binomial_distribution<RealType>& dist)
       { // Mean of Binomial distribution = np.
         return  dist.trials() * dist.success_fraction();
       } // mean
 
       template <class RealType>
-      RealType variance(const binomial_distribution<RealType>& dist)
+      inline RealType variance(const binomial_distribution<RealType>& dist)
       { // Mean of Binomial distribution = np.
         return  dist.trials() * dist.success_fraction() * (1 - dist.success_fraction());
       } // mean
@@ -139,35 +293,37 @@ namespace boost
       { // Probability Density/Mass Function.
         using boost::math::tools::domain_error;
         using namespace std; // for ADL of std functions
+
+        RealType n = dist.trials();
+
+        // Error check:
+        RealType result;
+        if(false == binomial_detail::check_dist_and_k(
+           BOOST_CURRENT_FUNCTION,
+           n,
+           dist.success_fraction(),
+           k,
+           &result))
+        {
+           return result;
+        }
+
         // Special cases of success_fraction, regardless of k successes and regardless of n trials.
         if (dist.success_fraction() == 0)
         {
            // probability of zero successes is 1:
            return static_cast<RealType>(k == 0 ? 1 : 0);
         }
-        RealType n = dist.trials();
         if (dist.success_fraction() == 1)
         {
            // probability of n successes is 1:
            return static_cast<RealType>(k == n ? 1 : 0);
-        }
-        if(n < 0)
-        { // k must be <= n!
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= 0 !", n);
         }
         // k argument may be integral, signed, or unsigned, or floating point.
         // If necessary, it has already been promoted from an integral type.
         if (n == 0)
         {
           return 1;
-        }
-        if(k < 0)
-        { // k must be >= 0!
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "k argument is %1%, but must be >= 0 !", k);
-        }
-        if(k > n)
-        { // k must be <= n!
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= k !", n);
         }
         if (k == 0)
         { // binomial coeffic (n 0) = 1,
@@ -219,26 +375,23 @@ namespace boost
         using namespace std; // for ADL of std functions
 
         RealType n = dist.trials();
-        if(n < 0)
-        { // k must be <= n!
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "n argument is %1%, but must be >= 0 !", n);
-        }
-        // k argument may be integral, signed, or unsigned, or floating-point.
-        if(k < 0)
-        { // k must be >= 0!
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "k argument is %1%, but must be >= 0 !", k);
-          //  warning C4702: unreachable code ???
-        }
-        if(k > n)
-        { // k should be <= n.  TODO is this the best - or return 1?
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "k argument is %1%, but should be <= n !", k);
-          //  warning C4702: unreachable code ???
+        RealType p = dist.success_fraction();
+
+        // Error check:
+        RealType result;
+        if(false == binomial_detail::check_dist_and_k(
+           BOOST_CURRENT_FUNCTION,
+           n,
+           p,
+           k,
+           &result))
+        {
+           return result;
         }
         if (k == n)
         {
           return 1;
         }
-        RealType p = dist.success_fraction();
 
         // Special cases, regardless of k.
         if (p == 0)
@@ -300,25 +453,26 @@ namespace boost
 
         RealType const& k = c.param;
         binomial_distribution<RealType> const& dist = c.dist;
-
-        // k argument may be integral, signed, or unsigned, or floating-point.
-        if(k < 0)
-        { // k must be >= 0!
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "k argument is %1%, but must be >= 0 !", k);
-          //  warning C4702: unreachable code ???
-        }
         RealType n = dist.trials();
-        if(k > n)
-        { // k should be <= n.  TODO is this the best - or return 1?
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "k argument is %1%, but should be <= n !", k);
-          //  warning C4702: unreachable code ???
+        RealType p = dist.success_fraction();
+
+        // Error checks:
+        RealType result;
+        if(false == binomial_detail::check_dist_and_k(
+           BOOST_CURRENT_FUNCTION,
+           n,
+           p,
+           k,
+           &result))
+        {
+           return result;
         }
+
         if (k == n)
         {
           // Probability of greater than n successes is necessarily zero:
           return 0;
         }
-        RealType p = dist.success_fraction();
 
         // Special cases, regardless of k.
         if (p == 0)
@@ -383,11 +537,16 @@ namespace boost
         // Return the number of expected successes k for a given 
         // probability p.
         //
-        // Error check:
-        //
-        if ((p < 0) || (p > 1))
-        { // Check 0 <= cdf <= 1. 
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability is %1%, but must be >= 0 and <= 1 !", p);
+        // Error checks:
+        RealType result;
+        if(false == binomial_detail::check_dist_and_prob(
+           BOOST_CURRENT_FUNCTION,
+           dist.trials(),
+           dist.success_fraction(),
+           p,
+           &result))
+        {
+           return result;
         }
         //
         // Special cases:
@@ -431,13 +590,18 @@ namespace boost
         // Return the number of expected successes k for a given 
         // complement of the probability q.
         //
-        // Error check:
-        //
+        // Error checks:
         RealType q = c.param;
         const binomial_distribution<RealType>& dist = c.dist;
-        if ((q < 0) || (q > 1))
-        { // Check 0 <= cdf <= 1. 
-          return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability is %1%, but must be >= 0 and <= 1 !", q);
+        RealType result;
+        if(false == binomial_detail::check_dist_and_prob(
+           BOOST_CURRENT_FUNCTION,
+           dist.trials(),
+           dist.success_fraction(),
+           q,
+           &result))
+        {
+           return result;
         }
         //
         // Special cases:
@@ -477,6 +641,11 @@ namespace boost
 
     } // namespace math
   } // namespace boost
+
+// This include must be at the end, *after* the accessors
+// for this distribution have been defined, in order to
+// keep compilers that support two-phase lookup happy.
+#include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_MATH_SPECIAL_BINOMIAL_HPP
 

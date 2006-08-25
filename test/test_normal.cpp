@@ -191,6 +191,35 @@ void test_spots(RealType T)
          tolerance);
    }
 
+    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5;
+    normal_distribution<RealType> dist(8, 3);
+    RealType x = static_cast<RealType>(0.125);
+    using namespace std; // ADL of std names.
+    // mean:
+    BOOST_CHECK_CLOSE(
+       mean(dist)
+       , static_cast<RealType>(8), tol2);
+    // variance:
+    BOOST_CHECK_CLOSE(
+       variance(dist)
+       , static_cast<RealType>(9), tol2);
+    // std deviation:
+    BOOST_CHECK_CLOSE(
+       standard_deviation(dist)
+       , static_cast<RealType>(3), tol2);
+    // hazard:
+    BOOST_CHECK_CLOSE(
+       hazard(dist, x)
+       , pdf(dist, x) / cdf(complement(dist, x)), tol2);
+    // cumulative hazard:
+    BOOST_CHECK_CLOSE(
+       chf(dist, x)
+       , -log(cdf(complement(dist, x))), tol2);
+    // coefficient_of_variation:
+    BOOST_CHECK_CLOSE(
+       coefficient_of_variation(dist)
+       , standard_deviation(dist) / mean(dist), tol2);
+
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])

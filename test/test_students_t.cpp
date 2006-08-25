@@ -13,8 +13,11 @@
 
 // Basic sanity test for Student's t probability (quintile) (0. < p < 1).
 // and Student's t probability Quintile (0. < p < 1).
-
+//
+// Verify error handling by getting it to throw:
+//
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
+#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
@@ -276,25 +279,6 @@ void test_spots(RealType T)
   // for PDF checks, use 100eps tolerance expressed as a percent:
    tolerance = boost::math::tools::epsilon<RealType>() * 10000;
 
-  // t = 0 and degrees_of_freedom max and infinity should be 1/sqrt(2 * pi).  TODO
-      
-  // std::numeric_limits<RealType>::max() is NOT defined for Real_concept
-
-  //for (RealType df = 1e15; df < boost::math::tools::max_value<RealType>() / 11; df *=10)
-  //{ 
-  //  RealType d = ::boost::math::pdf(students_t_distribution<RealType>(df), static_cast<RealType>(0));
-  //  if (abs(d-  0.3989422804014326779399460599343818684759) > 1e-14)
-  //  { // too far from 1.sqrt(2*pi)
-  //    std::cout << "df = " << df << ", density = " << d << endl;
-  //  }
-  //BOOST_CHECK_CLOSE(
-  //    ::boost::math::pdf(
-  //    students_t_distribution<RealType>(df), // degrees_of_freedom  = max
-  //       static_cast<RealType>(0)),  // t == 0 where density is maximum.
-  //       static_cast<RealType>(0.3989422804014326779399460599343818684759), // probability == 1 / sqrt(2 * pi).
-  //     tolerance);
-  //}
-
    for(unsigned i = 1; i < 20; i += 3)
    {
       for(RealType r = -10; r < 10; r += 0.125)
@@ -308,6 +292,35 @@ void test_spots(RealType T)
             tolerance);
       }
    }
+
+    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5;
+    students_t_distribution<RealType> dist(8);
+    RealType x = static_cast<RealType>(0.125);
+    using namespace std; // ADL of std names.
+    // mean:
+    BOOST_CHECK_CLOSE(
+       mean(dist)
+       , static_cast<RealType>(0), tol2);
+    // variance:
+    BOOST_CHECK_CLOSE(
+       variance(dist)
+       , static_cast<RealType>(8.0L / 6.0L), tol2);
+    // std deviation:
+    BOOST_CHECK_CLOSE(
+       standard_deviation(dist)
+       , static_cast<RealType>(sqrt(8.0L / 6.0L)), tol2);
+    // hazard:
+    BOOST_CHECK_CLOSE(
+       hazard(dist, x)
+       , pdf(dist, x) / cdf(complement(dist, x)), tol2);
+    // cumulative hazard:
+    BOOST_CHECK_CLOSE(
+       chf(dist, x)
+       , -log(cdf(complement(dist, x))), tol2);
+    // coefficient_of_variation:
+    BOOST_CHECK_THROW(
+       coefficient_of_variation(dist),
+       std::overflow_error);
 
 } // template <class RealType>void test_spots(RealType)
 

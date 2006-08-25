@@ -72,6 +72,47 @@ void test_spot(
          // Just check quantile is very small:
          BOOST_CHECK(quantile(complement(bn, Q)) < boost::math::tools::epsilon<RealType>() * 10);
       }
+      // estimate success ratio:
+      BOOST_CHECK_CLOSE(
+         binomial_distribution<RealType>::estimate_lower_bound_on_p(
+            N, k, Q), 
+         p, tol);
+      BOOST_CHECK_CLOSE(
+         binomial_distribution<RealType>::estimate_upper_bound_on_p(
+            N, k, P), 
+         p, tol);
+      
+      if(Q < P)
+      {
+         BOOST_CHECK(
+            binomial_distribution<RealType>::estimate_lower_bound_on_p(
+               N, k, Q)
+               < 
+            binomial_distribution<RealType>::estimate_upper_bound_on_p(
+               N, k, Q)
+               );
+      }
+      else
+      {
+         BOOST_CHECK(
+            binomial_distribution<RealType>::estimate_lower_bound_on_p(
+               N, k, P)
+               < 
+            binomial_distribution<RealType>::estimate_upper_bound_on_p(
+               N, k, P)
+               );
+      }
+      //
+      // estimate sample size:
+      //
+      BOOST_CHECK_CLOSE(
+         binomial_distribution<RealType>::estimate_number_of_trials(
+            k, p, P), 
+         N, tol);
+      BOOST_CHECK_CLOSE(
+         binomial_distribution<RealType>::estimate_number_of_trials(
+            boost::math::complement(k, p, Q)), 
+         N, tol);
    }
 
    // Double check consistency of CDF and PDF by computing 
@@ -125,7 +166,6 @@ void test_spots(RealType)
   using  ::boost::math::binomial;
   using  ::boost::math::cdf;
   using  ::boost::math::pdf;
-  using boost::math::binomial_coefficient;
 
   // Test binomial using cdf spot values from MathCAD.
   // These test quantiles and complements as well.
@@ -330,15 +370,34 @@ void test_spots(RealType)
     static_cast<RealType>(0.00001525878906250000000000000000), // k=8  p = 0.25
     tolerance); 
 
-    // mean:
     RealType tol2 = boost::math::tools::epsilon<RealType>() * 5;
+    binomial_distribution<RealType> dist(static_cast<RealType>(8), static_cast<RealType>(0.25));
+    RealType x = static_cast<RealType>(0.125);
+    using namespace std; // ADL of std names.
+    // mean:
     BOOST_CHECK_CLOSE(
-       mean(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)))
+       mean(dist)
        , static_cast<RealType>(8 * 0.25), tol2);
     // variance:
     BOOST_CHECK_CLOSE(
-       variance(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)))
+       variance(dist)
        , static_cast<RealType>(8 * 0.25 * 0.75), tol2);
+    // std deviation:
+    BOOST_CHECK_CLOSE(
+       standard_deviation(dist)
+       , static_cast<RealType>(sqrt(8 * 0.25 * 0.75)), tol2);
+    // hazard:
+    BOOST_CHECK_CLOSE(
+       hazard(dist, x)
+       , pdf(dist, x) / cdf(complement(dist, x)), tol2);
+    // cumulative hazard:
+    BOOST_CHECK_CLOSE(
+       chf(dist, x)
+       , -log(cdf(complement(dist, x))), tol2);
+    // coefficient_of_variation:
+    BOOST_CHECK_CLOSE(
+       coefficient_of_variation(dist)
+       , standard_deviation(dist) / mean(dist), tol2);
 
     // special cases for PDF:
     BOOST_CHECK_EQUAL(
@@ -373,6 +432,16 @@ void test_spots(RealType)
        );
     BOOST_CHECK_THROW(
        pdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(-0.25)),
+          static_cast<RealType>(0)), std::domain_error
+       );
+    BOOST_CHECK_THROW(
+       pdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1.25)),
+          static_cast<RealType>(0)), std::domain_error
+       );
+    BOOST_CHECK_THROW(
+       pdf(
           binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
           static_cast<RealType>(-1)), std::domain_error
        );
@@ -390,6 +459,26 @@ void test_spots(RealType)
        cdf(
           binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
           static_cast<RealType>(9)), std::domain_error
+       );
+    BOOST_CHECK_THROW(
+       cdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(-0.25)),
+          static_cast<RealType>(0)), std::domain_error
+       );
+    BOOST_CHECK_THROW(
+       cdf(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1.25)),
+          static_cast<RealType>(0)), std::domain_error
+       );
+    BOOST_CHECK_THROW(
+       quantile(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(-0.25)),
+          static_cast<RealType>(0)), std::domain_error
+       );
+    BOOST_CHECK_THROW(
+       quantile(
+          binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1.25)),
+          static_cast<RealType>(0)), std::domain_error
        );
     BOOST_CHECK_EQUAL(
        cdf(
@@ -421,24 +510,23 @@ void test_spots(RealType)
 
   {
     // This is a visual sanity check that everything is OK:
-    binomial my8dist(8., 0.25); // Note: double values (matching the distribution definition) avoid the need for any casting.
+    binomial_distribution<RealType> my8dist(8., 0.25); // Note: double values (matching the distribution definition) avoid the need for any casting.
     cout << "mean(my8dist) = " << boost::math::mean(my8dist) << endl; // mean(my8dist) = 2
     cout << "my8dist.trials() = " << my8dist.trials()  << endl; // my8dist.trials() = 8
     cout << "my8dist.success_fraction() = " << my8dist.success_fraction()  << endl; // my8dist.success_fraction() = 0.25
-    BOOST_CHECK_EQUAL(my8dist.trials(), 8);
-    BOOST_CHECK_EQUAL(my8dist.success_fraction(), 0.25);
-    BOOST_CHECK_EQUAL(mean(my8dist), 0.25 * 8);
+    BOOST_CHECK_CLOSE(my8dist.trials(), static_cast<RealType>(8), tol2);
+    BOOST_CHECK_CLOSE(my8dist.success_fraction(), static_cast<RealType>(0.25), tol2);
 
    {
-      int n = static_cast<int>(my8dist.trials());
-      double sumcdf = 0.;
+      int n = static_cast<int>(boost::math::tools::real_cast<double>(my8dist.trials()));
+      RealType sumcdf = 0.;
       for (int k = 0; k <= n; k++)
       {
-        cout << k << ' ' << pdf(my8dist, static_cast<double>(k));
-        sumcdf += pdf(my8dist, static_cast<double>(k));
+        cout << k << ' ' << pdf(my8dist, static_cast<RealType>(k));
+        sumcdf += pdf(my8dist, static_cast<RealType>(k));
         cout  << ' '  << sumcdf;
-        cout << ' ' << cdf(my8dist, static_cast<double>(k));
-        cout << ' ' << sumcdf - cdf(my8dist, static_cast<double>(k)) << endl;
+        cout << ' ' << cdf(my8dist, static_cast<RealType>(k));
+        cout << ' ' << sumcdf - cdf(my8dist, static_cast<RealType>(k)) << endl;
       } // for k
     }
     // n = 8, p =0.25

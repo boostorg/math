@@ -22,6 +22,8 @@ template <class RealType>
 class normal_distribution
 {
 public:
+   typedef RealType value_type;
+
    normal_distribution(RealType mean = 0, RealType sd = 1) 
       : m_mean(mean), m_sd(sd) {}
 
@@ -133,8 +135,25 @@ RealType quantile(const complemented2_type<normal_distribution<RealType>, RealTy
    return r;
 }
 
+template <class RealType>
+inline RealType mean(const normal_distribution<RealType>& dist)
+{
+   return dist.mean();
+}
+
+template <class RealType>
+inline RealType standard_deviation(const normal_distribution<RealType>& dist)
+{
+   return dist.standard_deviation();
+}
+
 } // namespace math
 } // namespace boost
+
+// This include must be at the end, *after* the accessors
+// for this distribution have been defined, in order to
+// keep compilers that support two-phase lookup happy.
+#include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_STATS_STUDENTS_T_HPP
 
