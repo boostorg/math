@@ -319,7 +319,7 @@ want to be 95% sure that the true value is [*greater than] some value,
    p``[sub min]`` = binomial_distribution<RealType>::estimate_lower_bound_on_p(
                        n, k, 0.05);
 
-See worked example.
+[link binom_conf See worked example.]
       
    static RealType estimate_upper_bound_on_p(
       RealType trials, 
@@ -343,7 +343,7 @@ want to be 95% sure that the true value is [*less than] some value,
    p``[sub max]`` = binomial_distribution<RealType>::estimate_upper_bound_on_p(
                        n, k, 0.05);
 
-See worked example.
+[link binom_conf See worked example.]
 
    static RealType estimate_number_of_trials(
       RealType k,     // number of events
@@ -378,6 +378,8 @@ While:
 Returns the the largest number of trials we can conduct and still be 95% certain
 of not observing any events that occur with one in a million frequency.
 This is typically used in failure analysis.
+
+[link binom_size_eg See Worked Example.]
 
 [h4 Non-member Accessors]
 
@@ -488,10 +490,20 @@ distribution approaches the normal-distribution.
    class students_t_distribution
    {
       typedef RealType value_type;
+      
       // Construct:
       students_t_distribution(const RealType& v);
+      
       // Accessor:
       RealType degrees_of_freedom()const;
+      
+      // degrees of freedom estimation:
+      static RealType estimate_degrees_of_freedom(
+         RealType difference_from_mean,
+         RealType alpha,
+         RealType beta,
+         RealType sd,
+         RealType hint = 100);
    };
    
 [h4 Member Functions]
@@ -503,6 +515,31 @@ Constructs a Student's t-distribution with /v/ degrees of freedom.
    RealType degrees_of_freedom()const;
    
 Returns the number of degrees of freedom of this distribution.
+
+   static RealType estimate_degrees_of_freedom(
+      RealType difference_from_mean,
+      RealType alpha,
+      RealType beta,
+      RealType sd,
+      RealType hint = 100);
+
+Returns the number of degrees of freedom required to observe a significant
+result when the mean differs from the "true" mean by /difference_from_mean/.
+
+[variablelist
+[[difference_from_mean][The difference between the true mean and the sample mean
+                        that we wish to show is significant.]]
+[[alpha][The maximum acceptable probability of rejecting the null hypothesis 
+        when it is in fact true.]]
+[[beta][The maximum acceptable probability of accepting the null hypothesis 
+        when it is in fact false.]]
+[[sd][The sample standard deviation.]]
+[[hint][A hint for the location to start looking for the result.]]
+]
+
+[note
+Remember that for a two sided test, you must divide alpha by two
+before calling this function.]
       
 [h4 Non-member Accessors]
 

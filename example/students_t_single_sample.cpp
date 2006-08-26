@@ -142,7 +142,7 @@ void single_sample_t_test(double M, double Sm, double Sd, unsigned Sn, double al
       << setprecision(4) << fixed << alpha << "\n\n";
    cout << "Alternative Hypothesis     Conclusion\n";
    cout << "Mean != " << setprecision(3) << fixed << M << "            ";
-   if(q < alpha)
+   if(q < alpha / 2)
       cout << "ACCEPTED\n";
    else
       cout << "REJECTED\n";
@@ -187,8 +187,9 @@ void single_sample_estimate_df(double M, double Sm, double Sd)
    //
    cout << "\n\n"
            "_______________________________________________________________\n"
-           "Confidence      Estimated\n"
-           " Value (%)     Sample Size\n"
+           "Confidence       Estimated          Estimated\n"
+           " Value (%)      Sample Size        Sample Size\n"
+           "              (one sided test)    (two sided test)\n"
            "_______________________________________________________________\n";
    //
    // Now print out the data for the table rows.
@@ -197,10 +198,18 @@ void single_sample_estimate_df(double M, double Sm, double Sd)
    {
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
-      // calculate df:
-      double df = students_t::estimate_degrees_of_freedom(complement(M, Sm, Sd, alpha[i]));
+      // calculate df for single sided test:
+      double df = students_t::estimate_degrees_of_freedom(
+         fabs(M - Sm), alpha[i], alpha[i], Sd);
       // convert to sample size:
       double size = ceil(df) + 1;
+      // Print size:
+      cout << fixed << setprecision(0) << setw(16) << right << size;
+      // calculate df for two sided test:
+      df = students_t::estimate_degrees_of_freedom(
+         fabs(M - Sm), alpha[i]/2, alpha[i], Sd);
+      // convert to sample size:
+      size = ceil(df) + 1;
       // Print size:
       cout << fixed << setprecision(0) << setw(16) << right << size << endl;
    }
@@ -237,6 +246,8 @@ int main()
    single_sample_t_test(38.9, 37.8, 0.964365, 3, 0.1);
    // parameter estimate:
    single_sample_estimate_df(38.9, 37.8, 0.964365);
+
+   return 0;
 }
 
 /*

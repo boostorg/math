@@ -1,0 +1,119 @@
+<?xml version='1.0'?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN'
+  'http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd'
+  [<!ENTITY mathml 'http://www.w3.org/1998/Math/MathML'>]>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<!-- MathML created with MathCast Equation Editor version 0.83 -->
+</head>
+<body>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mtext>hazard</mtext>
+    <mfenced>
+      <mrow>
+        <mi>x</mi>
+      </mrow>
+    </mfenced>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <mi>h</mi>
+    <mfenced>
+      <mrow>
+        <mi>x</mi>
+      </mrow>
+    </mfenced>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <mfrac>
+      <mrow>
+        <mtext>pdf</mtext>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+      <mrow>
+        <mn>1</mn>
+        <mo>&minus;</mo>
+        <mtext>cdf</mtext>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mtext>chf</mtext>
+    <mfenced>
+      <mrow>
+        <mi>d</mi>
+        <mi>i</mi>
+        <mi>s</mi>
+        <mi>t</mi>
+        <mo>,</mo>
+        <mi>x</mi>
+      </mrow>
+    </mfenced>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <mi>H</mi>
+    <mfenced>
+      <mrow>
+        <mi>x</mi>
+      </mrow>
+    </mfenced>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <munderover>
+      <mo>&Integral;</mo>
+      <mrow>
+        <mo>&minus;</mo>
+        <mi>&infin;</mi>
+      </mrow>
+      <mi>x</mi>
+    </munderover>
+    <mi>h</mi>
+    <mfenced>
+      <mrow>
+        <mi>&mu;</mi>
+      </mrow>
+    </mfenced>
+    <mi>d</mi>
+    <mi>&mu;</mi>
+  </mrow>
+</math>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mi>t</mi>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <mfrac>
+      <mrow>
+        <mi>&mu;</mi>
+        <mo>&minus;</mo>
+        <mi>M</mi>
+      </mrow>
+      <mrow>
+        <mfrac>
+          <mi>s</mi>
+          <msqrt>
+            <mi>N</mi>
+          </msqrt>
+        </mfrac>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>
+</body>
+</html>
