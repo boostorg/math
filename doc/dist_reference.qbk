@@ -49,7 +49,7 @@ want if you already know it's name.
 * __hazard
 * __mean.
 * [link cdfPQ P].
-* [link persent Persent Point Function]
+* [link percent Percent Point Function]
 * __pdf.
 * [link pmf Probability Mass Function].
 * [link cdfPQ Q].
@@ -209,9 +209,9 @@ and it's [link math.dist.ccdf complement] respectively.
 Lowercase p and q are sometimes used to refer to the values returned
 by these functions.
 
-[h4 [#persent]Persent Point Function]
+[h4 [#percent]Percent Point Function]
 
-The persent point function, also known as the persentile, is the same as
+The percent point function, also known as the percentiles, is the same as
 the __quantile.
 
 [h4 [#survival_inv]Inverse Survival Function.]
@@ -220,11 +220,11 @@ The inverse of the survival function, is the same as computing the
 [link math.dist.quantile_c quantile
 from the complement of the probability].
 
-[h4 [#pmf]Probabilty Mass Function]
+[h4 [#pmf]Probability Mass Function]
 
 The Probability Mass Function is the same as the __pdf.
 
-The term Mass Function is usually applied to descrete distributions,
+The term Mass Function is usually applied to discrete distributions,
 while the term __pdf applies to continuous distributions.
 
 [h4 [#survival]Survival Function]
@@ -276,7 +276,7 @@ Refer to the __ccdf.
    
 The class type `binomial_distribution` represents a binomial distribution:
 it is used when there are exactly two mutually 
-exclusive outcomes of a trial. These outcomes are labeled 
+exclusive outcomes of a trial. These outcomes are labelled 
 "success" and "failure". The binomial distribution is used to obtain 
 the probability of observing x successes in N trials, with the 
 probability of success on a single trial denoted by p. The 
@@ -306,7 +306,7 @@ Returns a lower bound on the success fraction:
 
 [variablelist
 [[trials][The total number of trials conducted.]]
-[[successes][The number of successes that occured.]]
+[[successes][The number of successes that occurred.]]
 [[alpha][The largest acceptable probability that the true value of
          the success fraction is [*less than] the value returned.]]
 ]
@@ -330,7 +330,7 @@ Returns an upper bound on the success fraction:
 
 [variablelist
 [[trials][The total number of trials conducted.]]
-[[successes][The number of successes that occured.]]
+[[successes][The number of successes that occurred.]]
 [[alpha][The largest acceptable probability that the true value of
          the success fraction is [*greater than] the value returned.]]
 ]
@@ -368,14 +368,14 @@ For example:
    binomial_distribution<RealType>::estimate_number_of_trials(10, 0.5, 0.05);
       
 Returns the smallest number of trials we must conduct to be 95% sure
-of seeing 10 events that occur with frequence one half.
+of seeing 10 events that occur with frequency one half.
    
 While:
 
    binomial_distribution<RealType>::estimate_number_of_trials(
       complement(0, 1.0/1000000, 0.05));
 
-Returns the the largest number of trials we can conduct and still be 95% certain
+Returns the largest number of trials we can conduct and still be 95% certain
 of not observing any events that occur with one in a million frequency.
 This is typically used in failure analysis.
 
@@ -392,13 +392,13 @@ the context of this distribution:
 [table Meaning of the non-member accessors
 [[Function][Example Code][Meaning]]
 [[__pdf][``pdf(binomial(n, p), k)``]
-   [The probability of obtaining [*exactly k succeses] from n trials
+   [The probability of obtaining [*exactly k successes] from n trials
    with success fraction p.]]
 [[__cdf][``cdf(binomial(n, p), k)``]
-   [The probability of obtaining [*k succeses or fewer] from n trials
+   [The probability of obtaining [*k successes or fewer] from n trials
    with success fraction p.]]
 [[__ccdf][``cdf(complement(binomial(n, p), k))``]
-   [The probability of obtaining [*more than k succeses] from n trials
+   [The probability of obtaining [*more than k successes] from n trials
    with success fraction p.]]
 [[__quantile][``quantile(binomial(n, p), P)``]
    [The [*greatest] number of successes that may be observed from n trials
@@ -540,6 +540,10 @@ result when the mean differs from the "true" mean by /difference_from_mean/.
 [note
 Remember that for a two sided test, you must divide alpha by two
 before calling this function.]
+
+For more information on this function see the 
+[@http://www.itl.nist.gov/div898/handbook/prc/section2/prc222.htm 
+NIST Engineering Statistics Handbook].
       
 [h4 Non-member Accessors]
 

@@ -69,7 +69,7 @@ is to be able to calculate the /cumulative distribution functions/ and
 
 [h4 Generic operations common to all distributions are non-member functions]
 
-Want to calculate the PDF (Probabilty Density Function) of a distribution?
+Want to calculate the PDF (Probability Density Function) of a distribution?
 No problem, just use:
 
    pdf(my_dist, x);  // Returns PDF (density) at point x of distribution my_dist
@@ -136,7 +136,7 @@ of the distributions, for example:
       5.0,        // true mean
       6.3,        // sample mean
       0.13,       // sample standard deviation
-      0.95);      // probabilty
+      0.95);      // probability
       
 Returns the number of degrees of freedom required to obtain a 95%
 probability that the observed differences in means is not down to
@@ -570,8 +570,8 @@ wish to be able to detect, here it's the absolute value of the
 difference between the sample mean, and the true mean.  
 
 Then come two probability values: alpha and beta.  Alpha is the
-maximum acceptible risk of rejecting the null-hypothesis when it is
-in fact true.  Beta is the maximum acceptible risk of accepting
+maximum acceptable risk of rejecting the null-hypothesis when it is
+in fact true.  Beta is the maximum acceptable risk of accepting
 the null-hypothesis when in fact it is false.  Also note that for a two
 sided test, then alpha must be divided by 2.  
 
@@ -882,13 +882,13 @@ TODO
 [section:binom_eg Binomial Distribution]
 
 
-* [link binom_conf Calculating Confidence Limits on the Frequency of Occurance.]
+* [link binom_conf Calculating Confidence Limits on the Frequency of Occurrence.]
 * [link binom_size_eg Estimating Sample Sizes.]
 
-[h4 [#binom_conf]Calculating Confidence Limits on the Frequency of Occurance.]
+[h4 [#binom_conf]Calculating Confidence Limits on the Frequency of Occurrence.]
 
 Imagine you have a process that follows a binomial distribution: for each
-trial conducted, and event either occurs or does it does not, these are refered
+trial conducted, and event either occurs or does it does not, these are referred
 to as "successes" and "failures".  If by experiment you want to measure the
 frequency with which successes occur, the best estimate is given simply
 by k/N, for /k/ successes out of /N/ trials.  However our confidence in that
@@ -896,7 +896,7 @@ value will be shaped by how many trials were conducted, and how many successes
 were observed.  The static member functions 
 `binomial_distribution<>::estimate_lower_bound_on_p` and
 `binomial_distribution<>::estimate_upper_bound_on_p` allow you to calculate
-the confidence intervals for your estimate of the occurance frequency.
+the confidence intervals for your estimate of the occurrence frequency.
 
 The sample program [@../../example/binomial_confidence_limits.cpp 
 binomial_confidence_limits.cpp] illustrates their use.  It begins by defining
@@ -931,7 +931,7 @@ of certainty:
       cout << setw(40) << left << "Sample frequency of occurance" << "=  " << double(successes) / trials << "\n";
 
 The procedure now defines a table of confidence values: these are the 
-probabilities that the true occurance frequency lies outside the calculated
+probabilities that the true occurrence frequency lies outside the calculated
 interval:
 
       double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
@@ -951,7 +951,7 @@ value of /alpha/, we call `estimate_lower_bound_on_p` and
 respectively.  Note that since we are calculating a two sided interval
 we must divide the value of alpha in two.  Had we been calculating a 
 single sided interval, for example: ['"Calculate a lower bound so that we are P%
-sure that the true occurance frequency is greater than some value"]
+sure that the true occurrence frequency is greater than some value"]
 then we would *not* have divided by two.
 
       for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
@@ -977,7 +977,7 @@ ___________________________________________
 
 Number of Observations                  =  20
 Number of successes                     =  2
-Sample frequency of occurance           =  0.1
+Sample frequency of occurrence          =  0.1
 
 
 ___________________________________________
@@ -1004,7 +1004,7 @@ ___________________________________________
 
 Number of Observations                  =  2000
 Number of successes                     =  200
-Sample frequency of occurance           =  0.1000000
+Sample frequency of occurrence          =  0.1000000
 
 
 ___________________________________________
@@ -1045,8 +1045,8 @@ a table of maximum sample sizes for various probability thresholds:
       unsigned successes)    // Total number of observed successes permitted.
    {
 
-The routine then declares a table of probabity thresholds, these are the
-maximum acceptible probability that /successes/ or fewer events will be
+The routine then declares a table of probability thresholds, these are the
+maximum acceptable probability that /successes/ or fewer events will be
 observed.  In our example /successes/ will be always zero: since we want
 no component failures, but in other situations non-zero values may well
 make sense.
