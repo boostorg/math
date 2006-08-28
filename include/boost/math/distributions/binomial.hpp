@@ -74,6 +74,7 @@
 
 #include <boost/math/special_functions/beta.hpp> // for incomplete beta.
 #include <boost/math/distributions/complement.hpp> // complements
+#include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
 
@@ -90,7 +91,7 @@ namespace boost
      namespace binomial_detail{
         // common error checking routines for binomial distribution functions:
         template <class RealType>
-        inline bool check_N(const char* function, RealType N, RealType* result)
+        inline bool check_N(const char* function, const RealType& N, RealType* result)
         {
            if((N < 0) || !(boost::math::isfinite)(N))
            {
@@ -102,7 +103,7 @@ namespace boost
            return true;
         }
         template <class RealType>
-        inline bool check_success_fraction(const char* function, RealType p, RealType* result)
+        inline bool check_success_fraction(const char* function, const RealType& p, RealType* result)
         {
            if((p < 0) || (p > 1) || !(boost::math::isfinite)(p))
            {
@@ -114,7 +115,7 @@ namespace boost
            return true;
         }
         template <class RealType>
-        inline bool check_dist(const char* function, RealType N, RealType p, RealType* result)
+        inline bool check_dist(const char* function, const RealType& N, const RealType& p, RealType* result)
         {
            return check_success_fraction(
               function, p, result) 
@@ -122,7 +123,7 @@ namespace boost
                function, N, result);
         }
         template <class RealType>
-        bool check_dist_and_k(const char* function, RealType N, RealType p, RealType k, RealType* result)
+        bool check_dist_and_k(const char* function, const RealType& N, const RealType& p, RealType k, RealType* result)
         {
            if(check_dist(function, N, p, result) == false)
               return false;
@@ -143,17 +144,10 @@ namespace boost
            return true;
         }
         template <class RealType>
-        inline bool check_dist_and_prob(const char* function, RealType N, RealType p, RealType prob, RealType* result)
+        inline bool check_dist_and_prob(const char* function, const RealType& N, RealType p, RealType prob, RealType* result)
         {
-           if(check_dist(function, N, p, result) == false)
+           if(check_dist(function, N, p, result) && detail::check_probability(function, prob, result) == false)
               return false;
-           if((prob < 0) || (prob > 1) || !(boost::math::isfinite)(prob))
-           {
-               *result = tools::domain_error<RealType>(
-                  function, 
-                  "Probability argument is %1%, but must be >= 0 and <= 1 !", prob);
-               return false;
-           }
            return true;
         }
      }
@@ -284,9 +278,9 @@ namespace boost
 
       template <class RealType>
       inline RealType variance(const binomial_distribution<RealType>& dist)
-      { // Mean of Binomial distribution = np.
+      { // Variance of Binomial distribution = np(1-p).
         return  dist.trials() * dist.success_fraction() * (1 - dist.success_fraction());
-      } // mean
+      } // variance
 
       template <class RealType>
       RealType pdf(const binomial_distribution<RealType>& dist, const RealType k)

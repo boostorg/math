@@ -12,6 +12,7 @@
 
 #include <boost/math/special_functions/beta.hpp> // for ibeta(a, b, x).
 #include <boost/math/distributions/complement.hpp>
+#include <boost/math/distributions/detail/common_error_handling.hpp>
 
 #ifdef BOOST_MSVC
 # pragma warning(push)
@@ -28,15 +29,9 @@ public:
 
    students_t_distribution(RealType i) : m_df(i)
    {
-       if(m_df <= 0)
-       {  // Degrees of freedom must be > 0!
-         // domain_error may throw if defined BOOST_MATH_THROW_ON_DOMAIN_ERROR, else not throw.
-          tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", m_df);
-          // If domain_error throws, the construction will fail.
-          // If domain_error does not throw, m_df will contain a negative value,
-          // and degrees_of_freedom() will return that value too.
-          // So code calling degrees_of_freedom() needs to check it as well.
-       }
+      RealType result;
+      detail::check_df(
+         BOOST_CURRENT_FUNCTION, m_df, &result);
    } // students_t_distribution
 
    RealType degrees_of_freedom()const
@@ -66,13 +61,12 @@ RealType pdf(const students_t_distribution<RealType>& dist, const RealType& t)
 {
    using namespace std;  // for ADL of std functions
    RealType degrees_of_freedom = dist.degrees_of_freedom();
-   if(degrees_of_freedom <= 0)
-   { // Degrees of freedom must be > 0!
-     // (If BOOST_MATH_THROW_ON_DOMAIN_ERROR is NOT defined,
-     // then a negative value may be stored here
-     // so a re-check is always needed).
-      return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
-   }
+   // Error check:
+   RealType error_result;
+   if(false == detail::check_df(
+         BOOST_CURRENT_FUNCTION, degrees_of_freedom, &error_result))
+      return error_result;
+
    // TODO fails for t == 0 and df >=1e16 for ALL fp types - need to use normal distribution.
    RealType basem1 = t * t / degrees_of_freedom;
    RealType result;
@@ -93,10 +87,12 @@ template <class RealType>
 RealType cdf(const students_t_distribution<RealType>& dist, const RealType& t)
 {
    RealType degrees_of_freedom = dist.degrees_of_freedom();
-   if(degrees_of_freedom <= 0)
-   { // Degrees of freedom must be > 0!
-      return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
-   }
+   // Error check:
+   RealType error_result;
+   if(false == detail::check_df(
+         BOOST_CURRENT_FUNCTION, degrees_of_freedom, &error_result))
+      return error_result;
+
    if (t == 0)
    {
      return 0.5;
@@ -159,16 +155,12 @@ RealType quantile(const students_t_distribution<RealType>& dist, const RealType&
    //
    // Check for domain errors:
    //
-   if(degrees_of_freedom <= 0)
-   { 
-      // Degrees of freedom must be > 0!
-      return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "degrees of freedom argument is %1%, but must be > 0 !", degrees_of_freedom);
-   }
-   if((probability < 0) || (probability > 1))
-   { 
-      // probability must be >= 0 and <= 1!
-      return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "probability argument is %1%, but must be >= 0 and <= 1 !", probability);
-   }
+   RealType error_result;
+   if(false == detail::check_df(
+         BOOST_CURRENT_FUNCTION, degrees_of_freedom, &error_result)
+         && detail::check_probability(BOOST_CURRENT_FUNCTION, probability, &error_result))
+      return error_result;
+
    // Special cases, regardless of degrees_of_freedom.
    if (probability == 0)
       return numeric_limits<RealType>::has_infinity ? -numeric_limits<RealType>::infinity() : -tools::max_value<RealType>();
@@ -246,6 +238,18 @@ RealType students_t_distribution<RealType>::estimate_degrees_of_freedom(
       RealType sd,
       RealType hint)
 {
+   //
+   // Check for domain errors:
+   //
+   RealType error_result;
+   if(false == detail::check_probability(
+         BOOST_CURRENT_FUNCTION, alpha, &error_result)
+         && detail::check_probability(BOOST_CURRENT_FUNCTION, beta, &error_result))
+      return error_result;
+
+   if(hint <= 0)
+      hint = 1;
+
    detail::sample_size_func<RealType> f(alpha, beta, sd, difference_from_mean);
    tools::eps_tolerance<RealType> tol(tools::digits<RealType>());
    boost::uintmax_t max_iter = 10000;
@@ -269,6 +273,12 @@ inline RealType mean(const students_t_distribution<RealType>& )
 template <class RealType>
 inline RealType variance(const students_t_distribution<RealType>& dist)
 {
+   // Error check:
+   RealType error_result;
+   if(false == detail::check_df(
+         BOOST_CURRENT_FUNCTION, dist.degrees_of_freedom(), &error_result))
+      return error_result;
+
    RealType v = dist.degrees_of_freedom();
    return v / (v - 2);
 }

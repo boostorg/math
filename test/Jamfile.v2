@@ -16,7 +16,7 @@ run powm1_sqrtp1m1_test.cpp ;
 run test_beta.cpp ;
 run test_binomial.cpp ;
 run test_cbrt.cpp ;
-run test_chisqr.cpp ;
+run test_chi_squared.cpp ;
 run test_classify.cpp ;
 run test_erf.cpp ;
 run test_error_handling.cpp ;
@@ -37,6 +37,7 @@ run test_roots.cpp ;
 run test_students_t.cpp ;
 run test_tgamma_ratio.cpp ;
 run test_toms748_solve.cpp ;
+
 
 
 
