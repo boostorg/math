@@ -261,7 +261,7 @@ RealType students_t_distribution<RealType>::estimate_degrees_of_freedom(
          " either there is no answer to how many degrees of freedom are required"
          " or the answer is infinite.  Current best guess is %1%", result);
    }
-   return result + 1;
+   return result;
 }
 
 template <class RealType>

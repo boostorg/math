@@ -292,7 +292,7 @@ void test_spots(RealType)
   // Basic sanity checks, test data is to three decimal places only
   // so set tolerance to 0.001 expressed as a persentage.
 
-  RealType tolerance = 0.001 * 100;
+  RealType tolerance = 0.001f * 100;
 
   cout << "Tolerance = " << tolerance << "%." << endl;
 
@@ -301,7 +301,7 @@ void test_spots(RealType)
   using  ::boost::math::cdf;
   using  ::boost::math::pdf;
 
-  for(int i = 0; i < sizeof(upper_critical_values) / sizeof(upper_critical_values[0]); ++i)
+  for(unsigned i = 0; i < sizeof(upper_critical_values) / sizeof(upper_critical_values[0]); ++i)
   {
      test_spot(
         static_cast<RealType>(upper_critical_values[i][0]),   // degrees of freedom
@@ -335,7 +335,7 @@ void test_spots(RealType)
         tolerance);
   }
 
-  for(int i = 0; i < sizeof(lower_critical_values) / sizeof(lower_critical_values[0]); ++i)
+  for(unsigned i = 0; i < sizeof(lower_critical_values) / sizeof(lower_critical_values[0]); ++i)
   {
      test_spot(
         static_cast<RealType>(lower_critical_values[i][0]),   // degrees of freedom

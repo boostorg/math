@@ -322,6 +322,56 @@ void test_spots(RealType T)
        coefficient_of_variation(dist),
        std::overflow_error);
 
+    // Parameter estimation. These results are close to but
+    // not identical to those reported on the NIST website at
+    // http://www.itl.nist.gov/div898/handbook/prc/section2/prc222.htm
+    // the NIST results appear to be calculated using a normal
+    // approximation, which slightly under-estimates the degrees of
+    // freedom required, particularly when the result is small.
+    //
+    BOOST_CHECK_EQUAL(
+       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+         static_cast<RealType>(0.5), 
+         static_cast<RealType>(0.005), 
+         static_cast<RealType>(0.01), 
+         static_cast<RealType>(1.0))),
+         99);
+    BOOST_CHECK_EQUAL(
+       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+         static_cast<RealType>(1.5), 
+         static_cast<RealType>(0.005), 
+         static_cast<RealType>(0.01), 
+         static_cast<RealType>(1.0))),
+         14);
+    BOOST_CHECK_EQUAL(
+       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+         static_cast<RealType>(0.5), 
+         static_cast<RealType>(0.025), 
+         static_cast<RealType>(0.01), 
+         static_cast<RealType>(1.0))),
+         76);
+    BOOST_CHECK_EQUAL(
+       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+         static_cast<RealType>(1.5), 
+         static_cast<RealType>(0.025), 
+         static_cast<RealType>(0.01), 
+         static_cast<RealType>(1.0))),
+         11);
+    BOOST_CHECK_EQUAL(
+       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+         static_cast<RealType>(0.5), 
+         static_cast<RealType>(0.05), 
+         static_cast<RealType>(0.01), 
+         static_cast<RealType>(1.0))),
+         65);
+    BOOST_CHECK_EQUAL(
+       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+         static_cast<RealType>(1.5), 
+         static_cast<RealType>(0.05), 
+         static_cast<RealType>(0.01), 
+         static_cast<RealType>(1.0))),
+         9);
+
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
