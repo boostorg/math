@@ -47,6 +47,7 @@ want if you already know it's name.
 * __chf
 * [link survival_inv Inverse Survival Function].
 * __hazard
+* [link lower_critical Lower Critical Value.]
 * __mean.
 * [link cdfPQ P].
 * [link percent Percent Point Function]
@@ -57,6 +58,7 @@ want if you already know it's name.
 * [link math.dist.quantile_c Quantile from the complement of the probability].
 * __sd
 * [link survival Survival Function].
+* [link upper_critical Upper Critical Value.]
 * __variance.
 
 [h4 [#math.dist.cdf]Cumulative Distribution Function]
@@ -226,6 +228,19 @@ The Probability Mass Function is the same as the __pdf.
 
 The term Mass Function is usually applied to discrete distributions,
 while the term __pdf applies to continuous distributions.
+
+[h4 [#lower_critical]Lower Critical Value.]
+
+The lower critical value calculates the value of the random variable
+given the area under the left tail of the distribution.  
+It is equivalent to calculating the __quantile.
+
+[h4 [#upper_critical]Upper Critical Value.]
+
+The upper critical value calculates the value of the random variable
+given the area under the right tail of the distribution.  It is equivalent to 
+calculating the [link math.dist.quantile_c quantile from the complement of the
+probability].
 
 [h4 [#survival]Survival Function]
 
@@ -411,6 +426,63 @@ the context of this distribution:
    is a real-number, and not an integer.  Depending on the use case you may
    want to take either the floor or ceiling of the result.]]
 ]
+
+[endsect]
+
+[section Chi Squared]
+
+The chi-square distribution results when /v/ independent variables with
+standard normal distributions are squared and summed.
+
+   template <class RealType>
+   class chi_squared_distribution;
+
+   typedef chi_squared_distribution<double> chi_squared;
+
+   template <class RealType>
+   class chi_squared_distribution
+   {
+   public:
+      typedef RealType value_type;
+
+      // Construct:
+      chi_squared_distribution(RealType i);
+
+      // Access parameter:
+      RealType degrees_of_freedom()const;
+
+      // Parameter estimation:
+      static RealType estimate_degrees_of_freedom(
+         RealType difference_from_mean,
+         RealType alpha,
+         RealType beta,
+         RealType sd,
+         RealType hint = 100);
+   };
+   
+[h4 Member Functions]
+
+      chi_squared_distribution(RealType v);
+      
+Constructs a Chi Squared distribution with /v/ degrees of freedom.
+
+      RealType degrees_of_freedom()const;
+      
+Retruns the parameter /v/ from which this object was constructed.
+
+      static RealType estimate_degrees_of_freedom(
+         RealType difference_from_mean,
+         RealType alpha,
+         RealType beta,
+         RealType sd,
+         RealType hint = 100);
+
+Under construction.
+
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
+distributions are supported: __usual_accessors.
 
 [endsect]
 
