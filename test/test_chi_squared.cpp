@@ -10,6 +10,7 @@
 
 
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
+#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
@@ -397,6 +398,36 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        coefficient_of_variation(dist)
        , standard_deviation(dist) / mean(dist), tol2);
+    // special cases:
+    BOOST_CHECK_THROW(
+       pdf(
+          chi_squared_distribution<RealType>(static_cast<RealType>(1)),
+          static_cast<RealType>(0)), std::overflow_error
+       );
+    BOOST_CHECK_EQUAL(
+       pdf(chi_squared_distribution<RealType>(2), static_cast<RealType>(0))
+       , static_cast<RealType>(0.5f));
+    BOOST_CHECK_EQUAL(
+       pdf(chi_squared_distribution<RealType>(3), static_cast<RealType>(0))
+       , static_cast<RealType>(0.0f));
+    BOOST_CHECK_EQUAL(
+       cdf(chi_squared_distribution<RealType>(1), static_cast<RealType>(0))
+       , static_cast<RealType>(0.0f));
+    BOOST_CHECK_EQUAL(
+       cdf(chi_squared_distribution<RealType>(2), static_cast<RealType>(0))
+       , static_cast<RealType>(0.0f));
+    BOOST_CHECK_EQUAL(
+       cdf(chi_squared_distribution<RealType>(3), static_cast<RealType>(0))
+       , static_cast<RealType>(0.0f));
+    BOOST_CHECK_EQUAL(
+       cdf(complement(chi_squared_distribution<RealType>(1), static_cast<RealType>(0)))
+       , static_cast<RealType>(1));
+    BOOST_CHECK_EQUAL(
+       cdf(complement(chi_squared_distribution<RealType>(2), static_cast<RealType>(0)))
+       , static_cast<RealType>(1));
+    BOOST_CHECK_EQUAL(
+       cdf(complement(chi_squared_distribution<RealType>(3), static_cast<RealType>(0)))
+       , static_cast<RealType>(1));
 
     BOOST_CHECK_THROW(
        pdf(
@@ -406,7 +437,7 @@ void test_spots(RealType)
     BOOST_CHECK_THROW(
        pdf(
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
-          static_cast<RealType>(0)), std::domain_error
+          static_cast<RealType>(-1)), std::domain_error
        );
     BOOST_CHECK_THROW(
        cdf(
@@ -416,7 +447,7 @@ void test_spots(RealType)
     BOOST_CHECK_THROW(
        cdf(
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
-          static_cast<RealType>(0)), std::domain_error
+          static_cast<RealType>(-1)), std::domain_error
        );
     BOOST_CHECK_THROW(
        cdf(complement(
@@ -426,7 +457,7 @@ void test_spots(RealType)
     BOOST_CHECK_THROW(
        cdf(complement(
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
-          static_cast<RealType>(0))), std::domain_error
+          static_cast<RealType>(-1))), std::domain_error
        );
     BOOST_CHECK_THROW(
        quantile(
@@ -458,6 +489,23 @@ void test_spots(RealType)
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
           static_cast<RealType>(1.1))), std::domain_error
        );
+
+    // This first test value is taken from an example here:
+    // http://www.itl.nist.gov/div898/handbook/prc/section2/prc232.htm
+    // Subsequent tests just test our empirically generated values, they
+    // catch regressions, but otherwise aren't worth much.
+    BOOST_CHECK_EQUAL(
+       ceil(chi_squared_distribution<RealType>::estimate_degrees_of_freedom(
+         55, 0.05f, 0.01f, 100)), static_cast<RealType>(170));
+    BOOST_CHECK_EQUAL(
+       ceil(chi_squared_distribution<RealType>::estimate_degrees_of_freedom(
+         10, 0.05f, 0.01f, 100)), static_cast<RealType>(3493));
+    BOOST_CHECK_EQUAL(
+       ceil(chi_squared_distribution<RealType>::estimate_degrees_of_freedom(
+         -55, 0.05f, 0.01f, 100)), static_cast<RealType>(10));
+    BOOST_CHECK_EQUAL(
+       ceil(chi_squared_distribution<RealType>::estimate_degrees_of_freedom(
+         -10, 0.05f, 0.01f, 100)), static_cast<RealType>(123));
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
