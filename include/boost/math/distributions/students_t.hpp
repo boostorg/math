@@ -66,8 +66,9 @@ RealType pdf(const students_t_distribution<RealType>& dist, const RealType& t)
    if(false == detail::check_df(
          BOOST_CURRENT_FUNCTION, degrees_of_freedom, &error_result))
       return error_result;
-
-   // TODO fails for t == 0 and df >=1e16 for ALL fp types - need to use normal distribution.
+	// Might conceivably permit df = +infinity and use normal distribution.
+   // TODO fails for t == 0 and df >=1e16 for ALL fp types.
+   // - probably need to use normal distribution - when available.
    RealType basem1 = t * t / degrees_of_freedom;
    RealType result;
    if(basem1 < 0.125)
@@ -102,14 +103,14 @@ RealType cdf(const students_t_distribution<RealType>& dist, const RealType& t)
    // probability = ibeta(degrees_of_freedom / 2, 1/2, degrees_of_freedom / (degrees_of_freedom + t*t))
    //
    // However when t is small compared to the degrees of freedom, that formula
-   // suffers from rounding error, use the identity formula to work around 
+   // suffers from rounding error, use the identity formula to work around
    // the problem:
    //
    // I[x](a,b) = 1 - I[1-x](b,a)
    //
    // and:
    //
-   //     x = df / (df + t^2) 
+   //     x = df / (df + t^2)
    //
    // so:
    //
