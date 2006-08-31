@@ -14,6 +14,7 @@
     [last-revision $Date$]
 ]
 
+
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
 [def __exm1 '''<code>e<superscript>x</superscript> - 1</code>''']
@@ -134,4 +135,5 @@ data and/or data for output to an external graphing application.
 [include issues.qbk]
 
 [endsect]
+
 
