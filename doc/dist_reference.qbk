@@ -252,6 +252,10 @@ Refer to the __ccdf.
 
 [section Binomial]
 
+``#include <boost/math/distributions/binomial.hpp>``
+
+   namespace boost{ namespace math{ 
+   
    template <class RealType>
    class binomial_distribution;
    
@@ -288,6 +292,8 @@ Refer to the __ccdf.
       static RealType estimate_number_of_trials(
          const ``['unspecified-complemented-type]``<P1, P2, P3>& c);
    };
+   
+   }} // namespaces
    
 The class type `binomial_distribution` represents a binomial distribution:
 it is used when there are exactly two mutually 
@@ -434,6 +440,10 @@ the context of this distribution:
 The chi-square distribution results when /v/ independent variables with
 standard normal distributions are squared and summed.
 
+``#include <boost/math/distributions/chi_squared.hpp>``
+
+   namespace boost{ namespace math{ 
+
    template <class RealType>
    class chi_squared_distribution;
 
@@ -459,6 +469,8 @@ standard normal distributions are squared and summed.
          RealType sd,
          RealType hint = 100);
    };
+   
+   }} // namespaces
    
 [h4 Member Functions]
 
@@ -486,6 +498,59 @@ distributions are supported: __usual_accessors.
 
 [endsect]
 
+[section F distribution]
+
+The F distribution is the ratio of two chi-square distributions with
+degrees of freedom df1 and df2, respectively, where each chi-square has
+first been divided by its degrees of freedom.
+
+``#include <boost/math/distributions/fisher_f.hpp>``
+
+   namespace boost{ namespace math{ 
+      
+   template <class RealType>
+   class fisher_f_distribution;
+   
+   typedef fisher_f_distribution<double> fisher_f;
+
+   template <class RealType>
+   class fisher_f_distribution
+   {
+   public:
+      typedef RealType value_type;
+      
+      // Construct:
+      fisher_f_distribution(const RealType& i, const RealType& j);
+      
+      // Accessors:
+      RealType degrees_of_freedom1()const;
+      RealType degrees_of_freedom2()const;
+   };
+   
+   }} //namespaces
+
+[h4 Member Functions]
+
+      fisher_f_distribution(const RealType& df1, const RealType& df2);
+      
+Constructs an F-distribution with numerator degrees of freedom /df1/
+and denominator degrees of freedom /df2/.
+      
+      RealType degrees_of_freedom1()const;
+      
+Returns the numerator degrees of freedom parameter of the distribution.
+
+      RealType degrees_of_freedom2()const;
+      
+Returns the denominator degrees of freedom parameter of the distribution.
+
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
+distributions are supported: __usual_accessors.
+
+[endsect]
+
 [section Normal]
 
 The normal distribution is probably the most well known statistical 
@@ -493,6 +558,10 @@ distribution, and is also known as the Gaussian Distribution.
 A normal distribution with mean zero, and standard distribution one
 is known as the ['Standard Normal Distribution].
 
+``#include <boost/math/distributions/normal.hpp>``
+
+   namespace boost{ namespace math{ 
+      
    template <class RealType>
    class normal_distribution;
    
@@ -509,6 +578,8 @@ is known as the ['Standard Normal Distribution].
       RealType mean()const;
       RealType standard_deviation()const;
    };
+   
+   }} // namespaces
    
 [h4 Member Functions]
 
@@ -553,6 +624,10 @@ degrees of freedom of the sample.  When the degrees of freedom is
 As the number of degrees of freedom tends towards infinity, then this
 distribution approaches the normal-distribution.
 
+``#include <boost/math/distributions/students_t.hpp>``
+
+   namespace boost{ namespace math{ 
+      
    template <class RealType>
    class students_t_distribution;
    
@@ -577,6 +652,8 @@ distribution approaches the normal-distribution.
          RealType sd,
          RealType hint = 100);
    };
+   
+   }} // namespaces
    
 [h4 Member Functions]
 
