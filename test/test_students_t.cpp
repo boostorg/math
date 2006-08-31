@@ -11,11 +11,9 @@
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
 // http://www.itl.nist.gov/div898/handbook/eda/section3/eda3664.htm
 
-// Basic sanity test for Student's t probability (quintile) (0. < p < 1).
-// and Student's t probability Quintile (0. < p < 1).
-//
-// Verify error handling by getting it to throw:
-//
+// Basic sanity test for Student's t probability (quantile) (0. < p < 1).
+// and Student's t probability Quantile (0. < p < 1).
+
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
 
@@ -68,31 +66,31 @@ RealType naive_pdf(RealType v, RealType t)
 template <class RealType>
 void test_spots(RealType T)
 {
-   // Basic santity checks
+  // Basic sanity checks
 	RealType tolerance = static_cast<RealType>(std::pow(10., -(6-2))); // 1e-6 (as %)
 	// Some tests only pass at 1e-5 because probability value is less accurate,
 	// a digit in 6th decimal place, although calculated using
 	// a t-distribution generator (claimed 6 decimal digits) at
-   // http://faculty.vassar.edu/lowry/VassarStats.html
+  // http://faculty.vassar.edu/lowry/VassarStats.html
 	// http://faculty.vassar.edu/lowry/tsamp.html
 	// df = 5, +/-t = 2.0, 1-tailed = 0.050970, 2-tailed = 0.101939
 
 	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
 
 	// http://en.wikipedia.org/wiki/Student%27s_t_distribution#Table_of_selected_values
-   // Using tabulated value of t = 3.182 for 0.975, 3 df, one-sided.
+  // Using tabulated value of t = 3.182 for 0.975, 3 df, one-sided.
 
 	// http://www.mth.kcl.ac.uk/~shaww/web_page/papers/Tdistribution06.pdf refers to:
 
 	// A lookup table of quantiles of the RealType distribution
-   // for 1 to 25 in steps of 0.1 is provided in CSV form at:
-   // www.mth.kcl.ac.uk/~shaww/web_page/papers/Tsupp/tquantiles.csv
+  // for 1 to 25 in steps of 0.1 is provided in CSV form at:
+  // www.mth.kcl.ac.uk/~shaww/web_page/papers/Tsupp/tquantiles.csv
 	// gives accurate t of -3.1824463052837 and 3 degrees of freedom.
 	// Values below are from this source, saved as tquantiles.xls.
 	// DF are across the columns, probabilities down the rows
 	// and the t- values (quantiles) are shown.
 	// These values are probably accurate to nearly 64-bit double
-   // (perhaps 14 decimal digits).
+  // (perhaps 14 decimal digits).
 
    RealType big = std::numeric_limits<RealType>::has_infinity ?
       std::numeric_limits<RealType>::infinity() :
@@ -267,6 +265,7 @@ void test_spots(RealType T)
          static_cast<RealType>(-6.96455673428326)),  // t
          static_cast<RealType>(0.01), // probability.
 			tolerance);
+
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          students_t_distribution<RealType>(2.),  // degrees_of_freedom
@@ -274,9 +273,9 @@ void test_spots(RealType T)
          static_cast<RealType>(-6.96455673428326), // t
 			tolerance);
 
-   
+
   // Student's t pdf tests.
-  // for PDF checks, use 100eps tolerance expressed as a percent:
+  // for PDF checks, use 100 eps tolerance expressed as a percent:
    tolerance = boost::math::tools::epsilon<RealType>() * 10000;
 
    for(unsigned i = 1; i < 20; i += 3)
@@ -331,44 +330,44 @@ void test_spots(RealType T)
     //
     BOOST_CHECK_EQUAL(
        ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
-         static_cast<RealType>(0.5), 
-         static_cast<RealType>(0.005), 
-         static_cast<RealType>(0.01), 
+         static_cast<RealType>(0.5),
+         static_cast<RealType>(0.005),
+         static_cast<RealType>(0.01),
          static_cast<RealType>(1.0))),
          99);
     BOOST_CHECK_EQUAL(
        ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
-         static_cast<RealType>(1.5), 
-         static_cast<RealType>(0.005), 
-         static_cast<RealType>(0.01), 
+         static_cast<RealType>(1.5),
+         static_cast<RealType>(0.005),
+         static_cast<RealType>(0.01),
          static_cast<RealType>(1.0))),
          14);
     BOOST_CHECK_EQUAL(
        ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
-         static_cast<RealType>(0.5), 
-         static_cast<RealType>(0.025), 
-         static_cast<RealType>(0.01), 
+         static_cast<RealType>(0.5),
+         static_cast<RealType>(0.025),
+         static_cast<RealType>(0.01),
          static_cast<RealType>(1.0))),
          76);
     BOOST_CHECK_EQUAL(
        ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
-         static_cast<RealType>(1.5), 
-         static_cast<RealType>(0.025), 
-         static_cast<RealType>(0.01), 
+         static_cast<RealType>(1.5),
+         static_cast<RealType>(0.025),
+         static_cast<RealType>(0.01),
          static_cast<RealType>(1.0))),
          11);
     BOOST_CHECK_EQUAL(
        ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
-         static_cast<RealType>(0.5), 
-         static_cast<RealType>(0.05), 
-         static_cast<RealType>(0.01), 
+         static_cast<RealType>(0.5),
+         static_cast<RealType>(0.05),
+         static_cast<RealType>(0.01),
          static_cast<RealType>(1.0))),
          65);
     BOOST_CHECK_EQUAL(
        ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
-         static_cast<RealType>(1.5), 
-         static_cast<RealType>(0.05), 
-         static_cast<RealType>(0.01), 
+         static_cast<RealType>(1.5),
+         static_cast<RealType>(0.05),
+         static_cast<RealType>(0.01),
          static_cast<RealType>(1.0))),
          9);
 
@@ -395,24 +394,22 @@ int test_main(int, char* [])
 
 /*
 
-Output:
------- Build started: Project: test_students_t, Configuration: Release Win32 ------
+------ Rebuild All started: Project: test_students_t, Configuration: Debug Win32 ------
+Deleting intermediate and output files for project 'test_students_t', configuration 'Debug|Win32'
 Compiling...
 test_students_t.cpp
 Linking...
-Generating code
-Finished generating code
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\release\test_students_t.exe"
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_students_t.exe"
 Running 1 test case...
 Tolerance for type float is 0.0001 %
 Tolerance for type double is 0.0001 %
 Tolerance for type long double is 0.0001 %
 Tolerance for type class boost::math::concepts::real_concept is 0.0001 %
 *** No errors detected
-Build Time 0:16
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_students_t\Release\BuildLog.htm"
+Build Time 0:14
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_students_t\Debug\BuildLog.htm"
 test_students_t - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
 
 */
 
