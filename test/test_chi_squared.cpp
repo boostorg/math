@@ -526,3 +526,28 @@ int test_main(int, char* [])
   return 0;
 } // int test_main(int, char* [])
 
+/*
+After correcting check_df 1 sep 06
+
+------ Rebuild All started: Project: test_chisquared, Configuration: Debug Win32 ------
+Deleting intermediate and output files for project 'test_chisquared', configuration 'Debug|Win32'
+Compiling...
+test_chi_squared.cpp
+Linking...
+Embedding manifest...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_chisquared.exe"
+Running 1 test case...
+BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
+Tolerance = 0.1%.
+Tolerance = 0.1%.
+Tolerance = 0.1%.
+Tolerance = 0.1%.
+*** No errors detected
+Build Time 0:14
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_chisqr\Debug\BuildLog.htm"
+test_chisquared - 0 error(s), 0 warning(s)
+========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
+
+
+*/
+
