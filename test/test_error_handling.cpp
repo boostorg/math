@@ -20,8 +20,6 @@
 	using ::boost::math::tools::underflow_error;
 	using ::boost::math::tools::denorm_error;
 	using ::boost::math::tools::logic_error;
-#include <boost/math/special_functions/chisqr.hpp> // chisqr
-   using ::boost::math::chisqr;
 #include <boost/math/special_functions/gamma.hpp> // tgamma
    using ::boost::math::tgamma;
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -79,9 +77,6 @@ void test_error(FPT)
 //   BOOST_CHECK_THROW_MSG(logic_error<FPT>(BOOST_CURRENT_FUNCTION, "Internal error"), std::logic_error);
    BOOST_CHECK_THROW_MSG(logic_error<FPT>(BOOST_CURRENT_FUNCTION, 0, static_cast<FPT>(3.124567890123456789012345678901L)), std::logic_error);
    BOOST_CHECK_THROW_MSG(logic_error<FPT>(BOOST_CURRENT_FUNCTION, "Internal error, computed result was %1%, but should be in the range [0,1]", static_cast<FPT>(3.124567890123456789012345678901L)), std::logic_error);
-   BOOST_CHECK_THROW_MSG(chisqr(-1, static_cast<FPT>(1)), std::domain_error);
-   BOOST_CHECK_THROW_MSG(chisqr(static_cast<FPT>(1), static_cast<FPT>(-1)), std::domain_error);
-   BOOST_CHECK_THROW_MSG(chisqr(static_cast<FPT>(0), static_cast<FPT>(1)), std::domain_error);
    BOOST_CHECK_THROW_MSG(tgamma(static_cast<FPT>(0)), std::domain_error);
    BOOST_CHECK_THROW_MSG(tgamma(static_cast<FPT>(-10)), std::domain_error);
    BOOST_CHECK_THROW_MSG(tgamma(static_cast<FPT>(-10123457772243.0)), std::domain_error);

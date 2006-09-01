@@ -212,7 +212,7 @@ RealType chi_squared_distribution<RealType>::estimate_degrees_of_freedom(
    RealType alpha,
    RealType beta,
    RealType variance,
-   RealType hint = 100)
+   RealType hint)
 {
    //
    // Check for domain errors:

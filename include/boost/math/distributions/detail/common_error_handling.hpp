@@ -29,7 +29,7 @@ inline bool check_probability(const char* function, RealType const& prob, RealTy
 template <class RealType>
 inline bool check_df(const char* function, RealType const& df, RealType* result)
 {
-   if((df <= 0) && !(boost::math::isfinite)(df))
+   if((df <= 0) || !(boost::math::isfinite)(df))
    {
       *result = tools::domain_error<RealType>(
          function, 
