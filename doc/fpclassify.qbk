@@ -84,6 +84,6 @@ Returns true only if /z/ is a NaN.
    template <class T>
    bool isnormal(T t);
 
-Returns true only if /z/ is a normal number (not zero, infinite, NaN, or denomalised).
+Returns true only if /z/ is a normal number (not zero, infinite, NaN, or denormalised).
 
 [endsect]

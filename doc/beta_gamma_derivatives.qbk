@@ -20,7 +20,7 @@
    
 [h4 Description]
 
-These two functions find some uses in statistical distributions, they
+These two functions find some uses in statistical distributions: they
 implement the partial derivative with respect to /x/ of the incomplete
 gamma and beta functions respectively.
 
@@ -30,13 +30,13 @@ gamma and beta functions respectively.
 
 [h4 Accuracy]
 
-Almost identical to the incomplete gamma and beta functions, refer to
+Almost identical to the incomplete gamma and beta functions: refer to
 the documentation for those function for more information.
 
 [h4 Implementation]
 
 These two functions just expose some of the internals of the incomplete
-gamma and beta functions, refer to the documentation for those functions
+gamma and beta functions: refer to the documentation for those functions
 for more information.
 
 

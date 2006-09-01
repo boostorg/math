@@ -64,12 +64,11 @@ checks use high-precision test values calculated at 1000-bit precision with
 NTL::RR and this implementation.  Note that the generic and type-specific
 versions of these functions use differing implementations internally, so this
 gives us reasonably independent test data.  Using our test data to test other
-known "good" implementations also provides an additional sanity check. 
+"known good" implementations also provides an additional sanity check. 
 
-One 
-should note that our tests rely on decimal to binary conversion of floating
-point numbers, and assume that the result will be correctly rounded.  In practice
-it appears that in a few very rare cases the test data may be incorrect in the last bit:
+One should note that our tests rely on decimal to binary conversion of 
+floating-point numbers, and assume that the result will be correctly rounded.
+In practice, it appears that in a few very rare cases the test data may be incorrect in the last bit:
 this depends upon the compiler and standard library used, and means that the 
 relative errors quoted above have to treated somewhat circumspectly.  Using
 binary or hexadecimal coded test data would remove this issue (or at least
@@ -83,15 +82,15 @@ to make their arguments positive:
 
    erf(-z) = 1 - erf(z);
    
-   erfc(-z) = 2 - erfc(z);  // prefered when -z < -0.5
+   erfc(-z) = 2 - erfc(z);  // preferred when -z < -0.5
    
-   erfc(-z) = 1 + erf(z);   // prefered when -0.5 <= -z < 0
+   erfc(-z) = 1 + erf(z);   // preferred when -0.5 <= -z < 0
 
 The generic versions of these functions are implemented in terms of
 the incomplete gamma function.
 
-When the mantissa size is recognised (currently for 53, 64 and 113-bit reals,
-plus single precision handled via promotion to double)
+When the significand (mantissa) size is recognised
+(currently for 53, 64 and 113-bit reals, plus single-precision handled via promotion to double)
 then a series of rational approximations are used.
 
 For `z <= 0.5` then a rational approximation to erf is used, based on the 
@@ -103,9 +102,9 @@ Therefore erf is calculated using:
 
    erf(z) = z * (1.125F + R(z));
    
-Where the rational approximation R(z) is optimised for absolute error: as
-long as it's absolute error is small enough compared to 1.125 then any 
-roundoff error incured during the computation of R(z) will effectively 
+where the rational approximation R(z) is optimised for absolute error:
+as long as its absolute error is small enough compared to 1.125, then any 
+round-off error incurred during the computation of R(z) will effectively 
 dissappear from the result.  As a result the error for erf and erfc in this
 region is very low: the last bit is incorrect in only a very small number of 
 cases.
@@ -122,7 +121,7 @@ Therefore for `z > 0.5` we calculate erfc using:
    
 Again R(z) is optimised for absolute error, and the constant `c` is
 the average of `erfc(z) * exp(z*z) * z` taken at the endpoints of the range.
-Once again as long as the absolute error in R(z) is small
+Once again, as long as the absolute error in R(z) is small
 compared to `c` then `c + R(z)` will be correctly rounded, and the error
 in the result will depend only on the accuracy of the exp function.  In practice
 in all but a very small number of cases the error is confined to the last bit

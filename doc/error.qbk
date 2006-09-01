@@ -16,7 +16,7 @@ otherwise the relative error is assigned the value of 1 if only one of the terms
 is zero.  The threshold is currently set at `std::numeric_limits<>::min()`, in other words all
 denormalised numbers are regarded as a zero.
 
-All the test programs calculate /quantised relative error/ whereas the graphs
+All the test programs calculate /quantized relative error/ whereas the graphs
 in this manual are produced with the /actual error/.  The difference is as 
 follows: in the test programs the test data is rounded to the target type 
 under test when
@@ -36,16 +36,16 @@ to the same number of binary digits.  You have been warned!
 
 [#zero_error][h4 The Impossibility of Zero Error]
 
-For many of the functions in this library, it's assumed that the error is
+For many of the functions in this library, it is assumed that the error is
 "effectively zero" if the computation can be done with a number of guard
 digits.  However it should be remembered that if the result is a 
 /transcendental number/ 
 then as a point of principle we can never be sure that the result is accurate
-to more than 1ulp.  This is an example of /the table makers dilemma/: consider what
+to more than 1 ulp.  This is an example of /the table makers dilemma/: consider what
 happens if the first guard digit is a one, and the remaining guard digits are all zero.
 Do we have a tie or not?  Since the only thing we can tell about a transcendental number
-is that it's digits have no particular pattern, we can never tell if we have a tie,
-no matter how many guard digits we have.  Therefore we can never be completely sure 
+is that its digits have no particular pattern, we can never tell if we have a tie,
+no matter how many guard digits we have.  Therefore, we can never be completely sure 
 that the result has been rounded in the right direction.  Of course transcendental
 numbers that just happen to be a tie - for however many guard digits we have - are
 extremely rare, and get rarer the more guard digits we have, but even so....

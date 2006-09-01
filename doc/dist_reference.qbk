@@ -22,10 +22,9 @@ getter functions.  This allows more of these functions to be added over time
 as the need arises.  Unfortunately the literature uses many different and
 confusing names to refer to a rather small number of actual concepts, refer
 to the [link concept_index concept index] to find the property you 
-want by the name you are most
-familiar with.  Or use the [link function_index function index]
-to go straight to the function you
-want if you already know it's name.
+want by the name you are most familiar with. 
+Or use the [link function_index function index]
+to go straight to the function you want if you already know it's name.
 
 [h4 [#function_index]Function Index]
 
@@ -68,7 +67,7 @@ want if you already know it's name.
    
 The __cdf is the probability that 
 the variable takes a value less than or equal to x.  It is equivalent
-to the integral from -Infinity to x of the __pdf.  
+to the integral from -infinity to x of the __pdf.  
 For example the following graph shows the cdf for the
 normal distribution:
 
@@ -82,11 +81,11 @@ normal distribution:
 The complement of the __cdf 
 is the probability that 
 the variable takes a value greater than x.  It is equivalent
-to the integral from x to Infinity of the __pdf, or 1 minus the __cdf of x. 
+to the integral from x to infinity of the __pdf, or 1 minus the __cdf of x. 
 
 This is also known as the survival function.
 
-In this library it is obtained by wrapping the arguments to the `cdf`
+In this library, it is obtained by wrapping the arguments to the `cdf`
 function in a call to `complement`, for example:
 
    // standard normal distribution object:
@@ -109,7 +108,7 @@ Returns the __hazard of /x/ and distibution /dist/.
 [$../equations/hazard.png]
 
 [caution
-Some authors refer to this as the refer to this as the conditional failure 
+Some authors refer to this as the conditional failure 
 density function rather than the hazard function.]
 
 [h4 [#math.dist.chf]Cumulative Hazard Function]
@@ -157,7 +156,7 @@ For example for a standard normal distribution the pdf looks like this:
 The quantile is best viewed as the inverse of the __cdf, it returns
 a value /x/ such that `cdf(dist, x) == p`.
 
-This is also known as the /persent point function/, or a /persentile/.
+This is also known as the /percent point function/, or a /percentile/.
 
 The following graph shows the quantile function for a standard normal
 distribution:
@@ -404,8 +403,8 @@ This is typically used in failure analysis.
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
-distributions are supported: __usual_accessors.
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
 
 However it's worth taking a moment to define what these actually mean in 
 the context of this distribution:
@@ -480,7 +479,7 @@ Constructs a Chi Squared distribution with /v/ degrees of freedom.
 
       RealType degrees_of_freedom()const;
       
-Retruns the parameter /v/ from which this object was constructed.
+Returns the parameter /v/ from which this object was constructed.
 
       static RealType estimate_degrees_of_freedom(
          RealType difference_from_mean,
@@ -493,15 +492,15 @@ Under construction.
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
-distributions are supported: __usual_accessors.
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
 
 [endsect]
 
 [section F distribution]
 
-The F distribution is the ratio of two chi-square distributions with
-degrees of freedom df1 and df2, respectively, where each chi-square has
+The F distribution is the ratio of two chi-squared distributions with
+degrees of freedom df1 and df2, respectively, where each chi-squared has
 first been divided by its degrees of freedom.
 
 ``#include <boost/math/distributions/fisher_f.hpp>``
@@ -546,16 +545,16 @@ Returns the denominator degrees of freedom parameter of the distribution.
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
-distributions are supported: __usual_accessors.
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
 
 [endsect]
 
 [section Normal]
 
 The normal distribution is probably the most well known statistical 
-distribution, and is also known as the Gaussian Distribution.
-A normal distribution with mean zero, and standard distribution one
+distribution: it is also known as the Gaussian Distribution.
+A normal distribution with mean zero and standard distribution one
 is known as the ['Standard Normal Distribution].
 
 ``#include <boost/math/distributions/normal.hpp>``
@@ -607,7 +606,7 @@ distributions are supported: __usual_accessors.
 
 A statistical distribution published by William Gosset in 1908. 
 His employer, Guinness Breweries, required him to publish under a 
-pseudonym, so he chose "Student." Given N independent measurements, let
+pseudonym, so he chose "Student". Given N independent measurements, let
 
 [$../equations/students_t_dist.png]
 
@@ -687,7 +686,7 @@ result when the mean differs from the "true" mean by /difference_from_mean/.
 ]
 
 [note
-Remember that for a two sided test, you must divide alpha by two
+Remember that for a two-sided test, you must divide alpha by two
 before calling this function.]
 
 For more information on this function see the 

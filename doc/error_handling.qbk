@@ -141,7 +141,7 @@ C++ exception is thrown.
 
 [#logic_error][h4 Internal Logic Errors]
 
-When a special function calculates a result that is known to be erronious,
+When a special function calculates a result that is known to be erroneous,
 or where the result is incalculable then it calls:
 
    boost::math::tools::logic_error<T>(FunctionName, Message, Val);

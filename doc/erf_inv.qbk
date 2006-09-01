@@ -52,7 +52,7 @@ There are two sets of tests:
 * Basic sanity checks attempt to "round-trip" from
 /x/ to /p/ and back again.  These tests have quite
 generous tolerances: in general both the error functions and their
-inverses change so rapidly in some places, that round tripping to more than a couple
+inverses change so rapidly in some places that round tripping to more than a couple
 of significant digits isn't possible.  This is especially true when
 /p/ is very near one: in this case there isn't enough 
 "information content" in the input to the inverse function to get

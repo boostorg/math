@@ -30,8 +30,8 @@ And for small values:
 There are effectively two versions of this function internally: a fully
 generic version that is slow, but reasonably accurate, and a much more
 efficient approximation that is used where the number of digits in the mantissa
-of T correspond to a certain __lanczos.  In practice any built in
-floating point type you will encounter has an appropriate __lanczos
+of T correspond to a certain __lanczos.  In practice any built-in
+floating-point type you will encounter has an appropriate __lanczos
 defined for it.  It is also possible, given enough machine time, to generate
 further __lanczos's using the program libs/math/tools/lanczos_generator.cpp.
 
@@ -66,7 +66,7 @@ the gamma functions directly, or taking logarithms and then
 exponentiating the result.  However, the former is prone to overflows
 for even very modest arguments, while the latter is prone to cancellation
 errors.  As an alternative, if we regard the gamma function as a white-box
-containing the __lanczos then we can combine the power terms:
+containing the __lanczos, then we can combine the power terms:
 
 [$../equations/beta2.png]
 
