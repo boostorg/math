@@ -18,16 +18,16 @@ Students t distribution include <boost/math/distributions/students_t.hpp>
 
 [h4 Distributions are Objects]
 
-Each kind of distribution in this library is a class type, this does two
+Each kind of distribution in this library is a class type: this does two
 things:
 
 * It encapsulates the kind of distribution in the C++ type system, 
-so for example Students-t distributions are always a different C++ type from 
+so, for example, Students-t distributions are always a different C++ type from 
 Chi-Squared distributions.
 * The distribution objects store any parameters associated with the 
-distribution: for example the students-t distribution has a ['degrees
+distribution: for example, the Students-t distribution has a ['degrees
 of freedom] parameter that controls the shape of the distribution.
-This parameter has to be provided to the students-t object when it is
+This parameter has to be provided to the Students-t object when it is
 constructed.
 
 Although the distribution classes in this library are templates, there
@@ -45,7 +45,7 @@ distribution.  Probably 95% of uses are covered by these typedefs:
    binomial d2(20, 0.3);
    
 If you need to use the distributions with a type other than `double`
-then you can instantiate the template directly, the names of the 
+then you can instantiate the template directly: the names of the 
 templates are the same as the `double` typedef but with `_distribution`
 appended:
 
@@ -58,12 +58,12 @@ appended:
    // and 20 trials in total:
    binomial_distribution<long double> d4(20, 0.3);
    
-The parameters passed to the distributions can be accessed via member
+The parameters passed to the distributions can be accessed via getter member
 functions:
 
    d1.degrees_of_freedom();  // returns 4.0 
    
-This is all well and good, but not very useful so far.  What we want
+This is all well and good, but not very useful so far.  What we often want
 is to be able to calculate the /cumulative distribution functions/ and
 /quantiles/ etc for these distributions.
 
@@ -76,12 +76,12 @@ No problem, just use:
    
 Or how about the CDF (Cumulative Distribution Function):
 
-   cdf(my_dist, x);  // Returns CDF (integral) to point x of distribution my_dist
+   cdf(my_dist, x);  // Returns CDF (integral from -infinity) to point x of distribution my_dist
    
 And quantiles are just the same:
 
-   quantile(my_dist, p);  // Returns the value of the random variable
-                          // x such that cdf(my_dist, x) == p.
+   quantile(my_dist, p);  // Returns the value of the random variable x
+                          // such that cdf(my_dist, x) == p.
                           
 If you're wondering why these aren't member functions, it's to 
 make the library more easily extensible: if you want to add additional
@@ -94,7 +94,7 @@ supported distribution type.
 Often you don't want the value of the CDF, but it's complement, which is
 to say `1-p` rather than `p`.  You could calculate the CDF and subtract
 it from `1`, but if `p` is very close to `1` then cancellation error
-will cause you to loose significant digits.  In extreme cases `p` may
+will cause you to loose significant digits.  In extreme cases, `p` may
 actually be equal to `1`, even though the true value of the complement is non-zero.
 
 In this library, whenever you want to receive a complement, just wrap
@@ -122,9 +122,9 @@ by wrapping all of its arguments in a call to `complement(...)`, for example:
 [h4 Parameters can be estimated]
 
 Sometimes it's the parameters that define the distribution that you 
-need to find.  Suppose for example you have conducted a Students-t test
+need to find.  Suppose, for example, you have conducted a Students-t test
 for equal means and the result is borderline.  Maybe your two samples
-differ from each other, or maybe they don't, based on the result
+differ from each other, or maybe they don't; based on the result
 of the test you can't be sure.  A legitimate question to ask then is
 "How many more measurements would I have to take before I would get
 an X% probability that the difference is real?"  Parameter estimators
@@ -151,7 +151,7 @@ deviation are invariant with sample size.
 * Distributions are objects, which are constructed from whatever
 parameters the distribution may have.
 * Member functions allow you to retrieve the parameters of a distribution.
-* Generic non-member functions, provide access to the properties that
+* Generic non-member functions provide access to the properties that
 are common to all the distributions (PDF, CDF, quantile etc).
 * Complements of probabilities are calculated by wrapping the function's
 arguments in a call to `complement(...)`.
@@ -169,14 +169,14 @@ Now that you have the basics, the next section looks at some worked examples.
 
 [section:st_eg Student's t]
 
-* [link tut_mean_intervals Calculating confidence intervals on the mean with the students-t.]
+* [link tut_mean_intervals Calculating confidence intervals on the mean with the Students-t distribution.]
 * [link tut_mean_test Testing a sample mean for systematic difference, by comparison to a "true" mean.]
 * [link tut_mean_size Estimating how large a sample size would have to become
 in order to give a significant Students-t test result with a single sample test.]
 * [link two_sample_students_t Comparing the means of two samples with the Students-t test.]
 * [link paired_st Comparing two paired samples with the Student's t distribution.]
 
-[h4 [#tut_mean_intervals]Calculating confidence intervals on the mean with the students-t]
+[h4 [#tut_mean_intervals]Calculating confidence intervals on the mean with the Students-t distribution]
 
 Let's say you have a sample mean, you may wish to know what confidence intervals
 you can place on that mean.  Colloquially: "I want an interval that I can be
@@ -195,11 +195,15 @@ Where, ['Y[sub s]] is the sample mean, /s/ is the sample standard deviation,
 ['t[sub (__alpha/2,N-1)]] is the upper critical value of the Students-t
 distribution with /N-1/ degrees of freedom.
 
+Confidence level (value or coefficient) is defined as 1 - __alpha (often as a percent)
+
+[@http://www.itl.nist.gov/div898/handbook/pmd/section5/pmd511.htm on the NIST site].
+
 From the formula it should be clear that:
 
 * The width of the confidence interval decreases as the sample size increases.
-* The width increases as the standard deviation increase.
-* The width increases as the confidence level gets smaller (stronger).
+* The width increases as the standard deviation increases.
+* The width increases as the confidence level increases (0.5 towards 0.99999 - stronger).
 
 The following example code is taken from the example program
 [@../../example/students_t_single_sample.cpp students_t_single_sample.cpp].
@@ -720,7 +724,7 @@ or less than that of the first, and all the possible tests are summed up
 in the following table:
 
 [table
-[[Hypothosis][Test][Code]]
+[[Hypothesis][Test][C++ Code]]
 [[The Null-hypothesis: there is
 *no difference* in means]  [complement of CDF for |t| > confidence level / 2]
                          [``cdf(complement(dist, fabs(t))) > alpha / 2``]]
@@ -736,8 +740,7 @@ Sample 2 Mean.]  [Complement of CDF of t < confidence level]
 ]
 
 [note
-Notice that for a two sided test we must compare against alpha / 2 and
-not alpha.]
+For a two sided test we must compare against alpha / 2 and not alpha.]
 
 Most of the rest of the sample program is pretty-printing, so we'll
 skip over that, and take a look at the sample output for alpha=0.05
@@ -793,7 +796,7 @@ integer value.
 
 [note
 Some statistical packages truncate the effective degrees of freedom to
-an integer value, this may be necessary if you are relying on lookup tables,
+an integer value: this may be necessary if you are relying on lookup tables,
 but since our code fully supports non-integer degrees of freedom there is no
 need to truncate in this case.  Also note that when the degrees of freedom 
 is small then the Welch-Satterthwaite approximation may be a significant
@@ -858,7 +861,7 @@ Instead we calculate the difference between before and after measurements
 in each patient, and calculate the mean and standard deviation of the differences.
 To test whether a significant change has taken place, we can then test 
 the null-hypothesis that the true mean is zero using the same procedure 
-that's used in the single sample cases previously discussed.
+we used in the single sample cases previously discussed.
 
 That means we can:
 
@@ -888,17 +891,17 @@ TODO
 [section:binom_eg Binomial Distribution]
 
 
-* [link binom_conf Calculating Confidence Limits on the Frequency of Occurrence.]
-* [link binom_size_eg Estimating Sample Sizes.]
+* [link binom_conf Calculating Confidence Limits on the Frequency of Occurrence]
+* [link binom_size_eg Estimating Sample Sizes]
 
-[h4 [#binom_conf]Calculating Confidence Limits on the Frequency of Occurrence.]
+[h4 [#binom_conf]Calculating Confidence Limits on the Frequency of Occurrence]
 
 Imagine you have a process that follows a binomial distribution: for each
-trial conducted, and event either occurs or does it does not, these are referred
-to as "successes" and "failures".  If by experiment you want to measure the
+trial conducted, an event either occurs or does it does not, referred
+to as "successes" and "failures".  If, by experiment, you want to measure the
 frequency with which successes occur, the best estimate is given simply
 by k/N, for /k/ successes out of /N/ trials.  However our confidence in that
-value will be shaped by how many trials were conducted, and how many successes
+estimate will be shaped by how many trials were conducted, and how many successes
 were observed.  The static member functions 
 `binomial_distribution<>::estimate_lower_bound_on_p` and
 `binomial_distribution<>::estimate_upper_bound_on_p` allow you to calculate
@@ -954,9 +957,9 @@ Some pretty printing of the table header follows:
 And now for the important part - the intervals themselves - for each
 value of /alpha/, we call `estimate_lower_bound_on_p` and 
 `estimate_lower_upper_on_p` to obtain lower and upper bounds
-respectively.  Note that since we are calculating a two sided interval
+respectively.  Note that since we are calculating a two-sided interval,
 we must divide the value of alpha in two.  Had we been calculating a 
-single sided interval, for example: ['"Calculate a lower bound so that we are P%
+single-sided interval, for example: ['"Calculate a lower bound so that we are P%
 sure that the true occurrence frequency is greater than some value"]
 then we would *not* have divided by two.
 
@@ -1032,18 +1035,18 @@ quite close to the experimentally calculated value of 0.1.
 
 [h4 [#binom_size_eg]Estimating Sample Sizes.]
 
-Imagine you have a critical component, that you know will fail in 1 in
-N "uses", for some suitable definition of "use".  You may want to schedule
-routine replacement of the component so that it's chance of failure between
+Imagine you have a critical component that you know will fail in 1 in
+N "uses" (for some suitable definition of "use").  You may want to schedule
+routine replacement of the component so that its chance of failure between
 routine replacements is less than P%.  If the failures follow a binomial
-distribution - each time the component is "used" it either fails or does not -
+distribution (each time the component is "used" it either fails or does not)
 then the static member function `binomial_distibution<>::estimate_number_of_trials`
 can be used to estimate the maximum number of "uses" of that component for some
 probability P.
 
 The example program 
 [@../../example/binomial_sample_sizes.cpp binomial_sample_sizes.cpp]
-demonstrates it's usage.  It centres around a routine that prints out
+demonstrates its usage.  It centres around a routine that prints out
 a table of maximum sample sizes for various probability thresholds:
 
    void estimate_max_sample_size(
@@ -1051,9 +1054,9 @@ a table of maximum sample sizes for various probability thresholds:
       unsigned successes)    // Total number of observed successes permitted.
    {
 
-The routine then declares a table of probability thresholds, these are the
+The routine then declares a table of probability thresholds: these are the
 maximum acceptable probability that /successes/ or fewer events will be
-observed.  In our example /successes/ will be always zero: since we want
+observed.  In our example, /successes/ will be always zero, since we want
 no component failures, but in other situations non-zero values may well
 make sense.
 
@@ -1110,7 +1113,7 @@ ____________________________
 ]
 
 So 51 "uses" of the component would yield a 95% chance that no
-component-failures would be observed.
+component failures would be observed.
 
 Compare that with a 1 in 1 million chance of component failure:
 
@@ -1137,7 +1140,7 @@ ____________________________
     99.999             10'''
 ]
 
-In this case even 1000 uses of the component would still yield a 
+In this case, even 1000 uses of the component would still yield a 
 less than 1 in 1000 chance of observing a component failure 
 (99.9% chance of no failure).
 
