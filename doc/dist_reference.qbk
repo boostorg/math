@@ -554,7 +554,7 @@ that are generic to all distributions are supported: __usual_accessors.
 
 The normal distribution is probably the most well known statistical 
 distribution: it is also known as the Gaussian Distribution.
-A normal distribution with mean zero and standard distribution one
+A normal distribution with mean zero and standard deviation one
 is known as the ['Standard Normal Distribution].
 
 ``#include <boost/math/distributions/normal.hpp>``
@@ -763,6 +763,7 @@ opportunity to integrate the statistical tests with this framework at some later
 	double p = probability(acc);
 
 [endsect]
+
 
 
 
