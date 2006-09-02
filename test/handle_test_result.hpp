@@ -90,6 +90,10 @@ inline const std::pair<unsigned, unsigned>&
    {
       if(regex_match(name, a->first))
       {
+#if 0
+         std::cout << name << std::endl;
+         std::cout << a->first.str() << std::endl;
+#endif
          return a->second;
       }
       ++a;

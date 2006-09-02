@@ -4,10 +4,11 @@
     [purpose Various Special Functions & Distributions and Numerical Tools]
     [license
         Distributed under the Boost Software License, Version 1.0.
-        (See accompanying file LICENSE_1_0.txt) or copy at
-    ]
-    [@http://www.boost.org/LICENSE_1_0.txt http://www.boost.org/LICENSE_1_0.txt]
-    [authors [Maddock, John], [Bristow, Paul A.]]
+        (See accompanying file LICENSE_1_0.txt or copy at
+        <ulink url="http://www.boost.org/LICENSE_1_0.txt">
+            http://www.boost.org/LICENSE_1_0.txt
+        </ulink>)
+    ]    [authors [Maddock, John], [Bristow, Paul A.]]
     [category math]
     [last-revision $Date$]
 ]
@@ -153,5 +154,6 @@ some typical applications in statistics.
 [include issues.qbk]
 
 [endsect]
+
 
 

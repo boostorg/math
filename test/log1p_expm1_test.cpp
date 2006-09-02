@@ -51,8 +51,8 @@ void expected_results()
       ".*",                          // test type(s)
       ".*",                          // test data group
       ".*",                          // test function
-      3,                             // Max Peek error
-      2);                            // Max mean error
+      4,                             // Max Peek error
+      3);                            // Max mean error
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,

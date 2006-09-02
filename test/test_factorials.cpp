@@ -22,8 +22,7 @@ template <class T>
 void test_spots(T)
 {
    //
-   // Basic sanity checks, tolerance is 10 decimal places expressed as a percentage,
-   // One check per domain of the implementation:
+   // Basic sanity checks.
    //
    T tolerance = boost::math::tools::epsilon<T>() * 100 * 2;  // 2 eps as a percent.
    BOOST_CHECK_CLOSE(
@@ -47,9 +46,13 @@ void test_spots(T)
 
    tolerance = boost::math::tools::epsilon<T>() * 100 * 20;  // 20 eps as a percent.
    unsigned i = boost::math::max_factorial<T>::value;
-   BOOST_CHECK_CLOSE(
-      ::boost::math::unchecked_factorial<T>(i),
-      boost::math::tgamma(static_cast<T>(i+1)), tolerance);
+   if((boost::is_floating_point<T>::value) && (sizeof(T) <= sizeof(double)))
+   {
+      // Without Lanczos support tgamma isn't accurate enough for this test:
+      BOOST_CHECK_CLOSE(
+         ::boost::math::unchecked_factorial<T>(i),
+         boost::math::tgamma(static_cast<T>(i+1)), tolerance);
+   }
 
    i += 10;
    while(boost::math::lgamma(static_cast<T>(i+1)) < boost::math::tools::log_max_value<T>())

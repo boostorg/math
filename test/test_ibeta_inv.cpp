@@ -72,6 +72,37 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
+   //
+   // Linux,
+   // Extended exponent range of long double
+   // causes more extreme test cases to be executed:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "linux",                       // platform
+      "double",                      // test type(s)
+      ".*",                          // test data group
+      ".*", 20, 10);            // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "linux",                       // platform
+      "long double",                      // test type(s)
+      ".*",                          // test data group
+      ".*", 200000, 100000);            // test function
+   //
+   // HP-UX
+   // Extended exponent range of long double
+   // causes more extreme test cases to be executed:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "HP-UX",                       // platform
+      "long double",                      // test type(s)
+      ".*",                          // test data group
+      ".*", 200000, 100000);            // test function
 
    //
    // Catch all cases come last:

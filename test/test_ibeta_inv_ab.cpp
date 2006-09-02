@@ -65,11 +65,19 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
-
+   //
+   // Linux:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "linux",                          // platform
+      largest_type,                  // test type(s)
+      ".*",                          // test data group
+      ".*", 3000, 500);               // test function
    //
    // Catch all cases come last:
    //
-   // TODO!!!!
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

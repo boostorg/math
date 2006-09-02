@@ -27,7 +27,7 @@ namespace detail{
 template <class T, class L>
 T beta_imp(T a, T b, const L&)
 {
-   using namespace std;
+   using namespace std;  // for ADL of std names
 
    if(a <= 0)
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The arguments to the beta function must be greater than zero (got a=%1%).", a);
@@ -783,6 +783,8 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
 template <class T, class L>
 T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
 {
+   using namespace std; // for ADL of std math functions.
+
    bool invert = inv;
    T fract;
    T y = 1 - x;
@@ -986,9 +988,12 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             // out (for me!!), and requires two pochhammer calculations rather
             // than one, so leave it for now....
             int n = static_cast<int>(boost::math::tools::real_cast<long double>(floor(b)));
-            if(n == b)
-               --n;
             T bbar = b - n;
+            if(bbar <= 0)
+            {
+               --n;
+               bbar += 1;
+            }
             fract = ibeta_a_step(bbar, a, y, x, n, l, normalised);
             fract += ibeta_a_step(a, bbar, x, y, 20, l, normalised);
             if(invert)

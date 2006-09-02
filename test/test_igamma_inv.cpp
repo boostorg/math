@@ -64,6 +64,26 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
+   //
+   // Large exponent range causes more extreme test cases to be evaluated:
+   //
+   if(std::numeric_limits<long double>::max_exponent > std::numeric_limits<double>::max_exponent)
+   {
+      add_expected_result(
+         "[^|]*",                          // compiler
+         "[^|]*",                          // stdlib
+         "[^|]*",                          // platform
+         largest_type,                     // test type(s)
+         "[^|]*small[^|]*",                    // test data group
+         "[^|]*", 200000, 10000);              // test function
+      add_expected_result(
+         "[^|]*",                          // compiler
+         "[^|]*",                          // stdlib
+         "[^|]*",                          // platform
+         "real_concept",                     // test type(s)
+         "[^|]*small[^|]*",                   // test data group
+         "[^|]*", 70000, 8000);                  // test function
+   }
 
 
    //
@@ -96,14 +116,14 @@ void expected_results()
       "[^|]*",                          // platform
       "float|double",                   // test type(s)
       "[^|]*small[^|]*",                    // test data group
-      "boost::math::gamma_P_inv", 100, 50);   // test function
+      "boost::math::gamma_P_inv", 500, 60);   // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
       "float|double",                   // test type(s)
       "[^|]*",                          // test data group
-      "boost::math::gamma_Q_inv", 30, 10);   // test function
+      "boost::math::gamma_Q_inv", 350, 60);   // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -288,13 +308,15 @@ void test_gamma(T, const char* name)
 template <class T>
 void test_spots(T, const char* type_name)
 {
-   std::cout << "Running spot checks for type " << type_name << std::cout;
+   std::cout << "Running spot checks for type " << type_name << std::endl;
    //
    // basic sanity checks, tolerance is 100 epsilon expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 10000;
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1e-2), static_cast<T>(1.0/128)), static_cast<T>(0.35767144525455121503672919307647515332256996883787L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1e-2), static_cast<T>(1.0/2)), static_cast<T>(4.4655350189103486773248562646452806745879516124613e-31L), tolerance);
+   if(tolerance < 1e-25)
+      tolerance = 1e-25;  // limit of test data?
+   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1)/100, static_cast<T>(1.0/128)), static_cast<T>(0.35767144525455121503672919307647515332256996883787L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1)/100, static_cast<T>(0.5)), static_cast<T>(4.4655350189103486773248562646452806745879516124613e-31L), tolerance*10);
    //
    // We can't test in this region against Mathworld's data as the results produced
    // by functions.wolfram.com appear to be in error, and do *not* round trip with

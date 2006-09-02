@@ -47,12 +47,19 @@ void expected_results()
    // various compilers and platforms.
    //
    add_expected_result(
-      "Microsoft.*",                 // compiler
+      ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       "Erf Function:.*",             // test data group
-      "boost::math::erfc?", 4, 3);   // test function
+      "boost::math::erfc?", 20, 6);   // test function
+   add_expected_result(
+      ".*",                           // compiler
+      ".*",                           // stdlib
+      ".*",                           // platform
+      "real_concept",                 // test type(s)
+      "Inverse Erfc.*",               // test data group
+      "boost::math::erfc_inv", 80, 10);  // test function
 
 
    //
@@ -66,12 +73,19 @@ void expected_results()
       "Erf Function:.*",             // test data group
       "boost::math::erfc?", 2, 2);   // test function
    add_expected_result(
+      ".*aCC.*",                     // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      ".*",                          // test type(s)
+      "Inverse Erfc.*",               // test data group
+      "boost::math::erfc_inv", 80, 10);  // test function
+   add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       ".*",                          // test type(s)
       "Inverse Erf.*",               // test data group
-      "boost::math::erfc?_inv", 14, 4);  // test function
+      "boost::math::erfc?_inv", 18, 4);  // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
@@ -228,20 +242,20 @@ void test_spots(T, const char* t)
    // basic sanity checks, tolerance is 10 epsilon expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 1000;
-   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(0.125)), static_cast<T>(0.859683795198666182606970553478L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(0.5)), static_cast<T>(0.479500122186953462317253346108L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(1)), static_cast<T>(0.157299207050285130658779364917L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(5)), static_cast<T>(1.53745979442803485018834348538e-12L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(-0.125)), static_cast<T>(1.14031620480133381739302944652L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(-0.5)), static_cast<T>(1.52049987781304653768274665389L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(0.125)), static_cast<T>(0.85968379519866618260697055347837660181302041685015L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(0.5)), static_cast<T>(0.47950012218695346231725334610803547126354842424204L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(1)), static_cast<T>(0.15729920705028513065877936491739074070393300203370L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(5)), static_cast<T>(1.5374597944280348501883434853833788901180503147234e-12L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(-0.125)), static_cast<T>(1.1403162048013338173930294465216233981869795831498L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(-0.5)), static_cast<T>(1.5204998778130465376827466538919645287364515757580L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::erfc(static_cast<T>(0)), static_cast<T>(1), tolerance);
 
-   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(0.125)), static_cast<T>(0.140316204801333817393029446522L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(0.5)), static_cast<T>(0.520499877813046537682746653892L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(1)), static_cast<T>(0.842700792949714869341220635083L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(5)), static_cast<T>(0.99999999999846254020557196515L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(-0.125)), static_cast<T>(-0.140316204801333817393029446522L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(-0.5)), static_cast<T>(-0.520499877813046537682746653892L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(0.125)), static_cast<T>(0.14031620480133381739302944652162339818697958314985L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(0.5)), static_cast<T>(0.52049987781304653768274665389196452873645157575796L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(1)), static_cast<T>(0.84270079294971486934122063508260925929606699796630L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(5)), static_cast<T>(0.9999999999984625402055719651498116565146166211099L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(-0.125)), static_cast<T>(-0.14031620480133381739302944652162339818697958314985L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(-0.5)), static_cast<T>(-0.52049987781304653768274665389196452873645157575796L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::erf(static_cast<T>(0)), static_cast<T>(0), tolerance);
 
    tolerance = boost::math::tools::epsilon<T>() * 100 * 200; // 200 eps %.

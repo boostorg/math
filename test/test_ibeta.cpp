@@ -61,6 +61,67 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
+   //
+   // Linux - results depend quite a bit on the
+   // processor type, and how good the std::pow
+   // function is for that processor.
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux",                          // platform
+      largest_type,                     // test type(s)
+      "(?i).*small.*",                  // test data group
+      ".*", 350, 100);  // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux",                          // platform
+      largest_type,                     // test type(s)
+      "(?i).*medium.*",                     // test data group
+      ".*", 300, 80);  // test function
+   //
+   // deficiencies in pow function really kick in here for
+   // large arguments.  Note also that the tests here get
+   // *very* extreme due to the increased exponent range
+   // of 80-bit long doubles.
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux",                          // platform
+      "double",                     // test type(s)
+      "(?i).*large.*",                      // test data group
+      ".*", 10, 5);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux",                          // platform
+      largest_type,                     // test type(s)
+      "(?i).*large.*",                      // test data group
+      ".*", 200000, 10000);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux",                          // platform
+      "real_concept",                   // test type(s)
+      "(?i).*medium.*",                 // test data group
+      ".*", 350, 100);  // test function
+
+   //
+   // HP-UX:
+   //
+   // Large value tests include some with *very* extreme
+   // results, thanks to the large exponent range of
+   // 128-bit long doubles.
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "HP-UX",                          // platform
+      largest_type,                     // test type(s)
+      "(?i).*large.*",                      // test data group
+      ".*", 200000, 10000);                 // test function
 
    //
    // Catch all cases come last:
@@ -70,8 +131,8 @@ void expected_results()
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
-      "(?i).*small.*",                      // test data group
-      ".*", 20, 10);  // test function
+      "(?i).*small.*",                  // test data group
+      ".*", 40, 10);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -93,7 +154,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "(?i).*small.*",                      // test data group
-      ".*", 30, 15);  // test function
+      ".*", 40, 15);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -108,6 +169,15 @@ void expected_results()
       "real_concept",                   // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 200000, 50000);             // test function
+
+   // catch all default is 2eps for all types:
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
+      "[^|]*",                          // test type(s)
+      "[^|]*",                          // test data group
+      ".*", 2, 2);                      // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
@@ -218,22 +288,22 @@ void test_spots(T)
    T tolerance = boost::math::tools::epsilon<T>() * 3000;
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(0.015964560210704803),
-         static_cast<T>(1.1846856068586931e-005),
-         static_cast<T>(0.69176378846168518)),
-      static_cast<T>(0.0007508604820642986204162462167319506309750L), tolerance);
+         static_cast<T>(159) / 10000, //(0.015964560210704803L),
+         static_cast<T>(1184) / 1000000000L,//(1.1846856068586931e-005L),
+         static_cast<T>(6917) / 10000),//(0.69176378846168518L)),
+      static_cast<T>(0.000075393541456247525676062058821484095548666733251733L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(42.434902191162109),
-         static_cast<T>(0.30012050271034241),
-         static_cast<T>(0.91574394702911377)),
-      static_cast<T>(0.002844243156314242058287766324242276991912L), tolerance);
+         static_cast<T>(4243) / 100,//(42.434902191162109L),
+         static_cast<T>(3001) / 10000, //(0.30012050271034241L),
+         static_cast<T>(9157) / 10000), //(0.91574394702911377L)),
+      static_cast<T>(0.0028387319012616013434124297160711532419664289474798L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(9.7131776809692383),
-         static_cast<T>(99.406852722167969),
-         static_cast<T>(0.083912998437881470)),
-      static_cast<T>(0.4612716118626361034813232775095335302198L), tolerance);
+         static_cast<T>(9713) / 1000, //(9.7131776809692383L),
+         static_cast<T>(9940) / 100, //(99.406852722167969L),
+         static_cast<T>(8391) / 100000), //(0.083912998437881470L)),
+      static_cast<T>(0.46116895440368248909937863372410093344466819447476L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
          static_cast<T>(72.5),
@@ -242,83 +312,83 @@ void test_spots(T)
       static_cast<T>(1.3423066982487051710597194786268004978931316494920e-9L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(4.9854421615600586),
-         static_cast<T>(1.0665277242660522),
-         static_cast<T>(0.75997146964073181)),
-      static_cast<T>(0.2755954254731642667260071858810487404614L), tolerance);
+         static_cast<T>(4985)/1000, //(4.9854421615600586L),
+         static_cast<T>(1066)/1000, //(1.0665277242660522L),
+         static_cast<T>(7599)/10000), //(0.75997146964073181L)),
+      static_cast<T>(0.27533431334486812211032939156910472371928659321347L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(6.8127136230468750),
-         static_cast<T>(1.0562920570373535),
-         static_cast<T>(0.17416560649871826)),
-      static_cast<T>(7.702362015088558153029455563361002570531e-6L), tolerance);
+         static_cast<T>(6813)/1000, //(6.8127136230468750L),
+         static_cast<T>(1056)/1000, //(1.0562920570373535L),
+         static_cast<T>(1741)/10000), //(0.17416560649871826L)),
+      static_cast<T>(7.6736128722762245852815040810349072461658078840945e-6L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(0.48983201384544373),
-         static_cast<T>(0.22512593865394592),
-         static_cast<T>(0.20032680034637451)),
-      static_cast<T>(0.170905142698145967653807992508983970176L), tolerance);
+         static_cast<T>(4898)/10000, //(0.48983201384544373L),
+         static_cast<T>(2251)/10000, //(0.22512593865394592L),
+         static_cast<T>(2003)/10000), //(0.20032680034637451L)),
+      static_cast<T>(0.17089223868046209692215231702890838878342349377008L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(4.0498137474060059),
-         static_cast<T>(0.15403440594673157),
-         static_cast<T>(0.65370121598243713)),
-      static_cast<T>(0.0172702040689452906446803217247250156007L), tolerance);
+         static_cast<T>(4049)/1000, //(4.0498137474060059L),
+         static_cast<T>(1540)/10000, //(0.15403440594673157L),
+         static_cast<T>(6537)/10000), //(0.65370121598243713L)),
+      static_cast<T>(0.017273988301528087878279199511703371301647583919670L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(7.2695474624633789),
-         static_cast<T>(0.11902070045471191),
-         static_cast<T>(0.80036874115467072)),
-      static_cast<T>(0.013346136714187857821168127038816508028L), tolerance);
+         static_cast<T>(7269)/1000, //(7.2695474624633789L),
+         static_cast<T>(1190)/10000, //(0.11902070045471191L),
+         static_cast<T>(8003)/10000), //(0.80036874115467072L)),
+      static_cast<T>(0.013334694467796052900138431733772122625376753696347L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(2.7266697883605957),
-         static_cast<T>(0.011510574258863926),
-         static_cast<T>(0.086654007434844971)),
-      static_cast<T>(5.812020420972734916187451486321162137375e-6L), tolerance);
+         static_cast<T>(2726)/1000, //(2.7266697883605957L),
+         static_cast<T>(1151)/100000, //(0.011510574258863926L),
+         static_cast<T>(8665)/100000), //(0.086654007434844971L)),
+      static_cast<T>(5.8218877068298586420691288375690562915515260230173e-6L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(0.34317314624786377),
-         static_cast<T>(0.046342257410287857),
-         static_cast<T>(0.75823287665843964)),
-      static_cast<T>(0.151317265120184850887504097401768195067L), tolerance);
+         static_cast<T>(3431)/10000, //(0.34317314624786377L),
+         static_cast<T>(4634)/100000, //0.046342257410287857L),
+         static_cast<T>(7582)/10000), //(0.75823287665843964L)),
+      static_cast<T>(0.15132819929418661038699397753916091907278005695387L), tolerance);
 
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(0.34317314624786377),
-         static_cast<T>(0.046342257410287857),
+         static_cast<T>(0.34317314624786377L),
+         static_cast<T>(0.046342257410287857L),
          static_cast<T>(0)),
       static_cast<T>(0), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibetac(
-         static_cast<T>(0.34317314624786377),
-         static_cast<T>(0.046342257410287857),
+         static_cast<T>(0.34317314624786377L),
+         static_cast<T>(0.046342257410287857L),
          static_cast<T>(0)),
       static_cast<T>(1), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(0.34317314624786377),
-         static_cast<T>(0.046342257410287857),
+         static_cast<T>(0.34317314624786377L),
+         static_cast<T>(0.046342257410287857L),
          static_cast<T>(1)),
       static_cast<T>(1), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibetac(
-         static_cast<T>(0.34317314624786377),
-         static_cast<T>(0.046342257410287857),
+         static_cast<T>(0.34317314624786377L),
+         static_cast<T>(0.046342257410287857L),
          static_cast<T>(1)),
       static_cast<T>(0), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
          static_cast<T>(1),
-         static_cast<T>(0.046342257410287857),
-         static_cast<T>(0.32)),
-      static_cast<T>(0.0177137046180187568703202426065033413304L), tolerance);
+         static_cast<T>(4634)/100000, //(0.046342257410287857L),
+         static_cast<T>(32)/100),
+      static_cast<T>(0.017712849440718489999419956301675684844663359595318L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
-         static_cast<T>(0.046342257410287857),
+         static_cast<T>(4634)/100000, //(0.046342257410287857L),
          static_cast<T>(1),
-         static_cast<T>(0.32)),
-      static_cast<T>(0.948565954109602496577407403168592262389L), tolerance);
+         static_cast<T>(32)/100),
+      static_cast<T>(0.94856839398626914764591440181367780660208493234722L), tolerance);
 
    // very naive check on derivative:
    using namespace std;  // For ADL of std functions

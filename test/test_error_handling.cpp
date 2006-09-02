@@ -77,9 +77,9 @@ void test_error(FPT)
 //   BOOST_CHECK_THROW_MSG(logic_error<FPT>(BOOST_CURRENT_FUNCTION, "Internal error"), std::logic_error);
    BOOST_CHECK_THROW_MSG(logic_error<FPT>(BOOST_CURRENT_FUNCTION, 0, static_cast<FPT>(3.124567890123456789012345678901L)), std::logic_error);
    BOOST_CHECK_THROW_MSG(logic_error<FPT>(BOOST_CURRENT_FUNCTION, "Internal error, computed result was %1%, but should be in the range [0,1]", static_cast<FPT>(3.124567890123456789012345678901L)), std::logic_error);
-   BOOST_CHECK_THROW_MSG(tgamma(static_cast<FPT>(0)), std::domain_error);
-   BOOST_CHECK_THROW_MSG(tgamma(static_cast<FPT>(-10)), std::domain_error);
-   BOOST_CHECK_THROW_MSG(tgamma(static_cast<FPT>(-10123457772243.0)), std::domain_error);
+   BOOST_CHECK_THROW_MSG(boost::math::tgamma(static_cast<FPT>(0)), std::domain_error);
+   BOOST_CHECK_THROW_MSG(boost::math::tgamma(static_cast<FPT>(-10)), std::domain_error);
+   BOOST_CHECK_THROW_MSG(boost::math::tgamma(static_cast<FPT>(-10123457772243.0)), std::domain_error);
 
    cout << endl;
 

@@ -294,6 +294,8 @@ struct gamma_P_inverse_func
       typedef typename lanczos::lanczos_traits<T>::value_type value_type;
       typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
 
+      using namespace std;  // For ADL of std functions.
+
       T f = !invert ? boost::math::gamma_P(a, x) : boost::math::gamma_Q(a, x);
       T f1 = static_cast<T>(boost::math::detail::regularised_gamma_prefix(value_type(a), value_type(x), evaluation_type()));
       T f2;
@@ -337,6 +339,8 @@ private:
 template <class T>
 T gamma_P_inv(T a, T p)
 {
+   using namespace std;  // ADL of std functions.
+
    if(a <= 0)
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a in the incomplete gamma function inverse must be >= 0 (got a=%1%).", a);
    if((p < 0) || (p > 1))
@@ -375,6 +379,8 @@ T gamma_P_inv(T a, T p)
 template <class T>
 T gamma_Q_inv(T a, T q)
 {
+   using namespace std;  // ADL of std functions.
+
    if(a <= 0)
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a in the incomplete gamma function inverse must be >= 0 (got a=%1%).", a);
    if((q < 0) || (q > 1))

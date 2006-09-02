@@ -54,7 +54,19 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
-
+   //
+   // HP-UX
+   // This is a weird one, HP-UX shows up errors at float
+   // precision, that don't show up on other platforms.
+   // There appears to be some kind of rounding issue going on:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "HP-UX",                          // platform
+      "float",                          // test type(s)
+      "[^|]*",                          // test data group
+      "boost::math::tgamma_ratio[^|]*", 35, 8);                 // test function
 
    //
    // Catch all cases come last:
@@ -65,21 +77,21 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*",                          // test data group
-      "boost::math::tgamma_delta_ratio[^|]*", 20, 10);                 // test function
+      "boost::math::tgamma_delta_ratio[^|]*", 30, 20);                 // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*",               // test data group
-      "boost::math::tgamma_ratio[^|]*", 40, 20);                 // test function
+      "boost::math::tgamma_ratio[^|]*", 100, 50);                 // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*",                          // test data group
-      "boost::math::tgamma_delta_ratio[^|]*", 30, 15);                 // test function
+      "boost::math::tgamma_delta_ratio[^|]*", 40, 15);                 // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

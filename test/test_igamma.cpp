@@ -61,6 +61,55 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
+   //
+   // Linux:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 1000, 200);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 600, 200);                // test function
+
+   //
+   // HP-UX:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "HP-UX",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 500, 50);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "HP-UX",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 500, 100);                // test function
+
+   //
+   // Large exponent range causes more extreme test cases to be evaluated:
+   //
+   if(std::numeric_limits<long double>::max_exponent > std::numeric_limits<double>::max_exponent)
+   {
+      add_expected_result(
+         "[^|]*",                          // compiler
+         "[^|]*",                          // stdlib
+         "[^|]*",                          // platform
+         largest_type,                     // test type(s)
+         "[^|]*large[^|]*",                // test data group
+         ".*", 40000, 3000);  // test function
+   }
 
 
    //
@@ -79,7 +128,7 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*small[^|]*",                // test data group
-      "[^|]*", 10, 5);                  // test function
+      "[^|]*", 20, 10);                  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -114,7 +163,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*small[^|]*",                // test data group
-      ".*", 10, 5);                  // test function
+      ".*", 20, 10);                  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -253,7 +302,7 @@ void test_spots(T)
    BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(0.70206451384706574414638719662835463671916532623256L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(3.8734332808745531496973774140085644548465762343719e-36L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(0.5)), static_cast<T>(0.56241823159440712427949495730204306902676756479651L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(0.9)), static_cast<T>(0.31853210360412109873859360390443790076576777747449L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(9)/10), static_cast<T>(0.31853210360412109873859360390443790076576777747449L), tolerance*10);
    BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(5)), static_cast<T>(0.0027746032604128093194908357272603294120210079791437L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(0.5), static_cast<T>(100)), static_cast<T>(3.7017478604082789202535664481339075721362102520338e-45L), tolerance);
 

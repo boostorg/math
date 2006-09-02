@@ -564,15 +564,15 @@ namespace boost
         //
         detail::binomial_functor<RealType> f(dist, p);
         tools::eps_tolerance<RealType> tol(tools::digits<RealType>());
-        boost::uintmax_t max_iter = 200;
+        boost::uintmax_t max_iter = 1000;
         std::pair<RealType, RealType> r = tools::bracket_and_solve_root(
            f, 
            dist.trials() / 2, 
-           static_cast<RealType>(2),
+           static_cast<RealType>(8),
            true,
            tol,
            max_iter);
-        if(max_iter >= 200)
+        if(max_iter >= 1000)
            tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION, "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first);
         // return centre point of range found:
         return r.first + (r.second - r.first) / 2;
@@ -619,15 +619,15 @@ namespace boost
         //
         detail::binomial_functor<RealType> f(dist, q, true);
         tools::eps_tolerance<RealType> tol(tools::digits<RealType>());
-        boost::uintmax_t max_iter = 200;
+        boost::uintmax_t max_iter = 1000;
         std::pair<RealType, RealType> r = tools::bracket_and_solve_root(
            f, 
            dist.trials() / 2, 
-           static_cast<RealType>(2),
+           static_cast<RealType>(8),
            true,
            tol,
            max_iter);
-        if(max_iter >= 200)
+        if(max_iter >= 1000)
            tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION, "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first);
         // return centre point of range found:
         return r.first + (r.second - r.first) / 2;

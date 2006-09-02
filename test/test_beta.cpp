@@ -60,28 +60,28 @@ void expected_results()
       ".*",                          // platform
       "(long\\s+)?double",           // test type(s)
       "Beta Function: Medium.*",     // test data group
-      "boost::math::beta", 101, 35); // test function
+      "boost::math::beta", 130, 35); // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "(long\\s+)?double",           // test type(s)
       "Beta Function: Divergent.*",  // test data group
-      "boost::math::beta", 14, 6);   // test function
+      "boost::math::beta", 20, 6);   // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       "Beta Function: Small.*",      // test data group
-      "boost::math::beta", 10, 6);   // test function
+      "boost::math::beta", 15, 6);   // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       "Beta Function: Medium.*",     // test data group
-      "boost::math::beta", 60, 35);  // test function
+      "boost::math::beta", 130, 35);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -173,7 +173,7 @@ void test_spots(T)
    BOOST_CHECK_CLOSE(::boost::math::beta(small, static_cast<T>(4)), 1/small, tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), small), 1/small, tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), static_cast<T>(20)), static_cast<T>(0.00002823263692828910220214568040654997176736L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(0.0125), static_cast<T>(0.000023)), static_cast<T>(43558.24045647538375006349016083320744662L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(0.0125L), static_cast<T>(0.000023L)), static_cast<T>(43558.24045647538375006349016083320744662L), tolerance);
 }
 
 int test_main(int, char* [])

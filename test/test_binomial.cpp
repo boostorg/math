@@ -60,7 +60,12 @@ void test_spot(
       else
       {
          // Just check quantile is very small:
-         BOOST_CHECK(quantile(bn, P) < boost::math::tools::epsilon<RealType>() * 10);
+         if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent) && (boost::is_floating_point<RealType>::value))
+         {
+            // Limit where this is checked: if exponent range is very large we may
+            // run out of iterations in our root finding algorithm.
+            BOOST_CHECK(quantile(bn, P) < boost::math::tools::epsilon<RealType>() * 10);
+         }
       }
       if(k != 0)
       {
@@ -70,7 +75,12 @@ void test_spot(
       else
       {
          // Just check quantile is very small:
-         BOOST_CHECK(quantile(complement(bn, Q)) < boost::math::tools::epsilon<RealType>() * 10);
+         if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent) && (boost::is_floating_point<RealType>::value))
+         {
+            // Limit where this is checked: if exponent range is very large we may
+            // run out of iterations in our root finding algorithm.
+            BOOST_CHECK(quantile(complement(bn, Q)) < boost::math::tools::epsilon<RealType>() * 10);
+         }
       }
       // estimate success ratio:
       BOOST_CHECK_CLOSE(
@@ -385,7 +395,7 @@ void test_spots(RealType)
     // std deviation:
     BOOST_CHECK_CLOSE(
        standard_deviation(dist)
-       , static_cast<RealType>(sqrt(8 * 0.25 * 0.75)), tol2);
+       , static_cast<RealType>(sqrt(8 * 0.25L * 0.75L)), tol2);
     // hazard:
     BOOST_CHECK_CLOSE(
        hazard(dist, x)
@@ -495,18 +505,6 @@ void test_spots(RealType)
           binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1)),
           static_cast<RealType>(7)), static_cast<RealType>(0)
        );
-
-   if(boost::is_floating_point<RealType>::value)
-   {
-     // This is an extreme test, without Lanczos approximation support
-     // we get pretty inaccurate results from real_concept (about 5 sig digits only).
-     // So only test for accuracy with "real" floating point types:
-     BOOST_CHECK_CLOSE(::boost::math::pdf( // Really big number of trials - max()
-       binomial_distribution<RealType>(static_cast<RealType>((numeric_limits<int>::max)()), static_cast<RealType>(0.5)),
-       static_cast<RealType>((numeric_limits<int>::max)()/2)),  // half way to max
-       static_cast<RealType>(1.7217698023561394e-005), // probability.
-       tolerance);
-   }
 
   {
     // This is a visual sanity check that everything is OK:

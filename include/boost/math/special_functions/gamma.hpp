@@ -649,6 +649,7 @@ T regularised_gamma_prefix(T a, T z, const lanczos::undefined_lanczos&)
 template <class T, class L>
 T tgamma_small_upper_part(T a, T x, const L& l)
 {
+   using namespace std;  // ADL of std functions.
    //
    // Compute the full upper fraction (Q) when a is very small:
    //

@@ -60,7 +60,16 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
-
+   //
+   // Linux:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*",                          // test data group
+      "[^|]*", 800, 200);               // test function
 
    //
    // Catch all cases come last:
@@ -78,7 +87,7 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*",                          // test data group
-      "[^|]*", 40, 20);                 // test function
+      "[^|]*", 300, 100);               // test function
    // this one has to come last in case double *is* the widest
    // float type:
    add_expected_result(
