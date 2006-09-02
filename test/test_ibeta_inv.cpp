@@ -91,6 +91,13 @@ void expected_results()
       "long double",                      // test type(s)
       ".*",                          // test data group
       ".*", 200000, 100000);            // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "linux",                          // platform
+      "real_concept",                // test type(s)
+      ".*",                          // test data group
+      ".*", 5000000L, 500000);         // test function
    //
    // HP-UX
    // Extended exponent range of long double

@@ -285,6 +285,8 @@ namespace boost
       template <class RealType>
       RealType pdf(const binomial_distribution<RealType>& dist, const RealType k)
       { // Probability Density/Mass Function.
+        BOOST_FPU_EXCEPTION_GUARD
+
         using boost::math::tools::domain_error;
         using namespace std; // for ADL of std functions
 

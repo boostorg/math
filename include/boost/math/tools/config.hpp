@@ -19,4 +19,32 @@ inline void check_series_iterations(const char* function, boost::uintmax_t max_i
 
 }}} // namespaces
 
+#ifdef __linux__
+
+#include <fenv.h>
+
+namespace boost{ namespace math{ namespace detail{
+
+struct fpu_guard
+{
+	fpu_guard()
+	{
+		fegetexceptflag(&m_flags, FE_ALL_EXCEPT);
+		feclearexcept(FE_ALL_EXCEPT);
+	}
+	~fpu_guard()
+	{
+		fesetexceptflag(&m_flags, FE_ALL_EXCEPT);
+	}
+private:
+	fexcept_t m_flags;
+};
+
+}}} // namespaces
+
+#define BOOST_FPU_EXCEPTION_GUARD boost::math::detail::fpu_guard local_guard_object;
+#else
+#define BOOST_FPU_EXCEPTION_GUARD
+#endif
+
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP

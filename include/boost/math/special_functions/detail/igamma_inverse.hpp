@@ -287,6 +287,7 @@ struct gamma_P_inverse_func
 
    std::tr1::tuple<T, T, T> operator()(const T& x)const
    {
+      BOOST_FPU_EXCEPTION_GUARD
       //
       // Calculate P(x) - p and the first two derivates, or if the invert
       // flag is set, then Q(x) - q and it's derivatives.

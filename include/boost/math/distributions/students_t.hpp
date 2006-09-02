@@ -59,7 +59,9 @@ typedef students_t_distribution<double> students_t;
 template <class RealType>
 RealType pdf(const students_t_distribution<RealType>& dist, const RealType& t)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    using namespace std;  // for ADL of std functions
+
    RealType degrees_of_freedom = dist.degrees_of_freedom();
    // Error check:
    RealType error_result;

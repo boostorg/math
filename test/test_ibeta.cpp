@@ -92,7 +92,7 @@ void expected_results()
       "linux",                          // platform
       "double",                     // test type(s)
       "(?i).*large.*",                      // test data group
-      ".*", 10, 5);                 // test function
+      ".*", 40, 20);                 // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -309,7 +309,7 @@ void test_spots(T)
          static_cast<T>(72.5),
          static_cast<T>(1.125),
          static_cast<T>(0.75)),
-      static_cast<T>(1.3423066982487051710597194786268004978931316494920e-9L), tolerance);
+      static_cast<T>(1.3423066982487051710597194786268004978931316494920e-9L), tolerance*3); // extra tolerance needed on linux X86EM64
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
          static_cast<T>(4985)/1000, //(4.9854421615600586L),

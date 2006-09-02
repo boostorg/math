@@ -1070,6 +1070,7 @@ T ibeta_derivative_imp(T a, T b, T x, const L& l)
 template <class T>
 T beta(T a, T b)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::beta_imp(static_cast<value_type>(a), static_cast<value_type>(b), evaluation_type()), BOOST_CURRENT_FUNCTION);
@@ -1078,6 +1079,7 @@ T beta(T a, T b)
 template <class T>
 T beta(T a, T b, T x)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), false, false), BOOST_CURRENT_FUNCTION);
@@ -1086,6 +1088,7 @@ T beta(T a, T b, T x)
 template <class T>
 T betac(T a, T b, T x)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, false), BOOST_CURRENT_FUNCTION);
@@ -1094,6 +1097,7 @@ T betac(T a, T b, T x)
 template <class T>
 T ibeta(T a, T b, T x)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), false, true), BOOST_CURRENT_FUNCTION);
@@ -1102,6 +1106,7 @@ T ibeta(T a, T b, T x)
 template <class T>
 T ibetac(T a, T b, T x)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, true), BOOST_CURRENT_FUNCTION);
@@ -1110,6 +1115,7 @@ T ibetac(T a, T b, T x)
 template <class T>
 T ibeta_derivative(T a, T b, T x)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::ibeta_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type()), BOOST_CURRENT_FUNCTION);

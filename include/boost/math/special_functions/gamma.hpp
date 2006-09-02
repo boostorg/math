@@ -924,6 +924,7 @@ T gamma_P_derivative_imp(T a, T x, const L& l)
 template <class T>
 inline T tgamma(T z)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::gamma_imp(static_cast<value_type>(z), evaluation_type()), BOOST_CURRENT_FUNCTION);
@@ -932,6 +933,7 @@ inline T tgamma(T z)
 template <class T>
 inline T lgamma(T z, int* sign)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::lgamma_imp(static_cast<value_type>(z), evaluation_type(), sign), BOOST_CURRENT_FUNCTION);
@@ -940,12 +942,14 @@ inline T lgamma(T z, int* sign)
 template <class T>
 inline T lgamma(T x)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    return ::boost::math::lgamma(x, 0);
 }
 
 template <class T>
 inline T tgammap1m1(T z)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::tgammap1m1_imp(static_cast<value_type>(z), evaluation_type()), BOOST_CURRENT_FUNCTION);
@@ -957,6 +961,7 @@ inline T tgammap1m1(T z)
 template <class T>
 inline T tgamma(T a, T z)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(
@@ -970,6 +975,7 @@ inline T tgamma(T a, T z)
 template <class T>
 inline T tgamma_lower(T a, T z)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(
@@ -983,6 +989,7 @@ inline T tgamma_lower(T a, T z)
 template <class T>
 inline T gamma_Q(T a, T z)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(
@@ -996,6 +1003,7 @@ inline T gamma_Q(T a, T z)
 template <class T>
 inline T gamma_P(T a, T z)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(
@@ -1008,6 +1016,7 @@ inline T gamma_P(T a, T z)
 template <class T>
 inline T tgamma_delta_ratio(T z, T delta)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(z), static_cast<value_type>(delta), evaluation_type()), BOOST_CURRENT_FUNCTION);
@@ -1015,6 +1024,7 @@ inline T tgamma_delta_ratio(T z, T delta)
 template <class T>
 inline T tgamma_ratio(T a, T b)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b - a), evaluation_type()), BOOST_CURRENT_FUNCTION);
@@ -1023,6 +1033,7 @@ inline T tgamma_ratio(T a, T b)
 template <class T>
 T gamma_P_derivative(T a, T x)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
    return tools::checked_narrowing_cast<T>(detail::gamma_P_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(x), evaluation_type()), BOOST_CURRENT_FUNCTION);

@@ -404,6 +404,7 @@ struct ibeta_roots
 
    std::tr1::tuple<T, T, T> operator()(T x)
    {
+      BOOST_FPU_EXCEPTION_GUARD
       T f = ibeta_imp(a, b, x, L(), invert, true) - target;
       T f1 = invert ?
                -ibeta_power_terms(b, a, 1 - x, x, L(), true)
@@ -780,6 +781,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
 template <class T>
 T ibeta_inv(T a, T b, T p, T* py)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
 
@@ -806,12 +808,14 @@ T ibeta_inv(T a, T b, T p, T* py)
 template <class T>
 inline T ibeta_inv(T a, T b, T p)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    return ibeta_inv(a, b, p, static_cast<T*>(0));
 }
 
 template <class T>
 T ibetac_inv(T a, T b, T q, T* py)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<T>::value_type value_type;
    typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
 
@@ -838,6 +842,7 @@ T ibetac_inv(T a, T b, T q, T* py)
 template <class T>
 inline T ibetac_inv(T a, T b, T q)
 {
+   BOOST_FPU_EXCEPTION_GUARD
    return ibetac_inv(a, b, q, static_cast<T*>(0));
 }
 
