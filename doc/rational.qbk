@@ -25,7 +25,7 @@
    template <class T, class U>
    U evaluate_polynomial(const T* poly, U z, std::size_t count);
 
-Evaluates the polynomial described by
+Evaluates the [@http://en.wikipedia.org/wiki/Polynomial polynomial] described by
 the coefficients stored in /poly/.
 
 The polynomial most have order /count-1/ with /count/ coefficients.
@@ -71,8 +71,9 @@ to be a table of integers if this is appropriate.
 
 [h4 Implementation]
 
-Evaluation is by Horners method: with the two polynomials being evaluated
-in parallel to make the most of the processors floating point pipeline.
+Evaluation is by [@http://en.wikipedia.org/wiki/Horner_algorithm Horners method]:
+with the two polynomials being evaluated
+in parallel to make the most of the processors floating-point pipeline.
 If /v/ is greater than one, then the polynomials are evaluated in reverse
 order as polynomials in ['1\/v]: this avoids unnecessary numerical overflow when the
 coefficients are large.

@@ -32,7 +32,8 @@
 
 [h4 Description]
 
-These algorithms are intended for the summation of infinite series.
+These algorithms are intended for the
+[@http://en.wikipedia.org/wiki/Series_%28mathematics%29 summation of infinite series].
 
 Each of the algorithms takes a nullary-function object as the first argument:
 the function object will be repeatedly invoked to pull successive terms from
@@ -43,7 +44,7 @@ precision required, summation will stop when the next term is too small to
 have any effect on the first /bits/ bits of the result.
 
 The optional third argument /max_terms/ sets an upper limit on the number
-of terms of the series to evaluate, in addition, on exit the function will
+of terms of the series to evaluate. In addition, on exit the function will
 set /max_terms/ to the actual number of terms of the series that were 
 evaluated: this is particularly useful for profiling the convergence
 properties of a new series.
@@ -57,9 +58,9 @@ last argument and the logic of the function object can then be simplified
 to return subsequent terms.
 * Where the series is being added (or subtracted) from some other value:
 termination of the series will likely occur much more rapidly if that other 
-value is passed as the last argument.  For example there are several functions
+value is passed as the last argument.  For example, there are several functions
 that can be expressed as /1 - S(z)/ where S(z) is an infinite series.  In this
-case pass -1 as the last argument and then negate the result of the summation
+case, pass -1 as the last argument and then negate the result of the summation
 to get the result of /1 - S(z)/.
 
 The two /kahan_sum_series/ variants of these algorithms maintain a carry term

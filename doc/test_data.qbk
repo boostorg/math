@@ -104,7 +104,7 @@ graphing program (or spreadsheet) for further analysis.
    
 [h4 Description]
 
-This tool is best illustrated with a series of examples, if you just want the
+This tool is best illustrated with a series of examples: but if you just want the
 gory details, [link test_data_reference skip onwards to the reference].
 
 The functionality of test_data is split into the following parts:
@@ -149,7 +149,7 @@ Which when plotted results in:
 
 [h5 Example 2: Creating Test Data]
 
-As a second example, lets suppose we want to create highly accurate test
+As a second example, let's suppose we want to create highly accurate test
 data for a special function.  Since many special functions have two or
 more independent parameters, it's very hard to effectively cover all of
 the possible parameter space without generating gigabytes of data at

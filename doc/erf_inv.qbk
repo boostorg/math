@@ -23,7 +23,8 @@
    template <class T>
    T erf_inv(T z);
    
-Returns the inverse error function of z, that is a value x such that:
+Returns the [@http://functions.wolfram.com/GammaBetaErf/InverseErf/ inverse error function]
+of z, that is a value x such that:
 
    p = erf(x);
 
@@ -63,7 +64,8 @@ the accuracy of the result, given /exact/ input values.
 [h4 Implementation]
 
 These functions use a rational approximation to calculate an initial
-approximation to the result, then clean up the value using Halley iteration.
+approximation to the result, then clean up the value using
+[@http://en.wikipedia.org/wiki/Simple_rational_approximation Halley iteration].
 No more than 3 iterations are required in practice.
 
 [endsect]

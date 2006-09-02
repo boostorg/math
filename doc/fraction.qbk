@@ -30,6 +30,7 @@
 
 [h4 Description]
 
+[@http://en.wikipedia.org/wiki/Continued_fraction Continued fractions are a common method of approximation. ]
 These functions all evaluate the continued fraction described by the /generator/
 type argument.  The functions with an "_a" suffix evaluate the fraction:
 
@@ -73,12 +74,15 @@ fraction for convergence.
 [h4 Implementation]
 
 Internally these algorithms all use the modified Lentz algorithm: refer to
-Numeric Recipes, chapter 5 for more information, also
+Numeric Recipes in C++, W. H. Press et all, chapter 5,
+(especially 5.2 Evaluation of continued fractions, p 175 - 179)
+for more information, also
 Lentz, W.J. 1976, Applied Optics, vol. 15, pp. 668-671.
 
 [h4 Examples]
 
-The golden ratio can be computed from the simplest continued fraction of all:
+The [@http://en.wikipedia.org/wiki/Golden_ratio golden ratio phi = 1.618033989...]
+can be computed from the simplest continued fraction of all:
 
 [$../equations/fraction3.png]
 
@@ -95,7 +99,7 @@ We begin by defining a generator function:
       }
    };
 
-The golden ration can then be computed to double precision using:
+The golden ratio can then be computed to double precision using:
 
    continued_fraction_a(
       golden_ratio_fraction<double>(),

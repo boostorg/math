@@ -26,10 +26,12 @@
    
 [h4 Description]
 
-There are four incomplete gamma functions: two are normalised versions
+There are four [@http://mathworld.wolfram.com/IncompleteGammaFunction.html incomplete gamma functions]:
+two are normalised versions
 that return values in the range [0, 1], and two are non-normalised and
 return values in the range [0, gamma(a)].  Users interested in statistical
-applications should use the normalised versions (gamma_P and gamma_Q).
+applications should use the
+[@http://mathworld.wolfram.com/RegularizedGammaFunction.html normalised versions (gamma_P and gamma_Q)].
 
 All of these function require /a > 0/ and /z >= 0/.
 
@@ -71,7 +73,7 @@ This function changes rapidly from 0 to 1 around the point z == a:
 
 [h4 Accuracy]
 
-The following tables give peek and mean relative errors in over various domains of
+The following tables give peak and mean relative errors in over various domains of
 a and z, along with comparisons to other open source implementations where available.  
 Note that only results for the widest floating point type on the system are given as
 narrower types have __zero_error.
@@ -81,41 +83,42 @@ Errors also grow as /a/ grows larger.
 
 [table Errors In the Function tgamma(a,z)
 [[Mantissa Size] [Platform and Compiler] [0.5 < a < 100\nand\n0.01*a < z < 100*a]  [1e-12 < a < 5e-2\nand\n0.01*a < z < 100*a]]
-[[53] [Win32, Visual C++ 8] [Peek=5.9 Mean=1.5]  [Peek=1.8 Mean=0.6]]
-[[64] [RedHat Linux IA32, gcc-3.3] [Peek=596 Mean=116]  [Peek=3.2 Mean=0.84]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peek=40.2 Mean=2.5]  [Peek=3.2 Mean=0.8]]
-[[113] [HPUX IA64, aCC A.06.06] [Peek=364 Mean=17.6]  [Peek=12.7 Mean=1.8]]
+[[53] [Win32, Visual C++ 8] [Peak=5.9 Mean=1.5]  [Peak=1.8 Mean=0.6]]
+[[64] [RedHat Linux IA32, gcc-3.3] [Peak=596 Mean=116]  [Peak=3.2 Mean=0.84]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=40.2 Mean=2.5]  [Peak=3.2 Mean=0.8]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=364 Mean=17.6]  [Peak=12.7 Mean=1.8]]
 ]
 
 [table Errors In the Function tgamma_lower(a,z)
 [[Mantissa Size] [Platform and Compiler] [0.5 < a < 100\nand\n0.01*a < z < 100*a]  [1e-12 < a < 5e-2\nand\n0.01*a < z < 100*a]]
-[[53] [Win32, Visual C++ 8] [Peek=5.5 Mean=1.4]  [Peek=3.6 Mean=0.78]]
-[[64] [RedHat Linux IA32, gcc-3.3] [Peek=402 Mean=79]  [Peek=3.4 Mean=0.8]]
-[[64] [Redhat Linux IA64, gcc-3.4] [Peek=6.8 Mean=1.4]  [Peek=3.4 Mean=0.78]]
-[[113] [HPUX IA64, aCC A.06.06] [Peek=6.1 Mean=1.8]  [Peek=3.7 Mean=0.89]]
+[[53] [Win32, Visual C++ 8] [Peak=5.5 Mean=1.4]  [Peak=3.6 Mean=0.78]]
+[[64] [RedHat Linux IA32, gcc-3.3] [Peak=402 Mean=79]  [Peak=3.4 Mean=0.8]]
+[[64] [Redhat Linux IA64, gcc-3.4] [Peak=6.8 Mean=1.4]  [Peak=3.4 Mean=0.78]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=6.1 Mean=1.8]  [Peak=3.7 Mean=0.89]]
 ]
 
 [table Errors In the Function gamma_Q(a,z)
 [[Mantissa Size] [Platform and Compiler] [0.5 < a < 100\nand\n0.01*a < z < 100*a]  [1e-12 < a < 5e-2\nand\n0.01*a < z < 100*a] [1e-6 < a < 1.7e6\nand\n1 < z < 100*a]]
-[[53] [Win32, Visual C++ 8] [Peek=28.3 Mean=7.2\n\n(GSL Peek=201 Mean=13)\n(Cephes Peek=556 Mean=97)]  [Peek=4.8 Mean=1.6\n\n(GSL Peek~1.3e10 Mean=1e+9)\n(Cephes Peek~3e11 Mean=4e10)] [Peek=469 Mean=33\n\n(GSL Peek=27,050 Mean=2159)\n(Cephes Peek~8e6 Mean~7e5)]]
-[[64] [RedHat Linux IA32, gcc-3.3] [Peek=280 Mean=33]  [Peek=4.1 Mean=1.6] [Peek=11,490 Mean=732]]
-[[64] [Redhat Linux IA64, gcc-3.4] [Peek=32 Mean=9.4]  [Peek=4.7 Mean=1.5] [Peek=6815 Mean=414]]
-[[113] [HPUX IA64, aCC A.06.06] [Peek=37 Mean=10]  [Peek=11.2 Mean=2.0] [Peek=4,999 Mean=298]]
+[[53] [Win32, Visual C++ 8] [Peak=28.3 Mean=7.2\n\n(GSL Peak=201 Mean=13)\n(Cephes Peak=556 Mean=97)]  [Peak=4.8 Mean=1.6\n\n(GSL Peak~1.3e10 Mean=1e+9)\n(Cephes Peak~3e11 Mean=4e10)] [Peak=469 Mean=33\n\n(GSL Peak=27,050 Mean=2159)\n(Cephes Peak~8e6 Mean~7e5)]]
+[[64] [RedHat Linux IA32, gcc-3.3] [Peak=280 Mean=33]  [Peak=4.1 Mean=1.6] [Peak=11,490 Mean=732]]
+[[64] [Redhat Linux IA64, gcc-3.4] [Peak=32 Mean=9.4]  [Peak=4.7 Mean=1.5] [Peak=6815 Mean=414]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=37 Mean=10]  [Peak=11.2 Mean=2.0] [Peak=4,999 Mean=298]]
 ]
 
 [table Errors In the Function gamma_P(a,z)
 [[Mantissa Size] [Platform and Compiler] [0.5 < a < 100\nand\n0.01*a < z < 100*a]  [1e-12 < a < 5e-2\nand\n0.01*a < z < 100*a] [1e-6 < a < 1.7e6\nand\n1 < z < 100*a]]
-[[53] [Win32, Visual C++ 8] [Peek=36 Mean=9.1\n\n(GSL Peek=342 Mean=46)\n(Cephes Peek=491 Mean=102)]  [Peek=4.5 Mean=1.4\n\n(GSL Peek=4.8 Mean=0.76)\n(Cephes Peek=21 Mean=5.6)] [Peek=244 Mean=21\n\n(GSL Peek=1022 Mean=1054)\n(Cephes Peek~8e6 Mean~7e4)]]
-[[64] [RedHat Linux IA32, gcc-3.3] [Peek=241 Mean=36]  [Peek=4.7 Mean=1.5] [Peek~30,220 Mean=1929]]
-[[64] [Redhat Linux IA64, gcc-3.4] [Peek=41 Mean=10]  [Peek=4.7 Mean=1.4] [Peek~30,790 Mean=1864]]
-[[113] [HPUX IA64, aCC A.06.06] [Peek=40.2 Mean=10.2]  [Peek=5 Mean=1.6] [Peek=5,476 Mean=440]]
+[[53] [Win32, Visual C++ 8] [Peak=36 Mean=9.1\n\n(GSL Peak=342 Mean=46)\n(Cephes Peak=491 Mean=102)]  [Peak=4.5 Mean=1.4\n\n(GSL Peak=4.8 Mean=0.76)\n(Cephes Peak=21 Mean=5.6)] [Peak=244 Mean=21\n\n(GSL Peak=1022 Mean=1054)\n(Cephes Peak~8e6 Mean~7e4)]]
+[[64] [RedHat Linux IA32, gcc-3.3] [Peak=241 Mean=36]  [Peak=4.7 Mean=1.5] [Peak~30,220 Mean=1929]]
+[[64] [Redhat Linux IA64, gcc-3.4] [Peak=41 Mean=10]  [Peak=4.7 Mean=1.4] [Peak~30,790 Mean=1864]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=40.2 Mean=10.2]  [Peak=5 Mean=1.6] [Peak=5,476 Mean=440]]
 ]
 
 [h4 Testing]
 
-There are two sets of tests: spot tests compare values taken from Mathworld's
-online calculator with this implementation: they provide a basic "sanity check"
-for the implementation.  Accuracy tests use data generated at very high precision
+There are two sets of tests: spot tests compare values taken from
+[@http://functions.wolfram.com/GammaBetaErf/ Mathworld's online evaluator]
+with this implementation to a basic "sanity check".
+Accuracy tests use data generated at very high precision
 (using NTL's RR class set at 1000-bit precision) using this implementation 
 with a very high precision 60-term __lanczos.
 This is less than satisfactory: an independent method should really be used,
@@ -175,8 +178,8 @@ occurs for /x ~ y/.  Using /x * 1.1 < a/ as the crossover criterion
 for /0.5 < x <= 1.1 keeps the maximum value computed (whether
 it's the upper or lower interal) to around 0.6.   Likewise for
 /x <= 0.5/ then using /-0.4 / log(x) < a/ as the crossover criterion
-keeps the maximum value computed (whether
-it's the upper or lower interal) to around 0.7.
+keeps the maximum value computed to around 0.7
+(whether it's the upper or lower interval).
 
 There are two special cases used when a is an integer or half integer,
 and the crossover conditions listed above indicate that we should compute
@@ -194,9 +197,9 @@ following finite sum is used:
 These are both more stable and more efficient than the continued fraction
 alternative.
 
-For the normalised incomplete gamma function's then calculation of the 
-leading power terms
-is central to the accuracy of the function.  For smallish a and x combining
+For the normalised incomplete gamma functions, calculation of the 
+leading power terms is central to the accuracy of the function.
+For smallish a and x combining
 the power terms with the __lanczos gives the greatest accuracy:
 
 [$../equations/igamma12.png]
@@ -204,7 +207,7 @@ the power terms with the __lanczos gives the greatest accuracy:
 In the event that this causes underflow/overflow then the exponent can 
 be reduced by a factor of /a/ and brought inside the power term.
 
-When a and x are large we end up with a very large exponent with a base
+When a and x are large, we end up with a very large exponent with a base
 near one: this will not be computed accurately via the pow function,
 and taking logs simply leads to cancellation errors.  The worst of the
 errors can be avoided by using:
@@ -213,7 +216,7 @@ errors can be avoided by using:
 
 when /a-x/ is small and a and x are large.  There is still a subtraction
 and therefore some cancellation errors - but the terms are small so the absolute
-error will be small - and it's absolute rather than relative error that 
+error will be small - and it is absolute rather than relative error that 
 counts in the argument to the /exp/ function.  Note that for sufficiently
 large a and x the errors will still get you eventually, although this does
 delay the inevitable much longer than other methods.  Use of /log(1+x)-x/ here
@@ -223,7 +226,7 @@ Finally, I note that there is an asymptotic expansion available
 when a and x are large: however this requires backwards evaluation
 of a series (forwards evaluation is unstable), and therefore 
 foreknowledge of the number of terms required (see Temme).  The accuracy quoted
-by it's authors is also lower than that obtained here with careful
+by its authors is also lower than that obtained here with careful
 evaluation of the leading power terms.  However, the Legendre continued
 fraction in particular become increasingly expensive to compute for larger
 a and x, so this area needs more investigation.

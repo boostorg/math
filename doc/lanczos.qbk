@@ -8,12 +8,15 @@
 ['Why base gamma and gamma-like functions on the Lanczos approximation?]
 
 First of all I should make clear that for the gamma function
-over real numbers (as opposed to
-complex ones) the Lanczos approximation appears to offer no clear
-advantage over more traditional methods such as Stirling's approximation.
+over real numbers (as opposed to complex ones)
+the [@http://en.wikipedia.org/wiki/Lanczos_approximation Lanczos approximation]
+[@http://mathworld.wolfram.com/LanczosApproximation.html (see also)]
+appears to offer no clear
+advantage over more traditional methods such as
+[@http://en.wikipedia.org/wiki/Stirling_approximation Stirling's approximation].
 __pugh carried out an extensive comparison of the various methods available
 and discovered that they were all very similar in terms of complexity
-and relative error.  However, the lanczos approximation does have a couple of
+and relative error.  However, the Lanczos approximation does have a couple of
 properties that make it worthy of further consideration:
 
 * The approximation has an easy to compute truncation error, that holds for 
@@ -24,7 +27,7 @@ error will /at worst/ be bounded by some finite value.
 manipulation, in particular ratio's of gamma or gamma-like functions
 are particularly easy to compute without resorting to logarithms.
 
-It's the combination of these two properties that make the approximation
+It is the combination of these two properties that make the approximation
 attractive: Stirling's approximation is highly accurate for large z, and
 has some of the same analytic properties as the Lanczos approximation, but
 can't easily be used across the whole range of z.
@@ -44,7 +47,7 @@ way: ['each time a and b increase in magnitude by a factor of 10, at least one
 decimal digit of precision will be lost.]  In contrast, by combining like power
 terms in a ratio of Lanczos approximation's, these errors can be virtually eliminated
 for small /a/ and /b/, and kept under control for very large (or very small
-for that matter) /a/ and /b/.  Of course computing large powers is itself a
+for that matter) /a/ and /b/.  Of course, computing large powers is itself a
 notoriously hard problem, but even so, analytic combinations of Lanczos 
 approximations can make the difference between obtaining a valid result, or
 simply garbage.
@@ -183,8 +186,9 @@ so fewer floating point operations may be required overall.
 
 The following table shows the optimal values for /N/ and /g/ when computing
 at fixed precision.  These should be taken as work in progress: there are no
-values for 106-bit mantissa machines (Darwin long doubles), and further 
-optimisation of the values of /g/ may be possible.  Errors given in the table
+values for 106-bit mantissa machines (Darwin long doubles & NTL quad_float),
+and further optimisation of the values of /g/ may be possible.
+Errors given in the table
 are estimates of the error due to truncation of the Lanczos infinite series
 to /N/ terms.  They are calculated from the sum of the first five neglected
 terms - and are known to be rather pessimistic estimates - although it is noticeable

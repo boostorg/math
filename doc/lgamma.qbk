@@ -20,26 +20,26 @@
 
 [h4 Description]
 
-The lgamma function is defined by:
+The [@http://en.wikipedia.org/wiki/Gamma_function lgamma function] is defined by:
 
 [$../equations/lgamm1.png]
 
-The second form of the function takes a pointer to an integer, which if non-null
-is set on output to the sign of tgamma(z).
+The second form of the function takes a pointer to an integer,
+which if non-null is set on output to the sign of tgamma(z).
 
 [$../graphs/lgamma.png]
 
 There are effectively two versions of this function internally: a fully
 generic version that is slow, but reasonably accurate, and a much more
 efficient approximation that is used where the number of digits in the mantissa
-of T correspond to a certain __lanczos.  In practice any built in
-floating point type you will encounter has an appropriate __lanczos
+of T correspond to a certain __lanczos.  In practice, any built-in
+floating-point type you will encounter has an appropriate __lanczos
 defined for it.  It is also possible, given enough machine time, to generate
 further __lanczos's using the program libs/math/tools/lanczos_generator.cpp.
 
 [h4 Accuracy]
 
-The following table shows the peek errors (in units of epsilon) 
+The following table shows the peak errors (in units of epsilon) 
 found on various platforms
 with various floating point types. Unless otherwise specified any
 floating point type that is narrower than the one shown will have
@@ -47,10 +47,10 @@ __zero_error.
 
 [table
 [[Mantissa Size] [Platform and Compiler] [Factorials and Half factorials] [Values Near Zero] [Values Near 1 or 2] [Values Near a Negative Pole]]
-[[53]            [Win32 Visual C++ 8]  [Peek=0.88 Mean=0.14 \n\n(GSL=33) (Cephes=1.5)] [Peek=2.6 Mean=0.7 \n\n(GSL=5.2) (Cephes=1.1)]    [Peek=6.8 Mean=3.0 \n\n(GSL=1168) (Cephes~500000)] [Peek=3.8 Mean=0.9 \n\n(GSL=25) (Cephes=1.6)] ]
-[[64]            [Linux IA32 / GCC]  [Peek=25 Mean=2.6 \n\n(Native Peek=1.7 Mean=0.49)]           [Peek=1.6 Mean=0.57 \n\n(Native Peek= 0.96 Mean=0.54)]    [Peek=44 Mean=23 \n\n(Native Peek=0.74 Mean=0.26)]       [Peek=6.0 Mean=1.8 \n\n(Native Peek=3.0 Mean=0.86)]           ]
-[[64]            [Linux IA64 / GCC]  [Peek=29 Mean=2.7 (Native=0)]           [Pek=1.2 Mean=0.6 \n(Native=0)]    [Peek=44 Mean=23 \n(Native=0)]       [Peek=2.3 Mean=0.69 \n(Native 0)]           ]
-[[113]           [HPUX IA64, aCC A.06.06]    [Peek=218.7 Mean=17.54 \n(Native=0)] [Peek=6.1 Mean=1.3 \n(Native=0)]    [Peek=238.8 Mean=105 \n(Native=0)] [Peek=1.2 Mean=0.43 \n(Native=0)]  ]
+[[53]            [Win32 Visual C++ 8]  [Peak=0.88 Mean=0.14 \n\n(GSL=33) (Cephes=1.5)] [Peak=2.6 Mean=0.7 \n\n(GSL=5.2) (Cephes=1.1)]    [Peak=6.8 Mean=3.0 \n\n(GSL=1168) (Cephes~500000)] [Peak=3.8 Mean=0.9 \n\n(GSL=25) (Cephes=1.6)] ]
+[[64]            [Linux IA32 / GCC]  [Peak=25 Mean=2.6 \n\n(Native Peak=1.7 Mean=0.49)]           [Peak=1.6 Mean=0.57 \n\n(Native Peak= 0.96 Mean=0.54)]    [Peak=44 Mean=23 \n\n(Native Peak=0.74 Mean=0.26)]       [Peak=6.0 Mean=1.8 \n\n(Native Peak=3.0 Mean=0.86)]           ]
+[[64]            [Linux IA64 / GCC]  [Peak=29 Mean=2.7 (Native=0)]           [Pek=1.2 Mean=0.6 \n(Native=0)]    [Peak=44 Mean=23 \n(Native=0)]       [Peak=2.3 Mean=0.69 \n(Native 0)]           ]
+[[113]           [HPUX IA64, aCC A.06.06]    [Peak=218.7 Mean=17.54 \n(Native=0)] [Peak=6.1 Mean=1.3 \n(Native=0)]    [Peak=238.8 Mean=105 \n(Native=0)] [Peak=1.2 Mean=0.43 \n(Native=0)]  ]
 ]
 
 There's still some work to do on these error bounds, currently the larger errors
@@ -79,7 +79,7 @@ reflection formula is used:
 
 [$../equations/lgamm3.png]
 
-For types of known precision the __lanczos is used, a traits class 
+For types of known precision, the __lanczos is used, a traits class 
 `boost::math::lanczos::lanczos_traits` maps type T to an appropriate
 approximation.  The logarithmic version of the __lanczos is:
 
@@ -91,7 +91,7 @@ When z is very near 1 or 2, then the logarithmic version of the __lanczos
 suffers very badly from cancellation error: indeed for values sufficiently
 close to 1 or 2, arbitrarily large relative errors can be obtained (even though
 the absolute error is tiny).  The current solution is as follows: imagine we
-balance the two terms in the __lanczos by dividing the power term by it's value
+balance the two terms in the __lanczos by dividing the power term by its value
 at /z = 1/, and then multiplying the Lanczos coefficients by the same value.
 Now each term will take the value 1 at /z = 1/ and we can rearrange the power terms
 in terms of log1p.  Likewise if we subtract 1 from the Lanczos sum part 

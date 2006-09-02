@@ -38,18 +38,19 @@
    
 [h4 Description]
 
-There are six incomplete beta function inverses which allow you solve for
+
+There are six [@http://functions.wolfram.com/GammaBetaErf/ incomplete beta function inverses]
+which allow you solve for
 any of the three parameters to the incomplete beta, starting from either
-the result of the incomplete beta (p) or it's complement (q).
+the result of the incomplete beta (p) or its complement (q).
 
 [tip When people normally talk about the inverse of the incomplete
 beta function, they are talking about inverting on parameter /x/.
 These are implemented here as ibeta_inv and ibeta_invc, and are by
-far the most efficient of the inverses presented here.  \n\nThe inverses
-on the /a/ and /b/ parameters find use in some statistical
-applications but have to be computed by rather
-brute force numerical techniques and are consequently several times
-slower.]
+far the most efficient of the inverses presented here.
+\n\nThe inverses on the /a/ and /b/ parameters find use in some statistical
+applications but have to be computed by rather brute force numerical
+techniques and are consequently several times slower.]
 
    template <class T>
    T ibeta_inv(T a, T b, T p);
@@ -114,9 +115,8 @@ Requires:  /a > 0/, /0 < x < 1/ and /0 <= p,q <= 1/.
 The accuracy of these functions should closely follow that
 of the regular forward incomplete beta functions.  However, 
 note that in some parts of their domain, these functions can
-be extremely sensitive to changes in input, this is particularly
-the case when the argument /p/ (or it's complement /q/) is very
-close to `0` or `1`.
+be extremely sensitive to changes in input, particularly when
+the argument /p/ (or it's complement /q/) is very close to `0` or `1`.
 
 [h4 Testing]
 
@@ -124,7 +124,7 @@ There are two sets of tests:
 
 * Basic sanity checks attempt to "round-trip" from
 /a, b/ and /x/ to /p/ or /q/ and back again.  These tests have quite
-generous tolerances: in general both the incomplete beta and it's
+generous tolerances: in general both the incomplete beta and its
 inverses change so rapidly, that round tripping to more than a couple
 of significant digits isn't possible.  This is especially true when
 /p/ or /q/ is very near one: in this case there isn't enough 
@@ -138,12 +138,13 @@ the accuracy of the result, given exact input values.
 These two functions share a common implementation.
 
 First an initial approximation to x is computed then the
-last few bits are cleaned up using Halley iteration.  The iteration
-limit is set to 1/2 of the number of bits in T, which by experiment is
+last few bits are cleaned up using
+[@http://en.wikipedia.org/wiki/Simple_rational_approximation Halley iteration].
+The iteration limit is set to 1/2 of the number of bits in T, which by experiment is
 sufficient to ensure that the inverses are at least as accurate as the normal
 incomplete beta functions.  Up to 5 iterations may be
 required in extreme cases, although normally only one or two are required.
-Further the number of iterations requires decreases with increasing /a/ and
+Further, the number of iterations required decreases with increasing /a/ and
 /b/ (which generally form the more important use cases).  
 
 The initial guesses used for iteration are obtained as follows: 
@@ -159,7 +160,8 @@ more manageable problem.
 
 For `a+b >= 5` the initial guess is computed using the methods described in:
 
-Asymptotic Inversion of the Incomplete Beta Function, by N. M. Temme.
+Asymptotic Inversion of the Incomplete Beta Function,
+by N. M. [@http://homepages.cwi.nl/~nicot/ Temme].
 Journal of Computational and Applied Mathematics 41 (1992) 145-157.
 
 The nearly symetrical case (section 2 of the paper) is used for
@@ -178,8 +180,8 @@ and again expresses the inverse incomplete beta in terms of the
 inverse of the error function.  The method is accurate to at least 
 2 decimal digits when [^a+b = 5] rising to 11 digits when [^a+b = 10[super 5]].
 However, when the result is expected to be very small, and when a+b is 
-also small, then it's accuracy tails off, in this case when p[super 1/a] < 0.0025
-then it's better to use the following as an initial estimate:
+also small, then its accuracy tails off, in this case when p[super 1/a] < 0.0025
+then it is better to use the following as an initial estimate:
 
 [$../equations/ibeta_inv4.png]
 
@@ -212,7 +214,8 @@ An initial estimate for x is made with:
 
 [$../equations/ibeta_inv7.png]
 
-which is provably below the true value for x: Newton iteration will
+which is provably below the true value for x:
+[@http://en.wikipedia.org/wiki/Newton%27s_method Newton iteration] will
 therefore smoothly converge on x without problems caused by overshooting etc.
 
 When a and b are both greater than 1, but a+b is too small to use the other

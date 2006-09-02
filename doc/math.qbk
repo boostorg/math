@@ -1,19 +1,16 @@
 [library Math Toolkit
     [quickbook 1.3]
     [copyright 2006 John Maddock and Paul A. Bristow]
-    [purpose Various Special Functions and Numerical Tools]
+    [purpose Various Special Functions & Distributions and Numerical Tools]
     [license
         Distributed under the Boost Software License, Version 1.0.
-        (See accompanying file LICENSE_1_0.txt or copy at
-        <ulink url="http://www.boost.org/LICENSE_1_0.txt">
-            http://www.boost.org/LICENSE_1_0.txt
-        </ulink>)
+        (See accompanying file LICENSE_1_0.txt) or copy at
     ]
+    [@http://www.boost.org/LICENSE_1_0.txt http://www.boost.org/LICENSE_1_0.txt]
     [authors [Maddock, John], [Bristow, Paul A.]]
     [category math]
     [last-revision $Date$]
 ]
-
 
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
@@ -28,8 +25,8 @@
 
 [def __caution This is not an official Boost library, it is a library under 
                construction, the code is fully functional and robust, but 
-               interfaces, library structure, and function names may be 
-               changed without notice.]
+               interfaces, library structure, and function and distribution names
+               may be changed without notice.]
                
 [def __domain_error [link domain_error domain_error]]
 [def __pole_error [link pole_error pole_error]]
@@ -46,20 +43,31 @@
 
 This library is work in progress, it is intended to fulfil several needs:
 
-# To provide a reasonably comprehensive set of statistical distributions,
-upon which higher level statistical tests can be built.  The initial
-focus is on the central univariate distributions.
+# To provide a reasonably comprehensive set of
+[@http://en.wikipedia.org/wiki/List_of_probability_distributions statistical distributions],
+upon which higher level statistical tests can be built.
+The initial focus is on the central
+[@http://en.wikipedia.org/wiki/Univariate univariate]
+[@http://mathworld.wolfram.com/StatisticalDistribution.html distributions].
 
-# To provide a small number of high quality special functions, initially
-these will be concentrated on functions used in statistical applications.
-The functions currently implemented are the gamma/beta/erf functions
+Both [@http://mathworld.wolfram.com/ContinuousDistribution.html continuous]
+(like [@http://mathworld.wolfram.com/NormalDistribution.html normal]
+& [@http://mathworld.wolfram.com/F-Distribution.html Fisher])
+and [@http://mathworld.wolfram.com/DiscreteDistribution.html discrete]
+(like [@http://mathworld.wolfram.com/BinomialDistribution.html binomial]
+& [@http://mathworld.wolfram.com/PoissonDistribution.html Poisson]) distributions are provided.
+
+# To provide a small number of high quality 
+[@http://en.wikipedia.org/wiki/Special_functions special functions],
+initially these will be concentrated on functions used in statistical applications.
+The functions currently implemented are the gamma, beta & erf functions
 along with the incomplete gamma and beta functions (four variants
 of each) and all the possible inverses of these.  All the implementations
-are fully generic and support the use of arbitrary "real-number"
-types, although they are optimised for use with types with known-about
-mantissa sizes: typically `float`, `double` or `long double`.  Use of these
-functions with interval arithmetic (Boost.Interval) isn't quite supported
-yet, but it's something I want to investigate soon.
+are fully generic and support the use of arbitrary "real-number" types,
+although they are optimised for use with types with known-about
+mantissa sizes: typically `float`, `double` or `long double`.
+Use of these functions with interval arithmetic (Boost.Interval)
+isn't quite supported yet, but it's something we want to investigate soon.
 
 # To provide at least some of the tools required to implement 
 mathematical special functions, hopefully the presence of 
@@ -72,6 +80,16 @@ both with and without derivative support.  There are also classes
 for the manipulation of polynomials, for testing a special function
 against tabulated test data, and for the rapid generation of test
 data and/or data for output to an external graphing application.
+
+# To provide the most common
+[@http://en.wikipedia.org/wiki/List_of_probability_distributions probability distributions]
+used for statistics as C++ templated objects fully generic
+to support the use of arbitrary "real-number" types, so that they can be used not only with
+built-in floating-point types but also User-Defined Types (UDT) conforming to the
+real_concept archetype.
+These distributions areimplemented using the special functions above.
+There are several examples of using the distributions for
+some typical applications in statistics.
 
 [endsect]
 
@@ -115,7 +133,7 @@ data and/or data for output to an external graphing application.
 
 [endsect]
 
-[section Use with Non-Builtin Floating Point Types]
+[section Use with User Defined (not built-in) Floating-Point Types]
 
 [include concepts.qbk]
 
@@ -123,7 +141,7 @@ data and/or data for output to an external graphing application.
 
 [section Backgrounders]
 
-[include lanczos.qbk]
+[include ]
 [include error.qbk]
 [include promotion.qbk]
 

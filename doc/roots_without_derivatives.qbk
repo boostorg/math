@@ -73,8 +73,8 @@ need for the derivatives of /f(x)/.  The functions here that use TOMS
 Algorithm 748 are asymptotically the most efficient known, and have
 been shown to be optimal for a certain classes of smooth functions.
 
-Alternatively there is a simple bisection routine which can be useful
-in it's own right in some situations, or alternatively for narrowing 
+Alternatively, there is a simple bisection routine which can be useful
+in its own right in some situations, or alternatively for narrowing 
 down the range containing the root prior to calling a more advanced
 algorithm.
 
@@ -85,14 +85,14 @@ significantly reduce the enclosing interval, even though they rapidly approach
 the root.  This is also in contrast to some other derivate free methods
 (for example the methods of Brent or Dekker) which only reduce the enclosing
 interval on the final step.  Therefore these methods return a std::pair 
-containing the enclosing
-interval found, and accept a function object specifying the termination condition.
+containing the enclosing interval found,
+and accept a function object specifying the termination condition.
 Three function objects are provided for ready-made termination conditions:
 /eps_tolerance/ causes termination when the relative error in the enclosing
 interval is below a certain threshold, while /equal_floor/ and /equal_ceil/ are
 useful for certain statistical applications where the result is known to be
-an integer.  Other user defined termination conditions are likely to be used
-only rairly, but may be useful in some specific circumstances.
+an integer.  Other user-defined termination conditions are likely to be used
+only rarely, but may be useful in some specific circumstances.
 
    template <class F, class T, class Tol>
    std::pair<T, T> 
@@ -267,7 +267,7 @@ condition /tol/ was satisfied.
    };
    
 This is the usual termination condition used with these root finding functions.
-It's operator() will return true when the relative distance between /a/ and /b/
+Its operator() will return true when the relative distance between /a/ and /b/
 is less than twice the machine epsilon for T, or 2[super 1-bits], whichever is
 the larger.  In other words you set /bits/ to the number of bits of precision you
 want in the result.  The minimal tolerance of twice the machine epsilon of T is
@@ -296,7 +296,7 @@ of the interval have the same /ceil/.
 
 [h4 Implementation]
 
-The implementation of the bisection algorithm is extrememly straightforward
+The implementation of the bisection algorithm is extremely straightforward
 and not detailed here.  TOMS algorithm 748 is described in detail in:
 
 ['Algorithm 748: Enclosing Zeros of Continuous Functions, 
