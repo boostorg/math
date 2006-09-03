@@ -50,7 +50,7 @@ is good enough (Medium Priority).
 
 [h4 Statistical distributions]
 
-* None known.
+* Student's t Perhaps switch to normal distribution as a better approximation for very large degrees of freedom?
 
 [endsect]
 
