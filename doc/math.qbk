@@ -67,7 +67,7 @@ are fully generic and support the use of arbitrary "real-number" types,
 although they are optimised for use with types with known-about
 mantissa sizes: typically `float`, `double` or `long double`.
 Use of these functions with interval arithmetic (Boost.Interval)
-isn't quite supported yet, but it's something we want to investigate soon.
+isn't quite supported yet, but it's something that needs to be investigated.
 
 # To provide at least some of the tools required to implement 
 mathematical special functions, hopefully the presence of 
@@ -153,6 +153,7 @@ some typical applications in statistics.
 [include issues.qbk]
 
 [endsect]
+
 
 
 

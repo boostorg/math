@@ -9,8 +9,8 @@
 
 First of all I should make clear that for the gamma function
 over real numbers (as opposed to complex ones)
-the [@http://en.wikipedia.org/wiki/Lanczos_approximation Lanczos approximation]
-[@http://mathworld.wolfram.com/LanczosApproximation.html (see also)]
+the Lanczos approximation (See [@http://en.wikipedia.org/wiki/Lanczos_approximation the Wikipedia entry]
+or [@http://mathworld.wolfram.com/LanczosApproximation.html Mathworld])
 appears to offer no clear
 advantage over more traditional methods such as
 [@http://en.wikipedia.org/wiki/Stirling_approximation Stirling's approximation].
@@ -228,4 +228,5 @@ PhD Thesis November 2004.
 The Lanczos Approximation].
 
 [endsect]
+
 

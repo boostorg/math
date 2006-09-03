@@ -87,7 +87,7 @@ iteration just takes the next value into the zone where f(x) becomes inaccurate.
 * Finally: you may well be able to do better than these functions by hand-coding
 the heuristics used so that they are tailored to a specific function.  You may also
 be able to compute the ratio of derivatives used by these methods more efficiently
-than computing the derivative themselves.  As ever, algebraic simplification can
+than computing the derivatives themselves.  As ever, algebraic simplification can
 be a big win.
 
 [#newton]
@@ -232,4 +232,5 @@ further digits with remarkable efficiency.  Or to put it another way: ['nothing 
 a really good initial guess!]
 
 [endsect]
+
 
