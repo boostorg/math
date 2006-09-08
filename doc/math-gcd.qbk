@@ -1,5 +1,5 @@
 
-[section Greatest Common Divisor and Least Common Multiple]
+[section:gcd_lcm Greatest Common Divisor and Least Common Multiple]
 
 [section Introduction]
 
@@ -227,3 +227,4 @@ pool library. The code had updates by Helmut Zeisel.
 [endsect]
 
 [endsect]
+
