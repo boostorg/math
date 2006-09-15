@@ -35,7 +35,6 @@ or else compute /a/ given /x/ and either /p/ or /q/.
 gamma function, they are talking about inverting on parameter /x/.
 These are implemented here as gamma_P_inv and gamma_Q_inv, and are by
 far the most efficient of the inverses presented here.
-
 \n\nThe inverse on the /a/ parameter finds use in some statistical
 applications but has to be computed by rather brute force numerical
 techniques and is consequently several times slower.]
