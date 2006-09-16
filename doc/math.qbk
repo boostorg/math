@@ -47,9 +47,8 @@ This library is work in progress, it is intended to fulfil several needs:
 [@http://en.wikipedia.org/wiki/List_of_probability_distributions statistical distributions],
 upon which higher level statistical tests can be built.
 The initial focus is on the central
-[@http://en.wikipedia.org/wiki/Univariate univariate]
-[@http://mathworld.wolfram.com/StatisticalDistribution.html distributions].
-
+[@http://en.wikipedia.org/wiki/Univariate univariate ]
+[@http://mathworld.wolfram.com/StatisticalDistribution.html distributions].\n
 Both [@http://mathworld.wolfram.com/ContinuousDistribution.html continuous]
 (like [@http://mathworld.wolfram.com/NormalDistribution.html normal]
 & [@http://mathworld.wolfram.com/F-Distribution.html Fisher])
@@ -141,7 +140,6 @@ some typical applications in statistics.
 
 [section Backgrounders]
 
-[include ]
 [include error.qbk]
 [include lanczos.qbk]
 
@@ -153,9 +151,3 @@ some typical applications in statistics.
 [include issues.qbk]
 
 [endsect]
-
-
-
-
-
-
