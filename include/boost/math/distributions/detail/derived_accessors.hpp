@@ -77,7 +77,7 @@ typename Distribution::value_type coefficient_of_variation(const Distribution& d
    typedef typename Distribution::value_type value_type;
    value_type m = mean(dist);
    value_type d = standard_deviation(dist);
-   if(d > m * tools::max_value<value_type>())
+   if((m < 1) && (d > m * tools::max_value<value_type>()))
       return tools::overflow_error<value_type>(
          BOOST_CURRENT_FUNCTION, 0);
    return d / m;

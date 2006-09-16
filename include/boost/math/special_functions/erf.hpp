@@ -781,10 +781,10 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<113>& t)
 template <class T>
 T erf(T z)
 {
-   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
+   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
 
-   return tools::checked_narrowing_cast<T>(detail::erf_imp(
+   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::erf_imp(
       static_cast<value_type>(z),
       false,
       evaluation_type(),
@@ -794,10 +794,10 @@ T erf(T z)
 template <class T>
 T erfc(T z)
 {
-   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
+   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
 
-   return tools::checked_narrowing_cast<T>(detail::erf_imp(
+   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::erf_imp(
       static_cast<value_type>(z),
       true,
       evaluation_type(),
@@ -810,18 +810,18 @@ T erfc_inv(T z)
    if((z < 0) || (z > 2))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument outside range [0,2] in inverse erfc function (got p=%1%).", z);
    T guess = detail::estimate_inverse_erfc(z);
-   return tools::halley_iterate(detail::erf_roots<T>(z, -1), guess, -tools::max_value<T>(), tools::max_value<T>(), (tools::digits<T>() * 2) / 3);
+   return tools::halley_iterate(detail::erf_roots<typename remove_cv<T>::type>(z, -1), guess, -tools::max_value<T>(), tools::max_value<T>(), (tools::digits<T>() * 2) / 3);
 }
 
 template <class T>
 T erf_inv(T z)
 {
    if((z < -1) || (z > 1))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument outside range [-1, 1] in inverse erf function (got p=%1%).", z);
+      tools::domain_error<typename remove_cv<T>::type>(BOOST_CURRENT_FUNCTION, "Argument outside range [-1, 1] in inverse erf function (got p=%1%).", z);
    T guess = detail::estimate_inverse_erfc(1 - z);
-   if((fabs(z) != 1) && (fabs(guess) == tools::max_value<T>()))
+   if((fabs(z) != 1) && (fabs(guess) == tools::max_value<typename remove_cv<T>::type>()))
       guess = static_cast<T>((z < 0) ? -4 : 4);
-   return tools::halley_iterate(detail::erf_roots<T>(z, 1), guess, ((z > 0) ? 0 : -tools::max_value<T>()), ((z < 0) ? 0 : tools::max_value<T>()), (tools::digits<T>() * 2) / 3);
+   return tools::halley_iterate(detail::erf_roots<typename remove_cv<T>::type>(z, 1), guess, ((z > 0) ? 0 : -tools::max_value<T>()), ((z < 0) ? 0 : tools::max_value<T>()), (tools::digits<T>() * 2) / 3);
 }
 
 } // namespace math

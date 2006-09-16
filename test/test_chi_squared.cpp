@@ -521,8 +521,9 @@ int test_main(int, char* [])
   test_spots(0.0F); // Test float.
   test_spots(0.0); // Test double.
   test_spots(0.0L); // Test long double.
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
-
+#endif
   return 0;
 } // int test_main(int, char* [])
 

@@ -81,7 +81,6 @@ namespace detail
 		 boost::throw_exception(e);
 	}
 
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
   #ifndef BOOST_MATH_THROW_ON_DOMAIN_ERROR
     template <class T>
     inline T domain_error_imp(const char* /*function*/, const char* /*message*/, const T&, const mpl::true_*)
@@ -115,7 +114,6 @@ namespace detail
      // We don't get here: (and may get warning C4702: unreachable code)
      return 0;
   }
-#endif // BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 
 } // namespace detail
 

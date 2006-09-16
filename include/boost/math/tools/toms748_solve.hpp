@@ -159,8 +159,8 @@ T secant_interpolate(const T& a, const T& b, const T& fa, const T& fb)
 }
 
 template <class T>
-T quadratic_interpolate(T a, T b, T const& d, 
-                           T fa, T fb, T const& fd, 
+T quadratic_interpolate(const T& a, const T& b, T const& d,
+                           const T& fa, const T& fb, T const& fd, 
                            unsigned count)
 {
    //

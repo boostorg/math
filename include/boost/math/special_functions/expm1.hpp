@@ -75,7 +75,12 @@ T expm1(T x)
       return x;
    detail::expm1_series<T> s(x);
    boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    T result = tools::sum_series(s, tools::digits<T>() + 2, max_iter);
+#else
+   T zero = 0;
+   T result = tools::sum_series(s, tools::digits<T>() + 2, max_iter, zero);
+#endif
    tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
    return result;
 }
