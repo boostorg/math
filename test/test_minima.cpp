@@ -38,9 +38,10 @@ void test_minima(T, const char* name)
 
 int test_main(int, char* [])
 {
-   test_minima(0.1f, "double");
+   test_minima(0.1f, "float");
    test_minima(0.1, "double");
-   test_minima(0.1L, "double");
+   test_minima(0.1L, "long double");
    return 0;
 }
+
 
