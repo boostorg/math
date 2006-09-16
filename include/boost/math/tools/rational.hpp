@@ -35,7 +35,7 @@ inline U evaluate_odd_polynomial(const T* poly, U z, std::size_t count)
 template <class T, class U, class V>
 V evaluate_rational(const T* num, const U* denom, const V& z_, std::size_t count)
 {
-   T z(z_);
+   V z(z_);
    V s1, s2;
    if(z <= 1)
    {
