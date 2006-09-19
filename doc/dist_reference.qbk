@@ -4,8 +4,8 @@
 [def __cdf [link math.dist.cdf Cumulative Distribution Function]]
 [def __pdf [link math.dist.pdf Probability Density Function]]
 [def __ccdf [link math.dist.ccdf Complement of the Cumulative Distribution Function]]
-[def __quantile [link math.dist.quantile quantile]]
-[def __quantile_c [link math.dist.quantile_c quantile from the complement of the probabitity]]
+[def __quantile [link math.dist.quantile Quantile]]
+[def __quantile_c [link math.dist.quantile_c Quantile from the complement of the probability]]
 [def __mean [link math.dist.mean mean]]
 [def __variance [link math.dist.variance variance]]
 [def __sd [link math.dist.sd standard deviation]]
@@ -20,36 +20,36 @@
 Properties that are common to all distributions are accessed via non-member 
 getter functions.  This allows more of these functions to be added over time
 as the need arises.  Unfortunately the literature uses many different and
-confusing names to refer to a rather small number of actual concepts, refer
+confusing names to refer to a rather small number of actual concepts; refer
 to the [link concept_index concept index] to find the property you 
 want by the name you are most familiar with. 
 Or use the [link function_index function index]
-to go straight to the function you want if you already know it's name.
+to go straight to the function you want if you already know its name.
 
 [h4 [#function_index]Function Index]
 
 * [link math.dist.cdf cdf].
 * [link math.dist.ccdf cdf complement].
 * [link math.dist.chf chf].
-* [link math.dist.hazard hazard]
+* [link math.dist.hazard hazard].
 * __mean.
 * [link math.dist.pdf pdf].
 * [link math.dist.quantile quantile].
 * [link math.dist.quantile_c quantile from the complement].
-* [link math.dist.sd standard_deviation]
-* __variance
+* [link math.dist.sd standard_deviation].
+* __variance.
 
 [h4 [#concept_index]Conceptual Index]
 
 * __ccdf.
 * __cdf.
-* __chf
+* __chf.
 * [link survival_inv Inverse Survival Function].
 * __hazard
-* [link lower_critical Lower Critical Value.]
+* [link lower_critical Lower Critical Value].
 * __mean.
 * [link cdfPQ P].
-* [link percent Percent Point Function]
+* [link percent Percent Point Function].
 * __pdf.
 * [link pmf Probability Mass Function].
 * [link cdfPQ Q].
@@ -57,7 +57,7 @@ to go straight to the function you want if you already know it's name.
 * [link math.dist.quantile_c Quantile from the complement of the probability].
 * __sd
 * [link survival Survival Function].
-* [link upper_critical Upper Critical Value.]
+* [link upper_critical Upper Critical Value].
 * __variance.
 
 [h4 [#math.dist.cdf]Cumulative Distribution Function]
@@ -179,7 +179,7 @@ the arguments in a call to the quantile function in a call to
    std::cout << quantile(complement(norm, 0.05)) << std::endl;
 
 The function computes a value /x/ such that
-`cdf(complement(dist, x)) == q` where /q/ complement of the
+`cdf(complement(dist, x)) == q` where /q/ is complement of the
 probability.
 
 This function is also called the inverse survival function.
@@ -206,7 +206,7 @@ Returns the variance of the distribution /dist/.
 [h4 [#cdfPQ]P and Q]
 
 The terms P and Q are sometimes used to refer to the __cdf
-and it's [link math.dist.ccdf complement] respectively.
+and its [link math.dist.ccdf complement] respectively.
 Lowercase p and q are sometimes used to refer to the values returned
 by these functions.
 
@@ -249,7 +249,7 @@ Refer to the __ccdf.
 
 [section Distributions]
 
-[section Binomial]
+[section Binomial[#binomial_distribution]]
 
 ``#include <boost/math/distributions/binomial.hpp>``
 
@@ -434,7 +434,7 @@ the context of this distribution:
 
 [endsect]
 
-[section Chi Squared]
+[#chi_squared_distribution][section Chi Squared]
 
 The chi-square distribution results when /v/ independent variables with
 standard normal distributions are squared and summed.
@@ -550,7 +550,7 @@ that are generic to all distributions are supported: __usual_accessors.
 
 [endsect]
 
-[section Normal]
+[#normal_distribution][section Normal]
 
 The normal distribution is probably the most well known statistical 
 distribution: it is also known as the Gaussian Distribution.
@@ -603,6 +603,7 @@ distributions are supported: __usual_accessors.
 [endsect]
 
 [section Student's t]
+[#students_t_distribution]
 
 A statistical distribution published by William Gosset in 1908. 
 His employer, Guinness Breweries, required him to publish under a 
@@ -734,7 +735,8 @@ Which would then have its own set of overloads for the non-member accessor funct
 
 [h4 Higher Level Hypothesis Tests]
 
-Higher level tests roughly corresponding to the Mathematica HypothesisTests
+Higher-level tests roughly corresponding to the
+[@http://documents.wolfram.com/mathematica/Add-onsLinks/StandardPackages/Statistics/HypothesisTests.html Mathematica Hypothesis Tests]
 package could be added reasonably easily, for example:
 
 	template <class InputIterator>

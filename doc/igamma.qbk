@@ -137,7 +137,7 @@ they are all related via:
 
 [$../equations/igamma7.png]
 
-The lower incomplete gamma is computed from it's series representation:
+The lower incomplete gamma is computed from its series representation:
 
 [$../equations/igamma8.png]
 
@@ -175,7 +175,7 @@ functions in their own right to avoid cancellation errors.
 
 For /x < 1.1/ the crossover point where the result is ~0.5 no longer
 occurs for /x ~ y/.  Using /x * 1.1 < a/ as the crossover criterion
-for /0.5 < x <= 1.1 keeps the maximum value computed (whether
+for /0.5 < x <= 1.1/ keeps the maximum value computed (whether
 it's the upper or lower interal) to around 0.6.   Likewise for
 /x <= 0.5/ then using /-0.4 / log(x) < a/ as the crossover criterion
 keeps the maximum value computed to around 0.7

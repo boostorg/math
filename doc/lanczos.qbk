@@ -19,12 +19,12 @@ and discovered that they were all very similar in terms of complexity
 and relative error.  However, the Lanczos approximation does have a couple of
 properties that make it worthy of further consideration:
 
-* The approximation has an easy to compute truncation error, that holds for 
+* The approximation has an easy to compute truncation error that holds for 
 all /z > 0/.  In practice that means we can use the same approximation for all
 /z > 0/, and be certain that no matter how large or small /z/ is, the truncation 
 error will /at worst/ be bounded by some finite value.
 * The approximation has a form that is particularly amenable to analytic
-manipulation, in particular ratio's of gamma or gamma-like functions
+manipulation, in particular ratios of gamma or gamma-like functions
 are particularly easy to compute without resorting to logarithms.
 
 It is the combination of these two properties that make the approximation

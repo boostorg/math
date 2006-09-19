@@ -12,26 +12,27 @@ provides a few worked examples of applying the library to statistical tests.
 
 All the code in this library is inside namespace boost::math.
 
-In order to use a distribution /something/ you will need to include
-the header <boost/math/distributions/something.hpp> so for example to use the
-Students t distribution include <boost/math/distributions/students_t.hpp>
+In order to use a distribution /my_distribution/ you will need to include
+the header <boost/math/distributions/my_distribution.hpp>.
+For example, to use the Students-t distribution include
+<boost/math/distributions/students_t.hpp>
 
 [h4 Distributions are Objects]
 
 Each kind of distribution in this library is a class type: this does two
 things:
 
-* It encapsulates the kind of distribution in the C++ type system, 
+* It encapsulates the kind of distribution in the C++ type system; 
 so, for example, Students-t distributions are always a different C++ type from 
 Chi-Squared distributions.
 * The distribution objects store any parameters associated with the 
-distribution: for example, the Students-t distribution has a ['degrees
-of freedom] parameter that controls the shape of the distribution.
-This parameter has to be provided to the Students-t object when it is
-constructed.
+distribution: for example, the Students-t distribution has a
+['degrees of freedom] parameter that controls the shape of the distribution.
+This ['degrees of freedom] parameter has to be provided
+to the Students-t object when it is constructed.
 
 Although the distribution classes in this library are templates, there
-are typedefs on type /double/ that always take the usual name of the
+are typedefs on type /double/ that mostly take the usual name of the
 distribution.  Probably 95% of uses are covered by these typedefs:
 
    using namespace boost::math;
@@ -39,15 +40,15 @@ distribution.  Probably 95% of uses are covered by these typedefs:
    // Construct a students_t distribution with 4 degrees of freedom:
    students_t d1(4);
    
-   // Construct a binomial distribution
+   // Construct a binomial distribution 
    // with probability of success 0.3
    // and 20 trials in total:
    binomial d2(20, 0.3);
    
-If you need to use the distributions with a type other than `double`
+If you need to use the distributions with a type other than `double`,
 then you can instantiate the template directly: the names of the 
 templates are the same as the `double` typedef but with `_distribution`
-appended:
+appended, for example: [link students_t_distribution] or [link binomial_distribution]:
 
    // Construct a students_t distribution, of float type,
    // with 4 degrees of freedom:
@@ -72,11 +73,11 @@ is to be able to calculate the /cumulative distribution functions/ and
 Want to calculate the PDF (Probability Density Function) of a distribution?
 No problem, just use:
 
-   pdf(my_dist, x);  // Returns PDF (density) at point x of distribution my_dist
+   pdf(my_dist, x);  // Returns PDF (density) at point x of distribution my_dist.
    
 Or how about the CDF (Cumulative Distribution Function):
 
-   cdf(my_dist, x);  // Returns CDF (integral from -infinity) to point x of distribution my_dist
+   cdf(my_dist, x);  // Returns CDF (integral from -infinity) to point x of distribution my_dist.
    
 And quantiles are just the same:
 
@@ -91,7 +92,7 @@ supported distribution type.
 
 [h4 Complements are supported too]
 
-Often you don't want the value of the CDF, but it's complement, which is
+Often you don't want the value of the CDF, but its complement, which is
 to say `1-p` rather than `p`.  You could calculate the CDF and subtract
 it from `1`, but if `p` is very close to `1` then cancellation error
 will cause you to loose significant digits.  In extreme cases, `p` may
@@ -180,11 +181,11 @@ in order to give a significant Students-t test result with a single sample test.
 
 Let's say you have a sample mean, you may wish to know what confidence intervals
 you can place on that mean.  Colloquially: "I want an interval that I can be
-P% sure contains the true mean".  On a technical point, note that 
+P% sure contains the true mean".  (On a technical point, note that 
 the interval either contains the true mean or it does not: the 
 meaning of the confidence level is subtly 
 different from this colloquialism.  More background information can be found 
-[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm on the NIST site].
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm on the NIST site]).
 
 The formula for the interval can be expressed as:
 
@@ -196,7 +197,6 @@ Where, ['Y[sub s]] is the sample mean, /s/ is the sample standard deviation,
 distribution with /N-1/ degrees of freedom.
 
 Confidence level (value or coefficient) is defined as 1 - __alpha (often as a percent)
-
 [@http://www.itl.nist.gov/div898/handbook/pmd/section5/pmd511.htm on the NIST site].
 
 From the formula it should be clear that:
@@ -209,7 +209,7 @@ The following example code is taken from the example program
 [@../../example/students_t_single_sample.cpp students_t_single_sample.cpp].
 
 We'll begin by defining a procedure to calculate intervals for 
-various confidence levels, the procedure will print these out
+various confidence levels; the procedure will print these out
 as a table:
 
    // Needed includes:
@@ -346,7 +346,7 @@ to be very confident in the location of the mean.
 When calibrating or comparing a scientific instrument or measurement method of some kind, 
 we want to be answer the question "Does an observed sample mean differ from the
 "true" mean in any significant way?".  If it does, then we have evidence of
-a systematic difference.  This question can be answered with a Students-t test,
+a systematic difference.  This question can be answered with a Students-t test:
 more information can be found 
 [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm 
 on the NIST site].
@@ -527,8 +527,9 @@ in order to give a significant Students-t test result with a single sample test]
 Imagine you have conducted a Students-t test on a single sample in order
 to check for systematic errors in your measurements.  Imagine that the
 result is borderline.  At this point one might go off and collect more data,
-but first ask the question "How much more?".  The parameter estimators of the
-students_t_distribution class can provide this information.
+but it might be prudent to first ask the question "How much more?".
+The parameter estimators of the students_t_distribution class
+can provide this information.
 
 This section is based on the example code in 
 [@../../example/students_t_single_sample.cpp students_t_single_sample.cpp]
@@ -576,14 +577,14 @@ difference between the sample mean, and the true mean.
 Then come two probability values: alpha and beta.  Alpha is the
 maximum acceptable risk of rejecting the null-hypothesis when it is
 in fact true.  Beta is the maximum acceptable risk of accepting
-the null-hypothesis when in fact it is false.  Also note that for a two
-sided test, then alpha must be divided by 2.  
+the null-hypothesis when in fact it is false.
+Also note that for a two-sided test, alpha must be divided by 2.  
 
 The final parameter of the function is the standard deviation of the sample.
 
 In this example, we assume that alpha and beta are the same, and call
-`estimate_degrees_of_freedom` twice: once with alpha for a one sided test,
-once with alpha/2 for a two sided test.
+`estimate_degrees_of_freedom` twice: once with alpha for a one-sided test,
+and once with alpha/2 for a two-sided test.
 
       for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
       {
@@ -644,7 +645,7 @@ _______________________________________________________________
 ''']
 
 So in this case, many more measurement would have had to be made, 
-for example at the 95% level 14 in total for a two sided test.
+for example at the 95% level, 14 measurements in total for a two-sided test.
 
 [h4 [#two_sample_students_t]Comparing the means of two samples with the Students-t test]
 
@@ -718,9 +719,9 @@ complement of the probability:
       << setprecision(3) << scientific << q << "\n\n";
 
 Here we've used the absolute value of the t-statistic, because we initially
-want to know simply whether there is a difference or not (a two sided test).
+want to know simply whether there is a difference or not (a two-sided test).
 However, we can also test whether the mean of the second sample is greater
-or less than that of the first, and all the possible tests are summed up
+or less than that of the first: all the possible tests are summed up
 in the following table:
 
 [table
@@ -740,7 +741,7 @@ Sample 2 Mean.]  [Complement of CDF of t < confidence level]
 ]
 
 [note
-For a two sided test we must compare against alpha / 2 and not alpha.]
+For a two-sided test we must compare against alpha / 2 and not alpha.]
 
 Most of the rest of the sample program is pretty-printing, so we'll
 skip over that, and take a look at the sample output for alpha=0.05
@@ -786,7 +787,8 @@ are not equal.  In this case the formula for the t-statistic becomes:
 [$../equations/dist_tutorial2.png]
 
 And for the combined degrees of freedom we use the 
-Welch-Satterthwaite approximation:
+[@http://en.wikipedia.org/wiki/Welch-Satterthwaite_equation Welch-Satterthwaite]
+approximation:
 
 [$../equations/dist_tutorial3.png]
 
@@ -865,10 +867,10 @@ we used in the single sample cases previously discussed.
 
 That means we can:
 
-* [link tut_mean_intervals Calculate confidence intervals of the mean], 
-if the endpoints of the interval differ in sign then we must accept 
+* [link tut_mean_intervals Calculate confidence intervals of the mean]. 
+If the endpoints of the interval differ in sign then we must accept 
 the null-hypothesis that there is no change.
-* [link tut_mean_test Test whether the true mean is zero], if the
+* [link tut_mean_test Test whether the true mean is zero]. If the
 result is consistent with a true mean of zero, then we must accept the
 null-hypothesis that there is no change.
 * [link tut_mean_size Calculate how many pairs of readings we would need
@@ -889,6 +891,7 @@ TODO
 [endsect]
 
 [section:binom_eg Binomial Distribution]
+[/ need link binomial.binomial_distribution in dist_references.qbk]
 
 
 * [link binom_conf Calculating Confidence Limits on the Frequency of Occurrence]
@@ -900,7 +903,7 @@ Imagine you have a process that follows a binomial distribution: for each
 trial conducted, an event either occurs or does it does not, referred
 to as "successes" and "failures".  If, by experiment, you want to measure the
 frequency with which successes occur, the best estimate is given simply
-by k/N, for /k/ successes out of /N/ trials.  However our confidence in that
+by /k/ \/ /N/, for /k/ successes out of /N/ trials.  However our confidence in that
 estimate will be shaped by how many trials were conducted, and how many successes
 were observed.  The static member functions 
 `binomial_distribution<>::estimate_lower_bound_on_p` and
@@ -923,7 +926,7 @@ of certainty:
       // successes = Total number of observed successes.
       //
       // Calculate confidence limits for an observed
-      // frequency of occurance that follows a binomial
+      // frequency of occurrence that follows a binomial
       // distribution.
       //
       using namespace std;

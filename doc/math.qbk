@@ -36,6 +36,8 @@
 [def __logic_error [link logic_error logic_error]]
 [def __checked_narrowing_cast [link checked_narrowing_cast checked_narrowing_cast]]
 
+[def __binomial_distribution [link binomial_distribution binomial distribution]]
+
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
 [template sub[x]'''<subscript>'''[x]'''</subscript>''']
 
@@ -82,11 +84,11 @@ data and/or data for output to an external graphing application.
 
 # To provide the most common
 [@http://en.wikipedia.org/wiki/List_of_probability_distributions probability distributions]
-used for statistics as C++ templated objects fully generic
+used for statistics as C++ templated objects, fully generic,
 to support the use of arbitrary "real-number" types, so that they can be used not only with
 built-in floating-point types but also User-Defined Types (UDT) conforming to the
 real_concept archetype.
-These distributions areimplemented using the special functions above.
+These distributions are implemented using the special functions above.
 There are several examples of using the distributions for
 some typical applications in statistics.
 
