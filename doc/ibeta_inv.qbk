@@ -1,4 +1,5 @@
-[#ibeta_inv][section The Incomplete Beta Function Inverses]
+[#ibeta_inv][section:ibeta_inv_function The Incomplete Beta Function Inverses]
+[/TODO remove use of this anchor]
 
 [caution __caution ]
 
@@ -46,11 +47,13 @@ the result of the incomplete beta (p) or its complement (q).
 
 [tip When people normally talk about the inverse of the incomplete
 beta function, they are talking about inverting on parameter /x/.
-These are implemented here as ibeta_inv and ibeta_invc, and are by
+These are implemented here as ibeta_inv and ibeta_inv, and are by
 far the most efficient of the inverses presented here.
 \n\nThe inverses on the /a/ and /b/ parameters find use in some statistical
-applications but have to be computed by rather brute force numerical
-techniques and are consequently several times slower.]
+applications, but have to be computed by rather brute force numerical
+techniques and are consequently several times slower.
+These are implemented here as ibeta_inva and ibeta_invb,
+and complement versions ibetac_inva and ibetac_invb.]
 
    template <class T>
    T ibeta_inv(T a, T b, T p);
@@ -62,10 +65,10 @@ Returns a value /x/ such that: `p = ibeta(a, b, x);`
 and sets `*py = 1 - x` when the `py` parameter is provided and is non-null.  
 Note that internally this function computes whichever is the smaller of
 `x` and `1-x`, and therefore the value assigned to `*py` is free from 
-cancellation errors.  That means that even if the function returns `1` the
+cancellation errors.  That means that even if the function returns `1`, the
 value stored in `*py` may be non-zero, albeit very small.
 
-Requires:  /a,b > 0/ and /0 <= p,q <= 1/.
+Requires:  /a,b > 0/ and /0 <= p, q <= 1/.
 
    template <class T>
    T ibetac_inv(T a, T b, T q);
@@ -77,10 +80,10 @@ Returns a value /x/ such that: `q = ibetac(a, b, x);`
 and sets `*py = 1 - x` when the `py` parameter is provided and is non-null.  
 Note that internally this function computes whichever is the smaller of
 `x` and `1-x`, and therefore the value assigned to `*py` is free from 
-cancellation errors.  That means that even if the function returns `1` the
+cancellation errors.  That means that even if the function returns `1`, the
 value stored in `*py` may be non-zero, albeit very small.
 
-Requires:  /a,b > 0/ and /0 <= p,q <= 1/.
+Requires:  /a,b > 0/ and /0 <= p, q <= 1/.
 
    template <class T>
    T ibeta_inva(T b, T x, T p);
@@ -271,5 +274,11 @@ A better initial approximation for /a/ or /b/ would improve these
 functions quite substantially: currently 10-20 incomplete beta
 function invocations are required to find the root.
 
-[endsect]
+[endsect][/section:ibeta_inv_function The Incomplete Beta Function Inverses]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

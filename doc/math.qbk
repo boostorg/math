@@ -9,7 +9,7 @@
     ]
     [authors [Maddock, John], [Bristow, Paul A.]]
     [category math]
-    [last-revision $Date$]
+    [/last-revision $Date$]
 ]
 
 [def __effects [*Effects: ]]
@@ -19,6 +19,8 @@
 [def __te '''2&#x025B;''']
 [def __lanczos [link lanczos Lanczos approximation]]
 [def __zero_error [link zero_error effectively zero error]]
+[def __NTL_RR [@http://shoup.net/ntl/doc/RR.txt NTL::RR]]
+[def __NTL_quad_float [@http://shoup.net/ntl/doc/quad_float.txt NTL::quad_float]]
 
 [def __godfrey [link godfrey Godfrey]]
 [def __pugh [link pugh Pugh]]
@@ -35,8 +37,6 @@
 [def __denorm_error [link denorm_error denorm_error]]
 [def __logic_error [link logic_error logic_error]]
 [def __checked_narrowing_cast [link checked_narrowing_cast checked_narrowing_cast]]
-
-[def __binomial_distribution [link binomial_distribution binomial distribution]]
 
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
 [template sub[x]'''<subscript>'''[x]'''</subscript>''']
@@ -92,17 +92,14 @@ These distributions are implemented using the special functions above.
 There are several examples of using the distributions for
 some typical applications in statistics.
 
-[endsect]
+[endsect][/section:intro Introduction]
 
 [section:dist Statistical Distributions and Functions]
-
 [include dist_tutorial.qbk]
 [include dist_reference.qbk]
+[endsect][/section:dist Statistical Distributions and Functions]
 
-[endsect]
-
-[section Special Functions]
-
+[section:special Special Functions]
 [include tgamma.qbk]
 [include lgamma.qbk]
 [include gamma_ratios.qbk]
@@ -117,11 +114,9 @@ some typical applications in statistics.
 [include beta_gamma_derivatives.qbk]
 [include fpclassify.qbk]
 [include error_handling.qbk]
+[endsect][/section:special Special Functions]
 
-[endsect]
-
-[section Toolkit]
-
+[section:toolkit Toolkit]
 [include series.qbk]
 [include fraction.qbk]
 [include rational.qbk]
@@ -130,26 +125,25 @@ some typical applications in statistics.
 [include polynomial.qbk]
 [include relative_error.qbk]
 [include test_data.qbk]
+[endsect][/section:toolkit Toolkit]
 
-
-[endsect]
-
-[section Use with User Defined (not built-in) Floating-Point Types]
-
+[section:Using_UDT Use with User Defined Floating-Point Types]
 [include concepts.qbk]
+[endsect][/section:Using_UDT Use with User Defined Floating-Point Types]
 
-[endsect]
-
-[section Backgrounders]
-
+[section:backgrounders Backgrounders]
 [include error.qbk]
 [include lanczos.qbk]
+[endsect][/section:backgrounds Backgrounders]
 
-[endsect]
-
-[section Status and Roadmap]
-
+[section:status Status and Roadmap]
 [include roadmap.qbk]
 [include issues.qbk]
+[endsect][/section:status Status and Roadmap]
 
-[endsect]
+[/ math.qbk
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

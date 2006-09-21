@@ -1,12 +1,17 @@
 [def __alpha '''&#945;''']
+[/ def names end in distrib to avoid clashes]
+[def __binomial_distrib [link math_toolkit.dist.dist_ref.dists.binomial_dist Binomial Distribution]]
+[def __chi_squared_distrib [link math_toolkit.dist.dist_ref.dists.chi_squared_dist Chi Squared Distribution]]
+[def __normal_distrib [link math_toolkit.dist.dist_ref.dists.normal_dist Normal Distribution]]
+[def __F_distrib [link math_toolkit.dist.dist_ref.dists.f_dist Fisher F Distribution]]
+[def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
 
 [section:stat_tut Statistical Functions Tutorial]
-
 This library is centred around statistical distributions, this tutorial
 will give you an overview of what they are, how they can be used, and 
 provides a few worked examples of applying the library to statistical tests.
 
-[section Overview]
+[section:overview Overview]
 
 [h4 Headers and Namespaces]
 
@@ -48,7 +53,7 @@ distribution.  Probably 95% of uses are covered by these typedefs:
 If you need to use the distributions with a type other than `double`,
 then you can instantiate the template directly: the names of the 
 templates are the same as the `double` typedef but with `_distribution`
-appended, for example: [link students_t_distribution] or [link binomial_distribution]:
+appended, for example: __students_t_distrib or __binomial_distrib:
 
    // Construct a students_t distribution, of float type,
    // with 4 degrees of freedom:
@@ -77,7 +82,8 @@ No problem, just use:
    
 Or how about the CDF (Cumulative Distribution Function):
 
-   cdf(my_dist, x);  // Returns CDF (integral from -infinity) to point x of distribution my_dist.
+   cdf(my_dist, x);  // Returns CDF (integral from -infinity to point x)
+                     // of distribution my_dist.
    
 And quantiles are just the same:
 
@@ -164,7 +170,7 @@ to be estimated from other information.
 
 Now that you have the basics, the next section looks at some worked examples.
 
-[endsect]
+[endsect][/section:stat_tut Statistical Functions Tutorial]
 
 [section:weg Worked Examples]
 
@@ -401,7 +407,7 @@ that can be done, these
 can be summarised in the following table:
 
 [table
-[[Hypothosis][Test][Code]]
+[[Hypothesis][Test][Code]]
 [[The Null-hypothesis: there is
 *no difference* in means]  [complement of CDF for |t| > confidence level / 2]
                          [``cdf(complement(dist, fabs(t))) > alpha / 2``]]
@@ -891,8 +897,8 @@ TODO
 [endsect]
 
 [section:binom_eg Binomial Distribution]
-[/ need link binomial.binomial_distribution in dist_references.qbk]
-
+[/ link binomial.binomial_distribution in dist_references.qbk is __binomial_distrib ]
+(See __binomial_distrib for reference info.)
 
 * [link binom_conf Calculating Confidence Limits on the Frequency of Occurrence]
 * [link binom_size_eg Estimating Sample Sizes]
@@ -1152,6 +1158,15 @@ less than 1 in 1000 chance of observing a component failure
 [endsect]
 
 [endsect]
+
+[/ dist_tutorial.qbk
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+
 
 
 

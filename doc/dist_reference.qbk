@@ -1,5 +1,4 @@
-
-[section:dist_ref Reference]
+[section:dist_ref Statistical Distributions and Functions Reference]
 
 [def __cdf [link math.dist.cdf Cumulative Distribution Function]]
 [def __pdf [link math.dist.pdf Probability Density Function]]
@@ -12,9 +11,16 @@
 [def __hazard [link math.dist.hazard Hazard Function]]
 [def __chf [link math.dist.chf Cumulative Hazard Function]]
 
+[/ def names end in distrib to avoid clashes]
+[def __binomial_distrib [link math_toolkit.dist.dist_ref.dists.binomial_dist Binomial Distribution]]
+[def __chi_squared_distrib [link math_toolkit.dist.dist_ref.dists.chi_squared_dist Chi Squared Distribution]]
+[def __normal_distrib [link math_toolkit.dist.dist_ref.dists.normal_dist Normal Distribution]]
+[def __F_distrib [link math_toolkit.dist.dist_ref.dists.f_dist Fisher F Distribution]]
+[def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
+
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard, 
    __chf, __mean, __variance and __sd]
-
+   
 [section:nmp Non-Member Properties]
 
 Properties that are common to all distributions are accessed via non-member 
@@ -245,11 +251,11 @@ probability].
 
 Refer to the __ccdf.
 
-[endsect]
+[endsect][/section:nmp Non-Member Properties]
 
-[section Distributions]
+[section:dists Distributions]
 
-[section Binomial[#binomial_distribution]]
+[section:binomial_dist Binomial]
 
 ``#include <boost/math/distributions/binomial.hpp>``
 
@@ -432,9 +438,9 @@ the context of this distribution:
    want to take either the floor or ceiling of the result.]]
 ]
 
-[endsect]
+[endsect][/section:binomial_dist Binomial]
 
-[#chi_squared_distribution][section Chi Squared]
+[section:chi_squared_dist Chi Squared]
 
 The chi-square distribution results when /v/ independent variables with
 standard normal distributions are squared and summed.
@@ -495,9 +501,9 @@ Under construction.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
-[endsect]
+[endsect][/section:chi_squared_dist Chi Squared]
 
-[section F distribution]
+[section:f_dist F distribution]
 
 The F distribution is the ratio of two chi-squared distributions with
 degrees of freedom df1 and df2, respectively, where each chi-squared has
@@ -548,9 +554,9 @@ Returns the denominator degrees of freedom parameter of the distribution.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
-[endsect]
+[endsect][/section:f_dist F distribution]
 
-[#normal_distribution][section Normal]
+[section:normal_dist Normal]
 
 The normal distribution is probably the most well known statistical 
 distribution: it is also known as the Gaussian Distribution.
@@ -600,10 +606,9 @@ Returns the /standard deviation/ of this distribution.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
 
-[endsect]
+[endsect][/section:normal_dist Normal]
 
-[section Student's t]
-[#students_t_distribution]
+[section:students_t_dist Students t]
 
 A statistical distribution published by William Gosset in 1908. 
 His employer, Guinness Breweries, required him to publish under a 
@@ -699,11 +704,11 @@ NIST Engineering Statistics Handbook].
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
 
-[endsect]
+[endsect][/section:students_t_dist Students t]
 
-[endsect]
+[endsect][/section:dists Distributions]
 
-[endsect]
+[endsect][/section:dist_ref Statistical Distributions and Functions Reference]
 
 [section:future Extras/Future Directions]
 
@@ -764,7 +769,14 @@ opportunity to integrate the statistical tests with this framework at some later
 	// extract the result:
 	double p = probability(acc);
 
-[endsect]
+[endsect][/section:future Extras Future Directions]
+
+[/ dist_reference.qbk
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
 
 
 

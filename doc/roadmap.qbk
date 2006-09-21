@@ -1,4 +1,4 @@
-[section Roadmap]
+[section:roadmap Roadmap]
 
 [h4 Milestone 1: Released March 31st 2006]
 
@@ -30,4 +30,11 @@ results, indexed by test, floating point type, platform, and compiler.
 * Implement Rational function generation.
 * Release??
 
-[endsect]
+[endsect][/section:roadmap Roadmap]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

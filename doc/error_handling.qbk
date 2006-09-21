@@ -1,4 +1,4 @@
-[section Error Handling]
+[section:error_handling Error Handling]
 
 [caution __caution ]
 
@@ -47,7 +47,7 @@ the result of:
    boost::math::tools::domain_error<T>(FunctionName, Message, Val);
    
 Where
-`T` is the floating point type passed to the function, `FunctionName` is the 
+`T` is the floating-point type passed to the function, `FunctionName` is the 
 name of the function, `Message` is an error message describing the problem, 
 and Val is the value that was out of range.
 
@@ -56,7 +56,7 @@ The default behaviour of this function is to return a NaN.  However, if type
 is defined when building the library, then a std::domain_error C++ exception 
 is thrown.
 
-Note that in order to support information rich error messages when throwing
+Note that in order to support information-rich error messages when throwing
 exceptions, `Message` must contain
 a __format recognised format specifier: the argument `Val` is inserted into
 the error message according to the specifier used.
@@ -81,7 +81,7 @@ and `Val` is the value of the argument that is at a pole.
 The default behaviour of this function is to return the result of
 `domain_error<T>(FunctionName, Message, Val)`.
 
-Note that in order to support information rich error messages when throwing
+Note that in order to support information-rich error messages when throwing
 exceptions, `Message` must contain
 a __format recognised format specifier: the argument `val` is inserted into
 the error message according to the specifier used.
@@ -98,7 +98,7 @@ floating point type, then the function returns the result of:
    boost::math::tools::overflow_error<T>(FunctionName, Message);
    
 Where
-`T` is the floating point type passed to the function, `FunctionName` is the 
+`T` is the floating-point type passed to the function, `FunctionName` is the 
 name of the function, and `Message` is an error message describing the problem.
 
 The default version of this function returns 
@@ -118,8 +118,8 @@ Where
 `T` is the floating point type passed to the function, `FunctionName` is the 
 name of the function, and `Message` is an error message describing the problem.
 
-The default version of this function returns 
-zero.  However if the macro BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
+The default version of this function returns zero.
+However if the macro BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
 is defined when building the library, then a `std::underflow_error` 
 C++ exception is thrown.
 
@@ -166,8 +166,8 @@ For example if `Message` contains a "%1%" then it is replaced by the value of
 
 Many special functions evaluate their results at a higher precision
 than their arguments in order to ensure full machine precision in 
-the result: for example a function passed a float argument may evaluate
-it's result using double precision internally.  Many of the errors listed
+the result: for example, a function passed a float argument may evaluate
+its result using double precision internally.  Many of the errors listed
 above may therefore occur not during evaluation, but when converting 
 the result to the narrower result type.  The function:
 
@@ -181,5 +181,12 @@ listed above on [link overflow_error overflow],
 Obviously if T and U are the same type or if T is at least as wide as U, 
 then no checks are performed.
 
-[endsect]
+[endsect][/section:error_handling Error Handling]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
 

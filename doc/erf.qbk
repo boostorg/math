@@ -1,4 +1,5 @@
-[#erf][section The Error Functions]
+[#erf][section:error_function The Error Functions]
+[/TODO replace #erf with link math_toolkit... error_function]
 
 [caution __caution ]
 
@@ -23,7 +24,8 @@
    template <class T>
    T erf(T z);
    
-Returns the [@http://en.wikipedia.org/wiki/Error_function error function][@ of z:
+Returns the [@http://en.wikipedia.org/wiki/Error_function error function]
+[@http://functions.wolfram.com/GammaBetaErf/Erf/ erf] of z:
 
 [$../equations/erf1.png]
 
@@ -32,7 +34,7 @@ Returns the [@http://en.wikipedia.org/wiki/Error_function error function][@ of z
    template <class T>
    T erfc(T z);
    
-Returns the complement of the ['http://functions.wolfram.com/GammaBetaErf/Erf/ error function] of z:
+Returns the complement of the [@http://functions.wolfram.com/GammaBetaErf/Erfc/ error function] of z:
 
 [$../equations/erf2.png]
 
@@ -62,7 +64,8 @@ The tests for these functions come in two parts:
 basic sanity checks use spot values calculated using
 [@http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=Erf Mathworld's online evaluator],
 while accuracy checks use high-precision test values calculated at 1000-bit precision with
-NTL::RR and this implementation.  Note that the generic and type-specific
+[@http://shoup.net/ntl/doc/RR.txt NTL::RR] and this implementation. 
+Note that the generic and type-specific
 versions of these functions use differing implementations internally, so this
 gives us reasonably independent test data.  Using our test data to test other
 "known good" implementations also provides an additional sanity check. 
@@ -124,9 +127,16 @@ Again R(z) is optimised for absolute error, and the constant `c` is
 the average of `erfc(z) * exp(z*z) * z` taken at the endpoints of the range.
 Once again, as long as the absolute error in R(z) is small
 compared to `c` then `c + R(z)` will be correctly rounded, and the error
-in the result will depend only on the accuracy of the exp function.  In practice
-in all but a very small number of cases the error is confined to the last bit
+in the result will depend only on the accuracy of the exp function.  In practice,
+in all but a very small number of cases, the error is confined to the last bit
 of the result.
 
 [endsect]
+[/ :error_function The Error Functions]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

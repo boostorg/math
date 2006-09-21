@@ -1,4 +1,4 @@
-[section Known Issues, and Todo List]
+[section:issues Known Issues, and Todo List]
 
 [h4 tgamma]
 
@@ -52,5 +52,11 @@ is good enough (Medium Priority).
 
 * Student's t Perhaps switch to normal distribution as a better approximation for very large degrees of freedom?
 
-[endsect]
+[endsect][/section:issues Known Issues, and Todo List]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

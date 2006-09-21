@@ -1,5 +1,6 @@
-[section The Lanczos Approximation]
+[section:lanczos The Lanczos Approximation]
 [#lanczos]
+[/TODO (aN) query and correct link]
 
 [caution __caution ]
 
@@ -9,8 +10,8 @@
 
 First of all I should make clear that for the gamma function
 over real numbers (as opposed to complex ones)
-the Lanczos approximation (See [@http://en.wikipedia.org/wiki/Lanczos_approximation the Wikipedia entry]
-or [@http://mathworld.wolfram.com/LanczosApproximation.html Mathworld])
+the Lanczos approximation (See [@http://en.wikipedia.org/wiki/Lanczos_approximation Wikipedia or ]
+[@http://mathworld.wolfram.com/LanczosApproximation.html Mathworld])
 appears to offer no clear
 advantage over more traditional methods such as
 [@http://en.wikipedia.org/wiki/Stirling_approximation Stirling's approximation].
@@ -137,14 +138,14 @@ at higher precision than that desired in the result.  These values are best
 reserved for say, computing to float precision with double precision arithmetic. 
 
 [table Optimal choices for N and g when computing with guard digits (source: Pugh)
-[[Mantissa Size] [N] [g][Max Error]]
+[[Significand Size] [N] [g][Max Error]]
 [[24] [6] [5.581][9.51e-12]]
 [[53][13][13.144565][9.2213e-23]]
 ]
 
 The alternative described by __godfrey is to perform an exhaustive
 search of the /N/ and /g/ parameter space to determine the optimal combination for
-a given /p/ digit floating point type.  Repeating this work found a good 
+a given /p/ digit floating-point type.  Repeating this work found a good 
 approximation for double precision arithmetic (close to the one __godfrey found), 
 but failed to find really
 good approximations for 80 or 128-bit long doubles.  Further it was observed 
@@ -156,15 +157,15 @@ suffer from error resulting from the truncation of the Lancozos series.
 __pugh identified all the locations where the theoretical error of the 
 approximation were at a minimum, but unfortunately has published only the largest
 of these minima.  However, he makes the observation that the minima
-coincide closely with the location where the first neglected term in the
-Lanczos series (aN above) changes sign.  These locations are quite easy to
+coincide closely with the location where the first neglected term (a[sub N]) in the
+Lanczos series S[sub g](z) changes sign.  These locations are quite easy to
 locate, albeit with considerable computer time.  These "sweet spots" need
 only be computed once, tabulated, and then searched when required for an
 approximation that delivers the required precision for some fixed precision
 type.
 
 Unfortunately, following this path failed to find a really good approximation
-for 128-bit long doubles, and those found for 64 and 80 bit reals required an
+for 128-bit long doubles, and those found for 64 and 80-bit reals required an
 excessive number of terms.  There are two competing issues here: high precision
 requires a large value of /g/, but avoiding cancellation errors in the evaluation
 requires a small /g/.
@@ -186,7 +187,7 @@ so fewer floating point operations may be required overall.
 
 The following table shows the optimal values for /N/ and /g/ when computing
 at fixed precision.  These should be taken as work in progress: there are no
-values for 106-bit mantissa machines (Darwin long doubles & NTL quad_float),
+values for 106-bit significand machines (Darwin long doubles & NTL quad_float),
 and further optimisation of the values of /g/ may be possible.
 Errors given in the table
 are estimates of the error due to truncation of the Lanczos infinite series
@@ -196,7 +197,7 @@ that the best combinations of /N/ and /g/ occurred when the estimated truncation
 almost exactly matches the machine epsilon for the type in question.
 
 [table Optimum value for N and g when computing at fixed precision
-[[Mantissa Size][Platform/Compiler Used][N][g][Max Truncation Error]]
+[[Significand Size][Platform/Compiler Used][N][g][Max Truncation Error]]
 [[24][Win32, VC++ 7.1] [6] [1.428456135094165802001953125][9.41e-007]]
 [[53][Win32, VC++ 7.1] [13] [6.024680040776729583740234375][3.23e-016]]
 [[64][Suse Linux 9 IA64, gcc-3.3.3] [17] [12.2252227365970611572265625][2.34e-024]]
@@ -227,6 +228,11 @@ PhD Thesis November 2004.
 # Mathworld, [@http://mathworld.wolfram.com/LanczosApproximation.html 
 The Lanczos Approximation].
 
-[endsect]
+[endsect][/section:lanczos The Lanczos Approximation]
 
-
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

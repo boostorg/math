@@ -1,4 +1,5 @@
-[#roots2][section Root Finding Without Derivatives]
+[#roots2][section:roots2 Root Finding Without Derivatives]
+[/TODO replace #anchor iwht link]
 
 [caution __caution ]
 
@@ -83,9 +84,9 @@ interval with the same asymptotic efficiency with which they locate the
 root.  This is in contrast to the derivative based methods which may /never/
 significantly reduce the enclosing interval, even though they rapidly approach
 the root.  This is also in contrast to some other derivate free methods
-(for example the methods of Brent or Dekker) which only reduce the enclosing
-interval on the final step.  Therefore these methods return a std::pair 
-containing the enclosing interval found,
+(for example the methods of [@http://en.wikipedia.org/wiki/Brent%27s_method Brent or Dekker)]
+which only reduce the enclosing interval on the final step.
+Therefore these methods return a std::pair containing the enclosing interval found,
 and accept a function object specifying the termination condition.
 Three function objects are provided for ready-made termination conditions:
 /eps_tolerance/ causes termination when the relative error in the enclosing
@@ -306,5 +307,11 @@ Pages 327-344.]
 
 The implementation here is a faithful translation of this paper into C++.
 
-[endsect]
+[endsect][/section:roots2 Root Finding Without Derivatives]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

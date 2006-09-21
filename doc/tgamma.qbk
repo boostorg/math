@@ -1,5 +1,5 @@
-
-[#tgamma][section The Gamma Function]
+[#tgamma][section:tgamma The Gamma Function]
+{/TODO replace ancho with link]
 
 [caution __caution ]
 
@@ -18,7 +18,7 @@
   
 [h4 Description]
 
-Returns the "true gamma" of value z:
+Returns the "true gamma" (hence tgamma) of value z:
 
 [$../equations/gamm1.png]
 
@@ -27,7 +27,7 @@ Returns the "true gamma" of value z:
 There are effectively two versions of the [@http://en.wikipedia.org/wiki/Gamma_function gamma]
 (not log gamma) function internally: a fully
 generic version that is slow, but reasonably accurate, and a much more
-efficient approximation that is used where the number of digits in the mantissa
+efficient approximation that is used where the number of digits in the significand
 of T correspond to a certain __lanczos.  In practice any built in
 floating point type you will encounter has an appropriate __lanczos
 defined for it.  It is also possible, given enough machine time, to generate
@@ -41,7 +41,7 @@ Unless otherwise specified any floating point type that is narrower
 than the one shown will have __zero_error.
 
 [table
-[[Mantissa Size] [Platform and Compiler] [Factorials and Half factorials] [Values Near Zero] [Values Near 1 or 2] [Values Near a Negative Pole]]
+[[Significand Size] [Platform and Compiler] [Factorials and Half factorials] [Values Near Zero] [Values Near 1 or 2] [Values Near a Negative Pole]]
 [[53]            [Win32 Visual C++ 8]  [Peak=1.9 Mean=0.7 \n\n(GSL=3.9) \n(Cephes=3.0)] [Peak=2.0 Mean=1.1 \n\n(GSL=4.5) (Cephes=1)]    [Peak=2.0 Mean=1.1 \n\n(GSL=7.9) (Cephes=1.0)] [Peak=2.6 Mean=1.3 \n\n(GSL=2.5) (Cephes=2.7)] ]
 [[64]            [Linux IA32 / GCC]  [Peak=300 Mean=49.5 \n\n(Native Peak=395 Mean=89)]           [Peak=3.0 Mean=1.4 \n\n(Native Peak=11 Mean=3.3)]    [Peak=5.0 Mean=1.8 \n\n(Native Peak=0.92 Mean=0.2)]       [Peak=157 Mean=65 \n\n(Native Peak=205 Mean=108)]   ]
 [[64]            [Linux IA64 / GCC]  [Peak=2.8 Mean=0.9 \n(Native=0.7)]           [Peak=4.8 Mean=1.5 \n(Native=0)]    [Peak=4.8 Mean=1.5 \n(Native=0)]       [Peak=5.0 Mean=1.7 \n(Native 0)]           ]
@@ -87,5 +87,11 @@ result in is the range [0, PI/2]. Without this an excessive amount of error occu
 in this region (which is hard enough already, as the rate of change near a negative pole
 is /exceptionally/ high).
 
-[endsect]
+[endsect][/section:tgamma The Gamma Function]
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
 

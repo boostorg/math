@@ -1,8 +1,11 @@
-[section Using With NTL - a High Precision Floating-point Library]
+[section:use_NTL Using With NTL - a High-Precision Floating-Point Library]
 
-The special functions and tools in this library can be used with NTL::RR (arbitrary precision),
-and to a lesser extent with NTL::quad_float (128-bit, using 106 significand bits).
-[@http://shoup.net/ntl/  NTL: A Library for doing Number Theory by Victor Shoup]
+The special functions and tools in this library can be used with
+__NTL__RR (arbitrary precision),
+[/@http://shoup.net/ntl/doc/RR.txt NTL::RR]
+and to a lesser extent with
+[@http://shoup.net/ntl/doc/quad_float.txt NTL::quad_float] (128-bit, using 106 significand bits).
+[@http://shoup.net/ntl/ NTL: A Library for doing Number Theory by Victor Shoup]
 
 In order to do so you will need to apply the following patch to NTL: libs/math/tools/ntl.diff
 This patch adds trivial converting constructors to NTL::RR and NTL::quad_float,
@@ -27,17 +30,18 @@ of > 100 decimal digits.  To use that approximation, just include that header be
 any of the special function headers (if you don't use it, you'll get a slower, but
 fully generic implementation for all of the gamma-like functions).
 
-[endsect]
+[endsect][/section:use_NTL Using With NTL - a High Precision Floating-Point Library]
 
-[section Using With Boost.Interval]
+[section:interval Using With Boost.Interval]
 
 There are currently problems comparing two intervals that make it hard to use
 Boost.Interval with this library.  It should be just about possible to make it
 work "as is", but this needs more investigation, and a simple, easy to use solution.
 
-[endsect]
+[endsect][/section:interval Using With Boost.Interval]
 
-[section Conceptual Requirements]
+
+[section:real_concept Conceptual Requirements]
 
 TODO.
 
@@ -65,4 +69,12 @@ and then specialise lanczos_traits for type T.  Otherwise you may have to hack
 libs/math/tools/lanczos_generator.cpp to find a suitable
 approximation for your type T.
 
-[endsect]
+[endsect][/section:real_concept Conceptual Requirements]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+

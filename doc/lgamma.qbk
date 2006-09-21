@@ -1,4 +1,4 @@
-[#lgamma][section The Log Gamma Function]
+[#lgamma][section:lgamma The Log Gamma Function]
 
 [caution __caution ]
 
@@ -31,7 +31,7 @@ which if non-null is set on output to the sign of tgamma(z).
 
 There are effectively two versions of this function internally: a fully
 generic version that is slow, but reasonably accurate, and a much more
-efficient approximation that is used where the number of digits in the mantissa
+efficient approximation that is used where the number of digits in the significand
 of T correspond to a certain __lanczos.  In practice, any built-in
 floating-point type you will encounter has an appropriate __lanczos
 defined for it.  It is also possible, given enough machine time, to generate
@@ -46,7 +46,7 @@ floating point type that is narrower than the one shown will have
 __zero_error.
 
 [table
-[[Mantissa Size] [Platform and Compiler] [Factorials and Half factorials] [Values Near Zero] [Values Near 1 or 2] [Values Near a Negative Pole]]
+[[Significand Size] [Platform and Compiler] [Factorials and Half factorials] [Values Near Zero] [Values Near 1 or 2] [Values Near a Negative Pole]]
 [[53]            [Win32 Visual C++ 8]  [Peak=0.88 Mean=0.14 \n\n(GSL=33) (Cephes=1.5)] [Peak=0.96 Mean=0.46 \n\n(GSL=5.2) (Cephes=1.1)]    [Peak=0.86 Mean=0.46 \n\n(GSL=1168) (Cephes~500000)] [Peak=4.2 Mean=1.3 \n\n(GSL=25) (Cephes=1.6)] ]
 [[64]            [Linux IA32 / GCC]  [Peak=1.9 Mean=0.43 \n\n(Native Peak=1.7 Mean=0.49)]           [Peak=1.4 Mean=0.57 \n\n(Native Peak= 0.96 Mean=0.54)]    [Peak=0.86 Mean=0.35 \n\n(Native Peak=0.74 Mean=0.26)]       [Peak=6.0 Mean=1.8 \n\n(Native Peak=3.0 Mean=0.86)]           ]
 [[64]            [Linux IA64 / GCC]  [Peak=0.99 Mean=0.12 (Native=0)]           [Pek=1.2 Mean=0.6 \n(Native=0)]    [Peak=0.86 Mean=0.16 \n(Native=0)]       [Peak=2.3 Mean=0.69 \n(Native 0)]           ]
@@ -101,5 +101,11 @@ A similar rearrangement can be performed at /z = 2/:
 
 [$../equations/lgamm6.png]
 
-[endsect]
+[endsect][/section:lgamma The Log Gamma Function]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

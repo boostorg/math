@@ -1,4 +1,5 @@
-[#erf_inv][section The Error Function Inverses]
+[#erf_inv][section:error_inv The Error Function Inverses]
+[/TODO remove use of this anchor]
 
 [caution __caution ]
 
@@ -58,7 +59,7 @@ of significant digits isn't possible.  This is especially true when
 /p/ is very near one: in this case there isn't enough 
 "information content" in the input to the inverse function to get
 back where you started.
-* Accuracy checks using high precision test values.  These measure
+* Accuracy checks using high-precision test values.  These measure
 the accuracy of the result, given /exact/ input values.
 
 [h4 Implementation]
@@ -68,5 +69,11 @@ approximation to the result, then clean up the value using
 [@http://en.wikipedia.org/wiki/Simple_rational_approximation Halley iteration].
 No more than 3 iterations are required in practice.
 
-[endsect]
+[endsect][/ :error_inv The Error Function Inverses]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

@@ -1,4 +1,4 @@
-[section Graphing, Profiling, and Generating Test Data for Special Functions]
+[section:test_data Graphing, Profiling, and Generating Test Data for Special Functions]
 
 The class `test_data` and associated helper functions are designed so that in just
 a few lines of code you should be able to:
@@ -109,7 +109,7 @@ gory details, [link test_data_reference skip onwards to the reference].
 
 The functionality of test_data is split into the following parts:
 
-* A functor that implements the function for which data is being generated,
+* A functor that implements the function for which data is being generated:
 this is the bit you have to write.
 * One of more parameters that are to be passed to the functor, these are
 described in fairly abstract terms: give me N points distributed like /this/ etc.
@@ -143,7 +143,7 @@ one could do this like so:
       return 0;
    }
    
-Which when plotted results in:
+Which, when plotted, results in:
 
 [$../graphs/lgamma.png]
 
@@ -158,7 +158,8 @@ by which a user (or the library maintainer) can quickly generate more data
 on demand to probe the function over a particular domain of interest.
 
 In this example we'll generate test data for the beta function using
-NTL::RR at 1000 bit precision. Rather than call our generic
+[@http://shoup.net/ntl/doc/RR.txt NTL::RR] at 1000 bit precision.
+Rather than call our generic
 version of the beta function, we'll implement a deliberately naive version
 of the beta function using lgamma, and rely on the high precision of the 
 data type used to get results accurate to at least 128-bit precision. In this
@@ -182,9 +183,9 @@ To start with then, here's the function object that creates the test data:
       {
          //
          // If we throw a domain error then test_data will
-         // ignore this input point, we'll use this to filter
+         // ignore this input point. We'll use this to filter
          // out all cases where a < b since the beta function
-         // is symetrical in a and b:
+         // is symmetrical in a and b:
          //
          if(a < b)
             throw std::domain_error("");
@@ -207,8 +208,8 @@ for which the function will be tested: the function `get_user_parameter_info`
 is designed for just that purpose.  The start of main will look something like:
 
    // Set the precision on RR:
-   NTL::RR::SetPrecision(1000);
-   NTL::RR::SetOutputPrecision(40);
+   NTL::RR::SetPrecision(1000); // bits.
+   NTL::RR::SetOutputPrecision(40); // decimal digits.
 
    parameter_info<NTL::RR> arg1, arg2;
    test_data<NTL::RR> data;
@@ -254,10 +255,15 @@ There's just one final step now, and that's to write the test data to file:
 The format of the test data looks something like:
 
    #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
-      static const boost::array<boost::array<T, 3>, 1830> beta_med_data = {
-         SC_(0.4883005917072296142578125), SC_(0.4883005917072296142578125), SC_(3.245912809500479157065104747353807392371), 
-         SC_(3.5808107852935791015625), SC_(0.4883005917072296142578125), SC_(1.007653173802923954909901438393379243537), 
-         /* lots of rows skipped */
+      static const boost::array<boost::array<T, 3>, 1830>
+      beta_med_data = {
+         SC_(0.4883005917072296142578125),
+         SC_(0.4883005917072296142578125),
+         SC_(3.245912809500479157065104747353807392371), 
+         SC_(3.5808107852935791015625),
+         SC_(0.4883005917072296142578125),
+         SC_(1.007653173802923954909901438393379243537), 
+         /* ... lots of rows skipped */
    };
 
 The first two values in each row are the input parameters that were passed
@@ -346,7 +352,7 @@ for each element in the tuple (in addition to the input parameters):
    };
 
 Feeding that functor into test_data allows rapid output of csv data,
-for whatever type `T` we may be intersted in:
+for whatever type `T` we may be interested in:
    
    int main()
    {
@@ -379,4 +385,11 @@ of a and z.
 
 TODO...
 
-[endsect]
+[endsect][/section:test_data Graphing, Profiling, and Generating Test Data for Special Functions]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

@@ -1,5 +1,5 @@
 [#igamma_inv][section The Incomplete Gamma Function Inverses]
-
+[/ TODO replace anchor with link]
 [caution __caution ]
 
 [h4 Synopsis]
@@ -37,7 +37,8 @@ These are implemented here as gamma_P_inv and gamma_Q_inv, and are by
 far the most efficient of the inverses presented here.
 \n\nThe inverse on the /a/ parameter finds use in some statistical
 applications but has to be computed by rather brute force numerical
-techniques and is consequently several times slower.]
+techniques and is consequently several times slower.
+These are implemented here as gamma_P_inva and gamma_Q_inva.]
 
 
    template <class T>
@@ -82,8 +83,8 @@ There are two sets of tests:
 
 * Basic sanity checks attempt to "round-trip" from
 /a/ and /x/ to /p/ or /q/ and back again.  These tests have quite
-generous tolerances: in general both the incomplete gamma and it's
-inverses change so rapidly, that round tripping to more than a couple
+generous tolerances: in general both the incomplete gamma, and its
+inverses, change so rapidly that round tripping to more than a couple
 of significant digits isn't possible.  This is especially true when
 /p/ or /q/ is very near one: in this case there isn't enough 
 "information content" in the input to the inverse function to get
@@ -115,10 +116,16 @@ but are handled separately from gamma_P_inv and gamma_Q_inv.
 
 An initial approximation for /a/ is computed very crudely so that
 /gamma_P(a, x) ~ 0.5/, this value is then used as a starting point
-for a generic derivative-free root finding algorithm.  As a consequence
+for a generic derivative-free root finding algorithm.  As a consequence,
 these two functions are rather more expensive to compute than the 
 gamma_P_inv or gamma_Q_inv functions.  Even so, the root is usually found
 in fewer than 10 iterations.
 
-[endsect]
+[endsect][/section The Incomplete Gamma Function Inverses]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

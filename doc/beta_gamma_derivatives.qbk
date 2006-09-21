@@ -1,5 +1,5 @@
 [#beta_gamma_derivatives][section Derivatives of the Incomplete Beta and Gamma Functions]
-
+[TODO replace with link]
 [caution __caution ]
 
 [h4 Synopsis]
@@ -40,5 +40,12 @@ gamma and beta functions: refer to the documentation for those functions
 for more information.
 
 
-[endsect]
+[endsect][/section Derivatives of the Incomplete Beta and Gamma Functions]
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 

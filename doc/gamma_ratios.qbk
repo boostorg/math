@@ -1,4 +1,4 @@
-[section Ratios of Gamma Functions]
+[section:gamma_ratios Ratios of Gamma Functions]
 
 [caution __caution ]
 
@@ -57,8 +57,8 @@ Returns the ratio of gamma functions:
 [h4 Testing]
 
 Accuracy tests use data generated at very high precision
-(with NTL's RR class set at 1000-bit precision) and using this
-implementation.  
+(with [@http://shoup.net/ntl/doc/RR.txt NTL RR class]
+set at 1000-bit precision) and using this implementation.  
 
 [h4 Implementation]
 
@@ -66,5 +66,12 @@ The inplementation of these functions is very similar to that of
 [link beta the beta function], and is based on combining similar power terms
 to improve accuracy and avoid spurious overflow/underflow.
 
-[endsect]
+[endsect][/section:gamma_ratios Ratios of Gamma Functions]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
 

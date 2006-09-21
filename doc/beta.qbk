@@ -1,4 +1,5 @@
-[#beta][section The Beta Function]
+[#beta][section:beta_function The Beta Function]
+[/TODO remove use of this enchor]
 
 [caution __caution ]
 
@@ -57,7 +58,8 @@ errors will be very small.
 [h4 Testing]
 
 A mixture of spot tests of exact values, and randomly generated test data are
-used: the test data was computed using NTL::RR at 1000-bit precision.
+used: the test data was computed using
+[@http://shoup.net/ntl/doc/RR.txt NTL::RR] at 1000-bit precision.
 
 [h4 Implementation]
 
@@ -97,12 +99,17 @@ When /a/ or /b/ are less than one, we can use the recurrence relations:
 
 [$../equations/beta5.png]
 
-To move to a more favorable region where they are both greater than 1.
+to move to a more favorable region where they are both greater than 1.
 
 In addition:
 
 [$../equations/beta7.png]
 
-
-[endsect]
+[endsect][/section:beta_function The Beta Function]
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
 

@@ -1,4 +1,4 @@
-[section Polynomials]
+[section:polynomials Polynomials]
 
 [caution __caution ]
 
@@ -86,5 +86,11 @@ for special function approximation.
 Advanced manipulations: the FFT, division, GCD, factorisation etc are
 not currently provided.  Submissions for these are of course welcome :-)
 
-[endsect]
+[endsect][/section:polynomials Polynomials]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

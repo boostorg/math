@@ -1,4 +1,4 @@
-[section Continued Fraction Evaluation]
+[section:cf Continued Fraction Evaluation]
 
 [caution __caution ]
 
@@ -147,5 +147,12 @@ Notice that this time we're using the "_b" suffixed version to evaluate
 the fraction: we're removing the leading /a/ term during fraction evaluation
 as it's different from all the others.
 
-[endsect]
+[endsect][/section:cf Continued Fraction Evaluation]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
 

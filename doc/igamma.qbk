@@ -1,4 +1,5 @@
-[#igamma][section The Incomplete Gamma Function]
+[#igamma][section:igamma The Incomplete Gamma Function]
+[/TODO replace #anchor with link]
 
 [caution __caution ]
 
@@ -243,5 +244,11 @@ and Contemporary Applied Mathematics, Atti dei Convegni Lincei, n. 147,
 Accademia Nazionale dei Lincei, Roma, 1998, pp. 203--237. 
 [@http://citeseer.ist.psu.edu/gautschi98incomplete.html http://citeseer.ist.psu.edu/gautschi98incomplete.html]
 
-[endsect]
+[endsect][/section:igamma The Incomplete Gamma Function]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

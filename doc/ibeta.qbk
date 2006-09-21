@@ -1,4 +1,5 @@
-[#ibeta][section The Incomplete Beta Function]
+[#ibeta][section:ibeta_function The Incomplete Beta Function]
+[/ TODO replace use of anchor with link]
 
 [caution __caution ]
 
@@ -32,9 +33,9 @@ that return values in the range [0, 1], and two are non-normalised and
 return values in the range [0, beta(a, b)].  Users interested in statistical
 applications should use the normalised (or
 [@http://mathworld.wolfram.com/RegularizedBetaFunction.html regularized]
-)versions (ibeta and ibetac).
+) versions (ibeta and ibetac).
 
-All of these function require /a > 0/, /b > 0/ and /0 <= x <= 1/.
+All of these functions require /a > 0/, /b > 0/ and /0 <= x <= 1/.
 
    template <class T>
    T beta(T a, T b, T x);
@@ -69,7 +70,7 @@ Returns the normalised complement of the incomplete beta function of a, b and x:
 
 The following tables give peak and mean relative errors in over various domains of
 a, b and x, along with comparisons to other open source implementations where available.  
-Note that only results for the widest floating point type on the system are given as
+Note that only results for the widest floating-point type on the system are given as
 narrower types have __zero_error.
 
 [table Errors In the Function beta(a, b, x)
@@ -113,8 +114,8 @@ for the implementation, with one spot-test in each implementation-domain
 (see implementation notes below). 
  
 Accuracy tests use data generated at very high precision
-(with NTL's RR class set at 1000-bit precision), using the "textbook"
-continued fraction representation (fraction 1 below).
+(with [@http://shoup.net/ntl/doc/RR.txt NTL RR class] set at 1000-bit precision),
+using the "textbook" continued fraction representation (fraction 1 below).
 Note that this continued fraction is /not/ used in the implementation,
 and therefore we have test data that is fully independent of the code.  
 
@@ -157,8 +158,8 @@ the following series representation is used:
 
 Where Q(a,x) is an [@http://functions.wolfram.com/GammaBetaErf/Gamma2/ incomplete gamma function].
 Note that this method relies
-on keeping a table of all the p[sub n] previously computed, which does limit
-the precision of the method depending upon the size of the table used.
+on keeping a table of all the p[sub n ] previously computed, which does limit
+the precision of the method, depending upon the size of the table used.
 
 Finally we can sidestep difficult areas, or move to an area with a more
 efficient means of computation, by using the duplication formulae:
@@ -167,8 +168,14 @@ efficient means of computation, by using the duplication formulae:
 [$../equations/ibeta11.png]
 
 The domains of a, b and x for which the various methods are used are identical
-to those described in [@http://portal.acm.org/citation.cfm?doid=131766.131776 Didonato and Morris TOMS 708 paper].
+to those described in
+[@http://portal.acm.org/citation.cfm?doid=131766.131776 Didonato and Morris TOMS 708 paper].
 
+[endsect][/section:ibeta_function The Incomplete Beta Function]
 
-[endsect]
-
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

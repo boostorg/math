@@ -1,4 +1,4 @@
-[section Polynomial and Rational Function Evaluation]
+[section:rational Polynomial and Rational Function Evaluation]
 
 [caution __caution ]
 
@@ -78,5 +78,12 @@ If /v/ is greater than one, then the polynomials are evaluated in reverse
 order as polynomials in ['1\/v]: this avoids unnecessary numerical overflow when the
 coefficients are large.
 
-[endsect]
+[endsect][/section:rational Polynomial and Rational Function Evaluation]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
 

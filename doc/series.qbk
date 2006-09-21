@@ -65,7 +65,9 @@ to get the result of /1 - S(z)/.
 
 The two /kahan_sum_series/ variants of these algorithms maintain a carry term
 that corrects for roundoff error during summation.  
-They are inspired by the /Kahan Summation Formula/ that appears in
+They are inspired by the
+[@http://en.wikipedia.org/wiki/Kahan_Summation_Algorithm /Kahan Summation Formula/]
+that appears in
 [@http://docs.sun.com/source/806-3568/ncg_goldberg.html What Every Computer Scientist Should Know About Floating-Point Arithmetic].
 However, it should be pointed out that there are very few series that require
 summation in this way.
@@ -119,5 +121,11 @@ Implementing log(1+x) is now fairly trivial:
       return tools::sum_series(s, tools::digits(x) + 2);
    }
 
-[endsect]
+[endsect][/section Series Evaluation]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

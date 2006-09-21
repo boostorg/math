@@ -1,4 +1,4 @@
-[section Root Finding With Derivatives]
+[section:roots Root Finding With Derivatives]
 
 [caution __caution ]
 
@@ -47,7 +47,7 @@ The functions all take the same parameters:
         of the function and it's first derivative.\n\n
         For the third order methods (Halley and Schroeder) the tuple
         should have three elements containing the evaluation of
-        the function and it's first and second derivatives.]]
+        the function and its first and second derivatives.]]
 [[T guess] [The initial starting value.]]
 [[T min] [The minimum possible value for the result, this is used as an initial lower bracket.]]
 [[T max] [The maximum possible value for the result, this is used as an initial upper bracket.]]
@@ -134,13 +134,13 @@ Under ideal conditions, the number of correct digits trebbles with each iteratio
 [h4 Example]
 
 Lets suppose we want to find the cube root of a number, the equation we want to
-solve along with it's derivatives are:
+solve along with its derivatives are:
 
 [$../equations/roots4.png]
 
 To begin with lets solve the problem using Newton Raphson iterations, we'll
 begin be defining a function object that returns the evaluation of the function
-to solve, along with it's first derivative:
+to solve, along with its first derivative:
 
    template <class T>
    struct cbrt_functor
@@ -176,7 +176,7 @@ Using the test data in libs/math/test/cbrt_test.cpp this found the cube root
 exact to the last digit in every case, and in no more than 6 iterations at double
 precision.  However, you will note that a high precision was used in this 
 example, exactly what was warned against earlier on in these docs!  In this
-particular case it's possible to compute f(x) exactly and without undue 
+particular case its possible to compute f(x) exactly and without undue 
 cancellation error, so a high limit is not too much of an issue.  However,
 reducing the limit to `std::numeric_limits<T>::digits * 2 / 3` gave full
 precision in all but one of the test cases (and that one was out by just one bit).
@@ -214,7 +214,7 @@ And then adapt the `cbrt` function to use Halley iterations:
 
 Note that the iterations are set to stop at just one-half of full precision,
 and yet even so not one of the test cases had a single bit wrong. 
-What's more the maximum number of iterations was now just 4.
+What's more, the maximum number of iterations was now just 4.
 
 Just to complete the picture, we could have called `schroeder_iterate` in the last
 example: and in fact it makes no difference to the accuracy or number of iterations
@@ -223,14 +223,20 @@ may vary depending upon the nature of f(x), and the accuracy to which the initia
 guess can be computed.  There appear to be no generalisations that can be made
 except "try them and see".
 
-Finally, had we called cbrt with NTL::RR set to 1000 bit precision, then full
-precision can be obtained with just 7 iterations.  To put that in perspective
+Finally, had we called cbrt with [@http://shoup.net/ntl/doc/RR.txt NTL::RR]
+set to 1000 bit precision, then full precision can be obtained with just 7 iterations.
+To put that in perspective
 an increase in precision by a factor of 20, has less than doubled the number of 
 iterations.  That just goes to emphasise that most of the iterations are used
 up getting the first few digits correct: after that these methods can churn out
 further digits with remarkable efficiency.  Or to put it another way: ['nothing beats
 a really good initial guess!]
 
-[endsect]
+[endsect][/section:roots Root Finding With Derivatives]
 
-
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
