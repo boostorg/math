@@ -232,6 +232,12 @@ void test_erf(T, const char* name)
 
    do_test_erfc_inv(erfc_inv_data, name, "Inverse Erfc Function");
 
+#  include "erfc_inv_big_data.ipp"
+
+   if(std::numeric_limits<T>::min_exponent <= -4500)
+   {
+      do_test_erfc_inv(erfc_inv_big_data, name, "Inverse Erfc Function: extreme values");
+   }
 }
 
 template <class T>

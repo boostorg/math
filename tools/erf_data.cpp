@@ -4,6 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/tools/ntl.hpp>
+#include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/erf.hpp> // for inverses
 #include <boost/math/constants/constants.hpp>
@@ -16,6 +17,19 @@
 
 using namespace boost::math::tools;
 using namespace std;
+
+float external_f;
+float force_truncate(const float* f)
+{
+   external_f = *f;
+   return external_f;
+}
+
+float truncate_to_float(NTL::RR r)
+{
+   float f = boost::math::tools::real_cast<float>(r);
+   return force_truncate(&f);
+}
 
 struct erf_data_generator
 {
@@ -105,14 +119,18 @@ void asymptotic_limit(int Bits)
       << terms << " terms." << std::endl;
 }
 
-NTL::RR erfc_inv(NTL::RR r)
+std::tr1::tuple<NTL::RR, NTL::RR> erfc_inv(NTL::RR r)
 {
-   std::cout << r << std::endl;
-   return boost::math::erfc_inv(r);
+   NTL::RR x = exp(-r * r);
+   x = NTL::RoundToPrecision(x, 64);
+   std::cout << x << "   ";
+   NTL::RR result = boost::math::erfc_inv(x);
+   std::cout << result << std::endl;
+   return std::tr1::make_tuple(x, result);
 }
 
 
-int main(int argc, char* argv[])
+int test_main(int argc, char*argv [])
 {
    NTL::RR::SetPrecision(1000);
    NTL::RR::SetOutputPrecision(40);
@@ -147,14 +165,19 @@ int main(int argc, char* argv[])
       }
       else if(strcmp(argv[1], "--erfc_inv") == 0)
       {
-         NTL::RR (*f)(NTL::RR);
-         f = /*boost::math::*/ erfc_inv;
+         std::tr1::tuple<NTL::RR, NTL::RR> (*f)(NTL::RR);
+         f = erfc_inv;
          std::cout << "Welcome.\n"
             "This program will generate spot tests for the inverse erfc function:\n";
+         std::cout << "Enter the maximum *result* expected from erfc_inv: ";
+         double max_val;
+         std::cin >> max_val;
          std::cout << "Enter the number of data points: ";
          int points;
          std::cin >> points;
-         data.insert(f, make_random_param(NTL::RR(0), NTL::RR(2), points));
+         parameter_info<NTL::RR> arg = make_random_param(NTL::RR(0), NTL::RR(max_val), points);
+         arg.type |= dummy_param;
+         data.insert(f, arg);
       }
    }
    else

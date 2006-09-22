@@ -1,5 +1,5 @@
 
-
+#define L22
 #include "../tools/ntl_rr_lanczos.hpp"
 #include <boost/math/tools/ntl.hpp>
 #include <boost/math/tools/polynomial.hpp>
@@ -88,18 +88,34 @@ T f0(T x, int variant)
       //
       if(x == 0)
          x = boost::math::tools::epsilon<T>() / 64;
-      return boost::math::erf_inv(x) / x;
+      return boost::math::erf_inv(x) / (x * (x+10));
    case 8:
       // 
-      //erfc_inv in range [0.5, 1]
+      // erfc_inv in range [0.25, 0.5]
+      // Use an x-offset of 0.25, and range [0, 0.25]
+      // abs error, auto y-offset.
       //
       if(x == 0)
-         return x = boost::lexical_cast<T>("1e-5000");
+         x = boost::lexical_cast<T>("1e-5000");
       return sqrt(-2 * log(x)) / boost::math::erfc_inv(x);
    case 9:
+      {
       if(x == 0)
-         return 0;
-      return 1 / boost::math::erfc_inv(x);
+         x = tiny;
+      double xr = boost::math::tools::real_cast<double>(x);
+      T z = 1/x;
+      double zr = boost::math::tools::real_cast<double>(z);
+      double yr = exp(zr * zr / -2);
+      T y = exp(z * z / -2);
+      return (boost::math::erfc_inv(y)/* - z*/ + log(z) / z) / z;
+      }
+   case 10:
+      {
+      if(x == 0)
+         x = boost::lexical_cast<T>("1e-5000");
+      T y = exp(-x*x); // sqrt(-log(x)) - 5;
+      return boost::math::erfc_inv(y) / x;
+      }
    }
    return 0;
 }
@@ -117,5 +133,16 @@ void show_extra(
    const NTL::RR& y_offset, 
    int variant)
 {
+   switch(variant)
+   {
+   case 9:
+      {
+         NTL::RR v = boost::math::tools::log_min_value<NTL::RR>();
+         v *= -2;
+         v = sqrt(v);
+         v = 1 / v;
+         std::cout << "Minimum range = " << v << std::endl;
+      }
+   }
 }
 

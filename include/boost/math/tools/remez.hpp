@@ -148,6 +148,16 @@ public:
       --orderN;
       ++orderD;
    }
+   void rescale(T a, T b)
+   {
+      T scale = (b - a) / (max - min);
+      for(unsigned i = 0; i < control_points.size(); ++i)
+      {
+         control_points[i] = (control_points[i] - min) * scale + a;
+      }
+      min = a;
+      max = b;
+   }
 private:
 
    void init_chebyshev();

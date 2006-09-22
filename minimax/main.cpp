@@ -47,6 +47,7 @@ NTL::RR the_function(const NTL::RR& val)
 void step_some(unsigned count)
 {
    try{
+      NTL::RR::SetPrecision(working_precision);
       if(!started)
       {
          //
@@ -108,6 +109,7 @@ void step(const char*, const char*)
 
 void show(const char*, const char*)
 {
+   NTL::RR::SetPrecision(working_precision);
    if(started)
    {
       boost::math::tools::polynomial<NTL::RR> n = p_remez->numerator();
@@ -151,10 +153,15 @@ void show(const char*, const char*)
 
       show_extra(n, d, x_offset, y_offset, variant);
    }
+   else
+   {
+      std::cerr << "Nothing to display" << std::endl;
+   }
 }
 
 void do_graph(unsigned points)
 {
+   NTL::RR::SetPrecision(working_precision);
    NTL::RR step = (b - a) / (points - 1);
    NTL::RR x = a;
    while(points > 1)
@@ -177,6 +184,7 @@ void graph(const char*, const char*)
 template <class T>
 void do_test(T, const char* name)
 {
+   NTL::RR::SetPrecision(working_precision);
    if(started)
    {
       //
@@ -274,6 +282,30 @@ void test_all(const char*, const char*)
    do_test((long double)(0), "long double");
 }
 
+void rotate(const char*, const char*)
+{
+   if(p_remez)
+   {
+      p_remez->rotate();
+   }
+   else
+   {
+      std::cerr << "Nothing to rotate" << std::endl;
+   }
+}
+
+void rescale(const char*, const char*)
+{
+   if(p_remez)
+   {
+      p_remez->rescale(a, b);
+   }
+   else
+   {
+      std::cerr << "Nothing to rescale" << std::endl;
+   }
+}
+
 int test_main(int, char* [])
 {
    std::string line;
@@ -337,6 +369,10 @@ int test_main(int, char* [])
             str_p("test") && str_p("long")[&test_long]
       ||
             str_p("test") && str_p("all")[&test_all]
+      ||
+            str_p("rotate")[&rotate]
+      ||
+            str_p("rescale") && real_p[assign_a(a)] && real_p[assign_a(b)] && epsilon_p[&rescale]
 
          ), space_p).full)
       {

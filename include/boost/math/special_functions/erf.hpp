@@ -82,65 +82,6 @@ T erf_asymptotic_limit()
    return erf_asymptotic_limit_N(boost::integral_constant<int, std::numeric_limits<T>::digits>());
 }
 
-//
-// Inverses, start with inverse of the Normal Distribution from
-// Abramowitz & Stegun p933, 26.2.23,
-// then convert that to the inverse of erfc:
-//
-template <class T>
-inline T invq(T q)
-{
-   using namespace std;
-
-   static const float num[4] =
-   {
-      2.515517f,
-      0.802853f,
-      0.010328f,
-      0.0f
-   };
-   static const float denom[4] =
-   {
-      1.0f,
-      1.432788f,
-      0.189269f,
-      0.001308f
-   };
-
-   T t = sqrt(-2 * log(q));
-   return t - tools::evaluate_rational(num, denom, t, 4);
-}
-
-template <class T>
-inline T estimate_inverse_erfc(T q)
-{
-   if(q == 2)
-      return -tools::max_value<T>();
-   if(q == 0)
-      return tools::max_value<T>();
-   if(q > 1)
-      return -estimate_inverse_erfc(2 - q);
-   if(q == 1)
-      return 0;
-   return T(0.70710678) * invq(q / 2);
-}
-
-template <class T>
-struct erf_roots
-{
-   std::tr1::tuple<T,T,T> operator()(const T& guess)
-   {
-      using namespace std;
-      T derivative = sign * (2 / sqrt(constants::pi<T>())) * exp(-(guess * guess));
-      T derivative2 = -2 * guess * derivative;
-      return std::tr1::make_tuple(((sign > 0) ? boost::math::erf(guess) : boost::math::erfc(guess)) - target, derivative, derivative2);
-   }
-   erf_roots(T z, int s) : target(z), sign(s) {}
-private:
-   T target;
-   int sign;
-};
-
 template <class T, class L, class Tag>
 T erf_imp(T z, bool invert, const L& l, const Tag& t)
 {
@@ -193,15 +134,6 @@ T erf_imp(T z, bool invert, const L& l, const Tag& t)
    if(invert)
       result = 1 - result;
    return result;
-}
-
-template <class T>
-T truncate(T z, int b)
-{
-   using namespace std;
-   int exp;
-   z = frexp(z, &exp);
-   return ldexp(floor(ldexp(z, b)), exp - b);
 }
 
 template <class T, class L>
@@ -804,28 +736,10 @@ T erfc(T z)
       mpl::int_< ::std::numeric_limits<value_type>::digits>()), BOOST_CURRENT_FUNCTION);
 }
 
-template <class T>
-T erfc_inv(T z)
-{
-   if((z < 0) || (z > 2))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument outside range [0,2] in inverse erfc function (got p=%1%).", z);
-   T guess = detail::estimate_inverse_erfc(z);
-   return tools::halley_iterate(detail::erf_roots<typename remove_cv<T>::type>(z, -1), guess, -tools::max_value<T>(), tools::max_value<T>(), (tools::digits<T>() * 2) / 3);
-}
-
-template <class T>
-T erf_inv(T z)
-{
-   if((z < -1) || (z > 1))
-      tools::domain_error<typename remove_cv<T>::type>(BOOST_CURRENT_FUNCTION, "Argument outside range [-1, 1] in inverse erf function (got p=%1%).", z);
-   T guess = detail::estimate_inverse_erfc(1 - z);
-   if((fabs(z) != 1) && (fabs(guess) == tools::max_value<typename remove_cv<T>::type>()))
-      guess = static_cast<T>((z < 0) ? -4 : 4);
-   return tools::halley_iterate(detail::erf_roots<typename remove_cv<T>::type>(z, 1), guess, ((z > 0) ? 0 : -tools::max_value<T>()), ((z < 0) ? 0 : tools::max_value<T>()), (tools::digits<T>() * 2) / 3);
-}
-
 } // namespace math
 } // namespace boost
+
+#include <boost/math/special_functions/detail/erf_inv.hpp>
 
 #endif // BOOST_MATH_SPECIAL_ERF_HPP
 

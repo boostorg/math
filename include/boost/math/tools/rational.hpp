@@ -8,6 +8,77 @@
 
 namespace boost{ namespace math{ namespace tools{
 
+namespace detail{
+
+template <class T, class V>
+inline V evaluate_polynomial_c_imp(const T* a, const V&, const mpl::int_<1>*)
+{
+   return a[0];
+}
+
+template <class T, class V>
+inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<2>*)
+{
+   return a[0] + x * a[1];
+}
+
+template <class T, class V>
+inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<3>*)
+{
+   return ((a[2] * x) + a[1]) * x + a[0];
+}
+
+template <class T, class V>
+inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<4>*)
+{
+   return ((a[3] * x + a[2]) * x + a[1]) * x + a[0];
+}
+
+template <class T, class V>
+inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<5>*)
+{
+   return (((a[4] * x + a[3]) * x + a[2]) * x + a[1]) * x + a[0];
+}
+
+template <class T, class V>
+inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<6>*)
+{
+   return ((((a[5] * x + a[4]) * x + a[3]) * x + a[2]) * x + a[1]) * x + a[0];
+}
+
+template <class T, class V>
+inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<7>*)
+{
+   return (((((a[6] * x + a[5]) * x + a[4]) * x + a[3]) * x + a[2]) * x + a[1]) * x + a[0];
+}
+
+template <class T, class V>
+inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<8>*)
+{
+   return ((((((a[7] * x + a[6]) * x + a[5]) * x + a[4]) * x + a[3]) * x + a[2]) * x + a[1]) * x + a[0];
+}
+
+template <class T, class V>
+inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<9>*)
+{
+   return (((((((a[8] * x + a[7]) * x + a[6]) * x + a[5]) * x + a[4]) * x + a[3]) * x + a[2]) * x + a[1]) * x + a[0];
+}
+
+template <class T, class V, class Tag>
+inline V evaluate_polynomial_c_imp(const T* a, const V& val, const Tag*)
+{
+   return evaluate_polynomial(a, val, Tag::value);
+}
+
+} // namespace detail
+
+template <std::size_t N, class T, class V>
+inline V evaluate_polynomial(const T(&a)[N], const V& val)
+{
+   typedef mpl::int_<N> tag_type;
+   return detail::evaluate_polynomial_c_imp(static_cast<const T*>(a), val, static_cast<tag_type const*>(0));
+}
+
 template <class T, class U>
 U evaluate_polynomial(const T* poly, U z, std::size_t count)
 {
