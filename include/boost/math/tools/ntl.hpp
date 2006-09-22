@@ -136,7 +136,7 @@ inline NTL::RR log_max_value<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR)
    if(!has_init)
    {
       val = 1;
-      val.e = NTL_OVFBND-2;
+      val.e = NTL_OVFBND-20;
       val = log(val);
       has_init = true;
    }
@@ -151,7 +151,7 @@ inline NTL::RR log_min_value<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR)
    if(!has_init)
    {
       val = 1;
-      val.e = -NTL_OVFBND+2;
+      val.e = -NTL_OVFBND+20;
       val = log(val);
       has_init = true;
    }
