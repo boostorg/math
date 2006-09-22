@@ -6,14 +6,32 @@
 #ifndef BOOST_MATH_TOOLS_RATIONAL_HPP
 #define BOOST_MATH_TOOLS_RATIONAL_HPP
 
+#include <boost/array.hpp>
+
 namespace boost{ namespace math{ namespace tools{
 
+//
+// Forward declaration to keep two phase lookup happy:
+//
+template <class T, class U>
+U evaluate_polynomial(const T* poly, U const& z, std::size_t count);
+
 namespace detail{
+//
+// These inline functions evaluate polynomials whose size is
+// known at compile time - there's no need for a for-loop
+// just an inline application of Horners rule.
+//
+template <class T, class V>
+inline V evaluate_polynomial_c_imp(const T* a, const V&, const mpl::int_<0>*)
+{
+   return static_cast<V>(0);
+}
 
 template <class T, class V>
 inline V evaluate_polynomial_c_imp(const T* a, const V&, const mpl::int_<1>*)
 {
-   return a[0];
+   return static_cast<V>(a[0]);
 }
 
 template <class T, class V>
@@ -72,16 +90,15 @@ inline V evaluate_polynomial_c_imp(const T* a, const V& val, const Tag*)
 
 } // namespace detail
 
-template <std::size_t N, class T, class V>
-inline V evaluate_polynomial(const T(&a)[N], const V& val)
-{
-   typedef mpl::int_<N> tag_type;
-   return detail::evaluate_polynomial_c_imp(static_cast<const T*>(a), val, static_cast<tag_type const*>(0));
-}
-
+//
+// Polynomial evaluation with runtime size.
+// This requires a for-loop which may be more expensive than
+// the loop expanded versions above:
+//
 template <class T, class U>
 U evaluate_polynomial(const T* poly, U const& z, std::size_t count)
 {
+   BOOST_ASSERT(count > 0);
    U sum = static_cast<U>(poly[count - 1]);
    for(int i = static_cast<int>(count) - 2; i >= 0; --i)
    {
@@ -90,19 +107,73 @@ U evaluate_polynomial(const T* poly, U const& z, std::size_t count)
    }
    return sum;
 }
+//
+// Compile time sized polynomials, just inline forwarders to the
+// implementations above:
+//
+template <std::size_t N, class T, class V>
+inline V evaluate_polynomial(const T(&a)[N], const V& val)
+{
+   typedef mpl::int_<N> tag_type;
+   return detail::evaluate_polynomial_c_imp(static_cast<const T*>(a), val, static_cast<tag_type const*>(0));
+}
 
+template <std::size_t N, class T, class V>
+inline V evaluate_polynomial(const boost::array<T,N>& a, const V& val)
+{
+   typedef mpl::int_<N> tag_type;
+   return detail::evaluate_polynomial_c_imp(static_cast<const T*>(a.data()), val, static_cast<tag_type const*>(0));
+}
+//
+// Even polynomials are trivial: just square the argument!
+//
 template <class T, class U>
 inline U evaluate_even_polynomial(const T* poly, U z, std::size_t count)
 {
    return evaluate_polynomial(poly, z*z, count);
 }
 
+template <std::size_t N, class T, class V>
+inline V evaluate_even_polynomial(const T(&a)[N], const V& z)
+{
+   return evaluate_polynomial(a, z*z);
+}
+
+template <std::size_t N, class T, class V>
+inline V evaluate_even_polynomial(const boost::array<T,N>& a, const V& z)
+{
+   return evaluate_polynomial(a, z*z);
+}
+//
+// Odd polynomials come next:
+//
 template <class T, class U>
 inline U evaluate_odd_polynomial(const T* poly, U z, std::size_t count)
 {
    return poly[0] + z * evaluate_polynomial(poly+1, z*z, count-1);
 }
 
+template <std::size_t N, class T, class V>
+inline V evaluate_odd_polynomial(const T(&a)[N], const V& z)
+{
+   typedef mpl::int_<N-1> tag_type;
+   return a[0] + z * detail::evaluate_polynomial_c_imp(static_cast<const T*>(a) + 1, z*z, static_cast<tag_type const*>(0));
+}
+
+template <std::size_t N, class T, class V>
+inline V evaluate_odd_polynomial(const boost::array<T,N>& a, const V& z)
+{
+   typedef mpl::int_<N-1> tag_type;
+   return a[0] + z * detail::evaluate_polynomial_c_imp(static_cast<const T*>(a.data()) + 1, z*z, static_cast<tag_type const*>(0));
+}
+//
+// Rational functions: numerator and denominator must be
+// equal in size.  These always have a for-loop and so may be less
+// efficient than evaluating a pair of polynomials. However, there
+// are some tricks we can use to prevent overflow that might otherwise
+// occur in polynomial evaluation, if z is large.  This is important
+// in our Lanczos code for example.
+//
 template <class T, class U, class V>
 V evaluate_rational(const T* num, const U* denom, const V& z_, std::size_t count)
 {
@@ -134,6 +205,18 @@ V evaluate_rational(const T* num, const U* denom, const V& z_, std::size_t count
       }
    }
    return s1 / s2;
+}
+
+template <std::size_t N, class T, class V>
+inline V evaluate_rational(const T(&a)[N], const T(&b)[N], const V& z)
+{
+   return evaluate_rational(a, b, z, N);
+}
+
+template <std::size_t N, class T, class V>
+inline V evaluate_rational(const boost::array<T,N>& a, const boost::array<T,N>& b, const V& z)
+{
+   return evaluate_rational(a.data(), b.data(), z, N);
 }
 
 } // namespace tools

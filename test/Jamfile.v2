@@ -32,10 +32,10 @@ run test_igamma_inva.cpp ;
 run test_minima.cpp ;
 run test_normal.cpp ;
 run test_promotion.cpp ;
+run test_rationals.cpp ;
 run test_remez.cpp ;
 run test_roots.cpp ;
 run test_students_t.cpp ;
 run test_tgamma_ratio.cpp ;
 run test_toms748_solve.cpp ;
-
 
