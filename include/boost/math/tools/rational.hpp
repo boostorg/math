@@ -80,7 +80,7 @@ inline V evaluate_polynomial(const T(&a)[N], const V& val)
 }
 
 template <class T, class U>
-U evaluate_polynomial(const T* poly, U z, std::size_t count)
+U evaluate_polynomial(const T* poly, U const& z, std::size_t count)
 {
    U sum = static_cast<U>(poly[count - 1]);
    for(int i = static_cast<int>(count) - 2; i >= 0; --i)
