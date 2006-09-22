@@ -166,14 +166,13 @@ T gamma_imp(T z, const L& l)
 // lgamma for small arguments:
 //
 template <class T, class L>
-T lgamma_small_imp(T z, const mpl::int_<64>&, const L& l)
+T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
 {
-   //
    // This version uses rational approximations for small
    // values of z accurate enough for 64-bit mantissas
-   // (80-bit long doubles), works well for 53-bit
-   // doubles as well.
-   //
+   // (80-bit long doubles), works well for 53-bit doubles as well.
+   // L is only used to select the Lanczos function.
+
    using namespace std;  // for ADL of std names
    T result = 0;
    if(z < tools::epsilon<T>())
@@ -353,7 +352,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& l)
    return result;
 }
 template <class T, class L>
-T lgamma_small_imp(T z, const mpl::int_<113>&, const L& l)
+T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
 {
    //
    // This version uses rational approximations for small
