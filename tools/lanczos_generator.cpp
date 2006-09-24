@@ -4125,18 +4125,24 @@ void print_code(const lanczos_info<T>& l, const char* name)
 
    for(unsigned i = 0; i < rat.num.size(); ++i)
    {
-      std::cout << "         static_cast<T>(" << rat.num[i] << "L),\n";
+      std::cout << "         static_cast<T>(" << rat.num[i] << "L)";
+      if(i != rat.num.size() - 1)
+         std::cout << ",";
+      std::cout << "\n";
    }
    std::cout << 
       "      };\n"
       "      static const " << denom_type << " denom[" << rat.denom.size() << "] = {\n";
    for(unsigned i = 0; i < rat.denom.size(); ++i)
    {
-      std::cout << "         " << cast_type << "(" << rat.denom[i] << suffix_type << "),\n";
+      std::cout << "         " << cast_type << "(" << rat.denom[i] << suffix_type << ")";
+      if(i != rat.denom.size() - 1)
+         std::cout << ",";
+      std::cout << "\n";
    }
    std::cout << 
       "      };\n"
-      "      return boost::math::tools::evaluate_rational(num, denom, z, " << rat.denom.size() << ");\n"
+      "      return boost::math::tools::evaluate_rational(num, denom, z);\n"
       "   }\n\n"
       "   template <class T>\n"
       "   static T lanczos_sum_expG_scaled(const T& z)\n"
@@ -4145,18 +4151,24 @@ void print_code(const lanczos_info<T>& l, const char* name)
 
    for(unsigned i = 0; i < rat.num.size(); ++i)
    {
-      std::cout << "         static_cast<T>(" << (rat.num[i]/factor) << "L),\n";
+      std::cout << "         static_cast<T>(" << (rat.num[i]/factor) << "L)";
+      if(i != rat.num.size() - 1)
+         std::cout << ",";
+      std::cout << "\n";
    }
    std::cout << 
       "      };\n"
       "      static const " << denom_type << " denom[" << rat.denom.size() << "] = {\n";
    for(unsigned i = 0; i < rat.denom.size(); ++i)
    {
-      std::cout << "         " << cast_type << "(" << rat.denom[i] << suffix_type << "),\n";
+      std::cout << "         " << cast_type << "(" << rat.denom[i] << suffix_type << ")";
+      if(i != rat.denom.size() - 1)
+         std::cout << ",";
+      std::cout << "\n";
    }
    std::cout << 
       "      };\n"
-      "      return boost::math::tools::evaluate_rational(num, denom, z, " << rat.denom.size() << ");\n"
+      "      return boost::math::tools::evaluate_rational(num, denom, z);\n"
       "   }\n\n";
 
    std::cout <<
@@ -4169,7 +4181,10 @@ void print_code(const lanczos_info<T>& l, const char* name)
 
    for(int i = 1; i < l.n; ++i)
    {
-      std::cout << "         static_cast<T>(" << l.c[i]*factor << "L),\n";
+      std::cout << "         static_cast<T>(" << l.c[i]*factor << "L)";
+      if(i != l.n - 1)
+         std::cout << ",";
+      std::cout << "\n";
    }
    std::cout << 
       "      };\n"

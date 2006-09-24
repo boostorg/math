@@ -237,8 +237,8 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
 
       T zm2 = z - 2;
       T r = zm2 * (z + 1);
-      T R = tools::evaluate_polynomial(P, zm2, 7);
-      R /= tools::evaluate_polynomial(Q, zm2, 9);
+      T R = tools::evaluate_polynomial(P, zm2);
+      R /= tools::evaluate_polynomial(Q, zm2);
 
       result +=  r * Y + r * R;
    }
@@ -299,7 +299,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
             0.00195965575583577133094L
          };
 
-         T r = tools::evaluate_rational(P, Q, zm1, 7);
+         T r = tools::evaluate_polynomial(P, zm1) / tools::evaluate_polynomial(Q, zm1);
          T prefix = zm1 * (z - 2);
 
          result += prefix * Y + prefix * r;
@@ -329,8 +329,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
             -0.142297490891035317134L,
             0.0541690188155727486422L,
             -0.00847605819461625689902L,
-            0.000428889290535950015422L,
-            0
+            0.000428889290535950015422L
          };
          static const T Q[] = {    
             1,
@@ -344,7 +343,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
          // (2 - x) * (1 - x) * (c + R(2 - x))
          T zm2 = 2 - z;
          T r = -zm2 * zm1;
-         T R = tools::evaluate_rational(P, Q, zm2, 7);
+         T R = tools::evaluate_polynomial(P, zm2) / tools::evaluate_polynomial(Q, zm2);
          
          result += r * Y + r * R;
       }
@@ -424,8 +423,8 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
             0.57494385484443300318253584008028386122e-6L
          };
 
-         T R = tools::evaluate_polynomial(P, zm2, 11);
-         R /= tools::evaluate_polynomial(Q, zm2, 10);
+         T R = tools::evaluate_polynomial(P, zm2);
+         R /= tools::evaluate_polynomial(Q, zm2);
 
          static const float Y = 0.1524307727813720703125f;
 
@@ -464,7 +463,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
             -0.21417746406796251935895373591106602902e-7L
          };
 
-         T R = tools::evaluate_rational(P, Q, z - 2.5, 10);
+         T R = tools::evaluate_polynomial(P, z - 2.5) / tools::evaluate_polynomial(Q, z - 2.5);
 
          static const float Y = 0.16830921173095703125f;
 
@@ -538,7 +537,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
             0.0003583032812720649835431669893011257277L
          };
 
-         T r = tools::evaluate_polynomial(P, zm1, 12) / tools::evaluate_polynomial(Q, zm1, 10);
+         T r = tools::evaluate_polynomial(P, zm1) / tools::evaluate_polynomial(Q, zm1);
          T prefix = zm1 * (z - 2);
 
          result += prefix * Y + prefix * r;
@@ -590,7 +589,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
          // (2 - x) * (1 - x) * (c + R(2 - x))
          T zm2 = 2 - z;
          T r = -zm2 * zm1;
-         T R = tools::evaluate_rational(P, Q, 1.625 - z, 10);
+         T R = tools::evaluate_polynomial(P, 1.625 - z) / tools::evaluate_polynomial(Q, 1.625 - z);
          
          result += r * Y + r * R;
       }
@@ -632,7 +631,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
          // (2 - x) * (1 - x) * (c + R(2 - x))
          T zm2 = 2 - z;
          T r = -zm2 * zm1;
-         T R = tools::evaluate_rational(P, Q, zm2, 10);
+         T R = tools::evaluate_polynomial(P, zm2) / tools::evaluate_polynomial(Q, zm2);
          
          result += r * Y + r * R;
       }

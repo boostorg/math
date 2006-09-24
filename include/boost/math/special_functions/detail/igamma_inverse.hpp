@@ -38,7 +38,7 @@ T estimate_inverse_s(T p, T q)
    }
    static const double a[4] = { 3.31125922108741, 11.6616720288968, 4.28342155967104, 0.213623493715853 };
    static const double b[5] = { 1, 6.61053765625462, 6.40691597760039, 1.27364489782223, 0.3611708101884203e-1 };
-   T s = t - tools::evaluate_polynomial(a, t, 4) / tools::evaluate_polynomial(b, t, 5);
+   T s = t - tools::evaluate_polynomial(a, t) / tools::evaluate_polynomial(b, t);
    if(p < 0.5)
       s = -s;
    return s;

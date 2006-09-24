@@ -207,14 +207,14 @@ V evaluate_rational(const T* num, const U* denom, const V& z_, std::size_t count
    return s1 / s2;
 }
 
-template <std::size_t N, class T, class V>
-inline V evaluate_rational(const T(&a)[N], const T(&b)[N], const V& z)
+template <std::size_t N, class T, class U, class V>
+inline V evaluate_rational(const T(&a)[N], const U(&b)[N], const V& z)
 {
    return evaluate_rational(a, b, z, N);
 }
 
-template <std::size_t N, class T, class V>
-inline V evaluate_rational(const boost::array<T,N>& a, const boost::array<T,N>& b, const V& z)
+template <std::size_t N, class T, class U, class V>
+inline V evaluate_rational(const boost::array<T,N>& a, const boost::array<U,N>& b, const V& z)
 {
    return evaluate_rational(a.data(), b.data(), z, N);
 }

@@ -108,11 +108,11 @@ of /z/ are even numbers.  Equivalent to calling
 As above but evaluates a polynomial where all the powers are odd numbers.
 Equivalent to `evaluate_polynomial(poly+1, z*z, count-1) * z + poly[0]`.
 
-   template <std::size_t N, class T, class V>
-   V evaluate_rational(const T(&num)[N], const T(&denom)[N], const V& z);
+   template <std::size_t N, class T, class U, class V>
+   V evaluate_rational(const T(&num)[N], const U(&denom)[N], const V& z);
    
-   template <std::size_t N, class T, class V>
-   V evaluate_rational(const boost::array<T,N>& num, const boost::array<T,N>& denom, const V& z);
+   template <std::size_t N, class T, class U, class V>
+   V evaluate_rational(const boost::array<T,N>& num, const boost::array<U,N>& denom, const V& z);
    
    template <class T, class U, class V>
    V evaluate_rational(const T* num, const U* denom, V z, unsigned count);
