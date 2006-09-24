@@ -47,7 +47,7 @@ std::pair<T, T> brent_find_minima(F f, T min, T max, int bits, boost::uintmax_t&
       if(fabs(x - mid) <= (fract2 - (max - min) / 2))
          break;
 
-      if(fabs(fract2) > fract1)
+      if(fabs(delta2) > fract1)
       {
          // try and construct a parabolic fit:
          T r = (x - w) * (fx - fv);
