@@ -66,24 +66,24 @@ graphing program (or spreadsheet) for further analysis.
       template <class F>
       test_data& insert(F func, const parameter_info<T>& arg1, const parameter_info<T>& arg2, const parameter_info<T>& arg3);
 
-      void clear(){ m_data.clear(); }
+      void clear();
 
       // access:
-      iterator begin() { return m_data.begin(); }
-      iterator end() { return m_data.end(); }
-      const_iterator begin()const { return m_data.begin(); }
-      const_iterator end()const { return m_data.end(); }
-      bool operator==(const test_data& d)const{ return m_data == d.m_data; }
-      bool operator!=(const test_data& d)const{ return m_data != d.m_data; }
-      void swap(test_data& other){ m_data.swap(other.m_data); }
-      size_type size()const{ return m_data.size(); }
-      size_type max_size()const{ return m_data.max_size(); }
-      bool empty()const{ return m_data.empty(); }
+      iterator begin();
+      iterator end();
+      const_iterator begin()const;
+      const_iterator end()const;
+      bool operator==(const test_data& d)const;
+      bool operator!=(const test_data& d)const;
+      void swap(test_data& other);
+      size_type size()const;
+      size_type max_size()const;
+      bool empty()const;
 
-      bool operator < (const test_data& dat)const{ return m_data < dat.m_data; }
-      bool operator <= (const test_data& dat)const{ return m_data <= dat.m_data; }
-      bool operator > (const test_data& dat)const{ return m_data > dat.m_data; }
-      bool operator >= (const test_data& dat)const{ return m_data >= dat.m_data; }
+      bool operator < (const test_data& dat)const;
+      bool operator <= (const test_data& dat)const;
+      bool operator > (const test_data& dat)const;
+      bool operator >= (const test_data& dat)const;
    };
 
    template <class charT, class traits, class T>
@@ -136,7 +136,7 @@ one could do this like so:
       
       // insert 500 points at uniform intervals between just after -3 and 100:
       double (*pf)(double) = boost::math::lgamma;
-      data.insert(pf, make_periodic_param(0.00001, 100.0, 500));
+      data.insert(pf, make_periodic_param(-3.0 + 0.00001, 100.0, 500));
       
       // print out in csv format:
       write_csv(std::cout, data, ", ");
@@ -288,7 +288,9 @@ when the table is large.
 
 Alternatively, lets say we want to profile a continued fraction for 
 convergence and error.  As an example, we'll use the continued fraction
-for the upper incomplete gamma function:
+for the upper incomplete gamma function, the following function object
+returns the next a[sub N ] and b[sub N ] of the continued fraction
+each time it's invoked:
 
    template <class T>
    struct upper_incomplete_gamma_fract
@@ -383,7 +385,42 @@ of a and z.
 [h4 reference]
 [#test_data_reference]
 
-TODO...
+Most of this tool has been descibed already in the examples above, we'll 
+just add the following notes on the non-member functions:
+
+   template <class T>
+   parameter_info<T> make_random_param(T start_range, T end_range, int n_points);
+   
+Tells class test_data to test /n_points/ random values in the range 
+[start_range,end_range].
+
+   template <class T>
+   parameter_info<T> make_periodic_param(T start_range, T end_range, int n_points);
+   
+Tells class test_data to test /n_points/ evenly spaced values in the range 
+[start_range,end_range].
+
+   template <class T>
+   parameter_info<T> make_power_param(T basis, int start_exponent, int end_exponent);
+
+Tells class test_data to test points of the form [^/basis + 2[super expon]/] for each
+/expon/ in the range [start_exponent, end_exponent].
+
+   template <class T>
+   bool get_user_parameter_info(parameter_info<T>& info, const char* param_name);
+   
+Prompts the user for the parameter range and form to use.
+
+Finally, if we don't want the parameter to be included in the output, we can tell
+test_data by setting it a "dummy paramter":
+
+   parameter_info<double> p = make_random_param(2.0, 5.0, 10);
+   p.type |= dummy_param;
+   
+This is useful when the functor used transforms the parameter in some way
+before passing it to the function under test, usually the functor will then
+return both the transformed input and the result in a tuple, so there's no
+need for the original pseudo-parameter to be included in program output.
 
 [endsect][/section:test_data Graphing, Profiling, and Generating Test Data for Special Functions]
 

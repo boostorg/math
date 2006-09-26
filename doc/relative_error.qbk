@@ -37,8 +37,24 @@ This function is used for testing a function against tabulated test data.
 
 The return type contains statistical data on the relative errors (max, mean,
 variance, and the number of test cases etc), as well as the row of test data that
-caused the largest relative error.  Type test_result is work in progress, refer
-to the header for more details.
+caused the largest relative error.  Public members of type test_result are:
+
+[variablelist
+[[`unsigned worst()const;`][Returns the row at which the worst error occured.]]
+[[`T min()const;`][Returns the smallest relative error found.]]
+[[`T max()const;`][Returns the largest relative error found.]]
+[[`T mean()const;`][Returns the mean error found.]]
+[[`boost::uintmax_t count()const;`][Returns the number of test cases.]]
+[[`T variance()const;`][Returns the variance of the errors found.]]
+[[`T variance1()const;`][Returns the unbiased variance of the errors found.]]
+[[`T rms()const`][Returns the Root Mean Square, or quadratic mean of the errors.]]
+[[`test_result& operator+=(const test_result& t)`][Combines two test_result's into
+a single result.]]
+]
+
+The template parameter of test_result, is the same type as the values in the two
+dimentional array passed to function /test/, roughly that's 
+`A::value_type::value_type`.
 
 Parameter /a/ is a matrix of test data: and must be a standard library Sequence type,
 that contains another Sequence type:
@@ -56,8 +72,10 @@ from a row of test data in /a/.  Typically type F2 is created with Boost.Lambda:
 the example below.
 
 If the function under test returns a non-finite value when a finite result is
-expected, or if a gross error is found, then a message is sent to `std::cerr`.
-This is mainly a debugging/development aid (and a good place for a breakpoint).
+expected, or if a gross error is found, then a message is sent to `std::cerr`,
+and a call to BOOST_ERROR() made (which means that including this header requires
+you use Boost.Test).  This is mainly a debugging/development aid 
+(and a good place for a breakpoint).
 
 [h4 Example]
 

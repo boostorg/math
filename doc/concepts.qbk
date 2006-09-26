@@ -13,7 +13,7 @@ and forces conversions to RR to proceed via `long double` rather than `double`.
 The latter change is essential to accurately measure relative errors between
 high precision calculations (using NTL::RR) and fixed precision calculations
 (using `long double`).  These occur if, for example, you are generating additional
-__lanczos's.
+__lanczos's or rational approximations.
 
 You will also need to include NTL via the header `<boost/math/tools/ntl.hpp>`
 and include that header /before/ you include any of the special function headers.

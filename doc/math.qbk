@@ -122,10 +122,16 @@ some typical applications in statistics.
 [include rational.qbk]
 [include roots.qbk]
 [include roots_without_derivatives.qbk]
+[include minima.qbk]
+[endsect][/section:toolkit Toolkit]
+
+[section:intenals Tools for Internal Testing and Development Use]
+[include internals_overview.qbk]
 [include polynomial.qbk]
+[include minimax.qbk]
 [include relative_error.qbk]
 [include test_data.qbk]
-[endsect][/section:toolkit Toolkit]
+[endsect]
 
 [section:Using_UDT Use with User Defined Floating-Point Types]
 [include concepts.qbk]

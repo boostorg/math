@@ -379,7 +379,7 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
          {
             random_type r = gen();
             power_type p = ldexp(static_cast<power_type>(r), power);
-            points.insert(truncate_to_float(real_cast<float>(p)));
+            points.insert(truncate_to_float(real_cast<float>(arg1.z1 + p)));
          }
       }
       break;

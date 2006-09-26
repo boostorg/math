@@ -10,10 +10,9 @@
 
 #include <cmath>
 
-template <class T>
-T f0(T x, int variant)
+NTL::RR f(const NTL::RR& x, int variant)
 {
-   static const T tiny = boost::math::tools::min_value<T>() * 64;
+   static const NTL::RR tiny = boost::math::tools::min_value<NTL::RR>() * 64;
    switch(variant)
    {
    case 0:
@@ -23,9 +22,12 @@ T f0(T x, int variant)
    case 2:
       return boost::math::erf(x) / x - 1.125;
    case 3:
-      if(x == 0) 
-         x += tiny;
-      return boost::math::lgamma(x+2) / x - 0.5;
+      {
+         NTL::RR y(x);
+         if(y == 0) 
+            y += tiny;
+         return boost::math::lgamma(y+2) / y - 0.5;
+      }
    case 4:
       //
       // lgamma in the range [2,3], use:
@@ -37,7 +39,7 @@ T f0(T x, int variant)
       //
       if(x == 0)
       {
-         return boost::lexical_cast<T>("0.42278433509846713939348790991759756895784066406008") / 3;
+         return boost::lexical_cast<NTL::RR>("0.42278433509846713939348790991759756895784066406008") / 3;
       }
       return boost::math::lgamma(x+2) / (x * (x+3));
    case 5:
@@ -49,8 +51,8 @@ T f0(T x, int variant)
          //
          // works well over [1, 1.5] but not near 2 :-(
          //
-         NTL::RR r1 = boost::lexical_cast<T>("0.57721566490153286060651209008240243104215933593992");
-         NTL::RR r2 = boost::lexical_cast<T>("0.42278433509846713939348790991759756895784066406008");
+         NTL::RR r1 = boost::lexical_cast<NTL::RR>("0.57721566490153286060651209008240243104215933593992");
+         NTL::RR r2 = boost::lexical_cast<NTL::RR>("0.42278433509846713939348790991759756895784066406008");
          if(x == 0)
          {
             return r1;
@@ -70,8 +72,8 @@ T f0(T x, int variant)
          //
          // works well over [1.5, 2] but not near 1 :-(
          //
-         NTL::RR r1 = boost::lexical_cast<T>("0.57721566490153286060651209008240243104215933593992");
-         NTL::RR r2 = boost::lexical_cast<T>("0.42278433509846713939348790991759756895784066406008");
+         NTL::RR r1 = boost::lexical_cast<NTL::RR>("0.57721566490153286060651209008240243104215933593992");
+         NTL::RR r2 = boost::lexical_cast<NTL::RR>("0.42278433509846713939348790991759756895784066406008");
          if(x == 0)
          {
             return r2;
@@ -83,48 +85,49 @@ T f0(T x, int variant)
          return boost::math::lgamma(2-x) / (x * (x - 1));
       }
    case 7:
-      //
-      // erf_inv in range [0, 0.5]
-      //
-      if(x == 0)
-         x = boost::math::tools::epsilon<T>() / 64;
-      return boost::math::erf_inv(x) / (x * (x+10));
+      {
+         //
+         // erf_inv in range [0, 0.5]
+         //
+         NTL::RR y = x;
+         if(y == 0)
+            y = boost::math::tools::epsilon<NTL::RR>() / 64;
+         return boost::math::erf_inv(y) / (y * (y+10));
+      }
    case 8:
-      // 
-      // erfc_inv in range [0.25, 0.5]
-      // Use an x-offset of 0.25, and range [0, 0.25]
-      // abs error, auto y-offset.
-      //
-      if(x == 0)
-         x = boost::lexical_cast<T>("1e-5000");
-      return sqrt(-2 * log(x)) / boost::math::erfc_inv(x);
+      {
+         // 
+         // erfc_inv in range [0.25, 0.5]
+         // Use an y-offset of 0.25, and range [0, 0.25]
+         // abs error, auto y-offset.
+         //
+         NTL::RR y = x;
+         if(y == 0)
+            y = boost::lexical_cast<NTL::RR>("1e-5000");
+         return sqrt(-2 * log(y)) / boost::math::erfc_inv(y);
+      }
    case 9:
       {
-      if(x == 0)
-         x = tiny;
-      double xr = boost::math::tools::real_cast<double>(x);
-      T z = 1/x;
-      double zr = boost::math::tools::real_cast<double>(z);
-      double yr = exp(zr * zr / -2);
-      T y = exp(z * z / -2);
-      return (boost::math::erfc_inv(y)/* - z*/ + log(z) / z) / z;
+      NTL::RR y = 0.5 - x;
+      return boost::math::erfc_inv(y);
       }
    case 10:
       {
-      if(x == 0)
-         x = boost::lexical_cast<T>("1e-5000");
-      T y = exp(-x*x); // sqrt(-log(x)) - 5;
-      return boost::math::erfc_inv(y) / x;
+         NTL::RR x2 = x;
+         if(x2 == 0)
+            x2 = boost::lexical_cast<NTL::RR>("1e-5000");
+         NTL::RR y = exp(-x2*x2); // sqrt(-log(x2)) - 5;
+         return boost::math::erfc_inv(y) / x2;
       }
    }
    return 0;
 }
 
-
+/*
 NTL::RR f(const NTL::RR& x, int variant)
 {
    return f0<NTL::RR>(x, variant);
-}
+}*/
 
 void show_extra(
    const boost::math::tools::polynomial<NTL::RR>& n, 
