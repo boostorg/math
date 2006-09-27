@@ -200,6 +200,15 @@ inline bool isnan BOOST_NO_MACRO_EXPAND(T t)
 {
    return (::boost::math::fpclassify)(t) == FP_NAN;
 }
+#ifdef isnan
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return isnan(t); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return isnan(t); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return isnan(t); }
+#elif defined(BOOST_MSVC)
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return _isnan(t); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return _isnan(t); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return _isnan(t); }
+#endif
 
 template <class T>
 inline bool isnormal BOOST_NO_MACRO_EXPAND(T t)

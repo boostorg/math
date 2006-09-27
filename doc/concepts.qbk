@@ -32,15 +32,6 @@ fully generic implementation for all of the gamma-like functions).
 
 [endsect][/section:use_NTL Using With NTL - a High Precision Floating-Point Library]
 
-[section:interval Using With Boost.Interval]
-
-There are currently problems comparing two intervals that make it hard to use
-Boost.Interval with this library.  It should be just about possible to make it
-work "as is", but this needs more investigation, and a simple, easy to use solution.
-
-[endsect][/section:interval Using With Boost.Interval]
-
-
 [section:real_concept Conceptual Requirements]
 
 TODO.
