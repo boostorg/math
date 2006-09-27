@@ -18,7 +18,7 @@ The program consists of two parts:
 
 [variablelist
 [[main.cpp][Contains the command line parser, and all the calls to the Remez code.]]
-[[f.cpp][Contains the function to appoximate.]]
+[[f.cpp][Contains the function to approximate.]]
 ]
 
 Therefore to use this tool, you must modify f.cpp to return the function to
@@ -50,7 +50,7 @@ y-offset of the approximation to /Y/ (see command line options below).
 Many other forms are possible, but in all cases the objective is to 
 split /f(x)/ into a dominant part that you can evaluate easily using
 standard math functions, and a smooth and slowly changing rational approximation
-part.  Refer to your favorite textbook for more examples.
+part.  Refer to your favourite textbook for more examples.
 
 Command line options for the program are as follows:
 
@@ -116,7 +116,7 @@ Command line options for the program are as follows:
          the error function of the approximation, 
          the theoretical error term solved for on the last step,
          and the maximum relative change in the location of the
-         Chebeshev control points.  The approximation is converged on the
+         Chebyshev control points.  The approximation is converged on the
          minimax solution when the two error terms are (approximately)
          equal, and the change in the control points has decreased to
          a suitably small value.]]
@@ -130,11 +130,11 @@ Command line options for the program are as follows:
          starting control points for an approximation that can not otherwise be
          converged.]]
 [[rotate][Moves one term from the numerator to the denominator, but keeps the
-         Chebeshev control points the same.  Sometimes this can be used to obtain
+         Chebyshev control points the same.  Sometimes this can be used to obtain
          starting control points for an approximation that can not otherwise be
          converged.]]
 [[info][Prints out the current approximation: the location of the zeros of the
-         error function, the location of the Chebeshev control points, the
+         error function, the location of the Chebyshev control points, the
          x and y offsets, and of course the coefficients of the polynomials.]]
 ] 
 

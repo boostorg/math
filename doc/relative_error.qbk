@@ -40,7 +40,7 @@ variance, and the number of test cases etc), as well as the row of test data tha
 caused the largest relative error.  Public members of type test_result are:
 
 [variablelist
-[[`unsigned worst()const;`][Returns the row at which the worst error occured.]]
+[[`unsigned worst()const;`][Returns the row at which the worst error occurred.]]
 [[`T min()const;`][Returns the smallest relative error found.]]
 [[`T max()const;`][Returns the largest relative error found.]]
 [[`T mean()const;`][Returns the mean error found.]]

@@ -43,9 +43,10 @@ value x such that:
 
 [h4 Accuracy]
 
-These functions are deliberately "detuned" to be not too accurate in order to avoid
-undue iterations during their calculation.  The relative error in these functions
-will be similar for all types T at around 3 to 15 epsilon.
+For types up to and including 80-bit long doubles the approximations used
+are accurate to less than ~ 2 epsilon.  For higher precision types these 
+functions have the same accuracy as the 
+[link math_toolkit.special.error_function forward error functions].
 
 [h4 Testing]
 
@@ -65,9 +66,46 @@ the accuracy of the result, given /exact/ input values.
 [h4 Implementation]
 
 These functions use a rational approximation to calculate an initial
-approximation to the result, then clean up the value using
+approximation to the result that is accurate to ~10[super -19], 
+then only if that has insufficient accuracy compared to the epsilon for T,
+do we clean up the result using
 [@http://en.wikipedia.org/wiki/Simple_rational_approximation Halley iteration].
-No more than 3 iterations are required in practice.
+
+Constructing rational approximations to the erf/erfc functions is actually
+surprisingly hard, especially at high precision.  For this reason no attempt
+has been made to achieve 10[super -34 ] accuracy suitable for use with 128-bit
+reals.
+
+In the following discussion, /p/ is the value passed to erf_inv, and /q/ is
+the value passed to erfc_inv, so that /p = 1 - q/ and /q = 1 - p/ and in both
+cases we want to solve for the same result /x/.
+
+For /p < 0.5/ the inverse erf function is reasonably smooth and the approximation:
+
+   x = p(p + 10)(Y + R(p))
+   
+Gives a good result for a constant Y, and R(p) optimised for low absolute error
+compared to |Y|.
+
+For q < 0.5 things get trickier, over the interval /0.5 > q > 0.25/
+the following approximation works well:
+
+   x = sqrt(-2log(q)) / (Y + R(q))
+   
+While for q < 0.25, let 
+
+   z = sqrt(-log(q))
+
+Then the result is given by:
+
+   x = z(Y + R(z - B))
+
+As before Y is a constant and the rational function R is optimised for low
+absolute error compared to |Y|.  B is also a constant: it is the smallest value
+of /z/ for which each approximation is valid.  There are several approximations
+of this form each of which reaches a little further into the tail of the erfc 
+function (at `long double` precision the extended exponent range compared to
+`double` means that the tail goes on for a very long way indeed).
 
 [endsect][/ :error_inv The Error Function Inverses]
 

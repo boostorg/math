@@ -14,20 +14,20 @@ on error rates.
 
 * Implement preview release of the statistical distribution.
 * Added statistical distributions tutorial.
-* Implement root finding algorithms.
-* Implement the inverses of the incomplete gamma and beta functions.
+* Implemented root finding algorithms.
+* Implemented the inverses of the incomplete gamma and beta functions.
 * Rewrite erf/erfc as rational approximations (valid to 128-bit precision).
 * Integrated the statistical results generated from
 the test data with Boost.Test: uses a database of expected
 results, indexed by test, floating point type, platform, and compiler.
+* Improved lgamma near 1 and 2 (rational approximations).
+* Improved erf/erfc inverses (rational approximations).
+* Implemented Rational function generation (the Remez method).
 
 [h4 Milestone 3]
 
-* Improve lgamma near 1 and 2.
-* Implement the main probability distribution and density functions (under construction).
+* Implement the main probability distribution and density functions (currently under construction).
 * Implement digamma (differentiate the __lanczos).
-* Implement Chebyshev approximation generation, and evaluation.
-* Implement Rational function generation.
 * Release??
 
 [endsect][/section:roadmap Roadmap]

@@ -385,7 +385,7 @@ of a and z.
 [h4 reference]
 [#test_data_reference]
 
-Most of this tool has been descibed already in the examples above, we'll 
+Most of this tool has been described already in the examples above, we'll 
 just add the following notes on the non-member functions:
 
    template <class T>
@@ -412,7 +412,7 @@ Tells class test_data to test points of the form [^/basis + 2[super expon]/] for
 Prompts the user for the parameter range and form to use.
 
 Finally, if we don't want the parameter to be included in the output, we can tell
-test_data by setting it a "dummy paramter":
+test_data by setting it a "dummy parameter":
 
    parameter_info<double> p = make_random_param(2.0, 5.0, 10);
    p.type |= dummy_param;

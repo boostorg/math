@@ -6,8 +6,7 @@
 
 [h4 lgamma]
 
-* Improve accuracy near 1 and 2 with either Chebyshev or rational
-approximation. (High priority).
+* No known issues?
 
 [h4 Error function]
 
@@ -29,7 +28,7 @@ this one is mainly an issue of performance rather than accuracy (medium priority
 
 [h4 Inverse Erf]
 
-* Replace current iterative scheme with direct rational approximation (medium priority).
+* No known issues?
 
 [h4 Inverse Gamma]
 

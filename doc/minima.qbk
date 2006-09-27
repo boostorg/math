@@ -21,7 +21,7 @@ algorithm.  Parameters are:
 
 [variablelist
 [[f] [The function to minimise.  The function should be smooth over the
-          range \[min,max\], with no maxima occuring in that interval.]]
+          range \[min,max\], with no maxima occurring in that interval.]]
 [[min] [The lower endpoint of the range in which to search
           for the minima.]]
 [[max] [The upper endpoint of the range in which to search
@@ -36,7 +36,7 @@ algorithm.  Parameters are:
              keep on going until the minima is found.]]             
 ]
 
-[*Returns:] a pair containing the value of the absissa at the minima and the value
+[*Returns:] a pair containing the value of the abscissa at the minima and the value
 of f(x) at the minima.
 
 [h4 Implementation]
@@ -52,8 +52,8 @@ Second Edition, William H. Press, Saul A. Teukolsky,
 William T. Vetterling, and Brian P. Flannery.
 Cambridge University Press. 1988, 1992.
 
-An algorithm with guarenteed convergence for finding a zero
-of a function, R. P. Brent, The Computer Jounal, Vol 44, 1971.
+An algorithm with guaranteed convergence for finding a zero
+of a function, R. P. Brent, The Computer Journal, Vol 44, 1971.
 
 [endsect][/section:minima Locating Function Minima]
 
