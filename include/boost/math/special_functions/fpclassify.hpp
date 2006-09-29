@@ -1,4 +1,4 @@
-//  (C) Copyright John Maddock 2005-2006.
+//  Copyright John Maddock 2005-2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -17,7 +17,7 @@
 #endif
 
 #ifdef BOOST_NO_STDC_NAMESPACE
-namespace std{ using ::abs; using ::fabs; }
+  namespace std{ using ::abs; using ::fabs; }
 #endif
 
 #ifndef FP_NORMAL
@@ -205,9 +205,14 @@ template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return isna
 template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return isnan(t); }
 template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return isnan(t); }
 #elif defined(BOOST_MSVC)
+#  pragma warning(push)
+#  pragma warning(disable: 4800) // forcing value to bool 'true' or 'false' 
+#  pragma warning(disable: 4244) // conversion from 'long double' to 'double',
+// No possible loss of data because they are same size.
 template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return _isnan(t); }
 template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return _isnan(t); }
 template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return _isnan(t); }
+#pragma warning (pop)
 #endif
 
 template <class T>
