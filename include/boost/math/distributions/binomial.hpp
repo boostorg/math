@@ -11,14 +11,12 @@
 // http://en.wikipedia.org/wiki/binomial_distribution
 
 // Binomial distribution is the discrete probability distribution of
-// the number (k) of successes in a sequence of
+// the number (k) of successes, in a sequence of
 // n independent (yes or no, success or failure) Bernoulli trials.
 
 // It expresses the probability of a number of events occurring in a fixed time
 // if these events occur with a known average rate (probability of success),
 // and are independent of the time since the last event.
-
-// The binomial distribution was discovered by Siméon-Denis (1781–1840).
 
 // The number of cars that pass through a certain point on a road during a given period of time.
 // The number of spelling mistakes a secretary makes while typing a single page.
@@ -68,6 +66,16 @@
 //  The 2-subsets of {1,2,3,4} are the six pairs {1,2}, {1,3}, {1,4}, {2,3}, {2,4}, and {3,4}, so (4; 2)==6.
 
 // http://functions.wolfram.com/GammaBetaErf/Binomial/ for evaluation.
+
+// But note that the binomial distribution
+// (like others including the poisson, negative binomial & Bernoulli)
+// is strictly defined as a discrete function: only integral values of k are envisaged.
+// However because of the method of calculation using a continuous gamma function,
+// it is convenient to treat it as if a continous function,
+// and permit non-integral values of k.
+// To enforce the strict mathematical model, users should use floor or ceil functions
+// on k outside this function to ensure that k is integral.
+
 
 #ifndef BOOST_MATH_SPECIAL_BINOMIAL_HPP
 #define BOOST_MATH_SPECIAL_BINOMIAL_HPP
