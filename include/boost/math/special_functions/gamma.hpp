@@ -1,4 +1,4 @@
-//  (C) Copyright John Maddock 2006.
+//  Copyright John Maddock 2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,9 +9,9 @@
 #ifdef BOOST_MSVC
 # pragma warning(push)
 # pragma warning(disable: 4127 4701)
-  // For lexical_cast, until fixed in 1.35?
-  // conditional expression is constant & 
-  // Potentially uninitialized local variable 'name' used
+//  // For lexical_cast, until fixed in 1.35?
+//  // conditional expression is constant &
+//  // Potentially uninitialized local variable 'name' used
 #endif
 #include <boost/lexical_cast.hpp>
 #ifdef BOOST_MSVC
@@ -212,7 +212,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
       // Maximum Deviation Found (approximation error): 6.040e-24
       // Expected Error Term (theoretical error):       5.767e-24
       //
-      static const T P[] = {    
+      static const T P[] = {
          -0.0180355685678449379105L,
          0.0275059304004787666091L,
          0.0443171685792247257804L,
@@ -221,7 +221,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
          -0.000458665561626849913383L,
          -0.329037148433534407895e-4L
       };
-      static const T Q[] = {    
+      static const T Q[] = {
          1,
          1.83010828760766301928L,
          1.3199677109125375453L,
@@ -232,7 +232,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
          -0.408214992824162576988e-6L,
          0.781369170950110070318e-8L
       };
-  
+
       static const float Y = 0.158963680267333984375f;
 
       T zm2 = z - 2;
@@ -258,7 +258,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
       else
          zm1 = z - 1;
       //
-      // Two approximations, on for z in [1,1.5] and 
+      // Two approximations, on for z in [1,1.5] and
       // one for z in [1.5,2]:
       //
       if(z <= 1.5)
@@ -280,7 +280,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
          //
          static const float Y = 0.52815341949462890625f;
 
-         static const T P[] = {    
+         static const T P[] = {
             0.0490622454069039543533L,
             -0.0968972636035201431444L,
             -0.415019091842327964937L,
@@ -289,7 +289,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
             -0.0240316347501407156547L,
             -0.00100446883357397271829L
          };
-         static const T Q[] = {    
+         static const T Q[] = {
             1,
             3.0237936256008388622L,
             3.48814379942953126287L,
@@ -323,7 +323,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
          //
          static const float Y = 0.452017307281494140625f;
 
-         static const T P[] = {    
+         static const T P[] = {
             -0.0292329721830270012331L,
             0.144185670931552060284L,
             -0.142297490891035317134L,
@@ -331,7 +331,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
             -0.00847605819461625689902L,
             0.000428889290535950015422L
          };
-         static const T Q[] = {    
+         static const T Q[] = {
             1,
             -1.50064690591634799344L,
             0.845676689661021077429L,
@@ -344,7 +344,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
          T zm2 = 2 - z;
          T r = -zm2 * zm1;
          T R = tools::evaluate_polynomial(P, zm2) / tools::evaluate_polynomial(Q, zm2);
-         
+
          result += r * Y + r * R;
       }
    }
@@ -397,7 +397,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
          // Maximum Deviation Found (approximation error)      2.990e-37
          // Expected Error Term (theoretical error)            1.826e-37
 
-         static const T P[] = {  
+         static const T P[] = {
             -0.011502661081883023848004030027467477217L,
             0.031944056132337735501977479182395853396L,
             0.077551357404033952847503773969798192055L,
@@ -410,7 +410,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
             -0.82655776630019901220154520563681851706e-7L,
             -0.2090780370635504302612422476975184869e-10L
          };
-         static const T Q[] = { 
+         static const T Q[] = {
             1L,
             2.4836790002330047758856657909530073081L,
             2.6186711577900720702672028343951089484L,
@@ -488,7 +488,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
       else
          zm1 = z - 1;
       //
-      // Three approximations, on for z in [1,1.35], [1.35,1.625] and [1.625,1]  
+      // Three approximations, on for z in [1,1.35], [1.35,1.625] and [1.625,1]
       //
       if(z <= 1.35)
       {
@@ -562,7 +562,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
          //
          static const float Y = 0.483787059783935546875f;
 
-         static const T P[] = {    
+         static const T P[] = {
             -0.017977422421608624353488126610933005432L,
             0.18484528905298309555089509029244135703L,
             -0.40401251514859546989565001431430884082L,
@@ -572,9 +572,9 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
             -0.012681481427699686635516772923547347328L,
             0.0012489322866834830413292771335113136034L,
             -0.57058739515423112045108068834668269608e-4L,
-            0.8207548771933585614380644961342925976e-6L     
+            0.8207548771933585614380644961342925976e-6L
          };
-         static const T Q[] = { 
+         static const T Q[] = {
             1,
             -2.9629552288944259229543137757200262073L,
             3.7118380799042118987185957298964772755L,
@@ -590,7 +590,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
          T zm2 = 2 - z;
          T r = -zm2 * zm1;
          T R = tools::evaluate_polynomial(P, 1.625 - z) / tools::evaluate_polynomial(Q, 1.625 - z);
-         
+
          result += r * Y + r * R;
       }
       else
@@ -604,7 +604,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
          //
          static const float Y = 0.443811893463134765625f;
 
-         static const T P[] = {    
+         static const T P[] = {
             -0.021027558364667626231512090082402429494L,
             0.15128811104498736604523586803722368377L,
             -0.26249631480066246699388544451126410278L,
@@ -616,7 +616,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
             -0.11088589183158123733132268042570710338e-4L,
             0.13240510580220763969511741896361984162e-6L
          };
-         static const T Q[] = {    
+         static const T Q[] = {
             1,
             -2.4240003754444040525462170802796471996L,
             2.4868383476933178722203278602342786002L,
@@ -632,7 +632,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
          T zm2 = 2 - z;
          T r = -zm2 * zm1;
          T R = tools::evaluate_polynomial(P, zm2) / tools::evaluate_polynomial(Q, zm2);
-         
+
          result += r * Y + r * R;
       }
    }
@@ -1440,7 +1440,7 @@ T gamma_P_derivative_imp(T a, T x, const L& l)
    }
 
    f1 /= x;
-   
+
    return f1;
 }
 

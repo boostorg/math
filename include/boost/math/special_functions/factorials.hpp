@@ -1,4 +1,4 @@
-//  (C) Copyright John Maddock 2006.
+//  Copyright John Maddock 2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,7 +9,7 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/array.hpp>
 #ifdef BOOST_MSVC
-#pragma warning(push)
+#pragma warning(push) // Temporary until lexical cast fixed.
 #pragma warning(disable: 4127 4701)
 #endif
 #include <boost/lexical_cast.hpp>
@@ -18,13 +18,15 @@
 #endif
 #include <cmath>
 
-namespace boost{ namespace math{
-
+namespace boost { namespace math
+{
+// Forward declarations:
 template <class T>
 T unchecked_factorial(unsigned i);
 template <class T>
 struct max_factorial;
 
+// efinitions:
 template <>
 inline float unchecked_factorial<float>(unsigned i)
 {
@@ -394,13 +396,13 @@ struct max_factorial
 template <class T>
 T factorial(unsigned i)
 {
-   using namespace std;
+   using namespace std; // Aid ADL for floor.
 
    if(i <= max_factorial<T>::value)
       return unchecked_factorial<T>(i);
    T result = boost::math::tgamma(static_cast<T>(i+1));
    if(result > tools::max_value<T>())
-      return result; // overflowed value, tgamma will have signalled the error already
+      return result; // Overflowed value! (But tgamma will have signalled the error already).
    return floor(result + 0.5);
 }
 
