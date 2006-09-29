@@ -1,15 +1,29 @@
-//  (C) Copyright John Maddock 2006.
+//  Copyright John Maddock 2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <ostream>
-#include <istream>
-#include <cmath>
+// real_concept is an archetype for User defined Real types.
+
+// This file defines the features, constructors, operators, functions...
+// that are essential to use mathematical and statistical functions.
+// The template typename "RealType" is used where this type
+// (as well as the normal built-in types, float, double & long double)
+// can be used.
+// That this is the minimum set is confirmed by use as a type
+// in tests of all functions & distributions, for example:
+//   test_spots(0.F); & test_spots(0.);  for float and double, but also
+//   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+// NTL quad_float type is an example of a type meeting the requirements.
+
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/precision.hpp>
+
+#include <ostream>
+#include <istream>
+#include <cmath>
 
 #ifndef BOOST_MATH_REAL_CONCEPT_HPP
 #define BOOST_MATH_REAL_CONCEPT_HPP
@@ -22,7 +36,7 @@ namespace concepts
 class real_concept
 {
 public:
-   // constructors:
+   // Constructors:
    real_concept() : m_value(0){}
    real_concept(char c) : m_value(c){}
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
@@ -65,10 +79,10 @@ public:
    real_concept& operator=(double c) { m_value = c; return *this; }
    real_concept& operator=(long double c) { m_value = c; return *this; }
 
-   // access:
+   // Access:
    long double value()const{ return m_value; }
 
-   // member arithmetic:
+   // Member arithmetic:
    real_concept& operator+=(const real_concept& other)
    { m_value += other.value(); return *this; }
    real_concept& operator-=(const real_concept& other)
@@ -112,7 +126,7 @@ inline real_concept operator/(const real_concept& a, const real_concept& b)
    return result;
 }
 
-// comparison:
+// Comparison:
 inline bool operator == (const real_concept& a, const real_concept& b)
 { return a.value() == b.value(); }
 inline bool operator != (const real_concept& a, const real_concept& b)
@@ -125,8 +139,9 @@ inline bool operator > (const real_concept& a, const real_concept& b)
 { return a.value() > b.value(); }
 inline bool operator >= (const real_concept& a, const real_concept& b)
 { return a.value() >= b.value(); }
+
 #if 0
-// non-member mixed compare:
+// Non-member mixed compare:
 template <class T>
 inline bool operator == (const T& a, const real_concept& b)
 {
@@ -157,8 +172,9 @@ inline bool operator >= (const T& a, const real_concept& b)
 {
    return a >= b.value();
 }
-#endif
-// non-member functions:
+#endif  // Non-member mixed compare:
+
+// Non-member functions:
 inline real_concept acos(real_concept a)
 { return std::acos(a.value()); }
 inline real_concept cos(real_concept a)
@@ -213,7 +229,7 @@ inline real_concept sqrt(real_concept a)
 inline real_concept tanh(real_concept a)
 { return std::tanh(a.value()); }
 
-// streaming:
+// Streaming:
 template <class charT, class traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const real_concept& a)
 {
@@ -228,9 +244,10 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
    return is;
 }
 
-} // namepace concepts
+} // namespace concepts
 
-namespace tools{
+namespace tools
+{
 
 template <>
 inline int digits<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
@@ -290,5 +307,4 @@ inline concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts
 } // namespace boost
 
 #endif // BOOST_MATH_REAL_CONCEPT_HPP
-
 
