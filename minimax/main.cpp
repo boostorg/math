@@ -1,3 +1,7 @@
+//  (C) Copyright John Maddock 2006.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_UBLAS_TYPE_CHECK_EPSILON (type_traits<real_type>::type_sqrt (boost::math::tools::epsilon <real_type>()))
 #define BOOST_UBLAS_TYPE_CHECK_MIN (type_traits<real_type>::type_sqrt ( boost::math::tools::min_value<real_type>()))
@@ -61,6 +65,7 @@ void step_some(unsigned count)
             rel_error, 
             skew, 
             working_precision));
+         std::cout << "Max error in interpolated form: " << std::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(p_remez->max_error()) << std::endl;
          //
          // Signal that we've started:
          //

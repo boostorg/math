@@ -6,6 +6,8 @@
 #ifndef BOOST_MATH_TOOLS_EVALUATION_TYPE_HPP
 #define BOOST_MATH_TOOLS_EVALUATION_TYPE_HPP
 
+#include <boost/mpl/if.hpp>
+
 namespace boost{ namespace math{ namespace tools{
 
 template <class T>

@@ -16,6 +16,7 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/array.hpp>
+#include <boost/test/included/test_exec_monitor.hpp>
 
 //
 // this is a sort of recursive include, since this file
@@ -4277,7 +4278,7 @@ void find_best_lanczos(const char* name, T eps, int max_scan = 100)
 
    print_code(best, name);
 }
-int main(int argc, char*argv[])
+int test_main(int argc, char*argv [])
 {
    bool test_double(false), test_long(false), test_float(false), test_quad(false), spots(false), test_data(false);
 
@@ -4315,6 +4316,7 @@ int main(int argc, char*argv[])
    if(spots)
    {
       // these are optimal N and R from Pugh:
+      calculate_lanczos_spot(61, 63.192152);
       calculate_lanczos_spot(31, 32.080670);
       calculate_lanczos_spot(6, 5.581);
       calculate_lanczos_spot(11, 10.900511);

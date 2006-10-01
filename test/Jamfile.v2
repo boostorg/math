@@ -38,4 +38,7 @@ run test_roots.cpp ;
 run test_students_t.cpp ;
 run test_tgamma_ratio.cpp ;
 run test_toms748_solve.cpp ;
+run test_digamma.cpp ;
+
+
 

@@ -1,6 +1,11 @@
+//  (C) Copyright John Maddock 2006.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define L22
 #include "../tools/ntl_rr_lanczos.hpp"
+#include "../tools/ntl_rr_digamma.hpp"
 #include <boost/math/tools/ntl.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/special_functions/log1p.hpp>
@@ -9,6 +14,7 @@
 #include <boost/math/special_functions/erf.hpp>
 
 #include <cmath>
+
 
 NTL::RR f(const NTL::RR& x, int variant)
 {
@@ -108,26 +114,37 @@ NTL::RR f(const NTL::RR& x, int variant)
       }
    case 9:
       {
-      NTL::RR y = 0.5 - x;
-      return boost::math::erfc_inv(y);
-      }
-   case 10:
-      {
          NTL::RR x2 = x;
          if(x2 == 0)
             x2 = boost::lexical_cast<NTL::RR>("1e-5000");
          NTL::RR y = exp(-x2*x2); // sqrt(-log(x2)) - 5;
          return boost::math::erfc_inv(y) / x2;
       }
+   case 10:
+      {
+         int current_precision = NTL::RR::precision();
+         if(current_precision < 1000)
+            NTL::RR::SetPrecision(1000);
+         //
+         // This value for the root of digamma is calculated using our
+         // differentiated lanczos approximation.  It agrees with Cody
+         // to ~ 25 digits and to Morris to 35 digits.  See:
+         // TOLMS ALGORITHM 708 (Didonato and Morris).
+         // and Math. Comp. 27, 123-127 (1973) by Cody, Strecok and Thacher.
+         //
+         NTL::RR root = boost::lexical_cast<NTL::RR>("1.4616321449683623412626595423257213234331845807102825466429633351908372838889871");
+
+         NTL::RR x2 = x;
+         if(x2 == root)
+            x2 += 1e-40;
+         NTL::RR result =  boost::math::digamma(x2) / (x2 - root);
+         if(current_precision < 1000)
+            NTL::RR::SetPrecision(current_precision);
+         return result;
+      }
    }
    return 0;
 }
-
-/*
-NTL::RR f(const NTL::RR& x, int variant)
-{
-   return f0<NTL::RR>(x, variant);
-}*/
 
 void show_extra(
    const boost::math::tools::polynomial<NTL::RR>& n, 
@@ -138,14 +155,9 @@ void show_extra(
 {
    switch(variant)
    {
-   case 9:
-      {
-         NTL::RR v = boost::math::tools::log_min_value<NTL::RR>();
-         v *= -2;
-         v = sqrt(v);
-         v = 1 / v;
-         std::cout << "Minimum range = " << v << std::endl;
-      }
+   default:
+      // do nothing here...
+      ;
    }
 }
 
