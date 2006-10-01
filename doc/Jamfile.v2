@@ -14,7 +14,15 @@ boostbook standalone
         <xsl:param>chunk.section.depth=5
         <xsl:param>chunk.first.sections=1
         <xsl:param>toc.section.depth=5
+        <xsl:param>fop1.extensions=1
+        <xsl:param>fop.extensions=0
+        <xsl:param>body.start.indent=0pt
+        <xsl:param>page.margin.inner=0.5in
+        <xsl:param>page.margin.outer=0.5in
     ;
+
+
+
 
 
 
