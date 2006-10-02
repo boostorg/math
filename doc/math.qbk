@@ -66,7 +66,7 @@ along with the incomplete gamma and beta functions (four variants
 of each) and all the possible inverses of these.  All the implementations
 are fully generic and support the use of arbitrary "real-number" types,
 although they are optimised for use with types with known-about
-mantissa sizes: typically `float`, `double` or `long double`.
+significand sizes: typically `float`, `double` or `long double`.
 Use of these functions with interval arithmetic (Boost.Interval)
 isn't quite supported yet, but it's something that needs to be investigated.
 

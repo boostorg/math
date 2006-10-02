@@ -74,7 +74,7 @@ Note that only results for the widest floating-point type on the system are give
 narrower types have __zero_error.
 
 [table Errors In the Function beta(a, b, x)
-[[Mantissa Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
 [[53] [Win32, Visual C++ 8] [Peak=39 Mean=2.9] [Peak=91 Mean=12.7] [Peak=635 Mean=25]]
 [[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=26 Mean=3.6] [Peak=180.7 Mean=30.1] [Peak~68,580 Mean=2,816]]
 [[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=13 Mean=2.4] [Peak=67.1 Mean=13.4] [Peak~68,380 Mean=2,760]]
@@ -82,7 +82,7 @@ narrower types have __zero_error.
 ]
 
 [table Errors In the Function betac(a,b,x)
-[[Mantissa Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
 [[53] [Win32, Visual C++ 8] [Peak=12.0 Mean=2.4] [Peak=91 Mean=15] [Peak=3718 Mean=113]]
 [[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=19.8 Mean=3.8] [Peak=295.1 Mean=33.9] [Peak~104,400 Mean=5,468]]
 [[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=11.2 Mean=2.4] [Peak=63.5 Mean=13.6] [Peak~104,500 Mean=5,444]]
@@ -90,7 +90,7 @@ narrower types have __zero_error.
 ]
 
 [table Errors In the Function ibeta(a,b,x)
-[[Mantissa Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
 [[53] [Win32, Visual C++ 8] [Peak=42.3 Mean=2.9\n\n(GSL Peak=682 Mean=32.5)\n(Cephes Peak=42.7 Mean=7.0)]  [Peak=108 Mean=16.6\n\n(GSL Peak=690 Mean=151)\n(Cephes Peak=1545 Mean=218)] [Peak=4109 Mean=203\n\n(GSL Peak~390000 Mean~18000)\n(Cephes Peak~560000 Mean~20000)]]
 [[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=21.9 Mean=3.1] [Peak=270.7 Mean=26.8] [Peak~53,560 Mean=2,948]]
 [[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=15.4 Mean=3.0] [Peak=112.9 Mean=14.3] [Peak~53,560 Mean=2,893]]
@@ -98,7 +98,7 @@ narrower types have __zero_error.
 ]
 
 [table Errors In the Function ibetac(a,b,x)
-[[Mantissa Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
 [[53] [Win32, Visual C++ 8] [Peak=13.9 Mean=2.0]  [Peak=56.2 Mean=14] [Peak=2670 Mean=159]]
 [[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=21.1 Mean=3.6] [Peak=221.7 Mean=25.8] [Peak~91,790 Mean=3,047]]
 [[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=10.6 Mean=2.2] [Peak=73.9 Mean=11.9] [Peak~91,790 Mean=3,029]]
