@@ -21,6 +21,7 @@
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/tr1/random.hpp>
 #include <boost/tr1/tuple.hpp>
+#include <boost/math/tools/real_cast.hpp>
 
 #include <set>
 #include <vector>

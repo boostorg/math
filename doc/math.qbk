@@ -102,6 +102,7 @@ some typical applications in statistics.
 [section:special Special Functions]
 [include tgamma.qbk]
 [include lgamma.qbk]
+[include digamma.qbk]
 [include gamma_ratios.qbk]
 [include factorials.qbk]
 [include igamma.qbk]

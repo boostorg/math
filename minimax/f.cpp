@@ -132,11 +132,23 @@ NTL::RR f(const NTL::RR& x, int variant)
          // TOLMS ALGORITHM 708 (Didonato and Morris).
          // and Math. Comp. 27, 123-127 (1973) by Cody, Strecok and Thacher.
          //
-         NTL::RR root = boost::lexical_cast<NTL::RR>("1.4616321449683623412626595423257213234331845807102825466429633351908372838889871");
+         //NTL::RR root = boost::lexical_cast<NTL::RR>("1.4616321449683623412626595423257213234331845807102825466429633351908372838889871");
+
+         static boost::math::tools::eps_tolerance<NTL::RR> tol(1000);
+         static boost::uintmax_t max_iter = 1000;
+         static const NTL::RR root = boost::math::tools::bracket_and_solve_root(&boost::math::digamma, NTL::RR(1.4), NTL::RR(1.5), true, tol, max_iter).first;
 
          NTL::RR x2 = x;
-         if(x2 == root)
-            x2 += 1e-40;
+         double lim = 1e-65;
+         if(fabs(x2 - root) < lim)
+         {
+            static const NTL::RR a = boost::math::digamma(root - lim) / -lim;
+            static const NTL::RR b = boost::math::digamma(root + lim) / lim;
+            NTL::RR fract = (x2 - root + lim) / (2*lim);
+            NTL::RR r = (1-fract) * a + fract * b;
+            std::cout << "In root area: " << r;
+            return r;
+         }
          NTL::RR result =  boost::math::digamma(x2) / (x2 - root);
          if(current_precision < 1000)
             NTL::RR::SetPrecision(current_precision);
