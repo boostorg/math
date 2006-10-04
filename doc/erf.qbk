@@ -70,15 +70,6 @@ versions of these functions use differing implementations internally, so this
 gives us reasonably independent test data.  Using our test data to test other
 "known good" implementations also provides an additional sanity check. 
 
-One should note that our tests rely on decimal to binary conversion of 
-floating-point numbers, and assume that the result will be correctly rounded.
-In practice, it appears that in a few very rare cases the test data may be incorrect in the last bit:
-this depends upon the compiler and standard library used, and means that the 
-relative errors quoted above have to treated somewhat circumspectly.  Using
-binary or hexadecimal coded test data would remove this issue (or at least
-confirm whether it is actually an issue or not), but would make the test data
-unportable, so is not used at present.
-
 [h4 Implementation]
 
 All versions of these functions first use the usual reflection formulas

@@ -122,6 +122,10 @@ NTL::RR f(const NTL::RR& x, int variant)
       }
    case 10:
       {
+         //
+         // Digamma over the interval [1,2], set x-offset to 1
+         // and optimise for absolute error over [0,1].
+         //
          int current_precision = NTL::RR::precision();
          if(current_precision < 1000)
             NTL::RR::SetPrecision(1000);
@@ -129,11 +133,16 @@ NTL::RR f(const NTL::RR& x, int variant)
          // This value for the root of digamma is calculated using our
          // differentiated lanczos approximation.  It agrees with Cody
          // to ~ 25 digits and to Morris to 35 digits.  See:
-         // TOLMS ALGORITHM 708 (Didonato and Morris).
+         // TOMS ALGORITHM 708 (Didonato and Morris).
          // and Math. Comp. 27, 123-127 (1973) by Cody, Strecok and Thacher.
          //
          //NTL::RR root = boost::lexical_cast<NTL::RR>("1.4616321449683623412626595423257213234331845807102825466429633351908372838889871");
-
+         //
+         // Actually better to calculate the root on the fly, it appears to be more
+         // accurate: convergence is easier with the 1000-bit value, the approximation
+         // produced agrees with functions.mathworld.com values to 35 digits even quite
+         // near the root.
+         //
          static boost::math::tools::eps_tolerance<NTL::RR> tol(1000);
          static boost::uintmax_t max_iter = 1000;
          static const NTL::RR root = boost::math::tools::bracket_and_solve_root(&boost::math::digamma, NTL::RR(1.4), NTL::RR(1.5), true, tol, max_iter).first;
@@ -142,6 +151,12 @@ NTL::RR f(const NTL::RR& x, int variant)
          double lim = 1e-65;
          if(fabs(x2 - root) < lim)
          {
+            //
+            // This is a problem area:
+            // x2-root suffers cancellation error, so does digamma.
+            // That gets compounded again when Remez calculates the error
+            // function.  This cludge seems to stop the worst of the problems:
+            //
             static const NTL::RR a = boost::math::digamma(root - lim) / -lim;
             static const NTL::RR b = boost::math::digamma(root + lim) / lim;
             NTL::RR fract = (x2 - root + lim) / (2*lim);
