@@ -61,10 +61,13 @@ graphing program (or spreadsheet) for further analysis.
       test_data& insert(F func, const parameter_info<T>& arg1);
 
       template <class F>
-      test_data& insert(F func, const parameter_info<T>& arg1, const parameter_info<T>& arg2);
+      test_data& insert(F func, const parameter_info<T>& arg1, 
+                        const parameter_info<T>& arg2);
 
       template <class F>
-      test_data& insert(F func, const parameter_info<T>& arg1, const parameter_info<T>& arg2, const parameter_info<T>& arg3);
+      test_data& insert(F func, const parameter_info<T>& arg1, 
+                        const parameter_info<T>& arg2, 
+                        const parameter_info<T>& arg3);
 
       void clear();
 
@@ -87,13 +90,15 @@ graphing program (or spreadsheet) for further analysis.
    };
 
    template <class charT, class traits, class T>
-   std::basic_ostream<charT, traits>& write_csv(std::basic_ostream<charT, traits>& os,
-                                                const test_data<T>& data);
+   std::basic_ostream<charT, traits>& write_csv(
+               std::basic_ostream<charT, traits>& os,
+               const test_data<T>& data);
 
    template <class charT, class traits, class T>
-   std::basic_ostream<charT, traits>& write_csv(std::basic_ostream<charT, traits>& os,
-                                                const test_data<T>& data,
-                                                const charT* separator);
+   std::basic_ostream<charT, traits>& write_csv(
+               std::basic_ostream<charT, traits>& os,
+               const test_data<T>& data,
+               const charT* separator);
 
    template <class T>
    std::ostream& write_code(std::ostream& os,
