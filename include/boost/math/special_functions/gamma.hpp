@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_SF_GAMMA_HPP
 #define BOOST_MATH_SF_GAMMA_HPP
 
+#include <boost/config.hpp>
 #ifdef BOOST_MSVC
 # pragma warning(push)
 # pragma warning(disable: 4127 4701)
@@ -17,7 +18,6 @@
 #ifdef BOOST_MSVC
 # pragma warning(pop)
 #endif
-#include <boost/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
@@ -30,6 +30,7 @@
 #include <boost/math/special_functions/sqrtp1m1.hpp>
 #include <boost/math/special_functions/lanczos.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/detail/igamma_large.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/assert.hpp>
 
@@ -1312,21 +1313,87 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
    else
    {
       //
-      // Changeover here occurs at P ~ Q ~ 0.5
+      // Begin by testing whether we're in the "bad" zone
+      // where the result will be near 0.5 and the usual
+      // series and continued fractions are slow to converge:
       //
-      result = normalised ? regularised_gamma_prefix(a, x, l) : full_igamma_prefix(a, x);
-      if(x < a)
+      bool use_temme = false;
+      if(normalised && std::numeric_limits<T>::is_specialized && (a > 20))
       {
-         // Compute P:
-         if(result != 0)
-            result *= detail::lower_gamma_series(a, x, boost::math::tools::digits<T>()) / a;
+         T sigma = fabs((x-a)/a);
+         if((a > 200) && (tools::digits<T>() <= 113))
+         {
+            //
+            // This limit is chosen so that we use Temme's expansion
+            // only if the result would be larger than about 10^-6.
+            // Below that the regular series and continued fractions
+            // converge OK, and if we use Temme's method we get increasing
+            // errors from the dominant erfc term as it's (inexact) argument
+            // increases in magnitude.
+            //
+            if(20 / a > sigma * sigma)
+               use_temme = true;
+         }
+         else if(tools::digits<T>() <= 64)
+         {
+            // Note in this zone we can't use Temme's expansion for 
+            // types longer than an 80-bit real:
+            // it would require too many terms in the polynomials.
+            if(sigma < 0.4)
+               use_temme = true;
+         }
+      }
+      if(use_temme)
+      {
+         //
+         // Use compile time dispatch to the appropriate
+         // Temme asymptotic expansion.  This may be dead code
+         // if T does not have numeric limits support, or has
+         // too many digits for the most precise version of
+         // these expansions, in that case we'll be calling
+         // an empty function.
+         //
+         typedef typename mpl::if_c<
+            (std::numeric_limits<T>::digits == 0)
+            ||
+            (std::numeric_limits<T>::digits > 113),
+            mpl::int_<0>,
+            typename mpl::if_c<
+               (std::numeric_limits<T>::digits <= 53),
+               mpl::int_<53>,
+               typename mpl::if_c<
+                  (std::numeric_limits<T>::digits <= 64),
+                  mpl::int_<64>,
+                  mpl::int_<113>
+               >::type
+            >::type
+         >::type tag_type;
+
+         result = igamma_temme_large(a, x, static_cast<tag_type const*>(0));
+         if(x >= a)
+            invert = !invert;
       }
       else
       {
-         // Compute Q:
-         invert = !invert;
-         if(result != 0)
-            result *= upper_gamma_fraction(a, x, tools::digits<T>());
+         //
+         // Regular case where the result will not be too close to 0.5.
+         //
+         // Changeover here occurs at P ~ Q ~ 0.5
+         //
+         result = normalised ? regularised_gamma_prefix(a, x, l) : full_igamma_prefix(a, x);
+         if(x < a)
+         {
+            // Compute P:
+            if(result != 0)
+               result *= detail::lower_gamma_series(a, x, boost::math::tools::digits<T>()) / a;
+         }
+         else
+         {
+            // Compute Q:
+            invert = !invert;
+            if(result != 0)
+               result *= upper_gamma_fraction(a, x, tools::digits<T>());
+         }
       }
    }
 
