@@ -132,22 +132,22 @@ naive implementation without special case handling since Legendre's continued fr
 These four functions share a common implementation since
 they are all related via:
 
-[$../equations/igamma5.png]
+1) [$../equations/igamma5.png]
 
-[$../equations/igamma6.png]
+2) [$../equations/igamma6.png]
 
-[$../equations/igamma7.png]
+3) [$../equations/igamma7.png]
 
 The lower incomplete gamma is computed from its series representation:
 
-[$../equations/igamma8.png]
+4) [$../equations/igamma8.png]
 
 Or by subtraction of the upper integral from either gamma(a) or 1
 when /x > a and x > 1.1/.
 
 The upper integral is computed from Legendre's continued fraction representation:
 
-[$../equations/igamma9.png]
+5) [$../equations/igamma9.png]
 
 When /x > 1.1/ or by subtraction of the lower integral from either gamma(a) or 1
 when /x < a/.
@@ -156,12 +156,12 @@ For /x < 1.1/ computation of the upper integral is more complex as the continued
 fraction representation is inaccurate in this area.  However there is another 
 series representation for the lower integral:
 
-[$../equations/igamma10.png]
+6) [$../equations/igamma10.png]
 
 That lends itself to calculation of the upper integral via rearrangement
 to:
 
-[$../equations/igamma11.png]
+7) [$../equations/igamma11.png]
 
 Obviously this is only accurate if the functions "powm1" and "gp1m1" are
 accurately calculated. "gp1m1" is computed via the following rearrangement
@@ -169,7 +169,7 @@ of the __lanczos, note that no generic version of this function is available
 and so the accuracy of the fully generic version of the upper incomplete
 gamma functions is likely to limited to approximately long double precision.
 
-[$../equations/igamma11b.png]
+8) [$../equations/igamma11b.png]
 
 The terms in square brackets in the above are evaluated as special
 functions in their own right to avoid cancellation errors.
@@ -188,22 +188,58 @@ the upper integral Q.
 If a is an integer in the range /1 <= a < 30/ then the following 
 finite sum is used:
 
-[$../equations/igamma1f.png]
+9) [$../equations/igamma1f.png]
 
 While for half integers in the range /0.5 <= a < 30/ then the
 following finite sum is used:
 
-[$../equations/igamma2f.png]
+10) [$../equations/igamma2f.png]
 
 These are both more stable and more efficient than the continued fraction
 alternative.
+
+When the argument /a/ is large, and /x ~ a/ then the series (4) and continued 
+fraction (5) above are very slow to converge.  In this area an expansion due to
+Temme is used:
+
+11) [$../equations/igamma16.png]
+
+12) [$../equations/igamma17.png]
+
+13) [$../equations/igamma18.png]
+
+14) [$../equations/igamma19.png]
+
+The double sum is truncated to a fixed number of terms - to give a specific
+target precision - and evaluated as a polynomial-of-polynomials.  There are 
+versions for up to 128-bit long double precision: types requiring
+greater precision than that do not use these expansions.  The
+coefficients C[sub k][super n] are computed in advance using the recurrance
+relations given by Temme.  The zone where these expansions are used is
+
+   (a > 20) && (a < 200) && fabs(x-a)/a < 0.4
+   
+And:
+
+   (a > 200) && (fabs(x-a)/a < 4.5/sqrt(a))
+   
+The latter range is valid for all types up to 128-bit long doubles, and
+is designed to ensure that the result is larger than 10[super -6], the 
+first range is used only for types up to 80-bit long doubles.  These
+domains are narrower than the ones recomended by either Temme or Didonato
+and Morris.  However, using a wider range results in large and inexact
+(i.e. computed) values being passed to the `exp` and `erfc` functions
+resulting in significantly larger error rates.  In other words there is a
+fine trade off here between efficiency and error.  The current limits should
+keep the number of iterations required by (4) and (5) to no more than ~20
+at double precision.
 
 For the normalised incomplete gamma functions, calculation of the 
 leading power terms is central to the accuracy of the function.
 For smallish a and x combining
 the power terms with the __lanczos gives the greatest accuracy:
 
-[$../equations/igamma12.png]
+15) [$../equations/igamma12.png]
 
 In the event that this causes underflow/overflow then the exponent can 
 be reduced by a factor of /a/ and brought inside the power term.
@@ -213,7 +249,7 @@ near one: this will not be computed accurately via the pow function,
 and taking logs simply leads to cancellation errors.  The worst of the
 errors can be avoided by using:
 
-[$../equations/igamma13.png]
+16) [$../equations/igamma13.png]
 
 when /a-x/ is small and a and x are large.  There is still a subtraction
 and therefore some cancellation errors - but the terms are small so the absolute
@@ -223,22 +259,14 @@ large a and x the errors will still get you eventually, although this does
 delay the inevitable much longer than other methods.  Use of /log(1+x)-x/ here
 is inspired by Temme (see references below).
 
-Finally, I note that there is an asymptotic expansion available
-when a and x are large: however this requires backwards evaluation
-of a series (forwards evaluation is unstable), and therefore 
-foreknowledge of the number of terms required (see Temme).  The accuracy quoted
-by its authors is also lower than that obtained here with careful
-evaluation of the leading power terms.  However, the Legendre continued
-fraction in particular become increasingly expensive to compute for larger
-a and x, so this area needs more investigation.
-
-Also needing further attention is the area where a is very small and x is near 1, 
-and where a and x are both vanishingly small.
-
 [h4 References]
 
 * N. M. Temme, A Set of Algorithms for the Incomplete Gamma Functions,
 Probability in the Engineering and Informational Sciences, 8, 1994.
+* N. M. Temme, The Asymptotic Expansion of the Incomplete Gamma Functions,
+Siam J. Math Anal. Vol 10 No 4, July 1979, p757.
+* A. R. Didonato and A. H. Morris, Computation of the Incomplete Gamma 
+Function Ratios and their Inverse.  ACM TOMS, Vol 12, No 4, Dec 1986, p377.
 * W. Gautschi, The Incomplete Gamma Functions Since Tricomi, In Tricomi's Ideas 
 and Contemporary Applied Mathematics, Atti dei Convegni Lincei, n. 147, 
 Accademia Nazionale dei Lincei, Roma, 1998, pp. 203--237. 
