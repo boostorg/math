@@ -14,8 +14,7 @@
 
 [h4 Incomplete gamma]
 
-* Implement Temme's asymptotic expansion for large a and z,
-this one is mainly an issue of performance rather than accuracy (medium priority).
+* No known issues?
 
 [h4 Beta Function]
 
