@@ -164,12 +164,12 @@ void test_spots(RealType T)
       tolerance);
 
    //
-   // Tests for PDF: we know that the peek value is at 1/sqrt(2*pi)
+   // Tests for PDF: we know that the peak value is at 1/sqrt(2*pi)
    //
-   tolerance = boost::math::tools::epsilon<RealType>() * 5 * 100; // 5 eps as a persentage
+   tolerance = boost::math::tools::epsilon<RealType>() * 5 * 100; // 5 eps as a percentage
    BOOST_CHECK_CLOSE(
       pdf(normal_distribution<RealType>(), static_cast<RealType>(0)), 
-      static_cast<RealType>(0.3989422804014326779399460599343818684759L),
+      static_cast<RealType>(0.3989422804014326779399460599343818684759L), // 1/sqrt(2*pi)
       tolerance);
    BOOST_CHECK_CLOSE(
       pdf(normal_distribution<RealType>(3), static_cast<RealType>(3)), 
@@ -220,6 +220,26 @@ void test_spots(RealType T)
        coefficient_of_variation(dist)
        , standard_deviation(dist) / mean(dist), tol2);
 
+    normal_distribution<RealType> norm01(0, 1); // Test default (0, 1) 
+    BOOST_CHECK_CLOSE(
+       mean(norm01),
+       static_cast<RealType>(0), 0); // Mean == zero
+
+    normal_distribution<RealType> defsd_norm01(0); // Test default (0, sd = 1) 
+    BOOST_CHECK_CLOSE(
+       mean(defsd_norm01),
+       static_cast<RealType>(0), 0); // Mean == zero
+
+    normal_distribution<RealType> def_norm01; // Test default (0, sd = 1) 
+    BOOST_CHECK_CLOSE(
+       mean(def_norm01),
+       static_cast<RealType>(0), 0); // Mean == zero
+
+    BOOST_CHECK_CLOSE(
+       standard_deviation(def_norm01),
+       static_cast<RealType>(1), 0); // Mean == zero
+
+
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
@@ -247,22 +267,21 @@ int test_main(int, char* [])
 
 Output:
 
------- Build started: Project: test_normal, Configuration: Debug Win32 ------
+------ Build started: Project: normal, Configuration: Debug Win32 ------
 Compiling...
 test_normal.cpp
 Linking...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_normal.exe"
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\normal.exe"
 Running 1 test case...
 Tolerance for type float is 0.01 %
 Tolerance for type double is 0.01 %
 Tolerance for type long double is 0.01 %
 Tolerance for type class boost::math::concepts::real_concept is 0.01 %
 *** No errors detected
-Build Time 0:07
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_normal\Debug\BuildLog.htm"
-test_normal - 0 error(s), 0 warning(s)
+Build Time 0:06
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\normal\Debug\BuildLog.htm"
+normal - 0 error(s), 0 warning(s)
 ========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
-
 
 */
 
