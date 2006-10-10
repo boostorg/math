@@ -68,7 +68,7 @@ RealType pdf(const students_t_distribution<RealType>& dist, const RealType& t)
    if(false == detail::check_df(
          BOOST_CURRENT_FUNCTION, degrees_of_freedom, &error_result))
       return error_result;
-	// Might conceivably permit df = +infinity and use normal distribution.
+	 // Might conceivably permit df = +infinity and use normal distribution.
    // TODO fails for t == 0 and df >=1e16 for ALL fp types.
    // - probably need to use normal distribution - when available.
    RealType basem1 = t * t / degrees_of_freedom;

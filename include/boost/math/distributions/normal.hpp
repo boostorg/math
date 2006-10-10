@@ -1,4 +1,4 @@
-//  (C) Copyright John Maddock 2006.
+//  Copyright John Maddock 2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,9 +9,9 @@
 // http://en.wikipedia.org/wiki/Normal_distribution
 // http://www.itl.nist.gov/div898/handbook/eda/section3/eda3661.htm
 // Also:
-// Weisstein, Eric W. "Normal Distribution." 
-// From MathWorld--A Wolfram Web Resource. 
-// http://mathworld.wolfram.com/NormalDistribution.html 
+// Weisstein, Eric W. "Normal Distribution."
+// From MathWorld--A Wolfram Web Resource.
+// http://mathworld.wolfram.com/NormalDistribution.html
 
 #include <boost/math/special_functions/erf.hpp> // for erf/erfc.
 #include <boost/math/distributions/complement.hpp>
@@ -24,7 +24,7 @@ class normal_distribution
 public:
    typedef RealType value_type;
 
-   normal_distribution(RealType mean = 0, RealType sd = 1) 
+   normal_distribution(RealType mean = 0, RealType sd = 1)
       : m_mean(mean), m_sd(sd) {}
 
    RealType mean()const

@@ -513,8 +513,8 @@ namespace boost
         return ibeta(k + 1, n - k, p);
       } // binomial cdf
 
-      namespace detail{
-
+      namespace detail
+      {
          template <class RealType>
          struct binomial_functor
          {
@@ -531,9 +531,8 @@ namespace boost
             const binomial_distribution<RealType>& dist;
             RealType t;
             bool complement;
-         };
-
-      }
+         }; // struct binomial_functor
+      } // namespace detail
 
       template <class RealType>
       RealType quantile(const binomial_distribution<RealType>& dist, const RealType& p)
