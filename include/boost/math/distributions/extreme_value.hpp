@@ -53,7 +53,7 @@ class extreme_value_distribution
 public:
    typedef RealType value_type;
 
-   extreme_value_distribution(RealType a, RealType b)
+   extreme_value_distribution(RealType a = 0, RealType b = 1)
       : m_a(a), m_b(b)
    {
       RealType err;

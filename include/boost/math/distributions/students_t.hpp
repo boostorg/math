@@ -286,6 +286,54 @@ inline RealType variance(const students_t_distribution<RealType>& dist)
    return v / (v - 2);
 }
 
+template <class RealType>
+inline RealType mode(const students_t_distribution<RealType>& dist)
+{
+   return 0;
+}
+
+template <class RealType>
+inline RealType skewness(const students_t_distribution<RealType>& dist)
+{
+   if(dist.degrees_of_freedom() <= 3)
+   {
+      tools::domain_error<RealType>(
+         BOOST_CURRENT_FUNCTION,
+         "Skewness is undefined for degrees of freedom <= 3, but got %1%.",
+         dist.degrees_of_freedom());
+   }
+   return 0;
+}
+
+template <class RealType>
+inline RealType kurtosis(const students_t_distribution<RealType>& dist)
+{
+   RealType df = dist.degrees_of_freedom();
+   if(df <= 3)
+   {
+      tools::domain_error<RealType>(
+         BOOST_CURRENT_FUNCTION,
+         "Skewness is undefined for degrees of freedom <= 3, but got %1%.",
+         df);
+   }
+   return 3 * (df - 2) / (df - 4);
+}
+
+template <class RealType>
+inline RealType kurtosis_excess(const students_t_distribution<RealType>& dist)
+{
+   // see http://mathworld.wolfram.com/Kurtosis.html
+   RealType df = dist.degrees_of_freedom();
+   if(df <= 3)
+   {
+      tools::domain_error<RealType>(
+         BOOST_CURRENT_FUNCTION,
+         "Skewness is undefined for degrees of freedom <= 3, but got %1%.",
+         df);
+   }
+   return 6 / (df - 4);
+}
+
 } // namespace math
 } // namespace boost
 

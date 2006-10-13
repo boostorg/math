@@ -380,7 +380,7 @@ void test_spots(RealType)
     static_cast<RealType>(0.00001525878906250000000000000000), // k=8  p = 0.25
     tolerance); 
 
-    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5;
+    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5 * 100;  // 5 eps as a persent
     binomial_distribution<RealType> dist(static_cast<RealType>(8), static_cast<RealType>(0.25));
     RealType x = static_cast<RealType>(0.125);
     using namespace std; // ADL of std names.
@@ -408,6 +408,22 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        coefficient_of_variation(dist)
        , standard_deviation(dist) / mean(dist), tol2);
+    // mode:
+    BOOST_CHECK_CLOSE(
+       mode(dist)
+       , static_cast<RealType>(std::floor(9 * 0.25)), tol2);
+    // skewness:
+    BOOST_CHECK_CLOSE(
+       skewness(dist)
+       , static_cast<RealType>(0.40824829046386301636621401245098L), tol2);
+    // kurtosis:
+    BOOST_CHECK_CLOSE(
+       kurtosis(dist)
+       , static_cast<RealType>(2.9166666666666666666666666666667L), tol2);
+    // kurtosis excess:
+    BOOST_CHECK_CLOSE(
+       kurtosis_excess(dist)
+       , static_cast<RealType>(-0.083333333333333333333333333333333L), tol2);
 
     // special cases for PDF:
     BOOST_CHECK_EQUAL(

@@ -147,6 +147,30 @@ inline RealType standard_deviation(const normal_distribution<RealType>& dist)
    return dist.standard_deviation();
 }
 
+template <class RealType>
+inline RealType mode(const normal_distribution<RealType>& dist)
+{
+   return dist.mean();
+}
+
+template <class RealType>
+inline RealType skewness(const normal_distribution<RealType>& dist)
+{
+   return 0;
+}
+
+template <class RealType>
+inline RealType kurtosis(const normal_distribution<RealType>& dist)
+{
+   return 3;
+}
+
+template <class RealType>
+inline RealType kurtosis_excess(const normal_distribution<RealType>& dist)
+{
+   return 0;
+}
+
 } // namespace math
 } // namespace boost
 

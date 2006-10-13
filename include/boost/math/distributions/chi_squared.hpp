@@ -170,6 +170,40 @@ inline RealType variance(const chi_squared_distribution<RealType>& dist)
   return 2 * dist.degrees_of_freedom();
 } // variance
 
+template <class RealType>
+inline RealType mode(const chi_squared_distribution<RealType>& dist)
+{
+   RealType df = dist.degrees_of_freedom();
+   if(df <= 2)
+      return tools::domain_error<RealType>(
+         BOOST_CURRENT_FUNCTION,
+         "The Chi-Squared distribution only has a mode for degrees of freedom >= 2, but got degrees of freedom = %1%.",
+         df);
+   return df - 2;
+}
+
+template <class RealType>
+inline RealType skewness(const chi_squared_distribution<RealType>& dist)
+{
+   using namespace std; // For ADL
+   RealType df = dist.degrees_of_freedom();
+   return 2 * sqrt(2 / df);
+}
+
+template <class RealType>
+inline RealType kurtosis(const chi_squared_distribution<RealType>& dist)
+{
+   RealType df = dist.degrees_of_freedom();
+   return 3 + 12 / df;
+}
+
+template <class RealType>
+inline RealType kurtosis_excess(const chi_squared_distribution<RealType>& dist)
+{
+   RealType df = dist.degrees_of_freedom();
+   return 12 / df;
+}
+
 //
 // Parameter estimation comes last:
 //

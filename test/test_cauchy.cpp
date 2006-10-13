@@ -374,11 +374,23 @@ void test_spots(RealType T)
    BOOST_CHECK_THROW(
        mean(dist),
        std::domain_error);
+   BOOST_CHECK_EQUAL(
+       mode(dist),
+       static_cast<RealType>(0));
    BOOST_CHECK_THROW(
        variance(dist),
        std::domain_error);
    BOOST_CHECK_THROW(
        standard_deviation(dist),
+       std::domain_error);
+   BOOST_CHECK_THROW(
+       kurtosis(dist),
+       std::domain_error);
+   BOOST_CHECK_THROW(
+       kurtosis_excess(dist),
+       std::domain_error);
+   BOOST_CHECK_THROW(
+       skewness(dist),
        std::domain_error);
    BOOST_CHECK_THROW(
        quantile(dist, RealType(0.0)),

@@ -58,7 +58,7 @@ class exponential_distribution
 public:
    typedef RealType value_type;
 
-   exponential_distribution(RealType lambda)
+   exponential_distribution(RealType lambda = 1)
       : m_lambda(lambda)
    {
       RealType err;

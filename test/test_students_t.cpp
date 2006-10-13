@@ -320,6 +320,22 @@ void test_spots(RealType T)
     BOOST_CHECK_THROW(
        coefficient_of_variation(dist),
        std::overflow_error);
+    // mode:
+    BOOST_CHECK_CLOSE(
+       mean(dist)
+       , static_cast<RealType>(0), tol2);
+    // skewness:
+    BOOST_CHECK_CLOSE(
+       skewness(dist)
+       , static_cast<RealType>(0), tol2);
+    // kurtosis:
+    BOOST_CHECK_CLOSE(
+       kurtosis(dist)
+       , static_cast<RealType>(4.5), tol2);
+    // kurtosis excess:
+    BOOST_CHECK_CLOSE(
+       kurtosis_excess(dist)
+       , static_cast<RealType>(1.5), tol2);
 
     // Parameter estimation. These results are close to but
     // not identical to those reported on the NIST website at

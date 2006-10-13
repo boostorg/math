@@ -113,6 +113,42 @@ inline RealType variance(const cauchy_distribution<RealType>& dist)
       std::numeric_limits<RealType>::quiet_NaN());
 }
 
+template <class RealType>
+inline RealType mode(const cauchy_distribution<RealType>& dist)
+{
+   return 0;
+}
+
+template <class RealType>
+inline RealType skewness(const cauchy_distribution<RealType>& dist)
+{
+   return tools::domain_error<RealType>(
+      BOOST_CURRENT_FUNCTION,
+      "The Cauchy distribution does not have a skewness: "
+      "the only possible return value is %1%.",
+      std::numeric_limits<RealType>::quiet_NaN());
+}
+
+template <class RealType>
+inline RealType kurtosis(const cauchy_distribution<RealType>& dist)
+{
+   return tools::domain_error<RealType>(
+      BOOST_CURRENT_FUNCTION,
+      "The Cauchy distribution does not have a kurtosis: "
+      "the only possible return value is %1%.",
+      std::numeric_limits<RealType>::quiet_NaN());
+}
+
+template <class RealType>
+inline RealType kurtosis_excess(const cauchy_distribution<RealType>& dist)
+{
+   return tools::domain_error<RealType>(
+      BOOST_CURRENT_FUNCTION,
+      "The Cauchy distribution does not have a kurtosis: "
+      "the only possible return value is %1%.",
+      std::numeric_limits<RealType>::quiet_NaN());
+}
+
 } // namespace math
 } // namespace boost
 

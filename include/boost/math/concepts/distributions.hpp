@@ -1,0 +1,127 @@
+//  Copyright John Maddock 2006.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+
+#ifndef BOOST_MATH_DISTRIBUTION_CONCEPT_HPP
+#define BOOST_MATH_DISTRIBUTION_CONCEPT_HPP
+
+#include <boost/math/distributions/complement.hpp>
+#include <boost/concept_check.hpp>
+
+namespace boost{
+namespace math{
+namespace concepts{
+
+//
+// Begin by defining a concept archetype
+// for a distribution class:
+//
+template <class RealType>
+class distribution_archetype
+{
+public:
+   typedef RealType value_type;
+
+   distribution_archetype(const distribution_archetype&);
+   distribution_archetype& operator=(const distribution_archetype&);
+
+   // there is no default constructor, but we need a way to
+   // instantiate the archetype:
+   static distribution_archetype& get_object();
+};
+
+//
+// Non-member accessors:
+//
+template <class RealType>
+RealType pdf(const distribution_archetype<RealType>& dist, const RealType& x);
+
+template <class RealType>
+RealType cdf(const distribution_archetype<RealType>& dist, const RealType& x);
+
+template <class RealType>
+RealType quantile(const distribution_archetype<RealType>& dist, const RealType& p);
+
+template <class RealType>
+RealType cdf(const complemented2_type<distribution_archetype<RealType>, RealType>& c);
+
+template <class RealType>
+RealType quantile(const complemented2_type<distribution_archetype<RealType>, RealType>& c);
+
+template <class RealType>
+RealType mean(const distribution_archetype<RealType>& dist);
+
+template <class RealType>
+RealType standard_deviation(const distribution_archetype<RealType>& dist);
+
+template <class RealType>
+RealType variance(const distribution_archetype<RealType>& dist);
+
+template <class RealType>
+RealType hazard(const distribution_archetype<RealType>& dist);
+
+template <class RealType>
+RealType chf(const distribution_archetype<RealType>& dist);
+
+template <class RealType>
+RealType coefficient_of_variation(const distribution_archetype<RealType>& dist);
+
+template <class RealType>
+RealType mode(const distribution_archetype<RealType>& dist);
+
+template <class RealType>
+RealType skewness(const distribution_archetype<RealType>& dist);
+
+template <class RealType>
+RealType kurtosis_excess(const distribution_archetype<RealType>& dist);
+
+template <class RealType>
+RealType kurtosis(const distribution_archetype<RealType>& dist);
+
+//
+// Next comes the concept checks for verifying that a class
+// fullfils the requirements of a Distribution:
+//
+template <class Distribution>
+struct DistributionConcept
+{
+   void constraints() 
+   {
+      function_requires<CopyConstructibleConcept<Distribution> >();
+      function_requires<AssignableConcept<Distribution> >();
+
+      typedef Distribution::value_type value_type;
+
+      const Distribution& dist = DistributionConcept<Distribution>::get_object();
+
+      value_type x = 0;
+      value_type v = cdf(dist, x);
+      v = cdf(complement(dist, x));
+      v = pdf(dist, x);
+      v = quantile(dist, x);
+      v = quantile(complement(dist, x));
+      v = mean(dist);
+      v = mode(dist);
+      v = standard_deviation(dist);
+      v = variance(dist);
+      v = hazard(dist, x);
+      v = chf(dist, x);
+      v = coefficient_of_variation(dist);
+      v = skewness(dist);
+      v = kurtosis(dist);
+      v = kurtosis_excess(dist);
+   }
+private:
+   static Distribution& get_object();
+};
+
+} // namespace concepts
+} // namespace math
+} // namespace boost
+
+
+
+#endif // BOOST_MATH_DISTRIBUTION_CONCEPT_HPP
+

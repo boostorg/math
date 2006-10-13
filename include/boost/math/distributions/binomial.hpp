@@ -642,6 +642,41 @@ namespace boost
         return r.first + (r.second - r.first) / 2;
       } // quantile
 
+      template <class RealType>
+      inline RealType mode(const binomial_distribution<RealType>& dist)
+      {
+         using namespace std; // ADL of std functions
+         RealType p = dist.success_fraction();
+         RealType n = dist.trials();
+         return floor(p * (n + 1));
+      }
+
+      template <class RealType>
+      inline RealType skewness(const binomial_distribution<RealType>& dist)
+      {
+         using namespace std; // ADL of std functions
+         RealType p = dist.success_fraction();
+         RealType n = dist.trials();
+         return (1 - 2 * p) / sqrt(n * p * (1 - p));
+      }
+
+      template <class RealType>
+      inline RealType kurtosis(const binomial_distribution<RealType>& dist)
+      {
+         RealType p = dist.success_fraction();
+         RealType n = dist.trials();
+         return 3 - 6 / n + 1 / (n * p * (1 - p));
+      }
+
+      template <class RealType>
+      inline RealType kurtosis_excess(const binomial_distribution<RealType>& dist)
+      {
+         RealType p = dist.success_fraction();
+         RealType q = 1 - p;
+         RealType n = dist.trials();
+         return (1 - 6 * p * q) / (n * p * q);
+      }
+
     } // namespace math
   } // namespace boost
 

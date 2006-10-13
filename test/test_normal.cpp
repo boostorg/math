@@ -219,6 +219,22 @@ void test_spots(RealType T)
     BOOST_CHECK_CLOSE(
        coefficient_of_variation(dist)
        , standard_deviation(dist) / mean(dist), tol2);
+    // mode:
+    BOOST_CHECK_CLOSE(
+       mode(dist)
+       , static_cast<RealType>(8), tol2);
+    // skewness:
+    BOOST_CHECK_CLOSE(
+       skewness(dist)
+       , static_cast<RealType>(0), tol2);
+    // kertosis:
+    BOOST_CHECK_CLOSE(
+       kurtosis(dist)
+       , static_cast<RealType>(3), tol2);
+    // kertosis excess:
+    BOOST_CHECK_CLOSE(
+       kurtosis_excess(dist)
+       , static_cast<RealType>(0), tol2);
 
     normal_distribution<RealType> norm01(0, 1); // Test default (0, 1) 
     BOOST_CHECK_CLOSE(

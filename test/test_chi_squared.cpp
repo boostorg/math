@@ -370,7 +370,7 @@ void test_spots(RealType)
         tolerance);
   }
 
-    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5;
+    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5 * 100; // 5 eps as a percentage
     chi_squared_distribution<RealType> dist(static_cast<RealType>(8));
     RealType x = 7;
     using namespace std; // ADL of std names.
@@ -398,6 +398,22 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        coefficient_of_variation(dist)
        , standard_deviation(dist) / mean(dist), tol2);
+    // mode:
+    BOOST_CHECK_CLOSE(
+       mode(dist)
+       , static_cast<RealType>(6), tol2);
+    // skewness:
+    BOOST_CHECK_CLOSE(
+       skewness(dist)
+       , static_cast<RealType>(1), tol2);
+    // kurtosis:
+    BOOST_CHECK_CLOSE(
+       kurtosis(dist)
+       , static_cast<RealType>(4.5), tol2);
+    // kurtosis excess:
+    BOOST_CHECK_CLOSE(
+       kurtosis_excess(dist)
+       , static_cast<RealType>(1.5), tol2);
     // special cases:
     BOOST_CHECK_THROW(
        pdf(
