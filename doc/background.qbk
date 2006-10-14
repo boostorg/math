@@ -1,0 +1,52 @@
+[section:variates Random Variates and Distribution Parameters]
+
+[@http://en.wikipedia.org/wiki/Random_variate Random variates]
+and [@http://en.wikipedia.org/wiki/Parameter distribution parameters]
+are conventionally distinguished (for example in Wikipedia and Wolfram MathWorld
+by placing a semi-colon after the random variable (whose value you 'choose'),
+to separate the variable from the parameter(s) that defines the shape of the distribution.
+
+For example, the binomial distribution has two parameters:
+n (the number of trials) and p (the probability of success on one trial).
+
+The `binomial_distribution` constructor therefore has two parameters:
+
+	binomial_distribution(RealType n, RealType p);
+
+In this case the random variable is k: the number of successes observed,
+so the probability density/mass function (pdf) is written as /f(k; n, p)/.
+
+In this library the function `pdf` has one parameter specifying the distribution type,
+and a second parameter for the random variate.  So taking our binomial distribution 
+example, we would write:
+
+	pdf(binomial_distribution<RealType>(n, p), k);
+
+[endsect]
+
+[section:dist_params Discrete Probability Distributions]
+
+Note that the [@http://en.wikipedia.org/wiki/Discrete_probability_distribution 
+discrete distributions], including the binomial, negative binomial, Poisson & Bernoulli,
+are all mathematically defined as discrete functions:
+only integral values of the random variate are envisaged
+and the functions are only defined at these integral values.
+However because the method of calculation often uses continuous functions,
+it is convenient to treat them as if they were continous functions,
+and permit non-integral values of their parameters.
+
+To enforce a strict mathematical model,
+users may use floor or ceil functions on the random variate,
+prior to calling the distribution function,
+to enforce integral values.
+
+For similar reasons, in continuous distributions, parameters like degrees of freedom
+that might appear to be integral, are treated as real values
+(and are promoted from integer to floating-point if necessary).
+In this case however, that there are a small number of situations where non-integral
+degrees of freedom do have a genuine meaning.
+
+[endsect]
+
+
+
