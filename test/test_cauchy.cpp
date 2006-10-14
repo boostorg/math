@@ -365,7 +365,103 @@ void test_spots(RealType T)
          static_cast<RealType>(-10.0)),              // x
          static_cast<RealType>(0.0031515830315226799162155200667825L),                // probability.
 			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::pdf(
+         cauchy_distribution<RealType>(2, 5),      
+         static_cast<RealType>(1)),              // x
+         static_cast<RealType>(0.061213439650728975295724524374044L),                // probability.
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::pdf(
+         cauchy_distribution<RealType>(-2, 0.25),      
+         static_cast<RealType>(1)),              // x
+         static_cast<RealType>(0.0087809623774838805941453110826215L),                // probability.
+			tolerance); // %
 
+   //
+   // The following test values were calculated using MathCad,
+   // precision seems to be about 10^-13.
+   // 
+   tolerance = (std::max)(tolerance, static_cast<RealType>(1e-11));
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(1, 1),      
+         static_cast<RealType>(0.125)),              // x
+         static_cast<RealType>(0.271189304634946L),  // probability.
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(0.125)),              // x
+         static_cast<RealType>(0.539583424160566L),  // probability.
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(0.5)),              // x
+         static_cast<RealType>(0.647583617650433L),  // probability.
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(1)),              // x
+         static_cast<RealType>(0.750000000000000),  // probability.
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(2)),              // x
+         static_cast<RealType>(0.852416382349567),  // probability.
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(10)),              // x
+         static_cast<RealType>(0.968274482569447),  // probability.
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(100)),              // x
+         static_cast<RealType>(0.996817007235092),  // probability.
+			tolerance); // %
+
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(-0.125)),              // x
+         static_cast<RealType>(0.460416575839434),  // probability.
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(-0.5)),              // x
+         static_cast<RealType>(0.352416382349567),  // probability.
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(-1)),              // x
+         static_cast<RealType>(0.2500000000000000),  // probability.
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(-2)),              // x
+         static_cast<RealType>(0.147583617650433),  // probability.
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(-10)),              // x
+         static_cast<RealType>(0.031725517430554),  // probability.
+			tolerance); // % 
+   BOOST_CHECK_CLOSE(
+      ::boost::math::cdf(
+         cauchy_distribution<RealType>(0, 1),      
+         static_cast<RealType>(-100)),              // x
+         static_cast<RealType>(3.18299276490824E-3),  // probability.
+			tolerance); // %
 
    //
    // Things that are errors:

@@ -19,54 +19,63 @@
 namespace boost{ namespace math{
 
 template <class RealType>
-class cauchy_distribution
-{
-public:
-   typedef RealType value_type;
+class cauchy_distribution;
 
-   cauchy_distribution()
+namespace detail{
+
+template <class RealType>
+bool check_cauchy_scale(const char* func, RealType scale, RealType* result)
+{
+   if(scale <= 0)
    {
-   } // cauchy_distribution
-
-private:
-};
-
-typedef cauchy_distribution<double> cauchy;
-
-template <class RealType>
-RealType pdf(const cauchy_distribution<RealType>& dist, const RealType& x)
-{
-   RealType result = 1 / (constants::pi<RealType>() * (1 + x * x));
-   return result;
-} // pdf
+      *result = tools::domain_error<RealType>(
+         func,
+         "The scale parameter for the Cauchy distribution must be > 0 but got %1%.",
+         scale);
+      return false;
+   }
+   return true;
+}
 
 template <class RealType>
-RealType cdf(const cauchy_distribution<RealType>& dist, const RealType& x)
+RealType cdf_imp(const cauchy_distribution<RealType>& dist, const RealType& x, bool complement)
 {
    using namespace std; // for ADL of std functions
 
-   RealType mx = -fabs(x);
+   RealType result;
+   RealType loc = dist.location();
+   RealType scale = dist.scale();
+   if(0 == detail::check_cauchy_scale(BOOST_CURRENT_FUNCTION, scale, &result))
+      return result;
+   RealType mx = -fabs((x - loc) / scale);
 
    // special case first:
    if(mx > -tools::epsilon<RealType>() / 8)
       return 0.5;
 
-   RealType result = -atan(1 / mx) / constants::pi<RealType>();
+   result = -atan(1 / mx) / constants::pi<RealType>();
 
-   return (x > 0 ? 1	- result : result);
+   return (((x > loc) != complement) ? 1	- result : result);
 } // cdf
 
 template <class RealType>
-RealType quantile(const cauchy_distribution<RealType>& dist, const RealType& p)
+RealType quantile_imp(
+      const cauchy_distribution<RealType>& dist, 
+      const RealType& p, 
+      bool complement)
 {
    using namespace std; // for ADL of std functions
    // Special cases:
    if(p == 1)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return (complement ? -1 : 1) * tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
    if(p == 0)
-      return -tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return (complement ? 1 : -1) * tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
 
    RealType result;
+   RealType loc = dist.location();
+   RealType scale = dist.scale();
+   if(0 == detail::check_cauchy_scale(BOOST_CURRENT_FUNCTION, scale, &result))
+      return result;
    if(0 == detail::check_probability(BOOST_CURRENT_FUNCTION, p, &result))
       return result;
 
@@ -76,21 +85,79 @@ RealType quantile(const cauchy_distribution<RealType>& dist, const RealType& p)
       P = P - 1;
    // special case:
    if(P == 0.5)
-      return 0;
-   result = -1 / tan(constants::pi<RealType>() * P);
-   return result;
+      return loc;
+   result = -scale / tan(constants::pi<RealType>() * P);
+   return complement ? loc - result : loc + result;
 } // quantile
 
-template <class RealType>
-RealType cdf(const complemented2_type<cauchy_distribution<RealType>, RealType>& c)
-{
-   return cdf(c.dist, -c.param);
 }
 
 template <class RealType>
-RealType quantile(const complemented2_type<cauchy_distribution<RealType>, RealType>& c)
+class cauchy_distribution
 {
-   return -quantile(c.dist, c.param);
+public:
+   typedef RealType value_type;
+
+   cauchy_distribution(RealType a = 0, RealType b = 1)
+      : m_a(a), m_hg(b)
+   {
+      RealType r;
+      detail::check_cauchy_scale(BOOST_CURRENT_FUNCTION, b, &r);
+   } // cauchy_distribution
+
+   RealType location()const
+   {
+      return m_a;
+   }
+   RealType scale()const
+   {
+      return m_hg;
+   }
+
+private:
+   RealType m_a;    // The location, this is the median of the distribution
+   RealType m_hg;   // The scale, this is the half width at half height.
+};
+
+typedef cauchy_distribution<double> cauchy;
+
+template <class RealType>
+RealType pdf(const cauchy_distribution<RealType>& dist, const RealType& x)
+{
+   RealType result;
+   RealType loc = dist.location();
+   RealType scale = dist.scale();
+   if(0 == detail::check_cauchy_scale(BOOST_CURRENT_FUNCTION, scale, &result))
+      return result;
+
+   RealType xs = (x - loc) / scale;
+
+   result = 1 / (constants::pi<RealType>() * scale * (1 + xs * xs));
+   return result;
+} // pdf
+
+template <class RealType>
+inline RealType cdf(const cauchy_distribution<RealType>& dist, const RealType& x)
+{
+   return detail::cdf_imp(dist, x, false);
+} // cdf
+
+template <class RealType>
+inline RealType quantile(const cauchy_distribution<RealType>& dist, const RealType& p)
+{
+   return detail::quantile_imp(dist, p, false);
+} // quantile
+
+template <class RealType>
+inline RealType cdf(const complemented2_type<cauchy_distribution<RealType>, RealType>& c)
+{
+   return detail::cdf_imp(c.dist, c.param, true);
+}
+
+template <class RealType>
+inline RealType quantile(const complemented2_type<cauchy_distribution<RealType>, RealType>& c)
+{
+   return detail::quantile_imp(c.dist, c.param, true);
 }
 
 template <class RealType>
@@ -116,7 +183,7 @@ inline RealType variance(const cauchy_distribution<RealType>& dist)
 template <class RealType>
 inline RealType mode(const cauchy_distribution<RealType>& dist)
 {
-   return 0;
+   return dist.location();
 }
 
 template <class RealType>
