@@ -88,11 +88,39 @@ void test_spots(RealType)
   using  ::boost::math::pdf;
 
   BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(0)), // mean zero
+      static_cast<RealType>(0)),  // zero k events. 
+      static_cast<RealType>(0), // probability zero.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(0)), // mean zero
+      static_cast<RealType>(999)),  // any k events. 
+      static_cast<RealType>(0), // probability zero.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
+      static_cast<RealType>(0)),  // zero k events. 
+      static_cast<RealType>(3.678794411714420E-1), // probability.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
+      static_cast<RealType>(1)),  // one k event. 
+      static_cast<RealType>(7.357588823428830E-1), // probability.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
+      static_cast<RealType>(2)),  // two k events. 
+      static_cast<RealType>(9.196986029286060E-1), // probability.
+			tolerance);
+  BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(5.)), // mean
       static_cast<RealType>(5)),  // k events. 
       static_cast<RealType>(0.615960654833065), // probability.
 			tolerance);
-
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(5.)), // mean
       static_cast<RealType>(1)),  // k events. 
@@ -172,8 +200,7 @@ int test_main(int, char* [])
   cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
 #endif
 
-
-  
+ 
 #if 0
   using boost::math::cdf;
   using boost::math::pdf;
@@ -193,16 +220,11 @@ int test_main(int, char* [])
      cout << p << ' '
    << sum <<' ' 
    << cdf(poisson_distribution<double>(mean), static_cast<double>(i)) << ' ';
-     if (i > 0)
      {
        cout << boost::math::gamma_Q<double>(i+1, mean);
        double diff = boost::math::gamma_Q<double>(i+1, mean) - sum;
        cout << ' ' << diff; // 0 0 to 4, 1 eps 5 to 9, 10 to 20 2 eps, 21 upwards 3 eps
       
-     }
-     else
-     {
-       cout <<  pdf(poisson_distribution<double>(mean), static_cast<double>(0));
      }
      cout << endl;
   }
