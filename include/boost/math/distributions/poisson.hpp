@@ -83,6 +83,19 @@ namespace boost
       } // bool check_mean
 
       template <class RealType>
+      inline bool check_mean_NZ(const char* function, const RealType& mean, RealType* result)
+      {
+        if((mean <= 0) || !(boost::math::isfinite)(mean))
+        {
+          *result = tools::domain_error<RealType>(
+            function, 
+            "Mean argument is %1%, but must be > 0 !", mean);
+          return false;
+        }
+        return true;
+      } // bool check_mean_NZ
+
+      template <class RealType>
       inline bool check_dist(const char* function, const RealType& mean, RealType* result)
       { // Only one check, so this is redundant really but should be optimized away.
         return check_mean(function, mean, result);
@@ -224,7 +237,7 @@ namespace boost
     { // skewness = sqrt(l).
       return 1 / dist.mean(); // kurtosis_excess 1/mean from Wiki & MathWorld eq 31.
       // http://mathworld.wolfram.com/Kurtosis.html explains that the kurtosis excess
-      // and is more convenient because the kurtosis excess of a normal distribution is zero
+      // is more convenient because the kurtosis excess of a normal distribution is zero
       // whereas the true kurtosis is 3.
     } // RealType kurtosis_excess
 
@@ -236,7 +249,7 @@ namespace boost
       // http://www.itl.nist.gov/div898/handbook/eda/section3/eda35b.htm
       return 3 + 1 / dist.mean(); // NIST.
       // http://mathworld.wolfram.com/Kurtosis.html explains that the kurtosis excess
-      // and is more convenient because the kurtosis excess of a normal distribution is zero
+      // is more convenient because the kurtosis excess of a normal distribution is zero
       // whereas the true kurtosis is 3.
     } // RealType kurtosis
 
@@ -271,7 +284,6 @@ namespace boost
         return exp(-mean);
       }
       using boost::math::unchecked_factorial;
-      using namespace std; // Aid ADL for pow, exp, log.
       RealType floork = floor(k);
       if ((floork == k) // integral
         && k < max_factorial<RealType>::value)
@@ -285,8 +297,8 @@ namespace boost
         // == exp(log(e ^ -mean) + log (mean ^ k) - lgamma(k+1))
         // exp( -mean + log(mean) * k - lgamma(k+1))
         return exp(-mean + log(mean) * k - lgamma(k+1));
+        // return gamma_P_derivative(k+1, mean); // equivalent & also passes tests.
       }
-      // JM says PDF = gamma_P_derivative(k+1, lambda)
     } // pdf
 
     template <class RealType>
@@ -325,28 +337,33 @@ namespace boost
         return result;
       }
       if (mean == 0)
-      {
-        // Probability for any k is zero.
+      { // Probability for any k is zero.
         return 0;
       }
       if (k == 0)
-      { // gamma_Q will choke on k+1 = 1, so provide pdf for k == 0.
-        return pdf(dist, static_cast<RealType>(0)); 
+      { // return pdf(dist, static_cast<RealType>(0));
+        // but mean (and k) have already been checked,
+        // so this avoids unnecessary repeated checks.
+       return exp(-mean);
       }
 
       if(  // For small integral k use a finite sum - 
-        (k < 20) // it's cheaper than the gamma function.
+         // it's cheaper than the gamma function.
+         (k < 34) // 34 chosen as maximum unchecked_factorial with float.
+         // A smaller k might be more efficient than calling gamma_Q?
         && (floor(k) == k) // k is integral.
         ) 
       {
         RealType result = 0;
-        for(unsigned i = 0; i <= k; ++i)
-        {
-          result += pdf(dist, static_cast<RealType>(i));
+        for(int i = 0; i <= k; ++i)
+        { // cdf is sum of pdfs.
+          //result += pdf(dist, static_cast<RealType>(i));
+          result += exp(-mean) * pow(mean, i) /
+          unchecked_factorial<RealType>(tools::real_cast<unsigned int>(i));
         }
         return result;
       }
-      // Calculate poisson cdf using the gamma_q function.
+      // Calculate poisson cdf using the gamma_Q function.
       return gamma_Q(k+1, mean);
     } // binomial cdf
 
@@ -370,7 +387,6 @@ namespace boost
       // instead the incomplete gamma integral is employed,
 
       using boost::math::tools::domain_error;
-      using namespace std; // for ADL of std functions.
       
       RealType const& k = c.param;
       poisson_distribution<RealType> const& dist = c.dist;
@@ -393,58 +409,39 @@ namespace boost
         return 1;
       }
 
+      // Unlike un-complemented cdf (sum from 0 to k),
+      // can't use finite sum from k+1 to infinity for small integral k.
       return gamma_P(k + 1, mean); // Calculate Poisson cdf using the gamma_P function.
       // CCDF = gamma_P(k+1, lambda)
     } // poisson ccdf
-
-    namespace detail
-    {
-      template <class RealType>
-      struct poisson_functor
-      {
-        poisson_functor(const poisson_distribution<RealType>& d, const RealType& target, bool c = false)
-          : dist(d), t(target), complement(c)
-        { // Constructor.
-        }
-        RealType operator()(const RealType k)
-        {
-          if(k >= dist.mean())
-            return 1; // any positive value will do.
-          return complement ? t - cdf(boost::math::complement(dist, k)) : cdf(dist, k) - t;
-        }
-      private:
-        const poisson_distribution<RealType>& dist;
-        RealType t;
-        bool complement;
-      }; // struct poisson_functor
-    } // namespace detail
 
     template <class RealType>
     RealType quantile(const poisson_distribution<RealType>& dist, const RealType& p)
     { // Quantile (or Percent Point) Poisson function.
       // Return the number of expected events k for a given probability p.
-      //
-      // Argument checks:
-      RealType result;
-      if(false == poisson_detail::check_dist_and_prob(
+      RealType result; // of Argument checks:
+      if(false == poisson_detail::check_prob(
         BOOST_CURRENT_FUNCTION,
-        dist.mean(),
         p,
         &result))
       {
         return result;
       }
-      // Special cases?
-      //if(p == 0)
-      //{ // NOT necessarily zero!
-      //  return 0;
-      //}
-      //if(p == 1)
-      //{ // Not necessarily any special value of k which is unlimited.
-      //}
+      // Special case:
+      if (dist.mean() == 0)
+      { // if mean = 0 then p = 0, so k can be anything?
+         if (false == poisson_detail::check_mean_NZ(
+         BOOST_CURRENT_FUNCTION,
+         dist.mean(),
+         &result))
+        {
+          return result;
+        }
+      }
+      // if(p == 0) NOT necessarily zero!
+      // Not necessarily any special value of k because is unlimited.
 
       return gamma_Q_inva(dist.mean(), p) -1;
-
    } // quantile
 
     template <class RealType>
@@ -456,25 +453,27 @@ namespace boost
       // Error checks:
       RealType q = c.param;
       const poisson_distribution<RealType>& dist = c.dist;
-      RealType result;
-      if(false == poisson_detail::check_dist_and_prob(
+      RealType result;  // of argument checks.
+      if(false == poisson_detail::check_prob(
         BOOST_CURRENT_FUNCTION,
-        dist.mean(),
         q,
         &result))
       {
         return result;
       }
-      // No special cases?
+      // Special case:
+      if (dist.mean() == 0)
+      { // if mean = 0 then p = 0, so k can be anything?
+         if (false == poisson_detail::check_mean_NZ(
+         BOOST_CURRENT_FUNCTION,
+         dist.mean(),
+         &result))
+        {
+          return result;
+        }
+      }
       return gamma_P_inva(dist.mean(), q) -1;
    } // quantile complement.
-
-
-    //static RealType estimate_mean(RealType n, RealType k)
-    //{
-
-    //} //  estimate_mean(RealType n, RealType k)
-
 
   } // namespace math
 } // namespace boost
