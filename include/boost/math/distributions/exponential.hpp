@@ -184,6 +184,30 @@ inline RealType standard_deviation(const exponential_distribution<RealType>& dis
    return 1 / lambda;
 }
 
+template <class RealType>
+inline RealType mode(const exponential_distribution<RealType>& /*dist*/)
+{
+   return 0;
+}
+
+template <class RealType>
+inline RealType skewness(const exponential_distribution<RealType>& /*dist*/)
+{
+   return 2;
+}
+
+template <class RealType>
+inline RealType kurtosis(const exponential_distribution<RealType>& /*dist*/)
+{
+   return 9;
+}
+
+template <class RealType>
+inline RealType kurtosis_excess(const exponential_distribution<RealType>& /*dist*/)
+{
+   return 6;
+}
+
 } // namespace math
 } // namespace boost
 

@@ -240,6 +240,7 @@ void test_spots(RealType)
 	// 40 decimal digits includes 128-bit significand User Defined Floating-Point types.
    // These all pass tests at near epsilon accuracy for the floating-point type.
    tolerance = boost::math::tools::epsilon<RealType>() * 5 * 100;
+   cout << "Tolerance = " << tolerance << "%." << endl;
    BOOST_CHECK_CLOSE(
       cdf(fisher_f_distribution<RealType>(
          static_cast<RealType>(1.),  // df1
@@ -370,7 +371,8 @@ void test_spots(RealType)
 // These might allow some further cross checks?
 
 
-    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5;
+    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5 * 100;  // 5eps as a percent
+    cout << "Tolerance = " << tol2 << "%." << endl;
     fisher_f_distribution<RealType> dist(static_cast<RealType>(8), static_cast<RealType>(6));
     RealType x = 7;
     using namespace std; // ADL of std names.
@@ -398,6 +400,20 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        coefficient_of_variation(dist)
        , standard_deviation(dist) / mean(dist), tol2);
+    BOOST_CHECK_CLOSE(
+       mode(dist)
+       , static_cast<RealType>(6*6)/static_cast<RealType>(8*8), tol2);
+
+    fisher_f_distribution<RealType> dist2(static_cast<RealType>(8), static_cast<RealType>(12));
+    BOOST_CHECK_CLOSE(
+       skewness(dist2)
+       , static_cast<RealType>(26 * sqrt(64.0L)) / (12*6), tol2);
+    BOOST_CHECK_CLOSE(
+       kurtosis_excess(dist2)
+       , static_cast<RealType>(6272) * 12 / 3456, tol2);
+    BOOST_CHECK_CLOSE(
+       kurtosis(dist2)
+       , static_cast<RealType>(6272) * 12 / 3456 + 3, tol2);
     // special cases:
     BOOST_CHECK_THROW(
        pdf(

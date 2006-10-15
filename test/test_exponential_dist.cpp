@@ -141,6 +141,26 @@ void test_spots(RealType T)
          exponential_distribution<RealType>(2)), 
          static_cast<RealType>(0.5),
 			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::mode(
+         exponential_distribution<RealType>(2)),
+         static_cast<RealType>(0),           
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::skewness(
+         exponential_distribution<RealType>(2)),
+         static_cast<RealType>(2),           
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::kurtosis(
+         exponential_distribution<RealType>(2)),
+         static_cast<RealType>(9),           
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::kurtosis_excess(
+         exponential_distribution<RealType>(2)),
+         static_cast<RealType>(6),           
+			tolerance); // %
 
    //
    // Things that are errors:

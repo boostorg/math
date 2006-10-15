@@ -26,6 +26,10 @@
 // that implement 2-phase lookup and early-type-checking of templates
 // can find the definitions refered to herein.
 //
+
+#include <boost/type_traits/is_same.hpp>
+#include <boost/static_assert.hpp>
+
 namespace boost{ namespace math{
 
 template <class Distribution>
@@ -81,6 +85,55 @@ typename Distribution::value_type coefficient_of_variation(const Distribution& d
       return tools::overflow_error<value_type>(
          BOOST_CURRENT_FUNCTION, 0);
    return d / m;
+}
+//
+// Next follow overloads of some of the standard accessors with mixed
+// argument types. We just use a typecast to forward on to the "real"
+// implementation with all arguments of the same type:
+//
+template <class Distribution, class RealType>
+inline typename Distribution::value_type pdf(const Distribution& dist, const RealType& x)
+{
+   typedef typename Distribution::value_type value_type;
+   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
+   return pdf(dist, static_cast<value_type>(x));
+}
+template <class Distribution, class RealType>
+inline typename Distribution::value_type cdf(const Distribution& dist, const RealType& x)
+{
+   typedef typename Distribution::value_type value_type;
+   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
+   return cdf(dist, static_cast<value_type>(x));
+}
+template <class Distribution, class RealType>
+inline typename Distribution::value_type quantile(const Distribution& dist, const RealType& x)
+{
+   typedef typename Distribution::value_type value_type;
+   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
+   return quantile(dist, static_cast<value_type>(x));
+}
+/*
+template <class Distribution, class RealType>
+inline typename Distribution::value_type chf(const Distribution& dist, const RealType& x)
+{
+   typedef typename Distribution::value_type value_type;
+   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
+   return chf(dist, static_cast<value_type>(x));
+}
+*/
+template <class Distribution, class RealType>
+inline typename Distribution::value_type cdf(const complemented2_type<Distribution, RealType>& c)
+{
+   typedef typename Distribution::value_type value_type;
+   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
+   return cdf(complement(c.dist, static_cast<value_type>(c.param)));
+}
+template <class Distribution, class RealType>
+inline typename Distribution::value_type quantile(const complemented2_type<Distribution, RealType>& c)
+{
+   typedef typename Distribution::value_type value_type;
+   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
+   return quantile(complement(c.dist, static_cast<value_type>(c.param)));
 }
 
 } // namespace math

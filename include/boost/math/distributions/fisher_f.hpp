@@ -259,6 +259,82 @@ inline RealType variance(const fisher_f_distribution<RealType>& dist)
    return 2 * df2 * df2 * (df1 + df2 - 2) / (df1 * (df2 - 2) * (df2 - 2) * (df2 - 4));
 } // variance
 
+template <class RealType>
+inline RealType mode(const fisher_f_distribution<RealType>& dist)
+{
+   RealType df1 = dist.degrees_of_freedom1();
+   RealType df2 = dist.degrees_of_freedom2();
+   // Error check:
+   RealType error_result;
+   if(false == detail::check_df(
+            BOOST_CURRENT_FUNCTION, df1, &error_result)
+         && detail::check_df(
+            BOOST_CURRENT_FUNCTION, df2, &error_result))
+      return error_result;
+   if(df2 <= 2)
+   {
+      return tools::domain_error<RealType>(
+         BOOST_CURRENT_FUNCTION, "Second degree of freedom was %1% but must be > 2 in order for the distribution to have a mode.", df2);
+   }
+   return df2 * (df1 - 2) / (df1 * (df2 + 2));
+}
+
+template <class RealType>
+inline RealType skewness(const fisher_f_distribution<RealType>& dist)
+{
+   // See http://mathworld.wolfram.com/F-Distribution.html
+   RealType df1 = dist.degrees_of_freedom1();
+   RealType df2 = dist.degrees_of_freedom2();
+   // Error check:
+   RealType error_result;
+   if(false == detail::check_df(
+            BOOST_CURRENT_FUNCTION, df1, &error_result)
+         && detail::check_df(
+            BOOST_CURRENT_FUNCTION, df2, &error_result))
+      return error_result;
+   if(df2 <= 6)
+   {
+      return tools::domain_error<RealType>(
+         BOOST_CURRENT_FUNCTION, "Second degree of freedom was %1% but must be > 6 in order for the distribution to have a skewness.", df2);
+   }
+   return 2 * (df2 + 2 * df1 - 2) * sqrt((2 * df2 - 8) / (df1 * (df2 + df1 - 2))) / (df2 - 6);
+}
+
+template <class RealType>
+RealType kurtosis_excess(const fisher_f_distribution<RealType>& dist);
+
+template <class RealType>
+inline RealType kurtosis(const fisher_f_distribution<RealType>& dist)
+{
+   return 3 + kurtosis_excess(dist);
+}
+
+template <class RealType>
+inline RealType kurtosis_excess(const fisher_f_distribution<RealType>& dist)
+{
+   // See http://mathworld.wolfram.com/F-Distribution.html
+   RealType df1 = dist.degrees_of_freedom1();
+   RealType df2 = dist.degrees_of_freedom2();
+   // Error check:
+   RealType error_result;
+   if(false == detail::check_df(
+            BOOST_CURRENT_FUNCTION, df1, &error_result)
+         && detail::check_df(
+            BOOST_CURRENT_FUNCTION, df2, &error_result))
+      return error_result;
+   if(df2 <= 8)
+   {
+      return tools::domain_error<RealType>(
+         BOOST_CURRENT_FUNCTION, "Second degree of freedom was %1% but must be > 8 in order for the distribution to have a kutosis.", df2);
+   }
+   RealType df2_2 = df2 * df2;
+   RealType df1_2 = df1 * df1;
+   RealType n = -16 + 20 * df2 - 8 * df2_2 + df2_2 * df2 + 44 * df1 - 32 * df2 * df1 + 5 * df2_2 * df1 - 22 * df1_2 + 5 * df2 * df1_2;
+   n *= 12;
+   RealType d = df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2);
+   return n / d;
+}
+
 } // namespace math
 } // namespace boost
 

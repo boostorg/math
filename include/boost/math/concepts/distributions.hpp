@@ -112,6 +112,47 @@ struct DistributionConcept
       v = skewness(dist);
       v = kurtosis(dist);
       v = kurtosis_excess(dist);
+
+      float f = 1;
+      v = cdf(dist, f);
+      v = cdf(complement(dist, f));
+      v = pdf(dist, f);
+      v = quantile(dist, f);
+      v = quantile(complement(dist, f));
+      v = hazard(dist, f);
+      v = chf(dist, f);
+      double d = 1;
+      v = cdf(dist, d);
+      v = cdf(complement(dist, d));
+      v = pdf(dist, d);
+      v = quantile(dist, d);
+      v = quantile(complement(dist, d));
+      v = hazard(dist, d);
+      v = chf(dist, d);
+      long double ld = 1;
+      v = cdf(dist, ld);
+      v = cdf(complement(dist, ld));
+      v = pdf(dist, ld);
+      v = quantile(dist, ld);
+      v = quantile(complement(dist, ld));
+      v = hazard(dist, ld);
+      v = chf(dist, ld);
+      int i = 1;
+      v = cdf(dist, i);
+      v = cdf(complement(dist, i));
+      v = pdf(dist, i);
+      v = quantile(dist, i);
+      v = quantile(complement(dist, i));
+      v = hazard(dist, i);
+      v = chf(dist, i);
+      unsigned long li = 1;
+      v = cdf(dist, li);
+      v = cdf(complement(dist, li));
+      v = pdf(dist, li);
+      v = quantile(dist, li);
+      v = quantile(complement(dist, li));
+      v = hazard(dist, li);
+      v = chf(dist, li);
    }
 private:
    static Distribution& get_object();

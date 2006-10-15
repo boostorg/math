@@ -141,6 +141,26 @@ void test_spots(RealType T)
          extreme_value_distribution<RealType>(-1, 0.5)), 
          static_cast<RealType>(0.6412749150809320477720181798355L),
 			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::mode(
+         extreme_value_distribution<RealType>(2, 3)),
+         static_cast<RealType>(2),           
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::skewness(
+         extreme_value_distribution<RealType>(2, 3)),
+         static_cast<RealType>(1.1395470994046486574927930193898461120875997958366L),           
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::kurtosis(
+         extreme_value_distribution<RealType>(2, 3)),
+         static_cast<RealType>(5.4),           
+			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::kurtosis_excess(
+         extreme_value_distribution<RealType>(2, 3)),
+         static_cast<RealType>(2.4),           
+			tolerance); // %
 
    //
    // Things that are errors:

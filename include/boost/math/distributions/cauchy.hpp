@@ -40,6 +40,27 @@ bool check_cauchy_scale(const char* func, RealType scale, RealType* result)
 template <class RealType>
 RealType cdf_imp(const cauchy_distribution<RealType>& dist, const RealType& x, bool complement)
 {
+   //
+   // This calculates the cdf of the Cauchy distribution and/or its complement.
+   //
+   // The usual formula for the Cauchy cdf is:
+   //
+   // cdf = 0.5 + atan(x)/pi
+   //
+   // But that suffers from cancellation error as x -> -INF.
+   //
+   // Recall that for x < 0:
+   //
+   // atan(x) = -pi/2 - atan(1/x)
+   //
+   // Substituting into the above we get:
+   //
+   // CDF = -atan(1/x)  ; x < 0
+   //
+   // So the proceedure is to calculate the cdf for -fabs(x)
+   // using the above formula, and then subtract from 1 when required
+   // to get the result.
+   //
    using namespace std; // for ADL of std functions
 
    RealType result;
@@ -64,6 +85,15 @@ RealType quantile_imp(
       const RealType& p, 
       bool complement)
 {
+   //
+   // This routine implements the quantile for the Cauchy distibution,
+   // the value p may be the probability or it's complement if complement=true.
+   //
+   // The proceedure first performs argument reduction on p to avoid error
+   // when calculating the tangent, then calulates the distance from the 
+   // mid-point of the distribution.  This is either added or subtracted
+   // from the location parameter depending on whether `complement` is true.
+   //
    using namespace std; // for ADL of std functions
    // Special cases:
    if(p == 1)
@@ -163,6 +193,7 @@ inline RealType quantile(const complemented2_type<cauchy_distribution<RealType>,
 template <class RealType>
 inline RealType mean(const cauchy_distribution<RealType>& )
 {
+   // There is no mean:
    return tools::domain_error<RealType>(
       BOOST_CURRENT_FUNCTION,
       "The Cauchy distribution does not have a mean: "
@@ -173,6 +204,7 @@ inline RealType mean(const cauchy_distribution<RealType>& )
 template <class RealType>
 inline RealType variance(const cauchy_distribution<RealType>& dist)
 {
+   // There is no variance:
    return tools::domain_error<RealType>(
       BOOST_CURRENT_FUNCTION,
       "The Cauchy distribution does not have a variance: "
@@ -189,6 +221,7 @@ inline RealType mode(const cauchy_distribution<RealType>& dist)
 template <class RealType>
 inline RealType skewness(const cauchy_distribution<RealType>& dist)
 {
+   // There is no skewness:
    return tools::domain_error<RealType>(
       BOOST_CURRENT_FUNCTION,
       "The Cauchy distribution does not have a skewness: "
@@ -199,6 +232,7 @@ inline RealType skewness(const cauchy_distribution<RealType>& dist)
 template <class RealType>
 inline RealType kurtosis(const cauchy_distribution<RealType>& dist)
 {
+   // There is no kurtosis:
    return tools::domain_error<RealType>(
       BOOST_CURRENT_FUNCTION,
       "The Cauchy distribution does not have a kurtosis: "
@@ -209,6 +243,7 @@ inline RealType kurtosis(const cauchy_distribution<RealType>& dist)
 template <class RealType>
 inline RealType kurtosis_excess(const cauchy_distribution<RealType>& dist)
 {
+   // There is no kurtosis excess:
    return tools::domain_error<RealType>(
       BOOST_CURRENT_FUNCTION,
       "The Cauchy distribution does not have a kurtosis: "

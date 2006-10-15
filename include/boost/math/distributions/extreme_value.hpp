@@ -185,6 +185,37 @@ inline RealType standard_deviation(const extreme_value_distribution<RealType>& d
    return constants::pi<RealType>() * b / sqrt(static_cast<RealType>(6));
 }
 
+template <class RealType>
+inline RealType mode(const extreme_value_distribution<RealType>& dist)
+{
+   return dist.location();
+}
+
+template <class RealType>
+inline RealType skewness(const extreme_value_distribution<RealType>& dist)
+{
+   //
+   // This is 12 * sqrt(6) * zeta(3) / pi^3:
+   // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
+   //
+   return static_cast<RealType>(1.1395470994046486574927930193898461120875997958366L);
+}
+
+template <class RealType>
+inline RealType kurtosis(const extreme_value_distribution<RealType>& dist)
+{
+   // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
+   return RealType(27) / 5;
+}
+
+template <class RealType>
+inline RealType kurtosis_excess(const extreme_value_distribution<RealType>& dist)
+{
+   // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
+   return RealType(12) / 5;
+}
+
+
 } // namespace math
 } // namespace boost
 
