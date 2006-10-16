@@ -6,6 +6,10 @@
 [def __quantile [link math.dist.quantile Quantile]]
 [def __quantile_c [link math.dist.quantile_c Quantile from the complement of the probability]]
 [def __mean [link math.dist.mean mean]]
+[def __mode [link math.dist.mode mode]]
+[def __skewness [link math.dist.skewness skewness]]
+[def __kurtosis [link math.dist.kurtosis kurtosis]]
+[def __kurtosis_excess [link math.dist.kurtosis_excess kurtosis_excess]]
 [def __variance [link math.dist.variance variance]]
 [def __sd [link math.dist.sd standard deviation]]
 [def __hazard [link math.dist.hazard Hazard Function]]
@@ -19,7 +23,7 @@
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
 
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard, 
-   __chf, __mean, __variance and __sd]
+   __chf, __mean, __mode, __variance, __sd, __skewness, __kurtosis and __kurtosis_excess]
    
 [section:nmp Non-Member Properties]
 
@@ -38,10 +42,14 @@ to go straight to the function you want if you already know its name.
 * [link math.dist.ccdf cdf complement].
 * [link math.dist.chf chf].
 * [link math.dist.hazard hazard].
+* __kurtosis.
+* __kurtosis_excess
 * __mean.
+* __mode.
 * [link math.dist.pdf pdf].
 * [link math.dist.quantile quantile].
 * [link math.dist.quantile_c quantile from the complement].
+* __skewness.
 * [link math.dist.sd standard_deviation].
 * __variance.
 
@@ -53,7 +61,10 @@ to go straight to the function you want if you already know its name.
 * [link survival_inv Inverse Survival Function].
 * __hazard
 * [link lower_critical Lower Critical Value].
+* __kurtosis.
+* __kurtosis_excess
 * __mean.
+* __mode.
 * [link cdfPQ P].
 * [link percent Percent Point Function].
 * __pdf.
@@ -61,6 +72,7 @@ to go straight to the function you want if you already know its name.
 * [link cdfPQ Q].
 * __quantile.
 * [link math.dist.quantile_c Quantile from the complement of the probability].
+* __skewness.
 * __sd
 * [link survival Survival Function].
 * [link upper_critical Upper Critical Value].
@@ -136,6 +148,13 @@ Some authors refer to this as simply the "Hazard Function".]
    
 Returns the mean of the distribution /dist/.
 
+[h4 [#math.dist.mode]mode]
+
+   template<class RealType>
+   RealType mode(const ``['Distribution-Type]``<RealType>& dist);
+   
+Returns the mode of the distribution /dist/.
+
 [h4 [#math.dist.pdf]Probabilty Density Function]
 
    template <class RealType>
@@ -208,6 +227,27 @@ Returns the standard deviation of distribution /dist/.
    RealType variance(const ``['Distribution-Type]``<RealType>& dist);
    
 Returns the variance of the distribution /dist/.
+
+[h4 [#math.dist.skewness]skewness]
+
+   template <class RealType>
+   RealType skewness(const ``['Distribution-Type]``<RealType>& dist);
+   
+Returns the skewness of the distribution /dist/.
+
+[h4 [#math.dist.kurtosis]kurtosis]
+
+   template <class RealType>
+   RealType kurtosis(const ``['Distribution-Type]``<RealType>& dist);
+   
+Returns the kurtosis of the distribution /dist/.
+
+[h4 [#math.dist.kurtosis_excess]kurtosis excess]
+
+   template <class RealType>
+   RealType kurtosis_excess(const ``['Distribution-Type]``<RealType>& dist);
+   
+Returns the kurtosis excess of the distribution /dist/.
 
 [h4 [#cdfPQ]P and Q]
 
@@ -442,6 +482,49 @@ the context of this distribution:
 
 [endsect][/section:binomial_dist Binomial]
 
+[section:cauchy_dist Cauchi]
+
+TODO: insert background here....
+
+``#include <boost/math/distributions/cauchy.hpp>``
+
+   template <class RealType>
+   class cauchy_distribution
+   {
+   public:
+      typedef RealType value_type;
+
+      cauchy_distribution(RealType location = 0, RealType scale = 1);
+      
+      RealType location()const;
+      RealType scale()const;
+   };
+
+   typedef cauchy_distribution<double> cauchy;
+
+[h4 Member Functions]
+
+   cauchy_distribution(RealType location = 0, RealType scale = 1);
+   
+Constructs a Cauchy distribution, with location parameter /location/
+and scale parameter /scale/.  When these parameters take their default
+values then the result is a Standard Cauchy Distribution.
+   
+   RealType location()const;
+   
+Returns the location parameter of the distribution.
+   
+   RealType scale()const;
+   
+Returns the scale parameter of the distribution.
+
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+[endsect][/section:cauchy_dist Cauchi]
+
 [section:chi_squared_dist Chi Squared]
 
 The chi-square distribution results when /v/ independent variables with
@@ -490,13 +573,40 @@ Constructs a Chi Squared distribution with /v/ degrees of freedom.
 Returns the parameter /v/ from which this object was constructed.
 
       static RealType estimate_degrees_of_freedom(
-         RealType difference_from_mean,
+         RealType difference_from_variance,
          RealType alpha,
          RealType beta,
-         RealType sd,
+         RealType variance,
          RealType hint = 100);
 
-Under construction.
+Estimates the sample size required to detect a difference from a nominal
+variance in a Chi-Squared test for equal standard deviations.
+
+[variablelist
+[[difference_from_variance][The difference from the assumed nominal variance 
+   that is to be detected: Note that the sign of this value is critical, see below.]]
+[[alpha][The maximum acceptable risk of rejecting the null hypothesis when it is
+         in fact true.]]
+[[beta][The maximum acceptable risk of falsely accepting the null hypothesis.]]
+[[variance][The nominal variance being tested against.]]
+[[hint][An optional hint on where to start looking for a result: the current sample
+      size would be a good choice.]]
+]
+
+Note that this calculation works with /variances/ and not /standard deviations/.
+
+The sign of the parameter /difference_from_variance/ is important: the Chi
+squared distribution is asymmetric, and the caller must decide in advance
+whether they are testing for a variance greater than a nominal value (positive
+/difference_from_variance/) or testing for a variance less than a nominal value
+(negative /difference_from_variance/).  If the latter, then obviously it is
+a requirement that `variance + difference_from_variance > 0`, since no sample
+can have a negative variance!
+
+This procedure uses the method in Diamond, W. J. (1989). 
+Practical Experiment Designs, Van-Nostrand Reinhold, New York.  
+See also the NIST Engineering Statistics Handbook,
+Section 7.2.3.2.
 
 [h4 Non-member Accessors]
 
@@ -504,6 +614,99 @@ All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions
 that are generic to all distributions are supported: __usual_accessors.
 
 [endsect][/section:chi_squared_dist Chi Squared]
+
+[section:exp_dist Exponential]
+
+``#include <boost/math/distributions/exponential.hpp>``
+
+   template <class RealType>
+   class exponential_distribution
+   {
+   public:
+      typedef RealType value_type;
+
+      exponential_distribution(RealType lambda = 1);
+
+      RealType lambda()const;
+   };
+
+   typedef exponential_distribution<double> exponential;
+
+The exponential distribution is a distribution with PDF:
+
+f(x) = lambda * e[super -lambda*x]
+
+[h4 Member Functions]
+
+   exponential_distribution(RealType lambda = 1);
+   
+Constructs an Exponential distribution with parameter /lambda/.  Lambda
+is defined as the reciprocal of the scale parameter.
+
+   RealType lambda()const;
+   
+Returns the lambda parameter of the distribution.
+   
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+[endsect][/section:exp_dist Exponential]
+
+[section:exteme_dist Extreme Value]
+
+There are various extreme value distributions, this implementation represents the
+maximum case, and is variously known as a Fisher-Tippett distribution, 
+a log-Weibull distribution or a Gumbel distribution.  More information
+can be found on the 
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366g.htm NIST] 
+and [@http://mathworld.wolfram.com/ExtremeValueDistribution.html Mathworld] 
+websites.  The distribution has a PDF given by:
+
+f(x) = (1/scale) e[super -(x-location)/scale] e[super -e[super -(x-location)/scale]]
+
+Which in the standard case reduces to:
+
+f(x) = e[super -x]e[super -e[super -x]]
+
+``#include <boost/math/distributions/extreme.hpp>``
+
+   template <class RealType>
+   class extreme_value_distribution
+   {
+   public:
+      typedef RealType value_type;
+
+      extreme_value_distribution(RealType location = 0, RealType scale = 1);
+
+      RealType scale()const;
+      RealType location()const;
+   };
+
+   typedef extreme_value_distribution<double> extreme_value;
+
+[h4 Member Functions]
+
+   extreme_value_distribution(RealType location = 0, RealType scale = 1);
+   
+Constructs an Extreme Value distribution with the specified location and scale
+parameters.
+
+   RealType location()const;
+   
+Returns the location parameter of the distribution.
+   
+   RealType scale()const;
+   
+Returns the scale parameter of the distribution.
+   
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+[endsect][/section:exteme_dist Extreme Value]
 
 [section:f_dist F distribution]
 
