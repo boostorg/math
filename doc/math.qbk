@@ -127,7 +127,7 @@ some typical applications in statistics.
 [include minima.qbk]
 [endsect][/section:toolkit Toolkit]
 
-[section:intenals Tools for Internal Testing and Development Use (Experimental)]
+[section:internals Tools for Internal Testing and Development Use (Experimental)]
 [include internals_overview.qbk]
 [include polynomial.qbk]
 [include minimax.qbk]
