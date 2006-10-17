@@ -62,6 +62,47 @@ approximation for your type T.
 
 [endsect][/section:real_concept Conceptual Requirements]
 
+
+[section:concept_check Concept Checking]
+
+The test program is distribution_concept_check.cpp 
+The concept checks and archetypes
+(see the Boost Concept Check lib for more info)
+are in boost/math/concepts/distributions.hpp.
+
+Implementations of distributions require them to be:
+
+CopyConstructible and Assignable.
+
+All support the following non-member accessor functions
+
+pdf
+cdf
+quantile
+mean
+mode
+standard_deviation
+variance
+hazard
+chf
+coefficient_of_variation
+skewness
+kurtosis
+kurtosis_excess
+
+Their existence (but not proper function) is checked by calls like
+
+v = pdf(dist, x); // (Result v is ignored).
+
+And in addition, those that accept two arguments do the right thing when the 
+arguments are of different types (the result type is always the same as the 
+distribution's value_type).  This is implemented by some additional 
+forwarding-functions in derived_accessors.hpp, so no need for any code 
+changes.  Likewise hazard/chf/coefficient_of_variation are implemented in 
+there too.
+
+[endsect][/section:concept_check Concept Checking]
+
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
