@@ -3,6 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// Test real concept.
+
 // real_concept is an archetype for User defined Real types.
 
 // This file defines the features, constructors, operators, functions...
@@ -13,8 +15,10 @@
 // That this is the minimum set is confirmed by use as a type
 // in tests of all functions & distributions, for example:
 //   test_spots(0.F); & test_spots(0.);  for float and double, but also
-//   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
-// NTL quad_float type is an example of a type meeting the requirements.
+//   test_spots(boost::math::concepts::real_concept(0.));
+// NTL quad_float type is an example of a type meeting the requirements,
+// but note minor additions are needed - see ntl.diff and documentation
+// "Using With NTL - a High-Precision Floating-Point Library".
 
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
@@ -58,7 +62,7 @@ public:
    real_concept(double c) : m_value(c){}
    real_concept(long double c) : m_value(c){}
 
-   // assignment:
+   // Assignment:
    real_concept& operator=(char c) { m_value = c; return *this; }
    real_concept& operator=(unsigned char c) { m_value = c; return *this; }
    real_concept& operator=(signed char c) { m_value = c; return *this; }
@@ -248,12 +252,29 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
 
 namespace tools
 {
+// real_cast converts from T to integer and narrower floating-point types.
+
+// Convert from T to integer types.
 
 template <>
-inline int digits<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline unsigned int real_cast<unsigned int, concepts::real_concept>(concepts::real_concept r)
 {
-   return std::numeric_limits<long double>::digits;
+   return static_cast<unsigned int>(r.value());
 }
+
+template <>
+inline int real_cast<int, concepts::real_concept>(concepts::real_concept r)
+{
+   return static_cast<int>(r.value());
+}
+
+template <>
+inline long real_cast<long, concepts::real_concept>(concepts::real_concept r)
+{
+   return static_cast<long>(r.value());
+}
+
+// Converts from T to narrower floating-point types, float, double & long double.
 
 template <>
 inline float real_cast<float, concepts::real_concept>(concepts::real_concept r)
@@ -299,6 +320,13 @@ template <>
 inline concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return std::numeric_limits<long double>::epsilon();
+}
+
+template <>
+inline int digits<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+{ // Assume number of significand bits is same as long double,
+  // unless std::numeric_limits<T>::is_specialized to provide digits.
+   return std::numeric_limits<long double>::digits;
 }
 
 } // namespace tools

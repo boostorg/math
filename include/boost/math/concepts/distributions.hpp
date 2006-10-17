@@ -3,7 +3,6 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-
 #ifndef BOOST_MATH_DISTRIBUTION_CONCEPT_HPP
 #define BOOST_MATH_DISTRIBUTION_CONCEPT_HPP
 
@@ -12,9 +11,9 @@
 
 namespace boost{
 namespace math{
-namespace concepts{
 
-//
+namespace concepts
+{
 // Begin by defining a concept archetype
 // for a distribution class:
 //
@@ -24,17 +23,17 @@ class distribution_archetype
 public:
    typedef RealType value_type;
 
-   distribution_archetype(const distribution_archetype&);
-   distribution_archetype& operator=(const distribution_archetype&);
+   distribution_archetype(const distribution_archetype&); // Copy constructible.
+   distribution_archetype& operator=(const distribution_archetype&); // Assignable.
 
-   // there is no default constructor, but we need a way to
-   // instantiate the archetype:
+   // There is no default constructor,
+   // but we need a way to instantiate the archetype:
    static distribution_archetype& get_object();
-};
+}; // template <class RealType>class distribution_archetype
 
-//
-// Non-member accessors:
-//
+// Non-member accessor functions:
+// (This list defines the functions that must be implemented by all distributions).
+
 template <class RealType>
 RealType pdf(const distribution_archetype<RealType>& dist, const RealType& x);
 
@@ -87,7 +86,7 @@ RealType kurtosis(const distribution_archetype<RealType>& dist);
 template <class Distribution>
 struct DistributionConcept
 {
-   void constraints() 
+   void constraints()
    {
       function_requires<CopyConstructibleConcept<Distribution> >();
       function_requires<AssignableConcept<Distribution> >();
@@ -97,7 +96,8 @@ struct DistributionConcept
       const Distribution& dist = DistributionConcept<Distribution>::get_object();
 
       value_type x = 0;
-      value_type v = cdf(dist, x);
+       // The result values are ignored in all these checks.
+       value_type v = cdf(dist, x);
       v = cdf(complement(dist, x));
       v = pdf(dist, x);
       v = quantile(dist, x);
@@ -156,13 +156,11 @@ struct DistributionConcept
    }
 private:
    static Distribution& get_object();
-};
+}; // struct DistributionConcept
 
 } // namespace concepts
 } // namespace math
 } // namespace boost
-
-
 
 #endif // BOOST_MATH_DISTRIBUTION_CONCEPT_HPP
 
