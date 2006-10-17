@@ -116,6 +116,69 @@ void test_spots(RealType)
       static_cast<RealType>(2)),  // two k events. 
       static_cast<RealType>(9.196986029286060E-1), // probability.
 			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
+      static_cast<RealType>(10)),  // two k events. 
+      static_cast<RealType>(9.999999899522340E-1), // probability.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
+      static_cast<RealType>(15)),  // two k events. 
+      static_cast<RealType>(9.999999999999810E-1), // probability.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
+      static_cast<RealType>(16)),  // two k events. 
+      static_cast<RealType>(9.999999999999990E-1), // probability.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
+      static_cast<RealType>(17)),  // two k events. 
+      static_cast<RealType>(1.), // probability unity for double.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
+      static_cast<RealType>(33)),  // k events at limit for float unchecked_factorial table. 
+      static_cast<RealType>(1.), // probability.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(100)), // mean unity.
+      static_cast<RealType>(33)),  // k events at limit for float unchecked_factorial table. 
+      static_cast<RealType>(6.328271240363390E-15), // probability is tiny.
+			tolerance*static_cast<RealType>(2e11)); //         6.3495253382825722e-015 MathCAD
+  // Note that there two tiny probability are much more different.
+
+   BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(100)), // mean unity.
+      static_cast<RealType>(34)),  // k events at limit for float unchecked_factorial table. 
+      static_cast<RealType>(1.898481372109020E-14), // probability is tiny.
+			tolerance*static_cast<RealType>(2e11)); //         1.8984813721090199e-014 MathCAD
+
+
+ BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(33)), // mean = k
+      static_cast<RealType>(33)),  // k events above limit for float unchecked_factorial table. 
+      static_cast<RealType>(5.461191812386560E-1), // probability.
+			tolerance);
+
+ BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(33)), // mean = k-1
+      static_cast<RealType>(34)),  // k events above limit for float unchecked_factorial table. 
+      static_cast<RealType>(6.133535681502950E-1), // probability.
+			tolerance);
+
+ BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
+      static_cast<RealType>(34)),  // k events above limit for float unchecked_factorial table. 
+      static_cast<RealType>(1.), // probability.
+			tolerance);
+
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(5.)), // mean
       static_cast<RealType>(5)),  // k events. 
