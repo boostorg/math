@@ -347,19 +347,36 @@ namespace boost
        return exp(-mean);
       }
 
-      if(  // For small integral k use a finite sum - 
+      if(// For small integral k use a finite sum - 
          // it's cheaper than the gamma function.
          (k < 34) // 34 chosen as maximum unchecked_factorial with float.
-         // A smaller k might be more efficient than calling gamma_Q?
+         // A smaller maximum k might be more efficient calling gamma_Q?
         && (floor(k) == k) // k is integral.
         ) 
       {
-        RealType result = 0;
-        for(int i = 0; i <= k; ++i)
+        //RealType exp_mean = exp(-mean);
+        //RealType result = exp_mean;
+        //for(int i = 0; i <= k; ++i)
+        //{ // cdf is sum of pdfs.
+        //  // result += pdf(dist, static_cast<RealType>(i));
+        //  // result += exp(-mean) * pow(mean, i) /
+        //  result += exp_mean * pow(mean, i) /
+        // unchecked_factorial<RealType>(tools::real_cast<unsigned int>(i));
+
+        // But each term can be calculated from the previous one much more efficiently:
+        // (And avoiding any risk of exceeding unchecked_factorial table size).
+
+        // cdf = sum from 0 to k of C[k]
+        // with:
+        // C[0] = exp(-mean)
+        // C[N+1] = C[N] * mean / (N+1)
+
+        RealType result = exp(-mean);
+        RealType term = result;
+        for(int i = 1; i <= k; ++i)
         { // cdf is sum of pdfs.
-          //result += pdf(dist, static_cast<RealType>(i));
-          result += exp(-mean) * pow(mean, i) /
-          unchecked_factorial<RealType>(tools::real_cast<unsigned int>(i));
+          term *= mean / i;
+          result += term;
         }
         return result;
       }
