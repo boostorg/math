@@ -1,0 +1,53 @@
+[section:exteme_dist Extreme Value]
+
+There are various extreme value distributions, this implementation represents the
+maximum case, and is variously known as a Fisher-Tippett distribution, 
+a log-Weibull distribution or a Gumbel distribution.  More information
+can be found on the 
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366g.htm NIST] 
+and [@http://mathworld.wolfram.com/ExtremeValueDistribution.html Mathworld] 
+websites.  The distribution has a PDF given by:
+
+f(x) = (1/scale) e[super -(x-location)/scale] e[super -e[super -(x-location)/scale]]
+
+Which in the standard case reduces to:
+
+f(x) = e[super -x]e[super -e[super -x]]
+
+``#include <boost/math/distributions/extreme.hpp>``
+
+   template <class RealType>
+   class extreme_value_distribution
+   {
+   public:
+      typedef RealType value_type;
+
+      extreme_value_distribution(RealType location = 0, RealType scale = 1);
+
+      RealType scale()const;
+      RealType location()const;
+   };
+
+   typedef extreme_value_distribution<double> extreme_value;
+
+[h4 Member Functions]
+
+   extreme_value_distribution(RealType location = 0, RealType scale = 1);
+   
+Constructs an Extreme Value distribution with the specified location and scale
+parameters.
+
+   RealType location()const;
+   
+Returns the location parameter of the distribution.
+   
+   RealType scale()const;
+   
+Returns the scale parameter of the distribution.
+   
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+[endsect][/section:exteme_dist Extreme Value]

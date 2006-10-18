@@ -1,0 +1,42 @@
+[section:cauchy_dist Cauchi]
+
+TODO: insert background here....
+
+``#include <boost/math/distributions/cauchy.hpp>``
+
+   template <class RealType>
+   class cauchy_distribution
+   {
+   public:
+      typedef RealType value_type;
+
+      cauchy_distribution(RealType location = 0, RealType scale = 1);
+      
+      RealType location()const;
+      RealType scale()const;
+   };
+
+   typedef cauchy_distribution<double> cauchy;
+
+[h4 Member Functions]
+
+   cauchy_distribution(RealType location = 0, RealType scale = 1);
+   
+Constructs a Cauchy distribution, with location parameter /location/
+and scale parameter /scale/.  When these parameters take their default
+values then the result is a Standard Cauchy Distribution.
+   
+   RealType location()const;
+   
+Returns the location parameter of the distribution.
+   
+   RealType scale()const;
+   
+Returns the scale parameter of the distribution.
+
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+[endsect][/section:cauchy_dist Cauchi]

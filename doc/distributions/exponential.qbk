@@ -1,0 +1,38 @@
+[section:exp_dist Exponential]
+
+``#include <boost/math/distributions/exponential.hpp>``
+
+   template <class RealType>
+   class exponential_distribution
+   {
+   public:
+      typedef RealType value_type;
+
+      exponential_distribution(RealType lambda = 1);
+
+      RealType lambda()const;
+   };
+
+   typedef exponential_distribution<double> exponential;
+
+The exponential distribution is a distribution with PDF:
+
+f(x) = lambda * e[super -lambda*x]
+
+[h4 Member Functions]
+
+   exponential_distribution(RealType lambda = 1);
+   
+Constructs an Exponential distribution with parameter /lambda/.  Lambda
+is defined as the reciprocal of the scale parameter.
+
+   RealType lambda()const;
+   
+Returns the lambda parameter of the distribution.
+   
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+[endsect][/section:exp_dist Exponential]

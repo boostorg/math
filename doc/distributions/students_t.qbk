@@ -1,0 +1,97 @@
+[section:students_t_dist Students t]
+
+A statistical distribution published by William Gosset in 1908. 
+His employer, Guinness Breweries, required him to publish under a 
+pseudonym, so he chose "Student". Given N independent measurements, let
+
+[$../equations/students_t_dist.png]
+
+where /M/ is the population mean,[' ''' &#x3BC; '''] is the sample mean, and /s/ is the 
+sample variance.
+
+Student's t-distribution is defined as the distribution of the random 
+variable t which is  - very loosely - the "best" that we can do not 
+knowing the true standard deviation of the sample.
+
+The Student's t-distribution takes a single parameter: the number of
+degrees of freedom of the sample.  When the degrees of freedom is
+/one/ then this distribution is the same as the Cauchy-distribution.
+As the number of degrees of freedom tends towards infinity, then this
+distribution approaches the normal-distribution.
+
+``#include <boost/math/distributions/students_t.hpp>``
+
+   namespace boost{ namespace math{ 
+      
+   template <class RealType>
+   class students_t_distribution;
+   
+   typedef students_t_distribution<double> students_t;
+
+   template <class RealType>
+   class students_t_distribution
+   {
+      typedef RealType value_type;
+      
+      // Construct:
+      students_t_distribution(const RealType& v);
+      
+      // Accessor:
+      RealType degrees_of_freedom()const;
+      
+      // degrees of freedom estimation:
+      static RealType estimate_degrees_of_freedom(
+         RealType difference_from_mean,
+         RealType alpha,
+         RealType beta,
+         RealType sd,
+         RealType hint = 100);
+   };
+   
+   }} // namespaces
+   
+[h4 Member Functions]
+
+   students_t_distribution(const RealType& v);
+   
+Constructs a Student's t-distribution with /v/ degrees of freedom.
+
+   RealType degrees_of_freedom()const;
+   
+Returns the number of degrees of freedom of this distribution.
+
+   static RealType estimate_degrees_of_freedom(
+      RealType difference_from_mean,
+      RealType alpha,
+      RealType beta,
+      RealType sd,
+      RealType hint = 100);
+
+Returns the number of degrees of freedom required to observe a significant
+result when the mean differs from the "true" mean by /difference_from_mean/.
+
+[variablelist
+[[difference_from_mean][The difference between the true mean and the sample mean
+                        that we wish to show is significant.]]
+[[alpha][The maximum acceptable probability of rejecting the null hypothesis 
+        when it is in fact true.]]
+[[beta][The maximum acceptable probability of accepting the null hypothesis 
+        when it is in fact false.]]
+[[sd][The sample standard deviation.]]
+[[hint][A hint for the location to start looking for the result.]]
+]
+
+[note
+Remember that for a two-sided test, you must divide alpha by two
+before calling this function.]
+
+For more information on this function see the 
+[@http://www.itl.nist.gov/div898/handbook/prc/section2/prc222.htm 
+NIST Engineering Statistics Handbook].
+      
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
+distributions are supported: __usual_accessors.
+
+[endsect][/section:students_t_dist Students t]

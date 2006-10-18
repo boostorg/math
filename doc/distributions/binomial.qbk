@@ -1,0 +1,186 @@
+[section:binomial_dist Binomial]
+
+``#include <boost/math/distributions/binomial.hpp>``
+
+   namespace boost{ namespace math{ 
+   
+   template <class RealType>
+   class binomial_distribution;
+   
+   typedef binomial_distribution<double> binomial;
+   
+   template <class RealType>
+   class binomial_distribution
+   {
+   public:
+      // construct:
+      binomial_distribution(RealType n, RealType p);
+      
+      // parameter access::
+      RealType success_fraction() const;
+      RealType trials() const;
+      
+      // Bounds on success fraction:
+      static RealType estimate_lower_bound_on_p(
+         RealType trials, 
+         RealType successes,
+         RealType probability);
+      static RealType estimate_upper_bound_on_p(
+         RealType trials, 
+         RealType successes,
+         RealType probability);
+         
+      // estimate min/max number of trials:
+      static RealType estimate_number_of_trials(
+         RealType k,     // number of events
+         RealType p,     // success fraction
+         RealType probability); // probability threshold
+         
+      template <class P1, class P2, class P3>
+      static RealType estimate_number_of_trials(
+         const ``['unspecified-complemented-type]``<P1, P2, P3>& c);
+   };
+   
+   }} // namespaces
+   
+The class type `binomial_distribution` represents a binomial distribution:
+it is used when there are exactly two mutually 
+exclusive outcomes of a trial. These outcomes are labelled 
+"success" and "failure". The binomial distribution is used to obtain 
+the probability of observing x successes in N trials, with the 
+probability of success on a single trial denoted by p. The 
+binomial distribution assumes that p is fixed for all trials.
+   
+[h4 Member Functions]
+
+   binomial_distribution(RealType n, RealType p);
+
+Constructor: /n/ is the total number of trials, /p/ is the
+probability of success of a single trial.
+
+   RealType success_fraction() const;
+   
+Returns the parameter /p/ from which this distribution was constructed.
+   
+   RealType trials() const;
+   
+Returns the parameter /n/ from which this distribution was constructed.
+
+   static RealType estimate_lower_bound_on_p(
+      RealType trials, 
+      RealType successes,
+      RealType alpha);
+      
+Returns a lower bound on the success fraction:
+
+[variablelist
+[[trials][The total number of trials conducted.]]
+[[successes][The number of successes that occurred.]]
+[[alpha][The largest acceptable probability that the true value of
+         the success fraction is [*less than] the value returned.]]
+]
+
+For example, if you observe /k/ successes from /n/ trials the
+best estimate for the success fraction is simply ['k/n], but if you
+want to be 95% sure that the true value is [*greater than] some value, 
+['p[sub min]], then:
+
+   p``[sub min]`` = binomial_distribution<RealType>::estimate_lower_bound_on_p(
+                       n, k, 0.05);
+
+[link binom_conf See worked example.]
+      
+   static RealType estimate_upper_bound_on_p(
+      RealType trials, 
+      RealType successes,
+      RealType alpha);
+      
+Returns an upper bound on the success fraction:
+
+[variablelist
+[[trials][The total number of trials conducted.]]
+[[successes][The number of successes that occurred.]]
+[[alpha][The largest acceptable probability that the true value of
+         the success fraction is [*greater than] the value returned.]]
+]
+
+For example, if you observe /k/ successes from /n/ trials the
+best estimate for the success fraction is simply ['k/n], but if you
+want to be 95% sure that the true value is [*less than] some value, 
+['p[sub max]], then:
+
+   p``[sub max]`` = binomial_distribution<RealType>::estimate_upper_bound_on_p(
+                       n, k, 0.05);
+
+[link binom_conf See worked example.]
+
+   static RealType estimate_number_of_trials(
+      RealType k,     // number of events
+      RealType p,     // success fraction
+      RealType alpha); // probability threshold
+      
+   template <class P1, class P2, class P3>
+   static RealType estimate_number_of_trials(
+      const ``['unspecified-complemented-type]``<P1, P2, P3>& c);
+      
+These functions estimate the number of trials required to achieve a certain
+probability that [*k events or fewer will be observed].
+
+[variablelist
+[[k][The number of success observed.]]
+[[p][The probability of success for each trial.]]
+[[alpha][The maximum acceptable probability that k events or fewer will be observed.]]
+]
+
+For example:
+   
+   binomial_distribution<RealType>::estimate_number_of_trials(10, 0.5, 0.05);
+      
+Returns the smallest number of trials we must conduct to be 95% sure
+of seeing 10 events that occur with frequency one half.
+   
+While:
+
+   binomial_distribution<RealType>::estimate_number_of_trials(
+      complement(0, 1.0/1000000, 0.05));
+
+Returns the largest number of trials we can conduct and still be 95% certain
+of not observing any events that occur with one in a million frequency.
+This is typically used in failure analysis.
+
+[link binom_size_eg See Worked Example.]
+
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+However it's worth taking a moment to define what these actually mean in 
+the context of this distribution:
+
+[table Meaning of the non-member accessors
+[[Function][Meaning]]
+[[__pdf]
+   [The probability of obtaining [*exactly k successes] from n trials
+   with success fraction p.  For example:\n\n``pdf(binomial(n, p), k)``]]
+[[__cdf]
+   [The probability of obtaining [*k successes or fewer] from n trials
+   with success fraction p.  For example:\n\n ``cdf(binomial(n, p), k)``]]
+[[__ccdf]
+   [The probability of obtaining [*more than k successes] from n trials
+   with success fraction p.  For example:\n\n ``cdf(complement(binomial(n, p), k))``]]
+[[__quantile]
+   [The [*greatest] number of successes that may be observed from n trials
+   with success fraction p, at probability P.  Note that the value returned
+   is a real-number, and not an integer.  Depending on the use case you may
+   want to take either the floor or ceiling of the result.  For example:\n\n
+   ``quantile(binomial(n, p), P)``]]
+[[__quantile_c]
+   [The [*smallest] number of successes that may be observed from n trials
+   with success fraction p, at probability P.  Note that the value returned
+   is a real-number, and not an integer.  Depending on the use case you may
+   want to take either the floor or ceiling of the result. For example:
+   ``quantile(complement(binomial(n, p), P))``]]
+]
+
+[endsect][/section:binomial_dist Binomial]

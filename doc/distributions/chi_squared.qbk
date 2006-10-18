@@ -1,0 +1,89 @@
+[section:chi_squared_dist Chi Squared]
+
+The chi-square distribution results when /v/ independent variables with
+standard normal distributions are squared and summed.
+
+``#include <boost/math/distributions/chi_squared.hpp>``
+
+   namespace boost{ namespace math{ 
+
+   template <class RealType>
+   class chi_squared_distribution;
+
+   typedef chi_squared_distribution<double> chi_squared;
+
+   template <class RealType>
+   class chi_squared_distribution
+   {
+   public:
+      typedef RealType value_type;
+
+      // Construct:
+      chi_squared_distribution(RealType i);
+
+      // Access parameter:
+      RealType degrees_of_freedom()const;
+
+      // Parameter estimation:
+      static RealType estimate_degrees_of_freedom(
+         RealType difference_from_mean,
+         RealType alpha,
+         RealType beta,
+         RealType sd,
+         RealType hint = 100);
+   };
+   
+   }} // namespaces
+   
+[h4 Member Functions]
+
+      chi_squared_distribution(RealType v);
+      
+Constructs a Chi Squared distribution with /v/ degrees of freedom.
+
+      RealType degrees_of_freedom()const;
+      
+Returns the parameter /v/ from which this object was constructed.
+
+      static RealType estimate_degrees_of_freedom(
+         RealType difference_from_variance,
+         RealType alpha,
+         RealType beta,
+         RealType variance,
+         RealType hint = 100);
+
+Estimates the sample size required to detect a difference from a nominal
+variance in a Chi-Squared test for equal standard deviations.
+
+[variablelist
+[[difference_from_variance][The difference from the assumed nominal variance 
+   that is to be detected: Note that the sign of this value is critical, see below.]]
+[[alpha][The maximum acceptable risk of rejecting the null hypothesis when it is
+         in fact true.]]
+[[beta][The maximum acceptable risk of falsely accepting the null hypothesis.]]
+[[variance][The nominal variance being tested against.]]
+[[hint][An optional hint on where to start looking for a result: the current sample
+      size would be a good choice.]]
+]
+
+Note that this calculation works with /variances/ and not /standard deviations/.
+
+The sign of the parameter /difference_from_variance/ is important: the Chi
+squared distribution is asymmetric, and the caller must decide in advance
+whether they are testing for a variance greater than a nominal value (positive
+/difference_from_variance/) or testing for a variance less than a nominal value
+(negative /difference_from_variance/).  If the latter, then obviously it is
+a requirement that `variance + difference_from_variance > 0`, since no sample
+can have a negative variance!
+
+This procedure uses the method in Diamond, W. J. (1989). 
+Practical Experiment Designs, Van-Nostrand Reinhold, New York.  
+See also the NIST Engineering Statistics Handbook,
+Section 7.2.3.2.
+
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+[endsect][/section:chi_squared_dist Chi Squared]

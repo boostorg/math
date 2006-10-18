@@ -1,0 +1,52 @@
+[section:f_dist F distribution]
+
+The F distribution is the ratio of two chi-squared distributions with
+degrees of freedom df1 and df2, respectively, where each chi-squared has
+first been divided by its degrees of freedom.
+
+``#include <boost/math/distributions/fisher_f.hpp>``
+
+   namespace boost{ namespace math{ 
+      
+   template <class RealType>
+   class fisher_f_distribution;
+   
+   typedef fisher_f_distribution<double> fisher_f;
+
+   template <class RealType>
+   class fisher_f_distribution
+   {
+   public:
+      typedef RealType value_type;
+      
+      // Construct:
+      fisher_f_distribution(const RealType& i, const RealType& j);
+      
+      // Accessors:
+      RealType degrees_of_freedom1()const;
+      RealType degrees_of_freedom2()const;
+   };
+   
+   }} //namespaces
+
+[h4 Member Functions]
+
+      fisher_f_distribution(const RealType& df1, const RealType& df2);
+      
+Constructs an F-distribution with numerator degrees of freedom /df1/
+and denominator degrees of freedom /df2/.
+      
+      RealType degrees_of_freedom1()const;
+      
+Returns the numerator degrees of freedom parameter of the distribution.
+
+      RealType degrees_of_freedom2()const;
+      
+Returns the denominator degrees of freedom parameter of the distribution.
+
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+[endsect][/section:f_dist F distribution]
