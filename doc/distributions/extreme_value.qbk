@@ -1,12 +1,20 @@
+
 [section:exteme_dist Extreme Value]
 
-There are various extreme value distributions, this implementation represents the
+There are various extreme value distributions: this implementation represents the
 maximum case, and is variously known as a Fisher-Tippett distribution, 
-a log-Weibull distribution or a Gumbel distribution.  More information
-can be found on the 
-[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366g.htm NIST] 
-and [@http://mathworld.wolfram.com/ExtremeValueDistribution.html Mathworld] 
-websites.  The distribution has a PDF given by:
+a log-Weibull distribution or a Gumbel distribution. 
+
+Extreme value theory is important for assessing risk for highly unusual events, such as 100-year floods.
+
+More information can be found on the 
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366g.htm NIST],
+[@http://en.wikipedia.org/wiki/Extreme_value_distribution Wikipedia],
+[@http://mathworld.wolfram.com/ExtremeValueDistribution.html Mathworld],
+and [@http://en.wikipedia.org/wiki/Extreme_value_theory Extreme value theory]
+websites.
+
+The distribution has a PDF given by:
 
 f(x) = (1/scale) e[super -(x-location)/scale] e[super -e[super -(x-location)/scale]]
 
