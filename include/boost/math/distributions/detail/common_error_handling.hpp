@@ -39,6 +39,22 @@ inline bool check_df(const char* function, RealType const& df, RealType* result)
    return true;
 }
 
+template <class RealType>
+bool check_scale(
+      const char* function,
+      RealType scale,
+      RealType* result)
+{
+   if((scale < 0) || !(boost::math::isfinite)(scale))
+   {
+      *result = tools::domain_error<RealType>(
+         function, 
+         "Scale parameter is %1%, but must be > 0 !", scale);
+      return false;
+   }
+   return true;
+}
+
 
 } // namespace detail
 } // namespace math
