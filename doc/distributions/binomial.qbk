@@ -183,4 +183,56 @@ the context of this distribution:
    ``quantile(complement(binomial(n, p), P))``]]
 ]
 
+[h4 Accuracy]
+
+This distribution is implemented using the 
+incomplete beta functions __ibeta and __ibetac, 
+please refer to these functions for information on accuracy.
+
+[h4 Implementation]
+
+In the following table /p/ is the probablity that one trial will
+be successful (the success fraction), /n/ is the number of trials,
+/k/ is the number of successes, /p/ is the probablity and /q = 1-p/.
+
+[table
+[[Function][Implementation Notes]]
+[[pdf][Implementation is in terms of __ibeta_derivative: if [sub n]C[sub k ] is the binomial
+       coefficient of a and b, then we have:\n\n
+       f(k; n,p) = [sub n]C[sub k ] * p[super k ] * (1-p)[super n-k]\n 
+                 = (n!/(k!(n-k)!)) * p[super k ] * (1-p)[super n-k]\n
+                 = (tgamma(n+1) / (tgamma(k+1)*tgamma(n-k+1))) * p[super k ] * (1-p)[super n-k]\n
+                 = p[super k ] * (1-p)[super n-k ] / (beta(k+1, n-k+1) * (n+1))\n
+                 = ibeta_derivative(k+1, n-k+1, p) / (n+1)\n\n
+       The function __ibeta_derivative is used here, since it has already
+       been optimised for the lowest possible error - indeed this is really
+       just a thin wrapper around part of the internals of the incomplete
+       beta function.\n\n
+       There are also various special cases: refer to the code for details.
+       ]]
+[[cdf][Using the relation: \n\n
+       p = I[sub 1-p](n - k, k + 1)\n
+         = 1 - I[sub p](k + 1, n - k)\n
+         = __ibetac(k + 1, n - k, p)\n\n
+         There are also various special cases: refer to the code for details.
+]]
+[[cdf complement][Using the relation: q = __ibeta(k + 1, n - k, p)\n\n
+     There are also various special cases: refer to the code for details. ]]
+[[quantile][Since the cdf is non-linear in variate /k/ none of the inverse
+            incomplete beta functions can be used here.  Instead the quantile
+            is found numerically using a derivative free method 
+            ([link math_toolkit.toolkit.roots2 TOMS Algorithm 748]).]]
+[[quantile from the complement][Found numerically as above.]]
+[[mean][ `p * n` ]]
+[[variance][ `p * n * (1-p)` ]]
+[[mode][`floor(p * (n + 1))`]]
+[[skewness][`(1 - 2 * p) / sqrt(n * p * (1 - p))`]]
+[[kurtosis][`3 - (6 / n) + (1 / (n * p * (1 - p)))`]]
+[[kurtosis excess][`(1 - 6 * p * q) / (n * p * q)`]]
+[[parameter estimation][The member functions `estimate_upper_bound_on_p`
+       `estimate_lower_bound_on_p` and `estimate_number_of_trials` are 
+       implemented in terms of the inverse incomplete beta functions
+       __ibetac_inv, __ibeta_inv, and __ibetac_invb respectively]]
+]
+
 [endsect][/section:binomial_dist Binomial]
