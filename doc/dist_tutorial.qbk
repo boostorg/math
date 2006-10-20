@@ -6,7 +6,7 @@
 [def __F_distrib [link math_toolkit.dist.dist_ref.dists.f_dist Fisher F Distribution]]
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
 
-[section:stat_tut Statistical Functions Tutorial]
+[section:stat_tut Statistical Distributions Tutorial]
 This library is centred around statistical distributions, this tutorial
 will give you an overview of what they are, how they can be used, and 
 provides a few worked examples of applying the library to statistical tests.
@@ -96,6 +96,52 @@ generic operations - let's say the /n'th moment/ - then all you have to
 do is add the appropriate non-member functions, overloaded for each
 supported distribution type.
 
+[tip\n\n
+[*Random Variates and Distribution Parameters]\n\n
+[@http://en.wikipedia.org/wiki/Random_variate Random variates]
+and [@http://en.wikipedia.org/wiki/Parameter distribution parameters]
+are conventionally distinguished (for example in Wikipedia and Wolfram MathWorld
+by placing a semi-colon after the random variate (whose value you 'choose'),
+to separate the variate from the parameter(s) that defines the shape of the distribution.\n\n
+For example, the binomial distribution has two parameters:
+n (the number of trials) and p (the probability of success on one trial).\n\n
+The `binomial_distribution` constructor therefore has two parameters:\n\n
+	`binomial_distribution(RealType n, RealType p);`\n\n
+For this distribution the random variate is k: the number of successes observed.
+The probability density\/mass function (pdf) is therefore written as ['f(k; n, p)].\n\n
+As noted above the non-member function `pdf` has one parameter for the distribution object,
+and a second for the random variate.  So taking our binomial distribution 
+example, we would write:\n\n
+	`pdf(binomial_distribution<RealType>(n, p), k);`\n\n
+]
+
+[tip\n\n
+[*Discrete Probability Distributions]\n\n
+Note that the [@http://en.wikipedia.org/wiki/Discrete_probability_distribution 
+discrete distributions], including the binomial, negative binomial, Poisson & Bernoulli,
+are all mathematically defined as discrete functions:
+that is to say the functions `cdf` and `pdf` are only defined for integral values 
+of the random variate.\n\n
+However, because the method of calculation often uses continuous functions
+it is convenient to treat them as if they were continuous functions,
+and permit non-integral values of their parameters.\n\n
+Users wanting to enforce a strict mathematical model may use `floor` 
+or `ceil` functions on the random variate prior to calling the distribution 
+function.\n\n
+Likewise the `quantile` function will return a real value: users should use
+either the `floor` or `ceil` functions to convert the result to the nearest
+integer.  However, whether it makes more sense to take the floor or the 
+ceiling of the result, depends both on the distribution, and the particular 
+use case.  So some common sense needs to be applied as well!\n\n
+For similar reasons continuous distributions with parameters like "degrees of freedom"
+that might appear to be integral, are treated as real values
+(and are promoted from integer to floating-point if necessary).
+In this case however, there are a small number of situations where non-integral
+degrees of freedom do have a genuine meaning.
+]
+
+
+
 [h4 Complements are supported too]
 
 Often you don't want the value of the CDF, but its complement, which is
@@ -125,6 +171,42 @@ by wrapping all of its arguments in a call to `complement(...)`, for example:
       cout << "Quantile of students-t with 5 degrees of freedom\n"
               "for a 1 in " << i << " chance is " << t << endl;
    }
+ 
+[tip\n\n
+[*Critical values are just quantiles]\n\n
+Some texts talk about quantiles, others about critical values, the basic rule is:\n\n
+['Lower critical values] are the same as the quantile.\n\n
+['Upper critical values] are the same as the quantile from the complement
+of the probability.\n\n
+For example, suppose we have a Bernoulli process, giving rise to a binomial
+distribution with success ratio 0.1 and 100 trials in total.  The 
+['lower critical value] for a probability of 0.05 is given by:\n\n
+   `quantile(binomial(100, 0.1), 0.05)`\n\n
+and the ['upper critical value] is given by:\n\n
+   `quantile(complement(binomial(100, 0.1), 0.05))`\n\n
+which return 4.82 and 14.63 respectively.
+]  
+[tip\n\n
+[*Why bother with complements anyway?]\n\n
+It's very tempting to dispense with complements, and simply subtract
+the probability from 1 when required.  However, consider what happens when
+the probability is very close to 1: let's say the probability expressed at
+float precision is `0.999999940f`, then `1 - 0.999999940f = 5.96046448e-008`,
+but the result is actually accurate to just ['one single bit]: the only
+bit that didn't cancel out!\n\n
+Or to look at this another way: consider that we want the risk of falsely
+rejecting the null-hypothesis in the Student's t test to be 1 in 1 billion,
+for a sample size of 10,000.
+This gives a probability of 1 - 10[super -9], which is exactly 1 when 
+calculated at float precision.  In this case calculating the quantile from
+the complement neatly solves the problem, so for example:\n\n
+   `quantile(complement(students_t(10000), 1e-9))`\n\n
+returns the expected t-statistic `6.00336`, where as:\n\n
+   `quantile(students_t(10000), 1-1e-9f)`\n\n
+raises an overflow error, since it is the same as:\n\n
+   `quantile(students_t(10000), 1)`\n\n
+Which has no finite result.
+]
 
 [h4 Parameters can be estimated]
 

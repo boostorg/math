@@ -1,4 +1,4 @@
-[section:dist_ref Statistical Distributions and Functions Reference]
+[section:dist_ref Statistical Distributions Reference]
 
 [def __cdf [link math.dist.cdf Cumulative Distribution Function]]
 [def __pdf [link math.dist.pdf Probability Density Function]]
