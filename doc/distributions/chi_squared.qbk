@@ -86,4 +86,31 @@ Section 7.2.3.2.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
+[h4 Accuracy]
+
+The Chi-Squared distribution is implemented in terms of the 
+[link math_toolkit.special.igamma incomplete gamma functions]:
+please refer to the accuracy date for those functions.
+
+[h4 Implementation]
+
+In the following table /v/ number of degrees of freedom of the distribution
+/x/ is the random variate, /p/ is the probability, and /q = 1-p/.
+
+[table
+[[Function][Implementation Notes]]
+[[pdf][Using the relation: pdf = __gamma_P_derivative(v / 2, x / 2) / 2 ]]
+[[cdf][Using the relation: p = __gamma_P(v / 2, x / 2) ]]
+[[cdf complement][Using the relation: q = __gamma_Q(v / 2, x / 2) ]]
+[[quantile][Using the relation: x = 2 * __gamma_P_inv(v / 2, p) ]]
+[[quantile from the complement][Using the relation: x = 2 * __gamma_Q_inv(v / 2, p) ]]
+[[mean][v]]
+[[variance][2v]]
+[[mode][v - 2]]
+[[skewness][2 * sqrt(2 / v)]]
+[[kurtosis][3 + 12 / v]]
+[[kurtosis excess][12 / v]]
+]
+
+
 [endsect][/section:chi_squared_dist Chi Squared]

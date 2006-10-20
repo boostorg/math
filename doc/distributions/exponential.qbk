@@ -35,4 +35,31 @@ Returns the lambda parameter of the distribution.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
+[h4 Accuracy]
+
+The exponential distribution is implemented in terms of the 
+standard library functions exp, log, and expm1
+and as such should have very low error rates.
+
+[h4 Implementation]
+
+In the following table /l/ is the parameter lambda of the distribution, 
+/x/ is the random variate, /p/ is the probability and /q = 1-p/.
+
+[table
+[[Function][Implementation Notes]]
+[[pdf][Using the relation: pdf = l * exp(-l * x) ]]
+[[cdf][Using the relation: p = 1 - exp(-x * l) = -expm1(-x * l) ]]
+[[cdf complement][Using the relation: q = exp(-x * l) ]]
+[[quantile][Using the relation: x = -log(1-p) / l = -log1p(-p) / l]]
+[[quantile from the complement][Using the relation: x = -log(q) / l]]
+[[mean][1/l]]
+[[standard deviation][1/l]]
+[[mode][0]]
+[[skewness][2]]
+[[kurtosis][9]]
+[[kurtosis excess][6]]
+]
+
+
 [endsect][/section:exp_dist Exponential]

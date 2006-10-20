@@ -39,4 +39,52 @@ Returns the scale parameter of the distribution.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
+Note however that the Cauchy distribution does not have a mean or 
+standard deviation.  Therefore, the functions __mean, __sd, 
+__variance, __skewness, __kurtosis and __kurtosis_excess will all
+raise a domain_error if called.
+
+[h4 Accuracy]
+
+The cauchy distribution is implemented in terms of the
+standard library `tan` and `atan` functions, 
+and as such should have very low error rates.
+
+[h4 Implementation]
+
+[def __x0 x[sub 0 ]]
+
+In the following table __x0 is the location parameter of the distribution, 
+/g/ is it's scale parameter, /x/ is the random variate, /p/ is the probability
+and /q = 1-p/.
+
+[table
+[[Function][Implementation Notes]]
+[[pdf][Using the relation: pdf = 1 / (pi * g * (1 + ((x - __x0) / g)[super 2]) ]]
+[[cdf and it's complement][
+      The cdf is normally given by:\n\n
+      p = 0.5 + atan(x)/pi\n\n
+      But that suffers from cancellation error as x -> -INF.
+      So recall that for x < 0:\n\n
+      atan(x) = -pi/2 - atan(1/x)\n\n
+      Substituting into the above we get:\n\n
+      p = -atan(1/x)  ; x < 0\n\n
+      So the proceedure is to calculate the cdf for -fabs(x)
+      using the above formula.  Note that to factor in the location and scale
+      parameters you must substitute (x - __x0) / g for x in the above.\n\n
+      This procedure yields the smaller of /p/ and /q/, so the result
+      may need subtracting from 1 depending on whether we want the complement
+      or not, and whether /x/ is less than __x0 or not.
+]]
+[[quantile][The same proceedure is used irrespective of whether we're starting
+            from the probability or it's complement.  First the argument /p/ is
+            reduced to the range \[-0.5, 0.5\], then the relation\n\n
+            x = __x0 +- g / tan(pi * p)\n\n
+            is used to obtain the result.  Whether we're adding
+            or subtracting from __x0 is determined by whether we're
+            starting from the complement or not.]]
+[[mode][The location parameter.]]
+]
+
+
 [endsect][/section:cauchy_dist Cauchi]
