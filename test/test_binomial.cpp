@@ -173,7 +173,6 @@ void test_spots(RealType)
   // P = pbinom(30, 500, 0.05) = 0.869147702104609
 
   using boost::math::binomial_distribution;
-  using  ::boost::math::binomial;
   using  ::boost::math::cdf;
   using  ::boost::math::pdf;
 
@@ -560,6 +559,13 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
+
+	// Check that can generate binomial distribution using one convenience methods:
+	binomial_distribution<> mybn2(1., 0.5); // Using default RealType double.
+  // but that
+	// boost::math::binomial mybn1(1., 0.5); // Using typedef fails
+  // error C2039: 'binomial' : is not a member of 'boost::math'
+
   // Basic sanity-check spot values.
 #ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
   cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is defined to throw on domain error." << endl;
@@ -579,6 +585,10 @@ int test_main(int, char* [])
 } // int test_main(int, char* [])
 
 /*
+
+
+Output is:
+
 ------ Build started: Project: test_binomial, Configuration: Debug Win32 ------
 Compiling...
 test_binomial.cpp
@@ -586,44 +596,60 @@ Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_binomial.exe"
 Running 1 test case...
 BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
-Tolerance = 1e-011%.
-mydist.trials() = 20
-mydist.success_fraction() = 0.25
-pdf(mydist, 10.) = 0.0099222752796776954
-0 0.0031712119389339932
-1 0.021141412926226611
-2 0.066947807599717579
-3 0.13389561519943508
-4 0.18968545486586622
-5 0.20233115185692488
-6 0.1686092932141042
-7 0.11240619547606928
-8 0.060886689216204264
-9 0.027060750762757328
-10 0.0099222752796776954
-11 0.0030067500847508143
-12 0.00075168752118770694
-13 0.00015419231203850383
-14 2.5698718673084013e-005
-15 3.4264958230778655e-006
-16 3.5692664823727603e-007
-17 2.7994246920570691e-008
-18 1.5552359400317058e-009
-19 5.4569682106375668e-011
-20 9.0949470177292824e-013
+Tolerance = 0.0119209%.
+mean(my8dist) = 2
+my8dist.trials() = 8
+my8dist.success_fraction() = 0.25
 0 0.100113 0.100113 0.100113 0
-1 0.266968 0.367081 0.367081 -2.77556e-016
-2 0.311462 0.678543 0.678543 -8.88178e-016
-3 0.207642 0.886185 0.886185 -1.11022e-015
-4 0.0865173 0.972702 0.972702 -1.22125e-015
-5 0.0230713 0.995773 0.995773 -1.22125e-015
-6 0.00384521 0.999619 0.999619 -1.22125e-015
-7 0.000366211 0.999985 0.999985 -1.22125e-015
-8 1.52588e-005 1 1 -1.22125e-015
-1
-1
+1 0.266968 0.367081 0.367081 0
+2 0.311462 0.678543 0.678543 0
+3 0.207642 0.886185 0.886185 0
+4 0.0865173 0.972702 0.972702 0
+5 0.0230713 0.995773 0.995773 0
+6 0.00384521 0.999619 0.999619 0
+7 0.000366211 0.999985 0.999985 0
+8 1.52588e-005 1 1 0
+Tolerance = 2.22045e-011%.
+mean(my8dist) = 2
+my8dist.trials() = 8
+my8dist.success_fraction() = 0.25
+0 0.100113 0.100113 0.100113 0
+1 0.266968 0.367081 0.367081 0
+2 0.311462 0.678543 0.678543 0
+3 0.207642 0.886185 0.886185 0
+4 0.0865173 0.972702 0.972702 0
+5 0.0230713 0.995773 0.995773 0
+6 0.00384521 0.999619 0.999619 0
+7 0.000366211 0.999985 0.999985 0
+8 1.52588e-005 1 1 0
+Tolerance = 2.22045e-011%.
+mean(my8dist) = 2
+my8dist.trials() = 8
+my8dist.success_fraction() = 0.25
+0 0.100113 0.100113 0.100113 0
+1 0.266968 0.367081 0.367081 0
+2 0.311462 0.678543 0.678543 0
+3 0.207642 0.886185 0.886185 0
+4 0.0865173 0.972702 0.972702 0
+5 0.0230713 0.995773 0.995773 0
+6 0.00384521 0.999619 0.999619 0
+7 0.000366211 0.999985 0.999985 0
+8 1.52588e-005 1 1 0
+Tolerance = 2.22045e-011%.
+mean(my8dist) = 2
+my8dist.trials() = 8
+my8dist.success_fraction() = 0.25
+0 0.100113 0.100113 0.100113 0
+1 0.266968 0.367081 0.367081 0
+2 0.311462 0.678543 0.678543 0
+3 0.207642 0.886185 0.886185 0
+4 0.0865173 0.972702 0.972702 0
+5 0.0230713 0.995773 0.995773 0
+6 0.00384521 0.999619 0.999619 0
+7 0.000366211 0.999985 0.999985 0
+8 1.52588e-005 1 1 -6.66134e-016
 *** No errors detected
-Build Time 0:05
+Build Time 0:08
 Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_binomial\Debug\BuildLog.htm"
 test_binomial - 0 error(s), 0 warning(s)
 ========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
