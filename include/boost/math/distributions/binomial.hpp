@@ -160,6 +160,10 @@ namespace boost
         }
      }
 
+    // typedef binomial_distribution<double> binomial;
+    // is deliberately NOT included to avoid a name clash with function.
+    //typedef binomial_distribution<double> binomial; // Reserved name of type double.
+
     template <class RealType = double>
     class binomial_distribution
     {
@@ -275,7 +279,6 @@ namespace boost
         RealType m_p; // success_fraction
       }; // template <class RealType> class binomial_distribution
 
-      typedef binomial_distribution<double> binomial; // Reserved name of type double.
 
       template <class RealType>
       inline RealType mean(const binomial_distribution<RealType>& dist)

@@ -13,9 +13,9 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math{ 
-   
-template <class RealType>
+namespace boost{ namespace math{
+
+template <class RealType = double>
 class chi_squared_distribution
 {
 public:

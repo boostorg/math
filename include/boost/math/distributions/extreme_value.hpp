@@ -17,7 +17,7 @@
 // This is the maximum extreme value distribution, see
 // http://www.itl.nist.gov/div898/handbook/eda/section3/eda366g.htm
 // and http://mathworld.wolfram.com/ExtremeValueDistribution.html
-// Also known as a Fisher-Tippett distribution, a log-Weibull 
+// Also known as a Fisher-Tippett distribution, a log-Weibull
 // distribution or a Gumbel distribution.
 //
 
@@ -38,7 +38,7 @@ inline bool verify_scale_b(const char* function, RealType b, RealType* presult)
    if(b <= 0)
    {
       *presult = tools::domain_error<RealType>(
-         function, 
+         function,
          "The scale parameter \"b\" must be > 0, but was: %1%.", b);
       return false;
    }
@@ -47,7 +47,7 @@ inline bool verify_scale_b(const char* function, RealType b, RealType* presult)
 
 } // namespace detail
 
-template <class RealType>
+template <class RealType = double>
 class extreme_value_distribution
 {
 public:

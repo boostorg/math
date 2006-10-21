@@ -81,8 +81,8 @@ RealType cdf_imp(const cauchy_distribution<RealType>& dist, const RealType& x, b
 
 template <class RealType>
 RealType quantile_imp(
-      const cauchy_distribution<RealType>& dist, 
-      const RealType& p, 
+      const cauchy_distribution<RealType>& dist,
+      const RealType& p,
       bool complement)
 {
    //
@@ -90,7 +90,7 @@ RealType quantile_imp(
    // the value p may be the probability or it's complement if complement=true.
    //
    // The proceedure first performs argument reduction on p to avoid error
-   // when calculating the tangent, then calulates the distance from the 
+   // when calculating the tangent, then calulates the distance from the
    // mid-point of the distribution.  This is either added or subtracted
    // from the location parameter depending on whether `complement` is true.
    //
@@ -122,7 +122,7 @@ RealType quantile_imp(
 
 }
 
-template <class RealType>
+template <class RealType = double>
 class cauchy_distribution
 {
 public:

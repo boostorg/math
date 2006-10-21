@@ -30,7 +30,7 @@ inline bool verify_lambda(const char* function, RealType l, RealType* presult)
    if(l <= 0)
    {
       *presult = tools::domain_error<RealType>(
-         function, 
+         function,
          "The scale parameter \"lambda\" must be > 0, but was: %1%.", l);
       return false;
    }
@@ -43,7 +43,7 @@ inline bool verify_exp_x(const char* function, RealType x, RealType* presult)
    if(x < 0)
    {
       *presult = tools::domain_error<RealType>(
-         function, 
+         function,
          "The random variable must be >= 0, but was: %1%.", x);
       return false;
    }
@@ -52,7 +52,7 @@ inline bool verify_exp_x(const char* function, RealType x, RealType* presult)
 
 } // namespace detail
 
-template <class RealType>
+template <class RealType = double>
 class exponential_distribution
 {
 public:

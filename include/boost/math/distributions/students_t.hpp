@@ -21,7 +21,7 @@
 
 namespace boost{ namespace math{
 
-template <class RealType>
+template <class RealType = double>
 class students_t_distribution
 {
 public:

@@ -25,7 +25,7 @@ bool check_weibull_shape(
    if((shape < 0) || !(boost::math::isfinite)(shape))
    {
       *result = tools::domain_error<RealType>(
-         function, 
+         function,
          "Shape parameter is %1%, but must be > 0 !", shape);
       return false;
    }
@@ -41,7 +41,7 @@ bool check_weibull_x(
    if((x < 0) || !(boost::math::isfinite)(x))
    {
       *result = tools::domain_error<RealType>(
-         function, 
+         function,
          "Random variate is %1% but must be >= 0 !", x);
       return false;
    }
@@ -60,14 +60,14 @@ inline bool check_weibull(
 
 } // namespace detail
 
-template <class RealType>
+template <class RealType = double>
 class weibull_distribution
 {
 public:
    typedef RealType value_type;
 
    weibull_distribution(RealType shape, RealType scale = 1)
-      : m_shape(shape), m_scale(scale) 
+      : m_shape(shape), m_scale(scale)
    {
       RealType result;
       detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result);

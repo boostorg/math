@@ -13,9 +13,9 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math{ 
-   
-template <class RealType>
+namespace boost{ namespace math{
+
+template <class RealType = double>
 class fisher_f_distribution
 {
 public:
@@ -134,7 +134,7 @@ RealType cdf(const fisher_f_distribution<RealType>& dist, const RealType& x)
    // content as a result of being 0.999999something.  Better
    // to switch things around so we're passing 1-z instead.
    //
-   return v1x > df2 
+   return v1x > df2
       ? boost::math::ibetac(df2 / 2, df1 / 2, df2 / (df2 + v1x))
       : boost::math::ibeta(df1 / 2, df2 / 2, v1x / (df2 + v1x));
 } // cdf
@@ -191,7 +191,7 @@ RealType cdf(const complemented2_type<fisher_f_distribution<RealType>, RealType>
    // content as a result of being 0.999999something.  Better
    // to switch things around so we're passing 1-z instead.
    //
-   return v1x > df2 
+   return v1x > df2
       ? boost::math::ibeta(df2 / 2, df1 / 2, df2 / (df2 + v1x))
       : boost::math::ibetac(df1 / 2, df2 / 2, v1x / (df2 + v1x));
 }

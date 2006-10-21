@@ -24,7 +24,7 @@ bool check_lognormal_x(
    if((x < 0) || !(boost::math::isfinite)(x))
    {
       *result = tools::domain_error<RealType>(
-         function, 
+         function,
          "Random variate is %1% but must be > 0 !", x);
       return false;
    }
@@ -33,14 +33,14 @@ bool check_lognormal_x(
 
 }
 
-template <class RealType>
+template <class RealType = double>
 class lognormal_distribution
 {
 public:
    typedef RealType value_type;
 
    lognormal_distribution(RealType location = 0, RealType scale = 1)
-      : m_location(location), m_scale(scale) 
+      : m_location(location), m_scale(scale)
    {
       RealType result;
       detail::check_scale(BOOST_CURRENT_FUNCTION, scale, &result);

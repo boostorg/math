@@ -75,7 +75,7 @@ namespace boost
         if((mean < 0) || !(boost::math::isfinite)(mean))
         {
           *result = tools::domain_error<RealType>(
-            function, 
+            function,
             "Mean argument is %1%, but must be >= 0 !", mean);
           return false;
         }
@@ -88,7 +88,7 @@ namespace boost
         if((mean <= 0) || !(boost::math::isfinite)(mean))
         {
           *result = tools::domain_error<RealType>(
-            function, 
+            function,
             "Mean argument is %1%, but must be > 0 !", mean);
           return false;
         }
@@ -171,7 +171,7 @@ namespace boost
 
     } // namespace poisson_detail
 
-    template <class RealType>
+    template <class RealType = double>
     class poisson_distribution
     {
     public:
@@ -347,12 +347,12 @@ namespace boost
        return exp(-mean);
       }
 
-      if(// For small integral k use a finite sum - 
+      if(// For small integral k use a finite sum -
          // it's cheaper than the gamma function.
          (k < 34) // 34 chosen as maximum unchecked_factorial with float.
          // A smaller maximum k might be more efficient calling gamma_Q?
         && (floor(k) == k) // k is integral.
-        ) 
+        )
       {
         //RealType exp_mean = exp(-mean);
         //RealType result = exp_mean;
@@ -404,7 +404,7 @@ namespace boost
       // instead the incomplete gamma integral is employed,
 
       using boost::math::tools::domain_error;
-      
+
       RealType const& k = c.param;
       poisson_distribution<RealType> const& dist = c.dist;
 
