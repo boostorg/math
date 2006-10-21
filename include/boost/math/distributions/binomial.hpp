@@ -104,7 +104,7 @@ namespace boost
            if((N < 0) || !(boost::math::isfinite)(N))
            {
                *result = tools::domain_error<RealType>(
-                  function, 
+                  function,
                   "Number of Trials argument is %1%, but must be >= 0 !", N);
                return false;
            }
@@ -116,7 +116,7 @@ namespace boost
            if((p < 0) || (p > 1) || !(boost::math::isfinite)(p))
            {
                *result = tools::domain_error<RealType>(
-                  function, 
+                  function,
                   "Success fraction argument is %1%, but must be >= 0 and <= 1 !", p);
                return false;
            }
@@ -126,7 +126,7 @@ namespace boost
         inline bool check_dist(const char* function, const RealType& N, const RealType& p, RealType* result)
         {
            return check_success_fraction(
-              function, p, result) 
+              function, p, result)
               && check_N(
                function, N, result);
         }
@@ -138,14 +138,14 @@ namespace boost
            if((k < 0) || !(boost::math::isfinite)(k))
            {
                *result = tools::domain_error<RealType>(
-                  function, 
+                  function,
                   "Number of Successes argument is %1%, but must be >= 0 !", k);
                return false;
            }
            if(k > N)
            {
                *result = tools::domain_error<RealType>(
-                  function, 
+                  function,
                   "Number of Successes argument is %1%, but must be <= Number of Trials !", k);
                return false;
            }
@@ -160,7 +160,7 @@ namespace boost
         }
      }
 
-    template <class RealType>
+    template <class RealType = double>
     class binomial_distribution
     {
     public:
@@ -185,7 +185,6 @@ namespace boost
         return m_n;
       }
 
-      //
       // Estimation of the success parameter.
       // The best estimate is actually simply
       // successes/trials, these functions are used
@@ -193,7 +192,7 @@ namespace boost
       // fraction:
       //
       static RealType estimate_lower_bound_on_p(
-         RealType trials, 
+         RealType trials,
          RealType successes,
          RealType probability)
       {
@@ -201,7 +200,7 @@ namespace boost
         RealType result;
         if(false == binomial_detail::check_dist_and_k(
            BOOST_CURRENT_FUNCTION, trials, RealType(0), successes, &result)
-            && 
+            &&
            binomial_detail::check_dist_and_prob(
            BOOST_CURRENT_FUNCTION, trials, RealType(0), probability, &result))
         { return result; }
@@ -209,7 +208,7 @@ namespace boost
         return ibeta_inv(successes + 1, trials - successes, probability);
       }
       static RealType estimate_upper_bound_on_p(
-         RealType trials, 
+         RealType trials,
          RealType successes,
          RealType probability)
       {
@@ -217,14 +216,14 @@ namespace boost
         RealType result;
         if(false == binomial_detail::check_dist_and_k(
            BOOST_CURRENT_FUNCTION, trials, RealType(0), successes, &result)
-            && 
+            &&
            binomial_detail::check_dist_and_prob(
            BOOST_CURRENT_FUNCTION, trials, RealType(0), probability, &result))
         { return result; }
 
         return ibetac_inv(successes + 1, trials - successes, probability);
       }
-      //
+
       // Estimate number of trials parameter:
       //
       // "How many trials do I need to be P% sure of seeing k events?"
@@ -240,7 +239,7 @@ namespace boost
         RealType result;
         if(false == binomial_detail::check_dist_and_k(
            BOOST_CURRENT_FUNCTION, k, p, k, &result)
-            && 
+            &&
            binomial_detail::check_dist_and_prob(
            BOOST_CURRENT_FUNCTION, k, p, probability, &result))
         { return result; }
@@ -251,7 +250,7 @@ namespace boost
 
       template <class P1, class P2, class P3>
       static RealType estimate_number_of_trials(
-         const complemented3_type<P1, P2, P3>& c) 
+         const complemented3_type<P1, P2, P3>& c)
       {
         // extract args:
         const RealType k = c.dist;     // number of events
@@ -262,7 +261,7 @@ namespace boost
         RealType result;
         if(false == binomial_detail::check_dist_and_k(
            BOOST_CURRENT_FUNCTION, k, p, k, &result)
-            && 
+            &&
            binomial_detail::check_dist_and_prob(
            BOOST_CURRENT_FUNCTION, k, p, Q, &result))
         { return result; }
@@ -340,10 +339,10 @@ namespace boost
           return pow(dist.success_fraction(), k);  // * pow((1 - dist.success_fraction()), (n - k)) = 1
         }
 
-        // Probability of getting exactly k successes 
+        // Probability of getting exactly k successes
         // if C(n, k) is the binomial coefficient then:
         //
-        // f(k; n,p) = C(n, k) * p^k * (1-p)^(n-k) 
+        // f(k; n,p) = C(n, k) * p^k * (1-p)^(n-k)
         //           = (n!/(k!(n-k)!)) * p^k * (1-p)^(n-k)
         //           = (tgamma(n+1) / (tgamma(k+1)*tgamma(n-k+1))) * p^k * (1-p)^(n-k)
         //           = p^k (1-p)^(n-k) / (beta(k+1, n-k+1) * (n+1))
@@ -399,7 +398,7 @@ namespace boost
 
         // Special cases, regardless of k.
         if (p == 0)
-        { 
+        {
            // This need explanation: the pdf is zero for all
            // cases except when k == 0.  For zero p the probability
            // of zero successes is one.  Therefore the cdf is always
@@ -480,7 +479,7 @@ namespace boost
 
         // Special cases, regardless of k.
         if (p == 0)
-        { 
+        {
            // This need explanation: the pdf is zero for all
            // cases except when k == 0.  For zero p the probability
            // of zero successes is one.  Therefore the cdf is always
@@ -537,8 +536,8 @@ namespace boost
       template <class RealType>
       RealType quantile(const binomial_distribution<RealType>& dist, const RealType& p)
       { // Quantile or Percent Point Binomial function.
-        // Return the number of expected successes k for a given 
-        // probability p.
+        // Return the number of expected successes k,
+        // for a given probability p.
         //
         // Error checks:
         RealType result;
@@ -563,7 +562,7 @@ namespace boost
         }
         if(p == 1)
         {
-           // probability of n or fewer successes is always one,
+           // Probability of n or fewer successes is always one,
            // so n is the most sensible answer here:
            return dist.trials();
         }
@@ -575,8 +574,8 @@ namespace boost
         tools::eps_tolerance<RealType> tol(tools::digits<RealType>());
         boost::uintmax_t max_iter = 1000;
         std::pair<RealType, RealType> r = tools::bracket_and_solve_root(
-           f, 
-           dist.trials() / 2, 
+           f,
+           dist.trials() / 2,
            static_cast<RealType>(8),
            true,
            tol,
@@ -590,7 +589,7 @@ namespace boost
       template <class RealType>
       RealType quantile(const complemented2_type<binomial_distribution<RealType>, RealType>& c)
       { // Quantile or Percent Point Binomial function.
-        // Return the number of expected successes k for a given 
+        // Return the number of expected successes k for a given
         // complement of the probability q.
         //
         // Error checks:
@@ -630,8 +629,8 @@ namespace boost
         tools::eps_tolerance<RealType> tol(tools::digits<RealType>());
         boost::uintmax_t max_iter = 1000;
         std::pair<RealType, RealType> r = tools::bracket_and_solve_root(
-           f, 
-           dist.trials() / 2, 
+           f,
+           dist.trials() / 2,
            static_cast<RealType>(8),
            true,
            tol,
@@ -645,7 +644,7 @@ namespace boost
       template <class RealType>
       inline RealType mode(const binomial_distribution<RealType>& dist)
       {
-         using namespace std; // ADL of std functions
+         using namespace std; // ADL of std functions.
          RealType p = dist.success_fraction();
          RealType n = dist.trials();
          return floor(p * (n + 1));
@@ -654,7 +653,7 @@ namespace boost
       template <class RealType>
       inline RealType skewness(const binomial_distribution<RealType>& dist)
       {
-         using namespace std; // ADL of std functions
+         using namespace std; // ADL of std functions.
          RealType p = dist.success_fraction();
          RealType n = dist.trials();
          return (1 - 2 * p) / sqrt(n * p * (1 - p));
