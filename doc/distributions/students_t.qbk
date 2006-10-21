@@ -94,4 +94,41 @@ NIST Engineering Statistics Handbook].
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
 
+[h4 Accuracy]
+
+The normal distribution is implemented in terms of the 
+[link math_toolkit.special.ibeta_function incomplete beta function]
+and [link math_toolkit.special.ibeta_inv_function it's inverses],
+refer to accuracy data on those functions for more information.
+
+[h4 Implementation]
+
+In the following table /v/ is the degrees of freedom of the distribution, 
+/t/ is the random variate, /p/ is the probablity and /q = 1-p/.
+
+[table
+[[Function][Implementation Notes]]
+[[pdf][Using the relation: pdf = (v \/ (v + t[super 2]))[super (1+v)\/2 ] / (sqrt(v) * __beta(v\/2, 0.5))   ]]
+[[cdf][Using the relations:\n\n
+       p = 1 - z /iff t > 0/\n
+       p = z     /otherwise/\n\n
+       where z is given by:\n\n
+       __ibeta(v \/ 2, 0.5, v \/ (v + t[super 2])) \/ 2 ['iff v < 2t[super 2]]\n
+       __ibetac(0.5, v \/ 2, t[super 2 ] / (v + t[super 2]) \/ 2   /otherwise/\n]]
+[[cdf complement][Using the relation: q = cdf(-t) ]]
+[[quantile][Using the relation: t = sign(p - 0.5) * sqrt(v * y \/ x)\n\n
+            where:\n\n
+            x = __ibeta_inv(v \/ 2, 0.5, 2 * min(p, q))\n
+            y = 1 - x\n\n
+            The quantities /x/ and /y/ are both returned by __ibeta_inv
+            without the subtraction implied above.]]
+[[quantile from the complement][Using the relation: t = -quantile(q)]]
+[[mean][0]]
+[[variance][v \/ (v - 2)]]
+[[mode][0]]
+[[skewness][0]]
+[[kurtosis][3 * (v - 2) \/ (v - 4)]]
+[[kurtosis excess][6 \/ (df - 4)]]
+]
+
 [endsect][/section:students_t_dist Students t]

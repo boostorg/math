@@ -58,4 +58,32 @@ Returns the scale parameter of the distribution.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
+[h4 Accuracy]
+
+The extreme value distribution is implemented in terms of the 
+standard library exp and log functions and as such should have very low
+error rates.
+
+[h4 Implementation]
+
+In the following table /a/ is the location and /b/ is the scale
+parameter of the distribution, /x/ is the random variate, /p/ is
+the probability and /q = 1-p/.
+
+[table
+[[Function][Implementation Notes]]
+[[pdf][Using the relation: pdf = exp((a-x)/b) * exp(-exp((a-x)/b)) / b ]]
+[[cdf][Using the relation: p = exp(-exp((a-x)/b)) ]]
+[[cdf complement][Using the relation: q = -expm1(-exp((a-x)/b)) ]]
+[[quantile][Using the relation: a - log(-log(p)) * b]]
+[[quantile from the complement][Using the relation: a - log(-log1p(-q)) * b]]
+[[mean][a + eulers_constant * b]]
+[[standard deviation][pi * b / sqrt(6)]]
+[[mode][The same as the location parameter /a/.]]
+[[skewness][12 * sqrt(6) * zeta(3) / pi[super 3] ]]
+[[kurtosis][27 / 5]]
+[[kurtosis excess][12 / 5]]
+]
+
+
 [endsect][/section:exteme_dist Extreme Value]

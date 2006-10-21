@@ -49,4 +49,72 @@ Returns the denominator degrees of freedom parameter of the distribution.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
+[h4 Accuracy]
+
+The normal distribution is implemented in terms of the 
+[link math_toolkit.special.ibeta_function incomplete beta function]
+and it's [link math_toolkit.special.ibeta_inv_function inverses], 
+refer to those functions for accuracy data.
+
+[h4 Implementation]
+
+In the following table /v1/ and /v2/ are the first and second
+degrees of freedom parameters of the distribution,
+/x/ is the random variate, /p/ is the probability, and /q = 1-p/.
+
+[table
+[[Function][Implementation Notes]]
+[[pdf][The usual form of the PDF is given by:\n\n
+f[sub v1,v2](x) = v2[super v2\/1 ] * v1[super v1\/2 ] * x[super v1\/2 - 1 ] \/ ((v2 + v1*x)[super v1+v2 ] * __beta(v1\/2, v2\/2))\n\n
+However, that form is hard to evaluate directly without incurring problems with
+either accuracy or numeric overflow.  Direct differentiation of the CDF expressed
+in terms of the incomplete beta function led to the following two formulas:\n\n
+f[sub v1,v2](x) = y * __ibeta_derivative(v2 \/ 2, v1 \/ 2, v2 \/ (v2 + v1 * x))\n
+with y = (v2 * v1) \/ ((v2 + v1 * x) * (v2 + v1 * x))\n\n
+and\n\n
+f[sub v1,v2](x) = y * __ibeta_derivative(v1 \/ 2, v2 \/ 2, v1 * x \/ (v2 + v1 * x))\n
+with y = (z * v1 - x * v1 * v1) \/ z[super 2]\n
+and z = v2 + v1 * x\n\n
+The first of these is used for v1 * x > v2, otherwise the second is used.  The
+aim is to keep the /x/ argument to __ibeta_derivative away from 1 to avoid
+rounding error. ]]
+[[cdf][Using the relations:\n\n
+      p = __ibeta(v1 \/ 2, v2 \/ 2, v1 * x \/ (v2 + v1 * x))\n\n
+      and\n\n
+      p = __ibetac(v2 \/ 2, v1 \/ 2, v2 \/ (v2 + v1 * x))\n\n
+      The first is used for v1 * x > v2, otherwise the second is used.
+      The aim is to keep the /x/ argument to __ibeta well away from 1 to
+      avoid rounding error. ]]
+[[cdf complement][Using the relations:\n\n
+      p = __ibetac(v1 \/ 2, v2 \/ 2, v1 * x \/ (v2 + v1 * x))\n\n
+      and\n\n
+      p = __ibeta(v2 \/ 2, v1 \/ 2, v2 \/ (v2 + v1 * x))\n\n
+      The first is used for v1 * x < v2, otherwise the second is used.
+      The aim is to keep the /x/ argument to __ibeta well away from 1 to
+      avoid rounding error. ]]
+[[quantile][Using the relation: \n\n
+      x = v2 * a \/ (v1 * b)\n\n
+      where:\n\n
+      a = __ibeta_inv(v1 \/ 2, v2 \/ 2, p)\n
+      and\n
+      b = 1 - a\n\n
+      Quantities /a/ and /b/ are both computed by __ibeta_inv without the
+      subtraction implied above.]]
+[[quantile from the complement][Using the relation:\n\n
+x = v2 * a \/ (v1 * b)\n\n
+where\n\n
+a = __ibetac_inv(v1 \/ 2, v2 \/ 2, p)\n
+and\n
+b = 1 - a\n\n
+Quantities /a/ and /b/ are both computed by __ibetac_inv without the
+subtraction implied above.]]
+[[mean][v2 \/ (v2 - 2)]]
+[[variance][2 * v2[super 2 ] * (v1 + v2 - 2) \/ (v1 * (v2 - 2) * (v2 - 2) * (v2 - 4))]]
+[[mode][v2 * (v1 - 2) \/ (v1 * (v2 + 2))]]
+[[skewness][2 * (v2 + 2 * v1 - 2) * sqrt((2 * v2 - 8) \/ (v1 * (v2 + v1 - 2))) \/ (v2 - 6)]]
+[[kurtosis and kurtosis excess]
+    [Refer to, [@http://mathworld.wolfram.com/F-Distribution.html
+    Weisstein, Eric W. "F-Distribution." From MathWorld--A Wolfram Web Resource.]  ]]
+]
+
 [endsect][/section:f_dist F distribution]

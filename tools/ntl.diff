@@ -1,6 +1,6 @@
-diff -b -r -u WinNTL-5_4/include/NTL/RR.h WinNTL-5_4_patch/include/NTL/RR.h
---- WinNTL-5_4/include/NTL/RR.h	2005-03-25 07:59:12.000000000 +0000
-+++ WinNTL-5_4_patch/include/NTL/RR.h	2006-03-23 17:06:36.742860800 +0000
+diff -r -u ntl/WinNTL-5_4/include/NTL/RR.h WinNTL-5_4/include/NTL/RR.h
+--- ntl/WinNTL-5_4/include/NTL/RR.h	2005-03-25 07:59:12.000000000 +0000
++++ WinNTL-5_4/include/NTL/RR.h	2006-03-23 17:06:36.742860800 +0000
 @@ -17,6 +17,13 @@
  
  RR() {  e = 0; }
@@ -55,11 +55,9 @@ diff -b -r -u WinNTL-5_4/include/NTL/RR.h WinNTL-5_4_patch/include/NTL/RR.h
 +   conv(*this, t);
 +}
  
- 
- 
-diff -b -r -u WinNTL-5_4/include/NTL/quad_float.h WinNTL-5_4_patch/include/NTL/quad_float.h
---- WinNTL-5_4/include/NTL/quad_float.h	2005-03-25 07:59:14.000000000 +0000
-+++ WinNTL-5_4_patch/include/NTL/quad_float.h	2006-03-23 12:25:57.453315200 +0000
+diff -r -u ntl/WinNTL-5_4/include/NTL/quad_float.h WinNTL-5_4/include/NTL/quad_float.h
+--- ntl/WinNTL-5_4/include/NTL/quad_float.h	2005-03-25 07:59:14.000000000 +0000
++++ WinNTL-5_4/include/NTL/quad_float.h	2006-03-23 12:25:57.453315200 +0000
 @@ -67,7 +67,7 @@
    static void SetOutputPrecision(long p);
    static long OutputPrecision() { return oprec; }
@@ -69,9 +67,18 @@ diff -b -r -u WinNTL-5_4/include/NTL/quad_float.h WinNTL-5_4_patch/include/NTL/q
  
    ~quad_float() {}
  
-diff -b -r -u WinNTL-5_4/src/RR.cpp WinNTL-5_4_patch/src/RR.cpp
---- WinNTL-5_4/src/RR.cpp	2005-03-25 07:59:08.000000000 +0000
-+++ WinNTL-5_4_patch/src/RR.cpp	2006-03-25 13:31:14.338248000 +0000
+diff -r -u ntl/WinNTL-5_4/src/RR.cpp WinNTL-5_4/src/RR.cpp
+--- ntl/WinNTL-5_4/src/RR.cpp	2005-03-25 07:59:08.000000000 +0000
++++ WinNTL-5_4/src/RR.cpp	2006-09-12 17:28:15.281374400 +0100
+@@ -66,7 +66,7 @@
+       Error("RR: overflow");
+ 
+    if (z.e <= -NTL_OVFBND)
+-      Error("RR: underflow");
++      z = 0; // Error("RR: underflow");
+ }
+ 
+ void normalize(RR& z, const RR& y, long residual = 0)
 @@ -570,7 +570,7 @@
     xcopy(z, t);
  }
@@ -132,4 +139,37 @@ diff -b -r -u WinNTL-5_4/src/RR.cpp WinNTL-5_4_patch/src/RR.cpp
  
  void ConvPrec(RR& x, double a, long p)
  {
+@@ -1069,7 +1104,7 @@
+       Error("RR: overflow");
+ 
+    if (z.e <= -NTL_OVFBND)
+-      Error("RR: underflow");
++      z = 0; // Error("RR: underflow");
+ }
+ 
+ void ConvPrec(RR& x, const xdouble& a, long p)
+@@ -1100,11 +1135,12 @@
+    if (e >= NTL_OVFBND)
+       Error("RR: overflow");
+ 
+-   if (e <= -NTL_OVFBND)
+-      Error("RR: underflow");
+ 
+    set(z.x); 
+    z.e = e;
++
++   if (e <= -NTL_OVFBND)
++      z = 0; // Error("RR: underflow");
+ }
+ 
+ void conv(RR& z, const quad_float& a)
+@@ -2019,7 +2055,7 @@
+ 
+    bp[len] = '\0';
+ 
+-   if (k > 3 || k < -len - 3) {
++   if ((s.flags() & ostream::scientific) || (k > 3 || k < -len - 3)) {
+       // use scientific notation
+ 
+       if (neg) s << "-";
 
