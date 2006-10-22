@@ -16,6 +16,7 @@
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
+//#  pragma warning(disable: 4244) //  conversion from 'const double' to 'float'.
 #endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
@@ -23,6 +24,7 @@ using ::boost::math::concepts::real_concept;
 
 #include <boost/math/distributions/chi_squared.hpp> // for chi_squared_distribution
 using boost::math::chi_squared_distribution;
+using boost::math::chi_squared;
 
 #include <boost/test/included/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
@@ -526,6 +528,10 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
+ 	// Check that can generate chi_squared distribution using the two convenience methods:
+  chi_squared_distribution<> mychisqr(8);
+  chi_squared mychisqr2(8);
+
   // Basic sanity-check spot values.
 #ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
   cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is defined to throw on domain error." << endl;
@@ -544,15 +550,12 @@ int test_main(int, char* [])
 } // int test_main(int, char* [])
 
 /*
-After correcting check_df 1 sep 06
-
------- Rebuild All started: Project: test_chisquared, Configuration: Debug Win32 ------
-Deleting intermediate and output files for project 'test_chisquared', configuration 'Debug|Win32'
+------ Rebuild All started: Project: test_chi_squared, Configuration: Debug Win32 ------
+Deleting intermediate and output files for project 'test_chi_squared', configuration 'Debug|Win32'
 Compiling...
 test_chi_squared.cpp
 Linking...
-Embedding manifest...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_chisquared.exe"
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_chi_squared.exe"
 Running 1 test case...
 BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
 Tolerance = 0.1%.
@@ -560,9 +563,9 @@ Tolerance = 0.1%.
 Tolerance = 0.1%.
 Tolerance = 0.1%.
 *** No errors detected
-Build Time 0:14
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_chisqr\Debug\BuildLog.htm"
-test_chisquared - 0 error(s), 0 warning(s)
+Build Time 0:09
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_chi_squared\Debug\BuildLog.htm"
+test_chi_squared - 0 error(s), 0 warning(s)
 ========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
 
 
