@@ -38,17 +38,20 @@ to the Students-t object when it is constructed.
 
 Although the distribution classes in this library are templates, there
 are typedefs on type /double/ that mostly take the usual name of the
-distribution.  Probably 95% of uses are covered by these typedefs:
+distribution
+(except where there is a clash with a function name: beta, gamma, binomial,
+in which case using the default RealType = double is nearly as convenient).
+Probably 95% of uses are covered by these typedefs:
 
    using namespace boost::math;
    
    // Construct a students_t distribution with 4 degrees of freedom:
    students_t d1(4);
    
-   // Construct a binomial distribution 
+   // Construct a double binomial distribution 
    // with probability of success 0.3
    // and 20 trials in total:
-   binomial d2(20, 0.3);
+   binomial_distribution<> d2(20, 0.3); // Note: _distribution<> !
    
 If you need to use the distributions with a type other than `double`,
 then you can instantiate the template directly: the names of the 
