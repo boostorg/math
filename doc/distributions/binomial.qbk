@@ -4,10 +4,12 @@
 
    namespace boost{ namespace math{ 
    
-   template <class RealType>
+   template <class RealType = double>
    class binomial_distribution;
    
-   typedef binomial_distribution<double> binomial;
+   // typedef binomial_distribution<double> binomial;
+   // Note that this is NOT provided to avoid a clash with the function name.
+   // Use binomial_distribution<> myBinomial(...) to construct type double. 
    
    template <class RealType>
    class binomial_distribution
