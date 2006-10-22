@@ -514,6 +514,12 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
+
+  // Check that can generate fisher distribution using the two convenience methods:
+	boost::math::fisher_f myf1(1., 2); // Using typedef
+	fisher_f_distribution<> myf2(1., 2); // Using default RealType double.
+
+
   // Basic sanity-check spot values.
 #ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
   cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is defined to throw on domain error." << endl;
@@ -531,4 +537,38 @@ int test_main(int, char* [])
 
   return 0;
 } // int test_main(int, char* [])
+
+/*
+
+Output is:
+
+------ Build started: Project: test_fisher, Configuration: Debug Win32 ------
+Compiling...
+test_fisher_f.cpp
+Linking...
+Embedding manifest...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_fisher.exe"
+Running 1 test case...
+BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
+Tolerance = 0.2%.
+Tolerance = 5.96046e-005%.
+Tolerance = 5.96046e-005%.
+Tolerance = 0.2%.
+Tolerance = 1.11022e-013%.
+Tolerance = 1.11022e-013%.
+Tolerance = 0.2%.
+Tolerance = 1.11022e-013%.
+Tolerance = 1.11022e-013%.
+Tolerance = 0.2%.
+Tolerance = 1.11022e-013%.
+Tolerance = 1.11022e-013%.
+*** No errors detected
+Build Time 0:12
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_fisher\Debug\BuildLog.htm"
+test_fisher - 0 error(s), 0 warning(s)
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
+
+*/
+
 
