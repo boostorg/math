@@ -27,7 +27,6 @@
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
-
 #include <iostream>
 	using std::cout;
 	using std::endl;
@@ -72,7 +71,7 @@ template <class RealType>
 void test_spots(RealType T)
 {
    // Basic sanity checks.
-   // 50eps as a persentage, up to a maximum of double precision
+   // 50 eps as a percentage, up to a maximum of double precision
    // (that's the limit of our test data: obtained by punching
    // numbers into a calculator).
    RealType tolerance = (std::max)(
@@ -251,6 +250,10 @@ void test_spots(RealType T)
 
 int test_main(int, char* [])
 {
+  // Check that can generate exponential distribution using the two convenience methods:
+	boost::math::exponential mycexp1(1.); // Using typedef
+	exponential_distribution<> myexp2(1.); // Using default RealType double.
+
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
@@ -270,3 +273,32 @@ int test_main(int, char* [])
    return 0;
 } // int test_main(int, char* [])
 
+/*
+
+Output is:
+
+------ Build started: Project: test_exponential_dist, Configuration: Debug Win32 ------
+Compiling...
+test_exponential_dist.cpp
+Linking...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_exponential_dist.exe"
+Running 1 test case...
+Tolerance for type float is 0.000596046 %
+Tolerance for type double is 1.11022e-012 %
+../../../../../../boost-sandbox/libs/math_functions/test/test_exponential_dist.cpp(43): error in "test_main_caller( argc, argv )": difference between ::boost::math::cdf( exponential_distribution<RealType>(l), x){9.9999995000000163e-008} and p{9.9999994999987298e-008} exceeds 1.11022e-012%
+../../../../../../boost-sandbox/libs/math_functions/test/test_exponential_dist.cpp(57): error in "test_main_caller( argc, argv )": difference between ::boost::math::quantile( exponential_distribution<RealType>(l), p){9.9999999999987131e-008} and x{9.9999999999999995e-008} exceeds 1.11022e-012%
+Tolerance for type long double is 1.11022e-012 %
+../../../../../../boost-sandbox/libs/math_functions/test/test_exponential_dist.cpp(43): error in "test_main_caller( argc, argv )": difference between ::boost::math::cdf( exponential_distribution<RealType>(l), x){9.9999995000000163e-008} and p{9.9999994999987298e-008} exceeds 1.11022e-012%
+../../../../../../boost-sandbox/libs/math_functions/test/test_exponential_dist.cpp(57): error in "test_main_caller( argc, argv )": difference between ::boost::math::quantile( exponential_distribution<RealType>(l), p){9.9999999999987131e-008} and x{9.9999999999999995e-008} exceeds 1.11022e-012%
+Tolerance for type class boost::math::concepts::real_concept is 1.11022e-012 %
+*** 4 failures detected in test suite "Test Program"
+Project : error PRJ0019: A tool returned an error code from "Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_exponential_dist.exe""
+Build Time 0:05
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_exponential\Debug\BuildLog.htm"
+test_exponential_dist - 5 error(s), 0 warning(s)
+========== Build: 0 succeeded, 1 failed, 0 up-to-date, 0 skipped ==========
+
+
+
+
+*/
