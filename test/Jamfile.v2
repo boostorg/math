@@ -20,6 +20,7 @@ run test_cbrt.cpp ;
 run test_chi_squared.cpp ;
 run test_classify.cpp ;
 run test_digamma.cpp ;
+run test_dist_overloads.cpp ;
 run test_erf.cpp ;
 run test_error_handling.cpp ;
 run test_exponential_dist.cpp ;
@@ -33,8 +34,10 @@ run test_ibeta_inv_ab.cpp ;
 run test_igamma.cpp ;
 run test_igamma_inv.cpp ;
 run test_igamma_inva.cpp ;
+run test_lognormal.cpp ;
 run test_minima.cpp ;
 run test_normal.cpp ;
+run test_poisson.cpp ;
 run test_promotion.cpp ;
 run test_rationals.cpp ;
 run test_remez.cpp ;
@@ -42,6 +45,9 @@ run test_roots.cpp ;
 run test_students_t.cpp ;
 run test_tgamma_ratio.cpp ;
 run test_toms748_solve.cpp ;
+run test_weibull.cpp ;
+
+compile distribution_concept_check.cpp ;
 
 
 
