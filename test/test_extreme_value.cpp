@@ -191,6 +191,12 @@ void test_spots(RealType T)
 
 int test_main(int, char* [])
 {
+
+  // Check that can generate extreme_value distribution using the two convenience methods:
+	boost::math::extreme_value mycev1(1.); // Using typedef
+	extreme_value_distribution<> myev2(1.); // Using default RealType double.
+
+
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
@@ -209,4 +215,28 @@ int test_main(int, char* [])
 
    return 0;
 } // int test_main(int, char* [])
+
+/*
+
+Output is:
+
+------ Rebuild All started: Project: test_extreme_value, Configuration: Debug Win32 ------
+Deleting intermediate and output files for project 'test_extreme_value', configuration 'Debug|Win32'
+Compiling...
+test_extreme_value.cpp
+Linking...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_extreme_value.exe"
+Running 1 test case...
+Tolerance for type float is 0.000596046 %
+Tolerance for type double is 1.11022e-012 %
+Tolerance for type long double is 1.11022e-012 %
+Tolerance for type class boost::math::concepts::real_concept is 1.11022e-012 %
+*** No errors detected
+Build Time 0:05
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_extreme_value\Debug\BuildLog.htm"
+test_extreme_value - 0 error(s), 0 warning(s)
+========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
+
+
+*/
 
