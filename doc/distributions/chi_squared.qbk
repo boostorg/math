@@ -7,7 +7,7 @@ standard normal distributions are squared and summed.
 
    namespace boost{ namespace math{ 
 
-   template <class RealType>
+   template <class RealType = double>
    class chi_squared_distribution;
 
    typedef chi_squared_distribution<double> chi_squared;

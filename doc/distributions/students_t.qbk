@@ -23,7 +23,7 @@ distribution approaches the normal-distribution.
 
    namespace boost{ namespace math{ 
       
-   template <class RealType>
+   template <class RealType = double>
    class students_t_distribution;
    
    typedef students_t_distribution<double> students_t;

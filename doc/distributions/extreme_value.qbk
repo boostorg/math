@@ -1,5 +1,5 @@
 
-[section:exteme_dist Extreme Value]
+[section:extreme_dist Extreme Value]
 
 There are various extreme value distributions: this implementation represents the
 maximum case, and is variously known as a Fisher-Tippett distribution, 
@@ -24,7 +24,7 @@ f(x) = e[super -x]e[super -e[super -x]]
 
 ``#include <boost/math/distributions/extreme.hpp>``
 
-   template <class RealType>
+   template <class RealType = double>
    class extreme_value_distribution
    {
    public:
@@ -86,4 +86,4 @@ the probability and /q = 1-p/.
 ]
 
 
-[endsect][/section:exteme_dist Extreme Value]
+[endsect][/section:extreme_dist Extreme Value]

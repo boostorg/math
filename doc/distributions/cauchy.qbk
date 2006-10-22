@@ -1,10 +1,10 @@
-[section:cauchy_dist Cauchi]
+[section:cauchy_dist Cauchy]
 
 TODO: insert background here....
 
 ``#include <boost/math/distributions/cauchy.hpp>``
 
-   template <class RealType>
+   template <class RealType = double>
    class cauchy_distribution
    {
    public:

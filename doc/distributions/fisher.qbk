@@ -8,7 +8,7 @@ first been divided by its degrees of freedom.
 
    namespace boost{ namespace math{ 
       
-   template <class RealType>
+   template <class RealType = double>
    class fisher_f_distribution;
    
    typedef fisher_f_distribution<double> fisher_f;

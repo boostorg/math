@@ -9,7 +9,7 @@ is known as the ['Standard Normal Distribution].
 
    namespace boost{ namespace math{ 
       
-   template <class RealType>
+   template <class RealType = double>
    class normal_distribution;
    
    typedef normal_distribution<double> normal;

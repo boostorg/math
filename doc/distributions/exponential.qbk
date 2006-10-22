@@ -2,7 +2,7 @@
 
 ``#include <boost/math/distributions/exponential.hpp>``
 
-   template <class RealType>
+   template <class RealType = double>
    class exponential_distribution
    {
    public:
