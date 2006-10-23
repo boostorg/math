@@ -27,7 +27,7 @@
 
 #include <boost/math/distributions/lognormal.hpp>
 	 using boost::math::lognormal_distribution;
-#include <boost/math/tools/test.hpp> 
+#include <boost/math/tools/test.hpp>
 
 #include <iostream>
 	using std::cout;
@@ -158,15 +158,15 @@ void test_spots(RealType T)
    tolerance = boost::math::tools::epsilon<RealType>() * 5 * 100; // 5 eps as a percentage
 	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
    BOOST_CHECK_CLOSE(
-      pdf(lognormal_distribution<RealType>(), static_cast<RealType>(1)), 
+      pdf(lognormal_distribution<RealType>(), static_cast<RealType>(1)),
       static_cast<RealType>(0.3989422804014326779399460599343818684759L), // 1/sqrt(2*pi)
       tolerance);
    BOOST_CHECK_CLOSE(
-      pdf(lognormal_distribution<RealType>(3), exp(static_cast<RealType>(3))), 
+      pdf(lognormal_distribution<RealType>(3), exp(static_cast<RealType>(3))),
       static_cast<RealType>(0.3989422804014326779399460599343818684759L) / exp(static_cast<RealType>(3)),
       tolerance);
    BOOST_CHECK_CLOSE(
-      pdf(lognormal_distribution<RealType>(3, 5), exp(static_cast<RealType>(3))), 
+      pdf(lognormal_distribution<RealType>(3, 5), exp(static_cast<RealType>(3))),
       static_cast<RealType>(0.3989422804014326779399460599343818684759L / (5 * exp(static_cast<RealType>(3)))),
       tolerance);
    //
@@ -176,7 +176,7 @@ void test_spots(RealType T)
    for(RealType x = -15; x < 5; x += 0.125)
    {
       BOOST_CHECK_CLOSE(
-         pdf(lognormal_distribution<RealType>(-5, 6), exp(x)), 
+         pdf(lognormal_distribution<RealType>(-5, 6), exp(x)),
          pdf(boost::math::normal_distribution<RealType>(-5, 6), x) / exp(x),
          tolerance);
    }
@@ -256,6 +256,11 @@ void test_spots(RealType T)
 
 int test_main(int, char* [])
 {
+
+	// Check that can generate lognormal distribution using the two convenience methods:
+	boost::math::lognormal myf1(1., 2); // Using typedef
+	lognormal_distribution<> myf2(1., 2); // Using default RealType double.
+
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
@@ -277,23 +282,28 @@ int test_main(int, char* [])
 
 /*
 
-Output:
-
------- Build started: Project: normal, Configuration: Debug Win32 ------
+------ Rebuild All started: Project: test_lognormal, Configuration: Debug Win32 ------
+Deleting intermediate and output files for project 'test_lognormal', configuration 'Debug|Win32'
 Compiling...
-test_normal.cpp
+test_lognormal.cpp
 Linking...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\normal.exe"
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_lognormal.exe"
 Running 1 test case...
-Tolerance for type float is 0.01 %
-Tolerance for type double is 0.01 %
-Tolerance for type long double is 0.01 %
-Tolerance for type class boost::math::concepts::real_concept is 0.01 %
-*** No errors detected
+Tolerance for type float is 0.5 %
+Tolerance for type float is 5.96046e-005 %
+Tolerance for type float is 5.96046e-005 %
+../../../../../../boost-sandbox/libs/math_functions/test/test_lognormal.cpp(222): error in "test_main_caller( argc, argv )": difference between mode(dist){24154952} and static_cast<RealType>(0.36787944117144232159552377016146L){0.36787945} exceeds 5.96046e-005%
+../../../../../../boost-sandbox/libs/math_functions/test/test_lognormal.cpp(226): error in "test_main_caller( argc, argv )": difference between skewness(dist){729506.375} and static_cast<RealType>(729551.38304660255658441529235697L){729551.375} exceeds 5.96046e-005%
+../../../../../../boost-sandbox/libs/math_functions/test/test_lognormal.cpp(239): error in "test_main_caller( argc, argv )": check pdf(dist, 0) == 0 failed
+unknown location(0): fatal error in "test_main_caller( argc, argv )": std::overflow_error: Error in function float __cdecl boost::math::erfc_inv<float>(float): Overflow
+..\..\..\..\..\..\boost-sandbox\libs\math_functions\test\test_lognormal.cpp(242): last checkpoint
+*** 4 failures detected in test suite "Test Program"
+Project : error PRJ0019: A tool returned an error code from "Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_lognormal.exe""
 Build Time 0:06
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\normal\Debug\BuildLog.htm"
-normal - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_lognormal\Debug\BuildLog.htm"
+test_lognormal - 5 error(s), 0 warning(s)
+========== Rebuild All: 0 succeeded, 1 failed, 0 skipped ==========
+
 
 */
 
