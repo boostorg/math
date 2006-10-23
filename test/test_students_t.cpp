@@ -391,6 +391,11 @@ void test_spots(RealType T)
 
 int test_main(int, char* [])
 {
+  // Check that can construct students_t distribution using the two convenience methods:
+  using namespace boost::math;
+  students_t myst1(2); // Using typedef
+	students_t_distribution<> myst2(2); // Using default RealType double.
+
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
