@@ -256,6 +256,11 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
+  // Check that can construct normal distribution using the two convenience methods:
+  using namespace boost::math;
+  poisson myp1(2); // Using typedef
+	poisson_distribution<> myp2(2); // Using default RealType double.
+
 	// Basic sanity-check spot values.
 #ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
   cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is defined to throw on domain error." << endl;
@@ -263,8 +268,8 @@ int test_main(int, char* [])
   cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
 #endif
 
- 
 #if 0
+  // Compare cdf from finite sum of pdf and gamma_Q.
   using boost::math::cdf;
   using boost::math::pdf;
 
@@ -299,12 +304,11 @@ int test_main(int, char* [])
 	// (Parameter value, arbitrarily zero, only communicates the floating-point type).
 	test_spots(0.0F); // Test float.
 	test_spots(0.0); // Test double.
-	//test_spots(0.0L); // Test long double.
+	test_spots(0.0L); // Test long double.
 
   #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
   #endif
-
 
 	return 0;
 } // int test_main(int, char* [])
