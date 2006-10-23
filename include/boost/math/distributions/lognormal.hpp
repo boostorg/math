@@ -8,30 +8,64 @@
 
 // http://www.itl.nist.gov/div898/handbook/eda/section3/eda3669.htm
 // http://mathworld.wolfram.com/LogNormalDistribution.html
+// http://en.wikipedia.org/wiki/Lognormal_distribution
 
 #include <boost/math/distributions/normal.hpp>
+#include <boost/math/special_functions/expm1.hpp>
+
 
 namespace boost{ namespace math{
 
-namespace detail{
-
-template <class RealType>
-bool check_lognormal_x(
-      const char* function,
-      RealType const& x,
-      RealType* result)
+namespace detail
 {
-   if((x < 0) || !(boost::math::isfinite)(x))
-   {
-      *result = tools::domain_error<RealType>(
-         function,
-         "Random variate is %1% but must be > 0 !", x);
-      return false;
-   }
-   return true;
-}
 
-}
+  template <class RealType>
+  bool check_lognormal_x(
+        const char* function,
+        RealType const& x,
+        RealType* result)
+  {
+     if((x < 0) || !(boost::math::isfinite)(x))
+     {
+        *result = tools::domain_error<RealType>(
+           function,
+           "Random variate is %1% but must be > 0 !", x);
+        return false;
+     }
+     return true;
+  }
+
+  template <class RealType>
+  bool check_scale(
+        const char* function,
+        RealType const& x,
+        RealType* result)
+  {
+     if((x < 0) || !(boost::math::isfinite)(x))
+     {
+        *result = tools::domain_error<RealType>(
+           function,
+           "Scale is %1% but must be > 0 !", x);
+        return false;
+     }
+     return true;
+  }
+
+  template <class RealType>
+  inline bool check_probability(const char* function, const RealType& p, RealType* result)
+  { // Check 0 <= p <= 1
+    if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
+    {
+      *result = tools::domain_error<RealType>(
+        function,
+        "Probability argument is %1%, but must be >= 0 and <= 1 !", p);
+      return false;
+    }
+    return true;
+  } // bool check_prob
+
+} // namespace detail
+
 
 template <class RealType = double>
 class lognormal_distribution
@@ -191,7 +225,7 @@ inline RealType skewness(const lognormal_distribution<RealType>& dist)
 {
    using namespace std;  // for ADL of std functions
 
-   RealType mu = dist.location();
+   //RealType mu = dist.location();
    RealType sigma = dist.scale();
 
    RealType ess = exp(sigma * sigma);
@@ -208,7 +242,7 @@ inline RealType kurtosis(const lognormal_distribution<RealType>& dist)
 {
    using namespace std;  // for ADL of std functions
 
-   RealType mu = dist.location();
+   //RealType mu = dist.location();
    RealType sigma = dist.scale();
    RealType ss = sigma * sigma;
 
@@ -224,7 +258,7 @@ inline RealType kurtosis_excess(const lognormal_distribution<RealType>& dist)
 {
    using namespace std;  // for ADL of std functions
 
-   RealType mu = dist.location();
+   // RealType mu = dist.location();
    RealType sigma = dist.scale();
    RealType ss = sigma * sigma;
 
