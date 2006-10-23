@@ -291,8 +291,6 @@ namespace boost
        (p * p) / r * (1 - p );
     } // kurtosis
 
-
-
     template <class RealType>
     inline RealType variance(const negative_binomial_distribution<RealType>& dist)
     { // Variance of Binomial distribution = r (1-p) / p^2.
@@ -408,7 +406,7 @@ namespace boost
 
       // Special cases.
       if (P == 1)
-      {  // Would need +infinity failures to have no probability of failure.
+      {  // Would need +infinity failures to have no probability of success.
        using std::numeric_limits;
        //return +numeric_limits<RealType>::infinity(); 
        return +numeric_limits<RealType>::max(); 
