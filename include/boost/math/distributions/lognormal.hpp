@@ -12,7 +12,7 @@
 
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/special_functions/expm1.hpp>
-
+#include <boost/math/distributions/detail/common_error_handling.hpp>
 
 namespace boost{ namespace math{
 
@@ -34,35 +34,6 @@ namespace detail
      }
      return true;
   }
-
-  template <class RealType>
-  bool check_scale(
-        const char* function,
-        RealType const& x,
-        RealType* result)
-  {
-     if((x < 0) || !(boost::math::isfinite)(x))
-     {
-        *result = tools::domain_error<RealType>(
-           function,
-           "Scale is %1% but must be > 0 !", x);
-        return false;
-     }
-     return true;
-  }
-
-  template <class RealType>
-  inline bool check_probability(const char* function, const RealType& p, RealType* result)
-  { // Check 0 <= p <= 1
-    if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
-    {
-      *result = tools::domain_error<RealType>(
-        function,
-        "Probability argument is %1%, but must be >= 0 and <= 1 !", p);
-      return false;
-    }
-    return true;
-  } // bool check_prob
 
 } // namespace detail
 
@@ -110,8 +81,11 @@ RealType pdf(const lognormal_distribution<RealType>& dist, const RealType& x)
    RealType result;
    if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
       return result;
-   if(0 == detail::check_lognormal_x(BOOST_CURRENT_FUNCTION, sigma, &result))
+   if(0 == detail::check_lognormal_x(BOOST_CURRENT_FUNCTION, x, &result))
       return result;
+
+   if(x == 0)
+      return 0;
 
    RealType exponent = log(x) - mu;
    exponent *= -exponent;
@@ -132,6 +106,9 @@ inline RealType cdf(const lognormal_distribution<RealType>& dist, const RealType
    if(0 == detail::check_lognormal_x(BOOST_CURRENT_FUNCTION, x, &result))
       return result;
 
+   if(x == 0)
+      return 0;
+
    normal_distribution<RealType> norm(dist.location(), dist.scale());
    return cdf(norm, log(x));
 }
@@ -144,6 +121,11 @@ RealType quantile(const lognormal_distribution<RealType>& dist, const RealType& 
    RealType result;
    if(0 == detail::check_probability(BOOST_CURRENT_FUNCTION, p, &result))
       return result;
+
+   if(p == 0)
+      return 0;
+   if(p == 1)
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
 
    normal_distribution<RealType> norm(dist.location(), dist.scale());
    return exp(quantile(norm, p));
@@ -158,6 +140,9 @@ RealType cdf(const complemented2_type<lognormal_distribution<RealType>, RealType
    if(0 == detail::check_lognormal_x(BOOST_CURRENT_FUNCTION, c.param, &result))
       return result;
 
+   if(c.param == 0)
+      return 1;
+
    normal_distribution<RealType> norm(c.dist.location(), c.dist.scale());
    return cdf(complement(norm, log(c.param)));
 }
@@ -170,6 +155,11 @@ RealType quantile(const complemented2_type<lognormal_distribution<RealType>, Rea
    RealType result;
    if(0 == detail::check_probability(BOOST_CURRENT_FUNCTION, c.param, &result))
       return result;
+
+   if(c.param == 1)
+      return 0;
+   if(c.param == 0)
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
 
    normal_distribution<RealType> norm(c.dist.location(), c.dist.scale());
    return exp(quantile(complement(norm, c.param)));
@@ -217,7 +207,7 @@ inline RealType mode(const lognormal_distribution<RealType>& dist)
    if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
       return result;
 
-   return exp(mu + sigma * sigma);
+   return exp(mu - sigma * sigma);
 }
 
 template <class RealType>
@@ -228,13 +218,14 @@ inline RealType skewness(const lognormal_distribution<RealType>& dist)
    //RealType mu = dist.location();
    RealType sigma = dist.scale();
 
-   RealType ess = exp(sigma * sigma);
+   RealType ss = sigma * sigma;
+   RealType ess = exp(ss);
 
    RealType result;
    if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
       return result;
 
-   return (ess + 2) * sqrt(expm1(sigma * sigma) - 1);
+   return (ess + 2) * sqrt(expm1(ss));
 }
 
 template <class RealType>

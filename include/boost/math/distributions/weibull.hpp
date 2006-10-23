@@ -108,6 +108,9 @@ RealType pdf(const weibull_distribution<RealType>& dist, const RealType& x)
    if(false == detail::check_weibull_x(BOOST_CURRENT_FUNCTION, x, &result))
       return result;
 
+   if(x == 0)
+      return 0;
+
    result = exp(-pow(x / scale, shape));
    result *= pow(x / scale, shape) * shape / x;
 
@@ -146,6 +149,9 @@ RealType quantile(const weibull_distribution<RealType>& dist, const RealType& p)
       return result;
    if(false == detail::check_probability(BOOST_CURRENT_FUNCTION, p, &result))
       return result;
+
+   if(p == 1)
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
 
    result = scale * pow(-log1p(-p), 1 / shape);
 
@@ -186,6 +192,9 @@ RealType quantile(const complemented2_type<weibull_distribution<RealType>, RealT
    if(false == detail::check_probability(BOOST_CURRENT_FUNCTION, q, &result))
       return result;
 
+   if(q == 0)
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+
    result = scale * pow(-log(q), 1 / shape);
 
    return result;
@@ -208,7 +217,7 @@ inline RealType mean(const weibull_distribution<RealType>& dist)
 }
 
 template <class RealType>
-RealType standard_deviation(const weibull_distribution<RealType>& dist)
+RealType variance(const weibull_distribution<RealType>& dist)
 {
    using namespace std;  // for ADL of std functions
 
