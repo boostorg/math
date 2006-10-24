@@ -168,7 +168,7 @@ namespace boost
           return result;
         }
 
-        return ibeta_inv(successes + 1, failures - successes, probability); // TODO negative
+        return ibeta_inv(successes + 1, failures - successes, probability);
       } // estimate_lower_bound_on_p
 
       static RealType estimate_upper_bound_on_p(
@@ -187,7 +187,7 @@ namespace boost
           return result;
         }
         // Use complement ibetac_inv function for upper bound.
-        return ibetac_inv(successes + 1, failures - successes, probability); // TODO negative
+        return ibetac_inv(successes + 1, failures - successes, probability);
       } // estimate_upper_bound_on_p
 
       // Estimate number of failures parameter:  
@@ -212,7 +212,7 @@ namespace boost
 
         result = ibetac_invb(k + 1, p, probability);  // returns n - k
         return result + k;
-      } // estimate_number_of_failures
+      } // RealType estimate_number_of_failures
 
       template <class P1, class P2, class P3>
       static RealType estimate_number_of_trials(
@@ -406,10 +406,12 @@ namespace boost
 
       // Special cases.
       if (P == 1)
-      {  // Would need +infinity failures to have no probability of success.
-       using std::numeric_limits;
-       //return +numeric_limits<RealType>::infinity(); 
-       return +numeric_limits<RealType>::max(); 
+      {  // Would need +infinity failures for total confidence.
+        result = tools::overflow_error<RealType>(
+            BOOST_CURRENT_FUNCTION, 
+            "Probability argument is 1, which implies infinite failures !");
+        return result;
+       // usually means return +std::numeric_limits<RealType>::infinity(); 
       }
       if (P == 0)
       { // No failures are allowed if P = 0.
@@ -425,38 +427,38 @@ namespace boost
       { // Quantile or Percent Point Binomial function.
         // Return the number of expected successes k for a given 
         // complement of the probability Q.
-        //
-      RealType p = dist.success_fraction();
-      RealType r = dist.successes();
 
         // Error checks:
         RealType Q = c.param;
         const negative_binomial_distribution<RealType>& dist = c.dist;
+        RealType p = dist.success_fraction();
+        RealType r = dist.successes();
         RealType result;
         if(false == negative_binomial_detail::check_dist_and_prob(
            BOOST_CURRENT_FUNCTION,
            r,
            p,
-           q,
+           Q,
            &result))
         {
            return result;
         }
+
         // Special cases:
         //
-        if(q == 1)
+        if(Q == 1)
         {  // There may actually be no answer to this question,
            // since the probability of zero failures may be non-zero,
            // but zero is the best we can do:
            return 0;
         }
-        if(q == 0)
-        {  // Probability of greater than n failures is always zero,
-           // so r is the most sensible answer here:  TODO check these special cases.
+        if(Q == 0)
+        {  // Probability of greater than r failures is always zero,
+           // so r is the most sensible answer here.
            return r;
         }
 
-        return ibetac_invb(r, p, Q);
+        return ibetac_invb(r, p, Q) -1;
       } // quantile complement
 
  } // namespace math
