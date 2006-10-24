@@ -3,6 +3,11 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// distributions.hpp provides definitions of the concept of a distribution
+// and non-member accessor functions that must be implemented by all distributions.
+// This is used to verify that
+// all the features of a distributions have been fully implemented.
+
 #ifndef BOOST_MATH_DISTRIBUTION_CONCEPT_HPP
 #define BOOST_MATH_DISTRIBUTION_CONCEPT_HPP
 
@@ -63,6 +68,7 @@ RealType hazard(const distribution_archetype<RealType>& dist);
 
 template <class RealType>
 RealType chf(const distribution_archetype<RealType>& dist);
+// http://en.wikipedia.org/wiki/Characteristic_function_%28probability_theory%29
 
 template <class RealType>
 RealType coefficient_of_variation(const distribution_archetype<RealType>& dist);
