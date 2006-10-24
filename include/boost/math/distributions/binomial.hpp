@@ -189,11 +189,10 @@ namespace boost
         return m_n;
       }
 
-      // Estimation of the success parameter.
-      // The best estimate is actually simply
-      // successes/trials, these functions are used
-      // to obtain confidence intervals for the success
-      // fraction:
+      // Estimation of the success fraction parameter.
+      // The best estimate is actually simply successes/trials, 
+      // these functions are used
+      // to obtain confidence intervals for the success fraction:
       //
       static RealType estimate_lower_bound_on_p(
          RealType trials,
@@ -316,20 +315,18 @@ namespace boost
 
         // Special cases of success_fraction, regardless of k successes and regardless of n trials.
         if (dist.success_fraction() == 0)
-        {
-           // probability of zero successes is 1:
+        {  // probability of zero successes is 1:
            return static_cast<RealType>(k == 0 ? 1 : 0);
         }
         if (dist.success_fraction() == 1)
-        {
-           // probability of n successes is 1:
+        {  // probability of n successes is 1:
            return static_cast<RealType>(k == n ? 1 : 0);
         }
         // k argument may be integral, signed, or unsigned, or floating point.
         // If necessary, it has already been promoted from an integral type.
         if (n == 0)
         {
-          return 1;
+          return 1; // Probability = 1 = certainty.
         }
         if (k == 0)
         { // binomial coeffic (n 0) = 1,
@@ -401,31 +398,33 @@ namespace boost
 
         // Special cases, regardless of k.
         if (p == 0)
-        {
-           // This need explanation: the pdf is zero for all
-           // cases except when k == 0.  For zero p the probability
-           // of zero successes is one.  Therefore the cdf is always
-           // 1: the probability of k or *fewer* successes is always 1
+        {  // This need explanation:
+           // the pdf is zero for all cases except when k == 0.
+           // For zero p the probability of zero successes is one.
+           // Therefore the cdf is always 1:
+           // the probability of k or *fewer* successes is always 1
            // if there are never any successes!
            return 1;
         }
         if (p == 1)
-        {
-          // This is correct but needs explanation, when k = 1
-          // all the cdf and pdf values are zero *except* when
-          // k == n, and that case has been handled above already.
+        { // This is correct but needs explanation:
+          // when k = 1
+          // all the cdf and pdf values are zero *except* when k == n, 
+          // and that case has been handled above already.
           return 0;
         }
-        if((k < 20) && (floor(k) == k))
+        if((k < 20) // Small (perhaps up to 34, the largest factorial for float).
+          && (floor(k) == k)) // and integral.
         {
-          // For small k use a finite sum, it's cheaper
-          // than the incomplete beta:
+          // For small k, use a finite sum of pdfs: 
+          // it's cheaper than the incomplete beta:
           RealType result = 0;
           for(unsigned i = 0; i <= k; ++i)
              result += pdf(dist, static_cast<RealType>(i));
           return result;
         }
-        // Calculate cdf binomial using the incomplete beta function.
+        // else for larger and non-integral k,
+        // calculate cdf binomial using the incomplete beta function.
         // P = I[1-p](n - k, k + 1)
         //   = 1 - I[p](k + 1, n - k)
         // Use of ibetac here prevents cancellation errors in calculating
@@ -475,8 +474,7 @@ namespace boost
         }
 
         if (k == n)
-        {
-          // Probability of greater than n successes is necessarily zero:
+        { // Probability of greater than n successes is necessarily zero:
           return 0;
         }
 
@@ -553,24 +551,21 @@ namespace boost
         {
            return result;
         }
-        //
+
         // Special cases:
         //
         if(p == 0)
-        {
-           // There may actually be no answer to this question,
+        {  // There may actually be no answer to this question,
            // since the probability of zero successes may be non-zero,
            // but zero is the best we can do:
            return 0;
         }
         if(p == 1)
-        {
-           // Probability of n or fewer successes is always one,
+        {  // Probability of n or fewer successes is always one,
            // so n is the most sensible answer here:
            return dist.trials();
         }
 
-        //
         // Solve for quantile numerically:
         //
         detail::binomial_functor<RealType> f(dist, p);
@@ -608,19 +603,17 @@ namespace boost
         {
            return result;
         }
-        //
+
         // Special cases:
         //
         if(q == 1)
-        {
-           // There may actually be no answer to this question,
+        {  // There may actually be no answer to this question,
            // since the probability of zero successes may be non-zero,
            // but zero is the best we can do:
            return 0;
         }
         if(q == 0)
-        {
-           // probability of greater than n successes is always zero,
+        {  // probability of greater than n successes is always zero,
            // so n is the most sensible answer here:
            return dist.trials();
         }
