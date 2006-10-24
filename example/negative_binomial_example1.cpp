@@ -87,7 +87,7 @@ int main()
   #endif
 	cout << endl;
 
-  // Some examples of constructing negative binomial distributions:
+  // Some examples of constructing distribution, for example negative binomial:
   // Fundamentally constructed like this:
   boost::math::negative_binomial_distribution<double> mydist0(8., 0.25);
   // But is inconveniently long.
@@ -104,7 +104,6 @@ int main()
   // And if you have your own RealType then:
   // negative_binomial_distribution<YourType>  mydist6(8, 1); // Integer arguments -> YourType.
 
-  // negative_binomial_distribution<> mydist7; // error C2512 no appropriate default constructor available.
   // negative_binomial_distribution<> mydist8; // error C2512 no appropriate default constructor available.
   // Since there are no accessor functions, no default constructor are provided,
   // because it is difficult to chose any sensible default values.
@@ -230,8 +229,8 @@ int main()
 Output is:
 
 Example 1 using the Negative_binomial Distribution.  ..\..\..\..\..\..\boost-san
-dbox\libs\math_functions\example\negative_binomial_example1.cpp Fri Oct 20 19:14
-:47 2006 140050727
+dbox\libs\math_functions\example\negative_binomial_example1.cpp Mon Oct 23 13:57
+:11 2006 140050727
 
 Selling candy bars - an example of using the negative binomial distribution.
 An example by Dr. Diane Evans,
@@ -283,9 +282,9 @@ If confidence of meeting quota is 0.9, then finishing house is 18
 If confidence of meeting quota is 0.95, then finishing house is 21
 If confidence of meeting quota is 0.99, then finishing house is 25
 If confidence of meeting quota is 0.999, then finishing house is 32
-If confidence of meeting quota is 1, then finishing house is 1.8e+308
-If we demand a confidence of meeting sales quota of unity (so we never achieve 5
- sales), then we can never be certain, so the finishing house is infinite!
+If confidence of meeting quota is 1, then finishing house is 1.#J
+If we demand a confidence of meeting sales quota of unity (so we never achieve 5 sales),
+then we can never be certain, so the finishing house is infinite!
 Press any key to continue . . .
 
 

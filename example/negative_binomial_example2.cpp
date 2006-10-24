@@ -61,8 +61,10 @@ int main(int, char* [])
   // Note: double values (matching the distribution definition) avoid the need for any casting.
 
   cout << "mean(my8dist) = " << mean(my8dist) << endl; // 
-  cout << "my8dist.successes() = " << my8dist.successes()  << endl; // r th trial is successful.
-  cout << "my8dist.success_fraction() = " << my8dist.success_fraction()  << endl; //
+  cout << "my8dist.successes() = " << my8dist.successes()  << endl;
+  // r th trial is successful, after r-1 = k failures.
+  cout << "my8dist.success_fraction() = " << my8dist.success_fraction()  << endl;
+  // failures/successes. 
   cout << "cdf(my8dist, 2.) = " << cdf(my8dist, 2.) << endl; // 4.1580200195313E-4
 
   cout << "cdf(my8dist, 8.) = " << cdf(my8dist, 8.) << endl;
