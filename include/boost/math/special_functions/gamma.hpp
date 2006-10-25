@@ -1252,6 +1252,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
    using namespace std;
 
    T result;
+   /*
    if((floor(a) == a) && (a < 30) && (a <= x + 1) && (x > 0.6))
    {
       // calculate Q via finite sum:
@@ -1268,7 +1269,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
       if(normalised == false)
          result *= gamma_imp(a, l);
    }
-   else if(x < 0.5)
+   else*/ if(x < 0.5)
    {
       //
       // Changeover criterion chosen to give a changeover at Q ~ 0.33

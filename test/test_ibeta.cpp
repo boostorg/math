@@ -277,6 +277,10 @@ void test_beta(T, const char* name)
 #  include "ibeta_large_data.ipp"
 
    do_test_beta(ibeta_large_data, name, "Incomplete Beta Function: Large and Diverse Values");
+
+#  include "ibeta_int_data.ipp"
+
+   do_test_beta(ibeta_int_data, name, "Incomplete Beta Function: Small Integer Values");
 }
 
 template <class T>
@@ -389,6 +393,32 @@ void test_spots(T)
          static_cast<T>(1),
          static_cast<T>(32)/100),
       static_cast<T>(0.94856839398626914764591440181367780660208493234722L), tolerance);
+   
+   // try with some integer arguments:
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta(
+         static_cast<T>(3),
+         static_cast<T>(8),
+         static_cast<T>(0.25)),
+      static_cast<T>(0.474407196044921875000000000000000000000000000000000000000000L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta(
+         static_cast<T>(6),
+         static_cast<T>(8),
+         static_cast<T>(0.25)),
+      static_cast<T>(0.0802125930786132812500000000000000000000000000000000000000000L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta(
+         static_cast<T>(12),
+         static_cast<T>(1),
+         static_cast<T>(0.25)),
+      static_cast<T>(5.96046447753906250000000000000000000000000000000000000000000e-8L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta(
+         static_cast<T>(1),
+         static_cast<T>(8),
+         static_cast<T>(0.25)),
+      static_cast<T>(0.899887084960937500000000000000000000000000000000000000000000L), tolerance);
 
    // very naive check on derivative:
    using namespace std;  // For ADL of std functions

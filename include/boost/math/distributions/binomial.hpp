@@ -368,8 +368,8 @@ namespace boost
         //   --  ( i )
         //   i=0
 
-        // The terms are not summed directly (at least for larger k)
-        // instead the incomplete beta integral is employed,
+        // The terms are not summed directly instead
+        // the incomplete beta integral is employed,
         // according to the formula:
         // P = I[1-p]( n-k, k+1).
         //   = 1 - I[p](k + 1, n - k)
@@ -413,22 +413,16 @@ namespace boost
           // and that case has been handled above already.
           return 0;
         }
-        if((k < 20) // Small (perhaps up to 34, the largest factorial for float).
-          && (floor(k) == k)) // and integral.
-        {
-          // For small k, use a finite sum of pdfs: 
-          // it's cheaper than the incomplete beta:
-          RealType result = 0;
-          for(unsigned i = 0; i <= k; ++i)
-             result += pdf(dist, static_cast<RealType>(i));
-          return result;
-        }
-        // else for larger and non-integral k,
-        // calculate cdf binomial using the incomplete beta function.
+        //
         // P = I[1-p](n - k, k + 1)
         //   = 1 - I[p](k + 1, n - k)
         // Use of ibetac here prevents cancellation errors in calculating
         // 1-p if p is very small, perhaps smaller than machine epsilon.
+        //
+        // Note that we do not use a finite sum here, since the incomplete
+        // beta uses a finite sum internally for integer arguments, so
+        // we'll just let it take care of the necessary logic.
+        //
         return ibetac(k + 1, n - k, p);
       } // binomial cdf
 
@@ -447,8 +441,8 @@ namespace boost
         //   --  ( i )
         //   i=k+1
 
-        // The terms are not summed directly (at least for larger k)
-        // instead the incomplete beta integral is employed,
+        // The terms are not summed directly instead
+        // the incomplete beta integral is employed,
         // according to the formula:
         // Q = 1 -I[1-p]( n-k, k+1).
         //   = I[p](k + 1, n - k)
@@ -496,20 +490,17 @@ namespace boost
           // The k == n case has already been handled above.
           return 1;
         }
-        if((n - k < 20) && (floor(k) == k) && (floor(n) == n))
-        {
-          // For small n-k use a finite sum, it's cheaper
-          // than the incomplete beta:
-          RealType result = 0;
-          for(RealType i = n; i > k; i -= 1)
-             result += pdf(dist, i);
-          return result;
-        }
+        //
         // Calculate cdf binomial using the incomplete beta function.
         // Q = 1 -I[1-p](n - k, k + 1)
         //   = I[p](k + 1, n - k)
         // Use of ibeta here prevents cancellation errors in calculating
         // 1-p if p is very small, perhaps smaller than machine epsilon.
+        //
+        // Note that we do not use a finite sum here, since the incomplete
+        // beta uses a finite sum internally for integer arguments, so
+        // we'll just let it take care of the necessary logic.
+        //
         return ibeta(k + 1, n - k, p);
       } // binomial cdf
 

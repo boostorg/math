@@ -773,6 +773,24 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
    return sum;
 } // template <class T, class L>T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool normalised)
 
+//
+// For integer arguments we can relate the incomplete beta to the
+// complement of the binomial distribution cdf and use this finite sum.
+//
+template <class T>
+T binomial_ccdf(T n, T k, T x, T y)
+{
+   T result = pow(x, n);
+   T term = result;
+   for(unsigned i = tools::real_cast<unsigned>(n - 1); i > k; --i)
+   {
+      term *= ((i + 1) * y) / ((n - i) * x) ;
+      result += term;
+   }
+
+   return result;
+}
+
 
 //
 // The incomplete beta function implementation:
@@ -948,10 +966,19 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
          std::swap(x, y);
          invert = !invert;
       }
-
+      
       if(b < 40)
       {
-         if(b * x <= 0.7)
+         if((floor(a) == a) && (floor(b) == b))
+         {
+            // relate to the binomial distribution and use a finite sum:
+            T k = a - 1;
+            T n = b + k;
+            fract = binomial_ccdf(n, k, x, y);
+            if(!normalised)
+               fract *= boost::math::beta(a, b);
+         }
+         else if(b * x <= 0.7)
          {
             if(!invert)
                fract = ibeta_series(a, b, x, T(0), l, normalised);

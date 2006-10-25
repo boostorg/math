@@ -161,6 +161,11 @@ Note that this method relies
 on keeping a table of all the p[sub n ] previously computed, which does limit
 the precision of the method, depending upon the size of the table used.
 
+When /a/ and /b/ are both small integers, then we can relate the incomplete
+beta to the binomial distribution and use the following finite sum:
+
+[$../equations/ibeta12.png]
+
 Finally we can sidestep difficult areas, or move to an area with a more
 efficient means of computation, by using the duplication formulae:
 

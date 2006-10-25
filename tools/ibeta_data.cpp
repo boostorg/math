@@ -4,6 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/tools/ntl.hpp>
+#include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -229,13 +230,24 @@ struct beta_data_generator_small
    }
 };
 
+struct beta_data_generator_int
+{
+   std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR> operator()(NTL::RR a, NTL::RR b, NTL::RR x_)
+   {
+      float x = truncate_to_float(real_cast<float>(x_));
+      std::cout << a << " " << b << " " << x << std::endl;
+      std::pair<NTL::RR, NTL::RR> ib_full = ibeta_fraction1(a, b, NTL::RR(x));
+      std::pair<NTL::RR, NTL::RR> ib_reg = ibeta_fraction1_regular(a, b, NTL::RR(x));
+      return std::tr1::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
+   }
+};
 
-int main(int argc, char* argv[])
+int test_main(int, char* [])
 {
    NTL::RR::SetPrecision(1000);
    NTL::RR::SetOutputPrecision(40);
 
-   parameter_info<NTL::RR> arg1, arg2, arg3, arg4;
+   parameter_info<NTL::RR> arg1, arg2, arg3, arg4, arg5;
    test_data<NTL::RR> data;
 
    std::cout << "Welcome.\n"
@@ -247,17 +259,20 @@ int main(int argc, char* argv[])
    arg2 = make_periodic_param(NTL::RR(-5), NTL::RR(6), 11);
    arg3 = make_random_param(NTL::RR(0.0001), NTL::RR(1), 10);
    arg4 = make_random_param(NTL::RR(0.0001), NTL::RR(1), 100 /*500*/);
+   arg5 = make_periodic_param(NTL::RR(1), NTL::RR(41), 10);
 
    arg1.type |= dummy_param;
    arg2.type |= dummy_param;
    arg3.type |= dummy_param;
    arg4.type |= dummy_param;
+   arg5.type |= dummy_param;
 
    // comment out all but one of the following when running
    // or this program will take forever to complete!
-   data.insert(beta_data_generator(), arg1, arg2, arg3);
-   data.insert(beta_data_generator_medium(), arg4);
-   data.insert(beta_data_generator_small(), arg4);
+   //data.insert(beta_data_generator(), arg1, arg2, arg3);
+   //data.insert(beta_data_generator_medium(), arg4);
+   //data.insert(beta_data_generator_small(), arg4);
+   data.insert(beta_data_generator_int(), arg5, arg5, arg3);
 
    test_data<NTL::RR>::const_iterator i, j;
    i = data.begin();

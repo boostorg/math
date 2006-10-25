@@ -36,6 +36,7 @@
 [include distributions/exponential.qbk]
 [include distributions/extreme_value.qbk]
 [include distributions/fisher.qbk]
+[include distributions/lognormal.qbk]
 [include distributions/normal.qbk]
 [include distributions/students_t.qbk]
 
