@@ -1,15 +1,21 @@
-[section:lognormal_dist Lognormal]
+[section:lognormal_dist Log Normal Distribution]
 
-The lognormal distribution is TODO - just a placeholder so far.
+The lognormal distribution is the distribution that arises
+when the logarithm of the random variable is normally distributed.
+
+For location and scale parameters /m/ and /s/ it is defined by the
+probability density function:
+
+f(x; m, s) = e[super -(ln(x) - m)[super 2 ] / 2s[super 2 ] ] / (x * s * sqrt(2pi))
 
 ``#include <boost/math/distributions/lognormal.hpp>``
 
    namespace boost{ namespace math{ 
       
-   template <class RealType = double>
+   template <class RealType>
    class lognormal_distribution;
    
-   typedef normal_distribution<double> lognormal;
+   typedef lognormal_distribution<double> lognormal;
    
    template <class RealType>
    class lognormal_distribution
@@ -17,28 +23,34 @@ The lognormal distribution is TODO - just a placeholder so far.
    public:
       typedef RealType value_type;
       // Construct:
-      lognormal_distribution(RealType mean = 0, RealType sd = 1);
+      lognormal_distribution(RealType location = 0, RealType scale = 1);
       // Accessors:
-      RealType mean()const;
-      RealType standard_deviation()const;
+      RealType location()const;
+      RealType scale()const;
    };
    
    }} // namespaces
    
 [h4 Member Functions]
 
-   lognormal_distribution(RealType mean = 0, RealType sd = 1);
+   lognormal_distribution(RealType location = 0, RealType scale = 1);
    
-Constructs a normal distribution with mean /mean/ and 
-standard deviation /sd/.
+Constructs a lognormal distribution with location /location/ and 
+scale /scale/.
 
-   RealType mean()const;
+The location parameter is the same as the mean of the logarithm of the
+random variate.
+
+The scale parameter is the same as the standard deviation of the
+logarithm of the random variate.
+
+   RealType location()const;
    
-Returns the /mean/ of this distribution.
+Returns the /location/ parameter of this distribution.
    
-   RealType standard_deviation()const;
+   RealType scale()const;
       
-Returns the /standard deviation/ of this distribution.
+Returns the /scale/ parameter of this distribution.
 
 [h4 Non-member Accessors]
 
@@ -47,34 +59,31 @@ distributions are supported: __usual_accessors.
 
 [h4 Accuracy]
 
-The normal distribution is implemented in terms of the 
+The lognormal distribution is implemented in terms of the 
+standard library log and exp functions, plus the
 [link math_toolkit.special.error_function error function], 
 and as such should have very low error rates.
 
 [h4 Implementation]
 
-In the following table /m/ is the mean of the distribution, and /s/ is it's
-standard deviation.
+In the following table /m/ is the location parameter of the distribution, 
+/s/ is it's scale parameter, /x/ is the random variate, /p/ is the probability
+and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Using the relation: pdf = e[super -(x-m)[super 2]\/(2s[super 2])] \/ (s * sqrt(2*pi)) ]]
-[[cdf][Using the relation: p = 0.5 * __erfc(-(x-m)/(s*sqrt(2))) ]]
-[[cdf complement][Using the relation: q = 0.5 * __erfc((x-m)/(s*sqrt(2))) ]]
-[[quantile][Using the relation: x = m - s * sqrt(2) * __erfc_inv(2*p)]]
-[[quantile from the complement][Using the relation: x = m + s * sqrt(2) * __erfc_inv(2*p)]]
-[[mean and standard deviation][The same as `dist.mean()` and `dist.standard_deviation()`]]
-[[mode][The same as the mean.]]
-[[skewness][0]]
-[[kurtosis][3]]
-[[kurtosis excess][0]]
+[[pdf][Using the relation: pdf = e[super -(ln(x) - m)[super 2 ] \/ 2s[super 2 ] ] \/ (x * s * sqrt(2pi)) ]]
+[[cdf][Using the relation: p = cdf(normal_distribtion<RealType>(m, s), log(x)) ]]
+[[cdf complement][Using the relation: q = cdf(complement(normal_distribtion<RealType>(m, s), log(x))) ]]
+[[quantile][Using the relation: x = exp(quantile(normal_distribtion<RealType>(m, s), p))]]
+[[quantile from the complement][Using the relation: x = exp(quantile(complement(normal_distribtion<RealType>(m, s), q)))]]
+[[mean][e[super m + s[super 2 ] / 2 ] ]]
+[[variance][(e[super s[super 2] ] - 1) * e[super 2m + s[super 2 ] ] ]]
+[[mode][e[super m + s[super 2 ] ] ]]
+[[skewness][sqrt(e[super s[super 2] ] - 1) * (2 + e[super s[super 2] ]) ]]
+[[kurtosis][e[super 4s[super 2] ] + 2e[super 3s[super 2] ] + 3e[super 2s[super 2] ] - 3]]
+[[kurtosis excess][e[super 4s[super 2] ] + 2e[super 3s[super 2] ] + 3e[super 2s[super 2] ] - 6 ]]
 ]
 
-[endsect][/section:lognormal_dist Normal]
+[endsect][/section:normal_dist Normal]
 
-[/ lognormal.qbk
-  Copyright 2006 John Maddock and Paul A. Bristow.
-  Distributed under the Boost Software License, Version 1.0.
-  (See accompanying file LICENSE_1_0.txt or copy at
-  http://www.boost.org/LICENSE_1_0.txt).
-]
