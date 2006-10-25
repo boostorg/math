@@ -154,6 +154,13 @@ void expected_results()
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*integer[^|]*",              // test data group
+      ".*", 20, 10);                    // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*medium[^|]*",               // test data group
       "[^|]*", 200, 50);                // test function
@@ -171,6 +178,13 @@ void expected_results()
       "real_concept",                   // test type(s)
       "[^|]*large[^|]*",                // test data group
       ".*", 1000000, 100000);        // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*integer[^|]*",              // test data group
+      ".*", 30, 10);                    // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
@@ -288,6 +302,10 @@ void test_gamma(T, const char* name)
 #  include "igamma_big_data.ipp"
 
    do_test_gamma_2(igamma_big_data, name, "tgamma(a, z) large values");
+
+#  include "igamma_int_data.ipp"
+
+   do_test_gamma_2(igamma_int_data, name, "tgamma(a, z) integer and half integer values");
 }
 
 template <class T>
