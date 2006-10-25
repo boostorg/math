@@ -1,28 +1,5 @@
 well-[section:poisson_dist Poisson]
 
-[/@http://www.oreilly.com/catalog/docbook/chapter/book/iso-grk1.html Greek DocBook]
-[def __alpha '''&#945;''']
-[def __lambda '''&#955;''']
-[def __Lambda '''&#923;''']
-[def __gamma '''&#947;''']
-[def __Gamma '''&#915;''']
-[def __sigma '''&#963;''']
-[def __Sigma '''&#931;''']
-[/@http://www.oreilly.com/catalog/docbook/chapter/book/iso-tech.html]
-[def __ceilR '''&#x2309;''']
-[def __ceilL '''&#2308;''']
-[def __floorR '''&#x230B;''']
-[def __floorL '''&#x230A;''']
-[def __infin '''&#8734;''']
-[def __integral '''&#8747;''']
-[def __aacute '''&#225;''']
-[def __eacute '''&#233;''']
-[def __quarter '''&#x00BC;''']
-[def __nearequal '''&#x224A;''']
-[def __quarter '''&#x00BC;''']
-[def __space '''&#8203;''']
-
-
 The [@http://en.wikipedia.org/wiki/Poisson_distribution Poisson distribution]
 is a well-known statistical discrete distribution.
 It expresses the probability of a number of events
