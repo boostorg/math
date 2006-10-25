@@ -1,26 +1,23 @@
-[section:normal_dist Normal]
+[section:lognormal_dist Normal]
 
-The normal distribution is probably the most well known statistical 
-distribution: it is also known as the Gaussian Distribution.
-A normal distribution with mean zero and standard deviation one
-is known as the ['Standard Normal Distribution].
+The lognormal distribution is TODO - just a placeholder so far.
 
-``#include <boost/math/distributions/normal.hpp>``
+``#include <boost/math/distributions/lognormal.hpp>``
 
    namespace boost{ namespace math{ 
       
    template <class RealType = double>
-   class normal_distribution;
+   class lognormal_distribution;
    
-   typedef normal_distribution<double> normal;
+   typedef normal_distribution<double> lognormal;
    
    template <class RealType>
-   class normal_distribution
+   class lognormal_distribution
    {
    public:
       typedef RealType value_type;
       // Construct:
-      normal_distribution(RealType mean = 0, RealType sd = 1);
+      lognormal_distribution(RealType mean = 0, RealType sd = 1);
       // Accessors:
       RealType mean()const;
       RealType standard_deviation()const;
@@ -30,7 +27,7 @@ is known as the ['Standard Normal Distribution].
    
 [h4 Member Functions]
 
-   normal_distribution(RealType mean = 0, RealType sd = 1);
+   lognormal_distribution(RealType mean = 0, RealType sd = 1);
    
 Constructs a normal distribution with mean /mean/ and 
 standard deviation /sd/.
@@ -73,9 +70,9 @@ standard deviation.
 [[kurtosis excess][0]]
 ]
 
-[endsect][/section:normal_dist Normal]
+[endsect][/section:lognormal_dist Normal]
 
-[/ normal.qbk
+[/ lognormal.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
