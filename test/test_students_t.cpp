@@ -92,10 +92,6 @@ void test_spots(RealType T)
 	// These values are probably accurate to nearly 64-bit double
   // (perhaps 14 decimal digits).
 
-   RealType big = std::numeric_limits<RealType>::has_infinity ?
-      std::numeric_limits<RealType>::infinity() :
-      boost::math::tools::max_value<RealType>();
-
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          students_t_distribution<RealType>(2),       // degrees_of_freedom
@@ -185,15 +181,13 @@ void test_spots(RealType T)
 	// Student's t Inverse function tests.
   // Special cases
 
-  BOOST_CHECK_EQUAL(boost::math::quantile(
+  BOOST_CHECK_THROW(boost::math::quantile(
          students_t_distribution<RealType>(1.),  // degrees_of_freedom (ignored).
-         static_cast<RealType>(0)),  //  probability == half - special case.
-         -big); // t == -infinity.
+         static_cast<RealType>(0)), std::overflow_error); // t == -infinity.
 
-  BOOST_CHECK_EQUAL(boost::math::quantile(
+  BOOST_CHECK_THROW(boost::math::quantile(
          students_t_distribution<RealType>(1.),  // degrees_of_freedom (ignored).
-         static_cast<RealType>(1)),  //  probability == half - special case.
-         +big); // t == +infinity.
+         static_cast<RealType>(1)), std::overflow_error); // t == +infinity.
 
   BOOST_CHECK_EQUAL(boost::math::quantile(
          students_t_distribution<RealType>(1.),  // degrees_of_freedom (ignored).

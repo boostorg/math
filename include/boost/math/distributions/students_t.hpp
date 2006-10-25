@@ -166,9 +166,9 @@ RealType quantile(const students_t_distribution<RealType>& dist, const RealType&
 
    // Special cases, regardless of degrees_of_freedom.
    if (probability == 0)
-      return numeric_limits<RealType>::has_infinity ? -numeric_limits<RealType>::infinity() : -tools::max_value<RealType>();
+      return -tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
    if (probability == 1)
-     return numeric_limits<RealType>::has_infinity ? numeric_limits<RealType>::infinity() : tools::max_value<RealType>();
+     return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
    if (probability == static_cast<RealType>(0.5))
      return 0;
    //
@@ -178,7 +178,7 @@ RealType quantile(const students_t_distribution<RealType>& dist, const RealType&
    RealType t, x, y;
    x = ibeta_inv(degrees_of_freedom / 2, RealType(0.5), 2 * probability, &y);
    if(degrees_of_freedom * y > tools::max_value<RealType>() * x)
-      t = numeric_limits<RealType>::has_infinity ? numeric_limits<RealType>::infinity() : tools::max_value<RealType>();
+      t = tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
    else
       t = sqrt(degrees_of_freedom * y / x);
    //
