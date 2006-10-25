@@ -1,4 +1,4 @@
-[section:poisson_dist Poisson]
+well-[section:poisson_dist Poisson]
 
 [/@http://www.oreilly.com/catalog/docbook/chapter/book/iso-grk1.html Greek DocBook]
 [def __alpha '''&#945;''']
@@ -20,19 +20,22 @@
 [def __quarter '''&#x00BC;''']
 [def __nearequal '''&#x224A;''']
 [def __quarter '''&#x00BC;''']
+[def __space '''&#8203;''']
+
 
 The [@http://en.wikipedia.org/wiki/Poisson_distribution Poisson distribution]
-is a known statistical discrete distribution.
+is a well-known statistical discrete distribution.
 It expresses the probability of a number of events
 (or failures, arrivals, occurrences ...)
 occurring in a fixed period of time,
-if these events occur with a known mean rate __lambda (events/time),
+provided these events occur with a known mean rate __lambda __space
+(events/time), 
 and are independent of the time since the last event.
 
 The distribution was discovered by Sim__eacute on-Denis Poisson (1781 to 1840).
 
 ``#include <boost/math/distributions/poisson.hpp>``
-  namespace boost {namespace math{
+  namespace boost { namespace math {
   
 	template <class RealType = double>
 	class poisson_distribution;
@@ -43,12 +46,10 @@ The distribution was discovered by Sim__eacute on-Denis Poisson (1781 to 1840).
 	class poisson_distribution
 	{ 
 	public:
-	  // Construct:
-	  poisson_distribution(RealType mean = 1);
-	  // Accessor:
-	  RealType mean()const;
-
-   }} // namespaces boost::math
+	  poisson_distribution(RealType mean = 1); // Constructor.
+	  RealType mean()const;	// Accessor.
+	}
+  }} // namespaces boost::math
    
 [h4 Member Functions]
 
@@ -74,7 +75,7 @@ and as such should have low error rates.
 Quantile and complement use the inverse gamma functions
 and are therefore probably less accurate.
 This is because the inverse gamma functions are
-implemented with iterative method to a lower tolerance
+implemented using an iterative method with a lower tolerance
 to avoid excessive computation.
 
 [h4 Implementation]
