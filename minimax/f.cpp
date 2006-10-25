@@ -22,11 +22,14 @@ NTL::RR f(const NTL::RR& x, int variant)
    switch(variant)
    {
    case 0:
-      return boost::math::expm1(x);
+      return boost::math::erfc(x) * x / exp(-x * x);
    case 1:
-      return boost::math::log1p(x) - x;
+      return boost::math::erf(x);
    case 2:
-      return boost::math::erf(x) / x - 1.125;
+      {
+         NTL::RR x_ = x == 0 ? 1e-80 : x;
+      return boost::math::erf(x_) / x_;
+      }
    case 3:
       {
          NTL::RR y(x);
@@ -169,6 +172,27 @@ NTL::RR f(const NTL::RR& x, int variant)
             NTL::RR::SetPrecision(current_precision);
          return result;
       }
+   case 11:
+      // expm1:
+      if(x == 0)
+      {
+         static NTL::RR lim = 1e-80;
+         static NTL::RR a = expm1(-lim);
+         static NTL::RR b = expm1(lim);
+         static NTL::RR l = (b-a) / (2 * lim);
+         return l;
+      }
+      return expm1(x) / x;
+   case 12:
+      // log1p:
+      if(x == 0)
+         return 1;
+      return log1p(x) / x;
+   case 13:
+      // log1p:
+      if(x == 0)
+         return 1;
+      return log1p(-x) / (-x);
    }
    return 0;
 }

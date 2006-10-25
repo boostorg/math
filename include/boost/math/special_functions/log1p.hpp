@@ -115,12 +115,45 @@ inline long double log1p(long double z)
 
 #ifdef BOOST_HAS_LOG1P
 #  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
-inline float log1p(float x){ return ::log1pf(x); }
-inline long double log1p(long double x){ return ::log1pl(x); }
+template <>
+inline float log1p<float>(float x){ return ::log1pf(x); }
+template <>
+inline long double log1p<long double>(long double x){ return ::log1pl(x); }
 #else
-inline float log1p(float x){ return ::log1p(x); }
+template <>
+inline float log1p<float>(float x){ return ::log1p(x); }
 #endif
-inline double log1p(double x){ return ::log1p(x); }
+template <>
+inline double log1p<double>(double x){ return ::log1p(x); }
+#elif defined(_MSC_VER)
+//
+// You should only enable this branch if you are absolutely sure
+// that your compilers optimizer won't mess this code up!!
+// Currently tested with VC8 and Intel 9.1.
+//
+template <>
+inline double log1p<double>(double x)
+{
+   double u = 1+x;
+   if(u == 1.0) 
+      return x; 
+   else
+      return log(u)*(x/(u-1.0));
+}
+template <>
+inline float log1p<float>(float x)
+{
+   return static_cast<float>(boost::math::log1p<double>(x));
+}
+template <>
+inline long double log1p<long double>(long double x)
+{
+   long double u = 1+x;
+   if(u == 1.0) 
+      return x; 
+   else
+      return log(u)*(x/(u-1.0));
+}
 #endif
 
 } // namespace math

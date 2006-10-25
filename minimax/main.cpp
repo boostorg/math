@@ -287,6 +287,76 @@ void test_all(const char*, const char*)
    do_test((long double)(0), "long double");
 }
 
+template <class T>
+void do_test_n(T, const char* name, unsigned count)
+{
+   NTL::RR::SetPrecision(working_precision);
+   if(started)
+   {
+      //
+      // We want to test the approximation at fixed precision:
+      // either float, double or long double.  Begin by getting the
+      // polynomials:
+      //
+      boost::math::tools::polynomial<T> n, d;
+      n = p_remez->numerator();
+      d = p_remez->denominator();
+
+      NTL::RR max_error(0);
+      NTL::RR step = (b - a) / count;
+
+      //
+      // Do the tests at the zeros:
+      //
+      std::cout << "Starting tests at " << name << " precision...\n";
+      std::cout << "Absissa        Error\n";
+      for(NTL::RR x = a; x <= b; x += step)
+      {
+         NTL::RR true_result = the_function(x);
+         T absissa = boost::math::tools::real_cast<T>(x);
+         NTL::RR test_result = n.evaluate(absissa) / d.evaluate(absissa);
+         NTL::RR err;
+         if(rel_error)
+         {
+            err = boost::math::tools::relative_error(test_result, true_result);
+         }
+         else
+         {
+            err = fabs(test_result - true_result);
+         }
+         if(err > max_error)
+            max_error = err;
+         std::cout << std::setprecision(6) << std::setw(15) << std::left << boost::math::tools::real_cast<double>(absissa)
+            << boost::math::tools::real_cast<double>(err) << std::endl;
+      }
+      std::cout << "Max error found: " << std::setprecision(6) << boost::math::tools::real_cast<T>(max_error) << std::endl;
+   }
+   else
+   {
+      std::cout << "Nothing to test: try converging an approximation first!!!" << std::endl;
+   }
+}
+
+void test_n(unsigned n)
+{
+   do_test_n(NTL::RR(), "NTL::RR", n);
+}
+
+void test_float_n(unsigned n)
+{
+   do_test_n(float(0), "float", n);
+}
+
+void test_double_n(unsigned n)
+{
+   do_test_n(double(0), "double", n);
+}
+
+void test_long_n(unsigned n)
+{
+   do_test_n((long double)(0), "long double", n);
+}
+
 void rotate(const char*, const char*)
 {
    if(p_remez)
@@ -367,13 +437,21 @@ int test_main(int, char* [])
       ||
             str_p("y-offset") && real_p[assign_a(y_offset)][assign_a(auto_offset_y, false)]
       ||
+            str_p("test") && str_p("float") && uint_p[&test_float_n]
+      ||
             str_p("test") && str_p("float")[&test_float]
       ||
+            str_p("test") && str_p("double") && uint_p[&test_double_n]
+      ||
             str_p("test") && str_p("double")[&test_double]
+      ||
+            str_p("test") && str_p("long") && uint_p[&test_long_n]
       ||
             str_p("test") && str_p("long")[&test_long]
       ||
             str_p("test") && str_p("all")[&test_all]
+      ||
+            str_p("test") && uint_p[&test_n]
       ||
             str_p("rotate")[&rotate]
       ||

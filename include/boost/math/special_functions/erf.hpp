@@ -713,27 +713,65 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<113>& t)
 template <class T>
 T erf(T z)
 {
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
+   typedef typename remove_cv<T>::type cv_type;
+   typedef typename lanczos::lanczos_traits<cv_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<cv_type>::evaluation_type evaluation_type;
+
+   typedef typename mpl::if_c<
+      ::std::numeric_limits<cv_type>::is_specialized == 0,
+      mpl::int_<0>,  // no numeric_limits, use generic solution
+      typename mpl::if_c<
+         ::std::numeric_limits<cv_type>::digits <= 53,
+         mpl::int_<53>,  // double
+         typename mpl::if_c<
+            ::std::numeric_limits<cv_type>::digits <= 64,
+            mpl::int_<64>, // 80-bit long double
+            typename mpl::if_c<
+               ::std::numeric_limits<cv_type>::digits <= 113,
+               mpl::int_<113>, // 128-bit long double
+               mpl::int_<0> // too many bits, use generic version.
+            >::type
+         >::type
+      >::type
+   >::type tag_type;
 
    return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::erf_imp(
       static_cast<value_type>(z),
       false,
       evaluation_type(),
-      mpl::int_< ::std::numeric_limits<value_type>::digits>()), BOOST_CURRENT_FUNCTION);
+      tag_type()), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
 T erfc(T z)
 {
+   typedef typename remove_cv<T>::type cv_type;
    typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
    typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
+
+   typedef typename mpl::if_c<
+      ::std::numeric_limits<cv_type>::is_specialized == 0,
+      mpl::int_<0>,  // no numeric_limits, use generic solution
+      typename mpl::if_c<
+         ::std::numeric_limits<cv_type>::digits <= 53,
+         mpl::int_<53>,  // double
+         typename mpl::if_c<
+            ::std::numeric_limits<cv_type>::digits <= 64,
+            mpl::int_<64>, // 80-bit long double
+            typename mpl::if_c<
+               ::std::numeric_limits<cv_type>::digits <= 113,
+               mpl::int_<113>, // 128-bit long double
+               mpl::int_<0> // too many bits, use generic version.
+            >::type
+         >::type
+      >::type
+   >::type tag_type;
 
    return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::erf_imp(
       static_cast<value_type>(z),
       true,
       evaluation_type(),
-      mpl::int_< ::std::numeric_limits<value_type>::digits>()), BOOST_CURRENT_FUNCTION);
+      tag_type()), BOOST_CURRENT_FUNCTION);
 }
 
 } // namespace math
