@@ -171,7 +171,7 @@ namespace boost
 
    // sqrt
    template <class T>
-   T sqrtp1m1(const T&);
+   T sqrt1pm1(const T&);
 
  	} // namespace math
 } // namespace boost

@@ -1,0 +1,149 @@
+[section:powers Logs, Powers, Roots and Exponentials]
+
+[caution __caution ]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/log1p.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T log1p(T x);
+   
+   }} // namespaces
+
+``
+#include <boost/math/special_functions/expm1.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T expm1(T x);
+   
+   }} // namespaces
+
+``
+#include <boost/math/special_functions/cbrt.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T cbrt(T x);
+   
+   }} // namespaces
+
+``
+#include <boost/math/special_functions/sqrt1pm1.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T sqrt1pm1(T x);
+   
+   }} // namespaces
+
+``
+#include <boost/math/special_functions/powm1.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T powm1(T x, T y);
+   
+   }} // namespaces
+
+[h4 Description]
+
+   template <class T>
+   T log1p(T x);
+   
+Returns the natural logarithm of `x+1`.
+
+There are many situations where it is desirable to compute `log(x+1)`. 
+However, for small `x` then `x+1` suffers from catastrophic cancellation errors 
+so that `x+1 == 1` and `log(x+1) == 0`, when in fact for very small x, the 
+best approximation to `log(x+1)` would be `x`.  `log1p` calculates the best
+approximation to `log(1+x)` using a Taylor series expansion for accuracy 
+(less than __te).
+Alternatively note that there are faster methods available, 
+for example using the equivalence:
+
+   log(1+x) == (log(1+x) * x) / ((1-x) - 1)
+
+However, experience has shown that these methods tend to fail quite spectacularly
+once the compiler's optimizations are turned on, consequently they are
+used only when known not to break with a particular compiler.  
+In contrast, the series expansion method seems to be reasonably 
+immune to optimizer-induced errors.
+
+Finally when BOOST_HAS_LOG1P is defined then the `float/double/long double` 
+specializations of this template simply forward to the platform's 
+native implementation of this function.
+
+   template <class T>
+   T expm1(T x);
+   
+Returns e[super x] - 1.
+
+For small x, then __ex is very close to 1, as a result calculating __exm1 results
+in catastrophic cancellation errors when x is small.  `expm1` calculates __exm1 using
+rational approximations (for up to 128-bit long doubles), otherwise via
+a series expansion when x is small (giving an accuracy of less than __te).
+
+Finally when BOOST_HAS_EXPM1 is defined then the `float/double/long double` 
+specializations of this template simply forward to the platform's 
+native implementation of this function.
+
+   template <class T>
+   T cbrt(T x);
+   
+Returns the cubed root of x.
+
+Implemented using Halley iteration.
+
+   template <class T>
+   T sqrt1pm1(T x);
+   
+Returns `sqrt(1+x) - 1`.
+
+This function is useful when you need the difference between sqrt(x) and 1, when
+x is itself close to 1.
+
+Implemented in terms of `log1p` and `expm1`.
+
+   template <class T>
+   T powm1(T x, T y);
+   
+Returns x[super y ] - 1.
+
+There are two domains where this is useful: when y is very small, or when
+x is close to 1.
+
+Implemented in terms of `expm1`.
+
+[h4 Accuracy]
+
+For built in floating point types `expm1`, `log1p` and `cbrt` 
+should have approximately 1 epsilon accuracy, 
+the other functions about double that.
+
+[h4 Testing]
+
+A mixture of spot test sanity checks, and random high precision test values
+calculated using NTL::RR at 1000-bit precision.
+
+[endsect][/section:beta_function The Beta Function]
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+

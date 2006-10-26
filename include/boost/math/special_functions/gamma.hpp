@@ -27,7 +27,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/powm1.hpp>
-#include <boost/math/special_functions/sqrtp1m1.hpp>
+#include <boost/math/special_functions/sqrt1pm1.hpp>
 #include <boost/math/special_functions/lanczos.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/detail/igamma_large.hpp>
@@ -910,7 +910,7 @@ T tgammap1m1_imp(T dz, const L&)
 
    T zgh = (L::g() + T(0.5) + dz) / boost::math::constants::e<T>();
    T A = boost::math::powm1(zgh, dz);
-   T B = boost::math::sqrtp1m1(dz / (L::g() + T(0.5)));
+   T B = boost::math::sqrt1pm1(dz / (L::g() + T(0.5)));
    T C = L::lanczos_sum_near_1(dz);
    T Ap1 = pow(zgh, dz);
    T Bp1 = sqrt(1 + (dz / (L::g() + T(0.5))) );
@@ -1544,7 +1544,7 @@ inline T lgamma(T x)
 }
 
 template <class T>
-inline T tgammap1m1(T z)
+inline T tgamma1pm1(T z)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;

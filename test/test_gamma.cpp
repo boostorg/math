@@ -23,7 +23,7 @@
 // ~~~~~~~~~~~~
 //
 // This file tests the functions tgamma and lgamma, and the 
-// function tgammap1m1.  There are two sets of tests, spot
+// function tgamma1pm1.  There are two sets of tests, spot
 // tests which compare our results with selected values computed
 // using the online special function calculator at 
 // functions.wolfram.com, while the bulk of the accuracy tests
@@ -100,8 +100,8 @@ void expected_results()
       ".*",                          // stdlib
       "linux",                       // platform
       largest_type,                  // test type(s)
-      "tgammap1m1.*",                // test data group
-      "boost::math::tgammap1m1", 50, 15);  // test function
+      "tgamma1pm1.*",                // test data group
+      "boost::math::tgamma1pm1", 50, 15);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -121,8 +121,8 @@ void expected_results()
       ".*",                          // stdlib
       "linux",                       // platform
       "real_concept",                // test type(s)
-      "tgammap1m1.*",                // test data group
-      "boost::math::tgammap1m1", 40, 10);  // test function
+      "tgamma1pm1.*",                // test data group
+      "boost::math::tgamma1pm1", 40, 10);  // test function
    //
    // HP-UX results:
    //
@@ -159,8 +159,8 @@ void expected_results()
       ".*",                          // stdlib
       "HP-UX",                          // platform
       largest_type,                  // test type(s)
-      "tgammap1m1.*",                // test data group
-      "boost::math::tgammap1m1", 200, 70);  // test function
+      "tgamma1pm1.*",                // test data group
+      "boost::math::tgamma1pm1", 200, 70);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -173,8 +173,8 @@ void expected_results()
       ".*",                          // stdlib
       "HP-UX",                          // platform
       "real_concept",                // test type(s)
-      "tgammap1m1.*",                // test data group
-      "boost::math::tgammap1m1", 200, 60);  // test function
+      "tgamma1pm1.*",                // test data group
+      "boost::math::tgamma1pm1", 200, 60);  // test function
 
    //
    // Catch all cases come last:
@@ -219,8 +219,8 @@ void expected_results()
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
-      "tgammap1m1.*",                // test data group
-      "boost::math::tgammap1m1", 30, 9);  // test function
+      "tgamma1pm1.*",                // test data group
+      "boost::math::tgamma1pm1", 30, 9);  // test function
 
    add_expected_result(
       ".*",                          // compiler
@@ -255,8 +255,8 @@ void expected_results()
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
-      "tgammap1m1.*",                // test data group
-      "boost::math::tgammap1m1", 20, 5);  // test function
+      "tgamma1pm1.*",                // test data group
+      "boost::math::tgamma1pm1", 20, 5);  // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
@@ -328,7 +328,7 @@ void do_test_gammap1m1(const T& data, const char* type_name, const char* test_na
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type);
-   pg funcp = boost::math::tgammap1m1;
+   pg funcp = boost::math::tgamma1pm1;
 
    boost::math::tools::test_result<value_type> result;
 
@@ -336,13 +336,13 @@ void do_test_gammap1m1(const T& data, const char* type_name, const char* test_na
       << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 
    //
-   // test tgammap1m1 against data:
+   // test tgamma1pm1 against data:
    //
    result = boost::math::tools::test(
       data,
       boost::lambda::bind(funcp, boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[1]));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgammap1m1", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma1pm1", test_name);
    std::cout << std::endl;
 }
 
@@ -389,9 +389,9 @@ void test_gamma(T, const char* name)
    do_test_gamma(near_m55, name, "near -55");
 
    //
-   // And now tgammap1m1 which computes gamma(1+dz)-1:
+   // And now tgamma1pm1 which computes gamma(1+dz)-1:
    //
-   do_test_gammap1m1(gammap1m1_data, name, "tgammap1m1(dz)");
+   do_test_gammap1m1(gammap1m1_data, name, "tgamma1pm1(dz)");
 }
 
 template <class T>

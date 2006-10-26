@@ -6,7 +6,7 @@
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include <boost/math/special_functions/sqrtp1m1.hpp>
+#include <boost/math/special_functions/sqrt1pm1.hpp>
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/lambda/lambda.hpp>
@@ -19,7 +19,7 @@
 // DESCRIPTION:
 // ~~~~~~~~~~~~
 //
-// This file tests the functions powm1 and sqrtp1m1.  
+// This file tests the functions powm1 and sqrt1pm1.  
 // The accuracy tests
 // use values generated with NTL::RR at 1000-bit precision
 // and our generic versions of these functions.
@@ -1617,7 +1617,7 @@ void test_powm1_sqrtp1m1(T, const char* type_name)
    using namespace std;
 
    typedef T (*func_t)(const T&);
-   func_t f = &boost::math::sqrtp1m1<T>;
+   func_t f = &boost::math::sqrt1pm1<T>;
 
    boost::math::tools::test_result<T> result = boost::math::tools::test(
       sqrtp1m1_data, 
@@ -1626,7 +1626,7 @@ void test_powm1_sqrtp1m1(T, const char* type_name)
 
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
       "Test results for type " << type_name << std::endl << std::endl;
-   handle_test_result(result, sqrtp1m1_data[result.worst()], result.worst(), type_name, "boost::math::sqrtp1m1", "sqrtp1m1");
+   handle_test_result(result, sqrtp1m1_data[result.worst()], result.worst(), type_name, "boost::math::sqrt1pm1", "sqrt1pm1");
 
    typedef T (*func2_t)(T, T);
    func2_t f2 = &boost::math::powm1<T>;
