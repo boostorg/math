@@ -239,6 +239,7 @@ void test_spots(RealType)
   static_cast<RealType>(1 - 9.999999940939000E-1),   // Q = 1 - P
   tolerance);
 
+
   test_spot(  // pbinom(100000,100,0.001)
   static_cast<RealType>(100),     // successes r
   static_cast<RealType>(100000),     // Number of failures, k
@@ -246,9 +247,10 @@ void test_spots(RealType)
   static_cast<RealType>(5.173047534260320E-1),     // Probability of result (CDF), P
   static_cast<RealType>(1 - 5.173047534260320E-1),   // Q = 1 - P
   tolerance*1000); // *1000 is OK 0.51730475350664229  versus
-  //                       MathCAD 0.51730475342603199 differs at 10th decimal digit.
+  //   MathCAD 0.51730475342603199 differs at 10th decimal digit.
 
- // End of single spot tests using RealType
+/* */
+  // End of single spot tests using RealType
 
   // Tests on cdf:
 // MathCAD pbinom k, r, p) == failures, successes, 
@@ -485,12 +487,14 @@ void test_spots(RealType)
   negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1)),
   static_cast<RealType>(8)),
   static_cast<RealType>(0) );
+
   BOOST_CHECK_SMALL(
   pdf(
    negative_binomial_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(0.25)),
   static_cast<RealType>(0))-
   static_cast<RealType>(0.0625),
-  numeric_limits<RealType>::epsilon()); // Expect exact, but not quite.
+  boost::math::tools::epsilon<RealType>() ); // Expect exact, but not quite.
+  // numeric_limits<RealType>::epsilon()); // Not suitable for real concept!
 
 
   // Check that duff arguments throw domain_error:
@@ -657,9 +661,9 @@ int test_main(int, char* [])
   test_spots(0.0F); // Test float.
   test_spots(0.0); // Test double.
   test_spots(0.0L); // Test long double.
-  //#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-  //  test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
-  //#endif
+  #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+    test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+  #endif
 
   return 0;
 } // int test_main(int, char* [])
