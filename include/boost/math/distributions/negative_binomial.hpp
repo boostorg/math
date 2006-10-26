@@ -157,8 +157,7 @@ namespace boost
         RealType successes,
         RealType probability)
       {
-        // Error checks:
-        RealType result;
+        RealType result;  // of error checks.
         if(false == negative_binomial_detail::check_dist_and_k(
           BOOST_CURRENT_FUNCTION, failures, RealType(0), successes, &result)
           && 
@@ -167,7 +166,6 @@ namespace boost
         {
           return result;
         }
-
         return ibeta_inv(successes + 1, failures - successes, probability);
       } // estimate_lower_bound_on_p
 
@@ -176,8 +174,8 @@ namespace boost
         RealType successes,
         RealType probability)
       {
-        // Error checks:
-        RealType result;
+        
+        RealType result;  // of error checks.
         if(false == negative_binomial_detail::check_dist_and_k(
           BOOST_CURRENT_FUNCTION, failures, RealType(0), successes, &result)
           && 
