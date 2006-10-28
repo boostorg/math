@@ -146,21 +146,28 @@ T gamma_imp(T z, const L& l)
       result /= z;
       z += 1;
    }
-   result *= L::lanczos_sum(z);
-   if(z * log(z) > tools::log_max_value<T>())
+   if((floor(z) == z) && (z < max_factorial<T>::value))
    {
-      // we're going to overflow unless this is done with care:
-      T zgh = (z + L::g() - boost::math::constants::half<T>());
-      T hp = pow(zgh, (z / 2) - T(0.25));
-      result *= hp / exp(zgh);
-      if(tools::max_value<T>() / hp < result)
-         return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
-      result *= hp;
+      result *= unchecked_factorial<T>(tools::real_cast<unsigned>(z) - 1);
    }
    else
    {
-      T zgh = (z + L::g() - boost::math::constants::half<T>());
-      result *= pow(zgh, z - boost::math::constants::half<T>()) / exp(zgh);
+      result *= L::lanczos_sum(z);
+      if(z * log(z) > tools::log_max_value<T>())
+      {
+         // we're going to overflow unless this is done with care:
+         T zgh = (z + L::g() - boost::math::constants::half<T>());
+         T hp = pow(zgh, (z / 2) - T(0.25));
+         result *= hp / exp(zgh);
+         if(tools::max_value<T>() / hp < result)
+            return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
+         result *= hp;
+      }
+      else
+      {
+         T zgh = (z + L::g() - boost::math::constants::half<T>());
+         result *= pow(zgh, z - boost::math::constants::half<T>()) / exp(zgh);
+      }
    }
    return result;
 }
@@ -856,12 +863,20 @@ T gamma_imp(T z, const lanczos::undefined_lanczos& l)
       prefix /= z;
       z += 1;
    }
-   prefix = prefix * pow(z / boost::math::constants::e<T>(), z);
-   T sum = detail::lower_gamma_series(z, z, ::boost::math::tools::digits<T>()) / z;
-   sum += detail::upper_gamma_fraction(z, z, ::boost::math::tools::digits<T>());
-   if(fabs(tools::max_value<T>() / prefix) < fabs(sum))
-      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
-   return sum * prefix;
+   if((floor(z) == z) && (z < max_factorial<T>::value))
+   {
+      prefix *= unchecked_factorial<T>(tools::real_cast<unsigned>(z) - 1);
+   }
+   else
+   {
+      prefix = prefix * pow(z / boost::math::constants::e<T>(), z);
+      T sum = detail::lower_gamma_series(z, z, ::boost::math::tools::digits<T>()) / z;
+      sum += detail::upper_gamma_fraction(z, z, ::boost::math::tools::digits<T>());
+      if(fabs(tools::max_value<T>() / prefix) < fabs(sum))
+         return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
+      return sum * prefix;
+   }
+   return prefix;
 }
 
 template <class T>

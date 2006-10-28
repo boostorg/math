@@ -87,6 +87,9 @@ result in is the range [0, PI/2]. Without this an excessive amount of error occu
 in this region (which is hard enough already, as the rate of change near a negative pole
 is /exceptionally/ high).
 
+Finally if the argument is a small integer then table lookup of the factorial
+is used.
+
 [endsect][/section:tgamma The Gamma Function]
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
