@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_TOOLS_NTL_HPP
 #define BOOST_MATH_TOOLS_NTL_HPP
 
+
 #include <NTL/RR.h>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/precision.hpp>
@@ -92,6 +93,16 @@ template <>
 inline NTL::RR real_cast<NTL::RR, NTL::RR>(NTL::RR t)
 {
    return t;
+}
+template <>
+inline unsigned real_cast<unsigned, NTL::RR>(NTL::RR t)
+{
+   return static_cast<unsigned>(real_cast<long double>(t));;
+}
+template <>
+inline int real_cast<int, NTL::RR>(NTL::RR t)
+{
+   return static_cast<int>(real_cast<long double>(t));;
 }
 
 template<>

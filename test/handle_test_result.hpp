@@ -150,6 +150,7 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
       std::cerr << "Mean error greater than expected value of " << bounds.second << std::endl;
       BOOST_CHECK(bounds.second >= mean_error_found);
    }
+   std::cout << std::endl;
 }
 
 template <class T, class Seq>

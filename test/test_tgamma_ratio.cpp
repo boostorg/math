@@ -175,7 +175,15 @@ void test_tgamma_ratio(T, const char* name)
    //
 #  include "tgamma_delta_ratio_data.ipp"
 
-   do_test_tgamma_delta_ratio(tgamma_delta_ratio_data, name, "tgamma ratios");
+   do_test_tgamma_delta_ratio(tgamma_delta_ratio_data, name, "tgamma + small delta ratios");
+
+#  include "tgamma_delta_ratio_int.ipp"
+
+   do_test_tgamma_delta_ratio(tgamma_delta_ratio_int, name, "tgamma + small integer ratios");
+
+#  include "tgamma_delta_ratio_int2.ipp"
+
+   do_test_tgamma_delta_ratio(tgamma_delta_ratio_int2, name, "integer tgamma ratios");
 
 #  include "tgamma_ratio_data.ipp"
 

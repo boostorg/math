@@ -4,6 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/tools/ntl.hpp>
+#include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/test.hpp>
 #include <fstream>
@@ -18,8 +19,15 @@ using namespace std;
 std::tr1::tuple<NTL::RR, NTL::RR> 
    tgamma_ratio(const NTL::RR& a, const NTL::RR& delta)
 {
+   if(delta > a)
+      throw std::domain_error("");
    NTL::RR tg = boost::math::tgamma(a);
-   return std::tr1::make_tuple(tg / boost::math::tgamma(a + delta), tg / boost::math::tgamma(a - delta));
+   NTL::RR r1 = tg / boost::math::tgamma(a + delta);
+   NTL::RR r2 = tg / boost::math::tgamma(a - delta);
+   if((r1 > (std::numeric_limits<float>::max)()) || (r2 > (std::numeric_limits<float>::max)()))
+      throw std::domain_error("");
+
+   return std::tr1::make_tuple(r1, r2);
 }
 
 NTL::RR tgamma_ratio2(const NTL::RR& a, const NTL::RR& b)
@@ -28,7 +36,7 @@ NTL::RR tgamma_ratio2(const NTL::RR& a, const NTL::RR& b)
 }
 
 
-int main(int argc, char* argv[])
+int test_main(int argc, char*argv [])
 {
    NTL::RR::SetPrecision(1000);
    NTL::RR::SetOutputPrecision(40);

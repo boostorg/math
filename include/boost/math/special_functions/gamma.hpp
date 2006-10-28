@@ -31,6 +31,7 @@
 #include <boost/math/special_functions/lanczos.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/detail/igamma_large.hpp>
+#include <boost/math/special_functions/detail/unchecked_factorial.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/assert.hpp>
 
@@ -1414,15 +1415,9 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
 // Ratios of two gamma functions:
 //
 template <class T, class L>
-T tgamma_delta_ratio_imp(T z, T delta, const L&)
+T tgamma_delta_ratio_imp_lanczos(T z, T delta, const L&)
 {
    using namespace std;
-
-   if(z <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments (got a=%1%).", z);
-   if(z+delta <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments (got b=%1%).", z+delta);
-
    T zgh = z + L::g() - constants::half<T>();
    T result;
    if(fabs(delta) < 10)
@@ -1441,15 +1436,9 @@ T tgamma_delta_ratio_imp(T z, T delta, const L&)
 // And again without Lanczos support this time:
 //
 template <class T>
-T tgamma_delta_ratio_imp(T z, T delta, const lanczos::undefined_lanczos&)
+T tgamma_delta_ratio_imp_lanczos(T z, T delta, const lanczos::undefined_lanczos&)
 {
    using namespace std;
-
-   if(z <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments (got a=%1%).", z);
-   if(z+delta <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments (got b=%1%).", z+delta);
-
    //
    // The upper gamma fraction is *very* slow for z < 6, actually it's very
    // slow to converge everywhere but recursing until z > 6 gets rid of the
@@ -1481,6 +1470,62 @@ T tgamma_delta_ratio_imp(T z, T delta, const lanczos::undefined_lanczos&)
    if(fabs(tools::max_value<T>() / prefix) < fabs(sum))
       return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
    return sum * prefix;
+}
+
+template <class T, class L>
+T tgamma_delta_ratio_imp(T z, T delta, const L& l)
+{
+   using namespace std;
+
+   if(z <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments (got a=%1%).", z);
+   if(z+delta <= 0)
+      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Gamma function ratios only implemented for positive arguments (got b=%1%).", z+delta);
+
+   if(floor(delta) == delta)
+   {
+      if(floor(z) == z)
+      {
+         //
+         // Both z and delta are integers, see if we can just use table lookup
+         // of the factorials to get the result:
+         //
+         if((z <= max_factorial<T>::value) && (z + delta <= max_factorial<T>::value))
+         {
+            return unchecked_factorial<T>(tools::real_cast<unsigned>(z) - 1) / unchecked_factorial<T>(tools::real_cast<unsigned>(z + delta) - 1);
+         }
+      }
+      if(fabs(delta) < 20)
+      {
+         //
+         // delta is a small integer, we can use a finite product:
+         //
+         if(delta == 0)
+            return 1;
+         if(delta < 0)
+         {
+            z -= 1;
+            T result = z;
+            while(0 != (delta += 1))
+            {
+               z -= 1;
+               result *= z;
+            }
+            return result;
+         }
+         else
+         {
+            T result = 1 / z;
+            while(0 != (delta -= 1))
+            {
+               z += 1;
+               result /= z;
+            }
+            return result;
+         }
+      }
+   }
+   return tgamma_delta_ratio_imp_lanczos(z, delta, l);
 }
 
 template <class T, class L>

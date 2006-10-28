@@ -15,6 +15,7 @@ run log1p_expm1_test.cpp ;
 run powm1_sqrtp1m1_test.cpp ;
 run test_beta.cpp ;
 run test_binomial.cpp ;
+run test_binomial_coeff.cpp ;
 run test_cauchy.cpp ;
 run test_cbrt.cpp ;
 run test_chi_squared.cpp ;
@@ -48,6 +49,7 @@ run test_toms748_solve.cpp ;
 run test_weibull.cpp ;
 
 compile distribution_concept_check.cpp ;
+
 
 
 

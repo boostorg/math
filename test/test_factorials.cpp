@@ -22,6 +22,20 @@
   using std::endl;
 
 template <class T>
+T naive_falling_factorial(T x, unsigned n)
+{
+   if(n == 0)
+      return 1;
+   T result = x;
+   while(--n)
+   {
+      x -= 1;
+      result *= x;
+   }
+   return result;
+}
+
+template <class T>
 void test_spots(T)
 {
    //
@@ -46,6 +60,207 @@ void test_spots(T)
    BOOST_CHECK_CLOSE(
       ::boost::math::unchecked_factorial<T>(10),
       static_cast<T>(3628800L), tolerance);
+
+   //
+   // Try some double factorials:
+   //
+   BOOST_CHECK_CLOSE(
+      ::boost::math::double_factorial<T>(0),
+      static_cast<T>(1), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::double_factorial<T>(1),
+      static_cast<T>(1), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::double_factorial<T>(2),
+      static_cast<T>(2), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::double_factorial<T>(5),
+      static_cast<T>(15), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::double_factorial<T>(10),
+      static_cast<T>(3840), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::double_factorial<T>(19),
+      static_cast<T>(6.547290750e8L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::double_factorial<T>(24),
+      static_cast<T>(1.961990553600000e12L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::double_factorial<T>(33),
+      static_cast<T>(6.33265987076285062500000e18L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::double_factorial<T>(42),
+      static_cast<T>(1.0714547155728479551488000000e26L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::double_factorial<T>(47),
+      static_cast<T>(1.19256819277443412353990764062500000e30L), tolerance);
+
+   if((std::numeric_limits<T>::has_infinity) && (std::numeric_limits<T>::max_exponent <= 1024))
+   {
+      BOOST_CHECK_EQUAL(
+         ::boost::math::double_factorial<T>(320),
+         std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(
+         ::boost::math::double_factorial<T>(301),
+         std::numeric_limits<T>::infinity());
+   }
+   //
+   // Rising factorials:
+   //
+   tolerance = boost::math::tools::epsilon<T>() * 100 * 20;  // 20 eps as a percent.
+   if(std::numeric_limits<T>::is_specialized == 0)
+      tolerance *= 5;  // higher error rates without Lanczos support
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(3), 4),
+      static_cast<T>(360), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(7), -4),
+      static_cast<T>(0.00277777777777777777777777777777777777777777777777777777777778L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(120.5f), 8),
+      static_cast<T>(5.58187566784927180664062500e16L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(120.5f), -4),
+      static_cast<T>(5.15881498170104646868208445266116850161120996179812063177241e-9L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(5000.25f), 8),
+      static_cast<T>(3.92974581976666067544013393509103775024414062500000e29L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(5000.25f), -7),
+      static_cast<T>(1.28674092710208810281923019294164707555099052561945725535047e-26L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(30.25), 21),
+      static_cast<T>(3.93286957998925490693364184100209193343633629069699964020401e33L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(30.25), -21),
+      static_cast<T>(3.35010902064291983728782493133164809108646650368560147505884e-27L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-30.25), 21),
+      static_cast<T>(-9.76168312768123676601980433377916854311706629232503473758698e26L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-30.25), -21),
+      static_cast<T>(-1.50079704000923674318934280259377728203516775215430875839823e-34), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-30.25), 5),
+      static_cast<T>(-1.78799177197265625000000e7L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-30.25), -5),
+      static_cast<T>(-2.47177487004482195012362027432181137141899692171397467859150e-8), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-30.25), 6),
+      static_cast<T>(4.5146792242309570312500000e8L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-30.25), -6),
+      static_cast<T>(6.81868929667537089689274558433603136943171564610751635473516e-10L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-3), 6),
+      static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-3.25), 6),
+      static_cast<T>(2.99926757812500L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-5.25), 6),
+      static_cast<T>(50.987548828125000000000000L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-5.25), 13),
+      static_cast<T>(127230.91046623885631561279296875000L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-3.25), -6),
+      static_cast<T>(0.0000129609865918182348202632178291407500332449622510474437452125L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-5.25), -6),
+      static_cast<T>(2.50789821857946332294524052303699065683926911849535903362649e-6L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::rising_factorial(static_cast<T>(-5.25), -13),
+      static_cast<T>(-1.38984989447269128946284683518361786049649013886981662962096e-14L), tolerance);
+
+   //
+   // Falling factorials:
+   //
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(30.25), 0),
+      static_cast<T>(naive_falling_factorial(30.25L, 0)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(30.25), 1),
+      static_cast<T>(naive_falling_factorial(30.25L, 1)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(30.25), 2),
+      static_cast<T>(naive_falling_factorial(30.25L, 2)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(30.25), 5),
+      static_cast<T>(naive_falling_factorial(30.25L, 5)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(30.25), 22),
+      static_cast<T>(naive_falling_factorial(30.25L, 22)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(100.5), 6),
+      static_cast<T>(naive_falling_factorial(100.5L, 6)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(30.75), 30),
+      static_cast<T>(naive_falling_factorial(30.75L, 30)),
+      tolerance);
+   if(boost::math::tools::digits<T>() > 50)
+   {
+      BOOST_CHECK_CLOSE(
+         ::boost::math::falling_factorial(static_cast<T>(-30.75), 30),
+         static_cast<T>(naive_falling_factorial(-30.75L, 30)),
+         tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::falling_factorial(static_cast<T>(-30.75), 27),
+         static_cast<T>(naive_falling_factorial(-30.75L, 27)),
+         tolerance);
+   }
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(-12.0), 6),
+      static_cast<T>(naive_falling_factorial(-12.0L, 6)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(-12), 5),
+      static_cast<T>(naive_falling_factorial(-12.0L, 5)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(-3.0), 6),
+      static_cast<T>(naive_falling_factorial(-3.0L, 6)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(-3), 5),
+      static_cast<T>(naive_falling_factorial(-3.0L, 5)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(3.0), 6),
+      static_cast<T>(naive_falling_factorial(3.0L, 6)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(3), 5),
+      static_cast<T>(naive_falling_factorial(3.0L, 5)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(3.25), 4),
+      static_cast<T>(naive_falling_factorial(3.25L, 4)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(3.25), 5),
+      static_cast<T>(naive_falling_factorial(3.25L, 5)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(3.25), 6),
+      static_cast<T>(naive_falling_factorial(3.25L, 6)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(3.25), 7),
+      static_cast<T>(naive_falling_factorial(3.25L, 7)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::falling_factorial(static_cast<T>(8.25), 12),
+      static_cast<T>(naive_falling_factorial(8.25L, 12)),
+      tolerance);
+
 
    tolerance = boost::math::tools::epsilon<T>() * 100 * 20;  // 20 eps as a percent.
    unsigned i = boost::math::max_factorial<T>::value;
@@ -95,6 +310,7 @@ int test_main(int, char* [])
    cout << "max factorial for float "  << max_factorial<float>::value  << endl;
    cout << "max factorial for double "  << max_factorial<double>::value  << endl;
    cout << "max factorial for long double "  << max_factorial<long double>::value  << endl;
+   cout << "max factorial for real_concept "  << max_factorial<boost::math::concepts::real_concept>::value  << endl;
 
 
 
