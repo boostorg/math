@@ -79,7 +79,7 @@ This is a fairly trivial class for polynomial manipulation.
 
 Implementation is currently of the "naive" variety, with O(N^2)
 multiplication for example.  This class should not be used in
-high performance computing environments: it is intended for the
+high-performance computing environments: it is intended for the
 simple manipulation of small polynomials, typically generated
 for special function approximation.
 

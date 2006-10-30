@@ -1,10 +1,11 @@
-[def __alpha '''&#945;''']
 [/ def names end in distrib to avoid clashes]
 [def __binomial_distrib [link math_toolkit.dist.dist_ref.dists.binomial_dist Binomial Distribution]]
 [def __chi_squared_distrib [link math_toolkit.dist.dist_ref.dists.chi_squared_dist Chi Squared Distribution]]
 [def __normal_distrib [link math_toolkit.dist.dist_ref.dists.normal_dist Normal Distribution]]
 [def __F_distrib [link math_toolkit.dist.dist_ref.dists.f_dist Fisher F Distribution]]
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
+
+[def __alpha '''&#945;''']
 
 [section:stat_tut Statistical Distributions Tutorial]
 This library is centred around statistical distributions, this tutorial
@@ -967,19 +968,22 @@ null-hypothesis that there is no change.
 * [link tut_mean_size Calculate how many pairs of readings we would need
 in order to obtain a significant result].
 
-[endsect]
+[endsect][/section:st_eg Student's t]
+
 
 [section:cs_eg Chi Squared Distribution]
 
 TODO
 
-[endsect]
+[endsect][/section:cs_eg Chi Squared Distribution]
+
 
 [section:norm_eg Normal Distribution]
 
 TODO
 
-[endsect]
+[endsect][/section:norm_eg Normal Distribution]
+
 
 [section:binom_eg Binomial Distribution]
 [/ link binomial.binomial_distribution in dist_references.qbk is __binomial_distrib ]
@@ -1238,11 +1242,11 @@ In this case, even 1000 uses of the component would still yield a
 less than 1 in 1000 chance of observing a component failure 
 (99.9% chance of no failure).
 
-[endsect]
+[endsect][/section:binom_eg Binomial Distribution]
 
-[endsect]
+[endsect][/section:overview Overview]
 
-[endsect]
+[endsect][/section:stat_tut Statistical Distributions Tutorial]
 
 [/ dist_tutorial.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.

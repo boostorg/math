@@ -12,6 +12,12 @@
     [/last-revision $Date$]
 ]
 
+[/template floor[x]'''&#x230A;'''[x]'''&#x230B;''']
+[/template ceil[x]'''&#2308;'''[x]'''&#x2309;''']
+
+[template super[x]'''<superscript>'''[x]'''</superscript>''']
+[template sub[x]'''<subscript>'''[x]'''</subscript>''']
+
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
 [def __exm1 '''<code>e<superscript>x</superscript> - 1</code>''']
@@ -25,7 +31,8 @@
 [def __Gamma '''&#915;''']
 [def __sigma '''&#963;''']
 [def __Sigma '''&#931;''']
-[/@http://www.oreilly.com/catalog/docbook/chapter/book/iso-tech.html]
+
+[/@http://www.oreilly.com/catalog/docbook/chapter/book/iso-tech.html technical]
 [def __ceilR '''&#x2309;''']
 [def __ceilL '''&#2308;''']
 [def __floorR '''&#x230B;''']
@@ -39,8 +46,6 @@
 [def __quarter '''&#x00BC;''']
 [def __space '''&#8203;''']
 
-[def __lanczos [link lanczos Lanczos approximation]]
-[def __zero_error [link zero_error effectively zero error]]
 [def __NTL_RR [@http://shoup.net/ntl/doc/RR.txt NTL::RR]]
 [def __NTL_quad_float [@http://shoup.net/ntl/doc/quad_float.txt NTL::quad_float]]
 
@@ -63,15 +68,17 @@
 [/ The following macros expand to links to the various special functions
 and use the function's name as the link text]
 
-[def __tgamma [link math_toolkit.special.tgamma tgamma]]
-[def __lgamma [link math_toolkit.special.lgamma tgamma]]
-[def __digamma [link math_toolkit.special.lgamma digamma]]
+[def __lanczos [link math_toolkit.backgrounders.lanczos Lanczos approximation]
+[def __zero_error [link zero_error effectively zero error]]
+[def __relative_error [link math_toolkit.backgrounders.relative_error relative zero error]]
+[def __lgamma [link math_toolkit.special.lgamma lgamma]]
+[def __digamma [link math_toolkit.special.digamma digamma]]
 [def __tgamma_ratio [link math_toolkit.special.gamma_ratios tgamma_ratio]]
 [def __tgamma_delta_ratio [link math_toolkit.special.gamma_ratios tgamma_delta_ratio]]
 [def __factorial [link math_toolkit.special.factorials factorial]]
 [def __unchecked_factorial [link math_toolkit.special.factorials unchecked_factorial]]
 [def __max_factorial [link math_toolkit.special.factorials max_factorial]]
-[def __tgamma2 [link math_toolkit.special.igamma tgamma]]
+[def __tgamma [link math_toolkit.special.tgamma tgamma]]
 [def __tgamma_lower [link math_toolkit.special.igamma tgamma_lower]]
 [def __gamma_P [link math_toolkit.special.igamma gamma_P]]
 [def __gamma_Q [link math_toolkit.special.igamma gamma_Q]]
@@ -83,8 +90,8 @@ and use the function's name as the link text]
 [def __erfc [link math_toolkit.special.error_function erfc]]
 [def __erf_inv [link math_toolkit.special.error_inv erf_inv]]
 [def __erfc_inv [link math_toolkit.special.error_inv erfc_inv]]
-[def __beta [link math_toolkit.special.beta_function beta]]
-[def __beta3 [link math_toolkit.special.ibeta_function beta]]
+[def __beta  [link math_toolkit.special.beta_function beta]]
+[/def __beta [link math_toolkit.special.ibeta_function beta]]
 [def __betac [link math_toolkit.special.ibeta_function betac]]
 [def __ibeta [link math_toolkit.special.ibeta_function ibeta]]
 [def __ibetac [link math_toolkit.special.ibeta_function ibetac]]
@@ -107,10 +114,6 @@ and use the function's name as the link text]
 [def __sqrt1pm1 [link math_toolkit.special.powers sqrt1pm1]]
 [def __powm1 [link math_toolkit.special.powers powm1]]
 
-
-
-[template super[x]'''<superscript>'''[x]'''</superscript>''']
-[template sub[x]'''<subscript>'''[x]'''</subscript>''']
 
 [section:intro Introduction]
 

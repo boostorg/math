@@ -235,6 +235,16 @@ be successful (the success fraction), /n/ is the number of trials,
        __ibetac_inv, __ibeta_inv, and __ibetac_invb respectively]]
 ]
 
+
+Implementation note: 
+The real concept type (that deliberately lacks the Lanczos approximation),
+was found to take several minutes to evaluate some extreme test values,
+so the test has been disabled for this type.
+Much greater speed, and perhaps greater accuracy,
+might be achieved for extreme values by using a normal approximation.
+This is NOT been tested or implemented.
+
+
 [endsect][/section:negative_binomial_dist Negative Binomial]
 
 [/ negative_binomial.qbk

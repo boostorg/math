@@ -1,4 +1,4 @@
-[section Series Evaluation]
+[section:series_evaluation Series Evaluation]
 
 [caution __caution ]
 
@@ -74,7 +74,7 @@ summation in this way.
 
 [h4 Example]
 
-Let's suppose we want to implement /log(1+x)/ via it's infinite series,
+Let's suppose we want to implement /log(1+x)/ via its infinite series,
 
 [$../equations/log1pseries.png]
 

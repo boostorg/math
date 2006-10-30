@@ -64,7 +64,7 @@ and using this implementation.
 [h4 Implementation]
 
 The inplementation of these functions is very similar to that of 
-[link beta the beta function], and is based on combining similar power terms
+__beta, and is based on combining similar power terms
 to improve accuracy and avoid spurious overflow/underflow.
 
 In addition there are optimisations for the situation where /delta/

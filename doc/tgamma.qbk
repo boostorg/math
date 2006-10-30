@@ -1,5 +1,4 @@
-[#tgamma][section:tgamma The Gamma Function]
-[/TODO replace anchor with link]
+[section:tgamma The Gamma Function]
 
 [caution __caution ]
 
@@ -18,7 +17,7 @@
   
 [h4 Description]
 
-Returns the "true gamma" (hence tgamma) of value z:
+Returns the "true gamma" (hence name tgamma) of value z:
 
 [$../equations/gamm1.png]
 

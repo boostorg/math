@@ -1,5 +1,5 @@
-[#beta_gamma_derivatives][section:beta_gamma_derivatives Derivatives of the Incomplete Beta and Gamma Functions]
-[/TODO replace with link]
+[section:beta_gamma_derivatives Derivatives of the Incomplete Beta and Gamma Functions]
+
 [caution __caution ]
 
 [h4 Synopsis]
@@ -38,7 +38,6 @@ the documentation for those function for more information.
 These two functions just expose some of the internals of the incomplete
 gamma and beta functions: refer to the documentation for those functions
 for more information.
-
 
 [endsect][/section Derivatives of the Incomplete Beta and Gamma Functions]
 [/ 

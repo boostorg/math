@@ -127,7 +127,8 @@ means that even when x is the value of the root rounded to the nearest
 representable value, the result of digamma(x) ['[*will not be zero]].
 
 
-[endsect][/section:tgamma The Gamma Function]
+[endsect][/section:digamma The Digamma Function]
+
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.

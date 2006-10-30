@@ -139,7 +139,8 @@ the other functions about double that.
 A mixture of spot test sanity checks, and random high precision test values
 calculated using NTL::RR at 1000-bit precision.
 
-[endsect][/section:beta_function The Beta Function]
+[endsect][/section:powers Logs, Powers, Roots and Exponentials]
+
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.

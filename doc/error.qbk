@@ -1,7 +1,5 @@
 [section:relative_error Relative Error]
 
-[/TODO add link to error_test]
-
 [caution __caution ]
 
 Given an actual value /a/ and a found value /v/ the relative error can be

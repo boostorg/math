@@ -1,6 +1,4 @@
 [section:lanczos The Lanczos Approximation]
-[#lanczos]
-[/TODO (aN) query and correct link]
 
 [caution __caution ]
 
@@ -12,8 +10,7 @@ First of all I should make clear that for the gamma function
 over real numbers (as opposed to complex ones)
 the Lanczos approximation (See [@http://en.wikipedia.org/wiki/Lanczos_approximation Wikipedia or ]
 [@http://mathworld.wolfram.com/LanczosApproximation.html Mathworld])
-appears to offer no clear
-advantage over more traditional methods such as
+appears to offer no clear advantage over more traditional methods such as
 [@http://en.wikipedia.org/wiki/Stirling_approximation Stirling's approximation].
 __pugh carried out an extensive comparison of the various methods available
 and discovered that they were all very similar in terms of complexity
