@@ -68,7 +68,7 @@
 [/ The following macros expand to links to the various special functions
 and use the function's name as the link text]
 
-[def __lanczos [link math_toolkit.backgrounders.lanczos Lanczos approximation]
+[def __lanczos [link math_toolkit.backgrounders.lanczos Lanczos approximation]]
 [def __zero_error [link zero_error effectively zero error]]
 [def __relative_error [link math_toolkit.backgrounders.relative_error relative zero error]]
 [def __lgamma [link math_toolkit.special.lgamma lgamma]]
@@ -79,6 +79,7 @@ and use the function's name as the link text]
 [def __unchecked_factorial [link math_toolkit.special.factorials unchecked_factorial]]
 [def __max_factorial [link math_toolkit.special.factorials max_factorial]]
 [def __tgamma [link math_toolkit.special.tgamma tgamma]]
+[def __tgamma1pm1 [link math_toolkit.special.tgamma tgamma1pm1]]
 [def __tgamma_lower [link math_toolkit.special.igamma tgamma_lower]]
 [def __gamma_P [link math_toolkit.special.igamma gamma_P]]
 [def __gamma_Q [link math_toolkit.special.igamma gamma_Q]]
