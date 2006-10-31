@@ -177,7 +177,7 @@ namespace boost
     public:
       typedef RealType value_type;
 
-      poisson_distribution(RealType mean) : m_l(mean = 1) // mean (lambda).
+      poisson_distribution(RealType mean = 1) : m_l(mean) // mean (lambda).
       { // Expected mean number of events that occur during the given interval.
         RealType r;
         poisson_detail::check_dist(
