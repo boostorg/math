@@ -37,7 +37,7 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
    cout << setw(40) << left << "Number of successes" << "=  " << successes << "\n";
    cout << setw(40) << left << "Sample frequency of occurance" << "=  " << double(successes) / trials << "\n";
    //
-   // Define a table of confidence intervals:
+   // Define a table of significance levels:
    //
    double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
    //

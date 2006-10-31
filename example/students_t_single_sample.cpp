@@ -46,7 +46,7 @@ void confidence_limits_on_mean(double Sm, double Sd, unsigned Sn)
    cout << setw(40) << left << "Mean" << "=  " << Sm << "\n";
    cout << setw(40) << left << "Standard Deviation" << "=  " << Sd << "\n";
    //
-   // Define a table of confidence intervals:
+   // Define a table of significance/risk levels:
    //
    double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
    //
@@ -93,7 +93,7 @@ void single_sample_t_test(double M, double Sm, double Sd, unsigned Sn, double al
    // Sm = Sample Mean.
    // Sd = Sample Standard Deviation.
    // Sn = Sample Size.
-   // alpha = Confidence Level.
+   // alpha = Significance Level.
    //
    // A Students t test applied to a single set of data.
    // We are testing the null hypothesis that the true
@@ -179,7 +179,7 @@ void single_sample_estimate_df(double M, double Sm, double Sd)
    cout << setw(40) << left << "Sample Mean" << "=  " << Sm << "\n";
    cout << setw(40) << left << "Sample Standard Deviation" << "=  " << Sd << "\n";
    //
-   // Define a table of confidence intervals:
+   // Define a table of significance intervals:
    //
    double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
    //

@@ -30,7 +30,7 @@ void two_samples_t_test_equal_sd(
    // Sm2 = Sample Mean 2.
    // Sd2 = Sample Standard Deviation 2.
    // Sn2 = Sample Size 2.
-   // alpha = Confidence Level.
+   // alpha = Significance Level.
    //
    // A Students t test applied to two sets of data.
    // We are testing the null hypothesis that the two
@@ -66,7 +66,7 @@ void two_samples_t_test_equal_sd(
    double t_stat = (Sm1 - Sm2) / (sp * sqrt(1.0 / Sn1 + 1.0 / Sn2));
    cout << setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
    //
-   // Finally define our distribution, and get the probability:
+   // Define our distribution, and get the probability:
    //
    students_t dist(v);
    double q = cdf(complement(dist, fabs(t_stat)));
@@ -113,7 +113,7 @@ void two_samples_t_test_unequal_sd(
    // Sm2 = Sample Mean 2.
    // Sd2 = Sample Standard Deviation 2.
    // Sn2 = Sample Size 2.
-   // alpha = Confidence Level.
+   // alpha = Significance Level.
    //
    // A Students t test applied to two sets of data.
    // We are testing the null hypothesis that the two
@@ -154,7 +154,7 @@ void two_samples_t_test_unequal_sd(
    double t_stat = (Sm1 - Sm2) / sqrt(Sd1 * Sd1 / Sn1 + Sd2 * Sd2 / Sn2);
    cout << setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
    //
-   // Finally define our distribution, and get the probability:
+   // Define our distribution, and get the probability:
    //
    students_t dist(v);
    double q = cdf(complement(dist, fabs(t_stat)));

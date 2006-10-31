@@ -6,6 +6,8 @@
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
 
 [def __alpha '''&#945;''']
+[def __handbook [@http://www.itl.nist.gov/div898/handbook/ 
+NIST/SEMATECH e-Handbook of Statistical Methods.]]
 
 [section:stat_tut Statistical Distributions Tutorial]
 This library is centred around statistical distributions, this tutorial
@@ -226,10 +228,10 @@ each distribution.  They are implemented as static member functions
 of the distributions, for example:
 
    students_t::estimate_degrees_of_freedom(
-      5.0,        // true mean
-      6.3,        // sample mean
-      0.13,       // sample standard deviation
-      0.95);      // probability
+      1.3,        // difference from true mean to detect
+      0.05,       // maximum risk of falsely rejecting the null-hypothesis.
+      0.1,        // maximum risk of falsely failing to reject the null-hypothesis.
+      0.13);      // sample standard deviation
       
 Returns the number of degrees of freedom required to obtain a 95%
 probability that the observed differences in means is not down to
@@ -288,14 +290,23 @@ Where, ['Y[sub s]] is the sample mean, /s/ is the sample standard deviation,
 ['t[sub (__alpha/2,N-1)]] is the upper critical value of the Students-t
 distribution with /N-1/ degrees of freedom.
 
-Confidence level (value or coefficient) is defined as 1 - __alpha (often as a percent)
-[@http://www.itl.nist.gov/div898/handbook/pmd/section5/pmd511.htm on the NIST site].
+[Note
+The quantity __alpha is the maximum acceptable risk of falsely rejecting
+the null-hypothesis.  The smaller the value of __alpha the greater the
+strength of the test.\n\n
+The confidence level of the test is defined as 1 - __alpha, and often expressed
+as a percentage.  So for example a significance level of 0.05, is equivalent
+to a 95% confidence level.  Refer to 
+[@http://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm 
+"What are confidence intervals?"] in __handbook for more information.
+]
 
 From the formula it should be clear that:
 
 * The width of the confidence interval decreases as the sample size increases.
 * The width increases as the standard deviation increases.
-* The width increases as the confidence level increases (0.5 towards 0.99999 - stronger).
+* The width increases as the ['confidence level increases] (0.5 towards 0.99999 - stronger).
+* The width increases as the ['significance level decreases] (0.5 towards 0.00000...01 - stronger).
 
 The following example code is taken from the example program
 [@../../example/students_t_single_sample.cpp students_t_single_sample.cpp].
@@ -330,11 +341,11 @@ as a table:
       cout << setw(40) << left << "Mean" << "=  " << Sm << "\n";
       cout << setw(40) << left << "Standard Deviation" << "=  " << Sd << "\n";
 
-We'll define a table of confidence levels for which we'll compute intervals:
+We'll define a table of significance/risk levels for which we'll compute intervals:
 
       double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
       
-Note that these are the complements of the probability levels: 0.5, 0.75, 0.9 .. 0.99999).
+Note that these are the complements of the confidence/probability levels: 0.5, 0.75, 0.9 .. 0.99999).
 
 Next we'll declare the distribution object we'll need, note that
 the /degrees of freedom/ parameter is the sample size less one:
@@ -343,8 +354,8 @@ the /degrees of freedom/ parameter is the sample size less one:
 
 Most of what follows in the program is pretty printing, so let's focus
 on the calculation of the interval. First we need the t-statistic,
-computed using the /quantile/ function and our confidence level.  Note
-that since the confidence levels are the complement of the probability,
+computed using the /quantile/ function and our significance level.  Note
+that since the significance levels are the complement of the probability,
 we have to wrap the arguments in a call to /complement(...)/:
 
    double T = quantile(complement(dist, alpha[i] / 2));
@@ -353,7 +364,7 @@ Note that alpha was divided by two, since we'll be calculating
 both the upper and lower bounds: had we been interested in a single
 sided interval then we would have omitted this step.
    
-Now complete the picture, and get the (one-sided) width of the
+Now to complete the picture, we'll get the (one-sided) width of the
 interval from the t-statistic
 by multiplying by the standard deviation, and dividing by the square
 root of the sample size:
@@ -369,6 +380,10 @@ Let's take a look at some sample output, first using the
 Heat flow data] from the NIST site.  The data set was collected 
 by Bob Zarr of NIST in January, 1990 from a heat flow meter 
 calibration and stability analysis.
+The corresponding dataplot
+output for this test can be found in 
+@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm 
+section 3.5.2] of the __handbook.
 
 [pre'''
    __________________________________
@@ -443,14 +458,14 @@ more information can be found
 [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm 
 on the NIST site].
 
-(Of course, the assignment of "true" to one mean may be quite arbitrary,
-often a "traditional" method of measurement).
+Of course, the assignment of "true" to one mean may be quite arbitrary,
+often this is simply a "traditional" method of measurement.
 
 The following example code is taken from the example program
 [@../../example/students_t_single_sample.cpp students_t_single_sample.cpp].
 
 We'll begin by defining a procedure to determine which of the
-possible hypothesis are accepted or rejected at a given confidence level:
+possible hypothesis are accepted or rejected at a given significance level:
 
    // Needed includes:
    #include <boost/math/distributions/students_t.hpp>
@@ -467,7 +482,7 @@ possible hypothesis are accepted or rejected at a given confidence level:
       // Sm = Sample Mean.
       // Sd = Sample Standard Deviation.
       // Sn = Sample Size.
-      // alpha = Confidence Level.
+      // alpha = Significance Level.
       
 Most of the procedure is pretty-printing, so let's just focus on the
 calculation, we begin by calculating the t-statistic:
@@ -495,16 +510,16 @@ can be summarised in the following table:
 [table
 [[Hypothesis][Test]]
 [[The Null-hypothesis: there is
-*no difference* in means]  [Complement of CDF for |t| > confidence level / 2:\n\n
+*no difference* in means]  [Complement of CDF for |t| > significance level / 2:\n\n
                          ``cdf(complement(dist, fabs(t))) > alpha / 2``]]
 [[The Alternative-hypothesis: there is
-*difference* in means]  [Complement of CDF for |t| < confidence level / 2:\n\n
+*difference* in means]  [Complement of CDF for |t| < significance level / 2:\n\n
                          ``cdf(complement(dist, fabs(t))) < alpha / 2``]]
 [[The Alternative-hypothesis: the sample mean is *less* than
-the true mean.]  [CDF of t < confidence level:\n\n
+the true mean.]  [CDF of t < significance level:\n\n
                          ``cdf(dist, t) < alpha``]]
 [[The Alternative-hypothesis: the sample mean is *greater* than
-the true mean.]  [Complement of CDF of t < confidence level:\n\n
+the true mean.]  [Complement of CDF of t < significance level:\n\n
                          ``cdf(complement(dist, t)) < alpha``]]
 ]
 
@@ -517,7 +532,10 @@ sample output, first using the
 [@http://www.itl.nist.gov/div898/handbook/eda/section4/eda428.htm
 Heat flow data] from the NIST site.  The data set was collected 
 by Bob Zarr of NIST in January, 1990 from a heat flow meter 
-calibration and stability analysis.
+calibration and stability analysis.  The corresponding dataplot
+output for this test can be found in 
+@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm 
+section 3.5.2] of the __handbook.
 
 [pre'''
    __________________________________
@@ -583,9 +601,9 @@ atomic absorption.
 As you can see the small number of measurements (3) has led to a large uncertainty
 in the location of the true mean.  So even though there appears to be a difference
 between the sample mean and the expected true mean, we conclude that there
-is no significant difference, and accept the null hypothesis.  However, if we
-were to lower the bar for acceptance down to alpha = 0.1 (90% confidence level)
-we see a different output:
+is no significant difference, and are unable to reject the null hypothesis.  
+However, if we were to lower the bar for acceptance down to alpha = 0.1 
+(a 90% confidence level) we see a different output:
 
 [pre'''
 __________________________________
@@ -642,7 +660,7 @@ estimated sample sizes for various confidence levels:
       double Sd)         // Sd = Sample Standard Deviation.
    {
 
-Next we define a table of confidence levels:
+Next we define a table of significance levels:
 
       double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
 
@@ -668,7 +686,7 @@ difference between the sample mean, and the true mean.
 
 Then come two probability values: alpha and beta.  Alpha is the
 maximum acceptable risk of rejecting the null-hypothesis when it is
-in fact true.  Beta is the maximum acceptable risk of accepting
+in fact true.  Beta is the maximum acceptable risk of failing to reject
 the null-hypothesis when in fact it is false.
 Also note that for a two-sided test, alpha must be divided by 2.  
 
@@ -736,7 +754,7 @@ _______________________________________________________________
     99.999              67              69
 ''']
 
-So in this case, many more measurement would have had to be made, 
+So in this case, many more measurements would have had to be made, 
 for example at the 95% level, 14 measurements in total for a two-sided test.
 
 [h4 [#two_sample_students_t]Comparing the means of two samples with the Students-t test]
@@ -779,7 +797,7 @@ variances:
            double Sm2,       // Sm2 = Sample 2 Mean.
            double Sd2,       // Sd2 = Sample 2 Standard Deviation.
            unsigned Sn2,     // Sn2 = Sample 2 Size.
-           double alpha)     // alpha = Confidence Level.
+           double alpha)     // alpha = Significance Level.
    {
       
 
@@ -819,16 +837,16 @@ in the following table:
 [table
 [[Hypothesis][Test][C++ Code]]
 [[The Null-hypothesis: there is
-*no difference* in means]  [Complement of CDF for |t| > confidence level / 2:\n\n
+*no difference* in means]  [Complement of CDF for |t| > significance level / 2:\n\n
                          ``cdf(complement(dist, fabs(t))) > alpha / 2``]]
 [[The Alternative-hypothesis: there is a
-*difference* in means]  [Complement of CDF for |t| < confidence level / 2:\n\n
+*difference* in means]  [Complement of CDF for |t| < significance level / 2:\n\n
                          ``cdf(complement(dist, fabs(t))) < alpha / 2``]]
 [[The Alternative-hypothesis: Sample 1 Mean is *less* than
-Sample 2 Mean.]  [CDF of t < confidence level:\n\n
+Sample 2 Mean.]  [CDF of t < significance level:\n\n
                          ``cdf(dist, t) < alpha``]]
 [[The Alternative-hypothesis: Sample 1 Mean is *greater* than
-Sample 2 Mean.]  [Complement of CDF of t < confidence level:\n\n
+Sample 2 Mean.]  [Complement of CDF of t < significance level:\n\n
                          ``cdf(complement(dist, t)) < alpha``]]
 ]
 
@@ -837,7 +855,10 @@ For a two-sided test we must compare against alpha / 2 and not alpha.]
 
 Most of the rest of the sample program is pretty-printing, so we'll
 skip over that, and take a look at the sample output for alpha=0.05
-(95% probability level).
+(a 95% probability level).  For comparison the dataplot output
+for te same data is in 
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda353.htm
+section 1.3.5.3] of the __handbook.
 
 [pre'''
    ________________________________________________
@@ -960,10 +981,10 @@ we used in the single sample cases previously discussed.
 That means we can:
 
 * [link tut_mean_intervals Calculate confidence intervals of the mean]. 
-If the endpoints of the interval differ in sign then we must accept 
+If the endpoints of the interval differ in sign then we are unable to reject 
 the null-hypothesis that there is no change.
 * [link tut_mean_test Test whether the true mean is zero]. If the
-result is consistent with a true mean of zero, then we must accept the
+result is consistent with a true mean of zero, then we are unable to reject the
 null-hypothesis that there is no change.
 * [link tut_mean_size Calculate how many pairs of readings we would need
 in order to obtain a significant result].
@@ -986,8 +1007,8 @@ TODO
 
 
 [section:binom_eg Binomial Distribution]
-[/ link binomial.binomial_distribution in dist_references.qbk is __binomial_distrib ]
-(See __binomial_distrib for reference info.)
+
+See also the reference documentation for the __binomial_distrib.)
 
 * [link binom_conf Calculating Confidence Limits on the Frequency of Occurrence]
 * [link binom_size_eg Estimating Sample Sizes]
@@ -1037,7 +1058,7 @@ of certainty:
       cout << setw(40) << left << "Number of successes" << "=  " << successes << "\n";
       cout << setw(40) << left << "Sample frequency of occurance" << "=  " << double(successes) / trials << "\n";
 
-The procedure now defines a table of confidence values: these are the 
+The procedure now defines a table of significance levels: these are the 
 probabilities that the true occurrence frequency lies outside the calculated
 interval:
 
