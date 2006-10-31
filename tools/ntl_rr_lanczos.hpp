@@ -111,7 +111,7 @@ struct lanczos13UDT
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       static const T d[12] = {
          boost::lexical_cast<T>("26.96979819614830698367887026728396466395"),
@@ -128,7 +128,7 @@ struct lanczos13UDT
          boost::lexical_cast<T>("-0.9685385411006641478305219367315965391289e-9"),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = dz + 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
@@ -291,7 +291,7 @@ struct lanczos22UDT
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       static const T d[21] = {
          boost::lexical_cast<T>("75.39272007105208086018421070699575462226"),
@@ -317,7 +317,7 @@ struct lanczos22UDT
          boost::lexical_cast<T>("0.6580207998808093935798753964580596673177e-19"),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = dz + 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
@@ -524,7 +524,7 @@ struct lanczos31UDT
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       static const T d[30] = {
          boost::lexical_cast<T>("147.9979641587472136175636384176549713358"),
@@ -559,7 +559,7 @@ struct lanczos31UDT
          boost::lexical_cast<T>("-0.1060655106553177007425710511436497259484e-29"),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = dz + 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
@@ -802,7 +802,7 @@ struct lanczos61UDT
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       using namespace boost;
       static const T d[60] = {
@@ -868,7 +868,7 @@ struct lanczos61UDT
          boost::lexical_cast<T>("-0.684593199208628857931267904308244537968349564351534581234005234847904343404822808648361291e-70"),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = dz + 2;
       for(int k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);

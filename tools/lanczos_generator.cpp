@@ -4199,7 +4199,7 @@ void print_code(const lanczos_info<T>& l, const char* name)
 
    std::cout <<
       "\n   template<class T>\n"
-      "   static T lanczos_sum_near_2(const T& z)\n"
+      "   static T lanczos_sum_near_2(const T& dz)\n"
       "   {\n"
       "      static const T d[" << l2.n-1 << "] = {\n";
 
@@ -4213,7 +4213,7 @@ void print_code(const lanczos_info<T>& l, const char* name)
    std::cout << 
       "      };\n"
       "      T result = 0;\n"
-      "      T dz = z - 2;\n"
+      "      T z = dz + 2;\n"
       "      for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)\n"
       "      {\n"
       "         result += (-d[k-1]*dz)/(z + k*z + k*k - 1);\n"

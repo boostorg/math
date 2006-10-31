@@ -175,7 +175,7 @@ T gamma_imp(T z, const L& l)
 // lgamma for small arguments:
 //
 template <class T, class L>
-T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
+T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const L& /* l */)
 {
    // This version uses rational approximations for small
    // values of z accurate enough for 64-bit mantissas
@@ -188,7 +188,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
    {
       result = -log(z);
    }
-   else if((z == 1) || (z == 2))
+   else if((zm1 == 0) || (zm2 == 0))
    {
       // nothing to do, result is zero....
    }
@@ -198,10 +198,16 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
       // Begin by performing argument reduction until
       // z is in [2,3):
       //
-      while(z >= 3)
+      if(z >= 3)
       {
-         z -= 1;
-         result += log(z);
+         do
+         {
+            z -= 1;
+            zm2 -= 1;
+            result += log(z);
+         }while(z >= 3);
+         // Update zm2, we need it below:
+         zm2 = z - 2;
       }
 
       //
@@ -244,7 +250,6 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
 
       static const float Y = 0.158963680267333984375f;
 
-      T zm2 = z - 2;
       T r = zm2 * (z + 1);
       T R = tools::evaluate_polynomial(P, zm2);
       R /= tools::evaluate_polynomial(Q, zm2);
@@ -257,15 +262,13 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
       // If z is less than 1 use recurrance to shift to
       // z in the interval [1,2]:
       //
-      T zm1;
       if(z < 1)
       {
          result += -log(z);
+         zm2 = zm1;
          zm1 = z;
          z += 1;
       }
-      else
-         zm1 = z - 1;
       //
       // Two approximations, on for z in [1,1.5] and
       // one for z in [1.5,2]:
@@ -309,7 +312,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
          };
 
          T r = tools::evaluate_polynomial(P, zm1) / tools::evaluate_polynomial(Q, zm1);
-         T prefix = zm1 * (z - 2);
+         T prefix = zm1 * zm2;
 
          result += prefix * Y + prefix * r;
       }
@@ -349,10 +352,8 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
             -0.00100122979330632606976L,
             -0.818096163862371810295e-6L
          };
-         // (2 - x) * (1 - x) * (c + R(2 - x))
-         T zm2 = 2 - z;
-         T r = -zm2 * zm1;
-         T R = tools::evaluate_polynomial(P, zm2) / tools::evaluate_polynomial(Q, zm2);
+         T r = zm2 * zm1;
+         T R = tools::evaluate_polynomial(P, -zm2) / tools::evaluate_polynomial(Q, -zm2);
 
          result += r * Y + r * R;
       }
@@ -360,7 +361,7 @@ T lgamma_small_imp(T z, const mpl::int_<64>&, const L& /* l */)
    return result;
 }
 template <class T, class L>
-T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
+T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const L& /* l */)
 {
    //
    // This version uses rational approximations for small
@@ -373,7 +374,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
    {
       result = -log(z);
    }
-   else if((z == 1) || (z == 2))
+   else if((zm1 == 0) || (zm2 == 0))
    {
       // nothing to do, result is zero....
    }
@@ -383,10 +384,14 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
       // Begin by performing argument reduction until
       // z is in [2,3):
       //
-      while(z >= 3)
+      if(z >= 3)
       {
-         z -= 1;
-         result += log(z);
+         do
+         {
+            z -= 1;
+            result += log(z);
+         }while(z >= 3);
+         zm2 = z - 2;
       }
 
       //
@@ -399,7 +404,6 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
       // is small compared to the constant Y - then any rounding
       // error in it's computation will get wiped out.
       //
-      T zm2 = z - 2;
       if(zm2 <= 0.5)
       {
          // Max error found at 128-bit long double precision   2.079e-36
@@ -472,7 +476,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
             -0.21417746406796251935895373591106602902e-7L
          };
 
-         T R = tools::evaluate_polynomial(P, z - 2.5) / tools::evaluate_polynomial(Q, z - 2.5);
+         T R = tools::evaluate_polynomial(P, zm2 - 0.5) / tools::evaluate_polynomial(Q, zm2 - 0.5);
 
          static const float Y = 0.16830921173095703125f;
 
@@ -487,15 +491,13 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
       // If z is less than 1 use recurrance to shift to
       // z in the interval [1,2]:
       //
-      T zm1;
       if(z < 1)
       {
          result += -log(z);
+         zm2 = zm1;
          zm1 = z;
          z += 1;
       }
-      else
-         zm1 = z - 1;
       //
       // Three approximations, on for z in [1,1.35], [1.35,1.625] and [1.625,1]
       //
@@ -547,7 +549,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
          };
 
          T r = tools::evaluate_polynomial(P, zm1) / tools::evaluate_polynomial(Q, zm1);
-         T prefix = zm1 * (z - 2);
+         T prefix = zm1 * zm2;
 
          result += prefix * Y + prefix * r;
       }
@@ -595,10 +597,8 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
             0.00013288854760548251757651556792598235735L,
             -0.17194794958274081373243161848194745111e-5L
          };
-         // (2 - x) * (1 - x) * (c + R(2 - x))
-         T zm2 = 2 - z;
-         T r = -zm2 * zm1;
-         T R = tools::evaluate_polynomial(P, 1.625 - z) / tools::evaluate_polynomial(Q, 1.625 - z);
+         T r = zm2 * zm1;
+         T R = tools::evaluate_polynomial(P, 0.625 - zm1) / tools::evaluate_polynomial(Q, 0.625 - zm1);
 
          result += r * Y + r * R;
       }
@@ -638,9 +638,8 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
             -0.30202973883316730694433702165188835331e-6L
          };
          // (2 - x) * (1 - x) * (c + R(2 - x))
-         T zm2 = 2 - z;
-         T r = -zm2 * zm1;
-         T R = tools::evaluate_polynomial(P, zm2) / tools::evaluate_polynomial(Q, zm2);
+         T r = zm2 * zm1;
+         T R = tools::evaluate_polynomial(P, -zm2) / tools::evaluate_polynomial(Q, -zm2);
 
          result += r * Y + r * R;
       }
@@ -648,7 +647,7 @@ T lgamma_small_imp(T z, const mpl::int_<113>&, const L& /* l */)
    return result;
 }
 template <class T, class L>
-T lgamma_small_imp(T z, const mpl::int_<0>&, const L& l)
+T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<0>&, const L& l)
 {
    //
    // No rational approximations are available because either
@@ -676,15 +675,15 @@ T lgamma_small_imp(T z, const mpl::int_<0>&, const L& l)
    else if(z >= 1.5)
    {
       // special case near 2:
-      T dz = z - 2;
+      T dz = zm2;
       result = dz * log((z + L::g() - T(0.5)) / boost::math::constants::e<T>());
       result += boost::math::log1p(dz / (L::g() + T(1.5))) * T(1.5);
-      result += boost::math::log1p(L::lanczos_sum_near_2(z));
+      result += boost::math::log1p(L::lanczos_sum_near_2(dz));
    }
    else
    {
       // special case near 1:
-      T dz = z - 1;
+      T dz = zm1;
       result = dz * log((z + L::g() - T(0.5)) / boost::math::constants::e<T>());
       result += boost::math::log1p(dz / (L::g() + T(0.5))) / 2;
       result += boost::math::log1p(L::lanczos_sum_near_1(dz));
@@ -737,7 +736,7 @@ T lgamma_imp(T z, const L& l, int* sign = 0)
             (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits <= 113)),
             mpl::int_<113>, mpl::int_<0> >::type
           >::type tag_type;
-      result = lgamma_small_imp(z, tag_type(), l);
+      result = lgamma_small_imp(z, z - 1, z - 2, tag_type(), l);
    }
    else if((z >= 3) && (z < 100))
    {
@@ -918,43 +917,78 @@ T lgamma_imp(T z, const lanczos::undefined_lanczos&, int*sign)
 // This helper calculates tgamma(dz+1)-1 without cancellation errors,
 // used by the upper incomplete gamma with z < 1:
 //
-template <class T, class L>
-T tgammap1m1_imp(T dz, const L&)
+template <class T, class Tag, class L>
+T tgammap1m1_imp(T dz, Tag const& tag, const L& l)
 {
-   //
    using namespace std;
 
-   T zgh = (L::g() + T(0.5) + dz) / boost::math::constants::e<T>();
-   T A = boost::math::powm1(zgh, dz);
-   T B = boost::math::sqrt1pm1(dz / (L::g() + T(0.5)));
-   T C = L::lanczos_sum_near_1(dz);
-   T Ap1 = pow(zgh, dz);
-   T Bp1 = sqrt(1 + (dz / (L::g() + T(0.5))) );
+   T result;
+   if(dz < 0)
+   {
+      if(dz < -0.5)
+      {
+         // Best method is simply to subtract 1 from tgamma:
+         result = boost::math::tgamma(1+dz) - 1;
+      }
+      else
+      {
+         // Use expm1 on lgamma:
+         result = boost::math::expm1(-boost::math::log1p(dz) 
+            + lgamma_small_imp(dz+2, dz + 1, dz, tag, l));
+      }
+   }
+   else
+   {
+      if(dz < 2)
+      {
+         // Use expm1 on lgamma:
+         result = boost::math::expm1(lgamma_small_imp(dz+1, dz, dz-1, tag, l));
+      }
+      else
+      {
+         // Best method is simply to subtract 1 from tgamma:
+         result = boost::math::tgamma(1+dz) - 1;
+      }
+   }
 
-   return Bp1 * (A + C * Ap1) + B;
+   return result;
 }
 
-template <class T>
-T tgammap1m1_imp(T dz,
+template <class T, class Tag>
+T tgammap1m1_imp(T dz, Tag const& tag,
                  const ::boost::math::lanczos::undefined_lanczos& l)
 {
    //
-   // TODO FIXME!!!!
    // There should be a better solution than this, but the
    // algebra isn't easy for the general case....
+   // Start by subracting 1 from tgamma:
    //
    T result = gamma_imp(1 + dz, l) - 1;
-   if(std::pow(2.0, boost::math::tools::digits<T>()) * result
-      < std::pow(2.0, std::numeric_limits<long double>::digits))
+   //
+   // Test the level of cancellation error observed: we loose one bit
+   // for each power of 2 the result is less than 1.  If we would get
+   // more bits from our most precise lgamma rational approximation, 
+   // then use that instead:
+   //
+   if((dz > -0.5) && (dz < 2) && (ldexp(1.0, boost::math::tools::digits<T>()) * fabs(result) < 1e34))
    {
-      // Cancellation errors mean that we have
-      // fewer good digits left in the result than
-      // there are digits in a long double.  To limit
-      // the damage, call the long double version:
-      typedef boost::math::lanczos::lanczos_traits<long double>::evaluation_type eval_type;
-      result = tgammap1m1_imp(boost::math::tools::real_cast<long double>(dz), eval_type());
+      result = tgammap1m1_imp(dz, mpl::int_<113>(), boost::math::lanczos::lanczos24m113());
    }
    return result;
+}
+
+template <class T, class L>
+inline T tgammap1m1_imp(T dz, const L& l)
+{
+   // Simple forwarding function.
+   typedef typename mpl::if_c<
+      (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits <= 64)),
+      mpl::int_<64>,
+      typename mpl::if_c<
+         (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits <= 113)),
+         mpl::int_<113>, mpl::int_<0> >::type
+       >::type tag_type;
+   return tgammap1m1_imp(dz, tag_type(), l);
 }
 
 //
@@ -1609,7 +1643,15 @@ inline T tgamma1pm1(T z)
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
    typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::tgammap1m1_imp(static_cast<value_type>(z), evaluation_type()), BOOST_CURRENT_FUNCTION);
+   typedef typename mpl::if_c<
+      (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits <= 64)),
+      mpl::int_<64>,
+      typename mpl::if_c<
+         (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits <= 113)),
+         mpl::int_<113>, mpl::int_<0> >::type
+       >::type tag_type;
+
+   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::tgammap1m1_imp(static_cast<value_type>(z), tag_type(), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 //

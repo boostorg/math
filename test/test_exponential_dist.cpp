@@ -157,12 +157,16 @@ void test_spots(RealType T)
       static_cast<RealType>(9.999500016666250E-005L), // p
       static_cast<RealType>(1-9.999500016666250E-005L), //q
       tolerance);
+   /*
+   // This test data appears to be erroneous, MathCad appears
+   // to suffer from cancellation error as x -> 0
    test_spot(
       static_cast<RealType>(1), // lambda
       static_cast<RealType>(0.0000001), // x
       static_cast<RealType>(9.999999499998730E-008L), // p
       static_cast<RealType>(1-9.999999499998730E-008L), //q
       tolerance);
+   */   
 
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
@@ -285,18 +289,12 @@ Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_exponential_
 Running 1 test case...
 Tolerance for type float is 0.000596046 %
 Tolerance for type double is 1.11022e-012 %
-../../../../../../boost-sandbox/libs/math_functions/test/test_exponential_dist.cpp(43): error in "test_main_caller( argc, argv )": difference between ::boost::math::cdf( exponential_distribution<RealType>(l), x){9.9999995000000163e-008} and p{9.9999994999987298e-008} exceeds 1.11022e-012%
-../../../../../../boost-sandbox/libs/math_functions/test/test_exponential_dist.cpp(57): error in "test_main_caller( argc, argv )": difference between ::boost::math::quantile( exponential_distribution<RealType>(l), p){9.9999999999987131e-008} and x{9.9999999999999995e-008} exceeds 1.11022e-012%
 Tolerance for type long double is 1.11022e-012 %
-../../../../../../boost-sandbox/libs/math_functions/test/test_exponential_dist.cpp(43): error in "test_main_caller( argc, argv )": difference between ::boost::math::cdf( exponential_distribution<RealType>(l), x){9.9999995000000163e-008} and p{9.9999994999987298e-008} exceeds 1.11022e-012%
-../../../../../../boost-sandbox/libs/math_functions/test/test_exponential_dist.cpp(57): error in "test_main_caller( argc, argv )": difference between ::boost::math::quantile( exponential_distribution<RealType>(l), p){9.9999999999987131e-008} and x{9.9999999999999995e-008} exceeds 1.11022e-012%
 Tolerance for type class boost::math::concepts::real_concept is 1.11022e-012 %
-*** 4 failures detected in test suite "Test Program"
-Project : error PRJ0019: A tool returned an error code from "Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_exponential_dist.exe""
 Build Time 0:05
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_exponential\Debug\BuildLog.htm"
-test_exponential_dist - 5 error(s), 0 warning(s)
-========== Build: 0 succeeded, 1 failed, 0 up-to-date, 0 skipped ==========
+Build log was saved at "file://c:\data\boost\sandbox\boost-sandbox\libs\math_functions\IDE\math_toolkit\test_distribution\Debug\BuildLog.htm"
+test_distribution - 0 error(s), 1 warning(s)
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 
 

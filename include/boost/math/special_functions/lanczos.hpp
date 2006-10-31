@@ -98,7 +98,7 @@ struct lanczos6
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       static const T d[5] = {
          static_cast<T>(5.748142489536043490764289256167080091892L),
@@ -108,7 +108,7 @@ struct lanczos6
          static_cast<T>(0.002763134585812698552178368447708846850353L),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = dz + 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
@@ -215,7 +215,7 @@ struct lanczos11
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       static const T d[10] = {
          static_cast<T>(19.05889633808148715159575716844556056056L),
@@ -230,7 +230,7 @@ struct lanczos11
          static_cast<T>(-0.493038376656195010308610694048822561263e-7L),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = dz + 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
@@ -347,7 +347,7 @@ struct lanczos13
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       static const T d[12] = {
          static_cast<T>(26.96979819614830698367887026728396466395L),
@@ -364,7 +364,7 @@ struct lanczos13
          static_cast<T>(-0.9685385411006641478305219367315965391289e-9L),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = z = 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
@@ -526,7 +526,7 @@ struct lanczos22
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       static const T d[21] = {
          static_cast<T>(75.39272007105208086018421070699575462226L),
@@ -552,7 +552,7 @@ struct lanczos22
          static_cast<T>(0.6580207998808093935798753964580596673177e-19L),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = dz + 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
@@ -634,7 +634,7 @@ struct lanczos6m24
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       static const T d[5] = {
          static_cast<T>(0.6534966888520080645505805298901130485464L),
@@ -644,7 +644,7 @@ struct lanczos6m24
          static_cast<T>(-0.000750517993690428370380996157470900204524L),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = dz + 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
@@ -761,7 +761,7 @@ struct lanczos13m53
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       static const T d[12] = {
          static_cast<T>(6.565936202082889535528455955485877361223L),
@@ -778,7 +778,7 @@ struct lanczos13m53
          static_cast<T>(0.1009141566987569892221439918230042368112e-8L),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = dz + 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
@@ -915,7 +915,7 @@ struct lanczos17m64
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       static const T d[16] = {
          static_cast<T>(23.56409085052261327114594781581930373708L),
@@ -936,7 +936,7 @@ struct lanczos17m64
          static_cast<T>(-0.7398586479708476329563577384044188912075e-16L),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = dz + 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
@@ -1108,7 +1108,7 @@ struct lanczos24m113
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& z)
+   static T lanczos_sum_near_2(const T& dz)
    {
       static const T d[23] = {
          static_cast<T>(61.4165001061101455341808888883960361969557848005400286332291451422461117307237198559485365L),
@@ -1136,7 +1136,7 @@ struct lanczos24m113
          static_cast<T>(0.410605371184590959139968810080063542546949719163227555918846829816144878123034347778284006e-25L),
       };
       T result = 0;
-      T dz = z - 2;
+      T z = dz + 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
