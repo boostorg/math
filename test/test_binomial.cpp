@@ -1,6 +1,7 @@
 // test_binomial.cpp
 
-// Copyright Paul A. Bristow 2006.
+// Copyright John Maddock 2006.
+// Copyright  Paul A. Bristow 2006.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -85,19 +86,19 @@ void test_spot(
       // estimate success ratio:
       BOOST_CHECK_CLOSE(
          binomial_distribution<RealType>::estimate_lower_bound_on_p(
-            N, k, Q), 
+            N, k, Q),
          p, tol);
       BOOST_CHECK_CLOSE(
          binomial_distribution<RealType>::estimate_upper_bound_on_p(
-            N, k, P), 
+            N, k, P),
          p, tol);
-      
+
       if(Q < P)
       {
          BOOST_CHECK(
             binomial_distribution<RealType>::estimate_lower_bound_on_p(
                N, k, Q)
-               < 
+               <
             binomial_distribution<RealType>::estimate_upper_bound_on_p(
                N, k, Q)
                );
@@ -107,7 +108,7 @@ void test_spot(
          BOOST_CHECK(
             binomial_distribution<RealType>::estimate_lower_bound_on_p(
                N, k, P)
-               < 
+               <
             binomial_distribution<RealType>::estimate_upper_bound_on_p(
                N, k, P)
                );
@@ -117,15 +118,15 @@ void test_spot(
       //
       BOOST_CHECK_CLOSE(
          binomial_distribution<RealType>::estimate_number_of_trials(
-            k, p, P), 
+            k, p, P),
          N, tol);
       BOOST_CHECK_CLOSE(
          binomial_distribution<RealType>::estimate_number_of_trials(
-            boost::math::complement(k, p, Q)), 
+            boost::math::complement(k, p, Q)),
          N, tol);
    }
 
-   // Double check consistency of CDF and PDF by computing 
+   // Double check consistency of CDF and PDF by computing
    // the finite sum:
    RealType sum = 0;
    for(unsigned i = 0; i <= k; ++i)
@@ -233,7 +234,7 @@ void test_spots(RealType)
      static_cast<RealType>(0.75),                    // Probability of result (CDF), P
      static_cast<RealType>(0.25),                    // Q = 1 - P
      tolerance);
-  
+
   test_spot(
      static_cast<RealType>(8),                       // Sample size, N
      static_cast<RealType>(3),                       // Number of successes, k
@@ -241,7 +242,7 @@ void test_spots(RealType)
      static_cast<RealType>(0.8861846923828125),      // Probability of result (CDF), P
      static_cast<RealType>(1 - 0.8861846923828125),  // Q = 1 - P
      tolerance);
-  
+
   test_spot(
      static_cast<RealType>(8),                       // Sample size, N
      static_cast<RealType>(0),                       // Number of successes, k
@@ -249,7 +250,7 @@ void test_spots(RealType)
      static_cast<RealType>(0.1001129150390625),      // Probability of result (CDF), P
      static_cast<RealType>(1 - 0.1001129150390625),  // Q = 1 - P
      tolerance);
-  
+
   test_spot(
      static_cast<RealType>(8),                       // Sample size, N
      static_cast<RealType>(1),                       // Number of successes, k
@@ -257,7 +258,7 @@ void test_spots(RealType)
      static_cast<RealType>(0.36708068847656244),     // Probability of result (CDF), P
      static_cast<RealType>(1 - 0.36708068847656244), // Q = 1 - P
      tolerance);
-  
+
   test_spot(
      static_cast<RealType>(8),                       // Sample size, N
      static_cast<RealType>(4),                       // Number of successes, k
@@ -265,7 +266,7 @@ void test_spots(RealType)
      static_cast<RealType>(0.9727020263671875),      // Probability of result (CDF), P
      static_cast<RealType>(1 - 0.9727020263671875),  // Q = 1 - P
      tolerance);
-  
+
   test_spot(
      static_cast<RealType>(8),                       // Sample size, N
      static_cast<RealType>(7),                       // Number of successes, k
@@ -273,7 +274,7 @@ void test_spots(RealType)
      static_cast<RealType>(0.9999847412109375),      // Probability of result (CDF), P
      static_cast<RealType>(1 - 0.9999847412109375),  // Q = 1 - P
      tolerance);
-  
+
   // Tests on PDF follow:
   BOOST_CHECK_CLOSE(
      pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.75)),
@@ -282,11 +283,11 @@ void test_spots(RealType)
      tolerance);
 
   BOOST_CHECK_CLOSE(
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.5)), 
+    pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.5)),
     static_cast<RealType>(10)),  // k.
     static_cast<RealType>(0.17619705200195312500000000000000000000), // get k=10 0.049611376398388612 p = 0.25
     tolerance);
-  
+
   // Binomial pdf Test values from
   // http://www.adsciengineering.com/bpdcalc/index.php  for example
   // http://www.adsciengineering.com/bpdcalc/index.php?n=20&p=0.25&start=0&stop=20&Submit=Generate
@@ -319,65 +320,65 @@ void test_spots(RealType)
 
 
     BOOST_CHECK_CLOSE(
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)), 
+    pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)),
     static_cast<RealType>(10)),  // k.
     static_cast<RealType>(0.00992227527967770583927631378173), // k=10  p = 0.25
-    tolerance); 
-  
+    tolerance);
+
     BOOST_CHECK_CLOSE( // k = 0 use different formula - only exp so more accurate.
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)), 
+    pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)),
     static_cast<RealType>(0)),  // k.
     static_cast<RealType>(0.00317121193893399322405457496643), // k=0  p = 0.25
-    tolerance); 
+    tolerance);
 
     BOOST_CHECK_CLOSE( // k = 20 use different formula - only exp so more accurate.
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)), 
+    pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)),
     static_cast<RealType>(20)),  // k == n.
     static_cast<RealType>(0.00000000000090949470177292823791), // k=20  p = 0.25
-    tolerance); 
+    tolerance);
 
     BOOST_CHECK_CLOSE( // k = 1.
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)), 
+    pdf(binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)),
     static_cast<RealType>(1)),  // k.
     static_cast<RealType>(0.02114141292622662149369716644287), // k=1  p = 0.25
-    tolerance); 
+    tolerance);
 
     // Some exact (probably) values.
-    BOOST_CHECK_CLOSE( 
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
+    BOOST_CHECK_CLOSE(
+    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
     static_cast<RealType>(0)),  // k.
     static_cast<RealType>(0.10011291503906250000000000000000), // k=0  p = 0.25
-    tolerance); 
+    tolerance);
 
     BOOST_CHECK_CLOSE( // k = 1.
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
+    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
     static_cast<RealType>(1)),  // k.
     static_cast<RealType>(0.26696777343750000000000000000000), // k=1  p = 0.25
-    tolerance); 
+    tolerance);
 
     BOOST_CHECK_CLOSE( // k = 2.
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
+    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
     static_cast<RealType>(2)),  // k.
     static_cast<RealType>(0.31146240234375000000000000000000), // k=2  p = 0.25
-    tolerance); 
+    tolerance);
 
     BOOST_CHECK_CLOSE( // k = 3.
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
+    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
     static_cast<RealType>(3)),  // k.
     static_cast<RealType>(0.20764160156250000000000000000000), // k=3  p = 0.25
-    tolerance); 
+    tolerance);
 
     BOOST_CHECK_CLOSE( // k = 7.
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
+    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
     static_cast<RealType>(7)),  // k.
     static_cast<RealType>(0.00036621093750000000000000000000), // k=7  p = 0.25
-    tolerance); 
+    tolerance);
 
     BOOST_CHECK_CLOSE( // k = 8.
-    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)), 
+    pdf(binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
     static_cast<RealType>(8)),  // k = n.
     static_cast<RealType>(0.00001525878906250000000000000000), // k=8  p = 0.25
-    tolerance); 
+    tolerance);
 
     RealType tol2 = boost::math::tools::epsilon<RealType>() * 5 * 100;  // 5 eps as a persent
     binomial_distribution<RealType> dist(static_cast<RealType>(8), static_cast<RealType>(0.25));
@@ -544,14 +545,14 @@ void test_spots(RealType)
     }
     // n = 8, p =0.25
     //k         pdf              cdf
-    //0 0.1001129150390625 0.1001129150390625 
-    //1 0.26696777343749994 0.36708068847656244 
-    //2 0.31146240234375017 0.67854309082031261 
-    //3 0.20764160156249989 0.8861846923828125 
-    //4 0.086517333984375 0.9727020263671875 
-    //5 0.023071289062499997 0.9957733154296875 
-    //6 0.0038452148437500009 0.9996185302734375 
-    //7 0.00036621093749999984 0.9999847412109375 
+    //0 0.1001129150390625 0.1001129150390625
+    //1 0.26696777343749994 0.36708068847656244
+    //2 0.31146240234375017 0.67854309082031261
+    //3 0.20764160156249989 0.8861846923828125
+    //4 0.086517333984375 0.9727020263671875
+    //5 0.023071289062499997 0.9957733154296875
+    //6 0.0038452148437500009 0.9996185302734375
+    //7 0.00036621093749999984 0.9999847412109375
     //8 1.52587890625e-005 1 1 0
   }
 
