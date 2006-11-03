@@ -66,11 +66,6 @@ namespace detail
 
 } // namespace detail
 
-// Note all before are also in namespace detail too.
-
-// TODO move } // namespace detail to end??
-
-
 //
 // continued_fraction_b
 // Evaluates:
@@ -88,6 +83,8 @@ namespace detail
 template <class Gen>
 typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, int bits)
 {
+   using namespace std; // ADL of std names
+
    typedef detail::fraction_traits<Gen> traits;
    typedef typename traits::result_type result_type;
    typedef typename traits::value_type value_type;
@@ -123,6 +120,8 @@ typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, 
 template <class Gen>
 typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, int bits, boost::uintmax_t& max_terms)
 {
+   using namespace std; // ADL of std names
+
    typedef detail::fraction_traits<Gen> traits;
    typedef typename traits::result_type result_type;
    typedef typename traits::value_type value_type;
@@ -176,6 +175,8 @@ typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, 
 template <class Gen>
 typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, int bits)
 {
+   using namespace std; // ADL of std names
+
    typedef detail::fraction_traits<Gen> traits;
    typedef typename traits::result_type result_type;
    typedef typename traits::value_type value_type;
@@ -212,6 +213,8 @@ typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, 
 template <class Gen>
 typename detail::fraction_traits<Gen>::result_type continued_fraction_a(Gen& g, int bits, boost::uintmax_t& max_terms)
 {
+   using namespace std; // ADL of std names
+
    typedef detail::fraction_traits<Gen> traits;
    typedef typename traits::result_type result_type;
    typedef typename traits::value_type value_type;

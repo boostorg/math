@@ -29,6 +29,7 @@ run test_extreme_value.cpp ;
 run test_factorials.cpp ;
 run test_fisher_f.cpp ;
 run test_gamma.cpp ;
+run test_gamma_dist.cpp ;
 run test_ibeta.cpp ;
 run test_ibeta_inv.cpp ;
 run test_ibeta_inv_ab.cpp ;
@@ -37,6 +38,7 @@ run test_igamma_inv.cpp ;
 run test_igamma_inva.cpp ;
 run test_lognormal.cpp ;
 run test_minima.cpp ;
+run test_negative_binomial.cpp ;
 run test_normal.cpp ;
 run test_poisson.cpp ;
 run test_promotion.cpp ;
@@ -49,6 +51,9 @@ run test_toms748_solve.cpp ;
 run test_weibull.cpp ;
 
 compile distribution_concept_check.cpp ;
+compile std_real_concept_check.cpp ;
+
+
 
 
 

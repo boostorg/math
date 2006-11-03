@@ -10,7 +10,6 @@
 // http://mathworld.wolfram.com/WeibullDistribution.html
 
 #include <boost/math/special_functions/gamma.hpp>
-#include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/complement.hpp>
 
@@ -19,12 +18,12 @@ namespace boost{ namespace math{
 namespace detail{
 
 template <class RealType>
-bool check_weibull_shape(
+bool check_gamma_shape(
       const char* function,
       RealType shape,
       RealType* result)
 {
-   if((shape < 0) || !(boost::math::isfinite)(shape))
+   if((shape <= 0) || !(boost::math::isfinite)(shape))
    {
       *result = tools::domain_error<RealType>(
          function,
@@ -35,7 +34,7 @@ bool check_weibull_shape(
 }
 
 template <class RealType>
-bool check_weibull_x(
+bool check_gamma_x(
       const char* function,
       RealType const& x,
       RealType* result)
@@ -51,28 +50,28 @@ bool check_weibull_x(
 }
 
 template <class RealType>
-inline bool check_weibull(
+inline bool check_gamma(
       const char* function,
       RealType scale,
       RealType shape,
       RealType* result)
 {
-   return check_scale(function, scale, result) && check_weibull_shape(function, shape, result);
+   return check_scale(function, scale, result) && check_gamma_shape(function, shape, result);
 }
 
 } // namespace detail
 
 template <class RealType = double>
-class weibull_distribution
+class gamma_distribution
 {
 public:
    typedef RealType value_type;
 
-   weibull_distribution(RealType shape, RealType scale = 1)
+   gamma_distribution(RealType shape, RealType scale = 1)
       : m_shape(shape), m_scale(scale)
    {
       RealType result;
-      detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result);
+      detail::check_gamma(BOOST_CURRENT_FUNCTION, scale, shape, &result);
    }
 
    RealType shape()const
@@ -92,10 +91,8 @@ private:
    RealType m_scale;     // distribution scale
 };
 
-typedef weibull_distribution<double> weibull;
-
 template <class RealType>
-RealType pdf(const weibull_distribution<RealType>& dist, const RealType& x)
+RealType pdf(const gamma_distribution<RealType>& dist, const RealType& x)
 {
    using namespace std;  // for ADL of std functions
 
@@ -103,22 +100,21 @@ RealType pdf(const weibull_distribution<RealType>& dist, const RealType& x)
    RealType scale = dist.scale();
 
    RealType result;
-   if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   if(false == detail::check_gamma(BOOST_CURRENT_FUNCTION, scale, shape, &result))
       return result;
-   if(false == detail::check_weibull_x(BOOST_CURRENT_FUNCTION, x, &result))
+   if(false == detail::check_gamma_x(BOOST_CURRENT_FUNCTION, x, &result))
       return result;
 
    if(x == 0)
       return 0;
 
-   result = exp(-pow(x / scale, shape));
-   result *= pow(x / scale, shape) * shape / x;
+   result = gamma_P_derivative(shape, x / scale) / scale;
 
    return result;
 }
 
 template <class RealType>
-inline RealType cdf(const weibull_distribution<RealType>& dist, const RealType& x)
+inline RealType cdf(const gamma_distribution<RealType>& dist, const RealType& x)
 {
    using namespace std;  // for ADL of std functions
 
@@ -126,18 +122,18 @@ inline RealType cdf(const weibull_distribution<RealType>& dist, const RealType& 
    RealType scale = dist.scale();
 
    RealType result;
-   if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   if(false == detail::check_gamma(BOOST_CURRENT_FUNCTION, scale, shape, &result))
       return result;
-   if(false == detail::check_weibull_x(BOOST_CURRENT_FUNCTION, x, &result))
+   if(false == detail::check_gamma_x(BOOST_CURRENT_FUNCTION, x, &result))
       return result;
 
-   result = -boost::math::expm1(-pow(x / scale, shape));
+   result = boost::math::gamma_P(shape, x / scale);
 
    return result;
 }
 
 template <class RealType>
-RealType quantile(const weibull_distribution<RealType>& dist, const RealType& p)
+RealType quantile(const gamma_distribution<RealType>& dist, const RealType& p)
 {
    using namespace std;  // for ADL of std functions
 
@@ -145,7 +141,7 @@ RealType quantile(const weibull_distribution<RealType>& dist, const RealType& p)
    RealType scale = dist.scale();
 
    RealType result;
-   if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   if(false == detail::check_gamma(BOOST_CURRENT_FUNCTION, scale, shape, &result))
       return result;
    if(false == detail::check_probability(BOOST_CURRENT_FUNCTION, p, &result))
       return result;
@@ -153,13 +149,13 @@ RealType quantile(const weibull_distribution<RealType>& dist, const RealType& p)
    if(p == 1)
       return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
 
-   result = scale * pow(-boost::math::log1p(-p), 1 / shape);
+   result = gamma_P_inv(shape, p) * scale;
 
    return result;
 }
 
 template <class RealType>
-RealType cdf(const complemented2_type<weibull_distribution<RealType>, RealType>& c)
+RealType cdf(const complemented2_type<gamma_distribution<RealType>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 
@@ -167,18 +163,18 @@ RealType cdf(const complemented2_type<weibull_distribution<RealType>, RealType>&
    RealType scale = c.dist.scale();
 
    RealType result;
-   if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   if(false == detail::check_gamma(BOOST_CURRENT_FUNCTION, scale, shape, &result))
       return result;
-   if(false == detail::check_weibull_x(BOOST_CURRENT_FUNCTION, c.param, &result))
+   if(false == detail::check_gamma_x(BOOST_CURRENT_FUNCTION, c.param, &result))
       return result;
 
-   result = exp(-pow(c.param / scale, shape));
+   result = gamma_Q(shape, c.param / scale);
 
    return result;
 }
 
 template <class RealType>
-RealType quantile(const complemented2_type<weibull_distribution<RealType>, RealType>& c)
+RealType quantile(const complemented2_type<gamma_distribution<RealType>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 
@@ -187,7 +183,7 @@ RealType quantile(const complemented2_type<weibull_distribution<RealType>, RealT
    RealType q = c.param;
 
    RealType result;
-   if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   if(false == detail::check_gamma(BOOST_CURRENT_FUNCTION, scale, shape, &result))
       return result;
    if(false == detail::check_probability(BOOST_CURRENT_FUNCTION, q, &result))
       return result;
@@ -195,13 +191,13 @@ RealType quantile(const complemented2_type<weibull_distribution<RealType>, RealT
    if(q == 0)
       return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
 
-   result = scale * pow(-log(q), 1 / shape);
+   result = gamma_Q_inv(shape, q) * scale;
 
    return result;
 }
 
 template <class RealType>
-inline RealType mean(const weibull_distribution<RealType>& dist)
+inline RealType mean(const gamma_distribution<RealType>& dist)
 {
    using namespace std;  // for ADL of std functions
 
@@ -209,15 +205,15 @@ inline RealType mean(const weibull_distribution<RealType>& dist)
    RealType scale = dist.scale();
 
    RealType result;
-   if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   if(false == detail::check_gamma(BOOST_CURRENT_FUNCTION, scale, shape, &result))
       return result;
 
-   result = scale * boost::math::tgamma(1 + 1 / shape);
+   result = shape * scale;
    return result;
 }
 
 template <class RealType>
-RealType variance(const weibull_distribution<RealType>& dist)
+RealType variance(const gamma_distribution<RealType>& dist)
 {
    using namespace std;  // for ADL of std functions
 
@@ -225,18 +221,15 @@ RealType variance(const weibull_distribution<RealType>& dist)
    RealType scale = dist.scale();
 
    RealType result;
-   if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   if(false == detail::check_gamma(BOOST_CURRENT_FUNCTION, scale, shape, &result))
       return result;
 
-   result = boost::math::tgamma(1 + 1 / shape);
-   result *= -result;
-   result += boost::math::tgamma(1 + 2 / shape);
-   result *= scale * scale;
+   result = shape * scale * scale;
    return result;
 }
 
 template <class RealType>
-inline RealType mode(const weibull_distribution<RealType>& dist)
+inline RealType mode(const gamma_distribution<RealType>& dist)
 {
    using namespace std;  // for ADL of std functions
 
@@ -244,15 +237,21 @@ inline RealType mode(const weibull_distribution<RealType>& dist)
    RealType scale = dist.scale();
 
    RealType result;
-   if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   if(false == detail::check_gamma(BOOST_CURRENT_FUNCTION, scale, shape, &result))
       return result;
 
-   result = scale * pow((shape - 1) / shape, 1 / shape);
+   if(shape < 1)
+      return tools::domain_error<RealType>(
+         BOOST_CURRENT_FUNCTION,
+         "The mode of the gamma distribution is only defined for values of the shape parameter >= 1, but got %1%.",
+         shape);
+
+   result = (shape - 1) * scale;
    return result;
 }
 
 template <class RealType>
-inline RealType skewness(const weibull_distribution<RealType>& dist)
+inline RealType skewness(const gamma_distribution<RealType>& dist)
 {
    using namespace std;  // for ADL of std functions
 
@@ -260,22 +259,15 @@ inline RealType skewness(const weibull_distribution<RealType>& dist)
    RealType scale = dist.scale();
 
    RealType result;
-   if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   if(false == detail::check_gamma(BOOST_CURRENT_FUNCTION, scale, shape, &result))
       return result;
 
-   RealType g1, g2, g3, d;
-
-   g1 = boost::math::tgamma(1 + 1 / shape);
-   g2 = boost::math::tgamma(1 + 2 / shape);
-   g3 = boost::math::tgamma(1 + 3 / shape);
-   d = pow(g2 - g1 * g1, RealType(1.5));
-
-   result = (2 * g1 * g1 * g1 - 3 * g1 * g2 + g3) / d;
+   result = 2 / sqrt(shape);
    return result;
 }
 
 template <class RealType>
-inline RealType kurtosis_excess(const weibull_distribution<RealType>& dist)
+inline RealType kurtosis_excess(const gamma_distribution<RealType>& dist)
 {
    using namespace std;  // for ADL of std functions
 
@@ -283,27 +275,15 @@ inline RealType kurtosis_excess(const weibull_distribution<RealType>& dist)
    RealType scale = dist.scale();
 
    RealType result;
-   if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   if(false == detail::check_gamma(BOOST_CURRENT_FUNCTION, scale, shape, &result))
       return result;
 
-   RealType g1, g2, g3, g4, d, g1_2, g1_4;
-
-   g1 = boost::math::tgamma(1 + 1 / shape);
-   g2 = boost::math::tgamma(1 + 2 / shape);
-   g3 = boost::math::tgamma(1 + 3 / shape);
-   g4 = boost::math::tgamma(1 + 4 / shape);
-   g1_2 = g1 * g1;
-   g1_4 = g1_2 * g1_2;
-   d = g2 - g1_2;
-   d *= d;
-
-   result = -6 * g1_4 + 12 * g1_2 * g2 - 3 * g2 * g2 - 4 * g1 * g3 + g4;
-   result /= d;
+   result = 6 / shape;
    return result;
 }
 
 template <class RealType>
-inline RealType kurtosis(const weibull_distribution<RealType>& dist)
+inline RealType kurtosis(const gamma_distribution<RealType>& dist)
 {
    return kurtosis_excess(dist) + 3;
 }

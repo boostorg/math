@@ -282,6 +282,7 @@ inline RealType mode(const fisher_f_distribution<RealType>& dist)
 template <class RealType>
 inline RealType skewness(const fisher_f_distribution<RealType>& dist)
 {
+   using namespace std; // ADL of std names
    // See http://mathworld.wolfram.com/F-Distribution.html
    RealType df1 = dist.degrees_of_freedom1();
    RealType df2 = dist.degrees_of_freedom2();

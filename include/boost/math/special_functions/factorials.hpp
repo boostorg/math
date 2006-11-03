@@ -126,6 +126,7 @@ T rising_factorial(T x, int n)
 template <class T>
 inline T falling_factorial(T x, unsigned n)
 {
+   using namespace std; // ADL of std names
    if(x == 0)
       return 0;
    if(x < 0)

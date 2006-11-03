@@ -780,6 +780,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
 template <class T>
 T binomial_ccdf(T n, T k, T x, T y)
 {
+   using namespace std; // ADL of std names
    T result = pow(x, n);
    T term = result;
    for(unsigned i = tools::real_cast<unsigned>(n - 1); i > k; --i)

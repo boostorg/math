@@ -70,6 +70,7 @@ inline T igamma_temme_large(T, T, mpl::int_<0> const *)
 template <class T>
 T igamma_temme_large(T a, T x, mpl::int_<64> const *)
 {
+   using namespace std; // ADL of std functions
    T sigma = (x - a) / a;
    T phi = -log1pmx(sigma);
    T y = a * phi;
@@ -263,7 +264,7 @@ T igamma_temme_large(T a, T x, mpl::int_<64> const *)
    if(x < a)
       result = -result;
 
-   result += erfc(sqrt(y)) / 2;
+   result += boost::math::erfc(sqrt(y)) / 2;
 
    return result;
 }
@@ -274,6 +275,7 @@ T igamma_temme_large(T a, T x, mpl::int_<64> const *)
 template <class T>
 T igamma_temme_large(T a, T x, mpl::int_<53> const *)
 {
+   using namespace std; // ADL of std functions
    T sigma = (x - a) / a;
    T phi = -log1pmx(sigma);
    T y = a * phi;
@@ -404,7 +406,7 @@ T igamma_temme_large(T a, T x, mpl::int_<53> const *)
    if(x < a)
       result = -result;
 
-   result += erfc(sqrt(y)) / 2;
+   result += boost::math::erfc(sqrt(y)) / 2;
 
    return result;
 }
@@ -415,6 +417,7 @@ T igamma_temme_large(T a, T x, mpl::int_<53> const *)
 template <class T>
 T igamma_temme_large(T a, T x, mpl::int_<24> const *)
 {
+   using namespace std; // ADL of std functions
    T sigma = (x - a) / a;
    T phi = -log1pmx(sigma);
    T y = a * phi;
@@ -456,7 +459,7 @@ T igamma_temme_large(T a, T x, mpl::int_<24> const *)
    if(x < a)
       result = -result;
 
-   result += erfc(sqrt(y)) / 2;
+   result += boost::math::erfc(sqrt(y)) / 2;
 
    return result;
 }
@@ -470,6 +473,7 @@ T igamma_temme_large(T a, T x, mpl::int_<24> const *)
 template <class T>
 T igamma_temme_large(T a, T x, mpl::int_<113> const *)
 {
+   using namespace std; // ADL of std functions
    T sigma = (x - a) / a;
    T phi = -log1pmx(sigma);
    T y = a * phi;
@@ -752,7 +756,7 @@ T igamma_temme_large(T a, T x, mpl::int_<113> const *)
    if(x < a)
       result = -result;
 
-   result += erfc(sqrt(y)) / 2;
+   result += boost::math::erfc(sqrt(y)) / 2;
 
    return result;
 }

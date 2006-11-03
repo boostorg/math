@@ -23,6 +23,8 @@ struct temme_root_finder
 
    std::tr1::tuple<T, T> operator()(T x)
    {
+      using namespace std; // ADL of std names
+
       T y = 1 - x;
       if(y == 0)
       {
@@ -51,6 +53,8 @@ private:
 template <class T>
 T temme_method_1_ibeta_inverse(T a, T b, T z)
 {
+   using namespace std; // ADL of std names
+
    const T r2 = sqrt(T(2));
    //
    // get the first approximation for eta from the inverse
@@ -127,6 +131,8 @@ T temme_method_1_ibeta_inverse(T a, T b, T z)
 template <class T>
 T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
 {
+   using namespace std; // ADL of std names
+
    //
    // Get first estimate for eta, see Eq 3.9 and 3.10,
    // but note there is a typo in Eq 3.10:
@@ -302,6 +308,8 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
 template <class T>
 T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
 {
+   using namespace std; // ADL of std names
+
    //
    // Begin by getting an initial approximation for the quantity
    // eta from the dominant part of the incomplete beta:
@@ -404,6 +412,8 @@ struct ibeta_roots
 
    std::tr1::tuple<T, T, T> operator()(T x)
    {
+      using namespace std; // ADL of std names
+
       BOOST_FPU_EXCEPTION_GUARD
       T f = ibeta_imp(a, b, x, L(), invert, true) - target;
       T f1 = invert ?

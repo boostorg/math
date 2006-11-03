@@ -958,6 +958,7 @@ template <class T, class Tag>
 T tgammap1m1_imp(T dz, Tag const& tag,
                  const ::boost::math::lanczos::undefined_lanczos& l)
 {
+   using namespace std; // ADL of std names
    //
    // There should be a better solution than this, but the
    // algebra isn't easy for the general case....
@@ -1270,7 +1271,7 @@ T finite_half_gamma_Q(T a, T x)
    // Calculates normalised Q when a is a half-integer:
    //
    using namespace std;
-   T e = erfc(sqrt(x));
+   T e = boost::math::erfc(sqrt(x));
    if((e != 0) && (a > 1))
    {
       T term = exp(-x) / sqrt(constants::pi<T>() * x);

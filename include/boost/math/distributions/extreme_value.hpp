@@ -157,7 +157,7 @@ RealType quantile(const complemented2_type<extreme_value_distribution<RealType>,
    if(q == 1)
       return -tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
 
-   result = a - log(-log1p(-q)) * b;
+   result = a - log(-boost::math::log1p(-q)) * b;
 
    return result;
 }

@@ -139,13 +139,13 @@ void test_spots(T)
       static_cast<T>(-9.76168312768123676601980433377916854311706629232503473758698e26L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::rising_factorial(static_cast<T>(-30.25), -21),
-      static_cast<T>(-1.50079704000923674318934280259377728203516775215430875839823e-34), tolerance);
+      static_cast<T>(-1.50079704000923674318934280259377728203516775215430875839823e-34L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::rising_factorial(static_cast<T>(-30.25), 5),
       static_cast<T>(-1.78799177197265625000000e7L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::rising_factorial(static_cast<T>(-30.25), -5),
-      static_cast<T>(-2.47177487004482195012362027432181137141899692171397467859150e-8), tolerance);
+      static_cast<T>(-2.47177487004482195012362027432181137141899692171397467859150e-8L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::rising_factorial(static_cast<T>(-30.25), 6),
       static_cast<T>(4.5146792242309570312500000e8L), tolerance);
@@ -208,13 +208,13 @@ void test_spots(T)
    if(boost::math::tools::digits<T>() > 50)
    {
       BOOST_CHECK_CLOSE(
-         ::boost::math::falling_factorial(static_cast<T>(-30.75), 30),
+         ::boost::math::falling_factorial(static_cast<T>(-30.75L), 30),
          static_cast<T>(naive_falling_factorial(-30.75L, 30)),
-         tolerance);
+         tolerance * 3);
       BOOST_CHECK_CLOSE(
-         ::boost::math::falling_factorial(static_cast<T>(-30.75), 27),
+         ::boost::math::falling_factorial(static_cast<T>(-30.75L), 27),
          static_cast<T>(naive_falling_factorial(-30.75L, 27)),
-         tolerance);
+         tolerance * 3);
    }
    BOOST_CHECK_CLOSE(
       ::boost::math::falling_factorial(static_cast<T>(-12.0), 6),

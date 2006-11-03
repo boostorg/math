@@ -1163,7 +1163,25 @@ template <class T>
 struct lanczos_traits
 {
    typedef T value_type;
-   typedef undefined_lanczos evaluation_type;
+   // typedef undefined_lanczos evaluation_type;
+   typedef typename mpl::if_c<
+      (std::numeric_limits<T>::is_specialized == 0)
+      || (std::numeric_limits<T>::digits > 113),
+      undefined_lanczos,
+      typename mpl::if_c<
+         std::numeric_limits<T>::digits <= 24,
+         lanczos6m24,
+         typename mpl::if_c<
+            std::numeric_limits<T>::digits <= 53,
+            lanczos13m53,
+            typename mpl::if_c<
+               std::numeric_limits<T>::digits <= 64,
+               lanczos17m64,
+               lanczos24m113
+            >::type
+         >::type
+      >::type
+   >::type evaluation_type;
 };
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS

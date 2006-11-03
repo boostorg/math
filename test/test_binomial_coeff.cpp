@@ -60,7 +60,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*large.*",                   // test data group
-      ".*", 50, 20);                 // test function
+      ".*", 70, 20);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -74,7 +74,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*",                          // test data group
-      ".*", 50, 30);                 // test function
+      ".*", 100, 30);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

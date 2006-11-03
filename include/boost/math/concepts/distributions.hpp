@@ -97,7 +97,7 @@ struct DistributionConcept
       function_requires<CopyConstructibleConcept<Distribution> >();
       function_requires<AssignableConcept<Distribution> >();
 
-      typedef Distribution::value_type value_type;
+      typedef typename Distribution::value_type value_type;
 
       const Distribution& dist = DistributionConcept<Distribution>::get_object();
 

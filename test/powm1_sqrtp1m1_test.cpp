@@ -48,7 +48,7 @@ void expected_results()
       ".*",                          // platform
       ".*",                          // test type(s)
       ".*",                          // test data group
-      ".*", 3, 2);                   // test function
+      ".*", 5, 2);                   // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
