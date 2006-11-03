@@ -8,7 +8,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
-//  02 Nov 2006  Change to Boost.Test's unit test system
+//  03 Nov 2006  Use custom numeric types (Daryle Walker)
+//  02 Nov 2006  Change to Boost.Test's unit test system (Daryle Walker)
 //  07 Nov 2001  Initial version (Daryle Walker)
 
 #define BOOST_TEST_MAIN  "Boost.Math GCD & LCM unit tests"
@@ -16,29 +17,211 @@
 #include <boost/config.hpp>              // for BOOST_MSVC
 #include <boost/math/common_factor.hpp>  // for boost::math::gcd, etc.
 #include <boost/mpl/list.hpp>            // for boost::mpl::list
+#include <boost/operators.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_case_template.hpp>
+
+#include <istream>  // for std::basic_istream
+#include <limits>   // for std::numeric_limits
+#include <ostream>  // for std::basic_ostream
 
 
 namespace {
 
-// TODO: add new signed and unsigned types here, with and without numeric_limits
-// specialization; add polynominal/non-real type; especially after any switch to
-// the binary-GCD algorithm for built-in types
+// TODO: add polynominal/non-real type; especially after any switch to the
+// binary-GCD algorithm for built-in types
+
+// Custom integer class (template)
+template < typename IntType, int ID = 0 >
+class my_wrapped_integer
+    : private ::boost::shiftable1<my_wrapped_integer<IntType, ID>,
+        ::boost::operators<my_wrapped_integer<IntType, ID> > >
+{
+    // Helper type-aliases
+    typedef my_wrapped_integer    self_type;
+    typedef IntType self_type::*  bool_type;
+
+    // Member data
+    IntType  v_;
+
+public:
+    // Template parameters
+    typedef IntType  int_type;
+
+    static  int const  id = ID;
+
+    // Lifetime management (use automatic destructor and copy constructor)
+    my_wrapped_integer( int_type const &v = int_type() )  : v_( v )  {}
+
+    // Accessors
+    int_type  value() const  { return this->v_; }
+
+    // Operators (use automatic copy assignment)
+    operator bool_type() const  { return this->v_ ? &self_type::v_ : 0; }
+
+    self_type &  operator ++()  { ++this->v_; return *this; }
+    self_type &  operator --()  { --this->v_; return *this; }
+
+    self_type  operator ~() const  { return self_type( ~this->v_ ); }
+    self_type  operator !() const  { return self_type( !this->v_ ); }
+    self_type  operator +() const  { return self_type( +this->v_ ); }
+    self_type  operator -() const  { return self_type( -this->v_ ); }
+
+    bool  operator  <( self_type const &r ) const  { return this->v_ < r.v_; }
+    bool  operator ==( self_type const &r ) const  { return this->v_ == r.v_; }
+
+    self_type &operator *=(self_type const &r) {this->v_ *= r.v_; return *this;}
+    self_type &operator /=(self_type const &r) {this->v_ /= r.v_; return *this;}
+    self_type &operator %=(self_type const &r) {this->v_ %= r.v_; return *this;}
+    self_type &operator +=(self_type const &r) {this->v_ += r.v_; return *this;}
+    self_type &operator -=(self_type const &r) {this->v_ -= r.v_; return *this;}
+    self_type &operator<<=(self_type const &r){this->v_ <<= r.v_; return *this;}
+    self_type &operator>>=(self_type const &r){this->v_ >>= r.v_; return *this;}
+    self_type &operator &=(self_type const &r) {this->v_ &= r.v_; return *this;}
+    self_type &operator |=(self_type const &r) {this->v_ |= r.v_; return *this;}
+    self_type &operator ^=(self_type const &r) {this->v_ ^= r.v_; return *this;}
+
+    // Input & output
+    template < typename Ch, class Tr >
+    friend  std::basic_istream<Ch, Tr> &
+    operator >>( std::basic_istream<Ch, Tr> &i, self_type &x )
+    { return i >> x.v_; }
+
+    template < typename Ch, class Tr >
+    friend  std::basic_ostream<Ch, Tr> &
+    operator <<( std::basic_ostream<Ch, Tr> &o, self_type const &x )
+    { return o << x.v_; }
+
+};  // my_wrapped_integer
+
+template < typename IntType, int ID >
+my_wrapped_integer<IntType, ID>  abs( my_wrapped_integer<IntType, ID> const &x )
+{ return ( x < my_wrapped_integer<IntType, ID>(0) ) ? -x : +x; }
+
+typedef my_wrapped_integer<int>          MyInt1;
+typedef my_wrapped_integer<unsigned>     MyUnsigned1;
+typedef my_wrapped_integer<int, 1>       MyInt2;
+typedef my_wrapped_integer<unsigned, 1>  MyUnsigned2;
 
 // Various types to test with each GCD/LCM
 typedef ::boost::mpl::list<short, int, long>  builtin_signed_test_types;
 typedef ::boost::mpl::list<unsigned short, unsigned, unsigned long>
   builtin_unsigned_test_types;
 
+typedef ::boost::mpl::list<short, int, long, MyInt1>  signed_test_types;
+typedef ::boost::mpl::list<unsigned short, unsigned, unsigned long, MyUnsigned1,
+ MyUnsigned2>  unsigned_test_types;
+
 }  // namespace
+
+
+// Specialize numeric_limits for _some_ of our types
+namespace std
+{
+
+template < >
+class numeric_limits< MyInt1 >
+{
+    typedef MyInt1::int_type             int_type;
+    typedef numeric_limits<int_type>  limits_type;
+
+public:
+    static const bool is_specialized = limits_type::is_specialized;
+
+    static MyInt1 min() throw()  { return limits_type::min(); }
+    static MyInt1 max() throw()  { return limits_type::max(); }
+
+    static const int digits      = limits_type::digits;
+    static const int digits10    = limits_type::digits10;
+    static const bool is_signed  = limits_type::is_signed;
+    static const bool is_integer = limits_type::is_integer;
+    static const bool is_exact   = limits_type::is_exact;
+    static const int radix       = limits_type::radix;
+    static MyInt1 epsilon() throw()      { return limits_type::epsilon(); }
+    static MyInt1 round_error() throw()  { return limits_type::round_error(); }
+
+    static const int min_exponent   = limits_type::min_exponent;
+    static const int min_exponent10 = limits_type::min_exponent10;
+    static const int max_exponent   = limits_type::max_exponent;
+    static const int max_exponent10 = limits_type::max_exponent10;
+
+    static const bool has_infinity             = limits_type::has_infinity;
+    static const bool has_quiet_NaN            = limits_type::has_quiet_NaN;
+    static const bool has_signaling_NaN        = limits_type::has_signaling_NaN;
+    static const float_denorm_style has_denorm = limits_type::has_denorm;
+    static const bool has_denorm_loss          = limits_type::has_denorm_loss;
+
+    static MyInt1 infinity() throw()      { return limits_type::infinity(); }
+    static MyInt1 quiet_NaN() throw()     { return limits_type::quiet_NaN(); }
+    static MyInt1 signaling_NaN() throw() {return limits_type::signaling_NaN();}
+    static MyInt1 denorm_min() throw()    { return limits_type::denorm_min(); }
+
+    static const bool is_iec559  = limits_type::is_iec559;
+    static const bool is_bounded = limits_type::is_bounded;
+    static const bool is_modulo  = limits_type::is_modulo;
+
+    static const bool traps                    = limits_type::traps;
+    static const bool tinyness_before          = limits_type::tinyness_before;
+    static const float_round_style round_style = limits_type::round_style;
+
+};  // std::numeric_limits<MyInt1>
+
+template < >
+class numeric_limits< MyUnsigned1 >
+{
+    typedef MyUnsigned1::int_type        int_type;
+    typedef numeric_limits<int_type>  limits_type;
+
+public:
+    static const bool is_specialized = limits_type::is_specialized;
+
+    static MyUnsigned1 min() throw()  { return limits_type::min(); }
+    static MyUnsigned1 max() throw()  { return limits_type::max(); }
+
+    static const int digits      = limits_type::digits;
+    static const int digits10    = limits_type::digits10;
+    static const bool is_signed  = limits_type::is_signed;
+    static const bool is_integer = limits_type::is_integer;
+    static const bool is_exact   = limits_type::is_exact;
+    static const int radix       = limits_type::radix;
+    static MyUnsigned1 epsilon() throw()      { return limits_type::epsilon(); }
+    static MyUnsigned1 round_error() throw(){return limits_type::round_error();}
+
+    static const int min_exponent   = limits_type::min_exponent;
+    static const int min_exponent10 = limits_type::min_exponent10;
+    static const int max_exponent   = limits_type::max_exponent;
+    static const int max_exponent10 = limits_type::max_exponent10;
+
+    static const bool has_infinity             = limits_type::has_infinity;
+    static const bool has_quiet_NaN            = limits_type::has_quiet_NaN;
+    static const bool has_signaling_NaN        = limits_type::has_signaling_NaN;
+    static const float_denorm_style has_denorm = limits_type::has_denorm;
+    static const bool has_denorm_loss          = limits_type::has_denorm_loss;
+
+    static MyUnsigned1 infinity() throw()    { return limits_type::infinity(); }
+    static MyUnsigned1 quiet_NaN() throw()  { return limits_type::quiet_NaN(); }
+    static MyUnsigned1 signaling_NaN() throw()
+        { return limits_type::signaling_NaN(); }
+    static MyUnsigned1 denorm_min() throw(){ return limits_type::denorm_min(); }
+
+    static const bool is_iec559  = limits_type::is_iec559;
+    static const bool is_bounded = limits_type::is_bounded;
+    static const bool is_modulo  = limits_type::is_modulo;
+
+    static const bool traps                    = limits_type::traps;
+    static const bool tinyness_before          = limits_type::tinyness_before;
+    static const float_round_style round_style = limits_type::round_style;
+
+};  // std::numeric_limits<MyUnsigned1>
+
+}  // namespace std
 
 
 // GCD tests
 BOOST_AUTO_TEST_SUITE( gcd_test_suite )
 
-// GCD on built-in signed integer types
-BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_int_test, T, builtin_signed_test_types )
+// GCD on signed integer types
+BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_int_test, T, signed_test_types )
 {
 #ifndef BOOST_MSVC
     using boost::math::gcd;
@@ -65,8 +248,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_int_test, T, builtin_signed_test_types )
     BOOST_CHECK_EQUAL( gcd<T>(  7,  49), static_cast<T>( 7) );
 }
 
-// GCD on built-in unsigned integer types
-BOOST_AUTO_TEST_CASE_TEMPLATE(gcd_unsigned_test, T, builtin_unsigned_test_types)
+// GCD on unmarked signed integer type
+BOOST_AUTO_TEST_CASE( gcd_unmarked_int_test )
 {
 #ifndef BOOST_MSVC
     using boost::math::gcd;
@@ -74,14 +257,47 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(gcd_unsigned_test, T, builtin_unsigned_test_types)
     using namespace boost::math;
 #endif
 
-    BOOST_CHECK_EQUAL( gcd<T>(  1u,   1u), static_cast<T>( 1u) );
-    BOOST_CHECK_EQUAL( gcd<T>(  0u,   0u), static_cast<T>( 0u) );
-    BOOST_CHECK_EQUAL( gcd<T>(  7u,   0u), static_cast<T>( 7u) );
-    BOOST_CHECK_EQUAL( gcd<T>(  0u,   9u), static_cast<T>( 9u) );
-    BOOST_CHECK_EQUAL( gcd<T>( 42u,  30u), static_cast<T>( 6u) );
-    BOOST_CHECK_EQUAL( gcd<T>(  3u,   7u), static_cast<T>( 1u) );
-    BOOST_CHECK_EQUAL( gcd<T>(  8u,   9u), static_cast<T>( 1u) );
-    BOOST_CHECK_EQUAL( gcd<T>(  7u,  49u), static_cast<T>( 7u) );
+    // The regular signed-integer GCD function performs the unsigned version,
+    // then does an absolute-value on the result.  Signed types that are not
+    // marked as such (due to no std::numeric_limits specialization) may be off
+    // by a sign.
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   1,  -1 )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(  -1,   1 )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   1,   1 )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(  -1,  -1 )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   0,   0 )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   7,   0 )), MyInt2( 7) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   0,   9 )), MyInt2( 9) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(  -7,   0 )), MyInt2( 7) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   0,  -9 )), MyInt2( 9) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(  42,  30 )), MyInt2( 6) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   6,  -9 )), MyInt2( 3) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>( -10, -10 )), MyInt2(10) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>( -25, -10 )), MyInt2( 5) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   3,   7 )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   8,   9 )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   7,  49 )), MyInt2( 7) );
+}
+
+// GCD on unsigned integer types
+BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_unsigned_test, T, unsigned_test_types )
+{
+#ifndef BOOST_MSVC
+    using boost::math::gcd;
+#else
+    using namespace boost::math;
+#endif
+
+    // Note that unmarked types (i.e. have no std::numeric_limits
+    // specialization) are treated like non/unsigned types
+    BOOST_CHECK_EQUAL( gcd<T>( 1u,   1u), static_cast<T>( 1u) );
+    BOOST_CHECK_EQUAL( gcd<T>( 0u,   0u), static_cast<T>( 0u) );
+    BOOST_CHECK_EQUAL( gcd<T>( 7u,   0u), static_cast<T>( 7u) );
+    BOOST_CHECK_EQUAL( gcd<T>( 0u,   9u), static_cast<T>( 9u) );
+    BOOST_CHECK_EQUAL( gcd<T>(42u,  30u), static_cast<T>( 6u) );
+    BOOST_CHECK_EQUAL( gcd<T>( 3u,   7u), static_cast<T>( 1u) );
+    BOOST_CHECK_EQUAL( gcd<T>( 8u,   9u), static_cast<T>( 1u) );
+    BOOST_CHECK_EQUAL( gcd<T>( 7u,  49u), static_cast<T>( 7u) );
 }
 
 // GCD at compile-time
@@ -115,8 +331,8 @@ BOOST_AUTO_TEST_SUITE_END()
 // LCM tests
 BOOST_AUTO_TEST_SUITE( lcm_test_suite )
 
-// LCM on built-in signed integer types
-BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_int_test, T, builtin_signed_test_types )
+// LCM on signed integer types
+BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_int_test, T, signed_test_types )
 {
 #ifndef BOOST_MSVC
     using boost::math::lcm;
@@ -143,8 +359,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_int_test, T, builtin_signed_test_types )
     BOOST_CHECK_EQUAL( lcm<T>(  7,  49), static_cast<T>(49) );
 }
 
-// LCM on built-in unsigned integer types
-BOOST_AUTO_TEST_CASE_TEMPLATE(lcm_unsigned_test, T, builtin_unsigned_test_types)
+// LCM on unmarked signed integer type
+BOOST_AUTO_TEST_CASE( lcm_unmarked_int_test )
 {
 #ifndef BOOST_MSVC
     using boost::math::lcm;
@@ -152,14 +368,47 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(lcm_unsigned_test, T, builtin_unsigned_test_types)
     using namespace boost::math;
 #endif
 
-    BOOST_CHECK_EQUAL( lcm<T>(  1u,   1u), static_cast<T>( 1u) );
-    BOOST_CHECK_EQUAL( lcm<T>(  0u,   0u), static_cast<T>( 0u) );
-    BOOST_CHECK_EQUAL( lcm<T>(  6u,   0u), static_cast<T>( 0u) );
-    BOOST_CHECK_EQUAL( lcm<T>(  0u,   7u), static_cast<T>( 0u) );
-    BOOST_CHECK_EQUAL( lcm<T>( 18u,  30u), static_cast<T>(90u) );
-    BOOST_CHECK_EQUAL( lcm<T>(  3u,   7u), static_cast<T>(21u) );
-    BOOST_CHECK_EQUAL( lcm<T>(  8u,   9u), static_cast<T>(72u) );
-    BOOST_CHECK_EQUAL( lcm<T>(  7u,  49u), static_cast<T>(49u) );
+    // The regular signed-integer LCM function performs the unsigned version,
+    // then does an absolute-value on the result.  Signed types that are not
+    // marked as such (due to no std::numeric_limits specialization) may be off
+    // by a sign.
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   1,  -1 )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  -1,   1 )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   1,   1 )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  -1,  -1 )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   0,   0 )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   6,   0 )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   0,   7 )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  -5,   0 )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   0,  -4 )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  18,  30 )), MyInt2(90) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  -6,   9 )), MyInt2(18) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>( -10, -10 )), MyInt2(10) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  25, -10 )), MyInt2(50) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   3,   7 )), MyInt2(21) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   8,   9 )), MyInt2(72) );
+    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   7,  49 )), MyInt2(49) );
+}
+
+// LCM on unsigned integer types
+BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_unsigned_test, T, unsigned_test_types )
+{
+#ifndef BOOST_MSVC
+    using boost::math::lcm;
+#else
+    using namespace boost::math;
+#endif
+
+    // Note that unmarked types (i.e. have no std::numeric_limits
+    // specialization) are treated like non/unsigned types
+    BOOST_CHECK_EQUAL( lcm<T>( 1u,   1u), static_cast<T>( 1u) );
+    BOOST_CHECK_EQUAL( lcm<T>( 0u,   0u), static_cast<T>( 0u) );
+    BOOST_CHECK_EQUAL( lcm<T>( 6u,   0u), static_cast<T>( 0u) );
+    BOOST_CHECK_EQUAL( lcm<T>( 0u,   7u), static_cast<T>( 0u) );
+    BOOST_CHECK_EQUAL( lcm<T>(18u,  30u), static_cast<T>(90u) );
+    BOOST_CHECK_EQUAL( lcm<T>( 3u,   7u), static_cast<T>(21u) );
+    BOOST_CHECK_EQUAL( lcm<T>( 8u,   9u), static_cast<T>(72u) );
+    BOOST_CHECK_EQUAL( lcm<T>( 7u,  49u), static_cast<T>(49u) );
 }
 
 // LCM at compile-time
