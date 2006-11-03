@@ -7,7 +7,7 @@
 import testing ;
 
 run ../test/common_factor_test.cpp
-    ../../test/build//boost_test_exec_monitor ;
+    ../../test/build//boost_unit_test_framework ;
 
 run ../octonion/octonion_test.cpp
     ../../test/build//boost_unit_test_framework ;
