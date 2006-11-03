@@ -18,6 +18,7 @@
 // (independent, yes or no, succeed or fail) with success_fraction probability p,
 // negative_binomial is the probability that k or fewer failures
 // preceed the r th trial's success.
+// random variable k is the number of failures NOT the probability.
 
 // Negative_binomial distribution is a discrete probability distribution.
 // But note that the negative binomial distribution
@@ -31,7 +32,9 @@
 
 // MATHCAD cumulative negative binomial pnbinom(k, n, p)
 
-// random variable x is the number of success NOT the probability.
+// Implementation note: much greater speed and perhaps greater accuracy
+// might be achieved for extreme values by using a normal approximation.
+// This is NOT been tested or implemented.
 
 #ifndef BOOST_MATH_SPECIAL_NEGATIVE_BINOMIAL_HPP
 #define BOOST_MATH_SPECIAL_NEGATIVE_BINOMIAL_HPP
@@ -190,7 +193,7 @@ namespace boost
 
       // Estimate number of failures parameter:  
       //
-      // "How many failures do I need to be P% sure of seeing k successes?"  
+      // "How many failures (k) do I need to be P% sure of seeing successes?"  
       //    or
       // "How many failures can I have to be P% sure of seeing fewer than k events?"
 
@@ -254,23 +257,6 @@ namespace boost
     } // mode
 
     template <class RealType>
-    inline RealType median(const negative_binomial_distribution<RealType>& dist)
-    { // Median of Negative Binomial distribution undefined
-      return numeric_limits<RealType>::quiet_NaN();
-    } // median
-
-    template <class RealType>
-    inline RealType hazard(const negative_binomial_distribution<RealType>& dist)
-    { // hazard of Negative Binomial distribution ???  TODO
-      return numeric_limits<RealType>::quiet_NaN();
-    } // hazard
-
-    template <class RealType>
-    inline RealType chf(const negative_binomial_distribution<RealType>& dist)
-    { // chf of Negative Binomial distribution ???  TODO
-      return numeric_limits<RealType>::quiet_NaN();
-    } // chf
-    template <class RealType>
     inline RealType skewness(const negative_binomial_distribution<RealType>& dist)
     { // skewness of Negative Binomial distribution = 2-p / (sqrt(r(1-p))
       RealType p = dist.success_fraction();
@@ -296,12 +282,12 @@ namespace boost
         / (dist.success_fraction() * dist.success_fraction());
     } // variance
 
-    template <class RealType>
-    inline RealType standard_deviation(const negative_binomial_distribution<RealType>& dist)
-    { // standard_deviation = sqrt (Variance of Binomial distribution = r (1-p) / p^2).
-      return sqrt(variance(dist));
-    } // variance
-
+    // RealType standard_deviation(const negative_binomial_distribution<RealType>& dist)
+    // standard_deviation provided by derived accessors.
+    // RealType hazard(const negative_binomial_distribution<RealType>& dist)
+    // hazard of Negative Binomial distribution provided by derived accessors.
+    // RealType chf(const negative_binomial_distribution<RealType>& dist)
+    // chf of Negative Binomial distribution provided by derived accessors.
 
     template <class RealType>
     RealType pdf(const negative_binomial_distribution<RealType>& dist, const RealType k)
