@@ -64,6 +64,12 @@ void expected_results()
    //
    // Linux:
    //
+   // These should not really be needed, but on *some* Linux
+   // versions these error rates are quite large and appear to
+   // be related to the accuracy of powl and expl.  On Itanium
+   // or Xeon machines the error rates are much lower than this.
+   // Worst cases appear to be AMD64 machines.
+   //
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -75,8 +81,22 @@ void expected_results()
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "linux",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*integer[^|]*",               // test data group
+      "[^|]*", 1000, 200);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 600, 200);                // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*integer[^|]*",               // test data group
       "[^|]*", 600, 200);                // test function
 
    //

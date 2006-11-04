@@ -84,6 +84,24 @@ void expected_results()
          "[^|]*small[^|]*",                   // test data group
          "[^|]*", 70000, 8000);                  // test function
    }
+   //
+   // These high error rates are seen on on some Linux
+   // architectures:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux.*",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*medium[^|]*",                   // test data group
+      "[^|]*", 350, 5);                  // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux.*",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*large[^|]*",                   // test data group
+      "[^|]*", 150, 5);                  // test function
 
 
    //

@@ -149,28 +149,6 @@ namespace boost
         return true;
       } // bool check_dist_and_prob
 
-      // Constrain probability not used as no indications so far
-      // that computed values ever stray outside the range 0 to 1.
-      //template <class RealType>
-      //RealType constrain_probability(const RealType& p)
-      //{ // Constrain 0 <= probability <= 1.
-      //  // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
-      //  // This might cause trouble downstream, so warn, & possibly throw exception,
-      //  // but constrain to the 0 to 1 limits.
-      //  if (probability < static_cast<RealType>(0.))
-      //  {
-      //    tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION,
-      //      "probability %1% is < 0, so has been constrained to zero !", probability);
-      //    return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
-      //  }
-      //  if(probability > static_cast<RealType>(1.))
-      //  {
-      //    tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION,
-      //      "probability %1% is > 1, so has been constrained to unity!", probability);
-      //    return static_cast<RealType>(1.); // Constrain to unity if logic_error does not throw.
-      //  }
-      //} // RealType constrained_probability
-
     } // namespace poisson_detail
 
     template <class RealType = double>
@@ -295,7 +273,7 @@ namespace boost
         // (e ^ -mean * mean ^ k) / k!
         // == exp(log(e ^ -mean) + log (mean ^ k) - lgamma(k+1))
         // exp( -mean + log(mean) * k - lgamma(k+1))
-        return exp(-mean + log(mean) * k - lgamma(k+1));
+        return exp(-mean + log(mean) * k - boost::math::lgamma(k+1));
         // return gamma_P_derivative(k+1, mean); // equivalent & also passes tests.
       }
     } // pdf
@@ -475,3 +453,5 @@ namespace boost
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_MATH_SPECIAL_POISSON_HPP
+
+

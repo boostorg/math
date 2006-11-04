@@ -204,7 +204,7 @@ void test_spots(T)
    BOOST_CHECK_CLOSE(
       ::boost::math::falling_factorial(static_cast<T>(30.75), 30),
       static_cast<T>(naive_falling_factorial(30.75L, 30)),
-      tolerance);
+      tolerance * 3);
    if(boost::math::tools::digits<T>() > 50)
    {
       BOOST_CHECK_CLOSE(
