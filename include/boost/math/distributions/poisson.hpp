@@ -72,7 +72,7 @@ namespace boost
       template <class RealType>
       inline bool check_mean(const char* function, const RealType& mean, RealType* result)
       {
-        if((mean < 0) || !(boost::math::isfinite)(mean))
+        if(!(boost::math::isfinite)(mean) || (mean < 0))
         {
           *result = tools::domain_error<RealType>(
             function,
@@ -84,8 +84,8 @@ namespace boost
 
       template <class RealType>
       inline bool check_mean_NZ(const char* function, const RealType& mean, RealType* result)
-      {
-        if((mean <= 0) || !(boost::math::isfinite)(mean))
+      { // mean == 0 is considered an error.
+        if( !(boost::math::isfinite)(mean) || (mean <= 0))
         {
           *result = tools::domain_error<RealType>(
             function,
@@ -98,7 +98,7 @@ namespace boost
       template <class RealType>
       inline bool check_dist(const char* function, const RealType& mean, RealType* result)
       { // Only one check, so this is redundant really but should be optimized away.
-        return check_mean(function, mean, result);
+        return check_mean_NZ(function, mean, result);
       } // bool check_dist
 
       template <class RealType>
@@ -149,25 +149,27 @@ namespace boost
         return true;
       } // bool check_dist_and_prob
 
-      template <class RealType>
-      RealType constrain_probability(const RealType& p)
-      { // Constrain 0 <= probability <= 1.
-        // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
-        // This might cause trouble downstream, so warn, & possibly throw exception,
-        // but constrain to the 0 to 1 limits.
-        if (probability < static_cast<RealType>(0.))
-        {
-          tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION,
-            "probability %1% is < 0, so has been constrained to zero !", probability);
-          return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
-        }
-        if(probability > static_cast<RealType>(1.))
-        {
-          tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION,
-            "probability %1% is > 1, so has been constrained to unity!", probability);
-          return static_cast<RealType>(1.); // Constrain to unity if logic_error does not throw.
-        }
-      } // RealType constrained_probability
+      // Constrain probability not used as no indications so far
+      // that computed values ever stray outside the range 0 to 1.
+      //template <class RealType>
+      //RealType constrain_probability(const RealType& p)
+      //{ // Constrain 0 <= probability <= 1.
+      //  // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
+      //  // This might cause trouble downstream, so warn, & possibly throw exception,
+      //  // but constrain to the 0 to 1 limits.
+      //  if (probability < static_cast<RealType>(0.))
+      //  {
+      //    tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION,
+      //      "probability %1% is < 0, so has been constrained to zero !", probability);
+      //    return static_cast<RealType>(0.); // Constrain to zero if logic_error does not throw.
+      //  }
+      //  if(probability > static_cast<RealType>(1.))
+      //  {
+      //    tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION,
+      //      "probability %1% is > 1, so has been constrained to unity!", probability);
+      //    return static_cast<RealType>(1.); // Constrain to unity if logic_error does not throw.
+      //  }
+      //} // RealType constrained_probability
 
     } // namespace poisson_detail
 
@@ -196,7 +198,7 @@ namespace boost
 
     private:
       // Data member, initialized by constructor.
-      RealType m_l; // mean number of occurences.
+      RealType m_l; // mean number of occurrences.
     }; // template <class RealType> class poisson_distribution
 
     typedef poisson_distribution<double> poisson; // Reserved name of type double.
@@ -220,11 +222,8 @@ namespace boost
       return dist.mean();
     }
 
-    template <class RealType>
-    inline RealType standard_deviation(const poisson_distribution<RealType>& dist)
-    { // standard_deviation.
-      return sqrt(dist.mean());
-    }
+    // RealType standard_deviation(const poisson_distribution<RealType>& dist)
+    // standard_deviation provided by derived accessors.
 
     template <class RealType>
     inline RealType skewness(const poisson_distribution<RealType>& dist)
@@ -274,7 +273,7 @@ namespace boost
         return result;
       }
 
-      // Special case of mean, regardless of the number of events k.
+      // Special case of mean zero, regardless of the number of events k.
       if (mean == 0)
       { // Probability for any k is zero.
         return 0;
@@ -473,8 +472,6 @@ namespace boost
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to
 // keep compilers that support two-phase lookup happy.
-//#include <boost/math/distributions/detail/derived_accessors.hpp>
-// BUT is not appropriate for this distribution
-// as both are defined above.
+#include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_MATH_SPECIAL_POISSON_HPP

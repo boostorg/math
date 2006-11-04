@@ -37,6 +37,8 @@
 	using std::cout;
 	using std::endl;
 	using std::setprecision;
+	using std::showpoint;
+	using std::ios;
 #include <limits>
   using std::numeric_limits;
 
@@ -48,14 +50,26 @@ void test_spots(RealType)
 	// expressed as a percentage (so -2) for BOOST_CHECK_CLOSE,
 
 	int decdigits = numeric_limits<RealType>::digits10;
-	decdigits -= 1; // Perhaps allow some decimal digits margin of numerical error.
+  // May eb >15 for 80 and 128-bit FP typtes.
+  if (decdigits <= 0)
+  { // decdigits is not defined, for example real concept,
+    // so assume precision of most test data is double (for example, MathCAD).
+     decdigits = numeric_limits<double>::digits10; // == 15
+  }
+  if (decdigits > 15 ) // numeric_limits<double>::digits10)
+  { // 15 is the accuracy of the MathCAD test data.
+    decdigits = 15; // numeric_limits<double>::digits10;
+  }
+
+	decdigits -= 1; // Perhaps allow some decimal digit(s) margin of numerical error.
 	RealType tolerance = static_cast<RealType>(std::pow(10., -(decdigits-2))); // 1e-6 (-2 so as %)
 	tolerance *= 2; // Allow some bit(s) small margin (2 means + or - 1 bit) of numerical error.
 	// Typically 2e-13% = 2e-15 as fraction for double.
 
 	// Sources of spot test values:
 
-  // Many be some combinations for which the result is 'exact', or at least is to 40 decimal digits.
+  // Many be some combinations for which the result is 'exact',
+  // or at least is good to 40 decimal digits.
 	// 40 decimal digits includes 128-bit significand User Defined Floating-Point types,
 	
 	// Best source of accurate values is:
@@ -87,18 +101,74 @@ void test_spots(RealType)
   using  ::boost::math::cdf;
   using  ::boost::math::pdf;
 
+   // Check that bad arguments throw.
+   BOOST_CHECK_THROW(
+   cdf(poisson_distribution<RealType>(static_cast<RealType>(0)), // mean zero is bad.
+      static_cast<RealType>(0)),  // even for a good k.
+      std::domain_error); // Expected error to be thrown.
+
+    BOOST_CHECK_THROW(
+   cdf(poisson_distribution<RealType>(static_cast<RealType>(-1)), // mean negative is bad.
+      static_cast<RealType>(0)),
+      std::domain_error);
+
+   BOOST_CHECK_THROW(
+   cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unit OK,
+      static_cast<RealType>(-1)),  // but negative events is bad.
+      std::domain_error);
+
+  BOOST_CHECK_THROW(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(0)), // mean zero is bad.
+      static_cast<RealType>(99999)),  // for any k events. 
+      std::domain_error);
+  
+  BOOST_CHECK_THROW(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(0)), // mean zero is bad.
+      static_cast<RealType>(99999)),  // for any k events. 
+      std::domain_error);
+
+  BOOST_CHECK_THROW(
+     quantile(poisson_distribution<RealType>(static_cast<RealType>(0)), // mean zero.
+      static_cast<RealType>(0.5)),  // probability OK. 
+      std::domain_error);
+
+  BOOST_CHECK_THROW(
+     quantile(poisson_distribution<RealType>(static_cast<RealType>(-1)), 
+      static_cast<RealType>(-1)),  // bad probability. 
+      std::domain_error);
+
+  BOOST_CHECK_THROW(
+     quantile(poisson_distribution<RealType>(static_cast<RealType>(1)), 
+      static_cast<RealType>(-1)),  // bad probability. 
+      std::domain_error);
+
+  // Check some test values.
+  // PDF
   BOOST_CHECK_CLOSE(
-     cdf(poisson_distribution<RealType>(static_cast<RealType>(0)), // mean zero
-      static_cast<RealType>(0)),  // zero k events. 
-      static_cast<RealType>(0), // probability zero.
+     pdf(poisson_distribution<RealType>(static_cast<RealType>(4)), // mean 4.
+      static_cast<RealType>(0)),   
+      static_cast<RealType>(1.831563888873410E-002), // probability.
 			tolerance);
 
   BOOST_CHECK_CLOSE(
-     cdf(poisson_distribution<RealType>(static_cast<RealType>(0)), // mean zero
-      static_cast<RealType>(999)),  // any k events. 
-      static_cast<RealType>(0), // probability zero.
+     pdf(poisson_distribution<RealType>(static_cast<RealType>(4)), // mean 4.
+      static_cast<RealType>(2)),   
+      static_cast<RealType>(1.465251111098740E-001), // probability.
 			tolerance);
 
+  BOOST_CHECK_CLOSE(
+     pdf(poisson_distribution<RealType>(static_cast<RealType>(20)), // mean big.
+      static_cast<RealType>(1)),   //  k small
+      static_cast<RealType>(4.122307244877130E-008), // probability.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     pdf(poisson_distribution<RealType>(static_cast<RealType>(4)), // mean 4.
+      static_cast<RealType>(20)),   //  K>> mean 
+      static_cast<RealType>(8.277463646553730E-009), // probability.
+			tolerance);
+  
+  // CDF
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
       static_cast<RealType>(0)),  // zero k events. 
@@ -148,14 +218,14 @@ void test_spots(RealType)
 			tolerance);
 
   BOOST_CHECK_CLOSE(
-     cdf(poisson_distribution<RealType>(static_cast<RealType>(100)), // mean unity.
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(100)), // mean 100.
       static_cast<RealType>(33)),  // k events at limit for float unchecked_factorial table. 
       static_cast<RealType>(6.328271240363390E-15), // probability is tiny.
-			tolerance*static_cast<RealType>(2e11)); //         6.3495253382825722e-015 MathCAD
-  // Note that there two tiny probability are much more different.
+			tolerance * static_cast<RealType>(2e11)); // 6.3495253382825722e-015 MathCAD
+      // Note that there two tiny probability are much more different.
 
    BOOST_CHECK_CLOSE(
-     cdf(poisson_distribution<RealType>(static_cast<RealType>(100)), // mean unity.
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(100)), // mean 100.
       static_cast<RealType>(34)),  // k events at limit for float unchecked_factorial table. 
       static_cast<RealType>(1.898481372109020E-14), // probability is tiny.
 			tolerance*static_cast<RealType>(2e11)); //         1.8984813721090199e-014 MathCAD
@@ -208,6 +278,7 @@ void test_spots(RealType)
       static_cast<RealType>(0.785130387030406), // probability.
 			tolerance);
 
+  // complement CDF
   BOOST_CHECK_CLOSE( // Complement CDF
      cdf(complement(poisson_distribution<RealType>(static_cast<RealType>(4.)), // mean
       static_cast<RealType>(5))),  // k events. 
@@ -222,13 +293,13 @@ void test_spots(RealType)
       static_cast<RealType>(0.5419181783625430), // probability.
 			tolerance);
 
-   // Quantile & complement
+   // Quantile & complement.
   BOOST_CHECK_CLOSE(
     boost::math::quantile(
          poisson_distribution<RealType>(5),  // mean.
          static_cast<RealType>(0.615960654833065)),  //  probability.
          static_cast<RealType>(5.), // Expect k = 5
-         tolerance/5); 
+         tolerance/5); // 
 
   // EQUAL is too optimistic - fails [5.0000000000000124 != 5]
   //BOOST_CHECK_EQUAL(boost::math::quantile( // 
@@ -268,6 +339,40 @@ int test_main(int, char* [])
   cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
 #endif
 
+// Some plain double examples & tests:
+  cout.precision(17); // double max_digits10
+  cout.setf(ios::showpoint);
+  
+  poisson mypoisson(4.); // // mean = 4, default FP type is double.
+  cout << "mean(mypoisson, 4.) == " << mean(mypoisson) << endl;
+  cout << "mean(mypoisson, 0.) == " << mean(mypoisson) << endl;
+  cout << "cdf(mypoisson, 2.) == " << cdf(mypoisson, 2.) << endl;
+  cout << "pdf(mypoisson, 2.) == " << pdf(mypoisson, 2.) << endl;
+  
+  //poisson mydudpoisson(0.);
+  // throws (if BOOST_MATH_THROW_ON_DOMAIN_ERROR defined to enable).
+
+#define BOOST_MATH_THROW_ON_LOGIC_ERROR
+  
+  BOOST_CHECK_THROW(poisson mydudpoisson(-1), std::domain_error);// Mean must be > 0.
+  BOOST_CHECK_THROW(poisson mydudpoisson(-1), std::logic_error);// Mean must be > 0.
+  // Passes the check because logic_error is a parent????
+  // BOOST_CHECK_THROW(poisson mydudpoisson(-1), std::overflow_error); // fails the check
+  // because overflow_error is unrelated - except from std::exception
+  BOOST_CHECK_THROW(cdf(mypoisson, -1), std::domain_error); // k must be >= 0
+
+  BOOST_CHECK_EQUAL(mean(mypoisson), 4.);
+  BOOST_CHECK_CLOSE(
+  pdf(mypoisson, 2.),  // k events = 2. 
+    1.465251111098740E-001, // probability.
+		5e-13);
+
+  BOOST_CHECK_CLOSE(
+  cdf(mypoisson, 2.),  // k events = 2. 
+    0.238103305553545, // probability.
+		5e-13);
+
+
 #if 0
   // Compare cdf from finite sum of pdf and gamma_Q.
   using boost::math::cdf;
@@ -275,8 +380,11 @@ int test_main(int, char* [])
 
   double mean = 4.;
   cout.precision(17); // double max_digits10
+  cout.setf(ios::showpoint);
+  cout << showpoint << endl;  // Ensure trailing zeros are shown.
+  // This also helps show the expected precision max_digits10
+  //cout.unsetf(ios::showpoint); // No trailing zeros are shown.
 
-  cout << "Mean = " << mean << endl;
   cout << "k          pdf                     sum                  cdf                   diff" << endl;
   double sum = 0.;
   for (int i = 0; i <= 50; i++)
@@ -285,15 +393,22 @@ int test_main(int, char* [])
    double p =  pdf(poisson_distribution<double>(mean), static_cast<double>(i));
    sum += p;
 
-     cout << p << ' '
-   << sum <<' ' 
+   cout << p << ' ' << sum << ' ' 
    << cdf(poisson_distribution<double>(mean), static_cast<double>(i)) << ' ';
      {
-       cout << boost::math::gamma_Q<double>(i+1, mean);
-       double diff = boost::math::gamma_Q<double>(i+1, mean) - sum;
-       cout << ' ' << diff; // 0 0 to 4, 1 eps 5 to 9, 10 to 20 2 eps, 21 upwards 3 eps
+       cout << boost::math::gamma_Q<double>(i+1, mean); // cdf
+       double diff = boost::math::gamma_Q<double>(i+1, mean) - sum; // cdf -sum
+       cout << setprecision (2) << ' ' << diff; // 0 0 to 4, 1 eps 5 to 9, 10 to 20 2 eps, 21 upwards 3 eps
       
      }
+    BOOST_CHECK_CLOSE(
+    cdf(mypoisson, static_cast<double>(i)),
+      sum, // of pdfs.
+	   4e-14); // Fails at 2e-14
+   // This call puts the precision etc back to default 6 !!!
+   cout << setprecision(17) << showpoint;
+
+
      cout << endl;
   }
    cout << cdf(poisson_distribution<double>(5), static_cast<double>(0)) << ' ' << endl; // 0.006737946999085467
@@ -302,9 +417,12 @@ int test_main(int, char* [])
 #endif
 
 	// (Parameter value, arbitrarily zero, only communicates the floating-point type).
-	test_spots(0.0F); // Test float.
+  test_spots(0.0F); // Test float.
 	test_spots(0.0); // Test double.
-	test_spots(0.0L); // Test long double.
+  if (numeric_limits<long double>::digits10 > numeric_limits<double>::digits10)
+  { // long double is better than double (so not MSVC where they are same).
+	  test_spots(0.0L); // Test long double.
+  }
 
   #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
@@ -324,11 +442,16 @@ Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_poisson.exe"
 Running 1 test case...
 BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
+mean(mypoisson, 4.) == 4.0000000000000000
+mean(mypoisson, 0.) == 4.0000000000000000
+cdf(mypoisson, 2.) == 0.23810330555354431
+pdf(mypoisson, 2.) == 0.14652511110987343
 *** No errors detected
 Build Time 0:06
 Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_poisson\Debug\BuildLog.htm"
 test_poisson - 0 error(s), 0 warning(s)
 ========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
 
 ------ Build started: Project: test_poisson, Configuration: Debug Win32 ------
 Compiling...
