@@ -8,6 +8,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  04 Nov 2006  Use more built-in numeric types, binary-GCD (Daryle Walker)
 //  03 Nov 2006  Use custom numeric types (Daryle Walker)
 //  02 Nov 2006  Change to Boost.Test's unit test system (Daryle Walker)
 //  07 Nov 2001  Initial version (Daryle Walker)
@@ -104,13 +105,23 @@ typedef my_wrapped_integer<int, 1>       MyInt2;
 typedef my_wrapped_integer<unsigned, 1>  MyUnsigned2;
 
 // Various types to test with each GCD/LCM
-typedef ::boost::mpl::list<short, int, long>  builtin_signed_test_types;
-typedef ::boost::mpl::list<unsigned short, unsigned, unsigned long>
-  builtin_unsigned_test_types;
-
-typedef ::boost::mpl::list<short, int, long, MyInt1>  signed_test_types;
-typedef ::boost::mpl::list<unsigned short, unsigned, unsigned long, MyUnsigned1,
- MyUnsigned2>  unsigned_test_types;
+typedef ::boost::mpl::list<signed char, short, int, long,
+#ifdef BOOST_HAS_LONG_LONG
+ long long,
+#endif
+#ifdef BOOST_HAS_MS_INT64
+ __int64,
+#endif
+ MyInt1>  signed_test_types;
+typedef ::boost::mpl::list<unsigned char, unsigned short, unsigned,
+ unsigned long,
+#ifdef BOOST_HAS_LONG_LONG
+ unsigned long long,
+#endif
+#ifdef BOOST_HAS_MS_INT64
+ unsigned __int64,
+#endif
+ MyUnsigned1, MyUnsigned2>  unsigned_test_types;
 
 }  // namespace
 
