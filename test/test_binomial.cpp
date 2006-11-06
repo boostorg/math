@@ -415,15 +415,15 @@ void test_spots(RealType)
     // skewness:
     BOOST_CHECK_CLOSE(
        skewness(dist)
-       , static_cast<RealType>(0.40824829046386301636621401245098L), tol2);
+       , static_cast<RealType>(0.40824829046386301636621401245098L), (std::max)(tol2, static_cast<RealType>(5e-29))); // test data has 32 digits only.
     // kurtosis:
     BOOST_CHECK_CLOSE(
        kurtosis(dist)
-       , static_cast<RealType>(2.9166666666666666666666666666667L), tol2);
+       , static_cast<RealType>(2.916666666666666666666666666666666666L), tol2);
     // kurtosis excess:
     BOOST_CHECK_CLOSE(
        kurtosis_excess(dist)
-       , static_cast<RealType>(-0.083333333333333333333333333333333L), tol2);
+       , static_cast<RealType>(-0.08333333333333333333333333333333333333L), tol2);
 
     // special cases for PDF:
     BOOST_CHECK_EQUAL(

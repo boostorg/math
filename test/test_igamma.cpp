@@ -204,7 +204,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*integer[^|]*",              // test data group
-      ".*", 30, 10);                    // test function
+      ".*", 40, 10);                    // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
