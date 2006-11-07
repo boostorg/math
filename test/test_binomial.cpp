@@ -424,6 +424,8 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        kurtosis_excess(dist)
        , static_cast<RealType>(-0.08333333333333333333333333333333333333L), tol2);
+    // Check kurtosis_excess == kurtosis -3;
+		BOOST_CHECK_EQUAL(kurtosis(dist), static_cast<RealType>(3) + kurtosis_excess(dist));
 
     // special cases for PDF:
     BOOST_CHECK_EQUAL(
