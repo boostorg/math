@@ -5,13 +5,13 @@
 
 // std_real_concept is an archetype for built-in Real types.
 
-// The main purpose in providing this type, is to verify
+// The main purpose in providing this type is to verify
 // that std lib functions are found via a using declaration
 // bringing those functions into the current scope, and not
 // just because they happen to be in global scope.
 //
 // If ::pow is found rather than std::pow say, then the code
-// will silently compile, but trunctaion of long doubles to
+// will silently compile, but truncation of long doubles to
 // double will cause a significant loss of precision.
 // A template instantiated with std_real_concept will *only*
 // compile if it std::whatever is in scope.

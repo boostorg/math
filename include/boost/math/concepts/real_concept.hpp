@@ -327,6 +327,11 @@ inline int digits<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(conc
 { // Assume number of significand bits is same as long double,
   // unless std::numeric_limits<T>::is_specialized to provide digits.
    return std::numeric_limits<long double>::digits;
+   // Note that if numeric_limits real concept is NOT specialized to provide digits10
+   // (or max_digits10) then the default precision of 6 decimal digits will be used
+   // by Boost test (giving misleading error messages like
+   // "difference between {9.79796} and {9.79796} exceeds 5.42101e-19%"
+   // and by Boost lexical cast and serialization causing loss of accuracy.
 }
 
 } // namespace tools
