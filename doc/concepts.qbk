@@ -34,6 +34,35 @@ fully generic implementation for all of the gamma-like functions).
 
 [section:real_concept Conceptual Requirements]
 
+std_real_concept is an archetype for built-in Real types.
+
+The main purpose in providing this type is to verify
+that std lib functions are found via a using declaration,
+bringing those functions into the current scope, and not
+just because they happen to be in global scope.
+
+If ::pow is found rather than std::pow say, then the code
+will silently compile, but truncation of long doubles to
+double will cause a significant loss of precision.
+A template instantiated with std_real_concept will *only*
+compile if it std::whatever is in scope.
+
+real_concept is an archetype for User defined Real types.
+
+This file defines the features, constructors, operators, functions...
+that are essential to use mathematical and statistical functions.
+The template typename "RealType" is used where this type
+(as well as the normal built-in types, float, double & long double)
+can be used.
+That this is the minimum set is confirmed by use as a type
+in tests of all functions & distributions, for example:
+  test_spots(0.F); & test_spots(0.);  for float and double, but also
+  test_spots(boost::math::concepts::real_concept(0.));
+  
+NTL quad_float type is an example of a type meeting the requirements,
+but note minor additions are needed - see ntl.diff and documentation
+"Using With NTL - a High-Precision Floating-Point Library".
+
 TODO.
 
 See boost/math/concepts/real_concept.hpp for the current concept-archetype
@@ -62,15 +91,18 @@ approximation for your type T.
 
 [warning
 
-1  Real concept type T assumes that the number of significand bits is the same as long double,
-*unless* std::numeric_limits<T>::is_specialized to provide std::numeric_limits<T>::digits.
+1  Real concept type T assumes that the number of significand bits
+is the same as long double,
+*unless* std::numeric_limits<T>::is_specialized
+to provide std::numeric_limits<T>::digits.
 
 2  If std::numeric_limits<T> is *NOT specialized* to provide std::numeric_limits<T>::digits
 (or in future max_digits10) then the default float precision of 6 decimal digits
 will be used by other Boost programs including:
 * Boost.test giving misleading error messages like
 "difference between {9.79796} and {9.79796} exceeds 5.42101e-19%".
-* Boost.lexical cast and Boost.serialization causing potentially serious loss of accuracy.
+* Boost.lexical cast to decimal digit string types
+and Boost.serialization output causing potentially serious loss of accuracy.
 ]
 
 
