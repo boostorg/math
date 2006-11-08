@@ -520,10 +520,10 @@ void test_spots(RealType)
          10, 0.05f, 0.01f, 100)), static_cast<RealType>(3493));
     BOOST_CHECK_EQUAL(
        ceil(chi_squared_distribution<RealType>::estimate_degrees_of_freedom(
-         -55, 0.05f, 0.01f, 100)), static_cast<RealType>(10));
+         -55, 0.05f, 0.01f, 100)), static_cast<RealType>(49));
     BOOST_CHECK_EQUAL(
        ceil(chi_squared_distribution<RealType>::estimate_degrees_of_freedom(
-         -10, 0.05f, 0.01f, 100)), static_cast<RealType>(123));
+         -10, 0.05f, 0.01f, 100)), static_cast<RealType>(2826));
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])

@@ -229,8 +229,8 @@ struct df_estimator
       }
       else
       {
-         RealType r = 1 - ratio;
-         result = cdf(cs, quantile(cs, alpha) / r) - beta;
+         RealType r = 1 + ratio;
+         result = cdf(complement(cs, quantile(cs, alpha) / r)) - beta;
       }
       return result;
    }
