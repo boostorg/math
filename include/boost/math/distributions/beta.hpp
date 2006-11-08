@@ -192,7 +192,7 @@ namespace boost
 
       static RealType estimate_beta(
         RealType mean, // Expected value of mean for probability x.
-        RealType variance,// Expected value of variance for probability x.
+        RealType variance, // Expected value of variance for probability x.
         RealType probability) // x
       {
         RealType result; // of error checks.
@@ -217,7 +217,6 @@ namespace boost
       RealType m_beta;
     }; // template <class RealType> class beta_distribution
 
-
     template <class RealType>
     inline RealType mean(const beta_distribution<RealType>& dist)
     { // Mean of beta distribution = np.
@@ -231,6 +230,57 @@ namespace boost
       RealType b = dist.beta();
       return  (a * b) / ((a + b ) * (a + b) * (a + b + 1));
     } // variance
+
+    template <class RealType>
+    inline RealType mode(const beta_distribution<RealType>& dist)
+    {
+      RealType result;
+      if ((dist.alpha() <= 1))
+      {
+        result = tools::domain_error<RealType>(
+          BOOST_CURRENT_FUNCTION,
+          "mode undefined for alpha = %1%, must be > 1!", dist.alpha());
+        return result;
+      }
+
+      if ((dist.beta() <= 1))
+      {
+        result = tools::domain_error<RealType>(
+          BOOST_CURRENT_FUNCTION,
+          "mode undefined for beta = %1%, must be > 1!", dist.beta());
+        return result;
+      }
+      RealType a = dist.alpha();
+      RealType b = dist.beta();
+      return (a-1) / (a + b - 2);
+    } // mode
+
+    template <class RealType>
+    inline RealType skewness(const beta_distribution<RealType>& dist)
+    {
+      using namespace std; // ADL of std functions.
+      RealType a = dist.alpha();
+      RealType b = dist.beta();
+      return (2 * (b-a) * sqrt(a + B + 1)) / ((a + b + 2) * sqrt(a * b));
+    } // skewness
+
+    template <class RealType>
+    inline RealType kurtosis(const beta_distribution<RealType>& dist)
+    {
+      RealType a = dist.alpha();
+      RealType b = dist.beta();
+      return 3 + 6 * a * a * a - a * a * (2 * b -1) + b * b * (b + 1) - 2 * a * b * (b + 2) /
+        a * b * (a + b + 2) * (a + b + 3);
+    } // kurtosis
+
+    template <class RealType>
+    inline RealType kurtosis_excess(const beta_distribution<RealType>& dist)
+    {
+      RealType a = dist.alpha();
+      RealType b = dist.beta();
+      return 6 * a * a * a - a * a * (2 * b -1) + b * b * (b + 1) - 2 * a * b * (b + 2) /
+        a * b * (a + b + 2) * (a + b + 3);
+    } // kurtosis_excess
 
     template <class RealType>
     RealType pdf(const beta_distribution<RealType>& dist, const RealType x)
@@ -304,27 +354,6 @@ namespace boost
       return 1 - ibeta(a, b, x);
     } // beta cdf
 
-    namespace detail
-    {
-      template <class RealType>
-      struct beta_functor
-      {
-        beta_functor(const beta_distribution<RealType>& d, const RealType& target, bool c = false)
-          : dist(d), t(target), complement(c) {}
-
-        RealType operator()(const RealType x)
-        {
-          if(x >= dist.alpha())
-            return 1; // Any positive value will do.
-          return complement ? t - cdf(boost::math::complement(dist, x)) : cdf(dist, x) - t;
-        }
-      private:
-        const beta_distribution<RealType>& dist;
-        RealType t;
-        bool complement;
-      }; // struct beta_functor
-    } // namespace detail
-
     template <class RealType>
     RealType quantile(const beta_distribution<RealType>& dist, const RealType& p)
     { // Quantile or Percent Point beta function or .
@@ -336,8 +365,9 @@ namespace boost
       // will be less than or equal to that value
       // is whatever probability you supplied as an argument. 
 
-      // Argument checks:
-      RealType result;
+      // use incomplete beta inverse ibeta_inv
+      
+      RealType result; // of argument checks:
       RealType a = dist.alpha();
       RealType b = dist.beta();
       if(false == beta_detail::check_dist_and_prob(
@@ -356,24 +386,7 @@ namespace boost
       {
         return 1;
       }
-      // Solve for quantile numerically:
-      detail::beta_functor<RealType> f(dist, p);
-      tools::eps_tolerance<RealType> tol(tools::digits<RealType>());
-      boost::uintmax_t max_iter = 1000;
-      std::pair<RealType, RealType> r = tools::bracket_and_solve_root(
-        f,
-        dist.alpha() / 2, // (dist.alpha + dist.beta()) / 4
-        static_cast<RealType>(8),
-        true,
-        tol,
-        max_iter);
-      // Special cases?
-      if(max_iter >= 1000)
-      {
-        tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION, "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first);
-      }
-      // return centre point of range found:
-      return r.first + (r.second - r.first) / 2;
+      return ibeta_inv(a, b, p);
     } // quantile
 
     template <class RealType>
@@ -386,10 +399,12 @@ namespace boost
       RealType q = c.param;
       const beta_distribution<RealType>& dist = c.dist;
       RealType result;
+      RealType a = dist.alpha();
+      RealType b = dist.beta();
       if(false == beta_detail::check_dist_and_prob(
         BOOST_CURRENT_FUNCTION,
-        dist.alpha(),
-        dist.beta(),
+        a,
+        b,
         q,
         &result))
       {
@@ -405,75 +420,8 @@ namespace boost
         return 1;
       }
 
-      // Solve for quantile numerically:
-      detail::beta_functor<RealType> f(dist, q, true);
-      tools::eps_tolerance<RealType> tol(tools::digits<RealType>());
-      boost::uintmax_t max_iter = 1000;
-      std::pair<RealType, RealType> r = tools::bracket_and_solve_root(
-        f,
-        dist.alpha() / 2, // (dist.alpha + dist.beta()) / 4
-        static_cast<RealType>(8),
-        true,
-        tol,
-        max_iter);
-      if(max_iter >= 1000)
-      {
-        tools::logic_error<RealType>(BOOST_CURRENT_FUNCTION, "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first);
-      }
-      // return centre point of range found:
-      return r.first + (r.second - r.first) / 2;
+      return ibetac_inv(a, b, q);
     } // Quantile Complement
-
-    template <class RealType>
-    inline RealType mode(const beta_distribution<RealType>& dist)
-    {
-      RealType result;
-      if ((dist.alpha() <= 1))
-      {
-        result = tools::domain_error<RealType>(
-          BOOST_CURRENT_FUNCTION,
-          "mode undefined for alpha = %1%, must be > 1!", dist.alpha());
-        return result;
-      }
-
-      if ((dist.beta() <= 1))
-      {
-        result = tools::domain_error<RealType>(
-          BOOST_CURRENT_FUNCTION,
-          "mode undefined for beta = %1%, must be > 1!", dist.beta());
-        return result;
-      }
-      RealType a = dist.alpha();
-      RealType b = dist.beta();
-      return (a-1) / (a + b - 2);
-    } // mode
-
-    template <class RealType>
-    inline RealType skewness(const beta_distribution<RealType>& dist)
-    {
-      using namespace std; // ADL of std functions.
-      RealType a = dist.alpha();
-      RealType b = dist.beta();
-      return (2 * (b-a) * sqrt(a + B + 1)) / ((a + b + 2) * sqrt(a * b));
-    } // skewness
-
-    template <class RealType>
-    inline RealType kurtosis(const beta_distribution<RealType>& dist)
-    {
-      RealType a = dist.alpha();
-      RealType b = dist.beta();
-      return 3 + 6 * a * a * a - a * a * (2 * b -1) + b * b * (b + 1) - 2 * a * b * (b + 2) /
-        a * b * (a + b + 2) * (a + b + 3);
-    } // kurtosis
-
-    template <class RealType>
-    inline RealType kurtosis_excess(const beta_distribution<RealType>& dist)
-    {
-      RealType a = dist.alpha();
-      RealType b = dist.beta();
-      return 6 * a * a * a - a * a * (2 * b -1) + b * b * (b + 1) - 2 * a * b * (b + 2) /
-        a * b * (a + b + 2) * (a + b + 3);
-    } // kurtosis_excess
 
   } // namespace math
 } // namespace boost
