@@ -148,11 +148,9 @@ void test_spots(RealType)
   // pbeta(x, s1, s2) cdf and qbeta(x, s1, s2) inverse of cdf
   // returns pr(X ,= x) when random variable X
   // has the beta distribution with parameters s1)alpha) and s2(beta).
-
-  // s1 > 0 and s2 >0 and 0 < x < 1 but allows x == 0! and x == 1!)
+  // s1 > 0 and s2 >0 and 0 < x < 1 (but allows x == 0! and x == 1!)
   // dbeta(0,1,1) = 0
   // dbeta(0.5,1,1) = 1
-
 
   using boost::math::beta_distribution;
   using  ::boost::math::cdf;
@@ -235,7 +233,6 @@ void test_spots(RealType)
      // http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=BetaRegularized&ptype=0&z=0.1&a=2&b=2&digits=40
       tolerance);
 
-
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(2)),
      static_cast<RealType>(0.0001)),  // x
@@ -285,7 +282,7 @@ void test_spots(RealType)
      static_cast<RealType>(0.7951672353008665483508021524494810519023)),  // x
      static_cast<RealType>(0.9), 
      // Wolfram
-     tolerance); // gives 0.5 ??????????????
+     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(0.5)),
@@ -295,11 +292,11 @@ void test_spots(RealType)
       tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
-     quantile(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(0.5)),
+     quantile(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(0.5)),
      static_cast<RealType>(0.5640942168489749316118742861695149357858)),  // x
      static_cast<RealType>(0.6), 
      // Wolfram
-      tolerance); // gives 
+      tolerance); 
 
 
   BOOST_CHECK_CLOSE_FRACTION(
@@ -316,8 +313,6 @@ void test_spots(RealType)
      // Wolfram
       tolerance); // gives 
 
-
-
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)),
      static_cast<RealType>(0.1)),  // x 
@@ -331,9 +326,6 @@ void test_spots(RealType)
      static_cast<RealType>(0.1),  // 0.1000000000000000000000000000000000000000
      // Wolfram
       tolerance);
-
-
-
 
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(complement(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(0.5)),
@@ -404,14 +396,13 @@ int test_main(int, char* [])
   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.1), 0.028000000000000, tol);
   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.5), 0.5, tol);
   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.9), 0.972000000000000, tol);
-  //BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.0001), 4.999666666666666666666666666666666666667E-9, tol);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.0001), 2.999800000000000000000000000000000000000E-8, tol);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.001), 2.998000000000000000000000000000000000000E-6, tol);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.01), 0.0002980000000000000000000000000000000000000, tol);
   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.1), 0.02800000000000000000000000000000000000000, tol); // exact
-  //BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.1), 0.004666666666666666666666666666666666666667, tol);
-
-  // 4.999666666666666666666666666666666666667E-9  Wolfram
+  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.99), 0.9997020000000000000000000000000000000000, tol);
 
   BOOST_CHECK_EQUAL(cdf(mybeta22, 1), 1.); // Exact unity expected.
-
 
   // Complement
 
@@ -426,8 +417,12 @@ int test_main(int, char* [])
   BOOST_CHECK_CLOSE_FRACTION(mean(mybeta22), 0.5, tol);
   BOOST_CHECK_EQUAL(beta_distribution<double>::estimate_alpha(mean(mybeta22), variance(mybeta22), 0.5), mybeta22.alpha()); // mean, variance, probability. 
   BOOST_CHECK_EQUAL(beta_distribution<double>::estimate_beta(mean(mybeta22), variance(mybeta22), 0.5), mybeta22.beta());// mean, variance, probability. 
-
-  
+  using boost::math::ibeta_inva;
+  using boost::math::ibeta_invb;
+  cout << beta_distribution<double>::estimate_beta(mean(mybeta22), variance(mybeta22), 0.5) << endl; // 2
+  cout << beta_distribution<double>::estimate_beta(mean(mybeta22), variance(mybeta22), 0.5) << endl; // 2
+  cout << ibeta_inva(mean(mybeta22), variance(mybeta22), 0.5) << endl; // 0.167502
+  cout << ibeta_invb(mean(mybeta22), variance(mybeta22), 0.5) << endl; // 4.67659
 
   // Basic sanity-check spot values.
 #ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
