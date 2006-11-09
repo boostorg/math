@@ -103,6 +103,23 @@ will be used by other Boost programs including:
 "difference between {9.79796} and {9.79796} exceeds 5.42101e-19%".
 * Boost.lexical cast to decimal digit string types
 and Boost.serialization output causing potentially serious loss of accuracy.
+
+
+Although it might seem the real_concept would best require std::numeric_limits
+to be specialized for all types to provide digits, this is not sensible for
+NTL::RR and similar classes where the number of digits is a runtime 
+parameter (for numeric_limits it has to be fixed at compile time).
+(One could still define digits, digits10, epsilon etc to be suitable values,
+but one would have to ensure that the precision chosen at runtime,
+for example, using the NTL function NTL::setprecision(40), matched
+that chosen at compile time by these definitions,
+for example, std::numeric_limits<RR>::digits10 = 40;).
+
+To mitigate the problems caused by lack of full numeric_limits specialization,
+boost::math::tools:: provides some compile time asserts which will alert
+the user by failure to compile unless
+both numeric_limits<T>::is_specilized and numeric_limits<T>::digits.
+
 ]
 
 
