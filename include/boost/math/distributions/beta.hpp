@@ -19,6 +19,7 @@
 // to describe the time to completion.
 // The cdf of the beta distribution is used as a convenient way
 // of obtaining the sum over a set of binomial outcomes.
+// The beta distribution is also used in Bayesian statistics.
 
 #ifndef BOOST_MATH_DIST_BETA_HPP
 #define BOOST_MATH_DIST_BETA_HPP
@@ -54,6 +55,7 @@ namespace boost
         }
         return true;
       } // bool check_alpha
+
       template <class RealType>
       inline bool check_beta(const char* function, const RealType& beta, RealType* result)
       {
@@ -66,6 +68,7 @@ namespace boost
         }
         return true;
       } // bool check_beta
+
       template <class RealType>
       inline bool check_prob(const char* function, const RealType& p, RealType* result)
       {
@@ -78,6 +81,7 @@ namespace boost
         }
         return true;
       } // bool check_prob
+
       template <class RealType>
       inline bool check_x(const char* function, const RealType& x, RealType* result)
       {
@@ -90,18 +94,21 @@ namespace boost
         }
         return true;
       } // bool check_x
+
       template <class RealType>
       inline bool check_dist(const char* function, const RealType& alpha, const RealType& beta, RealType* result)
       { // Check both alpha and beta.
         return check_alpha(function, alpha, result)
           && check_beta(function, beta, result);
       } // bool check_dist
+
       template <class RealType>
       inline bool check_dist_and_x(const char* function, const RealType& alpha, const RealType& beta, RealType x, RealType* result)
       {
         return check_dist(function, alpha, beta, result) 
           && check_x(function, x, result);
       } // bool check_dist_and_x
+
       template <class RealType>
       inline bool check_dist_and_prob(const char* function, const RealType& alpha, const RealType& beta, RealType p, RealType* result)
       {
@@ -133,11 +140,10 @@ namespace boost
         }
         return true;
       } // bool check_variance
-  
-    }
+    } // namespace beta_detail
 
     // typedef beta_distribution<double> beta;
-    // is deliberately NOT included to avoid a name clash with beta function.
+    // is deliberately NOT included to avoid a name clash with the beta function.
     // Use beta_distribution<> mybeta(...) to construct type double. 
 
     template <class RealType = double>
@@ -168,16 +174,16 @@ namespace boost
       // Estimation of the alpha & beta parameters.
       // http://en.wikipedia.org/wiki/Beta_distribution
       // gives formulae in section on parameter estimation.
+      // Also NIST EDA page 3 & 4 give the same.
+      // http://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm
+      // http://www.epi.ucdavis.edu/diagnostictests/betabuster.html
+
       static RealType estimate_alpha(
-        RealType mean, // Expected value of mean for probability x.
-        RealType variance,// Expected value of variance for probability x.
-        RealType probability) // x
+        RealType mean, // Expected value of mean.
+        RealType variance) // Expected value of variance.
       {
         RealType result; // of error checks.
         if(false == 
-          beta_detail::check_prob(
-          BOOST_CURRENT_FUNCTION, probability, &result)
-          &&
           beta_detail::check_mean(
           BOOST_CURRENT_FUNCTION, mean, &result)
           &&
@@ -191,15 +197,11 @@ namespace boost
       } // RealType estimate_alpha
 
       static RealType estimate_beta(
-        RealType mean, // Expected value of mean for probability x.
-        RealType variance, // Expected value of variance for probability x.
-        RealType probability) // x
+        RealType mean, // Expected value of mean.
+        RealType variance) // Expected value of variance.
       {
         RealType result; // of error checks.
         if(false ==
-          beta_detail::check_prob(
-          BOOST_CURRENT_FUNCTION, probability, &result)
-          &&
           beta_detail::check_mean(
           BOOST_CURRENT_FUNCTION, mean, &result)
           &&
@@ -211,6 +213,54 @@ namespace boost
         }
         return (1 - mean) * (((mean * (1 - mean)) /variance)-1);
       } //  RealType estimate_beta
+
+      // Estimate alpha & beta from either alpha or beta, and x and probability.
+      // Uses for these parameter estimators are unclear.
+
+      static RealType estimate_alpha(
+        RealType beta, // from beta.
+        RealType x, //  x.
+        RealType probability) // cdf
+      {
+        RealType result; // of error checks.
+        if(false == 
+          beta_detail::check_prob(
+          BOOST_CURRENT_FUNCTION, probability, &result)
+          &&
+          beta_detail::check_beta(
+          BOOST_CURRENT_FUNCTION, beta, &result)
+          &&
+          beta_detail::check_x(
+          BOOST_CURRENT_FUNCTION, x, &result)
+          )
+        {
+          return result;
+        }
+        return ibeta_inva(beta, x, probability);
+      } // RealType estimate_alpha(beta, a, probability)
+
+      static RealType estimate_beta(
+        // ibeta_invb(T b, T x, T p); (alpha, x, cdf,)
+        RealType alpha, // alpha.
+        RealType x, // probability x.
+        RealType probability) // probability cdf.
+      {
+        RealType result; // of error checks.
+        if(false ==
+          beta_detail::check_prob(
+          BOOST_CURRENT_FUNCTION, probability, &result)
+          &&
+          beta_detail::check_alpha(
+          BOOST_CURRENT_FUNCTION, alpha, &result)
+          &&
+          beta_detail::check_x(
+          BOOST_CURRENT_FUNCTION, x, &result)
+          )
+        {
+          return result;
+        }
+        return ibeta_invb(alpha, x, probability);
+      } //  RealType estimate_beta(alpha, x, probability)
 
     private:
       RealType m_alpha; // Two parameters of the beta distribution.
@@ -324,6 +374,15 @@ namespace boost
       {
         return result;
       }
+      // Special cases:
+      if (x == 0)
+      {
+        return 0;
+      }
+      else if (x == 1)
+      {
+        return 1;
+      }
       return ibeta(a, b, x);
     } // beta cdf
 
@@ -348,6 +407,14 @@ namespace boost
       {
         return result;
       }
+      if (x == 0)
+      {
+        return 1;
+      }
+      else if (x == 1)
+      {
+        return 0;
+      }
       // Calculate cdf beta using the incomplete beta function.
       // Use of ibeta here prevents cancellation errors in calculating
       // 1 - x if x is very small, perhaps smaller than machine epsilon.
@@ -356,17 +423,15 @@ namespace boost
 
     template <class RealType>
     RealType quantile(const beta_distribution<RealType>& dist, const RealType& p)
-    { // Quantile or Percent Point beta function or .
-      // Inverse cumulative probability distribution.
+    { // Quantile or Percent Point beta function or
+      // Inverse Cumulative probability distribution function CDF.
       // Return x (0 <= x <= 1),
       // for a given probability p (0 <= p <= 1).
       // These functions take a probability as an argument
       // and return a value such that the probability that a random variable x
       // will be less than or equal to that value
       // is whatever probability you supplied as an argument. 
-
-      // use incomplete beta inverse ibeta_inv
-      
+     
       RealType result; // of argument checks:
       RealType a = dist.alpha();
       RealType b = dist.beta();
