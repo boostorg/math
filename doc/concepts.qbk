@@ -90,12 +90,10 @@ libs/math/tools/lanczos_generator.cpp to find a suitable
 approximation for your type T.
 
 [warning
-
 1  Real concept type T assumes that the number of significand bits
 is the same as long double,
 *unless* std::numeric_limits<T>::is_specialized
-to provide std::numeric_limits<T>::digits.
-
+to provide std::numeric_limits<T>::digits.\n
 2  If std::numeric_limits<T> is *NOT specialized* to provide std::numeric_limits<T>::digits
 (or in future max_digits10) then the default float precision of 6 decimal digits
 will be used by other Boost programs including:
@@ -172,4 +170,5 @@ there too.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
 
