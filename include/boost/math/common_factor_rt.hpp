@@ -296,9 +296,7 @@ namespace detail
 
 #ifdef BOOST_HAS_LONG_LONG
     BOOST_PRIVATE_GCD_UF( unsigned long long );
-#endif
-
-#ifdef BOOST_HAS_MS_INT64
+#elif defined(BOOST_HAS_MS_INT64)
     BOOST_PRIVATE_GCD_UF( unsigned __int64 );
 #endif
 
@@ -320,9 +318,7 @@ namespace detail
 
 #ifdef BOOST_HAS_LONG_LONG
     BOOST_PRIVATE_GCD_SF( long long, unsigned long long );
-#endif
-
-#ifdef BOOST_HAS_MS_INT64
+#elif defined(BOOST_HAS_MS_INT64)
     BOOST_PRIVATE_GCD_SF( __int64, unsigned __int64 );
 #endif
 

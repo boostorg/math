@@ -8,6 +8,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  10 Nov 2006  Make long long and __int64 mutually exclusive (Daryle Walker)
 //  04 Nov 2006  Use more built-in numeric types, binary-GCD (Daryle Walker)
 //  03 Nov 2006  Use custom numeric types (Daryle Walker)
 //  02 Nov 2006  Change to Boost.Test's unit test system (Daryle Walker)
@@ -15,7 +16,7 @@
 
 #define BOOST_TEST_MAIN  "Boost.Math GCD & LCM unit tests"
 
-#include <boost/config.hpp>              // for BOOST_MSVC
+#include <boost/config.hpp>              // for BOOST_MSVC, etc.
 #include <boost/math/common_factor.hpp>  // for boost::math::gcd, etc.
 #include <boost/mpl/list.hpp>            // for boost::mpl::list
 #include <boost/operators.hpp>
@@ -108,8 +109,7 @@ typedef my_wrapped_integer<unsigned, 1>  MyUnsigned2;
 typedef ::boost::mpl::list<signed char, short, int, long,
 #ifdef BOOST_HAS_LONG_LONG
  long long,
-#endif
-#ifdef BOOST_HAS_MS_INT64
+#elif defined(BOOST_HAS_MS_INT64)
  __int64,
 #endif
  MyInt1>  signed_test_types;
@@ -117,8 +117,7 @@ typedef ::boost::mpl::list<unsigned char, unsigned short, unsigned,
  unsigned long,
 #ifdef BOOST_HAS_LONG_LONG
  unsigned long long,
-#endif
-#ifdef BOOST_HAS_MS_INT64
+#elif defined(BOOST_HAS_MS_INT64)
  unsigned __int64,
 #endif
  MyUnsigned1, MyUnsigned2>  unsigned_test_types;
