@@ -96,13 +96,11 @@ is the same as long double,
 to provide std::numeric_limits<T>::digits.\n
 2  If std::numeric_limits<T> is *NOT specialized* to provide std::numeric_limits<T>::digits
 (or in future max_digits10) then the default float precision of 6 decimal digits
-will be used by other Boost programs including:
-* Boost.test giving misleading error messages like
-"difference between {9.79796} and {9.79796} exceeds 5.42101e-19%".
-* Boost.lexical cast to decimal digit string types
-and Boost.serialization output causing potentially serious loss of accuracy.
-
-
+will be used by other Boost programs including:\n
+* Boost.test giving misleading error messages like\n
+"difference between {9.79796} and {9.79796} exceeds 5.42101e-19%".\n
+* Boost.lexical cast to decimal digit string types\n
+and Boost.serialization output causing potentially serious loss of accuracy.\n
 Although it might seem the real_concept would best require std::numeric_limits
 to be specialized for all types to provide digits, this is not sensible for
 NTL::RR and similar classes where the number of digits is a runtime 
@@ -111,13 +109,11 @@ parameter (for numeric_limits it has to be fixed at compile time).
 but one would have to ensure that the precision chosen at runtime,
 for example, using the NTL function NTL::setprecision(40), matched
 that chosen at compile time by these definitions,
-for example, std::numeric_limits<RR>::digits10 = 40;).
-
+for example, std::numeric_limits<RR>::digits10 = 40;).\n
 To mitigate the problems caused by lack of full numeric_limits specialization,
 boost::math::tools:: provides some compile time asserts which will alert
 the user by failure to compile unless
 both numeric_limits<T>::is_specilized and numeric_limits<T>::digits.
-
 ]
 
 
@@ -170,5 +166,6 @@ there too.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
 
 

@@ -14,7 +14,7 @@
 #include <iomanip>
 #include <boost/math/distributions/chi_squared.hpp>
 
-void confidence_limits_on_variance(
+void confidence_limits_on_std_deviation(
         double Sd,    // Sample Standard Deviation
         unsigned N)   // Sample size
 {
@@ -28,7 +28,7 @@ void confidence_limits_on_variance(
    // confidence interval means that there is a 95%
    // probability that the interval contains the true standard deviation.
    // The interval computed from a given sample either
-   // contains the true mean or it does not.
+   // contains the true standard deviation or it does not.
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda358.htm
 
    using namespace std;
@@ -212,7 +212,7 @@ int main()
    // see http://www.itl.nist.gov/div898/handbook/eda/section3/eda3581.htm
    // Tests measurements of gear diameter.
    //
-   confidence_limits_on_variance(0.6278908E-02, 100);
+   confidence_limits_on_std_deviation(0.6278908E-02, 100);
    chi_squared_test(0.6278908E-02, 0.1, 100, 0.05);
    chi_squared_sample_sized(0.1 - 0.6278908E-02, 0.1);
    //
@@ -224,7 +224,7 @@ int main()
    // 10 ohm.cm. A sample of N = 10 wafers taken from the lot has a 
    // standard deviation of 13.97 ohm.cm
    //
-   confidence_limits_on_variance(13.97, 10);
+   confidence_limits_on_std_deviation(13.97, 10);
    chi_squared_test(13.97, 10.0, 10, 0.05);
    chi_squared_sample_sized(13.97 * 13.97 - 100, 100);
    chi_squared_sample_sized(55, 100);

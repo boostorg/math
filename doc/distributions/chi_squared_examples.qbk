@@ -1,0 +1,120 @@
+
+[section:cs_eg Chi Squared Distribution]
+
+[section:chi_sq_intervals Confidence Intervals on the Standard Deviation]
+
+Once you have calculated the standard deviation for your data, a legitimate
+question to ask is "How reliable is the calculated standard deviation?".
+For this situation the Chi Squared distribution can be used to calculate
+confidence intervals for the standard deviation.
+
+The full example code is in [@../../example/chi_square_std_dev_test.cpp 
+chi_square_std_deviation_test.cpp].
+
+We'll begin by defining the procedure that will calculate and print out the
+confidence intervals:
+
+   void confidence_limits_on_std_deviation(
+        double Sd,    // Sample Standard Deviation
+        unsigned N)   // Sample size
+   {
+   
+We'll begin by printing out some general information:
+
+   cout <<
+      "________________________________________________\n"
+      "2-Sided Confidence Limits For Standard Deviation\n"
+      "________________________________________________\n\n";
+   cout << setprecision(7);
+   cout << setw(40) << left << "Number of Observations" << "=  " << N << "\n";
+   cout << setw(40) << left << "Standard Deviation" << "=  " << Sd << "\n";
+
+and then define a table of significance levels for which we'll calculate
+intervals:
+
+   double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
+
+The distribution we'll need to calculate the confidence intervals is a
+Chi Squared distribution, with N-1 degrees of freedom:
+
+   chi_squared dist(N - 1);
+
+For each value of alpha, the formula for the confidence interval is given by:
+
+[$../equations/chi_squ_tut1.png]
+
+Where [$../equations/chi_squ_tut2.png] is the upper critical value, and 
+[$../equations/chi_squ_tut3.png] is the lower critical value of the
+Chi Squared distribution.
+
+In code we begin by printing out a table header:
+
+   cout << "\n\n"
+           "_____________________________________________\n"
+           "Confidence          Lower          Upper\n"
+           " Value (%)          Limit          Limit\n"
+           "_____________________________________________\n";
+
+and then loop over the values of alpha and calculate the intervals
+for each: remember that the lower critical value is the same as the
+quantile, and the upper critical value is the same as the quantile
+from the complement of the probability:
+
+   for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
+   {
+      // Confidence value:
+      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
+      // Calculate limits:
+      double lower_limit = sqrt((N - 1) * Sd * Sd / quantile(complement(dist, alpha[i] / 2)));
+      double upper_limit = sqrt((N - 1) * Sd * Sd / quantile(dist, alpha[i] / 2));
+      // Print Limits:
+      cout << fixed << setprecision(5) << setw(15) << right << lower_limit;
+      cout << fixed << setprecision(5) << setw(15) << right << upper_limit << endl;
+   }
+   cout << endl;
+
+To see some example output we'll use the
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda3581.htm 
+gear data] from the NIST Engineering Statistics Handbook.
+The data represents measurements of gear diameter from a manufacturing
+process.
+
+[pre'''
+________________________________________________
+2-Sided Confidence Limits For Standard Deviation
+________________________________________________
+
+Number of Observations                  =  100
+Standard Deviation                      =  0.006278908
+
+
+_____________________________________________
+Confidence          Lower          Upper
+ Value (%)          Limit          Limit
+_____________________________________________
+    50.000        0.00601        0.00662
+    75.000        0.00582        0.00685
+    90.000        0.00563        0.00712
+    95.000        0.00551        0.00729
+    99.000        0.00530        0.00766
+    99.900        0.00507        0.00812
+    99.990        0.00489        0.00855
+    99.999        0.00474        0.00895
+''']
+
+So at the 95% confidence level we conclude that the standard deviation
+is between 0.00551 and 0.00729.
+
+[endsect][/section:chi_sq_intervals Confidence Intervals on the Standard Deviation]
+
+[section:chi_sq_test Testing for Unequal Standard Deviations]
+
+[endsect][/section:chi_sq_test Testing for Unequal Standard Deviations]
+
+[section:chi_sq_size Estimating the Required Sample Sizes for a Chi Squared Test
+for Unequal Standard Deviations]
+
+[endsect][/section:chi_sq_size Estimating the Required Sample Sizes for a Chi Squared Test
+for Unequal Standard Deviations]
+
+[endsect][/section:cs_eg Chi Squared Distribution]

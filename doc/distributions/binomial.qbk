@@ -90,7 +90,7 @@ want to be 95% sure that the true value is [*greater than] some value,
    p``[sub min]`` = binomial_distribution<RealType>::estimate_lower_bound_on_p(
                        n, k, 0.05);
 
-[link binom_conf See worked example.]
+[link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf See worked example.]
       
    static RealType estimate_upper_bound_on_p(
       RealType trials, 
@@ -114,7 +114,7 @@ want to be 95% sure that the true value is [*less than] some value,
    p``[sub max]`` = binomial_distribution<RealType>::estimate_upper_bound_on_p(
                        n, k, 0.05);
 
-[link binom_conf See worked example.]
+[link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf See worked example.]
 
    static RealType estimate_number_of_trials(
       RealType k,     // number of events
@@ -150,7 +150,7 @@ Returns the largest number of trials we can conduct and still be 95% certain
 of not observing any events that occur with one in a million frequency.
 This is typically used in failure analysis.
 
-[link binom_size_eg See Worked Example.]
+[link math_toolkit.dist.stat_tut.weg.binom_eg.binom_size_eg See Worked Example.]
 
 [h4 Non-member Accessors]
 
