@@ -14,6 +14,8 @@ boostbook standalone
         <xsl:param>chunk.section.depth=10
         <xsl:param>chunk.first.sections=1
         <xsl:param>toc.section.depth=10
+        <xsl:param>toc.max.depth=4
+        <xsl:param>generate.section.toc.level=10
         # this is needed for FOP-0.9 and later:
         <xsl:param>fop1.extensions=0
         # this is needed for FOP 0.2, but must not be set to zero for FOP-0.9!
@@ -23,6 +25,7 @@ boostbook standalone
         <xsl:param>page.margin.outer=0.5in
         <xsl:param>admon.graphics=1
     ;
+
 
 
 

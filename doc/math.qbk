@@ -12,9 +12,6 @@
     [/last-revision $Date$]
 ]
 
-[/template floor[x]'''&#x230A;'''[x]'''&#x230B;''']
-[/template ceil[x]'''&#2308;'''[x]'''&#x2309;''']
-
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
 [template sub[x]'''<subscript>'''[x]'''</subscript>''']
 
@@ -92,7 +89,7 @@ and use the function's name as the link text]
 [def __erf_inv [link math_toolkit.special.error_inv erf_inv]]
 [def __erfc_inv [link math_toolkit.special.error_inv erfc_inv]]
 [def __beta  [link math_toolkit.special.beta_function beta]]
-[/def __beta [link math_toolkit.special.ibeta_function beta]]
+[def __beta3 [link math_toolkit.special.ibeta_function beta]]
 [def __betac [link math_toolkit.special.ibeta_function betac]]
 [def __ibeta [link math_toolkit.special.ibeta_function ibeta]]
 [def __ibetac [link math_toolkit.special.ibeta_function ibetac]]
