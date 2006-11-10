@@ -8,21 +8,21 @@
 import testing ;
 
 run ../test/common_factor_test.cpp
-    ../../test/build//boost_test_exec_monitor ;
+    ../../test/build//boost_unit_test_framework/<link>static ;
 
 run ../octonion/octonion_test.cpp
-    ../../test/build//boost_unit_test_framework ;
+    ../../test/build//boost_unit_test_framework/<link>static ;
 
 run ../quaternion/quaternion_test.cpp
-    ../../test/build//boost_unit_test_framework ;
+    ../../test/build//boost_unit_test_framework/<link>static ;
 
 run ../special_functions/special_functions_test.cpp
-    ../../test/build//boost_unit_test_framework ;
+    ../../test/build//boost_unit_test_framework/<link>static ;
 
 run ../quaternion/quaternion_mult_incl_test.cpp 
     ../quaternion/quaternion_mi1.cpp
     ../quaternion/quaternion_mi2.cpp
-    ../../test/build//boost_unit_test_framework ;
+    ../../test/build//boost_unit_test_framework/<link>static ;
 
 run complex_test.cpp ;
 run hypot_test.cpp ;
