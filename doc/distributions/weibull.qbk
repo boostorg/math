@@ -1,9 +1,5 @@
 [section:weibull Weibull Distribution]
 
-[template alpha '''&#945;''']
-[template beta '''&#946;''']
-[template GAMMA '''&#915;''']
-
 
 ``#include <boost/math/distributions/weibull.hpp>``
 
@@ -78,8 +74,8 @@ and /q = 1-p/.
 [[cdf complement][Using the relation: q = e[super -(x\/[beta])[super [alpha]]] ]]
 [[quantile][Using the relation: x = [beta] * (-__log1p(-p))[super 1\/[alpha]] ]]
 [[quantile from the complement][Using the relation: x = [beta] * (-log(q))[super 1\/[alpha]] ]]
-[[mean][[beta] * [GAMMA](1 + 1\/[alpha]) ]]
-[[variance][[beta][super 2]([GAMMA](1 + 2\/[alpha]) - [GAMMA][super 2](1 + 1\/[alpha])) ]]
+[[mean][[beta] * [Gamma](1 + 1\/[alpha]) ]]
+[[variance][[beta][super 2]([Gamma](1 + 2\/[alpha]) - [Gamma][super 2](1 + 1\/[alpha])) ]]
 [[mode][[beta](([alpha] - 1) \/ [alpha])[super 1\/[alpha]] ]]
 [[skewness][Refer to [@http://mathworld.wolfram.com/WeibullDistribution.html Weisstein, Eric W. "Weibull Distribution." From MathWorld--A Wolfram Web Resource.] ]]
 [[kurtosis][Refer to [@http://mathworld.wolfram.com/WeibullDistribution.html Weisstein, Eric W. "Weibull Distribution." From MathWorld--A Wolfram Web Resource.] ]]

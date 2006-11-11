@@ -155,8 +155,6 @@ degrees of freedom:
 
 The various hypothesis that can be tested are summarised in the following table:
 
-[template chi '''&#x3C7;''']
-
 [table
 [[Hypothesis][Test]]
 [[The null-hypothesis: there is no difference in standard deviation from the specified value]

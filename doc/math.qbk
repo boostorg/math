@@ -12,6 +12,8 @@
     [/last-revision $Date$]
 ]
 
+[include HTML4_symbols.qbk]
+
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
 [template sub[x]'''<subscript>'''[x]'''</subscript>''']
 

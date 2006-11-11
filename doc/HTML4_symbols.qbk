@@ -1,6 +1,6 @@
 [/ Symbols and Greek letters (about 120) from HTML4 ]
 [/ File HTML4_symbols.qbk]
-[@http://www.htmlhelp.com/reference/html40/entities/symbols.html]
+[/ See http://www.htmlhelp.com/reference/html40/entities/symbols.html]
 
 [template fnof	'''&#x192;'''] [/	ƒ	Latin small f with hook = function = florin]
 [template Alpha	'''&#x391;'''] [/	?	Greek capital letter alpha]
@@ -126,6 +126,8 @@
 [template clubs	'''&#x2663;'''] [/	?	black club suit = shamrock]
 [template hearts	'''&#x2665;'''] [/	?	black heart suit = valentine]
 [template diams	'''&#x2666;'''] [/	?	black diamond suit]
+
+[template plusminus	'''&#x00B1;'''] [/	?	plus or minus sign]
 
 [/ 
   Copyright 2006 Paul A. Bristow.

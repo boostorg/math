@@ -1,6 +1,4 @@
-[section:cauchy_dist Cauchy]
-
-TODO: insert background here....
+[section:cauchy_dist Cauchy-Lorentz Distribution]
 
 ``#include <boost/math/distributions/cauchy.hpp>``
 
@@ -15,8 +13,34 @@ TODO: insert background here....
       RealType location()const;
       RealType scale()const;
    };
+   
+The Cauchy-Lorentz distribution is named after Augustin Cauchy and
+Hendrik Lorentz.  It is a continuous probability distribution with
+PDF given by:
 
-   typedef cauchy_distribution<double> cauchy;
+[$../equations/cauchy_ref1.png]
+
+The location parameter x[sub 0] is the location of the 
+peak of the distribution (the mode of the distribution),
+while the scale parameter [gamma] specifies half the width
+of the PDF at half the maximum height.  If the location is 
+zero, and the scale 1, then the result is a standard Cauchy
+distribution.
+
+The distribution is important in physics as it is the solution
+to the differential equation describing forced resonance,
+while in spectroscopy it is the description of the line shape 
+of spectral lines.
+
+The following graph shows how the distributions moves as the
+location parameter changes:
+
+[$../graphs/cauchy1.png]
+
+While the following graph shows how the shape parameter alters
+the distribution:
+
+[$../graphs/cauchy2.png]
 
 [h4 Member Functions]
 
@@ -42,7 +66,7 @@ that are generic to all distributions are supported: __usual_accessors.
 Note however that the Cauchy distribution does not have a mean or 
 standard deviation.  Therefore, the functions __mean, __sd, 
 __variance, __skewness, __kurtosis and __kurtosis_excess will all
-raise a domain_error if called.
+raise a __domain_error if called.
 
 [h4 Accuracy]
 
@@ -55,23 +79,23 @@ and as such should have very low error rates.
 [def __x0 x[sub 0 ]]
 
 In the following table __x0 is the location parameter of the distribution, 
-/g/ is it's scale parameter, /x/ is the random variate, /p/ is the probability
+[gamma] is it's scale parameter, /x/ is the random variate, /p/ is the probability
 and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Using the relation: pdf = 1 / (pi * g * (1 + ((x - __x0) / g)[super 2]) ]]
+[[pdf][Using the relation: pdf = 1 / ([pi] * [gamma] * (1 + ((x - __x0) / [gamma])[super 2]) ]]
 [[cdf and it's complement][
       The cdf is normally given by:\n\n
-      p = 0.5 + atan(x)/pi\n\n
+      p = 0.5 + atan(x)/[pi]\n\n
       But that suffers from cancellation error as x -> -INF.
       So recall that for x < 0:\n\n
-      atan(x) = -pi/2 - atan(1/x)\n\n
+      atan(x) = -[pi]/2 - atan(1/x)\n\n
       Substituting into the above we get:\n\n
       p = -atan(1/x)  ; x < 0\n\n
       So the proceedure is to calculate the cdf for -fabs(x)
       using the above formula.  Note that to factor in the location and scale
-      parameters you must substitute (x - __x0) / g for x in the above.\n\n
+      parameters you must substitute (x - __x0) / [gamma] for x in the above.\n\n
       This procedure yields the smaller of /p/ and /q/, so the result
       may need subtracting from 1 depending on whether we want the complement
       or not, and whether /x/ is less than __x0 or not.
@@ -79,7 +103,7 @@ and /q = 1-p/.
 [[quantile][The same proceedure is used irrespective of whether we're starting
             from the probability or it's complement.  First the argument /p/ is
             reduced to the range \[-0.5, 0.5\], then the relation\n\n
-            x = __x0 +- g / tan(pi * p)\n\n
+            x = __x0 [plusminus] [gamma] / tan([pi] * p)\n\n
             is used to obtain the result.  Whether we're adding
             or subtracting from __x0 is determined by whether we're
             starting from the complement or not.]]

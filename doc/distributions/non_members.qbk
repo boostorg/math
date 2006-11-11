@@ -154,7 +154,8 @@ For example for a standard normal distribution the pdf looks like this:
 The quantile is best viewed as the inverse of the __cdf, it returns
 a value /x/ such that `cdf(dist, x) == p`.
 
-This is also known as the /percent point function/, or a /percentile/.
+This is also known as the /percent point function/, or a /percentile/, it is
+also the same as calculating the ['lower critical value] of a distribution.
 
 The following graph shows the quantile function for a standard normal
 distribution:
@@ -180,7 +181,8 @@ The function computes a value /x/ such that
 `cdf(complement(dist, x)) == q` where /q/ is complement of the
 probability.
 
-This function is also called the inverse survival function.
+This function is also called the inverse survival function, and is the
+same as calculating the ['upper critical value] of a distribution.
 
 The following graph show the inverse survival function for the normal
 distribution:
