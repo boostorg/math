@@ -16,6 +16,7 @@
 
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
 [template sub[x]'''<subscript>'''[x]'''</subscript>''']
+[template space''' ''']
 
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]

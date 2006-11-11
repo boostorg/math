@@ -1,7 +1,4 @@
-[section:chi_squared_dist Chi Squared]
-
-The chi-square distribution results when /v/ independent variables with
-standard normal distributions are squared and summed.
+[section:chi_squared_dist Chi Squared Distribution]
 
 ``#include <boost/math/distributions/chi_squared.hpp>``
 
@@ -35,6 +32,23 @@ standard normal distributions are squared and summed.
    
    }} // namespaces
    
+The Chi-Squared distribution is one of the most widely used distributions
+in statistical tests.  If [chi][sub i][space] are [nu][space] 
+independent, normally distributed
+random variables with means [mu][sub i][space] and variances [sigma][sub i][super 2], 
+then the random variable:
+
+[$../equations/chi_squ_ref1.png]
+
+is distributed according to the Chi-Squared distribution.
+
+The Chi-Squared distribution is a special case of the gamma distribution
+and has a single parameter [nu][space] that specifies the number of degrees of
+freedom.  The following graph illustrates how the distribution changes
+for different values of [nu]:
+
+[$../graphs/chi_square.png]
+
 [h4 Member Functions]
 
       chi_squared_distribution(RealType v);
@@ -60,7 +74,7 @@ variance in a Chi-Squared test for equal standard deviations.
    that is to be detected: Note that the sign of this value is critical, see below.]]
 [[alpha][The maximum acceptable risk of rejecting the null hypothesis when it is
          in fact true.]]
-[[beta][The maximum acceptable risk of falsely accepting the null hypothesis.]]
+[[beta][The maximum acceptable risk of falsely failing to reject the null hypothesis.]]
 [[variance][The nominal variance being tested against.]]
 [[hint][An optional hint on where to start looking for a result: the current sample
       size would be a good choice.]]
@@ -69,7 +83,7 @@ variance in a Chi-Squared test for equal standard deviations.
 Note that this calculation works with /variances/ and not /standard deviations/.
 
 The sign of the parameter /difference_from_variance/ is important: the Chi
-squared distribution is asymmetric, and the caller must decide in advance
+Squared distribution is asymmetric, and the caller must decide in advance
 whether they are testing for a variance greater than a nominal value (positive
 /difference_from_variance/) or testing for a variance less than a nominal value
 (negative /difference_from_variance/).  If the latter, then obviously it is
@@ -90,11 +104,11 @@ that are generic to all distributions are supported: __usual_accessors.
 
 The Chi-Squared distribution is implemented in terms of the 
 [link math_toolkit.special.igamma incomplete gamma functions]:
-please refer to the accuracy date for those functions.
+please refer to the accuracy data for those functions.
 
 [h4 Implementation]
 
-In the following table /v/ number of degrees of freedom of the distribution
+In the following table /v/ is the number of degrees of freedom of the distribution,
 /x/ is the random variate, /p/ is the probability, and /q = 1-p/.
 
 [table

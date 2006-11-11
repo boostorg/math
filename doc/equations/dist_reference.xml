@@ -473,5 +473,48 @@
     </mfenced>
   </mrow>
 </math>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mi>Q</mi>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <munderover>
+      <mo>&Sum;</mo>
+      <mrow>
+        <mi>i</mi>
+        <mo>=</mo>
+        <mn>1</mn>
+      </mrow>
+      <mi>&nu;</mi>
+    </munderover>
+    <msup>
+      <mfenced>
+        <mrow>
+          <mfrac>
+            <mrow>
+              <msub>
+                <mi>&chi;</mi>
+                <mi>i</mi>
+              </msub>
+              <mo>&minus;</mo>
+              <msub>
+                <mi>&nu;</mi>
+                <mi>i</mi>
+              </msub>
+            </mrow>
+            <mrow>
+              <msub>
+                <mi>&sigma;</mi>
+                <mi>i</mi>
+              </msub>
+            </mrow>
+          </mfrac>
+        </mrow>
+      </mfenced>
+      <mn>2</mn>
+    </msup>
+  </mrow>
+</math>
 </body>
 </html>
