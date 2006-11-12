@@ -1,6 +1,22 @@
 
 [section:extreme_dist Extreme Value]
 
+``#include <boost/math/distributions/extreme.hpp>``
+
+   template <class RealType = double>
+   class extreme_value_distribution
+   {
+   public:
+      typedef RealType value_type;
+
+      extreme_value_distribution(RealType location = 0, RealType scale = 1);
+
+      RealType scale()const;
+      RealType location()const;
+   };
+
+   typedef extreme_value_distribution<double> extreme_value;
+
 There are various extreme value distributions: this implementation represents the
 maximum case, and is variously known as a Fisher-Tippett distribution, 
 a log-Weibull distribution or a Gumbel distribution. 
@@ -18,25 +34,17 @@ The distribution has a PDF given by:
 
 f(x) = (1/scale) e[super -(x-location)/scale] e[super -e[super -(x-location)/scale]]
 
-Which in the standard case reduces to:
+Which in the standard case (scale = 1, location = 0) reduces to:
 
 f(x) = e[super -x]e[super -e[super -x]]
 
-``#include <boost/math/distributions/extreme.hpp>``
+The following graph illustrates how the PDF varies with the location parameter:
 
-   template <class RealType = double>
-   class extreme_value_distribution
-   {
-   public:
-      typedef RealType value_type;
+[$../graphs/extreme_val_dist.png]
 
-      extreme_value_distribution(RealType location = 0, RealType scale = 1);
+And this graph illustrates how the PDF varies with the shape parameter:
 
-      RealType scale()const;
-      RealType location()const;
-   };
-
-   typedef extreme_value_distribution<double> extreme_value;
+[$../graphs/extreme_val_dist2.png]
 
 [h4 Member Functions]
 
@@ -44,6 +52,8 @@ f(x) = e[super -x]e[super -e[super -x]]
    
 Constructs an Extreme Value distribution with the specified location and scale
 parameters.
+
+Requires `scale > 0`, otherwise calls __domain_error.
 
    RealType location()const;
    
@@ -58,10 +68,12 @@ Returns the scale parameter of the distribution.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
+The domain of the random parameter is \[-[infin], +[infin]\].
+
 [h4 Accuracy]
 
 The extreme value distribution is implemented in terms of the 
-standard library exp and log functions and as such should have very low
+standard library `exp` and `log` functions and as such should have very low
 error rates.
 
 [h4 Implementation]

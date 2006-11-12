@@ -1,9 +1,5 @@
 [section:f_dist F distribution]
 
-The F distribution is the ratio of two chi-squared distributions with
-degrees of freedom df1 and df2, respectively, where each chi-squared has
-first been divided by its degrees of freedom.
-
 ``#include <boost/math/distributions/fisher_f.hpp>``
 
    namespace boost{ namespace math{ 
@@ -29,12 +25,30 @@ first been divided by its degrees of freedom.
    
    }} //namespaces
 
+The F distribution is a continuous distribution that arises when testing
+whether two samples have the same variance.  If [chi][super 2][sub m] and
+[chi][super 2][sub n] are independent variates each distributed as 
+Chi-Squared with /m/ and /n/ degrees of freedom, then the test statistic:
+
+F[sub n,m] = ([chi][super 2][sub n] / n) / ([chi][super 2][sub m] / m)
+
+Is distributed over the range \[0, [infin]\] with an F distribution.
+
+The following graph illustrates how the PDF varies depending on the
+two degrees of freedom parameters.
+
+[$../graphs/fisher_f.png]
+
+
 [h4 Member Functions]
 
       fisher_f_distribution(const RealType& df1, const RealType& df2);
       
 Constructs an F-distribution with numerator degrees of freedom /df1/
 and denominator degrees of freedom /df2/.
+
+Requires that /df1/ and /df2/ are both greater than zero, otherwise __domain_error
+is called.
       
       RealType degrees_of_freedom1()const;
       
@@ -48,6 +62,8 @@ Returns the denominator degrees of freedom parameter of the distribution.
 
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+
+The domain of the random variable is \[0, +[infin]\].
 
 [h4 Accuracy]
 

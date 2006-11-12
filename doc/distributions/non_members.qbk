@@ -58,7 +58,11 @@ to go straight to the function you want if you already know its name.
    
 The __cdf is the probability that 
 the variable takes a value less than or equal to x.  It is equivalent
-to the integral from -infinity to x of the __pdf.  
+to the integral from -infinity to x of the __pdf.
+
+This function may return a __domain_error if the random variable is outside
+the defined range for the distribution.
+
 For example the following graph shows the cdf for the
 normal distribution:
 
@@ -75,6 +79,9 @@ the variable takes a value greater than x.  It is equivalent
 to the integral from x to infinity of the __pdf, or 1 minus the __cdf of x. 
 
 This is also known as the survival function.
+
+This function may return a __domain_error if the random variable is outside
+the defined range for the distribution.
 
 In this library, it is obtained by wrapping the arguments to the `cdf`
 function in a call to `complement`, for example:
@@ -96,6 +103,9 @@ normal distribution:
 
 Returns the __hazard of /x/ and distibution /dist/.
 
+This function may return a __domain_error if the random variable is outside
+the defined range for the distribution.
+
 [$../equations/hazard.png]
 
 [caution
@@ -109,6 +119,9 @@ density function rather than the hazard function.]
 
 Returns the __chf of /x/ and distibution /dist/.
 
+This function may return a __domain_error if the random variable is outside
+the defined range for the distribution.
+
 [$../equations/chf.png]
 
 [caution 
@@ -121,12 +134,18 @@ Some authors refer to this as simply the "Hazard Function".]
    
 Returns the mean of the distribution /dist/.
 
+This function may return a __domain_error if the distribution does not have
+a defined mean (for example the Cauchy distribution).
+
 [h4 [#math.dist.mode]mode]
 
    template<class RealType>
    RealType mode(const ``['Distribution-Type]``<RealType>& dist);
    
 Returns the mode of the distribution /dist/.
+
+This function may return a __domain_error if the distribution does not have
+a defined mode.
 
 [h4 [#math.dist.pdf]Probabilty Density Function]
 
@@ -142,6 +161,9 @@ see the __cdf.
 For a discrete distribution, the pdf is the probability that the 
 variate takes the value x.
 
+This function may return a __domain_error if the random variable is outside
+the defined range for the distribution.
+
 For example for a standard normal distribution the pdf looks like this:
 
 [$../graphs/pdf.png]
@@ -156,6 +178,10 @@ a value /x/ such that `cdf(dist, x) == p`.
 
 This is also known as the /percent point function/, or a /percentile/, it is
 also the same as calculating the ['lower critical value] of a distribution.
+
+This function returns a __domain_error if the probablity lies outside [0,1].
+The function may return an __overflow_error if there is no finite value
+that has the specified probability.
 
 The following graph shows the quantile function for a standard normal
 distribution:
@@ -184,6 +210,10 @@ probability.
 This function is also called the inverse survival function, and is the
 same as calculating the ['upper critical value] of a distribution.
 
+This function returns a __domain_error if the probablity lies outside [0,1].
+The function may return an __overflow_error if there is no finite value
+that has the specified probability.
+
 The following graph show the inverse survival function for the normal
 distribution:
 
@@ -196,12 +226,18 @@ distribution:
    
 Returns the standard deviation of distribution /dist/.   
 
+This function may return a __domain_error if the distribution does not have
+a defined standard deviation.
+
 [h4 [#math.dist.variance]variance]
 
    template <class RealType>
    RealType variance(const ``['Distribution-Type]``<RealType>& dist);
    
 Returns the variance of the distribution /dist/.
+
+This function may return a __domain_error if the distribution does not have
+a defined variance.
 
 [h4 [#math.dist.skewness]skewness]
 
@@ -210,6 +246,9 @@ Returns the variance of the distribution /dist/.
    
 Returns the skewness of the distribution /dist/.
 
+This function may return a __domain_error if the distribution does not have
+a defined skewness.
+
 [h4 [#math.dist.kurtosis]kurtosis]
 
    template <class RealType>
@@ -217,12 +256,18 @@ Returns the skewness of the distribution /dist/.
    
 Returns the kurtosis of the distribution /dist/.
 
+This function may return a __domain_error if the distribution does not have
+a defined kurtosis.
+
 [h4 [#math.dist.kurtosis_excess]kurtosis excess]
 
    template <class RealType>
    RealType kurtosis_excess(const ``['Distribution-Type]``<RealType>& dist);
    
 Returns the kurtosis excess of the distribution /dist/.
+
+This function may return a __domain_error if the distribution does not have
+a defined kurtosis excess.
 
 [h4 [#cdfPQ]P and Q]
 

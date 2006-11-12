@@ -15,9 +15,17 @@
 
    typedef exponential_distribution<double> exponential;
 
-The exponential distribution is a distribution with PDF:
+The exponential distribution is a ntinuous codistribution with PDF:
 
-f(x) = lambda * e[super -lambda*x]
+[$../equations/exponential_dist_ref1.png]
+
+It is often used to model the the time between independent 
+events that happen at a constant average rate.
+
+The following graph shows how the distribution changes for different
+values of the rate parameter lambda:
+
+[$../graphs/exponential_dist.png]
 
 [h4 Member Functions]
 
@@ -25,6 +33,8 @@ f(x) = lambda * e[super -lambda*x]
    
 Constructs an Exponential distribution with parameter /lambda/.  Lambda
 is defined as the reciprocal of the scale parameter.
+
+Requires lambda > 0, otherwise calls __domain_error.
 
    RealType lambda()const;
    
@@ -35,26 +45,28 @@ Returns the lambda parameter of the distribution.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
+The domain of the random variable is \[0, +[infin]\].
+
 [h4 Accuracy]
 
 The exponential distribution is implemented in terms of the 
-standard library functions exp, log, and expm1
+standard library functions `exp`, `log`, `log1p` and `expm1`
 and as such should have very low error rates.
 
 [h4 Implementation]
 
-In the following table /l/ is the parameter lambda of the distribution, 
+In the following table [lambda] is the parameter lambda of the distribution, 
 /x/ is the random variate, /p/ is the probability and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Using the relation: pdf = l * exp(-l * x) ]]
-[[cdf][Using the relation: p = 1 - exp(-x * l) = -expm1(-x * l) ]]
-[[cdf complement][Using the relation: q = exp(-x * l) ]]
-[[quantile][Using the relation: x = -log(1-p) / l = -log1p(-p) / l]]
-[[quantile from the complement][Using the relation: x = -log(q) / l]]
-[[mean][1/l]]
-[[standard deviation][1/l]]
+[[pdf][Using the relation: pdf = [lambda] * exp(-[lambda] * x) ]]
+[[cdf][Using the relation: p = 1 - exp(-x * [lambda]) = -expm1(-x * [lambda]) ]]
+[[cdf complement][Using the relation: q = exp(-x * [lambda]) ]]
+[[quantile][Using the relation: x = -log(1-p) / [lambda] = -log1p(-p) / [lambda]]]
+[[quantile from the complement][Using the relation: x = -log(q) / [lambda]]]
+[[mean][1/[lambda]]]
+[[standard deviation][1/[lambda]]]
 [[mode][0]]
 [[skewness][2]]
 [[kurtosis][9]]

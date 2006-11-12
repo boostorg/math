@@ -76,6 +76,8 @@ vary the success fraction /p/:
 Constructor: /n/ is the total number of trials, /p/ is the
 probability of success of a single trial.
 
+Requires `0 <= p <= 1`, and `n >= 0`, otherwise calls __domain_error.
+
    RealType success_fraction() const;
    
 Returns the parameter /p/ from which this distribution was constructed.
@@ -173,7 +175,10 @@ This is typically used in failure analysis.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
-However it's worth taking a moment to define what these actually mean in 
+The domain for the random variable /k/ is `0 <= k <= N`, otherwise a 
+__domain_error is returned.
+
+It's worth taking a moment to define what these accessors actually mean in 
 the context of this distribution:
 
 [table Meaning of the non-member accessors

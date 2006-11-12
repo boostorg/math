@@ -49,6 +49,8 @@ the distribution:
 Constructs a Cauchy distribution, with location parameter /location/
 and scale parameter /scale/.  When these parameters take their default
 values then the result is a Standard Cauchy Distribution.
+
+Requires scale > 0, otherwise calls __domain_error.
    
    RealType location()const;
    
@@ -66,7 +68,9 @@ that are generic to all distributions are supported: __usual_accessors.
 Note however that the Cauchy distribution does not have a mean or 
 standard deviation.  Therefore, the functions __mean, __sd, 
 __variance, __skewness, __kurtosis and __kurtosis_excess will all
-raise a __domain_error if called.
+return a __domain_error if called.
+
+The domain of the random variable is \[-[infin], +[infin]\].
 
 [h4 Accuracy]
 
