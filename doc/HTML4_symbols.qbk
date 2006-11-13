@@ -1,6 +1,7 @@
 [/ Symbols and Greek letters (about 120) from HTML4 ]
 [/ File HTML4_symbols.qbk]
 [/ See http://www.htmlhelp.com/reference/html40/entities/symbols.html]
+[/ All (except 2 angle brackets) show OK on Firefox 2.0]
 
 [/ Also some miscellaneous math charaters added to this list - see the end.]
 
@@ -123,8 +124,8 @@
 [template rceil '''&#x2309;'''] [/  ? right ceiling]
 [template lfloor  '''&#x230A;'''] [/  ? left floor = APL downstile]
 [template rfloor  '''&#x230B;'''] [/  ? right floor]
-[template lang  '''&#x2329;'''] [/  < left-pointing angle bracket = bra]
-[template rang  '''&#x232A;'''] [/  > right-pointing angle bracket = ket]
+[template lang  '''&#x2329;'''] [/  < left-pointing angle bracket = bra (Firefox shows ?)]
+[template rang  '''&#x232A;'''] [/  > right-pointing angle bracket = ket (Firefox shows ?)]
 [template loz '''&#x25CA;'''] [/  ? lozenge]
 [template spades  '''&#x2660;'''] [/  ? black spade suit]
 [template clubs '''&#x2663;'''] [/  ? black club suit = shamrock]

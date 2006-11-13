@@ -14,19 +14,15 @@
 
 [include HTML4_symbols.qbk]
 
-[template super[x]'''<superscript>'''[x]'''</superscript>''']
-[template sub[x]'''<subscript>'''[x]'''</subscript>''']
-[template space''' ''']
-
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
 [def __exm1 '''<code>e<superscript>x</superscript> - 1</code>''']
 [def __ex '''<code>e<superscript>x</superscript></code>''']
-[def __te '''2&#x025B;'''][/small Latin letter open e]
+[def __te '''2&#x025B;''']  [/small Latin letter open e]
 [/@http://www.oreilly.com/catalog/docbook/chapter/book/iso-grk1.html Greek DocBook]
 [def __alpha '''&#945;''']
-[def __lambda '''&#955;'''][/lower case]
-[def __Lambda '''&#923;'''][/upper case]
+[def __lambda '''&#955;'''] [/lower case]
+[def __Lambda '''&#923;'''] [/upper case]
 [def __gamma '''&#947;''']
 [def __Gamma '''&#915;''']
 [def __sigma '''&#963;''']
@@ -115,6 +111,12 @@ and use the function's name as the link text]
 [def __sqrt1pm1 [link math_toolkit.special.powers sqrt1pm1]]
 [def __powm1 [link math_toolkit.special.powers powm1]]
 
+[/ Some composite templates]
+[template super[x]'''<superscript>'''[x]'''</superscript>''']
+[template sub[x]'''<subscript>'''[x]'''</subscript>''']
+[template floor[x]'''&#x230A;'''[x]'''&#x230B;''']
+[template floorlr[x][lfloor][x][rfloor]]
+[template ceil[x] '''&#x2308;'''[x]'''&#x2309;''']
 
 [section:intro Introduction]
 
@@ -223,6 +225,7 @@ some typical applications in statistics.
 [section:status Status and Roadmap]
 [include roadmap.qbk]
 [include issues.qbk]
+[include test_HTML4_symbols.qbk]
 [endsect][/section:status Status and Roadmap]
 
 [/ math.qbk
