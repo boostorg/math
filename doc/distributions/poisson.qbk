@@ -1,4 +1,4 @@
-well-[section:poisson_dist Poisson]
+[section:poisson_dist Poisson]
 
 The [@http://en.wikipedia.org/wiki/Poisson_distribution Poisson distribution]
 is a well-known statistical discrete distribution.
@@ -14,18 +14,18 @@ The distribution was discovered by Sim__eacute on-Denis Poisson (1781 to 1840).
 ``#include <boost/math/distributions/poisson.hpp>``
   namespace boost { namespace math {
   
-	template <class RealType = double>
-	class poisson_distribution;
+  template <class RealType = double>
+  class poisson_distribution;
 
-	typedef poisson_distribution<double> poisson;
+  typedef poisson_distribution<double> poisson;
 
   template <class RealType>
-	class poisson_distribution
-	{ 
-	public:
-	  poisson_distribution(RealType mean = 1); // Constructor.
-	  RealType mean()const;	// Accessor.
-	}
+  class poisson_distribution
+  { 
+  public:
+    poisson_distribution(RealType mean = 1); // Constructor.
+    RealType mean()const; // Accessor.
+  }
   }} // namespaces boost::math
    
 [h4 Member Functions]
@@ -57,7 +57,7 @@ to avoid excessive computation.
 
 [h4 Implementation]
 
-In the following table __lambda  is the mean of the distribution.
+In the following table __lambda __space is the mean of the distribution.\n
 
 [table
 [[Function][Implementation Notes]]
@@ -67,8 +67,8 @@ In the following table __lambda  is the mean of the distribution.
 [[quantile][Using the relation: gamma_Q\_inva(__lambda, p) -1]]
 [[quantile from the complement][Using the relation: gamma\_P\_inva(__lambda, q) -1]]
 [[mean][__lambda]]
-[[mode][floor (__lambda) or __floorL __lambda __floorR]]
-[[skewness][1/sqrt(__lambda)]]
+[[mode][ floor (__lambda) or [floor[lambda]] ]]
+[[skewness][1/[radic][lambda]]]
 [[kurtosis][3 + 1/__lambda]]
 [[kurtosis excess][1/__lambda]]
 ]

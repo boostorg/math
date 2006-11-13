@@ -1,0 +1,229 @@
+[section:beta_dist Beta Distribution]
+
+``#include <boost/math/distributions/beta.hpp>``
+
+   namespace boost{ namespace math{ 
+   
+   template <class RealType = double>
+   class beta_distribution;
+   
+   // typedef beta_distribution<double> beta;
+   // Note that this is deliberately NOT provided,
+   // to avoid a clash with the function name beta.
+   
+   template <class RealType>
+   class beta_distribution
+   {
+   public:
+      // Constructor from two shape parameters, alpha & beta:
+      beta_distribution(RealType a, RealType b);
+      
+      // Parameter accessors:
+      RealType alpha() const;
+      RealType beta() const;
+      
+      // Parameter estimators of alpha or beta from mean and variance.
+      static RealType estimate_alpha(
+        RealType mean, // Expected value of mean.
+        RealType variance); // Expected value of variance.
+      
+      static RealType estimate_beta(
+        RealType mean, // Expected value of mean.
+        RealType variance); // Expected value of variance.
+  
+      // Parameter estimators from from
+      // either alpha or beta, and x and probability.
+      
+      static RealType estimate_alpha(
+        RealType beta, // from beta.
+        RealType x, //  x.
+        RealType probability); // cdf
+      
+      static RealType estimate_beta(
+        RealType alpha, // alpha.
+        RealType x, // probability x.
+        RealType probability); // probability cdf.
+   };
+   
+   RealType mean(const beta_distribution<RealType>& dist);
+     // Mean of beta distribution = a/(a+b).
+   RealType variance(const beta_distribution<RealType>& dist);
+     // Variance of beta distribution = a * b / (a+b)^2 * (a + b + 1).
+   RealType mode(const beta_distribution<RealType>& dist);
+     // Mode of beta distribution = (a-1) / (a + b + 2)
+   RealType skewness(const beta_distribution<RealType>& dist);
+     // Skewness of beta distribution = 2 (b-a) sqrt(a+b+1)/(a+b+2) * sqrt(a * b)
+   RealType kurtosis(const beta_distribution<RealType>& dist);
+   RealType kurtosis_excess(const beta_distribution<RealType>& dist);
+   // See below.
+   
+   }} // namespaces
+   
+The class type `beta_distribution` represents a 
+[@http://en.wikipedia.org/wiki/Beta_distribution beta ] 
+[@http://en.wikipedia.org/wiki/Probability_distribution probability distribution function].
+
+The [@http://mathworld.wolfram.com/BetaDistribution.htm beta distribution ]
+is used as a [@http://en.wikipedia.org/wiki/Prior_distribution prior distribution]
+for binomial proportions in
+[@http://mathworld.wolfram.com/BayesianAnalysis.html Bayesian analysis].
+
+See also: 
+[@http://documents.wolfram.com/calculationcenter/v2/Functions/ListsMatrices/Statistics/BetaDistribution.html beta distribution]
+and [@http://en.wikipedia.org/wiki/Bayesian_statistics Bayesian statistics].
+
+[h4 Member Functions]
+
+   beta_distribution(RealType alpha, RealType beta);
+
+Constructor example: beta_distribution<> mybeta22(2., 5);
+
+constructs a double beta distribution with two unequal shape parameters,
+whose pdf is shown in grey in the
+[@http://en.wikipedia.org/wiki/Beta_distribution plot].
+
+The [@http://en.wikipedia.org/wiki/Probability_density_function probability density function PDF]
+for the [@http://en.wikipedia.org/wiki/Beta_distribution beta distribution]
+defined on the interval \[0,1\] is given by:
+
+f(x;[alpha],[beta]) = x[super[alpha] - 1] (1 - x)[super[beta] -1] / B([alpha], [beta])
+
+where B([alpha], [beta]) is the
+[@http://en.wikipedia.org/wiki/Beta_function beta function],
+implemented in the Math Toolkit as __beta.  Division by the beta function
+ensures that the pdf is normalized to the range zero to unity.
+
+[@http://en.wikipedia.org/wiki/Image:Beta_distribution_pdf.png Examples of pdf for various values of shape parameters are shown here.]
+x is a [@http://en.wikipedia.org/wiki/Random_variate random variate]
+in the interval zero to unity.
+Note the [alpha] = [beta] = 2 (purple line) is dome-shaped,
+and might be approximated by a symmetrical trianglar distribution.
+
+If [alpha] = [beta] = 1, then it is a __space
+[@http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29 uniform distribution],
+equal to unity in the entire interval x = 0 to 1.
+If [alpha] __space and [beta] __space are < 1, then the pdf is U-shaped.
+If [alpha] != [beta], then the shape is asymmetric
+and could be approximated by a triangle
+whose apex is away from the centre (where x = half).
+
+Accessor member functions simply retrieve the shape parameters,
+/alpha/ and /beta/ used to construct the distribution.
+
+   RealType alpha() const;
+   
+Returns the parameter /alpha/ from which this distribution was constructed.
+   
+   RealType beta() const;
+   
+Returns the parameter /beta/ from which this distribution was constructed.
+
+So
+
+  mybeta25.alpha() == 2.;
+  mybeta25.beta() == 5.;
+
+[h4 Parameter Estimators]
+
+Two pairs of parameter estimators are provided.
+
+One estimates either [alpha] __space or [beta] __space from presumed-known mean and variance.
+
+The other pair estimates either [alpha] __space or [beta] __space from the cdf and x.
+
+(It is also possible to estimate [alpha] __space and  [beta] __space from 'known' mode & quantile.
+For example, calculators are provided
+[@http://www.ausvet.com.au/pprev/content.php?page=PPscript Pooled Prevalance Calculator] and
+[@http://www.epi.ucdavis.edu/diagnostictests/betabuster.html Beta Buster]
+but this is NOT (yet) implemented here).
+
+
+[h4 Non-member Accessor Functions]
+
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+The formulae for calculating these are shown as comments above
+(and in the table below) with the exception of the __kurtosis and __kurtosis_excess 
+whose formula is difficult to show as a comment but is given below, and at
+[@http://mathworld.wolfram.com/BetaDistribution.html Wolfram Mathworld].
+
+[h4 Applications]
+
+The beta distribution can be used to model events constrained
+to take place within an interval defined by a minimum and maximum value:
+so it is used in project management systems. 
+
+It is also widely used in [@http://en.wikipedia.org/wiki/Bayesian_inference Bayesian statistial inference].
+
+[h4 Related distributions]
+
+The beta distribution with both [alpha]  __space and [beta] = 1 follows a
+[@http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29 uniform distribution].
+
+The [@http://en.wikipedia.org/wiki/Triangular_distribution triangular]
+is used when less precise information is available.
+
+The [@http://en.wikipedia.org/wiki/Binomial_distribution binomial distribution]
+is closely related when [alpha]  __space and [beta]  __space are integers.
+
+With integer values of [alpha]  __space and [beta]  __space the distribution B(i, j) is
+that of the j-th highest of a sample of i + j + 1 independent random variables
+uniformly distributed between 0 and 1.
+The cumulative probability from 0 to x is thus
+the probability that the j-th highest value is less than x.
+Or it is the probability that that at least i of the random variables are less than x, 
+a probability given by summing over the __binomial_distrib
+with its p parameter set to x.
+
+[h4 Accuracy]
+
+This distribution is implemented using the 
+[link math_toolkit.special.beta_function beta functions] __beta and 
+[link math_toolkit.special.ibeta_function incomplete beta functions] __ibeta and __ibetac;
+please refer to these functions for information on accuracy.
+
+[h4 Implementation]
+
+In the following table /p/ is the probablity and /q = 1-p/.
+
+[table
+[[Function][Implementation Notes]]
+[[pdf][`pow(x, (a-1)) * pow((1 - x), (b-1))/ beta(a, b)`]]
+[[cdf][inverse incomplete beta function `ibeta(a, b, x)`]]
+[[cdf complement][`1 - ibeta(a, b, x)`]]
+[[quantile][inverse incomplete beta function `ibeta_inv(a, b, p)`]]
+[[quantile from the complement][inverse incomplete beta function complement `ibetac_inv(a, b, q)`]]
+[[mean][`a/(a+b)`]]
+[[variance][`a * b / (a+b)^2 * (a + b + 1)`]]
+[[mode][`(a-1) / (a + b + 2)`]]
+[[skewness][`2 (b-a) sqrt(a+b+1)/(a+b+2) * sqrt(a * b)`]]
+[[kurtosis][`3 + 6 * a * a * a - a * a * (2 * b -1) + b * b * (b + 1) - 2 * a * b * (b + 2) /
+        a * b * (a + b + 2) * (a + b + 3)`]]
+[[kurtosis excess][`kurtosis - 3`]]
+[[parameter estimation][ ]]
+[[alpha\n
+from mean and variance][`mean * (( (mean * (1 - mean)) / variance)- 1)`]]
+[[beta\n
+from mean and variance][`(1 - mean) * (((mean * (1 - mean)) /variance)-1)`]]
+[[The member functions `estimate_alpha` and `estimate_beta`\n
+  from cdf and probability x\n
+  and *either* `alpha` or `beta`][Implemented in terms of the inverse incomplete beta functions\n
+__ibetac_inv, __ibeta_inv, and __ibetac_invb respectively.]]
+[[`estimate_alpha`][`ibeta_inva(beta, x, probability)`]]
+[[`estimate_beta`][`ibeta_invb(alpha, x, probability)`]]
+]
+
+[h4 References]
+[@http://en.wikipedia.org/wiki/Beta_distribution Wikipedia Beta distribution]\n
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm NIST Exploratory Data Aanalysis]\n
+[@http://mathworld.wolfram.com/BetaDistribution.html Wolfram MathWorld]
+
+[endsect][/section:beta_dist beta]
+
+[/ beta.qbk
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
