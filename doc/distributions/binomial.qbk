@@ -1,4 +1,4 @@
-[section:binomial_dist Binomial]
+[section:binomial_dist Binomial Distribution]
 
 ``#include <boost/math/distributions/binomial.hpp>``
 
@@ -45,10 +45,12 @@
    
    }} // namespaces
    
-The class type `binomial_distribution` represents a binomial distribution:
+The class type `binomial_distribution` represents a
+[@http://mathworld.wolfram.com/BinomialDistribution.html binomial distribution]:
 it is used when there are exactly two mutually 
 exclusive outcomes of a trial. These outcomes are labelled 
-"success" and "failure". The binomial distribution is used to obtain 
+"success" and "failure". The
+[@ binomial distribution] is used to obtain 
 the probability of observing k successes in N trials, with the 
 probability of success on a single trial denoted by p. The 
 binomial distribution assumes that p is fixed for all trials.
@@ -254,6 +256,12 @@ be successful (the success fraction), /n/ is the number of trials,
        implemented in terms of the inverse incomplete beta functions
        __ibetac_inv, __ibeta_inv, and __ibetac_invb respectively]]
 ]
+
+[h4 References]
+
+* [@http://mathworld.wolfram.com/BinomialDistribution.html Weisstein, Eric W. "Binomial Distribution." From MathWorld--A Wolfram Web Resource].
+* [@http://en.wikipedia.org/wiki/Beta_distribution Wikipedia binomial distribution]. 
+* [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366i.htm  NIST Explorary Data Analysis]. 
 
 [endsect][/section:binomial_dist Binomial]
 
