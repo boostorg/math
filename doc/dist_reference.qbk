@@ -39,6 +39,7 @@
 [include distributions/extreme_value.qbk]
 [include distributions/fisher.qbk]
 [include distributions/lognormal.qbk]
+[include distributions/negative_binomial.qbk]
 [include distributions/normal.qbk]
 [include distributions/poisson.qbk]
 [include distributions/students_t.qbk]
@@ -65,14 +66,14 @@ information.
 
 The obvious way to handle this is via an adapter template:
 
-	template <class Dist>
-	class scaled_distribution
-	{
-	   scaled_distribution(
-	     const Dist dist, 
-	     typename Dist::value_type location,
-	     typename Dist::value_type scale = 0);
-	};
+  template <class Dist>
+  class scaled_distribution
+  {
+     scaled_distribution(
+       const Dist dist, 
+       typename Dist::value_type location,
+       typename Dist::value_type scale = 0);
+  };
 
 Which would then have its own set of overloads for the non-member accessor functions.
 
@@ -82,12 +83,12 @@ Higher-level tests roughly corresponding to the
 [@http://documents.wolfram.com/mathematica/Add-onsLinks/StandardPackages/Statistics/HypothesisTests.html Mathematica Hypothesis Tests]
 package could be added reasonably easily, for example:
 
-	template <class InputIterator>
-	typename std::iterator_traits<InputIterator>::value_type
-	   test_equal_mean(
-	     InputIterator a,
-	     InputIterator b,
-	     typename std::iterator_traits<InputIterator>::value_type expected_mean);
+  template <class InputIterator>
+  typename std::iterator_traits<InputIterator>::value_type
+     test_equal_mean(
+       InputIterator a,
+       InputIterator b,
+       typename std::iterator_traits<InputIterator>::value_type expected_mean);
 
 Returns the probability that the data in the sequence [a,b) has the mean
 /expected_mean/.
@@ -99,13 +100,13 @@ Eric Niebler's accumulator framework] - also work in progress - provides the mea
 to calculate various statistical properties from experimental data.  There is an
 opportunity to integrate the statistical tests with this framework at some later date:
 
-	// define an accumulator, all required statistics to calculate the test
-	// are calculated automatically:
-	accumulator_set<double, features<tag::test_expected_mean> > acc(expected_mean=4);
-	// pass our data to the accumulator:
-	acc = std::for_each(mydata.begin(), mydata.end(), acc);
-	// extract the result:
-	double p = probability(acc);
+  // define an accumulator, all required statistics to calculate the test
+  // are calculated automatically:
+  accumulator_set<double, features<tag::test_expected_mean> > acc(expected_mean=4);
+  // pass our data to the accumulator:
+  acc = std::for_each(mydata.begin(), mydata.end(), acc);
+  // extract the result:
+  double p = probability(acc);
 
 [endsect][/section:future Extras Future Directions]
 
