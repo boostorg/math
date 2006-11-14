@@ -14,15 +14,17 @@
       RealType scale()const;
    };
    
-The Cauchy-Lorentz distribution is named after Augustin Cauchy and
-Hendrik Lorentz.  It is a continuous probability distribution with
-PDF given by:
+The [@http://en.wikipedia.org/wiki/Cauchy_distribution Cauchy-Lorentz distribution]
+is named after Augustin Cauchy and Hendrik Lorentz.
+It is a [@http://en.wikipedia.org/wiki/Probability_distribution continuous probability distribution]
+with [@http://en.wikipedia.org/wiki/Probability_distribution probability distribution function PDF]
+given by:
 
 [$../equations/cauchy_ref1.png]
 
-The location parameter x[sub 0] is the location of the 
+The location parameter x[sub 0][space] is the location of the 
 peak of the distribution (the mode of the distribution),
-while the scale parameter [gamma] specifies half the width
+while the scale parameter [gamma][space] specifies half the width
 of the PDF at half the maximum height.  If the location is 
 zero, and the scale 1, then the result is a standard Cauchy
 distribution.
@@ -48,7 +50,8 @@ the distribution:
    
 Constructs a Cauchy distribution, with location parameter /location/
 and scale parameter /scale/.  When these parameters take their default
-values then the result is a Standard Cauchy Distribution.
+values (location = 0, sacle = 1) 
+then the result is a Standard Cauchy Distribution.
 
 Requires scale > 0, otherwise calls __domain_error.
    
@@ -74,7 +77,7 @@ The domain of the random variable is \[-[infin], +[infin]\].
 
 [h4 Accuracy]
 
-The cauchy distribution is implemented in terms of the
+The Cauchy distribution is implemented in terms of the
 standard library `tan` and `atan` functions, 
 and as such should have very low error rates.
 
@@ -83,8 +86,8 @@ and as such should have very low error rates.
 [def __x0 x[sub 0 ]]
 
 In the following table __x0 is the location parameter of the distribution, 
-[gamma] is it's scale parameter, /x/ is the random variate, /p/ is the probability
-and /q = 1-p/.
+[gamma][space] is it's scale parameter,
+/x/ is the random variate, /p/ is the probability and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
@@ -99,7 +102,7 @@ and /q = 1-p/.
       p = -atan(1/x)  ; x < 0\n\n
       So the proceedure is to calculate the cdf for -fabs(x)
       using the above formula.  Note that to factor in the location and scale
-      parameters you must substitute (x - __x0) / [gamma] for x in the above.\n\n
+      parameters you must substitute (x - __x0) / [gamma][space] for x in the above.\n\n
       This procedure yields the smaller of /p/ and /q/, so the result
       may need subtracting from 1 depending on whether we want the complement
       or not, and whether /x/ is less than __x0 or not.
@@ -107,12 +110,18 @@ and /q = 1-p/.
 [[quantile][The same proceedure is used irrespective of whether we're starting
             from the probability or it's complement.  First the argument /p/ is
             reduced to the range \[-0.5, 0.5\], then the relation\n\n
-            x = __x0 [plusminus] [gamma] / tan([pi] * p)\n\n
+            x = __x0 [plusminus] [gamma][space] / tan([pi] * p)\n\n
             is used to obtain the result.  Whether we're adding
             or subtracting from __x0 is determined by whether we're
             starting from the complement or not.]]
 [[mode][The location parameter.]]
 ]
+
+[h4 References]
+
+* [@http://en.wikipedia.org/wiki/Cauchy_distribution Cauchy-Lorentz distribution]
+* [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda3663.htm NIST Exploratory Data Analysis]
+* [@http://mathworld.wolfram.com/CauchyDistribution.html Weisstein, Eric W. "Cauchy Distribution." From MathWorld--A Wolfram Web Resource.]
 
 [endsect][/section:cauchy_dist Cauchi]
 
