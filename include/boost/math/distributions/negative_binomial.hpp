@@ -18,7 +18,7 @@
 // (independent, yes or no, succeed or fail) with success_fraction probability p,
 // negative_binomial is the probability that k or fewer failures
 // preceed the r th trial's success.
-// random variable k is the number of failures NOT the probability.
+// random variable k is the number of failures (NOT the probability).
 
 // Negative_binomial distribution is a discrete probability distribution.
 // But note that the negative binomial distribution
@@ -32,7 +32,7 @@
 
 // MATHCAD cumulative negative binomial pnbinom(k, n, p)
 
-// Implementation note: much greater speed and perhaps greater accuracy
+// Implementation note: much greater speed, and perhaps greater accuracy,
 // might be achieved for extreme values by using a normal approximation.
 // This is NOT been tested or implemented.
 
@@ -54,8 +54,8 @@
 
 #if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 #  pragma warning(push)
-#  pragma warning(disable: 4702) // unreachable code
-// in domain_error_imp in error_handling
+#  pragma warning(disable: 4702) // unreachable code.
+// in domain_error_imp in error_handling.
 #endif
 
 namespace boost
@@ -63,7 +63,7 @@ namespace boost
   namespace math
   {
     namespace negative_binomial_detail
-    { 
+    {
       // Common error checking routines for negative binomial distribution functions:
       template <class RealType>
       inline bool check_successes(const char* function, const RealType& r, RealType* result)
@@ -71,7 +71,7 @@ namespace boost
         if( !(boost::math::isfinite)(r) || (r <= 0) )
         {
           *result = tools::domain_error<RealType>(
-            function, 
+            function,
             "Number of successes argument is %1%, but must be > 0 !", r);
           return false;
         }
@@ -83,7 +83,7 @@ namespace boost
         if( !(boost::math::isfinite)(p) || (p < 0) || (p > 1) )
         {
           *result = tools::domain_error<RealType>(
-            function, 
+            function,
             "Success fraction argument is %1%, but must be >= 0 and <= 1 !", p);
           return false;
         }
@@ -92,7 +92,7 @@ namespace boost
       template <class RealType>
       inline bool check_dist(const char* function, const RealType& r, const RealType& p, RealType* result)
       {
-        return check_success_fraction(function, p, result) 
+        return check_success_fraction(function, p, result)
           && check_successes(function, r, result);
       }
       template <class RealType>
@@ -105,7 +105,7 @@ namespace boost
         if( !(boost::math::isfinite)(k) || (k < 0) )
         { // Check k failures.
           *result = tools::domain_error<RealType>(
-            function, 
+            function,
             "Number of failures argument is %1%, but must be >= 0 !", k);
           return false;
         }
@@ -134,7 +134,7 @@ namespace boost
         RealType result;
         negative_binomial_detail::check_dist(
           BOOST_CURRENT_FUNCTION,
-          m_r, // check successes r > 0.
+          m_r, // Check successes r > 0.
           m_p, // Check success_fraction 0 <= p <= 1.
           &result);
       } // negative_binomial_distribution constructor.
@@ -150,20 +150,20 @@ namespace boost
       }
 
       // Estimation of the success_fraction parameter in a negative binomial distribution.
-      // The best estimate is actually simply successes/trials:
-      // these functions are used to obtain 
+      // The best estimate is actually the simple mean successes/trials:
+      // these functions are used to obtain
       // confidence intervals for the success fraction.
       // Use ibeta_inc function for lower bound but complement ibetac_inv for upper bound.
 
       static RealType estimate_lower_bound_on_p(
-        RealType failures, 
+        RealType failures,
         RealType successes,
         RealType probability)
       {
         RealType result;  // of error checks.
         if(false == negative_binomial_detail::check_dist_and_k(
           BOOST_CURRENT_FUNCTION, failures, RealType(0), successes, &result)
-          && 
+          &&
           negative_binomial_detail::check_dist_and_prob(
           BOOST_CURRENT_FUNCTION, failures, RealType(0), probability, &result))
         {
@@ -173,15 +173,15 @@ namespace boost
       } // estimate_lower_bound_on_p
 
       static RealType estimate_upper_bound_on_p(
-        RealType failures, 
+        RealType failures,
         RealType successes,
         RealType probability)
       {
-        
+
         RealType result;  // of error checks.
         if(false == negative_binomial_detail::check_dist_and_k(
           BOOST_CURRENT_FUNCTION, failures, RealType(0), successes, &result)
-          && 
+          &&
           negative_binomial_detail::check_dist_and_prob(
           BOOST_CURRENT_FUNCTION, failures, RealType(0), probability, &result))
         {
@@ -191,9 +191,9 @@ namespace boost
         return ibetac_inv(successes + 1, failures - successes, probability);
       } // estimate_upper_bound_on_p
 
-      // Estimate number of failures parameter:  
+      // Estimate number of failures parameter:
       //
-      // "How many failures (k) do I need to be P% sure of seeing successes?"  
+      // "How many failures (k) do I need to be P% sure of seeing successes?"
       //    or
       // "How many failures can I have to be P% sure of seeing fewer than k events?"
 
@@ -206,7 +206,7 @@ namespace boost
         RealType result;
         if(false == negative_binomial_detail::check_dist_and_k(
           BOOST_CURRENT_FUNCTION, k, p, k, &result)
-          && 
+          && // Is this right - check dist twice?
           negative_binomial_detail::check_dist_and_prob(
           BOOST_CURRENT_FUNCTION, k, p, probability, &result))
         { return result; }
@@ -217,7 +217,7 @@ namespace boost
 
       template <class P1, class P2, class P3>
       static RealType estimate_number_of_trials(
-        const complemented3_type<P1, P2, P3>& c) 
+        const complemented3_type<P1, P2, P3>& c)
       {
         // extract args:
         const RealType k = c.dist;     // number of events.
@@ -228,7 +228,7 @@ namespace boost
         RealType result;
         if(false == negative_binomial_detail::check_dist_and_k(
           BOOST_CURRENT_FUNCTION, k, p, k, &result)
-          && 
+          &&  // Is this right - check dist twice?
           negative_binomial_detail::check_dist_and_prob(
           BOOST_CURRENT_FUNCTION, k, p, Q, &result))
         { return result; }
@@ -275,6 +275,16 @@ namespace boost
        (p * p) / r * (1 - p );
     } // kurtosis
 
+     template <class RealType>
+    inline RealType kurtosis_excess(const negative_binomial_distribution<RealType>& dist)
+    { // kurtosis of Negative Binomial distribution = r(1-p)/p.
+      RealType p = dist.success_fraction();
+      RealType r = dist.successes();
+      return 6 / r +
+       (p * p) / r * (1 - p ) -3;
+    } // kurtosis
+
+
     template <class RealType>
     inline RealType variance(const negative_binomial_distribution<RealType>& dist)
     { // Variance of Binomial distribution = r (1-p) / p^2.
@@ -307,7 +317,7 @@ namespace boost
     } // negative_binomial_pdf
 
     template <class RealType>
-    RealType cdf(const negative_binomial_distribution<RealType>& dist, const RealType k) 
+    RealType cdf(const negative_binomial_distribution<RealType>& dist, const RealType k)
     { // Cumulative Distribution Function of Negative Binomial.
       using boost::math::ibeta; // Regularized incomplete beta function.
       // k argument may be integral, signed, or unsigned, or floating point.
@@ -380,7 +390,7 @@ namespace boost
       RealType p = dist.success_fraction();
       RealType r = dist.successes();
 
-      //check dist and p 
+      //check dist and p
       RealType result;
       if(false == negative_binomial_detail::check_dist_and_prob
         (BOOST_CURRENT_FUNCTION, r, p, P, &result))
@@ -392,10 +402,10 @@ namespace boost
       if (P == 1)
       {  // Would need +infinity failures for total confidence.
         result = tools::overflow_error<RealType>(
-            BOOST_CURRENT_FUNCTION, 
+            BOOST_CURRENT_FUNCTION,
             "Probability argument is 1, which implies infinite failures !");
         return result;
-       // usually means return +std::numeric_limits<RealType>::infinity(); 
+       // usually means return +std::numeric_limits<RealType>::infinity();
       }
       if (P == 0)
       { // No failures are allowed if P = 0.
@@ -403,13 +413,13 @@ namespace boost
       }
       using boost::math::ibeta_invb;
       // Calculate quantile of negative_binomial using the inverse incomplete beta function.
-      return ibeta_invb(r, p, P) - 1; // 
+      return ibeta_invb(r, p, P) - 1; //
     } // RealType quantile(const negative_binomial_distribution dist, p)
 
       template <class RealType>
       RealType quantile(const complemented2_type<negative_binomial_distribution<RealType>, RealType>& c)
       { // Quantile or Percent Point Binomial function.
-        // Return the number of expected successes k for a given 
+        // Return the number of expected successes k for a given
         // complement of the probability Q.
 
         // Error checks:
