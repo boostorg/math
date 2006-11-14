@@ -1,4 +1,4 @@
-[section:exp_dist Exponential]
+[section:exp_dist Exponential Distribution]
 
 ``#include <boost/math/distributions/exponential.hpp>``
 
@@ -15,7 +15,9 @@
 
    typedef exponential_distribution<double> exponential;
 
-The exponential distribution is a ntinuous codistribution with PDF:
+The [@http://en.wikipedia.org/wiki/Exponential_distribution exponential distribution]
+is a [@http://en.wikipedia.org/wiki/Probability_distribution continuous probability distribution]
+with PDF:
 
 [$../equations/exponential_dist_ref1.png]
 
@@ -31,14 +33,16 @@ values of the rate parameter lambda:
 
    exponential_distribution(RealType lambda = 1);
    
-Constructs an Exponential distribution with parameter /lambda/.  Lambda
-is defined as the reciprocal of the scale parameter.
+Constructs an
+[@http://en.wikipedia.org/wiki/Exponential_distribution Exponential distribution]
+with parameter /lambda/.
+Lambda is defined as the reciprocal of the scale parameter.
 
 Requires lambda > 0, otherwise calls __domain_error.
 
    RealType lambda()const;
    
-Returns the lambda parameter of the distribution.
+Accessor function returns the lambda parameter of the distribution.
    
 [h4 Non-member Accessors]
 
@@ -72,6 +76,13 @@ In the following table [lambda] is the parameter lambda of the distribution,
 [[kurtosis][9]]
 [[kurtosis excess][6]]
 ]
+
+[h4 references]
+
+* [@http://mathworld.wolfram.com/ExponentialDistribution.html Weisstein, Eric W. "Exponential Distribution." From MathWorld--A Wolfram Web Resource]
+* [@http://documents.wolfram.com/calccenter/Functions/ListsMatrices/Statistics/ExponentialDistribution.html Wolfram Mathematica calculator]
+* [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda3667.htm NIST Exploratory Data Analysis]
+* [@http://en.wikipedia.org/wiki/Exponential_distribution Wikipedia Exponential distribution]
 
 [endsect][/section:exp_dist Exponential]
 
