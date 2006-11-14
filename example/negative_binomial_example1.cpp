@@ -76,8 +76,11 @@
 #include <iostream>
 	using std::cout;
 	using std::endl;
+	using std::noshowpoint;
 #include <iomanip>
 	using std::setprecision;
+
+#include <cassert>
 
 int main()
 {
@@ -214,7 +217,7 @@ int main()
     cout << "If we demand a confidence of meeting sales quota of unity"
       " (so we never achieve " << sales_quota << " sales)" 
       ", then we can never be certain, so the finishing house is infinite!"  << endl;
-   }
+  }
   catch(const std::exception& e)
    {
       std::cout <<
