@@ -32,7 +32,10 @@ Chi-Squared with /m/ and /n/ degrees of freedom, then the test statistic:
 
 F[sub n,m] = ([chi][super 2][sub n] / n) / ([chi][super 2][sub m] / m)
 
-Is distributed over the range \[0, [infin]\] with an F distribution.
+Is distributed over the range \[0, [infin]\] with an F distribution, and
+has the PDF:
+
+[$../equations/fisher_pdf.png]
 
 The following graph illustrates how the PDF varies depending on the
 two degrees of freedom parameters.
@@ -81,7 +84,7 @@ degrees of freedom parameters of the distribution,
 [table
 [[Function][Implementation Notes]]
 [[pdf][The usual form of the PDF is given by:\n\n
-f[sub v1,v2](x) = v2[super v2\/1 ] * v1[super v1\/2 ] * x[super v1\/2 - 1 ] \/ ((v2 + v1*x)[super v1+v2 ] * __beta(v1\/2, v2\/2))\n\n
+[$../equations/fisher_pdf.png]\n\n
 However, that form is hard to evaluate directly without incurring problems with
 either accuracy or numeric overflow.  Direct differentiation of the CDF expressed
 in terms of the incomplete beta function led to the following two formulas:\n\n

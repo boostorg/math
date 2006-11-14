@@ -1,13 +1,5 @@
 [section:lognormal_dist Log Normal Distribution]
 
-The lognormal distribution is the distribution that arises
-when the logarithm of the random variable is normally distributed.
-
-For location and scale parameters /m/ and /s/ it is defined by the
-probability density function:
-
-f(x; m, s) = e[super -(ln(x) - m)[super 2 ] / 2s[super 2 ] ] / (x * s * sqrt(2pi))
-
 ``#include <boost/math/distributions/lognormal.hpp>``
 
    namespace boost{ namespace math{ 
@@ -31,6 +23,30 @@ f(x; m, s) = e[super -(ln(x) - m)[super 2 ] / 2s[super 2 ] ] / (x * s * sqrt(2pi
    
    }} // namespaces
    
+The lognormal distribution is the distribution that arises
+when the logarithm of the random variable is normally distributed.
+A lognormal distribution results when the variable is the product 
+of a large number of independent, identically-distributed variables.
+
+For location and scale parameters /m/ and /s/ it is defined by the
+probability density function:
+
+[$../equations/lognormal_ref.png]
+
+The location and scale parameters are equivalent to the mean and 
+standard deviation of the logarithm of the random variable.
+
+The following graph illustrates the effect of the location
+parameter on the PDF, note that the range of the random
+variable remains \[0,+[infin]\] irrespective of the value of the
+location parameter:
+
+[$../graphs/lognormal1.png]
+
+The next graph illustrates the effect of the scale parameter on the PDF:
+
+[$../graphs/lognormal2.png]
+
 [h4 Member Functions]
 
    lognormal_distribution(RealType location = 0, RealType scale = 1);
@@ -44,6 +60,9 @@ random variate.
 The scale parameter is the same as the standard deviation of the
 logarithm of the random variate.
 
+Requires that the scale parameter is greater than zero, otherwise calls
+__domain_error.
+
    RealType location()const;
    
 Returns the /location/ parameter of this distribution.
@@ -56,6 +75,8 @@ Returns the /scale/ parameter of this distribution.
 
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+
+The domain of the random variable is \[0,+[infin]\].
 
 [h4 Accuracy]
 
