@@ -7,16 +7,16 @@
    template <class RealType = double>
    class negative_binomial_distribution;
    
-   typedef negative_binomial_distribution<double> binomial;
+   typedef negative_binomial_distribution<double> negative_binomial;
    
    template <class RealType>
    class negative_binomial_distribution
    {
    public:
-      // construct:
+      // Constructor from successes and success_fraction:
       negative_binomial_distribution(RealType r, RealType p);
       
-      // parameter access::
+      // Parameter accessors:
       RealType success_fraction() const;
       RealType successes() const;
       
@@ -30,11 +30,11 @@
          RealType successes,
          RealType probability);
          
-      // estimate min/max number of trials:
+      // Estimate min/max number of trials:
       static RealType estimate_number_of_trials(
-         RealType k,     // number of failure
-         RealType p,     // success fraction
-         RealType probability); // probability threshold
+         RealType k,     // Number of failures.
+         RealType p,     // Success fraction.
+         RealType probability); // Probability threshold.
          
       template <class P1, class P2, class P3>
       static RealType estimate_number_of_failures(
@@ -43,52 +43,80 @@
    
    }} // namespaces
    
-The class type `negative_binomial_distribution` represents a negative_binomial distribution:
-it is used when there are exactly two mutually exclusive outcomes of a trial:
+The class type `negative_binomial_distribution` represents a
+[@http://en.wikipedia.org/wiki/Negative_binomial_distribution negative_binomial distribution]:
+it is used when there are exactly two mutually exclusive outcomes of a
+[@http://en.wikipedia.org/wiki/Bernoulli_trial Bernoulli trial]:
 these outcomes are labelled "success" and "failure".
 The negative_binomial distribution is used to obtain 
-the probability of observing x failures in N trials, with the 
-probability of success on a single trial denoted by p. The 
-negative_binomial distribution assumes that p is fixed for all trials.
+the probability of observing x failures in n trials, with the 
+probability of success on a single trial denoted by success_fraction p. The 
+negative_binomial distribution assumes that success_fraction p is fixed for all trials.
+
+[h4 Related Distributions]
+
+The name negative binomial distribution is reserved by some to the
+case where the successes parameter r is an integer.
+This integer version is also called the Pascal distribution.
+
+This implementation uses real numbers for the computation throughout
+(because it uses the *real* incomplete beta function family of functions).
+This real-valued version is also called the Polya Distribution.
+
+To obtain the Pascal distribution,
+you must ensure that an integer value is provided for r,
+and you may want to take either the floor or ceiling (or integer)
+of the result in order to ensure it is integral.
+
+For large values of r (successes), the negative binomial distribution
+converges to the Poisson distribution.
+
+The geometric distribution is a special case
+where the successes parameter r = 1;
+
+geometric(p) = negative-binomial(1,p)
+
+poisson([lambda]) = lim [sub r] [sub larr] [sub infin] negative_binomial(r, r/ [lambda] + r))
+
    
 [h4 Member Functions]
 
-   negative_binomial_distribution(RealType n, RealType p);
+   negative_binomial_distribution(RealType r, RealType p);
 
-Constructor: /n/ is the total number of trials, /p/ is the
+Constructor: /r/ is the total number of successes, /p/ is the
 probability of success of a single trial.
 
    RealType success_fraction() const;
    
 Returns the parameter /p/ from which this distribution was constructed.
    
-   RealType trials() const;
+   RealType successes() const;
    
-Returns the parameter /n/ from which this distribution was constructed.
+Returns the parameter /r/ from which this distribution was constructed.
 
-   static RealType estimate_lower_bound_on_p(
-      RealType trials, 
-      RealType successes,
-      RealType alpha);
+      static RealType estimate_lower_bound_on_p(
+        RealType failures, 
+        RealType successes,
+        RealType probability)
       
 Returns a lower bound on the success fraction:
 
 [variablelist
-[[trials][The total number of trials conducted.]]
-[[successes][The number of successes that occurred.]]
+[[failures][The total number of failures before the r th success.]]
+[[successes][The number of successes required.]]
 [[alpha][The largest acceptable probability that the true value of
          the success fraction is [*less than] the value returned.]]
 ]
 
-For example, if you observe /k/ successes from /n/ trials the
+For example, if you observe /k/ failures from /n/ trials the
 best estimate for the success fraction is simply ['k/n], but if you
 want to be 95% sure that the true value is [*greater than] some value, 
 ['p[sub min]], then:
 
    p``[sub min]`` = negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
-                       n, k, 0.05);
+                       failures, successes, 0.05);
 
-[link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf See worked example.]
+[/link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf TO worked example.]
       
    static RealType estimate_upper_bound_on_p(
       RealType trials, 
@@ -112,7 +140,7 @@ want to be 95% sure that the true value is [*less than] some value,
    p``[sub max]`` = negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
                        n, k, 0.05);
 
-[link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf See worked example.]
+[/link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf TODO worked example.]
 
    static RealType estimate_number_of_trials(
       RealType k,     // number of events
@@ -124,7 +152,7 @@ want to be 95% sure that the true value is [*less than] some value,
       const ``['unspecified-complemented-type]``<P1, P2, P3>& c);
       
 These functions estimate the number of trials required to achieve a certain
-probability that [*k events or fewer will be observed].
+probability that [*k failure or fewer will be observed].
 
 [variablelist
 [[k][The number of success observed.]]
@@ -148,7 +176,7 @@ Returns the largest number of trials we can conduct and still be 95% certain
 of not observing any events that occur with one in a million frequency.
 This is typically used in failure analysis.
 
-[link math_toolkit.dist.stat_tut.weg.binom_eg.binom_size_eg See Worked Example.]
+[/link math_toolkit.dist.stat_tut.weg.binom_eg.binom_size_eg TODO Worked Example.]
 
 [h4 Non-member Accessors]
 
@@ -158,7 +186,7 @@ that are generic to all distributions are supported: __usual_accessors.
 However it's worth taking a moment to define what these actually mean in 
 the context of this distribution:
 
-[table Meaning of the non-member accessors
+[table Meaning of the non-member accessors.
 [[Function][Meaning]]
 [[__pdf]
    [The probability of obtaining [*exactly k successes] from n trials
@@ -191,59 +219,47 @@ please refer to these functions for information on accuracy.
 
 [h4 Implementation]
 
-In the following table /p/ is the probablity that one trial will
-be successful (the success fraction), /n/ is the number of trials,
-/k/ is the number of successes, /p/ is the probablity and /q = 1-p/.
+In the following table, /p/ is the probability that one trial will
+be successful (the success fraction), /r/ is the number of successes,
+/k/ is the number of failures, /p/ is the probablity and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Implementation is in terms of __ibeta_derivative: if [sub n]C[sub k ] is the negative_binomial
-       coefficient of a and b, then we have:\n\n
-       f(k; n,p) = [sub n]C[sub k ] * p[super k ] * (1-p)[super n-k]\n 
-                 = (n!/(k!(n-k)!)) * p[super k ] * (1-p)[super n-k]\n
-                 = (tgamma(n+1) / (tgamma(k+1)*tgamma(n-k+1))) * p[super k ] * (1-p)[super n-k]\n
-                 = p[super k ] * (1-p)[super n-k ] / (beta(k+1, n-k+1) * (n+1))\n
-                 = ibeta_derivative(k+1, n-k+1, p) / (n+1)\n\n
-       The function __ibeta_derivative is used here, since it has already
-       been optimised for the lowest possible error - indeed this is really
-       just a thin wrapper around part of the internals of the incomplete
-       beta function.\n\n
-       There are also various special cases: refer to the code for details.
-       ]]
-[[cdf][Using the relation: \n\n
-       p = I[sub 1-p](n - k, k + 1)\n
-         = 1 - I[sub p](k + 1, n - k)\n
-         = __ibetac(k + 1, n - k, p)\n\n
-         There are also various special cases: refer to the code for details.
+[[pdf][exp(lgamma(r + k) - lgamma(r) - lgamma(k+1)) * pow(p, r) * pow((1-p), k)\n
+Implementation is in terms of __ibeta_derivative:\n
+(p/(r + k)) * ibeta_derivative(r, static_cast<RealType>(k+1), p)
+The function __ibeta_derivative is used here, since it has already
+been optimised for the lowest possible error - indeed this is really
+just a thin wrapper around part of the internals of the incomplete
+beta function.\n\n
 ]]
-[[cdf complement][Using the relation: q = __ibeta(k + 1, n - k, p)\n\n
-     There are also various special cases: refer to the code for details. ]]
-[[quantile][Since the cdf is non-linear in variate /k/ none of the inverse
-            incomplete beta functions can be used here.  Instead the quantile
-            is found numerically using a derivative free method 
-            ([link math_toolkit.toolkit.roots2 TOMS Algorithm 748]).]]
-[[quantile from the complement][Found numerically as above.]]
-[[mean][ `p * n` ]]
-[[variance][ `p * n * (1-p)` ]]
-[[mode][`floor(p * (n + 1))`]]
-[[skewness][`(1 - 2 * p) / sqrt(n * p * (1 - p))`]]
-[[kurtosis][`3 - (6 / n) + (1 / (n * p * (1 - p)))`]]
-[[kurtosis excess][`(1 - 6 * p * q) / (n * p * q)`]]
-[[parameter estimation][The member functions `estimate_upper_bound_on_p`
-       `estimate_lower_bound_on_p` and `estimate_number_of_trials` are 
-       implemented in terms of the inverse incomplete beta functions
-       __ibetac_inv, __ibeta_inv, and __ibetac_invb respectively]]
+[[cdf][Using the relation: \n
+I[sub p](r, k+1) = ibeta(r, k+1, p)\n
+= ibeta(r, static_cast<RealType>(k+1), p)]]
+[[cdf complement][Using the relation:\n
+I[sub p](k+1, r)\n
+= ibetac(r, static_cast<RealType>(k+1), p)\n\n]]
+[[quantile][ibeta_invb(r, p, P) - 1]]
+[[quantile from the complement][ibetac_invb(r, p, Q) -1)]]
+[[mean][ `r(1-p)/p` ]]
+[[variance][ `r (1-p) / p * p` ]]
+[[mode][`floor[(r-1) * (1 - p)/p`]]
+[[skewness][`(2 - p) / sqrt(r * (1 - p))`]]
+[[kurtosis][`6 / r + (p * p) / r * (1 - p )`]]
+[[kurtosis excess][`6 / r + (p * p) / r * (1 - p ) -3`]]
+[[parameter estimation member functions][]]
+[[`estimate_upper_bound_on_p`][ibetac_inv(successes + 1, failures - successes, probability)]]
+[[`estimate_lower_bound_on_p`][ibeta_inv(successes + 1, failures - successes, probability)]]
+[[`estimate_number_of_trials`][ibetac_invb(k + 1, p, probability)]]
 ]
 
-
-Implementation note: 
-The real concept type (that deliberately lacks the Lanczos approximation),
+Implementation notes: 
+* The real concept type (that deliberately lacks the Lanczos approximation),
 was found to take several minutes to evaluate some extreme test values,
 so the test has been disabled for this type.
-Much greater speed, and perhaps greater accuracy,
+* Much greater speed, and perhaps greater accuracy,
 might be achieved for extreme values by using a normal approximation.
 This is NOT been tested or implemented.
-
 
 [endsect][/section:negative_binomial_dist Negative Binomial]
 
