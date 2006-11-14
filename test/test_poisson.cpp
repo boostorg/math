@@ -54,7 +54,7 @@ void test_spots(RealType)
   if (decdigits <= 0)
   { // decdigits is not defined, for example real concept,
     // so assume precision of most test data is double (for example, MathCAD).
-     decdigits = numeric_limits<double>::digits10; // == 15
+     decdigits = numeric_limits<double>::digits10; // == 15 for 64-bit
   }
   if (decdigits > 15 ) // numeric_limits<double>::digits10)
   { // 15 is the accuracy of the MathCAD test data.
