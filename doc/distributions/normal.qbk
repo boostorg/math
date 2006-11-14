@@ -1,9 +1,4 @@
-[section:normal_dist Normal]
-
-The normal distribution is probably the most well known statistical 
-distribution: it is also known as the Gaussian Distribution.
-A normal distribution with mean zero and standard deviation one
-is known as the ['Standard Normal Distribution].
+[section:normal_dist Normal (Gaussian) Distribution]
 
 ``#include <boost/math/distributions/normal.hpp>``
 
@@ -28,12 +23,28 @@ is known as the ['Standard Normal Distribution].
    
    }} // namespaces
    
+The normal distribution is probably the most well known statistical 
+distribution: it is also known as the Gaussian Distribution.
+A normal distribution with mean zero and standard deviation one
+is known as the ['Standard Normal Distribution].
+
+Given mean [mu][space] and standard deviation [sigma][space] it has the PDF:
+
+[$../equations/normal_ref1.png]
+
+The variation of it's PDF with it's parameters is illustrated
+in the following graph:
+
+[$../graphs/normal.png]
+
 [h4 Member Functions]
 
    normal_distribution(RealType mean = 0, RealType sd = 1);
    
 Constructs a normal distribution with mean /mean/ and 
 standard deviation /sd/.
+
+Requires sd > 0, otherwise __domain_error is called.
 
    RealType mean()const;
    
@@ -47,6 +58,8 @@ Returns the /standard deviation/ of this distribution.
 
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+
+The domain of the random variable is \[-[infin], +[infin]\].
 
 [h4 Accuracy]
 
