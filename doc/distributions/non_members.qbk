@@ -254,10 +254,25 @@ a defined skewness.
    template <class RealType>
    RealType kurtosis(const ``['Distribution-Type]``<RealType>& dist);
    
-Returns the kurtosis of the distribution /dist/.
+Returns the 'proper' kurtosis (normalized fourth moment) of the distribution /dist/.
+
+Note that the literature definition of kurtosis is confusing.
+The definition used here is that used by
+[@http://mathworld.wolfram.com/Kurtosis.html Wolfram MathWorld]
+(that includes a table of formulae for kurtosis excess for various distributions)
+but NOT the definition of
+[@http://en.wikipedia.org/wiki/Kurtosis kurtosis used by Wikipedia]
+whose tables of distributions all show the (same) formulae labelled kurtosis.
+
+  kurtosis_excess = 'proper' kurtosis - 3
+
+This subtraction of 3 is convenient so that the kurtosis excess
+of a normal distribution is zero.
 
 This function may return a __domain_error if the distribution does not have
 a defined kurtosis.
+
+'Proper' kurtosis can have a value from zero to + infinity.
 
 [h4 [#math.dist.kurtosis_excess]kurtosis excess]
 
@@ -269,6 +284,12 @@ Returns the kurtosis excess of the distribution /dist/.
 This function may return a __domain_error if the distribution does not have
 a defined kurtosis excess.
 
+Kurtosis excess can have a value from -2 to + infinity.
+
+  kurtosis = kurtosis_excess +3;
+  
+The kurtosis excess of a normal distribution is zero.
+
 [h4 [#cdfPQ]P and Q]
 
 The terms P and Q are sometimes used to refer to the __cdf
@@ -278,7 +299,7 @@ by these functions.
 
 [h4 [#percent]Percent Point Function]
 
-The percent point function, also known as the percentiles, is the same as
+The percent point function, also known as the percentile, is the same as
 the __quantile.
 
 [h4 [#survival_inv]Inverse Survival Function.]
