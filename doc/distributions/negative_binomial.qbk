@@ -1,4 +1,4 @@
-[section:negative_binomial_dist Negative Binomial]
+[section:negative_binomial_dist Negative Binomial Distribution]
 
 ``#include <boost/math/distributions/negative_binomial.hpp>``
 
@@ -49,7 +49,7 @@ it is used when there are exactly two mutually exclusive outcomes of a
 [@http://en.wikipedia.org/wiki/Bernoulli_trial Bernoulli trial]:
 these outcomes are labelled "success" and "failure".
 The negative_binomial distribution is used to obtain 
-the probability of observing x failures in n trials, with the 
+the probability of observing x success in n trials, with the 
 probability of success on a single trial denoted by success_fraction p. The 
 negative_binomial distribution assumes that success_fraction p is fixed for all trials.
 
@@ -57,7 +57,8 @@ negative_binomial distribution assumes that success_fraction p is fixed for all 
 
 The name negative binomial distribution is reserved by some to the
 case where the successes parameter r is an integer.
-This integer version is also called the Pascal distribution.
+This integer version is also called the
+[@http://mathworld.wolfram.com/PascalDistribution.html Pascal distribution].
 
 This implementation uses real numbers for the computation throughout
 (because it uses the *real* incomplete beta function family of functions).
@@ -66,7 +67,7 @@ This real-valued version is also called the Polya Distribution.
 To obtain the Pascal distribution,
 you must ensure that an integer value is provided for r,
 and you may want to take either the floor or ceiling (or integer)
-of the result in order to ensure it is integral.
+of the result in order to ensure it too is integral.
 
 For large values of r (successes), the negative binomial distribution
 converges to the Poisson distribution.
@@ -108,15 +109,15 @@ Returns a lower bound on the success fraction:
          the success fraction is [*less than] the value returned.]]
 ]
 
-For example, if you observe /k/ failures from /n/ trials the
-best estimate for the success fraction is simply ['k/n], but if you
+For example, if you observe /r/ successes from /n/ trials the
+best estimate for the success fraction is simply ['r/n], but if you
 want to be 95% sure that the true value is [*greater than] some value, 
 ['p[sub min]], then:
 
    p``[sub min]`` = negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
                        failures, successes, 0.05);
 
-[/link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf TO worked example.]
+[/link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf TODO worked example.]
       
    static RealType estimate_upper_bound_on_p(
       RealType trials, 
@@ -138,7 +139,7 @@ want to be 95% sure that the true value is [*less than] some value,
 ['p[sub max]], then:
 
    p``[sub max]`` = negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
-                       n, k, 0.05);
+                       r, k, 0.05);
 
 [/link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf TODO worked example.]
 
@@ -170,7 +171,7 @@ of seeing 10 events that occur with frequency one half.
 While:
 
    negative_binomial_distribution<RealType>::estimate_number_of_trials(
-      complement(0, 1.0/1000000, 0.05));
+      complement(0, 1./1000000, 0.05));
 
 Returns the largest number of trials we can conduct and still be 95% certain
 of not observing any events that occur with one in a million frequency.
