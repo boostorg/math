@@ -17,9 +17,8 @@
    typedef extreme_value_distribution<double> extreme_value;
 
 There are various
-[@ extreme value distributions]
-: this implementation represents the
-[@http://en.wikipedia.org/wiki/Euler-Mascheroni_constant maximum case],
+[@http://mathworld.wolfram.com/ExtremeValueDistribution.html extreme value distributions]
+: this implementation represents the maximum case,
 and is variously known as a Fisher-Tippett distribution, 
 a log-Weibull distribution or a Gumbel distribution. 
 
@@ -81,8 +80,8 @@ error rates.
 
 [h4 Implementation]
 
-In the following table:\n
-/a/ is the location and /b/ is the scale parameter of the distribution;\n
+In the following table:
+/a/ is the location parameter, /b/ is the scale parameter,
 /x/ is the random variate, /p/ is the probability and /q = 1-p/.
 
 [table
@@ -92,7 +91,7 @@ In the following table:\n
 [[cdf complement][Using the relation: q = -expm1(-exp((a-x)/b)) ]]
 [[quantile][Using the relation: a - log(-log(p)) * b]]
 [[quantile from the complement][Using the relation: a - log(-log1p(-q)) * b]]
-[[mean][a + [@http://en.wikipedia.org/wiki/Euler-Mascheroni_constant Euler-Mascheroni constant] * b]]
+[[mean][a + [@http://en.wikipedia.org/wiki/Euler-Mascheroni_constant Euler-Mascheroni-constant] * b]]
 [[standard deviation][pi * b / sqrt(6)]]
 [[mode][The same as the location parameter /a/.]]
 [[skewness][12 * sqrt(6) * zeta(3) / pi[super 3] ]]

@@ -208,6 +208,11 @@ the context of this distribution:
    ``quantile(complement(binomial(n, p), P))``]]
 ]
 
+[h4 Examples]
+
+Various [link math_toolkit.dist.stat_tut.weg.binom_eg worked examples] 
+are available illustrating the use of the binomial distribution.
+
 [h4 Accuracy]
 
 This distribution is implemented using the 

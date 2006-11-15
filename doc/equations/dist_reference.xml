@@ -772,5 +772,177 @@
     </mfrac>
   </mrow>
 </math>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mtext>f</mtext>
+    <mfenced>
+      <mrow>
+        <mi>x</mi>
+      </mrow>
+    </mfenced>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <mfrac>
+      <mrow>
+        <mi>&Gamma;</mi>
+        <mfenced>
+          <mrow>
+            <mfrac>
+              <mrow>
+                <mi>&nu;</mi>
+                <mo>+</mo>
+                <mn>1</mn>
+              </mrow>
+              <mn>2</mn>
+            </mfrac>
+          </mrow>
+        </mfenced>
+      </mrow>
+      <mrow>
+        <msqrt>
+          <mrow>
+            <mi>&nu;</mi>
+            <mi>&pi;</mi>
+          </mrow>
+        </msqrt>
+        <mi>&Gamma;</mi>
+        <mfenced>
+          <mrow>
+            <mfrac>
+              <mi>&nu;</mi>
+              <mn>2</mn>
+            </mfrac>
+          </mrow>
+        </mfenced>
+        <msup>
+          <mfenced>
+            <mrow>
+              <mn>1</mn>
+              <mo>+</mo>
+              <mfrac>
+                <mrow>
+                  <msup>
+                    <mi>x</mi>
+                    <mn>2</mn>
+                  </msup>
+                </mrow>
+                <mi>&nu;</mi>
+              </mfrac>
+            </mrow>
+          </mfenced>
+          <mrow>
+            <mfrac>
+              <mrow>
+                <mi>&nu;</mi>
+                <mo>+</mo>
+                <mn>1</mn>
+              </mrow>
+              <mn>2</mn>
+            </mfrac>
+          </mrow>
+        </msup>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mtext>f</mtext>
+    <mfenced>
+      <mrow>
+        <mi>x</mi>
+        <mo>;</mo>
+        <mi>k</mi>
+        <mo>,</mo>
+        <mi>&theta;</mi>
+      </mrow>
+    </mfenced>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <msup>
+      <mi>x</mi>
+      <mrow>
+        <mi>k</mi>
+        <mo>&minus;</mo>
+        <mn>1</mn>
+      </mrow>
+    </msup>
+    <mfrac>
+      <msup>
+        <mi>e</mi>
+        <mrow>
+          <mo>&minus;</mo>
+          <mfrac>
+            <mi>x</mi>
+            <mi>&theta;</mi>
+          </mfrac>
+        </mrow>
+      </msup>
+      <mrow>
+        <msup>
+          <mi>&theta;</mi>
+          <mi>k</mi>
+        </msup>
+        <mi>&Gamma;</mi>
+        <mfenced>
+          <mrow>
+            <mi>k</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mtext>f</mtext>
+    <mfenced>
+      <mrow>
+        <mi>x</mi>
+        <mo>;</mo>
+        <mi>&alpha;</mi>
+        <mo>,</mo>
+        <mi>&beta;</mi>
+      </mrow>
+    </mfenced>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <msup>
+      <mi>x</mi>
+      <mrow>
+        <mi>&alpha;</mi>
+        <mo>&minus;</mo>
+        <mn>1</mn>
+      </mrow>
+    </msup>
+    <mfrac>
+      <mrow>
+        <msup>
+          <mi>&beta;</mi>
+          <mi>&alpha;</mi>
+        </msup>
+        <msup>
+          <mi>e</mi>
+          <mrow>
+            <mo>&minus;</mo>
+            <mi>&beta;</mi>
+            <mi>x</mi>
+          </mrow>
+        </msup>
+      </mrow>
+      <mrow>
+        <mi>&Gamma;</mi>
+        <mfenced>
+          <mrow>
+            <mi>&alpha;</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>
 </body>
 </html>

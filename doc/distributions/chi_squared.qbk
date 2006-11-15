@@ -104,6 +104,11 @@ that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable is \[0, +[infin]\].
 
+[h4 Examples]
+
+Various [link math_toolkit.dist.stat_tut.weg.cs_eg worked examples] 
+are available illustrating the use of the Chi Squared Distribution.
+
 [h4 Accuracy]
 
 The Chi-Squared distribution is implemented in terms of the 

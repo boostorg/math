@@ -1,23 +1,4 @@
-[section:students_t_dist Students t]
-
-A statistical distribution published by William Gosset in 1908. 
-His employer, Guinness Breweries, required him to publish under a 
-pseudonym, so he chose "Student". Given N independent measurements, let
-
-[$../equations/students_t_dist.png]
-
-where /M/ is the population mean,[' ''' &#x3BC; '''] is the sample mean, and /s/ is the 
-sample variance.
-
-Student's t-distribution is defined as the distribution of the random 
-variable t which is  - very loosely - the "best" that we can do not 
-knowing the true standard deviation of the sample.
-
-The Student's t-distribution takes a single parameter: the number of
-degrees of freedom of the sample.  When the degrees of freedom is
-/one/ then this distribution is the same as the Cauchy-distribution.
-As the number of degrees of freedom tends towards infinity, then this
-distribution approaches the normal-distribution.
+[section:students_t_dist Students t Distribution]
 
 ``#include <boost/math/distributions/students_t.hpp>``
 
@@ -50,11 +31,39 @@ distribution approaches the normal-distribution.
    
    }} // namespaces
    
+A statistical distribution published by William Gosset in 1908. 
+His employer, Guinness Breweries, required him to publish under a 
+pseudonym, so he chose "Student". Given N independent measurements, let
+
+[$../equations/students_t_dist.png]
+
+where /M/ is the population mean,[' ''' &#x3BC; '''] is the sample mean, and /s/ is the 
+sample variance.
+
+Student's t-distribution is defined as the distribution of the random 
+variable t which is  - very loosely - the "best" that we can do not 
+knowing the true standard deviation of the sample.  It has the PDF:
+
+[$../equations/students_t_ref1.png]
+
+The Student's t-distribution takes a single parameter: the number of
+degrees of freedom of the sample.  When the degrees of freedom is
+/one/ then this distribution is the same as the Cauchy-distribution.
+As the number of degrees of freedom tends towards infinity, then this
+distribution approaches the normal-distribution.  The following graph
+illustrates how the PDF varies with the degrees of freedom [nu]:
+
+[$../graphs/students_t.png]
+
 [h4 Member Functions]
 
    students_t_distribution(const RealType& v);
    
 Constructs a Student's t-distribution with /v/ degrees of freedom.
+
+Requires v > 0, otherwise calls __domain_error.  Note that 
+non-integral degrees of freedom are supported, and 
+meaningful under certain circumstances.
 
    RealType degrees_of_freedom()const;
    
@@ -68,17 +77,19 @@ Returns the number of degrees of freedom of this distribution.
       RealType hint = 100);
 
 Returns the number of degrees of freedom required to observe a significant
-result when the mean differs from the "true" mean by /difference_from_mean/.
+result in the Student's t test when the mean differs from the "true" 
+mean by /difference_from_mean/.
 
 [variablelist
 [[difference_from_mean][The difference between the true mean and the sample mean
                         that we wish to show is significant.]]
 [[alpha][The maximum acceptable probability of rejecting the null hypothesis 
         when it is in fact true.]]
-[[beta][The maximum acceptable probability of accepting the null hypothesis 
+[[beta][The maximum acceptable probability of failing to reject the null hypothesis 
         when it is in fact false.]]
 [[sd][The sample standard deviation.]]
-[[hint][A hint for the location to start looking for the result.]]
+[[hint][A hint for the location to start looking for the result, a good choice for this
+      would be the sample size of a previous borderline Student's t test.]]
 ]
 
 [note
@@ -93,6 +104,13 @@ NIST Engineering Statistics Handbook].
 
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
+
+The domain of the random variable is \[-[infin], +[infin]\].
+
+[h4 Examples]
+
+Various [link math_toolkit.dist.stat_tut.weg.st_eg worked examples] are available illustrating the use of the Student's t
+distribution.
 
 [h4 Accuracy]
 

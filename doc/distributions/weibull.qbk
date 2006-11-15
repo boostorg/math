@@ -41,6 +41,14 @@ If the failure rate is:
 * decreases over time, then [alpha][space] < 1, suggesting "infant mortality".
 * increases over time, then [alpha][space] > 1, suggesting "wear out" - more likely to fail as time goes by.
 
+The following graph illustrates how the PDF varies with the shape parameter [alpha]:
+
+[$../graphs/weibull.png]
+
+While this graph illustrates how the PDF varies with the scale parameter [beta]:
+
+[$../graphs/weibull2.png]
+
 [h4 Related distributions]
 
 When [alpha][space] = 3, the
@@ -53,8 +61,11 @@ When [alpha][space] = 1, the Weibull distribution reduces to the
 
    weibull_distribution(RealType shape, RealType scale = 1);
    
-Constructs a [@ Weibull distribution] with shape /shape/ and 
-scale /scale/.
+Constructs a [@http://en.wikipedia.org/wiki/Weibull_distribution 
+Weibull distribution] with shape /shape/ and scale /scale/.
+
+Requires that the /shape/ and /scale/ parameters are both greater than zero, 
+otherwise calls __domain_error.
 
    RealType shape()const;
    
@@ -69,10 +80,12 @@ Returns the /scale/ parameter of this distribution.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
 
+The domain of the random variable is \[0, [infin]\].
+
 [h4 Accuracy]
 
 The Weibull distribution is implemented in terms of the 
-standard library log and exp functions
+standard library `log` and `exp` functions plus __expm1 and __log1p
 and as such should have very low error rates.
 
 [h4 Implementation]

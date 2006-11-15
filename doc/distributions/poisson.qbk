@@ -1,4 +1,4 @@
-[section:poisson_dist Poisson]
+[section:poisson_dist Poisson Distribution]
 
 ``#include <boost/math/distributions/poisson.hpp>``
 
