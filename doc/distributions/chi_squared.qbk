@@ -15,10 +15,10 @@
    public:
       typedef RealType value_type;
 
-      // Construct:
+      // Constructor:
       chi_squared_distribution(RealType i);
 
-      // Access parameter:
+      // Accessor to parameter:
       RealType degrees_of_freedom()const;
 
       // Parameter estimation:
@@ -53,7 +53,7 @@ for different values of [nu]:
 
       chi_squared_distribution(RealType v);
       
-Constructs a Chi Squared distribution with /v/ degrees of freedom.
+Constructs a Chi-Squared distribution with /v/ degrees of freedom.
 
 Requires v > 0, otherwise calls __domain_error.
 
@@ -93,9 +93,9 @@ a requirement that `variance + difference_from_variance > 0`, since no sample
 can have a negative variance!
 
 This procedure uses the method in Diamond, W. J. (1989). 
-Practical Experiment Designs, Van-Nostrand Reinhold, New York.  
-See also the NIST Engineering Statistics Handbook,
-Section 7.2.3.2.
+Practical Experiment Designs, Van-Nostrand Reinhold, New York.\n  
+See also section on Sample sizes required in
+[@http://www.itl.nist.gov/div898/handbook/prc/section2/prc232.htm the NIST Engineering Statistics Handbook, Section 7.2.3.2].
 
 [h4 Non-member Accessors]
 
@@ -124,11 +124,18 @@ In the following table /v/ is the number of degrees of freedom of the distributi
 [[quantile from the complement][Using the relation: x = 2 * __gamma_Q_inv(v / 2, p) ]]
 [[mean][v]]
 [[variance][2v]]
-[[mode][v - 2]]
-[[skewness][2 * sqrt(2 / v)]]
+[[mode][v - 2 (if v >= 2)]]
+[[skewness][2 * sqrt(2 / v) == sqrt(8 / v)]]
 [[kurtosis][3 + 12 / v]]
 [[kurtosis excess][12 / v]]
 ]
+
+[h4 References]
+
+* [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda3666.htm NIST Exploratory Data Analysis]
+* [@http://en.wikipedia.org/wiki/Chi-square_distribution Chi-square distribution]
+* [@http://mathworld.wolfram.com/Chi-SquaredDistribution.html Weisstein, Eric W. "Chi-Squared Distribution." From MathWorld--A Wolfram Web Resource.]
+
 
 [endsect][/section:chi_squared_dist Chi Squared]
 
