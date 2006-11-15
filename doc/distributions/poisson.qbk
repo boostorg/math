@@ -62,7 +62,7 @@ The poisson distribution is implemented in terms of the
 incomplete gamma functions __gamma_P and __gamma_Q 
 and as such should have low error rates: but refer to the documentation
 of those functions for more information.
-The quantile and it's complement use the inverse gamma functions
+The quantile and its complement use the inverse gamma functions
 and are therefore probably slightly less accurate: this is because the 
 inverse gamma functions are implemented using an iterative method with a 
 lower tolerance to avoid excessive computation.
@@ -80,7 +80,7 @@ In the following table [lambda][space] is the mean of the distribution,
 [[quantile][Using the relation: k = __gamma_Q_inva([lambda], p) - 1]]
 [[quantile from the complement][Using the relation: k = __gamma_P_inva([lambda], q) - 1]]
 [[mean][[lambda]]]
-[[mode][ floor ([lambda]) or [floor[lambda]] ]]
+[[mode][ floor ([lambda]) or [floorlr[lambda]] ]]
 [[skewness][1/[radic][lambda]]]
 [[kurtosis][3 + 1/[lambda]]]
 [[kurtosis excess][1/[lambda]]]
