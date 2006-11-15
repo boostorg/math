@@ -32,7 +32,7 @@ Given mean [mu][space] and standard deviation [sigma][space] it has the PDF:
 
 [$../equations/normal_ref1.png]
 
-The variation of it's PDF with it's parameters is illustrated
+The variation of it's PDF with its parameters is illustrated
 in the following graph:
 
 [$../graphs/normal.png]
@@ -69,8 +69,8 @@ and as such should have very low error rates.
 
 [h4 Implementation]
 
-In the following table /m/ is the mean of the distribution, and /s/ is it's
-standard deviation.
+In the following table /m/ is the mean of the distribution,
+and /s/ is its standard deviation.
 
 [table
 [[Function][Implementation Notes]]
