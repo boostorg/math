@@ -50,6 +50,8 @@ is good enough (Medium Priority).
 
 * Student's t Perhaps switch to normal distribution as a better approximation for very large degrees of freedom?
 
+* Some distributions say the range may include infinity, but is not always implemented; nor is it clear if and how it should be.
+
 [endsect][/section:issues Known Issues, and Todo List]
 
 [/ 
