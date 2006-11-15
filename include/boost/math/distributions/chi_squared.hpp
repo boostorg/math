@@ -187,7 +187,7 @@ inline RealType skewness(const chi_squared_distribution<RealType>& dist)
 {
    using namespace std; // For ADL
    RealType df = dist.degrees_of_freedom();
-   return 2 * sqrt(2 / df);
+   return sqrt (8 / df);  // == 2 * sqrt(2 / df);
 }
 
 template <class RealType>
