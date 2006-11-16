@@ -32,7 +32,7 @@ Given mean [mu][space] and standard deviation [sigma][space] it has the PDF:
 
 [$../equations/normal_ref1.png]
 
-The variation of it's PDF with its parameters is illustrated
+The variation the PDF with its parameters is illustrated
 in the following graph:
 
 [$../graphs/normal.png]
@@ -94,3 +94,4 @@ and /s/ is its standard deviation.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+

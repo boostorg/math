@@ -9,11 +9,7 @@
 <body>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>g</mi>
-    <mi>a</mi>
-    <mi>m</mi>
-    <mi>m</mi>
-    <mi>a</mi>
+    <mtext>tgamma</mtext>
     <mfenced>
       <mrow>
         <mi>z</mi>

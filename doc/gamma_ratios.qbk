@@ -58,8 +58,8 @@ Returns the ratio of gamma functions:
 
 Accuracy tests use data generated at very high precision
 (with [@http://shoup.net/ntl/doc/RR.txt NTL RR class]
-set at 1000-bit precision, about 300 decimal digits)
-and using this implementation.  
+set at 1000-bit precision: about 300 decimal digits)
+and a deliberately naive calculation of [Gamma](x)/[Gamma](y).  
 
 [h4 Implementation]
 

@@ -52,9 +52,6 @@
 
 [section:future Extras/Future Directions]
 
-I'm not anticipating any of the following being present in the initial
-release: we've got enough to do figuring out the math !
-
 [h4 Adding Additional Location and Scale Parameters] 
 
 In some modelling applications we require a distribution with a specific 
@@ -77,6 +74,30 @@ The obvious way to handle this is via an adapter template:
   };
 
 Which would then have its own set of overloads for the non-member accessor functions.
+
+[h4 An "any_distribution" class]
+
+It would be fairly trivial to add a distribution object that virtualises
+the actual type of the distibution, and can therefore hold "any" object
+that conforms to the conceptual requirements of a distribution:
+
+   template <class RealType>
+   class any_distribution
+   {
+   public:
+      template <class Distribution>
+      any_distribution(const Distribution& d);
+   };
+   
+   // Get the cdf of the underlying distribution:
+   template <class RealType>
+   RealType cdf(const any_distribution<RealType>& d, RealType x);
+   // etc....
+   
+Such a class would facilitate the writing of non-template code that can 
+function with any distribution type.  It's not clear yet whether there is a
+compelling use case though.  Possibly tests for goodness of fit might 
+provide such a use case: this needs more investigation.
 
 [h4 Higher Level Hypothesis Tests]
 

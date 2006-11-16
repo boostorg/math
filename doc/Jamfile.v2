@@ -24,7 +24,9 @@ boostbook standalone
         <xsl:param>page.margin.inner=0.5in
         <xsl:param>page.margin.outer=0.5in
         <xsl:param>admon.graphics=1
+        <xsl:param>symbol.font.family=DejaVuSans,Symbol,ZapfDingbats
     ;
+
 
 
 

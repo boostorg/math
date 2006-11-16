@@ -29,8 +29,8 @@ Returns the "true gamma" (hence name tgamma) of value z:
 
 [$../graphs/gamma.png]
 
-There are effectively two versions of the [@http://en.wikipedia.org/wiki/Gamma_function gamma]
-(not log gamma) function internally: a fully
+There are effectively two versions of the [@http://en.wikipedia.org/wiki/Gamma_function tgamma]
+function internally: a fully
 generic version that is slow, but reasonably accurate, and a much more
 efficient approximation that is used where the number of digits in the significand
 of T correspond to a certain __lanczos.  In practice any built in
@@ -70,7 +70,7 @@ In addition, some accuracy tests in known tricky areas were computed at high pre
 using the generic version of this function.
 
 The function `tgamma1pm1` is tested against values calculated very naively
-using the formula `tgamma(1+dz)-1` and a lanczos approximation accurate
+using the formula `tgamma(1+dz)-1` with a lanczos approximation accurate
 to around 100 decimal digits.
 
 [h4 Implementation]
@@ -99,9 +99,9 @@ For z < -20 the reflection formula:
 
 [$../equations/gamm5.png]
 
-is used.  Particular care has to be taken to evaluate the `z * sin(PI * z)` part: 
-a special routine is used to reduce z prior to multiplying by PI to ensure that the
-result in is the range [0, PI/2]. Without this an excessive amount of error occurs
+is used.  Particular care has to be taken to evaluate the `z * sin([pi][space] * z)` part: 
+a special routine is used to reduce z prior to multiplying by [pi][space] to ensure that the
+result in is the range [0, [pi]/2]. Without this an excessive amount of error occurs
 in this region (which is hard enough already, as the rate of change near a negative pole
 is /exceptionally/ high).
 

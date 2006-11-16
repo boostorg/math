@@ -17,7 +17,7 @@
   
 [h4 Description]
 
-Returns the digamma or psi function of /x/, that is the logarithmic
+Returns the digamma or psi function of /x/. Digamma is defined as the logarithmic
 derivative of the gamma function:
 
 [$../equations/digamma1.png]

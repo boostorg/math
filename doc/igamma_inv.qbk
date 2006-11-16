@@ -75,7 +75,9 @@ The accuracy of these functions doesn't vary much by platform or by
 the type T.  Given that these functions are computed by iterative methods,
 they are deliberately "detuned" so as not to be too accurate: it is in
 any case impossible for these function to be more accurate than the
-regular forward incomplete gamma functions.
+regular forward incomplete gamma functions.  In practice, the accuracy
+of these functions is very similar to that of __gamma_P and __gamma_Q
+functions.
 
 [h4 Testing]
 

@@ -45,6 +45,11 @@ with various floating point types. Unless otherwise specified any
 floating point type that is narrower than the one shown will have
 __zero_error.
 
+Note that while the relative errors near the positive roots of lgamma
+are very low, the lgamma function has an infinite number of irrational
+roots for negative arguments: very close to these negative roots only
+a low absolute error can be guaranteed.
+
 [table
 [[Significand Size] [Platform and Compiler] [Factorials and Half factorials] [Values Near Zero] [Values Near 1 or 2] [Values Near a Negative Pole]]
 [[53]            [Win32 Visual C++ 8]  [Peak=0.88 Mean=0.14 \n\n(GSL=33) (Cephes=1.5)] [Peak=0.96 Mean=0.46 \n\n(GSL=5.2) (Cephes=1.1)]    [Peak=0.86 Mean=0.46 \n\n(GSL=1168) (Cephes~500000)] [Peak=4.2 Mean=1.3 \n\n(GSL=25) (Cephes=1.6)] ]
@@ -78,6 +83,8 @@ For types of known precision, the __lanczos is used, a traits class
 approximation.  The logarithmic version of the __lanczos is:
 
 [$../equations/lgamm4.png]
+
+Where L[sub e,g][space] is the Lanczos sum, scaled by e[super g].
 
 As before the reflection formula is used for /z < 0/.
 
@@ -133,7 +140,7 @@ terms tend to zero, as /z -> 1/:
 
 [$../equations/lgamm5.png]
 
-The Ck terms in the above are the same as in the __lanczos.
+The C[sub k][space] terms in the above are the same as in the __lanczos.
 
 A similar rearrangement can be performed at /z = 2/:
 

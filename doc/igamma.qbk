@@ -29,11 +29,12 @@
 There are four [@http://mathworld.wolfram.com/IncompleteGammaFunction.html incomplete gamma functions]:
 two are normalised versions
 that return values in the range [0, 1], and two are non-normalised and
-return values in the range [0, gamma(a)].  Users interested in statistical
+return values in the range [0, [Gamma](a)].  Users interested in statistical
 applications should use the
 [@http://mathworld.wolfram.com/RegularizedGammaFunction.html normalised versions (gamma_P and gamma_Q)].
 
-All of these function require /a > 0/ and /z >= 0/.
+All of these functions require /a > 0/ and /z >= 0/, otherwise they return
+the result of __domain_error.
 
    template <class T>
    T tgamma(T a, T z);
@@ -78,8 +79,13 @@ a and z, along with comparisons to other open source implementations where avail
 Note that only results for the widest floating point type on the system are given as
 narrower types have __zero_error.
 
-Note that for very large /a/ and /a ~ z/, these functions are currently quite slow.  
-Errors also grow as /a/ grows larger.
+Note that errors grow as /a/ grows larger.
+
+Note also that the higher error rates for the 80 and 128 bit 
+long double results are somewhat misleading: expected results that are 
+zero at 64-bit double precision may be non-zero - but exceptionally small -
+with the larger exponent range of a long double.  These results therefore
+reflect the more extreme nature of the tests conducted for these types.
 
 [table Errors In the Function tgamma(a,z)
 [[Significand Size] [Platform and Compiler] [0.5 < a < 100\nand\n0.01*a < z < 100*a]  [1e-12 < a < 5e-2\nand\n0.01*a < z < 100*a]]
@@ -117,10 +123,11 @@ Errors also grow as /a/ grows larger.
 
 There are two sets of tests: spot tests compare values taken from
 [@http://functions.wolfram.com/GammaBetaErf/ Mathworld's online evaluator]
-with this implementation to a basic "sanity check".
+with this implementation to perform a basic "sanity check".
 Accuracy tests use data generated at very high precision
 (using NTL's RR class set at 1000-bit precision) using this implementation 
-with a very high precision 60-term __lanczos.
+with a very high precision 60-term __lanczos, and some but not all of the special
+case handling disabled.
 This is less than satisfactory: an independent method should really be used,
 but apparently a complete lack of such methods are available.  We can't even use a deliberately
 naive implementation without special case handling since Legendre's continued fraction
@@ -141,18 +148,18 @@ The lower incomplete gamma is computed from its series representation:
 
 4) [$../equations/igamma8.png]
 
-Or by subtraction of the upper integral from either gamma(a) or 1
+Or by subtraction of the upper integral from either [Gamma](a) or 1
 when /x > a and x > 1.1/.
 
 The upper integral is computed from Legendre's continued fraction representation:
 
 5) [$../equations/igamma9.png]
 
-When /x > 1.1/ or by subtraction of the lower integral from either gamma(a) or 1
+When /x > 1.1/ or by subtraction of the lower integral from either [Gamma](a) or 1
 when /x < a/.
 
 For /x < 1.1/ computation of the upper integral is more complex as the continued 
-fraction representation is inaccurate in this area.  However there is another 
+fraction representation is unstable in this area.  However there is another 
 series representation for the lower integral:
 
 6) [$../equations/igamma10.png]
@@ -162,16 +169,12 @@ to:
 
 7) [$../equations/igamma11.png]
 
-Obviously this is only accurate if the functions "powm1" and "gp1m1" are
-accurately calculated. "gp1m1" is computed via the following rearrangement
-of the __lanczos, note that no generic version of this function is available
-and so the accuracy of the fully generic version of the upper incomplete
-gamma functions is likely to limited to approximately long double precision.
-
-8) [$../equations/igamma11b.png]
-
-The terms in square brackets in the above are evaluated as special
-functions in their own right to avoid cancellation errors.
+Refer to the documentation for __powm1 and __tgamma1pm1 for details
+of their implementation.  Note however that the precision of __tgamma1pm1
+is capped to either around 35 digits, or to that of the __lanczos associated with
+type T - if there is one - whichever of the two is the greater.  
+That therefore imposes a similar limit on the precision of this 
+function in this region.
 
 For /x < 1.1/ the crossover point where the result is ~0.5 no longer
 occurs for /x ~ y/.  Using /x * 1.1 < a/ as the crossover criterion
@@ -230,7 +233,7 @@ and Morris.  However, using a wider range results in large and inexact
 (i.e. computed) values being passed to the `exp` and `erfc` functions
 resulting in significantly larger error rates.  In other words there is a
 fine trade off here between efficiency and error.  The current limits should
-keep the number of iterations required by (4) and (5) to no more than ~20
+keep the number of terms required by (4) and (5) to no more than ~20
 at double precision.
 
 For the normalised incomplete gamma functions, calculation of the 
