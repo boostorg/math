@@ -49,8 +49,8 @@ it is used when there are exactly two mutually exclusive outcomes of a
 [@http://en.wikipedia.org/wiki/Bernoulli_trial Bernoulli trial]:
 these outcomes are labelled "success" and "failure".
 The negative_binomial distribution is used to obtain 
-the probability of observing x success in n trials, with the 
-probability of success on a single trial denoted by success_fraction p. The 
+the probability of observing k failures in n trials before the required number of successes r,
+with the probability of success on a single trial denoted by success_fraction p. The 
 negative_binomial distribution assumes that success_fraction p is fixed for all trials.
 
 [h4 Related Distributions]
@@ -73,34 +73,35 @@ For large values of r (successes), the negative binomial distribution
 converges to the Poisson distribution.
 
 The geometric distribution is a special case
-where the successes parameter r = 1;
+where the successes parameter r = 1, so only a first and only success is required.
 
 geometric(p) = negative-binomial(1,p)
 
 poisson([lambda]) = lim [sub r] [sub larr] [sub infin] negative_binomial(r, r/ [lambda] + r))
+TODO equation does not show right <<<<<<<<< Check after update of templates.
 
    
 [h4 Member Functions]
 
    negative_binomial_distribution(RealType r, RealType p);
 
-Constructor: /r/ is the total number of successes, /p/ is the
-probability of success of a single trial.
+Constructor: /r/ is the total number of successes (r > 0), /p/ is the
+probability of success of a single trial (0 <= p <= 1).
 
-   RealType success_fraction() const;
+   RealType success_fraction() const; // successes / trials (0 <= p <= 1)
    
 Returns the parameter /p/ from which this distribution was constructed.
    
-   RealType successes() const;
+   RealType successes() const; // required successes (r > 0)
    
 Returns the parameter /r/ from which this distribution was constructed.
 
       static RealType estimate_lower_bound_on_p(
         RealType failures, 
         RealType successes,
-        RealType probability)
+        RealType probability) // alpha, (0 <= p <= 1), 0.05 equivalent to 95% confidence.
       
-Returns a lower bound on the success fraction:
+Returns a *lower bound* on the success fraction:
 
 [variablelist
 [[failures][The total number of failures before the r th success.]]
@@ -109,8 +110,8 @@ Returns a lower bound on the success fraction:
          the success fraction is [*less than] the value returned.]]
 ]
 
-For example, if you observe /r/ successes from /n/ trials the
-best estimate for the success fraction is simply ['r/n], but if you
+For example, if you observe /k/ failures and /r/ successes from /n/ = k + r trials
+the best estimate for the success fraction is simply ['r/n], but if you
 want to be 95% sure that the true value is [*greater than] some value, 
 ['p[sub min]], then:
 
@@ -122,9 +123,9 @@ want to be 95% sure that the true value is [*greater than] some value,
    static RealType estimate_upper_bound_on_p(
       RealType trials, 
       RealType successes,
-      RealType alpha);
+      RealType alpha); // probability (0.05 equivalent to 95%).
       
-Returns an upper bound on the success fraction:
+Returns an *upper bound* on the success fraction:
 
 [variablelist
 [[trials][The total number of trials conducted.]]
@@ -144,9 +145,9 @@ want to be 95% sure that the true value is [*less than] some value,
 [/link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf TODO worked example.]
 
    static RealType estimate_number_of_trials(
-      RealType k,     // number of events
-      RealType p,     // success fraction
-      RealType alpha); // probability threshold
+      RealType k,     // number of failures.
+      RealType p,     // success fraction.
+      RealType alpha); // probability threshold (0.05 equivalent to 95%).
       
    template <class P1, class P2, class P3>
    static RealType estimate_number_of_trials(
@@ -156,7 +157,7 @@ These functions estimate the number of trials required to achieve a certain
 probability that [*k failure or fewer will be observed].
 
 [variablelist
-[[k][The number of success observed.]]
+[[k][The number of failures observed.]]
 [[p][The probability of success for each trial.]]
 [[alpha][The maximum acceptable probability that k events or fewer will be observed.]]
 ]
@@ -190,22 +191,22 @@ the context of this distribution:
 [table Meaning of the non-member accessors.
 [[Function][Meaning]]
 [[__pdf]
-   [The probability of obtaining [*exactly k successes] from n trials
+   [The probability of obtaining [*exactly k failures] from n trials
    with success fraction p.  For example:\n\n``pdf(negative_binomial(n, p), k)``]]
 [[__cdf]
-   [The probability of obtaining [*k successes or fewer] from n trials
+   [The probability of obtaining [*k failures or fewer] from n trials
    with success fraction p.  For example:\n\n ``cdf(negative_binomial(n, p), k)``]]
 [[__ccdf]
-   [The probability of obtaining [*more than k successes] from n trials
+   [The probability of obtaining [*more than k failures] from n trials
    with success fraction p.  For example:\n\n ``cdf(complement(negative_binomial(n, p), k))``]]
 [[__quantile]
-   [The [*greatest] number of successes that may be observed from n trials
+   [The [*greatest] number of failures that may be observed from n trials
    with success fraction p, at probability P.  Note that the value returned
    is a real-number, and not an integer.  Depending on the use case you may
    want to take either the floor or ceiling of the result.  For example:\n\n
    ``quantile(negative_binomial(n, p), P)``]]
 [[__quantile_c]
-   [The [*smallest] number of successes that may be observed from n trials
+   [The [*smallest] number of failures that may be observed from n trials
    with success fraction p, at probability P.  Note that the value returned
    is a real-number, and not an integer.  Depending on the use case you may
    want to take either the floor or ceiling of the result. For example:
