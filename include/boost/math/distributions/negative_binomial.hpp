@@ -158,14 +158,14 @@ namespace boost
       static RealType estimate_lower_bound_on_p(
         RealType failures,
         RealType successes,
-        RealType probability)
+        RealType probability) // alpha 0.05 equivalent to 95%.
       {
         RealType result;  // of error checks.
-        if(false == negative_binomial_detail::check_dist_and_k(
+        if(false == negative_binomial_detail::check_successes(
           BOOST_CURRENT_FUNCTION, failures, RealType(0), successes, &result)
-          &&
-          negative_binomial_detail::check_dist_and_prob(
-          BOOST_CURRENT_FUNCTION, failures, RealType(0), probability, &result))
+          && detail::check_probability(function, probability, result)
+          && negative_binomial_detail::check_dist_and_k(
+          BOOST_CURRENT_FUNCTION, failures, RealType(0), failures, &result))
         {
           return result;
         }
@@ -175,15 +175,14 @@ namespace boost
       static RealType estimate_upper_bound_on_p(
         RealType failures,
         RealType successes,
-        RealType probability)
+        RealType probability) // alpha 0.05 equivalent to 95%.
       {
-
         RealType result;  // of error checks.
         if(false == negative_binomial_detail::check_dist_and_k(
-          BOOST_CURRENT_FUNCTION, failures, RealType(0), successes, &result)
-          &&
-          negative_binomial_detail::check_dist_and_prob(
-          BOOST_CURRENT_FUNCTION, failures, RealType(0), probability, &result))
+          BOOST_CURRENT_FUNCTION, failures, RealType(0), failures, &result)
+          && detail::check_probability(function, probability, result)
+          && negative_binomial_detail::check_dsuccesses(
+          BOOST_CURRENT_FUNCTION, failures, RealType(0), successes, &result))
         {
           return result;
         }
@@ -192,13 +191,13 @@ namespace boost
       } // estimate_upper_bound_on_p
 
       // Estimate number of failures parameter:
-      //
-      // "How many failures (k) do I need to be P% sure of seeing successes?"
+      // TODO Not understood yet.
+      // "How many failures (k) do I need to be P% sure of seeing r successes?"
       //    or
       // "How many failures can I have to be P% sure of seeing fewer than k events?"
 
       static RealType estimate_number_of_trials(
-        RealType k,     // number of events.
+        RealType k,     // number of failures.
         RealType p,     // success fraction.
         RealType probability) // probability threshold.
       {
@@ -308,10 +307,7 @@ namespace boost
       RealType p = dist.success_fraction();
 
       RealType result = (p/(r + k)) * ibeta_derivative(r, static_cast<RealType>(k+1), p);
-      // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
-      // constrain_probability here?
-      // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
-      // equivalent to
+      // Equivalent to:
       // return exp(lgamma(r + k) - lgamma(r) - lgamma(k+1)) * pow(p, r) * pow((1-p), k);
       return result;
     } // negative_binomial_pdf
@@ -338,9 +334,6 @@ namespace boost
 
       RealType probability = ibeta(r, static_cast<RealType>(k+1), p);
       // Ip(r, k+1) = ibeta(r, k+1, p)
-      // constrain_probability here?
-      // Numerical errors might cause probability to be slightly outside the range < 0 or > 1.
-      // This might cause trouble downstream, so warn, possibly throw exception, but constrain to the limits.
       return probability;
     } // cdf Cumulative Distribution Function Negative Binomial.
 
