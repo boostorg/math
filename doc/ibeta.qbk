@@ -29,7 +29,7 @@
 There are four [@http://en.wikipedia.org/wiki/Incomplete_beta_function incomplete beta functions]
 : two are normalised versions
 that return values in the range [0, 1], and two are non-normalised and
-return values in the range [0, beta(a, b)].  Users interested in statistical
+return values in the range [0, __beta(a, b)].  Users interested in statistical
 applications should use the normalised (or
 [@http://mathworld.wolfram.com/RegularizedBetaFunction.html regularized]
 ) versions (ibeta and ibetac).
@@ -61,6 +61,7 @@ Returns the normalised incomplete beta function of a, b and x:
 
    template <class T>
    T ibetac(T a, T zb, T x);   
+   
 Returns the normalised complement of the incomplete beta function of a, b and x:
 
 [$../equations/ibeta4.png]
@@ -72,36 +73,55 @@ a, b and x, along with comparisons to other open source implementations where av
 Note that only results for the widest floating-point type on the system are given as
 narrower types have __zero_error.
 
+Note that the results for 80 and 128-bit long doubles are noticably higher than
+for doubles: this is because the wider exponent range of these types allow
+more extreme test cases to be tested.  For example expected results that
+are zero at double precision, may be finite but exceptionally small with
+the wider exponent range of the long double types.
+
 [table Errors In the Function beta(a, b, x)
 [[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
 [[53] [Win32, Visual C++ 8] [Peak=39 Mean=2.9] [Peak=91 Mean=12.7] [Peak=635 Mean=25]]
-[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=26 Mean=3.6] [Peak=180.7 Mean=30.1] [Peak~68,580 Mean=2,816]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=13 Mean=2.4] [Peak=67.1 Mean=13.4] [Peak~68,380 Mean=2,760]]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=27.3 Mean=3.6] [Peak=49.8 Mean=9.1] [Peak~60,900 Mean=2,920]]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=26 Mean=3.6] [Peak=180.7 Mean=30.1] [Peak~7x10[super 4][space] Mean=3x10[super 3][space] ]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=13 Mean=2.4] [Peak=67.1 Mean=13.4] [Peak~7x10[super 4][space] Mean=3x10[super 3][space] ]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=27.3 Mean=3.6] [Peak=49.8 Mean=9.1] [Peak~6x10[super 4][space] Mean=3x10[super 3][space] ]]
 ]
 
 [table Errors In the Function betac(a,b,x)
 [[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
-[[53] [Win32, Visual C++ 8] [Peak=12.0 Mean=2.4] [Peak=91 Mean=15] [Peak=3718 Mean=113]]
-[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=19.8 Mean=3.8] [Peak=295.1 Mean=33.9] [Peak~104,400 Mean=5,468]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=11.2 Mean=2.4] [Peak=63.5 Mean=13.6] [Peak~104,500 Mean=5,444]]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=15.6 Mean=3.5] [Peak=39.8 Mean=8.9] [Peak~89,780 Mean=4,946]]
+[[53] [Win32, Visual C++ 8] [Peak=12.0 Mean=2.4] [Peak=91 Mean=15] [Peak=4x10[super 3][space] Mean=113]]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=19.8 Mean=3.8] [Peak=295.1 Mean=33.9] [Peak~1x10[super 5][space] Mean=5x10[super 3][space] ]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=11.2 Mean=2.4] [Peak=63.5 Mean=13.6] [Peak~1x10[super 5][space] Mean=5x10[super 3][space]  ]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=15.6 Mean=3.5] [Peak=39.8 Mean=8.9] [Peak~9x10[super 4][space] Mean=5x10[super 3][space]  ]]
 ]
 
 [table Errors In the Function ibeta(a,b,x)
 [[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
-[[53] [Win32, Visual C++ 8] [Peak=42.3 Mean=2.9\n\n(GSL Peak=682 Mean=32.5)\n(Cephes Peak=42.7 Mean=7.0)]  [Peak=108 Mean=16.6\n\n(GSL Peak=690 Mean=151)\n(Cephes Peak=1545 Mean=218)] [Peak=4109 Mean=203\n\n(GSL Peak~390000 Mean~18000)\n(Cephes Peak~560000 Mean~20000)]]
-[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=21.9 Mean=3.1] [Peak=270.7 Mean=26.8] [Peak~53,560 Mean=2,948]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=15.4 Mean=3.0] [Peak=112.9 Mean=14.3] [Peak~53,560 Mean=2,893]]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=20.9 Mean=2.6] [Peak=88.1 Mean=14.3] [Peak~25,920 Mean=1,671]]
+[[53] [Win32, Visual C++ 8] 
+      [Peak=42.3 Mean=2.9\n\n(GSL Peak=682 Mean=32.5)\n(Cephes Peak=42.7 Mean=7.0)]  
+      [Peak=108 Mean=16.6\n\n(GSL Peak=690 Mean=151)\n(Cephes Peak=1545 Mean=218)] 
+      [Peak=4x10[super 3][space] Mean=203\n\n(GSL Peak~3x10[super 5][space] Mean~2x10[super 4][space])\n(Cephes Peak~5x10[super 5][space] Mean~2x10[super 4][space])]]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=21.9 Mean=3.1] 
+      [Peak=270.7 Mean=26.8] [Peak~5x10[super 4][space] Mean=3x10[super 3][space] ]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=15.4 Mean=3.0] [Peak=112.9 Mean=14.3] 
+      [Peak~5x10[super 4][space] Mean=3x10[super 3][space]]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=20.9 Mean=2.6] [Peak=88.1 Mean=14.3] 
+      [Peak~2x10[super 4][space] Mean=1x10[super 3][space] ]]
 ]
 
 [table Errors In the Function ibetac(a,b,x)
 [[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
-[[53] [Win32, Visual C++ 8] [Peak=13.9 Mean=2.0]  [Peak=56.2 Mean=14] [Peak=2670 Mean=159]]
-[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=21.1 Mean=3.6] [Peak=221.7 Mean=25.8] [Peak~91,790 Mean=3,047]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=10.6 Mean=2.2] [Peak=73.9 Mean=11.9] [Peak~91,790 Mean=3,029]]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=9.9 Mean=2.6] [Peak=117.7 Mean=15.1] [Peak~27,860 Mean=1,195]]
+[[53] [Win32, Visual C++ 8] [Peak=13.9 Mean=2.0]  
+      [Peak=56.2 Mean=14] [Peak=3x10[super 3][space] Mean=159]]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=21.1 Mean=3.6] 
+      [Peak=221.7 Mean=25.8] 
+      [Peak~9x10[super 4][space] Mean=3x10[super 3][space] ]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=10.6 Mean=2.2] 
+      [Peak=73.9 Mean=11.9] 
+      [Peak~9x10[super 4][space] Mean=3x10[super 3][space] ]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=9.9 Mean=2.6] 
+      [Peak=117.7 Mean=15.1] 
+      [Peak~3x10[super 4][space] Mean=1x10[super 3][space] ]]
 ]
 
 [h4 Testing]
@@ -114,7 +134,8 @@ for the implementation, with one spot-test in each implementation-domain
  
 Accuracy tests use data generated at very high precision
 (with [@http://shoup.net/ntl/doc/RR.txt NTL RR class] set at 1000-bit precision),
-using the "textbook" continued fraction representation (fraction 1 below).
+using the "textbook" continued fraction representation (refer to the first continued
+fraction in the implementation discussion below).
 Note that this continued fraction is /not/ used in the implementation,
 and therefore we have test data that is fully independent of the code.  
 
@@ -130,7 +151,7 @@ x and y, and can return either p or q where these are related by:
 
 so at any point we can swap a for b, x for y and p for q if this results in
 a more favourable position.  Generally such swaps are performed so that we always
-compute a value less than 0.9, when required this can then be subtracted from 1
+compute a value less than 0.9: when required this can then be subtracted from 1
 without undue cancellation error.
 
 The following continued fraction representation is found in many textbooks
@@ -169,10 +190,11 @@ Finally we can sidestep difficult areas, or move to an area with a more
 efficient means of computation, by using the duplication formulae:
 
 [$../equations/ibeta10.png]
+
 [$../equations/ibeta11.png]
 
 The domains of a, b and x for which the various methods are used are identical
-to those described in
+to those described in the
 [@http://portal.acm.org/citation.cfm?doid=131766.131776 Didonato and Morris TOMS 708 paper].
 
 [endsect][/section:ibeta_function The Incomplete Beta Function]

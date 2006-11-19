@@ -114,7 +114,7 @@ only rarely, but may be useful in some specific circumstances.
 These two functions locate the root using bisection, function arguments are:
 
 [variablelist
-[[f]  [A unary functor which the function whose root is to be found.]]
+[[f]  [A unary functor which is the function whose root is to be found.]]
 [[min] [The left bracket of the interval known to contain the root.]]
 [[max] [The right bracket of the interval known to contain the root.
         It is a precondition that /min < max/ and /f(min)*f(max) <= 0/,
@@ -140,8 +140,8 @@ where /m/ is the initial value of /max_iter/ passed to the function.
 
 In other words it's up to the caller to verify whether termination occured
 as a result of exceeding /max_iter/ function invocations (easily done by 
-checking the value of /max_iter/), rather than because the termination 
-condition /tol/ was satisfied.
+checking the value of /max_iter/ when the function returns), rather than 
+because the termination condition /tol/ was satisfied.
 
    template <class F, class T, class Tol>
    std::pair<T, T> 
@@ -194,8 +194,8 @@ where /m/ is the initial value of /max_iter/ passed to the function.
 
 In other words it's up to the caller to verify whether termination occured
 as a result of exceeding /max_iter/ function invocations (easily done by 
-checking the value of /max_iter/), rather than because the termination 
-condition /tol/ was satisfied.
+checking the value of /max_iter/ when the function returns), rather than 
+because the termination condition /tol/ was satisfied.
 
    template <class F, class T, class Tol>
    std::pair<T, T> 

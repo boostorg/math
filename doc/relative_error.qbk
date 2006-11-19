@@ -110,9 +110,9 @@ Now we can invoke the test function to test tgamma:
    //
    // Print out some results:
    //
-   std::cout << "The Mean was " << result.stat.mean() << std::endl;
-   std::cout << "The worst error was " << (result.stat.max)() << std::endl;
-   std::cout << "The worst error was at row " << result.worst_case << std::endl;
+   std::cout << "The Mean was " << result.mean() << std::endl;
+   std::cout << "The worst error was " << (result.max)() << std::endl;
+   std::cout << "The worst error was at row " << result.worst_case() << std::endl;
    //
    // same again with lgamma this time:
    //

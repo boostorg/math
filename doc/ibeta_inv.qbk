@@ -67,7 +67,7 @@ Note that internally this function computes whichever is the smaller of
 cancellation errors.  That means that even if the function returns `1`, the
 value stored in `*py` may be non-zero, albeit very small.
 
-Requires:  /a,b > 0/ and /0 <= p, q <= 1/.
+Requires:  /a,b > 0/ and /0 <= p <= 1/.
 
    template <class T>
    T ibetac_inv(T a, T b, T q);
@@ -82,35 +82,35 @@ Note that internally this function computes whichever is the smaller of
 cancellation errors.  That means that even if the function returns `1`, the
 value stored in `*py` may be non-zero, albeit very small.
 
-Requires:  /a,b > 0/ and /0 <= p, q <= 1/.
+Requires:  /a,b > 0/ and /0 <= q <= 1/.
 
    template <class T>
    T ibeta_inva(T b, T x, T p);
 
 Returns a value /a/ such that: `p = ibeta(a, b, x);`
 
-Requires:  /b > 0/, /0 < x < 1/ and /0 <= p,q <= 1/.
+Requires:  /b > 0/, /0 < x < 1/ and /0 <= p <= 1/.
 
    template <class T>
    T ibetac_inva(T b, T x, T q);
    
 Returns a value /a/ such that: `q = ibetac(a, b, x);`
 
-Requires:  /b > 0/, /0 < x < 1/ and /0 <= p,q <= 1/.
+Requires:  /b > 0/, /0 < x < 1/ and /0 <= q <= 1/.
 
    template <class T>
    T ibeta_invb(T a, T x, T p);
 
 Returns a value /b/ such that: `p = ibeta(a, b, x);`
 
-Requires:  /a > 0/, /0 < x < 1/ and /0 <= p,q <= 1/.
+Requires:  /a > 0/, /0 < x < 1/ and /0 <= p <= 1/.
 
    template <class T>
    T ibetac_invb(T a, T x, T q);
    
 Returns a value /b/ such that: `q = ibetac(a, b, x);`
 
-Requires:  /a > 0/, /0 < x < 1/ and /0 <= p,q <= 1/.
+Requires:  /a > 0/, /0 < x < 1/ and /0 <= q <= 1/.
 
 [h4 Accuracy]
 
@@ -233,8 +233,8 @@ which can be improved somewhat to:
 
 [$../equations/ibeta_inv1.png]
 
-when b and x are both small (I've used b < a and x < 0.2).  These forms
-actually under-estimate x, which drops us on the wrong side of x for Newton
+when b and x are both small (I've used b < a and x < 0.2).  This
+actually under-estimates x, which drops us on the wrong side of x for Newton
 iteration to coverge monotonically.  However, use of higher derivatives
 and Halley iteration keeps everything under control.
 

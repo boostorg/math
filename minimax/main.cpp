@@ -55,22 +55,6 @@ void step_some(unsigned count)
       if(!started)
       {
          //
-         // Construct new Remez state machine:
-         //
-         p_remez.reset(new boost::math::tools::remez_minimax<NTL::RR>(
-            &the_function, 
-            orderN, orderD, 
-            a, b, 
-            pin, 
-            rel_error, 
-            skew, 
-            working_precision));
-         std::cout << "Max error in interpolated form: " << std::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(p_remez->max_error()) << std::endl;
-         //
-         // Signal that we've started:
-         //
-         started = true;
-         //
          // If we have an automatic y-offset calculate it now:
          //
          if(auto_offset_y)
@@ -88,6 +72,22 @@ void step_some(unsigned count)
          //
          x_offset = NTL::RoundToPrecision(x_offset, 20);
          y_offset = NTL::RoundToPrecision(y_offset, 20);
+         //
+         // Construct new Remez state machine:
+         //
+         p_remez.reset(new boost::math::tools::remez_minimax<NTL::RR>(
+            &the_function, 
+            orderN, orderD, 
+            a, b, 
+            pin, 
+            rel_error, 
+            skew, 
+            working_precision));
+         std::cout << "Max error in interpolated form: " << std::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(p_remez->max_error()) << std::endl;
+         //
+         // Signal that we've started:
+         //
+         started = true;
       }
       for(unsigned i = 0; i < count; ++i)
       {
@@ -327,7 +327,7 @@ void do_test_n(T, const char* name, unsigned count)
          if(err > max_error)
             max_error = err;
          std::cout << std::setprecision(6) << std::setw(15) << std::left << boost::math::tools::real_cast<double>(absissa)
-            << boost::math::tools::real_cast<double>(err) << std::endl;
+            << (test_result < true_result ? "-" : "") << boost::math::tools::real_cast<double>(err) << std::endl;
       }
       std::cout << "Max error found: " << std::setprecision(6) << boost::math::tools::real_cast<T>(max_error) << std::endl;
    }
@@ -411,7 +411,7 @@ int test_main(int, char* [])
       ||
             str_p("order")[assign_a(started, false)] && uint_p[assign_a(orderN)]
       ||
-            str_p("target-precision")[assign_a(started, false)] && uint_p[assign_a(target_precision)]
+            str_p("target-precision") && uint_p[assign_a(target_precision)]
       ||
             str_p("working-precision")[assign_a(started, false)] && uint_p[assign_a(working_precision)]
       ||

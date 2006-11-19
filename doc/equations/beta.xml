@@ -9,10 +9,16 @@
 <body>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>b</mi>
-    <mi>e</mi>
-    <mi>t</mi>
-    <mi>a</mi>
+    <mtext>beta</mtext>
+    <mfenced>
+      <mrow>
+        <mi>a</mi>
+        <mo>,</mo>
+        <mi>b</mi>
+      </mrow>
+    </mfenced>
+    <mo>=</mo>
+    <mi>B</mi>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -51,10 +57,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>b</mi>
-    <mi>e</mi>
-    <mi>t</mi>
-    <mi>a</mi>
+    <mtext>beta</mtext>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -159,10 +162,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>b</mi>
-    <mi>e</mi>
-    <mi>t</mi>
-    <mi>a</mi>
+    <mtext>beta</mtext>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -289,10 +289,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>b</mi>
-    <mi>e</mi>
-    <mi>t</mi>
-    <mi>a</mi>
+    <mtext>beta</mtext>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -311,10 +308,7 @@
       </mfenced>
       <mi>b</mi>
     </mfrac>
-    <mi>b</mi>
-    <mi>e</mi>
-    <mi>t</mi>
-    <mi>a</mi>
+    <mtext>beta</mtext>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -328,10 +322,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>b</mi>
-    <mi>e</mi>
-    <mi>t</mi>
-    <mi>a</mi>
+    <mtext>beta</mtext>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -364,10 +355,7 @@
         <mi>b</mi>
       </mrow>
     </mfrac>
-    <mi>b</mi>
-    <mi>e</mi>
-    <mi>t</mi>
-    <mi>a</mi>
+    <mtext>beta</mtext>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -429,25 +417,17 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>i</mi>
-    <mi>f</mi>
+    <mtext>if</mtext>
     <mspace width="1em"/>
     <mi>a</mi>
     <mo>=</mo>
     <mn>1</mn>
     <mspace width="1em"/>
     <mspace width="1em"/>
-    <mi>t</mi>
-    <mi>h</mi>
-    <mi>e</mi>
-    <mi>n</mi>
-    <mo>:</mo>
+    <mtext>then:</mtext>
     <mspace width="1em"/>
     <mspace width="1em"/>
-    <mi>b</mi>
-    <mi>e</mi>
-    <mi>t</mi>
-    <mi>a</mi>
+    <mtext>beta</mtext>
     <mfenced>
       <mrow>
         <mi>a</mi>

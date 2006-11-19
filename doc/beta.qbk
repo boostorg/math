@@ -23,10 +23,6 @@ The beta function is defined by:
 
 [$../graphs/beta.png]
 
-And for small values:
-
-[$../graphs/beta-small.png]
-
 There are effectively two versions of this function internally: a fully
 generic version that is slow, but reasonably accurate, and a much more
 efficient approximation that is used where the number of digits in the significand

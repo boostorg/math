@@ -136,17 +136,10 @@ void expected_results()
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "HP-UX",                          // platform
-      largest_type,                  // test type(s)
-      "factorials",                  // test data group
-      "boost::math::lgamma", 300, 150);  // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
       "HP-UX",                       // platform
       largest_type,                  // test type(s)
       "near (0|-55)",                // test data group
-      "boost::math::(t|l)gamma", 10, 5);  // test function
+      "boost::math::tgamma", 10, 5);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -154,13 +147,6 @@ void expected_results()
       largest_type,                  // test type(s)
       "near (1|2|-10)",              // test data group
       "boost::math::lgamma", 250, 200);  // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      "HP-UX",                          // platform
-      largest_type,                  // test type(s)
-      "tgamma1pm1.*",                // test data group
-      "boost::math::tgamma1pm1", 200, 70);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

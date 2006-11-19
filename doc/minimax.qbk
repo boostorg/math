@@ -3,10 +3,8 @@
 The directory libs/math/minimax contains a command line driven
 program for the generation of mininmax approximations using the Remez
 algorithm.  Both polynomial and rational approximations are supported,
-although the latter are tricky to converge, and in addition this
-implementation only converges correctly when the rational function is
-optimised over a positive domain.  It's not clear if this is a limitation
-of the algorithm or this implementation.  No such limitations are present
+although the latter are tricky to converge: it is not uncommon for
+convergence of rational forms to fail.  No such limitations are present
 for polynomial approximations which should always converge smoothly.
 
 It's worth stressing that developing rational approximations to functions
@@ -125,6 +123,13 @@ Command line options for the program are as follows:
          errors in evaluating the approximation at fixed precision.
          Tests are conducted at the extrema of the error function of the
          approximation, and at the zeros of the error function.]]
+[[test \[float|double|long\] N] [Tests the current approximation at float,
+         double, or long double precision.  Useful to check for rounding
+         errors in evaluating the approximation at fixed precision.
+         Tests are conducted at N evenly spaced points over the range
+         of the approximation.  If none of \[float|double|long\] are specified
+         then tests using NTL::RR, this can be used to obtain the error
+         function of the approximation.]]
 [[rescale a b][Takes the current Chebeshev control points, and rescales them
          over a new interval \[a,b\].  Sometimes this can be used to obtain
          starting control points for an approximation that can not otherwise be

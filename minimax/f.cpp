@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-//#define L22
+#define L22
 #include "../tools/ntl_rr_lanczos.hpp"
 #include "../tools/ntl_rr_digamma.hpp"
 #include <boost/math/tools/ntl.hpp>
@@ -183,6 +183,8 @@ NTL::RR f(const NTL::RR& x, int variant)
          return l;
       }
       return expm1(x) / x;
+   case 12:
+      return exp(x);
    }
    return 0;
 }

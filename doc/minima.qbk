@@ -9,7 +9,7 @@
 ``
 
    template <class F, class T>
-   std::pair<T, T> brent_find_minima(F f, T min, T max, int digits);
+   std::pair<T, T> brent_find_minima(F f, T min, T max, int bits);
    
    template <class F, class T>
    std::pair<T, T> brent_find_minima(F f, T min, T max, int bits, boost::uintmax_t& max_iter);

@@ -197,9 +197,9 @@ void remez_minimax<T>::init_chebyshev()
    //
    unsigned terms = pinned ? orderD + orderN : orderD + orderN + 1;
 
-   for(unsigned i = 0; i <= terms; ++i)
+   for(unsigned i = 0; i < terms; ++i)
    {
-      T cheb = cos((2 * terms + 1 - 2 * i) * constants::pi<T>() / (2 * terms + 2));
+      T cheb = cos((2 * terms - 1 - 2 * i) * constants::pi<T>() / (2 * terms));
       cheb += 1;
       cheb /= 2;
       if(m_skew != 0)
@@ -245,10 +245,11 @@ void remez_minimax<T>::init_chebyshev()
    //
    // Now go ahead and solve the expression to get our solution:
    //
-   vector_type solution = boost::math::tools::solve(A, b);
+   vector_type l_solution = boost::math::tools::solve(A, b);
    // need to add a "fake" error term:
-   solution.resize(unknowns);
-   solution[unknowns-1] = 0;
+   l_solution.resize(unknowns);
+   l_solution[unknowns-1] = 0;
+   solution = l_solution;
    //
    // Now find all the extrema of the error function:
    //
@@ -569,6 +570,7 @@ T remez_minimax<T>::iterate()
          control_points[i], 
          tol, 
          max_iter);
+      zeros[i] = (p.first + p.second) / 2;
       //zeros[i] = bisect(Err, control_points[i-1], control_points[i], m_precision);
    }
    //

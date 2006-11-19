@@ -109,8 +109,7 @@ graphing program (or spreadsheet) for further analysis.
    
 [h4 Description]
 
-This tool is best illustrated with a series of examples: but if you just want the
-gory details, [link test_data_reference skip onwards to the reference].
+This tool is best illustrated with the following series of examples.
 
 The functionality of test_data is split into the following parts:
 
@@ -408,8 +407,8 @@ Tells class test_data to test /n_points/ evenly spaced values in the range
    template <class T>
    parameter_info<T> make_power_param(T basis, int start_exponent, int end_exponent);
 
-Tells class test_data to test points of the form [^/basis + 2[super expon]/] for each
-/expon/ in the range [start_exponent, end_exponent].
+Tells class test_data to test points of the form ['basis + R * 2[super expon]] for each
+/expon/ in the range [start_exponent, end_exponent], and /R/ a random number in \[0.5, 1\].
 
    template <class T>
    bool get_user_parameter_info(parameter_info<T>& info, const char* param_name);

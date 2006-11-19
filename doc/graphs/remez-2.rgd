@@ -1,0 +1,747 @@
+[RJS Graph Data File]
+
+[Header]
+Version=3
+Revision=1
+[End Header]
+
+[Data]
+Row 1 Col 1="-1"
+Row 1 Col 2="0.001247667"
+Row 2 Col 1="-0.99"
+Row 2 Col 2="0.0009400049"
+Row 3 Col 1="-0.98"
+Row 3 Col 2="0.0006609923"
+Row 4 Col 1="-0.97"
+Row 4 Col 2="0.0004089776"
+Row 5 Col 1="-0.96"
+Row 5 Col 2="0.0001823761"
+Row 6 Col 1="-0.95"
+Row 6 Col 2="-0.0000203319"
+Row 7 Col 1="-0.94"
+Row 7 Col 2="-0.0002006416"
+Row 8 Col 1="-0.93"
+Row 8 Col 2="-0.0003599578"
+Row 9 Col 1="-0.92"
+Row 9 Col 2="-0.0004995974"
+Row 10 Col 1="-0.91"
+Row 10 Col 2="-0.0006208233"
+Row 11 Col 1="-0.9"
+Row 11 Col 2="-0.0007248464"
+Row 12 Col 1="-0.89"
+Row 12 Col 2="-0.0008128265"
+Row 13 Col 1="-0.88"
+Row 13 Col 2="-0.0008858735"
+Row 14 Col 1="-0.87"
+Row 14 Col 2="-0.000945049"
+Row 15 Col 1="-0.86"
+Row 15 Col 2="-0.0009913673"
+Row 16 Col 1="-0.85"
+Row 16 Col 2="-0.001025797"
+Row 17 Col 1="-0.84"
+Row 17 Col 2="-0.001049263"
+Row 18 Col 1="-0.83"
+Row 18 Col 2="-0.001062645"
+Row 19 Col 1="-0.82"
+Row 19 Col 2="-0.001066782"
+Row 20 Col 1="-0.81"
+Row 20 Col 2="-0.001062473"
+Row 21 Col 1="-0.8"
+Row 21 Col 2="-0.001050477"
+Row 22 Col 1="-0.79"
+Row 22 Col 2="-0.001031515"
+Row 23 Col 1="-0.78"
+Row 23 Col 2="-0.001006271"
+Row 24 Col 1="-0.77"
+Row 24 Col 2="-0.0009753925"
+Row 25 Col 1="-0.76"
+Row 25 Col 2="-0.0009394946"
+Row 26 Col 1="-0.75"
+Row 26 Col 2="-0.0008991576"
+Row 27 Col 1="-0.74"
+Row 27 Col 2="-0.0008549302"
+Row 28 Col 1="-0.73"
+Row 28 Col 2="-0.0008073299"
+Row 29 Col 1="-0.72"
+Row 29 Col 2="-0.0007568448"
+Row 30 Col 1="-0.71"
+Row 30 Col 2="-0.0007039337"
+Row 31 Col 1="-0.7"
+Row 31 Col 2="-0.000649028"
+Row 32 Col 1="-0.69"
+Row 32 Col 2="-0.0005925325"
+Row 33 Col 1="-0.68"
+Row 33 Col 2="-0.0005348262"
+Row 34 Col 1="-0.67"
+Row 34 Col 2="-0.0004762634"
+Row 35 Col 1="-0.66"
+Row 35 Col 2="-0.0004171751"
+Row 36 Col 1="-0.65"
+Row 36 Col 2="-0.000357869"
+Row 37 Col 1="-0.64"
+Row 37 Col 2="-0.0002986314"
+Row 38 Col 1="-0.63"
+Row 38 Col 2="-0.0002397275"
+Row 39 Col 1="-0.62"
+Row 39 Col 2="-0.0001814024"
+Row 40 Col 1="-0.61"
+Row 40 Col 2="-0.0001238822"
+Row 41 Col 1="-0.6"
+Row 41 Col 2="-0.00006737424"
+Row 42 Col 1="-0.59"
+Row 42 Col 2="-0.00001206854"
+Row 43 Col 1="-0.58"
+Row 43 Col 2="0.00004186358"
+Row 44 Col 1="-0.57"
+Row 44 Col 2="0.00009426876"
+Row 45 Col 1="-0.56"
+Row 45 Col 2="0.000145005"
+Row 46 Col 1="-0.55"
+Row 46 Col 2="0.0001939447"
+Row 47 Col 1="-0.54"
+Row 47 Col 2="0.0002409743"
+Row 48 Col 1="-0.53"
+Row 48 Col 2="0.0002859934"
+Row 49 Col 1="-0.52"
+Row 49 Col 2="0.0003289146"
+Row 50 Col 1="-0.51"
+Row 50 Col 2="0.0003696621"
+Row 51 Col 1="-0.5"
+Row 51 Col 2="0.0004081718"
+Row 52 Col 1="-0.49"
+Row 52 Col 2="0.0004443905"
+Row 53 Col 1="-0.48"
+Row 53 Col 2="0.0004782754"
+Row 54 Col 1="-0.47"
+Row 54 Col 2="0.0005097931"
+Row 55 Col 1="-0.46"
+Row 55 Col 2="0.00053892"
+Row 56 Col 1="-0.45"
+Row 56 Col 2="0.0005656409"
+Row 57 Col 1="-0.44"
+Row 57 Col 2="0.000589949"
+Row 58 Col 1="-0.43"
+Row 58 Col 2="0.0006118453"
+Row 59 Col 1="-0.42"
+Row 59 Col 2="0.0006313381"
+Row 60 Col 1="-0.41"
+Row 60 Col 2="0.0006484427"
+Row 61 Col 1="-0.4"
+Row 61 Col 2="0.0006631807"
+Row 62 Col 1="-0.39"
+Row 62 Col 2="0.00067558"
+Row 63 Col 1="-0.38"
+Row 63 Col 2="0.000685674"
+Row 64 Col 1="-0.37"
+Row 64 Col 2="0.0006935015"
+Row 65 Col 1="-0.36"
+Row 65 Col 2="0.0006991061"
+Row 66 Col 1="-0.35"
+Row 66 Col 2="0.0007025359"
+Row 67 Col 1="-0.34"
+Row 67 Col 2="0.0007038434"
+Row 68 Col 1="-0.33"
+Row 68 Col 2="0.000703085"
+Row 69 Col 1="-0.32"
+Row 69 Col 2="0.0007003203"
+Row 70 Col 1="-0.31"
+Row 70 Col 2="0.0006956125"
+Row 71 Col 1="-0.3"
+Row 71 Col 2="0.0006890276"
+Row 72 Col 1="-0.29"
+Row 72 Col 2="0.0006806344"
+Row 73 Col 1="-0.28"
+Row 73 Col 2="0.0006705038"
+Row 74 Col 1="-0.27"
+Row 74 Col 2="0.000658709"
+Row 75 Col 1="-0.26"
+Row 75 Col 2="0.0006453252"
+Row 76 Col 1="-0.25"
+Row 76 Col 2="0.0006304289"
+Row 77 Col 1="-0.24"
+Row 77 Col 2="0.0006140982"
+Row 78 Col 1="-0.23"
+Row 78 Col 2="0.0005964124"
+Row 79 Col 1="-0.22"
+Row 79 Col 2="0.0005774515"
+Row 80 Col 1="-0.21"
+Row 80 Col 2="0.0005572964"
+Row 81 Col 1="-0.2"
+Row 81 Col 2="0.0005360286"
+Row 82 Col 1="-0.19"
+Row 82 Col 2="0.0005137298"
+Row 83 Col 1="-0.18"
+Row 83 Col 2="0.000490482"
+Row 84 Col 1="-0.17"
+Row 84 Col 2="0.0004663669"
+Row 85 Col 1="-0.16"
+Row 85 Col 2="0.0004414663"
+Row 86 Col 1="-0.15"
+Row 86 Col 2="0.0004158615"
+Row 87 Col 1="-0.14"
+Row 87 Col 2="0.0003896336"
+Row 88 Col 1="-0.13"
+Row 88 Col 2="0.0003628626"
+Row 89 Col 1="-0.12"
+Row 89 Col 2="0.0003356281"
+Row 90 Col 1="-0.11"
+Row 90 Col 2="0.0003080085"
+Row 91 Col 1="-0.1"
+Row 91 Col 2="0.0002800815"
+Row 92 Col 1="-0.09"
+Row 92 Col 2="0.0002519234"
+Row 93 Col 1="-0.08"
+Row 93 Col 2="0.0002236094"
+Row 94 Col 1="-0.07"
+Row 94 Col 2="0.0001952131"
+Row 95 Col 1="-0.06"
+Row 95 Col 2="0.0001668068"
+Row 96 Col 1="-0.05"
+Row 96 Col 2="0.0001384613"
+Row 97 Col 1="-0.04"
+Row 97 Col 2="0.0001102456"
+Row 98 Col 1="-0.03"
+Row 98 Col 2="0.00008222705"
+Row 99 Col 1="-0.02"
+Row 99 Col 2="0.00005447118"
+Row 100 Col 1="-0.01"
+Row 100 Col 2="0.00002704161"
+Row 101 Col 1="-9.82796E-75"
+Row 101 Col 2="0"
+Row 102 Col 1="0.01"
+Row 102 Col 2="-0.0000265947"
+Row 103 Col 1="0.02"
+Row 103 Col 2="-0.00005268559"
+Row 104 Col 1="0.03"
+Row 104 Col 2="-0.00007821714"
+Row 105 Col 1="0.04"
+Row 105 Col 2="-0.000103136"
+Row 106 Col 1="0.05"
+Row 106 Col 2="-0.0001273911"
+Row 107 Col 1="0.06"
+Row 107 Col 2="-0.0001509335"
+Row 108 Col 1="0.07"
+Row 108 Col 2="-0.0001737168"
+Row 109 Col 1="0.08"
+Row 109 Col 2="-0.0001956968"
+Row 110 Col 1="0.09"
+Row 110 Col 2="-0.0002168317"
+Row 111 Col 1="0.1"
+Row 111 Col 2="-0.000237082"
+Row 112 Col 1="0.11"
+Row 112 Col 2="-0.0002564109"
+Row 113 Col 1="0.12"
+Row 113 Col 2="-0.0002747839"
+Row 114 Col 1="0.13"
+Row 114 Col 2="-0.0002921689"
+Row 115 Col 1="0.14"
+Row 115 Col 2="-0.0003085365"
+Row 116 Col 1="0.15"
+Row 116 Col 2="-0.0003238598"
+Row 117 Col 1="0.16"
+Row 117 Col 2="-0.0003381142"
+Row 118 Col 1="0.17"
+Row 118 Col 2="-0.0003512778"
+Row 119 Col 1="0.18"
+Row 119 Col 2="-0.0003633313"
+Row 120 Col 1="0.19"
+Row 120 Col 2="-0.0003742578"
+Row 121 Col 1="0.2"
+Row 121 Col 2="-0.0003840431"
+Row 122 Col 1="0.21"
+Row 122 Col 2="-0.0003926753"
+Row 123 Col 1="0.22"
+Row 123 Col 2="-0.0004001454"
+Row 124 Col 1="0.23"
+Row 124 Col 2="-0.0004064466"
+Row 125 Col 1="0.24"
+Row 125 Col 2="-0.0004115748"
+Row 126 Col 1="0.25"
+Row 126 Col 2="-0.0004155283"
+Row 127 Col 1="0.26"
+Row 127 Col 2="-0.0004183082"
+Row 128 Col 1="0.27"
+Row 128 Col 2="-0.0004199177"
+Row 129 Col 1="0.28"
+Row 129 Col 2="-0.0004203626"
+Row 130 Col 1="0.29"
+Row 130 Col 2="-0.0004196514"
+Row 131 Col 1="0.3"
+Row 131 Col 2="-0.0004177947"
+Row 132 Col 1="0.31"
+Row 132 Col 2="-0.0004148058"
+Row 133 Col 1="0.32"
+Row 133 Col 2="-0.0004107001"
+Row 134 Col 1="0.33"
+Row 134 Col 2="-0.0004054957"
+Row 135 Col 1="0.34"
+Row 135 Col 2="-0.0003992128"
+Row 136 Col 1="0.35"
+Row 136 Col 2="-0.000391874"
+Row 137 Col 1="0.36"
+Row 137 Col 2="-0.0003835043"
+Row 138 Col 1="0.37"
+Row 138 Col 2="-0.0003741308"
+Row 139 Col 1="0.38"
+Row 139 Col 2="-0.000363783"
+Row 140 Col 1="0.39"
+Row 140 Col 2="-0.0003524924"
+Row 141 Col 1="0.4"
+Row 141 Col 2="-0.0003402929"
+Row 142 Col 1="0.41"
+Row 142 Col 2="-0.0003272203"
+Row 143 Col 1="0.42"
+Row 143 Col 2="-0.0003133128"
+Row 144 Col 1="0.43"
+Row 144 Col 2="-0.0002986105"
+Row 145 Col 1="0.44"
+Row 145 Col 2="-0.0002831555"
+Row 146 Col 1="0.45"
+Row 146 Col 2="-0.000266992"
+Row 147 Col 1="0.46"
+Row 147 Col 2="-0.0002501661"
+Row 148 Col 1="0.47"
+Row 148 Col 2="-0.0002327259"
+Row 149 Col 1="0.48"
+Row 149 Col 2="-0.0002147213"
+Row 150 Col 1="0.49"
+Row 150 Col 2="-0.0001962042"
+Row 151 Col 1="0.5"
+Row 151 Col 2="-0.0001772282"
+Row 152 Col 1="0.51"
+Row 152 Col 2="-0.0001578487"
+Row 153 Col 1="0.52"
+Row 153 Col 2="-0.0001381229"
+Row 154 Col 1="0.53"
+Row 154 Col 2="-0.0001181095"
+Row 155 Col 1="0.54"
+Row 155 Col 2="-0.00009786915"
+Row 156 Col 1="0.55"
+Row 156 Col 2="-0.00007746391"
+Row 157 Col 1="0.56"
+Row 157 Col 2="-0.00005695751"
+Row 158 Col 1="0.57"
+Row 158 Col 2="-0.00003641519"
+Row 159 Col 1="0.58"
+Row 159 Col 2="-0.0000159037"
+Row 160 Col 1="0.59"
+Row 160 Col 2="0.000004508794"
+Row 161 Col 1="0.6"
+Row 161 Col 2="0.00002475321"
+Row 162 Col 1="0.61"
+Row 162 Col 2="0.00004475878"
+Row 163 Col 1="0.62"
+Row 163 Col 2="0.00006445313"
+Row 164 Col 1="0.63"
+Row 164 Col 2="0.00008376258"
+Row 165 Col 1="0.64"
+Row 165 Col 2="0.0001026122"
+Row 166 Col 1="0.65"
+Row 166 Col 2="0.0001209258"
+Row 167 Col 1="0.66"
+Row 167 Col 2="0.000138626"
+Row 168 Col 1="0.67"
+Row 168 Col 2="0.0001556343"
+Row 169 Col 1="0.68"
+Row 169 Col 2="0.0001718711"
+Row 170 Col 1="0.69"
+Row 170 Col 2="0.0001872557"
+Row 171 Col 1="0.7"
+Row 171 Col 2="0.0002017064"
+Row 172 Col 1="0.71"
+Row 172 Col 2="0.0002151406"
+Row 173 Col 1="0.72"
+Row 173 Col 2="0.0002274746"
+Row 174 Col 1="0.73"
+Row 174 Col 2="0.0002386238"
+Row 175 Col 1="0.74"
+Row 175 Col 2="0.0002485029"
+Row 176 Col 1="0.75"
+Row 176 Col 2="0.0002570256"
+Row 177 Col 1="0.76"
+Row 177 Col 2="0.000264105"
+Row 178 Col 1="0.77"
+Row 178 Col 2="0.0002696532"
+Row 179 Col 1="0.78"
+Row 179 Col 2="0.0002735818"
+Row 180 Col 1="0.79"
+Row 180 Col 2="0.0002758017"
+Row 181 Col 1="0.8"
+Row 181 Col 2="0.000276223"
+Row 182 Col 1="0.81"
+Row 182 Col 2="0.0002747554"
+Row 183 Col 1="0.82"
+Row 183 Col 2="0.000271308"
+Row 184 Col 1="0.83"
+Row 184 Col 2="0.0002657894"
+Row 185 Col 1="0.84"
+Row 185 Col 2="0.0002581075"
+Row 186 Col 1="0.85"
+Row 186 Col 2="0.00024817"
+Row 187 Col 1="0.86"
+Row 187 Col 2="0.0002358842"
+Row 188 Col 1="0.87"
+Row 188 Col 2="0.0002211569"
+Row 189 Col 1="0.88"
+Row 189 Col 2="0.0002038945"
+Row 190 Col 1="0.89"
+Row 190 Col 2="0.0001840033"
+Row 191 Col 1="0.9"
+Row 191 Col 2="0.0001613892"
+Row 192 Col 1="0.91"
+Row 192 Col 2="0.0001359579"
+Row 193 Col 1="0.92"
+Row 193 Col 2="0.0001076148"
+Row 194 Col 1="0.93"
+Row 194 Col 2="0.00007626539"
+Row 195 Col 1="0.94"
+Row 195 Col 2="0.00004181476"
+Row 196 Col 1="0.95"
+Row 196 Col 2="0.000004168009"
+Row 197 Col 1="0.96"
+Row 197 Col 2="-0.00003677118"
+Row 198 Col 1="0.97"
+Row 198 Col 2="-0.00008110035"
+Row 199 Col 1="0.98"
+Row 199 Col 2="-0.0001289155"
+Row 200 Col 1="0.99"
+Row 200 Col 2="-0.0001803125"
+Row 201 Col 1="1"
+Row 201 Col 2="-0.0002353877"
+[End Data]
+
+[Titles]
+Title="Initial Interpolated Approximation"
+Heading=""
+XAxisTitle=""
+YAxisTitle="Relative Error"
+[End Titles]
+
+[Title Options]
+Title="00000000000000000024Arial"
+Heading="00000000000000000016Arial"
+YAxisTitle="00000000000000000010Arial"
+XAxisTitle="00000000000000014.25Arial"
+YAxisVertical="1"
+[End Title Options]
+
+[Background]
+Graph Background=16777215
+Page Colour=16777215
+Print Graph Background=1
+Print Page Colour=0
+[End Background]
+
+[Axis]
+XMin=0
+XMax=10
+YMin=0
+YMax=10
+MaxMinOptions="000000"
+Axis Style=1
+Logarithmic X Axis=0
+Logarithmic Y Axis=0
+Border Style=0
+[End Axis]
+
+[Data Lines]
+Options="117000000000000000016777216611000000000000000016777216611000000000000000016777216611000000000000000016777216611000000000000000016777216611000000000000000016777216"
+[End Data Lines]
+
+[Data Markers]
+Size 1=5
+Size 2=5
+Size 3=5
+Size 4=5
+Size 5=5
+Size 6=5
+[End Data Markers]
+
+[Data Labels]
+Options="000100"
+Primary Font="00000000000000000010Arial"
+Secondary Font="00000000000000000010Arial"
+Spacing X Primary=.2
+Spacing Y Primary=.0005
+Spacing X Secondary=1
+Spacing Y Secondary=1
+Spacing Adjustment=1
+[End Data Labels]
+
+[Axis Markers]
+Options 1=1
+Spacing 1=.2
+Colour 1="00000000"
+Options 2=1
+Spacing 2=.0005
+Colour 2="00000000"
+Options 3=0
+Spacing 3=1
+Colour 3="00000000"
+Options 4=0
+Spacing 4=1
+Colour 4="00000000"
+Style=1
+[End Axis Markers]
+
+[Gridlines]
+Options="100000"
+Spacing X Primary=.2
+Spacing Y Primary=.0005
+Spacing X Secondary=1
+Spacing Y Secondary=1
+Colour 1="00000000"
+Colour 2="00000000"
+Colour 3="14671839"
+Colour 4="14671839"
+[End Gridlines]
+
+[Legend]
+X Position=22
+Y Position=10
+Style=2
+Font="00000000000000000010Arial"
+[End Legend]
+
+[Best Fit Line 1]
+Options1="0100000000"
+Options2="0100000000"
+Options3="0100000000"
+Options4="0100000000"
+Options5="0100000000"
+Options6="0100000000"
+Options7="0100000000"
+Options8="0100000000"
+Options9="0100000000"
+[End Best Fit Line 1]
+
+[Best Fit Line 2]
+Options1="0100000000"
+Options2="0100000000"
+Options3="0100000000"
+Options4="0100000000"
+Options5="0100000000"
+Options6="0100000000"
+Options7="0100000000"
+Options8="0100000000"
+Options9="0100000000"
+[End Best Fit Line 2]
+
+[Best Fit Line 3]
+Options1="0100000000"
+Options2="0100000000"
+Options3="0100000000"
+Options4="0100000000"
+Options5="0100000000"
+Options6="0100000000"
+Options7="0100000000"
+Options8="0100000000"
+Options9="0100000000"
+[End Best Fit Line 3]
+
+[Best Fit Line 4]
+Options1="0100000000"
+Options2="0100000000"
+Options3="0100000000"
+Options4="0100000000"
+Options5="0100000000"
+Options6="0100000000"
+Options7="0100000000"
+Options8="0100000000"
+Options9="0100000000"
+[End Best Fit Line 4]
+
+[Best Fit Line 5]
+Options1="0100000000"
+Options2="0100000000"
+Options3="0100000000"
+Options4="0100000000"
+Options5="0100000000"
+Options6="0100000000"
+Options7="0100000000"
+Options8="0100000000"
+Options9="0100000000"
+[End Best Fit Line 5]
+
+[Best Fit Line 6]
+Options1="0100000000"
+Options2="0100000000"
+Options3="0100000000"
+Options4="0100000000"
+Options5="0100000000"
+Options6="0100000000"
+Options7="0100000000"
+Options8="0100000000"
+Options9="0100000000"
+[End Best Fit Line 6]
+
+[Best Fit Data 1]
+Options1=0
+Options2=0
+Options3=0
+Options4=0
+Options5=0
+Options6=0
+X Position=5
+Y Position=5
+Style=1
+Font="00000000000000000010Arial"
+Correlation Coefficient=0
+Accuracy=8
+SF Or DP=0
+Display Accuracy=0
+Display Trailing Zeros=0
+[End Best Fit Data 1]
+
+[Best Fit Data 2]
+Options1=0
+Options2=0
+Options3=0
+Options4=0
+Options5=0
+Options6=0
+X Position=8
+Y Position=5
+Style=1
+Font="00000000000000000010Arial"
+Correlation Coefficient=0
+Accuracy=8
+SF Or DP=0
+Display Accuracy=0
+Display Trailing Zeros=0
+[End Best Fit Data 2]
+
+[Best Fit Data 3]
+Options1=0
+Options2=0
+Options3=0
+Options4=0
+Options5=0
+Options6=0
+X Position=11
+Y Position=5
+Style=1
+Font="00000000000000000010Arial"
+Correlation Coefficient=0
+Accuracy=8
+SF Or DP=0
+Display Accuracy=0
+Display Trailing Zeros=0
+[End Best Fit Data 3]
+
+[Best Fit Data 4]
+Options1=0
+Options2=0
+Options3=0
+Options4=0
+Options5=0
+Options6=0
+X Position=14
+Y Position=5
+Style=1
+Font="00000000000000000010Arial"
+Correlation Coefficient=0
+Accuracy=8
+SF Or DP=0
+Display Accuracy=0
+Display Trailing Zeros=0
+[End Best Fit Data 4]
+
+[Best Fit Data 5]
+Options1=0
+Options2=0
+Options3=0
+Options4=0
+Options5=0
+Options6=0
+X Position=17
+Y Position=5
+Style=1
+Font="00000000000000000010Arial"
+Correlation Coefficient=0
+Accuracy=8
+SF Or DP=0
+Display Accuracy=0
+Display Trailing Zeros=0
+[End Best Fit Data 5]
+
+[Best Fit Data 6]
+Options1=0
+Options2=0
+Options3=0
+Options4=0
+Options5=0
+Options6=0
+X Position=20
+Y Position=5
+Style=1
+Font="00000000000000000010Arial"
+Correlation Coefficient=0
+Accuracy=8
+SF Or DP=0
+Display Accuracy=0
+Display Trailing Zeros=0
+[End Best Fit Data 6]
+
+[Equations]
+Equation 1=""
+Equation 2=""
+Equation 3=""
+Equation 4=""
+Equation 5=""
+Equation 6=""
+Equation 7=""
+Equation 8=""
+Equation 9=""
+Equation 10=""
+Equation 11=""
+Equation 12=""
+Angle Measurement=0
+[End Equations]
+
+[Equation Options]
+Equation 1="0100000000"
+Equation 2="0100000000"
+Equation 3="0100000000"
+Equation 4="0100000000"
+Equation 5="0100000000"
+Equation 6="0100000000"
+Equation 7="0100000000"
+Equation 8="0100000000"
+Equation 9="0100000000"
+Equation 10="0100000000"
+Equation 11="0100000000"
+Equation 12="0100000000"
+[End Equation Options]
+
+[Print Setup & Margins]
+Paper Size=9
+Orientation=2
+Left=2.5
+Right=2.5
+Top=2.5
+Bottom=2.5
+[End Print Setup & Margins]
+
+[Datasheet]
+Column Width 1=1500
+Column Width 2=1500
+Column Width 3=1500
+Column Width 4=1500
+Column Width 5=1500
+Column Width 6=1500
+Column Width 7=1500
+Data Titles 1="Y1 Data"
+Data Titles 2="Y2 Data"
+Data Titles 3="Y3 Data"
+Data Titles 4="Y4 Data"
+Data Titles 5="Y5 Data"
+Data Titles 6="Y6 Data"
+[End Datasheet]
+
+[Other Graph Options]
+Zoom Factor=1
+Auto Redraw=1
+[End Other Graph Options]
+
+[End]
