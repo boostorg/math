@@ -91,11 +91,11 @@ In the following table __x0 is the location parameter of the distribution,
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Using the relation: pdf = 1 / ([pi] * [gamma] * (1 + ((x - __x0) / [gamma])[super 2]) ]]
-[[cdf and it's complement][
+[[pdf][Using the relation: pdf = 1 / ([pi] * [gamma] * (1 + ((x - __x0) / [gamma])[super[2]]) ]]
+[[cdf and its complement][
       The cdf is normally given by:\n\n
       p = 0.5 + atan(x)/[pi]\n\n
-      But that suffers from cancellation error as x -> -INF.
+      But that suffers from cancellation error as x -> -[infin].
       So recall that for x < 0:\n\n
       atan(x) = -[pi]/2 - atan(1/x)\n\n
       Substituting into the above we get:\n\n
