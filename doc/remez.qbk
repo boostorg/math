@@ -99,12 +99,7 @@ this is the best interpolated form we can
 achieve, and typically is very close to the minimax solution.\n
 However, if we want to optimise for /relative error/, or if the approximation
 is a rational function, then the initial Chebyshev solution can be quite far
-from the ideal minimax solution.\n
-Note also that since the location of the extrema of a Chebyshev approximation
-are well known and trivial to calculate, there is no need to go through
-the process above to locate an initial set of control points: ['in the polynomial
-case].  In the rational function case though we do need to interpolate and then
-use function minimisation to locate the extrema.]
+from the ideal minimax solution.]
 
 [h4 Remez Step 1]
 

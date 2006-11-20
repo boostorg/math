@@ -1,38 +1,181 @@
 [section:use_NTL Using With NTL - a High-Precision Floating-Point Library]
 
 The special functions and tools in this library can be used with
-__NTL__RR (arbitrary precision),
-[/@http://shoup.net/ntl/doc/RR.txt NTL::RR]
-and to a lesser extent with
-[@http://shoup.net/ntl/doc/quad_float.txt NTL::quad_float] (128-bit, using 106 significand bits).
-[@http://shoup.net/ntl/ NTL: A Library for doing Number Theory by Victor Shoup]
+[@http://shoup.net/ntl/doc/RR.txt NTL::RR (an arbitrary precision number type)],
+and to a lesser extent with [@http://shoup.net/ntl/doc/quad_float.txt 
+NTL::quad_float] (128-bit, using 106 significand bits).
+[@http://shoup.net/ntl/ Refer to NTL: A Library for doing Number Theory by 
+Victor Shoup]
 
-In order to do so you will need to apply the following patch to NTL: libs/math/tools/ntl.diff
+In order to do so you will need to apply the following patch to 
+NTL: [@../tools/ntl.diff libs/math/tools/ntl.diff].
 This patch adds trivial converting constructors to NTL::RR and NTL::quad_float,
 and forces conversions to RR to proceed via `long double` rather than `double`.
 The latter change is essential to accurately measure relative errors between
 high precision calculations (using NTL::RR) and fixed precision calculations
 (using `long double`).  These occur if, for example, you are generating additional
-__lanczos's or rational approximations.
+__lanczos's or rational approximations suitable for use with `long double`.
 
 You will also need to include NTL via the header `<boost/math/tools/ntl.hpp>`
 and include that header /before/ you include any of the special function headers.
-Rationale: the header `<boost/math/tools/ntl.hpp>` includes some traits classes
+The rationale for this is that the header `<boost/math/tools/ntl.hpp>` includes some traits classes
 and boilerplate code (mostly runtime substitutes for numeric_limits) that are
 required by the special functions.  Unfortunately, some of the stricter compilers
 require these definitions to be seen before the templates that will use them are
 parsed.
 
 Finally there is a high precision __lanczos suitable for use with NTL::RR,
-used at 1000-bit precision in libs/math/tools/ntl_rr_lanczos.hpp.  The approximation
-has a theoretical precision of > 90 decimal digits, and an experimental precision 
-of > 100 decimal digits.  To use that approximation, just include that header before
-any of the special function headers (if you don't use it, you'll get a slower, but
+used at 1000-bit precision in 
+[@../tools/ntl_rr_lanczos.hpp libs/math/tools/ntl_rr_lanczos.hpp].  
+The approximation has a theoretical precision of > 90 decimal digits, 
+and an experimental precision of > 100 decimal digits.  To use that 
+approximation, just include that header before any of the special 
+function headers (if you don't use it, you'll get a slower, but
 fully generic implementation for all of the gamma-like functions).
 
 [endsect][/section:use_NTL Using With NTL - a High Precision Floating-Point Library]
 
-[section:real_concept Conceptual Requirements]
+[section:concepts Conceptual Requirements for Real Number Types]
+
+The functions, and statistical distributions in this library can be used with
+any type /RealType/ that meets the conceptual requirements given below.  All
+the built in floating point types will meet these requirements.  
+User defined types that meet the requirements can also be used.  For example,
+with [link math_toolkit.Using_UDT.use_NTL minor modifications] two of the types 
+provided with [@http://shoup.net/ntl/ NTL (RR and quad_float)] can be used.
+
+The guiding principal behind these requirements, is that a /RealType/
+behaves just like a built in floating point type.
+
+[h4 Basic Arithmetic Requirements]
+
+These requirements are common to all of the functions in this library.
+
+In the following table /r/ is an object of type `RealType`, /cr/ and
+/cr2/ are objects
+of type `const RealType`, and /ca/ is an object of type `const arithmetic-type`
+(arithmetic types include all the built in integers and floating point types).
+
+[table
+[[Expression][Result Type][Notes]]
+[[`RealType(cr)`][RealType]
+      [RealType is copy constructible.]]
+[[`RealType(ca)`][RealType]
+      [RealType is copy constructible from the arithmetic types.]]
+[[`r = cr`][RealType&][Assignment operator.]]
+[[`r = ca`][RealType&][Assignment operator from the arithmetic types.]]
+[[`r += cr`][RealType&][Adds cr to r.]]
+[[`r += ca`][RealType&][Adds ar to r.]]
+[[`r -= cr`][RealType&][Subtracts cr from r.]]
+[[`r -= ca`][RealType&][Subtracts ca from r.]]
+[[`r *= cr`][RealType&][Multiplies r by cr.]]
+[[`r *= ca`][RealType&][Multiplies r by ca.]]
+[[`r /= cr`][RealType&][Divides r by cr.]]
+[[`r /= ca`][RealType&][Divides r by ca.]]
+[[`-r`][RealType][Unary Negation.]]
+[[`+r`][RealType&][Identity Operation.]]
+[[`cr + cr2`][RealType][Binary Addition]]
+[[`cr + ca`][RealType][Binary Addition]]
+[[`ca + cr`][RealType][Binary Addition]]
+[[`cr - cr2`][RealType][Binary Subtraction]]
+[[`cr - ca`][RealType][Binary Subtraction]]
+[[`ca - cr`][RealType][Binary Subtraction]]
+[[`cr * cr2`][RealType][Binary Multiplication]]
+[[`cr * ca`][RealType][Binary Multiplication]]
+[[`ca * cr`][RealType][Binary Multiplication]]
+[[`cr / cr2`][RealType][Binary Subtraction]]
+[[`cr / ca`][RealType][Binary Subtraction]]
+[[`ca / cr`][RealType][Binary Subtraction]]
+[[`cr == cr2`][bool][Equality Comparison]]
+[[`cr == ca`][bool][Equality Comparison]]
+[[`ca == cr`][bool][Equality Comparison]]
+[[`cr != cr2`][bool][Inequality Comparison]]
+[[`cr != ca`][bool][Inequality Comparison]]
+[[`ca != cr`][bool][Inequality Comparison]]
+[[`cr <= cr2`][bool][Less than equal to.]]
+[[`cr <= ca`][bool][Less than equal to.]]
+[[`ca <= cr`][bool][Less than equal to.]]
+[[`cr >= cr2`][bool][Greater than equal to.]]
+[[`cr >= ca`][bool][Greater than equal to.]]
+[[`ca >= cr`][bool][Greater than equal to.]]
+[[`cr < cr2`][bool][Less than comparison.]]
+[[`cr < ca`][bool][Less than comparison.]]
+[[`ca < cr`][bool][Less than comparison.]]
+[[`cr > cr2`][bool][Greater than comparison.]]
+[[`cr > ca`][bool][Greater than comparison.]]
+[[`ca > cr`][bool][Greater than comparison.]]
+[[`boost::math::tools::digits<RealType>()`][int]
+      [The number of digits in the significand of RealType.]]
+[[`boost::math::tools::max_value<RealType>()`][RealType]
+      [The largest representable number by type RealType.]]
+[[`boost::math::tools::min_value<RealType>()`][RealType]
+      [The smallest representable number by type RealType.]]
+[[`boost::math::tools::log_max_value<RealType>()`][RealType]
+      [The natural logarithm of the largest representable number by type RealType.]]
+[[`boost::math::tools::log_min_value<RealType>()`][RealType]
+      [The natural logarithm of the smallest representable number by type RealType.]]
+[[`boost::math::tools::epsilon<RealType>()`][RealType]
+      [The machine epsilon of RealType.]]
+]
+
+Note that:
+
+# The functions `log_max_value` and `log_min_value` can be 
+synthesised from the others, and so no explicit specialisation is required.
+# The function `epsilon` can be synthesised from the others, so no
+explicit specialisation is required provided the precision
+of RealType does not vary at runtime (see the header 
+[@../../../../boost/math/tools/ntl.hpp boost/math/tools/ntl.hpp]
+for an example where the precision does vary at runtime).
+# The functions `digits`, `max_value` and `min_value`, all get synthesised
+automatically from `std::numeric_limits`.  However, if `numeric_limits`
+is not specialised for type RealType, then you will get a compiler error
+when code tries to use these functions, /unless/ you explicitly specialise them.
+For example if the precision of RealType varies at runtime, then
+`numeric_limits` support may not be appropriate, see 
+[@../../../../boost/math/tools/ntl.hpp boost/math/tools/ntl.hpp] for examples.
+
+[h4 Standard Library Support Requirements]
+
+Many (though not all) of the functions in this library make calls
+to standard library functions, the following table summarises the
+requirements.  Note that most of the functions in this library
+will only call a small subset of the functions listed here, so if in
+doubt whether a user defined type has enough standard library
+support to be useable the best advise is to try it and see!
+
+In the following table /r/ is an object of type `RealType`, 
+/cr1/ and /cr2/ are objects of type `const RealType`, and
+/i/ is an object of type `int`.
+
+[table
+[[Expression][Result Type]]
+[[`fabs(cr1)`][RealType]]
+[[`abs(cr1)`][RealType]]
+[[`ceil(cr1)`][RealType]]
+[[`floor(cr1)`][RealType]]
+[[`exp(cr1)`][RealType]]
+[[`pow(cr1, cr2)`][RealType]]
+[[`sqrt(cr1)`][RealType]]
+[[`log(cr1)`][RealType]]
+[[`frexp(cr1, &i)`][RealType]]
+[[`ldexp(cr1, i)`][RealType]]
+[[`cos(cr1)`][RealType]]
+[[`sin(cr1)`][RealType]]
+[[`asin(cr1)`][RealType]]
+[[`tan(cr1)`][RealType]]
+[[`atan(cr1)`][RealType]]
+]
+
+Note that the table above lists only those standard library functions known to
+be used (or likely to be used in the near future) by this library.  
+The following functions: `acos`, `atan2`, `fmod`, `cosh`, `sinh`, `tanh`, `modf` and `log10`
+are not currently used, but may be if further special functions are added.
+
+
+[endsect]
+
+[section:archetypes Conceptual Archetypes and Testing]
 
 std_real_concept is an archetype for built-in Real types.
 
