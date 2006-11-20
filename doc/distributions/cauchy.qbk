@@ -91,7 +91,7 @@ In the following table __x0 is the location parameter of the distribution,
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Using the relation: pdf = 1 / ([pi] * [gamma] * (1 + ((x - __x0) / [gamma])[super[2]]) ]]
+[[pdf][Using the relation: pdf = 1 / ([pi] * [gamma] * (1 + ((x - __x0) / [gamma])[super 2]) ]]
 [[cdf and its complement][
       The cdf is normally given by:\n\n
       p = 0.5 + atan(x)/[pi]\n\n
