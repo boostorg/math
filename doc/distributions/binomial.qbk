@@ -133,8 +133,24 @@ want to be 95% sure that the true value is [*less than] some value,
 
    p``[sub max]`` = binomial_distribution<RealType>::estimate_upper_bound_on_p(
                        n, k, 0.05);
+                       
+[link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf See worked example.]
+
+Evaluated with the same arguments to *both* estimate_lower_bound_on_p
+*and* estimate_upper_bound_on_p, these two estimates provide a
+confidence interval for the success fraction p, success/trials.
+For a two sided interval, you have to divide the significance [alpha]
+in two, so for a 95% interval use [alpha]/2 and
+
+estimate_lower_bound_on_p and estimate_upper_bound_on_p with a 0.025 
+significance level.
+
+Otherwise, use [alpha] = 0.05 to get a one-sided bound,
+either [*less than] or [*greater than] as above
+- which may be enough for many applications.
 
 [link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf See worked example.]
+
 
    static RealType estimate_number_of_trials(
       RealType k,     // number of events
