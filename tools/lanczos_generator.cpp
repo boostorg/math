@@ -4311,7 +4311,7 @@ int test_main(int argc, char*argv [])
    }
 
    NTL::RR::SetPrecision(1000);
-   boost::math::tools::setprecision(std::cout, NTL::RR(0), 40);
+   NTL::RR::SetOutputPrecision(40);
 
    if(spots)
    {
@@ -4327,7 +4327,7 @@ int test_main(int argc, char*argv [])
       calculate_lanczos_spot(6, 1.428456135094165802001953125);
       calculate_lanczos_spot(13, 6.024680040776729583740234375);
       calculate_lanczos_spot(17, 12.2252227365970611572265625);
-      boost::math::tools::setprecision(std::cout, NTL::RR(0), 90);
+      NTL::RR::SetOutputPrecision(90);
       calculate_lanczos_spot(24, 20.3209821879863739013671875);
    }
    if(test_float)

@@ -175,11 +175,6 @@ inline NTL::RR epsilon<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
    return ldexp(NTL::RR(1), 1-digits<NTL::RR>());
 }
 
-inline void setprecision(std::ostream& /*os*/, NTL::RR, int p)
-{
-   NTL::RR::SetOutputPrecision(p);
-}
-
 } // namespace tools
 
 //
@@ -262,18 +257,6 @@ template <>
 inline NTL::quad_float log_min_value<NTL::quad_float>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::quad_float))
 {
    return log_min_value<double>();
-}
-
-template <>
-inline NTL::quad_float epsilon<NTL::quad_float>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::quad_float))
-{
-   static const NTL::quad_float val = pow(NTL::quad_float(2.0), NTL::quad_float(1-2*digits<double>()));
-   return val;
-}
-
-inline void setprecision(std::ostream& /*os*/, NTL::quad_float, int p)
-{
-   NTL::quad_float::SetOutputPrecision(p);
 }
 
 } // namespace tools

@@ -172,6 +172,47 @@ be used (or likely to be used in the near future) by this library.
 The following functions: `acos`, `atan2`, `fmod`, `cosh`, `sinh`, `tanh`, `modf` and `log10`
 are not currently used, but may be if further special functions are added.
 
+[endsect]
+
+[section:dist_concept Conceptual Requirements for Distribution Types]
+
+A /DistributionType/ is a type that implements the following conceptual
+requirements, and encapsulates a statistical distribution.
+
+Please note that this documentation should not be used as a substitute
+for the 
+[link math_toolkit.dist.dist_ref reference documentation], and 
+[link math_toolkit.dist.stat_tut tutorial] of the statistical
+distributions.
+
+In the following table, /d/ is an object of type `DistributionType`, 
+/cd/ is an object of type `const DistributionType` and /cr/ is an
+object of type `const RealType`.
+
+[table
+[[Expression][Result Type][Notes]]
+[[DistributionType::value_type][RealType]
+      [The real-number type /RealType/ upon which the distribution operates.]]
+[[d = cd][Distribution&][Distribution types are assignable]]
+[[pdf(cd, cr)][RealType][Returns the PDF of the distribution.]]
+[[cdf(cd, cr)][RealType][Returns the CDF of the distribution.]]
+[[cdf(complement(cd, cr))][RealType]
+      [Returns the complement of the CDF of the distribution, 
+      the same as: `1-cdf(cd, cr)`]]
+[[quantile(cd, cr)][RealType][Returns the quantile of the distribution.]]
+[[quantile(complement(cd, cr))][RealType]
+      [Returns the quantile of the distribution, starting from
+      the complement of the probability, the same as: `quantile(cd, 1-cr)`]]
+[[chf(cd, cr)][RealType][Returns the cumulative hazard function of the distribution.]]
+[[hazard(cd, cr)][RealType][Returns the hazard function of the distribution.]]
+[[kurtosis(cd)][RealType][Returns the kurtosis of the distribution.]]
+[[kurtosis_excess(cd)][RealType][Returns the kurtosis excess of the distribution.]]
+[[mean(cd)][RealType][Returns the mean of the distribution.]]
+[[mode(cd)][RealType][Returns the mode of the distribution.]]
+[[skewness(cd)][RealType][Returns the skewness of the distribution.]]
+[[standard_deviation(cd)][RealType][Returns the standard deviation of the distribution.]]
+[[variance(cd)][RealType][Returns the variance of the distribution.]]
+]
 
 [endsect]
 
