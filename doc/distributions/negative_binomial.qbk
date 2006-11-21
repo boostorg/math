@@ -119,7 +119,7 @@ want to be 95% sure that the true value is [*greater than] some value,
    p``[sub min]`` = negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
                        failures, successes, 0.05);
 
-[/link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf TODO worked example.]
+[link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
       
    static RealType estimate_upper_bound_on_p(
       RealType trials, 
@@ -143,7 +143,7 @@ want to be 95% sure that the true value is [*less than] some value,
    p``[sub max]`` = negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
                        r, k, 0.05);
 
-[/link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf TODO worked example.]
+[link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf worked example.]
 
    static RealType estimate_number_of_trials(
       RealType k,     // number of failures.
@@ -179,7 +179,7 @@ Returns the largest number of trials we can conduct and still be 95% certain
 of not observing any events that occur with one in a million frequency.
 This is typically used in failure analysis.
 
-[/link math_toolkit.dist.stat_tut.weg.binom_eg.binom_size_eg TODO Worked Example.]
+[link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_size_eg Worked Example.]
 
 [h4 Non-member Accessors]
 

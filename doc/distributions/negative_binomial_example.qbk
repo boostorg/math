@@ -1,0 +1,259 @@
+[section:neg_binom_eg Negative Binomial Distribution Examples]
+
+(See also the reference documentation for the __negative_binomial_distrib.)
+
+[section:neg_binom_conf Calculating Confidence Limits on the Frequency of Occurrence]
+
+Imagine you have a process that follows a negative binomial distribution:
+for each trial conducted, an event either occurs or does it does not, referred
+to as "successes" and "failures".  If, by experiment, you want to measure the
+frequency with which successes occur, the best estimate of success fraction is given simply
+by /k/ \/ /N/, for /k/ successes out of /N/ trials.  However our confidence in that
+estimate will be shaped by how many trials were conducted, and how many successes
+were observed.  The static member functions 
+`negative_binomial_distribution<>::estimate_lower_bound_on_p` and
+`negative_binomial_distribution<>::estimate_upper_bound_on_p` allow you to calculate
+the confidence intervals for your estimate of the occurrence frequency.
+
+The sample program [@../../example/neg_binomial_confidence_limits.cpp 
+neg_binomial_confidence_limits.cpp] illustrates their use.  It begins by defining
+a procedure that will print a table of confidence limits for various degrees
+of certainty:
+
+   #include <iostream>
+   #include <iomanip>
+   #include <boost/math/distributions/negative_binomial.hpp>
+
+   void confidence_limits_on_frequency(unsigned trials, unsigned successes)
+   {
+      //
+      // trials = Total number of trials.
+      // successes = Total number of observed successes.
+      //
+      // Calculate confidence limits for an observed
+      // frequency of occurrence that follows a negative binomial
+      // distribution.
+      //
+      using namespace std;
+      using namespace boost::math;
+
+      // Print out general info:
+      cout <<
+         "___________________________________________\n"
+         "2-Sided Confidence Limits For Success Ratio\n"
+         "___________________________________________\n\n";
+      cout << setprecision(7);
+      cout << setw(40) << left << "Number of Observations" << "=  " << trials << "\n";
+      cout << setw(40) << left << "Number of successes" << "=  " << successes << "\n";
+      cout << setw(40) << left << "Sample frequency of occurance" << "=  " << double(successes) / trials << "\n";
+
+The procedure now defines a table of significance levels: these are the 
+probabilities that the true occurrence frequency lies outside the calculated
+interval:
+
+      double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
+
+Some pretty printing of the table header follows:
+
+      cout << "\n\n"
+              "___________________________________________\n"
+              "Confidence        Lower          Upper\n"
+              " Value (%)        Limit          Limit\n"
+              "___________________________________________\n";
+
+
+And now for the important part - the intervals themselves - for each
+value of /alpha/, we call `estimate_lower_bound_on_p` and 
+`estimate_upper_bound_on_p` to obtain lower and upper bounds
+respectively.  Note that since we are calculating a two-sided interval,
+we must divide the value of alpha in two.  Had we been calculating a 
+single-sided interval, for example: ['"Calculate a lower bound so that we are P%
+sure that the true occurrence frequency is greater than some value"]
+then we would *not* have divided by two.
+
+      for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
+      {
+         // Confidence value:
+         cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
+         // calculate bounds:
+         double l = binomial::estimate_lower_bound_on_p(trials, successes, alpha[i]/2);
+         double u = binomial::estimate_upper_bound_on_p(trials, successes, alpha[i]/2);
+         // Print Limits:
+         cout << fixed << setprecision(5) << setw(15) << right << l;
+         cout << fixed << setprecision(5) << setw(15) << right << u << endl;
+      }
+      cout << endl;
+   }
+
+And that's all there is to it.  Let's see some sample output for a 1 in 10
+success ratio, first for 20 trials:
+
+[pre'''___________________________________________
+2-Sided Confidence Limits For Success Ratio
+___________________________________________
+
+Number of Observations                  =  20
+Number of successes                     =  2
+Sample frequency of occurrence          =  0.1
+
+
+___________________________________________
+Confidence        Lower          Upper
+ Value (%)        Limit          Limit
+___________________________________________
+    50.000        0.08701        0.18675
+    75.000        0.06229        0.23163
+    90.000        0.04217        0.28262
+    95.000        0.03207        0.31698
+    99.000        0.01764        0.38713
+    99.900        0.00786        0.47093
+    99.990        0.00358        0.54084
+    99.999        0.00165        0.60020
+''']
+
+As you can see, even at the 95% confidence level the bounds are
+really quite wide.  Compare that with the program output for
+2000 trials:
+
+[pre'''___________________________________________
+2-Sided Confidence Limits For Success Ratio
+___________________________________________
+
+Number of Observations                  =  2000
+Number of successes                     =  200
+Sample frequency of occurrence          =  0.1000000
+
+
+___________________________________________
+Confidence        Lower          Upper
+ Value (%)        Limit          Limit
+___________________________________________
+    50.000        0.09585        0.10491
+    75.000        0.09277        0.10822
+    90.000        0.08963        0.11172
+    95.000        0.08767        0.11399
+    99.000        0.08390        0.11850
+    99.900        0.07966        0.12385
+    99.990        0.07621        0.12845
+    99.999        0.07325        0.13256
+''']
+
+Now even when the confidence level is very high, the limits are really
+quite close to the experimentally calculated value of 0.1.
+
+[endsect][/section:neg_binom_conf Calculating Confidence Limits on the Frequency of Occurrence]
+
+[section:neg_binom_size_eg Estimating Sample Sizes.]
+
+Imagine you have a critical component that you know will occur in 1 in
+N "uses" (for some suitable definition of "use").  You may want to schedule
+use of the component so that its chance of occurrence
+is greater than P%.  If the events follow a negative binomial
+distribution (each time the component is "used" it either succeeds or does not)
+then the static member function `negative_binomial_distibution<>::estimate_number_of_trials`
+can be used to estimate the minimum number of "uses" of that component for some
+probability P.
+
+The example program 
+[@../../example/neg_binomial_sample_sizes.cpp neg_binomial_sample_sizes.cpp]
+demonstrates its usage.  It centres around a routine that prints out
+a table of maximum sample sizes for various probability thresholds:
+
+   void estimate_max_sample_size(
+      double p,              // success fraction.
+      unsigned successes)    // Total number of observed successes required.
+   {
+
+The routine then declares a table of probability thresholds: these are the
+maximum acceptable probability that /successes/ or more events will be
+observed.  In our example, /successes/ will be always zero, since we want
+no component failures, but in other situations non-zero values may well
+make sense.
+
+   double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
+
+Much of the rest of the program is pretty-printing, the important part
+is in the calculation of maximum number of permitted trials for each
+value of alpha:
+
+   for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
+   {
+      // Confidence value:
+      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
+      // calculate trials:
+      double t = binomial::estimate_number_of_trials(complement(successes, p, alpha[i]));
+      t = floor(t);
+      // Print Trials:
+      cout << fixed << setprecision(5) << setw(15) << right << t << endl;
+   }
+
+Note that since the value of alpha is the probability of observing
+[*more than /successes/ events], we have to wrap the arguments to
+`estimate_number_of_trials` in a call to complement: remember the binomial
+distribution deals in [*/successes/ or fewer events].  Finally, since we're
+calculating the maximum number of trials permitted, we'll err on the safe
+side and take the floor of the result.  Had we been calculating the
+/minimum/ number of trials required to observe a certain number of /successes/
+then we would have taken the ceiling instead.
+
+We'll finish off by looking at some sample output, firstly for
+a 1 in 1000 chance of component failure with each use:
+
+[pre
+'''________________________
+Maximum Number of Trials
+________________________
+
+Success ratio                           =  0.001
+Maximum Number of "successes" permitted =  0
+
+
+____________________________
+Confidence        Max Number
+ Value (%)        Of Trials
+____________________________
+    50.000            692
+    75.000            287
+    90.000            105
+    95.000             51
+    99.000             10
+    99.900              0
+    99.990              0
+    99.999              0'''
+]
+
+So 51 "uses" of the component would yield a 95% chance that no
+component failures would be observed.
+
+Compare that with a 1 in 1 million chance of component failure:
+
+[pre'''
+________________________
+Maximum Number of Trials
+________________________
+
+Success ratio                           =  0.0000010
+Maximum Number of "successes" permitted =  0
+
+
+____________________________
+Confidence        Max Number
+ Value (%)        Of Trials
+____________________________
+    50.000         693146
+    75.000         287681
+    90.000         105360
+    95.000          51293
+    99.000          10050
+    99.900           1000
+    99.990            100
+    99.999             10'''
+]
+
+In this case, even 1000 uses of the component would still yield a 
+less than 1 in 1000 chance of observing a component failure 
+(99.9% chance of no failure).
+
+[endsect][/section:neg_binom_size_eg Estimating Sample Sizes.]
+
+[endsect][/section:neg_binom_eg Negative Binomial Distribution Examples]
