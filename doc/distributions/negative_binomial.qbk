@@ -24,17 +24,17 @@
       static RealType estimate_lower_bound_on_p(
          RealType trials, 
          RealType successes,
-         RealType probability);
+         RealType probability); // alpha
       static RealType estimate_upper_bound_on_p(
          RealType trials, 
          RealType successes,
-         RealType probability);
+         RealType probability); // alpha
          
       // Estimate min/max number of trials:
       static RealType estimate_number_of_trials(
          RealType k,     // Number of failures.
          RealType p,     // Success fraction.
-         RealType probability); // Probability threshold.
+         RealType probability); // Probability threshold alpha.
          
       template <class P1, class P2, class P3>
       static RealType estimate_number_of_failures(
@@ -51,7 +51,7 @@ these outcomes are labelled "success" and "failure".
 The negative_binomial distribution is used to obtain 
 the probability of observing k failures in n trials before the required number of successes r,
 with the probability of success on a single trial denoted by success_fraction p. The 
-negative_binomial distribution assumes that success_fraction p is fixed for all trials.
+negative_binomial distribution assumes that success_fraction p is fixed for all (k + r) trials.
 
 [h4 Related Distributions]
 
@@ -64,21 +64,22 @@ This implementation uses real numbers for the computation throughout
 (because it uses the *real* incomplete beta function family of functions).
 This real-valued version is also called the Polya Distribution.
 
-To obtain the Pascal distribution,
-you must ensure that an integer value is provided for r,
-and you may want to take either the floor or ceiling (or integer)
-of the result in order to ensure it too is integral.
+The Poisson distribution is a generalization of the Pascal distribution,
+where the success parameter r is an integer: to obtain the Pascal
+distribution you must ensure that an integer value is provided for r,
+and take integer values (floor or ceiling) from functions like quantile that return successes.
 
 For large values of r (successes), the negative binomial distribution
 converges to the Poisson distribution.
 
 The geometric distribution is a special case
-where the successes parameter r = 1, so only a first and only success is required.
+where the successes parameter r = 1,
+so only a first and only success is required.
+geometric(p) = negative_binomial(1, p).
 
-geometric(p) = negative-binomial(1,p)
+The Poisson distribution is a special case for large successes
 
-poisson([lambda]) = lim [sub r] [sub larr] [sub infin] negative_binomial(r, r/ [lambda] + r))
-TODO equation does not show right <<<<<<<<< Check after update of templates.
+poisson([lambda]) = lim [sub r [rarr] [infin]] [space] negative_binomial(r, r / ([lambda] + r)))
 
    
 [h4 Member Functions]
@@ -99,7 +100,7 @@ Returns the parameter /r/ from which this distribution was constructed.
       static RealType estimate_lower_bound_on_p(
         RealType failures, 
         RealType successes,
-        RealType probability) // alpha, (0 <= p <= 1), 0.05 equivalent to 95% confidence.
+        RealType probability) // (0 <= alpha <= 1), 0.05 equivalent to 95% confidence.
       
 Returns a *lower bound* on the success fraction:
 
@@ -123,7 +124,7 @@ want to be 95% sure that the true value is [*greater than] some value,
    static RealType estimate_upper_bound_on_p(
       RealType trials, 
       RealType successes,
-      RealType alpha); // probability (0.05 equivalent to 95%).
+      RealType alpha); // (0 <= alpha <= 1), 0.05 equivalent to 95% confidence.
       
 Returns an *upper bound* on the success fraction:
 
@@ -203,13 +204,13 @@ the context of this distribution:
    [The [*greatest] number of failures that may be observed from n trials
    with success fraction p, at probability P.  Note that the value returned
    is a real-number, and not an integer.  Depending on the use case you may
-   want to take either the floor or ceiling of the result.  For example:\n\n
+   want to take either the floor or ceiling of the real result.  For example:\n\n
    ``quantile(negative_binomial(n, p), P)``]]
 [[__quantile_c]
    [The [*smallest] number of failures that may be observed from n trials
    with success fraction p, at probability P.  Note that the value returned
    is a real-number, and not an integer.  Depending on the use case you may
-   want to take either the floor or ceiling of the result. For example:
+   want to take either the floor or ceiling of the real result. For example:
    ``quantile(complement(negative_binomial(n, p), P))``]]
 ]
 
@@ -221,7 +222,7 @@ please refer to these functions for information on accuracy.
 
 [h4 Implementation]
 
-In the following table, /p/ is the probability that one trial will
+In the following table, /p/ is the probability that any one trial will
 be successful (the success fraction), /r/ is the number of successes,
 /k/ is the number of failures, /p/ is the probablity and /q = 1-p/.
 
@@ -255,10 +256,12 @@ I[sub p](k+1, r)\n
 [[`estimate_number_of_trials`][ibetac_invb(k + 1, p, probability)]]
 ]
 
-Implementation notes: 
+Implementation notes:
+
 * The real concept type (that deliberately lacks the Lanczos approximation),
 was found to take several minutes to evaluate some extreme test values,
 so the test has been disabled for this type.
+
 * Much greater speed, and perhaps greater accuracy,
 might be achieved for extreme values by using a normal approximation.
 This is NOT been tested or implemented.

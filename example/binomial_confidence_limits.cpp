@@ -1,4 +1,4 @@
-// (C) Copyright John Maddock 2006
+// Copyright John Maddock 2006
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -35,7 +35,7 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
    cout << setprecision(7);
    cout << setw(40) << left << "Number of Observations" << "=  " << trials << "\n";
    cout << setw(40) << left << "Number of successes" << "=  " << successes << "\n";
-   cout << setw(40) << left << "Sample frequency of occurance" << "=  " << double(successes) / trials << "\n";
+   cout << setw(40) << left << "Sample frequency of occurrence" << "=  " << double(successes) / trials << "\n";
    //
    // Define a table of significance levels:
    //
@@ -63,7 +63,7 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
       cout << fixed << setprecision(5) << setw(15) << right << u << endl;
    }
    cout << endl;
-}
+} // void confidence_limits_on_frequency()
 
 int main()
 {
@@ -72,5 +72,6 @@ int main()
    confidence_limits_on_frequency(2000, 200);
 
    return 0;
-}
+} // int main()
+
 

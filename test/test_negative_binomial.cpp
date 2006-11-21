@@ -123,17 +123,15 @@ void test_spot( // Test a single spot value against 'known good' values.
         );
     }
 #endif
-    //
     // Estimate sample size:
-    //
-    //BOOST_CHECK_CLOSE(
-    //  negative_binomial_distribution<RealType>::estimate_number_of_successes(
-    //  k, p, P), 
-    //  N, tol);
-    //BOOST_CHECK_CLOSE(
-    //  negative_binomial_distribution<RealType>::estimate_number_of_successes(
-    //  boost::math::complement(k, p, Q)), 
-    //  N, tol);
+    BOOST_CHECK_CLOSE(
+      negative_binomial_distribution<RealType>::estimate_number_of_trials(
+      k, p, P), 
+      N, tol);
+    BOOST_CHECK_CLOSE(
+      negative_binomial_distribution<RealType>::estimate_number_of_trials(
+      boost::math::complement(k, p, Q)), 
+      N, tol);
 
     // Double check consistency of CDF and PDF by computing the finite sum:
     RealType sum = 0;
