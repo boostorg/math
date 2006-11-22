@@ -8,6 +8,11 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
+//#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+// If this is enabled then quantile(nb, 1) will throw thus:
+// Message from thrown exception was:
+// Error in function double __cdecl boost::math::quantile<double>(const class boost::math::negative_binomial_distribution<double> &,const double &): Probability argument is 1, which implies infinite failures !
+
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
@@ -26,26 +31,27 @@
 // There are thirty houses in the neighborhood,
 // and Pat is not supposed to return home until five candy bars have been sold.
 // So the child goes door to door, selling candy bars.
-// At each house, there is a 0.4 probability of selling one candy bar
-// and a 0.6 probability of selling nothing.
+// At each house, there is a 0.4 probability (40%) of selling one candy bar
+// and a 0.6 probability (60%) of selling nothing.
 
-// What's the probability mass function for selling the last candy bar at the nth house?
+// What is the probability mass/density function for selling the last (fifth) candy bar at the nth house?
 
-// Recall that the Negative Binomial(r, p) distribution describes the probability of k failures
+// The Negative Binomial(r, p) distribution describes the probability of k failures
 // and r successes in k+r Bernoulli(p) trials with success on the last trial.
-// Selling five candy bars means getting five successes, so r = 5.
-// The total number of trials (in this case, houses) this takes is therefore
-//    sucesses + failures or k + r = k + 5 = n.
+// Selling five candy bars means getting five successes, so successes r = 5.
+// The total number of trials n (in this case, houses) this takes is therefore
+//    = sucesses + failures or k + r = k + 5.
 // The random variable we are interested in is the number of houses k
 // that must be visited to sell five candy bars,
-// so we substitute k = n 5 into a NegBin(5, 0.4) mass function
-// and obtain the following mass function of the distribution of houses (for n ? 5):
+// so we substitute k = n 5 into a NegBin(5, 0.4) mass/density function
+// and obtain the following mass/density function of the distribution of houses (for n >= 5):
+// Obviously, the best case is that Pat makes sales on all the first five houses.
 
-// What's the probability that Pat finishes ON the tenth house?
+// What is the probability that Pat finishes ON the tenth house?
 
 //    f(10) = 0.1003290624, or about 1 in 10
 
-// What's the probability that Pat finishes ON OR BEFORE reaching the eighth house?
+// What is the probability that Pat finishes ON OR BEFORE reaching the eighth house?
 
 // To finish on or before the eighth house,
 // Pat must finish at the fifth, sixth, seventh, or eighth house.
@@ -57,14 +63,13 @@
     // f(8) = 0.0774144
     // sum {j=5 to 8} f(j) = 0.17367
 
-// What's the probability that Pat exhausts all 30 houses in the neighborhood,
-// and doesn't sell the required 5 candy bars?
+// What is the probability that Pat exhausts all 30 houses in the neighborhood,
+// and still doesn't sell the required 5 candy bars?
 
-// 1 - sum{j=5 to 30} f(j) = 1 - incomplete beta (p = 0.4)(5, 30-5+1) =~ 1 - 0.99849 = 0.00151
+// 1 - sum{j=5 to 30} f(j) = 1 - incomplete beta (p = 0.4)(5, 30-5+1) =~ 1 - 0.99849 = 0.00151 = 0.15%.
 
 // see also http://www.math.uah.edu/stat/bernoulli/Introduction.xhtml
 // http://www.codecogs.com/pages/catgen.php?category=stats/dists/discrete
-
 
 #include <boost/math/distributions/negative_binomial.hpp> // for negative_binomial_distribution
   using boost::math::negative_binomial_distribution;
@@ -84,80 +89,45 @@
 
 int main()
 {
-	cout << "Example 1 using the Negative_binomial Distribution.";
+	cout << "Example 1 using the Negative Binomial Distribution.";
   #if defined(__FILE__) && defined(__TIMESTAMP__)
   	cout << "  " << __FILE__ << ' ' << __TIMESTAMP__ << ' '<< _MSC_FULL_VER << "\n";
   #endif
 	cout << endl;
-
-  // Some examples of constructing distribution, for example negative binomial:
-  // Fundamentally constructed like this:
-  boost::math::negative_binomial_distribution<double> mydist0(8., 0.25);
-  // But is inconveniently long.
-
-  using boost::math::negative_binomial_distribution;
-  // Allows convenient reference to negative_binomial_distribution.
-
-  // You can provide the type explicitly thus:
-  negative_binomial_distribution<double> mydist1(8., 0.25); // Explicit double.
-  negative_binomial_distribution<float>  mydist2(8., 0.25); // Explicit float, double arguments -> float.
-  negative_binomial_distribution<float>  mydist3(8, 0.25); // Explicit float, integer & double arguments -> float.
-  negative_binomial_distribution<float>  mydist4(8.F, 0.25F); // Explicit float, float arguments, no conversion.
-  negative_binomial_distribution<float>  mydist5(8, 1); // Explicit integer, integer arguments -> float.
-  // And if you have your own RealType then:
-  // negative_binomial_distribution<YourType>  mydist6(8, 1); // Integer arguments -> YourType.
-
-  // negative_binomial_distribution<> mydist8; // error C2512 no appropriate default constructor available.
-  // Since there are no accessor functions, no default constructor are provided,
-  // because it is difficult to chose any sensible default values.
-
-  negative_binomial_distribution<>  mydist9(8., 0.25); // Uses default RealType = double.
-  // But the name "negative_binomial_distribution" is still inconveniently long.
-
-  // Some examples using the provided typedef:
-  // typedef negative_binomial_distribution<double> negative_binomial; // Reserved name of type double.
-
-  using boost::math::negative_binomial; // Convenient access to the name.
-  // Allows convenient reference to negative_binomial of default type double.
-  negative_binomial mydist10(5., 0.4); // Both arguments double.
-  // And automatic conversion takes place, so you can use integers and floats:
-  negative_binomial mydist11(5, 0.4); // Using provided typedef double, int and double arguments.
-  // This is probably the most common usage.
-  negative_binomial mydist12(5., 0.4F); // Double and float arguments. 
-  negative_binomial mydist13(5, 1); // Both arguments integer.
+  cout.precision(5); // NB INF shows wrongly with < 5 !
+  // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=240227
 
   try
   {
     double sales_quota = 5; // Pat's sales quota - successes (r).
     double success_fraction = 0.4; // success_fraction (p) - so fail_fraction is 0.6.
-    negative_binomial nb(5, 0.4); // double
-    
+    negative_binomial nb(sales_quota, success_fraction); // double by default.
     int all_houses = 30; // The number of houses on the estate.
 
-    cout <<"Selling candy bars - an example of using the negative binomial distribution. " << setprecision(3)
+    cout <<"Selling candy bars - an example of using the negative binomial distribution. " 
       << "\n""An example by Dr. Diane Evans,"
       "\n""Professor of Mathematics at Rose-Hulman Institute of Technology,"
       << "\n""see http://en.wikipedia.org/wiki/Negative_binomial_distribution""\n"
       << endl;
     cout << "Pat has a sales per house success rate of " << success_fraction
-      << ",""\n""so he would, on average, sell " << nb.success_fraction() * 100 << " bars after trying 100 houses." << endl;
+      << ".""\n""Therefore he would, on average, sell " << nb.success_fraction() * 100 << " bars after trying 100 houses." << endl;
 
-    cout << "With a success rate of " << nb.success_fraction()  << ", he might expect, on average, to need to visit about "
-      << success_fraction * all_houses << " houses in order to sell all " << nb.successes() << " candy bars. " << endl;
+    cout << "With a success rate of " << nb.success_fraction()  << ", he might expect, on average,""\n"
+      " to need to visit about " << success_fraction * all_houses << " houses in order to sell all " << nb.successes() << " candy bars. " << endl;
 
     // To finish on or before the 8th house, Pat must finish at the 5th, 6th, 7th or 8th house.
     // (Obviously he could not finish on fewer than 5 houses because he must sell 5 candy bars.
-    // so the 5th house is the first possible that he could finish on).
-    // Sum those probabilities to find the probability that he will finish exactly on the tenth house.
-    // The probability that he will finish on exactly any house is the Probability Density Function (pdf).
+    // so the 5th house is the first  that he could possibly finish on).
+    // The probability that he will finish on EXACTLY on any house is the Probability Density Function (pdf).
     cout << "Probability that Pat finishes on the " << sales_quota << "th house is " << "f(5) = " << pdf(nb, nb.successes()) << endl;
-    cout << "Probability that Pat finishes on the 6th house is " << "f(6) = " << pdf(nb, 6 - sales_quota) << endl;
-    cout << "Probability that Pat finishes on the 7th house is " << "f(7) = " << pdf(nb, 7 - sales_quota) << endl;
-    cout << "Probability that Pat finishes on the 8th house is " << "f(8) = " << pdf(nb, 8 - sales_quota) << endl;
+    cout << "Probability that Pat finishes on the 6th house is " << pdf(nb, 6 - sales_quota) << endl;
+    cout << "Probability that Pat finishes on the 7th house is " << pdf(nb, 7 - sales_quota) << endl;
+    cout << "Probability that Pat finishes on the 8th house is " << pdf(nb, 8 - sales_quota) << endl;
 
     // The sum of the probabilities for these houses is the Cumulative Distribution Function (cdf).
-    cout << "Probability that Pat finishes on or before the 8th house is " << "f(sales_quota) + f(6) + f(7) + f(8) = "
-      // Sum each of the mass/density probabilities for houses sales_quota, 6, 7, & 8.
+    cout << "Probability that Pat finishes on or before the 8th house is sum "
+      "\n" << "pdf(sales_quota) + pdf(6) + pdf(7) + pdf(8) = "
+      // Sum each of the mass/density probabilities for houses sales_quota = 5, 6, 7, & 8.
       << pdf(nb, sales_quota - sales_quota) // 0
       + pdf(nb, 6 - sales_quota) // 1
       + pdf(nb, 7 - sales_quota) // 2
@@ -169,40 +139,51 @@ int main()
       << " candy bars""\n""on or before the " << 8 << "th house is "
       << cdf(nb, 8 - sales_quota) << endl;
 
-
-    cout << "Probability that Pat finishes on the 10th house is " << "f(10) = " << pdf(nb, 10 - sales_quota) << endl;
+    cout << "\n""Probability that Pat finishes exactly on the 10th house is " << pdf(nb, 10 - sales_quota) << endl;
     cout << "\n""Probability of selling his quota of " << sales_quota
       << " candy bars""\n""on or before the " << 10 << "th house is "
       << cdf(nb, 10 - sales_quota) << endl;
 
-    cout << "Probability that Pat finishes on the 11th house is " << "f(11) = " << pdf(nb, 11 - sales_quota) << endl;
+    cout << "Probability that Pat finishes on the 11th house is " << pdf(nb, 11 - sales_quota) << endl;
     cout << "\n""Probability of selling his quota of " << sales_quota
       << " candy bars""\n""on or before the " << 11 << "th house is "
       << cdf(nb, 11 - sales_quota) << endl;
 
-    cout << "Probability that Pat finishes on the 12th house is " << "f(10) = " << pdf(nb, 12 - sales_quota) << endl;
+    cout << "Probability that Pat finishes on the 12th house is " << pdf(nb, 12 - sales_quota) << endl;
     cout << "\n""Probability of selling his quota of " << sales_quota
       << " candy bars""\n""on or before the " << 12 << "th house is "
       << cdf(nb, 12 - sales_quota) << endl;
 
     // Finally consider the risk of Pat not setting his quota of 5 bars even after visiting all the houses.
+    // Calculate the probability that he would sell on the (non-existent) last-plus-1 house.
+    cout << "\n""Probability of selling his quota of " << sales_quota
+      << " candy bars""\n""on or before the " << all_houses + 1 << "th house is "
+      << cdf(nb, all_houses + 1 - sales_quota) << endl;
+    // So the risk of failing even at the 31th (non-existent) house is 1 - this probability.
     cout << "\n""Probability of failing to sell his quota of " << sales_quota
       << " candy bars""\n""even after visiting all " << all_houses << "  houses is "
-      << 1 - cdf(nb, all_houses - sales_quota) << endl;
+      << 1 - cdf(nb, all_houses - sales_quota + 1) << endl;
 
-    // This is the Cephes and Codecogs inverse.
-    cout.precision(17);
     double p = cdf(nb, (8 - sales_quota)); 
     cout << "Probability of meeting sales quota on or before 8th house is "<< p << endl;
-    // Probability of meeting sales quota on or before 8th house is 0.17367040000000009
-    cout.precision(3);
-
-    double z = quantile(nb, p);
-    cout << "quantile(nb, " << p << ") = " << z + sales_quota << endl;
+    // Probability of meeting sales quota on or before 8th house is 0.174
     cout << "If the confidence of meeting sales quota is " << p
         << ", then the finishing house is " << quantile(nb, p) + sales_quota << endl;
+    // Also try wanting absolute certainty that all 5 will be sold
+    // which implies an infinite number of sales.
+    // (Of course, there are only 30 houses on the estate, so he can't even be certain of selling his quota.
+    cout << "If the confidence of meeting sales quota is " << 1.
+        << ", then the finishing house is " << quantile(nb, 1) + sales_quota << endl; //  1.#INF == infinity.
 
-    cout << "If confidence of meeting quota is zero (we assume all " << sales_quota << " sales are successes)" 
+    cout << "If the confidence of meeting sales quota is " << 0.
+        << ", then the finishing house is " << quantile(nb, 0.) + sales_quota << endl;
+
+    cout << "If the confidence of meeting sales quota is " << 1 - 0.00151 // 30 th
+        << ", then the finishing house is " << quantile(nb, 1 - 0.00151) + sales_quota << endl;
+
+    // If the opposite is true, we don't want to assume any confidence, then
+    // this is tantamount to assuming that the first sales_quota will be successful.
+    cout << "If confidence of meeting quota is zero (we assume all houses are successful sales)" 
       ", then finishing house is " << sales_quota << endl;
 
 
@@ -215,8 +196,7 @@ int main()
     }
 
     cout << "If we demand a confidence of meeting sales quota of unity"
-      " (so we never achieve " << sales_quota << " sales)" 
-      ", then we can never be certain, so the finishing house is infinite!"  << endl;
+      ", then we can never be certain of selling 5 bars, so the finishing house is infinite!"  << endl;
   }
   catch(const std::exception& e)
    {
@@ -231,50 +211,54 @@ int main()
 
 Output is:
 
-Example 1 using the Negative_binomial Distribution.  ..\..\..\..\..\..\boost-san
-dbox\libs\math_functions\example\negative_binomial_example1.cpp Mon Oct 23 13:57
-:11 2006 140050727
+Example 1 using the Negative Binomial Distribution.  ..\..\..\..\..\..\boost-san
+dbox\libs\math_functions\example\negative_binomial_example1.cpp Wed Nov 22 18:33
+:26 2006 140050727
 
 Selling candy bars - an example of using the negative binomial distribution.
 An example by Dr. Diane Evans,
 Professor of Mathematics at Rose-Hulman Institute of Technology,
 see http://en.wikipedia.org/wiki/Negative_binomial_distribution
 
-Pat has a sales per house success rate of 0.4,
-so he would, on average, sell 40 bars after trying 100 houses.
-With a success rate of 0.4, he might expect, on average, to need to visit about
-12 houses in order to sell all 5 candy bars.
-Probability that Pat finishes on the 5th house is f(5) = 0.1
-Probability that Pat finishes on the 6th house is f(6) = 0.0307
-Probability that Pat finishes on the 7th house is f(7) = 0.0553
-Probability that Pat finishes on the 8th house is f(8) = 0.0774
-Probability that Pat finishes on or before the 8th house is f(sales_quota) + f(6
-) + f(7) + f(8) = 0.174
+Pat has a sales per house success rate of 0.4.
+Therefore he would, on average, sell 40 bars after trying 100 houses.
+With a success rate of 0.4, he might expect, on average,
+ to need to visit about 12 houses in order to sell all 5 candy bars.
+Probability that Pat finishes on the 5th house is f(5) = 0.10033
+Probability that Pat finishes on the 6th house is 0.03072
+Probability that Pat finishes on the 7th house is 0.055296
+Probability that Pat finishes on the 8th house is 0.077414
+Probability that Pat finishes on or before the 8th house is sum
+pdf(sales_quota) + pdf(6) + pdf(7) + pdf(8) = 0.17367
 
 Probability of selling his quota of 5 candy bars
-on or before the 8th house is 0.174
-Probability that Pat finishes on the 10th house is f(10) = 0.1
+on or before the 8th house is 0.17367
+
+Probability that Pat finishes exactly on the 10th house is 0.10033
 
 Probability of selling his quota of 5 candy bars
-on or before the 10th house is 0.367
-Probability that Pat finishes on the 11th house is f(11) = 0.1
+on or before the 10th house is 0.3669
+Probability that Pat finishes on the 11th house is 0.10033
 
 Probability of selling his quota of 5 candy bars
-on or before the 11th house is 0.467
-Probability that Pat finishes on the 12th house is f(10) = 0.0946
+on or before the 11th house is 0.46723
+Probability that Pat finishes on the 12th house is 0.094596
 
 Probability of selling his quota of 5 candy bars
-on or before the 12th house is 0.562
+on or before the 12th house is 0.56182
+
+Probability of selling his quota of 5 candy bars
+on or before the 31th house is 0.99897
 
 Probability of failing to sell his quota of 5 candy bars
-even after visiting all 30  houses is 0.00151
-Probability of meeting sales quota on or before 8th house is 0.17367040000000003
-
-quantile(nb, 0.174) = 8
-If the confidence of meeting sales quota is 0.174, then the finishing house is 8
-
-If confidence of meeting quota is zero (we assume all 5 sales are successes), th
-en finishing house is 5
+even after visiting all 30  houses is 0.0010314
+Probability of meeting sales quota on or before 8th house is 0.17367
+If the confidence of meeting sales quota is 0.17367, then the finishing house is 8
+If the confidence of meeting sales quota is 1, then the finishing house is 1.#INF
+If the confidence of meeting sales quota is 0, then the finishing house is 5
+If the confidence of meeting sales quota is 0.99849, then the finishing house is 30
+If confidence of meeting quota is zero (we assume all houses are successful sale
+s), then finishing house is 5
 If confidence of meeting quota is 0, then finishing house is 5
 If confidence of meeting quota is 0.001, then finishing house is 5
 If confidence of meeting quota is 0.01, then finishing house is 5
@@ -285,11 +269,10 @@ If confidence of meeting quota is 0.9, then finishing house is 18
 If confidence of meeting quota is 0.95, then finishing house is 21
 If confidence of meeting quota is 0.99, then finishing house is 25
 If confidence of meeting quota is 0.999, then finishing house is 32
-If confidence of meeting quota is 1, then finishing house is 1.#J
-If we demand a confidence of meeting sales quota of unity (so we never achieve 5 sales),
-then we can never be certain, so the finishing house is infinite!
+If confidence of meeting quota is 1, then finishing house is 1.#INF
+If we demand a confidence of meeting sales quota of unity, then we can never be
+certain of selling 5 bars, so the finishing house is infinite!
 Press any key to continue . . .
-
 
 */
 
