@@ -152,54 +152,52 @@ namespace boost
       // Estimation of the success_fraction parameter in a negative binomial distribution.
       // The best estimate is actually the simple mean successes/trials:
       // these functions are used to obtain
-      // confidence intervals for the success fraction.
+      // confidence intervals for the success fraction probability p.
       // Use ibeta_inc function for lower bound but complement ibetac_inv for upper bound.
 
       static RealType estimate_lower_bound_on_p(
-        RealType failures,
+        RealType trials,
         RealType successes,
-        RealType probability) // alpha 0.05 equivalent to 95%.
+        RealType probability) // alpha 0.05 equivalent to 95% for one-sided test.
       {
         RealType result;  // of error checks.
-        if(false == negative_binomial_detail::check_successes(
-          BOOST_CURRENT_FUNCTION, failures, RealType(0), successes, &result)
-          && detail::check_probability(function, probability, result)
+        RealType failures = trials - successes;
+        if(false == negative_binomial_detail::check_successes(BOOST_CURRENT_FUNCTION, successes, &result)
+          && detail::check_probability(BOOST_CURRENT_FUNCTION, probability, &result)
           && negative_binomial_detail::check_dist_and_k(
-          BOOST_CURRENT_FUNCTION, failures, RealType(0), failures, &result))
+          BOOST_CURRENT_FUNCTION, trials, RealType(0), failures, &result))
         {
           return result;
         }
-        return ibeta_inv(successes + 1, failures - successes, probability);
+        return ibeta_inv(successes + 1, failures, probability);
       } // estimate_lower_bound_on_p
 
       static RealType estimate_upper_bound_on_p(
-        RealType failures,
+        RealType trials,
         RealType successes,
-        RealType probability) // alpha 0.05 equivalent to 95%.
+        RealType probability) // alpha 0.05 equivalent to 95% for one-sided test.
       {
         RealType result;  // of error checks.
+        RealType failures = trials - successes;
         if(false == negative_binomial_detail::check_dist_and_k(
           BOOST_CURRENT_FUNCTION, failures, RealType(0), failures, &result)
-          && detail::check_probability(function, probability, result)
-          && negative_binomial_detail::check_dsuccesses(
-          BOOST_CURRENT_FUNCTION, failures, RealType(0), successes, &result))
+          && detail::check_probability(BOOST_CURRENT_FUNCTION, probability, &result)
+          && negative_binomial_detail::check_successes(
+          BOOST_CURRENT_FUNCTION, successes, &result))
         {
           return result;
         }
         // Use complement ibetac_inv function for upper bound.
-        return ibetac_inv(successes + 1, failures - successes, probability);
+        return ibetac_inv(successes + 1, failures, probability);
       } // estimate_upper_bound_on_p
 
-      // Estimate number of failures parameter:
-      // TODO Not understood yet.
-      // "How many failures (k) do I need to be P% sure of seeing r successes?"
-      //    or
-      // "How many failures can I have to be P% sure of seeing fewer than k events?"
+      // Estimate number of trials :
+      // "How many trials do I need to be P% sure of seeing r successes?"
 
       static RealType estimate_number_of_trials(
-        RealType k,     // number of failures.
-        RealType p,     // success fraction.
-        RealType probability) // probability threshold.
+        RealType k,     // number of failures (k >= 0).
+        RealType p,     // success fraction 0 <= p <= 1.
+        RealType probability) // probability threshold 0 <= probability <= 1.
       {
         // Error checks:
         RealType result;
@@ -219,7 +217,7 @@ namespace boost
         const complemented3_type<P1, P2, P3>& c)
       {
         // extract args:
-        const RealType k = c.dist;     // number of events.
+        const RealType k = c.dist;     // number of failures.
         const RealType p = c.param1;   // success fraction.
         const RealType Q = c.param2;   // probability threshold.
 
