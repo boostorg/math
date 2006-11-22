@@ -89,13 +89,13 @@ inline T log_min_value(const mpl::int_<1024>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYP
 // 80 and 128-bit long doubles:
 //
 template <class T>
-inline T log_max_value(const mpl::int_<1024>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_max_value(const mpl::int_<16384>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    return 11356.0L;
 }
 
 template <class T>
-inline T log_min_value(const mpl::int_<1024>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_min_value(const mpl::int_<16384>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    return -11355.0L;
 }
@@ -114,7 +114,7 @@ inline T log_max_value(const U& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 }
 
 template <class T, class U>
-inline T log_min_value(constU& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_min_value(const U& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -174,9 +174,9 @@ template <class T>
 inline T epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   return detail::epsilon<T>(mpl::bool_<::std::numeric_limits<T>::is_specialized>());
+   return detail::epsilon<T>(mpl::bool_< ::std::numeric_limits<T>::is_specialized>());
 #else
-   return ::std::numeric_limits<T>::is_specialized ? 
+   return ::std::numeric_limits<T>::is_specialized ?
       detail::epsilon<T>(mpl::true_()) :
       detail::epsilon<T>(mpl::false_());
 #endif
