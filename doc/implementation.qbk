@@ -1,0 +1,216 @@
+[section:implementation Implementation Notes]
+
+[h4 Mathematical Formula and Sources for Distributions]
+
+
+[h4 Implemention philosophy]
+
+"First be right, then be fast."
+
+There will always be potential compromises
+to be made between speed and accuracy.
+It may be possible to find faster methods,
+particularly for certain limited ranges of arguments,
+but for most applications of math functions and distributions,
+we judge that speed is rarely as important as accuracy.
+
+So our priority is accuracy.
+
+To permit evaluation of accuracy of the special functions,
+production of extremely accurate tables of test values
+has received considerable effort.
+
+(It also required much CPU effort -
+there was some danger of molten plastic dripping from the bottom of JM's laptop,
+so instead, PAB's Dual-core desktop was kept 50% busy for *days*
+calculating some tables of test values!)
+
+For a specific RealType, say float or double,
+it may be possible to find approximations for some functions
+that are simpler and thus faster, but less accurate
+(perhaps because there are no refining iterations,
+for example, when calculating inverse functions).
+
+If these prove accurate enough to be "fit for his purpose",
+then a user may substitute his custom specialization.
+
+[h4 Handling Unsuitable Arguments]
+
+In
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1665.pdf Errors in Mathematical Special Functions, J. Marraffino & M. Paterno]
+it is proposed that signalling a domain error is mandatory
+when the argument would give an mathematically undefined result.
+
+In Guideline 1, they propose:
+
+A mathematical function is said to be defined at a point a = (a1, a2, . . .)
+if the limits as x = (x1, x2, . . .) 'approaches a from all directions agree'.
+The defined value may be any number, or +infinity, or -infinity.
+
+(Put crudely, if the function goes to + infinity
+and then emerges 'round-the-back' with - infinity,
+it is NOT defined.)
+
+The library function which approximates a mathematical function shall signal a domain error
+whenever evaluated with argument values for which the mathematical function is undefined.
+
+Guideline 2 The library function which approximates a mathematical function
+shall signal a domain error whenever evaluated with argument values
+for which the mathematical function obtains a non-real value.
+
+This implementation follows these proposals.
+
+TODO Check that this is correct!
+
+[h4 Notes on Implementation of Specific Functions]
+
+[h4 Poisson Distribution - Optimization and Accuracy is quite complicated.
+
+The general formula for calculating the CDF uses the incomplete gamma thus:
+
+  return gamma_Q(k+1, mean);
+
+But the case of small integral k is *very* common, so it is worth considering optimisation.
+
+The first obvious step is to use a finite sum of each pdf (Probability *density* function)
+for each value of k to build up the cdf (*cumulative* distribution function).
+
+This could be done using the pdf function for the distribution,
+for which there are two equivalent formulae:
+
+  return exp(-mean + log(mean) * k - lgamma(k+1));
+    
+  return gamma_P_derivative(k+1, mean); 
+
+The pdf would probably be more accurate using gamma_P_derivative.
+
+The reason is that the expression:
+
+  -mean + log(mean) * k - lgamma(k+1)
+
+Will produce a value much smaller than the largest of the terms, so you get 
+cancellation error: and then when you pass the result to exp() which 
+converts the absolute error in it's argument to a relative error in the 
+result (explanation available if required), you effectively amplify the 
+error further still.
+
+gamma_p_derivative is just a thin wrapper around some of the internals of 
+the incomplete gamma, it does its upmost to avoid issues like this, because 
+this function is responsible for virtually all of the error in the result. 
+Hopefully further advances in the future might improve things even further 
+(what is really needed is an 'accurate' pow(1+x) function, but that's a whole 
+other story!).
+
+But calling pdf function makes repeated, redundant, checks on the value of mean and k,
+
+  result += pdf(dist, i);
+  
+so it may be faster to substitute the formula for the pdf in a summation loop
+
+  result += exp(-mean) * pow(mean, i) / unchecked_factorial(i);
+
+(simplified by removing casting from RealType).
+
+Of course, mean is unchanged during this summation,
+so exp(mean) should only be calculated once, outside the loop.
+
+Optimising compilers 'might' do this, but one can easily ensure this.
+
+Obviously too, k must be small enough that unchecked_factorial is OK:
+34 is an obvious choice as the limit for 32-bit float.
+For larger k, the number of iterations is like to be uneconomic.
+Only experiment can determine the optimum value of k
+for any particular RealType (float, double...)
+
+But also note that 
+
+The incomplete gamma already optimises this case
+(argument "a" is a small int),
+although only when the result q (1-p) would be < 0.5.
+
+And moreover, in the above series, each term can be calculated
+from the previous one much more efficiently:
+
+cdf = sum from 0 to k of C[k]
+
+with:
+
+C[0] = exp(-mean)
+
+C[N+1] = C[N] * mean / (N+1)
+
+So hopefully that's:
+
+     {
+       RealType result = exp(-mean);
+       RealType term = result;
+       for(int i = 1; i <= k; ++i)
+       { // cdf is sum of pdfs.
+          term *= mean / i;
+          result += term;
+       }
+       return result;
+     }
+
+This is exactly the same finite sum as used by gamma_P/gamma_Q internally.
+
+As explained previously it's only used when the result
+
+p > 0.5 or 1-p = q < 0.5.
+
+The slight danger when using the sum directly like this, is that if 
+the mean is small and k is large then you're calculating a value ~1, so 
+conceivably you might overshoot slightly.  For this and other reasons in the 
+case when p < 0.5 and q > 0.5 gamma_P/gamma_Q use a different (infinite but 
+rapidly converging) sum, so that danger isn't present since you always 
+calculate the smaller of p and q.
+
+So... it's tempting to suggest that you just call gamma_P/gamma_Q as 
+required.  However, there is a slight benefit for the k = 0 case because you 
+avoid all the internal logic inside gamma_P/gamma_Q trying to figure out 
+which method to use etc.
+
+For the incomplete beta function, there are no simple finite sums 
+available (that I know of yet anyway), so when there's a choice between a 
+finite sum of the PDF and an incomplete beta call, the finite sum may indeed 
+win out in that case.
+
+[h4 Sources of Test Data]
+
+We found a large number of sources of test data.
+We have assumed that these are /"known good/"
+if they agree with the results from our test
+and only consulted other sources for their /'vote/'
+in the case of serious disagreement.
+The accuracy, and claimed accuracy (if any), vary very widely.
+Only [@http://functions.wolfram.com/ Wolfram Mathematica functions]
+provided a higher accuracy than
+C++ double (64-bit floating-point) and was regarded as
+the most-trusted (by far) source.
+
+A useful index of sources is:
+[@http://www.sal.hut.fi/Teaching/Resources/ProbStat/table.html
+Web-oriented Teaching Resources in Probability and Statistics]
+
+[@http://espse.ed.psu.edu/edpsych/faculty/rhale/hale/507Mat/statlets/free/pdist.htm Statlet]:
+Calculate and plot probability distributions is a Javascript application
+that provides the most complete range of distributions:
+
+Bernoulli, Binomial, discrete uniform, geometric, hypergeometric,
+negative binomial, poisson, beta, cauchy, chi-sequared, erlang,
+exponential, extreme value, Fish, gamma, laplace, logistic,
+lognormal, normal, parteo, student's t, triangular, uniform, and weibull.
+
+It calculates pdf, cdf, survivor, log survivor, harard, tail areas,
+& critical values for 5 tail values.
+
+(It is the only independent source found for the Weibull distribution).
+
+[endsect][/section:implementation Implementation Notes]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
