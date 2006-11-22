@@ -135,6 +135,20 @@ For example if the precision of RealType varies at runtime, then
 `numeric_limits` support may not be appropriate, see 
 [@../../../../boost/math/tools/ntl.hpp boost/math/tools/ntl.hpp] for examples.
 
+[warning
+If `std::numeric_limits<>` is *not specialized*
+for type /RealType/ then the default float precision of 6 decimal digits
+will be used by other Boost programs including:\n\n
+* Boost.test: giving misleading error messages like\n
+"difference between {9.79796} and {9.79796} exceeds 5.42101e-19%".\n
+* Boost.lexical_cast and Boost.serialization when converting the number
+to a string, causing potentially serious loss of accuracy on output.\n\n
+Although it might seem obvious that RealType should require `std::numeric_limits`
+to be specialized, this is not sensible for
+`NTL::RR` and similar classes where the number of digits is a runtime 
+parameter (where as for `numeric_limits` it has to be fixed at compile time).
+]
+
 [h4 Standard Library Support Requirements]
 
 Many (though not all) of the functions in this library make calls
@@ -172,6 +186,19 @@ be used (or likely to be used in the near future) by this library.
 The following functions: `acos`, `atan2`, `fmod`, `cosh`, `sinh`, `tanh`, `modf` and `log10`
 are not currently used, but may be if further special functions are added.
 
+In addition, for efficient and accurate results, a __lanczos is highly desirable.
+You may be able to adapt an existing approximation from 
+[link ../../../../boost/math/special_functions/lanczos.hpp
+boost/math/special_functions/lanczos.hpp]: you will need change
+static_cast's to lexical_cast's, and the constants to /strings/ 
+(in order to ensure the coefficients aren't truncated to long double)
+and then specialise `lanczos_traits` for type T.  Otherwise you may have to hack 
+[link ../../tools/lanczos_generator.cpp 
+libs/math/tools/lanczos_generator.cpp] to find a suitable
+approximation for your RealType.  The code will still compile if you don't do
+this, but both accuracy and efficiency will be greatly compromised in any
+function that makes use of the gamma\/beta\/erf family of functions.
+
 [endsect]
 
 [section:dist_concept Conceptual Requirements for Distribution Types]
@@ -187,13 +214,14 @@ distributions.
 
 In the following table, /d/ is an object of type `DistributionType`, 
 /cd/ is an object of type `const DistributionType` and /cr/ is an
-object of type `const RealType`.
+object of a type convertible to `RealType`.
 
 [table
 [[Expression][Result Type][Notes]]
 [[DistributionType::value_type][RealType]
       [The real-number type /RealType/ upon which the distribution operates.]]
-[[d = cd][Distribution&][Distribution types are assignable]]
+[[d = cd][Distribution&][Distribution types are assignable.]]
+[[Distribution(cd)][Distribution][Distribution types are copy constructible.]]
 [[pdf(cd, cr)][RealType][Returns the PDF of the distribution.]]
 [[cdf(cd, cr)][RealType][Returns the CDF of the distribution.]]
 [[cdf(complement(cd, cr))][RealType]
@@ -218,131 +246,118 @@ object of type `const RealType`.
 
 [section:archetypes Conceptual Archetypes and Testing]
 
-std_real_concept is an archetype for built-in Real types.
+There are several concept archetypes available:
+
+``#include <boost/concepts/std_real_concept.hpp>``
+
+   namespace boost{
+   namespace math{
+   namespace concepts{
+   
+   class std_real_concept;
+   
+   }}} // namespaces
+
+`std_real_concept` is an archetype for the built-in Real types.
 
 The main purpose in providing this type is to verify
-that std lib functions are found via a using declaration,
-bringing those functions into the current scope, and not
+that standard library functions are found via a using declaration -
+bringing those functions into the current scope - and not
 just because they happen to be in global scope.
 
-If ::pow is found rather than std::pow say, then the code
-will silently compile, but truncation of long doubles to
+In order to ensure that a call to say `pow` can be found
+either via argument dependent lookup, or failing that then
+in the std namespace: all calls to standard library functions
+are unqualified, with the std:: versions found via a using declaration
+to make them visible in the current scope.  Unfortunately it's all
+to easy to forget the using declaration, and call the double version of
+the function that happens to be in the global scope by mistake.
+
+For example if the code calls ::pow rather than std::pow, 
+the code will cleanly compile, but truncation of long doubles to
 double will cause a significant loss of precision.
-A template instantiated with std_real_concept will *only*
-compile if it std::whatever is in scope.
+In contrast a template instantiated with std_real_concept will *only*
+compile if the all the standard library functions used have 
+been brought into the current scope with a using declaration.
 
-real_concept is an archetype for User defined Real types.
+There is a test program 
+[@../../teststd_real_concept_check.cpp libs/math/test/std_real_concept_check.cpp]
+that instantiates every template in this library with type
+`std_real_concept` to verify it's usage of standard library functions.
 
-This file defines the features, constructors, operators, functions...
-that are essential to use mathematical and statistical functions.
-The template typename "RealType" is used where this type
-(as well as the normal built-in types, float, double & long double)
-can be used.
-That this is the minimum set is confirmed by use as a type
-in tests of all functions & distributions, for example:
-  test_spots(0.F); & test_spots(0.);  for float and double, but also
-  test_spots(boost::math::concepts::real_concept(0.));
-  
-NTL quad_float type is an example of a type meeting the requirements,
-but note minor additions are needed - see ntl.diff and documentation
-"Using With NTL - a High-Precision Floating-Point Library".
+``#include <boost/math/concepts/real_concept.hpp>``
 
-TODO.
+   namespace boost{ 
+   namespace math{ 
+   namespace concepts{
+   
+   class real_concept;
+   
+   }}} // namespaces
 
-See boost/math/concepts/real_concept.hpp for the current concept-archetype
-test case.
+`real_concept` is an archetype for [link math_toolkit.Using_UDT.concepts 
+user defined real types], it
+declares it's standard library functions in it's own
+namespace: these will only be found if they are called unqualified
+allowing argument dependent lookup to locate them.  In addition
+this type is useable at runtime:
+this allows code that would not otherwise be exercised by the builtin
+floating point types to be tested.  There is no std::numeric_limits<>
+support for this type, since this is not a conceptual requirement
+for [link math_toolkit.Using_UDT.concepts RealType]'s.
 
-real_concept basically requires:
+NTL RR is an example of a type meeting the requirements that this type
+models, but note minor additions are needed - see ntl.diff and documentation
+[link math_toolkit.Using_UDT.use_NTL "Using With NTL - a High-Precision Floating-Point Library"].
 
-* The usual arithmetic operations.
-* The usual comparison operations.
-* The usual math functions (those in <cmath>).
-* Either `std::numeric_limits` support (the easy way), or a small number
-helper functions that provide the same functionality at runtime
-rather than compile time (see boost/math/tools/precision.hpp).
-* Promotion from the built-in floating point types to T, and the function 
-`real_cast` that converts from T to a narrower floating-point type
-(see boost/math/tools/real_cast.hpp).
+There is no specific test case for type `real_concept`, instead, since this
+type is usable at runtime, each individual test case as well as testing
+`float`, `double` and `long double`, also tests `real_concept`.
 
-For efficient and accurate results, a __lanczos is also highly desirable.
-You may be able to adapt an existing approximation from 
-boost/math/special_functions/lanczos.hpp: you will need change
-static_cast's to lexical_cast's, and the constants to /strings/ 
-(in order to ensure the coefficients aren't truncated to long double)
-and then specialise lanczos_traits for type T.  Otherwise you may have to hack 
-libs/math/tools/lanczos_generator.cpp to find a suitable
-approximation for your type T.
+``#include <boost/math/concepts/distribution.hpp>``
 
-[warning
-1  Real concept type T assumes that the number of significand bits
-is the same as long double,
-*unless* std::numeric_limits<T>::is_specialized
-to provide std::numeric_limits<T>::digits.\n
-2  If std::numeric_limits<T> is *NOT specialized* to provide std::numeric_limits<T>::digits
-(or in future max_digits10) then the default float precision of 6 decimal digits
-will be used by other Boost programs including:\n
-* Boost.test giving misleading error messages like\n
-"difference between {9.79796} and {9.79796} exceeds 5.42101e-19%".\n
-* Boost.lexical cast to decimal digit string types\n
-and Boost.serialization output causing potentially serious loss of accuracy.\n
-Although it might seem the real_concept would best require std::numeric_limits
-to be specialized for all types to provide digits, this is not sensible for
-NTL::RR and similar classes where the number of digits is a runtime 
-parameter (for numeric_limits it has to be fixed at compile time).
-(One could still define digits, digits10, epsilon etc to be suitable values,
-but one would have to ensure that the precision chosen at runtime,
-for example, using the NTL function NTL::setprecision(40), matched
-that chosen at compile time by these definitions,
-for example, std::numeric_limits<RR>::digits10 = 40;).\n
-To mitigate the problems caused by lack of full numeric_limits specialization,
-boost::math::tools:: provides some compile time asserts which will alert
-the user by failure to compile unless
-both numeric_limits<T>::is_specilized and numeric_limits<T>::digits.
-]
+   namespace boost{
+   namespace math{
+   namespace concepts{
+   
+   template <class RealType>
+   class distribution_archetype;
+   
+   template <class Distribution>
+   struct DistributionConcept;
+   
+   }}} // namespaces
+   
+The class template `distribution_archetype` is a model of the
+[link math_toolkit.Using_UDT.dist_concept Distribution concept].
 
+The class template `DistributionConcept` is a 
+[@../../../../libs/concept_check/index.html concept checking class] 
+for distribution types.
 
-[endsect][/section:real_concept Conceptual Requirements]
+The test program 
+[@../../test/distribution_concept_check.cpp distribution_concept_check.cpp]
+is responsible for using `DistributionConcept` to verify that all the
+distributions in this library conform to the 
+[link math_toolkit.Using_UDT.dist_concept Distribution concept].
 
-
-[section:concept_check Concept Checking]
-
-The test program is distribution_concept_check.cpp 
-The concept checks and archetypes
-(see the Boost Concept Check lib for more info)
-are in boost/math/concepts/distributions.hpp.
-
-Implementations of distributions require them to be:
-
-CopyConstructible and Assignable.
-
-All support the following non-member accessor functions
-
-pdf
-cdf
-quantile
-mean
-mode
-standard_deviation
-variance
-hazard
-chf
-coefficient_of_variation
-skewness
-kurtosis
-kurtosis_excess
-
-Their existence (but not proper function) is checked by calls like
+The class template `DistributionConcept` verifies the existence 
+(but not proper function) of the non-member accessors
+required by the [link math_toolkit.Using_UDT.dist_concept Distribution concept].
+These are checked by calls like
 
 v = pdf(dist, x); // (Result v is ignored).
 
 And in addition, those that accept two arguments do the right thing when the 
 arguments are of different types (the result type is always the same as the 
-distribution's value_type).  This is implemented by some additional 
-forwarding-functions in derived_accessors.hpp, so no need for any code 
-changes.  Likewise hazard/chf/coefficient_of_variation are implemented in 
-there too.
+distribution's value_type).  (This is implemented by some additional 
+forwarding-functions in derived_accessors.hpp, so that there is no need for 
+any code changes.  Likewise boilerplate versions of the 
+hazard\/chf\/coefficient_of_variation functions are implemented in 
+there too.)
 
-[endsect][/section:concept_check Concept Checking]
+[endsect][/section:archetypes Conceptual Archetypes and Testing]
+
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

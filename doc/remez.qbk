@@ -4,7 +4,7 @@
 
 The Remez method is a methodology for locating the minimax rational approximation
 to a function.  This short article gives a brief overview of the method, but
-it should not be regarded as a thoughough theoretical treatment, for that you
+it should not be regarded as a thorough theoretical treatment, for that you
 should consult your favorite textbook.
 
 Imagine that you want to approximate some function f(x) by way of a rational
@@ -14,7 +14,7 @@ polynomial case, as it's by far the easier to deal with, later we'll extend
 to the full rational function case.  
 
 We want to find the "best" rational approximation, where
-"best" is defined to the the approximation that has the least deviation
+"best" is defined to be the approximation that has the least deviation
 from f(x).  We can measure the deviation by way of an error function:
 
 E[sub abs](x) = f(x) - R(x)
@@ -22,7 +22,7 @@ E[sub abs](x) = f(x) - R(x)
 which is expressed in terms of absolute error, but we can equally use
 relative error:
 
-E[sub rel](x) = (f(x) - R(x)) / f(x)
+E[sub rel](x) = (f(x) - R(x)) / |f(x)|
 
 And indeed in general we can scale the error function in any way we want, it
 makes no difference to the maths, although the two forms above cover almost
@@ -36,13 +36,13 @@ properties:
 * If R(x) is a polynomial of degree N, then there are N+2 unknowns:
 the N+1 coefficients of the polynomial, and maximal value of the error
 function.
-* The error function has N+1 roots, and N+2 extrema.
+* The error function has N+1 roots, and N+2 extrema (minima and maxima).
 * The extrema alternate in sign, and all have the same magnitude.
 
 That means that if we know the location of the extrema of the error function
 then we can write N+2 simultaneous equations:
 
-R(x[sub i]) [plusminus] E = f(x[sub i])
+R(x[sub i]) + (-1)[super i]E = f(x[sub i])
 
 where E is the maximal error term, and x[sub i] are the absissa values of the
 N+2 extrema of the error function.  It is then trivial to solve the simultaneous
@@ -66,12 +66,13 @@ these, but a much closer first approximation can be obtained by first
 constructing an interpolated polynomial approximation to f(x).
 
 In order to obtain the N+1 coefficients of the interpolated polynomial
-we need N+1 points: with our interpolated form passing through each of those points
+we need N+1 points (x[sub 0]...x[sub N]): with our interpolated form 
+passing through each of those points
 that yields N+1 simultaneous equations:
 
-P(x[sub i]) = f(x[sub i])
+f(x[sub i]) = P(x[sub i]) = c[sub 0] + c[sub 1]x[sub i] ... + c[sub N]x[sub i][super N]
 
-Which can be solved for the coefficients in P(x).
+Which can be solved for the coefficients c[sub 0]...c[sub N] in P(x).
 
 Obviously this is not a minimax solution, indeed our only guarentee is that f(x) and 
 P(x) touch at N+1 locations, away from those points the error may be arbitrarily
@@ -79,7 +80,8 @@ large.  However, we would clearly like this initial approximation to be as close
 f(x) as possible, and it turns out that using the zeros of an orthogonal polynomial
 as the initial interpolation points is a good choice.  In our example we'll use the 
 zeros of a Chebyshev polynomial as these are particularly easy to calculate, 
-interpolating for a polynomial of degree 4, we get the following error function:
+interpolating for a polynomial of degree 4, and measuring /relative error/
+we get the following error function:
 
 [$../graphs/remez-2.png]
 
@@ -88,18 +90,20 @@ Which has a peak relative error of 1.2x10[super -3].
 While this is a pretty good approximation already, judging by the 
 shape of the error function we can clearly do better.  Before starting
 on the Remez method propper, we have one more step to preform: locate
-all the extrema of the error function of our interpolated form, and store
+all the extrema of the error function, and store
 these locations as our initial ['Chebyshev control points].
 
 [note
 In the simple case of a polynomial approximation, by interpolating through
 the roots of a Chebyshev polynomial we have in fact created a ['Chebyshev
 approximation] to the function: in terms of /absolute error/
-this is the best interpolated form we can
+this is the best a priori choice for the interpolated form we can
 achieve, and typically is very close to the minimax solution.\n
 However, if we want to optimise for /relative error/, or if the approximation
 is a rational function, then the initial Chebyshev solution can be quite far
-from the ideal minimax solution.]
+from the ideal minimax solution.  \n
+A more technical discussion of the theory involved can be found in this
+[@http://math.fullerton.edu/mathews/n2003/ChebyshevPolyMod.html online course].]
 
 [h4 Remez Step 1]
 
@@ -107,7 +111,7 @@ The first step in the Remez method, given our current set of
 N+2 Chebyshev control points x[sub i], is to solve the N+2 simultaneous
 equations:
 
-P(x[sub i]) [plusminus] E = f(x[sub i])
+P(x[sub i]) + (-1)[super i]E = f(x[sub i])
 
 To obtain the error term E, and the coefficients of the polynomial P(x).
 
@@ -165,11 +169,11 @@ f(x) = R(x) = P(x) / Q(x)
 where P(x) and Q(x) are polynomials, then we proceed as before, except that now
 we have N+M+2 unkowns if P(x) is of order N and Q(x) is of order M.  This assumes
 that Q(x) is normalised so that it's leading coefficient is 1, giving
-N+M+1 unkown coefficients in total, plus the error term E.
+N+M+1 polynomial coefficients in total, plus the error term E.
 
 The simultaneous equalations to be solved are now:
 
-P(x[sub i]) / Q(x[sub i]) [plusminus] E = f(x[sub i])
+P(x[sub i]) / Q(x[sub i]) + (-1)[super i]E = f(x[sub i])
 
 Evaluated at the N+M+2 control points x[sub i].
 
@@ -182,7 +186,7 @@ coefficients), then use the new value of E as the next guess.  The method is
 repeated until E converges on a stable value.
 
 These complications extend the running time required for the development
-of rational approximations quite considerably, and yet it is often desirable
+of rational approximations quite considerably. It is often desirable
 to obtain a rational rather than polynomial approximation none the less:
 rational approximations will often match more difficult to approximate
 functions, to greater accuracy, and with greater efficiency, than their
@@ -287,7 +291,7 @@ it is by no means an exhaustive list, but is provided in the hopes that it will
 prove useful.
 
 * Is the function smooth enough?  Can it be better separated into
-a raridly changing part, and an asymptotic part?
+a rapidly changing part, and an asymptotic part?
 * Does the function being appoximated have any "blips" in it?  Check
 for problems as the function changes computation method, or
 if a root, or an infinity has been divided out.  The telltale

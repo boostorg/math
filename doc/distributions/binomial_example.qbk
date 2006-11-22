@@ -68,21 +68,23 @@ value of /alpha/, we call `estimate_lower_bound_on_p` and
 respectively.  Note that since we are calculating a two-sided interval,
 we must divide the value of alpha in two.
 
-If we calculate two single-sided intervals each with a risk
-that the true value is outside the interval of alpha, then:
+Please note that calculating two separate /single sided bounds/, each with risk
+level [alpha][space]is not the same thing as calculating a two sided interval.
+Had we calculate two single-sided intervals each with a risk
+that the true value is outside the interval of [alpha], then:
 
-* The risk that it is less than the lower bound is alpha.
+* The risk that it is less than the lower bound is [alpha].
 
 and
 
-* The risk that it is greater than the upper bound is also alpha.
+* The risk that it is greater than the upper bound is also [alpha].
 
 So the risk it is outside *upper or lower bound*, is *twice* alpha, and the 
 probability that it is inside the bounds is therefore not nearly as high as 
-one might have thought.  This is why alpha/2 is used in 
-both the estimate bounds_on_p calculations below.
+one might have thought.  This is why [alpha]/2 must be used in 
+the calculations below.
 
-Had we been calculating a 
+In contrast, had we been calculating a 
 single-sided interval, for example: ['"Calculate a lower bound so that we are P%
 sure that the true occurrence frequency is greater than some value"]
 then we would *not* have divided by two.
@@ -91,7 +93,7 @@ then we would *not* have divided by two.
       {
          // Confidence value:
          cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
-         // Xalculate bounds of interval:
+         // Calculate bounds of interval:
          double l = binomial::estimate_lower_bound_on_p(trials, successes, alpha[i]/2);
          double u = binomial::estimate_upper_bound_on_p(trials, successes, alpha[i]/2);
          // Print Limits:

@@ -5,7 +5,16 @@
 Given an actual value /a/ and a found value /v/ the relative error can be
 calculated from:
 
+[$../equations/error2.png]
+
+However the test programs in the library use the symmetrical form:
+
 [$../equations/error1.png]
+
+which measures /relative difference/ and happens to be less error 
+prone in use since we don't have to worry which value is the "true"
+result, and which is the experimental one.  It guarantees to return a value
+at least as large as the relative error.
 
 Special care needs to be taken when one value is zero: we could either take the
 absolute error in this case (but that's cheating as the absolute error is likely 

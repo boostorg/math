@@ -219,6 +219,7 @@ some typical applications in statistics.
 [endsect][/section:Using_UDT Use with User Defined Floating-Point Types]
 
 [section:backgrounders Backgrounders]
+[include implementation.qbk]
 [include error.qbk]
 [include lanczos.qbk]
 [include remez.qbk]

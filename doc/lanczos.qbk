@@ -42,13 +42,20 @@ relative error in the above can easily be shown to be:
 
 For small /a/ and /b/ that's not a problem, but to put the relationship another
 way: ['each time a and b increase in magnitude by a factor of 10, at least one
-decimal digit of precision will be lost.]  In contrast, by combining like power
+decimal digit of precision will be lost.]  
+
+In contrast, by analytically combining like power
 terms in a ratio of Lanczos approximation's, these errors can be virtually eliminated
 for small /a/ and /b/, and kept under control for very large (or very small
 for that matter) /a/ and /b/.  Of course, computing large powers is itself a
 notoriously hard problem, but even so, analytic combinations of Lanczos 
 approximations can make the difference between obtaining a valid result, or
-simply garbage.
+simply garbage.  Refer to the implementation notes for the __beta function for
+an example of this method in practice.  The incomplete 
+[link math_toolkit.special.igamma gamma_P gamma] and 
+[link math_toolkit.special.ibeta_function beta] functions
+use similar analytic combinations of power terms, to combine gamma and beta
+functions divided by large powers into single (simpler) expressions.
 
 [h4 The Approximation]
 
@@ -56,7 +63,7 @@ The Lanczos Approximation to the Gamma Function is given by:
 
 [$../equations/lanczos0.png]
 
-Where S(z) is an infinite sum, that is convergent for all z > 0, 
+Where S[sub g](z) is an infinite sum, that is convergent for all z > 0, 
 and /g/ is an arbitrary parameter that controls the "shape" of the
 terms in the sum which is given by:
 
@@ -81,11 +88,15 @@ where:
 [$../equations/lanczos2.png]
 
 Again parameter /g/ is an arbitarily chosen constant, and /N/ is an arbitrarily chosen 
-number of terms to evaluate in the "Lanczos sum" part.  Note that some authors
+number of terms to evaluate in the "Lanczos sum" part.  
+
+[note 
+Some authors
 choose to define the sum from k=1 to N, and hence end up with N+1 coefficients.
 This happens to confuse both the following discussion and the code (since C++
-deals with half open ranges, rather than the closed range of the sum), hence
-the choice here, which is consistent with __godfrey, but not __pugh.
+deals with half open array ranges, rather than the closed range of the sum).
+This convention is consistent with __godfrey, but not __pugh, so take care
+when refering to the literature in this field.]
 
 [h4 Computing the Coefficients]
 
@@ -126,9 +137,9 @@ and\/or divergent for about the first /g-1/ terms, and to then suddenly converge
 with a "crunch".
 
 __pugh has determined the optimal
-value of /g/ for /N/ in the range /1 <= N <= 60/: however in practice choosing
+value of /g/ for /N/ in the range /1 <= N <= 60/: unfortunately in practice choosing
 these values leads to cancellation errors in the Lanczos sum as the largest
-term in the series is approximately 1000 times larger than the result.  
+term in the (alternating) series is approximately 1000 times larger than the result.  
 These optimal values appear not to be useful in practice unless the evaluation
 can be done with a number of guard digits /and/ the coefficients are stored
 at higher precision than that desired in the result.  These values are best
@@ -167,7 +178,9 @@ excessive number of terms.  There are two competing issues here: high precision
 requires a large value of /g/, but avoiding cancellation errors in the evaluation
 requires a small /g/.
 
-At this point note that the Lanczos sum can be converted into rational form,
+At this point note that the Lanczos sum can be converted into rational form
+(a ratio of two polynomials, obtained from the partial-fraction form using
+polynomial arithmetic),
 and doing so changes the coefficients so that /they are all positive/.  That 
 means that the sum in rational form can be evaluated without cancellation 
 error, albeit with double the number of coefficients for a given N.  Repeating 
