@@ -34,6 +34,14 @@ for example, when calculating inverse functions).
 If these prove accurate enough to be "fit for his purpose",
 then a user may substitute his custom specialization.
 
+For example, there are approximations dating back from times when computation was a *lot* more expensive:
+
+H Goldberg and H Levine, Approximate formulas for percentage points and normalisation of t and chi squared, Ann. Math. Stat., 17(4), 216 - 225 (Dec 1946).
+
+A H Carter, Approximations to percentage points of the z-distribution, Biometrika 34(2), 352 - 358 (Dec 1947).
+
+These could still provide sufficient accuracy for some speed-critical applications.
+
 [h4 Handling Unsuitable Arguments]
 
 In
