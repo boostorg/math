@@ -147,7 +147,7 @@ Returns the mode of the distribution /dist/.
 This function may return a __domain_error if the distribution does not have
 a defined mode.
 
-[h4 [#math.dist.pdf]Probabilty Density Function]
+[h4 [#math.dist.pdf]Probability Density Function]
 
    template <class RealType>
    RealType pdf(const ``['Distribution-Type]``<RealType>& dist, const RealType& x);
@@ -168,7 +168,7 @@ For example for a standard normal distribution the pdf looks like this:
 
 [$../graphs/pdf.png]
 
-[h4 [#math.dist.quantile]quantile]
+[h4 [#math.dist.quantile]Quantile]
 
    template <class RealType>
    RealType quantile(const ``['Distribution-Type]``<RealType>& dist, const RealType& p);
@@ -229,7 +229,7 @@ Returns the standard deviation of distribution /dist/.
 This function may return a __domain_error if the distribution does not have
 a defined standard deviation.
 
-[h4 [#math.dist.variance]variance]
+[h4 [#math.dist.variance]Variance]
 
    template <class RealType>
    RealType variance(const ``['Distribution-Type]``<RealType>& dist);
@@ -239,7 +239,7 @@ Returns the variance of the distribution /dist/.
 This function may return a __domain_error if the distribution does not have
 a defined variance.
 
-[h4 [#math.dist.skewness]skewness]
+[h4 [#math.dist.skewness]Skewness]
 
    template <class RealType>
    RealType skewness(const ``['Distribution-Type]``<RealType>& dist);
@@ -249,7 +249,7 @@ Returns the skewness of the distribution /dist/.
 This function may return a __domain_error if the distribution does not have
 a defined skewness.
 
-[h4 [#math.dist.kurtosis]kurtosis]
+[h4 [#math.dist.kurtosis]Kurtosis]
 
    template <class RealType>
    RealType kurtosis(const ``['Distribution-Type]``<RealType>& dist);
@@ -274,7 +274,7 @@ a defined kurtosis.
 
 'Proper' kurtosis can have a value from zero to + infinity.
 
-[h4 [#math.dist.kurtosis_excess]kurtosis excess]
+[h4 [#math.dist.kurtosis_excess]Kurtosis excess]
 
    template <class RealType>
    RealType kurtosis_excess(const ``['Distribution-Type]``<RealType>& dist);
