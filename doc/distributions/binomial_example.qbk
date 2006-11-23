@@ -94,8 +94,8 @@ then we would *not* have divided by two.
          // Confidence value:
          cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
          // Calculate bounds of interval:
-         double l = binomial::estimate_lower_bound_on_p(trials, successes, alpha[i]/2);
-         double u = binomial::estimate_upper_bound_on_p(trials, successes, alpha[i]/2);
+         double l = binomial_distribution<>::estimate_lower_bound_on_p(trials, successes, alpha[i]/2);
+         double u = binomial_distribution<>::estimate_upper_bound_on_p(trials, successes, alpha[i]/2);
          // Print Limits:
          cout << fixed << setprecision(5) << setw(15) << right << l;
          cout << fixed << setprecision(5) << setw(15) << right << u << endl;
