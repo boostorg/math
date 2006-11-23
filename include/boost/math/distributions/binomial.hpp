@@ -88,7 +88,7 @@
 
 #if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 #  pragma warning(push)
-#  pragma warning(disable: 4702) // unreachable code
+//#  pragma warning(disable: 4702) // unreachable code
 // in domain_error_imp in error_handling
 #endif
 
@@ -190,7 +190,7 @@ namespace boost
       }
 
       // Estimation of the success fraction parameter.
-      // The best estimate is actually simply successes/trials, 
+      // The best estimate is actually simply successes/trials,
       // these functions are used
       // to obtain confidence intervals for the success fraction:
       //
@@ -409,7 +409,7 @@ namespace boost
         if (p == 1)
         { // This is correct but needs explanation:
           // when k = 1
-          // all the cdf and pdf values are zero *except* when k == n, 
+          // all the cdf and pdf values are zero *except* when k == n,
           // and that case has been handled above already.
           return 0;
         }
@@ -556,6 +556,10 @@ namespace boost
            // so n is the most sensible answer here:
            return dist.trials();
         }
+        if (p <= pow(1 - dist.success_fraction(), dist.trials()))
+        { // p <= pdf(dist, 0) == cdf(dist, 0)
+					return 0; // So the only reasonable result is zero.
+				} // And root finder would fail otherwise.
 
         // Solve for quantile numerically:
         //
@@ -604,11 +608,17 @@ namespace boost
            return 0;
         }
         if(q == 0)
-        {  // probability of greater than n successes is always zero,
+        {  // Probability of greater than n successes is always zero,
            // so n is the most sensible answer here:
            return dist.trials();
         }
 
+        if (-q <= powm1(1 - dist.success_fraction(), dist.trials()))
+        { // // q <= cdf(complement(dist, 0)) == pdf(dist, 0) 
+          return 0; // So the only reasonable result is zero.
+        } // And root finder would fail otherwise.
+
+        // Need to consider the case where 
         //
         // Solve for quantile numerically:
         //
