@@ -56,8 +56,8 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate bounds:
-      double l = binomial::estimate_lower_bound_on_p(trials, successes, alpha[i]/2);
-      double u = binomial::estimate_upper_bound_on_p(trials, successes, alpha[i]/2);
+      double l = binomial_distribution<>::estimate_lower_bound_on_p(trials, successes, alpha[i]/2);
+      double u = binomial_distribution<>::estimate_upper_bound_on_p(trials, successes, alpha[i]/2);
       // Print Limits:
       cout << fixed << setprecision(5) << setw(15) << right << l;
       cout << fixed << setprecision(5) << setw(15) << right << u << endl;
@@ -73,5 +73,72 @@ int main()
 
    return 0;
 } // int main()
+
+/*
+
+------ Build started: Project: binomial_confidence_limits, Configuration: Debug Win32 ------
+Compiling...
+binomial_confidence_limits.cpp
+Linking...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\binomial_confidence_limits.exe"
+___________________________________________
+2-Sided Confidence Limits For Success Ratio
+___________________________________________
+Number of Observations                  =  20
+Number of successes                     =  2
+Sample frequency of occurrence          =  0.1
+___________________________________________
+Confidence        Lower          Upper
+ Value (%)        Limit          Limit
+___________________________________________
+    50.000        0.08701        0.18675
+    75.000        0.06229        0.23163
+    90.000        0.04217        0.28262
+    95.000        0.03207        0.31698
+    99.000        0.01764        0.38713
+    99.900        0.00786        0.47093
+    99.990        0.00358        0.54084
+    99.999        0.00165        0.60020
+___________________________________________
+2-Sided Confidence Limits For Success Ratio
+___________________________________________
+Number of Observations                  =  200
+Number of successes                     =  20
+Sample frequency of occurrence          =  0.1000000
+___________________________________________
+Confidence        Lower          Upper
+ Value (%)        Limit          Limit
+___________________________________________
+    50.000        0.08929        0.11824
+    75.000        0.08023        0.12959
+    90.000        0.07144        0.14199
+    95.000        0.06618        0.15021
+    99.000        0.05664        0.16698
+    99.900        0.04676        0.18756
+    99.990        0.03944        0.20571
+    99.999        0.03371        0.22226
+___________________________________________
+2-Sided Confidence Limits For Success Ratio
+___________________________________________
+Number of Observations                  =  2000
+Number of successes                     =  200
+Sample frequency of occurrence          =  0.1000000
+___________________________________________
+Confidence        Lower          Upper
+ Value (%)        Limit          Limit
+___________________________________________
+    50.000        0.09585        0.10491
+    75.000        0.09277        0.10822
+    90.000        0.08963        0.11172
+    95.000        0.08767        0.11399
+    99.000        0.08390        0.11850
+    99.900        0.07966        0.12385
+    99.990        0.07621        0.12845
+    99.999        0.07325        0.13256
+
+
+
+*/
+
 
 
