@@ -292,6 +292,7 @@ void test_spots(RealType)
   // http://www.adsciengineering.com/bpdcalc/index.php  for example
   // http://www.adsciengineering.com/bpdcalc/index.php?n=20&p=0.25&start=0&stop=20&Submit=Generate
   // Appears to use at least 80-bit long double for 32 decimal digits accuracy,
+  // but loses accuracy of display if leading zeros?
   // (if trailings zero then are exact values?)
   // so useful for testing 64-bit double accuracy.
   // P = 0.25, n = 20, k = 0 to 20
@@ -508,6 +509,14 @@ void test_spots(RealType)
           binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1.25)),
           static_cast<RealType>(0)), std::domain_error
        );
+
+    BOOST_CHECK_EQUAL(
+       quantile(
+          binomial_distribution<RealType>(static_cast<RealType>(16), static_cast<RealType>(0.25)),
+          static_cast<RealType>(0.01)), // Less than cdf == pdf(binomial_distribution<RealType>(16, 0.25), 0)
+          static_cast<RealType>(0) // so expect zero as best approximation.
+       );
+
     BOOST_CHECK_EQUAL(
        cdf(
           binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
