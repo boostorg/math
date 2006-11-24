@@ -1,0 +1,73 @@
+[section:error_eg Error Handling Example]
+
+See [link math_toolkit.special.error_handling error handling]
+for a detailed explanation of the mechanisn of handling errors,
+including the common "bad" arguments to distributions and functions.
+
+But, by default, *none of these exceptions will be raised*,
+and the most appropriate value, usually a NaN, will be returned.
+So, for example, without any attempt to deal with errors, if we write
+
+    cout << "Probability of Student's t is "
+      << boost::math::cdf(students_t(-1), -1) << endl; 
+
+the output will be:
+
+    Probability of Student's t is 1.#QNAN
+
+However, macros control whether an exception is raised, or not,
+for the following errors:
+
+  BOOST_MATH_THROW_ON_DOMAIN_ERROR
+  BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+  BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+  BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
+  BOOST_MATH_THROW_ON_DENORM_ERROR
+  BOOST_MATH_THROW_ON_LOGIC_ERROR
+
+[important These #defines *MUST* be *BEFORE* the function or distribution #include!]
+
+If defined, for example with
+
+  #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
+  
+before
+
+    #include <boost/math/distributions/students_t.hpp>
+
+then a domain_error exception will throw if we write
+
+  try
+  {
+     cout << "Probability of Student's t is "
+      << boost::math::cdf(students_t(-1), -1) << endl; // Bad arguments!
+  }
+  catch(const std::exception& e)
+  {
+    std::cout <<
+      "\n""Message from thrown exception was:\n   " << e.what() << std::endl;
+  }
+  
+and will output:
+  
+  Message from thrown exception was:
+  Error in function __thiscall
+  boost::math::students_t_distribution<double>::students_t_distribution(double):
+  Degrees of freedom argument is -1, but must be > 0 !
+  
+See [@../../example/error_handling_example.cpp error_handling_example.cpp]
+
+[caution If you enable throw but do NOT have try & catch block,
+then the program will terminate with an uncaught exception and probably abort.
+Therefore to get the benefit of helpful error messages, enabling *all exceptions
+and using try & catch* is recommended for all applications.
+However, for simplicity, the is not done for most examples.]
+  
+[endsect] [/section:error_eg Error Handling Example]
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
