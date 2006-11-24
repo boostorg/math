@@ -220,7 +220,7 @@ some typical applications in statistics.
 
 [section:backgrounders Backgrounders]
 [include implementation.qbk]
-[include error.qbk]
+[include error.qbk][/relative error NOT handling]
 [include lanczos.qbk]
 [include remez.qbk]
 [endsect][/section:backgrounds Backgrounders]
