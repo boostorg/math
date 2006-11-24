@@ -14,7 +14,12 @@ run students_t_example3.cpp ;
 run students_t_single_sample.cpp ;
 run students_t_two_samples.cpp ;
 
-
+run binomial_confidence_limits.cpp ;
+run binomial_sample_sizes.cpp ;
+run chi_square_std_dev_test.cpp ;
+run neg_binomial_sample_sizes.cpp ;
+run f_test.cpp ;
+run distribution_construction.cpp ;
 
 
 
