@@ -2,7 +2,6 @@
 
 [h4 Mathematical Formula and Sources for Distributions]
 
-
 [h4 Implemention philosophy]
 
 "First be right, then be fast."
@@ -49,7 +48,7 @@ In
 it is proposed that signalling a domain error is mandatory
 when the argument would give an mathematically undefined result.
 
-In Guideline 1, they propose:
+Guideline 1
 
 [:A mathematical function is said to be defined at a point a = (a1, a2, . . .)
 if the limits as x = (x1, x2, . . .) 'approaches a from all directions agree'.
@@ -62,128 +61,27 @@ it is NOT defined.
 [:The library function which approximates a mathematical function shall signal a domain error
 whenever evaluated with argument values for which the mathematical function is undefined.]
 
-And in Guideline 2:
+Guideline 2 
 
-[:The library function which approximates a mathematical function
+The library function which approximates a mathematical function
 shall signal a domain error whenever evaluated with argument values
-for which the mathematical function obtains a non-real value.]
+for which the mathematical function obtains a non-real value.
 
-This implementation follows these proposals.  Refer to the 
-[link math_toolkit.special.error_handling error handling reference] 
-for more information.
+This implementation is believed to follow these proposals.
+
+See [link math_toolkit.special.error_handling error handling]
+for a detailed explanation of the mechanism,
+and [link math_toolkit.dist.stat_tut.weg.error_eq error handling] and an example
+at [@../../example/error_handling_example.cpp error_handling_example.cpp]
+
+[caution If you enable throw but do NOT have try & catch block,
+then the program will terminate with an uncaught exception and probably abort.
+Therefore to get the benefit of helpful error messages, enabling *all* exceptions
+*and* using try&catch is recommended for all applications.
+However, for simplicity, the is not done for most examples.]
 
 [h4 Notes on Implementation of Specific Functions]
 
-[h4 Poisson Distribution - Optimization and Accuracy is quite complicated.]
-
-The general formula for calculating the CDF uses the incomplete gamma thus:
-
-  return gamma_Q(k+1, mean);
-
-But the case of small integral k is *very* common, so it is worth considering optimisation.
-
-The first obvious step is to use a finite sum of each pdf (Probability *density* function)
-for each value of k to build up the cdf (*cumulative* distribution function).
-
-This could be done using the pdf function for the distribution,
-for which there are two equivalent formulae:
-
-  return exp(-mean + log(mean) * k - lgamma(k+1));
-    
-  return gamma_P_derivative(k+1, mean); 
-
-The pdf would probably be more accurate using gamma_P_derivative.
-
-The reason is that the expression:
-
-  -mean + log(mean) * k - lgamma(k+1)
-
-Will produce a value much smaller than the largest of the terms, so you get 
-cancellation error: and then when you pass the result to exp() which 
-converts the absolute error in it's argument to a relative error in the 
-result (explanation available if required), you effectively amplify the 
-error further still.
-
-gamma_p_derivative is just a thin wrapper around some of the internals of 
-the incomplete gamma, it does its upmost to avoid issues like this, because 
-this function is responsible for virtually all of the error in the result. 
-Hopefully further advances in the future might improve things even further 
-(what is really needed is an 'accurate' pow(1+x) function, but that's a whole 
-other story!).
-
-But calling pdf function makes repeated, redundant, checks on the value of mean and k,
-
-  result += pdf(dist, i);
-  
-so it may be faster to substitute the formula for the pdf in a summation loop
-
-  result += exp(-mean) * pow(mean, i) / unchecked_factorial(i);
-
-(simplified by removing casting from RealType).
-
-Of course, mean is unchanged during this summation,
-so exp(mean) should only be calculated once, outside the loop.
-
-Optimising compilers 'might' do this, but one can easily ensure this.
-
-Obviously too, k must be small enough that unchecked_factorial is OK:
-34 is an obvious choice as the limit for 32-bit float.
-For larger k, the number of iterations is like to be uneconomic.
-Only experiment can determine the optimum value of k
-for any particular RealType (float, double...)
-
-But also note that 
-
-The incomplete gamma already optimises this case
-(argument "a" is a small int),
-although only when the result q (1-p) would be < 0.5.
-
-And moreover, in the above series, each term can be calculated
-from the previous one much more efficiently:
-
-cdf = sum from 0 to k of C[k]
-
-with:
-
-C[0] = exp(-mean)
-
-C[N+1] = C[N] * mean / (N+1)
-
-So hopefully that's:
-
-     {
-       RealType result = exp(-mean);
-       RealType term = result;
-       for(int i = 1; i <= k; ++i)
-       { // cdf is sum of pdfs.
-          term *= mean / i;
-          result += term;
-       }
-       return result;
-     }
-
-This is exactly the same finite sum as used by gamma_P/gamma_Q internally.
-
-As explained previously it's only used when the result
-
-p > 0.5 or 1-p = q < 0.5.
-
-The slight danger when using the sum directly like this, is that if 
-the mean is small and k is large then you're calculating a value ~1, so 
-conceivably you might overshoot slightly.  For this and other reasons in the 
-case when p < 0.5 and q > 0.5 gamma_P/gamma_Q use a different (infinite but 
-rapidly converging) sum, so that danger isn't present since you always 
-calculate the smaller of p and q.
-
-So... it's tempting to suggest that you just call gamma_P/gamma_Q as 
-required.  However, there is a slight benefit for the k = 0 case because you 
-avoid all the internal logic inside gamma_P/gamma_Q trying to figure out 
-which method to use etc.
-
-For the incomplete beta function, there are no simple finite sums 
-available (that I know of yet anyway), so when there's a choice between a 
-finite sum of the PDF and an incomplete beta call, the finite sum may indeed 
-win out in that case.
 
 [h4 Sources of Test Data]
 
@@ -211,7 +109,7 @@ negative binomial, poisson, beta, cauchy, chi-sequared, erlang,
 exponential, extreme value, Fish, gamma, laplace, logistic,
 lognormal, normal, parteo, student's t, triangular, uniform, and weibull.]
 
-It calculates pdf, cdf, survivor, log survivor, harard, tail areas,
+It calculates pdf, cdf, survivor, log survivor, hazard, tail areas,
 & critical values for 5 tail values.
 
 It is also the only independent source found for the Weibull distribution,
