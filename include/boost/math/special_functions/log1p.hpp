@@ -114,7 +114,9 @@ inline long double log1p(long double z)
 #endif
 
 #ifdef BOOST_HAS_LOG1P
-#  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
+#  if (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)) \
+   || defined(linux) || defined(__linux) || defined(__linux__) \
+   || defined(__hpux)
 template <>
 inline float log1p<float>(float x){ return ::log1pf(x); }
 template <>

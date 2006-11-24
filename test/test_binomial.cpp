@@ -83,35 +83,55 @@ void test_spot(
             BOOST_CHECK(quantile(complement(bn, Q)) < boost::math::tools::epsilon<RealType>() * 10);
          }
       }
-      // estimate success ratio:
-      BOOST_CHECK_CLOSE(
-         binomial_distribution<RealType>::estimate_lower_bound_on_p(
-            N, k, Q),
-         p, tol);
-      BOOST_CHECK_CLOSE(
-         binomial_distribution<RealType>::estimate_upper_bound_on_p(
-            N, k, P),
-         p, tol);
+      if(k > 0)
+      {
+         // estimate success ratio:
+         // Note lower bound uses a different formual imternally
+         // from upper bound, have to adjust things to prevent
+         // fencepost errors:
+         BOOST_CHECK_CLOSE(
+            binomial_distribution<RealType>::estimate_lower_bound_on_p(
+               N+1, k+1, Q),
+            p, tol);
+         BOOST_CHECK_CLOSE(
+            binomial_distribution<RealType>::estimate_upper_bound_on_p(
+               N, k, P),
+            p, tol);
 
-      if(Q < P)
-      {
-         BOOST_CHECK(
-            binomial_distribution<RealType>::estimate_lower_bound_on_p(
-               N, k, Q)
-               <
-            binomial_distribution<RealType>::estimate_upper_bound_on_p(
-               N, k, Q)
-               );
-      }
-      else
-      {
-         BOOST_CHECK(
-            binomial_distribution<RealType>::estimate_lower_bound_on_p(
-               N, k, P)
-               <
-            binomial_distribution<RealType>::estimate_upper_bound_on_p(
-               N, k, P)
-               );
+         if(Q < P)
+         {
+            BOOST_CHECK(
+               binomial_distribution<RealType>::estimate_lower_bound_on_p(
+                  N, k, Q)
+                  <=
+               binomial_distribution<RealType>::estimate_upper_bound_on_p(
+                  N, k, Q)
+                  );
+            BOOST_CHECK((
+               binomial_distribution<RealType>::estimate_lower_bound_on_p(
+                  N, k, Q)
+                  <= k/N) && (k/N <=
+               binomial_distribution<RealType>::estimate_upper_bound_on_p(
+                  N, k, Q))
+                  );
+         }
+         else
+         {
+            BOOST_CHECK(
+               binomial_distribution<RealType>::estimate_lower_bound_on_p(
+                  N, k, P)
+                  <=
+               binomial_distribution<RealType>::estimate_upper_bound_on_p(
+                  N, k, P)
+                  );
+            BOOST_CHECK(
+               (binomial_distribution<RealType>::estimate_lower_bound_on_p(
+                  N, k, P)
+                  <= k / N) && (k/N <=
+               binomial_distribution<RealType>::estimate_upper_bound_on_p(
+                  N, k, P))
+                  );
+         }
       }
       //
       // estimate sample size:

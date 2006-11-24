@@ -208,7 +208,12 @@ namespace boost
            BOOST_CURRENT_FUNCTION, trials, RealType(0), probability, &result))
         { return result; }
 
-        return ibeta_inv(successes + 1, trials - successes, probability);
+        if(successes == 0)
+           return 0;
+
+        // NOTE!!! This formual uses successes-1 to get the lower bound,
+        // see http://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
+        return ibeta_inv(successes, trials - successes, probability);
       }
       static RealType estimate_upper_bound_on_p(
          RealType trials,

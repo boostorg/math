@@ -188,12 +188,12 @@ are not currently used, but may be if further special functions are added.
 
 In addition, for efficient and accurate results, a __lanczos is highly desirable.
 You may be able to adapt an existing approximation from 
-[link ../../../../boost/math/special_functions/lanczos.hpp
+[@../../../../boost/math/special_functions/lanczos.hpp
 boost/math/special_functions/lanczos.hpp]: you will need change
 static_cast's to lexical_cast's, and the constants to /strings/ 
 (in order to ensure the coefficients aren't truncated to long double)
 and then specialise `lanczos_traits` for type T.  Otherwise you may have to hack 
-[link ../../tools/lanczos_generator.cpp 
+[@../../tools/lanczos_generator.cpp 
 libs/math/tools/lanczos_generator.cpp] to find a suitable
 approximation for your RealType.  The code will still compile if you don't do
 this, but both accuracy and efficiency will be greatly compromised in any
