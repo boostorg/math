@@ -262,8 +262,14 @@ void test_spots(RealType)
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(5.)), // mean
-      static_cast<RealType>(0)),  // k events. 
+      static_cast<RealType>(0)),  // k events (uses special case formula, not gamma). 
       static_cast<RealType>(0.006737946999085467), // probability.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(1.)), // mean
+      static_cast<RealType>(0)),  // k events (uses special case formula, not gamma). 
+      static_cast<RealType>(0.36787944117144233), // probability.
 			tolerance);
 
   BOOST_CHECK_CLOSE(
@@ -283,6 +289,17 @@ void test_spots(RealType)
      cdf(complement(poisson_distribution<RealType>(static_cast<RealType>(4.)), // mean
       static_cast<RealType>(5))),  // k events. 
       static_cast<RealType>(1 - 0.785130387030406), // probability.
+			tolerance);
+
+  BOOST_CHECK_CLOSE( // Complement CDF
+     cdf(complement(poisson_distribution<RealType>(static_cast<RealType>(4.)), // mean
+      static_cast<RealType>(0))),  // Zero k events (uses special case formula, not gamma).
+      static_cast<RealType>(0.98168436111126578), // probability.
+			tolerance);
+  BOOST_CHECK_CLOSE( // Complement CDF
+     cdf(complement(poisson_distribution<RealType>(static_cast<RealType>(1.)), // mean
+      static_cast<RealType>(0))),  // Zero k events (uses special case formula, not gamma).
+      static_cast<RealType>(0.63212055882855767), // probability.
 			tolerance);
 
   // Example where k is bigger than max_factorial (>34 for float)
@@ -319,7 +336,20 @@ void test_spots(RealType)
            poisson_distribution<RealType>(4),
            static_cast<RealType>(1 - 0.785130387030406))),  // complement.
            static_cast<RealType>(5), // Expect k = 5 events.
-         tolerance/5); 
+         tolerance/5);
+
+  BOOST_CHECK_EQUAL(boost::math::quantile( // Check case when probability < cdf(0) (== pdf(0))
+         poisson_distribution<RealType>(1),  // mean is small, so cdf and pdf(0) are about 0.35.
+         static_cast<RealType>(0.0001)),  //  probability < cdf(0).
+         static_cast<RealType>(0)); // Expect k = 0 events exactly.
+          
+  BOOST_CHECK_EQUAL(
+    boost::math::quantile(
+         complement(
+           poisson_distribution<RealType>(1),
+           static_cast<RealType>(0.9999))),  // complement, so 1-probability < cdf(0)
+           static_cast<RealType>(0)); // Expect k = 0 events exactly.
+
 
 } // template <class RealType>void test_spots(RealType)
 
