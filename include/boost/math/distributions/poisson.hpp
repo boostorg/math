@@ -8,39 +8,30 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// See http://en.wikipedia.org/wiki/Poisson_distribution
-
 // Poisson distribution is a discrete probability distribution.
 // It expresses the probability of a number (k) of
 // events, occurrences, failures or arrivals occurring in a fixed time,
 // assuming these events occur with a known average or mean rate (lambda)
 // and are independent of the time since the last event.
-
 // The distribution was discovered by Siméon-Denis Poisson (1781–1840).
 
-// The number of cars that pass through a certain point on a road during a given period of time.
-// The number of spelling mistakes a secretary makes while typing a single page.
-// The number of phone calls at a call center per minute.
-// The number of times a web server is accessed per minute.
-// The number of light bulbs that burn out in a certain amount of time.
-// The number of roadkill found per unit length of road.
-
 // Parameter lambda is the mean number of events in the given time interval.
-
-// http://documents.wolfram.com/v5/Add-onsLinks/StandardPackages/Statistics/DiscreteDistributions.html
-
 // The random variate k is the number of events, occurrences or arrivals.
 // k argument may be integral, signed, or unsigned, or floating point.
 // If necessary, it has already been promoted from an integral type.
 
 // Note that the Poisson distribution
 // (like others including the binomial, negative binomial & Bernoulli)
-// is strictly defined as a discrete function: only integral values of k are envisaged.
-// However because the method of calculation is using a continuous gamma function,
+// is strictly defined as a discrete function:
+// only integral values of k are envisaged.
+// However because the method of calculation uses a continuous gamma function,
 // it is convenient to treat it as if a continous function,
 // and permit non-integral values of k.
 // To enforce the strict mathematical model, users should use floor or ceil functions
 // on k outside this function to ensure that k is integral.
+
+// See http://en.wikipedia.org/wiki/Poisson_distribution
+// http://documents.wolfram.com/v5/Add-onsLinks/StandardPackages/Statistics/DiscreteDistributions.html
 
 #ifndef BOOST_MATH_SPECIAL_POISSON_HPP
 #define BOOST_MATH_SPECIAL_POISSON_HPP
@@ -372,7 +363,10 @@ namespace boost
       { // Probability for any k is unity, complement of zero.
         return 1;
       }
-
+      if (k == 0)
+      { // Avoid repeated checks on k and mean in gamma_P.
+       return -expm1(-mean);
+      }
       // Unlike un-complemented cdf (sum from 0 to k),
       // can't use finite sum from k+1 to infinity for small integral k,
       // anyway it is now done efficiently by gamma_P.
@@ -405,7 +399,10 @@ namespace boost
       }
       // if(p == 0) NOT necessarily zero!
       // Not necessarily any special value of k because is unlimited.
-
+			if (p <= exp(-dist.mean()))
+			{ // if p <= cdffor 0 events (== pdf for 0 events), then quantile must be zero.
+				return 0;
+			}
       return gamma_Q_inva(dist.mean(), p) -1;
    } // quantile
 
@@ -437,6 +434,10 @@ namespace boost
           return result;
         }
       }
+			if (-q <= expm1(-dist.mean()))
+			{ // if q <= cdf(complement for 0 events, then quantile must be zero.
+				return 0;
+			}
       return gamma_P_inva(dist.mean(), q) -1;
    } // quantile complement.
 
