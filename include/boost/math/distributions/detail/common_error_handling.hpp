@@ -11,6 +11,11 @@
 #include <boost/math/tools/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
+#endif
+
 namespace boost{ namespace math{ namespace detail{
 
 template <class RealType>
@@ -55,6 +60,9 @@ bool check_scale(
    return true;
 }
 
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 } // namespace detail
 } // namespace math
