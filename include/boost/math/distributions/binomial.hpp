@@ -211,7 +211,8 @@ namespace boost
         if(successes == 0)
            return 0;
 
-        // NOTE!!! This formual uses successes-1 to get the lower bound,
+        // NOTE!!! This formual uses "successes" not "successes+1" as usual
+        // to get the lower bound,
         // see http://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
         return ibeta_inv(successes, trials - successes, probability);
       }

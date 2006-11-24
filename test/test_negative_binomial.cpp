@@ -91,47 +91,79 @@ void test_spot( // Test a single spot value against 'known good' values.
         BOOST_CHECK(quantile(complement(bn, Q)) < boost::math::tools::epsilon<RealType>() * 10);
       }
     } 
-#if 0
     // estimate success ratio:
     BOOST_CHECK_CLOSE(
       negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
-      N, k, Q), 
+      N+k, N, P), 
       p, tol);
+    // Note we bump up the sample size here, purely for the sake of the test,
+    // internally the function has to adjust the sample size so that we get
+    // the right upper bound, our test undoes this, so we can verify the result.
     BOOST_CHECK_CLOSE(
       negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
-      N, k, P), 
+      N+k+1, N, Q), 
       p, tol);
 
     if(Q < P)
     {
+       //
+       // We check two things here, that the upper and lower bounds
+       // are the right way around, and that they do actually bracket
+       // the naive estimate of p = successes / (sample size)
+       //
       BOOST_CHECK(
         negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
-        N, k, Q)
-        < 
+        N+k, N, Q)
+        <= 
         negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
-        N, k, Q)
+        N+k, N, Q)
+        );
+      BOOST_CHECK(
+        negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
+        N+k, N, Q)
+        <= 
+        N / (N+k)
+        );
+      BOOST_CHECK(
+        N / (N+k)
+        <= 
+        negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
+        N+k, N, Q)
         );
     }
     else
     {
+       // As above but when P is small.
       BOOST_CHECK(
         negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
-        N, k, P)
-        < 
+        N+k, N, P)
+        <= 
         negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
-        N, k, P)
+        N+k, N, P)
+        );
+      BOOST_CHECK(
+        negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
+        N+k, N, P)
+        <= 
+        N / (N+k)
+        );
+      BOOST_CHECK(
+        N / (N+k)
+        <= 
+        negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
+        N+k, N, P)
         );
     }
-#endif
+
     // Estimate sample size:
     BOOST_CHECK_CLOSE(
       negative_binomial_distribution<RealType>::estimate_number_of_trials(
       k, p, P), 
-      N, tol);
+      N+k, tol);
     BOOST_CHECK_CLOSE(
       negative_binomial_distribution<RealType>::estimate_number_of_trials(
       boost::math::complement(k, p, Q)), 
-      N, tol);
+      N+k, tol);
 
     // Double check consistency of CDF and PDF by computing the finite sum:
     RealType sum = 0;
@@ -571,6 +603,7 @@ if(std::numeric_limits<RealType>::is_specialized)
 
 int test_main(int, char* [])
 {
+  test_spots(0.0); // Test double.
   // Check that can generate negative_binomial distribution using the two convenience methods:
   using namespace boost::math;
 	negative_binomial mynb1(2., 0.5); // Using typedef - default type is double.

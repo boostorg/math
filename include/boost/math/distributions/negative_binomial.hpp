@@ -162,14 +162,13 @@ namespace boost
       {
         RealType result;  // of error checks.
         RealType failures = trials - successes;
-        if(false == negative_binomial_detail::check_successes(BOOST_CURRENT_FUNCTION, successes, &result)
-          && detail::check_probability(BOOST_CURRENT_FUNCTION, probability, &result)
+        if(false == detail::check_probability(BOOST_CURRENT_FUNCTION, probability, &result)
           && negative_binomial_detail::check_dist_and_k(
-          BOOST_CURRENT_FUNCTION, trials, RealType(0), failures, &result))
+          BOOST_CURRENT_FUNCTION, successes, RealType(0), failures, &result))
         {
           return result;
         }
-        return ibeta_inv(successes + 1, failures, probability);
+        return ibeta_inv(successes, failures + 1, probability);
       } // estimate_lower_bound_on_p
 
       static RealType estimate_upper_bound_on_p(
@@ -180,15 +179,18 @@ namespace boost
         RealType result;  // of error checks.
         RealType failures = trials - successes;
         if(false == negative_binomial_detail::check_dist_and_k(
-          BOOST_CURRENT_FUNCTION, failures, RealType(0), failures, &result)
-          && detail::check_probability(BOOST_CURRENT_FUNCTION, probability, &result)
-          && negative_binomial_detail::check_successes(
-          BOOST_CURRENT_FUNCTION, successes, &result))
+          BOOST_CURRENT_FUNCTION, successes, RealType(0), failures, &result)
+          && detail::check_probability(BOOST_CURRENT_FUNCTION, probability, &result))
         {
           return result;
         }
+        if(failures == 0)
+           return successes;
         // Use complement ibetac_inv function for upper bound.
-        return ibetac_inv(successes + 1, failures, probability);
+        // Note adjusted failures value: *not* failures+1 as usual.
+        // This is adapted from the corresponding binomial formula
+        // here: http://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
+        return ibetac_inv(successes, failures/* + 1*/, probability);
       } // estimate_upper_bound_on_p
 
       // Estimate number of trials :
@@ -202,13 +204,11 @@ namespace boost
         // Error checks:
         RealType result;
         if(false == negative_binomial_detail::check_dist_and_k(
-          BOOST_CURRENT_FUNCTION, k, p, k, &result)
-          && // Is this right - check dist twice?
-          negative_binomial_detail::check_dist_and_prob(
-          BOOST_CURRENT_FUNCTION, k, p, probability, &result))
+          BOOST_CURRENT_FUNCTION, RealType(1), p, k, &result)
+          && detail::check_probability(BOOST_CURRENT_FUNCTION, probability, &result))
         { return result; }
 
-        result = ibetac_invb(k + 1, p, probability);  // returns n - k
+        result = ibeta_inva(k + 1, p, probability);  // returns n - k
         return result + k;
       } // RealType estimate_number_of_failures
 
@@ -224,13 +224,11 @@ namespace boost
         // Error checks:
         RealType result;
         if(false == negative_binomial_detail::check_dist_and_k(
-          BOOST_CURRENT_FUNCTION, k, p, k, &result)
-          &&  // Is this right - check dist twice?
-          negative_binomial_detail::check_dist_and_prob(
-          BOOST_CURRENT_FUNCTION, k, p, Q, &result))
+          BOOST_CURRENT_FUNCTION, RealType(1), p, k, &result)
+          &&  detail::check_probability(BOOST_CURRENT_FUNCTION, Q, &result))
         { return result; }
 
-        result = ibeta_invb(k + 1, p, Q);  // returns n - k
+        result = ibetac_inva(k + 1, p, Q);  // returns n - k
         return result + k;
       } // RealType estimate_number_of_trials complemented
 
