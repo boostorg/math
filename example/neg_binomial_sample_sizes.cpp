@@ -40,12 +40,12 @@ void estimate_number_of_trials(double failures, double p)
    // Define a table of significance levels:
    double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
 
-  cout << "\n""Number of failures = " << failures;
+  cout << "\n""Target number of failures = " << failures;
   cout << ",   Success fraction = " << 100 * p << "%" << endl;
    // Print table header:
    cout << "\n\n"
            "____________________________\n"
-           "Confidence        Max Number\n"
+           "Confidence        Min Number\n"
            " Value (%)        Of Trials \n"
            "____________________________\n";
    // Now print out the data for the table rows.

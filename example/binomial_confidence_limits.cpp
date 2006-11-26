@@ -67,9 +67,9 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
 
 int main()
 {
-   confidence_limits_on_frequency(20, 2);
-   confidence_limits_on_frequency(200, 20);
-   confidence_limits_on_frequency(2000, 200);
+   confidence_limits_on_frequency(20, 4);
+   confidence_limits_on_frequency(200, 40);
+   confidence_limits_on_frequency(2000, 400);
 
    return 0;
 } // int main()
@@ -84,59 +84,68 @@ Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\binomial_confiden
 ___________________________________________
 2-Sided Confidence Limits For Success Ratio
 ___________________________________________
+
 Number of Observations                  =  20
-Number of successes                     =  2
-Sample frequency of occurrence          =  0.1
+Number of successes                     =  4
+Sample frequency of occurrence          =  0.2
+
+
 ___________________________________________
 Confidence        Lower          Upper
  Value (%)        Limit          Limit
 ___________________________________________
-    50.000        0.08701        0.18675
-    75.000        0.06229        0.23163
-    90.000        0.04217        0.28262
-    95.000        0.03207        0.31698
-    99.000        0.01764        0.38713
-    99.900        0.00786        0.47093
-    99.990        0.00358        0.54084
-    99.999        0.00165        0.60020
+    50.000        0.12840        0.29588
+    75.000        0.09775        0.34633
+    90.000        0.07135        0.40103
+    95.000        0.05733        0.43661
+    99.000        0.03576        0.50661
+    99.900        0.01905        0.58632
+    99.990        0.01042        0.64997
+    99.999        0.00577        0.70216
+
 ___________________________________________
 2-Sided Confidence Limits For Success Ratio
 ___________________________________________
+
 Number of Observations                  =  200
-Number of successes                     =  20
-Sample frequency of occurrence          =  0.1000000
+Number of successes                     =  40
+Sample frequency of occurrence          =  0.2000000
+
+
 ___________________________________________
 Confidence        Lower          Upper
  Value (%)        Limit          Limit
 ___________________________________________
-    50.000        0.08929        0.11824
-    75.000        0.08023        0.12959
-    90.000        0.07144        0.14199
-    95.000        0.06618        0.15021
-    99.000        0.05664        0.16698
-    99.900        0.04676        0.18756
-    99.990        0.03944        0.20571
-    99.999        0.03371        0.22226
+    50.000        0.17949        0.22259
+    75.000        0.16701        0.23693
+    90.000        0.15455        0.25225
+    95.000        0.14689        0.26223
+    99.000        0.13257        0.28218
+    99.900        0.11703        0.30601
+    99.990        0.10489        0.32652
+    99.999        0.09492        0.34485
+
 ___________________________________________
 2-Sided Confidence Limits For Success Ratio
 ___________________________________________
+
 Number of Observations                  =  2000
-Number of successes                     =  200
-Sample frequency of occurrence          =  0.1000000
+Number of successes                     =  400
+Sample frequency of occurrence          =  0.2000000
+
+
 ___________________________________________
 Confidence        Lower          Upper
  Value (%)        Limit          Limit
 ___________________________________________
-    50.000        0.09585        0.10491
-    75.000        0.09277        0.10822
-    90.000        0.08963        0.11172
-    95.000        0.08767        0.11399
-    99.000        0.08390        0.11850
-    99.900        0.07966        0.12385
-    99.990        0.07621        0.12845
-    99.999        0.07325        0.13256
-
-
+    50.000        0.19382        0.20638
+    75.000        0.18965        0.21072
+    90.000        0.18537        0.21528
+    95.000        0.18267        0.21821
+    99.000        0.17745        0.22400
+    99.900        0.17150        0.23079
+    99.990        0.16658        0.23657
+    99.999        0.16233        0.24169
 
 */
 

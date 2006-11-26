@@ -91,7 +91,7 @@ void test_spot(
          // fencepost errors:
          BOOST_CHECK_CLOSE(
             binomial_distribution<RealType>::estimate_lower_bound_on_p(
-               N+1, k+1, Q),
+               N, k+1, Q),
             p, tol);
          BOOST_CHECK_CLOSE(
             binomial_distribution<RealType>::estimate_upper_bound_on_p(

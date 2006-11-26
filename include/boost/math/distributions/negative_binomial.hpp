@@ -185,12 +185,17 @@ namespace boost
           return result;
         }
         if(failures == 0)
-           return successes;
+           return 1;
         // Use complement ibetac_inv function for upper bound.
         // Note adjusted failures value: *not* failures+1 as usual.
         // This is adapted from the corresponding binomial formula
         // here: http://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
-        return ibetac_inv(successes, failures/* + 1*/, probability);
+        // This is a Clopper-Pearson interval, and may be overly conservative,
+        // see also "A Simple Improved Inferential Method for Some
+        // Discrete Distributions" Yong CAI and K. KRISHNAMOORTHY
+        // http://www.ucs.louisiana.edu/~kxk4695/Discrete_new.pdf
+        //
+        return ibetac_inv(successes, failures, probability);
       } // estimate_upper_bound_on_p
 
       // Estimate number of trials :

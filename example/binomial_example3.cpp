@@ -22,6 +22,8 @@ using std::endl;
 using std::ios;
 using std::showpoint;
 #include <iomanip>
+using std::fixed;
+using std::setw;
 #include <boost/math/distributions/binomial.hpp>
 
 int main()
@@ -49,25 +51,26 @@ int main()
 
   cout.setf(ios::showpoint); // Trailing zeros to show significant decimal digits.
   cout.precision(5); // Should be able to calculate this?
+  cout << fixed;
   //  Binomial distribution.
   
   // Note  that  cdf(dist, k) is equivalent to NAG library plek probability of <= k
   // cdf(complement(dist, k)) is equivalent to NAG library pgtk probability of > k
-  //             pdf(dist, k) is equivalent to NAG library plek probability of == k
+  //             pdf(dist, k) is equivalent to NAG library peqk probability of == k
 
-  cout << " n       p      k    plek    pgtk    pegk " << endl;
+  cout << " n        p     k     plek     pgtk     peqk " << endl;
   binomial_distribution<>one(4, 0.5);
-  cout << one.trials() <<  " "  << one.success_fraction() << "   "<< 2 << " "
-    << cdf(one, 2) << " " << cdf(complement(one, 2)) << " " << pdf(one, 2) << endl;
+  cout << setw(4) << (int)one.trials() <<  "  "  << one.success_fraction() << "   "<< 2 << "  "
+    << cdf(one, 2) << "  " << cdf(complement(one, 2)) << "  " << pdf(one, 2) << endl;
   binomial_distribution<>two(19, 0.440);
-  cout << two.trials() <<  " "  << two.success_fraction() << "  " << 13 << " "
-    << cdf(two, 13) << " " << cdf(complement(two, 13)) << " " << pdf(two, 13) << endl;
+  cout << setw(4) << (int)two.trials() <<  "  "  << two.success_fraction() << "  " << 13 << "  "
+    << cdf(two, 13) << "  " << cdf(complement(two, 13)) << "  " << pdf(two, 13) << endl;
   binomial_distribution<>three(100, 0.750);
-  cout << three.trials() <<  " "  << three.success_fraction() << "  " << 67 << " "
-    << cdf(three, 67) << " " << cdf(complement(three, 67)) << " " << pdf(three, 67) << endl;
+  cout << setw(4) << (int)three.trials() <<  "  "  << three.success_fraction() << "  " << 67 << "  "
+    << cdf(three, 67) << "  " << cdf(complement(three, 67)) << "  " << pdf(three, 67) << endl;
   binomial_distribution<>four(2000, 0.330);
-  cout << four.trials() <<  " "  << four.success_fraction() << " " << 700 << " "
-    << cdf(four, 700) << " " << cdf(complement(four, 700)) << " " << pdf(four, 700) << endl;
+  cout << setw(4) << (int)four.trials() <<  "  "  << four.success_fraction() << " " << 700 << "  "
+    << cdf(four, 700) << "  " << cdf(complement(four, 700)) << "  " << pdf(four, 700) << endl;
 
   return 0;
 } // int main()

@@ -103,7 +103,7 @@ then we would *not* have divided by two.
       cout << endl;
    }
 
-And that's all there is to it.  Let's see some sample output for a 1 in 10
+And that's all there is to it.  Let's see some sample output for a 2 in 10
 success ratio, first for 20 trials:
 
 [pre'''___________________________________________
@@ -111,26 +111,32 @@ success ratio, first for 20 trials:
 ___________________________________________
 
 Number of Observations                  =  20
-Number of successes                     =  2
-Sample frequency of occurrence          =  0.1
+Number of successes                     =  4
+Sample frequency of occurrence          =  0.2
 
 
 ___________________________________________
 Confidence        Lower          Upper
  Value (%)        Limit          Limit
 ___________________________________________
-    50.000        0.08701        0.18675
-    75.000        0.06229        0.23163
-    90.000        0.04217        0.28262
-    95.000        0.03207        0.31698
-    99.000        0.01764        0.38713
-    99.900        0.00786        0.47093
-    99.990        0.00358        0.54084
-    99.999        0.00165        0.60020
+    50.000        0.12840        0.29588
+    75.000        0.09775        0.34633
+    90.000        0.07135        0.40103
+    95.000        0.05733        0.43661
+    99.000        0.03576        0.50661
+    99.900        0.01905        0.58632
+    99.990        0.01042        0.64997
+    99.999        0.00577        0.70216
 ''']
 
 As you can see, even at the 95% confidence level the bounds are
-really quite wide.  Compare that with the program output for
+really quite wide (this example is chosen to be easily compared to the one
+in the __handbook
+[@http://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
+here]). 
+
+
+Compare that with the program output for
 2000 trials:
 
 [pre'''___________________________________________
@@ -138,26 +144,26 @@ really quite wide.  Compare that with the program output for
 ___________________________________________
 
 Number of Observations                  =  2000
-Number of successes                     =  200
-Sample frequency of occurrence          =  0.1000000
+Number of successes                     =  400
+Sample frequency of occurrence          =  0.2000000
 
 
 ___________________________________________
 Confidence        Lower          Upper
  Value (%)        Limit          Limit
 ___________________________________________
-    50.000        0.09585        0.10491
-    75.000        0.09277        0.10822
-    90.000        0.08963        0.11172
-    95.000        0.08767        0.11399
-    99.000        0.08390        0.11850
-    99.900        0.07966        0.12385
-    99.990        0.07621        0.12845
-    99.999        0.07325        0.13256
+    50.000        0.19382        0.20638
+    75.000        0.18965        0.21072
+    90.000        0.18537        0.21528
+    95.000        0.18267        0.21821
+    99.000        0.17745        0.22400
+    99.900        0.17150        0.23079
+    99.990        0.16658        0.23657
+    99.999        0.16233        0.24169
 ''']
 
 Now even when the confidence level is very high, the limits are really
-quite close to the experimentally calculated value of 0.1.
+quite close to the experimentally calculated value of 0.2.
 
 [endsect]
 
