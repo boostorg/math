@@ -5,13 +5,14 @@ It is not comprehensive and updated experiences are always welcome.
 Some effort has been made to suppress unhelpful warnings but it is difficult to achieve this on all systems.
 
 The code has been compiled and tested with:
-[table Compiler Notes]
+[table Compiler Notes
 [[Compiler][Platform][Notes]]
-[[Intel 9.1, 8.1 (Win32 and Linux)][]
-[[g++ Linux][HP-UX][problem with boost:array?]
-[[HP aCC][HP-UX][ warning from lambda library, numeric underflow in the test data]
-[Borland 5.8.2][][ almost works (doesn't compile the test suite, but does cope with *our* code I believe)]
-[[MSVC 8.0][Windows32][warning free at level 4]
+[[Intel 9.1, 8.1][Win32 and Linux][]]
+[[g++ Linux][HP-UX][problem with boost:array?]]
+[[HP aCC][HP-UX][ warning from lambda library, numeric underflow in the test data]]
+[[Borland 5.8.2][][almost works (doesn't compile the test suite, but does cope with *our* code I believe)]]
+[[MSVC 8.0][Windows32][warning free at level 4]]
+]
 
 [endsect][/section:compilers Compilers]
 

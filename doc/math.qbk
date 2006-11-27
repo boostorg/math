@@ -227,6 +227,7 @@ some typical applications in statistics.
 
 [section:status Status and Roadmap]
 [include roadmap.qbk]
+[include compilers.qbk]
 [include issues.qbk]
 [/include test_HTML4_symbols.qbk]
 [endsect][/section:status Status and Roadmap]
