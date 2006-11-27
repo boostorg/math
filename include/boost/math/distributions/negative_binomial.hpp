@@ -268,22 +268,21 @@ namespace boost
 
     template <class RealType>
     inline RealType kurtosis(const negative_binomial_distribution<RealType>& dist)
-    { // kurtosis of Negative Binomial distribution = r(1-p)/p.
+    { // kurtosis of Negative Binomial distribution
+      // http://en.wikipedia.org/wiki/Negative_binomial is kurtosis_excess so add 3
       RealType p = dist.success_fraction();
       RealType r = dist.successes();
-      return 6 / r +
-       (p * p) / r * (1 - p );
+      return 3 + (6 / r) + ((p * p) / (r * (1 - p)));
     } // kurtosis
 
      template <class RealType>
     inline RealType kurtosis_excess(const negative_binomial_distribution<RealType>& dist)
-    { // kurtosis of Negative Binomial distribution = r(1-p)/p.
+    { // kurtosis excess of Negative Binomial distribution
+      // http://mathworld.wolfram.com/Kurtosis.html table of kurtosis_excess
       RealType p = dist.success_fraction();
       RealType r = dist.successes();
-      return 6 / r +
-       (p * p) / r * (1 - p ) -3;
-    } // kurtosis
-
+      return (6 - p * (6-p)) / (r * (1-p));
+    } // kurtosis_excess
 
     template <class RealType>
     inline RealType variance(const negative_binomial_distribution<RealType>& dist)
@@ -383,8 +382,7 @@ namespace boost
 
       RealType p = dist.success_fraction();
       RealType r = dist.successes();
-
-      //check dist and p
+      // Check dist and P.
       RealType result;
       if(false == negative_binomial_detail::check_dist_and_prob
         (BOOST_CURRENT_FUNCTION, r, p, P, &result))
@@ -400,21 +398,26 @@ namespace boost
             "Probability argument is 1, which implies infinite failures !");
         return result;
        // usually means return +std::numeric_limits<RealType>::infinity();
+       // unless #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
       }
       if (P == 0)
-      { // No failures are allowed if P = 0.
-        return 0;
+      { // No failures are expected if P = 0.
+        return 0; // Total trials will be just dist.successes.
       }
-      using boost::math::ibeta_invb;
+      if (P <= pow(dist.success_fraction(), dist.successes()))
+      { // p <= pdf(dist, 0) == cdf(dist, 0)
+			   return 0;
+      }
       // Calculate quantile of negative_binomial using the inverse incomplete beta function.
+      using boost::math::ibeta_invb;
       return ibeta_invb(r, p, P) - 1; //
     } // RealType quantile(const negative_binomial_distribution dist, p)
 
       template <class RealType>
       RealType quantile(const complemented2_type<negative_binomial_distribution<RealType>, RealType>& c)
       { // Quantile or Percent Point Binomial function.
-        // Return the number of expected successes k for a given
-        // complement of the probability Q.
+        // Return the number of expected failures k for a given
+        // complement of the probability Q = 1 - P.
 
         // Error checks:
         RealType Q = c.param;
@@ -437,16 +440,23 @@ namespace boost
         if(Q == 1)
         {  // There may actually be no answer to this question,
            // since the probability of zero failures may be non-zero,
-           // but zero is the best we can do:
-           return 0;
+           return 0; // but zero is the best we can do:
+        }
+        if (-Q <= powm1(dist.success_fraction(), dist.successes()))
+        { // q <= cdf(complement(dist, 0)) == pdf(dist, 0) 
+           return 0; // 
         }
         if(Q == 0)
-        {  // Probability of greater than r failures is always zero,
-           // so r is the most sensible answer here.
-           return r;
+        {  // Probability 1 - Q  == 1 so infinite failures to achieve certainty.
+           // Would need +infinity failures for total confidence.
+           result = tools::overflow_error<RealType>(
+            BOOST_CURRENT_FUNCTION,
+            "Probability argument complement is 0, which implies infinite failures !");
+           return result;
+           // usually means return +std::numeric_limits<RealType>::infinity();
+           // unless #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
         }
-
-        return ibetac_invb(r, p, Q) -1;
+       return ibetac_invb(r, p, Q) -1;
       } // quantile complement
 
  } // namespace math
