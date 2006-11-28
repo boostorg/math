@@ -5,7 +5,7 @@ for a detailed explanation of the mechanisn of handling errors,
 including the common "bad" arguments to distributions and functions.
 
 But, by default, *none of these exceptions will be raised*,
-and the most appropriate value, usually a NaN, will be returned.
+and the most appropriate value, usually a NaN, or zero, will be returned.
 So, for example, without any attempt to deal with errors, if we write
 
     cout << "Probability of Student's t is "

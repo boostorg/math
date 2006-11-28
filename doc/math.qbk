@@ -147,7 +147,7 @@ and use the function's name as the link text]
 [template floorlr[x][lfloor][x][rfloor]]
 [template ceil[x] '''&#x2308;'''[x]'''&#x2309;''']
 
-[section:intro Introduction]
+[section:intro About the Math Toolkit] [/was Introduction]
 
 This library is work in progress, it is intended to fulfil several needs:
 
@@ -201,6 +201,8 @@ some typical applications in statistics.
 
 [endsect][/section:intro Introduction]
 
+[include structure.qbk] [/getting about]
+
 [section:dist Statistical Distributions and Functions]
 [include dist_tutorial.qbk]
 [include dist_reference.qbk]
@@ -240,7 +242,6 @@ some typical applications in statistics.
 [include relative_error.qbk]
 [include test_data.qbk]
 [endsect][/section: internal tools]
-
 [endsect][/section:toolkit Toolkit]
 
 [section:Using_UDT Use with User Defined Floating-Point Types]

@@ -38,6 +38,8 @@ set to activate the throwing of C++ exceptions from the default
 versions of the functions.  The various kind of errors are described 
 in more detail below.
 
+See also [@/../../example/error_handling_example.cpp error_handling_example.cpp]
+
 [#domain_error][h4 Domain Errors]
 
 When a special function is passed an argument that is outside the range

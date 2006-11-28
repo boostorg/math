@@ -1,0 +1,69 @@
+[section:structure  Getting About - Directory, Files, Namespaces & Configuration Macros]
+
+[h4 Directory File Structure for Boost Math Functions, Math Constants, & Statistics Distributions]
+
+[h4 boost\/math]
+
+#  *\/concepts* Prototype defining the *essential* features of a RealType class (see real_concept.hpp). Most applications will use `double` as the RealType (and short `typedef` names of distributions are reserved for this type where possible), a few will use `float` or `long double`, but it is also possible to use higher precision types like __NTL_RR or __NTL_quad_float that conform to the requirements specified by real_concept.
+
+#  *\/constants*  Templated definition of some highly accurate math constants (in constants.hpp).
+  
+#  *\/special_functions*  Math functions generally regarded as 'special', like beta, cbrt, erf, gamma, lgamma, tgamma ... (Some of these are specified in C++, and C99/TR1, and perhaps TR2).
+                     
+# *\/distributions*  Distributions used in mathematics and, especially, statistics: Gaussian, Students-t, Fisher, Binomial ...
+                     
+# *\/tools*  Tools used by functions, like evaluating polynomials, continued fractions, root finding, precision and limits, and by tests. Some will find application outside this package.
+  
+[h4 boost/libs]
+#   *\/doc*  Documentation source files in Quickbook format processed into html and pdf formats.
+   
+#   *\/examples*  Examples and demos of using math functions and distributions.
+   
+#   *\/test*  Test files, in various .cpp files, most using Boost.Test (some with test data as .ipp files, usually generated using NTL RR type with ample precision for the type, often for precisions suitable for up to 256-bit significand real types).
+   
+#   *\/tools* Programs used to generate test data.  Also changes to the
+[@http://shoup.net/ntl/ NTL] released package to provide a few additional (and vital) extra features.
+   
+   
+[h4 Namespaces for Boost Math Functions, Math Constants and Statistics Distributions]
+   
+All math functions and distributions are in `namespace boost::math`
+   
+So, for example, the Students-t distribution template in `namespace boost::math` is
+   
+   template <class RealType> class students_t_distribution
+   
+and can be instantiated with the help of the reserved name `students_t`(for `RealType  double`)
+   
+   typedef students_t_distribution<double> students_t;
+   
+   student_t mydist(10);
+   
+Functions not intended for use by applications are in `boost::math::detail`.
+
+Functions that may have more general use, like `digits` (significand), `max_value`, `min_value` and `epsilon` are in `boost::math::tools`.
+   
+[h4 Using Functions and Distributions]
+
+See [link math_toolkit.dist.stat_tut  Statistical Distributions Tutorial]
+[h4 Configuration Macros - Controlling Throwing of Exceptions]
+
+* *BOOST_MATH_THROW_ON_DOMAIN_ERROR*
+If the macro BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined when building the library, then a std::domain_error C++ exception is thrown.  Arugments outside defined range are common, and since several other errors, including pole_error, also may throw a domain_error, defining this macro is generally recommended to get helpful error messages, but using a try and catch blocks are also recommended.  See 
+
+* *BOOST_MATH_THROW_ON_OVERFLOW_ERROR* By default, overflow returns infinity. 
+* *BOOST_MATH_THROW_ON_UNDERFLOW_ERROR* By default, underflow returns zero. 
+* *BOOST_MATH_THROW_ON_DENORM_ERROR* By default, denormalization is ignored.
+* *BOOST_MATH_THROW_ON_POLE_ERROR* By default, pole error is the same as domain_error.
+
+See [link math_toolkit.special.error_handling Error handling]
+and [@../../example/error_handling_example.cpp error_handling_example.cpp].
+
+[endsect][/sect:structure Getting About - Directory, Namespace & File structure]
+
+[/ structure.qbk
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
