@@ -2,7 +2,7 @@
 
 See also the reference documentation for the __binomial_distrib.)
 
-[section:binom_conf Calculating Confidence Limits on the Frequency of Occurrence]
+[section:binom_conf Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution]
 
 Imagine you have a process that follows a binomial distribution: for each
 trial conducted, an event either occurs or does it does not, referred
@@ -167,7 +167,7 @@ quite close to the experimentally calculated value of 0.2.
 
 [endsect]
 
-[section:binom_size_eg Estimating Sample Sizes.]
+[section:binom_size_eg Estimating Sample Sizes for a Binomial Distribution.]
 
 Imagine you have a critical component that you know will fail in 1 in
 N "uses" (for some suitable definition of "use").  You may want to schedule

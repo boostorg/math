@@ -35,7 +35,7 @@ void estimate_number_of_trials(double failures, double p)
    // successes = required number of successes.
    //
    // Calculate how many trials we can have to ensure the
-   // required number of successes DOES exceed "successes".
+   // required number of failures DOES exceed "failures".
 
    // Define a table of significance levels:
    double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
@@ -53,7 +53,7 @@ void estimate_number_of_trials(double failures, double p)
    { // Confidence values %:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]) << "      "
       // estimate_number_of_trials
-      << setw(6) << right<< int(negative_binomial::estimate_number_of_trials(failures, p, alpha[i]/2))  << endl;
+      << setw(6) << right << (int)ceil(negative_binomial::estimate_number_of_trials(failures, p, alpha[i])) << endl;
    }
    cout << endl;
 } // void estimate_number_of_trials(double fails, double p)
@@ -68,7 +68,7 @@ int main()
 	 estimate_number_of_trials(500, 0.1);
 	 estimate_number_of_trials(5, 0.9);
 	 estimate_number_of_trials(10-5, 0.4); // See Evans example in Wikipedia.
-   return 0;
+    return 0;
 } // int main()
 
 
@@ -79,97 +79,125 @@ Compiling...
 neg_binomial_sample_sizes.cpp
 Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\neg_binomial_sample_sizes.exe"
-Number of failures = 5,   Success fraction = 50%
+
+Target number of failures = 5,   Success fraction = 50%
+
+
 ____________________________
-Confidence        Max Number
- Value (%)        Of Trials 
+Confidence        Min Number
+ Value (%)        Of Trials
 ____________________________
-    50.000          13
-    75.000          15
+    50.000          11
+    75.000          14
     90.000          17
-    95.000          19
-    99.000          23
+    95.000          18
+    99.000          22
     99.900          27
-    99.990          32
+    99.990          31
     99.999          36
-Number of failures = 50.000,   Success fraction = 50.000%
+
+
+Target number of failures = 50.000,   Success fraction = 50.000%
+
+
 ____________________________
-Confidence        Max Number
- Value (%)        Of Trials 
+Confidence        Min Number
+ Value (%)        Of Trials
 ____________________________
-    50.000         108
-    75.000         113
-    90.000         118
-    95.000         122
-    99.000         130
-    99.900         139
-    99.990         147
-    99.999         155
-Number of failures = 500.000,   Success fraction = 50.000%
+    50.000         101
+    75.000         109
+    90.000         115
+    95.000         119
+    99.000         128
+    99.900         137
+    99.990         146
+    99.999         154
+
+
+Target number of failures = 500.000,   Success fraction = 50.000%
+
+
 ____________________________
-Confidence        Max Number
- Value (%)        Of Trials 
+Confidence        Min Number
+ Value (%)        Of Trials
 ____________________________
-    50.000        1022
-    75.000        1038
-    90.000        1054
-    95.000        1064
-    99.000        1085
-    99.900        1110
-    99.990        1131
-    99.999        1150
-Number of failures = 50.000,   Success fraction = 10.000%
+    50.000        1001
+    75.000        1023
+    90.000        1043
+    95.000        1055
+    99.000        1078
+    99.900        1104
+    99.990        1126
+    99.999        1146
+
+
+Target number of failures = 50.000,   Success fraction = 10.000%
+
+
 ____________________________
-Confidence        Max Number
- Value (%)        Of Trials 
+Confidence        Min Number
+ Value (%)        Of Trials
 ____________________________
-    50.000         553
-    75.000         588
-    90.000         626
-    95.000         651
-    99.000         701
-    99.900         763
-    99.990         818
-    99.999         869
-Number of failures = 500.000,   Success fraction = 10.000%
+    50.000          56
+    75.000          58
+    90.000          60
+    95.000          61
+    99.000          63
+    99.900          66
+    99.990          68
+    99.999          71
+
+
+Target number of failures = 500.000,   Success fraction = 10.000%
+
+
 ____________________________
-Confidence        Max Number
- Value (%)        Of Trials 
+Confidence        Min Number
+ Value (%)        Of Trials
 ____________________________
-    50.000        5150
-    75.000        5254
-    90.000        5364
-    95.000        5434
-    99.000        5574
-    99.900        5739
-    99.990        5880
-    99.999        6006
-Number of failures = 5.000,   Success fraction = 90.000%
+    50.000         556
+    75.000         562
+    90.000         567
+    95.000         570
+    99.000         576
+    99.900         583
+    99.990         588
+    99.999         594
+
+
+Target number of failures = 5.000,   Success fraction = 90.000%
+
+
 ____________________________
-Confidence        Max Number
- Value (%)        Of Trials 
+Confidence        Min Number
+ Value (%)        Of Trials
 ____________________________
-    50.000           6
-    75.000           7
-    90.000           7
-    95.000           8
-    99.000           9
-    99.900          10
-    99.990          12
-    99.999          13
-Number of failures = 5.000,   Success fraction = 40.000%
+    50.000          57
+    75.000          73
+    90.000          91
+    95.000         103
+    99.000         127
+    99.900         159
+    99.990         189
+    99.999         217
+
+
+Target number of failures = 5.000,   Success fraction = 40.000%
+
+
 ____________________________
-Confidence        Max Number
- Value (%)        Of Trials 
+Confidence        Min Number
+ Value (%)        Of Trials
 ____________________________
-    50.000          17
-    75.000          20
-    90.000          23
-    95.000          25
-    99.000          30
-    99.900          36
-    99.990          42
-    99.999          48
+    50.000          10
+    75.000          11
+    90.000          13
+    95.000          15
+    99.000          18
+    99.900          21
+    99.990          25
+    99.999          28
+
 Build Time 0:03
 Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\neg_binomial_sample_sizes\Debug\BuildLog.htm"
 neg_binomial_sample_sizes - 0 error(s), 0 warning(s)

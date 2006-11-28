@@ -2,7 +2,7 @@
 
 (See also the reference documentation for the __negative_binomial_distrib.)
 
-[section:neg_binom_conf Calculating Confidence Limits on the Frequency of Occurrence]
+[section:neg_binom_conf Calculating Confidence Limits on the Frequency of Occurrence for the Negative Binomial Distribution]
 
 Imagine you have a process that follows a negative binomial distribution:
 for each trial conducted, an event either occurs or does it does not, referred
@@ -143,116 +143,120 @@ quite close to the experimentally calculated value of 0.1.
 
 [endsect][/section:neg_binom_conf Calculating Confidence Limits on the Frequency of Occurrence]
 
-[section:neg_binom_size_eg Estimating Sample Sizes.]
+[section:neg_binom_size_eg Estimating Sample Sizes for the Negative Binomial.]
 
-Imagine you have a critical component that you know will occur in 1 in
-N "uses" (for some suitable definition of "use").  You may want to schedule
-use of the component so that its chance of occurrence
-is greater than P%.  If the events follow a negative binomial
-distribution (each time the component is "used" it either succeeds or does not)
+Imagine you have an event (let's call it a "failure") that you know will 
+occur in 1 in N trials.  You may want to know how many trials you need to
+conduct to be 100P% sure of observing at least k such failures.  
+If the failure events follow a negative binomial
+distribution (each trial either succeeds or does not)
 then the static member function `negative_binomial_distibution<>::estimate_number_of_trials`
-can be used to estimate the minimum number of "uses" of that component for some
-probability P.
+can be used to estimate the minimum number of trials required to be 100P% sure
+of observing the desired number of failures.
 
 The example program 
 [@../../example/neg_binomial_sample_sizes.cpp neg_binomial_sample_sizes.cpp]
 demonstrates its usage.  It centres around a routine that prints out
-a table of maximum sample sizes for various probability thresholds:
+a table of minimum sample sizes for various probability thresholds:
 
    void estimate_max_sample_size(
       double p,              // success fraction.
-      unsigned successes)    // Total number of observed successes required.
+      unsigned failures)    // Total number of observed failures required.
    {
 
 The routine then declares a table of probability thresholds: these are the
-maximum acceptable probability that /successes/ or more events will be
-observed.  In our example, /successes/ will be always zero, since we want
-no component failures, but in other situations non-zero values may well
-make sense.
+maximum acceptable probability that /failure/ or fewer events will be
+observed.
 
    double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
 
 Much of the rest of the program is pretty-printing, the important part
-is in the calculation of maximum number of permitted trials for each
+is in the calculation of minimum number of trials required for each
 value of alpha:
 
+   cout << "\n""Target number of failures = " << failures;
+   cout << ",   Success fraction = " << 100 * p << "%" << endl;
+   
+   // Print table header:
+   cout << "\n\n"
+        "____________________________\n"
+        "Confidence        Min Number\n"
+        " Value (%)        Of Trials \n"
+        "____________________________\n";
+   
+   // Now print out the data for the table rows.
    for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
-   {
-      // Confidence value:
-      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
-      // calculate trials:
-      double t = binomial::estimate_number_of_trials(complement(successes, p, alpha[i]));
-      t = floor(t);
-      // Print Trials:
-      cout << fixed << setprecision(5) << setw(15) << right << t << endl;
+   { 
+      // Confidence values %:
+      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]) << "      "
+         // estimate_number_of_trials
+         << setw(6) << right 
+         << ceil(negative_binomial::estimate_number_of_trials(
+                     failures, p, alpha[i])) << endl;
    }
+   cout << endl;
 
-Note that since the value of alpha is the probability of observing
-[*more than /successes/ events], we have to wrap the arguments to
-`estimate_number_of_trials` in a call to complement: remember the binomial
-distribution deals in [*/successes/ or fewer events].  Finally, since we're
-calculating the maximum number of trials permitted, we'll err on the safe
-side and take the floor of the result.  Had we been calculating the
-/minimum/ number of trials required to observe a certain number of /successes/
-then we would have taken the ceiling instead.
+Note that since we're
+calculating the /minimum/ number of trials required, we'll err on the safe
+side and take the ceiling of the result.  Had we been calculating the
+/maximum/ number of trials permitted to observe less than a certain 
+number of /failures/ then we would have taken the ceiling instead.  We
+would also have wrapped the arguments to `estimate_number_of_trials` in
+a call to complement like this:
 
-We'll finish off by looking at some sample output, firstly for
-a 1 in 1000 chance of component failure with each use:
+   floor(negative_binomial::estimate_number_of_trials(
+            complement(failures, p, alpha[i])))
+            
+which would give us the largest number of trials we could conduct and
+still be 100P% sure of observing /failures or less/ failure events, when the
+probability of success is /p/.
+
+We'll finish off by looking at some sample output, firstly suppose
+we wish to observe at least 5 "failures" with a 50/50 chance of
+success or failure:
 
 [pre
-'''________________________
-Maximum Number of Trials
-________________________
-
-Success ratio                           =  0.001
-Maximum Number of "successes" permitted =  0
-
+'''Target number of failures = 5,   Success fraction = 50%
 
 ____________________________
-Confidence        Max Number
+Confidence        Min Number
  Value (%)        Of Trials
 ____________________________
-    50.000            692
-    75.000            287
-    90.000            105
-    95.000             51
-    99.000             10
-    99.900              0
-    99.990              0
-    99.999              0'''
+    50.000          11
+    75.000          14
+    90.000          17
+    95.000          18
+    99.000          22
+    99.900          27
+    99.990          31
+    99.999          36
+'''
 ]
 
-So 51 "uses" of the component would yield a 95% chance that no
-component failures would be observed.
+So 18 trials or more would yield a 95% chance that at least our 5
+required failures would be observed.
 
-Compare that with a 1 in 1 million chance of component failure:
+Compare that to what happens if the success ratio is 90%:
 
-[pre'''
-________________________
-Maximum Number of Trials
-________________________
-
-Success ratio                           =  0.0000010
-Maximum Number of "successes" permitted =  0
-
+[pre'''Target number of failures = 5.000,   Success fraction = 90.000%
 
 ____________________________
-Confidence        Max Number
+Confidence        Min Number
  Value (%)        Of Trials
 ____________________________
-    50.000         693146
-    75.000         287681
-    90.000         105360
-    95.000          51293
-    99.000          10050
-    99.900           1000
-    99.990            100
-    99.999             10'''
-]
+    50.000          57
+    75.000          73
+    90.000          91
+    95.000         103
+    99.000         127
+    99.900         159
+    99.990         189
+    99.999         217
+''']
 
-In this case, even 1000 uses of the component would still yield a 
-less than 1 in 1000 chance of observing a component failure 
-(99.9% chance of no failure).
+So now 103 trials are required to observe at least 5 failures with
+95% certainty.
+
 
 [endsect][/section:neg_binom_size_eg Estimating Sample Sizes.]
 

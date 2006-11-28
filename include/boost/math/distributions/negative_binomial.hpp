@@ -199,7 +199,7 @@ namespace boost
       } // estimate_upper_bound_on_p
 
       // Estimate number of trials :
-      // "How many trials do I need to be P% sure of seeing r successes?"
+      // "How many trials do I need to be P% sure of seeing k or fewer failures?"
 
       static RealType estimate_number_of_trials(
         RealType k,     // number of failures (k >= 0).
