@@ -1,6 +1,7 @@
 // test_negative_binomial.cpp
 
 // Copyright Paul A. Bristow 2006.
+// Copyright John Maddock 2006.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -10,6 +11,11 @@
 // Tests for Negative Binomial Distribution.
 
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
+// Note BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined - see below.
+// Note that there defines must be placed BEFORE #includes.
+// Nor are these defined - several tests underflow by design.
+//#define BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
+//#define BOOST_MATH_THROW_ON_DENORM_ERROR
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
@@ -69,7 +75,8 @@ void test_spot( // Test a single spot value against 'known good' values.
     else
     {
       // Just check quantile is very small:
-      if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent) && (boost::is_floating_point<RealType>::value))
+      if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent)
+        && (boost::is_floating_point<RealType>::value))
       {
         // Limit where this is checked: if exponent range is very large we may
         // run out of iterations in our root finding algorithm.
@@ -84,7 +91,8 @@ void test_spot( // Test a single spot value against 'known good' values.
     else
     {
       // Just check quantile is very small:
-      if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent) && (boost::is_floating_point<RealType>::value))
+      if((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent)
+        && (boost::is_floating_point<RealType>::value))
       {
         // Limit where this is checked: if exponent range is very large we may
         // run out of iterations in our root finding algorithm.
@@ -181,8 +189,8 @@ template <class RealType> // Any floating-point type RealType.
 void test_spots(RealType)
 {
   // Basic sanity checks, test data is to double precision only
-  // so set tolerance to 100eps expressed as a percent, or
-  // 100eps of type double expressed as a percent, whichever
+  // so set tolerance to 1000 eps expressed as a percent, or
+  // 1000 eps of type double expressed as a percent, whichever
   // is the larger.
 
   RealType tolerance = (std::max)
@@ -592,26 +600,47 @@ if(std::numeric_limits<RealType>::is_specialized)
   //static_cast<RealType>(189.56999032670058)  // 106.462769 for float
   //);
 
-  //BOOST_CHECK(
-  //quantile(  // At P == 1 so k failures should be infinite.
-  //negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
-  //static_cast<RealType>(1)) >=
-  ////static_cast<RealType>(boost::math::tools::infinity<RealType>())
-  //static_cast<RealType>(std::numeric_limits<RealType>::infinity())
-  //);
+if(std::numeric_limits<RealType>::has_infinity)
+{ // BOOST_CHECK tests for infinity using std::numeric_limits<>::infinity()
+  // Note that infinity is not implemented for real_concept, so these tests
+  // are only done for types, like built-in float, double.. that have infinity.
+  // Note that these assume that  BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined.
+  // #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR would give a throw here.
+  // #define BOOST_MATH_THROW_ON_DOMAIN_ERROR IS defined, so the throw path
+  // of error handling is tested below with BOOST_CHECK_THROW tests.
 
- //BOOST_CHECK_EQUAL(
-  //quantile(  // At 1 == P  so should be infinite.
-  //negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
-  //static_cast<RealType>(1)), //
-  //static_cast<RealType>(boost::math::tools::infinity<RealType>())  );
+  BOOST_CHECK(
+  quantile(  // At P == 1 so k failures should be infinite.
+  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+  static_cast<RealType>(1)) ==
+  //static_cast<RealType>(boost::math::tools::infinity<RealType>())
+  static_cast<RealType>(std::numeric_limits<RealType>::infinity()) );
+
+ BOOST_CHECK_EQUAL(
+  quantile(  // At 1 == P  so should be infinite.
+  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+  static_cast<RealType>(1)), //
+  std::numeric_limits<RealType>::infinity() );
+
+  BOOST_CHECK(
+  quantile(complement(  // Q very near to 1 so P nearly 1  < so should be large > 384.
+  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+  static_cast<RealType>(boost::math::tools::min_value<RealType>())))
+   >= static_cast<RealType>(384) );
 
   BOOST_CHECK_EQUAL(
-  quantile(  //  P ==  0 < cdf(0) so should be infinite.
+  quantile(complement(  // Q zero 1 so P == 1 < cdf(0) so should be exactly infinity.
+  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+  static_cast<RealType>(0))),
+  std::numeric_limits<RealType>::infinity() );
+
+ } // test for infinity using std::numeric_limits<>::infinity()
+
+  BOOST_CHECK_EQUAL(
+  quantile(  //  P ==  0 < cdf(0) so should be zero.
   negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
   static_cast<RealType>(0)),
   static_cast<RealType>(0));
-
 
   // Quantile Complement boundary cases:
 
