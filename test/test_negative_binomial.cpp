@@ -565,8 +565,7 @@ if(std::numeric_limits<RealType>::is_specialized)
   boost::math::tools::epsilon<RealType>() ); // Expect exact, but not quite.
   // numeric_limits<RealType>::epsilon()); // Not suitable for real concept!
 
-  // Quantile boundary cases:
-
+  // Quantile boundary cases checks:
   BOOST_CHECK_EQUAL(
   quantile(  // zero P < cdf(0) so should be exactly zero.
   negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
@@ -616,17 +615,11 @@ if(std::numeric_limits<RealType>::has_infinity)
   //static_cast<RealType>(boost::math::tools::infinity<RealType>())
   static_cast<RealType>(std::numeric_limits<RealType>::infinity()) );
 
- BOOST_CHECK_EQUAL(
+  BOOST_CHECK_EQUAL(
   quantile(  // At 1 == P  so should be infinite.
   negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
   static_cast<RealType>(1)), //
   std::numeric_limits<RealType>::infinity() );
-
-  BOOST_CHECK(
-  quantile(complement(  // Q very near to 1 so P nearly 1  < so should be large > 384.
-  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
-  static_cast<RealType>(boost::math::tools::min_value<RealType>())))
-   >= static_cast<RealType>(384) );
 
   BOOST_CHECK_EQUAL(
   quantile(complement(  // Q zero 1 so P == 1 < cdf(0) so should be exactly infinity.
@@ -635,6 +628,27 @@ if(std::numeric_limits<RealType>::has_infinity)
   std::numeric_limits<RealType>::infinity() );
 
  } // test for infinity using std::numeric_limits<>::infinity()
+else
+{ // real_concept case, so check it throws
+
+  BOOST_CHECK_THROW(
+  quantile(  // At P == 1 so k failures should be infinite.
+  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+  static_cast<RealType>(1)),
+  std::overflow_error );
+
+  BOOST_CHECK_THROW(
+  quantile(complement(  // Q zero 1 so P == 1 < cdf(0) so should be exactly infinity.
+  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+  static_cast<RealType>(0))),
+  std::overflow_error);
+
+}
+  BOOST_CHECK( // Should work for built-in and real_concept.
+  quantile(complement(  // Q very near to 1 so P nearly 1  < so should be large > 384.
+  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+  static_cast<RealType>(boost::math::tools::min_value<RealType>())))
+   >= static_cast<RealType>(384) );
 
   BOOST_CHECK_EQUAL(
   quantile(  //  P ==  0 < cdf(0) so should be zero.
@@ -911,27 +925,244 @@ int test_main(int, char* [])
 
 /*
 
------- Rebuild All started: Project: test_negative_binomial, Configuration: Debug Win32 ------
-Deleting intermediate and output files for project 'test_negative_binomial', configuration 'Debug|Win32'
+------ Build started: Project: test_negative_binomial, Configuration: Debug Win32 ------
 Compiling...
 test_negative_binomial.cpp
 Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_negative_binomial.exe"
 Running 1 test case...
+Tolerance = 2.22045e-011%.
+Tolerance 5 eps = 1.11022e-015%.
 BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
-0.40025683281803714 0.40025683281803681
+ Probability   quantile    expected failures
+quantile(my8dist, 0) == 0
+quantile(my8dist, denorm_min) == 0
+quantile(my8dist, min) == 0
+quantile(my8dist, epsilon) == 0
+quantile(my8dist, epsilon) == 0
+0.01 5.94544
+0.02 7.3077
+0.03 8.24308
+0.04 8.98404
+0.05 9.6108
+0.06 10.1615
+0.07 10.6575
+0.08 11.1123
+0.09 11.5345
+0.1 11.9306
+0.11 12.3052
+0.12 12.6617
+0.13 13.0029
+0.14 13.3309
+0.15 13.6474
+0.16 13.954
+0.17 14.2517
+0.18 14.5417
+0.19 14.8248
+0.2 15.1017
+0.21 15.3731
+0.22 15.6396
+0.23 15.9016
+0.24 16.1597
+0.25 16.4141
+0.26 16.6654
+0.27 16.9138
+0.28 17.1597
+0.29 17.4032
+0.3 17.6447
+0.31 17.8844
+0.32 18.1226
+0.33 18.3593
+0.34 18.5949
+0.35 18.8296
+0.36 19.0634
+0.37 19.2966
+0.38 19.5293
+0.39 19.7618
+0.4 19.994
+0.41 20.2263
+0.42 20.4587
+0.43 20.6915
+0.44 20.9246
+0.45 21.1584
+0.46 21.3928
+0.47 21.6282
+0.48 21.8645
+0.49 22.102
+0.5 22.3409
+0.51 22.5812
+0.52 22.8231
+0.53 23.0667
+0.54 23.3124
+0.55 23.5601
+0.56 23.8101
+0.57 24.0626
+0.58 24.3178
+0.59 24.5759
+0.6 24.837
+0.61 25.1015
+0.62 25.3695
+0.63 25.6413
+0.64 25.9172
+0.65 26.1975
+0.66 26.4825
+0.67 26.7725
+0.68 27.0679
+0.69 27.3691
+0.7 27.6765
+0.71 27.9907
+0.72 28.312
+0.73 28.6411
+0.74 28.9787
+0.75 29.3253
+0.76 29.6819
+0.77 30.0492
+0.78 30.4283
+0.79 30.8203
+0.8 31.2264
+0.81 31.6482
+0.82 32.0873
+0.83 32.5456
+0.84 33.0256
+0.85 33.53
+0.86 34.0621
+0.87 34.6259
+0.88 35.2264
+0.89 35.8699
+0.9 36.5643
+0.91 37.3201
+0.92 38.1514
+0.93 39.0777
+0.94 40.1276
+0.95 41.3448
+0.96 42.8019
+0.97 44.6337
+0.98 47.1381
+0.99 51.2478
+quantile(my8dist, 1-epsilon) == 189.57
+quantile(my8dist, 1) == 1.#INF
+__________
+quantile(complement(my8dist, zero)) == 1.#INF
+quantile(complement(my8dist, denorm_min)) == 2592.6
+quantile(complement(my8dist, min)) == 2588.78
+quantile(complement(my8dist, epsilon)) == 189.57
+0.01 0.99 51.2478
+0.02 0.98 47.1381
+0.03 0.97 44.6337
+0.04 0.96 42.8019
+0.05 0.95 41.3448
+0.06 0.94 40.1276
+0.07 0.93 39.0777
+0.08 0.92 38.1514
+0.09 0.91 37.3201
+0.1 0.9 36.5643
+0.11 0.89 35.8699
+0.12 0.88 35.2264
+0.13 0.87 34.6259
+0.14 0.86 34.0621
+0.15 0.85 33.53
+0.16 0.84 33.0256
+0.17 0.83 32.5456
+0.18 0.82 32.0873
+0.19 0.81 31.6482
+0.2 0.8 31.2264
+0.21 0.79 30.8203
+0.22 0.78 30.4283
+0.23 0.77 30.0492
+0.24 0.76 29.6819
+0.25 0.75 29.3253
+0.26 0.74 28.9787
+0.27 0.73 28.6411
+0.28 0.72 28.312
+0.29 0.71 27.9907
+0.3 0.7 27.6765
+0.31 0.69 27.3691
+0.32 0.68 27.0679
+0.33 0.67 26.7725
+0.34 0.66 26.4825
+0.35 0.65 26.1975
+0.36 0.64 25.9172
+0.37 0.63 25.6413
+0.38 0.62 25.3695
+0.39 0.61 25.1015
+0.4 0.6 24.837
+0.41 0.59 24.5759
+0.42 0.58 24.3178
+0.43 0.57 24.0626
+0.44 0.56 23.8101
+0.45 0.55 23.5601
+0.46 0.54 23.3124
+0.47 0.53 23.0667
+0.48 0.52 22.8231
+0.49 0.51 22.5812
+0.5 0.5 22.3409
+0.51 0.49 22.102
+0.52 0.48 21.8645
+0.53 0.47 21.6282
+0.54 0.46 21.3928
+0.55 0.45 21.1584
+0.56 0.44 20.9246
+0.57 0.43 20.6915
+0.58 0.42 20.4587
+0.59 0.41 20.2263
+0.6 0.4 19.994
+0.61 0.39 19.7618
+0.62 0.38 19.5293
+0.63 0.37 19.2966
+0.64 0.36 19.0634
+0.65 0.35 18.8296
+0.66 0.34 18.5949
+0.67 0.33 18.3593
+0.68 0.32 18.1226
+0.69 0.31 17.8844
+0.7 0.3 17.6447
+0.71 0.29 17.4032
+0.72 0.28 17.1597
+0.73 0.27 16.9138
+0.74 0.26 16.6654
+0.75 0.25 16.4141
+0.76 0.24 16.1597
+0.77 0.23 15.9016
+0.78 0.22 15.6396
+0.79 0.21 15.3731
+0.8 0.2 15.1017
+0.81 0.19 14.8248
+0.82 0.18 14.5417
+0.83 0.17 14.2517
+0.84 0.16 13.954
+0.85 0.15 13.6474
+0.86 0.14 13.3309
+0.87 0.13 13.0029
+0.88 0.12 12.6617
+0.89 0.11 12.3052
+0.9 0.1 11.9306
+0.91 0.09 11.5345
+0.92 0.08 11.1123
+0.93 0.07 10.6575
+0.94 0.06 10.1615
+0.95 0.05 9.6108
+0.96 0.04 8.98404
+0.97 0.03 8.24308
+0.98 0.02 7.3077
+0.99 0.01 5.94544
+quantile(complement(my8dist, 1-epsilon)) == 0
+quantile(complement(my8dist, 1)) == 0
+__________
+0.40025683281803698 0.40025683281803687
 Tolerance = 0.0119209%.
+Tolerance 5 eps = 5.96046e-007%.
 Tolerance = 2.22045e-011%.
+Tolerance 5 eps = 1.11022e-015%.
 Tolerance = 2.22045e-011%.
+Tolerance 5 eps = 1.11022e-015%.
 Tolerance = 2.22045e-011%.
+Tolerance 5 eps = 1.11022e-015%.
 *** No errors detected
-Build Time 2:59
+Build Time 0:08
 Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_negative_binomial\Debug\BuildLog.htm"
 test_negative_binomial - 0 error(s), 0 warning(s)
-========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
-
-But is SLOW - about 3 min using real_concept.
 
 
 */
