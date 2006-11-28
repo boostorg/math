@@ -12,6 +12,9 @@ is often not an easy task, and one to which many books have been devoted.
 To use this tool, you will need to have a reasonable grasp of what the Remez
 algorithm is, and the general form of the approximation you want to achieve.
 
+There is a background article explaining the principals behind the Remez
+algorithm [link math_toolkit.backgrounders.the_remez_method here].
+
 The program consists of two parts:
 
 [variablelist

@@ -7,11 +7,16 @@ Some effort has been made to suppress unhelpful warnings but it is difficult to 
 The code has been compiled and tested with:
 [table Compiler Notes
 [[Compiler][Platform][Notes]]
-[[Intel 9.1, 8.1][Win32 and Linux][]]
-[[g++ Linux][HP-UX][problem with boost:array?]]
-[[HP aCC][HP-UX][ warning from lambda library, numeric underflow in the test data]]
-[[Borland 5.8.2][][almost works (doesn't compile the test suite, but does cope with *our* code I believe)]]
-[[MSVC 8.0][Windows32][warning free at level 4]]
+[[Intel 9.1, 8.1][Win32 and Linux][The tests cases tend to generate a lot of
+      warnings relating to numeric underflow of the test data: these are 
+      harmless.  The headers all appear to be warning free.]]
+[[g++ ][Linux and HP-UX][The test suite doesn't compile with -pedantic 
+      (a problem with system headers included by Boost.Test not compiling 
+      with that option), otherwise our headers should be warning free.]]
+[[HP aCC][HP-UX][ Unfortunately this emits quite a few warnings from libraries 
+      upon which we depend (TR1, Array etc).]]
+[[Borland 5.8.2][Windows][Almost works (doesn't compile the test suite, but does cope with *our* code I believe)]]
+[[MSVC 8.0][Windows][Warning free at level 4]]
 ]
 
 [endsect][/section:compilers Compilers]

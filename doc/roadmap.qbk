@@ -10,9 +10,9 @@ rational functions.
 on error rates.
 * Provide sufficient docs for people to be able to find their way around the library.
 
-[h4 Milestone 2]
+[h4 Milestone 2: Released September 10th 2006]
 
-* Implement preview release of the statistical distribution.
+* Implement preview release of the statistical distributions.
 * Added statistical distributions tutorial.
 * Implemented root finding algorithms.
 * Implemented the inverses of the incomplete gamma and beta functions.
@@ -24,11 +24,22 @@ results, indexed by test, floating point type, platform, and compiler.
 * Improved erf/erfc inverses (rational approximations).
 * Implemented Rational function generation (the Remez method).
 
-[h4 Milestone 3]
+[h4 Milestone 3: Review candidate]
 
-* Implement the main probability distribution and density functions (currently under construction).
-* Implement digamma (differentiate the __lanczos).
-* Release??
+* Implement the main probability distribution and density functions.
+* Implement digamma.
+
+[h4 Future]
+
+* The TR1 Special functions are still needed, some of these 
+(Bessel functions, and Eliptic Integrals) are mostly
+complete as a result of Xiaogang Zhang's partisipation in
+the Google Summer of Code 2006, refer to the 
+[@https://www.boost-consulting.com:8443/trac/soc/browser/boost/soc/2006
+Boost Consulting Trac Server for the code].
+* Higher level statistical tests, perhaps integrated with Eric Neiblers
+accumulator library.
+
 
 [endsect][/section:roadmap Roadmap]
 
