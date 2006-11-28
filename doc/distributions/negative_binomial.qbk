@@ -48,10 +48,12 @@ The class type `negative_binomial_distribution` represents a
 it is used when there are exactly two mutually exclusive outcomes of a
 [@http://en.wikipedia.org/wiki/Bernoulli_trial Bernoulli trial]:
 these outcomes are labelled "success" and "failure".
-The negative_binomial distribution is used to obtain 
-the probability of observing k failures in n trials before the required number of successes r,
-with the probability of success on a single trial denoted by success_fraction p. The 
-negative_binomial distribution assumes that success_fraction p is fixed for all (k + r) trials.
+
+For k + r Bernoulli trials each with success fraction p, the
+negative_binomial distribution gives the probability of observing 
+k failures and r successes with success on the last trial. 
+The negative_binomial distribution 
+assumes that success_fraction p is fixed for all (k + r) trials.
 
 [h4 Related Distributions]
 
@@ -61,7 +63,7 @@ This integer version is also called the
 [@http://mathworld.wolfram.com/PascalDistribution.html Pascal distribution].
 
 This implementation uses real numbers for the computation throughout
-(because it uses the *real* incomplete beta function family of functions).
+(because it uses the *real-valued* incomplete beta function family of functions).
 This real-valued version is also called the Polya Distribution.
 
 The Poisson distribution is a generalization of the Pascal distribution,
@@ -86,8 +88,10 @@ poisson([lambda]) = lim [sub r [rarr] [infin]] [space] negative_binomial(r, r / 
 
    negative_binomial_distribution(RealType r, RealType p);
 
-Constructor: /r/ is the total number of successes (r > 0), /p/ is the
-probability of success of a single trial (0 <= p <= 1).
+Constructor: /r/ is the total number of successes, /p/ is the
+probability of success of a single trial.
+
+Requires: `r > 0` and `0 <= p <= 1`.
 
    RealType success_fraction() const; // successes / trials (0 <= p <= 1)
    
@@ -143,7 +147,7 @@ want to be 95% sure that the true value is [*less than] some value,
    p``[sub max]`` = negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
                        r, k, 0.05);
 
-[link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf worked example.]
+[link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
 
    static RealType estimate_number_of_trials(
       RealType k,     // number of failures.
@@ -155,7 +159,7 @@ want to be 95% sure that the true value is [*less than] some value,
       const ``['unspecified-complemented-type]``<P1, P2, P3>& c);
       
 These functions estimate the number of trials required to achieve a certain
-probability that [*k failure or fewer will be observed].
+probability that [*k failures or fewer will be observed].
 
 [variablelist
 [[k][The number of failures observed.]]
@@ -192,26 +196,26 @@ the context of this distribution:
 [table Meaning of the non-member accessors.
 [[Function][Meaning]]
 [[__pdf]
-   [The probability of obtaining [*exactly k failures] from n trials
-   with success fraction p.  For example:\n\n``pdf(negative_binomial(n, p), k)``]]
+   [The probability of obtaining [*exactly k failures] from k+r trials
+   with success fraction p.  For example:\n\n``pdf(negative_binomial(r, p), k)``]]
 [[__cdf]
-   [The probability of obtaining [*k failures or fewer] from n trials
-   with success fraction p.  For example:\n\n ``cdf(negative_binomial(n, p), k)``]]
+   [The probability of obtaining [*k failures or fewer] from k+r trials
+   with success fraction p and success on the last trial.  For example:\n\n ``cdf(negative_binomial(r, p), k)``]]
 [[__ccdf]
-   [The probability of obtaining [*more than k failures] from n trials
-   with success fraction p.  For example:\n\n ``cdf(complement(negative_binomial(n, p), k))``]]
+   [The probability of obtaining [*more than k failures] from k+r trials
+   with success fraction p and success on the last trial.  For example:\n\n ``cdf(complement(negative_binomial(r, p), k))``]]
 [[__quantile]
-   [The [*greatest] number of failures that may be observed from n trials
+   [The [*greatest] number of failures k expected to be observed from k+r trials
    with success fraction p, at probability P.  Note that the value returned
    is a real-number, and not an integer.  Depending on the use case you may
    want to take either the floor or ceiling of the real result.  For example:\n\n
-   ``quantile(negative_binomial(n, p), P)``]]
+   ``quantile(negative_binomial(r, p), P)``]]
 [[__quantile_c]
-   [The [*smallest] number of failures that may be observed from n trials
+   [The [*smallest] number of failures k expected to be observed from k+r trials
    with success fraction p, at probability P.  Note that the value returned
    is a real-number, and not an integer.  Depending on the use case you may
    want to take either the floor or ceiling of the real result. For example:
-   ``quantile(complement(negative_binomial(n, p), P))``]]
+   ``quantile(complement(negative_binomial(r, p), P))``]]
 ]
 
 [h4 Accuracy]
@@ -228,7 +232,7 @@ be successful (the success fraction), /r/ is the number of successes,
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][exp(lgamma(r + k) - lgamma(r) - lgamma(k+1)) * pow(p, r) * pow((1-p), k)\n
+[[pdf][pdf = exp(lgamma(r + k) - lgamma(r) - lgamma(k+1)) * pow(p, r) * pow((1-p), k)\n
 Implementation is in terms of __ibeta_derivative:\n
 (p/(r + k)) * ibeta_derivative(r, static_cast<RealType>(k+1), p)
 The function __ibeta_derivative is used here, since it has already
@@ -237,16 +241,16 @@ just a thin wrapper around part of the internals of the incomplete
 beta function.\n\n
 ]]
 [[cdf][Using the relation: \n
-I[sub p](r, k+1) = ibeta(r, k+1, p)\n
+cdf = I[sub p](r, k+1) = ibeta(r, k+1, p)\n
 = ibeta(r, static_cast<RealType>(k+1), p)]]
 [[cdf complement][Using the relation:\n
-I[sub p](k+1, r)\n
+1 - cdf = I[sub p](k+1, r)\n
 = ibetac(r, static_cast<RealType>(k+1), p)\n\n]]
 [[quantile][ibeta_invb(r, p, P) - 1]]
 [[quantile from the complement][ibetac_invb(r, p, Q) -1)]]
 [[mean][ `r(1-p)/p` ]]
 [[variance][ `r (1-p) / p * p` ]]
-[[mode][`floor[(r-1) * (1 - p)/p`]]
+[[mode][`floor((r-1) * (1 - p)/p)`]
 [[skewness][`(2 - p) / sqrt(r * (1 - p))`]]
 [[kurtosis][`6 / r + (p * p) / r * (1 - p )`]]
 [[kurtosis excess][`6 / r + (p * p) / r * (1 - p ) -3`]]

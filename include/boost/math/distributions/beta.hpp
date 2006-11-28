@@ -311,7 +311,7 @@ namespace boost
       using namespace std; // ADL of std functions.
       RealType a = dist.alpha();
       RealType b = dist.beta();
-      return (2 * (b-a) * sqrt(a + B + 1)) / ((a + b + 2) * sqrt(a * b));
+      return (2 * (b-a) * sqrt(a + b + 1)) / ((a + b + 2) * sqrt(a * b));
     } // skewness
 
     template <class RealType>

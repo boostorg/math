@@ -11,6 +11,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/if.hpp>
 
 #include <iostream>
 #include <iomanip>
@@ -102,8 +103,8 @@ inline T log_min_value(const mpl::int_<16384>& BOOST_APPEND_EXPLICIT_TEMPLATE_TY
    return -11355.0L;
 }
 
-template <class T, class U>
-inline T log_max_value(const U& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+template <class T>
+inline T log_max_value(const mpl::int_<0>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -115,8 +116,8 @@ inline T log_max_value(const U& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
    return val;
 }
 
-template <class T, class U>
-inline T log_min_value(const U& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+template <class T>
+inline T log_min_value(const mpl::int_<0>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -148,8 +149,15 @@ template <class T>
 inline T log_max_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+   typedef typename mpl::if_c<
+      std::numeric_limits<T>::max_exponent == 128
+      || std::numeric_limits<T>::max_exponent == 1024
+      || std::numeric_limits<T>::max_exponent == 16384,
+      mpl::int_<std::numeric_limits<T>::max_exponent>,
+      mpl::int_<0>
+   >::type tag_type;
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
-   return detail::log_max_value<T>(mpl::int_<std::numeric_limits<T>::max_exponent>());
+   return detail::log_max_value<T>(tag_type());
 #else
    BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
    using namespace std;
@@ -162,8 +170,16 @@ template <class T>
 inline T log_min_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+   typedef typename mpl::if_c<
+      std::numeric_limits<T>::max_exponent == 128
+      || std::numeric_limits<T>::max_exponent == 1024
+      || std::numeric_limits<T>::max_exponent == 16384,
+      mpl::int_<std::numeric_limits<T>::max_exponent>,
+      mpl::int_<0>
+   >::type tag_type;
+
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
-   return detail::log_min_value<T>(mpl::int_<std::numeric_limits<T>::max_exponent>());
+   return detail::log_min_value<T>(tag_type());
 #else
    BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
    using namespace std;

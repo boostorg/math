@@ -543,6 +543,7 @@ namespace boost
         // for a given probability p.
         //
         // Error checks:
+        using namespace std;  // ADL of std names
         RealType result;
         if(false == binomial_detail::check_dist_and_prob(
            BOOST_CURRENT_FUNCTION,
