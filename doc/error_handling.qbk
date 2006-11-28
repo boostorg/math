@@ -38,7 +38,7 @@ set to activate the throwing of C++ exceptions from the default
 versions of the functions.  The various kind of errors are described 
 in more detail below.
 
-See also [@/../../example/error_handling_example.cpp error_handling_example.cpp]
+See also [@../../example/error_handling_example.cpp error_handling_example.cpp]
 
 [#domain_error][h4 Domain Errors]
 
@@ -191,4 +191,5 @@ then no checks are performed.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
 
