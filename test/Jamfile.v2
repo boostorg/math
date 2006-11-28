@@ -4,7 +4,7 @@ import testing ;
 
 project  
     : requirements 
-      #<toolset>gcc:<cxxflags>-Wno-missing-braces
+      <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070
       <include>../../..
       <source>/boost/regex//boost_regex
@@ -54,6 +54,7 @@ run test_weibull.cpp ;
 
 compile distribution_concept_check.cpp ;
 compile std_real_concept_check.cpp ;
+
 
 
 
