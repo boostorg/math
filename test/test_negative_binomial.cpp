@@ -43,8 +43,6 @@ using std::showpoint;
 #include <limits>
 using std::numeric_limits;
 
-// Need all functions working to use this test_spot!
-
 template <class RealType>
 void test_spot( // Test a single spot value against 'known good' values.
                RealType N,    // Number of successes.
@@ -207,12 +205,14 @@ void test_spots(RealType)
 
   // Sources of spot test values:
 
-  // MathCAD defines pbinom(k, r, p)
+  // MathCAD defines pbinom(k, r, p) (at about 64-bit double precision, about 16 decimal digits)
   // returns pr(X , k) when random variable X has the binomial distribution with parameters r and p.
   // 0 <= k
   // r > 0
   // 0 <= p <= 1
   // P = pbinom(30, 500, 0.05) = 0.869147702104609
+
+  // And functions.wolfram.com
 
   using boost::math::negative_binomial_distribution;
   using  ::boost::math::negative_binomial;
@@ -299,24 +299,8 @@ if(std::numeric_limits<RealType>::is_specialized)
   // JM nonLanczos 0.51730475350664229 differs at the 13th decimal digit.
   // MathCAD       0.51730475342603199 differs at 10th decimal digit.
 }
+ // End of single spot tests using RealType
 
-/* */
-  // End of single spot tests using RealType
-
-  // Tests on cdf:
-// MathCAD pbinom k, r, p) == failures, successes,
-
-  BOOST_CHECK_CLOSE(cdf(
-    negative_binomial_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(0.5)), // successes = 2,prob 0.25
-    static_cast<RealType>(0) ), // k = 0
-    static_cast<RealType>(0.25), // probability 1/4
-    tolerance);
-
-  BOOST_CHECK_CLOSE(cdf(complement(
-    negative_binomial_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(0.5)), // successes = 2,prob 0.25
-    static_cast<RealType>(0) )), // k = 0
-    static_cast<RealType>(0.75), // probability 3/4
-    tolerance);
 
   // Tests on PDF:
   BOOST_CHECK_CLOSE(
@@ -362,8 +346,20 @@ if(std::numeric_limits<RealType>::is_specialized)
   static_cast<RealType>(1.215766545905690E-1), // k=20  p = 0.9
   tolerance);
 
-  // Test on cdf
+  // Tests on cdf:
+  // MathCAD pbinom k, r, p) == failures, successes, probability.
 
+  BOOST_CHECK_CLOSE(cdf(
+    negative_binomial_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(0.5)), // successes = 2,prob 0.25
+    static_cast<RealType>(0) ), // k = 0
+    static_cast<RealType>(0.25), // probability 1/4
+    tolerance);
+
+  BOOST_CHECK_CLOSE(cdf(complement(
+    negative_binomial_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(0.5)), // successes = 2,prob 0.25
+    static_cast<RealType>(0) )), // k = 0
+    static_cast<RealType>(0.75), // probability 3/4
+    tolerance);
   BOOST_CHECK_CLOSE( // k = 1.
   cdf(negative_binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)),
   static_cast<RealType>(1)),  // k =1.
@@ -485,39 +481,35 @@ if(std::numeric_limits<RealType>::is_specialized)
   static_cast<RealType>(4.550203671301790E-1),
   tolerance);
 
+  // Tests of other functions, mean and other moments ...
+
   negative_binomial_distribution<RealType> dist(static_cast<RealType>(8), static_cast<RealType>(0.25));
   using namespace std; // ADL of std names.
   // mean:
   BOOST_CHECK_CLOSE(
-    mean(dist)
-    , static_cast<RealType>(8 * ( 1 - 0.25) /0.25), tol5eps);
+    mean(dist), static_cast<RealType>(8 * ( 1 - 0.25) /0.25), tol5eps);
   // variance:
   BOOST_CHECK_CLOSE(
-    variance(dist)
-    , static_cast<RealType>(8 * (1 - 0.25) / (0.25 * 0.25)), tol5eps);
+    variance(dist), static_cast<RealType>(8 * (1 - 0.25) / (0.25 * 0.25)), tol5eps);
   // std deviation:
   BOOST_CHECK_CLOSE(
     standard_deviation(dist), // 9.79795897113271239270
     static_cast<RealType>(9.797958971132712392789136298823565567864), // using functions.wolfram.com
     //                              9.79795897113271152534  == sqrt(8 * (1 - 0.25) / (0.25 * 0.25)))
     tol5eps * 100);
-
   BOOST_CHECK_CLOSE(
     skewness(dist), //
     static_cast<RealType>(0.71443450831176036),
     // using http://mathworld.wolfram.com/skewness.html
     tol5eps * 100);
-
   BOOST_CHECK_CLOSE(
     kurtosis_excess(dist), //
     static_cast<RealType>(0.7604166666666666666666666666666666667), // using Wikipedia Kurtosis(excess) formula
     tol5eps * 100);
-
   BOOST_CHECK_CLOSE(
     kurtosis(dist), // true 
     static_cast<RealType>(3.76041666666666666666666666666666666667), // 
     tol5eps * 100);
-
   // hazard:
   RealType x = static_cast<RealType>(0.125);
   BOOST_CHECK_CLOSE(
@@ -525,8 +517,7 @@ if(std::numeric_limits<RealType>::is_specialized)
   , pdf(dist, x) / cdf(complement(dist, x)), tol5eps);
   // cumulative hazard:
   BOOST_CHECK_CLOSE(
-  chf(dist, x)
-  , -log(cdf(complement(dist, x))), tol5eps);
+  chf(dist, x), -log(cdf(complement(dist, x))), tol5eps);
   // coefficient_of_variation:
   BOOST_CHECK_CLOSE(
   coefficient_of_variation(dist)
@@ -599,51 +590,48 @@ if(std::numeric_limits<RealType>::is_specialized)
   //static_cast<RealType>(189.56999032670058)  // 106.462769 for float
   //);
 
-if(std::numeric_limits<RealType>::has_infinity)
-{ // BOOST_CHECK tests for infinity using std::numeric_limits<>::infinity()
-  // Note that infinity is not implemented for real_concept, so these tests
-  // are only done for types, like built-in float, double.. that have infinity.
-  // Note that these assume that  BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined.
-  // #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR would give a throw here.
-  // #define BOOST_MATH_THROW_ON_DOMAIN_ERROR IS defined, so the throw path
-  // of error handling is tested below with BOOST_CHECK_THROW tests.
+  if(std::numeric_limits<RealType>::has_infinity)
+  { // BOOST_CHECK tests for infinity using std::numeric_limits<>::infinity()
+    // Note that infinity is not implemented for real_concept, so these tests
+    // are only done for types, like built-in float, double.. that have infinity.
+    // Note that these assume that  BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined.
+    // #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR would give a throw here.
+    // #define BOOST_MATH_THROW_ON_DOMAIN_ERROR IS defined, so the throw path
+    // of error handling is tested below with BOOST_CHECK_THROW tests.
 
-  BOOST_CHECK(
-  quantile(  // At P == 1 so k failures should be infinite.
-  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
-  static_cast<RealType>(1)) ==
-  //static_cast<RealType>(boost::math::tools::infinity<RealType>())
-  static_cast<RealType>(std::numeric_limits<RealType>::infinity()) );
+    BOOST_CHECK(
+    quantile(  // At P == 1 so k failures should be infinite.
+    negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+    static_cast<RealType>(1)) ==
+    //static_cast<RealType>(boost::math::tools::infinity<RealType>())
+    static_cast<RealType>(std::numeric_limits<RealType>::infinity()) );
 
-  BOOST_CHECK_EQUAL(
-  quantile(  // At 1 == P  so should be infinite.
-  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
-  static_cast<RealType>(1)), //
-  std::numeric_limits<RealType>::infinity() );
+    BOOST_CHECK_EQUAL(
+    quantile(  // At 1 == P  so should be infinite.
+    negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+    static_cast<RealType>(1)), //
+    std::numeric_limits<RealType>::infinity() );
 
-  BOOST_CHECK_EQUAL(
-  quantile(complement(  // Q zero 1 so P == 1 < cdf(0) so should be exactly infinity.
-  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
-  static_cast<RealType>(0))),
-  std::numeric_limits<RealType>::infinity() );
+    BOOST_CHECK_EQUAL(
+    quantile(complement(  // Q zero 1 so P == 1 < cdf(0) so should be exactly infinity.
+    negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+    static_cast<RealType>(0))),
+    std::numeric_limits<RealType>::infinity() );
+   } // test for infinity using std::numeric_limits<>::infinity()
+  else
+  { // real_concept case, so check it throws rather than returning infinity.
+    BOOST_CHECK_THROW(
+    quantile(  // At P == 1 so k failures should be infinite.
+    negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+    static_cast<RealType>(1)),
+    std::overflow_error );
 
- } // test for infinity using std::numeric_limits<>::infinity()
-else
-{ // real_concept case, so check it throws
-
-  BOOST_CHECK_THROW(
-  quantile(  // At P == 1 so k failures should be infinite.
-  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
-  static_cast<RealType>(1)),
-  std::overflow_error );
-
-  BOOST_CHECK_THROW(
-  quantile(complement(  // Q zero 1 so P == 1 < cdf(0) so should be exactly infinity.
-  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
-  static_cast<RealType>(0))),
-  std::overflow_error);
-
-}
+    BOOST_CHECK_THROW(
+    quantile(complement(  // Q zero 1 so P == 1 < cdf(0) so should be exactly infinity.
+    negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
+    static_cast<RealType>(0))),
+    std::overflow_error);
+  }
   BOOST_CHECK( // Should work for built-in and real_concept.
   quantile(complement(  // Q very near to 1 so P nearly 1  < so should be large > 384.
   negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
@@ -671,7 +659,6 @@ else
   static_cast<RealType>(1 - boost::math::tools::epsilon<RealType>()))),
   static_cast<RealType>(0)
   );
-
 
   // Check that duff arguments throw domain_error:
   BOOST_CHECK_THROW(
@@ -728,14 +715,11 @@ else
   static_cast<RealType>(0)), std::domain_error
   );
   // End of check throwing 'duff' out-of-domain values.
-
   return;
-
 } // template <class RealType> void test_spots(RealType) // Any floating-point type RealType.
 
 int test_main(int, char* [])
 {
-  test_spots(0.0); // Test double.
   // Check that can generate negative_binomial distribution using the two convenience methods:
   using namespace boost::math;
 	negative_binomial mynb1(2., 0.5); // Using typedef - default type is double.
@@ -748,169 +732,24 @@ int test_main(int, char* [])
   cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
 #endif
 
-  // This is a visual sanity check that everything is OK:
-  cout << setprecision(17) << showpoint << endl;
-  // Show double max_digits10 precision, including trailing zeros.
-
+#ifdef BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+  cout << "BOOST_MATH_THROW_ON_OVERFLOW_ERROR" << " is defined to throw on domain error." << endl;
+#else
+  cout << "BOOST_MATH_THROW_ON_OVERFLOW_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
+#endif
+#ifdef BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
+  cout << "BOOST_MATH_THROW_ON_UNDERFLOW_ERROR" << " is defined to throw on domain error." << endl;
+#else
+  cout << "BOOST_MATH_THROW_ON_UNDERFLOW_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
+#endif
   // Test some simple double only examples.
   negative_binomial_distribution<double> my8dist(8., 0.25);
   // 8 successes (r), 0.25 success fraction = 35% or 1 in 4 successes.
   // Note: double values (matching the distribution definition) avoid the need for any casting.
 
-  //RealType estimate_lower_bound_on_p(RealType failures, RealType successes, RealType probability);
-  //RealType estimate_upper_bound_on_p(RealType failures, RealType successes, RealType probability);
-  //RealType estimate_number_of_trials(RealType failures, RealType successes, RealType probability);
-  //RealType estimate_number_of_trials(RealType k, RealType p, RealType probability);
-  //cout << my8dist.estimate_lower_bound_on_p(1, 8, 0.5) << endl;
-
+  // Check accessor functions return exact values for double at least.
   BOOST_CHECK_EQUAL(my8dist.successes(), static_cast<double>(8));
-  BOOST_CHECK_EQUAL(my8dist.success_fraction(), static_cast<double>(1./4.)); // Exact.
-
-  double tol = boost::math::tools::epsilon<double>() * 100 * 10;
-  // * 100 for %, so tol is 10 epsilon.
-  BOOST_CHECK_SMALL(cdf(my8dist, 2.), 4.1580200195313E-4);
-  BOOST_CHECK_SMALL(cdf(my8dist, 8.), 0.027129956288264);
-  BOOST_CHECK_CLOSE(cdf(my8dist, 16.), 0.233795830683125, tol);
-
-  BOOST_CHECK_CLOSE(pdf(
-  negative_binomial_distribution<double>(2., 0.5),
-  1.),
-  static_cast<double>(0.25),
-  tol);
-
-  BOOST_CHECK_CLOSE(cdf(complement(
-    negative_binomial_distribution<double>(2., 0.5), //
-    1.)), // k
-    static_cast<double>(0.5), // half
-    tol);
-
-  BOOST_CHECK_CLOSE(cdf(
-    negative_binomial_distribution<double>(2., 0.5),
-    1.),
-    static_cast<double>(0.5),
-    tol);
-
-  BOOST_CHECK_CLOSE(
-  quantile(
-  negative_binomial_distribution<double>(2., 0.5),
-  0.5),
-  1., //
-  tol);
-
-  BOOST_CHECK_CLOSE(
-  cdf(
-  negative_binomial_distribution<double>(8., 0.25),
-  16.),
-  0.233795830683125, //
-  tol);
-
-  BOOST_CHECK_CLOSE(
-  quantile(
-  negative_binomial_distribution<double>(8., 0.25),
-  0.233795830683125),
-  16., //
-  tol);
-
-  BOOST_CHECK_EQUAL( // Special cases probability == 0 and p == 1
-  quantile(
-  negative_binomial_distribution<double>(8., 0.25),
-  1.), // Special case of requiring certainty,
-  std::numeric_limits<double>::infinity() // which would require infinite trials.
-  );
-
-  BOOST_CHECK_EQUAL(
-  quantile(
-  negative_binomial_distribution<double>(8., 0.25),
-  0.), // Special case of requiring NO certainty,
-  0 // which would not require any trials.
-  );
-
-  BOOST_CHECK_EQUAL( // Special cases probability == 0 and p == 1
-  quantile(complement(
-  negative_binomial_distribution<double>(8., 0.25),
-  1.)), // Special case of not requiring any certainty,
-  0 // which would require any (zero) trials.
-  );
-
-  //BOOST_CHECK_EQUAL(
-  //quantile(complement(
-  //negative_binomial_distribution<double>(8., 0.25),
-  //std::numeric_limits<double>::min())), // Special case of requiring tiny certainty,
-  //8 // which would require more than successes (8) trials.
-  //);  // denorm_min needs 2592.5954063179784 trials
-      // min requireds 2588.7765527873094 trials.
-
-  BOOST_CHECK_EQUAL(
-  quantile(complement(
-  negative_binomial_distribution<double>(8., 0.25),
-  0.)), // Special case of requiring probability 1 - 0 == 1 == certainty,
-  std::numeric_limits<double>::infinity() // which would require infinity trials.
-  );
-
-
-  {
-    cout <<" Probability   quantile    expected failures" << endl;
-    typedef double RealType;
-    cout << "quantile(my8dist, 0) == " << quantile(my8dist, 0) << endl;
-    cout << "quantile(my8dist, denorm_min) == " << quantile(my8dist, std::numeric_limits<double>::denorm_min()) << endl;
-    cout << "quantile(my8dist, min) == " << quantile(my8dist, std::numeric_limits<double>::min()) << endl;
-    cout << "quantile(my8dist, epsilon) == " << quantile(my8dist, std::numeric_limits<double>::epsilon()) << endl;
-    cout << "quantile(my8dist, epsilon) == " << quantile(my8dist, 1e-6) << endl;
-    for (RealType p = 0.01; p <= 1; p += 0.01) //
-    {
-      cout << p << ' '<< quantile(my8dist, p) << endl;
-    }
-    cout << "quantile(my8dist, 1-epsilon) == " << quantile(my8dist, 1 - std::numeric_limits<double>::epsilon()) << endl;
-    cout << "quantile(my8dist, 1) == " << quantile(my8dist, 1) << endl;
-    cout << "__________"<< endl;
-  }
-
-  {
-    cout << endl;
-    typedef double RealType;
-    cout<< "quantile(complement(my8dist, zero)) == "  << quantile(complement(my8dist, 0)) << endl;
-    cout<< "quantile(complement(my8dist, denorm_min)) == "  << quantile(complement(my8dist, std::numeric_limits<double>::denorm_min())) << endl;
-    cout<< "quantile(complement(my8dist, min)) == "  << quantile(complement(my8dist, std::numeric_limits<double>::min())) << endl;
-    cout<< "quantile(complement(my8dist, epsilon)) == "  << quantile(complement(my8dist, std::numeric_limits<double>::epsilon())) << endl;
-    for (RealType p = 0.01; p <= 1 ; p += 0.01) //
-    {
-      cout << p << ' '<< 1 - p << ' ' << quantile(complement(my8dist, p)) << endl;
-    }
-    cout<< "quantile(complement(my8dist, 1-epsilon)) == "  << quantile(complement(my8dist, 1 - std::numeric_limits<double>::epsilon())) << endl;
-    cout<< "quantile(complement(my8dist, 1)) == "  << quantile(complement(my8dist, 1)) << endl;
-    cout << endl;
-    cout << "__________"<< endl;
-  }
-
-
-   // Compare pdf using the simple formulae:
-  //   exp(lgamma(r + k) - lgamma(r) - lgamma(k+1)) * pow(p, r) * pow((1-p), k)
-  // with
-  //   (p/(r+k) * ibeta_derivative(r, k+1, p) (as used in pdf)
-  {
-   typedef double RealType;
-   RealType r = my8dist.successes();
-    RealType p = my8dist.success_fraction();
-    for (int i = 0; i <= r * 4; i++) //
-    {
-      RealType k = static_cast<RealType>(i);
-      RealType pmf = exp(lgamma(r + k) - lgamma(r) - lgamma(k+1)) * pow(p, r) * pow((1-p), k);
-      BOOST_CHECK_CLOSE(pdf(my8dist, static_cast<RealType>(k)), pmf, tol * 10);
-      // 0.0015932321548461931
-    // 0.0015932321548461866
-  }
-
-  // Double-check consistency of CDF and PDF by computing the finite sum of pdfs:
-  RealType sum = 0;
-  for(unsigned i = 0; i <= 20; ++i)
-  {
-    sum += pdf(my8dist, RealType(i));
-  }
-
-  cout << setprecision(17) << showpoint << sum <<' '  // 0.40025683281803714
-  << cdf(my8dist, static_cast<RealType>(20)) << endl; // 0.40025683281803681
-  BOOST_CHECK_CLOSE(sum, cdf(my8dist, static_cast<RealType>(20)), tol);
-  }
+  BOOST_CHECK_EQUAL(my8dist.success_fraction(), static_cast<double>(1./4.));
 
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float.
@@ -931,224 +770,9 @@ test_negative_binomial.cpp
 Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_negative_binomial.exe"
 Running 1 test case...
-Tolerance = 2.22045e-011%.
-Tolerance 5 eps = 1.11022e-015%.
 BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
- Probability   quantile    expected failures
-quantile(my8dist, 0) == 0
-quantile(my8dist, denorm_min) == 0
-quantile(my8dist, min) == 0
-quantile(my8dist, epsilon) == 0
-quantile(my8dist, epsilon) == 0
-0.01 5.94544
-0.02 7.3077
-0.03 8.24308
-0.04 8.98404
-0.05 9.6108
-0.06 10.1615
-0.07 10.6575
-0.08 11.1123
-0.09 11.5345
-0.1 11.9306
-0.11 12.3052
-0.12 12.6617
-0.13 13.0029
-0.14 13.3309
-0.15 13.6474
-0.16 13.954
-0.17 14.2517
-0.18 14.5417
-0.19 14.8248
-0.2 15.1017
-0.21 15.3731
-0.22 15.6396
-0.23 15.9016
-0.24 16.1597
-0.25 16.4141
-0.26 16.6654
-0.27 16.9138
-0.28 17.1597
-0.29 17.4032
-0.3 17.6447
-0.31 17.8844
-0.32 18.1226
-0.33 18.3593
-0.34 18.5949
-0.35 18.8296
-0.36 19.0634
-0.37 19.2966
-0.38 19.5293
-0.39 19.7618
-0.4 19.994
-0.41 20.2263
-0.42 20.4587
-0.43 20.6915
-0.44 20.9246
-0.45 21.1584
-0.46 21.3928
-0.47 21.6282
-0.48 21.8645
-0.49 22.102
-0.5 22.3409
-0.51 22.5812
-0.52 22.8231
-0.53 23.0667
-0.54 23.3124
-0.55 23.5601
-0.56 23.8101
-0.57 24.0626
-0.58 24.3178
-0.59 24.5759
-0.6 24.837
-0.61 25.1015
-0.62 25.3695
-0.63 25.6413
-0.64 25.9172
-0.65 26.1975
-0.66 26.4825
-0.67 26.7725
-0.68 27.0679
-0.69 27.3691
-0.7 27.6765
-0.71 27.9907
-0.72 28.312
-0.73 28.6411
-0.74 28.9787
-0.75 29.3253
-0.76 29.6819
-0.77 30.0492
-0.78 30.4283
-0.79 30.8203
-0.8 31.2264
-0.81 31.6482
-0.82 32.0873
-0.83 32.5456
-0.84 33.0256
-0.85 33.53
-0.86 34.0621
-0.87 34.6259
-0.88 35.2264
-0.89 35.8699
-0.9 36.5643
-0.91 37.3201
-0.92 38.1514
-0.93 39.0777
-0.94 40.1276
-0.95 41.3448
-0.96 42.8019
-0.97 44.6337
-0.98 47.1381
-0.99 51.2478
-quantile(my8dist, 1-epsilon) == 189.57
-quantile(my8dist, 1) == 1.#INF
-__________
-quantile(complement(my8dist, zero)) == 1.#INF
-quantile(complement(my8dist, denorm_min)) == 2592.6
-quantile(complement(my8dist, min)) == 2588.78
-quantile(complement(my8dist, epsilon)) == 189.57
-0.01 0.99 51.2478
-0.02 0.98 47.1381
-0.03 0.97 44.6337
-0.04 0.96 42.8019
-0.05 0.95 41.3448
-0.06 0.94 40.1276
-0.07 0.93 39.0777
-0.08 0.92 38.1514
-0.09 0.91 37.3201
-0.1 0.9 36.5643
-0.11 0.89 35.8699
-0.12 0.88 35.2264
-0.13 0.87 34.6259
-0.14 0.86 34.0621
-0.15 0.85 33.53
-0.16 0.84 33.0256
-0.17 0.83 32.5456
-0.18 0.82 32.0873
-0.19 0.81 31.6482
-0.2 0.8 31.2264
-0.21 0.79 30.8203
-0.22 0.78 30.4283
-0.23 0.77 30.0492
-0.24 0.76 29.6819
-0.25 0.75 29.3253
-0.26 0.74 28.9787
-0.27 0.73 28.6411
-0.28 0.72 28.312
-0.29 0.71 27.9907
-0.3 0.7 27.6765
-0.31 0.69 27.3691
-0.32 0.68 27.0679
-0.33 0.67 26.7725
-0.34 0.66 26.4825
-0.35 0.65 26.1975
-0.36 0.64 25.9172
-0.37 0.63 25.6413
-0.38 0.62 25.3695
-0.39 0.61 25.1015
-0.4 0.6 24.837
-0.41 0.59 24.5759
-0.42 0.58 24.3178
-0.43 0.57 24.0626
-0.44 0.56 23.8101
-0.45 0.55 23.5601
-0.46 0.54 23.3124
-0.47 0.53 23.0667
-0.48 0.52 22.8231
-0.49 0.51 22.5812
-0.5 0.5 22.3409
-0.51 0.49 22.102
-0.52 0.48 21.8645
-0.53 0.47 21.6282
-0.54 0.46 21.3928
-0.55 0.45 21.1584
-0.56 0.44 20.9246
-0.57 0.43 20.6915
-0.58 0.42 20.4587
-0.59 0.41 20.2263
-0.6 0.4 19.994
-0.61 0.39 19.7618
-0.62 0.38 19.5293
-0.63 0.37 19.2966
-0.64 0.36 19.0634
-0.65 0.35 18.8296
-0.66 0.34 18.5949
-0.67 0.33 18.3593
-0.68 0.32 18.1226
-0.69 0.31 17.8844
-0.7 0.3 17.6447
-0.71 0.29 17.4032
-0.72 0.28 17.1597
-0.73 0.27 16.9138
-0.74 0.26 16.6654
-0.75 0.25 16.4141
-0.76 0.24 16.1597
-0.77 0.23 15.9016
-0.78 0.22 15.6396
-0.79 0.21 15.3731
-0.8 0.2 15.1017
-0.81 0.19 14.8248
-0.82 0.18 14.5417
-0.83 0.17 14.2517
-0.84 0.16 13.954
-0.85 0.15 13.6474
-0.86 0.14 13.3309
-0.87 0.13 13.0029
-0.88 0.12 12.6617
-0.89 0.11 12.3052
-0.9 0.1 11.9306
-0.91 0.09 11.5345
-0.92 0.08 11.1123
-0.93 0.07 10.6575
-0.94 0.06 10.1615
-0.95 0.05 9.6108
-0.96 0.04 8.98404
-0.97 0.03 8.24308
-0.98 0.02 7.3077
-0.99 0.01 5.94544
-quantile(complement(my8dist, 1-epsilon)) == 0
-quantile(complement(my8dist, 1)) == 0
-__________
-0.40025683281803698 0.40025683281803687
+BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined, so NO throw on domain error.
+BOOST_MATH_THROW_ON_UNDERFLOW_ERROR is NOT defined, so NO throw on domain error.
 Tolerance = 0.0119209%.
 Tolerance 5 eps = 5.96046e-007%.
 Tolerance = 2.22045e-011%.
@@ -1161,8 +785,5 @@ Tolerance 5 eps = 1.11022e-015%.
 Build Time 0:08
 Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_negative_binomial\Debug\BuildLog.htm"
 test_negative_binomial - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
-
-
 
 */
