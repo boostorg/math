@@ -944,5 +944,58 @@
     </mfrac>
   </mrow>
 </math>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mi>f</mi>
+    <mfenced>
+      <mrow>
+        <mi>k</mi>
+        <mo>;</mo>
+        <mi>r</mi>
+        <mo>,</mo>
+        <mi>p</mi>
+      </mrow>
+    </mfenced>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <mfrac>
+      <mrow>
+        <mi>&Gamma;</mi>
+        <mfenced>
+          <mrow>
+            <mi>r</mi>
+            <mo>+</mo>
+            <mi>k</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+      <mrow>
+        <mi>k</mi>
+        <mo>!</mo>
+        <mi>&Gamma;</mi>
+        <mfenced>
+          <mrow>
+            <mi>r</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+    </mfrac>
+    <msup>
+      <mi>p</mi>
+      <mi>r</mi>
+    </msup>
+    <msup>
+      <mfenced>
+        <mrow>
+          <mn>1</mn>
+          <mo>&minus;</mo>
+          <mi>p</mi>
+        </mrow>
+      </mfenced>
+      <mi>k</mi>
+    </msup>
+  </mrow>
+</math>
 </body>
 </html>

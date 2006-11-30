@@ -193,9 +193,9 @@ N "uses" (for some suitable definition of "use").  You may want to schedule
 routine replacement of the component so that its chance of failure between
 routine replacements is less than P%.  If the failures follow a binomial
 distribution (each time the component is "used" it either fails or does not)
-then the static member function `binomial_distibution<>::estimate_number_of_trials`
+then the static member function `binomial_distibution<>::estimate_maximum_number_of_trials`
 can be used to estimate the maximum number of "uses" of that component for some
-probability P.
+acceptable risk level /alpha/.
 
 The example program 
 [@../../example/binomial_sample_sizes.cpp binomial_sample_sizes.cpp]
@@ -224,20 +224,18 @@ value of alpha:
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate trials:
-      double t = binomial::estimate_number_of_trials(complement(successes, p, alpha[i]));
+      double t = binomial::estimate_maximum_number_of_trials(
+                     successes, p, alpha[i]);
       t = floor(t);
       // Print Trials:
       cout << fixed << setprecision(5) << setw(15) << right << t << endl;
    }
 
-Note that since the value of alpha is the probability of observing
-[*more than /successes/ events], we have to wrap the arguments to
-`estimate_number_of_trials` in a call to complement: remember the binomial
-distribution deals in [*/successes/ or fewer events].  Finally, since we're
+Note that since we're
 calculating the maximum number of trials permitted, we'll err on the safe
 side and take the floor of the result.  Had we been calculating the
 /minimum/ number of trials required to observe a certain number of /successes/
-then we would have taken the ceiling instead.
+using `estimate_minimum_number_of_trials` we would have taken the ceiling instead.
 
 We'll finish off by looking at some sample output, firstly for
 a 1 in 1000 chance of component failure with each use:
@@ -295,7 +293,7 @@ ____________________________
 
 In this case, even 1000 uses of the component would still yield a 
 less than 1 in 1000 chance of observing a component failure 
-(99.9% chance of no failure).
+(i.e. a 99.9% chance of no failure).
 
 [endsect]
 [endsect][/section:binom_eg Binomial Distribution]

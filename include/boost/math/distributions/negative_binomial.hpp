@@ -149,38 +149,40 @@ namespace boost
         return m_r;
       }
 
-      // Estimation of the success_fraction parameter in a negative binomial distribution.
-      // The best estimate is actually the simple mean successes/trials:
-      // these functions are used to obtain
-      // confidence intervals for the success fraction probability p.
-      // Use ibeta_inc function for lower bound but complement ibetac_inv for upper bound.
-
       static RealType estimate_lower_bound_on_p(
         RealType trials,
         RealType successes,
-        RealType probability) // alpha 0.05 equivalent to 95% for one-sided test.
+        RealType alpha) // alpha 0.05 equivalent to 95% for one-sided test.
       {
         RealType result;  // of error checks.
         RealType failures = trials - successes;
-        if(false == detail::check_probability(BOOST_CURRENT_FUNCTION, probability, &result)
+        if(false == detail::check_probability(BOOST_CURRENT_FUNCTION, alpha, &result)
           && negative_binomial_detail::check_dist_and_k(
           BOOST_CURRENT_FUNCTION, successes, RealType(0), failures, &result))
         {
           return result;
         }
-        return ibeta_inv(successes, failures + 1, probability);
+        // Use complement ibeta_inv function for lower bound.
+        // This is adapted from the corresponding binomial formula
+        // here: http://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
+        // This is a Clopper-Pearson interval, and may be overly conservative,
+        // see also "A Simple Improved Inferential Method for Some
+        // Discrete Distributions" Yong CAI and K. KRISHNAMOORTHY
+        // http://www.ucs.louisiana.edu/~kxk4695/Discrete_new.pdf
+        //
+        return ibeta_inv(successes, failures + 1, alpha);
       } // estimate_lower_bound_on_p
 
       static RealType estimate_upper_bound_on_p(
         RealType trials,
         RealType successes,
-        RealType probability) // alpha 0.05 equivalent to 95% for one-sided test.
+        RealType alpha) // alpha 0.05 equivalent to 95% for one-sided test.
       {
         RealType result;  // of error checks.
         RealType failures = trials - successes;
         if(false == negative_binomial_detail::check_dist_and_k(
           BOOST_CURRENT_FUNCTION, successes, RealType(0), failures, &result)
-          && detail::check_probability(BOOST_CURRENT_FUNCTION, probability, &result))
+          && detail::check_probability(BOOST_CURRENT_FUNCTION, alpha, &result))
         {
           return result;
         }
@@ -195,45 +197,41 @@ namespace boost
         // Discrete Distributions" Yong CAI and K. KRISHNAMOORTHY
         // http://www.ucs.louisiana.edu/~kxk4695/Discrete_new.pdf
         //
-        return ibetac_inv(successes, failures, probability);
+        return ibetac_inv(successes, failures, alpha);
       } // estimate_upper_bound_on_p
 
       // Estimate number of trials :
       // "How many trials do I need to be P% sure of seeing k or fewer failures?"
 
-      static RealType estimate_number_of_trials(
+      static RealType estimate_minimum_number_of_trials(
         RealType k,     // number of failures (k >= 0).
         RealType p,     // success fraction 0 <= p <= 1.
-        RealType probability) // probability threshold 0 <= probability <= 1.
+        RealType alpha) // risk level threshold 0 <= alpha <= 1.
       {
         // Error checks:
         RealType result;
         if(false == negative_binomial_detail::check_dist_and_k(
           BOOST_CURRENT_FUNCTION, RealType(1), p, k, &result)
-          && detail::check_probability(BOOST_CURRENT_FUNCTION, probability, &result))
+          && detail::check_probability(BOOST_CURRENT_FUNCTION, alpha, &result))
         { return result; }
 
-        result = ibeta_inva(k + 1, p, probability);  // returns n - k
+        result = ibeta_inva(k + 1, p, alpha);  // returns n - k
         return result + k;
       } // RealType estimate_number_of_failures
 
-      template <class P1, class P2, class P3>
-      static RealType estimate_number_of_trials(
-        const complemented3_type<P1, P2, P3>& c)
+      static RealType estimate_maximum_number_of_trials(
+        RealType k,     // number of failures (k >= 0).
+        RealType p,     // success fraction 0 <= p <= 1.
+        RealType alpha) // risk level threshold 0 <= alpha <= 1.
       {
-        // extract args:
-        const RealType k = c.dist;     // number of failures.
-        const RealType p = c.param1;   // success fraction.
-        const RealType Q = c.param2;   // probability threshold.
-
         // Error checks:
         RealType result;
         if(false == negative_binomial_detail::check_dist_and_k(
           BOOST_CURRENT_FUNCTION, RealType(1), p, k, &result)
-          &&  detail::check_probability(BOOST_CURRENT_FUNCTION, Q, &result))
+          &&  detail::check_probability(BOOST_CURRENT_FUNCTION, alpha, &result))
         { return result; }
 
-        result = ibetac_inva(k + 1, p, Q);  // returns n - k
+        result = ibetac_inva(k + 1, p, alpha);  // returns n - k
         return result + k;
       } // RealType estimate_number_of_trials complemented
 

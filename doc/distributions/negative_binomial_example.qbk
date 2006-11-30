@@ -150,7 +150,7 @@ occur in 1 in N trials.  You may want to know how many trials you need to
 conduct to be 100P% sure of observing at least k such failures.  
 If the failure events follow a negative binomial
 distribution (each trial either succeeds or does not)
-then the static member function `negative_binomial_distibution<>::estimate_number_of_trials`
+then the static member function `negative_binomial_distibution<>::estimate_minimum_number_of_trials`
 can be used to estimate the minimum number of trials required to be 100P% sure
 of observing the desired number of failures.
 
@@ -189,9 +189,9 @@ value of alpha:
    { 
       // Confidence values %:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]) << "      "
-         // estimate_number_of_trials
+         // estimate_minimum_number_of_trials
          << setw(6) << right 
-         << ceil(negative_binomial::estimate_number_of_trials(
+         << ceil(negative_binomial::estimate_minimum_number_of_trials(
                      failures, p, alpha[i])) << endl;
    }
    cout << endl;
@@ -201,11 +201,10 @@ calculating the /minimum/ number of trials required, we'll err on the safe
 side and take the ceiling of the result.  Had we been calculating the
 /maximum/ number of trials permitted to observe less than a certain 
 number of /failures/ then we would have taken the floor instead.  We
-would also have wrapped the arguments to `estimate_number_of_trials` in
-a call to complement like this:
+would also have called `estimate_maximum_number_of_trials` like this:
 
-   floor(negative_binomial::estimate_number_of_trials(
-            complement(failures, p, alpha[i])))
+   floor(negative_binomial::estimate_maximum_number_of_trials(
+            failures, p, alpha[i]))
             
 which would give us the largest number of trials we could conduct and
 still be 100P% sure of observing /failures or less/ failure events, when the

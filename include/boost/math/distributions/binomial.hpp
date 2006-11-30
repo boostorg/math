@@ -251,10 +251,10 @@ namespace boost
       //    or
       // "How many trials can I have to be P% sure of seeing fewer than k events?"
       //
-      static RealType estimate_number_of_trials(
+      static RealType estimate_minimum_number_of_trials(
          RealType k,     // number of events
          RealType p,     // success fraction
-         RealType probability) // probability threshold
+         RealType alpha) // risk level
       {
         // Error checks:
         RealType result;
@@ -262,32 +262,28 @@ namespace boost
            BOOST_CURRENT_FUNCTION, k, p, k, &result)
             &&
            binomial_detail::check_dist_and_prob(
-           BOOST_CURRENT_FUNCTION, k, p, probability, &result))
+           BOOST_CURRENT_FUNCTION, k, p, alpha, &result))
         { return result; }
 
-        result = ibetac_invb(k + 1, p, probability);  // returns n - k
+        result = ibetac_invb(k + 1, p, alpha);  // returns n - k
         return result + k;
       }
 
-      template <class P1, class P2, class P3>
-      static RealType estimate_number_of_trials(
-         const complemented3_type<P1, P2, P3>& c)
+      static RealType estimate_maximum_number_of_trials(
+         RealType k,     // number of events
+         RealType p,     // success fraction
+         RealType alpha) // risk level
       {
-        // extract args:
-        const RealType k = c.dist;     // number of events
-        const RealType p = c.param1;   // success fraction
-        const RealType Q = c.param2;   // probability threshold
-
         // Error checks:
         RealType result;
         if(false == binomial_detail::check_dist_and_k(
            BOOST_CURRENT_FUNCTION, k, p, k, &result)
             &&
            binomial_detail::check_dist_and_prob(
-           BOOST_CURRENT_FUNCTION, k, p, Q, &result))
+           BOOST_CURRENT_FUNCTION, k, p, alpha, &result))
         { return result; }
 
-        result = ibeta_invb(k + 1, p, Q);  // returns n - k
+        result = ibeta_invb(k + 1, p, alpha);  // returns n - k
         return result + k;
       }
 

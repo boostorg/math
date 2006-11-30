@@ -40,14 +40,15 @@
          ``['unspecified-type]`` method = clopper_pearson_exact_interval);
          
       // estimate min/max number of trials:
-      static RealType estimate_number_of_trials(
+      static RealType estimate_minimum_number_of_trials(
          RealType k,     // number of events
          RealType p,     // success fraction
-         RealType probability); // probability threshold
+         RealType alpha); // risk level
          
-      template <class P1, class P2, class P3>
-      static RealType estimate_number_of_trials(
-         const ``['unspecified-complemented-type]``<P1, P2, P3>& c);
+      static RealType estimate_maximum_number_of_trials(
+         RealType k,     // number of events
+         RealType p,     // success fraction
+         RealType alpha); // risk level
    };
    
    }} // namespaces
@@ -80,12 +81,16 @@ vary the success fraction /p/:
    
 [h4 Member Functions]
 
+[h5 Construct]
+
    binomial_distribution(RealType n, RealType p);
 
 Constructor: /n/ is the total number of trials, /p/ is the
 probability of success of a single trial.
 
 Requires `0 <= p <= 1`, and `n >= 0`, otherwise calls __domain_error.
+
+[h5 Accessors]
 
    RealType success_fraction() const;
    
@@ -94,6 +99,8 @@ Returns the parameter /p/ from which this distribution was constructed.
    RealType trials() const;
    
 Returns the parameter /n/ from which this distribution was constructed.
+
+[h5 Lower Bound on the Success Fraction]
 
    static RealType estimate_lower_bound_on_p(
       RealType trials, 
@@ -171,6 +178,8 @@ Clopper, C. J. and Pearson, E. S. (1934). The use of confidence
 or fiducial limits illustrated in the case of the binomial.
 Biometrika 26 404-413.
 
+[h5 Upper Bound on the Success Fraction]
+
    static RealType estimate_upper_bound_on_p(
       RealType trials, 
       RealType successes,
@@ -213,18 +222,16 @@ by passing [alpha] = 0.025 to each of the functions.\n
 ]
 
 
+[h5 Estimating the Number of Trials Required for a Certain Number of Successes]
 
-   static RealType estimate_number_of_trials(
+   static RealType estimate_minimum_number_of_trials(
       RealType k,     // number of events
       RealType p,     // success fraction
       RealType alpha); // probability threshold
       
-   template <class P1, class P2, class P3>
-   static RealType estimate_number_of_trials(
-      const ``['unspecified-complemented-type]``<P1, P2, P3>& c);
-      
-These functions estimate the number of trials required to achieve a certain
-probability that [*k events or fewer will be observed].
+This function estimates the minimum number of trials required to ensure that
+more than k events is observed with a level of risk /alpha/ that k or 
+fewer events occur.
 
 [variablelist
 [[k][The number of success observed.]]
@@ -239,11 +246,27 @@ For example:
 Returns the smallest number of trials we must conduct to be 95% sure
 of seeing 10 events that occur with frequency one half.
    
-While:
+[h5 Estimating the Maximum Number of Trials to Ensure no more than a Certain Number of Successes]
 
-   binomial_distribution<RealType>::estimate_number_of_trials(
-      complement(0, 1.0/1000000, 0.05));
+   static RealType estimate_maximum_number_of_trials(
+      RealType k,     // number of events
+      RealType p,     // success fraction
+      RealType alpha); // probability threshold
+      
+This function estimates the maximum number of trials we can conduct
+to ensure that k successes or fewer are observed, with a risk /alpha/
+that more than k occur.
 
+[variablelist
+[[k][The number of success observed.]]
+[[p][The probability of success for each trial.]]
+[[alpha][The maximum acceptable probability that more than k events will be observed.]]
+]
+
+For example:
+   
+   binomial_distribution<RealType>::estimate_maximum_number_of_trials(0, 1e-6, 0.05);
+      
 Returns the largest number of trials we can conduct and still be 95% certain
 of not observing any events that occur with one in a million frequency.
 This is typically used in failure analysis.

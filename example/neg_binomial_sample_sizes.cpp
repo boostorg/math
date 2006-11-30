@@ -32,7 +32,6 @@ void estimate_number_of_trials(double failures, double p)
    // trials = number of trials
    // failures = number of failures before achieving required success(es).
    // p         = success ratio.
-   // successes = required number of successes.
    //
    // Calculate how many trials we need to ensure the
    // required number of failures DOES exceed "failures".
@@ -52,8 +51,8 @@ void estimate_number_of_trials(double failures, double p)
   for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    { // Confidence values %:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]) << "      "
-      // estimate_number_of_trials
-      << setw(6) << right << (int)ceil(negative_binomial::estimate_number_of_trials(failures, p, alpha[i])) << endl;
+      // estimate_minimum_number_of_trials
+      << setw(6) << right << (int)ceil(negative_binomial::estimate_minimum_number_of_trials(failures, p, alpha[i])) << endl;
    }
    cout << endl;
 } // void estimate_number_of_trials(double fails, double p)

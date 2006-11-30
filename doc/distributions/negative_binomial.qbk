@@ -31,14 +31,14 @@
          RealType probability); // alpha
          
       // Estimate min/max number of trials:
-      static RealType estimate_number_of_trials(
+      static RealType estimate_minimum_number_of_trials(
          RealType k,     // Number of failures.
          RealType p,     // Success fraction.
          RealType probability); // Probability threshold alpha.
-         
-      template <class P1, class P2, class P3>
-      static RealType estimate_number_of_failures(
-         const ``['unspecified-complemented-type]``<P1, P2, P3>& c);
+      static RealType estimate_maximum_number_of_trials(
+         RealType k,     // Number of failures.
+         RealType p,     // Success fraction.
+         RealType probability); // Probability threshold alpha.
    };
    
    }} // namespaces
@@ -54,6 +54,20 @@ negative_binomial distribution gives the probability of observing
 k failures and r successes with success on the last trial. 
 The negative_binomial distribution 
 assumes that success_fraction p is fixed for all (k + r) trials.
+
+It has the PDF:
+
+[$../equations/neg_binomial_ref.png]
+
+The following graph illustrate how the PDF varies as the success fraction 
+/p/ changes:
+
+[$../graphs/neg_binomial_pdf1.png]
+
+Alternatively, this graph shows how the shape of the PDF varies as
+the number of successes changes:
+
+[$../graphs/neg_binomial_pdf2.png]
 
 [h4 Related Distributions]
 
@@ -86,12 +100,16 @@ poisson([lambda]) = lim [sub r [rarr] [infin]] [space] negative_binomial(r, r / 
    
 [h4 Member Functions]
 
+[h5 Construct]
+
    negative_binomial_distribution(RealType r, RealType p);
 
 Constructor: /r/ is the total number of successes, /p/ is the
 probability of success of a single trial.
 
 Requires: `r > 0` and `0 <= p <= 1`.
+
+[h5 Accessors]
 
    RealType success_fraction() const; // successes / trials (0 <= p <= 1)
    
@@ -100,6 +118,8 @@ Returns the parameter /p/ from which this distribution was constructed.
    RealType successes() const; // required successes (r > 0)
    
 Returns the parameter /r/ from which this distribution was constructed.
+
+[h5 Lower Bound on Parameter p]
 
       static RealType estimate_lower_bound_on_p(
         RealType failures, 
@@ -125,6 +145,18 @@ want to be 95% sure that the true value is [*greater than] some value,
 
 [link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
       
+This function uses the Clopper-Pearson method of computing the lower bound on the
+success fraction, whilst many texts refer to this method as giving an "exact" 
+result in practice it produces an interval that guarantees ['at least] the
+coverage required, and may produce pessimistic estimates for some combinations
+of /failures/ and /successes/.  See:
+
+[@http://www.ucs.louisiana.edu/~kxk4695/Discrete_new.pdf
+Yong Cai and K. Krishnamoorthy, A Simple Improved Inferential Method for Some Discrete Distributions.
+Computational statistics and data analysis, 2005, vol. 48, no3, 605-621].
+
+[h5 Upper Bound on Parameter p]
+
    static RealType estimate_upper_bound_on_p(
       RealType trials, 
       RealType successes,
@@ -149,43 +181,73 @@ want to be 95% sure that the true value is [*less than] some value,
 
 [link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
 
-   static RealType estimate_number_of_trials(
+This function uses the Clopper-Pearson method of computing the lower bound on the
+success fraction, whilst many texts refer to this method as giving an "exact" 
+result in practice it produces an interval that guarantees ['at least] the
+coverage required, and may produce pessimistic estimates for some combinations
+of /failures/ and /successes/.  See:
+
+[@http://www.ucs.louisiana.edu/~kxk4695/Discrete_new.pdf
+Yong Cai and K. Krishnamoorthy, A Simple Improved Inferential Method for Some Discrete Distributions.
+Computational statistics and data analysis, 2005, vol. 48, no3, 605-621].
+
+[h5 Estimating Number of Trials to Ensure at Least a Certain Number of Failures]
+
+   static RealType estimate_minimum_number_of_trials(
       RealType k,     // number of failures.
       RealType p,     // success fraction.
       RealType alpha); // probability threshold (0.05 equivalent to 95%).
       
-   template <class P1, class P2, class P3>
-   static RealType estimate_number_of_trials(
-      const ``['unspecified-complemented-type]``<P1, P2, P3>& c);
-      
-These functions estimate the number of trials required to achieve a certain
-probability that [*k failures or fewer will be observed].
+This functions estimates the number of trials required to achieve a certain
+probability that [*more than k failures will be observed].
 
 [variablelist
-[[k][The number of failures observed.]]
-[[p][The probability of success for each trial.]]
-[[alpha][The maximum acceptable probability that only k failure or fewer will be observed.]]
+[[k][The target number of failures to be observed.]]
+[[p][The probability of ['success] for each trial.]]
+[[alpha][The maximum acceptable risk that only k failures or fewer will be observed.]]
 ]
 
 For example:
    
-   negative_binomial_distribution<RealType>::estimate_number_of_trials(10, 0.5, 0.05);
+   negative_binomial_distribution<RealType>::estimate_minimum_number_of_trials(10, 0.5, 0.05);
       
 Returns the smallest number of trials we must conduct to be 95% sure
 of seeing 10 failures that occur with frequency one half.
    
-While:
-
-   negative_binomial_distribution<RealType>::estimate_number_of_trials(
-      complement(0, 1-1./1000000, 0.05));
-
-Returns the largest number of trials we can conduct and still be 95% certain
-of not observing any failures that occur with one in a million frequency.
-This is typically used in failure analysis.  Note that since the negative
-binomial deals in probability of success, the second argument must be
-1 minus the probablity of failure.
-
 [link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_size_eg Worked Example.]
+
+This function uses numeric inversion of the negative binomial distribution
+to obtain the result: another interpretation of the result, is that it finds
+the number of trials (success+failures) that will lead to an /alpha/ probability
+of observing k failures or fewer.
+
+[h5 Estimating Number of Trials to Ensure a Maximum Number of Failures or Less]
+
+   static RealType estimate_maximum_number_of_trials(
+      RealType k,     // number of failures.
+      RealType p,     // success fraction.
+      RealType alpha); // probability threshold (0.05 equivalent to 95%).
+      
+This functions estimates the maximum number of trials we can conduct and achieve
+a certain probability that [*k failures or fewer will be observed].
+
+[variablelist
+[[k][The maximum number of failures to be observed.]]
+[[p][The probability of ['success] for each trial.]]
+[[alpha][The maximum acceptable ['risk] that more than k failures will be observed.]]
+]
+
+For example:
+   
+   negative_binomial_distribution<RealType>::estimate_maximum_number_of_trials(0, 1.0-1.0/1000000, 0.05);
+      
+Returns the largest number of trials we can conduct and still be 95% sure
+of seeing no failures that occur with frequency one in one million.
+   
+This function uses numeric inversion of the negative binomial distribution
+to obtain the result: another interpretation of the result, is that it finds
+the number of trials (success+failures) that will lead to an /alpha/ probability
+of observing more than k failures.
 
 [h4 Non-member Accessors]
 
@@ -252,14 +314,15 @@ cdf = I[sub p](r, k+1) = ibeta(r, k+1, p)\n
 [[quantile from the complement][ibetac_invb(r, p, Q) -1)]]
 [[mean][ `r(1-p)/p` ]]
 [[variance][ `r (1-p) / p * p` ]]
-[[mode][`floor((r-1) * (1 - p)/p)`]
+[[mode][`floor((r-1) * (1 - p)/p)`]]
 [[skewness][`(2 - p) / sqrt(r * (1 - p))`]]
 [[kurtosis][`6 / r + (p * p) / r * (1 - p )`]]
 [[kurtosis excess][`6 / r + (p * p) / r * (1 - p ) -3`]]
 [[parameter estimation member functions][]]
-[[`estimate_upper_bound_on_p`][ibetac_inv(successes + 1, failures - successes, probability)]]
-[[`estimate_lower_bound_on_p`][ibeta_inv(successes + 1, failures - successes, probability)]]
-[[`estimate_number_of_trials`][ibetac_invb(k + 1, p, probability)]]
+[[`estimate_lower_bound_on_p`][ibeta_inv(successes, failures + 1, alpha)]]
+[[`estimate_upper_bound_on_p`][ibetac_inv(successes, failures, alpha) plus see comments in code.]]
+[[`estimate_minimum_number_of_trials`][ibeta_inva(k + 1, p, alpha)]]
+[[`estimate_maximum_number_of_trials`][ibetac_inva(k + 1, p, alpha)]]
 ]
 
 Implementation notes:

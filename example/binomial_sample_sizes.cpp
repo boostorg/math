@@ -56,7 +56,7 @@ void estimate_max_sample_size(double p, unsigned successes)
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate trials:
-      double t = binomial_distribution<>::estimate_number_of_trials(complement(successes, p, alpha[i]));
+      double t = binomial_distribution<>::estimate_maximum_number_of_trials(successes, p, alpha[i]);
       t = floor(t);
       // Print Trials:
       cout << fixed << setprecision(0) << setw(15) << right << t << endl;

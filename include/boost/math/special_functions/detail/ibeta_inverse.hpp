@@ -580,6 +580,8 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
       // right side of the inflection point:
       //
       T fs = boost::math::ibeta(a, b, xs) - p;
+      if(fs == 0)
+         return invert ? 1-xs : xs;
       if(fs < 0)
       {
          std::swap(a, b);

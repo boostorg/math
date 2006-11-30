@@ -309,14 +309,14 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
       result -= delta;
 
       // check for out of bounds step:
-      if(result <= min)
+      if(result < min)
       {
          delta = (guess - min) / 2;
          result = guess - delta;
          if((result == min) || (result == max))
             break;
       }
-      else if(result >= max)
+      else if(result > max)
       {
          delta = (guess - max) / 2;
          result = guess - delta;

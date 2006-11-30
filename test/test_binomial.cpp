@@ -169,12 +169,12 @@ void test_spot(
       // estimate sample size:
       //
       BOOST_CHECK_CLOSE(
-         binomial_distribution<RealType>::estimate_number_of_trials(
+         binomial_distribution<RealType>::estimate_minimum_number_of_trials(
             k, p, P),
          N, tol);
       BOOST_CHECK_CLOSE(
-         binomial_distribution<RealType>::estimate_number_of_trials(
-            boost::math::complement(k, p, Q)),
+         binomial_distribution<RealType>::estimate_maximum_number_of_trials(
+            k, p, Q),
          N, tol);
    }
 

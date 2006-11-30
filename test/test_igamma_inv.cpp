@@ -331,8 +331,8 @@ void test_spots(T, const char* type_name)
    // basic sanity checks, tolerance is 100 epsilon expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 10000;
-   if(tolerance < 1e-25)
-      tolerance = 1e-25;  // limit of test data?
+   if(tolerance < 1e-25f)
+      tolerance = 1e-25f;  // limit of test data?
    BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1)/100, static_cast<T>(1.0/128)), static_cast<T>(0.35767144525455121503672919307647515332256996883787L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1)/100, static_cast<T>(0.5)), static_cast<T>(4.4655350189103486773248562646452806745879516124613e-31L), tolerance*10);
    //
