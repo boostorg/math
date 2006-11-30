@@ -34,7 +34,7 @@ void estimate_number_of_trials(double failures, double p)
    // p         = success ratio.
    // successes = required number of successes.
    //
-   // Calculate how many trials we can have to ensure the
+   // Calculate how many trials we need to ensure the
    // required number of failures DOES exceed "failures".
 
    // Define a table of significance levels:

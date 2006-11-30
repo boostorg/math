@@ -100,6 +100,7 @@ void test_spot(
 
          if(Q < P)
          {
+            // Default method (Clopper Pearson)
             BOOST_CHECK(
                binomial_distribution<RealType>::estimate_lower_bound_on_p(
                   N, k, Q)
@@ -114,9 +115,25 @@ void test_spot(
                binomial_distribution<RealType>::estimate_upper_bound_on_p(
                   N, k, Q))
                   );
+            // Bayes Method (Jeffreys Prior)
+            BOOST_CHECK(
+               binomial_distribution<RealType>::estimate_lower_bound_on_p(
+               N, k, Q, binomial_distribution<RealType>::jeffreys_prior_interval)
+                  <=
+               binomial_distribution<RealType>::estimate_upper_bound_on_p(
+                  N, k, Q, binomial_distribution<RealType>::jeffreys_prior_interval)
+                  );
+            BOOST_CHECK((
+               binomial_distribution<RealType>::estimate_lower_bound_on_p(
+                  N, k, Q, binomial_distribution<RealType>::jeffreys_prior_interval)
+                  <= k/N) && (k/N <=
+               binomial_distribution<RealType>::estimate_upper_bound_on_p(
+                  N, k, Q, binomial_distribution<RealType>::jeffreys_prior_interval))
+                  );
          }
          else
          {
+            // Default method (Clopper Pearson)
             BOOST_CHECK(
                binomial_distribution<RealType>::estimate_lower_bound_on_p(
                   N, k, P)
@@ -130,6 +147,21 @@ void test_spot(
                   <= k / N) && (k/N <=
                binomial_distribution<RealType>::estimate_upper_bound_on_p(
                   N, k, P))
+                  );
+            // Bayes Method (Jeffreys Prior)
+            BOOST_CHECK(
+               binomial_distribution<RealType>::estimate_lower_bound_on_p(
+                  N, k, P, binomial_distribution<RealType>::jeffreys_prior_interval)
+                  <=
+               binomial_distribution<RealType>::estimate_upper_bound_on_p(
+                  N, k, P, binomial_distribution<RealType>::jeffreys_prior_interval)
+                  );
+            BOOST_CHECK(
+               (binomial_distribution<RealType>::estimate_lower_bound_on_p(
+                  N, k, P, binomial_distribution<RealType>::jeffreys_prior_interval)
+                  <= k / N) && (k/N <=
+               binomial_distribution<RealType>::estimate_upper_bound_on_p(
+                  N, k, P, binomial_distribution<RealType>::jeffreys_prior_interval))
                   );
          }
       }

@@ -44,10 +44,10 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
    // Print table header:
    //
    cout << "\n\n"
-           "___________________________________________\n"
-           "Confidence        Lower          Upper\n"
-           " Value (%)        Limit          Limit\n"
-           "___________________________________________\n";
+           "_______________________________________________________________________\n"
+           "Confidence        Lower CP       Upper CP       Lower JP       Upper JP\n"
+           " Value (%)        Limit          Limit          Limit          Limit\n"
+           "_______________________________________________________________________\n";
    //
    // Now print out the data for the table rows.
    //
@@ -55,12 +55,18 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
    {
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
-      // calculate bounds:
+      // Calculate Clopper Pearson bounds:
       double l = binomial_distribution<>::estimate_lower_bound_on_p(trials, successes, alpha[i]/2);
       double u = binomial_distribution<>::estimate_upper_bound_on_p(trials, successes, alpha[i]/2);
-      // Print Limits:
+      // Print Clopper Pearson Limits:
       cout << fixed << setprecision(5) << setw(15) << right << l;
-      cout << fixed << setprecision(5) << setw(15) << right << u << endl;
+      cout << fixed << setprecision(5) << setw(15) << right << u;
+      // Calculate Jeffreys Prior Bounds:
+      l = binomial_distribution<>::estimate_lower_bound_on_p(trials, successes, alpha[i]/2, binomial_distribution<>::jeffreys_prior_interval);
+      u = binomial_distribution<>::estimate_upper_bound_on_p(trials, successes, alpha[i]/2, binomial_distribution<>::jeffreys_prior_interval);
+      // Print Jeffreys Prior Limits:
+      cout << fixed << setprecision(5) << setw(15) << right << l;
+      cout << fixed << setprecision(5) << setw(15) << right << u << std::endl;
    }
    cout << endl;
 } // void confidence_limits_on_frequency()
@@ -90,18 +96,18 @@ Number of successes                     =  4
 Sample frequency of occurrence          =  0.2
 
 
-___________________________________________
-Confidence        Lower          Upper
- Value (%)        Limit          Limit
-___________________________________________
-    50.000        0.12840        0.29588
-    75.000        0.09775        0.34633
-    90.000        0.07135        0.40103
-    95.000        0.05733        0.43661
-    99.000        0.03576        0.50661
-    99.900        0.01905        0.58632
-    99.990        0.01042        0.64997
-    99.999        0.00577        0.70216
+_______________________________________________________________________
+Confidence        Lower CP       Upper CP       Lower JP       Upper JP
+ Value (%)        Limit          Limit          Limit          Limit
+_______________________________________________________________________
+    50.000        0.12840        0.29588        0.14974        0.26916
+    75.000        0.09775        0.34633        0.11653        0.31861
+    90.000        0.07135        0.40103        0.08734        0.37274
+    95.000        0.05733        0.43661        0.07152        0.40823
+    99.000        0.03576        0.50661        0.04655        0.47859
+    99.900        0.01905        0.58632        0.02634        0.55960
+    99.990        0.01042        0.64997        0.01530        0.62495
+    99.999        0.00577        0.70216        0.00901        0.67897
 
 ___________________________________________
 2-Sided Confidence Limits For Success Ratio
@@ -112,18 +118,18 @@ Number of successes                     =  40
 Sample frequency of occurrence          =  0.2000000
 
 
-___________________________________________
-Confidence        Lower          Upper
- Value (%)        Limit          Limit
-___________________________________________
-    50.000        0.17949        0.22259
-    75.000        0.16701        0.23693
-    90.000        0.15455        0.25225
-    95.000        0.14689        0.26223
-    99.000        0.13257        0.28218
-    99.900        0.11703        0.30601
-    99.990        0.10489        0.32652
-    99.999        0.09492        0.34485
+_______________________________________________________________________
+Confidence        Lower CP       Upper CP       Lower JP       Upper JP
+ Value (%)        Limit          Limit          Limit          Limit
+_______________________________________________________________________
+    50.000        0.17949        0.22259        0.18190        0.22001
+    75.000        0.16701        0.23693        0.16934        0.23429
+    90.000        0.15455        0.25225        0.15681        0.24956
+    95.000        0.14689        0.26223        0.14910        0.25951
+    99.000        0.13257        0.28218        0.13468        0.27940
+    99.900        0.11703        0.30601        0.11902        0.30318
+    99.990        0.10489        0.32652        0.10677        0.32366
+    99.999        0.09492        0.34485        0.09670        0.34197
 
 ___________________________________________
 2-Sided Confidence Limits For Success Ratio
@@ -134,18 +140,18 @@ Number of successes                     =  400
 Sample frequency of occurrence          =  0.2000000
 
 
-___________________________________________
-Confidence        Lower          Upper
- Value (%)        Limit          Limit
-___________________________________________
-    50.000        0.19382        0.20638
-    75.000        0.18965        0.21072
-    90.000        0.18537        0.21528
-    95.000        0.18267        0.21821
-    99.000        0.17745        0.22400
-    99.900        0.17150        0.23079
-    99.990        0.16658        0.23657
-    99.999        0.16233        0.24169
+_______________________________________________________________________
+Confidence        Lower CP       Upper CP       Lower JP       Upper JP
+ Value (%)        Limit          Limit          Limit          Limit
+_______________________________________________________________________
+    50.000        0.19382        0.20638        0.19406        0.20613
+    75.000        0.18965        0.21072        0.18990        0.21047
+    90.000        0.18537        0.21528        0.18561        0.21503
+    95.000        0.18267        0.21821        0.18291        0.21796
+    99.000        0.17745        0.22400        0.17769        0.22374
+    99.900        0.17150        0.23079        0.17173        0.23053
+    99.990        0.16658        0.23657        0.16681        0.23631
+    99.999        0.16233        0.24169        0.16256        0.24143
 
 */
 

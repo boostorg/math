@@ -188,18 +188,23 @@ namespace boost
       { // Total number of trials.
         return m_n;
       }
+
+      enum interval_type{
+         clopper_pearson_exact_interval,
+         jeffreys_prior_interval
+      };
+
       //
       // Estimation of the success fraction parameter.
       // The best estimate is actually simply successes/trials,
       // these functions are used
       // to obtain confidence intervals for the success fraction.
-      // Note these functions return the Clopper-Pearson interval
-      // which is known to be overly conservative.
       //
       static RealType estimate_lower_bound_on_p(
          RealType trials,
          RealType successes,
-         RealType probability)
+         RealType probability,
+         interval_type t = clopper_pearson_exact_interval)
       {
         // Error checks:
         RealType result;
@@ -213,15 +218,17 @@ namespace boost
         if(successes == 0)
            return 0;
 
-        // NOTE!!! This formual uses "successes" not "successes+1" as usual
-        // to get the lower bound,
+        // NOTE!!! The Clopper Pearson formula uses "successes" not 
+        // "successes+1" as usual to get the lower bound,
         // see http://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
-        return ibeta_inv(successes, trials - successes + 1, probability);
+        return (t == clopper_pearson_exact_interval) ? ibeta_inv(successes, trials - successes + 1, probability)
+           : ibeta_inv(successes + 0.5f, trials - successes + 0.5f, probability);
       }
       static RealType estimate_upper_bound_on_p(
          RealType trials,
          RealType successes,
-         RealType probability)
+         RealType probability,
+         interval_type t = clopper_pearson_exact_interval)
       {
         // Error checks:
         RealType result;
@@ -235,9 +242,9 @@ namespace boost
         if(trials == successes)
            return 1;
 
-        return ibetac_inv(successes + 1, trials - successes, probability);
+        return (t == clopper_pearson_exact_interval) ? ibetac_inv(successes + 1, trials - successes, probability)
+           : ibetac_inv(successes + 0.5f, trials - successes + 0.5f, probability);
       }
-
       // Estimate number of trials parameter:
       //
       // "How many trials do I need to be P% sure of seeing k events?"

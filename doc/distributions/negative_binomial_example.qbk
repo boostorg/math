@@ -200,7 +200,7 @@ Note that since we're
 calculating the /minimum/ number of trials required, we'll err on the safe
 side and take the ceiling of the result.  Had we been calculating the
 /maximum/ number of trials permitted to observe less than a certain 
-number of /failures/ then we would have taken the ceiling instead.  We
+number of /failures/ then we would have taken the floor instead.  We
 would also have wrapped the arguments to `estimate_number_of_trials` in
 a call to complement like this:
 

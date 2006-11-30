@@ -15,6 +15,11 @@
    class binomial_distribution
    {
    public:
+      typedef RealType value_type;
+      
+      static const ``['unspecified-type]`` cloppper_pearson_exact_interval;
+      static const ``['unspecified-type]`` jeffreys_prior_interval;
+      
       // construct:
       binomial_distribution(RealType n, RealType p);
       
@@ -26,11 +31,13 @@
       static RealType estimate_lower_bound_on_p(
          RealType trials, 
          RealType successes,
-         RealType probability);
+         RealType probability,
+         ``['unspecified-type]`` method = clopper_pearson_exact_interval);
       static RealType estimate_upper_bound_on_p(
          RealType trials, 
          RealType successes,
-         RealType probability);
+         RealType probability,
+         ``['unspecified-type]`` method = clopper_pearson_exact_interval);
          
       // estimate min/max number of trials:
       static RealType estimate_number_of_trials(
@@ -91,7 +98,8 @@ Returns the parameter /n/ from which this distribution was constructed.
    static RealType estimate_lower_bound_on_p(
       RealType trials, 
       RealType successes,
-      RealType alpha);
+      RealType alpha,
+      ``['unspecified-type]`` method = clopper_pearson_exact_interval);
       
 Returns a lower bound on the success fraction:
 
@@ -100,6 +108,8 @@ Returns a lower bound on the success fraction:
 [[successes][The number of successes that occurred.]]
 [[alpha][The largest acceptable probability that the true value of
          the success fraction is [*less than] the value returned.]]
+[[method][An optional parameter that specifies the method to be used
+         to compute the interval (See below).]]
 ]
 
 For example, if you observe /k/ successes from /n/ trials the
@@ -111,11 +121,61 @@ want to be 95% sure that the true value is [*greater than] some value,
                        n, k, 0.05);
 
 [link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf See worked example.]
-      
+
+There are currently two possible values available for the /method/ 
+optional parameter: /clopper_pearson_exact_interval/ 
+or /jeffreys_prior_interval/.  These constants are both members of 
+class template `binomial_distribution`, so usage is for example:
+
+   p = binomial_distribution<RealType>::estimate_lower_bound_on_p(
+       n, k, 0.05, binomial_distribution<RealType>::jeffreys_prior_interval);
+       
+The default method if this parameter is not specified is the Clopper Pearson
+"exact" interval.  This produces an interval that guarantees at least
+`100(1-alpha)%` coverage, but which is known to be overly conservative,
+sometimes producing intervals with much greater than the requested coverage.
+
+The alternative calculation method produces a non-informative 
+Jeffreys Prior interval.  It produces `100(1-alpha)%` coverage only
+['in the average case], though is typically very close to the requested
+coverage level.  It is one of the main methods of calculation recomended
+in the review by Brown, Cai and DasGupta.
+
+Please note that the "textbook" calculation method using
+a normal approximation (the Wald interval) is deliberately 
+not provided: it is known to produce consistently poor results, 
+even when the sample size is surprisingly large.
+Refer to Brown, Cai and DasGupta for a full explanation.  Many other methods
+of calculation are available, and may be more appropriate for specific
+situations.  Unfortunately there appears to be no consensus amoungst
+stataticians as to which is "best": refer to the discussion at the end of
+Brown, Cai and DasGupta for examples.
+
+The two methods provided here were chosen principally because they
+can be used for both one and two sided intervals.
+See also:
+
+Lawrence D. Brown, T. Tony Cai and Anirban DasGupta (2001),
+Interval Estimation for a Binomial Proportion,
+Statistical Science, Vol. 16, No. 2, 101-133.
+
+T. Tony Cai (2005),
+One-sided confidence intervals in discrete distributions,
+Journal of Statistical Planning and Inference 131, 63-88.
+
+Agresti, A. and Coull, B. A. (1998). Approximate is better than
+"exact" for interval estimation of binomial proportions. Amer.
+Statist. 52 119-126.
+
+Clopper, C. J. and Pearson, E. S. (1934). The use of confidence
+or fiducial limits illustrated in the case of the binomial.
+Biometrika 26 404-413.
+
    static RealType estimate_upper_bound_on_p(
       RealType trials, 
       RealType successes,
-      RealType alpha);
+      RealType alpha,
+      ``['unspecified-type]`` method = clopper_pearson_exact_interval);
       
 Returns an upper bound on the success fraction:
 
@@ -124,6 +184,10 @@ Returns an upper bound on the success fraction:
 [[successes][The number of successes that occurred.]]
 [[alpha][The largest acceptable probability that the true value of
          the success fraction is [*greater than] the value returned.]]
+[[method][An optional parameter that specifies the method to be used
+         to compute the interval. Refer to the documentation for 
+         `estimate_upper_bound_on_p` above for the meaning of the 
+         method options.]]
 ]
 
 For example, if you observe /k/ successes from /n/ trials the
