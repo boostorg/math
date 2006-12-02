@@ -46,11 +46,11 @@ namespace boost
       template <class RealType>
       inline bool check_alpha(const char* function, const RealType& alpha, RealType* result)
       {
-        if(!(boost::math::isfinite)(alpha) || (alpha < 0))
+        if(!(boost::math::isfinite)(alpha) || (alpha <= 0))
         {
           *result = tools::domain_error<RealType>(
             function,
-            "Alpha argument is %1%, but must be >= 0 !", alpha);
+            "Alpha argument is %1%, but must be > 0 !", alpha);
           return false;
         }
         return true;
@@ -59,11 +59,11 @@ namespace boost
       template <class RealType>
       inline bool check_beta(const char* function, const RealType& beta, RealType* result)
       {
-        if(!(boost::math::isfinite)(beta) || (beta < 0))
+        if(!(boost::math::isfinite)(beta) || (beta <= 0))
         {
           *result = tools::domain_error<RealType>(
             function,
-            "Beta argument is %1%, but must be >= 0 !", beta);
+            "Beta argument is %1%, but must be > 0 !", beta);
           return false;
         }
         return true;
@@ -119,11 +119,11 @@ namespace boost
       template <class RealType>
       inline bool check_mean(const char* function, const RealType& mean, RealType* result)
       {
-        if(!(boost::math::isfinite)(mean) || (mean < 0))
+        if(!(boost::math::isfinite)(mean) || (mean <= 0))
         {
           *result = tools::domain_error<RealType>(
             function,
-            "mean argument is %1%, but must be >= 0 !", mean);
+            "mean argument is %1%, but must be > 0 !", mean);
           return false;
         }
         return true;
@@ -131,11 +131,11 @@ namespace boost
       template <class RealType>
       inline bool check_variance(const char* function, const RealType& variance, RealType* result)
       {
-        if(!(boost::math::isfinite)(variance) || (variance < 0))
+        if(!(boost::math::isfinite)(variance) || (variance <= 0))
         {
           *result = tools::domain_error<RealType>(
             function,
-            "variance argument is %1%, but must be >= 0 !", variance);
+            "variance argument is %1%, but must be > 0 !", variance);
           return false;
         }
         return true;
@@ -315,22 +315,21 @@ namespace boost
     } // skewness
 
     template <class RealType>
-    inline RealType kurtosis(const beta_distribution<RealType>& dist)
-    {
-      RealType a = dist.alpha();
-      RealType b = dist.beta();
-      return 3 + 6 * a * a * a - a * a * (2 * b -1) + b * b * (b + 1) - 2 * a * b * (b + 2) /
-        a * b * (a + b + 2) * (a + b + 3);
-    } // kurtosis
-
-    template <class RealType>
     inline RealType kurtosis_excess(const beta_distribution<RealType>& dist)
     {
       RealType a = dist.alpha();
       RealType b = dist.beta();
-      return 6 * a * a * a - a * a * (2 * b -1) + b * b * (b + 1) - 2 * a * b * (b + 2) /
-        a * b * (a + b + 2) * (a + b + 3);
+      RealType a_2 = a * a;
+      RealType n = 6 * (a_2 * a - a_2 * (2 * b - 1) + b * b * (b + 1) - 2 * a * b * (b + 2));
+      RealType d = a * b * (a + b + 2) * (a + b + 3);
+      return  n / d;
     } // kurtosis_excess
+
+    template <class RealType>
+    inline RealType kurtosis(const beta_distribution<RealType>& dist)
+    {
+      return 3 + kurtosis_excess(dist);
+    } // kurtosis
 
     template <class RealType>
     RealType pdf(const beta_distribution<RealType>& dist, const RealType x)
@@ -353,7 +352,7 @@ namespace boost
         return result;
       }
       using boost::math::beta;
-      return pow(x, (a-1)) * pow((1 - x), (b-1))/ beta(a, b);
+      return ibeta_derivative(a, b, x);
     } // pdf
 
     template <class RealType>
@@ -418,7 +417,7 @@ namespace boost
       // Calculate cdf beta using the incomplete beta function.
       // Use of ibeta here prevents cancellation errors in calculating
       // 1 - x if x is very small, perhaps smaller than machine epsilon.
-      return 1 - ibeta(a, b, x);
+      return ibetac(a, b, x);
     } // beta cdf
 
     template <class RealType>

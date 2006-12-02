@@ -45,18 +45,6 @@
         RealType probability); // probability cdf.
    };
    
-   RealType mean(const beta_distribution<RealType>& dist);
-     // Mean of beta distribution = a/(a+b).
-   RealType variance(const beta_distribution<RealType>& dist);
-     // Variance of beta distribution = a * b / (a+b)^2 * (a + b + 1).
-   RealType mode(const beta_distribution<RealType>& dist);
-     // Mode of beta distribution = (a-1) / (a + b + 2)
-   RealType skewness(const beta_distribution<RealType>& dist);
-     // Skewness of beta distribution = 2 (b-a) sqrt(a+b+1)/(a+b+2) * sqrt(a * b)
-   RealType kurtosis(const beta_distribution<RealType>& dist);
-   RealType kurtosis_excess(const beta_distribution<RealType>& dist);
-   // See below.
-   
    }} // namespaces
    
 The class type `beta_distribution` represents a 
@@ -72,16 +60,6 @@ See also:
 [@http://documents.wolfram.com/calculationcenter/v2/Functions/ListsMatrices/Statistics/BetaDistribution.html beta distribution]
 and [@http://en.wikipedia.org/wiki/Bayesian_statistics Bayesian statistics].
 
-[h4 Member Functions]
-
-   beta_distribution(RealType alpha, RealType beta);
-
-Constructor example: beta_distribution<> mybeta22(2., 5);
-
-constructs a double beta distribution with two unequal shape parameters,
-whose pdf is shown in grey in the
-[@http://en.wikipedia.org/wiki/Beta_distribution plot].
-
 The [@http://en.wikipedia.org/wiki/Probability_density_function probability density function PDF]
 for the [@http://en.wikipedia.org/wiki/Beta_distribution beta distribution]
 defined on the interval \[0,1\] is given by:
@@ -90,14 +68,15 @@ f(x;[alpha],[beta]) = x[super[alpha] - 1] (1 - x)[super[beta] -1] / B([alpha], [
 
 where B([alpha], [beta]) is the
 [@http://en.wikipedia.org/wiki/Beta_function beta function],
-implemented in the Math Toolkit as __beta.  Division by the beta function
+implemented in this library as __beta.  Division by the beta function
 ensures that the pdf is normalized to the range zero to unity.
 
-[@http://en.wikipedia.org/wiki/Image:Beta_distribution_pdf.png Examples of pdf for various values of shape parameters are shown here.]
-x is a [@http://en.wikipedia.org/wiki/Random_variate random variate]
-in the interval zero to unity.
-Note the [alpha] = [beta] = 2 (purple line) is dome-shaped,
-and might be approximated by a symmetrical trianglar distribution.
+The following graph illustrates examples of the pdf for various values 
+of the shape parameters.  Note the [alpha] = [beta] = 2 (blue line) 
+is dome-shaped, and might be approximated by a symmetrical trianglar 
+distribution.
+
+[$../graphs/beta_dist.png]
 
 If [alpha] = [beta] = 1, then it is a __space
 [@http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29 uniform distribution],
@@ -107,8 +86,22 @@ If [alpha] != [beta], then the shape is asymmetric
 and could be approximated by a triangle
 whose apex is away from the centre (where x = half).
 
-Accessor member functions simply retrieve the shape parameters,
-/alpha/ and /beta/ used to construct the distribution.
+[h4 Member Functions]
+
+[h5 Constructor]
+
+   beta_distribution(RealType alpha, RealType beta);
+
+Constructs a beta distribution with shape parameters /alpha/ and /beta/.
+
+For example: 
+   
+   beta_distribution<> mybeta(2, 5);
+   
+Constructs a the beta distribution with alpha=2 and beta=5 (shown in yellow
+in the graph above).
+
+[h5 Parameter Accessors]
 
    RealType alpha() const;
    
@@ -118,34 +111,65 @@ Returns the parameter /alpha/ from which this distribution was constructed.
    
 Returns the parameter /beta/ from which this distribution was constructed.
 
-So
+So for example:
 
-  mybeta25.alpha() == 2.;
-  mybeta25.beta() == 5.;
+   beta_distribution<> mybeta(2, 5);
+   assert(mybeta.alpha() == 2.);  // mybeta.alpha() returns 2
+   assert(mybeta.beta() == 5.);   // mybeta.beta()  returns 5
 
 [h4 Parameter Estimators]
 
 Two pairs of parameter estimators are provided.
 
-One estimates either [alpha] __space or [beta] __space from presumed-known mean and variance.
+One estimates either [alpha] __space or [beta] __space 
+from presumed-known mean and variance.
 
-The other pair estimates either [alpha] __space or [beta] __space from the cdf and x.
+The other pair estimates either [alpha] __space or [beta] __space from 
+the cdf and x.
 
-(It is also possible to estimate [alpha] __space and  [beta] __space from 'known' mode & quantile.
-For example, calculators are provided
-[@http://www.ausvet.com.au/pprev/content.php?page=PPscript Pooled Prevalance Calculator] and
+It is also possible to estimate [alpha] __space and  [beta] __space from 
+'known' mode & quantile.  For example, calculators are provided by the
+[@http://www.ausvet.com.au/pprev/content.php?page=PPscript 
+Pooled Prevalance Calculator] and
 [@http://www.epi.ucdavis.edu/diagnostictests/betabuster.html Beta Buster]
-but this is NOT (yet) implemented here).
+but this is not yet implemented here.
 
+      static RealType estimate_alpha(
+        RealType mean, // Expected value of mean.
+        RealType variance); // Expected value of variance.
+        
+Returns the unique value of [alpha][space] that corresponds to a 
+beta distribution with mean /mean/ and variance /variance/.
+      
+      static RealType estimate_beta(
+        RealType mean, // Expected value of mean.
+        RealType variance); // Expected value of variance.
+  
+Returns the unique value of [beta][space] that corresponds to a 
+beta distribution with mean /mean/ and variance /variance/.
+      
+      static RealType estimate_alpha(
+        RealType beta, // from beta.
+        RealType x, //  x.
+        RealType probability); // probability cdf
+        
+Returns the value of [alpha][space] that gives:
+`cdf(beta_distribution<RealType>(alpha, beta), x) == probability`.
+      
+      static RealType estimate_beta(
+        RealType alpha, // alpha.
+        RealType x, // probability x.
+        RealType probability); // probability cdf.
 
+Returns the value of [beta][space] that gives:
+`cdf(beta_distribution<RealType>(alpha, beta), x) == probability`.
+      
 [h4 Non-member Accessor Functions]
 
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
-The formulae for calculating these are shown as comments above
-(and in the table below) with the exception of the __kurtosis and __kurtosis_excess 
-whose formula is difficult to show as a comment but is given below, and at
+The formulae for calculating these are shown in the table below, and at
 [@http://mathworld.wolfram.com/BetaDistribution.html Wolfram Mathworld].
 
 [h4 Applications]
@@ -185,22 +209,23 @@ please refer to these functions for information on accuracy.
 
 [h4 Implementation]
 
-In the following table /p/ is the probablity and /q = 1-p/.
+In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
+/x/ is the random variable, /p/ is the probablity and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][`pow(x, (a-1)) * pow((1 - x), (b-1))/ beta(a, b)`]]
-[[cdf][inverse incomplete beta function `ibeta(a, b, x)`]]
-[[cdf complement][`1 - ibeta(a, b, x)`]]
-[[quantile][inverse incomplete beta function `ibeta_inv(a, b, p)`]]
-[[quantile from the complement][inverse incomplete beta function complement `ibetac_inv(a, b, q)`]]
+[[pdf][f(x;[alpha],[beta]) = x[super[alpha] - 1] (1 - x)[super[beta] -1] / B([alpha], [beta])\n\n
+      Implemented using __ibeta_derivative(a, b, x).]]
+[[cdf][Using the incomplete beta function __ibeta(a, b, x)]]
+[[cdf complement][__ibetac(a, b, x)]]
+[[quantile][Using the inverse incomplete beta function __ibeta_inv(a, b, p)]]
+[[quantile from the complement][__ibetac_inv(a, b, q)]]
 [[mean][`a/(a+b)`]]
 [[variance][`a * b / (a+b)^2 * (a + b + 1)`]]
 [[mode][`(a-1) / (a + b + 2)`]]
 [[skewness][`2 (b-a) sqrt(a+b+1)/(a+b+2) * sqrt(a * b)`]]
-[[kurtosis][`3 + 6 * a * a * a - a * a * (2 * b -1) + b * b * (b + 1) - 2 * a * b * (b + 2) /
-        a * b * (a + b + 2) * (a + b + 3)`]]
-[[kurtosis excess][`kurtosis - 3`]]
+[[kurtosis excess][ [$../equations/beta_dist_kurtosis.png]  ]]
+[[kurtosis][`kurtosis + 3`]]
 [[parameter estimation][ ]]
 [[alpha\n
 from mean and variance][`mean * (( (mean * (1 - mean)) / variance)- 1)`]]
@@ -209,7 +234,7 @@ from mean and variance][`(1 - mean) * (((mean * (1 - mean)) /variance)-1)`]]
 [[The member functions `estimate_alpha` and `estimate_beta`\n
   from cdf and probability x\n
   and *either* `alpha` or `beta`][Implemented in terms of the inverse incomplete beta functions\n
-__ibetac_inv, __ibeta_inv, and __ibetac_invb respectively.]]
+__ibeta_inva, and __ibeta_invb respectively.]]
 [[`estimate_alpha`][`ibeta_inva(beta, x, probability)`]]
 [[`estimate_beta`][`ibeta_invb(alpha, x, probability)`]]
 ]

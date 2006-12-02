@@ -808,6 +808,15 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
    T fract;
    T y = 1 - x;
 
+   if(normalised)
+   {
+      // extend to a few very special cases:
+      if((a == 0) && (b != 0))
+         return inv ? 0 : 1;
+      else if(b == 0)
+         return inv ? 1 : 0;
+   }
+
    if(a <= 0)
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function must be greater than zero (got a=%1%).", a);
    if(b <= 0)
@@ -1061,12 +1070,12 @@ T ibeta_derivative_imp(T a, T b, T x, const L& l)
    if(x == 0)
    {
       return (a > 1) ? 0 : 
-         (a == 1) ? 1 : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+         (a == 1) ? 1 / boost::math::beta(a, b) : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
    }
    else if(x == 1)
    {
       return (b > 1) ? 0 :
-         (b == 1) ? 1 : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+         (b == 1) ? 1 / boost::math::beta(a, b) : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
    }
    //
    // Now the regular cases:

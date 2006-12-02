@@ -997,5 +997,76 @@
     </msup>
   </mrow>
 </math>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mn>6</mn>
+    <mfrac>
+      <mrow>
+        <msup>
+          <mi>&alpha;</mi>
+          <mn>3</mn>
+        </msup>
+        <mo>&minus;</mo>
+        <msup>
+          <mi>&alpha;</mi>
+          <mn>2</mn>
+        </msup>
+        <mfenced>
+          <mrow>
+            <mn>2</mn>
+            <mi>&beta;</mi>
+            <mo>&minus;</mo>
+            <mn>1</mn>
+          </mrow>
+        </mfenced>
+        <mo>+</mo>
+        <msup>
+          <mi>&beta;</mi>
+          <mn>2</mn>
+        </msup>
+        <mfenced>
+          <mrow>
+            <mi>&beta;</mi>
+            <mo>&minus;</mo>
+            <mn>1</mn>
+          </mrow>
+        </mfenced>
+        <mo>&minus;</mo>
+        <mn>2</mn>
+        <mi>&alpha;</mi>
+        <mi>&beta;</mi>
+        <mfenced>
+          <mrow>
+            <mi>&beta;</mi>
+            <mo>+</mo>
+            <mn>2</mn>
+          </mrow>
+        </mfenced>
+      </mrow>
+      <mrow>
+        <mi>&alpha;</mi>
+        <mi>&beta;</mi>
+        <mfenced>
+          <mrow>
+            <mi>&alpha;</mi>
+            <mo>+</mo>
+            <mi>&beta;</mi>
+            <mo>+</mo>
+            <mn>2</mn>
+          </mrow>
+        </mfenced>
+        <mfenced>
+          <mrow>
+            <mi>&alpha;</mi>
+            <mo>+</mo>
+            <mi>&beta;</mi>
+            <mo>+</mo>
+            <mn>3</mn>
+          </mrow>
+        </mfenced>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>
 </body>
 </html>

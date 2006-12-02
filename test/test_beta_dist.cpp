@@ -196,10 +196,11 @@ void test_spots(RealType)
      pdf(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)),
      static_cast<RealType>(0)),  // x
      static_cast<RealType>(1));
-  BOOST_CHECK_EQUAL(
+  BOOST_CHECK_CLOSE_FRACTION(
      pdf(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)),
      static_cast<RealType>(0.5)),  // x
-     static_cast<RealType>(1));
+     static_cast<RealType>(1),
+     tolerance);
 
   BOOST_CHECK_EQUAL(
      beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)).alpha(),
@@ -225,14 +226,14 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(2)),
      static_cast<RealType>(0.1)),  // x
-     static_cast<RealType>(0.02800000000000000000000000000000000000000), // Seems exact.
+     static_cast<RealType>(0.02800000000000000000000000000000000000000L), // Seems exact.
      // http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=BetaRegularized&ptype=0&z=0.1&a=2&b=2&digits=40
       tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(2)),
      static_cast<RealType>(0.0001)),  // x
-     static_cast<RealType>(2.999800000000000000000000000000000000000e-8),
+     static_cast<RealType>(2.999800000000000000000000000000000000000e-8L),
      // http://members.aol.com/iandjmsmith/BETAEX.HTM 2.9998000000004
      // http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=BetaRegularized&ptype=0&z=0.0001&a=2&b=2&digits=40
       tolerance);
@@ -241,41 +242,42 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(
      pdf(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(2)),
      static_cast<RealType>(0.0001)),  // x
-     static_cast<RealType>(0.0005999400000000004), // http://members.aol.com/iandjmsmith/BETAEX.HTM
-      tolerance);
+     static_cast<RealType>(0.0005999400000000004L), // http://members.aol.com/iandjmsmith/BETAEX.HTM
+     // Slightly higher tolerance for real concept:
+     (std::numeric_limits<RealType>::is_specialized ? 1 : 10) * tolerance);  
 
 
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(2)),
      static_cast<RealType>(0.9999)),  // x
-     static_cast<RealType>(0.999999970002), // http://members.aol.com/iandjmsmith/BETAEX.HTM
+     static_cast<RealType>(0.999999970002L), // http://members.aol.com/iandjmsmith/BETAEX.HTM
      // Wolfram 0.9999999700020000000000000000000000000000
       tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(2)),
      static_cast<RealType>(0.9)),  // x
-     static_cast<RealType>(0.9961174629530394895796514664963063381217), 
+     static_cast<RealType>(0.9961174629530394895796514664963063381217L), 
      // Wolfram
       tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(0.5)),
      static_cast<RealType>(0.1)),  // x
-     static_cast<RealType>(0.2048327646991334516491978475505189480977), 
+     static_cast<RealType>(0.2048327646991334516491978475505189480977L), 
      // Wolfram
       tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(0.5)),
      static_cast<RealType>(0.9)),  // x
-     static_cast<RealType>(0.7951672353008665483508021524494810519023), 
+     static_cast<RealType>(0.7951672353008665483508021524494810519023L), 
      // Wolfram
       tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
      quantile(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(0.5)),
-     static_cast<RealType>(0.7951672353008665483508021524494810519023)),  // x
+     static_cast<RealType>(0.7951672353008665483508021524494810519023L)),  // x
      static_cast<RealType>(0.9), 
      // Wolfram
      tolerance);
@@ -283,13 +285,13 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(0.5)),
      static_cast<RealType>(0.6)),  // x
-     static_cast<RealType>(0.5640942168489749316118742861695149357858), 
+     static_cast<RealType>(0.5640942168489749316118742861695149357858L), 
      // Wolfram
       tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
      quantile(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(0.5)),
-     static_cast<RealType>(0.5640942168489749316118742861695149357858)),  // x
+     static_cast<RealType>(0.5640942168489749316118742861695149357858L)),  // x
      static_cast<RealType>(0.6), 
      // Wolfram
       tolerance); 
@@ -298,13 +300,13 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(0.5)),
      static_cast<RealType>(0.6)),  // x
-     static_cast<RealType>(0.1778078083562213736802876784474931812329), 
+     static_cast<RealType>(0.1778078083562213736802876784474931812329L), 
      // Wolfram
       tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
      quantile(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(0.5)),
-     static_cast<RealType>(0.1778078083562213736802876784474931812329)),  // x
+     static_cast<RealType>(0.1778078083562213736802876784474931812329L)),  // x
      static_cast<RealType>(0.6), 
      // Wolfram
       tolerance); // gives 
@@ -326,13 +328,13 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(complement(beta_distribution<RealType>(static_cast<RealType>(0.5), static_cast<RealType>(0.5)),
      static_cast<RealType>(0.1))),  // complement of x
-     static_cast<RealType>(0.7951672353008665483508021524494810519023), 
+     static_cast<RealType>(0.7951672353008665483508021524494810519023L), 
      // Wolfram
       tolerance);
 
     BOOST_CHECK_CLOSE_FRACTION(
      quantile(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(2)),
-     static_cast<RealType>(0.0280000000000000000000000000000000000)),  // x
+     static_cast<RealType>(0.0280000000000000000000000000000000000L)),  // x
      static_cast<RealType>(0.1), 
      // Wolfram
       tolerance);
@@ -341,14 +343,14 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(
      cdf(complement(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(2)),
      static_cast<RealType>(0.1))),  // x
-     static_cast<RealType>(0.9720000000000000000000000000000000000000), // Exact.
+     static_cast<RealType>(0.9720000000000000000000000000000000000000L), // Exact.
      // Wolfram
       tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
      pdf(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(2)),
      static_cast<RealType>(0.9999)),  // x
-     static_cast<RealType>(0.0005999399999999344), // http://members.aol.com/iandjmsmith/BETAEX.HTM
+     static_cast<RealType>(0.0005999399999999344L), // http://members.aol.com/iandjmsmith/BETAEX.HTM
       tolerance*10); // Note less accurate.
 
   //void test_spot(
@@ -374,8 +376,8 @@ void test_spots(RealType)
      static_cast<RealType>(2),   // alpha a
      static_cast<RealType>(2),   // beta b
      static_cast<RealType>(0.1), // Probability  p
-     static_cast<RealType>(0.0280000000000000000000000000000000000), // Probability of result (CDF of beta), P
-     static_cast<RealType>(1 - 0.0280000000000000000000000000000000000),  // Complement of CDF Q = 1 - P
+     static_cast<RealType>(0.0280000000000000000000000000000000000L), // Probability of result (CDF of beta), P
+     static_cast<RealType>(1 - 0.0280000000000000000000000000000000000L),  // Complement of CDF Q = 1 - P
      tolerance); // Test tolerance.
 
 
@@ -399,56 +401,56 @@ void test_spots(RealType)
      static_cast<RealType>(2),   // alpha a
      static_cast<RealType>(2),   // beta b
      static_cast<RealType>(0.01), // Probability  p
-     static_cast<RealType>(0.0002980000000000000000000000000000000000000), // Probability of result (CDF of beta), P
-     static_cast<RealType>(1-0.0002980000000000000000000000000000000000000),  // Complement of CDF Q = 1 - P
+     static_cast<RealType>(0.0002980000000000000000000000000000000000000L), // Probability of result (CDF of beta), P
+     static_cast<RealType>(1-0.0002980000000000000000000000000000000000000L),  // Complement of CDF Q = 1 - P
      tolerance); // Test tolerance.
 
   test_spot(
      static_cast<RealType>(2),   // alpha a
      static_cast<RealType>(2),   // beta b
      static_cast<RealType>(0.001), // Probability  p
-     static_cast<RealType>(2.998000000000000000000000000000000000000E-6), // Probability of result (CDF of beta), P
-     static_cast<RealType>(1-2.998000000000000000000000000000000000000E-6),  // Complement of CDF Q = 1 - P
+     static_cast<RealType>(2.998000000000000000000000000000000000000E-6L), // Probability of result (CDF of beta), P
+     static_cast<RealType>(1-2.998000000000000000000000000000000000000E-6L),  // Complement of CDF Q = 1 - P
      tolerance); // Test tolerance.
 
   test_spot(
      static_cast<RealType>(2),   // alpha a
      static_cast<RealType>(2),   // beta b
      static_cast<RealType>(0.0001), // Probability  p
-     static_cast<RealType>(2.999800000000000000000000000000000000000E-8), // Probability of result (CDF of beta), P
-     static_cast<RealType>(1-2.999800000000000000000000000000000000000E-8),  // Complement of CDF Q = 1 - P
+     static_cast<RealType>(2.999800000000000000000000000000000000000E-8L), // Probability of result (CDF of beta), P
+     static_cast<RealType>(1-2.999800000000000000000000000000000000000E-8L),  // Complement of CDF Q = 1 - P
      tolerance); // Test tolerance.
 
   test_spot(
      static_cast<RealType>(2),   // alpha a
      static_cast<RealType>(2),   // beta b
      static_cast<RealType>(0.99), // Probability  p
-     static_cast<RealType>(0.9997020000000000000000000000000000000000), // Probability of result (CDF of beta), P
-     static_cast<RealType>(1-0.9997020000000000000000000000000000000000),  // Complement of CDF Q = 1 - P
+     static_cast<RealType>(0.9997020000000000000000000000000000000000L), // Probability of result (CDF of beta), P
+     static_cast<RealType>(1-0.9997020000000000000000000000000000000000L),  // Complement of CDF Q = 1 - P
      tolerance); // Test tolerance.
 
   test_spot(
      static_cast<RealType>(0.5),   // alpha a
      static_cast<RealType>(2),   // beta b
      static_cast<RealType>(0.5), // Probability  p
-     static_cast<RealType>(0.8838834764831844055010554526310612991060), // Probability of result (CDF of beta), P
-     static_cast<RealType>(1-0.8838834764831844055010554526310612991060),  // Complement of CDF Q = 1 - P
+     static_cast<RealType>(0.8838834764831844055010554526310612991060L), // Probability of result (CDF of beta), P
+     static_cast<RealType>(1-0.8838834764831844055010554526310612991060L),  // Complement of CDF Q = 1 - P
      tolerance); // Test tolerance.
 
   test_spot(
      static_cast<RealType>(0.5),   // alpha a
      static_cast<RealType>(3.),   // beta b
      static_cast<RealType>(0.7), // Probability  p
-     static_cast<RealType>(0.9903963064097119299191611355232156905687), // Probability of result (CDF of beta), P
-     static_cast<RealType>(1-0.9903963064097119299191611355232156905687),  // Complement of CDF Q = 1 - P
+     static_cast<RealType>(0.9903963064097119299191611355232156905687L), // Probability of result (CDF of beta), P
+     static_cast<RealType>(1-0.9903963064097119299191611355232156905687L),  // Complement of CDF Q = 1 - P
      tolerance); // Test tolerance.
 
   test_spot(
      static_cast<RealType>(0.5),   // alpha a
      static_cast<RealType>(3.),   // beta b
      static_cast<RealType>(0.1), // Probability  p
-     static_cast<RealType>(0.5545844446520295253493059553548880128511), // Probability of result (CDF of beta), P
-     static_cast<RealType>(1-0.5545844446520295253493059553548880128511),  // Complement of CDF Q = 1 - P
+     static_cast<RealType>(0.5545844446520295253493059553548880128511L), // Probability of result (CDF of beta), P
+     static_cast<RealType>(1-0.5545844446520295253493059553548880128511L),  // Complement of CDF Q = 1 - P
      tolerance); // Test tolerance.
 
 } // template <class RealType>void test_spots(RealType)
@@ -462,99 +464,96 @@ int test_main(int, char* [])
 #endif
 
 
-	// Check that can generate beta distribution using one convenience methods:
-	beta_distribution<> mybeta11(1., 1.); // Using default RealType double.
-  // but that
-	//boost::math::beta mybeta1(1., 1.); // Using typedef fails.
-  // error C2039: 'beta' : is not a member of 'boost::math'
+   // Check that can generate beta distribution using one convenience methods:
+   beta_distribution<> mybeta11(1., 1.); // Using default RealType double.
+   // but that
+   // boost::math::beta mybeta1(1., 1.); // Using typedef fails.
+   // error C2039: 'beta' : is not a member of 'boost::math'
 
-  // Basic sanity-check spot values.
+   // Basic sanity-check spot values.
 
-  // Some simple checks using double only.
-  BOOST_CHECK_EQUAL(mybeta11.alpha(), 1); // 
-  BOOST_CHECK_EQUAL(mybeta11.beta(), 1);
-  BOOST_CHECK_EQUAL(mean(mybeta11), 0.5); // 1 / (1 + 1) = 1/2 exactly
-  BOOST_CHECK_THROW(mode(mybeta11), std::domain_error);
-	beta_distribution<> mybeta22(2., 2.); // pdf is dome shape.
-  BOOST_CHECK_EQUAL(mode(mybeta22), 0.5); // 2-1 / (2+2-2) = 1/2 exactly.
-	beta_distribution<> mybetaH2(0.5, 2.); // 
-	beta_distribution<> mybetaH3(0.5, 3.); // 
-
-
-  // Check a few values using double.
-  BOOST_CHECK_EQUAL(pdf(mybeta11, 1), 1); // is uniform unity over 0 to 1,
-  BOOST_CHECK_EQUAL(pdf(mybeta11, 0), 1); // including zero and unity.
-  BOOST_CHECK_EQUAL(pdf(mybeta11, 0.5), 1);
-  BOOST_CHECK_EQUAL(pdf(mybeta11, 0.0001), 1);
-  BOOST_CHECK_EQUAL(pdf(mybeta11, 0.9999), 1);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.1), 0.1, std::numeric_limits<double>::epsilon());
-  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.5), 0.5, std::numeric_limits<double>::epsilon());
-  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.9), 0.9, std::numeric_limits<double>::epsilon());
-  BOOST_CHECK_EQUAL(cdf(mybeta11, 1), 1.); // Exact unity expected.
-
-  double tol = std::numeric_limits<double>::epsilon() * 10;
-  BOOST_CHECK_EQUAL(pdf(mybeta22, 1), 0); // is dome shape.
-  BOOST_CHECK_EQUAL(pdf(mybeta22, 0), 0);
-  BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta22, 0.5), 1.5, tol); // top of dome, expect exactly 3/2.
-  BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta22, 0.0001), 5.9994000000000E-4, tol);
-  BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta22, 0.9999), 5.9994000000000E-4, tol*50);
-
-  BOOST_CHECK_EQUAL(cdf(mybeta22, 0.), 0); // cdf is a curved line from 0 to 1.
-  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.1), 0.028000000000000, tol);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.5), 0.5, tol);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.9), 0.972000000000000, tol);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.0001), 2.999800000000000000000000000000000000000E-8, tol);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.001), 2.998000000000000000000000000000000000000E-6, tol);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.01), 0.0002980000000000000000000000000000000000000, tol);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.1), 0.02800000000000000000000000000000000000000, tol); // exact
-  BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.99), 0.9997020000000000000000000000000000000000, tol);
-
-  BOOST_CHECK_EQUAL(cdf(mybeta22, 1), 1.); // Exact unity expected.
-
-  // Complement
-
-  BOOST_CHECK_CLOSE_FRACTION(cdf(complement(mybeta22, 0.9)), 0.028000000000000, tol);
-
-  // quantile.
-  BOOST_CHECK_CLOSE_FRACTION(quantile(mybeta22, 0.028), 0.1, tol); 
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(mybeta22, 1 - 0.028)), 0.1, tol);
-  BOOST_CHECK_EQUAL(kurtosis(mybeta11), 3+ kurtosis_excess(mybeta11)); // Check kurtosis_excess = kurtosis - 3;
-  BOOST_CHECK_CLOSE_FRACTION(variance(mybeta22), 0.05, tol);
-  BOOST_CHECK_CLOSE_FRACTION(mode(mybeta22), 0.5, tol);
-  BOOST_CHECK_CLOSE_FRACTION(mean(mybeta22), 0.5, tol);
+   // Some simple checks using double only.
+   BOOST_CHECK_EQUAL(mybeta11.alpha(), 1); // 
+   BOOST_CHECK_EQUAL(mybeta11.beta(), 1);
+   BOOST_CHECK_EQUAL(mean(mybeta11), 0.5); // 1 / (1 + 1) = 1/2 exactly
+   BOOST_CHECK_THROW(mode(mybeta11), std::domain_error);
+   beta_distribution<> mybeta22(2., 2.); // pdf is dome shape.
+   BOOST_CHECK_EQUAL(mode(mybeta22), 0.5); // 2-1 / (2+2-2) = 1/2 exactly.
+   beta_distribution<> mybetaH2(0.5, 2.); // 
+   beta_distribution<> mybetaH3(0.5, 3.); // 
 
 
-   //cout << beta_distribution<double>::estimate_alpha(mean(mybeta22), variance(mybeta22)) << endl; // 2
-  //cout << beta_distribution<double>::estimate_beta(mean(mybeta22), variance(mybeta22)) << endl; // 2
-  BOOST_CHECK_EQUAL(beta_distribution<double>::estimate_alpha(mean(mybeta22), variance(mybeta22)), mybeta22.alpha()); // mean, variance, probability. 
-  BOOST_CHECK_EQUAL(beta_distribution<double>::estimate_beta(mean(mybeta22), variance(mybeta22)), mybeta22.beta());// mean, variance, probability. 
+   // Check a few values using double.
+   BOOST_CHECK_EQUAL(pdf(mybeta11, 1), 1); // is uniform unity over 0 to 1,
+   BOOST_CHECK_EQUAL(pdf(mybeta11, 0), 1); // including zero and unity.
+   // Although these next three have an exact result, internally they're
+   // *not* treated as special cases, and may be out by a couple of eps:
+   BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta11, 0.5), 1.0, 5*std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta11, 0.0001), 1.0, 5*std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta11, 0.9999), 1.0, 5*std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.1), 0.1, std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.5), 0.5, std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.9), 0.9, std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_EQUAL(cdf(mybeta11, 1), 1.); // Exact unity expected.
 
- // BOOST_CHECK_CLOSE_FRACTION(ibeta_inva(mybeta22.beta(), 0.8, cdf(mybeta22, 0.8)), mybeta22.alpha(), tol);
-  //BOOST_CHECK_CLOSE_FRACTION(ibeta_inva(mybeta22.beta(), 0.8, cdf(mybeta22, 0.8)), mybeta22.alpha(), tol);
-  BOOST_CHECK_CLOSE_FRACTION(mybeta22.estimate_alpha(mybeta22.beta(), 0.8, cdf(mybeta22, 0.8)), mybeta22.alpha(), tol);
-  BOOST_CHECK_CLOSE_FRACTION(mybeta22.estimate_beta(mybeta22.alpha(), 0.8, cdf(mybeta22, 0.8)), mybeta22.beta(), tol);
+   double tol = std::numeric_limits<double>::epsilon() * 10;
+   BOOST_CHECK_EQUAL(pdf(mybeta22, 1), 0); // is dome shape.
+   BOOST_CHECK_EQUAL(pdf(mybeta22, 0), 0);
+   BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta22, 0.5), 1.5, tol); // top of dome, expect exactly 3/2.
+   BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta22, 0.0001), 5.9994000000000E-4, tol);
+   BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta22, 0.9999), 5.9994000000000E-4, tol*50);
+
+   BOOST_CHECK_EQUAL(cdf(mybeta22, 0.), 0); // cdf is a curved line from 0 to 1.
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.1), 0.028000000000000, tol);
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.5), 0.5, tol);
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.9), 0.972000000000000, tol);
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.0001), 2.999800000000000000000000000000000000000E-8, tol);
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.001), 2.998000000000000000000000000000000000000E-6, tol);
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.01), 0.0002980000000000000000000000000000000000000, tol);
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.1), 0.02800000000000000000000000000000000000000, tol); // exact
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta22, 0.99), 0.9997020000000000000000000000000000000000, tol);
+
+   BOOST_CHECK_EQUAL(cdf(mybeta22, 1), 1.); // Exact unity expected.
+
+   // Complement
+
+   BOOST_CHECK_CLOSE_FRACTION(cdf(complement(mybeta22, 0.9)), 0.028000000000000, tol);
+
+   // quantile.
+   BOOST_CHECK_CLOSE_FRACTION(quantile(mybeta22, 0.028), 0.1, tol); 
+   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(mybeta22, 1 - 0.028)), 0.1, tol);
+   BOOST_CHECK_EQUAL(kurtosis(mybeta11), 3+ kurtosis_excess(mybeta11)); // Check kurtosis_excess = kurtosis - 3;
+   BOOST_CHECK_CLOSE_FRACTION(variance(mybeta22), 0.05, tol);
+   BOOST_CHECK_CLOSE_FRACTION(mode(mybeta22), 0.5, tol);
+   BOOST_CHECK_CLOSE_FRACTION(mean(mybeta22), 0.5, tol);
+   BOOST_CHECK_CLOSE_FRACTION(skewness(mybeta22), 0.0, tol);
+   BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(mybeta22), -144.0 / 168, tol);
+   BOOST_CHECK_CLOSE_FRACTION(skewness(beta_distribution<>(3, 5)), 0.30983866769659335081434123198259, tol);
+
+   BOOST_CHECK_EQUAL(beta_distribution<double>::estimate_alpha(mean(mybeta22), variance(mybeta22)), mybeta22.alpha()); // mean, variance, probability. 
+   BOOST_CHECK_EQUAL(beta_distribution<double>::estimate_beta(mean(mybeta22), variance(mybeta22)), mybeta22.beta());// mean, variance, probability. 
+
+   BOOST_CHECK_CLOSE_FRACTION(mybeta22.estimate_alpha(mybeta22.beta(), 0.8, cdf(mybeta22, 0.8)), mybeta22.alpha(), tol);
+   BOOST_CHECK_CLOSE_FRACTION(mybeta22.estimate_beta(mybeta22.alpha(), 0.8, cdf(mybeta22, 0.8)), mybeta22.beta(), tol);
 
 
-	beta_distribution<real_concept> rcbeta22(2, 2); // Using RealType real_concept.
-  cout << "numeric_limits<real_concept>::is_specialized " << numeric_limits<real_concept>::is_specialized << endl;
-  cout << "numeric_limits<real_concept>::digits " << numeric_limits<real_concept>::digits << endl;
-  cout << "numeric_limits<real_concept>::digits10 " << numeric_limits<real_concept>::digits10 << endl;
-  cout << "numeric_limits<real_concept>::epsilon " << numeric_limits<real_concept>::epsilon() << endl;
+   beta_distribution<real_concept> rcbeta22(2, 2); // Using RealType real_concept.
+   cout << "numeric_limits<real_concept>::is_specialized " << numeric_limits<real_concept>::is_specialized << endl;
+   cout << "numeric_limits<real_concept>::digits " << numeric_limits<real_concept>::digits << endl;
+   cout << "numeric_limits<real_concept>::digits10 " << numeric_limits<real_concept>::digits10 << endl;
+   cout << "numeric_limits<real_concept>::epsilon " << numeric_limits<real_concept>::epsilon() << endl;
 
-  // Tests for improvements to Boost.test display of errors.
-  //BOOST_CHECK_CLOSE_FRACTION(rcbeta22.alpha(), static_cast<real_concept>(2 + 3 * std::numeric_limits<double>::epsilon()), 0);
-  //BOOST_CHECK_CLOSE_FRACTION(cdf(rcbeta22, 0.1), static_cast<real_concept>(0.028000000000009), 0);
 
-  // (Parameter value, arbitrarily zero, only communicates the floating point type).
-  test_spots(0.0F); // Test float.
-  test_spots(0.0); // Test double.
+   // (Parameter value, arbitrarily zero, only communicates the floating point type).
+   test_spots(0.0F); // Test float.
+   test_spots(0.0); // Test double.
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-  test_spots(0.0L); // Test long double.
+   test_spots(0.0L); // Test long double.
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-  test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
 #endif
-  return 0;
+   return 0;
 } // int test_main(int, char* [])
 
 /*
