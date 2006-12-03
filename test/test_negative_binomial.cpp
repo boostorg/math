@@ -21,6 +21,7 @@
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
+#  pragma warning(disable: 4180) // qualifier applied to function type has no meaning; ignored
 #endif
 
 #include <boost/math/distributions/negative_binomial.hpp> // for negative_binomial_distribution
