@@ -199,8 +199,8 @@ void test_spots(RealType)
 
   cout << "Tolerance = " << tolerance << "%." << endl;
 
-  RealType tol1eps = boost::math::tools::epsilon<RealType>() * 2; // Very tight, suit exact values.
-  RealType tol2eps = boost::math::tools::epsilon<RealType>() * 2; // Tight, suit exact values.
+  //RealType tol1eps = boost::math::tools::epsilon<RealType>() * 2; // Very tight, suit exact values.
+  //RealType tol2eps = boost::math::tools::epsilon<RealType>() * 2; // Tight, suit exact values.
   RealType tol5eps = boost::math::tools::epsilon<RealType>() * 5; // Wider 5 epsilon.
   cout << "Tolerance 5 eps = " << tol5eps << "%." << endl;
 
@@ -371,7 +371,7 @@ if(std::numeric_limits<RealType>::is_specialized)
   cdf(negative_binomial_distribution<RealType>(static_cast<RealType>(20), static_cast<RealType>(0.25)),
   static_cast<RealType>(1)) -
   static_cast<RealType>(1.455191522836700E-11),
-  static_cast<RealType>(tol1eps) );
+  tolerance );
 
   // Some exact (probably - judging by trailing zeros) values.
   BOOST_CHECK_CLOSE(
@@ -390,7 +390,7 @@ if(std::numeric_limits<RealType>::is_specialized)
   cdf(negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
   static_cast<RealType>(0)) -
   static_cast<RealType>(1.525878906250000E-5),
-  tol2eps );
+  tolerance );
 
   BOOST_CHECK_CLOSE( // k = 1.
   cdf(negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
@@ -495,21 +495,21 @@ if(std::numeric_limits<RealType>::is_specialized)
   // std deviation:
   BOOST_CHECK_CLOSE(
     standard_deviation(dist), // 9.79795897113271239270
-    static_cast<RealType>(9.797958971132712392789136298823565567864), // using functions.wolfram.com
+    static_cast<RealType>(9.797958971132712392789136298823565567864L), // using functions.wolfram.com
     //                              9.79795897113271152534  == sqrt(8 * (1 - 0.25) / (0.25 * 0.25)))
     tol5eps * 100);
   BOOST_CHECK_CLOSE(
     skewness(dist), //
     static_cast<RealType>(0.71443450831176036),
     // using http://mathworld.wolfram.com/skewness.html
-    tol5eps * 100);
+    tolerance);
   BOOST_CHECK_CLOSE(
     kurtosis_excess(dist), //
-    static_cast<RealType>(0.7604166666666666666666666666666666667), // using Wikipedia Kurtosis(excess) formula
+    static_cast<RealType>(0.7604166666666666666666666666666666666666L), // using Wikipedia Kurtosis(excess) formula
     tol5eps * 100);
   BOOST_CHECK_CLOSE(
     kurtosis(dist), // true 
-    static_cast<RealType>(3.76041666666666666666666666666666666667), // 
+    static_cast<RealType>(3.76041666666666666666666666666666666666666L), // 
     tol5eps * 100);
   // hazard:
   RealType x = static_cast<RealType>(0.125);
@@ -554,7 +554,7 @@ if(std::numeric_limits<RealType>::is_specialized)
    negative_binomial_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(0.25)),
   static_cast<RealType>(0))-
   static_cast<RealType>(0.0625),
-  boost::math::tools::epsilon<RealType>() ); // Expect exact, but not quite.
+  2 * boost::math::tools::epsilon<RealType>() ); // Expect exact, but not quite.
   // numeric_limits<RealType>::epsilon()); // Not suitable for real concept!
 
   // Quantile boundary cases checks:
@@ -582,7 +582,7 @@ if(std::numeric_limits<RealType>::is_specialized)
   negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
   static_cast<RealType>(0.0001)),
   static_cast<RealType>(0.95854156929288470),
-    tol5eps * 100);
+    tolerance);
 
   //BOOST_CHECK(  // Fails with overflow for real_concept
   //quantile(  // Small P near 1 so k failures should be big.

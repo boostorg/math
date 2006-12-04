@@ -147,13 +147,16 @@ and use the function's name as the link text]
 [template floorlr[x][lfloor][x][rfloor]]
 [template ceil[x] '''&#x2308;'''[x]'''&#x2309;''']
 
-[section:intro About the Math Toolkit] [/was Introduction]
+[section:intro About the Math Toolkit]
 
-This library is work in progress, it is intended to fulfil several needs:
+This library is divided into three interconnected parts:
 
-# To provide a reasonably comprehensive set of
+[h4 Statistical Distributions]
+
+Provide a reasonably comprehensive set of
 [@http://en.wikipedia.org/wiki/List_of_probability_distributions statistical distributions],
 upon which higher level statistical tests can be built.
+
 The initial focus is on the central
 [@http://en.wikipedia.org/wiki/Univariate univariate ]
 [@http://mathworld.wolfram.com/StatisticalDistribution.html distributions].\n
@@ -164,40 +167,48 @@ and [@http://mathworld.wolfram.com/DiscreteDistribution.html discrete]
 (like [@http://mathworld.wolfram.com/BinomialDistribution.html binomial]
 & [@http://mathworld.wolfram.com/PoissonDistribution.html Poisson]) distributions are provided.
 
-# To provide a small number of high quality 
+A tutorial is provided, along with a series of worked examples illustrating
+how the library is used to conduct statistical tests.
+
+[h4 Mathematical Special Functions]
+
+Provides a small number of high quality 
 [@http://en.wikipedia.org/wiki/Special_functions special functions],
-initially these will be concentrated on functions used in statistical applications.
-The functions currently implemented are the gamma, beta & erf functions
+initially these are be concentrated on functions used in statistical applications.
+
+The function families currently implemented are the gamma, beta & erf functions
 along with the incomplete gamma and beta functions (four variants
-of each) and all the possible inverses of these.  All the implementations
+of each) and all the possible inverses of these, plus digamma and various 
+special power and logarithmic functions.  Future additions will focus on
+those new math functions added in the C++ Technical Report on Standard Library
+Extensions.
+
+All the implementations
 are fully generic and support the use of arbitrary "real-number" types,
 although they are optimised for use with types with known-about
 [@http://en.wikipedia.org/wiki/Significand significand (or mantissa)]
 sizes: typically `float`, `double` or `long double`.
-Use of these functions with interval arithmetic (Boost.Interval)
-isn't quite supported yet, but it's something that needs to be investigated.
 
-# To provide at least some of the tools required to implement 
-mathematical special functions, hopefully the presence of 
+[h4 Implementation Toolkit]
+
+Provides many of the tools required to implement 
+mathematical special functions: hopefully the presence of 
 these will encourage other authors to contribute more special
-function implementations in the future.  Currently implemented
-are helpers for the evaluation of infinite series, continued
-fractions and rational approximations.  There are also
-a fairly comprehensive set of root finding algorithms:
-both with and without derivative support.  There are also classes 
-for the manipulation of polynomials, for testing a special function
-against tabulated test data, and for the rapid generation of test
-data and/or data for output to an external graphing application.
+function implementations in the future.  
 
-# To provide the most common
-[@http://en.wikipedia.org/wiki/List_of_probability_distributions probability distributions]
-used for statistics as C++ templated objects, fully generic,
-to support the use of arbitrary "real-number" types, so that they can be used not only with
-built-in floating-point types but also User-Defined Types (UDT) conforming to the
-real_concept archetype.
-These distributions are implemented using the special functions above.
-There are several examples of using the distributions for
-some typical applications in statistics.
+There are helpers for the evaluation of infinite series, continued
+fractions and rational approximations.  
+
+There is a fairly comprehensive set of root finding and function minimisation 
+algorithms: both with and without derivative support.
+
+A Remez algorithm implementation allows for the locating of minimax rational
+approximations.
+
+There are also (experimental) classes for the manipulation of polynomials, for 
+testing a special function against tabulated test data, and for 
+the rapid generation of test data and/or data for output to an 
+external graphing application.
 
 [endsect][/section:intro Introduction]
 

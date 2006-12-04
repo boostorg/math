@@ -94,6 +94,12 @@ whose apex is away from the centre (where x = half).
 
 Constructs a beta distribution with shape parameters /alpha/ and /beta/.
 
+Requires alpha,beta > 0,otherwise __domain_error is called.  Note that 
+technically the beta distribution is defined for alpha,beta >= 0, but
+it's not clear whether any program can actually make use of that lattitude
+or how many of the non-member functions can be usefully defined in that case.
+Therefore for now, we regard it as an error if alpha or beta is zero.
+
 For example: 
    
    beta_distribution<> mybeta(2, 5);
