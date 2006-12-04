@@ -8,6 +8,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  01 Dec 2006  Various fixes for old compilers (Joaquín M López Muñoz)
 //  10 Nov 2006  Make long long and __int64 mutually exclusive (Daryle Walker)
 //  04 Nov 2006  Use more built-in numeric types, binary-GCD (Daryle Walker)
 //  03 Nov 2006  Use custom numeric types (Daryle Walker)
@@ -17,6 +18,7 @@
 #define BOOST_TEST_MAIN  "Boost.Math GCD & LCM unit tests"
 
 #include <boost/config.hpp>              // for BOOST_MSVC, etc.
+#include <boost/detail/workaround.hpp>
 #include <boost/math/common_factor.hpp>  // for boost::math::gcd, etc.
 #include <boost/mpl/list.hpp>            // for boost::mpl::list
 #include <boost/operators.hpp>
@@ -50,7 +52,7 @@ public:
     // Template parameters
     typedef IntType  int_type;
 
-    static  int const  id = ID;
+    BOOST_STATIC_CONSTANT(int,id = ID);
 
     // Lifetime management (use automatic destructor and copy constructor)
     my_wrapped_integer( int_type const &v = int_type() )  : v_( v )  {}
@@ -84,14 +86,10 @@ public:
     self_type &operator ^=(self_type const &r) {this->v_ ^= r.v_; return *this;}
 
     // Input & output
-    template < typename Ch, class Tr >
-    friend  std::basic_istream<Ch, Tr> &
-    operator >>( std::basic_istream<Ch, Tr> &i, self_type &x )
+    friend std::istream & operator >>( std::istream &i, self_type &x )
     { return i >> x.v_; }
 
-    template < typename Ch, class Tr >
-    friend  std::basic_ostream<Ch, Tr> &
-    operator <<( std::basic_ostream<Ch, Tr> &o, self_type const &x )
+    friend std::ostream & operator <<( std::ostream &o, self_type const &x )
     { return o << x.v_; }
 
 };  // my_wrapped_integer
@@ -104,6 +102,13 @@ typedef my_wrapped_integer<int>          MyInt1;
 typedef my_wrapped_integer<unsigned>     MyUnsigned1;
 typedef my_wrapped_integer<int, 1>       MyInt2;
 typedef my_wrapped_integer<unsigned, 1>  MyUnsigned2;
+
+// Without these explicit instantiations, MSVC++ 6.5/7.0 does not find
+// some friend operators in certain contexts.
+MyInt1       dummy1;
+MyUnsigned1  dummy2;
+MyInt2       dummy3;
+MyUnsigned2  dummy4;
 
 // Various types to test with each GCD/LCM
 typedef ::boost::mpl::list<signed char, short, int, long,
@@ -136,43 +141,43 @@ class numeric_limits< MyInt1 >
     typedef numeric_limits<int_type>  limits_type;
 
 public:
-    static const bool is_specialized = limits_type::is_specialized;
+    BOOST_STATIC_CONSTANT(bool, is_specialized = limits_type::is_specialized);
 
     static MyInt1 min() throw()  { return limits_type::min(); }
     static MyInt1 max() throw()  { return limits_type::max(); }
 
-    static const int digits      = limits_type::digits;
-    static const int digits10    = limits_type::digits10;
-    static const bool is_signed  = limits_type::is_signed;
-    static const bool is_integer = limits_type::is_integer;
-    static const bool is_exact   = limits_type::is_exact;
-    static const int radix       = limits_type::radix;
+    BOOST_STATIC_CONSTANT(int, digits      = limits_type::digits);
+    BOOST_STATIC_CONSTANT(int, digits10    = limits_type::digits10);
+    BOOST_STATIC_CONSTANT(bool, is_signed  = limits_type::is_signed);
+    BOOST_STATIC_CONSTANT(bool, is_integer = limits_type::is_integer);
+    BOOST_STATIC_CONSTANT(bool, is_exact   = limits_type::is_exact);
+    BOOST_STATIC_CONSTANT(int, radix       = limits_type::radix);
     static MyInt1 epsilon() throw()      { return limits_type::epsilon(); }
     static MyInt1 round_error() throw()  { return limits_type::round_error(); }
 
-    static const int min_exponent   = limits_type::min_exponent;
-    static const int min_exponent10 = limits_type::min_exponent10;
-    static const int max_exponent   = limits_type::max_exponent;
-    static const int max_exponent10 = limits_type::max_exponent10;
+    BOOST_STATIC_CONSTANT(int, min_exponent   = limits_type::min_exponent);
+    BOOST_STATIC_CONSTANT(int, min_exponent10 = limits_type::min_exponent10);
+    BOOST_STATIC_CONSTANT(int, max_exponent   = limits_type::max_exponent);
+    BOOST_STATIC_CONSTANT(int, max_exponent10 = limits_type::max_exponent10);
 
-    static const bool has_infinity             = limits_type::has_infinity;
-    static const bool has_quiet_NaN            = limits_type::has_quiet_NaN;
-    static const bool has_signaling_NaN        = limits_type::has_signaling_NaN;
-    static const float_denorm_style has_denorm = limits_type::has_denorm;
-    static const bool has_denorm_loss          = limits_type::has_denorm_loss;
+    BOOST_STATIC_CONSTANT(bool, has_infinity             = limits_type::has_infinity);
+    BOOST_STATIC_CONSTANT(bool, has_quiet_NaN            = limits_type::has_quiet_NaN);
+    BOOST_STATIC_CONSTANT(bool, has_signaling_NaN        = limits_type::has_signaling_NaN);
+    BOOST_STATIC_CONSTANT(float_denorm_style, has_denorm = limits_type::has_denorm);
+    BOOST_STATIC_CONSTANT(bool, has_denorm_loss          = limits_type::has_denorm_loss);
 
     static MyInt1 infinity() throw()      { return limits_type::infinity(); }
     static MyInt1 quiet_NaN() throw()     { return limits_type::quiet_NaN(); }
     static MyInt1 signaling_NaN() throw() {return limits_type::signaling_NaN();}
     static MyInt1 denorm_min() throw()    { return limits_type::denorm_min(); }
 
-    static const bool is_iec559  = limits_type::is_iec559;
-    static const bool is_bounded = limits_type::is_bounded;
-    static const bool is_modulo  = limits_type::is_modulo;
+    BOOST_STATIC_CONSTANT(bool, is_iec559  = limits_type::is_iec559);
+    BOOST_STATIC_CONSTANT(bool, is_bounded = limits_type::is_bounded);
+    BOOST_STATIC_CONSTANT(bool, is_modulo  = limits_type::is_modulo);
 
-    static const bool traps                    = limits_type::traps;
-    static const bool tinyness_before          = limits_type::tinyness_before;
-    static const float_round_style round_style = limits_type::round_style;
+    BOOST_STATIC_CONSTANT(bool, traps                    = limits_type::traps);
+    BOOST_STATIC_CONSTANT(bool, tinyness_before          = limits_type::tinyness_before);
+    BOOST_STATIC_CONSTANT(float_round_style, round_style = limits_type::round_style);
 
 };  // std::numeric_limits<MyInt1>
 
@@ -183,30 +188,30 @@ class numeric_limits< MyUnsigned1 >
     typedef numeric_limits<int_type>  limits_type;
 
 public:
-    static const bool is_specialized = limits_type::is_specialized;
+    BOOST_STATIC_CONSTANT(bool, is_specialized = limits_type::is_specialized);
 
     static MyUnsigned1 min() throw()  { return limits_type::min(); }
     static MyUnsigned1 max() throw()  { return limits_type::max(); }
 
-    static const int digits      = limits_type::digits;
-    static const int digits10    = limits_type::digits10;
-    static const bool is_signed  = limits_type::is_signed;
-    static const bool is_integer = limits_type::is_integer;
-    static const bool is_exact   = limits_type::is_exact;
-    static const int radix       = limits_type::radix;
+    BOOST_STATIC_CONSTANT(int, digits      = limits_type::digits);
+    BOOST_STATIC_CONSTANT(int, digits10    = limits_type::digits10);
+    BOOST_STATIC_CONSTANT(bool, is_signed  = limits_type::is_signed);
+    BOOST_STATIC_CONSTANT(bool, is_integer = limits_type::is_integer);
+    BOOST_STATIC_CONSTANT(bool, is_exact   = limits_type::is_exact);
+    BOOST_STATIC_CONSTANT(int, radix       = limits_type::radix);
     static MyUnsigned1 epsilon() throw()      { return limits_type::epsilon(); }
     static MyUnsigned1 round_error() throw(){return limits_type::round_error();}
 
-    static const int min_exponent   = limits_type::min_exponent;
-    static const int min_exponent10 = limits_type::min_exponent10;
-    static const int max_exponent   = limits_type::max_exponent;
-    static const int max_exponent10 = limits_type::max_exponent10;
+    BOOST_STATIC_CONSTANT(int, min_exponent   = limits_type::min_exponent);
+    BOOST_STATIC_CONSTANT(int, min_exponent10 = limits_type::min_exponent10);
+    BOOST_STATIC_CONSTANT(int, max_exponent   = limits_type::max_exponent);
+    BOOST_STATIC_CONSTANT(int, max_exponent10 = limits_type::max_exponent10);
 
-    static const bool has_infinity             = limits_type::has_infinity;
-    static const bool has_quiet_NaN            = limits_type::has_quiet_NaN;
-    static const bool has_signaling_NaN        = limits_type::has_signaling_NaN;
-    static const float_denorm_style has_denorm = limits_type::has_denorm;
-    static const bool has_denorm_loss          = limits_type::has_denorm_loss;
+    BOOST_STATIC_CONSTANT(bool, has_infinity             = limits_type::has_infinity);
+    BOOST_STATIC_CONSTANT(bool, has_quiet_NaN            = limits_type::has_quiet_NaN);
+    BOOST_STATIC_CONSTANT(bool, has_signaling_NaN        = limits_type::has_signaling_NaN);
+    BOOST_STATIC_CONSTANT(float_denorm_style, has_denorm = limits_type::has_denorm);
+    BOOST_STATIC_CONSTANT(bool, has_denorm_loss          = limits_type::has_denorm_loss);
 
     static MyUnsigned1 infinity() throw()    { return limits_type::infinity(); }
     static MyUnsigned1 quiet_NaN() throw()  { return limits_type::quiet_NaN(); }
@@ -214,18 +219,38 @@ public:
         { return limits_type::signaling_NaN(); }
     static MyUnsigned1 denorm_min() throw(){ return limits_type::denorm_min(); }
 
-    static const bool is_iec559  = limits_type::is_iec559;
-    static const bool is_bounded = limits_type::is_bounded;
-    static const bool is_modulo  = limits_type::is_modulo;
+    BOOST_STATIC_CONSTANT(bool, is_iec559  = limits_type::is_iec559);
+    BOOST_STATIC_CONSTANT(bool, is_bounded = limits_type::is_bounded);
+    BOOST_STATIC_CONSTANT(bool, is_modulo  = limits_type::is_modulo);
 
-    static const bool traps                    = limits_type::traps;
-    static const bool tinyness_before          = limits_type::tinyness_before;
-    static const float_round_style round_style = limits_type::round_style;
+    BOOST_STATIC_CONSTANT(bool, traps                    = limits_type::traps);
+    BOOST_STATIC_CONSTANT(bool, tinyness_before          = limits_type::tinyness_before);
+    BOOST_STATIC_CONSTANT(float_round_style, round_style = limits_type::round_style);
 
 };  // std::numeric_limits<MyUnsigned1>
 
-}  // namespace std
+#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
+// MSVC 6.0 lacks operator<< for __int64, see
+// http://support.microsoft.com/default.aspx?scid=kb;en-us;168440
 
+inline ostream& operator<<(ostream& os, __int64 i)
+{
+    char buf[20];
+    sprintf(buf,"%I64d", i);
+    os << buf;
+    return os;
+}
+
+inline ostream& operator<<(ostream& os, unsigned __int64 i)
+{
+    char buf[20];
+    sprintf(buf,"%I64u", i);
+    os << buf;
+    return os;
+}
+#endif
+
+}  // namespace std
 
 // GCD tests
 BOOST_AUTO_TEST_SUITE( gcd_test_suite )
