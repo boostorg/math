@@ -264,6 +264,7 @@ external graphing application.
 [include error.qbk][/relative error NOT handling]
 [include lanczos.qbk]
 [include remez.qbk]
+[include references.qbk]
 [endsect][/section:backgrounds Backgrounders]
 
 [section:status Status and Roadmap]
