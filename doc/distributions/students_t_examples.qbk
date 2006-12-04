@@ -537,7 +537,7 @@ variances:
       
 
 Our procedure will begin by calculating the t-statistic, assuming
-equal variances the needed formualas are:
+equal variances the needed formulae are:
 
 [$../equations/dist_tutorial1.png]
 

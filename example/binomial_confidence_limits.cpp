@@ -21,7 +21,7 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
    // successes = Total number of observed successes.
    //
    // Calculate confidence limits for an observed
-   // frequency of occurance that follows a binomial
+   // frequency of occurrence that follows a binomial
    // distribution.
    //
    using namespace std;

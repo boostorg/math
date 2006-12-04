@@ -51,7 +51,7 @@ and [link math_toolkit.special Special Functions]
 [h4 Configuration Macros - Controlling Throwing of Exceptions]
 
 * *BOOST_MATH_THROW_ON_DOMAIN_ERROR*
-If the macro BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined when building the library, then a std::domain_error C++ exception is thrown.  Arugments outside defined range are common, and since several other errors, including pole_error, also may throw a domain_error, defining this macro is generally recommended to get helpful error messages, but using a try and catch blocks are also recommended.  See 
+If the macro BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined when building the library, then a std::domain_error C++ exception is thrown.  Arguments outside defined range are common, and since several other errors, including pole_error, also may throw a domain_error, defining this macro is generally recommended to get helpful error messages, but using a try and catch blocks are also recommended.  See 
 
 * *BOOST_MATH_THROW_ON_OVERFLOW_ERROR* By default, overflow returns infinity. 
 * *BOOST_MATH_THROW_ON_UNDERFLOW_ERROR* By default, underflow returns zero. 

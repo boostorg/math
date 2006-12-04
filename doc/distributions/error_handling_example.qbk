@@ -1,7 +1,7 @@
 [section:error_eg Error Handling Example]
 
 See [link math_toolkit.special.error_handling error handling]
-for a detailed explanation of the mechanisn of handling errors,
+for a detailed explanation of the mechanism of handling errors,
 including the common "bad" arguments to distributions and functions.
 
 But, by default, *none of these exceptions will be raised*,

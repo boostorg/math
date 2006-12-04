@@ -145,7 +145,7 @@ sometimes producing intervals with much greater than the requested coverage.
 The alternative calculation method produces a non-informative 
 Jeffreys Prior interval.  It produces `100(1-alpha)%` coverage only
 ['in the average case], though is typically very close to the requested
-coverage level.  It is one of the main methods of calculation recomended
+coverage level.  It is one of the main methods of calculation recommended
 in the review by Brown, Cai and DasGupta.
 
 Please note that the "textbook" calculation method using
@@ -154,8 +154,8 @@ not provided: it is known to produce consistently poor results,
 even when the sample size is surprisingly large.
 Refer to Brown, Cai and DasGupta for a full explanation.  Many other methods
 of calculation are available, and may be more appropriate for specific
-situations.  Unfortunately there appears to be no consensus amoungst
-stataticians as to which is "best": refer to the discussion at the end of
+situations.  Unfortunately there appears to be no consensus amongst
+statisticians as to which is "best": refer to the discussion at the end of
 Brown, Cai and DasGupta for examples.
 
 The two methods provided here were chosen principally because they
@@ -322,9 +322,9 @@ please refer to these functions for information on accuracy.
 
 [h4 Implementation]
 
-In the following table /p/ is the probablity that one trial will
+In the following table /p/ is the probability that one trial will
 be successful (the success fraction), /n/ is the number of trials,
-/k/ is the number of successes, /p/ is the probablity and /q = 1-p/.
+/k/ is the number of successes, /p/ is the probability and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]

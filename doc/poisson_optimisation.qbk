@@ -31,7 +31,7 @@ result (explanation available if required), you effectively amplify the
 error further still.
 
 gamma_p_derivative is just a thin wrapper around some of the internals of 
-the incomplete gamma, it does its upmost to avoid issues like this, because 
+the incomplete gamma, it does its utmost to avoid issues like this, because 
 this function is responsible for virtually all of the error in the result. 
 Hopefully further advances in the future might improve things even further 
 (what is really needed is an 'accurate' pow(1+x) function, but that's a whole 

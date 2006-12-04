@@ -53,7 +53,7 @@ a single result.]]
 ]
 
 The template parameter of test_result, is the same type as the values in the two
-dimentional array passed to function /test/, roughly that's 
+dimensional array passed to function /test/, roughly that's 
 `A::value_type::value_type`.
 
 Parameter /a/ is a matrix of test data: and must be a standard library Sequence type,
@@ -80,7 +80,7 @@ you use Boost.Test).  This is mainly a debugging/development aid
 [h4 Example]
 
 Suppose we want to test the tgamma and lgamma functions, we can create a
-two dimentional matrix of test data, each row is one test case, and contains
+two dimensional matrix of test data, each row is one test case, and contains
 three elements: the input value, and the expected results for the tgamma and
 lgamma functions respectively.
 

@@ -24,7 +24,7 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
    // failures = trials - successes.
    //
    // Calculate confidence limits for an observed
-   // frequency of occurance that follows a negative binomial distribution.
+   // frequency of occurrence that follows a negative binomial distribution.
 
    using namespace std;
    using namespace boost::math;

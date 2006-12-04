@@ -122,7 +122,7 @@ refer to accuracy data on those functions for more information.
 [h4 Implementation]
 
 In the following table /v/ is the degrees of freedom of the distribution, 
-/t/ is the random variate, /p/ is the probablity and /q = 1-p/.
+/t/ is the random variate, /p/ is the probability and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]

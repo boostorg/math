@@ -166,7 +166,7 @@ Asymptotic Inversion of the Incomplete Beta Function,
 by N. M. [@http://homepages.cwi.nl/~nicot/ Temme].
 Journal of Computational and Applied Mathematics 41 (1992) 145-157.
 
-The nearly symetrical case (section 2 of the paper) is used for
+The nearly symmetrical case (section 2 of the paper) is used for
 
 [$../equations/ibeta_inv2.png]
 
@@ -235,7 +235,7 @@ which can be improved somewhat to:
 
 when b and x are both small (I've used b < a and x < 0.2).  This
 actually under-estimates x, which drops us on the wrong side of x for Newton
-iteration to coverge monotonically.  However, use of higher derivatives
+iteration to converge monotonically.  However, use of higher derivatives
 and Halley iteration keeps everything under control.
 
 The final case to be considered if when one of a and b is less than or equal
@@ -256,7 +256,7 @@ quarter circle, and estimating y from:
 
 [$../equations/ibeta_inv8.png]
 
-This doesn't guarentee that we will drop in on the right side of x for
+This doesn't guarantee that we will drop in on the right side of x for
 monotonic convergence, but it does get us close enough that Halley iteration
 rapidly converges on the true value.
 

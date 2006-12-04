@@ -1,7 +1,7 @@
 [section:minimax Minimax Approximations and the Remez Algorithm]
 
 The directory libs/math/minimax contains a command line driven
-program for the generation of mininmax approximations using the Remez
+program for the generation of minimax approximations using the Remez
 algorithm.  Both polynomial and rational approximations are supported,
 although the latter are tricky to converge: it is not uncommon for
 convergence of rational forms to fail.  No such limitations are present

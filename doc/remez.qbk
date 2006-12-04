@@ -43,7 +43,7 @@ then we can write N+2 simultaneous equations:
 
 R(x[sub i]) + (-1)[super i]E = f(x[sub i])
 
-where E is the maximal error term, and x[sub i] are the absissa values of the
+where E is the maximal error term, and x[sub i] are the abscissa values of the
 N+2 extrema of the error function.  It is then trivial to solve the simultaneous
 equations to obtain the polynomial coefficients and the error term.
 
@@ -59,7 +59,7 @@ In the following discussion we'll use a concrete example to illustrate
 the Remez method: an approximation to the function e[super x][space] over
 the range \[-1, 1\].
 
-Before we can begin the Remez method, we must obtain an inital value
+Before we can begin the Remez method, we must obtain an initial value
 for the location of the extrema of the error function.  We could "guess"
 these, but a much closer first approximation can be obtained by first  
 constructing an interpolated polynomial approximation to f(x).
@@ -73,7 +73,7 @@ f(x[sub i]) = P(x[sub i]) = c[sub 0] + c[sub 1]x[sub i] ... + c[sub N]x[sub i][s
 
 Which can be solved for the coefficients c[sub 0]...c[sub N] in P(x).
 
-Obviously this is not a minimax solution, indeed our only guarentee is that f(x) and 
+Obviously this is not a minimax solution, indeed our only guarantee is that f(x) and 
 P(x) touch at N+1 locations, away from those points the error may be arbitrarily
 large.  However, we would clearly like this initial approximation to be as close to
 f(x) as possible, and it turns out that using the zeros of an orthogonal polynomial
@@ -88,7 +88,7 @@ Which has a peak relative error of 1.2x10[super -3].
 
 While this is a pretty good approximation already, judging by the 
 shape of the error function we can clearly do better.  Before starting
-on the Remez method propper, we have one more step to preform: locate
+on the Remez method propper, we have one more step to perform: locate
 all the extrema of the error function, and store
 these locations as our initial ['Chebyshev control points].
 
@@ -166,7 +166,7 @@ If we wish to extend the Remez method to a rational approximation of the form
 f(x) = R(x) = P(x) / Q(x)
 
 where P(x) and Q(x) are polynomials, then we proceed as before, except that now
-we have N+M+2 unkowns if P(x) is of order N and Q(x) is of order M.  This assumes
+we have N+M+2 unknowns if P(x) is of order N and Q(x) is of order M.  This assumes
 that Q(x) is normalised so that it's leading coefficient is 1, giving
 N+M+1 polynomial coefficients in total, plus the error term E.
 
@@ -238,7 +238,7 @@ e[super -x[super 2]]\/x as x becomes large.  Therefore using:
 
 erfc(z) = (C + R(x)) e[super -x[super 2]]/x
 
-as the appoximating form seems like an obvious thing to try, and does indeed
+as the approximating form seems like an obvious thing to try, and does indeed
 yield a useful approximation.
 
 However, the difficulty then becomes one of converging the minimax solution.
@@ -285,13 +285,13 @@ our desired minimax solution (5x10[super -4]).
 
 [h4 Remez Method Checklist]
 
-The following lists some of the things to check if ther Remez method goes wrong, 
+The following lists some of the things to check if the Remez method goes wrong, 
 it is by no means an exhaustive list, but is provided in the hopes that it will
 prove useful.
 
 * Is the function smooth enough?  Can it be better separated into
 a rapidly changing part, and an asymptotic part?
-* Does the function being appoximated have any "blips" in it?  Check
+* Does the function being approximated have any "blips" in it?  Check
 for problems as the function changes computation method, or
 if a root, or an infinity has been divided out.  The telltale
 sign is if there is a narrow region where the Remez method will
@@ -310,12 +310,12 @@ location, try starting from a different location.
 * If a rational function won't converge, one can minimise a polynomial
 (which presents no problems), then rotate one term from the numerator to
 the denominator and minimise again.  In theory one can continue moving
-terms one at a time from numerator to denominator, and then reminimising, 
+terms one at a time from numerator to denominator, and then re-minimising, 
 retaining the last set of control points at each stage.
 * Try using a smaller interval.  It may also be possible to optimise over
 one (small) interval, rescale the control points over a larger interval,
-and then reminimise.
-* Keep absissa values small: use a change of variable to keep the absissa
+and then re-minimise.
+* Keep absissa values small: use a change of variable to keep the abscissa
 over, say \[0, b\], for some smallish value /b/.
 
 [endsect][/section:remez The Remez Method]

@@ -271,6 +271,8 @@ Now that you have the basics, the next section looks at some worked examples.
 
 [endsect][/section:overview Overview]
 
+[include background.qbk]
+
 [endsect][/section:stat_tut Statistical Distributions Tutorial]
 
 [/ dist_tutorial.qbk

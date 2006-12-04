@@ -179,7 +179,7 @@ function in this region.
 For /x < 1.1/ the crossover point where the result is ~0.5 no longer
 occurs for /x ~ y/.  Using /x * 1.1 < a/ as the crossover criterion
 for /0.5 < x <= 1.1/ keeps the maximum value computed (whether
-it's the upper or lower interal) to around 0.6.   Likewise for
+it's the upper or lower interval) to around 0.6.   Likewise for
 /x <= 0.5/ then using /-0.4 / log(x) < a/ as the crossover criterion
 keeps the maximum value computed to around 0.7
 (whether it's the upper or lower interval).
@@ -216,7 +216,7 @@ The double sum is truncated to a fixed number of terms - to give a specific
 target precision - and evaluated as a polynomial-of-polynomials.  There are 
 versions for up to 128-bit long double precision: types requiring
 greater precision than that do not use these expansions.  The
-coefficients C[sub k][super n] are computed in advance using the recurrance
+coefficients C[sub k][super n] are computed in advance using the recurrence
 relations given by Temme.  The zone where these expansions are used is
 
    (a > 20) && (a < 200) && fabs(x-a)/a < 0.4
@@ -228,7 +228,7 @@ And:
 The latter range is valid for all types up to 128-bit long doubles, and
 is designed to ensure that the result is larger than 10[super -6], the 
 first range is used only for types up to 80-bit long doubles.  These
-domains are narrower than the ones recomended by either Temme or Didonato
+domains are narrower than the ones recommended by either Temme or Didonato
 and Morris.  However, using a wider range results in large and inexact
 (i.e. computed) values being passed to the `exp` and `erfc` functions
 resulting in significantly larger error rates.  In other words there is a

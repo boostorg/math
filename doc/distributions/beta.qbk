@@ -73,7 +73,7 @@ ensures that the pdf is normalized to the range zero to unity.
 
 The following graph illustrates examples of the pdf for various values 
 of the shape parameters.  Note the [alpha] = [beta] = 2 (blue line) 
-is dome-shaped, and might be approximated by a symmetrical trianglar 
+is dome-shaped, and might be approximated by a symmetrical triangular 
 distribution.
 
 [$../graphs/beta_dist.png]
@@ -96,7 +96,7 @@ Constructs a beta distribution with shape parameters /alpha/ and /beta/.
 
 Requires alpha,beta > 0,otherwise __domain_error is called.  Note that 
 technically the beta distribution is defined for alpha,beta >= 0, but
-it's not clear whether any program can actually make use of that lattitude
+it's not clear whether any program can actually make use of that latitude
 or how many of the non-member functions can be usefully defined in that case.
 Therefore for now, we regard it as an error if alpha or beta is zero.
 
@@ -136,7 +136,7 @@ the cdf and x.
 It is also possible to estimate [alpha] __space and  [beta] __space from 
 'known' mode & quantile.  For example, calculators are provided by the
 [@http://www.ausvet.com.au/pprev/content.php?page=PPscript 
-Pooled Prevalance Calculator] and
+Pooled Prevalence Calculator] and
 [@http://www.epi.ucdavis.edu/diagnostictests/betabuster.html Beta Buster]
 but this is not yet implemented here.
 
@@ -184,7 +184,7 @@ The beta distribution can be used to model events constrained
 to take place within an interval defined by a minimum and maximum value:
 so it is used in project management systems. 
 
-It is also widely used in [@http://en.wikipedia.org/wiki/Bayesian_inference Bayesian statistial inference].
+It is also widely used in [@http://en.wikipedia.org/wiki/Bayesian_inference Bayesian statistical inference].
 
 [h4 Related distributions]
 
@@ -216,7 +216,7 @@ please refer to these functions for information on accuracy.
 [h4 Implementation]
 
 In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
-/x/ is the random variable, /p/ is the probablity and /q = 1-p/.
+/x/ is the random variable, /p/ is the probability and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
@@ -247,7 +247,7 @@ __ibeta_inva, and __ibeta_invb respectively.]]
 
 [h4 References]
 [@http://en.wikipedia.org/wiki/Beta_distribution Wikipedia Beta distribution]\n
-[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm NIST Exploratory Data Aanalysis]\n
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm NIST Exploratory Data Analysis]\n
 [@http://mathworld.wolfram.com/BetaDistribution.html Wolfram MathWorld]
 
 [endsect][/section:beta_dist beta]

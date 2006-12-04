@@ -31,9 +31,9 @@
    template <class T, class U>
    T __checked_narrowing_cast(U const& val, const char* function);
 
-The functions in this header are designed to be user-replacable error
+The functions in this header are designed to be user-replaceable error
 handlers that define how errors are handled by the special functions
-in this library.  There are also some preprocessor defines that can be 
+in this library.  There are also some pre-processor defines that can be 
 set to activate the throwing of C++ exceptions from the default
 versions of the functions.  The various kind of errors are described 
 in more detail below.
@@ -151,7 +151,7 @@ or where the result is incalculable then it calls:
 Where
 `T` is the floating point type passed to the function, `FunctionName` is the 
 name of the function, `Message` is an error message describing the problem,
-and `Val` is the erronious value.
+and `Val` is the erroneous value.
 
 The default behaviour of this function is to throw a `std::logic_error`.
 

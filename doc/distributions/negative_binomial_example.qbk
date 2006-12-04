@@ -45,7 +45,7 @@ of certainty:
       cout << setprecision(7);
       cout << setw(40) << left << "Number of Observations" << "=  " << trials << "\n";
       cout << setw(40) << left << "Number of successes" << "=  " << successes << "\n";
-      cout << setw(40) << left << "Sample frequency of occurance" << "=  " << double(successes) / trials << "\n";
+      cout << setw(40) << left << "Sample frequency of occurrence" << "=  " << double(successes) / trials << "\n";
 
 The procedure now defines a table of significance levels: these are the 
 probabilities that the true occurrence frequency lies outside the calculated

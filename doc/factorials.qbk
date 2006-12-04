@@ -108,7 +108,7 @@ Returns the falling factorial of /x/ and /i/:
 
 falling_factorial(x, i) = x(x-1)(x-2)(x-3)...(x-i+1)
    
-Note that this function is only defined for positive /i/, hense the
+Note that this function is only defined for positive /i/, hence the
 `unsigned` second argument.  Argument /x/ can be either positive or
 negative however.
 
@@ -167,7 +167,7 @@ and
 (2n-1)!! = [Gamma]((2n+1)/2) * 2[super n ] / sqrt(pi)
 
 Rising and falling factorials are implemented as ratios of gamma functions
-using __tgamma_delta_ratio.  Opimisations for
+using __tgamma_delta_ratio.  Optimisations for
 small integer arguments are handled internally by that function.
 
 Binomial coefficients are calculated using table lookup of factorials

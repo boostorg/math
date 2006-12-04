@@ -59,7 +59,7 @@ is the standard deviation of the second sample.  Or in code:
    F *= F;
    cout << setw(55) << left << "Test Statistic" << "=  " << F << "\n\n";
 
-At this point a word of caution: the F distribution is asymetric,
+At this point a word of caution: the F distribution is asymmetric,
 so we have to be careful how we compute the tests, the following table
 summarises the options available:
 

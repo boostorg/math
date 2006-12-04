@@ -139,7 +139,7 @@ For example if the precision of RealType varies at runtime, then
 If `std::numeric_limits<>` is *not specialized*
 for type /RealType/ then the default float precision of 6 decimal digits
 will be used by other Boost programs including:\n\n
-* Boost.test: giving misleading error messages like\n
+* Boost.Test: giving misleading error messages like\n
 "difference between {9.79796} and {9.79796} exceeds 5.42101e-19%".\n
 * Boost.lexical_cast and Boost.serialization when converting the number
 to a string, causing potentially serious loss of accuracy on output.\n\n
@@ -301,7 +301,7 @@ declares it's standard library functions in it's own
 namespace: these will only be found if they are called unqualified
 allowing argument dependent lookup to locate them.  In addition
 this type is useable at runtime:
-this allows code that would not otherwise be exercised by the builtin
+this allows code that would not otherwise be exercised by the built-in
 floating point types to be tested.  There is no std::numeric_limits<>
 support for this type, since this is not a conceptual requirement
 for [link math_toolkit.Using_UDT.concepts RealType]'s.

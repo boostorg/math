@@ -87,7 +87,7 @@ where:
 
 [$../equations/lanczos2.png]
 
-Again parameter /g/ is an arbitarily chosen constant, and /N/ is an arbitrarily chosen 
+Again parameter /g/ is an arbitrarily chosen constant, and /N/ is an arbitrarily chosen 
 number of terms to evaluate in the "Lanczos sum" part.  
 
 [note 
@@ -96,7 +96,7 @@ choose to define the sum from k=1 to N, and hence end up with N+1 coefficients.
 This happens to confuse both the following discussion and the code (since C++
 deals with half open array ranges, rather than the closed range of the sum).
 This convention is consistent with __godfrey, but not __pugh, so take care
-when refering to the literature in this field.]
+when referring to the literature in this field.]
 
 [h4 Computing the Coefficients]
 

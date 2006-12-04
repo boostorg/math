@@ -292,7 +292,7 @@ please refer to these functions for information on accuracy.
 
 In the following table, /p/ is the probability that any one trial will
 be successful (the success fraction), /r/ is the number of successes,
-/k/ is the number of failures, /p/ is the probablity and /q = 1-p/.
+/k/ is the number of failures, /p/ is the probability and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]

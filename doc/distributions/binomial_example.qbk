@@ -45,7 +45,7 @@ of certainty:
       cout << setprecision(7);
       cout << setw(40) << left << "Number of Observations" << "=  " << trials << "\n";
       cout << setw(40) << left << "Number of successes" << "=  " << successes << "\n";
-      cout << setw(40) << left << "Sample frequency of occurance" << "=  " << double(successes) / trials << "\n";
+      cout << setw(40) << left << "Sample frequency of occurrence" << "=  " << double(successes) / trials << "\n";
 
 The procedure now defines a table of significance levels: these are the 
 probabilities that the true occurrence frequency lies outside the calculated
@@ -150,7 +150,7 @@ really quite wide (this example is chosen to be easily compared to the one
 in the __handbook
 [@http://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
 here]).  Note also that the Clopper-Pearson calculation method (CP above)
-produces quite noticably more pessimistic estimates than the Jeffreys Prior
+produces quite noticeably more pessimistic estimates than the Jeffreys Prior
 method (JP above).
 
 
@@ -199,7 +199,7 @@ acceptable risk level /alpha/.
 
 The example program 
 [@../../example/binomial_sample_sizes.cpp binomial_sample_sizes.cpp]
-demonstrates its usage.  It centres around a routine that prints out
+demonstrates its usage.  It centres on a routine that prints out
 a table of maximum sample sizes for various probability thresholds:
 
    void estimate_max_sample_size(

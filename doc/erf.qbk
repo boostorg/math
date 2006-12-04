@@ -99,7 +99,7 @@ Therefore erf is calculated using:
 where the rational approximation R(z) is optimised for absolute error:
 as long as its absolute error is small enough compared to 1.125, then any 
 round-off error incurred during the computation of R(z) will effectively 
-dissappear from the result.  As a result the error for erf and erfc in this
+disappear from the result.  As a result the error for erf and erfc in this
 region is very low: the last bit is incorrect in only a very small number of 
 cases.
 

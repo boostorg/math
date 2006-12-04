@@ -33,7 +33,7 @@ results, indexed by test, floating point type, platform, and compiler.
 
 * The TR1 Special functions are still needed, some of these 
 (Bessel functions, and Eliptic Integrals) are mostly
-complete as a result of Xiaogang Zhang's partisipation in
+complete as a result of Xiaogang Zhang's participation in
 the Google Summer of Code 2006, refer to the 
 [@https://www.boost-consulting.com:8443/trac/soc/browser/boost/soc/2006
 Boost Consulting Trac Server for the code].

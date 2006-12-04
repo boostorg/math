@@ -138,7 +138,7 @@ or
 
 where /m/ is the initial value of /max_iter/ passed to the function.
 
-In other words it's up to the caller to verify whether termination occured
+In other words it's up to the caller to verify whether termination occurred
 as a result of exceeding /max_iter/ function invocations (easily done by 
 checking the value of /max_iter/ when the function returns), rather than 
 because the termination condition /tol/ was satisfied.
@@ -164,7 +164,7 @@ particular it is known whether the root is occurs for positive or negative
     f(x) must be uniformly increasing or decreasing on /x/.]]
 [[guess][An initial approximation to the root]]
 [[factor][A scaling factor that is used to bracket the root: the value
-         /guess/ is mutiplied (or divided as appropriate) by /factor/
+         /guess/ is multiplied (or divided as appropriate) by /factor/
          until two values are found that bracket the root.  A value
          such as 2 is a typical choice for /factor/.]]
 [[rising][Set to /true/ if /f(x)/ is rising on /x/ and /false/ if /f(x)/
@@ -192,7 +192,7 @@ or
 
 where /m/ is the initial value of /max_iter/ passed to the function.
 
-In other words it's up to the caller to verify whether termination occured
+In other words it's up to the caller to verify whether termination occurred
 as a result of exceeding /max_iter/ function invocations (easily done by 
 checking the value of /max_iter/ when the function returns), rather than 
 because the termination condition /tol/ was satisfied.
@@ -225,7 +225,7 @@ cubic, quadratic and linear (secant) interpolation to locate the root of
 [variablelist
 [[f]   [A unary functor that is the function whose root is to be solved.
        f(x) need not be uniformly increasing or decreasing on /x/ and
-       may have mutilple roots.]]
+       may have multiple roots.]]
 [[a]   [ The lower bound for the initial bracket of the root.]]
 [[b]   [The upper bound for the initial bracket of the root.
        It is a precondition that /a < b/ and that /a/ and /b/
@@ -254,7 +254,7 @@ or
 
 where /m/ is the initial value of /max_iter/ passed to the function.
 
-In other words it's up to the caller to verify whether termination occured
+In other words it's up to the caller to verify whether termination occurred
 as a result of exceeding /max_iter/ function invocations (easily done by 
 checking the value of /max_iter/), rather than because the termination 
 condition /tol/ was satisfied.

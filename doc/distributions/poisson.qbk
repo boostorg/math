@@ -58,7 +58,7 @@ The domain of the random variable is \[0, [infin]\].
 
 [h4 Accuracy]
 
-The poisson distribution is implemented in terms of the 
+The Poisson distribution is implemented in terms of the 
 incomplete gamma functions __gamma_P and __gamma_Q 
 and as such should have low error rates: but refer to the documentation
 of those functions for more information.
@@ -70,7 +70,7 @@ lower tolerance to avoid excessive computation.
 [h4 Implementation]
 
 In the following table [lambda][space] is the mean of the distribution,
-/k/ is the random variable, /p/ is the probablity and /q = 1-p/.
+/k/ is the random variable, /p/ is the probability and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]

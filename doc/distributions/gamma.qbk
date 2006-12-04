@@ -18,10 +18,10 @@
    
    }} // namespaces
    
-The gamma distribution is a continuous probablity distribution.
+The gamma distribution is a continuous probability distribution.
 When the shape parameter is an integer then it is known as the 
 Erlang Distribution.  It is also closely related to the Poisson
-and Chi Squared Dsitributions.
+and Chi Squared Distributions.
 
 [note
 To avoid potential confusion with the gamma functions, this
@@ -42,7 +42,7 @@ distribution can be defined by the PDF:
 
 In this form the inverse scale parameter is called a /rate parameter/.
 
-Both forms are in common useage: this library uses the first definition
+Both forms are in common usage: this library uses the first definition
 throughout.  Therefore to construct a Gamma Distribution from a ['rate
 parameter], you should pass the reciprocal of the rate as the scale parameter.
 

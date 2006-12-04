@@ -73,7 +73,7 @@ a, b and x, along with comparisons to other open source implementations where av
 Note that only results for the widest floating-point type on the system are given as
 narrower types have __zero_error.
 
-Note that the results for 80 and 128-bit long doubles are noticably higher than
+Note that the results for 80 and 128-bit long doubles are noticeably higher than
 for doubles: this is because the wider exponent range of these types allow
 more extreme test cases to be tested.  For example expected results that
 are zero at double precision, may be finite but exceptionally small with

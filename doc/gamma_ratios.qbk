@@ -63,7 +63,7 @@ and a deliberately naive calculation of [Gamma](x)/[Gamma](y).
 
 [h4 Implementation]
 
-The inplementation of these functions is very similar to that of 
+The implementation of these functions is very similar to that of 
 __beta, and is based on combining similar power terms
 to improve accuracy and avoid spurious overflow/underflow.
 

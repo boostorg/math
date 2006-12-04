@@ -52,7 +52,7 @@ Which would then have its own set of overloads for the non-member accessor funct
 [h4 An "any_distribution" class]
 
 It would be fairly trivial to add a distribution object that virtualises
-the actual type of the distibution, and can therefore hold "any" object
+the actual type of the distribution, and can therefore hold "any" object
 that conforms to the conceptual requirements of a distribution:
 
    template <class RealType>
