@@ -11,9 +11,9 @@
 // http://en.wikipedia.org/wiki/Normal_distribution
 // http://www.itl.nist.gov/div898/handbook/eda/section3/eda3661.htm
 // Also:
-// Weisstein, Eric W. "Normal Distribution." 
-// From MathWorld--A Wolfram Web Resource. 
-// http://mathworld.wolfram.com/NormalDistribution.html 
+// Weisstein, Eric W. "Normal Distribution."
+// From MathWorld--A Wolfram Web Resource.
+// http://mathworld.wolfram.com/NormalDistribution.html
 
 
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
@@ -37,7 +37,7 @@
 
 #include <boost/math/distributions/normal.hpp>
 	 using boost::math::normal_distribution;
-#include <boost/math/tools/test.hpp> 
+#include <boost/math/tools/test.hpp>
 
 #include <iostream>
 	using std::cout;
@@ -168,15 +168,15 @@ void test_spots(RealType T)
    //
    tolerance = boost::math::tools::epsilon<RealType>() * 5 * 100; // 5 eps as a percentage
    BOOST_CHECK_CLOSE(
-      pdf(normal_distribution<RealType>(), static_cast<RealType>(0)), 
+      pdf(normal_distribution<RealType>(), static_cast<RealType>(0)),
       static_cast<RealType>(0.3989422804014326779399460599343818684759L), // 1/sqrt(2*pi)
       tolerance);
    BOOST_CHECK_CLOSE(
-      pdf(normal_distribution<RealType>(3), static_cast<RealType>(3)), 
+      pdf(normal_distribution<RealType>(3), static_cast<RealType>(3)),
       static_cast<RealType>(0.3989422804014326779399460599343818684759L),
       tolerance);
    BOOST_CHECK_CLOSE(
-      pdf(normal_distribution<RealType>(3, 5), static_cast<RealType>(3)), 
+      pdf(normal_distribution<RealType>(3, 5), static_cast<RealType>(3)),
       static_cast<RealType>(0.3989422804014326779399460599343818684759L / 5),
       tolerance);
 
@@ -186,7 +186,7 @@ void test_spots(RealType T)
    for(RealType x = -15; x < 5; x += 0.125)
    {
       BOOST_CHECK_CLOSE(
-         pdf(normal_distribution<RealType>(-5, 6), x), 
+         pdf(normal_distribution<RealType>(-5, 6), x),
          NaivePDF(RealType(-5), RealType(6), x),
          tolerance);
    }
@@ -236,17 +236,17 @@ void test_spots(RealType T)
        kurtosis_excess(dist)
        , static_cast<RealType>(0), tol2);
 
-    normal_distribution<RealType> norm01(0, 1); // Test default (0, 1) 
+    normal_distribution<RealType> norm01(0, 1); // Test default (0, 1)
     BOOST_CHECK_CLOSE(
        mean(norm01),
        static_cast<RealType>(0), 0); // Mean == zero
 
-    normal_distribution<RealType> defsd_norm01(0); // Test default (0, sd = 1) 
+    normal_distribution<RealType> defsd_norm01(0); // Test default (0, sd = 1)
     BOOST_CHECK_CLOSE(
        mean(defsd_norm01),
        static_cast<RealType>(0), 0); // Mean == zero
 
-    normal_distribution<RealType> def_norm01; // Test default (0, sd = 1) 
+    normal_distribution<RealType> def_norm01; // Test default (0, sd = 1)
     BOOST_CHECK_CLOSE(
        mean(def_norm01),
        static_cast<RealType>(0), 0); // Mean == zero
@@ -263,6 +263,8 @@ int test_main(int, char* [])
     // Check that can generate normal distribution using the two convenience methods:
 	boost::math::normal myf1(1., 2); // Using typedef
 	normal_distribution<> myf2(1., 2); // Using default RealType double.
+  boost::math::normal myn01; // Use default values.
+  // Note NOT myn01() as the compiler will interpret as a function!
 
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
@@ -287,20 +289,20 @@ int test_main(int, char* [])
 
 Output:
 
------- Build started: Project: normal, Configuration: Debug Win32 ------
+------ Build started: Project: test_normal, Configuration: Debug Win32 ------
 Compiling...
 test_normal.cpp
 Linking...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\normal.exe"
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_normal.exe"
 Running 1 test case...
 Tolerance for type float is 0.01 %
 Tolerance for type double is 0.01 %
 Tolerance for type long double is 0.01 %
 Tolerance for type class boost::math::concepts::real_concept is 0.01 %
 *** No errors detected
-Build Time 0:06
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\normal\Debug\BuildLog.htm"
-normal - 0 error(s), 0 warning(s)
+Build Time 0:05
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_normal\Debug\BuildLog.htm"
+test_normal - 0 error(s), 0 warning(s)
 ========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 */
