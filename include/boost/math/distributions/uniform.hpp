@@ -157,8 +157,6 @@ typedef uniform_distribution<double> uniform;
 template <class RealType>
 RealType pdf(const uniform_distribution<RealType>& dist, const RealType& x)
 {
-   using namespace std;  // for ADL of std functions
-
    RealType lower = dist.lower();
    RealType upper = dist.upper();
 
@@ -185,8 +183,6 @@ RealType pdf(const uniform_distribution<RealType>& dist, const RealType& x)
 template <class RealType>
 inline RealType cdf(const uniform_distribution<RealType>& dist, const RealType& x)
 {
-   using namespace std;  // for ADL of std functions
-
    RealType lower = dist.lower();
    RealType upper = dist.upper();
 
@@ -213,8 +209,6 @@ inline RealType cdf(const uniform_distribution<RealType>& dist, const RealType& 
 template <class RealType>
 RealType quantile(const uniform_distribution<RealType>& dist, const RealType& p)
 {
-   using namespace std;  // for ADL of std functions
-
    RealType lower = dist.lower();
    RealType upper = dist.upper();
 
@@ -267,8 +261,6 @@ RealType cdf(const complemented2_type<uniform_distribution<RealType>, RealType>&
 template <class RealType>
 RealType quantile(const complemented2_type<uniform_distribution<RealType>, RealType>& c)
 {
-   using namespace std;  // for ADL of std functions
-
    RealType lower = c.dist.lower();
    RealType upper = c.dist.upper();
    RealType q = c.param;
@@ -305,8 +297,6 @@ inline RealType mean(const uniform_distribution<RealType>& dist)
 template <class RealType>
 RealType variance(const uniform_distribution<RealType>& dist)
 {
-   using namespace std;  // for ADL of std functions
-
    RealType lower = dist.lower();
    RealType upper = dist.upper();
 
@@ -322,8 +312,6 @@ RealType variance(const uniform_distribution<RealType>& dist)
 template <class RealType>
 inline RealType mode(const uniform_distribution<RealType>& dist)
 {
-   using namespace std;  // for ADL of std functions
-
    RealType lower = dist.lower();
    RealType upper = dist.upper();
 
@@ -339,8 +327,6 @@ inline RealType mode(const uniform_distribution<RealType>& dist)
 template <class RealType>
 inline RealType skewness(const uniform_distribution<RealType>& dist)
 {
-   using namespace std;  // for ADL of std functions
-
    RealType lower = dist.lower();
    RealType upper = dist.upper();
 
@@ -355,8 +341,6 @@ inline RealType skewness(const uniform_distribution<RealType>& dist)
 template <class RealType>
 inline RealType kurtosis_excess(const uniform_distribution<RealType>& dist)
 {
-   using namespace std;  // for ADL of std functions
-
    RealType lower = dist.lower();
    RealType upper = dist.upper();
 
@@ -365,7 +349,7 @@ inline RealType kurtosis_excess(const uniform_distribution<RealType>& dist)
    {
      return result;
    }
-    return static_cast<RealType>(-1.2); //  -6/5;  
+    return static_cast<RealType>(-6)/5; //  -6/5 = -1.2;  
 } // RealType kurtosis_excess(const uniform_distribution<RealType>& dist)
 
 template <class RealType>
