@@ -9,8 +9,9 @@
 #include <boost/assert.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4127 4701)
+#  pragma warning(push)
+#  pragma warning(disable: 4127 4701 )
+#  pragma warning(disable: 4130) // '==' : logical operation on address of string constant.
 #endif
 #include <boost/lexical_cast.hpp>
 #ifdef BOOST_MSVC
@@ -25,6 +26,12 @@
 
 #include <set>
 #include <vector>
+
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4130) // '==' : logical operation on address of string constant.
+// Used as a warning with BOOST_ASSERT
+#endif
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -386,6 +393,8 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
       break;
    default:
       BOOST_ASSERT(0 == "Invalid parameter_info object");
+      // Assert will fail if get here.
+      // Triggers warning 4130) // '==' : logical operation on address of string constant.
    }
 }
 
@@ -720,6 +729,11 @@ std::ostream& write_code(std::ostream& os,
 } // namespace tools
 } // namespace math
 } // namespace boost
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+
 
 #endif // BOOST_MATH_TOOLS_TEST_DATA_HPP
 
