@@ -368,11 +368,12 @@ void test_spots(RealType T)
 
    // Error checks:
    if(std::numeric_limits<RealType>::has_quiet_NaN)
-   { // BOOST_CHECK tests for quiet_NaN (not for real_concept, for example - see notes above).
+   { // BOOST_CHECK tests for constructing with quiet_NaN (not for real_concept, for example - see notes above).
      BOOST_CHECK_THROW(uniform_distribution<RealType>(0, std::numeric_limits<RealType>::quiet_NaN()), std::domain_error);
      BOOST_CHECK_THROW(uniform_distribution<RealType>(0, -std::numeric_limits<RealType>::quiet_NaN()), std::domain_error);
    }
    BOOST_CHECK_THROW(uniform_distribution<RealType>(1, 0), std::domain_error); // lower > upper!
+   BOOST_CHECK_THROW(uniform_distribution<RealType>(1, 1), std::domain_error); // lower == upper!
 
 } // template <class RealType>void test_spots(RealType)
 
@@ -380,13 +381,57 @@ int test_main(int, char* [])
 {
   // Check that can construct uniform distribution using the two convenience methods:
   using namespace boost::math;
-  uniform myustd; // Using typedef
-  // == uniform_distribution<double> myustd;
-  BOOST_CHECK_EQUAL(myustd.lower(), 0); // Check defaults.
-  BOOST_CHECK_EQUAL(myustd.upper(), 1);
+  uniform unistd; // Using typedef
+  // == uniform_distribution<double> unistd;
+  BOOST_CHECK_EQUAL(unistd.lower(), 0); // Check defaults.
+  BOOST_CHECK_EQUAL(unistd.upper(), 1);
 	uniform_distribution<> myu01(0, 1); // Using default RealType double.
   BOOST_CHECK_EQUAL(myu01.lower(), 0); // Check defaults again.
   BOOST_CHECK_EQUAL(myu01.upper(), 1);
+
+  // Test on extreme values of random variate x, using just double because it has numeric_limit infinity etc..
+  // If allow x to be + or - infinity, then these tests should be OK.
+  BOOST_CHECK_EQUAL(pdf(unistd, +std::numeric_limits<double>::infinity()), 0); // x = + infinity
+  BOOST_CHECK_EQUAL(pdf(unistd, -std::numeric_limits<double>::infinity()), 0); // x = - infinity
+  BOOST_CHECK_EQUAL(cdf(unistd, +std::numeric_limits<double>::infinity()), 1); // x = + infinity
+  BOOST_CHECK_EQUAL(cdf(unistd, -std::numeric_limits<double>::infinity()), 0); // x = - infinity
+
+  BOOST_CHECK_EQUAL(pdf(unistd, +std::numeric_limits<double>::max()), 0); // x = + max
+  BOOST_CHECK_EQUAL(pdf(unistd, -std::numeric_limits<double>::min()), 0); // x = - min
+  BOOST_CHECK_EQUAL(cdf(unistd, +std::numeric_limits<double>::max()), 1); // x = + max
+  BOOST_CHECK_EQUAL(cdf(unistd, -std::numeric_limits<double>::min()), 0); // x = - min
+
+	uniform_distribution<> zinf(0, +std::numeric_limits<double>::infinity()); // zero to infinity using default RealType double.
+  BOOST_CHECK_EQUAL(zinf.lower(), 0); // Check defaults again.
+  BOOST_CHECK_EQUAL(zinf.upper(), +std::numeric_limits<double>::infinity());
+
+  BOOST_CHECK_EQUAL(pdf(zinf, -1), 0); // pdf is 1/(0 - infinity) = zero for all x
+  BOOST_CHECK_EQUAL(pdf(zinf, 0), 0); // x = 
+  BOOST_CHECK_EQUAL(pdf(zinf, 1), 0); // x = 
+  BOOST_CHECK_EQUAL(pdf(zinf, std::numeric_limits<double>::infinity()), 0); // pdf is 1/(0 - infinity) = zero for all x
+  BOOST_CHECK_EQUAL(pdf(zinf, -std::numeric_limits<double>::infinity()), 0); 
+  BOOST_CHECK_EQUAL(pdf(zinf, +std::numeric_limits<double>::max()), 0); // x = 
+  BOOST_CHECK_EQUAL(pdf(zinf, -std::numeric_limits<double>::max()), 0); // x = 
+
+	uniform_distribution<> minf0(-std::numeric_limits<double>::infinity(), 0); // -infinity to zero using default RealType double.
+  BOOST_CHECK_EQUAL(minf0.lower(), -std::numeric_limits<double>::infinity()); // Check defaults again.
+  BOOST_CHECK_EQUAL(minf0.upper(), 0);
+
+	uniform_distribution<> zmax(0, +std::numeric_limits<double>::max()); // zero to infinity using default RealType double.
+  BOOST_CHECK_EQUAL(zmax.lower(), 0); // Check defaults again.
+  BOOST_CHECK_EQUAL(zmax.upper(), +std::numeric_limits<double>::max());
+
+  BOOST_CHECK_EQUAL(pdf(zmax, -1), 0); // pdf is 1/(0 - max) = almost zero for all x
+  BOOST_CHECK_EQUAL(pdf(zmax, 0), std::numeric_limits<double>::min()/4); // x = 
+  BOOST_CHECK_EQUAL(pdf(zmax, 1), std::numeric_limits<double>::min()/4); // x = 
+  BOOST_CHECK_EQUAL(pdf(zmax, +std::numeric_limits<double>::infinity()), 0); // pdf is 1/(0 - infinity) = zero for all x
+  BOOST_CHECK_EQUAL(pdf(zmax, -std::numeric_limits<double>::infinity()), 0); 
+  BOOST_CHECK_EQUAL(pdf(zmax, +std::numeric_limits<double>::max()), std::numeric_limits<double>::min()/4); // x = 
+  BOOST_CHECK_EQUAL(pdf(zmax, -std::numeric_limits<double>::max()), 0); // x = 
+
+  // Ensure NaN throws an exception.
+  BOOST_CHECK_THROW(uniform_distribution<> zNaN(0, std::numeric_limits<double>::quiet_NaN()), std::domain_error);
+  BOOST_CHECK_THROW(pdf(unistd, std::numeric_limits<double>::quiet_NaN()), std::domain_error);
 
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
@@ -430,6 +475,7 @@ Build Time 0:06
 Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_uniform\Debug\BuildLog.htm"
 test_uniform - 0 error(s), 0 warning(s)
 ========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+-
 
 */
 
