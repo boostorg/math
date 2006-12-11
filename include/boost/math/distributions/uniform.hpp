@@ -112,8 +112,8 @@ inline bool check_uniform(
 {
    if(check_uniform_lower(function, lower, result)
      && check_uniform_upper(function, upper, result)
-     && (lower <= upper))
-   {
+     && (lower < upper)) // If lower == upper then 1 / (upper-lower) = 1/0 = +infinity.
+   { 
      return true;
    }
    else
@@ -137,7 +137,7 @@ public:
       : m_lower(lower), m_upper(upper) // Default is standard uniform distribution.
    {
       RealType result;
-      detail::check_uniform(BOOST_CURRENT_FUNCTION,lower, upper, &result);
+      detail::check_uniform(BOOST_CURRENT_FUNCTION, lower, upper, &result);
    }
    // Accessor functions.
    RealType lower()const
