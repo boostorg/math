@@ -115,13 +115,13 @@ void test_spots(RealType T)
       // #define BOOST_MATH_THROW_ON_DOMAIN_ERROR IS defined, so the throw path
       // of error handling is tested below with BOOST_CHECK_THROW tests.
 
-     BOOST_CHECK_EQUAL( // x == infinity should be OK.
+     BOOST_CHECK_THROW( // x == infinity should NOT be OK.
        pdf(uniform_distribution<RealType>(0, 1), static_cast<RealType>(std::numeric_limits<RealType>::infinity())), 
-       static_cast<RealType>(0));
+       std::domain_error);
 
-     BOOST_CHECK_EQUAL( // x == minus infinity should be OK too.
+     BOOST_CHECK_THROW( // x == minus infinity should be OK too.
        pdf(uniform_distribution<RealType>(0, 1), static_cast<RealType>(-std::numeric_limits<RealType>::infinity())), 
-       static_cast<RealType>(0));
+       std::domain_error);
    }
    if(std::numeric_limits<RealType>::has_quiet_NaN)
    { // BOOST_CHECK tests for NaN using std::numeric_limits<>::has_quiet_NaN() - should throw.
@@ -333,14 +333,13 @@ void test_spots(RealType T)
    if(std::numeric_limits<RealType>::has_infinity)
   { // BOOST_CHECK tests for infinity using std::numeric_limits<>::infinity()
     // Note that infinity is not implemented for real_concept, so these tests
-    // are only done for types, like built-in float, double.. that have infinity.
-    // Note that these assume that  BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined.
+    // are only done for types, like built-in float, double, long double, that have infinity.
+    // Note that these assume that BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined.
     // #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR would give a throw here.
     // #define BOOST_MATH_THROW_ON_DOMAIN_ERROR IS defined, so the throw path
     // of error handling is tested below with BOOST_CHECK_THROW tests.
-
-    BOOST_CHECK_EQUAL(pdf(distu01, std::numeric_limits<RealType>::infinity()),  0);
-    BOOST_CHECK_EQUAL(pdf(distu01, -std::numeric_limits<RealType>::infinity()),  0);
+    BOOST_CHECK_THROW(pdf(distu01, std::numeric_limits<RealType>::infinity()),  std::domain_error);
+    BOOST_CHECK_THROW(pdf(distu01, -std::numeric_limits<RealType>::infinity()),  std::domain_error);
    } // test for infinity using std::numeric_limits<>::infinity()
    else
    { // real_concept case, does has_infinfity == false, so can't check it throws.
@@ -390,42 +389,28 @@ int test_main(int, char* [])
   BOOST_CHECK_EQUAL(myu01.upper(), 1);
 
   // Test on extreme values of random variate x, using just double because it has numeric_limit infinity etc..
-  // If allow x to be + or - infinity, then these tests should be OK.
-  BOOST_CHECK_EQUAL(pdf(unistd, +std::numeric_limits<double>::infinity()), 0); // x = + infinity
-  BOOST_CHECK_EQUAL(pdf(unistd, -std::numeric_limits<double>::infinity()), 0); // x = - infinity
-  BOOST_CHECK_EQUAL(cdf(unistd, +std::numeric_limits<double>::infinity()), 1); // x = + infinity
-  BOOST_CHECK_EQUAL(cdf(unistd, -std::numeric_limits<double>::infinity()), 0); // x = - infinity
+  // No longer allow x to be + or - infinity, then these tests should throw.
+  BOOST_CHECK_THROW(pdf(unistd, +std::numeric_limits<double>::infinity()), std::domain_error); // x = + infinity
+  BOOST_CHECK_THROW(pdf(unistd, -std::numeric_limits<double>::infinity()), std::domain_error); // x = - infinity
+  BOOST_CHECK_THROW(cdf(unistd, +std::numeric_limits<double>::infinity()), std::domain_error); // x = + infinity
+  BOOST_CHECK_THROW(cdf(unistd, -std::numeric_limits<double>::infinity()), std::domain_error); // x = - infinity
 
   BOOST_CHECK_EQUAL(pdf(unistd, +std::numeric_limits<double>::max()), 0); // x = + max
   BOOST_CHECK_EQUAL(pdf(unistd, -std::numeric_limits<double>::min()), 0); // x = - min
   BOOST_CHECK_EQUAL(cdf(unistd, +std::numeric_limits<double>::max()), 1); // x = + max
   BOOST_CHECK_EQUAL(cdf(unistd, -std::numeric_limits<double>::min()), 0); // x = - min
 
-	uniform_distribution<> zinf(0, +std::numeric_limits<double>::infinity()); // zero to infinity using default RealType double.
-  BOOST_CHECK_EQUAL(zinf.lower(), 0); // Check defaults again.
-  BOOST_CHECK_EQUAL(zinf.upper(), +std::numeric_limits<double>::infinity());
+  BOOST_CHECK_THROW(uniform_distribution<> zinf(0, +std::numeric_limits<double>::infinity()), std::domain_error); // zero to infinity using default RealType double.
 
-  BOOST_CHECK_EQUAL(pdf(zinf, -1), 0); // pdf is 1/(0 - infinity) = zero for all x
-  BOOST_CHECK_EQUAL(pdf(zinf, 0), 0); // x = 
-  BOOST_CHECK_EQUAL(pdf(zinf, 1), 0); // x = 
-  BOOST_CHECK_EQUAL(pdf(zinf, std::numeric_limits<double>::infinity()), 0); // pdf is 1/(0 - infinity) = zero for all x
-  BOOST_CHECK_EQUAL(pdf(zinf, -std::numeric_limits<double>::infinity()), 0); 
-  BOOST_CHECK_EQUAL(pdf(zinf, +std::numeric_limits<double>::max()), 0); // x = 
-  BOOST_CHECK_EQUAL(pdf(zinf, -std::numeric_limits<double>::max()), 0); // x = 
-
-	uniform_distribution<> minf0(-std::numeric_limits<double>::infinity(), 0); // -infinity to zero using default RealType double.
-  BOOST_CHECK_EQUAL(minf0.lower(), -std::numeric_limits<double>::infinity()); // Check defaults again.
-  BOOST_CHECK_EQUAL(minf0.upper(), 0);
-
-	uniform_distribution<> zmax(0, +std::numeric_limits<double>::max()); // zero to infinity using default RealType double.
+	uniform_distribution<> zmax(0, +std::numeric_limits<double>::max()); // zero to max using default RealType double.
   BOOST_CHECK_EQUAL(zmax.lower(), 0); // Check defaults again.
   BOOST_CHECK_EQUAL(zmax.upper(), +std::numeric_limits<double>::max());
 
   BOOST_CHECK_EQUAL(pdf(zmax, -1), 0); // pdf is 1/(0 - max) = almost zero for all x
   BOOST_CHECK_EQUAL(pdf(zmax, 0), std::numeric_limits<double>::min()/4); // x = 
   BOOST_CHECK_EQUAL(pdf(zmax, 1), std::numeric_limits<double>::min()/4); // x = 
-  BOOST_CHECK_EQUAL(pdf(zmax, +std::numeric_limits<double>::infinity()), 0); // pdf is 1/(0 - infinity) = zero for all x
-  BOOST_CHECK_EQUAL(pdf(zmax, -std::numeric_limits<double>::infinity()), 0); 
+  BOOST_CHECK_THROW(pdf(zmax, +std::numeric_limits<double>::infinity()), std::domain_error); // pdf is 1/(0 - infinity) = zero for all x
+  BOOST_CHECK_THROW(pdf(zmax, -std::numeric_limits<double>::infinity()), std::domain_error); 
   BOOST_CHECK_EQUAL(pdf(zmax, +std::numeric_limits<double>::max()), std::numeric_limits<double>::min()/4); // x = 
   BOOST_CHECK_EQUAL(pdf(zmax, -std::numeric_limits<double>::max()), 0); // x = 
 
@@ -456,7 +441,6 @@ int test_main(int, char* [])
 
 Output:
 
------- Build started: Project: test_uniform, Configuration: Debug Win32 ------
 Compiling...
 test_uniform.cpp
 Linking...
@@ -473,9 +457,6 @@ Tolerance (as fraction) for type class boost::math::concepts::real_concept is 1.
 *** No errors detected
 Build Time 0:06
 Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_uniform\Debug\BuildLog.htm"
-test_uniform - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
--
 
 */
 
