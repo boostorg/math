@@ -177,6 +177,16 @@ void test_spots(RealType T)
     static_cast<RealType>(0), 
     tolerance);
 
+  BOOST_CHECK_CLOSE_FRACTION( // x < middle so Wiki says special case pdf = 2 * x
+    pdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0.25)), 
+    static_cast<RealType>(0.5), 
+    tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION( // x < middle so Wiki says special case cdf = x * x
+    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0.25)), 
+    static_cast<RealType>(0.25 * 0.25), 
+    tolerance);
+
   // triangular_distribution<RealType>() (0, 0.5, 1) mode == middle.
   BOOST_CHECK_CLOSE_FRACTION( // x == lower
     pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(0)), 
