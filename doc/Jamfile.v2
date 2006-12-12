@@ -17,15 +17,20 @@ boostbook standalone
         <xsl:param>toc.max.depth=4
         <xsl:param>generate.section.toc.level=10
         # this is needed for FOP-0.9 and later:
-        <xsl:param>fop1.extensions=0
+        <xsl:param>fop1.extensions=1
         # this is needed for FOP 0.2, but must not be set to zero for FOP-0.9!
-        <xsl:param>fop.extensions=1
+        <xsl:param>fop.extensions=0
         <xsl:param>body.start.indent=0pt
         <xsl:param>page.margin.inner=0.5in
         <xsl:param>page.margin.outer=0.5in
         <xsl:param>admon.graphics=1
         <xsl:param>symbol.font.family=DejaVuSans,Symbol,ZapfDingbats
+        # set this one for PDF generation only:
+        #<xsl:param>admon.graphics.extension=".svg"
     ;
+
+
+
 
 
 

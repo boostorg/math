@@ -18,6 +18,10 @@
 #include <boost/math/distributions/lognormal.hpp>
 #include <boost/math/special_functions/digamma.hpp>
 #include <boost/math/special_functions/cbrt.hpp>
+#include <boost/math/special_functions/legendre.hpp>
+#include <boost/math/special_functions/laguerre.hpp>
+#include <boost/math/special_functions/hermite.hpp>
+#include <boost/math/special_functions/spherical_harmonic.hpp>
 
 //
 // The purpose of this test is to verify that our code compiles
@@ -269,6 +273,19 @@ void test_functions()
    boost::math::cbrt(v1);
    boost::math::sqrt1pm1(v1);
    boost::math::powm1(v1, v2);
+   boost::math::legendre_p(1, v1);
+   boost::math::legendre_p(1, 0, v1);
+   boost::math::legendre_q(1, v1);
+   boost::math::legendre_next(2, v1, v2, v3);
+   boost::math::legendre_next(2, 2, v1, v2, v3);
+   boost::math::laguerre(1, v1);
+   boost::math::laguerre(2, 1, v1);
+   boost::math::laguerre_next(2, v1, v2, v3);
+   boost::math::laguerre_next(2, 1, v1, v2, v3);
+   boost::math::hermite(1, v1);
+   boost::math::hermite_next(2, v1, v2, v3);
+   boost::math::spherical_harmonic_r(2, 1, v1, v2);
+   boost::math::spherical_harmonic_i(2, 1, v1, v2);
 
 }
 

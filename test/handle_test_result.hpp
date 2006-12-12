@@ -59,7 +59,7 @@ inline void add_expected_result(
    re += group_name;
    re += ")";
    get_expected_data().push_back(
-      std::make_pair(boost::regex(re), 
+      std::make_pair(boost::regex(re, boost::regex::perl | boost::regex::icase), 
          std::make_pair(max_peek_error, max_mean_error)));
 }
 

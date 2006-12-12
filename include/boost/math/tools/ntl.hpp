@@ -298,6 +298,14 @@ namespace NTL{
          boost::math::tools::digits<NTL::RR>());
    }
 
+   inline NTL::RR fmod(NTL::RR x, NTL::RR y)
+   {
+      // This is a really crummy version of fmod, we rely on lots
+      // of digits to get us out of trouble...
+      NTL::RR factor = floor(x/y);
+      return x - factor * y;
+   }
+
 } // namespace NTL
 
 
