@@ -130,10 +130,6 @@ Note that the worst errors occur when the degree increases, values greater than
 polynomial case when the order is also large.  Further the relative errors
 are likely to grow arbitrarily large when the function is very close to a root.
 
-No comparisons to other libraries are shown here: there appears to be only one
-viable implementation method for these functions, the comparisons to other
-libraries that have been run show identical error rates to those given here.
-
 [h4 Testing]
 
 A mixture of spot tests of values calculated using functions.wolfram.com, 
