@@ -4,8 +4,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_STATS_triangular_HPP
-#define BOOST_STATS_triangular_HPP
+#ifndef BOOST_STATS_TRIANGULAR_HPP
+#define BOOST_STATS_TRIANGULAR_HPP
 
 // http://mathworld.wolfram.com/TriangularDistribution.html
 // http://en.wikipedia.org/wiki/Triangular_distribution
@@ -15,10 +15,10 @@
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace boost{ namespace math{
-
-  namespace detail{
-
+namespace boost{ namespace math
+{
+  namespace detail
+  {
     template <class RealType>
     bool check_triangular_lower(
       const char* function,
@@ -27,7 +27,7 @@ namespace boost{ namespace math{
     {
       if((boost::math::isfinite)(lower))
       { // Any finite value is OK.
-        return true; 
+        return true;
       }
       else
       { // Not finite: infinity or NaN.
@@ -46,7 +46,7 @@ namespace boost{ namespace math{
     {
       if((boost::math::isfinite)(mode))
       { // any finite value is OK.
-        return true; 
+        return true;
       }
       else
       { // Not finite: infinity or NaN.
@@ -110,14 +110,14 @@ namespace boost{ namespace math{
         )
       {
         if (mode < lower)
-        { 
+        {
           *result = tools::domain_error<RealType>(
             function,
             "mode parameter is %1%, but must be >= than lower!", lower);
           return false;
         }
         if (mode > upper )
-        { 
+        {
           *result = tools::domain_error<RealType>(
             function,
             "mode parameter is %1%, but must be <= than upper!", upper);
@@ -132,8 +132,7 @@ namespace boost{ namespace math{
           "lower parameter is %1%, but must be less than upper!", lower);
         return false;
       }
-    } // bool check_triangular(
-
+    } // bool check_triangular
   } // namespace detail
 
   template <class RealType = double>
@@ -142,7 +141,7 @@ namespace boost{ namespace math{
   public:
     typedef RealType value_type;
 
-    triangular_distribution(RealType lower = 0, RealType mode = 0, RealType upper = 1) 
+    triangular_distribution(RealType lower = 0, RealType mode = 0, RealType upper = 1)
       : m_lower(lower), m_mode(mode), m_upper(upper) // Constructor.
     {
       RealType result;
@@ -194,7 +193,7 @@ namespace boost{ namespace math{
       return (mode == lower) ? 2 / (upper - lower) : 0;
     }
     else if (x == upper)
-    { 
+    {
       return (mode == upper) ? 2 / (upper - lower) : 0;
     }
     else if (x <= mode)
@@ -230,14 +229,14 @@ namespace boost{ namespace math{
     {
       return 1;
     }
-    // else lower <= x <= upper
+    // else lower < x < upper
     if (x <= mode)
     {
-      return ((x - lower) * (x - lower)) / ((upper - lower) * (mode - lower)); 
+      return ((x - lower) * (x - lower)) / ((upper - lower) * (mode - lower));
     }
     else
     {
-      return 1 - (upper - x) *  (upper - x) / ((upper - lower) * (upper - mode)); 
+      return 1 - (upper - x) *  (upper - x) / ((upper - lower) * (upper - mode));
     }
   } // RealType cdf(const triangular_distribution<RealType>& dist, const RealType& x)
 
@@ -299,7 +298,7 @@ namespace boost{ namespace math{
     {
       return result;
     }
-    if (x <= lower) 
+    if (x <= lower)
     {
       return 1;
     }
@@ -309,11 +308,11 @@ namespace boost{ namespace math{
     }
     if (x <= mode)
     {
-      return 1 - ((x - lower) * (x - lower)) / ((upper - lower) * (mode - lower)); 
+      return 1 - ((x - lower) * (x - lower)) / ((upper - lower) * (mode - lower));
     }
     else
     {
-      return (upper - x) *  (upper - x) / ((upper - lower) * (upper - mode)); 
+      return (upper - x) *  (upper - x) / ((upper - lower) * (upper - mode));
     }
   } // RealType cdf(const complemented2_type<triangular_distribution<RealType>, RealType>& c)
 
@@ -385,7 +384,7 @@ namespace boost{ namespace math{
     RealType lower = dist.lower();
     RealType mode = dist.mode();
     RealType upper = dist.upper();
-    RealType result;
+    RealType result; // of checks.
     if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION, lower, mode, upper, &result))
     {
       return result;
@@ -397,7 +396,7 @@ namespace boost{ namespace math{
   inline RealType mode(const triangular_distribution<RealType>& dist)
   {
     RealType mode = dist.mode();
-    RealType result;
+    RealType result; // of checks.
     if(false == detail::check_triangular_mode(BOOST_CURRENT_FUNCTION, mode, &result))
     { // This should never happen!
       return result;
@@ -414,7 +413,7 @@ namespace boost{ namespace math{
     RealType lower = dist.lower();
     RealType mode = dist.mode();
     RealType upper = dist.upper();
-    RealType result;
+    RealType result; // of checks.
     if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION,lower, mode, upper, &result))
     {
       return result;
@@ -434,7 +433,7 @@ namespace boost{ namespace math{
     {
       return result;
     }
-    return static_cast<RealType>(12)/5; //  12/5 = 2.4;  
+    return static_cast<RealType>(12)/5; //  12/5 = 2.4;
   } // RealType kurtosis_excess(const triangular_distribution<RealType>& dist)
 
   template <class RealType>
@@ -451,6 +450,6 @@ namespace boost{ namespace math{
 // keep compilers that support two-phase lookup happy.
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
-#endif // BOOST_STATS_triangular_HPP
+#endif // BOOST_STATS_TRIANGULAR_HPP
 
 
