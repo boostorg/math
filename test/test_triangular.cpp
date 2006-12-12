@@ -22,6 +22,7 @@
 #  pragma warning(disable: 4180) // qualifier applied to function type has no meaning; ignored.
 #  if !(defined _SCL_SECURE_NO_DEPRECATE) || (_SCL_SECURE_NO_DEPRECATE == 0)
 #    pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
+#  pragma warning(disable: 4305) // 'initializing' : truncation from 'long double' to 'float'
 #  endif
 #endif
 
@@ -119,6 +120,9 @@ void test_spots(RealType T)
     triangular_distribution<RealType>(1, 0, -1),
     std::domain_error);
 
+  BOOST_CHECK_THROW( // duff parameters upper == lower.
+    triangular_distribution<RealType>(0, 0, 0),
+    std::domain_error);
   BOOST_CHECK_THROW( // duff parameters mode < lower.
     triangular_distribution<RealType>(0, -1, 1),
     std::domain_error);
@@ -216,13 +220,13 @@ void test_spots(RealType T)
     // #define BOOST_MATH_THROW_ON_DOMAIN_ERROR IS defined, so the throw path
     // of error handling is tested below with BOOST_CHECK_THROW tests.
 
-    BOOST_CHECK_EQUAL( // x == infinity should be OK, and pdf == zero.
+    BOOST_CHECK_THROW( // x == infinity NOT OK.
       pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(std::numeric_limits<RealType>::infinity())), 
-      static_cast<RealType>(0));
+      std::domain_error);
 
-    BOOST_CHECK_EQUAL( // x == minus infinity should be OK too.
+    BOOST_CHECK_THROW( // x == minus infinity not OK too.
       pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(-std::numeric_limits<RealType>::infinity())), 
-      static_cast<RealType>(0));
+      std::domain_error);
   }
   if(std::numeric_limits<RealType>::has_quiet_NaN)
   { // BOOST_CHECK tests for NaN using std::numeric_limits<>::has_quiet_NaN() - should throw.
@@ -310,7 +314,7 @@ void test_spots(RealType T)
 
   BOOST_CHECK_CLOSE_FRACTION( // x = -0.5
     cdf(complement(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(-0.5))), 
-    static_cast<RealType>(0.875), 
+    static_cast<RealType>(0.875L), 
     tolerance);
 
     BOOST_CHECK_CLOSE_FRACTION( // x = +0.5
@@ -324,28 +328,28 @@ void test_spots(RealType T)
   triangular_distribution<RealType> tri0h1(0, 0.5, 1); // Equilateral triangle - mode is the middle.
   triangular_distribution<RealType> trim12(-1, -0.5, 2); // mode is negative.
 
-  BOOST_CHECK_CLOSE_FRACTION(cdf(tri0q1, 0.02), static_cast<RealType>(0.0016), tolerance);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(tri0q1, 0.5), static_cast<RealType>(0.66666666666666666666666666666666666666666666667), tolerance);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(tri0q1, 0.98), static_cast<RealType>(0.99946666666666661), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(tri0q1, 0.02L), static_cast<RealType>(0.0016L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(tri0q1, 0.5L), static_cast<RealType>(0.66666666666666666666666666666666666666666666667L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(tri0q1, 0.98L), static_cast<RealType>(0.99946666666666661L), tolerance);
 
   // quantile
-  BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.0016)), static_cast<RealType>(0.02), tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.66666666666666666666666666666666666666666666667)), static_cast<RealType>(0.5), tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0q1, static_cast<RealType>(0.3333333333333333333333333333333333333333333333333))), static_cast<RealType>(0.5), tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.0016L)), static_cast<RealType>(0.02L), tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.66666666666666666666666666666666666666666666667L)), static_cast<RealType>(0.5), tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0q1, static_cast<RealType>(0.3333333333333333333333333333333333333333333333333L))), static_cast<RealType>(0.5), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.99946666666666661)), static_cast<RealType>(0.98), 10 * tol5eps);
 
-  BOOST_CHECK_CLOSE_FRACTION(pdf(trim12, 0), static_cast<RealType>(0.533333333333333333333333333333333333333333333), tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(trim12, 0), static_cast<RealType>(0.466666666666666666666666666666666666666666667), tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(complement(trim12, 0)), static_cast<RealType>(1 - 0.466666666666666666666666666666666666666666667), tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(pdf(trim12, 0), static_cast<RealType>(0.533333333333333333333333333333333333333333333L), tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(trim12, 0), static_cast<RealType>(0.466666666666666666666666666666666666666666667L), tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(complement(trim12, 0)), static_cast<RealType>(1 - 0.466666666666666666666666666666666666666666667L), tol5eps);
 
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0q1, static_cast<RealType>(1 - 0.99946666666666661))), static_cast<RealType>(0.98), 10 * tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0q1, static_cast<RealType>(1 - 0.99946666666666661L))), static_cast<RealType>(0.98L), 10 * tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(1.))), static_cast<RealType>(0), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(0.5))), static_cast<RealType>(0.5), tol5eps); // OK
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(1. - 0.02))), static_cast<RealType>(0.1), tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(1. - 0.98))), static_cast<RealType>(0.9), tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(1. - 0.02L))), static_cast<RealType>(0.1L), tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(1. - 0.98L))), static_cast<RealType>(0.9L), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, 0)), static_cast<RealType>(1), tol5eps);
 
-  RealType xs [] = {0., 0.01, 0.02, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98, 0.99, 1.};
+  RealType xs [] = {0., 0.01L, 0.02L, 0.05L, 0.1L, 0.2L, 0.3L, 0.4L, 0.5L, 0.6L, 0.7L, 0.8L, 0.9L, 0.95L, 0.98L, 0.99L, 1.};
 
   const triangular_distribution<RealType>& distr = tristd;
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(distr, 1.)), static_cast<RealType>(0), tol5eps);
@@ -359,9 +363,9 @@ void test_spots(RealType T)
   {
     const triangular_distribution<RealType>* const dist = dists[i];
     // cout << "Distribution " << i << endl;
-    BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], 0.5), quantile(complement(*dist, 0.5)),  tol5eps);
-    BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], 0.98), quantile(complement(*dist, 1. - 0.98)),tol5eps);
-    BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], 0.98), quantile(complement(*dist, 1. - 0.98)),tol5eps);
+    BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], 0.5L), quantile(complement(*dist, 0.5L)),  tol5eps);
+    BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], 0.98L), quantile(complement(*dist, 1.L - 0.98L)),tol5eps);
+    BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], 0.98L), quantile(complement(*dist, 1.L - 0.98L)),tol5eps);
   } // for i
 
    // quantile complement
@@ -412,8 +416,8 @@ void test_spots(RealType T)
     static_cast<RealType>(1),       // mode
     static_cast<RealType>(2),     // upper
     static_cast<RealType>(1),     // x
-    static_cast<RealType>(0.66666666666666666666666666666666666666666667),   // p
-    static_cast<RealType>(0.33333333333333333333333333333333333333333333), // q = 1 - p
+    static_cast<RealType>(0.66666666666666666666666666666666666666666667L),   // p
+    static_cast<RealType>(0.33333333333333333333333333333333333333333333L), // q = 1 - p
     tolerance);
   tolerance = (std::max)(
     boost::math::tools::epsilon<RealType>(),
@@ -427,7 +431,7 @@ void test_spots(RealType T)
     mean(distu01), static_cast<RealType>(0.5), tolerance);
   // variance:
   BOOST_CHECK_CLOSE_FRACTION(
-    variance(distu01), static_cast<RealType>(0.0833333333333333333333333333333333333333333), tolerance);
+    variance(distu01), static_cast<RealType>(0.0833333333333333333333333333333333333333333L), tolerance);
   // std deviation:
   BOOST_CHECK_CLOSE_FRACTION(
     standard_deviation(distu01), sqrt(variance(distu01)), tolerance);
@@ -648,6 +652,26 @@ int test_main(int, char* [])
 
 Output:
 
+------ Build started: Project: test_triangular, Configuration: Debug Win32 ------
+Compiling...
+test_triangular.cpp
+Linking...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_triangular.exe"
+Running 1 test case...
+Distribution 0
+Distribution 1
+Distribution 2
+Distribution 3
+Distribution 4
+Tolerance for type float is 5.96046e-007.
+Tolerance for type double is 1.11022e-015.
+Tolerance for type long double is 1.11022e-015.
+Tolerance for type class boost::math::concepts::real_concept is 1.11022e-015.
+*** No errors detected
+Build Time 0:05
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_triangular\Debug\BuildLog.htm"
+test_triangular - 0 error(s), 0 warning(s)
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 
 
