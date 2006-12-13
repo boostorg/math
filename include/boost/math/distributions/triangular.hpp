@@ -419,7 +419,7 @@ namespace boost{ namespace math
       return result;
     }
     return root_two<RealType>() * (lower + upper - 2 * mode) * (2 * lower - upper - mode) * (lower - 2 * upper + mode) /
-      5 * pow((lower * lower + upper + upper + mode * mode - lower * upper - lower * mode - upper * mode), RealType(3)/RealType(2));
+      (5 * pow((lower * lower + upper + upper + mode * mode - lower * upper - lower * mode - upper * mode), RealType(3)/RealType(2)));
   } // RealType skewness(const triangular_distribution<RealType>& dist)
 
   template <class RealType>
