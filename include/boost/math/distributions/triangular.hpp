@@ -448,6 +448,7 @@ namespace boost{ namespace math
       return result;
     }
     return static_cast<RealType>(-3)/5; // - 3/5 = -0.6
+    // Assuming mathworld really means kurtosis excess?  Wikipedia corrected to match this.
   }
 
 } // namespace math
