@@ -423,8 +423,8 @@ namespace boost{ namespace math
   } // RealType skewness(const triangular_distribution<RealType>& dist)
 
   template <class RealType>
-  inline RealType kurtosis_excess(const triangular_distribution<RealType>& dist)
-  {
+  inline RealType kurtosis(const triangular_distribution<RealType>& dist)
+  { // These checks may be belt and braces as should have been checked on construction?
     RealType lower = dist.lower();
     RealType upper = dist.upper();
     RealType mode = dist.mode();
@@ -437,8 +437,16 @@ namespace boost{ namespace math
   } // RealType kurtosis_excess(const triangular_distribution<RealType>& dist)
 
   template <class RealType>
-  inline RealType kurtosis(const triangular_distribution<RealType>& dist)
-  {
+  inline RealType kurtosis_excess(const triangular_distribution<RealType>& dist)
+  { // These checks may be belt and braces as should have been checked on construction?
+    RealType lower = dist.lower();
+    RealType upper = dist.upper();
+    RealType mode = dist.mode();
+    RealType result;  // of checks.
+    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION,lower, mode, upper, &result))
+    {
+      return result;
+    }
     return static_cast<RealType>(-3)/5; // - 3/5 = -0.6
   }
 
