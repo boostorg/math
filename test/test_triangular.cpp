@@ -270,8 +270,8 @@ void test_spots(RealType T)
     static_cast<RealType>(0.5),    // (0 --1) / (1 -- 1) = 0.5
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION(
-    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0.9)), 
-    static_cast<RealType>(0.81), 
+    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0.9L)), 
+    static_cast<RealType>(0.81L), 
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
@@ -279,16 +279,16 @@ void test_spots(RealType T)
     static_cast<RealType>(0), 
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION(
-    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(-0.5)), 
-    static_cast<RealType>(0.125), 
+    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(-0.5L)), 
+    static_cast<RealType>(0.125L), 
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION(
     cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(0)), 
     static_cast<RealType>(0.5), 
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION(
-    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(+0.5)), 
-    static_cast<RealType>(0.875), 
+    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(+0.5L)), 
+    static_cast<RealType>(0.875L), 
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION(
     cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(1)), 
@@ -340,26 +340,26 @@ void test_spots(RealType T)
 
   BOOST_CHECK_CLOSE_FRACTION(cdf(tri0q1, 0.02L), static_cast<RealType>(0.0016L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cdf(tri0q1, 0.5L), static_cast<RealType>(0.66666666666666666666666666666666666666666666667L), tolerance);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(tri0q1, 0.98L), static_cast<RealType>(0.99946666666666661L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(tri0q1, 0.98L), static_cast<RealType>(0.9994666666666666666666666666666666666666666666L), tolerance);
 
   // quantile
   BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.0016L)), static_cast<RealType>(0.02L), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.66666666666666666666666666666666666666666666667L)), static_cast<RealType>(0.5), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0q1, static_cast<RealType>(0.3333333333333333333333333333333333333333333333333L))), static_cast<RealType>(0.5), tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.99946666666666661)), static_cast<RealType>(0.98), 10 * tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.9994666666666666666666666666666666666666666666)), static_cast<RealType>(0.98), 10 * tol5eps);
 
   BOOST_CHECK_CLOSE_FRACTION(pdf(trim12, 0), static_cast<RealType>(0.533333333333333333333333333333333333333333333L), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(cdf(trim12, 0), static_cast<RealType>(0.466666666666666666666666666666666666666666667L), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(cdf(complement(trim12, 0)), static_cast<RealType>(1 - 0.466666666666666666666666666666666666666666667L), tol5eps);
 
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0q1, static_cast<RealType>(1 - 0.99946666666666661L))), static_cast<RealType>(0.98L), 10 * tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(1.))), static_cast<RealType>(0), tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0q1, static_cast<RealType>(1 - 0.999466666666666666666666666666666666666666666666L))), static_cast<RealType>(0.98L), 10 * tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(1))), static_cast<RealType>(0), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(0.5))), static_cast<RealType>(0.5), tol5eps); // OK
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(1. - 0.02L))), static_cast<RealType>(0.1L), tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(1. - 0.98L))), static_cast<RealType>(0.9L), tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(1 - 0.02L))), static_cast<RealType>(0.1L), tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, static_cast<RealType>(1 - 0.98L))), static_cast<RealType>(0.9L), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0h1, 0)), static_cast<RealType>(1), tol5eps);
 
-  RealType xs [] = {0., 0.01L, 0.02L, 0.05L, 0.1L, 0.2L, 0.3L, 0.4L, 0.5L, 0.6L, 0.7L, 0.8L, 0.9L, 0.95L, 0.98L, 0.99L, 1.};
+  RealType xs [] = {0, 0.01L, 0.02L, 0.05L, 0.1L, 0.2L, 0.3L, 0.4L, 0.5L, 0.6L, 0.7L, 0.8L, 0.9L, 0.95L, 0.98L, 0.99L, 1};
 
   const triangular_distribution<RealType>& distr = tristd;
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(distr, 1.)), static_cast<RealType>(0), tol5eps);
@@ -462,8 +462,8 @@ void test_spots(RealType T)
     skewness(distu01), static_cast<RealType>(0));
   // kertosis:
   BOOST_CHECK_CLOSE_FRACTION(
-    kurtosis(distu01), kurtosis_excess(distu01) + static_cast<RealType>(3), tolerance);
-  // kertosis excess = kurtosis - 3;:
+    kurtosis_excess(distu01), kurtosis(distu01) - static_cast<RealType>(3L), tolerance);
+  // kurtosis excess = kurtosis - 3;
   BOOST_CHECK_CLOSE_FRACTION(
     kurtosis_excess(distu01), static_cast<RealType>(-1.2), tolerance);
 
