@@ -102,12 +102,20 @@ generic operations - let's say the /n'th moment/ - then all you have to
 do is add the appropriate non-member functions, overloaded for each
 supported distribution type.
 
+[tip\n
+[Random numbers that approximate Quantiles of Distributions]
+If you want random numbers that are distributed in a specific way,
+for example in a uniform, normal or triangular,
+see [@http://www.boost.org/libs/random/ Boost.Random].
+]
+
 [tip\n\n
 [*Random Variates and Distribution Parameters]\n\n
 [@http://en.wikipedia.org/wiki/Random_variate Random variates]
 and [@http://en.wikipedia.org/wiki/Parameter distribution parameters]
 are conventionally distinguished (for example in Wikipedia and Wolfram MathWorld
-by placing a semi-colon after the random variate (whose value you 'choose'),
+by placing a semi-colon (or sometimes vertical bar |)
+after the random variate (whose value you 'choose'),
 to separate the variate from the parameter(s) that defines the shape of the distribution.\n\n
 For example, the binomial distribution has two parameters:
 n (the number of trials) and p (the probability of success on one trial).\n\n
@@ -147,13 +155,12 @@ degrees of freedom do have a genuine meaning.
 ]
 
 
-
 [h4 Complements are supported too]
 
 Often you don't want the value of the CDF, but its complement, which is
 to say `1-p` rather than `p`.  You could calculate the CDF and subtract
 it from `1`, but if `p` is very close to `1` then cancellation error
-will cause you to loose significant digits.  In extreme cases, `p` may
+will cause you to lose significant digits.  In extreme cases, `p` may
 actually be equal to `1`, even though the true value of the complement is non-zero.
 
 In this library, whenever you want to receive a complement, just wrap
