@@ -70,8 +70,6 @@ The following graph illustrates how the
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function PDF]
 varies with the mode parameter:
 
-TODO insert graph.
-
 [h4 Member Functions]
 
    triangular_distribution(RealType lower = 0, RealType mode = 0 RealType upper = 1);
@@ -100,8 +98,7 @@ All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions
 distributions are supported: __usual_accessors.
 
 The domain of the random variable is \lower\ to \upper\,
-and the useful supported range is lower <= x <= upper.\n
-Outside this range, functions are NaN.
+and the supported range is lower <= x <= upper.\n
 
 [h4 Accuracy]
 

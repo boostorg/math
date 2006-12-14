@@ -46,10 +46,10 @@ the method of maximum likelihood uses this definition.
 
 There is also a [@http://en.wikipedia.org/wiki/Discrete_uniform_distribution *discrete* uniform distribution].
 
-Parameters lower and upper can be any finite value, or + infinity or -infinity
-(but not NaN).
+Parameters lower and upper can be any finite value.
 
-The [@http://en.wikipedia.org/wiki/Random_variate random variate] x must also be finite, and is supported lower <= x <= upper.
+The [@http://en.wikipedia.org/wiki/Random_variate random variate]
+x must also be finite, and is supported lower <= x <= upper.
 
 The lower parameter is also called the
 [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm location parameter],
@@ -67,8 +67,8 @@ varies with the shape parameter:
 Constructs a [@http://en.wikipedia.org/wiki/uniform_distribution 
 uniform distribution] with lower  /lower/ (a) and upper /upper/ (b).
 
-Requires that the /lower/ and /upper/ parameters are both finite, or +[infin][space] or -[infin], 
-otherwise if NaN calls __domain_error.
+Requires that the /lower/ and /upper/ parameters are both finite;
+otherwise if infinity or NaN then calls __domain_error.
 
    RealType lower()const;
    
@@ -80,12 +80,11 @@ Returns the /upper/ parameter of this distribution.
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
-distributions are supported: __usual_accessors.
+All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
 
-The domain of the random variable is \[-[infin], [infin]\],
-but the useful supported range is only 0 <= x <= 1.\n
-Outside this range, functions are zero.
+The domain of the random variable is any finite value,
+but the supported range is only 0 <= x <= 1.\n
 
 [h4 Accuracy]
 
@@ -101,15 +100,15 @@ b is the /upper/ parameter,
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = 0 for x < a, 1 / (b - a) for a <= x <= b, 0 for x > b ]]
 [[cdf][Using the relation: cdf = 0 for x < a, (x - a) / (b - a) for a <= x <= b, 1 for x > b]]
-[[cdf complement][Using the relation: q = 1 - p ]]
+[[cdf complement][Using the relation: q = 1 - p, (b - x) / (b - a) ]]
 [[quantile][Using the relation: x = p * (b - a) + a; ]]
 [[quantile from the complement][x = -q * (b - a) + b ]]
 [[mean][(a + b) / 2 ]]
 [[variance][(b - a) [super 2] / 12 ]]
 [[mode][any value in \[a, b\] but a is chosen.  (Would NaN be better?) ]]
 [[skewness][0]]
-[[kurtosis][-6/5 = -1.2 exactly.]]
-[[kurtosis excess][9/5 (kurtosis - 3)]]
+[[kurtosis excess][-6/5 = -1.2 exactly.]]
+[[kurtosis][9/5 (kurtosis - 3)]]
 ]
 
 [h4 References]
