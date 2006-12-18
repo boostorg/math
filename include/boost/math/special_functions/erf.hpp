@@ -51,33 +51,33 @@ private:
 // How large z has to be in order to ensure that the series converges:
 //
 template <class T>
-float erf_asymptotic_limit_N(const T&)
+inline float erf_asymptotic_limit_N(const T&)
 {
    return (std::numeric_limits<float>::max)();
 }
-float erf_asymptotic_limit_N(const boost::integral_constant<int, 24>&)
+inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 24>&)
 {
    return 2.8F;
 }
-float erf_asymptotic_limit_N(const boost::integral_constant<int, 53>&)
+inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 53>&)
 {
    return 4.3F;
 }
-float erf_asymptotic_limit_N(const boost::integral_constant<int, 64>&)
+inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 64>&)
 {
    return 4.8F;
 }
-float erf_asymptotic_limit_N(const boost::integral_constant<int, 106>&)
+inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 106>&)
 {
    return 6.5F;
 }
-float erf_asymptotic_limit_N(const boost::integral_constant<int, 113>&)
+inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 113>&)
 {
    return 6.8F;
 }
 
 template <class T>
-T erf_asymptotic_limit()
+inline T erf_asymptotic_limit()
 {
    return erf_asymptotic_limit_N(boost::integral_constant<int, std::numeric_limits<T>::digits>());
 }
