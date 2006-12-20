@@ -129,7 +129,7 @@ Mathematically, the random variate may take an (+ or -) infinite value,
 but this implementation limits it to finite values from the `max` to `min` for the `RealType`.
 (See [link math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity] for rationale).
 
-The range of random variate values that it permitted can be tested by using two functions
+The range of random variate values that is permitted can be tested by using two functions
 `range` and `support`.
 
 For example, the binomial distribution has two parameters:
@@ -303,6 +303,7 @@ Now that you have the basics, the next section looks at some worked examples.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
 
 
 
