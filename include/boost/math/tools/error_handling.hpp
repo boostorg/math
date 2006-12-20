@@ -43,10 +43,8 @@ namespace boost{ namespace math
 {
   namespace tools
   {
-
     namespace detail
     {
-
 	    template <class E>
 	    void raise_error(const char* function, const char* message)
 	    {
