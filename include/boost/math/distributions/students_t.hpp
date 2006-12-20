@@ -293,6 +293,12 @@ inline RealType mode(const students_t_distribution<RealType>& dist)
 }
 
 template <class RealType>
+inline RealType median(const students_t_distribution<RealType>& dist)
+{
+   return 0;
+}
+
+template <class RealType>
 inline RealType skewness(const students_t_distribution<RealType>& dist)
 {
    if(dist.degrees_of_freedom() <= 3)

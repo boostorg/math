@@ -183,6 +183,18 @@ inline RealType mode(const chi_squared_distribution<RealType>& dist)
 }
 
 template <class RealType>
+inline RealType median(const chi_squared_distribution<RealType>& dist)
+{ // Median is given by Quantile[dist, 1/2]
+   RealType df = dist.degrees_of_freedom();
+   if(df <= 1)
+      return tools::domain_error<RealType>(
+         BOOST_CURRENT_FUNCTION,
+         "The Chi-Squared distribution only has a mode for degrees of freedom >= 2, but got degrees of freedom = %1%.",
+         df);
+   return df - RealType(2)/3;
+}
+
+template <class RealType>
 inline RealType skewness(const chi_squared_distribution<RealType>& dist)
 {
    using namespace std; // For ADL

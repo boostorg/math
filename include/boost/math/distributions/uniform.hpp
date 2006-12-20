@@ -292,7 +292,7 @@ namespace boost{ namespace math
     RealType lower = dist.lower();
     RealType upper = dist.upper();
     RealType result; // of checks.
-    if(false == detail::check_uniform(BOOST_CURRENT_FUNCTION,lower, upper, &result))
+    if(false == detail::check_uniform(BOOST_CURRENT_FUNCTION, lower, upper, &result))
     {
       return result;
     }
@@ -300,6 +300,18 @@ namespace boost{ namespace math
     return result;
   }
 
+  template <class RealType>
+  inline RealType median(const uniform_distribution<RealType>& dist)
+  {
+    RealType lower = dist.lower();
+    RealType upper = dist.upper();
+    RealType result; // of checks.
+    if(false == detail::check_uniform(BOOST_CURRENT_FUNCTION, lower, upper, &result))
+    {
+      return result;
+    }
+    return (lower + upper) / 2; // 
+  }
   template <class RealType>
   inline RealType skewness(const uniform_distribution<RealType>& dist)
   {
@@ -319,7 +331,7 @@ namespace boost{ namespace math
     RealType lower = dist.lower();
     RealType upper = dist.upper();
     RealType result;  // of checks.
-    if(false == detail::check_uniform(BOOST_CURRENT_FUNCTION,lower, upper, &result))
+    if(false == detail::check_uniform(BOOST_CURRENT_FUNCTION, lower, upper, &result))
     {
       return result;
     }

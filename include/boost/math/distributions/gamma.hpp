@@ -3,11 +3,12 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_STATS_WEIBULL_HPP
-#define BOOST_STATS_WEIBULL_HPP
+#ifndef BOOST_STATS_GAMMA_HPP
+#define BOOST_STATS_GAMMA_HPP
 
-// http://www.itl.nist.gov/div898/handbook/eda/section3/eda3668.htm
-// http://mathworld.wolfram.com/WeibullDistribution.html
+// http://www.itl.nist.gov/div898/handbook/eda/section3/eda366b.htm
+// http://mathworld.wolfram.com/GammaDistribution.html
+// http://en.wikipedia.org/wiki/Gamma_distribution
 
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
@@ -15,7 +16,8 @@
 
 namespace boost{ namespace math{
 
-namespace detail{
+namespace detail
+{
 
 template <class RealType>
 bool check_gamma_shape(
@@ -106,12 +108,12 @@ RealType pdf(const gamma_distribution<RealType>& dist, const RealType& x)
       return result;
 
    if(x == 0)
+   {
       return 0;
-
+   }
    result = gamma_P_derivative(shape, x / scale) / scale;
-
    return result;
-}
+} // pdf
 
 template <class RealType>
 inline RealType cdf(const gamma_distribution<RealType>& dist, const RealType& x)
@@ -128,9 +130,8 @@ inline RealType cdf(const gamma_distribution<RealType>& dist, const RealType& x)
       return result;
 
    result = boost::math::gamma_P(shape, x / scale);
-
    return result;
-}
+} // cdf
 
 template <class RealType>
 RealType quantile(const gamma_distribution<RealType>& dist, const RealType& p)
@@ -250,6 +251,11 @@ inline RealType mode(const gamma_distribution<RealType>& dist)
    return result;
 }
 
+//template <class RealType>
+//inline RealType median(const gamma_distribution<RealType>& dist)
+//{  // Rely on default definition in derived accessors.
+//}
+
 template <class RealType>
 inline RealType skewness(const gamma_distribution<RealType>& dist)
 {
@@ -296,5 +302,5 @@ inline RealType kurtosis(const gamma_distribution<RealType>& dist)
 // keep compilers that support two-phase lookup happy.
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
-#endif // BOOST_STATS_WEIBULL_HPP
+#endif // BOOST_STATS_GAMMA_HPP
 

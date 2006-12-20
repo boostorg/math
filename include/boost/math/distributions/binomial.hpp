@@ -663,6 +663,24 @@ namespace boost
       }
 
       template <class RealType>
+      inline RealType median(const binomial_distribution<RealType>& dist)
+      { // Bounds for the median of the negative binomial distribution
+        // VAN DE VEN R. ; WEBER N. C. ;
+        // Univ. Sydney, school mathematics statistics, Sydney N.S.W. 2006, AUSTRALIE
+        // Metrika  (Metrika)  ISSN 0026-1335   CODEN MTRKA8 
+        // 1993, vol. 40, no3-4, pp. 185-189 (4 ref.)
+
+        // Bounds for median and 50 percetage point of binomial and negative binomial distribution
+        // Metrika, ISSN	0026-1335 (Print) 1435-926X (Online)
+        // Volume 41, Number 1 / December, 1994, DOI	10.1007/BF01895303
+         using namespace std; // ADL of std functions.
+         RealType p = dist.success_fraction();
+         RealType n = dist.trials();
+         // Wikipedia says one of floor(np) -1, floor (np), floor(np) +1
+         return floor(p * n); // Chose the middle value.
+      } 
+
+      template <class RealType>
       inline RealType skewness(const binomial_distribution<RealType>& dist)
       {
          using namespace std; // ADL of std functions.

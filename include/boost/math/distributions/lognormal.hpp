@@ -64,8 +64,8 @@ private:
    //
    // Data members:
    //
-   RealType m_location;  // distribution location
-   RealType m_scale;     // distribution scale
+   RealType m_location;  // distribution location.
+   RealType m_scale;     // distribution scale.
 };
 
 typedef lognormal_distribution<double> lognormal;
@@ -208,6 +208,14 @@ inline RealType mode(const lognormal_distribution<RealType>& dist)
       return result;
 
    return exp(mu - sigma * sigma);
+}
+
+template <class RealType>
+inline RealType median(const lognormal_distribution<RealType>& dist)
+{
+   using namespace std;  // for ADL of std functions
+   RealType mu = dist.location();
+   return exp(mu); // e^mu
 }
 
 template <class RealType>

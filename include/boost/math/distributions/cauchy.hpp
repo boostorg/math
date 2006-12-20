@@ -219,6 +219,11 @@ inline RealType mode(const cauchy_distribution<RealType>& dist)
 }
 
 template <class RealType>
+inline RealType median(const cauchy_distribution<RealType>& dist)
+{
+   return dist.location();
+}
+template <class RealType>
 inline RealType skewness(const cauchy_distribution<RealType>& dist)
 {
    // There is no skewness:

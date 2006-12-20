@@ -186,6 +186,14 @@ namespace boost
     }
 
     template <class RealType>
+    inline RealType median(const poisson_distribution<RealType>& dist)
+    { // median = approximately lambda + 1/3 - 0.2/lambda
+      RealType l = dist.mean();
+      return dist.mean() + static_cast<RealType>(0.3333333333333333333333333333333333333333333333)
+       - static_cast<RealType>(0.2) / l;
+    }
+
+    template <class RealType>
     inline RealType variance(const poisson_distribution<RealType>& dist)
     { // variance.
       return dist.mean();
@@ -281,7 +289,7 @@ namespace boost
       // (like others including the binomial, negative binomial & Bernoulli)
       // is strictly defined as a discrete function: only integral values of k are envisaged.
       // However because of the method of calculation using a continuous gamma function,
-      // it is convenient to treat it as is it is a continous function
+      // it is convenient to treat it as if it is a continous function
       // and permit non-integral values of k.
       // To enforce the strict mathematical model, users should use floor or ceil functions
       // outside this function to ensure that k is integral.
@@ -289,11 +297,9 @@ namespace boost
       // The terms are not summed directly (at least for larger k)
       // instead the incomplete gamma integral is employed,
 
-      using boost::math::tools::domain_error;
-      using namespace std; // for ADL of std functions
+      using namespace std; // for ADL of std function exp.
 
       RealType mean = dist.mean();
-
       // Error checks:
       RealType result;
       if(false == poisson_detail::check_dist_and_k(
@@ -304,6 +310,7 @@ namespace boost
       {
         return result;
       }
+      // Special cases:
       if (mean == 0)
       { // Probability for any k is zero.
         return 0;
@@ -314,10 +321,9 @@ namespace boost
         // so this avoids unnecessary repeated checks.
        return exp(-mean);
       }
-
-      // For small integral k use a finite sum -
+      // For small integral k could use a finite sum -
       // it's cheaper than the gamma function.
-      // BUT this is now done by gamma_Q function.
+      // BUT this is now done efficiently by gamma_Q function.
       // Calculate poisson cdf using the gamma_Q function.
       return gamma_Q(k+1, mean);
     } // binomial cdf
@@ -340,8 +346,6 @@ namespace boost
       // Returns the sum of the terms k+1 through inf of the Poisson Probability Density/Mass (pdf).
       // The terms are not summed directly (at least for larger k)
       // instead the incomplete gamma integral is employed,
-
-      using boost::math::tools::domain_error;
 
       RealType const& k = c.param;
       poisson_distribution<RealType> const& dist = c.dist;
@@ -400,10 +404,10 @@ namespace boost
       // if(p == 0) NOT necessarily zero!
       // Not necessarily any special value of k because is unlimited.
 			if (p <= exp(-dist.mean()))
-			{ // if p <= cdffor 0 events (== pdf for 0 events), then quantile must be zero.
+			{ // if p <= cdf for 0 events (== pdf for 0 events), then quantile must be zero.
 				return 0;
 			}
-      return gamma_Q_inva(dist.mean(), p) -1;
+      return gamma_Q_inva(dist.mean(), p) - 1;
    } // quantile
 
     template <class RealType>

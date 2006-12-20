@@ -154,6 +154,12 @@ inline RealType mode(const normal_distribution<RealType>& dist)
 }
 
 template <class RealType>
+inline RealType median(const normal_distribution<RealType>& dist)
+{
+   return dist.mean();
+}
+
+template <class RealType>
 inline RealType skewness(const normal_distribution<RealType>& dist)
 {
    return 0;

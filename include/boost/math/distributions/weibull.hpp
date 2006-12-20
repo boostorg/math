@@ -219,15 +219,14 @@ inline RealType mean(const weibull_distribution<RealType>& dist)
 template <class RealType>
 RealType variance(const weibull_distribution<RealType>& dist)
 {
-   using namespace std;  // for ADL of std functions
-
    RealType shape = dist.shape();
    RealType scale = dist.scale();
 
    RealType result;
    if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   {
       return result;
-
+   }
    result = boost::math::tgamma(1 + 1 / shape);
    result *= -result;
    result += boost::math::tgamma(1 + 2 / shape);
@@ -238,31 +237,49 @@ RealType variance(const weibull_distribution<RealType>& dist)
 template <class RealType>
 inline RealType mode(const weibull_distribution<RealType>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   using namespace std;  // for ADL of std function pow.
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
 
    RealType result;
    if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   {
       return result;
-
+   }
    result = scale * pow((shape - 1) / shape, 1 / shape);
+   return result;
+}
+
+template <class RealType>
+inline RealType median(const weibull_distribution<RealType>& dist)
+{
+   using namespace std;  // for ADL of std function pow.
+
+   RealType shape = dist.shape(); // Wikipedia k
+   RealType scale = dist.scale(); // Wikipedia lambda
+
+   RealType result;
+   if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   {
+      return result;
+   }
+   using boost::math::constants::ln_two;
+   result = scale * pow(ln_two<RealType>(), 1 / shape);
    return result;
 }
 
 template <class RealType>
 inline RealType skewness(const weibull_distribution<RealType>& dist)
 {
-   using namespace std;  // for ADL of std functions
-
    RealType shape = dist.shape();
    RealType scale = dist.scale();
 
    RealType result;
    if(false == detail::check_weibull(BOOST_CURRENT_FUNCTION, scale, shape, &result))
+   {
       return result;
-
+   }
    RealType g1, g2, g3, d;
 
    g1 = boost::math::tgamma(1 + 1 / shape);

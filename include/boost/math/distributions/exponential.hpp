@@ -191,6 +191,13 @@ inline RealType mode(const exponential_distribution<RealType>& /*dist*/)
 }
 
 template <class RealType>
+inline RealType median(const exponential_distribution<RealType>& dist)
+{
+   using boost::math::constants::ln_two;
+   return ln_two<RealType>() / dist.lambda(); // ln(2) / lambda
+}
+
+template <class RealType>
 inline RealType skewness(const exponential_distribution<RealType>& /*dist*/)
 {
    return 2;

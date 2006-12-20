@@ -249,6 +249,12 @@ namespace boost
     } // mean
 
     template <class RealType>
+    inline RealType median(const negative_binomial_distribution<RealType>& dist)
+    { // Median of negative_binomial_distribution is not defined.
+      return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "Median is not implemented, result is %1%!", std::numeric_limits<RealType>::quiet_NaN());
+    } // median
+
+    template <class RealType>
     inline RealType mode(const negative_binomial_distribution<RealType>& dist)
     { // Mode of Negative Binomial distribution = floor[(r-1) * (1 - p)/p]
       return floor((dist.successes() -1) * (1 - dist.success_fraction()) / dist.success_fraction());

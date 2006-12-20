@@ -405,6 +405,27 @@ namespace boost{ namespace math
   } // RealType mode
 
   template <class RealType>
+  inline RealType median(const triangular_distribution<RealType>& dist)
+  {
+    RealType mode = dist.mode();
+    RealType result; // of checks.
+    if(false == detail::check_triangular_mode(BOOST_CURRENT_FUNCTION, mode, &result))
+    { // This should never happen!
+      return result;
+    }
+    RealType lower = dist.lower();
+    RealType upper = dist.upper();
+    if (mode < (upper - lower) / 2)
+    {
+      return lower + sqrt((upper - lower) * (mode - lower)) / constants::root_two<RealType>();
+    }
+    else
+    {
+      return upper - sqrt((upper - lower) * (upper - mode)) / constants::root_two<RealType>();
+    }
+  } // RealType mode
+
+  template <class RealType>
   inline RealType skewness(const triangular_distribution<RealType>& dist)
   {
     using namespace std;  // for ADL of std functions

@@ -192,6 +192,13 @@ inline RealType mode(const extreme_value_distribution<RealType>& dist)
 }
 
 template <class RealType>
+inline RealType median(const extreme_value_distribution<RealType>& dist)
+{
+  using constants::ln_ln_two;
+   return dist.location() - dist.scale() * ln_ln_two<RealType>();
+}
+
+template <class RealType>
 inline RealType skewness(const extreme_value_distribution<RealType>& dist)
 {
    //
