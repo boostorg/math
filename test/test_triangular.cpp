@@ -458,6 +458,8 @@ void test_spots(RealType T)
   BOOST_CHECK_CLOSE_FRACTION(
     mode(distu01), static_cast<RealType>(0), tolerance);
   // skewness:
+  BOOST_CHECK_CLOSE_FRACTION(
+    median(trim12), static_cast<RealType>(-0.13397459621556151), tolerance);
   BOOST_CHECK_EQUAL(
     skewness(distu01), static_cast<RealType>(0));
   // kertosis:
@@ -527,6 +529,8 @@ int test_main(int, char* [])
   BOOST_CHECK_EQUAL(tristd.lower(), 0); // Check defaults - mode == lower.
   BOOST_CHECK_EQUAL(tristd.mode(), 0);
   BOOST_CHECK_EQUAL(tristd.upper(), 1);
+
+  cout <<  median(tristd) << endl;
 
   triangular_distribution<> tri011(0, 1, 1); // Using default RealType double.
   // mode is upper
@@ -611,6 +615,7 @@ int test_main(int, char* [])
     BOOST_CHECK_EQUAL(quantile(complement(*dists[i], 1.)), quantile(*dists[i], 0.));
     BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], 0.5), quantile(complement(*dist, 0.5)),  tol5eps); // OK
     BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], 0.98), quantile(complement(*dist, 1. - 0.98)),tol5eps);
+    // cout << setprecision(17) <<  median(*dist) << endl;
   }
 
   cout << showpos << setprecision(2) << endl;
@@ -635,10 +640,6 @@ int test_main(int, char* [])
     BOOST_CHECK_CLOSE_FRACTION(quantile(trim12, dx), quantile(complement(trim12, 1 - dx)), tol500eps);
   }
   cout << endl;
-
-
-
-
   // Basic sanity-check spot values.
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
@@ -662,26 +663,27 @@ int test_main(int, char* [])
 
 Output:
 
------- Build started: Project: test_triangular, Configuration: Debug Win32 ------
 Compiling...
 test_triangular.cpp
 Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_triangular.exe"
 Running 1 test case...
+0
 Distribution 0
+0
 Distribution 1
+1
 Distribution 2
+0.35355339059327373
 Distribution 3
+0.5
 Distribution 4
+-0.13397459621556151
 Tolerance for type float is 5.96046e-007.
 Tolerance for type double is 1.11022e-015.
 Tolerance for type long double is 1.11022e-015.
 Tolerance for type class boost::math::concepts::real_concept is 1.11022e-015.
 *** No errors detected
-Build Time 0:05
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_triangular\Debug\BuildLog.htm"
-test_triangular - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 
 

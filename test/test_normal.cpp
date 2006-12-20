@@ -223,6 +223,11 @@ void test_spots(RealType T)
     BOOST_CHECK_CLOSE(
        mode(dist)
        , static_cast<RealType>(8), tol2);
+
+    BOOST_CHECK_CLOSE(
+       median(dist)
+       , static_cast<RealType>(8), tol2);
+
     // skewness:
     BOOST_CHECK_CLOSE(
        skewness(dist)

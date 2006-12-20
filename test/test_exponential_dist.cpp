@@ -208,6 +208,13 @@ void test_spots(RealType T)
          exponential_distribution<RealType>(2)),
          static_cast<RealType>(0),           
 			tolerance); // %
+
+   BOOST_CHECK_CLOSE(
+      ::boost::math::median(
+         exponential_distribution<RealType>(4)),
+         static_cast<RealType>(0.693147180559945309417232121458176568075500134360255254) / 4,           
+			tolerance); // %
+
    BOOST_CHECK_CLOSE(
       ::boost::math::skewness(
          exponential_distribution<RealType>(2)),

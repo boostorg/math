@@ -296,6 +296,10 @@ void test_spots(RealType T)
    BOOST_CHECK_CLOSE(
     mode(dist)
     , dist.scale() * pow((dist.shape() - 1) / dist.shape(), 1/dist.shape()), tolerance);
+   // median:
+   BOOST_CHECK_CLOSE(
+    median(dist)
+    , dist.scale() * pow(log(static_cast<RealType>(2)), 1 / dist.shape()), tolerance);
    // skewness:
    BOOST_CHECK_CLOSE(
     skewness(dist), 

@@ -640,16 +640,19 @@ void test_spots(RealType T)
          static_cast<RealType>(-3),  // probability.
 			tolerance); // %
 
-   //
-   // Things that are errors:
-   //
-   cauchy_distribution<RealType> dist;
-   BOOST_CHECK_THROW(
-       mean(dist),
-       std::domain_error);
+   cauchy_distribution<RealType> dist; // default (0, 1)
    BOOST_CHECK_EQUAL(
        mode(dist),
        static_cast<RealType>(0));
+   BOOST_CHECK_EQUAL(
+       median(dist),
+       static_cast<RealType>(0));
+   //
+   // Things that are errors:
+   //
+   BOOST_CHECK_THROW(
+       mean(dist),
+       std::domain_error);
    BOOST_CHECK_THROW(
        variance(dist),
        std::domain_error);

@@ -143,6 +143,23 @@ void test_spots(RealType)
       std::domain_error);
 
   // Check some test values.
+
+  BOOST_CHECK_CLOSE( // mode
+     mode(poisson_distribution<RealType>(static_cast<RealType>(4))), // mode = mean = 4.
+      static_cast<RealType>(4), // mode.
+			tolerance);
+
+  //BOOST_CHECK_CLOSE( // mode
+  //   median(poisson_distribution<RealType>(static_cast<RealType>(4))), // mode = mean = 4.
+  //    static_cast<RealType>(4), // mode.
+		//	tolerance);
+  poisson_distribution<RealType> dist4(static_cast<RealType>(40));
+
+  BOOST_CHECK_CLOSE( // median
+     median(dist4), // mode = mean = 4. median = 40.328333333333333 
+      quantile(dist4, static_cast<RealType>(0.5)), // 39.332839138842637
+			tolerance);
+
   // PDF
   BOOST_CHECK_CLOSE(
      pdf(poisson_distribution<RealType>(static_cast<RealType>(4)), // mean 4.
@@ -319,7 +336,7 @@ void test_spots(RealType)
          tolerance/5); // 
 
   // EQUAL is too optimistic - fails [5.0000000000000124 != 5]
-  //BOOST_CHECK_EQUAL(boost::math::quantile( // 
+  // BOOST_CHECK_EQUAL(boost::math::quantile( // 
   //       poisson_distribution<RealType>(5.),  // mean.
   //       static_cast<RealType>(0.615960654833065)),  //  probability.
   //       static_cast<RealType>(5.)); // Expect k = 5 events.
@@ -329,6 +346,55 @@ void test_spots(RealType)
          static_cast<RealType>(0.785130387030406)),  //  probability.
          static_cast<RealType>(5.), // Expect k = 5 events.
          tolerance/5); 
+
+  // Check on quantile of other examples of inverse of cdf.
+  BOOST_CHECK_CLOSE( 
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(10.)), // mean
+      static_cast<RealType>(10)),  // k events. 
+      static_cast<RealType>(0.5830397501929856), // probability.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(boost::math::quantile( // inverse of cdf above.
+         poisson_distribution<RealType>(10.),  // mean.
+         static_cast<RealType>(0.5830397501929856)),  //  probability.
+         static_cast<RealType>(10.), // Expect k = 10 events.
+         tolerance/5); 
+
+
+  BOOST_CHECK_CLOSE(
+     cdf(poisson_distribution<RealType>(static_cast<RealType>(4.)), // mean
+      static_cast<RealType>(5)),  // k events. 
+      static_cast<RealType>(0.785130387030406), // probability.
+			tolerance);
+
+  BOOST_CHECK_CLOSE(boost::math::quantile( // inverse of cdf above.
+         poisson_distribution<RealType>(4.),  // mean.
+         static_cast<RealType>(0.785130387030406)),  //  probability.
+         static_cast<RealType>(5.), // Expect k = 10 events.
+         tolerance/5); 
+
+
+
+  //BOOST_CHECK_CLOSE(boost::math::quantile(
+  //       poisson_distribution<RealType>(5),  // mean.
+  //       static_cast<RealType>(0.785130387030406)),  //  probability.
+  //        // 6.1882832344329559 result but MathCAD givest smallest integer ppois(k, mean) >= prob
+  //       static_cast<RealType>(6.), // Expect k = 6 events. 
+  //       tolerance/5); 
+
+  //BOOST_CHECK_CLOSE(boost::math::quantile(
+  //       poisson_distribution<RealType>(5),  // mean.
+  //       static_cast<RealType>(0.77)),  //  probability.
+  //        // 6.1882832344329559 result but MathCAD givest smallest integer ppois(k, mean) >= prob
+  //       static_cast<RealType>(7.), // Expect k = 6 events. 
+  //       tolerance/5); 
+
+  //BOOST_CHECK_CLOSE(boost::math::quantile(
+  //       poisson_distribution<RealType>(5),  // mean.
+  //       static_cast<RealType>(0.75)),  //  probability.
+  //        // 6.1882832344329559 result but MathCAD givest smallest integer ppois(k, mean) >= prob
+  //       static_cast<RealType>(6.), // Expect k = 6 events. 
+  //       tolerance/5); 
 
   BOOST_CHECK_CLOSE(
     boost::math::quantile(
@@ -441,10 +507,20 @@ int test_main(int, char* [])
 
      cout << endl;
   }
+
    cout << cdf(poisson_distribution<double>(5), static_cast<double>(0)) << ' ' << endl; // 0.006737946999085467
    cout << cdf(poisson_distribution<double>(5), static_cast<double>(1)) << ' ' << endl; // 0.040427681994512805
    cout << cdf(poisson_distribution<double>(2), static_cast<double>(3)) << ' ' << endl; // 0.85712346049854715 
 #endif
+
+   {
+     for (int i = 1; i < 100; i++)
+     {
+       poisson_distribution<double> distn(static_cast<double>(i));
+       cout << i << ' ' << median(distn) << ' ' << quantile(distn, 0.5) << ' ' 
+         << median(distn) - quantile(distn, 0.5) << endl;
+     }
+   }
 
 	// (Parameter value, arbitrarily zero, only communicates the floating-point type).
   test_spots(0.0F); // Test float.

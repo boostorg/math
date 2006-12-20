@@ -404,6 +404,12 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        mode(dist)
        , static_cast<RealType>(6), tol2);
+
+    BOOST_CHECK_CLOSE(
+       median(dist), 
+       quantile(
+          chi_squared_distribution<RealType>(static_cast<RealType>(8)),
+          static_cast<RealType>(0.5)), static_cast<RealType>(1)); // 1% - approximate.
     // skewness:
     BOOST_CHECK_CLOSE(
        skewness(dist)

@@ -320,6 +320,8 @@ void test_spots(RealType T)
    // mode:
    BOOST_CHECK_CLOSE_FRACTION(
     mode(distu01), static_cast<RealType>(0), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(
+      median(distu01), static_cast<RealType>(0.5), tolerance);
    // skewness:
    BOOST_CHECK_EQUAL(
     skewness(distu01), static_cast<RealType>(0));

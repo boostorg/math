@@ -221,6 +221,10 @@ void test_spots(RealType T)
        kurtosis_excess(dist)
        , 6 / static_cast<RealType>(8), tol2);
 
+    BOOST_CHECK_CLOSE(
+       median(dist), static_cast<RealType>(23.007748327502412), tol2);
+    // Rely on default definition in derived accessors.
+
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
@@ -245,3 +249,20 @@ int test_main(int, char* [])
 } // int test_main(int, char* [])
 
 
+/*
+
+Output:
+
+Running 1 test case...
+Tolerance for type float is 0.000238419 %
+Tolerance for type float is 0.001 %
+Tolerance for type double is 5e-012 %
+Tolerance for type double is 0.001 %
+Tolerance for type long double is 5e-012 %
+Tolerance for type long double is 0.001 %
+Tolerance for type class boost::math::concepts::real_concept is 5e-012 %
+Tolerance for type class boost::math::concepts::real_concept is 0.001 %
+*** No errors detected
+
+
+*/

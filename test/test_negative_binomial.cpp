@@ -716,6 +716,12 @@ if(std::numeric_limits<RealType>::is_specialized)
   static_cast<RealType>(0)), std::domain_error
   );
   // End of check throwing 'duff' out-of-domain values.
+
+  BOOST_CHECK_THROW(
+  median( // NOT implemented.
+  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1.25))),
+  std::domain_error);
+
   return;
 } // template <class RealType> void test_spots(RealType) // Any floating-point type RealType.
 
@@ -734,14 +740,14 @@ int test_main(int, char* [])
 #endif
 
 #ifdef BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-  cout << "BOOST_MATH_THROW_ON_OVERFLOW_ERROR" << " is defined to throw on domain error." << endl;
+  cout << "BOOST_MATH_THROW_ON_OVERFLOW_ERROR" << " is defined to throw on overflow error." << endl;
 #else
-  cout << "BOOST_MATH_THROW_ON_OVERFLOW_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
+  cout << "BOOST_MATH_THROW_ON_OVERFLOW_ERROR" << " is NOT defined, so NO throw on overflow error." << endl;
 #endif
 #ifdef BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
-  cout << "BOOST_MATH_THROW_ON_UNDERFLOW_ERROR" << " is defined to throw on domain error." << endl;
+  cout << "BOOST_MATH_THROW_ON_UNDERFLOW_ERROR" << " is defined to throw on underflow error." << endl;
 #else
-  cout << "BOOST_MATH_THROW_ON_UNDERFLOW_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
+  cout << "BOOST_MATH_THROW_ON_UNDERFLOW_ERROR" << " is NOT defined, so NO throw on underflow error." << endl;
 #endif
   // Test some simple double only examples.
   negative_binomial_distribution<double> my8dist(8., 0.25);
@@ -765,15 +771,14 @@ int test_main(int, char* [])
 
 /*
 
------- Build started: Project: test_negative_binomial, Configuration: Debug Win32 ------
 Compiling...
 test_negative_binomial.cpp
 Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_negative_binomial.exe"
 Running 1 test case...
 BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
-BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined, so NO throw on domain error.
-BOOST_MATH_THROW_ON_UNDERFLOW_ERROR is NOT defined, so NO throw on domain error.
+BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined, so NO throw on overflow error.
+BOOST_MATH_THROW_ON_UNDERFLOW_ERROR is NOT defined, so NO throw on underflow error.
 Tolerance = 0.0119209%.
 Tolerance 5 eps = 5.96046e-007%.
 Tolerance = 2.22045e-011%.
@@ -783,8 +788,5 @@ Tolerance 5 eps = 1.11022e-015%.
 Tolerance = 2.22045e-011%.
 Tolerance 5 eps = 1.11022e-015%.
 *** No errors detected
-Build Time 0:08
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_negative_binomial\Debug\BuildLog.htm"
-test_negative_binomial - 0 error(s), 0 warning(s)
 
 */

@@ -204,7 +204,6 @@ void test_spots(RealType)
   // pretty useless, but it is an excellent sanity check.
 
   RealType tolerance = 0.002f * 100;
-
   cout << "Tolerance = " << tolerance << "%." << endl;
 
   using boost::math::fisher_f_distribution;
@@ -370,8 +369,7 @@ void test_spots(RealType)
 
 // These might allow some further cross checks?
 
-
-    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5 * 100;  // 5eps as a percent
+    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5 * 100;  // 5 eps as a percent
     cout << "Tolerance = " << tol2 << "%." << endl;
     fisher_f_distribution<RealType> dist(static_cast<RealType>(8), static_cast<RealType>(6));
     RealType x = 7;
@@ -510,6 +508,10 @@ void test_spots(RealType)
           fisher_f_distribution<RealType>(8, 8),
           static_cast<RealType>(1.1))), std::domain_error
        );
+    // median NOT implemented.
+    BOOST_CHECK_THROW(
+       median(fisher_f_distribution<RealType>(8, 8)), std::domain_error);
+
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])

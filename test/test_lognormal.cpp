@@ -220,6 +220,15 @@ void test_spots(RealType T)
    BOOST_CHECK_CLOSE(
     mode(dist)
     , static_cast<RealType>(0.36787944117144232159552377016146L), tolerance);
+
+   BOOST_CHECK_CLOSE(
+    median(dist)
+    , static_cast<RealType>(exp(dist.location())), tolerance);
+
+   BOOST_CHECK_CLOSE(
+    median(dist),
+    quantile(dist, static_cast<RealType>(0.5)), tolerance);
+
    // skewness:
    BOOST_CHECK_CLOSE(
     skewness(dist)

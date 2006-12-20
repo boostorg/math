@@ -5,7 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// test_students_t.cpp
+// test_extreme_value.cpp
 
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
@@ -26,7 +26,6 @@
 
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
-
 
 #include <iostream>
 	using std::cout;
@@ -146,6 +145,12 @@ void test_spots(RealType T)
          extreme_value_distribution<RealType>(2, 3)),
          static_cast<RealType>(2),           
 			tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::median(
+         extreme_value_distribution<RealType>(0, 1)),
+         static_cast<RealType>(+0.36651292058166432701243915823266946945426344783710526305367771367056),           
+			tolerance); // %
+
    BOOST_CHECK_CLOSE(
       ::boost::math::skewness(
          extreme_value_distribution<RealType>(2, 3)),
