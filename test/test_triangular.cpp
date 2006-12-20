@@ -530,7 +530,7 @@ int test_main(int, char* [])
   BOOST_CHECK_EQUAL(tristd.mode(), 0);
   BOOST_CHECK_EQUAL(tristd.upper(), 1);
 
-  cout <<  median(tristd) << endl;
+  cout << range(tristd).first << ' ' << range(tristd).second << endl;
 
   triangular_distribution<> tri011(0, 1, 1); // Using default RealType double.
   // mode is upper

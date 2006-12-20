@@ -156,6 +156,10 @@ void test_spots(RealType)
   BOOST_CHECK_THROW(mode(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1))), std::domain_error);
   // mode is undefined, and throws domain_error!
 
+  BOOST_CHECK_THROW(median(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1))), std::domain_error);
+  // median is undefined, and throws domain_error!
+
+
   BOOST_CHECK_THROW( // For various bad arguments.
        pdf(
           beta_distribution<RealType>(static_cast<RealType>(-1), static_cast<RealType>(1)), // bad alpha < 0.

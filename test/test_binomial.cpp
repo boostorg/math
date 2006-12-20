@@ -588,24 +588,24 @@ void test_spots(RealType)
   {
     // This is a visual sanity check that everything is OK:
     binomial_distribution<RealType> my8dist(8., 0.25); // Note: double values (matching the distribution definition) avoid the need for any casting.
-    cout << "mean(my8dist) = " << boost::math::mean(my8dist) << endl; // mean(my8dist) = 2
-    cout << "my8dist.trials() = " << my8dist.trials()  << endl; // my8dist.trials() = 8
-    cout << "my8dist.success_fraction() = " << my8dist.success_fraction()  << endl; // my8dist.success_fraction() = 0.25
+    //cout << "mean(my8dist) = " << boost::math::mean(my8dist) << endl; // mean(my8dist) = 2
+    //cout << "my8dist.trials() = " << my8dist.trials()  << endl; // my8dist.trials() = 8
+    //cout << "my8dist.success_fraction() = " << my8dist.success_fraction()  << endl; // my8dist.success_fraction() = 0.25
     BOOST_CHECK_CLOSE(my8dist.trials(), static_cast<RealType>(8), tol2);
     BOOST_CHECK_CLOSE(my8dist.success_fraction(), static_cast<RealType>(0.25), tol2);
 
-   {
-      int n = static_cast<int>(boost::math::tools::real_cast<double>(my8dist.trials()));
-      RealType sumcdf = 0.;
-      for (int k = 0; k <= n; k++)
-      {
-        cout << k << ' ' << pdf(my8dist, static_cast<RealType>(k));
-        sumcdf += pdf(my8dist, static_cast<RealType>(k));
-        cout  << ' '  << sumcdf;
-        cout << ' ' << cdf(my8dist, static_cast<RealType>(k));
-        cout << ' ' << sumcdf - cdf(my8dist, static_cast<RealType>(k)) << endl;
-      } // for k
-    }
+   //{
+   //   int n = static_cast<int>(boost::math::tools::real_cast<double>(my8dist.trials()));
+   //   RealType sumcdf = 0.;
+   //   for (int k = 0; k <= n; k++)
+   //   {
+   //     cout << k << ' ' << pdf(my8dist, static_cast<RealType>(k));
+   //     sumcdf += pdf(my8dist, static_cast<RealType>(k));
+   //     cout  << ' '  << sumcdf;
+   //     cout << ' ' << cdf(my8dist, static_cast<RealType>(k));
+   //     cout << ' ' << sumcdf - cdf(my8dist, static_cast<RealType>(k)) << endl;
+   //   } // for k
+   // }
     // n = 8, p =0.25
     //k         pdf              cdf
     //0 0.1001129150390625 0.1001129150390625
