@@ -92,14 +92,16 @@ void test_spots(RealType T)
   RealType tol5eps = boost::math::tools::epsilon<RealType>() * 5; // 5 eps as a fraction.
 
   cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
-
-  using std::exp;
+  
+  using namespace std; // for ADL of std::exp;
 
   // Tests on construction
   // Default should be 0, 0, 1
   BOOST_CHECK_EQUAL(triangular_distribution<RealType>().lower(), 0);
   BOOST_CHECK_EQUAL(triangular_distribution<RealType>().mode(), 0);
   BOOST_CHECK_EQUAL(triangular_distribution<RealType>().upper(), 1);
+  BOOST_CHECK_EQUAL(support(triangular_distribution<RealType>()).first, triangular_distribution<RealType>().lower());
+  BOOST_CHECK_EQUAL(support(triangular_distribution<RealType>()).second, triangular_distribution<RealType>().upper());
 
   if (std::numeric_limits<RealType>::has_quiet_NaN == true)
   {
@@ -505,6 +507,9 @@ void test_spots(RealType T)
   BOOST_CHECK(quantile(distu01, 1) == 1);
   BOOST_CHECK(quantile(complement(distu01, 1)) == 1);
 
+  BOOST_CHECK_EQUAL(support(trim12).first, tristd.lower());
+  BOOST_CHECK_EQUAL(support(trim12).second, tristd.upper());
+
   // Error checks:
   if(std::numeric_limits<RealType>::has_quiet_NaN)
   { // BOOST_CHECK tests for quiet_NaN (not for real_concept, for example - see notes above).
@@ -530,7 +535,11 @@ int test_main(int, char* [])
   BOOST_CHECK_EQUAL(tristd.mode(), 0);
   BOOST_CHECK_EQUAL(tristd.upper(), 1);
 
-  cout << range(tristd).first << ' ' << range(tristd).second << endl;
+  //cout << "X range from " << range(tristd).first << " to " << range(tristd).second << endl;
+  //cout << "Supported from "<< support(tristd).first << ' ' << support(tristd).second << endl;
+
+  BOOST_CHECK_EQUAL(support(tristd).first, tristd.lower());
+  BOOST_CHECK_EQUAL(support(tristd).second, tristd.upper());
 
   triangular_distribution<> tri011(0, 1, 1); // Using default RealType double.
   // mode is upper
