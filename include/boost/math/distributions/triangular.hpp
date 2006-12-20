@@ -15,6 +15,9 @@
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/constants/constants.hpp>
 
+#include <utility>
+using std::pair;
+
 namespace boost{ namespace math
 {
   namespace detail
@@ -168,6 +171,21 @@ namespace boost{ namespace math
   }; // class triangular_distribution
 
   typedef triangular_distribution<double> triangular;
+
+  template <class RealType>
+  pair<RealType, RealType> range(const triangular_distribution<RealType>& dist)
+  { // Range of permissible values for random variable x.
+    using boost::math::tools::min_value;
+    using boost::math::tools::max_value;
+    return pair<RealType, RealType>(min_value<RealType>(), max_value<RealType>());
+  }
+
+  template <class RealType>
+  pair<RealType, RealType> support(const triangular_distribution<RealType>& dist)
+  { // Range of supported values for random variable x.
+    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+    return pair<RealType, RealType>(dist.lower(), dist.upper());
+  }
 
   template <class RealType>
   RealType pdf(const triangular_distribution<RealType>& dist, const RealType& x)
