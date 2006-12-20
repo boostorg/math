@@ -128,12 +128,22 @@ inline typename Distribution::value_type cdf(const complemented2_type<Distributi
    BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
    return cdf(complement(c.dist, static_cast<value_type>(c.param)));
 }
+
 template <class Distribution, class RealType>
 inline typename Distribution::value_type quantile(const complemented2_type<Distribution, RealType>& c)
 {
    typedef typename Distribution::value_type value_type;
    BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
    return quantile(complement(c.dist, static_cast<value_type>(c.param)));
+}
+
+template <class Dist>
+typename Dist::value_type median(const Dist& d)
+{ // median - default definition for those distributions for which a
+  // simple closed form is not known,
+  // and for which a domain_error and/or NaN generating function is NOT defined.
+  typedef typename Dist::value_type value_type;
+  return quantile(d, static_cast<value_type>(0.5f));
 }
 
 } // namespace math
