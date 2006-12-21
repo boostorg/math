@@ -156,8 +156,9 @@ void test_spots(RealType)
   BOOST_CHECK_THROW(mode(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1))), std::domain_error);
   // mode is undefined, and throws domain_error!
 
-  BOOST_CHECK_THROW(median(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1))), std::domain_error);
+ // BOOST_CHECK_THROW(median(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1))), std::domain_error);
   // median is undefined, and throws domain_error!
+  // But now median IS provided via derived accessor as quantile(half).
 
 
   BOOST_CHECK_THROW( // For various bad arguments.
@@ -466,8 +467,6 @@ int test_main(int, char* [])
 #else
   cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
 #endif
-
-
    // Check that can generate beta distribution using one convenience methods:
    beta_distribution<> mybeta11(1., 1.); // Using default RealType double.
    // but that
@@ -528,8 +527,10 @@ int test_main(int, char* [])
    BOOST_CHECK_CLOSE_FRACTION(quantile(complement(mybeta22, 1 - 0.028)), 0.1, tol);
    BOOST_CHECK_EQUAL(kurtosis(mybeta11), 3+ kurtosis_excess(mybeta11)); // Check kurtosis_excess = kurtosis - 3;
    BOOST_CHECK_CLOSE_FRACTION(variance(mybeta22), 0.05, tol);
-   BOOST_CHECK_CLOSE_FRACTION(mode(mybeta22), 0.5, tol);
    BOOST_CHECK_CLOSE_FRACTION(mean(mybeta22), 0.5, tol);
+   BOOST_CHECK_CLOSE_FRACTION(mode(mybeta22), 0.5, tol);
+   BOOST_CHECK_CLOSE_FRACTION(median(mybeta22), 0.5, tol);
+
    BOOST_CHECK_CLOSE_FRACTION(skewness(mybeta22), 0.0, tol);
    BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(mybeta22), -144.0 / 168, tol);
    BOOST_CHECK_CLOSE_FRACTION(skewness(beta_distribution<>(3, 5)), 0.30983866769659335081434123198259, tol);
