@@ -19,7 +19,9 @@
 // and http://mathworld.wolfram.com/ExtremeValueDistribution.html
 // Also known as a Fisher-Tippett distribution, a log-Weibull
 // distribution or a Gumbel distribution.
-//
+
+#include <utility>
+using std::pair;
 
 #ifdef BOOST_MSVC
 # pragma warning(push)
@@ -68,6 +70,22 @@ private:
 };
 
 typedef extreme_value_distribution<double> extreme_value;
+
+template <class RealType>
+const pair<RealType, RealType> range(const extreme_value_distribution<RealType>& dist)
+{ // Range of permissible values for random variable x.
+	using boost::math::tools::max_value;
+	return const pair<RealType, RealType>(-max_value(), +max_value());
+}
+
+template <class RealType>
+const pair<RealType, RealType> support(const extreme_value_distribution<RealType>& dist)
+{ // Range of supported values for random variable x.
+	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+	using boost::math::tools::max_value;
+	return const pair<RealType, RealType>(-max_value(),  +max_value());
+}
+
 
 template <class RealType>
 RealType pdf(const extreme_value_distribution<RealType>& dist, const RealType& x)

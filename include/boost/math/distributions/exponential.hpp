@@ -18,6 +18,9 @@
 # pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
 #endif
 
+#include <utility>
+using std::pair;
+
 namespace boost{ namespace math{
 
 namespace detail{
@@ -72,6 +75,21 @@ private:
 };
 
 typedef exponential_distribution<double> exponential;
+
+template <class RealType>
+const pair<RealType, RealType> range(const exponential_distribution<RealType>& dist)
+{ // Range of permissible values for random variable x.
+	using boost::math::tools::max_value;
+	return const pair<RealType, RealType>(static_cast<RealType>(0), +max_value());
+}
+
+template <class RealType>
+const pair<RealType, RealType> support(const exponential_distribution<RealType>& dist)
+{ // Range of supported values for random variable x.
+	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+	using boost::math::tools::max_value;
+	return const pair<RealType, RealType>(0,  +max_value());
+}
 
 template <class RealType>
 RealType pdf(const exponential_distribution<RealType>& dist, const RealType& x)

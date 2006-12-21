@@ -14,8 +14,11 @@
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 
-namespace boost{ namespace math{
+#include <utility>
+using std::pair;
 
+namespace boost{ namespace math
+{
 namespace detail
 {
 
@@ -69,6 +72,22 @@ private:
 };
 
 typedef lognormal_distribution<double> lognormal;
+
+template <class RealType>
+const pair<RealType, RealType> range(const lognormal_distribution<RealType>& dist)
+{ // Range of permissible values for random variable x.
+	using boost::math::tools::max_value;
+	return const pair<RealType, RealType>(0, +max_value());
+}
+
+template <class RealType>
+const pair<RealType, RealType> support(const lognormal_distribution<RealType>& dist)
+{ // Range of supported values for random variable x.
+	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+	using boost::math::tools::max_value;
+	return const pair<RealType, RealType>(0,  +max_value());
+}
+
 
 template <class RealType>
 RealType pdf(const lognormal_distribution<RealType>& dist, const RealType& x)

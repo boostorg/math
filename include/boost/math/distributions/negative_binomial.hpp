@@ -51,6 +51,8 @@
 #include <boost/mpl/if.hpp>
 
 #include <limits> // using std::numeric_limits;
+#include <utility>
+using std::pair;
 
 #if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 #  pragma warning(push)
@@ -243,16 +245,32 @@ namespace boost
     typedef negative_binomial_distribution<double> negative_binomial; // Reserved name of type double.
 
     template <class RealType>
+    const pair<RealType, RealType> range(const negative_binomial_distribution<RealType>& dist)
+    { // Range of permissible values for random variable k.
+	    using boost::math::tools::max_value;
+	    return const pair<RealType, RealType>(0, +max_value()); // max_integer?
+    }
+
+    template <class RealType>
+    const pair<RealType, RealType> support(const negative_binomial_distribution<RealType>& dist)
+    { // Range of supported values for random variable k.
+	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+	    using boost::math::tools::max_value;
+	    return const pair<RealType, RealType>(0,  +max_value()); // max_integer?
+    }
+
+    template <class RealType>
     inline RealType mean(const negative_binomial_distribution<RealType>& dist)
     { // Mean of Negative Binomial distribution = r(1-p)/p.
       return dist.successes() * (1 - dist.success_fraction() ) / dist.success_fraction();
     } // mean
 
-    template <class RealType>
-    inline RealType median(const negative_binomial_distribution<RealType>& dist)
-    { // Median of negative_binomial_distribution is not defined.
-      return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "Median is not implemented, result is %1%!", std::numeric_limits<RealType>::quiet_NaN());
-    } // median
+    //template <class RealType>
+    //inline RealType median(const negative_binomial_distribution<RealType>& dist)
+    //{ // Median of negative_binomial_distribution is not defined.
+    //  return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "Median is not implemented, result is %1%!", std::numeric_limits<RealType>::quiet_NaN());
+    //} // median
+    // Now implemented via quantile(half) in derived accessors.
 
     template <class RealType>
     inline RealType mode(const negative_binomial_distribution<RealType>& dist)

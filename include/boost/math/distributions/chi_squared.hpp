@@ -13,6 +13,9 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp>
 
+#include <utility>
+using std::pair;
+
 namespace boost{ namespace math{
 
 template <class RealType = double>
@@ -49,6 +52,20 @@ private:
 };
 
 typedef chi_squared_distribution<double> chi_squared;
+
+template <class RealType>
+const pair<RealType, RealType> range(const chi_squared_distribution<RealType>& dist)
+{ // Range of permissible values for random variable x.
+	using boost::math::tools::max_value;
+	return const pair<RealType, RealType>(0, +max_value()); // 0 to + infinity.
+}
+
+template <class RealType>
+const pair<RealType, RealType> support(const chi_squared_distribution<RealType>& dist)
+{ // Range of supported values for random variable x.
+	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+	return const pair<RealType, RealType>(0, +max_value()); // 0 to + infinity.
+}
 
 template <class RealType>
 RealType pdf(const chi_squared_distribution<RealType>& dist, const RealType& chi_square)
@@ -182,17 +199,18 @@ inline RealType mode(const chi_squared_distribution<RealType>& dist)
    return df - 2;
 }
 
-template <class RealType>
-inline RealType median(const chi_squared_distribution<RealType>& dist)
-{ // Median is given by Quantile[dist, 1/2]
-   RealType df = dist.degrees_of_freedom();
-   if(df <= 1)
-      return tools::domain_error<RealType>(
-         BOOST_CURRENT_FUNCTION,
-         "The Chi-Squared distribution only has a mode for degrees of freedom >= 2, but got degrees of freedom = %1%.",
-         df);
-   return df - RealType(2)/3;
-}
+//template <class RealType>
+//inline RealType median(const chi_squared_distribution<RealType>& dist)
+//{ // Median is given by Quantile[dist, 1/2]
+//   RealType df = dist.degrees_of_freedom();
+//   if(df <= 1)
+//      return tools::domain_error<RealType>(
+//         BOOST_CURRENT_FUNCTION,
+//         "The Chi-Squared distribution only has a mode for degrees of freedom >= 2, but got degrees of freedom = %1%.",
+//         df);
+//   return df - RealType(2)/3;
+//}
+// Now implemented via quantile(half) in derived accessors.
 
 template <class RealType>
 inline RealType skewness(const chi_squared_distribution<RealType>& dist)

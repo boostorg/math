@@ -43,6 +43,9 @@
 #include <boost/math/special_functions/factorials.hpp> // factorials.
 #include <boost/math/tools/roots.hpp> // for root finding.
 
+#include <utility>
+using std::pair;
+
 #if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 #  pragma warning(push)
 #  pragma warning(disable: 4702) // unreachable code
@@ -173,6 +176,22 @@ namespace boost
     typedef poisson_distribution<double> poisson; // Reserved name of type double.
 
     // Non-member functions to give properties of the distribution.
+
+    template <class RealType>
+    const pair<RealType, RealType> range(const poisson_distribution<RealType>& dist)
+    { // Range of permissible values for random variable k.
+	    using boost::math::tools::max_value;
+	    return const pair<RealType, RealType>(0, +max_value()); // Max integer?
+    }
+
+    template <class RealType>
+    const pair<RealType, RealType> support(const poisson_distribution<RealType>& dist)
+    { // Range of supported values for random variable k.
+	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+	    using boost::math::tools::max_value;
+	    return const pair<RealType, RealType>(0,  +max_value());
+    }
+
     template <class RealType>
     inline RealType mean(const poisson_distribution<RealType>& dist)
     { // Mean of poisson distribution = lambda.
@@ -185,13 +204,15 @@ namespace boost
       return floor(dist.mean());
     }
 
-    template <class RealType>
-    inline RealType median(const poisson_distribution<RealType>& dist)
-    { // median = approximately lambda + 1/3 - 0.2/lambda
-      RealType l = dist.mean();
-      return dist.mean() + static_cast<RealType>(0.3333333333333333333333333333333333333333333333)
-       - static_cast<RealType>(0.2) / l;
-    }
+    //template <class RealType>
+    //inline RealType median(const poisson_distribution<RealType>& dist)
+    //{ // median = approximately lambda + 1/3 - 0.2/lambda
+    //  RealType l = dist.mean();
+    //  return dist.mean() + static_cast<RealType>(0.3333333333333333333333333333333333333333333333)
+    //   - static_cast<RealType>(0.2) / l;
+    //} // BUT this formula appears to be out-by-one compared to quantile(half)
+    // Query posted on Wikipedia.
+    // Now implemented via quantile(half) in derived accessors.
 
     template <class RealType>
     inline RealType variance(const poisson_distribution<RealType>& dist)

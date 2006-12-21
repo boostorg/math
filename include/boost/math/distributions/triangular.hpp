@@ -173,15 +173,14 @@ namespace boost{ namespace math
   typedef triangular_distribution<double> triangular;
 
   template <class RealType>
-  pair<RealType, RealType> range(const triangular_distribution<RealType>& dist)
+  const pair<RealType, RealType> range(const triangular_distribution<RealType>& dist)
   { // Range of permissible values for random variable x.
-    using boost::math::tools::min_value;
     using boost::math::tools::max_value;
-    return pair<RealType, RealType>(min_value<RealType>(), max_value<RealType>());
+    return pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
   }
 
   template <class RealType>
-  pair<RealType, RealType> support(const triangular_distribution<RealType>& dist)
+  const pair<RealType, RealType> support(const triangular_distribution<RealType>& dist)
   { // Range of supported values for random variable x.
     // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
     return pair<RealType, RealType>(dist.lower(), dist.upper());

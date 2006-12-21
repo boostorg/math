@@ -92,6 +92,9 @@
 // in domain_error_imp in error_handling
 #endif
 
+#include <utility>
+using std::pair;
+
 namespace boost
 {
   namespace math
@@ -292,6 +295,19 @@ namespace boost
         RealType m_p; // success_fraction
       }; // template <class RealType> class binomial_distribution
 
+      template <class RealType>
+      const pair<RealType, RealType> range(const binomial_distribution<RealType>& dist)
+      { // Range of permissible values for random variable k.
+        using boost::math::tools::max_value;
+        return const pair<RealType, RealType>(static_cast<RealType>(0), dist.trials());
+      }
+
+      template <class RealType>
+      const pair<RealType, RealType> support(const binomial_distribution<RealType>& dist)
+      { // Range of supported values for random variable k.
+        // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+        return const pair<RealType, RealType>(0,  dist.trials());
+      }
 
       template <class RealType>
       inline RealType mean(const binomial_distribution<RealType>& dist)

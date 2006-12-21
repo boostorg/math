@@ -41,7 +41,8 @@ inline T max_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
    BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
 #endif
    return (std::numeric_limits<T>::max)();
-}
+} // Also used as a finite 'infinite' value for - and +infinity, for example:
+// -max_value<double> = -1.79769e+308, max_value<double> = 1.79769e+308.
 
 template <class T>
 inline T min_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))

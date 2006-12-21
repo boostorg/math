@@ -20,6 +20,9 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/complement.hpp>
 
+#include <utility>
+using std::pair;
+
 namespace boost{ namespace math
 {
   namespace detail
@@ -134,6 +137,21 @@ namespace boost{ namespace math
   }; // class uniform_distribution
 
   typedef uniform_distribution<double> uniform;
+
+  template <class RealType>
+  const pair<RealType, RealType> range(const uniform_distribution<RealType>& dist)
+  { // Range of permissible values for random variable x.
+	  using boost::math::tools::max_value;
+	  return const pair<RealType, RealType>(-max_value(), +max_value()); // - to + infinity
+  }
+
+  template <class RealType>
+  const pair<RealType, RealType> support(const uniform_distribution<RealType>& dist)
+  { // Range of supported values for random variable x.
+	  // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+	  using boost::math::tools::max_value;
+	  return const pair<RealType, RealType>(dist.lower(),  dist.upper());
+  }
 
   template <class RealType>
   RealType pdf(const uniform_distribution<RealType>& dist, const RealType& x)

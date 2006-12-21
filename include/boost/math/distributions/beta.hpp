@@ -36,6 +36,9 @@
 // in domain_error_imp in error_handling
 #endif
 
+#include <utility>
+using std::pair;
+
 namespace boost
 {
   namespace math
@@ -266,6 +269,20 @@ namespace boost
       RealType m_alpha; // Two parameters of the beta distribution.
       RealType m_beta;
     }; // template <class RealType> class beta_distribution
+
+    template <class RealType>
+    const pair<RealType, RealType> range(const beta_distribution<RealType>& dist)
+    { // Range of permissible values for random variable x.
+      using boost::math::tools::max_value;
+      return pair<RealType, RealType>(0, 1);
+    }
+
+    template <class RealType>
+    const pair<RealType, RealType> support(const beta_distribution<RealType>& dist)
+    { // Range of supported values for random variable x.
+      // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+      return pair<RealType, RealType>(0, 1);
+    }
 
     template <class RealType>
     inline RealType mean(const beta_distribution<RealType>& dist)

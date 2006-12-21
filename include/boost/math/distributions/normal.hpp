@@ -16,8 +16,11 @@
 #include <boost/math/special_functions/erf.hpp> // for erf/erfc.
 #include <boost/math/distributions/complement.hpp>
 
-namespace boost{ namespace math{
+#include <utility>
+using std::pair;
 
+namespace boost{ namespace math
+{
 template <class RealType = double>
 class normal_distribution
 {
@@ -45,6 +48,23 @@ private:
 };
 
 typedef normal_distribution<double> normal;
+
+template <class RealType>
+const pair<RealType, RealType> range(const normal_distribution<RealType>& dist)
+{ // Range of permissible values for random variable x.
+	using boost::math::tools::max_value;
+	return const pair<RealType, RealType>(-max_value(), +max_value()); // - to + infinity.
+}
+
+template <class RealType>
+const pair<RealType, RealType> support(const normal_distribution<RealType>& dist)
+{ // Range of supported values for random variable x.
+	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+	using boost::math::tools::max_value;
+	return const pair<RealType, RealType>(-max_value(),  +max_value()); // - to + infinity.
+}
+
+
 
 template <class RealType>
 RealType pdf(const normal_distribution<RealType>& dist, const RealType& x)

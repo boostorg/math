@@ -34,6 +34,9 @@
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
 
+#include <utility>
+using std::pair;
+
 #if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 #pragma warning (disable: 4180)
 #  pragma warning(push)
@@ -225,6 +228,20 @@ namespace boost
     }; // template <class RealType> class bernoulli_distribution
 
     typedef bernoulli_distribution<double> bernoulli;
+
+    template <class RealType>
+    const pair<RealType, RealType> range(const bernoulli_distribution<RealType>& dist)
+    { // Range of permissible values for random variable k = {0, 1}.
+      using boost::math::tools::max_value;
+      return pair<RealType, RealType>(0, 1);
+    }
+
+    template <class RealType>
+    const pair<RealType, RealType> support(const bernoulli_distribution<RealType>& dist)
+    { // Range of supported values for random variable k = {0, 1}.
+      // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+      return pair<RealType, RealType>(0, 1);
+    }
 
     template <class RealType>
     inline RealType mean(const bernoulli_distribution<RealType>& dist)
