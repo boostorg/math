@@ -305,11 +305,13 @@ namespace boost
       return (a-1) / (a + b - 2);
     } // mode
 
-    template <class RealType>
-    inline RealType median(const beta_distribution<RealType>& dist)
-    { // Median of beta distribution is not defined.
-      return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "Median is not implemented, result is %1%!", std::numeric_limits<RealType>::quiet_NaN());
-    } // median
+    //template <class RealType>
+    //inline RealType median(const beta_distribution<RealType>& dist)
+    //{ // Median of beta distribution is not defined.
+    //  return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "Median is not implemented, result is %1%!", std::numeric_limits<RealType>::quiet_NaN());
+    //} // median
+
+    //But WILL be provided by the derived accessor as quantile(0.5).
 
     template <class RealType>
     inline RealType skewness(const beta_distribution<RealType>& dist)
