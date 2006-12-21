@@ -508,9 +508,6 @@ void test_spots(RealType)
           fisher_f_distribution<RealType>(8, 8),
           static_cast<RealType>(1.1))), std::domain_error
        );
-    // median NOT implemented.
-    BOOST_CHECK_THROW(
-       median(fisher_f_distribution<RealType>(8, 8)), std::domain_error);
 
 } // template <class RealType>void test_spots(RealType)
 
