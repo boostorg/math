@@ -84,7 +84,7 @@ All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions
 that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable is any finite value,
-but the supported range is only 0 <= x <= 1.\n
+but the supported range is only /lower/ <= x <= /upper/\n
 
 [h4 Accuracy]
 
@@ -107,8 +107,8 @@ b is the /upper/ parameter,
 [[variance][(b - a) [super 2] / 12 ]]
 [[mode][any value in \[a, b\] but a is chosen.  (Would NaN be better?) ]]
 [[skewness][0]]
-[[kurtosis excess][-6/5 = -1.2 exactly.]]
-[[kurtosis][9/5 (kurtosis - 3)]]
+[[kurtosis excess][-6/5 = -1.2 exactly. (kurtosis - 3)]]
+[[kurtosis][9/5]]
 ]
 
 [h4 References]
