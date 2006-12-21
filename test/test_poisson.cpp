@@ -511,16 +511,16 @@ int test_main(int, char* [])
    cout << cdf(poisson_distribution<double>(5), static_cast<double>(0)) << ' ' << endl; // 0.006737946999085467
    cout << cdf(poisson_distribution<double>(5), static_cast<double>(1)) << ' ' << endl; // 0.040427681994512805
    cout << cdf(poisson_distribution<double>(2), static_cast<double>(3)) << ' ' << endl; // 0.85712346049854715 
-#endif
 
-   {
+   { // Compare approximate formula in Wikipedia with quantile(half)
      for (int i = 1; i < 100; i++)
      {
        poisson_distribution<double> distn(static_cast<double>(i));
        cout << i << ' ' << median(distn) << ' ' << quantile(distn, 0.5) << ' ' 
-         << median(distn) - quantile(distn, 0.5) << endl;
-     }
+         << median(distn) - quantile(distn, 0.5) << endl; // formula appears to be out-by-one??
+     }  // so quantile(half) used via derived accressors.
    }
+#endif
 
 	// (Parameter value, arbitrarily zero, only communicates the floating-point type).
   test_spots(0.0F); // Test float.

@@ -199,7 +199,7 @@ void test_spots(RealType)
 
   cout << "Tolerance = " << tolerance << "%." << endl;
 
-  //RealType tol1eps = boost::math::tools::epsilon<RealType>() * 2; // Very tight, suit exact values.
+  RealType tol1eps = boost::math::tools::epsilon<RealType>() * 2; // Very tight, suit exact values.
   //RealType tol2eps = boost::math::tools::epsilon<RealType>() * 2; // Tight, suit exact values.
   RealType tol5eps = boost::math::tools::epsilon<RealType>() * 5; // Wider 5 epsilon.
   cout << "Tolerance 5 eps = " << tol5eps << "%." << endl;
@@ -488,7 +488,9 @@ if(std::numeric_limits<RealType>::is_specialized)
   using namespace std; // ADL of std names.
   // mean:
   BOOST_CHECK_CLOSE(
-    mean(dist), static_cast<RealType>(8 * ( 1 - 0.25) /0.25), tol5eps);
+    mean(dist), static_cast<RealType>(8 * (1 - 0.25) /0.25), tol5eps);
+  BOOST_CHECK_CLOSE(
+    mode(dist), static_cast<RealType>(21), tol1eps);
   // variance:
   BOOST_CHECK_CLOSE(
     variance(dist), static_cast<RealType>(8 * (1 - 0.25) / (0.25 * 0.25)), tol5eps);
@@ -716,11 +718,6 @@ if(std::numeric_limits<RealType>::is_specialized)
   static_cast<RealType>(0)), std::domain_error
   );
   // End of check throwing 'duff' out-of-domain values.
-
-  BOOST_CHECK_THROW(
-  median( // NOT implemented.
-  negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(1.25))),
-  std::domain_error);
 
   return;
 } // template <class RealType> void test_spots(RealType) // Any floating-point type RealType.

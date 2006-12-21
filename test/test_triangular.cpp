@@ -348,7 +348,7 @@ void test_spots(RealType T)
   BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.0016L)), static_cast<RealType>(0.02L), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.66666666666666666666666666666666666666666666667L)), static_cast<RealType>(0.5), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(tri0q1, static_cast<RealType>(0.3333333333333333333333333333333333333333333333333L))), static_cast<RealType>(0.5), tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.9994666666666666666666666666666666666666666666)), static_cast<RealType>(0.98), 10 * tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(tri0q1, static_cast<RealType>(0.9994666666666666666666666666666666666666666666L)), static_cast<RealType>(0.98), 10 * tol5eps);
 
   BOOST_CHECK_CLOSE_FRACTION(pdf(trim12, 0), static_cast<RealType>(0.533333333333333333333333333333333333333333333L), tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(cdf(trim12, 0), static_cast<RealType>(0.466666666666666666666666666666666666666666667L), tol5eps);

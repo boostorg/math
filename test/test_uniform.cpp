@@ -397,24 +397,24 @@ int test_main(int, char* [])
   BOOST_CHECK_THROW(cdf(unistd, +std::numeric_limits<double>::infinity()), std::domain_error); // x = + infinity
   BOOST_CHECK_THROW(cdf(unistd, -std::numeric_limits<double>::infinity()), std::domain_error); // x = - infinity
 
-  BOOST_CHECK_EQUAL(pdf(unistd, +std::numeric_limits<double>::max()), 0); // x = + max
-  BOOST_CHECK_EQUAL(pdf(unistd, -std::numeric_limits<double>::min()), 0); // x = - min
-  BOOST_CHECK_EQUAL(cdf(unistd, +std::numeric_limits<double>::max()), 1); // x = + max
-  BOOST_CHECK_EQUAL(cdf(unistd, -std::numeric_limits<double>::min()), 0); // x = - min
+  BOOST_CHECK_EQUAL(pdf(unistd, +(std::numeric_limits<double>::max)()), 0); // x = + max
+  BOOST_CHECK_EQUAL(pdf(unistd, -(std::numeric_limits<double>::min)()), 0); // x = - min
+  BOOST_CHECK_EQUAL(cdf(unistd, +(std::numeric_limits<double>::max)()), 1); // x = + max
+  BOOST_CHECK_EQUAL(cdf(unistd, -(std::numeric_limits<double>::min)()), 0); // x = - min
 
   BOOST_CHECK_THROW(uniform_distribution<> zinf(0, +std::numeric_limits<double>::infinity()), std::domain_error); // zero to infinity using default RealType double.
 
-	uniform_distribution<> zmax(0, +std::numeric_limits<double>::max()); // zero to max using default RealType double.
+	uniform_distribution<> zmax(0, +(std::numeric_limits<double>::max)()); // zero to max using default RealType double.
   BOOST_CHECK_EQUAL(zmax.lower(), 0); // Check defaults again.
-  BOOST_CHECK_EQUAL(zmax.upper(), +std::numeric_limits<double>::max());
+  BOOST_CHECK_EQUAL(zmax.upper(), +(std::numeric_limits<double>::max)());
 
   BOOST_CHECK_EQUAL(pdf(zmax, -1), 0); // pdf is 1/(0 - max) = almost zero for all x
-  BOOST_CHECK_EQUAL(pdf(zmax, 0), std::numeric_limits<double>::min()/4); // x = 
-  BOOST_CHECK_EQUAL(pdf(zmax, 1), std::numeric_limits<double>::min()/4); // x = 
+  BOOST_CHECK_EQUAL(pdf(zmax, 0), (std::numeric_limits<double>::min)()/4); // x = 
+  BOOST_CHECK_EQUAL(pdf(zmax, 1), (std::numeric_limits<double>::min)()/4); // x = 
   BOOST_CHECK_THROW(pdf(zmax, +std::numeric_limits<double>::infinity()), std::domain_error); // pdf is 1/(0 - infinity) = zero for all x
   BOOST_CHECK_THROW(pdf(zmax, -std::numeric_limits<double>::infinity()), std::domain_error); 
-  BOOST_CHECK_EQUAL(pdf(zmax, +std::numeric_limits<double>::max()), std::numeric_limits<double>::min()/4); // x = 
-  BOOST_CHECK_EQUAL(pdf(zmax, -std::numeric_limits<double>::max()), 0); // x = 
+  BOOST_CHECK_EQUAL(pdf(zmax, +(std::numeric_limits<double>::max)()), std::numeric_limits<double>::min()/4); // x = 
+  BOOST_CHECK_EQUAL(pdf(zmax, -(std::numeric_limits<double>::max)()), 0); // x = 
 
   // Ensure NaN throws an exception.
   BOOST_CHECK_THROW(uniform_distribution<> zNaN(0, std::numeric_limits<double>::quiet_NaN()), std::domain_error);
