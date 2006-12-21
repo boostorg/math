@@ -39,6 +39,14 @@ A H Carter, Approximations to percentage points of the z-distribution, Biometrik
 
 These could still provide sufficient accuracy for some speed-critical applications.
 
+Where possible we have used closed form to provide functions like median.
+But there are also several simple formulae for functions
+that are much faster, but approximate rather than exact.
+We have opted to use the quantile(half) to provide the more accurate result
+[@../../../../boost/math/distributions/detail/derived_accessors.hpp (see derived_accessors.hpp)].
+The approximate formulae remain in place as comments
+for use in cases where speed is more important than accuracy.
+
 [h4 Accuracy and Representation of Test Values]
 
 In order to be accurate enough for as many as possible real types,
