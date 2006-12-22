@@ -290,6 +290,8 @@ inline RealType median(const weibull_distribution<RealType>& dist)
 template <class RealType>
 inline RealType skewness(const weibull_distribution<RealType>& dist)
 {
+   using namespace std;  // for ADL of std functions
+
    RealType shape = dist.shape();
    RealType scale = dist.scale();
 
