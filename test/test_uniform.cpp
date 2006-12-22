@@ -413,7 +413,7 @@ int test_main(int, char* [])
   BOOST_CHECK_EQUAL(pdf(zmax, 1), (std::numeric_limits<double>::min)()/4); // x = 
   BOOST_CHECK_THROW(pdf(zmax, +std::numeric_limits<double>::infinity()), std::domain_error); // pdf is 1/(0 - infinity) = zero for all x
   BOOST_CHECK_THROW(pdf(zmax, -std::numeric_limits<double>::infinity()), std::domain_error); 
-  BOOST_CHECK_EQUAL(pdf(zmax, +(std::numeric_limits<double>::max)()), std::numeric_limits<double>::min()/4); // x = 
+  BOOST_CHECK_EQUAL(pdf(zmax, +(std::numeric_limits<double>::max)()), (std::numeric_limits<double>::min)()/4); // x = 
   BOOST_CHECK_EQUAL(pdf(zmax, -(std::numeric_limits<double>::max)()), 0); // x = 
 
   // Ensure NaN throws an exception.
