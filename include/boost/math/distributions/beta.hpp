@@ -37,7 +37,6 @@
 #endif
 
 #include <utility>
-using std::pair;
 
 namespace boost
 {
@@ -108,14 +107,14 @@ namespace boost
       template <class RealType>
       inline bool check_dist_and_x(const char* function, const RealType& alpha, const RealType& beta, RealType x, RealType* result)
       {
-        return check_dist(function, alpha, beta, result) 
+        return check_dist(function, alpha, beta, result)
           && check_x(function, x, result);
       } // bool check_dist_and_x
 
       template <class RealType>
       inline bool check_dist_and_prob(const char* function, const RealType& alpha, const RealType& beta, RealType p, RealType* result)
       {
-        return check_dist(function, alpha, beta, result) 
+        return check_dist(function, alpha, beta, result)
           && check_prob(function, p, result);
       } // bool check_dist_and_prob
 
@@ -147,7 +146,7 @@ namespace boost
 
     // typedef beta_distribution<double> beta;
     // is deliberately NOT included to avoid a name clash with the beta function.
-    // Use beta_distribution<> mybeta(...) to construct type double. 
+    // Use beta_distribution<> mybeta(...) to construct type double.
 
     template <class RealType = double>
     class beta_distribution
@@ -166,7 +165,7 @@ namespace boost
       } // beta_distribution constructor.
       // Accessor functions:
       RealType alpha() const
-      { 
+      {
         return m_alpha;
       }
       RealType beta() const
@@ -186,7 +185,7 @@ namespace boost
         RealType variance) // Expected value of variance.
       {
         RealType result; // of error checks.
-        if(false == 
+        if(false ==
           beta_detail::check_mean(
           BOOST_CURRENT_FUNCTION, mean, &result)
           &&
@@ -226,7 +225,7 @@ namespace boost
         RealType probability) // cdf
       {
         RealType result; // of error checks.
-        if(false == 
+        if(false ==
           beta_detail::check_prob(
           BOOST_CURRENT_FUNCTION, probability, &result)
           &&
@@ -271,17 +270,17 @@ namespace boost
     }; // template <class RealType> class beta_distribution
 
     template <class RealType>
-    const pair<RealType, RealType> range(const beta_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> range(const beta_distribution<RealType>& dist)
     { // Range of permissible values for random variable x.
       using boost::math::tools::max_value;
-      return pair<RealType, RealType>(0, 1);
+      return std::pair<RealType, RealType>(0, 1);
     }
 
     template <class RealType>
-    const pair<RealType, RealType> support(const beta_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> support(const beta_distribution<RealType>& dist)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-      return pair<RealType, RealType>(0, 1);
+      return std::pair<RealType, RealType>(0, 1);
     }
 
     template <class RealType>
@@ -454,8 +453,8 @@ namespace boost
       // These functions take a probability as an argument
       // and return a value such that the probability that a random variable x
       // will be less than or equal to that value
-      // is whatever probability you supplied as an argument. 
-     
+      // is whatever probability you supplied as an argument.
+
       RealType result; // of argument checks:
       RealType a = dist.alpha();
       RealType b = dist.beta();
@@ -501,11 +500,11 @@ namespace boost
       }
       // Special cases:
       if(q == 1)
-      {  
+      {
         return 0;
       }
       if(q == 0)
-      { 
+      {
         return 1;
       }
 

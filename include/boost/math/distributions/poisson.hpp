@@ -44,7 +44,6 @@
 #include <boost/math/tools/roots.hpp> // for root finding.
 
 #include <utility>
-using std::pair;
 
 #if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 #  pragma warning(push)
@@ -178,18 +177,18 @@ namespace boost
     // Non-member functions to give properties of the distribution.
 
     template <class RealType>
-    const pair<RealType, RealType> range(const poisson_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> range(const poisson_distribution<RealType>& dist)
     { // Range of permissible values for random variable k.
 	    using boost::math::tools::max_value;
-	    return const pair<RealType, RealType>(0, +max_value()); // Max integer?
+	    return const std::pair<RealType, RealType>(0, +max_value()); // Max integer?
     }
 
     template <class RealType>
-    const pair<RealType, RealType> support(const poisson_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> support(const poisson_distribution<RealType>& dist)
     { // Range of supported values for random variable k.
 	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	    using boost::math::tools::max_value;
-	    return const pair<RealType, RealType>(0,  +max_value());
+	    return const std::pair<RealType, RealType>(0,  +max_value());
     }
 
     template <class RealType>

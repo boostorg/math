@@ -5,7 +5,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // TODO deal with infinity as special better - or remove.
-// 
+//
 
 #ifndef BOOST_STATS_UNIFORM_HPP
 #define BOOST_STATS_UNIFORM_HPP
@@ -21,7 +21,6 @@
 #include <boost/math/distributions/complement.hpp>
 
 #include <utility>
-using std::pair;
 
 namespace boost{ namespace math
 {
@@ -35,7 +34,7 @@ namespace boost{ namespace math
     {
       if((boost::math::isfinite)(lower))
       { // any finite value is OK.
-        return true; 
+        return true;
       }
       else
       { // Not finite.
@@ -55,7 +54,7 @@ namespace boost{ namespace math
       if((boost::math::isfinite)(upper))
       { // Any finite value is OK.
         return true;
-      } 
+      }
       else
       { // Not finite.
         *result = tools::domain_error<RealType>(
@@ -94,7 +93,7 @@ namespace boost{ namespace math
       if(check_uniform_lower(function, lower, result)
         && check_uniform_upper(function, upper, result)
         && (lower < upper)) // If lower == upper then 1 / (upper-lower) = 1/0 = +infinity!
-      { 
+      {
         return true;
       }
       else
@@ -139,18 +138,18 @@ namespace boost{ namespace math
   typedef uniform_distribution<double> uniform;
 
   template <class RealType>
-  const pair<RealType, RealType> range(const uniform_distribution<RealType>& dist)
+  const std::pair<RealType, RealType> range(const uniform_distribution<RealType>& dist)
   { // Range of permissible values for random variable x.
 	  using boost::math::tools::max_value;
-	  return const pair<RealType, RealType>(-max_value(), +max_value()); // - to + infinity
+	  return const std::pair<RealType, RealType>(-max_value(), +max_value()); // - to + infinity
   }
 
   template <class RealType>
-  const pair<RealType, RealType> support(const uniform_distribution<RealType>& dist)
+  const std::pair<RealType, RealType> support(const uniform_distribution<RealType>& dist)
   { // Range of supported values for random variable x.
 	  // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	  using boost::math::tools::max_value;
-	  return const pair<RealType, RealType>(dist.lower(),  dist.upper());
+	  return const std::pair<RealType, RealType>(dist.lower(),  dist.upper());
   }
 
   template <class RealType>
@@ -172,7 +171,7 @@ namespace boost{ namespace math
     {
       return 0;
     }
-    else 
+    else
     {
       return 1 / (upper - lower);
     }
@@ -192,7 +191,7 @@ namespace boost{ namespace math
     {
       return result;
     }
-    if (x < lower) 
+    if (x < lower)
     {
       return 0;
     }
@@ -243,7 +242,7 @@ namespace boost{ namespace math
     {
       return result;
     }
-    if (x < lower) 
+    if (x < lower)
     {
       return 0;
     }
@@ -328,7 +327,7 @@ namespace boost{ namespace math
     {
       return result;
     }
-    return (lower + upper) / 2; // 
+    return (lower + upper) / 2; //
   }
   template <class RealType>
   inline RealType skewness(const uniform_distribution<RealType>& dist)
@@ -353,7 +352,7 @@ namespace boost{ namespace math
     {
       return result;
     }
-    return static_cast<RealType>(-6)/5; //  -6/5 = -1.2;  
+    return static_cast<RealType>(-6)/5; //  -6/5 = -1.2;
   } // RealType kurtosis_excess(const uniform_distribution<RealType>& dist)
 
   template <class RealType>

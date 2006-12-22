@@ -35,7 +35,6 @@
 #include <boost/math/tools/roots.hpp> // for root finding.
 
 #include <utility>
-using std::pair;
 
 #if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 #pragma warning (disable: 4180)
@@ -125,7 +124,7 @@ namespace boost
       }
 
       enum interval_type
-      { // 
+      { //
         clopper_pearson_exact_interval,
         jeffreys_prior_interval
       }; // class bernoulli_distribution
@@ -154,7 +153,7 @@ namespace boost
           return 0;
         }
 
-        // NOTE!!! The Clopper Pearson formula uses "successes" not 
+        // NOTE!!! The Clopper Pearson formula uses "successes" not
         // "successes+1" as usual to get the lower bound,
         // see http://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
         return (t == clopper_pearson_exact_interval) ? ibeta_inv(successes, trials - successes + 1, probability)
@@ -230,17 +229,17 @@ namespace boost
     typedef bernoulli_distribution<double> bernoulli;
 
     template <class RealType>
-    const pair<RealType, RealType> range(const bernoulli_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> range(const bernoulli_distribution<RealType>& dist)
     { // Range of permissible values for random variable k = {0, 1}.
       using boost::math::tools::max_value;
-      return pair<RealType, RealType>(0, 1);
+      return std::pair<RealType, RealType>(0, 1);
     }
 
     template <class RealType>
-    const pair<RealType, RealType> support(const bernoulli_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> support(const bernoulli_distribution<RealType>& dist)
     { // Range of supported values for random variable k = {0, 1}.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-      return pair<RealType, RealType>(0, 1);
+      return std::pair<RealType, RealType>(0, 1);
     }
 
     template <class RealType>
@@ -459,11 +458,11 @@ namespace boost
       }
 
       if (-q <= powm1(1 - dist.success_fraction(), dist.trials()))
-      { // // q <= cdf(complement(dist, 0)) == pdf(dist, 0) 
+      { // // q <= cdf(complement(dist, 0)) == pdf(dist, 0)
         return 0; // So the only reasonable result is zero.
       } // And root finder would fail otherwise.
 
-      // Need to consider the case where 
+      // Need to consider the case where
       //
       // Solve for quantile numerically:
       //

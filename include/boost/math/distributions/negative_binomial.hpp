@@ -52,7 +52,6 @@
 
 #include <limits> // using std::numeric_limits;
 #include <utility>
-using std::pair;
 
 #if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 #  pragma warning(push)
@@ -245,18 +244,18 @@ namespace boost
     typedef negative_binomial_distribution<double> negative_binomial; // Reserved name of type double.
 
     template <class RealType>
-    const pair<RealType, RealType> range(const negative_binomial_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> range(const negative_binomial_distribution<RealType>& dist)
     { // Range of permissible values for random variable k.
 	    using boost::math::tools::max_value;
-	    return const pair<RealType, RealType>(0, +max_value()); // max_integer?
+	    return const std::pair<RealType, RealType>(0, +max_value()); // max_integer?
     }
 
     template <class RealType>
-    const pair<RealType, RealType> support(const negative_binomial_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> support(const negative_binomial_distribution<RealType>& dist)
     { // Range of supported values for random variable k.
 	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	    using boost::math::tools::max_value;
-	    return const pair<RealType, RealType>(0,  +max_value()); // max_integer?
+	    return const std::pair<RealType, RealType>(0,  +max_value()); // max_integer?
     }
 
     template <class RealType>
@@ -465,8 +464,8 @@ namespace boost
            return 0; // but zero is the best we can do:
         }
         if (-Q <= powm1(dist.success_fraction(), dist.successes()))
-        { // q <= cdf(complement(dist, 0)) == pdf(dist, 0) 
-           return 0; // 
+        { // q <= cdf(complement(dist, 0)) == pdf(dist, 0)
+           return 0; //
         }
         if(Q == 0)
         {  // Probability 1 - Q  == 1 so infinite failures to achieve certainty.

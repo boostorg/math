@@ -93,7 +93,6 @@
 #endif
 
 #include <utility>
-using std::pair;
 
 namespace boost
 {
@@ -221,7 +220,7 @@ namespace boost
         if(successes == 0)
            return 0;
 
-        // NOTE!!! The Clopper Pearson formula uses "successes" not 
+        // NOTE!!! The Clopper Pearson formula uses "successes" not
         // "successes+1" as usual to get the lower bound,
         // see http://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
         return (t == clopper_pearson_exact_interval) ? ibeta_inv(successes, trials - successes + 1, probability)
@@ -241,7 +240,7 @@ namespace boost
            binomial_detail::check_dist_and_prob(
            BOOST_CURRENT_FUNCTION, trials, RealType(0), probability, &result))
         { return result; }
-        
+
         if(trials == successes)
            return 1;
 
@@ -296,17 +295,17 @@ namespace boost
       }; // template <class RealType> class binomial_distribution
 
       template <class RealType>
-      const pair<RealType, RealType> range(const binomial_distribution<RealType>& dist)
+      const std::pair<RealType, RealType> range(const binomial_distribution<RealType>& dist)
       { // Range of permissible values for random variable k.
         using boost::math::tools::max_value;
-        return const pair<RealType, RealType>(static_cast<RealType>(0), dist.trials());
+        return const std::pair<RealType, RealType>(static_cast<RealType>(0), dist.trials());
       }
 
       template <class RealType>
-      const pair<RealType, RealType> support(const binomial_distribution<RealType>& dist)
+      const std::pair<RealType, RealType> support(const binomial_distribution<RealType>& dist)
       { // Range of supported values for random variable k.
         // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-        return const pair<RealType, RealType>(0,  dist.trials());
+        return const std::pair<RealType, RealType>(0,  dist.trials());
       }
 
       template <class RealType>
@@ -645,11 +644,11 @@ namespace boost
         }
 
         if (-q <= powm1(1 - dist.success_fraction(), dist.trials()))
-        { // // q <= cdf(complement(dist, 0)) == pdf(dist, 0) 
+        { // // q <= cdf(complement(dist, 0)) == pdf(dist, 0)
           return 0; // So the only reasonable result is zero.
         } // And root finder would fail otherwise.
 
-        // Need to consider the case where 
+        // Need to consider the case where
         //
         // Solve for quantile numerically:
         //
@@ -683,7 +682,7 @@ namespace boost
       { // Bounds for the median of the negative binomial distribution
         // VAN DE VEN R. ; WEBER N. C. ;
         // Univ. Sydney, school mathematics statistics, Sydney N.S.W. 2006, AUSTRALIE
-        // Metrika  (Metrika)  ISSN 0026-1335   CODEN MTRKA8 
+        // Metrika  (Metrika)  ISSN 0026-1335   CODEN MTRKA8
         // 1993, vol. 40, no3-4, pp. 185-189 (4 ref.)
 
         // Bounds for median and 50 percetage point of binomial and negative binomial distribution
@@ -694,7 +693,7 @@ namespace boost
          RealType n = dist.trials();
          // Wikipedia says one of floor(np) -1, floor (np), floor(np) +1
          return floor(p * n); // Chose the middle value.
-      } 
+      }
 
       template <class RealType>
       inline RealType skewness(const binomial_distribution<RealType>& dist)

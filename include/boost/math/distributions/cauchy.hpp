@@ -17,7 +17,6 @@
 #endif
 
 #include <utility>
-using std::pair;
 
 namespace boost{ namespace math
 {
@@ -157,17 +156,17 @@ private:
 typedef cauchy_distribution<double> cauchy;
 
 template <class RealType>
-const pair<RealType, RealType> range(const cauchy_distribution<RealType>& dist)
+const std::pair<RealType, RealType> range(const cauchy_distribution<RealType>& dist)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
-	return const pair<RealType, RealType>(-max_value(), +max_value()); // - to + infinity.
+	return const std::pair<RealType, RealType>(-max_value(), +max_value()); // - to + infinity.
 }
 
 template <class RealType>
-const pair<RealType, RealType> support(const cauchy_distribution<RealType>& dist)
+const std::pair<RealType, RealType> support(const cauchy_distribution<RealType>& dist)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-	return const pair<RealType, RealType>(-max_value(), +max_value()); // - to + infinity.
+	return const std::pair<RealType, RealType>(-max_value(), +max_value()); // - to + infinity.
 }
 
 template <class RealType>
@@ -228,7 +227,7 @@ inline RealType variance(const cauchy_distribution<RealType>& dist)
       BOOST_CURRENT_FUNCTION,
       "The Cauchy distribution does not have a variance: "
       "the only possible return value is %1%.",
-      std::numeric_limits<RealType>::quiet_NaN()); 
+      std::numeric_limits<RealType>::quiet_NaN());
 }
 
 template <class RealType>

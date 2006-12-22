@@ -15,7 +15,6 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 
 #include <utility>
-using std::pair;
 
 #ifdef BOOST_MSVC
 # pragma warning(push)
@@ -60,18 +59,18 @@ private:
 typedef students_t_distribution<double> students_t;
 
 template <class RealType>
-const pair<RealType, RealType> range(const students_t_distribution<RealType>& dist)
+const std::pair<RealType, RealType> range(const students_t_distribution<RealType>& dist)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
-	return const pair<RealType, RealType>(-max_value(), +max_value());
+	return const std::pair<RealType, RealType>(-max_value(), +max_value());
 }
 
 template <class RealType>
-const pair<RealType, RealType> support(const students_t_distribution<RealType>& dist)
+const std::pair<RealType, RealType> support(const students_t_distribution<RealType>& dist)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
-	return const pair<RealType, RealType>(-max_value(), +max_value());
+	return const std::pair<RealType, RealType>(-max_value(), +max_value());
 }
 
 template <class RealType>
