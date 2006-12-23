@@ -72,6 +72,10 @@ varies with the various parameters:
 
 [$../graphs/triangular_pdf.png]
 
+and cumulative distribution function
+
+[$../graphs/triangular_cdf.png]
+
 [h4 Member Functions]
 
    triangular_distribution(RealType lower = 0, RealType mode = 0 RealType upper = 1);
