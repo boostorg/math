@@ -43,14 +43,6 @@ A H Carter, Approximations to percentage points of the z-distribution, Biometrik
 
 These could still provide sufficient accuracy for some speed-critical applications.
 
-Where possible we have used closed form to provide functions like median.
-But there are also several simple formulae for functions
-that are much faster, but approximate rather than exact.
-We have opted to use the quantile(half) to provide the more accurate result
-[@../../../../boost/math/distributions/detail/derived_accessors.hpp (see derived_accessors.hpp)].
-The approximate formulae remain in place as comments
-for use in cases where speed is more important than accuracy.
-
 [h4 Accuracy and Representation of Test Values]
 
 In order to be accurate enough for as many as possible real types,
@@ -148,9 +140,9 @@ Catching exceptions is therefore strongly recommended.]
 
 [h4 Median of distributions]
 
-There are several distributions we have been unable to find an analytic formula for 
-[@http://en.wikipedia.org/wiki/Median median], the mid-point in a list of values;
-for these no implementation is provided (see above).
+There are many distributions for which we have been unable to find an analytic formula,
+and this has deterred us from implementing
+[@http://en.wikipedia.org/wiki/Median median functions], the mid-point in a list of values.
 
 However a useful median approximation for distribution `dist` may be available from
 
@@ -166,7 +158,7 @@ However a useful median approximation for distribution `dist` may be available f
 Mathematica Basic Statistics.] give more detail, in particular for discrete distributions.
 
 
-[h4 Handling of Floating-point Infinity]
+[h4 Handling of Floating-Point Infinity]
 
 Some functions and distributions are well defined with + or - infinity as 
 argument(s), but after some experiments with handling infinite arguments 
@@ -209,7 +201,6 @@ We considered adding location and scale to the list of functions, for example:
 but found that these concepts are not defined (or their definition too contentious)
 for too many distributions to be generally applicable.
 Because they are non-member functions, they can be added if required.
-
 
 [h4 Notes on Implementation of Specific Functions & Distributions]
 
