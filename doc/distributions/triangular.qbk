@@ -15,8 +15,8 @@
     public:
        typedef RealType value_type;
 
-       triangular_distribution(RealType lower = 0, RealType mode = 0) RealType upper = 1); // Constructor.
-          : m_lower(lower), m_mode(mode), m_upper(upper) // Default is 001 triangular distribution.
+       triangular_distribution(RealType lower = -1, RealType mode = 0) RealType upper = 1); // Constructor.
+          : m_lower(lower), m_mode(mode), m_upper(upper) // Default is -1, 0, +1 triangular distribution.
        // Accessor functions.
        RealType lower()const;
        RealType mode()const;
@@ -68,7 +68,9 @@ and delivery is assumed to never take more than your upper limit.
 
 The following graph illustrates how the
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function PDF]
-varies with the mode parameter:
+varies with the various parameters:
+
+[$../graphs/triangular_pdf.png]
 
 [h4 Member Functions]
 
@@ -82,15 +84,15 @@ otherwise calls __domain_error.
 
    RealType lower()const;
    
-Returns the /lower/ parameter of this distribution.
+Returns the /lower/ parameter of this distribution (default -1).
    
    RealType mode()const;
    
-Returns the /mode/ parameter of this distribution.
+Returns the /mode/ parameter of this distribution (default 0).
 
    RealType upper()const;
       
-Returns the /upper/ parameter of this distribution.
+Returns the /upper/ parameter of this distribution (default+1).
 
 [h4 Non-member Accessors]
 
@@ -141,7 +143,8 @@ Some 'known good' test values were obtained from
 * Evans, M.; Hastings, N.; and Peacock, B. "Triangular Distribution." Ch. 40 in Statistical Distributions, 3rd ed. New York: Wiley, pp. 187-188, 2000, ISBN - 0471371246]
 * [@http://www.brighton-webs.co.uk/distributions/triangular.asp Brighton Webs Ltd. BW D-Calc 1.0 Distribution Calculator]
 * [@http://www.worldscibooks.com/mathematics/etextbook/5720/5720_chap1.pdf The Triangular Distribution including its history.]
-* [@www.measurement.sk/2002/S1/Wimmer2.pdf Gejza Wimmer, Viktor Witkovsky and Tomas Duby, MEASUREMENT SCIENCE REVIEW, Volume 2, Section 1, 2002, PROPER ROUNDING OF THE MEASUREMENT RESULTS UNDER THE ASSUMPTION OF TRAINGULAR DISTRIBUTION1]
+* [@www.measurement.sk/2002/S1/Wimmer2.pdf Gejza Wimmer, Viktor Witkovsky and Tomas Duby,
+Measurement Science Review, Volume 2, Section 1, 2002, Proper Rounding Of The Measurement Results Under The Assumption Of Triangular Distribution.]
 
 [endsect][/section:triangular_dist triangular]
 
