@@ -180,9 +180,38 @@ much more work to test, and much less readable.
 We have also tried to catch boundary cases where the mathematical specification
 would result in divide by zero or overflow and signalling these similarly.
 
+[h4 Scale, Shape and Location]
+
+We considered adding location and scale to the list of functions, for example:
+
+  template <class RealType>
+  inline RealType scale(const triangular_distribution<RealType>& dist)
+  {
+    RealType lower = dist.lower();
+    RealType mode = dist.mode();
+    RealType upper = dist.upper();
+    RealType result;  // of checks.
+    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION, lower, mode, upper, &result))
+    {
+      return result;
+    }
+    return (upper - lower);
+  }
+  
+but found that these concepts are not defined (or their definition too contentious)
+for too many distributions to be generally applicable.
+Because they are non-member functions, they can be added if required.
+
+
 [h4 Notes on Implementation of Specific Functions & Distributions]
 
-Some
+* Default parameters for the Triangular Distribution.
+We are uncertain about the best default parameters.
+Some sources suggest that the Standard Triangular Distribution has
+lower = 0, mode = half and upper = 1.
+However as a approximation for the normal distribution,
+the most common usage, lower = -1, mode = 0 and upper = 1 would be more suitable.
+
 
 
 [h4 Sources of Test Data]
