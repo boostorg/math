@@ -53,14 +53,14 @@ varies as the parameters vary:
 
 [$../graphs/gamma_dist2.png]
 
-The [*Erland Distribution] is the same as the Gamma, but with the shape parameter
+The [*Erlang Distribution] is the same as the Gamma, but with the shape parameter
 an integer.  It is often expressed using a /rate/ rather than a /scale/ as the 
 second parameter (remember that the rate is the reciprocal of the scale).
 
 Internally the functions used to implement the Gamma Distribution are
 already optimised for small-integer arguments, so in general there should
 be no great loss of performance from using a Gamma Distribution rather than
-a dedicated Erland Distribution.
+a dedicated Erlang Distribution.
 
 [h4 Member Functions]
 
