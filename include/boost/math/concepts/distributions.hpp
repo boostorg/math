@@ -13,6 +13,7 @@
 
 #include <boost/math/distributions/complement.hpp>
 #include <boost/concept_check.hpp>
+#include <utility>
 
 namespace boost{
 namespace math{
@@ -85,6 +86,15 @@ RealType kurtosis_excess(const distribution_archetype<RealType>& dist);
 template <class RealType>
 RealType kurtosis(const distribution_archetype<RealType>& dist);
 
+template <class RealType>
+RealType median(const distribution_archetype<RealType>& dist);
+
+template <class RealType>
+std::pair<RealType, RealType> range(const distribution_archetype<RealType>& dist);
+
+template <class RealType>
+std::pair<RealType, RealType> support(const distribution_archetype<RealType>& dist);
+
 //
 // Next comes the concept checks for verifying that a class
 // fullfils the requirements of a Distribution:
@@ -118,6 +128,10 @@ struct DistributionConcept
       v = skewness(dist);
       v = kurtosis(dist);
       v = kurtosis_excess(dist);
+      v = median(dist);
+      std::pair<value_type, value_type> pv;
+      pv = range(dist);
+      pv = support(dist);
 
       float f = 1;
       v = cdf(dist, f);

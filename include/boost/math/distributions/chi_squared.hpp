@@ -63,7 +63,7 @@ template <class RealType>
 const std::pair<RealType, RealType> support(const chi_squared_distribution<RealType>& dist)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-	return std::pair<RealType, RealType>(0, max_value<RealType>()); // 0 to + infinity.
+   return std::pair<RealType, RealType>(0, tools::max_value<RealType>()); // 0 to + infinity.
 }
 
 template <class RealType>

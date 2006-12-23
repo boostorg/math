@@ -166,7 +166,7 @@ template <class RealType>
 const std::pair<RealType, RealType> support(const cauchy_distribution<RealType>& dist)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + infinity.
+   return std::pair<RealType, RealType>(-tools::max_value<RealType>(), tools::max_value<RealType>()); // - to + infinity.
 }
 
 template <class RealType>
