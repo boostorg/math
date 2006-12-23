@@ -103,10 +103,16 @@ do is add the appropriate non-member functions, overloaded for each
 implemented distribution type.
 
 [tip\n
-[Random numbers that approximate Quantiles of Distributions]
+[*Random numbers that approximate Quantiles of Distributions]\n\n
 If you want random numbers that are distributed in a specific way,
 for example in a uniform, normal or triangular,
-see [@http://www.boost.org/libs/random/ Boost.Random].
+see [@http://www.boost.org/libs/random/ Boost.Random].\n\n
+The distributions in the random number library are typically much faster,
+but much less accurate than those in this library.  This reflects the
+differing uses of the two libraries: if you want to conduct statistical
+tests, then you will need the reliable computation of this library, where
+as random numbers are ['random]: so accuracy is not a concern, where
+as speed most certainly is.
 ]
 
 [tip\n\n
@@ -119,19 +125,6 @@ after the random variate (whose value you 'choose'),
 to separate the variate from the parameter(s) that defines the shape of the distribution.
 ]
 
-The distribution (effectly the random variate) is said to be 'supported' over a range that is
-[@http://en.wikipedia.org/wiki/Probability_distribution
- "the smallest closed set whose complement has probability zero"].
-Non-mathematicians might say it means the 'interesting' smallest range
-of random variate x that has the cdf going from zero to unity.
-Outside are uninteresting zones where the pdf is zero, and the cdf zero or unity.
-Mathematically, the random variate may take an (+ or -) infinite value,
-but this implementation limits it to finite values from the `max` to `min` for the `RealType`.
-(See [link math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity] for rationale).
-
-The range of random variate values that is permitted can be tested by using two functions
-`range` and `support`.
-
 For example, the binomial distribution has two parameters:
 n (the number of trials) and p (the probability of success on one trial).\n\n
 The `binomial_distribution` constructor therefore has two parameters:\n\n
@@ -142,7 +135,20 @@ As noted above the non-member function `pdf` has one parameter for the distribut
 and a second for the random variate.  So taking our binomial distribution 
 example, we would write:\n\n
   `pdf(binomial_distribution<RealType>(n, p), k);`\n\n
-]
+
+The distribution (effectly the random variate) is said to be 'supported' over a range that is
+[@http://en.wikipedia.org/wiki/Probability_distribution
+ "the smallest closed set whose complement has probability zero"].
+Non-mathematicians might say it means the 'interesting' smallest range
+of random variate x that has the cdf going from zero to unity.
+Outside are uninteresting zones where the pdf is zero, and the cdf zero or unity.
+Mathematically, the random variate may take an (+ or -) infinite value,
+but this implementation limits it to finite values from the `max` to `min` for the `RealType`.
+(See [link math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity 
+Handling of Floating-Point Infinity] for rationale).
+
+The range of random variate values that is permitted can be tested by using two functions
+`range` and `support`.
 
 [tip\n\n
 [*Discrete Probability Distributions]\n\n

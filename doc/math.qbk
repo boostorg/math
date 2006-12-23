@@ -118,6 +118,7 @@ and use the function's name as the link text]
 [def __quantile [link math.dist.quantile Quantile]]
 [def __quantile_c [link math.dist.quantile_c Quantile from the complement of the probability]]
 [def __mean [link math.dist.mean mean]]
+[def __median [link math.dist.median median]]
 [def __mode [link math.dist.mode mode]]
 [def __skewness [link math.dist.skewness skewness]]
 [def __kurtosis [link math.dist.kurtosis kurtosis]]
@@ -126,6 +127,8 @@ and use the function's name as the link text]
 [def __sd [link math.dist.sd standard deviation]]
 [def __hazard [link math.dist.hazard Hazard Function]]
 [def __chf [link math.dist.chf Cumulative Hazard Function]]
+[def __range [link math.dist.range range]]
+[def __support [link math.dist.support support]]
 
 [/ distribution def names end in distrib to avoid clashes]
 [def __beta_distrib [link math_toolkit.dist.dist_ref.dists.beta_dist Beta Distribution]]
@@ -137,7 +140,8 @@ and use the function's name as the link text]
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
 
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard, 
-   __chf, __mean, __mode, __variance, __sd, __skewness, __kurtosis and __kurtosis_excess]
+   __chf, __mean, __median, __mode, __variance, __sd, __skewness, 
+   __kurtosis, __kurtosis_excess, __range and __support]
 
 
 [/ Some composite templates]

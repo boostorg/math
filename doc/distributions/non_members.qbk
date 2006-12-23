@@ -18,12 +18,15 @@ to go straight to the function you want if you already know its name.
 * __kurtosis.
 * __kurtosis_excess
 * __mean.
+* [link math.dist.median median].
 * __mode.
 * [link math.dist.pdf pdf].
+* [link math.dist.range range].
 * [link math.dist.quantile quantile].
 * [link math.dist.quantile_c quantile from the complement].
 * __skewness.
 * [link math.dist.sd standard_deviation].
+* [link math.dist.support support].
 * __variance.
 
 [h4 [#concept_index]Conceptual Index]
@@ -31,23 +34,27 @@ to go straight to the function you want if you already know its name.
 * __ccdf.
 * __cdf.
 * __chf.
+* [link cdf_inv Inverse Cumulative Distribution Function].
 * [link survival_inv Inverse Survival Function].
 * __hazard
 * [link lower_critical Lower Critical Value].
 * __kurtosis.
 * __kurtosis_excess
 * __mean.
+* [link math.dist.median median].
 * __mode.
 * [link cdfPQ P].
 * [link percent Percent Point Function].
 * __pdf.
 * [link pmf Probability Mass Function].
+* [link math.dist.range range].
 * [link cdfPQ Q].
 * __quantile.
 * [link math.dist.quantile_c Quantile from the complement of the probability].
 * __skewness.
 * __sd
 * [link survival Survival Function].
+* [link math.dist.support support].
 * [link upper_critical Upper Critical Value].
 * __variance.
 
@@ -137,6 +144,13 @@ Returns the mean of the distribution /dist/.
 This function may return a __domain_error if the distribution does not have
 a defined mean (for example the Cauchy distribution).
 
+[h4 [#math.dist.median]median]
+
+   template<class RealType>
+   RealType median(const ``['Distribution-Type]``<RealType>& dist);
+   
+Returns the median of the distribution /dist/.
+
 [h4 [#math.dist.mode]mode]
 
    template<class RealType>
@@ -167,6 +181,13 @@ the defined range for the distribution.
 For example for a standard normal distribution the pdf looks like this:
 
 [$../graphs/pdf.png]
+
+[h4 [#math.dist.range]range]
+
+   template<class RealType>
+   std::pair<RealType, RealType> range(const ``['Distribution-Type]``<RealType>& dist);
+   
+Returns the valid range of the random variable over distribution /dist/.
 
 [h4 [#math.dist.quantile]Quantile]
 
@@ -228,6 +249,20 @@ Returns the standard deviation of distribution /dist/.
 
 This function may return a __domain_error if the distribution does not have
 a defined standard deviation.
+
+[h4 [#math.dist.support]support]
+
+   template<class RealType>
+   std::pair<RealType, RealType> support(const ``['Distribution-Type]``<RealType>& dist);
+   
+Returns the supported range of random variable over the distribution /dist/.
+
+The distribution is said to be 'supported' over a range that is
+[@http://en.wikipedia.org/wiki/Probability_distribution
+ "the smallest closed set whose complement has probability zero"].
+Non-mathematicians might say it means the 'interesting' smallest range
+of random variate x that has the cdf going from zero to unity.
+Outside are uninteresting zones where the pdf is zero, and the cdf zero or unity.
 
 [h4 [#math.dist.variance]Variance]
 
@@ -301,6 +336,11 @@ by these functions.
 
 The percent point function, also known as the percentile, is the same as
 the __quantile.
+
+[h4 [#cdf_inv]Inverse CDF Function.]
+
+The inverse of the cumulative distribution function, is the same as the 
+__quantile.
 
 [h4 [#survival_inv]Inverse Survival Function.]
 

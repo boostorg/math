@@ -1,5 +1,9 @@
 [section:implementation Additional Implementation Notes]
 
+The majority of the implementation notes are included with the documentation
+of each function or distribution.  The notes here are of a more general nature,
+and reflect more the general implementation philosophy used.
+
 [h4 Implemention philosophy]
 
 "First be right, then be fast."
@@ -72,12 +76,13 @@ So tests for one third, *not* exactly representable with radix two floating-poin
 `static_cast<RealType>(1) / 3;`
 
 If a function is very sensitive to changes in input,
-specifying an inexact value as input (0.1 say) can throw 
-the result off by a noticable amount: 0.1f is "wrong"
-by ~1e-7 for example (because 0.1L is not exactly representable, in contrast to 0.5L). 
-That is why halfs, quarters, and eighths are used in test code
-along with the occasional fraction a/b with b a power of two
-(so the result is an exactly representable binary value). 
+specifying an inexact value as input (such as 0.1) can throw 
+the result off by a noticeable amount: 0.1f is "wrong"
+by ~1e-7 for example (because 0.1 has no exact binary representation). 
+That is why exact binary values - halves, quarters, and eighths etc -
+are used in test code along with the occasional fraction `a/b` with `b` 
+a power of two (in order to ensure that the result is an exactly 
+representable binary value).
 
 
 [h4 Handling Unsuitable Arguments]
@@ -102,9 +107,9 @@ whenever evaluated with argument values for which the mathematical function is u
 
 *Guideline 2
 
-The library function which approximates a mathematical function
+[:The library function which approximates a mathematical function
 shall signal a domain error whenever evaluated with argument values
-for which the mathematical function obtains a non-real value.
+for which the mathematical function obtains a non-real value.]
 
 This implementation is believed to follow these proposals.
 
@@ -118,7 +123,7 @@ and
 then the program will terminate with an uncaught exception and probably abort.
 Therefore to get the benefit of helpful error messages, enabling *all* exceptions
 *and* using try&catch is recommended for all applications.
-However, for simplicity, the is not done for most examples.]
+However, for simplicity, this is not done for most examples.]
 
 [h4 Handling of Functions that are Not Implemented]
 
@@ -136,9 +141,10 @@ and caught to provide an appropriate error message.
 
 Otherwise the value of std::numeric_limits<T>::quiet_NaN() will be returned.
 
-[warning If the type T is not specialized to provide a NaN (for example a User-defined type),
-then zero will be returned. This may be unexpected and undetected.
-Catching exceptions is therefore recommended.]
+[warning If `std::numeric_limits<T>::has_quiet_NaN` is false
+(for example T is a User-defined type),
+then an exception will always be thrown when a domain error occurs. 
+Catching exceptions is therefore strongly recommended.]
 
 [h4 Median of distributions]
 
@@ -146,7 +152,7 @@ There are several distributions we have been unable to find an analytic formula 
 [@http://en.wikipedia.org/wiki/Median median], the mid-point in a list of values;
 for these no implementation is provided (see above).
 
-However a useful median approximation for distibution `dist` may be available from
+However a useful median approximation for distribution `dist` may be available from
 
 `quantile(dist, 0.5)`.
 
@@ -162,18 +168,20 @@ Mathematica Basic Statistics.] give more detail, in particular for discrete dist
 
 [h4 Handling of Floating-point Infinity]
 
-Some functions and distributions are well defined with + or - infinity as argument(s),
-but after some experiments with permitting std::numeric_limits<>::infinity(),
-and handling as special cases, we concluded that it was more useful to forbid this,
-throwing a std::domain_error with an appropriate message.
+Some functions and distributions are well defined with + or - infinity as 
+argument(s), but after some experiments with handling infinite arguments 
+as special cases, we concluded that it was more useful to forbid this,
+and instead to return the result of __domain_error.
 
-Doing this was also complicated because, unlike built-in types on most platforms,
-not all User-Defined Types are
-specialized to provide std::numeric_limits<RealType>::infinity()
-(and would return the default value of zero NOT any representation of infinity).
+Handling infinity as special cases was additionally complicated 
+because, unlike built-in types on most - but not all - platforms, 
+not all User-Defined Types are 
+specialized to provide `std::numeric_limits<RealType>::infinity()`
+and would return zero rather than any representation of infinity.
 
-The rationale is that non-finiteness may happen because of error or overflow in the users code,
-and it will be more helpful for this to be diagnosed promptly rather than just continuing.
+The rationale is that non-finiteness may happen because of error 
+or overflow in the users code, and it will be more helpful for this 
+to be diagnosed promptly rather than just continuing.
 The code also became much more complicated, more error-prone,
 much more work to test, and much less readable.
 
@@ -212,28 +220,26 @@ lower = 0, mode = half and upper = 1.
 However as a approximation for the normal distribution,
 the most common usage, lower = -1, mode = 0 and upper = 1 would be more suitable.
 
-
-
 [h4 Sources of Test Data]
 
 We found a large number of sources of test data.
-We have assumed that these are /"known good/"
+We have assumed that these are /"known good"/
 if they agree with the results from our test
-and only consulted other sources for their /'vote/'
+and only consulted other sources for their /'vote'/
 in the case of serious disagreement.
-The accuracy, and claimed accuracy (if any), vary very widely.
+The accuracy, actual and claimed, vary very widely.
 Only [@http://functions.wolfram.com/ Wolfram Mathematica functions]
 provided a higher accuracy than
 C++ double (64-bit floating-point) and was regarded as
-the most-trusted (by far) source.
+the most-trusted source by far.
 
 A useful index of sources is:
 [@http://www.sal.hut.fi/Teaching/Resources/ProbStat/table.html
 Web-oriented Teaching Resources in Probability and Statistics]
 
 [@http://espse.ed.psu.edu/edpsych/faculty/rhale/hale/507Mat/statlets/free/pdist.htm Statlet]:
-Calculate and plot probability distributions is a Javascript application
-that provides the most complete range of distributions:
+Is a Javascript application that calculates and plots probability distributions,
+and provides the most complete range of distributions:
 
 [:Bernoulli, Binomial, discrete uniform, geometric, hypergeometric,
 negative binomial, Poisson, beta, Cauchy-Lorentz, chi-sequared, Erlang,
