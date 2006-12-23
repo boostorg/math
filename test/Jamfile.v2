@@ -18,12 +18,16 @@ run test_beta.cpp ;
 run test_beta_dist.cpp ;
 run test_binomial.cpp ;
 run test_binomial_coeff.cpp ;
+run test_carlson.cpp ;
 run test_cauchy.cpp ;
 run test_cbrt.cpp ;
 run test_chi_squared.cpp ;
 run test_classify.cpp ;
 run test_digamma.cpp ;
 run test_dist_overloads.cpp ;
+run test_ellint_1.cpp ;
+run test_ellint_2.cpp ;
+run test_ellint_3.cpp ;
 run test_erf.cpp ;
 run test_error_handling.cpp ;
 run test_exponential_dist.cpp ;
@@ -39,6 +43,7 @@ run test_ibeta_inv_ab.cpp ;
 run test_igamma.cpp ;
 run test_igamma_inv.cpp ;
 run test_igamma_inva.cpp ;
+run test_instantiate1.cpp test_instantiate2.cpp ;
 run test_laguerre.cpp ;
 run test_legendre.cpp ;
 run test_lognormal.cpp ;
@@ -52,23 +57,12 @@ run test_roots.cpp ;
 run test_spherical_harmonic.cpp ;
 run test_students_t.cpp ;
 run test_tgamma_ratio.cpp ;
-run test_triangular.cpp ;
 run test_toms748_solve.cpp ;
+run test_triangular.cpp ;
 run test_uniform.cpp ;
 run test_weibull.cpp ;
 
 compile distribution_concept_check.cpp ;
 compile std_real_concept_check.cpp ;
-
-
-
-
-
-
-
-
-
-
-
 
 

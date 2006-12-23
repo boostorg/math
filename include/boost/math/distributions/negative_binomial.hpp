@@ -247,7 +247,7 @@ namespace boost
     const std::pair<RealType, RealType> range(const negative_binomial_distribution<RealType>& dist)
     { // Range of permissible values for random variable k.
 	    using boost::math::tools::max_value;
-	    return const std::pair<RealType, RealType>(0, +max_value()); // max_integer?
+	    return std::pair<RealType, RealType>(0, max_value<RealType>()); // max_integer?
     }
 
     template <class RealType>
@@ -255,7 +255,7 @@ namespace boost
     { // Range of supported values for random variable k.
 	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	    using boost::math::tools::max_value;
-	    return const std::pair<RealType, RealType>(0,  +max_value()); // max_integer?
+	    return std::pair<RealType, RealType>(0,  max_value<RealType>()); // max_integer?
     }
 
     template <class RealType>

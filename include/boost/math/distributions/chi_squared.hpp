@@ -56,14 +56,14 @@ template <class RealType>
 const std::pair<RealType, RealType> range(const chi_squared_distribution<RealType>& dist)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
-	return const std::pair<RealType, RealType>(0, +max_value()); // 0 to + infinity.
+	return std::pair<RealType, RealType>(0, max_value<RealType>()); // 0 to + infinity.
 }
 
 template <class RealType>
 const std::pair<RealType, RealType> support(const chi_squared_distribution<RealType>& dist)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-	return const std::pair<RealType, RealType>(0, +max_value()); // 0 to + infinity.
+	return std::pair<RealType, RealType>(0, max_value<RealType>()); // 0 to + infinity.
 }
 
 template <class RealType>

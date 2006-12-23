@@ -298,14 +298,14 @@ namespace boost
       const std::pair<RealType, RealType> range(const binomial_distribution<RealType>& dist)
       { // Range of permissible values for random variable k.
         using boost::math::tools::max_value;
-        return const std::pair<RealType, RealType>(static_cast<RealType>(0), dist.trials());
+        return std::pair<RealType, RealType>(static_cast<RealType>(0), dist.trials());
       }
 
       template <class RealType>
       const std::pair<RealType, RealType> support(const binomial_distribution<RealType>& dist)
       { // Range of supported values for random variable k.
         // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-        return const std::pair<RealType, RealType>(0,  dist.trials());
+        return std::pair<RealType, RealType>(0,  dist.trials());
       }
 
       template <class RealType>

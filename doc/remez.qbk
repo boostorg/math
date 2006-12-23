@@ -318,6 +318,52 @@ and then re-minimise.
 * Keep absissa values small: use a change of variable to keep the abscissa
 over, say \[0, b\], for some smallish value /b/.
 
+[h4 References]
+
+The original references for the Remez Method and it's extension
+to rational functions are unfortunately in Russian:
+
+Remez, E.Ya., ['Fundamentals of numerical methods for Chebyshev approximations], 
+"Naukova Dumka", Kiev, 1969.
+
+Remez, E.Ya., Gavrilyuk, V.T., ['Computer development of certain approaches 
+to the approximate construction of solutions of Chebyshev problems 
+nonlinearly depending on parameters], Ukr. Mat. Zh. 12 (1960), 324-338.
+
+Gavrilyuk, V.T., ['Generalization of the first polynomial algorithm of 
+E.Ya.Remez for the problem of constructing rational-fractional 
+Chebyshev approximations], Ukr. Mat. Zh. 16 (1961), 575-585.
+
+Some English language sources include:
+
+Fraser, W., Hart, J.F., ['On the computation of rational approximations 
+to continuous functions], Comm. of the ACM 5 (1962), 401-403, 414.
+
+Ralston, A., ['Rational Chebyshev approximation by Remes' algorithms], 
+Numer.Math. 7 (1965), no. 4, 322-330.
+
+A. Ralston, ['Rational Chebyshev approximation, Mathematical 
+Methods for Digital Computers v. 2] (Ralston A., Wilf H., eds.), 
+Wiley, New York, 1967, pp. 264-284.
+
+Hart, J.F. e.a., ['Computer approximations], Wiley, New York a.o., 1968.
+
+Cody, W.J., Fraser, W., Hart, J.F., ['Rational Chebyshev approximation 
+using linear equations], Numer.Math. 12 (1968), 242-251.
+
+Cody, W.J., ['A survey of practical rational and polynomial 
+approximation of functions], SIAM Review 12 (1970), no. 3, 400-423.
+
+Barrar, R.B., Loeb, H.J., ['On the Remez algorithm for non-linear 
+families], Numer.Math. 15 (1970), 382-391.
+
+Dunham, Ch.B., ['Convergence of the Fraser-Hart algorithm for rational 
+Chebyshev approximation], Math. Comp. 29 (1975), no. 132, 1078-1082.
+
+G. L. Litvinov, ['Approximate construction of rational
+approximations and the effect of error autocorrection],
+Russian Journal of Mathematical Physics, vol.1, No. 3, 1994.
+
 [endsect][/section:remez The Remez Method]
 
 

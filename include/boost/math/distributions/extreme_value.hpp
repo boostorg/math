@@ -74,7 +74,7 @@ template <class RealType>
 const std::pair<RealType, RealType> range(const extreme_value_distribution<RealType>& dist)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
-	return const std::pair<RealType, RealType>(-max_value(), +max_value());
+	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
 
 template <class RealType>
@@ -82,7 +82,7 @@ const std::pair<RealType, RealType> support(const extreme_value_distribution<Rea
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
-	return const std::pair<RealType, RealType>(-max_value(),  +max_value());
+	return std::pair<RealType, RealType>(-max_value<RealType>(),  max_value<RealType>());
 }
 
 

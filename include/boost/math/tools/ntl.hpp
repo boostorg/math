@@ -292,9 +292,36 @@ namespace NTL{
    {
       return boost::math::tools::newton_raphson_iterate(
          asin_root(z), 
-         NTL::RR(0), 
+         NTL::RR(std::asin(boost::math::tools::real_cast<double>(z))), 
          NTL::RR(-boost::math::constants::pi<NTL::RR>()/2),
          NTL::RR(boost::math::constants::pi<NTL::RR>()/2),
+         boost::math::tools::digits<NTL::RR>());
+   }
+
+   struct atan_root
+   {
+      atan_root(NTL::RR const& target) : t(target){}
+
+      std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR> operator()(NTL::RR const& p)
+      {
+         NTL::RR c = cos(p);
+         NTL::RR ta = tan(p);
+         NTL::RR f0 = ta - t;
+         NTL::RR f1 = 1 / (c * c);
+         NTL::RR f2 = 2 * ta / (c * c);
+         return std::tr1::make_tuple(f0, f1, f2);
+      }
+   private:
+      NTL::RR t;
+   };
+
+   inline NTL::RR atan(NTL::RR z)
+   {
+      return boost::math::tools::halley_iterate(
+         atan_root(z), 
+         NTL::RR(std::atan(boost::math::tools::real_cast<double>(z))), 
+         -boost::math::constants::pi<NTL::RR>()/2,
+         boost::math::constants::pi<NTL::RR>()/2,
          boost::math::tools::digits<NTL::RR>());
    }
 

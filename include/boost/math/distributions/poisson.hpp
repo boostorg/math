@@ -180,7 +180,7 @@ namespace boost
     const std::pair<RealType, RealType> range(const poisson_distribution<RealType>& dist)
     { // Range of permissible values for random variable k.
 	    using boost::math::tools::max_value;
-	    return const std::pair<RealType, RealType>(0, +max_value()); // Max integer?
+	    return std::pair<RealType, RealType>(0, max_value<RealType>()); // Max integer?
     }
 
     template <class RealType>
@@ -188,7 +188,7 @@ namespace boost
     { // Range of supported values for random variable k.
 	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	    using boost::math::tools::max_value;
-	    return const std::pair<RealType, RealType>(0,  +max_value());
+	    return std::pair<RealType, RealType>(0,  max_value<RealType>());
     }
 
     template <class RealType>
