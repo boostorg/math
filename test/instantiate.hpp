@@ -58,12 +58,12 @@ void instantiate(RealType)
    boost::math::falling_factorial(v1, i);
    boost::math::tgamma(v1, v2);
    boost::math::tgamma_lower(v1, v2);
-   boost::math::gamma_P(v1, v2);
-   boost::math::gamma_Q(v1, v2);
-   boost::math::gamma_P_inv(v1, v2);
-   boost::math::gamma_Q_inv(v1, v2);
-   boost::math::gamma_P_inva(v1, v2);
-   boost::math::gamma_Q_inva(v1, v2);
+   boost::math::gamma_p(v1, v2);
+   boost::math::gamma_q(v1, v2);
+   boost::math::gamma_p_inv(v1, v2);
+   boost::math::gamma_q_inv(v1, v2);
+   boost::math::gamma_p_inva(v1, v2);
+   boost::math::gamma_q_inva(v1, v2);
    boost::math::erf(v1);
    boost::math::erfc(v1);
    boost::math::erf_inv(v1);
@@ -79,7 +79,7 @@ void instantiate(RealType)
    boost::math::ibetac_inva(v1, v2, v3);
    boost::math::ibeta_invb(v1, v2, v3);
    boost::math::ibetac_invb(v1, v2, v3);
-   boost::math::gamma_P_derivative(v2, v3);
+   boost::math::gamma_p_derivative(v2, v3);
    boost::math::ibeta_derivative(v1, v2, v3);
    boost::math::fpclassify(v1);
    boost::math::isfinite(v1);

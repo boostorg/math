@@ -109,7 +109,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mtext>gamma_Q</mtext>
+    <mtext>gamma_q</mtext>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -193,7 +193,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mtext>gamma_P</mtext>
+    <mtext>gamma_p</mtext>
     <mfenced>
       <mrow>
         <mi>a</mi>

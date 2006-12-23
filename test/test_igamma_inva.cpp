@@ -22,7 +22,7 @@
 // ~~~~~~~~~~~~
 //
 // This file tests the incomplete gamma function inverses 
-// gamma_P_inva and gamma_Q_inva. There are two sets of tests:
+// gamma_p_inva and gamma_q_inva. There are two sets of tests:
 // 2) TODO: Accuracy tests use values generated with NTL::RR at 
 // 1000-bit precision and our generic versions of these functions.
 // 3) Round trip sanity checks, use the test data for the forward
@@ -109,7 +109,7 @@ template <class T>
 void do_test_gamma_2(const T& data, const char* type_name, const char* test_name)
 {
    //
-   // test gamma_P_inva(T, T) against data:
+   // test gamma_p_inva(T, T) against data:
    //
    using namespace std;
    typedef typename T::value_type row_type;
@@ -141,36 +141,36 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       // to be able to get back to the original value.
       //
       if(data[i][5] == 0)
-         BOOST_CHECK_EQUAL(boost::math::gamma_P_inva(data[i][1], data[i][5]), boost::math::tools::max_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::gamma_p_inva(data[i][1], data[i][5]), boost::math::tools::max_value<value_type>());
       else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()))
       {
-         value_type inv = boost::math::gamma_P_inva(data[i][1], data[i][5]);
+         value_type inv = boost::math::gamma_p_inva(data[i][1], data[i][5]);
          BOOST_CHECK_CLOSE(data[i][0], inv, precision);
       }
       else if(1 == data[i][5])
-         BOOST_CHECK_EQUAL(boost::math::gamma_P_inva(data[i][1], data[i][5]), boost::math::tools::min_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::gamma_p_inva(data[i][1], data[i][5]), boost::math::tools::min_value<value_type>());
       else
       {
          // not enough bits in our input to get back to x, but we should be in
          // the same ball park:
-         value_type inv = boost::math::gamma_P_inva(data[i][1], data[i][5]);
+         value_type inv = boost::math::gamma_p_inva(data[i][1], data[i][5]);
          BOOST_CHECK_CLOSE(data[i][0], inv, 100);
       }
 
       if(data[i][3] == 0)
-         BOOST_CHECK_EQUAL(boost::math::gamma_Q_inva(data[i][1], data[i][3]), boost::math::tools::min_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::gamma_q_inva(data[i][1], data[i][3]), boost::math::tools::min_value<value_type>());
       else if((1 - data[i][3] > 0.001) && (fabs(data[i][3]) >= boost::math::tools::min_value<value_type>()))
       {
-         value_type inv = boost::math::gamma_Q_inva(data[i][1], data[i][3]);
+         value_type inv = boost::math::gamma_q_inva(data[i][1], data[i][3]);
          BOOST_CHECK_CLOSE(data[i][0], inv, precision);
       }
       else if(1 == data[i][3])
-         BOOST_CHECK_EQUAL(boost::math::gamma_Q_inva(data[i][1], data[i][3]), boost::math::tools::max_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::gamma_q_inva(data[i][1], data[i][3]), boost::math::tools::max_value<value_type>());
       else
       {
          // not enough bits in our input to get back to x, but we should be in
          // the same ball park:
-         value_type inv = boost::math::gamma_Q_inva(data[i][1], data[i][3]);
+         value_type inv = boost::math::gamma_q_inva(data[i][1], data[i][3]);
          BOOST_CHECK_CLOSE(data[i][0], inv, 100);
       }
    }
@@ -184,7 +184,7 @@ void do_test_gamma_inva(const T& data, const char* type_name, const char* test_n
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
-   pg funcp = boost::math::gamma_P_inva;
+   pg funcp = boost::math::gamma_p_inva;
 
    using namespace boost::lambda;
 
@@ -194,22 +194,22 @@ void do_test_gamma_inva(const T& data, const char* type_name, const char* test_n
       << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 
    //
-   // test gamma_P_inva(T, T) against data:
+   // test gamma_p_inva(T, T) against data:
    //
    result = boost::math::tools::test(
       data,
       bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
       ret<value_type>(_1[2]));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_P_inva", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_p_inva", test_name);
    //
-   // test gamma_Q_inva(T, T) against data:
+   // test gamma_q_inva(T, T) against data:
    //
-   funcp = boost::math::gamma_Q_inva;
+   funcp = boost::math::gamma_q_inva;
    result = boost::math::tools::test(
       data,
       bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
       ret<value_type>(_1[3]));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_Q_inva", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_q_inva", test_name);
 }
 
 template <class T>
@@ -221,8 +221,8 @@ void test_gamma(T, const char* name)
    // First the data for the incomplete gamma function, each
    // row has the following 6 entries:
    // Parameter a, parameter z,
-   // Expected tgamma(a, z), Expected gamma_Q(a, z)
-   // Expected tgamma_lower(a, z), Expected gamma_P(a, z)
+   // Expected tgamma(a, z), Expected gamma_q(a, z)
+   // Expected tgamma_lower(a, z), Expected gamma_p(a, z)
    //
 #  include "igamma_med_data.ipp"
 

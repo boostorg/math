@@ -23,7 +23,7 @@
 // ~~~~~~~~~~~~
 //
 // This file tests the incomplete gamma functions tgamma,
-// tgamma_lower, gamma_P and gamma_Q. There are two sets of tests, spot
+// tgamma_lower, gamma_p and gamma_q. There are two sets of tests, spot
 // tests which compare our results with selected values computed
 // using the online special function calculator at 
 // functions.wolfram.com, while the bulk of the accuracy tests
@@ -155,21 +155,21 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "boost::math::gamma_Q", 500, 50);  // test function
+      "boost::math::gamma_q", 500, 50);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "Cygwin",                         // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "boost::math::gamma_P", 700, 50);  // test function
+      "boost::math::gamma_p", 700, 50);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "boost::math::gamma_P", 300, 50);  // test function
+      "boost::math::gamma_p", 300, 50);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -251,49 +251,49 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_lower", test_name);
    }
    //
-   // test gamma_Q(T, T) against data:
+   // test gamma_q(T, T) against data:
    //
-   funcp = boost::math::gamma_Q;
+   funcp = boost::math::gamma_q;
    result = boost::math::tools::test(
       data,
       bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
       ret<value_type>(_1[3]));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_Q", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_q", test_name);
 #if defined(TEST_CEPHES) || defined(TEST_GSL)
    //
-   // test other gamma_Q(T, T) against data:
+   // test other gamma_q(T, T) against data:
    //
    if(boost::is_floating_point<value_type>::value)
    {
-      funcp = other::gamma_Q;
+      funcp = other::gamma_q;
       result = boost::math::tools::test(
          data,
          bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
          ret<value_type>(_1[3]));
-      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_Q");
+      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_q");
    }
 #endif
    //
-   // test gamma_P(T, T) against data:
+   // test gamma_p(T, T) against data:
    //
-   funcp = boost::math::gamma_P;
+   funcp = boost::math::gamma_p;
    result = boost::math::tools::test(
       data,
       bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
       ret<value_type>(_1[5]));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_P", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_p", test_name);
 #if defined(TEST_CEPHES) || defined(TEST_GSL)
    //
-   // test other gamma_P(T, T) against data:
+   // test other gamma_p(T, T) against data:
    //
    if(boost::is_floating_point<value_type>::value)
    {
-      funcp = other::gamma_P;
+      funcp = other::gamma_p;
       result = boost::math::tools::test(
          data,
          bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
          ret<value_type>(_1[5]));
-      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_P");
+      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_p");
    }
 #endif
    std::cout << std::endl;
@@ -308,8 +308,8 @@ void test_gamma(T, const char* name)
    // First the data for the incomplete gamma function, each
    // row has the following 6 entries:
    // Parameter a, parameter z,
-   // Expected tgamma(a, z), Expected gamma_Q(a, z)
-   // Expected tgamma_lower(a, z), Expected gamma_P(a, z)
+   // Expected tgamma(a, z), Expected gamma_q(a, z)
+   // Expected tgamma_lower(a, z), Expected gamma_p(a, z)
    //
 #  include "igamma_med_data.ipp"
 
@@ -349,24 +349,24 @@ void test_spots(T)
    BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(23.297935486152934255853612803371645363280834673767L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(23.999999999999999999999999999999999996126566719125L), tolerance);
 
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(0.99634015317265628765454354418728984933240514654437L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(0.44049328506521241144258166566332823526854162116334L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(0.029252688076961072672766133192848109863298555259690L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(1.6139305336977304790405739225035685228527400976549e-37L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(1.5), static_cast<T>(2)), static_cast<T>(0.26146412994911062220282207597592120190281060919079L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q(static_cast<T>(20.5), static_cast<T>(22)), static_cast<T>(0.34575332043467326814971590879658406632570278929072L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(0.99634015317265628765454354418728984933240514654437L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(0.44049328506521241144258166566332823526854162116334L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(0.029252688076961072672766133192848109863298555259690L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(1.6139305336977304790405739225035685228527400976549e-37L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q(static_cast<T>(1.5), static_cast<T>(2)), static_cast<T>(0.26146412994911062220282207597592120190281060919079L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q(static_cast<T>(20.5), static_cast<T>(22)), static_cast<T>(0.34575332043467326814971590879658406632570278929072L), tolerance);
 
-   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(0.0036598468273437123454564558127101506675948534556288L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(0.55950671493478758855741833433667176473145837883666L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(0.97074731192303892732723386680715189013670144474031L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(0.9999999999999999999999999999999999998386069466302L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(1.5), static_cast<T>(2)), static_cast<T>(0.73853587005088937779717792402407879809718939080921L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_P(static_cast<T>(20.5), static_cast<T>(22)), static_cast<T>(0.65424667956532673185028409120341593367429721070928L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_p(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(0.0036598468273437123454564558127101506675948534556288L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_p(static_cast<T>(5), static_cast<T>(5)), static_cast<T>(0.55950671493478758855741833433667176473145837883666L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_p(static_cast<T>(5), static_cast<T>(10)), static_cast<T>(0.97074731192303892732723386680715189013670144474031L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_p(static_cast<T>(5), static_cast<T>(100)), static_cast<T>(0.9999999999999999999999999999999999998386069466302L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_p(static_cast<T>(1.5), static_cast<T>(2)), static_cast<T>(0.73853587005088937779717792402407879809718939080921L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_p(static_cast<T>(20.5), static_cast<T>(22)), static_cast<T>(0.65424667956532673185028409120341593367429721070928L), tolerance);
 
    // naive check on derivative function:
    using namespace std;  // For ADL of std functions
    tolerance = boost::math::tools::epsilon<T>() * 5000; // 50 eps
-   BOOST_CHECK_CLOSE(::boost::math::gamma_P_derivative(static_cast<T>(20.5), static_cast<T>(22)), 
+   BOOST_CHECK_CLOSE(::boost::math::gamma_p_derivative(static_cast<T>(20.5), static_cast<T>(22)), 
       exp(static_cast<T>(-22)) * pow(static_cast<T>(22), static_cast<T>(19.5)) / boost::math::tgamma(static_cast<T>(20.5)), tolerance);
 
 }

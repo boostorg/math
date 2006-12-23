@@ -24,7 +24,7 @@ struct gamma_inva_t
    gamma_inva_t(T z_, T p_, bool invert_) : z(z_), p(p_), invert(invert_) {}
    T operator()(T a)
    {
-      return invert ? p - boost::math::gamma_Q(a, z) : boost::math::gamma_P(a, z) - p;
+      return invert ? p - boost::math::gamma_q(a, z) : boost::math::gamma_p(a, z) - p;
    }
 private:
    T z, p;
@@ -88,13 +88,13 @@ T gamma_inva_imp(const T& z, const T& p, const T& q)
 } // namespace detail
 
 template <class T>
-inline T gamma_P_inva(T x, T p)
+inline T gamma_p_inva(T x, T p)
 {
    return detail::gamma_inva_imp(x, p, 1 - p);
 }
 
 template <class T>
-inline T gamma_Q_inva(T x, T q)
+inline T gamma_q_inva(T x, T q)
 {
    return detail::gamma_inva_imp(x, 1 - q, q);
 }

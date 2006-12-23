@@ -130,7 +130,7 @@ RealType pdf(const gamma_distribution<RealType>& dist, const RealType& x)
    {
       return 0;
    }
-   result = gamma_P_derivative(shape, x / scale) / scale;
+   result = gamma_p_derivative(shape, x / scale) / scale;
    return result;
 } // pdf
 
@@ -148,7 +148,7 @@ inline RealType cdf(const gamma_distribution<RealType>& dist, const RealType& x)
    if(false == detail::check_gamma_x(BOOST_CURRENT_FUNCTION, x, &result))
       return result;
 
-   result = boost::math::gamma_P(shape, x / scale);
+   result = boost::math::gamma_p(shape, x / scale);
    return result;
 } // cdf
 
@@ -169,7 +169,7 @@ RealType quantile(const gamma_distribution<RealType>& dist, const RealType& p)
    if(p == 1)
       return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
 
-   result = gamma_P_inv(shape, p) * scale;
+   result = gamma_p_inv(shape, p) * scale;
 
    return result;
 }
@@ -188,7 +188,7 @@ RealType cdf(const complemented2_type<gamma_distribution<RealType>, RealType>& c
    if(false == detail::check_gamma_x(BOOST_CURRENT_FUNCTION, c.param, &result))
       return result;
 
-   result = gamma_Q(shape, c.param / scale);
+   result = gamma_q(shape, c.param / scale);
 
    return result;
 }
@@ -211,7 +211,7 @@ RealType quantile(const complemented2_type<gamma_distribution<RealType>, RealTyp
    if(q == 0)
       return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
 
-   result = gamma_Q_inv(shape, q) * scale;
+   result = gamma_q_inv(shape, q) * scale;
 
    return result;
 }

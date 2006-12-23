@@ -101,7 +101,7 @@ RealType pdf(const chi_squared_distribution<RealType>& dist, const RealType& chi
       }
    }
 
-   return gamma_P_derivative(degrees_of_freedom / 2, chi_square / 2) / 2;
+   return gamma_p_derivative(degrees_of_freedom / 2, chi_square / 2) / 2;
 } // pdf
 
 template <class RealType>
@@ -120,7 +120,7 @@ RealType cdf(const chi_squared_distribution<RealType>& dist, const RealType& chi
          BOOST_CURRENT_FUNCTION, "Chi Square parameter was %1%, but must be > 0 !", chi_square);
    }
 
-   return boost::math::gamma_P(degrees_of_freedom / 2, chi_square / 2);
+   return boost::math::gamma_p(degrees_of_freedom / 2, chi_square / 2);
 } // cdf
 
 template <class RealType>
@@ -135,7 +135,7 @@ RealType quantile(const chi_squared_distribution<RealType>& dist, const RealType
             BOOST_CURRENT_FUNCTION, p, &error_result))
       return error_result;
 
-   return 2 * boost::math::gamma_P_inv(degrees_of_freedom / 2, p);
+   return 2 * boost::math::gamma_p_inv(degrees_of_freedom / 2, p);
 } // quantile
 
 template <class RealType>
@@ -155,7 +155,7 @@ RealType cdf(const complemented2_type<chi_squared_distribution<RealType>, RealTy
          BOOST_CURRENT_FUNCTION, "Chi Square parameter was %1%, but must be > 0 !", chi_square);
    }
 
-   return boost::math::gamma_Q(degrees_of_freedom / 2, chi_square / 2);
+   return boost::math::gamma_q(degrees_of_freedom / 2, chi_square / 2);
 }
 
 template <class RealType>
@@ -171,7 +171,7 @@ RealType quantile(const complemented2_type<chi_squared_distribution<RealType>, R
             BOOST_CURRENT_FUNCTION, q, &error_result))
       return error_result;
 
-   return 2 * boost::math::gamma_Q_inv(degrees_of_freedom / 2, q);
+   return 2 * boost::math::gamma_q_inv(degrees_of_freedom / 2, q);
 }
 
 template <class RealType>

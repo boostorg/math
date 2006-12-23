@@ -23,7 +23,7 @@
 // ~~~~~~~~~~~~
 //
 // This file tests the incomplete gamma function inverses 
-// gamma_P_inv and gamma_Q_inv. There are three sets of tests:
+// gamma_p_inv and gamma_q_inv. There are three sets of tests:
 // 1) Spot tests which compare our results with selected values 
 // computed using the online special function calculator at 
 // functions.wolfram.com, 
@@ -134,14 +134,14 @@ void expected_results()
       "[^|]*",                          // platform
       "float|double",                   // test type(s)
       "[^|]*small[^|]*",                    // test data group
-      "boost::math::gamma_P_inv", 500, 60);   // test function
+      "boost::math::gamma_p_inv", 500, 60);   // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
       "float|double",                   // test type(s)
       "[^|]*",                          // test data group
-      "boost::math::gamma_Q_inv", 350, 60);   // test function
+      "boost::math::gamma_q_inv", 350, 60);   // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -183,7 +183,7 @@ template <class T>
 void do_test_gamma_2(const T& data, const char* type_name, const char* test_name)
 {
    //
-   // test gamma_P_inv(T, T) against data:
+   // test gamma_p_inv(T, T) against data:
    //
    using namespace std;
    typedef typename T::value_type row_type;
@@ -215,36 +215,36 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       // to be able to get back to the original value.
       //
       if(data[i][5] == 0)
-         BOOST_CHECK_EQUAL(boost::math::gamma_P_inv(data[i][0], data[i][5]), value_type(0));
+         BOOST_CHECK_EQUAL(boost::math::gamma_p_inv(data[i][0], data[i][5]), value_type(0));
       else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()))
       {
-         value_type inv = boost::math::gamma_P_inv(data[i][0], data[i][5]);
+         value_type inv = boost::math::gamma_p_inv(data[i][0], data[i][5]);
          BOOST_CHECK_CLOSE(data[i][1], inv, precision);
       }
       else if(1 == data[i][5])
-         BOOST_CHECK_EQUAL(boost::math::gamma_P_inv(data[i][0], data[i][5]), boost::math::tools::max_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::gamma_p_inv(data[i][0], data[i][5]), boost::math::tools::max_value<value_type>());
       else
       {
          // not enough bits in our input to get back to x, but we should be in
          // the same ball park:
-         value_type inv = boost::math::gamma_P_inv(data[i][0], data[i][5]);
+         value_type inv = boost::math::gamma_p_inv(data[i][0], data[i][5]);
          BOOST_CHECK_CLOSE(data[i][1], inv, 100000);
       }
 
       if(data[i][3] == 0)
-         BOOST_CHECK_EQUAL(boost::math::gamma_Q_inv(data[i][0], data[i][3]), boost::math::tools::max_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::gamma_q_inv(data[i][0], data[i][3]), boost::math::tools::max_value<value_type>());
       else if((1 - data[i][3] > 0.001) && (fabs(data[i][3]) >= boost::math::tools::min_value<value_type>()))
       {
-         value_type inv = boost::math::gamma_Q_inv(data[i][0], data[i][3]);
+         value_type inv = boost::math::gamma_q_inv(data[i][0], data[i][3]);
          BOOST_CHECK_CLOSE(data[i][1], inv, precision);
       }
       else if(1 == data[i][3])
-         BOOST_CHECK_EQUAL(boost::math::gamma_Q_inv(data[i][0], data[i][3]), value_type(0));
+         BOOST_CHECK_EQUAL(boost::math::gamma_q_inv(data[i][0], data[i][3]), value_type(0));
       else
       {
          // not enough bits in our input to get back to x, but we should be in
          // the same ball park:
-         value_type inv = boost::math::gamma_Q_inv(data[i][0], data[i][3]);
+         value_type inv = boost::math::gamma_q_inv(data[i][0], data[i][3]);
          BOOST_CHECK_CLOSE(data[i][1], inv, 100);
       }
    }
@@ -258,7 +258,7 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
-   pg funcp = boost::math::gamma_P_inv;
+   pg funcp = boost::math::gamma_p_inv;
 
    using namespace boost::lambda;
 
@@ -268,22 +268,22 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
       << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 
    //
-   // test gamma_P_inv(T, T) against data:
+   // test gamma_p_inv(T, T) against data:
    //
    result = boost::math::tools::test(
       data,
       bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
       ret<value_type>(_1[2]));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_P_inv", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_p_inv", test_name);
    //
-   // test gamma_Q_inv(T, T) against data:
+   // test gamma_q_inv(T, T) against data:
    //
-   funcp = boost::math::gamma_Q_inv;
+   funcp = boost::math::gamma_q_inv;
    result = boost::math::tools::test(
       data,
       bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
       ret<value_type>(_1[3]));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_Q_inv", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_q_inv", test_name);
 }
 
 template <class T>
@@ -295,8 +295,8 @@ void test_gamma(T, const char* name)
    // First the data for the incomplete gamma function, each
    // row has the following 6 entries:
    // Parameter a, parameter z,
-   // Expected tgamma(a, z), Expected gamma_Q(a, z)
-   // Expected tgamma_lower(a, z), Expected gamma_P(a, z)
+   // Expected tgamma(a, z), Expected gamma_q(a, z)
+   // Expected tgamma_lower(a, z), Expected gamma_p(a, z)
    //
 #  include "igamma_med_data.ipp"
 
@@ -333,28 +333,28 @@ void test_spots(T, const char* type_name)
    T tolerance = boost::math::tools::epsilon<T>() * 10000;
    if(tolerance < 1e-25f)
       tolerance = 1e-25f;  // limit of test data?
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1)/100, static_cast<T>(1.0/128)), static_cast<T>(0.35767144525455121503672919307647515332256996883787L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1)/100, static_cast<T>(0.5)), static_cast<T>(4.4655350189103486773248562646452806745879516124613e-31L), tolerance*10);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(1)/100, static_cast<T>(1.0/128)), static_cast<T>(0.35767144525455121503672919307647515332256996883787L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(1)/100, static_cast<T>(0.5)), static_cast<T>(4.4655350189103486773248562646452806745879516124613e-31L), tolerance*10);
    //
    // We can't test in this region against Mathworld's data as the results produced
    // by functions.wolfram.com appear to be in error, and do *not* round trip with
-   // their own version of gamma_Q.  Using our output from the inverse as input to 
-   // their version of gamma_Q *does* round trip however.  It should be pointed out
+   // their own version of gamma_q.  Using our output from the inverse as input to 
+   // their version of gamma_q *does* round trip however.  It should be pointed out
    // that the functions in this area are very sensitive with nearly infinite
    // first derivatives, it's also questionable how useful these functions are
    // in this part of the domain.
    //
-   //BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(1e-2), static_cast<T>(1.0-1.0/128)), static_cast<T>(3.8106736649978161389878528903698068142257930575497e-181L), tolerance);
+   //BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(1e-2), static_cast<T>(1.0-1.0/128)), static_cast<T>(3.8106736649978161389878528903698068142257930575497e-181L), tolerance);
    //
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(0.5), static_cast<T>(1.0/128)), static_cast<T>(3.5379794687984498627918583429482809311448951189097L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(0.5), static_cast<T>(1.0/2)), static_cast<T>(0.22746821155978637597125832348982469815821055329511L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(0.5), static_cast<T>(1.0-1.0/128)), static_cast<T>(0.000047938431649305382237483273209405461203600840052182L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(10), static_cast<T>(1.0/128)), static_cast<T>(19.221865946801723949866005318845155649972164294057L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(10), static_cast<T>(1.0/2)), static_cast<T>(9.6687146147141311517500637401166726067778162022664L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(10), static_cast<T>(1.0-1.0/128)), static_cast<T>(3.9754602513640844712089002210120603689809432130520L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(10000), static_cast<T>(1.0/128)), static_cast<T>(10243.369973939134157953734588122880006091919872879L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(10000), static_cast<T>(1.0/2)), static_cast<T>(9999.6666686420474237369661574633153551436435884101L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::gamma_Q_inv(static_cast<T>(10000), static_cast<T>(1.0-1.0/128)), static_cast<T>(9759.8597223369324083191194574874497413261589080204L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(0.5), static_cast<T>(1.0/128)), static_cast<T>(3.5379794687984498627918583429482809311448951189097L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(0.5), static_cast<T>(1.0/2)), static_cast<T>(0.22746821155978637597125832348982469815821055329511L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(0.5), static_cast<T>(1.0-1.0/128)), static_cast<T>(0.000047938431649305382237483273209405461203600840052182L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(10), static_cast<T>(1.0/128)), static_cast<T>(19.221865946801723949866005318845155649972164294057L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(10), static_cast<T>(1.0/2)), static_cast<T>(9.6687146147141311517500637401166726067778162022664L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(10), static_cast<T>(1.0-1.0/128)), static_cast<T>(3.9754602513640844712089002210120603689809432130520L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(10000), static_cast<T>(1.0/128)), static_cast<T>(10243.369973939134157953734588122880006091919872879L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(10000), static_cast<T>(1.0/2)), static_cast<T>(9999.6666686420474237369661574633153551436435884101L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(10000), static_cast<T>(1.0-1.0/128)), static_cast<T>(9759.8597223369324083191194574874497413261589080204L), tolerance);
 }
 
 int test_main(int, char* [])

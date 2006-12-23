@@ -77,8 +77,8 @@ struct igamma_data_generator
       //NTL::RR g = boost::math::tgamma(a);
       NTL::RR lg = boost::math::tgamma_lower(a, z);
       NTL::RR ug = boost::math::tgamma(a, z);
-      NTL::RR rlg = boost::math::gamma_P(a, z);
-      NTL::RR rug = boost::math::gamma_Q(a, z);
+      NTL::RR rlg = boost::math::gamma_p(a, z);
+      NTL::RR rug = boost::math::gamma_q(a, z);
 
       return std::tr1::make_tuple(z, ug, rug, lg, rlg);
    }
@@ -88,8 +88,8 @@ struct gamma_inverse_generator
 {
    std::tr1::tuple<NTL::RR, NTL::RR> operator()(const NTL::RR a, const NTL::RR p)
    {
-      NTL::RR x1 = boost::math::gamma_P_inv(a, p);
-      NTL::RR x2 = boost::math::gamma_Q_inv(a, p);
+      NTL::RR x1 = boost::math::gamma_p_inv(a, p);
+      NTL::RR x2 = boost::math::gamma_q_inv(a, p);
       std::cout << "Inverse for " << a << " " << p << std::endl;
       return std::tr1::make_tuple(x1, x2);
    }
@@ -99,8 +99,8 @@ struct gamma_inverse_generator_a
 {
    std::tr1::tuple<NTL::RR, NTL::RR> operator()(const NTL::RR x, const NTL::RR p)
    {
-      NTL::RR x1 = boost::math::gamma_P_inva(x, p);
-      NTL::RR x2 = boost::math::gamma_Q_inva(x, p);
+      NTL::RR x1 = boost::math::gamma_p_inva(x, p);
+      NTL::RR x2 = boost::math::gamma_q_inva(x, p);
       std::cout << "Inverse for " << x << " " << p << std::endl;
       return std::tr1::make_tuple(x1, x2);
    }
@@ -122,7 +122,7 @@ int test_main(int argc, char*argv [])
    {
       std::cout << "Welcome.\n"
          "This program will generate spot tests for the inverse incomplete gamma function:\n"
-         "  gamma_P_inv(a, p) and gamma_Q_inv(a, q)\n\n";
+         "  gamma_p_inv(a, p) and gamma_q_inv(a, q)\n\n";
       do{
          get_user_parameter_info(arg1, "a");
          get_user_parameter_info(arg2, "p");
@@ -138,7 +138,7 @@ int test_main(int argc, char*argv [])
    {
       std::cout << "Welcome.\n"
          "This program will generate spot tests for the inverse incomplete gamma function:\n"
-         "  gamma_P_inva(a, p) and gamma_Q_inva(a, q)\n\n";
+         "  gamma_p_inva(a, p) and gamma_q_inva(a, q)\n\n";
       do{
          get_user_parameter_info(arg1, "x");
          get_user_parameter_info(arg2, "p");

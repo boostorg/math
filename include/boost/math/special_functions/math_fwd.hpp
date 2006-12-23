@@ -140,14 +140,14 @@ namespace boost
    template <class RT>
    RT tgamma_lower(RT a, RT z);
    template <class RT>
-   RT gamma_Q(RT a, RT z);
+   RT gamma_q(RT a, RT z);
    template <class RT>
-   RT gamma_P(RT a, RT z);
+   RT gamma_p(RT a, RT z);
    // gamma inverse.
    template <class RT>
-   RT gamma_P_inv(RT a, RT p);
+   RT gamma_p_inv(RT a, RT p);
    template <class RT>
-   RT gamma_Q_inv(RT a, RT q);
+   RT gamma_q_inv(RT a, RT q);
 
    // Hypotenuse function sqrt(x ^ 2 + y ^ 2).
    template <class T>

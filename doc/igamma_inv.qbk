@@ -11,16 +11,16 @@
    namespace boost{ namespace math{
    
    template <class T>
-   T gamma_Q_inv(T a, T q);
+   T gamma_q_inv(T a, T q);
    
    template <class T>
-   T gamma_P_inv(T a, T p);
+   T gamma_p_inv(T a, T p);
    
    template <class T>
-   T gamma_Q_inva(T x, T q);
+   T gamma_q_inva(T x, T q);
    
    template <class T>
-   T gamma_P_inva(T x, T p);
+   T gamma_p_inva(T x, T p);
    
    }} // namespaces
    
@@ -33,39 +33,39 @@ or else compute /a/ given /x/ and either /p/ or /q/.
 
 [tip When people normally talk about the inverse of the incomplete
 gamma function, they are talking about inverting on parameter /x/.
-These are implemented here as gamma_P_inv and gamma_Q_inv, and are by
+These are implemented here as gamma_p_inv and gamma_q_inv, and are by
 far the most efficient of the inverses presented here.
 \n\nThe inverse on the /a/ parameter finds use in some statistical
 applications but has to be computed by rather brute force numerical
 techniques and is consequently several times slower.
-These are implemented here as gamma_P_inva and gamma_Q_inva.]
+These are implemented here as gamma_p_inva and gamma_q_inva.]
 
 
    template <class T>
-   T gamma_Q_inv(T a, T q);
+   T gamma_q_inv(T a, T q);
 
-Returns a value x such that: `q = gamma_Q(a, x);`
+Returns a value x such that: `q = gamma_q(a, x);`
 
 Requires: /a > 0/ and /1 >= p,q >= 0/.
 
    template <class T>
-   T gamma_P_inv(T a, T p);
+   T gamma_p_inv(T a, T p);
    
-Returns a value x such that: `p = gamma_P(a, x);`
+Returns a value x such that: `p = gamma_p(a, x);`
 
 Requires: /a > 0/ and /1 >= p,q >= 0/.
 
    template <class T>
-   T gamma_Q_inva(T x, T q);
+   T gamma_q_inva(T x, T q);
 
-Returns a value a such that: `q = gamma_Q(a, x);`
+Returns a value a such that: `q = gamma_q(a, x);`
 
 Requires: /x > 0/ and /1 >= p,q >= 0/.
 
    template <class T>
-   T gamma_P_inva(T x, T p);
+   T gamma_p_inva(T x, T p);
    
-Returns a value a such that: `p = gamma_P(a, x);`
+Returns a value a such that: `p = gamma_p(a, x);`
 
 Requires: /x > 0/ and /1 >= p,q >= 0/.
 
@@ -76,7 +76,7 @@ the type T.  Given that these functions are computed by iterative methods,
 they are deliberately "detuned" so as not to be too accurate: it is in
 any case impossible for these function to be more accurate than the
 regular forward incomplete gamma functions.  In practice, the accuracy
-of these functions is very similar to that of __gamma_P and __gamma_Q
+of these functions is very similar to that of __gamma_p and __gamma_q
 functions.
 
 [h4 Testing]
@@ -96,7 +96,7 @@ the accuracy of the result, given exact input values.
 
 [h4 Implementation]
 
-The functions gamma_P_inv and [@http://functions.wolfram.com/GammaBetaErf/InverseGammaRegularized/ gamma_Q_inv]
+The functions gamma_p_inv and [@http://functions.wolfram.com/GammaBetaErf/InverseGammaRegularized/ gamma_q_inv]
 share a common implementation.
 
 First an initial approximation is computed using the methodology described
@@ -113,14 +113,14 @@ incomplete gamma functions.  In testing, no more than 3 iterations are required
 to produce a result as accurate as the forward incomplete gamma function, and
 in many cases only one iteration is required.
 
-The functions gamma_P_inva and gamma_Q_inva also share a common implementation
-but are handled separately from gamma_P_inv and gamma_Q_inv.
+The functions gamma_p_inva and gamma_q_inva also share a common implementation
+but are handled separately from gamma_p_inv and gamma_q_inv.
 
 An initial approximation for /a/ is computed very crudely so that
-/gamma_P(a, x) ~ 0.5/, this value is then used as a starting point
+/gamma_p(a, x) ~ 0.5/, this value is then used as a starting point
 for a generic derivative-free root finding algorithm.  As a consequence,
 these two functions are rather more expensive to compute than the 
-gamma_P_inv or gamma_Q_inv functions.  Even so, the root is usually found
+gamma_p_inv or gamma_q_inv functions.  Even so, the root is usually found
 in fewer than 10 iterations.
 
 [endsect][/section The Incomplete Gamma Function Inverses]

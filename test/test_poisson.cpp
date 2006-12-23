@@ -75,7 +75,7 @@ void test_spots(RealType)
 	// Best source of accurate values is:
 	// Mathworld online calculator (40 decimal digits precision, suitable for up to 128-bit significands)
 	// http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=GammaRegularized
-	// GammaRegularized is same as gamma incomplete, gamma or gamma_Q(a, x) or Q(a, z).
+	// GammaRegularized is same as gamma incomplete, gamma or gamma_q(a, x) or Q(a, z).
 
   // http://documents.wolfram.com/calculationcenter/v2/Functions/ListsMatrices/Statistics/PoissonDistribution.html
 
@@ -470,7 +470,7 @@ int test_main(int, char* [])
 
 
 #if 0
-  // Compare cdf from finite sum of pdf and gamma_Q.
+  // Compare cdf from finite sum of pdf and gamma_q.
   using boost::math::cdf;
   using boost::math::pdf;
 
@@ -492,8 +492,8 @@ int test_main(int, char* [])
    cout << p << ' ' << sum << ' ' 
    << cdf(poisson_distribution<double>(mean), static_cast<double>(i)) << ' ';
      {
-       cout << boost::math::gamma_Q<double>(i+1, mean); // cdf
-       double diff = boost::math::gamma_Q<double>(i+1, mean) - sum; // cdf -sum
+       cout << boost::math::gamma_q<double>(i+1, mean); // cdf
+       double diff = boost::math::gamma_q<double>(i+1, mean) - sum; // cdf -sum
        cout << setprecision (2) << ' ' << diff; // 0 0 to 4, 1 eps 5 to 9, 10 to 20 2 eps, 21 upwards 3 eps
       
      }

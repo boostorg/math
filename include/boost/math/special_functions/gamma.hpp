@@ -1205,7 +1205,7 @@ T tgamma_small_upper_part(T a, T x, const L& l)
 // Upper gamma fraction for integer a:
 //
 template <class T>
-T finite_gamma_Q(T a, T x)
+T finite_gamma_q(T a, T x)
 {
    //
    // Calculates normalised Q when a is an integer:
@@ -1228,7 +1228,7 @@ T finite_gamma_Q(T a, T x)
 // Upper gamma fraction for half integer a:
 //
 template <class T>
-T finite_half_gamma_Q(T a, T x)
+T finite_half_gamma_q(T a, T x)
 {
    //
    // Calculates normalised Q when a is a half-integer:
@@ -1275,7 +1275,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
    {
       // calculate Q via finite sum:
       invert = !invert;
-      result = finite_gamma_Q(a, x);
+      result = finite_gamma_q(a, x);
       if(normalised == false)
          result *= gamma_imp(a, l);
    }
@@ -1283,7 +1283,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
    {
       // calculate Q via finite sum for half integer a:
       invert = !invert;
-      result = finite_half_gamma_Q(a, x);
+      result = finite_half_gamma_q(a, x);
       if(normalised == false)
          result *= gamma_imp(a, l);
    }
@@ -1542,7 +1542,7 @@ T tgamma_delta_ratio_imp(T z, T delta, const L& l)
 }
 
 template <class T, class L>
-T gamma_P_derivative_imp(T a, T x, const L& l)
+T gamma_p_derivative_imp(T a, T x, const L& l)
 {
    //
    // Usual error checks first:
@@ -1650,7 +1650,7 @@ inline T tgamma_lower(T a, T z)
 // Regularised upper incomplete gamma:
 //
 template <class T>
-inline T gamma_Q(T a, T z)
+inline T gamma_q(T a, T z)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
@@ -1664,7 +1664,7 @@ inline T gamma_Q(T a, T z)
 // Regularised lower incomplete gamma:
 //
 template <class T>
-inline T gamma_P(T a, T z)
+inline T gamma_p(T a, T z)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
@@ -1694,12 +1694,12 @@ inline T tgamma_ratio(T a, T b)
 }
 
 template <class T>
-T gamma_P_derivative(T a, T x)
+T gamma_p_derivative(T a, T x)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
    typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::gamma_P_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(x), evaluation_type()), BOOST_CURRENT_FUNCTION);
+   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::gamma_p_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(x), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 } // namespace math

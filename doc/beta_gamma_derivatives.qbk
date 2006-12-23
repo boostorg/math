@@ -11,7 +11,7 @@
    namespace boost{ namespace math{ 
    
    template <class T>
-   T gamma_P_derivative(T a, T x);
+   T gamma_p_derivative(T a, T x);
    
    template <class T>
    T ibeta_derivative(T a, T b, T x);

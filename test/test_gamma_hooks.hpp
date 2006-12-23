@@ -46,11 +46,11 @@ inline long double lgamma(long double x)
    return lgaml(x); 
 #endif
 }
-inline float gamma_Q(float x, float y)
+inline float gamma_q(float x, float y)
 { return igamcf(x, y); }
-inline double gamma_Q(double x, double y)
+inline double gamma_q(double x, double y)
 { return igamc(x, y); }
-inline long double gamma_Q(long double x, long double y)
+inline long double gamma_q(long double x, long double y)
 {
 #ifdef BOOST_MSVC
    return igamc((double)x, (double)y); 
@@ -58,11 +58,11 @@ inline long double gamma_Q(long double x, long double y)
    return igamcl(x, y); 
 #endif
 }
-inline float gamma_P(float x, float y)
+inline float gamma_p(float x, float y)
 { return igamf(x, y); }
-inline double gamma_P(double x, double y)
+inline double gamma_p(double x, double y)
 { return igam(x, y); }
-inline long double gamma_P(long double x, long double y)
+inline long double gamma_p(long double x, long double y)
 {
 #ifdef BOOST_MSVC
    return igam((double)x, (double)y); 
@@ -147,17 +147,17 @@ long double lgamma(long double z)
 {
    return gsl_sf_lngamma(z);
 }
-inline float gamma_Q(float x, float y)
+inline float gamma_q(float x, float y)
 { return (float)gsl_sf_gamma_inc_Q(x, y); }
-inline double gamma_Q(double x, double y)
+inline double gamma_q(double x, double y)
 { return gsl_sf_gamma_inc_Q(x, y); }
-inline long double gamma_Q(long double x, long double y)
+inline long double gamma_q(long double x, long double y)
 { return gsl_sf_gamma_inc_Q(x, y); }
-inline float gamma_P(float x, float y)
+inline float gamma_p(float x, float y)
 { return (float)gsl_sf_gamma_inc_P(x, y); }
-inline double gamma_P(double x, double y)
+inline double gamma_p(double x, double y)
 { return gsl_sf_gamma_inc_P(x, y); }
-inline long double gamma_P(long double x, long double y)
+inline long double gamma_p(long double x, long double y)
 { return gsl_sf_gamma_inc_P(x, y); }
 }
 #endif
@@ -166,8 +166,8 @@ inline long double gamma_P(long double x, long double y)
 namespace other{
    boost::math::concepts::real_concept tgamma(boost::math::concepts::real_concept){ return 0; }
    boost::math::concepts::real_concept lgamma(boost::math::concepts::real_concept){ return 0; }
-   boost::math::concepts::real_concept gamma_Q(boost::math::concepts::real_concept, boost::math::concepts::real_concept){ return 0; }
-   boost::math::concepts::real_concept gamma_P(boost::math::concepts::real_concept, boost::math::concepts::real_concept){ return 0; }
+   boost::math::concepts::real_concept gamma_q(boost::math::concepts::real_concept, boost::math::concepts::real_concept){ return 0; }
+   boost::math::concepts::real_concept gamma_p(boost::math::concepts::real_concept, boost::math::concepts::real_concept){ return 0; }
 }
 #endif
 

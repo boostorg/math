@@ -17,8 +17,8 @@ using namespace boost::math;
 
 //
 // This program calculates the coefficients of the polynomials
-// used for the regularized incomplete gamma functions gamma_P
-// and gamma_Q when parameter a is large, and sigma is small
+// used for the regularized incomplete gamma functions gamma_p
+// and gamma_q when parameter a is large, and sigma is small
 // (where sigma = fabs(1 - x/a) ).
 //
 // See "The Asymptotic Expansion of the Incomplete Gamma Functions"

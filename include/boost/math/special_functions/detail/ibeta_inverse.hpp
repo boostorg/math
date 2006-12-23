@@ -316,9 +316,9 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
    //
    T eta0;
    if(p < q)
-      eta0 = boost::math::gamma_Q_inv(b, p);
+      eta0 = boost::math::gamma_q_inv(b, p);
    else
-      eta0 = boost::math::gamma_P_inv(b, q);
+      eta0 = boost::math::gamma_p_inv(b, q);
    eta0 /= a;
    //
    // Define the variables and powers we'll need later on:

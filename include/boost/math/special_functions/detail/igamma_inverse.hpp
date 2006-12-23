@@ -265,9 +265,9 @@ T estimate_inverse_gamma(T a, T p, T q)
 }
 
 template <class T>
-struct gamma_P_inverse_func
+struct gamma_p_inverse_func
 {
-   gamma_P_inverse_func(T a_, T p_, bool inv) : a(a_), p(p_), invert(inv)
+   gamma_p_inverse_func(T a_, T p_, bool inv) : a(a_), p(p_), invert(inv)
    {
       //
       // If p is too near 1 then P(x) - p suffers from cancellation
@@ -297,7 +297,7 @@ struct gamma_P_inverse_func
 
       using namespace std;  // For ADL of std functions.
 
-      T f = !invert ? boost::math::gamma_P(a, x) : boost::math::gamma_Q(a, x);
+      T f = !invert ? boost::math::gamma_p(a, x) : boost::math::gamma_q(a, x);
       T f1 = static_cast<T>(boost::math::detail::regularised_gamma_prefix(value_type(a), value_type(x), evaluation_type()));
       T f2;
       if((x < 1) && (tools::max_value<T>() * x < fabs(f1)))
@@ -338,7 +338,7 @@ private:
 
 
 template <class T>
-T gamma_P_inv(T a, T p)
+T gamma_p_inv(T a, T p)
 {
    using namespace std;  // ADL of std functions.
 
@@ -361,13 +361,13 @@ T gamma_P_inv(T a, T p)
    // precision to prevent premature termination of the root-finding routine.
    //
    unsigned digits = (tools::digits<T>() * 2) / 3;
-   if((a < 0.125) && (fabs(gamma_P_derivative(a, guess)) > 1 / sqrt(tools::epsilon<T>())))
+   if((a < 0.125) && (fabs(gamma_p_derivative(a, guess)) > 1 / sqrt(tools::epsilon<T>())))
       digits = tools::digits<T>();
    //
    // Go ahead and iterate:
    //
    guess = tools::halley_iterate(
-      detail::gamma_P_inverse_func<T>(a, p, false),
+      detail::gamma_p_inverse_func<T>(a, p, false),
       guess,
       lower,
       tools::max_value<T>(),
@@ -378,7 +378,7 @@ T gamma_P_inv(T a, T p)
 }
 
 template <class T>
-T gamma_Q_inv(T a, T q)
+T gamma_q_inv(T a, T q)
 {
    using namespace std;  // ADL of std functions.
 
@@ -401,13 +401,13 @@ T gamma_Q_inv(T a, T q)
    // precision to prevent premature termination of the root-finding routine.
    //
    unsigned digits = (tools::digits<T>() * 2) / 3;
-   if((a < 0.125) && (fabs(gamma_P_derivative(a, guess)) > 1 / sqrt(tools::epsilon<T>())))
+   if((a < 0.125) && (fabs(gamma_p_derivative(a, guess)) > 1 / sqrt(tools::epsilon<T>())))
       digits = tools::digits<T>();
    //
    // Go ahead and iterate:
    //
    guess = tools::halley_iterate(
-      detail::gamma_P_inverse_func<T>(a, q, true),
+      detail::gamma_p_inverse_func<T>(a, q, true),
       guess,
       lower,
       tools::max_value<T>(),

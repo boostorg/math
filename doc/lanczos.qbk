@@ -52,7 +52,7 @@ notoriously hard problem, but even so, analytic combinations of Lanczos
 approximations can make the difference between obtaining a valid result, or
 simply garbage.  Refer to the implementation notes for the __beta function for
 an example of this method in practice.  The incomplete 
-[link math_toolkit.special.igamma gamma_P gamma] and 
+[link math_toolkit.special.igamma gamma_p gamma] and 
 [link math_toolkit.special.ibeta_function beta] functions
 use similar analytic combinations of power terms, to combine gamma and beta
 functions divided by large powers into single (simpler) expressions.

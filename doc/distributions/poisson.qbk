@@ -59,7 +59,7 @@ The domain of the random variable is \[0, [infin]\].
 [h4 Accuracy]
 
 The Poisson distribution is implemented in terms of the 
-incomplete gamma functions __gamma_P and __gamma_Q 
+incomplete gamma functions __gamma_p and __gamma_q 
 and as such should have low error rates: but refer to the documentation
 of those functions for more information.
 The quantile and its complement use the inverse gamma functions
@@ -75,10 +75,10 @@ In the following table [lambda][space] is the mean of the distribution,
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = e[super -[lambda]] [lambda][super k] \/ k! ]]
-[[cdf][Using the relation: p = __Gamma(k+1, [lambda]) \/ k! = __gamma_Q(k+1, [lambda])]]
-[[cdf complement][Using the relation: q = __gamma_P(k+1, [lambda]) ]]
-[[quantile][Using the relation: k = __gamma_Q_inva([lambda], p) - 1]]
-[[quantile from the complement][Using the relation: k = __gamma_P_inva([lambda], q) - 1]]
+[[cdf][Using the relation: p = __Gamma(k+1, [lambda]) \/ k! = __gamma_q(k+1, [lambda])]]
+[[cdf complement][Using the relation: q = __gamma_p(k+1, [lambda]) ]]
+[[quantile][Using the relation: k = __gamma_q_inva([lambda], p) - 1]]
+[[quantile from the complement][Using the relation: k = __gamma_p_inva([lambda], q) - 1]]
 [[mean][[lambda]]]
 [[mode][ floor ([lambda]) or [floorlr[lambda]] ]]
 [[skewness][1/[radic][lambda]]]

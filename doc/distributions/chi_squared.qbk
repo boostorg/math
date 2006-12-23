@@ -122,11 +122,11 @@ In the following table /v/ is the number of degrees of freedom of the distributi
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Using the relation: pdf = __gamma_P_derivative(v / 2, x / 2) / 2 ]]
-[[cdf][Using the relation: p = __gamma_P(v / 2, x / 2) ]]
-[[cdf complement][Using the relation: q = __gamma_Q(v / 2, x / 2) ]]
-[[quantile][Using the relation: x = 2 * __gamma_P_inv(v / 2, p) ]]
-[[quantile from the complement][Using the relation: x = 2 * __gamma_Q_inv(v / 2, p) ]]
+[[pdf][Using the relation: pdf = __gamma_p_derivative(v / 2, x / 2) / 2 ]]
+[[cdf][Using the relation: p = __gamma_p(v / 2, x / 2) ]]
+[[cdf complement][Using the relation: q = __gamma_q(v / 2, x / 2) ]]
+[[quantile][Using the relation: x = 2 * __gamma_p_inv(v / 2, p) ]]
+[[quantile from the complement][Using the relation: x = 2 * __gamma_q_inv(v / 2, p) ]]
 [[mean][v]]
 [[variance][2v]]
 [[mode][v - 2 (if v >= 2)]]

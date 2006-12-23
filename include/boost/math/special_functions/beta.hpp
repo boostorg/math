@@ -707,7 +707,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
    //
    // Now an initial value for J, see 9.6:
    //
-   T j = gamma_Q(b, u) / h;
+   T j = gamma_q(b, u) / h;
    //
    // Now we can start to pull things together and evaluate the sum in Eq 9:
    //

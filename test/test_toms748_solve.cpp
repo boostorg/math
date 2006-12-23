@@ -90,7 +90,7 @@ struct toms748tester
          }
       case 16:
          {
-            return boost::math::gamma_Q(x, a) - b;
+            return boost::math::gamma_q(x, a) - b;
          }
       case 17:
          return boost::math::ibeta(x, a, 0.5) - b;

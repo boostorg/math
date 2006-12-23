@@ -36,7 +36,7 @@
 #ifndef BOOST_MATH_SPECIAL_POISSON_HPP
 #define BOOST_MATH_SPECIAL_POISSON_HPP
 
-#include <boost/math/special_functions/gamma.hpp> // for incomplete gamma. gamma_Q
+#include <boost/math/special_functions/gamma.hpp> // for incomplete gamma. gamma_q
 #include <boost/math/distributions/complement.hpp> // complements
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
@@ -293,7 +293,7 @@ namespace boost
         // == exp(log(e ^ -mean) + log (mean ^ k) - lgamma(k+1))
         // exp( -mean + log(mean) * k - lgamma(k+1))
         return exp(-mean + log(mean) * k - boost::math::lgamma(k+1));
-        // return gamma_P_derivative(k+1, mean); // equivalent & also passes tests.
+        // return gamma_p_derivative(k+1, mean); // equivalent & also passes tests.
       }
     } // pdf
 
@@ -343,9 +343,9 @@ namespace boost
       }
       // For small integral k could use a finite sum -
       // it's cheaper than the gamma function.
-      // BUT this is now done efficiently by gamma_Q function.
-      // Calculate poisson cdf using the gamma_Q function.
-      return gamma_Q(k+1, mean);
+      // BUT this is now done efficiently by gamma_q function.
+      // Calculate poisson cdf using the gamma_q function.
+      return gamma_q(k+1, mean);
     } // binomial cdf
 
     template <class RealType>
@@ -388,14 +388,14 @@ namespace boost
         return 1;
       }
       if (k == 0)
-      { // Avoid repeated checks on k and mean in gamma_P.
+      { // Avoid repeated checks on k and mean in gamma_p.
        return -expm1(-mean);
       }
       // Unlike un-complemented cdf (sum from 0 to k),
       // can't use finite sum from k+1 to infinity for small integral k,
-      // anyway it is now done efficiently by gamma_P.
-      return gamma_P(k + 1, mean); // Calculate Poisson cdf using the gamma_P function.
-      // CCDF = gamma_P(k+1, lambda)
+      // anyway it is now done efficiently by gamma_p.
+      return gamma_p(k + 1, mean); // Calculate Poisson cdf using the gamma_p function.
+      // CCDF = gamma_p(k+1, lambda)
     } // poisson ccdf
 
     template <class RealType>
@@ -427,7 +427,7 @@ namespace boost
 			{ // if p <= cdf for 0 events (== pdf for 0 events), then quantile must be zero.
 				return 0;
 			}
-      return gamma_Q_inva(dist.mean(), p) - 1;
+      return gamma_q_inva(dist.mean(), p) - 1;
    } // quantile
 
     template <class RealType>
@@ -462,7 +462,7 @@ namespace boost
 			{ // if q <= cdf(complement for 0 events, then quantile must be zero.
 				return 0;
 			}
-      return gamma_P_inva(dist.mean(), q) -1;
+      return gamma_p_inva(dist.mean(), q) -1;
    } // quantile complement.
 
   } // namespace math

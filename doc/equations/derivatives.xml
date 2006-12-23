@@ -9,7 +9,7 @@
 <body>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mtext>gamma_P_derivative</mtext>
+    <mtext>gamma_p_derivative</mtext>
     <mfenced>
       <mrow>
         <mi>a</mi>

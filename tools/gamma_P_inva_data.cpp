@@ -39,8 +39,8 @@ struct gamma_inverse_generator_a
 {
    std::tr1::tuple<NTL::RR, NTL::RR> operator()(const NTL::RR x, const NTL::RR p)
    {
-      NTL::RR x1 = boost::math::gamma_P_inva(x, p);
-      NTL::RR x2 = boost::math::gamma_Q_inva(x, p);
+      NTL::RR x1 = boost::math::gamma_p_inva(x, p);
+      NTL::RR x2 = boost::math::gamma_q_inva(x, p);
       std::cout << "Inverse for " << x << " " << p << std::endl;
       return std::tr1::make_tuple(x1, x2);
    }
@@ -60,7 +60,7 @@ int test_main(int argc, char*argv [])
 
    std::cout << "Welcome.\n"
       "This program will generate spot tests for the inverse incomplete gamma function:\n"
-      "  gamma_P_inva(a, p) and gamma_Q_inva(a, q)\n\n";
+      "  gamma_p_inva(a, p) and gamma_q_inva(a, q)\n\n";
 
    arg1 = make_power_param<NTL::RR>(NTL::RR(0), -4, 24);
    arg2 = make_random_param<NTL::RR>(NTL::RR(0), NTL::RR(1), 15);
