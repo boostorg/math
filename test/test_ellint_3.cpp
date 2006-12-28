@@ -1,4 +1,5 @@
 //  Copyright (c) 2006 Xiaogang Zhang
+//  Copyright (c) 2006 John Maddock
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -112,9 +113,9 @@ void do_test_ellint_pi3(T& data, const char* type_name, const char* test)
     result = boost::math::tools::test(
       data, 
       boost::lambda::bind(fp2, 
+         boost::lambda::ret<value_type>(boost::lambda::_1[2]),
          boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[2])),
+         boost::lambda::ret<value_type>(boost::lambda::_1[1])),
       boost::lambda::ret<value_type>(boost::lambda::_1[3]));
    handle_test_result(result, data[result.worst()], result.worst(), 
       type_name, "boost::math::ellint_3", test);
@@ -137,8 +138,8 @@ void do_test_ellint_pi2(T& data, const char* type_name, const char* test)
     result = boost::math::tools::test(
       data, 
       boost::lambda::bind(fp2, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])),
+         boost::lambda::ret<value_type>(boost::lambda::_1[1]),
+         boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[2]));
    handle_test_result(result, data[result.worst()], result.worst(), 
       type_name, "boost::math::ellint_3", test);
@@ -211,11 +212,11 @@ void test_spots(T, const char* type_name)
     do_test_ellint_pi2(ellint_pi2_data, type_name, "Complete Elliptic Integral PI: Random Data");
 
     // Special cases, exceptions etc:
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(-1), T(0), T(1.0001)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(20), T(1.5), T(0.5)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(-1), T(1.0001)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(1), T(0.5)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(2), T(0.5)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_3(T(1.0001), T(-1), T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_3(T(0.5), T(20), T(1.5)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_3(T(1.0001), T(-1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_3(T(0.5), T(1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_3(T(0.5), T(2)), std::domain_error);
 }
 
 int test_main(int, char* [])

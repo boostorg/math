@@ -23,7 +23,7 @@ float truncate_to_float(float const * pf)
 template<class T>
 T ellint_f_data(T phi, T k)
 {
-   return ellint_1(phi, k);
+   return ellint_1(k, phi);
 }
 
 int test_main(int argc, char*argv [])

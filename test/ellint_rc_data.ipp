@@ -1,3 +1,12 @@
+//  Copyright (c) 2006 John Maddock
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//
+// Test data for RC, each row contains in order:
+//
+// x, y, RC(x, y)
+//
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 3>, 201> ellint_rc_data = {
       SC_(0.11698430441812742785454260394458960094979845402414e-30), SC_(0.1429457475085533184e20), SC_(0.41546482167023371731518451342517736095263780557582e-9), 

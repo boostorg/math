@@ -1,4 +1,5 @@
 //  Copyright (c) 2006 Xiaogang Zhang
+//  Copyright (c) 2006 John Maddock
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -47,6 +48,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
     }
 
     T sphi = sin(fabs(phi));
+
     if(v > 1 / (sphi * sphi))
     {
         // Complex result is a domain error:
@@ -119,10 +121,11 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
        // If v > 1 we can use the identity in A&S 17.7.7/8
        // to shift to 0 <= v <= 1.  Unfortunately this
        // identity appears only to function correctly when
-       // 0 <= phi <= PI/2, but it's when phi is outside that
+       // 0 <= phi <= pi/2, but it's when phi is outside that
        // range that we really need it: That's when
-       // Carlson's formula fails, and the periodicity
+       // Carlson's formula fails, and what's more the periodicity
        // reduction used below on phi doesn't work when v > 1.
+       //
        // So we're stuck... the code is archived here in case
        // some bright spart can figure out the fix.
        //
@@ -131,8 +134,19 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
        T Nm1 = (v - k2) / v;
        T p1 = sqrt((-vc) * (1 - k2 / v));
        T delta = sqrt(1 - k2 * sphi * sphi);
+       //
+       // These next two terms have a large amount of cancellation
+       // so it's not clear if this relation is useable even if
+       // the issues with phi > pi/2 can be fixed:
+       //
        T result = -ellint_pi_imp(N, phi, k, Nm1);
        result += ellint_f_imp(phi, k);
+       //
+       // This log term gives the complex result when
+       //     n > 1/sin^2(phi)
+       // However that case is dealt with as an error above, 
+       // so we should always get a real result here:
+       //
        result += log((delta + p1 * tan(phi)) / (delta - p1 * tan(phi))) / (2 * p1);
        return result;
     }
@@ -170,10 +184,15 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
        }
 
        if((m > 0) && (v > 1))
+       {
+          //
+          // The region with v > 1 and phi outside [0, pi/2] is
+          // currently unsupported:
+          //
           return tools::domain_error<T>(
             BOOST_CURRENT_FUNCTION,
             "Got v = %1%, but this is only supported for 0 <= phi <= pi/2", v);
-
+       }  
        T sinp = sin(rphi);
        T cosp = cos(rphi);
        x = cosp * cosp;
@@ -248,7 +267,7 @@ T ellint_pi_imp(T v, T k, T vc)
 } // namespace detail
 
 template <typename T>
-inline T ellint_3(T v, T phi, T k)
+inline T ellint_3(T k, T v, T phi)
 {
    typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
    return tools::checked_narrowing_cast<typename remove_cv<T>::type>(
@@ -260,7 +279,7 @@ inline T ellint_3(T v, T phi, T k)
 }
 
 template <typename T>
-inline T ellint_3(T v, T k)
+inline T ellint_3(T k, T v)
 {
    typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
    return tools::checked_narrowing_cast<typename remove_cv<T>::type>(

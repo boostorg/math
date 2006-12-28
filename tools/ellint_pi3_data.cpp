@@ -25,7 +25,7 @@ std::tr1::tuple<NTL::RR, NTL::RR> generate_data(NTL::RR n, NTL::RR phi)
    std::tr1::uniform_real<float> ui(0, 1);
    float k = ui(r);
    NTL::RR kr(truncate_to_float(&k));
-   NTL::RR result = boost::math::ellint_3(n, phi, kr);
+   NTL::RR result = boost::math::ellint_3(kr, n, phi);
    return std::tr1::make_tuple(kr, result);
 }
 

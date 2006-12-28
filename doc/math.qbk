@@ -1,13 +1,13 @@
 [library Math Toolkit
     [quickbook 1.3]
-    [copyright 2006 John Maddock and Paul A. Bristow]
+    [copyright 2006 John Maddock, Paul A. Bristow and Xiaogang Zhang]
     [purpose Various Special Functions, Statistical Distributions, and Numerical Tools]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [authors [Maddock, John], [Bristow, Paul A.]]
+    [authors [Maddock, John], [Bristow, Paul A.], [Zhang, Xiaogang]]
     [category math]
     [/last-revision $Date$]
 ]
@@ -241,6 +241,15 @@ external graphing application.
 [include laguerre.qbk]
 [include hermite.qbk]
 [include spherical_harmonic.qbk]
+
+[section Elliptic Integrals]
+
+[include ellint_introduction.qbk]
+[include ellint_carlson.qbk]
+[include ellint_legendre.qbk]
+
+[endsect]
+
 [include fpclassify.qbk]
 [include powers.qbk]
 [include error_handling.qbk]

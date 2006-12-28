@@ -1,0 +1,173 @@
+[/
+Copyright (c) 2006 Xiaogang Zhang
+Copyright (c) 2006 John Maddock
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:ellint_carlson Elliptic Integrals - Carlson Form]
+
+[caution __caution ]
+
+[heading Synopsis]
+
+``
+  #include <boost/math/special_functions/ellint_rf.hpp>
+``
+
+  namespace boost { namespace math {
+
+  template <typename T>
+  T ellint_rf(T x, T y, T z)
+
+  }} // namespaces
+
+
+``
+  #include <boost/math/special_functions/ellint_rd.hpp>
+``
+
+  namespace boost { namespace math {
+
+  template <typename T>
+  T ellint_rd(T x, T y, T z)
+
+  }} // namespaces
+
+
+``
+  #include <boost/math/special_functions/ellint_rj.hpp>
+``
+
+  namespace boost { namespace math {
+
+  template <typename T>
+  T ellint_rj(T x, T y, T z, T p)
+
+  }} // namespaces
+
+
+``
+  #include <boost/math/special_functions/ellint_rc.hpp>
+``
+
+  namespace boost { namespace math {
+
+  template <typename T>
+  T ellint_rc(T x, T y)
+
+  }} // namespaces
+
+
+[heading Description]
+
+These functions return Carlson's symmetrical elliptic integrals, the functions
+have complicated behavior over all their possible domains, but the following
+graph gives an idea of their behavior:
+
+[$../graphs/ellint_c.png]
+
+  template <typename T>
+  T ellint_rf(T x, T y, T z)
+  
+Returns Carlson's Elliptic Integral R[sub F]:
+
+[$../equations/ellint9.png]
+
+Requires that all of the arguments are non-negative, and at most
+one may be zero.  Otherwise returns the result of __domain_error.
+
+  template <typename T>
+  T ellint_rd(T x, T y, T z)
+  
+Returns Carlson's elliptic integral R[sub D]:
+
+[$../equations/ellint10.png]
+
+Requires that x and y are non-negative, with at most one of them
+zero, and that z >= 0.  Otherwise returns the result of __domain_error.
+
+  template <typename T>
+  T ellint_rj(T x, T y, T z, T p)
+
+Returns Carlson's elliptic integral R[sub J]:
+  
+[$../equations/ellint11.png]
+
+Requires that x, y and z are non-negative, with at most one of them
+zero, and that ['p != 0].  Otherwise returns the result of __domain_error.
+
+When ['p < 0] the function returns the Cauchy principle value using the relation:
+
+[$../equations/ellint17.png]
+
+  template <typename T>
+  T ellint_rc(T x, T y)
+
+Returns Carlson's elliptic integral R[sub C]:
+  
+[$../equations/ellint12.png]
+
+Requires that ['x > 0] and that ['y != 0].  
+Otherwise returns the result of __domain_error.
+
+When ['y < 0] the function returns the Cauchy principle value using the relation:
+
+[$../equations/ellint18.png]
+
+[heading Testing]
+
+There are two sets of tests: spot tests compare selected values with test data
+given in:
+
+[:B. C. Carlson, ['[@http://arxiv.org/abs/math.CA/9409227 
+Numerical computation of real or complex elliptic integrals]]. Numerical Algorithms,
+Volume 10, Number 1 / March, 1995, p13-26.]
+
+While random test data generated using NTL::RR at 1000-bit precision and our
+implementation checks for rounding-errors and/or regressions.
+
+There are also sanity checks that use the inter-relations between the integrals
+to verify their correctness: see the above Carlson paper for details.
+
+[heading Accuracy]
+
+These functions are computed using only basic arithmetic operations, so
+there isn't much variation in accuracy over differing platforms.
+Note that only results for the widest floating point type on the 
+system are given as narrower types have __zero_error.  All values
+are relative errors in units of epsilon.
+
+[table Errors Rates in the Carlson Elliptic Integrals
+[[Significand Size] [Platform and Compiler] [R[sub F]] [R[sub D]] [R[sub J]] [R[sub C]]]
+[[53] [Win32 / Visual C++ 8.0] [Peek=2.9 Mean=0.75] [Peek=2.6 Mean=0.9] [Peek=108 Mean=6.9] [Peek=2.4 Mean=0.6] ]
+[[64] [Red Hat Linux / G++ 3.4] [Peek=2.5 Mean=0.75] [Peek=2.7 Mean=0.9] [Peek=105 Mean=8] [Peek=1.9 Mean=0.7] ]
+[[113] [HP-UX / HP aCC 6] [Peek=5.3 Mean=1.6] [Peek=2.9 Mean=0.99] [Peek=180 Mean=12] [Peek=1.8 Mean=0.7] ]
+]
+
+[heading Implementation]
+
+The key of Carlson's algorithm [[link ellint_ref_carlson79 Carlson79]] is the
+duplication theorem:
+
+[$../equations/ellint13.png]
+
+By applying it repeatedly, ['x], ['y], ['z] get
+closer and closer. When they are nearly equal, the special case equation
+
+[$../equations/ellint16.png]
+
+is used. More specifically, ['[R F]] is evaluated from a Taylor series
+expansion to the fifth order. The calculations of the other three integrals
+are analogous.
+
+For ['p < 0] in ['R[sub J](x, y, z, p)] and ['y < 0] in ['R[sub C](x, y)],
+the integrals are singular and their Cauchy principal values are returned via the
+relations:
+
+[$../equations/ellint17.png]
+
+[$../equations/ellint18.png]
+
+[endsect]

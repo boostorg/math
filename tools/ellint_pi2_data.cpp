@@ -38,7 +38,7 @@ int test_main(int argc, char*argv [])
          return 1;
 
       NTL::RR (*fp)(NTL::RR, NTL::RR) = &ellint_3;
-      data.insert(fp, arg1, arg2);
+      data.insert(fp, arg2, arg1);
 
       std::cout << "Any more data [y/n]?";
       std::getline(std::cin, line);

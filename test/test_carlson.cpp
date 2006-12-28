@@ -1,4 +1,4 @@
-//  Copyright (c) 2006 Xiaogang Zhang
+//  Copyright (c) 2006 John Maddock
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -90,14 +90,14 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*RJ.*",      // test data group
-      ".*", 150, 50);  // test function
+      ".*", 180, 50);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                  // test type(s)
       ".*RJ.*",      // test data group
-      ".*", 150, 50);  // test function
+      ".*", 180, 50);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

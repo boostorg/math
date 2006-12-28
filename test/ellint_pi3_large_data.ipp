@@ -1,3 +1,12 @@
+//  Copyright (c) 2006 John Maddock
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//
+// Each row of data contains in order:
+//
+// n, phi, k, PI(n, phi, k)
+//
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 4>, 380> ellint_pi3_large_data = {
       SC_(-0.882951507568359375e2), SC_(-0.80491924285888671875e1), SC_(0.814723670482635498046875e0), SC_(-0.87472421400728425336727040442604900083192977041785e0), 

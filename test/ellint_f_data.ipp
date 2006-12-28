@@ -1,3 +1,13 @@
+//  Copyright (c) 2006 John Maddock
+//
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//
+// There are three values in each row:
+//
+// phi, k, ellint_1(k, phi)
+//
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 3>, 610> ellint_f_data = {
       SC_(0.177219114266335964202880859375e-2), SC_(0.12698681652545928955078125e0), SC_(0.17721911576221833285284471505772299979929420100157e-2), 

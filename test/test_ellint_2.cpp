@@ -1,4 +1,5 @@
 //  Copyright (c) 2006 Xiaogang Zhang
+//  Copyright (c) 2006 John Maddock
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -96,8 +97,8 @@ void do_test_ellint_e2(const T& data, const char* type_name, const char* test)
     result = boost::math::tools::test(
       data, 
       boost::lambda::bind(fp2, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])),
+         boost::lambda::ret<value_type>(boost::lambda::_1[1]),
+         boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[2]));
    handle_test_result(result, data[result.worst()], result.worst(), 
       type_name, "boost::math::ellint_2", test);

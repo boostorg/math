@@ -68,25 +68,23 @@ T ellint_rj_imp(T x, T y, T z, T p)
     // for p < 0, the integral is singular, return Cauchy principal value
     if (p < 0)
     {
+       //
+       // We must ensure that (z - y) * (y - x) is positive.
+       // Since the integral is symmetrical in x, y and z
+       // we can just permute the values:
+       //
+       if(x > y)
+          std::swap(x, y);
+       if(y > z)
+          std::swap(y, z);
+       if(x > y)
+          std::swap(x, y);
+
        T q = -p;
        T pmy = (z - y) * (y - x) / (y + q);  // p - y
-       if(pmy < 0)
-       {
-          //
-          // TODO, FIXME if you can.... (JM Dec. 2006)
-          //
-          // The logic breaks down here, we can go into
-          // an infinite recursion unless we bail out right away!!
-          //
-          // This may be fixable by permuting x, y, and z, but may not
-          // be worth the hassle, fix this if you care about this use case!
-          //
-          return tools::domain_error<T>(
-             BOOST_CURRENT_FUNCTION,
-             "Unable to compute Cauchy principle value, p had the value %1% "
-             "and (z-y)(y-x) was negative.  Identity formula could not be applied!",
-             p);
-       }
+
+       BOOST_ASSERT(pmy >= 0);
+
        T p = pmy + y;
        value = ellint_rj(x, y, z, p);
        value *= pmy;

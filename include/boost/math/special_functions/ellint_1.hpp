@@ -124,7 +124,7 @@ inline T ellint_1(T k)
 
 // Elliptic integral (Legendre form) of the first kind
 template <typename T>
-inline T ellint_1(T phi, T k)
+inline T ellint_1(T k, T phi)
 {
    typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
    return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::ellint_f_imp(static_cast<value_type>(phi), static_cast<value_type>(k)), BOOST_CURRENT_FUNCTION);
