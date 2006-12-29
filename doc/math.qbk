@@ -25,7 +25,7 @@
 
 [section Overview]
 
-The [link boost_math.greatest_common_divisor_and_least_common_multiple Greatest Common Divisor and Least Common Multiple library] 
+The [link boost_math.gcd_lcm Greatest Common Divisor and Least Common Multiple library] 
 provides run-time and compile-time evaluation of the greatest common divisor (GCD) 
 or least common multiple (LCM) of two integers.
 
