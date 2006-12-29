@@ -61,7 +61,8 @@ Formally the arguments are:
    
 [h4 Accuracy]
 
-The following table shows peak errors for various domains of input arguments.  
+The following table shows peak errors (in units of epsilon) 
+for various domains of input arguments.  
 Note that only results for the widest floating point type on the system are 
 given as narrower types have __zero_error.
 

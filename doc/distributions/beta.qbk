@@ -209,8 +209,8 @@ with its p parameter set to x.
 [h4 Accuracy]
 
 This distribution is implemented using the 
-[link math_toolkit.special.beta_function beta functions] __beta and 
-[link math_toolkit.special.ibeta_function incomplete beta functions] __ibeta and __ibetac;
+[link math_toolkit.special.sf_beta.beta_function beta functions] __beta and 
+[link math_toolkit.special.sf_beta.ibeta_function incomplete beta functions] __ibeta and __ibetac;
 please refer to these functions for information on accuracy.
 
 [h4 Implementation]

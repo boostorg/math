@@ -1,4 +1,4 @@
-[section:ibeta_function The Incomplete Beta Function]
+[section:ibeta_function Incomplete Beta Functions]
 
 [caution __caution ]
 
@@ -11,23 +11,23 @@
    namespace boost{ namespace math{
    
    template <class T>
-   T beta(T a, T b, T x);
-   
-   template <class T>
-   T betac(T a, T b, T x);
-   
-   template <class T>
    T ibeta(T a, T b, T x);
    
    template <class T>
    T ibetac(T a, T b, T x);
+   
+   template <class T>
+   T beta(T a, T b, T x);
+   
+   template <class T>
+   T betac(T a, T b, T x);
    
    }} // namespaces
    
 [h4 Description]
 
 There are four [@http://en.wikipedia.org/wiki/Incomplete_beta_function incomplete beta functions]
-: two are normalised versions
+: two are normalised versions (also known as ['regularized] beta functions)
 that return values in the range [0, 1], and two are non-normalised and
 return values in the range [0, __beta(a, b)].  Users interested in statistical
 applications should use the normalised (or
@@ -35,20 +35,6 @@ applications should use the normalised (or
 ) versions (ibeta and ibetac).
 
 All of these functions require /a > 0/, /b > 0/ and /0 <= x <= 1/.
-
-   template <class T>
-   T beta(T a, T b, T x);
-
-Returns the full (non-normalised) incomplete beta function of a, b and x:
-
-[$../equations/ibeta1.png]
-
-   template <class T>
-   T betac(T a, T b, T x);
-
-Returns the full (non-normalised) complement of the incomplete beta function of a, b and x:
-
-[$../equations/ibeta2.png]
 
    template <class T>
    T ibeta(T a, T b, T x);
@@ -66,6 +52,20 @@ Returns the normalised complement of the incomplete beta function of a, b and x:
 
 [$../equations/ibeta4.png]
 
+   template <class T>
+   T beta(T a, T b, T x);
+
+Returns the full (non-normalised) incomplete beta function of a, b and x:
+
+[$../equations/ibeta1.png]
+
+   template <class T>
+   T betac(T a, T b, T x);
+
+Returns the full (non-normalised) complement of the incomplete beta function of a, b and x:
+
+[$../equations/ibeta2.png]
+
 [h4 Accuracy]
 
 The following tables give peak and mean relative errors in over various domains of
@@ -78,22 +78,6 @@ for doubles: this is because the wider exponent range of these types allow
 more extreme test cases to be tested.  For example expected results that
 are zero at double precision, may be finite but exceptionally small with
 the wider exponent range of the long double types.
-
-[table Errors In the Function beta(a, b, x)
-[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
-[[53] [Win32, Visual C++ 8] [Peak=39 Mean=2.9] [Peak=91 Mean=12.7] [Peak=635 Mean=25]]
-[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=26 Mean=3.6] [Peak=180.7 Mean=30.1] [Peak~7x10[super 4][space] Mean=3x10[super 3][space] ]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=13 Mean=2.4] [Peak=67.1 Mean=13.4] [Peak~7x10[super 4][space] Mean=3x10[super 3][space] ]]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=27.3 Mean=3.6] [Peak=49.8 Mean=9.1] [Peak~6x10[super 4][space] Mean=3x10[super 3][space] ]]
-]
-
-[table Errors In the Function betac(a,b,x)
-[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
-[[53] [Win32, Visual C++ 8] [Peak=12.0 Mean=2.4] [Peak=91 Mean=15] [Peak=4x10[super 3][space] Mean=113]]
-[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=19.8 Mean=3.8] [Peak=295.1 Mean=33.9] [Peak~1x10[super 5][space] Mean=5x10[super 3][space] ]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=11.2 Mean=2.4] [Peak=63.5 Mean=13.6] [Peak~1x10[super 5][space] Mean=5x10[super 3][space]  ]]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=15.6 Mean=3.5] [Peak=39.8 Mean=8.9] [Peak~9x10[super 4][space] Mean=5x10[super 3][space]  ]]
-]
 
 [table Errors In the Function ibeta(a,b,x)
 [[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
@@ -122,6 +106,22 @@ the wider exponent range of the long double types.
 [[113] [HPUX IA64, aCC A.06.06] [Peak=9.9 Mean=2.6] 
       [Peak=117.7 Mean=15.1] 
       [Peak~3x10[super 4][space] Mean=1x10[super 3][space] ]]
+]
+
+[table Errors In the Function beta(a, b, x)
+[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[53] [Win32, Visual C++ 8] [Peak=39 Mean=2.9] [Peak=91 Mean=12.7] [Peak=635 Mean=25]]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=26 Mean=3.6] [Peak=180.7 Mean=30.1] [Peak~7x10[super 4][space] Mean=3x10[super 3][space] ]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=13 Mean=2.4] [Peak=67.1 Mean=13.4] [Peak~7x10[super 4][space] Mean=3x10[super 3][space] ]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=27.3 Mean=3.6] [Peak=49.8 Mean=9.1] [Peak~6x10[super 4][space] Mean=3x10[super 3][space] ]]
+]
+
+[table Errors In the Function betac(a,b,x)
+[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[53] [Win32, Visual C++ 8] [Peak=12.0 Mean=2.4] [Peak=91 Mean=15] [Peak=4x10[super 3][space] Mean=113]]
+[[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=19.8 Mean=3.8] [Peak=295.1 Mean=33.9] [Peak~1x10[super 5][space] Mean=5x10[super 3][space] ]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=11.2 Mean=2.4] [Peak=63.5 Mean=13.6] [Peak~1x10[super 5][space] Mean=5x10[super 3][space]  ]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=15.6 Mean=3.5] [Peak=39.8 Mean=8.9] [Peak~9x10[super 4][space] Mean=5x10[super 3][space]  ]]
 ]
 
 [h4 Testing]

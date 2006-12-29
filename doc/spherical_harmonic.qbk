@@ -80,6 +80,8 @@ for both the real and imaginary parts, as the error is dominated by
 calculation of the associated Legendre polynomials: especially near the
 roots of the associated Legendre function.
 
+All values are in units of epsilon.
+
 [table Peak Errors In the Sperical Harmonic Functions
 [[Significand Size] [Platform and Compiler] [Errors in range\n0 < l < 20] ]
 [[53] [Win32, Visual C++ 8] [Peak=2x10[super 4] Mean=700] ]
@@ -89,8 +91,8 @@ roots of the associated Legendre function.
 ]
 
 Note that the worst errors occur when the degree increases, values greater than
-~120 are very unlikely to produce sensible results, especially in the associated
-polynomial case when the order is also large.  Further the relative errors
+~120 are very unlikely to produce sensible results, especially 
+when the order is also large.  Further the relative errors
 are likely to grow arbitrarily large when the function is very close to a root.
 
 [h4 Testing]

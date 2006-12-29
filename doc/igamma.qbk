@@ -1,4 +1,4 @@
-[section:igamma The Incomplete Gamma Function]
+[section:igamma Incomplete Gamma Functions]
 
 [caution __caution ]
 
@@ -11,23 +11,24 @@
    namespace boost{ namespace math{
    
    template <class T>
-   T tgamma(T a, T z);
-   
-   template <class T>
-   T tgamma_lower(T a, T z);
+   T gamma_p(T a, T z);
    
    template <class T>
    T gamma_q(T a, T z);
    
    template <class T>
-   T gamma_p(T a, T z);
+   T tgamma_lower(T a, T z);
+   
+   template <class T>
+   T tgamma(T a, T z);
    
    }} // namespaces
    
 [h4 Description]
 
-There are four [@http://mathworld.wolfram.com/IncompleteGammaFunction.html incomplete gamma functions]:
-two are normalised versions
+There are four [@http://mathworld.wolfram.com/IncompleteGammaFunction.html 
+incomplete gamma functions]:
+two are normalised versions (also known as /regularized/ incomplete gamma functions)
 that return values in the range [0, 1], and two are non-normalised and
 return values in the range [0, [Gamma](a)].  Users interested in statistical
 applications should use the
@@ -37,18 +38,15 @@ All of these functions require /a > 0/ and /z >= 0/, otherwise they return
 the result of __domain_error.
 
    template <class T>
-   T tgamma(T a, T z);
+   T gamma_p(T a, T z);
+   
+Returns the normalised lower incomplete gamma function of a and z:
 
-Returns the full (non-normalised) upper incomplete gamma function of a and z:
+[$../equations/igamma4.png]
 
-[$../equations/igamma1.png]
+This function changes rapidly from 0 to 1 around the point z == a:
 
-   template <class T>
-   T tgamma_lower(T a, T z);
-
-Returns the full (non-normalised) lower incomplete gamma function of a and z:
-
-[$../equations/igamma2.png]
+[$../graphs/gamma_p.png]
 
    template <class T>
    T gamma_q(T a, T z);
@@ -62,15 +60,18 @@ This function changes rapidly from 1 to 0 around the point z == a:
 [$../graphs/gamma_q.png]
 
    template <class T>
-   T gamma_p(T a, T z);
-   
-Returns the normalised lower incomplete gamma function of a and z:
+   T tgamma_lower(T a, T z);
 
-[$../equations/igamma4.png]
+Returns the full (non-normalised) lower incomplete gamma function of a and z:
 
-This function changes rapidly from 0 to 1 around the point z == a:
+[$../equations/igamma2.png]
 
-[$../graphs/gamma_p.png]
+   template <class T>
+   T tgamma(T a, T z);
+
+Returns the full (non-normalised) upper incomplete gamma function of a and z:
+
+[$../equations/igamma1.png]
 
 [h4 Accuracy]
 
@@ -87,20 +88,14 @@ zero at 64-bit double precision may be non-zero - but exceptionally small -
 with the larger exponent range of a long double.  These results therefore
 reflect the more extreme nature of the tests conducted for these types.
 
-[table Errors In the Function tgamma(a,z)
-[[Significand Size] [Platform and Compiler] [0.5 < a < 100\nand\n0.01*a < z < 100*a]  [1e-12 < a < 5e-2\nand\n0.01*a < z < 100*a]]
-[[53] [Win32, Visual C++ 8] [Peak=5.9 Mean=1.5]  [Peak=1.8 Mean=0.6]]
-[[64] [RedHat Linux IA32, gcc-3.3] [Peak=596 Mean=116]  [Peak=3.2 Mean=0.84]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=40.2 Mean=2.5]  [Peak=3.2 Mean=0.8]]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=364 Mean=17.6]  [Peak=12.7 Mean=1.8]]
-]
+All values are in units of epsilon.
 
-[table Errors In the Function tgamma_lower(a,z)
-[[Significand Size] [Platform and Compiler] [0.5 < a < 100\nand\n0.01*a < z < 100*a]  [1e-12 < a < 5e-2\nand\n0.01*a < z < 100*a]]
-[[53] [Win32, Visual C++ 8] [Peak=5.5 Mean=1.4]  [Peak=3.6 Mean=0.78]]
-[[64] [RedHat Linux IA32, gcc-3.3] [Peak=402 Mean=79]  [Peak=3.4 Mean=0.8]]
-[[64] [Redhat Linux IA64, gcc-3.4] [Peak=6.8 Mean=1.4]  [Peak=3.4 Mean=0.78]]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=6.1 Mean=1.8]  [Peak=3.7 Mean=0.89]]
+[table Errors In the Function gamma_p(a,z)
+[[Significand Size] [Platform and Compiler] [0.5 < a < 100\nand\n0.01*a < z < 100*a]  [1e-12 < a < 5e-2\nand\n0.01*a < z < 100*a] [1e-6 < a < 1.7e6\nand\n1 < z < 100*a]]
+[[53] [Win32, Visual C++ 8] [Peak=36 Mean=9.1\n\n(GSL Peak=342 Mean=46)\n(Cephes Peak=491 Mean=102)]  [Peak=4.5 Mean=1.4\n\n(GSL Peak=4.8 Mean=0.76)\n(Cephes Peak=21 Mean=5.6)] [Peak=244 Mean=21\n\n(GSL Peak=1022 Mean=1054)\n(Cephes Peak~8e6 Mean~7e4)]]
+[[64] [RedHat Linux IA32, gcc-3.3] [Peak=241 Mean=36]  [Peak=4.7 Mean=1.5] [Peak~30,220 Mean=1929]]
+[[64] [Redhat Linux IA64, gcc-3.4] [Peak=41 Mean=10]  [Peak=4.7 Mean=1.4] [Peak~30,790 Mean=1864]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=40.2 Mean=10.2]  [Peak=5 Mean=1.6] [Peak=5,476 Mean=440]]
 ]
 
 [table Errors In the Function gamma_q(a,z)
@@ -111,12 +106,20 @@ reflect the more extreme nature of the tests conducted for these types.
 [[113] [HPUX IA64, aCC A.06.06] [Peak=37 Mean=10]  [Peak=11.2 Mean=2.0] [Peak=4,999 Mean=298]]
 ]
 
-[table Errors In the Function gamma_p(a,z)
-[[Significand Size] [Platform and Compiler] [0.5 < a < 100\nand\n0.01*a < z < 100*a]  [1e-12 < a < 5e-2\nand\n0.01*a < z < 100*a] [1e-6 < a < 1.7e6\nand\n1 < z < 100*a]]
-[[53] [Win32, Visual C++ 8] [Peak=36 Mean=9.1\n\n(GSL Peak=342 Mean=46)\n(Cephes Peak=491 Mean=102)]  [Peak=4.5 Mean=1.4\n\n(GSL Peak=4.8 Mean=0.76)\n(Cephes Peak=21 Mean=5.6)] [Peak=244 Mean=21\n\n(GSL Peak=1022 Mean=1054)\n(Cephes Peak~8e6 Mean~7e4)]]
-[[64] [RedHat Linux IA32, gcc-3.3] [Peak=241 Mean=36]  [Peak=4.7 Mean=1.5] [Peak~30,220 Mean=1929]]
-[[64] [Redhat Linux IA64, gcc-3.4] [Peak=41 Mean=10]  [Peak=4.7 Mean=1.4] [Peak~30,790 Mean=1864]]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=40.2 Mean=10.2]  [Peak=5 Mean=1.6] [Peak=5,476 Mean=440]]
+[table Errors In the Function tgamma_lower(a,z)
+[[Significand Size] [Platform and Compiler] [0.5 < a < 100\nand\n0.01*a < z < 100*a]  [1e-12 < a < 5e-2\nand\n0.01*a < z < 100*a]]
+[[53] [Win32, Visual C++ 8] [Peak=5.5 Mean=1.4]  [Peak=3.6 Mean=0.78]]
+[[64] [RedHat Linux IA32, gcc-3.3] [Peak=402 Mean=79]  [Peak=3.4 Mean=0.8]]
+[[64] [Redhat Linux IA64, gcc-3.4] [Peak=6.8 Mean=1.4]  [Peak=3.4 Mean=0.78]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=6.1 Mean=1.8]  [Peak=3.7 Mean=0.89]]
+]
+
+[table Errors In the Function tgamma(a,z)
+[[Significand Size] [Platform and Compiler] [0.5 < a < 100\nand\n0.01*a < z < 100*a]  [1e-12 < a < 5e-2\nand\n0.01*a < z < 100*a]]
+[[53] [Win32, Visual C++ 8] [Peak=5.9 Mean=1.5]  [Peak=1.8 Mean=0.6]]
+[[64] [RedHat Linux IA32, gcc-3.3] [Peak=596 Mean=116]  [Peak=3.2 Mean=0.84]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=40.2 Mean=2.5]  [Peak=3.2 Mean=0.8]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=364 Mean=17.6]  [Peak=12.7 Mean=1.8]]
 ]
 
 [h4 Testing]

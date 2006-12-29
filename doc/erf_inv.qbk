@@ -1,4 +1,4 @@
-[section:error_inv The Error Function Inverses]
+[section:error_inv Error Function Inverses]
 
 [caution __caution ]
 
@@ -45,7 +45,7 @@ value x such that:
 For types up to and including 80-bit long doubles the approximations used
 are accurate to less than ~ 2 epsilon.  For higher precision types these 
 functions have the same accuracy as the 
-[link math_toolkit.special.error_function forward error functions].
+[link math_toolkit.special.sf_erf.error_function forward error functions].
 
 [h4 Testing]
 

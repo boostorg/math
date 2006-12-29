@@ -205,12 +205,13 @@ Returns the incomplete elliptic integral of the third kind ['[Pi](n, [phi], k)]:
 [$../equations/ellint4.png]
 
 Requires ['-1 <= k <= 1] and ['n < 1/sin[super 2]([phi])], otherwise 
-returns the result of __domain_error.
+returns the result of __domain_error (outside this range the result 
+would be complex).
 
-In addition, the region where ['n > 1] and [phi][space] ['is not in the range]
+[caution In addition, the region where ['n > 1] and [phi][space] ['is not in the range]
 \[0, [pi]\/2\] is currently unsupported and returns the result of __domain_error.
 For this reason it is recomended that you keep [phi][space] inside it's "natural" range
-of \[0, [pi]\/2\].
+of \[0, [pi]\/2\].]
 
   template <typename T>
   T ellint_3(T k, T n);
@@ -219,7 +220,8 @@ Returns the complete elliptic integral of the first kind ['[Pi](n, k)]:
 
 [$../equations/ellint8.png]
 
-Requires ['-1 <= k <= 1] and ['n < 1], otherwise returns the result of __domain_error.
+Requires ['-1 <= k <= 1] and ['n < 1], otherwise returns the 
+result of __domain_error (outside this range the result would be complex).
 
 [heading Accuracy]
 

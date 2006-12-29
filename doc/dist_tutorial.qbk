@@ -5,7 +5,6 @@
 [def __F_distrib [link math_toolkit.dist.dist_ref.dists.f_dist Fisher F Distribution]]
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
 
-[def __alpha '''&#945;''']
 [def __handbook [@http://www.itl.nist.gov/div898/handbook/ 
 NIST/SEMATECH e-Handbook of Statistical Methods.]]
 

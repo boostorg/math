@@ -76,8 +76,8 @@ available illustrating the use of the F Distribution.
 [h4 Accuracy]
 
 The normal distribution is implemented in terms of the 
-[link math_toolkit.special.ibeta_function incomplete beta function]
-and it's [link math_toolkit.special.ibeta_inv_function inverses], 
+[link math_toolkit.special.sf_beta.ibeta_function incomplete beta function]
+and it's [link math_toolkit.special.sf_beta.ibeta_inv_function inverses], 
 refer to those functions for accuracy data.
 
 [h4 Implementation]

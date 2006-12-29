@@ -1,0 +1,48 @@
+[section:gamma_derivatives Derivative of the Incomplete Gamma Function]
+
+[caution __caution ]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/gamma.hpp>
+``
+
+   namespace boost{ namespace math{ 
+   
+   template <class T>
+   T gamma_p_derivative(T a, T x);
+   
+   }} // namespaces
+   
+[h4 Description]
+
+This function find some uses in statistical distributions: it
+implements the partial derivative with respect to /x/ of the incomplete
+gamma function.
+
+[$../equations/derivative1.png]
+
+Note that the derivative of the function __gamma_q can be obtained by negating
+the result of this function.
+
+[h4 Accuracy]
+
+Almost identical to the incomplete gamma function __gamma_p: refer to
+the documentation for that function for more information.
+
+[h4 Implementation]
+
+This function just expose some of the internals of the incomplete
+gamma function __gamma_p: refer to the documentation for that function
+for more information.
+
+[endsect][/section Derivative of the Incomplete Gamma Functions]
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+

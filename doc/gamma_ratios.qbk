@@ -36,7 +36,16 @@ Returns the ratio of gamma functions:
 
 [$../equations/gamma_ratio1.png]
 
+Note that the result is calculated accurately even when /delta/ is
+small compared to /a/: indeed even if /a+delta ~ a/.  The function is
+typically used when /a/ is large and /delta/ is very small.
+
 [h4 Accuracy]
+
+The following table shows the peak errors (in units of epsilon) 
+found on various platforms with various floating point types.
+Unless otherwise specified any floating point type that is narrower
+than the one shown will have __zero_error.
 
 [table Errors In the Function tgamma_delta_ratio(a, delta)
 [[Significand Size] [Platform and Compiler] [20 < a < 80\nand\ndelta < 1]]

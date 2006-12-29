@@ -64,7 +64,7 @@ The domain of the random variable is \[-[infin], +[infin]\].
 [h4 Accuracy]
 
 The normal distribution is implemented in terms of the 
-[link math_toolkit.special.error_function error function], 
+[link math_toolkit.special.sf_erf.error_function error function], 
 and as such should have very low error rates.
 
 [h4 Implementation]

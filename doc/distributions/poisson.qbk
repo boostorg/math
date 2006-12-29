@@ -75,7 +75,7 @@ In the following table [lambda][space] is the mean of the distribution,
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = e[super -[lambda]] [lambda][super k] \/ k! ]]
-[[cdf][Using the relation: p = __Gamma(k+1, [lambda]) \/ k! = __gamma_q(k+1, [lambda])]]
+[[cdf][Using the relation: p = [Gamma](k+1, [lambda]) \/ k! = __gamma_q(k+1, [lambda])]]
 [[cdf complement][Using the relation: q = __gamma_p(k+1, [lambda]) ]]
 [[quantile][Using the relation: k = __gamma_q_inva([lambda], p) - 1]]
 [[quantile from the complement][Using the relation: k = __gamma_p_inva([lambda], q) - 1]]

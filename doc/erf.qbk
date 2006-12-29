@@ -1,4 +1,4 @@
-[section:error_function The Error Functions]
+[section:error_function Error Functions]
 
 [caution __caution ]
 
@@ -40,6 +40,11 @@ Returns the complement of the [@http://functions.wolfram.com/GammaBetaErf/Erfc/ 
 [$../graphs/erf2.png]
 
 [h4 Accuracy]
+
+The following table shows the peak errors (in units of epsilon) 
+found on various platforms with various floating point types.
+Unless otherwise specified any floating point type that is narrower
+than the one shown will have __zero_error.
 
 [table Errors In the Function erf(z)
 [[Significand Size] [Platform and Compiler] [z < 0.5]  [0.5 < z < 8] [z > 8]]

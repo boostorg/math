@@ -112,7 +112,7 @@ are available illustrating the use of the Chi Squared Distribution.
 [h4 Accuracy]
 
 The Chi-Squared distribution is implemented in terms of the 
-[link math_toolkit.special.igamma incomplete gamma functions]:
+[link math_toolkit.special.sf_gamma.igamma incomplete gamma functions]:
 please refer to the accuracy data for those functions.
 
 [h4 Implementation]

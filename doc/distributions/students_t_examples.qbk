@@ -16,15 +16,15 @@ The formula for the interval can be expressed as:
 [$../equations/dist_tutorial4.png]
 
 Where, ['Y[sub s]] is the sample mean, /s/ is the sample standard deviation, 
-/N/ is the sample size, /__alpha/ is the desired significance level and 
-['t[sub (__alpha/2,N-1)]] is the upper critical value of the Students-t
+/N/ is the sample size, /[alpha]/ is the desired significance level and 
+['t[sub ([alpha]/2,N-1)]] is the upper critical value of the Students-t
 distribution with /N-1/ degrees of freedom.
 
 [Note
-The quantity __alpha is the maximum acceptable risk of falsely rejecting
-the null-hypothesis.  The smaller the value of __alpha the greater the
+The quantity [alpha][space] is the maximum acceptable risk of falsely rejecting
+the null-hypothesis.  The smaller the value of [alpha] the greater the
 strength of the test.\n\n
-The confidence level of the test is defined as 1 - __alpha, and often expressed
+The confidence level of the test is defined as 1 - [alpha], and often expressed
 as a percentage.  So for example a significance level of 0.05, is equivalent
 to a 95% confidence level.  Refer to 
 [@http://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm 
