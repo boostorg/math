@@ -12,6 +12,7 @@
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/erf.hpp>
+#include <boost/math/special_functions/ellint_1.hpp>
 
 #include <cmath>
 
@@ -184,7 +185,31 @@ NTL::RR f(const NTL::RR& x, int variant)
       }
       return expm1(x) / x;
    case 12:
+      // demo, and test case:
       return exp(x);
+   case 13:
+      // K(k):
+      {
+         // x = k^2
+         NTL::RR k2 = x;
+         if(k2 > NTL::RR(1) - 1e-40)
+            k2 = NTL::RR(1) - 1e-40;
+         /*if(k < 1e-40)
+            k = 1e-40;*/
+         NTL::RR p2 = boost::math::constants::pi<NTL::RR>() / 2;
+         return (boost::math::ellint_1(sqrt(k2))) / (p2 - boost::math::log1p(-k2));
+      }
+   case 14:
+      // K(k)
+      {
+         // x = 1 - k^2
+         NTL::RR mp = x;
+         if(mp < 1e-20)
+            mp = 1e-20;
+         NTL::RR k = sqrt(1 - mp);
+         static const NTL::RR l4 = log(NTL::RR(4));
+         return boost::math::ellint_1(k) / (l4 - log(mp));
+      }
    }
    return 0;
 }

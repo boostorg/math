@@ -21,7 +21,7 @@ namespace detail{
 // though.
 //
 template <class T>
-T spherical_harmonic_prefix(unsigned n, unsigned m, T theta, T phi)
+T spherical_harmonic_prefix(unsigned n, unsigned m, T theta)
 {
    using namespace std;
 
@@ -63,7 +63,7 @@ T spherical_harmonic_r(unsigned n, int m, T theta, T phi)
          sign = !sign;
    }
    // Get the value and adjust sign as required:
-   T prefix = spherical_harmonic_prefix(n, m, theta, phi);
+   T prefix = spherical_harmonic_prefix(n, m, theta);
    prefix *= cos(m * phi);
    return sign ? -prefix : prefix;
 }
@@ -90,7 +90,7 @@ T spherical_harmonic_i(unsigned n, int m, T theta, T phi)
          sign = !sign;
    }
    // Get the value and adjust sign as required:
-   T prefix = spherical_harmonic_prefix(n, m, theta, phi);
+   T prefix = spherical_harmonic_prefix(n, m, theta);
    prefix *= sin(m * phi);
    return sign ? -prefix : prefix;
 }
@@ -126,7 +126,7 @@ std::complex<T> spherical_harmonic(unsigned n, int m, U theta, U phi)
    //
    // Calculate the value:
    //
-   U prefix = spherical_harmonic_prefix(n, m, theta, phi);
+   U prefix = spherical_harmonic_prefix(n, m, theta);
    U r = prefix * cos(m * phi);
    U i = prefix * sin(m * phi);
    //

@@ -918,7 +918,7 @@ T tgammap1m1_imp(T dz, Tag const& tag, const L& l)
 }
 
 template <class T, class Tag>
-T tgammap1m1_imp(T dz, Tag const& tag,
+T tgammap1m1_imp(T dz, Tag const& /*tag*/,
                  const ::boost::math::lanczos::undefined_lanczos& l)
 {
    using namespace std; // ADL of std names

@@ -49,14 +49,14 @@ private:
 typedef normal_distribution<double> normal;
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const normal_distribution<RealType>& dist)
+const std::pair<RealType, RealType> range(const normal_distribution<RealType>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + infinity.
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const normal_distribution<RealType>& dist)
+const std::pair<RealType, RealType> support(const normal_distribution<RealType>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
@@ -179,19 +179,19 @@ inline RealType median(const normal_distribution<RealType>& dist)
 }
 
 template <class RealType>
-inline RealType skewness(const normal_distribution<RealType>& dist)
+inline RealType skewness(const normal_distribution<RealType>& /*dist*/)
 {
    return 0;
 }
 
 template <class RealType>
-inline RealType kurtosis(const normal_distribution<RealType>& dist)
+inline RealType kurtosis(const normal_distribution<RealType>& /*dist*/)
 {
    return 3;
 }
 
 template <class RealType>
-inline RealType kurtosis_excess(const normal_distribution<RealType>& dist)
+inline RealType kurtosis_excess(const normal_distribution<RealType>& /*dist*/)
 {
    return 0;
 }

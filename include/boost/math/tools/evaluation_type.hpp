@@ -7,6 +7,7 @@
 #define BOOST_MATH_TOOLS_EVALUATION_TYPE_HPP
 
 #include <boost/mpl/if.hpp>
+#include <limits>
 
 namespace boost{ namespace math{ namespace tools{
 

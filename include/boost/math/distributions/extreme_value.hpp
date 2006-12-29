@@ -71,14 +71,14 @@ private:
 typedef extreme_value_distribution<double> extreme_value;
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const extreme_value_distribution<RealType>& dist)
+const std::pair<RealType, RealType> range(const extreme_value_distribution<RealType>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const extreme_value_distribution<RealType>& dist)
+const std::pair<RealType, RealType> support(const extreme_value_distribution<RealType>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
@@ -216,7 +216,7 @@ inline RealType median(const extreme_value_distribution<RealType>& dist)
 }
 
 template <class RealType>
-inline RealType skewness(const extreme_value_distribution<RealType>& dist)
+inline RealType skewness(const extreme_value_distribution<RealType>& /*dist*/)
 {
    //
    // This is 12 * sqrt(6) * zeta(3) / pi^3:
@@ -226,14 +226,14 @@ inline RealType skewness(const extreme_value_distribution<RealType>& dist)
 }
 
 template <class RealType>
-inline RealType kurtosis(const extreme_value_distribution<RealType>& dist)
+inline RealType kurtosis(const extreme_value_distribution<RealType>& /*dist*/)
 {
    // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
    return RealType(27) / 5;
 }
 
 template <class RealType>
-inline RealType kurtosis_excess(const extreme_value_distribution<RealType>& dist)
+inline RealType kurtosis_excess(const extreme_value_distribution<RealType>& /*dist*/)
 {
    // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
    return RealType(12) / 5;

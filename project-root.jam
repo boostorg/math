@@ -41,6 +41,7 @@ if ! $(boost-root)
 }
 
 use-project /boost/regex : $(boost-root)/libs/regex/build ;
+use-project /boost/unit_test : $(boost-root)/libs/test/build ;
 
 project math-toolkit
     : requirements
@@ -49,6 +50,8 @@ project math-toolkit
     :   #   build everything in ./bin.v2
         build-dir bin.v2
     ;
+
+
 
 
 

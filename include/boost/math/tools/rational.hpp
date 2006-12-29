@@ -7,6 +7,7 @@
 #define BOOST_MATH_TOOLS_RATIONAL_HPP
 
 #include <boost/array.hpp>
+#include <boost/mpl/int.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 

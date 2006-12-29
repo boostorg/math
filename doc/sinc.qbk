@@ -1,0 +1,71 @@
+[/ math.qbk
+  Copyright 2006 Hubert Holin and John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:sinc Sinus Cardinal and Hyperbolic Sinus Cardinal Functions]
+
+[section:sinc_overview Sinus Cardinal and Hyperbolic Sinus Cardinal Functions Overview]
+
+The Sinus Cardinal family of functions (indexed by the family of indices [^a > 0]) 
+is defined by 
+[$../equations/special_functions_blurb20.jpeg]; 
+it sees heavy use in signal processing tasks.
+
+By analogy, the Hyperbolic Sinus Cardinal family of functions 
+(also indexed by the family of indices [^a > 0]) is defined by 
+[$../equations/special_functions_blurb22.jpeg].
+
+These two families of functions are composed of entire functions.
+
+These functions (__sinc_pi and __sinhc_pi) are needed by our 
+implementation of quaternions and octonions.
+
+[: ['[*Sinus Cardinal of index pi (purple) and Hyperbolic Sinus Cardinal of index pi (red) on R]]]
+[: [$../graphs/sinc_pi_and_sinhc_pi_on_R.png]]
+
+[endsect]
+
+[section sinc_pi]
+
+``
+#include <boost/math/special_functions/sinc.hpp>
+``
+
+   template<typename T> 
+   T sinc_pi(const T x);
+
+   template<typename T, template<typename> class U> 
+   U<T> sinc_pi(const U<T> x);
+
+Computes 
+[link math_toolkit.special.sinc.sinc_overview 
+the Sinus Cardinal] of x. The second form is for complex numbers, 
+quaternions, octonions... Taylor series are used at the origin 
+to ensure accuracy.
+
+[endsect]
+
+[section sinhc_pi]
+
+``
+#include <boost/math/special_functions/sinhc.hpp>
+``
+
+   template<typename T> 
+   T sinhc_pi(const T x);
+
+   template<typename T, template<typename> class U> 
+   U<T> sinhc_pi(const U<T> x);
+
+Computes 
+[link math_toolkit.special.sinc.sinc_overview
+the Hyperbolic Sinus Cardinal] of x. The second form is for 
+complex numbers, quaternions, octonions... Taylor series are used at the origin 
+to ensure accuracy.
+
+[endsect]
+
+[endsect]

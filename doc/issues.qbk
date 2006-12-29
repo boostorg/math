@@ -1,50 +1,66 @@
 [section:issues Known Issues, and Todo List]
 
+This section lists those issues that are known about.
+
+Predominantly this is a TODO list, or a list of possible
+future enhancements.  Items labled "High Priority" effect
+the proper functioning of the component, and should be fixed
+as soon as possible.  Items labled "Medium Priority" are
+desirable enhancements, often pertaining to the performance
+of the component, but do not effect it's accuracy or functionality.
+Items labled "Low Priority" should probably be investigated at
+some point.  Such classifications are obviously highly subjective.
+
+If you don't see a component listed here, then we don't have any known 
+issues with it.
+
 [h4 tgamma]
 
 * Can the __lanczos be optimized any further?  (low priority)
-
-[h4 lgamma]
-
-* No known issues?
-
-[h4 Error function]
-
-* No known issues?
-
-[h4 Incomplete gamma]
-
-* No known issues?
-
-[h4 Beta Function]
-
-* No known issues?
 
 [h4 Incomplete Beta]
 
 * Investigate Didonato and Morris' asymptotic expansion for large a and b 
 (medium priority).
 
-[h4 Inverse Erf]
-
-* No known issues?
-
 [h4 Inverse Gamma]
 
 * Investigate whether we can skip iteration altogether if the first approximation
 is good enough (Medium Priority).
 
-[h4 Inverse Incomplete Beta]
+[h4 Polynomials]
 
-* None known.
+* The Legendre and Laguerre Polynomials have surprisingly different error
+rates on different platforms, considering they are evaluated with only
+basic arithmetic operations.  Maybe this is telling us something, or maybe not
+(Low Priority).
 
-[h4 Factorials]
+[h4 Elliptic Integrals]
 
-* None known.
+* Carlsons algorithms are essentially unchanged from Xiaogang Zhang's
+Google Summer of Code student project, and are based on Carlson's
+original papers.  However, Carlson has revised his algorithms since then
+(refer to the references in the elliptic integral docs for a list), to
+improve performance and accuracy, we may be able to take advantage
+of these improvements too (Low Priority).
+* Should we add an implementation of Carlson's R[sub G]?  It's not
+required for the Legendre form integrals, but some people may find it 
+useful (Low Priority).
+* There are a several other integrals: D([phi], k), Z([beta], k), 
+[Lambda][sub 0]([beta], k) and Bulirsch's ['el] functions that could
+be implemented using Carlson's integrals (Low Priority).
+* There is a sub-domain of __ellint_3 that is unimplemented (see the docs
+for details), currently
+it's not clear how to solve this issue, or if it's ever likely
+to be an real problem in practice - especially as most other implementations
+don't support this domain either (Medium Priority).
 
-[h4 Error handling]
+[h4 Inverse Hyperbolic Functions]
 
-* None known.
+* These functions are inherited from previous Boost versions,
+before __log1p became widely available.  Would they be better expressed
+in terms of this functions?  This is probably only an issue
+for very high precision types (Low Priority).
 
 [h4 Statistical distributions]
 

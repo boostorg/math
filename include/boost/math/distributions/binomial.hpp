@@ -551,6 +551,8 @@ namespace boost
             const binomial_distribution<RealType>& dist;
             RealType t;
             bool complement;
+
+            binomial_functor& operator=(const binomial_functor&);
          }; // struct binomial_functor
       } // namespace detail
 

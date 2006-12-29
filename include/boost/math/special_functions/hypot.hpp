@@ -6,15 +6,10 @@
 #ifndef BOOST_MATH_HYPOT_INCLUDED
 #define BOOST_MATH_HYPOT_INCLUDED
 
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/precision.hpp>
 #include <cmath>
-#include <boost/limits.hpp>
 #include <algorithm> // for swap
-
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-#  include <boost/static_assert.hpp>
-#else
-#  include <boost/assert.hpp>
-#endif
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std{ using ::sqrt; using ::fabs; }
@@ -25,31 +20,35 @@ namespace boost{ namespace math{
 template <class T>
 T hypot(T x, T y)
 {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT(::std::numeric_limits<T>::is_specialized);
-#else
-   BOOST_ASSERT(std::numeric_limits<T>::is_specialized);
-#endif
-
    //
    // Normalize x and y, so that both are positive and x >= y:
    //
    x = (std::fabs)(x);
    y = (std::fabs)(y);
 
+#ifdef BOOST_MSVC
+#pragma warning(push) 
+#pragma warning(disable: 4127)
+#endif
    // special case, see C99 Annex F:
    if(std::numeric_limits<T>::has_infinity
       && ((x == std::numeric_limits<T>::infinity())
       || (y == std::numeric_limits<T>::infinity())))
       return std::numeric_limits<T>::infinity();
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
    if(y > x)
       (std::swap)(x, y);
    //
-   // Figure out overflow and underflow limits:
+   // Figure out overflow and underflow limits,
+   // we could make these constants static to save
+   // a few cycles, but the code would then not be
+   // thread safe :-(
    //
-   T safe_upper = (std::sqrt)((std::numeric_limits<T>::max)()) / 2;
-   T safe_lower = (std::sqrt)((std::numeric_limits<T>::min)());
+   T safe_upper = (std::sqrt)(tools::max_value<T>()) / 2;
+   T safe_lower = (std::sqrt)(tools::min_value<T>());
    static const T one = 1;
    //
    // Now handle special cases:

@@ -178,6 +178,21 @@ calculated using NTL::RR at 1000-bit precision.
 
 [endsect]
 
+[section:hypot hypot]
+
+   template <class T>
+   T hypot(T x, T y);
+   
+__effects computes [$../equations/hypot.png] in such a way as to avoid undue underflow and overflow.
+
+When calculating [$../equations/hypot.png] it's quite easy for the intermediate terms to either
+overflow or underflow, even though the result is in fact perfectly representable.
+One possible alternative form is [$../equations/hypot2.png], but that can overflow or underflow
+if x and y are of very differing magnitudes.  The `hypot` function takes care of 
+all the special cases for you, so you don't have to.
+
+[endsect]
+
 
 [endsect][/section:powers Logs, Powers, Roots and Exponentials]
 

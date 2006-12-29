@@ -44,10 +44,6 @@ and in this implementation:
 The choice of x = lower or x = upper is made because statistical use of this distribution judged is most likely:
 the method of maximum likelihood uses this definition.
 
-[$../graphs/uniform_pdf.png]
-
-[$../graphs/uniform_cdf.png]
-
 There is also a [@http://en.wikipedia.org/wiki/Discrete_uniform_distribution *discrete* uniform distribution].
 
 Parameters lower and upper can be any finite value.
@@ -63,6 +59,12 @@ and (upper - lower) is also called the [@http://en.wikipedia.org/wiki/Scale_para
 The following graph illustrates how the
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function PDF]
 varies with the shape parameter:
+
+[$../graphs/uniform_pdf.png]
+
+Likewise for the CDF:
+
+[$../graphs/uniform_cdf.png]
 
 [h4 Member Functions]
 

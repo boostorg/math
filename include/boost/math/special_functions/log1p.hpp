@@ -71,6 +71,13 @@ T log1p(T x)
   // A domain error occurs if x < -1.  TODO should there be a check?
    using namespace std;
 
+   if(x < -1)
+      return tools::domain_error<T>(
+         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+   if(x == -1)
+      return -tools::overflow_error<T>(
+         BOOST_CURRENT_FUNCTION, 0);
+
    T a = fabs(x);
    if(a > T(0.5L))
       return log(1 + x);
@@ -118,15 +125,51 @@ inline long double log1p(long double z)
    || defined(linux) || defined(__linux) || defined(__linux__) \
    || defined(__hpux)
 template <>
-inline float log1p<float>(float x){ return ::log1pf(x); }
+inline float log1p<float>(float x)
+{ 
+   if(x < -1)
+      return tools::domain_error<float>(
+         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+   if(x == -1)
+      return -tools::overflow_error<float>(
+         BOOST_CURRENT_FUNCTION, 0);
+   return ::log1pf(x); 
+}
 template <>
-inline long double log1p<long double>(long double x){ return ::log1pl(x); }
+inline long double log1p<long double>(long double x)
+{ 
+   if(x < -1)
+      return tools::domain_error<long double>(
+         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+   if(x == -1)
+      return -tools::overflow_error<long double>(
+         BOOST_CURRENT_FUNCTION, 0);
+   return ::log1pl(x); 
+}
 #else
 template <>
-inline float log1p<float>(float x){ return ::log1p(x); }
+inline float log1p<float>(float x)
+{ 
+   if(x < -1)
+      return tools::domain_error<float>(
+         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+   if(x == -1)
+      return -tools::overflow_error<float>(
+         BOOST_CURRENT_FUNCTION, 0);
+   return ::log1p(x); 
+}
 #endif
 template <>
-inline double log1p<double>(double x){ return ::log1p(x); }
+inline double log1p<double>(double x)
+{ 
+   if(x < -1)
+      return tools::domain_error<double>(
+         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+   if(x == -1)
+      return -tools::overflow_error<double>(
+         BOOST_CURRENT_FUNCTION, 0);
+   return ::log1p(x); 
+}
 #elif defined(_MSC_VER)
 //
 // You should only enable this branch if you are absolutely sure
@@ -136,6 +179,12 @@ inline double log1p<double>(double x){ return ::log1p(x); }
 template <>
 inline double log1p<double>(double x)
 {
+   if(x < -1)
+      return tools::domain_error<double>(
+         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+   if(x == -1)
+      return -tools::overflow_error<double>(
+         BOOST_CURRENT_FUNCTION, 0);
    double u = 1+x;
    if(u == 1.0) 
       return x; 
@@ -150,6 +199,12 @@ inline float log1p<float>(float x)
 template <>
 inline long double log1p<long double>(long double x)
 {
+   if(x < -1)
+      return tools::domain_error<long double>(
+         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+   if(x == -1)
+      return -tools::overflow_error<long double>(
+         BOOST_CURRENT_FUNCTION, 0);
    long double u = 1+x;
    if(u == 1.0) 
       return x; 

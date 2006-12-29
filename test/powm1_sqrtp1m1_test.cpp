@@ -1628,7 +1628,7 @@ void test_powm1_sqrtp1m1(T, const char* type_name)
       "Test results for type " << type_name << std::endl << std::endl;
    handle_test_result(result, sqrtp1m1_data[result.worst()], result.worst(), type_name, "boost::math::sqrt1pm1", "sqrt1pm1");
 
-   typedef T (*func2_t)(T, T);
+   typedef T (*func2_t)(T const, T const);
    func2_t f2 = &boost::math::powm1<T>;
    result = boost::math::tools::test(
       powm1_data, 

@@ -59,14 +59,14 @@ private:
 typedef students_t_distribution<double> students_t;
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const students_t_distribution<RealType>& dist)
+const std::pair<RealType, RealType> range(const students_t_distribution<RealType>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const students_t_distribution<RealType>& dist)
+const std::pair<RealType, RealType> support(const students_t_distribution<RealType>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
@@ -304,13 +304,13 @@ inline RealType variance(const students_t_distribution<RealType>& dist)
 }
 
 template <class RealType>
-inline RealType mode(const students_t_distribution<RealType>& dist)
+inline RealType mode(const students_t_distribution<RealType>& /*dist*/)
 {
    return 0;
 }
 
 template <class RealType>
-inline RealType median(const students_t_distribution<RealType>& dist)
+inline RealType median(const students_t_distribution<RealType>& /*dist*/)
 {
    return 0;
 }

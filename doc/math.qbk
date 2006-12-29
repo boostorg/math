@@ -104,6 +104,24 @@ and use the function's name as the link text]
 [def __ibetac_invb [link math_toolkit.special.sf_beta.ibeta_inv_function ibetac_invb]]
 [def __ibeta_derivative [link math_toolkit.special.sf_beta.beta_derivative ibeta_derivative]]
 
+[/elliptic integrals]
+[def __ellint_rj  [link math_toolkit.special.elliptic_integrals.ellint_carlson ellint_rj]]
+[def __ellint_rf  [link math_toolkit.special.elliptic_integrals.ellint_carlson ellint_rf]]
+[def __ellint_rc  [link math_toolkit.special.elliptic_integrals.ellint_carlson ellint_rc]]
+[def __ellint_rd  [link math_toolkit.special.elliptic_integrals.ellint_carlson ellint_rd]]
+[def __ellint_1  [link math_toolkit.special.elliptic_integrals.ellint_1 ellint_1]]
+[def __ellint_2  [link math_toolkit.special.elliptic_integrals.ellint_2 ellint_2]]
+[def __ellint_3  [link math_toolkit.special.elliptic_integrals.ellint_3 ellint_3]]
+
+[/sinus cardinals]
+[def __sinc_pi  [link math_toolkit.special.sinc.sinc_pi sinc_pi]]
+[def __sinhc_pi  [link math_toolkit.special.sinc.sinhc_pi sinhc_pi]]
+
+[/Inverse hyperbolics]
+[def __acosh  [link math_toolkit.special.inv_hyper.acosh acosh]]
+[def __asinh  [link math_toolkit.special.inv_hyper.asinh asinh]]
+[def __atanh  [link math_toolkit.special.inv_hyper.atanh atanh]]
+
 [/classify]
 [def __fpclassify [link math_toolkit.special.fpclass fpclassify]]
 [def __isfinite [link math_toolkit.special.fpclass isfinite]]
@@ -117,6 +135,7 @@ and use the function's name as the link text]
 [def __cbrt [link math_toolkit.special.powers.cbrt cbrt]]
 [def __sqrt1pm1 [link math_toolkit.special.powers.sqrt1pm1 sqrt1pm1]]
 [def __powm1 [link math_toolkit.special.powers.powm1 powm1]]
+[def __hypot [link math_toolkit.special.powers.hypot hypot]]
 
 [/ distribution non-members]
 [def __cdf [link math.dist.cdf Cumulative Distribution Function]]
@@ -280,6 +299,8 @@ external graphing application.
 [endsect]
 
 [include powers.qbk]
+[include sinc.qbk]
+[include inv_hyper.qbk]
 
 [include fpclassify.qbk]
 [include error_handling.qbk]

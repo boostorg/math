@@ -6,7 +6,7 @@ Boost Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ]
 
-[section Elliptic Integrals of the First Kind - Legendre Form]
+[section:ellint_1 Elliptic Integrals of the First Kind - Legendre Form]
 
 [caution __caution]
 
@@ -88,7 +88,7 @@ and
 
 [endsect]
 
-[section Elliptic Integrals of the Second Kind - Legendre Form]
+[section:ellint_2 Elliptic Integrals of the Second Kind - Legendre Form]
 
 [caution __caution]
 
@@ -170,7 +170,7 @@ and
 
 [endsect]
 
-[section Elliptic Integrals of the Third Kind - Legendre Form]
+[section:ellint_3 Elliptic Integrals of the Third Kind - Legendre Form]
 
 [caution __caution]
 

@@ -156,14 +156,14 @@ private:
 typedef cauchy_distribution<double> cauchy;
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const cauchy_distribution<RealType>& dist)
+const std::pair<RealType, RealType> range(const cauchy_distribution<RealType>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + infinity.
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const cauchy_distribution<RealType>& dist)
+const std::pair<RealType, RealType> support(const cauchy_distribution<RealType>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
    return std::pair<RealType, RealType>(-tools::max_value<RealType>(), tools::max_value<RealType>()); // - to + infinity.
@@ -220,7 +220,7 @@ inline RealType mean(const cauchy_distribution<RealType>& )
 }
 
 template <class RealType>
-inline RealType variance(const cauchy_distribution<RealType>& dist)
+inline RealType variance(const cauchy_distribution<RealType>& /*dist*/)
 {
    // There is no variance:
    return tools::domain_error<RealType>(
@@ -242,7 +242,7 @@ inline RealType median(const cauchy_distribution<RealType>& dist)
    return dist.location();
 }
 template <class RealType>
-inline RealType skewness(const cauchy_distribution<RealType>& dist)
+inline RealType skewness(const cauchy_distribution<RealType>& /*dist*/)
 {
    // There is no skewness:
    return tools::domain_error<RealType>(
@@ -253,7 +253,7 @@ inline RealType skewness(const cauchy_distribution<RealType>& dist)
 }
 
 template <class RealType>
-inline RealType kurtosis(const cauchy_distribution<RealType>& dist)
+inline RealType kurtosis(const cauchy_distribution<RealType>& /*dist*/)
 {
    // There is no kurtosis:
    return tools::domain_error<RealType>(
@@ -264,7 +264,7 @@ inline RealType kurtosis(const cauchy_distribution<RealType>& dist)
 }
 
 template <class RealType>
-inline RealType kurtosis_excess(const cauchy_distribution<RealType>& dist)
+inline RealType kurtosis_excess(const cauchy_distribution<RealType>& /*dist*/)
 {
    // There is no kurtosis excess:
    return tools::domain_error<RealType>(
