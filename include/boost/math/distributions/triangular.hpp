@@ -143,9 +143,12 @@ namespace boost{ namespace math
   public:
     typedef RealType value_type;
 
-    triangular_distribution(RealType lower = 0, RealType mode = 0, RealType upper = 1)
+    triangular_distribution(RealType lower = -1, RealType mode = 0, RealType upper = 1)
       : m_lower(lower), m_mode(mode), m_upper(upper) // Constructor.
-    {
+    { // Evans says standard is lower 0, mode 1/2, upper 1,
+      // has median sqrt(c/2) for c <=1/2 and 1 - sqrt(1-c)/2 for c >= 1/2
+      // But this is more useful in most applications to approximate normal distribution,
+      // where the central value is the most likely and deviations either side equally likely.
       RealType result;
       detail::check_triangular(BOOST_CURRENT_FUNCTION,lower, mode, upper, &result);
     }
@@ -185,7 +188,7 @@ namespace boost{ namespace math
     return std::pair<RealType, RealType>(dist.lower(), dist.upper());
   }
 
-  template <class RealType>
+    template <class RealType>
   RealType pdf(const triangular_distribution<RealType>& dist, const RealType& x)
   {
     RealType lower = dist.lower();
@@ -393,6 +396,7 @@ namespace boost{ namespace math
     }
     return (lower + upper + mode) / 3;
   } // RealType mean(const triangular_distribution<RealType>& dist)
+
 
   template <class RealType>
   RealType variance(const triangular_distribution<RealType>& dist)
