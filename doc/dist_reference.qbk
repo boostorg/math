@@ -4,6 +4,7 @@
 
 [section:dists Distributions]
 
+[include distributions/bernoulli.qbk]
 [include distributions/beta.qbk]
 [include distributions/binomial.qbk]
 [include distributions/cauchy.qbk]
