@@ -1,0 +1,23 @@
+[section:credits Credits and Acknowledgements]
+
+Hubert Holin started the Boost.Math library.  The inverse
+hyperbolic functions, and the sinus cardinal functions are his.
+
+John Maddock started this library, the beta, gamma, erf, polynomial,
+and factorial functions are his.  As is the "Toolkit" section, and many
+of the statistical distributions.
+
+Paul A. Bristow implemented many of the statistical distributions, 
+and tirelessly proof-read everything that JM threw at him.
+
+Xiaogang Zhang worked on the Bessel functions and elliptic integrals for his
+Google Summer of Code project 2006.
+
+[endsect][/section:roadmap Roadmap]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

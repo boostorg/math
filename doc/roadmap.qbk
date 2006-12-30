@@ -1,4 +1,4 @@
-[section:roadmap Roadmap]
+[section:roadmap History and Roadmap]
 
 [h4 Milestone 1: Released March 31st 2006]
 
@@ -24,15 +24,22 @@ results, indexed by test, floating point type, platform, and compiler.
 * Improved erf/erfc inverses (rational approximations).
 * Implemented Rational function generation (the Remez method).
 
-[h4 Milestone 3: Review candidate]
+[h4 Milestone 3: Review candidate (31st Dec 2006)]
 
-* Implement the main probability distribution and density functions.
-* Implement digamma.
+* Implemented the main probability distribution and density functions.
+* Implemented digamma.
+* Added more factorial functions.
+* Implemented the Hermite, Legendre and Laguerre polynomials plus the 
+spherical harmonic functions from TR1.
+* Moved Xiaogang Zhang's elliptic integral code into the library,
+and brought them into line with the rest of the code.
+* Moved Hubert Holin's existing Boost.Math special functions
+into this library and brought them into line with the rest of the code.
 
 [h4 Future]
 
-* The TR1 Special functions are still needed, some of these 
-(Bessel functions, and Eliptic Integrals) are mostly
+* Some TR1 Special functions are still needed, some of these 
+(Bessel functions) are mostly
 complete as a result of Xiaogang Zhang's participation in
 the Google Summer of Code 2006, refer to the 
 [@https://www.boost-consulting.com:8443/trac/soc/browser/boost/soc/2006
