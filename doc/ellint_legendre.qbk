@@ -29,7 +29,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 [heading Description]
 
 These two functions evaluate the incomplete elliptic integral of the first kind
-['F([phi], k)] and it's complete counterpart ['K(k) = F([pi]/2, k)].
+['F([phi], k)] and its complete counterpart ['K(k) = F([pi]/2, k)].
 
 [$../graphs/ellint_1.png]
 
@@ -111,7 +111,7 @@ and
 [heading Description]
 
 These two functions evaluate the incomplete elliptic integral of the second kind
-['E([phi], k)] and it's complete counterpart ['E(k) = E([pi]/2, k)].
+['E([phi], k)] and its complete counterpart ['E(k) = E([pi]/2, k)].
 
 [$../graphs/ellint_2.png]
 
@@ -193,7 +193,7 @@ and
 [heading Description]
 
 These two functions evaluate the incomplete elliptic integral of the third kind
-['[Pi](n, [phi], k)] and it's complete counterpart ['[Pi](n, k) = E(n, [pi]/2, k)].
+['[Pi](n, [phi], k)] and its complete counterpart ['[Pi](n, k) = E(n, [pi]/2, k)].
 
 [$../graphs/ellint_3.png]
 
@@ -210,7 +210,7 @@ would be complex).
 
 [caution In addition, the region where ['n > 1] and [phi][space] ['is not in the range]
 \[0, [pi]\/2\] is currently unsupported and returns the result of __domain_error.
-For this reason it is recomended that you keep [phi][space] inside it's "natural" range
+For this reason it is recomended that you keep [phi][space] inside its "natural" range
 of \[0, [pi]\/2\].]
 
   template <typename T>
