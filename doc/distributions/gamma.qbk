@@ -23,6 +23,11 @@ When the shape parameter is an integer then it is known as the
 Erlang Distribution.  It is also closely related to the Poisson
 and Chi Squared Distributions.
 
+When the shape parameter has an integer value, the distribution is the
+[@http://en.wikipedia.org/wiki/Erlang_distribution Erlang distribution].
+Since this can be produced by ensuring that the shape parameter has an
+integer value > 0, the Erlang distribution is not separately implemented.
+
 [note
 To avoid potential confusion with the gamma functions, this
 distribution does not define a typedef 
