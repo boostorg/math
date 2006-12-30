@@ -97,7 +97,7 @@ void test_spots(RealType T)
 
   // Tests on construction
   // Default should be 0, 0, 1
-  BOOST_CHECK_EQUAL(triangular_distribution<RealType>().lower(), 0);
+  BOOST_CHECK_EQUAL(triangular_distribution<RealType>().lower(), -1);
   BOOST_CHECK_EQUAL(triangular_distribution<RealType>().mode(), 0);
   BOOST_CHECK_EQUAL(triangular_distribution<RealType>().upper(), 1);
   BOOST_CHECK_EQUAL(support(triangular_distribution<RealType>()).first, triangular_distribution<RealType>().lower());
@@ -334,7 +334,13 @@ void test_spots(RealType T)
     static_cast<RealType>(0.125), 
     tolerance);
   
-  triangular_distribution<RealType>  tristd; // Using typedef == triangular_distribution<double> tristd;
+  triangular_distribution<RealType>  triang; // Using typedef == triangular_distribution<double> tristd;
+  triangular_distribution<RealType>  tristd(0, 0.5, 1); // 'Standard' triangular distribution.
+
+  BOOST_CHECK_CLOSE_FRACTION( // median of Standard triangular is sqrt(mode/2) if c > 1/2 else 1 - sqrt((1-c)/2)
+    median(tristd), 
+    static_cast<RealType>(0.5), 
+    tolerance);
   triangular_distribution<RealType> tri011(0, 1, 1); // Using default RealType double.
   triangular_distribution<RealType> tri0q1(0, 0.25, 1); // mode is near bottom.
   triangular_distribution<RealType> tri0h1(0, 0.5, 1); // Equilateral triangle - mode is the middle.
@@ -363,10 +369,10 @@ void test_spots(RealType T)
 
   RealType xs [] = {0, 0.01L, 0.02L, 0.05L, 0.1L, 0.2L, 0.3L, 0.4L, 0.5L, 0.6L, 0.7L, 0.8L, 0.9L, 0.95L, 0.98L, 0.99L, 1};
 
-  const triangular_distribution<RealType>& distr = tristd;
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(distr, 1.)), static_cast<RealType>(0), tol5eps);
-  const triangular_distribution<RealType>* distp = &tristd;
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(*distp, 1.)), static_cast<RealType>(0), tol5eps);
+  const triangular_distribution<RealType>& distr = triang;
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(distr, 1.)), static_cast<RealType>(-1), tol5eps);
+  const triangular_distribution<RealType>* distp = &triang;
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(*distp, 1.)), static_cast<RealType>(-1), tol5eps);
 
   const triangular_distribution<RealType>* dists [] = {&tristd, &tri011, &tri0q1, &tri0h1, &trim12};
   BOOST_CHECK_CLOSE_FRACTION(quantile(complement(*dists[1], 1.)), static_cast<RealType>(0), tol5eps);
@@ -529,10 +535,17 @@ int test_main(int, char* [])
 
   // Check that can construct triangular distribution using the two convenience methods:
   using namespace boost::math;
-  triangular tristd; // Using typedef
-  // == triangular_distribution<double> tristd;
-  BOOST_CHECK_EQUAL(tristd.lower(), 0); // Check defaults - mode == lower.
-  BOOST_CHECK_EQUAL(tristd.mode(), 0);
+  triangular triang; // Using typedef
+  // == triangular_distribution<double> triang;
+
+  BOOST_CHECK_EQUAL(triang.lower(), -1); // Check default.
+  BOOST_CHECK_EQUAL(triang.mode(), 0);
+  BOOST_CHECK_EQUAL(triang.upper(), 1);
+
+  triangular tristd (0, 0.5, 1); // Using typedef
+
+  BOOST_CHECK_EQUAL(tristd.lower(), 0); 
+  BOOST_CHECK_EQUAL(tristd.mode(), 0.5);
   BOOST_CHECK_EQUAL(tristd.upper(), 1);
 
   //cout << "X range from " << range(tristd).first << " to " << range(tristd).second << endl;
