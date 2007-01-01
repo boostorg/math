@@ -274,12 +274,14 @@ namespace boost
     template <class RealType>
     inline RealType mode(const negative_binomial_distribution<RealType>& dist)
     { // Mode of Negative Binomial distribution = floor[(r-1) * (1 - p)/p]
+      using namespace std; // ADL of std functions.
       return floor((dist.successes() -1) * (1 - dist.success_fraction()) / dist.success_fraction());
     } // mode
 
     template <class RealType>
     inline RealType skewness(const negative_binomial_distribution<RealType>& dist)
     { // skewness of Negative Binomial distribution = 2-p / (sqrt(r(1-p))
+      using namespace std; // ADL of std functions.
       RealType p = dist.success_fraction();
       RealType r = dist.successes();
 
@@ -400,6 +402,7 @@ namespace boost
       // MAthCAD pnbinom return smallest k such that negative_binomial(k, n, p) >= probability.
       // k argument may be integral, signed, or unsigned, or floating point.
       // BUT Cephes/CodeCogs says: finds argument p (0 to 1) such that cdf(k, n, p) = y
+      using namespace std; // ADL of std functions.
 
       RealType p = dist.success_fraction();
       RealType r = dist.successes();

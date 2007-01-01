@@ -427,6 +427,7 @@ namespace boost{ namespace math
   template <class RealType>
   inline RealType median(const triangular_distribution<RealType>& dist)
   {
+    using namespace std; // ADL of std functions.
     RealType mode = dist.mode();
     RealType result; // of checks.
     if(false == detail::check_triangular_mode(BOOST_CURRENT_FUNCTION, mode, &result))

@@ -200,6 +200,7 @@ namespace boost
     template <class RealType>
     inline RealType mode(const poisson_distribution<RealType>& dist)
     { // mode.
+      using namespace std; // ADL of std functions.
       return floor(dist.mean());
     }
 
@@ -225,6 +226,7 @@ namespace boost
     template <class RealType>
     inline RealType skewness(const poisson_distribution<RealType>& dist)
     { // skewness = sqrt(l).
+      using namespace std; // ADL of std functions.
       return 1 / sqrt(dist.mean());
     }
 
@@ -421,6 +423,7 @@ namespace boost
           return result;
         }
       }
+      using namespace std; // ADL of std functions.
       // if(p == 0) NOT necessarily zero!
       // Not necessarily any special value of k because is unlimited.
 			if (p <= exp(-dist.mean()))
@@ -468,7 +471,7 @@ namespace boost
   } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#if defined(BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 # pragma warning(pop)
 #endif
 
