@@ -60,7 +60,12 @@ T hypot(T x, T y)
          // y is negligible:
          return x;
       }
-      return (std::sqrt)(x) * (std::sqrt)(y) * (std::sqrt)(x/y + y/x);
+      T a = (std::sqrt)(x) * (std::sqrt)(y);
+      T b = (std::sqrt)(x/y + y/x);
+      // We may have overflow:
+      if(tools::max_value<T>() /a < b)
+         return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+      return a * b;
    }
    else if(y <= safe_lower)
    {
