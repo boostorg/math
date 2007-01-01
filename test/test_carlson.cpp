@@ -73,14 +73,14 @@ void expected_results()
       "HP-UX",                          // platform
       largest_type,                  // test type(s)
       ".*RJ.*",      // test data group
-      ".*", 250, 50);  // test function
+      ".*", 450, 50);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       "HP-UX",                          // platform
       "real_concept",                  // test type(s)
       ".*RJ.*",      // test data group
-      ".*", 250, 50);  // test function
+      ".*", 450, 50);  // test function
    //
    // Catch all cases come last:
    //
