@@ -34,7 +34,11 @@ public:
 
    // There is no default constructor,
    // but we need a way to instantiate the archetype:
-   static distribution_archetype& get_object();
+   static distribution_archetype& get_object()
+   {
+      // will never get caled:
+      return *reinterpret_cast<distribution_archetype*>(0);
+   }
 }; // template <class RealType>class distribution_archetype
 
 // Non-member accessor functions:
@@ -175,7 +179,11 @@ struct DistributionConcept
       v = chf(dist, li);
    }
 private:
-   static Distribution& get_object();
+   static Distribution& get_object()
+   {
+      // will never get called:
+      return * reinterpret_cast<Distribution*>(0);
+   }
 }; // struct DistributionConcept
 
 } // namespace concepts

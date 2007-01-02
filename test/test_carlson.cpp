@@ -65,22 +65,25 @@ void expected_results()
    largest_type = "(long\\s+)?double";
 #endif
    //
-   // HP-UX:
+   // real long doubles:
    //
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      "HP-UX",                          // platform
-      largest_type,                  // test type(s)
-      ".*RJ.*",      // test data group
-      ".*", 450, 50);  // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      "HP-UX",                          // platform
-      "real_concept",                  // test type(s)
-      ".*RJ.*",      // test data group
-      ".*", 450, 50);  // test function
+   if(boost::math::tools::digits<long double>() > 53)
+   {
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         BOOST_PLATFORM,                          // platform
+         largest_type,                  // test type(s)
+         ".*RJ.*",      // test data group
+         ".*", 1000, 50);  // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         BOOST_PLATFORM,                          // platform
+         "real_concept",                  // test type(s)
+         ".*RJ.*",      // test data group
+         ".*", 1000, 50);  // test function
+   }
    //
    // Catch all cases come last:
    //

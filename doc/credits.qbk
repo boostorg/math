@@ -4,11 +4,18 @@ Hubert Holin started the Boost.Math library.  The inverse
 hyperbolic functions, and the sinus cardinal functions are his.
 
 John Maddock started this library, the beta, gamma, erf, polynomial,
-and factorial functions are his.  As is the "Toolkit" section, and many
+and factorial functions are his, as is the "Toolkit" section, and many
 of the statistical distributions.
 
-Paul A. Bristow implemented many of the statistical distributions, 
-and tirelessly proof-read everything that JM threw at him.
+Paul A. Bristow threw down the challenge in 
+[@http://www2.open-std.org/JTC1/SC22/WG21/docs/papers/2004/n1668.pdf 
+A Proposal to add Mathematical Functions for Statistics to the C++ 
+Standard Library] to add the key math functions, especially those essential for
+statistics. After JM accepted and solved the difficult problems, 
+not only numerically, but in full C++ template style, PAB
+implemented a few of the statistical distributions. PAB also tirelessly 
+proof-read everything that JM threw at him (so that all
+remaining editorial mistakes are his fault).
 
 Xiaogang Zhang worked on the Bessel functions and elliptic integrals for his
 Google Summer of Code project 2006.
