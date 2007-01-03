@@ -45,7 +45,7 @@ template <class RealType> // Any floating-point type RealType.
 void test_spots(RealType)
 { // Parameter only provides the type, float, double... value ignored.
 
-  // Basic sanity checks, test data is to double precision only
+  // Basic sanity checks, test data may be to double precision only
   // so set tolerance to 100 eps expressed as a fraction,
   // or 100 eps of type double expressed as a fraction,
   // whichever is the larger.
@@ -58,7 +58,9 @@ void test_spots(RealType)
   cout << "Tolerance for type " << typeid(RealType).name()  << " is "
     << setprecision(3) << tolerance  << " (or " << tolerance * 100 << "%)." << endl;
 
-  // Sources of spot test values:
+  // Sources of spot test values - calculator,
+  // or Steve Moshier's command interpreter V1.3 100 decimal digit calculator,
+  // Wolfram function evaluator.
 
   using boost::math::bernoulli_distribution; // of type RealType.
   using  ::boost::math::cdf;
@@ -120,12 +122,17 @@ void test_spots(RealType)
 
   BOOST_CHECK_CLOSE_FRACTION(
        kurtosis(bernoulli_distribution<RealType>(static_cast<RealType>(0.1L))),
+       static_cast<RealType>(8.11111111111111111111111111111111111111111111L),
+       tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(
+       kurtosis_excess(bernoulli_distribution<RealType>(static_cast<RealType>(0.1L))),
        static_cast<RealType>(5.11111111111111111111111111111111111111111111L),
        tolerance);
+
   // median NOT implemented.
   BOOST_CHECK_THROW(
        median(bernoulli_distribution<RealType>(static_cast<RealType>(0.5L))), std::domain_error);
-
 
   BOOST_CHECK_THROW(
      quantile(
@@ -223,20 +230,17 @@ int test_main(int, char* [])
   BOOST_CHECK_THROW(bernoulli_distribution<double> bn3(std::numeric_limits<double>::quiet_NaN() ), std::domain_error); // p outside 0 to 1.
   BOOST_CHECK_THROW(bernoulli_distribution<double> bn4(std::numeric_limits<double>::infinity() ), std::domain_error); // p outside 0 to 1.
 
-
   BOOST_CHECK_EQUAL(kurtosis(bn2) -3, kurtosis_excess(bn2));
-  BOOST_CHECK_EQUAL(kurtosis(bn2), -2);
-  BOOST_CHECK_EQUAL(kurtosis_excess(bn2), -5);
-  BOOST_CHECK_EQUAL(kurtosis_excess(bn2), -5);
+  BOOST_CHECK_EQUAL(kurtosis_excess(bn2), -2);
 
   //using namespace boost::math; or 
   using boost::math::bernoulli;
 
   double tol5eps = std::numeric_limits<double>::epsilon() * 5; // 5 eps as a fraction.
 
-  BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(bernoulli(0.1)), 2.11111111111111111111111111111111111111111111111111, tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(bernoulli(0.9)), 2.11111111111111111111111111111111111111111111111111, tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(kurtosis(bernoulli(0.6)), -1.8333333333333333333333333333333333333333333333333, tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(bernoulli(0.1)), 5.11111111111111111111111111111111111111111111111111, tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(bernoulli(0.9)), 5.11111111111111111111111111111111111111111111111111, tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(kurtosis(bernoulli(0.6)), 1/0.4 + 1/0.6 -3, tol5eps);
   BOOST_CHECK_EQUAL(kurtosis(bernoulli(0)), +std::numeric_limits<double>::infinity());
   BOOST_CHECK_EQUAL(kurtosis(bernoulli(1)), +std::numeric_limits<double>::infinity());
  // 
@@ -274,8 +278,6 @@ Tolerance for type double is 2.22e-014 (or 2.22e-012%).
 Tolerance for type long double is 2.22e-014 (or 2.22e-012%).
 Tolerance for type class boost::math::concepts::real_concept is 2.22e-014 (or 2.22e-012%).
 *** No errors detected
-Build Time 0:05
-
 
 
 */
