@@ -6,13 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_TEST_HPP
 #define BOOST_MATH_TOOLS_TEST_HPP
 
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/test/test_tools.hpp>
-
-#if defined(__CYGWIN__)
-#define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-#endif
 
 namespace boost{ namespace math{ namespace tools{
 

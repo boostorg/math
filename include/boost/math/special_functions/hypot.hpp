@@ -23,8 +23,10 @@ T hypot(T x, T y)
    //
    // Normalize x and y, so that both are positive and x >= y:
    //
-   x = (std::fabs)(x);
-   y = (std::fabs)(y);
+   using namespace std; // ADL of std names
+
+   x = fabs(x);
+   y = fabs(y);
 
 #ifdef BOOST_MSVC
 #pragma warning(push) 
@@ -47,8 +49,8 @@ T hypot(T x, T y)
    // a few cycles, but the code would then not be
    // thread safe :-(
    //
-   T safe_upper = (std::sqrt)(tools::max_value<T>()) / 2;
-   T safe_lower = (std::sqrt)(tools::min_value<T>());
+   T safe_upper = sqrt(tools::max_value<T>()) / 2;
+   T safe_lower = sqrt(tools::min_value<T>());
    static const T one = 1;
    //
    // Now handle special cases:
@@ -60,8 +62,8 @@ T hypot(T x, T y)
          // y is negligible:
          return x;
       }
-      T a = (std::sqrt)(x) * (std::sqrt)(y);
-      T b = (std::sqrt)(x/y + y/x);
+      T a = sqrt(x) * sqrt(y);
+      T b = sqrt(x/y + y/x);
       // We may have overflow:
       if(tools::max_value<T>() /a < b)
          return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
@@ -74,12 +76,12 @@ T hypot(T x, T y)
          // y is negligible:
          return x;
       }
-      return (std::sqrt)(x) * (std::sqrt)(y) * (std::sqrt)(x/y + y/x);
+      return sqrt(x) * sqrt(y) * sqrt(x/y + y/x);
    }
    //
    // If we get here then x^2+y^2 will not overflow or underflow:
    //
-   return (std::sqrt)(x*x + y*y);
+   return sqrt(x*x + y*y);
 } // template <class T> T hypot(T x, T y)
 
 
