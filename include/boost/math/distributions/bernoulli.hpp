@@ -76,21 +76,14 @@ namespace boost
         {
           return false;
         }
-        if((k < 0) || !(boost::math::isfinite)(k))
+        if(!(boost::math::isfinite)(k) || !((k == 0) || (k == 1)))
         {
           *result = tools::domain_error<RealType>(
             function,
             "Number of successes argument is %1%, but must be 0 or 1 !", k);
           return false;
         }
-        if(k > 1)
-        {
-          *result = tools::domain_error<RealType>(
-            function,
-            "Number of successes argument is %1%, but must be 0 or 1 !", k);
-          return false;
-        }
-        return true;
+       return true;
       }
       template <class RealType>
       inline bool check_dist_and_prob(const char* function, RealType p, RealType prob, RealType* result)
@@ -181,13 +174,9 @@ namespace boost
       {
         return 1 - dist.success_fraction(); // 1 - p
       }
-      else if (k == 1)
+      else  // k == 1
       {
         return dist.success_fraction(); // p
-      }
-      else
-      { // k < 0 or k > 1 So should never get here.
-        return 0;
       }
     } // pdf
 
@@ -205,16 +194,12 @@ namespace boost
       {
         return result;
       }
-      if (k < 0)
-      { // Should never get here.
-        return 0;
-      }
-      else if (k == 0)
+      if (k == 0)
       {
         return 1 - p;
       }
       else
-      { // k >= 1
+      { // k == 1
         return 1;
       }
     } // bernoulli cdf
@@ -235,16 +220,12 @@ namespace boost
       {
         return result;
       }
-      if (k < 0)
-      { // Should never get here.
-        return 1;
-      }
-      else if (k == 0)
+      if (k == 0)
       {
         return p;
       }
       else
-      { // k >= 1
+      { // k == 1
         return 0;
       }
     } // bernoulli cdf complement
@@ -321,14 +302,20 @@ namespace boost
     inline RealType kurtosis_excess(const bernoulli_distribution<RealType>& dist)
     {
       RealType p = dist.success_fraction();
-      return (6 * p * p - 6 * p + 1) / (p * (1 - p)) - 3;
+      // Note Wolfram says this is kurtosis in text, but gamma2 is the kurtosis excess,
+      // and Wikipedia also says this is the kurtosis excess formula.
+      // return (6 * p * p - 6 * p + 1) / (p * (1 - p));
+      // But Wolfram kurtosis article gives this simpler formula for kurtosis excess:
+      return 1 / (1 - p) + 1/p -6;
     }
 
     template <class RealType>
     inline RealType kurtosis(const bernoulli_distribution<RealType>& dist)
     {
       RealType p = dist.success_fraction();
-      return (6 * p * p - 6 * p + 1) / (p * (1 - p));
+      return 1 / (1 - p) + 1/p -6 + 3;
+      // Simpler than:
+      // return (6 * p * p - 6 * p + 1) / (p * (1 - p)) + 3;
     }
 
   } // namespace math
