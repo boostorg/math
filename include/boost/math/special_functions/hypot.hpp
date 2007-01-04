@@ -43,45 +43,12 @@ T hypot(T x, T y)
 
    if(y > x)
       (std::swap)(x, y);
-   //
-   // Figure out overflow and underflow limits,
-   // we could make these constants static to save
-   // a few cycles, but the code would then not be
-   // thread safe :-(
-   //
-   T safe_upper = sqrt(tools::max_value<T>()) / 2;
-   T safe_lower = sqrt(tools::min_value<T>());
-   static const T one = 1;
-   //
-   // Now handle special cases:
-   //
-   if(x >= safe_upper)
-   {
-      if(y <= one)
-      {
-         // y is negligible:
-         return x;
-      }
-      T a = sqrt(x) * sqrt(y);
-      T b = sqrt(x/y + y/x);
-      // We may have overflow:
-      if(tools::max_value<T>() /a < b)
-         return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
-      return a * b;
-   }
-   else if(y <= safe_lower)
-   {
-      if((x >= one) || (y == 0))
-      {
-         // y is negligible:
-         return x;
-      }
-      return sqrt(x) * sqrt(y) * sqrt(x/y + y/x);
-   }
-   //
-   // If we get here then x^2+y^2 will not overflow or underflow:
-   //
-   return sqrt(x*x + y*y);
+
+   if(x * tools::epsilon<T>() >= y)
+      return x;
+
+   T rat = y / x;
+   return x * sqrt(1 + rat*rat);
 } // template <class T> T hypot(T x, T y)
 
 

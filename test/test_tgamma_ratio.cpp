@@ -63,7 +63,7 @@ void expected_results()
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
-      "HP-UX|linux",                          // platform
+      "HP-UX|linux|.*(bsd|BSD).*",      // platform
       "float",                          // test type(s)
       "[^|]*",                          // test data group
       "boost::math::tgamma_ratio[^|]*", 35, 8);                 // test function

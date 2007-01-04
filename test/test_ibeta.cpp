@@ -122,16 +122,18 @@ void expected_results()
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 200000, 10000);                 // test function
+#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    //
-   // Cygwin:
+   // No long doubles:
    //
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
-      "cygwin",                          // platform
+      BOOST_PLATFORM,                          // platform
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
-      ".*", 10000, 500);                 // test function
+      ".*", 13000, 500);                 // test function
+#endif
    //
    // Catch all cases come last:
    //

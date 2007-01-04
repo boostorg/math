@@ -193,8 +193,15 @@ int test_main(int, char* [])
 
     test_spots(0.0F, "float");
     test_spots(0.0, "double");
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_spots(0.0L, "long double");
     test_spots(boost::math::concepts::real_concept(0), "real_concept");
+#else
+   std::cout << "<note>The long double tests have been disabled on this platform "
+      "either because the long double overloads of the usual math functions are "
+      "not available at all, or because they are too inaccurate for these tests "
+      "to pass.</note>" << std::cout;
+#endif
 
     return 0;
 }

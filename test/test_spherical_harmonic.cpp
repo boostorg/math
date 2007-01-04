@@ -57,6 +57,7 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if((std::numeric_limits<long double>::digits <= 64) &&
       (std::numeric_limits<long double>::digits != std::numeric_limits<double>::digits))
    {
@@ -68,6 +69,7 @@ void expected_results()
          ".*",                          // test data group
          ".*", 10, 5);                  // test function
    }
+#endif
    //
    // Catch all cases come last:
    //

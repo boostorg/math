@@ -64,6 +64,7 @@ void expected_results()
    if((std::numeric_limits<long double>::digits <= 64)
       && (std::numeric_limits<long double>::digits != std::numeric_limits<double>::digits))
    {
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
       add_expected_result(
          ".*",                          // compiler
          ".*",                          // stdlib
@@ -71,6 +72,7 @@ void expected_results()
          "double",                      // test type(s)
          ".*",                          // test data group
          ".*", 10, 5);                  // test function
+#endif
    }
    add_expected_result(
       ".*",                          // compiler

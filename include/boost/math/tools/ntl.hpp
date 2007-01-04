@@ -325,6 +325,16 @@ namespace NTL{
          boost::math::tools::digits<NTL::RR>());
    }
 
+   inline NTL::RR sinh(NTL::RR z)
+   {
+      return (expm1(z) - expm1(-z)) / 2;
+   }
+
+   inline NTL::RR cosh(NTL::RR z)
+   {
+      return (exp(z) + exp(-z)) / 2;
+   }
+
    inline NTL::RR fmod(NTL::RR x, NTL::RR y)
    {
       // This is a really crummy version of fmod, we rely on lots

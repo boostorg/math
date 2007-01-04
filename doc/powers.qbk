@@ -193,16 +193,11 @@ overflow or underflow, even though the result is in fact perfectly representable
 The function is even and symmetric in x and y, so first take assume
 ['x,y > 0] and ['x > y] (we can permute the arguments if this is not the case).
 
-Then if ['x > HIGH] return [$../equations/hypot2.png] for ['y > 1] or /x/ otherwise.
+Then if ['x * [epsilon][space] >= y] we can simply return /x/.
 
-Otherwise if ['y < LOW] return x if ['x > 1 || y == 0] otherwise [$../equations/hypot2.png].
+Otherwise the result is given by:
 
-All other cases are free from overflow or underflow problems and so can be dealt
-with via the usual formula [$../equations/hypot.png].
-
-The constant HIGH is the square root of half the largest 
-representable value.  The constant LOW is the square root of the 
-smallest representable value.
+[$../equations/hypot2.png]
 
 [endsect]
 
