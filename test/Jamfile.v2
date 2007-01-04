@@ -16,6 +16,8 @@ run hypot_test.cpp ;
 run log1p_expm1_test.cpp ;
 run powm1_sqrtp1m1_test.cpp ;
 run special_functions_test.cpp /boost/unit_test//boost_unit_test_framework/<link>static ;
+run test_bernoulli.cpp ;
+run test_constants.cpp ;
 run test_beta.cpp ;
 run test_beta_dist.cpp ;
 run test_binomial.cpp ;
@@ -130,6 +132,8 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_solve_inc_test.cpp ;
+
+
 
 
 
