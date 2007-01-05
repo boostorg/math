@@ -211,6 +211,56 @@ lower = 0, mode = half and upper = 1.
 However as a approximation for the normal distribution,
 the most common usage, lower = -1, mode = 0 and upper = 1 would be more suitable.
 
+[h4 Representation of Mathematical Constants]
+
+A macro BOOST_DEFINE_MATH_CONSTANT in constants.hpp is used
+to provide high accuracy constants to mathematical functions and distributions,
+since it is important to provide values uniformly for both built-in
+float, double and long double types,
+and for User Defined types like NTL::quad_float and NTL::RR.  
+                                        
+To permit calculations in this Math ToolKit and its tests, (and elsewhere)
+at about 100 decimal digits with NTL::RR type,
+it is obviously necessary to define constants to this accuracy.
+
+However, some compilers do not accept decimal digits strings as long as this.
+So the constant is split into two parts, with the 1st containing at least
+long double precision, and the 2nd zero if not needed or known.
+The 3rd part permits an exponent to be provided if necessary (use zero if none) -
+the other two parameters may only contain decimal digits (and sign and decimal point),
+and may NOT include an exponent like 1.234E99 (nor a trailing F or L).
+The second digit string is only used if T is a User-Defined Type,
+when the constant is converted to a long string literal and lexical_casted to type T.
+(This is necessary because you can't use a numeric constant
+since even a long double might not have enough digits).
+
+For example, pi is defined:
+
+  BOOST_DEFINE_MATH_CONSTANT(pi,
+    3.141592653589793238462643383279502884197169399375105820974944,
+    5923078164062862089986280348253421170679821480865132823066470938446095505,
+    0)                                              
+
+And used thus:
+
+  using namespace boost::math::constants;
+
+  double diameter = 1.;
+  double radius = diameter * pi<double>();
+  
+  or boost::math::constants::pi<NTL::RR>()
+
+Note that it is necessary (if inconvenient) to specify the type explicitly.
+
+So you cannot write
+
+  double p = boost::math::constants::pi<>();  // could not deduce template argument for 'T'  
+
+Neither can you write:
+
+  double p = boost::math::constants::pi; // Context does not allow for disambiguation of overloaded function     
+  double p = boost::math::constants::pi(); // Context does not allow for disambiguation of overloaded function     
+
 [h4 Sources of Test Data]
 
 We found a large number of sources of test data.
