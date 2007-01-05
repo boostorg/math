@@ -21,6 +21,20 @@ namespace boost{ namespace math
 {
   namespace constants
   {
+    // To permit other calculations at about 100 decimal digits with NTL::RR type,
+    // it is obviously necessary to define constants to this accuracy.
+
+    // However, some compilers do not accept decimal digits strings as long as this.
+    // So the constant is split into two parts, with the 1st containing at least
+    // long double precision, and the 2nd zero if not needed or known.
+    // The 3rd part permits an exponent to be provided if necessary (use zero if none) -
+    // the other two parameters may only contain decimal digits (and sign and decimal point),
+    // and may NOT include an exponent like 1.234E99.
+    // The second digit string is only used if T is a User-Defined Type,
+    // when the constant is converted to a long string literal and lexical_casted to type T.
+    // (This is necessary because you can't use a numeric constant
+    // since even a long double might not have enough digits).
+
 
   #define BOOST_DEFINE_MATH_CONSTANT(name, x, y, exp)\
    template <class T> inline T name(BOOST_EXPLICIT_TEMPLATE_TYPE(T))\
@@ -36,7 +50,7 @@ namespace boost{ namespace math
    { return BOOST_JOIN(BOOST_JOIN(x, BOOST_JOIN(e, exp)), L); }
 
   BOOST_DEFINE_MATH_CONSTANT(pi, 3.141592653589793238462643383279502884197169399375105820974944, 59230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196, 0)
-  BOOST_DEFINE_MATH_CONSTANT(root_pi, 1.7724538509055160272981674833411451827975, , 0)
+  BOOST_DEFINE_MATH_CONSTANT(root_pi, 1.7724538509055160272981674833411451827975, 0, 0)
   BOOST_DEFINE_MATH_CONSTANT(root_half_pi, 1.253314137315500251207882642405522626503, 0, 0)
   BOOST_DEFINE_MATH_CONSTANT(root_two_pi, 2.506628274631000502415765284811045253007, 0, 0)
   BOOST_DEFINE_MATH_CONSTANT(root_ln_four, 1.1774100225154746910115693264596996377473856893858205385225257565000, 2658854698492680841813836877081, 0)
