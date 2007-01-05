@@ -237,10 +237,10 @@ int test_main(int, char* [])
   using boost::math::bernoulli;
 
   double tol5eps = std::numeric_limits<double>::epsilon() * 5; // 5 eps as a fraction.
-
+  // Default bernoulli is type double, so these test values should also be type double.
   BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(bernoulli(0.1)), 5.11111111111111111111111111111111111111111111111111, tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(bernoulli(0.9)), 5.11111111111111111111111111111111111111111111111111, tol5eps);
-  BOOST_CHECK_CLOSE_FRACTION(kurtosis(bernoulli(0.6)), 1/0.4 + 1/0.6 -3, tol5eps);
+  BOOST_CHECK_CLOSE_FRACTION(kurtosis(bernoulli(0.6)), 1./0.4 + 1./0.6 -3., tol5eps);
   BOOST_CHECK_EQUAL(kurtosis(bernoulli(0)), +std::numeric_limits<double>::infinity());
   BOOST_CHECK_EQUAL(kurtosis(bernoulli(1)), +std::numeric_limits<double>::infinity());
  // 
