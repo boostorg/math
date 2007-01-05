@@ -30,7 +30,7 @@ void test_spots(RealType T)
    // Basic santity checks for constants.
 
 	RealType tolerance = static_cast<RealType>(2e-15);  // double
-	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
+	//cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
 
 	using namespace boost::math::constants;
    using namespace std; // Help ADL of std exp, log...
@@ -59,6 +59,7 @@ void test_spots(RealType T)
 int test_main(int, char* [])
 {
    // Basic sanity-check spot values.
+
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
    test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
    test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
