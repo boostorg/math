@@ -6,7 +6,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// test_uniform.cpp
+// test_constants.cpp
 
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
@@ -14,15 +14,7 @@
 // Ignore underflow to zero.
 
 #ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-#  pragma warning(disable: 4180) // qualifier applied to function type has no meaning; ignored.
-#  if !(defined _SCL_SECURE_NO_DEPRECATE) || (_SCL_SECURE_NO_DEPRECATE == 0)
-#    pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
-#  endif
 #endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
@@ -31,13 +23,6 @@
 
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/test.hpp> 
-
-#include <iostream>
-	using std::cout;
-	using std::endl;
-	using std::setprecision;
-#include <limits>
-  using std::numeric_limits;
 
 template <class RealType>
 void test_spots(RealType T)
@@ -83,13 +68,13 @@ int test_main(int, char* [])
    test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
 #else
-   std::cout << "<note>The long double tests have been disabled on this platform "
-      "either because the long double overloads of the usual math functions are "
-      "not available at all, or because they are too inaccurate for these tests "
-      "to pass.</note>" << std::cout;
+  std::cout << "<note>The long double tests have been disabled on this platform "
+    "either because the long double overloads of the usual math functions are "
+    "not available at all, or because they are too inaccurate for these tests "
+    "to pass.</note>" << std::cout;
 #endif
 
-   return 0;
+  return 0;
 } // int test_main(int, char* [])
 
 /*
@@ -100,13 +85,7 @@ test_constants.cpp
 Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_constants.exe"
 Running 1 test case...
-Tolerance for type float is 2e-015.
-Tolerance for type double is 2e-015.
-Tolerance for type long double is 2e-015.
-Tolerance for type class boost::math::concepts::real_concept is 2e-015.
 *** No errors detected
-
-
 
 
 */
