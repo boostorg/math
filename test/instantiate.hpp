@@ -15,6 +15,7 @@
 #include <boost/math/distributions/negative_binomial.hpp>
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/distributions/poisson.hpp>
+#include <boost/math/distributions/rayleigh.hpp>
 #include <boost/math/distributions/students_t.hpp>
 #include <boost/math/distributions/triangular.hpp>
 #include <boost/math/distributions/uniform.hpp>
@@ -50,6 +51,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<lognormal_distribution<RealType> > >();
    function_requires<DistributionConcept<negative_binomial_distribution<RealType> > >();
    function_requires<DistributionConcept<normal_distribution<RealType> > >();
+   function_requires<DistributionConcept<rayleigh_distribution<RealType> > >();
    function_requires<DistributionConcept<poisson_distribution<RealType> > >();
    function_requires<DistributionConcept<students_t_distribution<RealType> > >();
    function_requires<DistributionConcept<triangular_distribution<RealType> > >();
