@@ -99,7 +99,7 @@ calculated using NTL::RR at 1000-bit precision.
    
    }} // namespaces
    
-Returns the cubed root of x.
+Returns the cubed root of x: x[super 1/3].
 
 Implemented using Halley iteration.
    
