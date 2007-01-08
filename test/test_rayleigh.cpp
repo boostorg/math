@@ -78,7 +78,7 @@ void test_spots(RealType T)
    RealType tolerance = (std::max)(
       static_cast<RealType>(boost::math::tools::epsilon<double>()),
       boost::math::tools::epsilon<RealType>());
-   tolerance *= 50; // 50 eps
+   tolerance *= 10 * 100; // 10 eps as a percent
 	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
 
   using namespace boost::math::constants;

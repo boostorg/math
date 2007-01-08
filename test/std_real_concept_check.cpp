@@ -6,7 +6,7 @@
 #include <boost/math/concepts/std_real_concept.hpp>
 #include <boost/math/concepts/distributions.hpp>
 
-#include "instantiate.hpp"
+#include "compile_test/instantiate.hpp"
 
 //
 // The purpose of this test is to verify that our code compiles

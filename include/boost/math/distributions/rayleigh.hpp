@@ -1,4 +1,4 @@
-//  Copyright John Maddock 2006.
+//  Copyright Paul A. Bristow 2007.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -38,7 +38,7 @@ namespace detail
   } // bool verify_sigma
 
   template <class RealType>
-  inline bool verify_exp_x(const char* function, RealType x, RealType* presult)
+  inline bool verify_rayleigh_x(const char* function, RealType x, RealType* presult)
   {
      if(x < 0)
      {
@@ -48,7 +48,7 @@ namespace detail
         return false;
      }
      return true;
-  } // bool verify_exp_x
+  } // bool verify_rayleigh_x
 } // namespace detail
 
 template <class RealType = double>
@@ -87,7 +87,7 @@ const std::pair<RealType, RealType> support(const rayleigh_distribution<RealType
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
-	return std::pair<RealType, RealType>(1),  max_value<RealType>());
+	return std::pair<RealType, RealType>((1),  max_value<RealType>());
 }
 
 template <class RealType>
@@ -101,11 +101,11 @@ RealType pdf(const rayleigh_distribution<RealType>& dist, const RealType& x)
    {
       return result;
    }
-   if(false == detail::verify_exp_x(BOOST_CURRENT_FUNCTION, x, &result))
+   if(false == detail::verify_rayleigh_x(BOOST_CURRENT_FUNCTION, x, &result))
    {
       return result;
    }
-   RealType sigmasqr = dist.sigma() * dist.sigma();
+   RealType sigmasqr = sigma * sigma;
    result = x * (exp(-(x * x) / ( 2 * sigmasqr))) / sigmasqr; 
    return result;
 } // pdf
@@ -121,11 +121,11 @@ RealType cdf(const rayleigh_distribution<RealType>& dist, const RealType& x)
    {
       return result;
    }
-   if(false == detail::verify_exp_x(BOOST_CURRENT_FUNCTION, x, &result))
+   if(false == detail::verify_rayleigh_x(BOOST_CURRENT_FUNCTION, x, &result))
    {
       return result;
    }
-   result = 1 - exp(-x * x / ( 2 * sigma * sigma));
+   result = -boost::math::expm1(-x * x / ( 2 * sigma * sigma));
    return result;
 } // cdf
 
@@ -149,7 +149,7 @@ RealType quantile(const rayleigh_distribution<RealType>& dist, const RealType& p
    {
      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
    }
-   result = sqrt(-2 * sigma * sigma * log(1 - p));
+   result = sqrt(-2 * sigma * sigma * boost::math::log1p(-p));
    return result;
 } // quantile
 
@@ -165,7 +165,7 @@ RealType cdf(const complemented2_type<rayleigh_distribution<RealType>, RealType>
       return result;
    }
    RealType x = c.param;
-   if(false == detail::verify_exp_x(BOOST_CURRENT_FUNCTION, x, &result))
+   if(false == detail::verify_rayleigh_x(BOOST_CURRENT_FUNCTION, x, &result))
    {
       return result;
    }
