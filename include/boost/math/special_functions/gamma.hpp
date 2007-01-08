@@ -158,6 +158,8 @@ T gamma_imp(T z, const L& l)
       {
          // we're going to overflow unless this is done with care:
          T zgh = (z + L::g() - boost::math::constants::half<T>());
+         if(log(zgh) * z / 2 > tools::log_max_value<T>())
+            return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
          T hp = pow(zgh, (z / 2) - T(0.25));
          result *= hp / exp(zgh);
          if(tools::max_value<T>() / hp < result)
