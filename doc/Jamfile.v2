@@ -10,43 +10,36 @@ boostbook standalone
     :
         math
     :
+        # HTML options first:
+        # Use graphics not text for navigation:
         <xsl:param>navig.graphics=1
+        # How far down we chunk nested sections, basically all of them:
         <xsl:param>chunk.section.depth=10
+        # Don't put the first section on the same page as the TOC:
         <xsl:param>chunk.first.sections=1
+        # How far down sections get TOC's
         <xsl:param>toc.section.depth=10
+        # Max depth in each TOC:
         <xsl:param>toc.max.depth=4
+        # How far down we go with TOC's
         <xsl:param>generate.section.toc.level=10
-        # this is needed for FOP-0.9 and later:
+        
+        # PDF Options:
+        # TOC Generation: this is needed for FOP-0.9 and later:
         <xsl:param>fop1.extensions=1
-        # this is needed for FOP 0.2, but must not be set to zero for FOP-0.9!
+        # TOC generation: this is needed for FOP 0.2, but must not be set to zero for FOP-0.9!
         <xsl:param>fop.extensions=0
+        # No indent on body text:
         <xsl:param>body.start.indent=0pt
+        # Margin size:
         <xsl:param>page.margin.inner=0.5in
+        # Margin size:
         <xsl:param>page.margin.outer=0.5in
+        # Yes, we want graphics for admonishments:
         <xsl:param>admon.graphics=1
-        <xsl:param>symbol.font.family=DejaVuSans,Symbol,ZapfDingbats
-        # set this one for PDF generation only:
+        # Set this one for PDF generation *only*:
+        # default pnd graphics are awful in PDF form,
+        # better use SVG's instead:
         #<xsl:param>admon.graphics.extension=".svg"
     ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
