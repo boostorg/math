@@ -154,7 +154,7 @@ namespace boost
     public:
       typedef RealType value_type;
 
-      beta_distribution(RealType alpha, RealType beta) : m_alpha(alpha), m_beta(beta)
+      beta_distribution(RealType alpha = 1, RealType beta = 1) : m_alpha(alpha), m_beta(beta)
       {
         RealType result;
         beta_detail::check_dist(
