@@ -60,13 +60,13 @@ namespace boost
             {
                // -Infinity:
                return -tools::overflow_error<T>(
-                  BOOST_CURRENT_FUNCTION, 0);
+                  BOOST_CURRENT_FUNCTION);
             }
             else if    (x > one - tools::epsilon<T>())
             {
                // Infinity:
                return -tools::overflow_error<T>(
-                  BOOST_CURRENT_FUNCTION, 0);
+                  BOOST_CURRENT_FUNCTION);
             }
             else if    (x > +one)
             {

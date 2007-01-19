@@ -1070,12 +1070,12 @@ T ibeta_derivative_imp(T a, T b, T x, const L& l)
    if(x == 0)
    {
       return (a > 1) ? 0 : 
-         (a == 1) ? 1 / boost::math::beta(a, b) : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+         (a == 1) ? 1 / boost::math::beta(a, b) : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
    }
    else if(x == 1)
    {
       return (b > 1) ? 0 :
-         (b == 1) ? 1 / boost::math::beta(a, b) : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+         (b == 1) ? 1 / boost::math::beta(a, b) : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
    }
    //
    // Now the regular cases:
@@ -1089,7 +1089,7 @@ T ibeta_derivative_imp(T a, T b, T x, const L& l)
    if((tools::max_value<T>() * y < f1))
    {
       // overflow:
-      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
    }
 
    f1 /= y;

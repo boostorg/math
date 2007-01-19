@@ -147,7 +147,7 @@ RealType quantile(const rayleigh_distribution<RealType>& dist, const RealType& p
    }
    if(p == 1)
    {
-     return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+     return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
    }
    result = sqrt(-2 * sigma * sigma * boost::math::log1p(-p));
    return result;
@@ -195,7 +195,7 @@ RealType quantile(const complemented2_type<rayleigh_distribution<RealType>, Real
    }
    if(q == 0)
    {
-     return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+     return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
    }
    result = sqrt(-2 * sigma * sigma * log(q));
    return result;

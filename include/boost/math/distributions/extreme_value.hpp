@@ -130,9 +130,9 @@ RealType quantile(const extreme_value_distribution<RealType>& dist, const RealTy
       return result;
 
    if(p == 0)
-      return -tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return -tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
    if(p == 1)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
 
    result = a - log(-log(p)) * b;
 
@@ -170,9 +170,9 @@ RealType quantile(const complemented2_type<extreme_value_distribution<RealType>,
       return result;
 
    if(q == 0)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
    if(q == 1)
-      return -tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return -tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
 
    result = a - log(-boost::math::log1p(-q)) * b;
 

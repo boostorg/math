@@ -44,6 +44,9 @@
 #include <boost/math/special_functions/asinh.hpp>
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/atanh.hpp>
+#include <boost/math/special_functions/sin_pi.hpp>
+#include <boost/math/special_functions/cos_pi.hpp>
+#include <boost/math/special_functions/bessel.hpp>
 
 #include <boost/math/concepts/distributions.hpp>
 
@@ -152,6 +155,20 @@ void instantiate(RealType)
    boost::math::asinh(v1);
    boost::math::acosh(v1);
    boost::math::atanh(v1);
+   boost::math::sin_pi(v1);
+   boost::math::cos_pi(v1);
+   boost::math::cyl_neumann(v1, v2);
+   boost::math::cyl_neumann(i, v2);
+   boost::math::cyl_bessel_j(v1, v2);
+   boost::math::cyl_bessel_j(i, v2);
+   boost::math::cyl_bessel_i(v1, v2);
+   boost::math::cyl_bessel_i(i, v2);
+   boost::math::cyl_bessel_k(v1, v2);
+   boost::math::cyl_bessel_k(i, v2);
+   boost::math::sph_bessel(i, v2);
+   boost::math::sph_bessel(i, 1);
+   boost::math::sph_neumann(i, v2);
+   boost::math::sph_neumann(i, i);
 }
 
 

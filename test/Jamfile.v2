@@ -67,6 +67,11 @@ run test_triangular.cpp ;
 run test_uniform.cpp ;
 run test_weibull.cpp ;
 
+run test_bessel_j.cpp ;
+run test_bessel_y.cpp ;
+run test_bessel_i.cpp ;
+run test_bessel_k.cpp ;
+
 compile  compile_test/dist_bernoulli_incl_test.cpp ;
 compile  compile_test/dist_beta_incl_test.cpp ;
 compile  compile_test/dist_binomial_incl_test.cpp ;
@@ -87,8 +92,10 @@ compile  compile_test/dist_uniform_incl_test.cpp ;
 compile  compile_test/dist_weibull_incl_test.cpp ;
 compile  compile_test/distribution_concept_check.cpp ;
 compile  compile_test/sf_beta_incl_test.cpp ;
+compile  compile_test/sf_bessel_incl_test.cpp ;
 compile  compile_test/sf_binomial_incl_test.cpp ;
 compile  compile_test/sf_cbrt_incl_test.cpp ;
+compile  compile_test/sf_cos_pi_incl_test.cpp ;
 compile  compile_test/sf_digamma_incl_test.cpp ;
 compile  compile_test/sf_ellint_1_incl_test.cpp ;
 compile  compile_test/sf_ellint_2_incl_test.cpp ;
@@ -111,6 +118,7 @@ compile  compile_test/sf_log1p_incl_test.cpp ;
 compile  compile_test/sf_math_fwd_incl_test.cpp ;
 compile  compile_test/sf_powm1_incl_test.cpp ;
 compile  compile_test/sf_sign_incl_test.cpp ;
+compile  compile_test/sf_sin_pi_incl_test.cpp ;
 compile  compile_test/sf_sinc_incl_test.cpp ;
 compile  compile_test/sf_sinhc_incl_test.cpp ;
 compile  compile_test/sf_spherical_harmonic_incl_test.cpp ;
@@ -133,6 +141,9 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_solve_inc_test.cpp ;
+
+
+
 
 
 

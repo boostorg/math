@@ -136,7 +136,7 @@ RealType quantile(const exponential_distribution<RealType>& dist, const RealType
    if(p == 0)
       return 0;
    if(p == 1)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
 
    result = -boost::math::log1p(-p) / lambda;
    return result;
@@ -175,7 +175,7 @@ RealType quantile(const complemented2_type<exponential_distribution<RealType>, R
    if(q == 1)
       return 0;
    if(q == 0)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
 
    result = -log(q) / lambda;
    return result;

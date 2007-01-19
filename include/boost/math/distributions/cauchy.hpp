@@ -101,9 +101,9 @@ RealType quantile_imp(
    using namespace std; // for ADL of std functions
    // Special cases:
    if(p == 1)
-      return (complement ? -1 : 1) * tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return (complement ? -1 : 1) * tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
    if(p == 0)
-      return (complement ? 1 : -1) * tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return (complement ? 1 : -1) * tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
 
    RealType result;
    RealType loc = dist.location();

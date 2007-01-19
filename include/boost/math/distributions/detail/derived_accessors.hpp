@@ -58,7 +58,7 @@ typename Distribution::value_type hazard(const Distribution& dist, const RealTyp
    value_type d = pdf(dist, x);
    if(d > p * tools::max_value<value_type>())
       return tools::overflow_error<value_type>(
-         BOOST_CURRENT_FUNCTION, 0);
+         BOOST_CURRENT_FUNCTION);
    if(d == 0)
    {
       // This protects against 0/0, but is it the right thing to do?
@@ -83,7 +83,7 @@ typename Distribution::value_type coefficient_of_variation(const Distribution& d
    value_type d = standard_deviation(dist);
    if((m < 1) && (d > m * tools::max_value<value_type>()))
       return tools::overflow_error<value_type>(
-         BOOST_CURRENT_FUNCTION, 0);
+         BOOST_CURRENT_FUNCTION);
    return d / m;
 }
 //

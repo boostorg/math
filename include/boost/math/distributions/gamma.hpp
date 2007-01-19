@@ -167,7 +167,7 @@ RealType quantile(const gamma_distribution<RealType>& dist, const RealType& p)
       return result;
 
    if(p == 1)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
 
    result = gamma_p_inv(shape, p) * scale;
 
@@ -209,7 +209,7 @@ RealType quantile(const complemented2_type<gamma_distribution<RealType>, RealTyp
       return result;
 
    if(q == 0)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
 
    result = gamma_q_inv(shape, q) * scale;
 

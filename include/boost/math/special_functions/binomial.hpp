@@ -42,7 +42,7 @@ T binomial_coefficient(unsigned n, unsigned k)
       else
          result = (n - k) * beta(static_cast<T>(k+1), static_cast<T>(n-k));
       if(result == 0)
-         return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+         return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
       result = 1 / result;
    }
    // convert to nearest integer:

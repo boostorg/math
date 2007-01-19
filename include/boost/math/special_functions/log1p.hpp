@@ -76,7 +76,7 @@ T log1p(T x)
          BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
    if(x == -1)
       return -tools::overflow_error<T>(
-         BOOST_CURRENT_FUNCTION, 0);
+         BOOST_CURRENT_FUNCTION);
 
    T a = fabs(x);
    if(a > T(0.5L))
@@ -132,7 +132,7 @@ inline float log1p<float>(float x)
          BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
    if(x == -1)
       return -tools::overflow_error<float>(
-         BOOST_CURRENT_FUNCTION, 0);
+         BOOST_CURRENT_FUNCTION);
    return ::log1pf(x); 
 }
 template <>
@@ -143,7 +143,7 @@ inline long double log1p<long double>(long double x)
          BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
    if(x == -1)
       return -tools::overflow_error<long double>(
-         BOOST_CURRENT_FUNCTION, 0);
+         BOOST_CURRENT_FUNCTION);
    return ::log1pl(x); 
 }
 #else
@@ -155,7 +155,7 @@ inline float log1p<float>(float x)
          BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
    if(x == -1)
       return -tools::overflow_error<float>(
-         BOOST_CURRENT_FUNCTION, 0);
+         BOOST_CURRENT_FUNCTION);
    return ::log1p(x); 
 }
 #endif
@@ -167,7 +167,7 @@ inline double log1p<double>(double x)
          BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
    if(x == -1)
       return -tools::overflow_error<double>(
-         BOOST_CURRENT_FUNCTION, 0);
+         BOOST_CURRENT_FUNCTION);
    return ::log1p(x); 
 }
 #elif defined(_MSC_VER)
@@ -184,7 +184,7 @@ inline double log1p<double>(double x)
          BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
    if(x == -1)
       return -tools::overflow_error<double>(
-         BOOST_CURRENT_FUNCTION, 0);
+         BOOST_CURRENT_FUNCTION);
    double u = 1+x;
    if(u == 1.0) 
       return x; 
@@ -204,7 +204,7 @@ inline long double log1p<long double>(long double x)
          BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
    if(x == -1)
       return -tools::overflow_error<long double>(
-         BOOST_CURRENT_FUNCTION, 0);
+         BOOST_CURRENT_FUNCTION);
    long double u = 1+x;
    if(u == 1.0) 
       return x; 

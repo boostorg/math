@@ -40,7 +40,7 @@ inline float factorial<float>(unsigned i)
 {
    if(i <= max_factorial<float>::value)
       return unchecked_factorial<float>(i);
-   return tools::overflow_error<float>(BOOST_CURRENT_FUNCTION, 0);
+   return tools::overflow_error<float>(BOOST_CURRENT_FUNCTION);
 }
 
 template<>
@@ -48,7 +48,7 @@ inline double factorial<double>(unsigned i)
 {
    if(i <= max_factorial<double>::value)
       return unchecked_factorial<double>(i);
-   return tools::overflow_error<double>(BOOST_CURRENT_FUNCTION, 0);
+   return tools::overflow_error<double>(BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
@@ -82,7 +82,7 @@ T double_factorial(unsigned i)
    //
    // If we fall through to here then the result is infinite:
    //
-   return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+   return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>

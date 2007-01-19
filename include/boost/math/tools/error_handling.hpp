@@ -146,7 +146,7 @@ inline T pole_error(const char* function, const char* message, const T& val)
 // Result too large to be represented in type T:
 // so  show message & return an infinity.
 template <class T>
-inline T overflow_error(const char* function, const char* message)
+inline T overflow_error(const char* function, const char* message = 0)
 { // returns std::numeric_limits<T>::infinity(), or as near as possible.
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    if(std::numeric_limits<T>::has_infinity)
@@ -213,7 +213,7 @@ namespace detail
 	inline T checked_narrowing_cast(U const& val, const char* function, const boost::mpl::false_*)
 	{
 		 if(val > tools::max_value<T>())
-				return tools::overflow_error<T>(function, 0);
+				return tools::overflow_error<T>(function);
 		 T result = static_cast<T>(val);
 		 if((result == 0) && (val != 0))
 				return tools::underflow_error<T>(function, 0);

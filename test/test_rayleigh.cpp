@@ -71,6 +71,7 @@ void test_spot(RealType s, RealType x, RealType p, RealType q, RealType toleranc
 template <class RealType>
 void test_spots(RealType T)
 {
+   using namespace std; // ADL of std names.
    // Basic sanity checks.
    // 50 eps as a percentage, up to a maximum of double precision
    // (that's the limit of our test data: obtained by punching
@@ -330,3 +331,4 @@ Tolerance for type class boost::math::concepts::real_concept is 1.11022e-014 %
 
 
 */
+

@@ -131,7 +131,17 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
    for(unsigned i = 0; i < a.size(); ++i)
    {
       const row_type& row = a[i];
-      value_type point = test_func(row);
+      value_type point;
+      try{
+         point = test_func(row);
+      }catch(const std::exception& e)
+      {
+         std::cerr << e.what() << std::endl;
+         print_row(row);
+         BOOST_ERROR("Unexpected exception.");
+         // so we don't get further errors:
+         point = expect_func(row);
+      }
       value_type expected = expect_func(row);
       value_type err = relative_error(point, expected);
 #ifdef BOOST_INSTRUMENT

@@ -13,6 +13,7 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/ellint_1.hpp>
+#include <boost/math/special_functions/ellint_2.hpp>
 
 #include <cmath>
 
@@ -208,7 +209,15 @@ NTL::RR f(const NTL::RR& x, int variant)
             mp = 1e-20;
          NTL::RR k = sqrt(1 - mp);
          static const NTL::RR l4 = log(NTL::RR(4));
+         NTL::RR p2 = boost::math::constants::pi<NTL::RR>() / 2;
          return boost::math::ellint_1(k) / (l4 - log(mp));
+      }
+   case 15:
+      // E(k)
+      {
+         // x = 1-k^2
+         NTL::RR z = 1 - x * log(x);
+         return boost::math::ellint_2(sqrt(1-x)) / z;
       }
    }
    return 0;

@@ -89,7 +89,7 @@ RealType pdf(const chi_squared_distribution<RealType>& dist, const RealType& chi
       if(degrees_of_freedom < 2)
       {
          return tools::overflow_error<RealType>(
-            BOOST_CURRENT_FUNCTION, 0);
+            BOOST_CURRENT_FUNCTION);
       }
       else if(degrees_of_freedom == 2)
       {

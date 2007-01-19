@@ -168,7 +168,7 @@ RealType quantile(const weibull_distribution<RealType>& dist, const RealType& p)
       return result;
 
    if(p == 1)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
 
    result = scale * pow(-boost::math::log1p(-p), 1 / shape);
 
@@ -210,7 +210,7 @@ RealType quantile(const complemented2_type<weibull_distribution<RealType>, RealT
       return result;
 
    if(q == 0)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
 
    result = scale * pow(-log(q), 1 / shape);
 

@@ -143,7 +143,7 @@ RealType quantile(const lognormal_distribution<RealType>& dist, const RealType& 
    if(p == 0)
       return 0;
    if(p == 1)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
 
    normal_distribution<RealType> norm(dist.location(), dist.scale());
    return exp(quantile(norm, p));
@@ -177,7 +177,7 @@ RealType quantile(const complemented2_type<lognormal_distribution<RealType>, Rea
    if(c.param == 1)
       return 0;
    if(c.param == 0)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
 
    normal_distribution<RealType> norm(c.dist.location(), c.dist.scale());
    return exp(quantile(complement(norm, c.param)));

@@ -1559,7 +1559,7 @@ T gamma_p_derivative_imp(T a, T x, const L& l)
    if(x == 0)
    {
       return (a > 1) ? 0 :
-         (a == 1) ? 1 : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+         (a == 1) ? 1 : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
    }
    //
    // Normal case:
@@ -1568,7 +1568,7 @@ T gamma_p_derivative_imp(T a, T x, const L& l)
    if((x < 1) && (tools::max_value<T>() * x < f1))
    {
       // overflow:
-      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
    }
 
    f1 /= x;

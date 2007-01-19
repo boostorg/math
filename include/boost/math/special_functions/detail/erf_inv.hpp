@@ -327,9 +327,9 @@ T erfc_inv(T z)
    if((z < 0) || (z > 2))
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument outside range [0,2] in inverse erfc function (got p=%1%).", z);
    if(z == 0)
-      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
    if(z == 2)
-      return -tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+      return -tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
    //
    // Normalise the input, so it's in the range [0,1], we will
    // negate the result if z is outside that range.  This is a simple
@@ -380,9 +380,9 @@ T erf_inv(T z)
    if((z < -1) || (z > 1))
       tools::domain_error<typename remove_cv<T>::type>(BOOST_CURRENT_FUNCTION, "Argument outside range [-1, 1] in inverse erf function (got p=%1%).", z);
    if(z == 1)
-      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
    if(z == -1)
-      return -tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+      return -tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
    if(z == 0)
       return 0;
    //

@@ -52,7 +52,7 @@ T ellint_f_imp(T phi, T k)
     if(phi >= tools::max_value<T>())
     {
        // Need to handle infinity as a special case:
-       result = tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+       result = tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
     }
     else if(phi > 1 / tools::epsilon<T>())
     {
@@ -101,7 +101,7 @@ T ellint_k_imp(T k)
     }
     if (abs(k) == 1)
     {
-        return overflow_error<T>(BOOST_CURRENT_FUNCTION, 0);
+        return overflow_error<T>(BOOST_CURRENT_FUNCTION);
     }
 
     T x = 0;
