@@ -100,8 +100,9 @@ namespace boost
     public:
       typedef RealType value_type;
 
-      bernoulli_distribution(RealType p) : m_p(p)
-      {
+      bernoulli_distribution(RealType p = 0.5) : m_p(p)
+      { // Default probability = half suits 'fair' coin tossing
+        // where probability of heads == probability of tails.
         RealType result; // of checks.
         bernoulli_detail::check_dist(
           BOOST_CURRENT_FUNCTION,
@@ -140,11 +141,12 @@ namespace boost
       return dist.success_fraction();
     } // mean
 
-    template <class RealType>
-    inline RealType median(const bernoulli_distribution<RealType>& dist)
-    { // Median of bernoulli distribution is not defined.
-      return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "Median is not implemented, result is %1%!", std::numeric_limits<RealType>::quiet_NaN());
-    } // median
+    // Rely on dereived_accessors quantile(half)
+    //template <class RealType>
+    //inline RealType median(const bernoulli_distribution<RealType>& dist)
+    //{ // Median of bernoulli distribution is not defined.
+    //  return tools::domain_error<RealType>(BOOST_CURRENT_FUNCTION, "Median is not implemented, result is %1%!", std::numeric_limits<RealType>::quiet_NaN());
+    //} // median
 
     template <class RealType>
     inline RealType variance(const bernoulli_distribution<RealType>& dist)
@@ -232,7 +234,7 @@ namespace boost
     { // Quantile or Percent Point Bernoulli function.
       // Return the number of expected successes k either 0 or 1.
       // for a given probability p.
-     
+
       RealType result; // of error checks:
       if(false == bernoulli_detail::check_dist_and_prob(
         BOOST_CURRENT_FUNCTION,
@@ -241,11 +243,11 @@ namespace boost
         &result))
       {
         return result;
-      }  
+      }
       if (p <= (1 - dist.success_fraction()))
       { // p <= pdf(dist, 0) == cdf(dist, 0)
-        return 0; 
-      } 
+        return 0;
+      }
       else
       {
         return 1;

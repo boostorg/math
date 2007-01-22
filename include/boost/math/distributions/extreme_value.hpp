@@ -61,8 +61,8 @@ public:
       detail::verify_scale_b(BOOST_CURRENT_FUNCTION, b, &err);
    } // extreme_value_distribution
 
-   RealType scale()const { return m_b; }
    RealType location()const { return m_a; }
+   RealType scale()const { return m_b; }
 
 private:
    RealType m_a, m_b;
@@ -84,7 +84,6 @@ const std::pair<RealType, RealType> support(const extreme_value_distribution<Rea
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(),  max_value<RealType>());
 }
-
 
 template <class RealType>
 RealType pdf(const extreme_value_distribution<RealType>& dist, const RealType& x)

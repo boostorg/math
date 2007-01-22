@@ -172,8 +172,9 @@ namespace boost
     public:
       typedef RealType value_type;
 
-      binomial_distribution(RealType n, RealType p) : m_n(n), m_p(p)
-      {
+      binomial_distribution(RealType n = 1, RealType p = 0.5) : m_n(n), m_p(p)
+      { // Default n = 1 is the Bernoulli distribution
+        // with equal probability of 'heads' or 'tails.
          RealType r;
          binomial_detail::check_dist(
             BOOST_CURRENT_FUNCTION,
