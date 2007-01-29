@@ -63,14 +63,14 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 20, 10);                 // test function
+      ".*", 35, 15);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*",                          // test data group
-      ".*", 20, 10);                 // test function
+      ".*", 35, 15);                 // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.

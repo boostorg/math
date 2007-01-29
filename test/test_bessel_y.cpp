@@ -57,6 +57,73 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
+
+   //
+   // HP-uX rates are very slightly higher:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "HP-UX",                          // platform
+      largest_type,                // test type(s)
+      ".*(Y[nv]|y).*Random.*",           // test data group
+      ".*", 30000, 30000);             // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "HP-UX",                          // platform
+      largest_type,                  // test type(s)
+      ".*Y[01Nv].*",           // test data group
+      ".*", 400, 200);               // test function
+
+   //
+   // Linux:
+   //
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         "linux",                          // platform
+         largest_type,                  // test type(s)
+         ".*Yv.*Random.*",              // test data group
+         ".*", 200000, 200000);         // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         "linux",                          // platform
+         largest_type,                  // test type(s)
+         ".*Y[01v].*",              // test data group
+         ".*", 2000, 1000);         // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         "linux",                          // platform
+         largest_type,                  // test type(s)
+         ".*Yn.*",              // test data group
+         ".*", 30000, 30000);         // test function
+
+
+   if((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
+      && (std::numeric_limits<long double>::digits < 90))
+   {
+      // some errors spill over into type double as well:
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         ".*Y[Nn].*",              // test data group
+         ".*", 20, 20);         // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         ".*Yv.*",              // test data group
+         ".*", 80, 70);         // test function
+   }
+   //
+   // defaults are based on MSVC-8 on Win32:
+   //
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

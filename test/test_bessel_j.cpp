@@ -57,6 +57,113 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
+   //
+   // HP-UX specific rates:
+   //
+   // Does this need more investigation or is test data limited????
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "HP-UX",                          // platform
+      "double",                      // test type(s)
+      ".*Tricky.*",              // test data group
+      ".*", 100000, 100000);         // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "HP-UX",                          // platform
+      largest_type,                      // test type(s)
+      ".*J0.*Tricky.*",              // test data group
+      ".*", 80000000000LL, 80000000000LL);         // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "HP-UX",                          // platform
+      largest_type,                      // test type(s)
+      ".*J1.*Tricky.*",              // test data group
+      ".*", 3000000, 2000000);         // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "HP-UX",                          // platform
+      largest_type,                      // test type(s)
+      ".*J.*Tricky.*",              // test data group
+      ".*", 3000, 500);         // test function
+
+   //
+   // Linux specific results:
+   //
+   // sin and cos appear to have only double precision for large
+   // arguments on some linux distros:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "linux",                          // platform
+      largest_type,                      // test type(s)
+      ".*J:.*",              // test data group
+      ".*", 40000, 30000);         // test function
+
+
+
+   if((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
+      && (std::numeric_limits<long double>::digits < 90))
+   {
+      // some errors spill over into type double as well:
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         ".*J0.*Tricky.*",              // test data group
+         ".*", 400000, 400000);         // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         ".*J1.*Tricky.*",              // test data group
+         ".*", 5000, 5000);             // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         ".*(JN|j).*|.*Tricky.*",       // test data group
+         ".*", 50, 50);                 // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         ".*",                          // test data group
+         ".*", 30, 30);                 // test function
+      //
+      // and we have a few cases with higher limits as well:
+      //
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         largest_type,                  // test type(s)
+         ".*J0.*Tricky.*",              // test data group
+         ".*", 400000000, 400000000);   // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         largest_type,                  // test type(s)
+         ".*J1.*Tricky.*",              // test data group
+         ".*", 5000000, 5000000);       // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         largest_type,                  // test type(s)
+         ".*(JN|j).*|.*Tricky.*",       // test data group
+         ".*", 30000, 20000);               // test function
+   }
+
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -84,7 +191,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*(JN|j).*|.*Tricky.*",       // test data group
-      ".*", 800, 600);               // test function
+      ".*", 1500, 700);               // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

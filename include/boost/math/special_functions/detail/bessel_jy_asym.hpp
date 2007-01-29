@@ -147,32 +147,35 @@ T asymptotic_bessel_j_large_x_2(T v, T x)
 //
 // Various limits for the J and Y asymptotics
 // (the asympotic expansions are safe to use if
-// x is less than the limit given):
+// x is less than the limit given).
+// We assume that if we don't use these expansions then the
+// error will likely be >100eps, so the limits given are chosen
+// to lead to < 100eps truncation error.
 //
 template <class T>
 inline T asymptotic_bessel_y_limit(const mpl::int_<0>&)
 {
    // default case:
    using namespace std;
-   return 2.25 / pow(tools::epsilon<T>() / T(0.001f), T(0.2f));
+   return 2.25 / pow(100 * tools::epsilon<T>() / T(0.001f), T(0.2f));
 }
 template <class T>
 inline T asymptotic_bessel_y_limit(const mpl::int_<53>&)
 {
    // double case:
-   return 780;
+   return 304 /*780*/;
 }
 template <class T>
 inline T asymptotic_bessel_y_limit(const mpl::int_<64>&)
 {
    // 80-bit extended-double case:
-   return 3500;
+   return 1552 /*3500*/;
 }
 template <class T>
 inline T asymptotic_bessel_y_limit(const mpl::int_<113>&)
 {
    // 128-bit long double case:
-   return 3128000;
+   return 1245243 /*3128000*/;
 }
 
 template <class T>
@@ -199,25 +202,29 @@ inline T asymptotic_bessel_j_limit(const T& v, const mpl::int_<0>&)
 {
    // default case:
    using namespace std;
-   return (std::max)(T(100), v * v / pow(tools::epsilon<T>() / T(2e-5f), T(0.17f)));
+   T v2 = (std::max)(T(3), v * v);
+   return v2 / pow(100 * tools::epsilon<T>() / T(2e-5f), T(0.17f));
 }
 template <class T>
 inline T asymptotic_bessel_j_limit(const T& v, const mpl::int_<53>&)
 {
    // double case:
-   return (std::max)(T(100), v * v * 73);
+   T v2 = (std::max)(T(3), v * v);
+   return v2 * 33 /*73*/;
 }
 template <class T>
 inline T asymptotic_bessel_j_limit(const T& v, const mpl::int_<64>&)
 {
    // 80-bit extended-double case:
-   return (std::max)(T(100), v * v * 266);
+   T v2 = (std::max)(T(3), v * v);
+   return v2 * 121 /*266*/;
 }
 template <class T>
 inline T asymptotic_bessel_j_limit(const T& v, const mpl::int_<113>&)
 {
    // 128-bit long double case:
-   return (std::max)(T(100), v * v * 85700);
+   T v2 = (std::max)(T(3), v * v);
+   return v2 * 39154 /*85700*/;
 }
 
 template <class T>

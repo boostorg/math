@@ -250,13 +250,16 @@ T cyl_bessel_i_imp(T v, T x)
       T e = exp(x / 2);
       return e * (e / sqrt(2 * x * constants::pi<T>()));
    }
-   if(v == 0)
+   if(tools::digits<T>() <= 64)
    {
-      return bessel_i0(x);
-   }
-   if(v == 1)
-   {
-      return bessel_i1(x);
+      if(v == 0)
+      {
+         return bessel_i0(x);
+      }
+      if(v == 1)
+      {
+         return bessel_i1(x);
+      }
    }
    T I, K;
    bessel_ik(v, x, &I, &K, need_i);
