@@ -183,8 +183,13 @@ inline T cyl_bessel_j_imp(int v, T x, const bessel_int_tag&)
 {
    using namespace std;
    typedef typename bessel_asymptotic_tag<T>::type tag_type;
-   if(fabs(x) > asymptotic_bessel_j_limit<T>(v, tag_type()))
-      return asymptotic_bessel_j_large_x_2(static_cast<T>(v), x);
+   if(fabs(x) > asymptotic_bessel_j_limit<T>(abs(v), tag_type()))
+   {
+      T r = asymptotic_bessel_j_large_x_2(static_cast<T>(abs(v)), x);
+      if((v < 0) && (v & 1))
+         r = -r;
+      return r;
+   }
    else
       return bessel_jn(v, x);
 }
@@ -335,8 +340,13 @@ inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&)
    typedef typename bessel_asymptotic_tag<T>::type tag_type;
    if(floor(v) == v)
    {
-      if(fabs(x) > asymptotic_bessel_y_limit<T>(tag_type()))
-         return asymptotic_bessel_y_large_x_2(v, x);
+      if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
+      {
+         T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);
+         if((v < 0) && (tools::real_cast<int>(v) & 1))
+            r = -r;
+         return r;
+      }
       else
          return bessel_yn(tools::real_cast<int>(v), x);
    }
@@ -348,8 +358,13 @@ inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&)
 {
    using namespace std;
    typedef typename bessel_asymptotic_tag<T>::type tag_type;
-   if(fabs(x) > asymptotic_bessel_y_limit<T>(tag_type()))
-      return asymptotic_bessel_y_large_x_2(static_cast<T>(v), x);
+   if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
+   {
+      T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);
+      if((v < 0) && (v & 1))
+         r = -r;
+      return r;
+   }
    else
       return bessel_yn(tools::real_cast<int>(v), x);
 }

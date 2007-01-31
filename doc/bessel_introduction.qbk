@@ -1,0 +1,118 @@
+
+[section:bessel_over Bessel Function Overview]
+
+[h4 Ordinary Bessel Functions]
+
+Bessel Functions are solutions to Bessel's ordinary differential
+equation:
+
+[$../equations/bessel1.png]
+
+where [nu][space] is the /order/ of the equation, and may be an arbitrary
+real or complex number, although integer orders are the most common occurance.
+
+This library supports either integer or real order's.
+
+Since this is a second order differential equation, there must be two
+linearly independent solutions, the first of these is denoted J[sub v][space]
+and known as a Bessel function of the first kind:
+
+[$../equations/bessel2.png]
+
+This function is implemented in this library as __cyl_bessel_j.
+
+The second solution is denoted either Y[sub v][space] or N[sub v][space]
+and is known as either a Bessel Function of the second kind, or as a
+Neumann function:
+
+[$../equations/bessel3.png]
+
+This function is implemented in this library as __cyl_neumann.
+
+The Bessel functions satisfy the recurrences relations:
+
+[$../equations/bessel4.png]
+
+[$../equations/bessel5.png]
+
+Have the derivatives:
+
+[$../equations/bessel6.png]
+
+[$../equations/bessel7.png]
+
+Have the Wronskian relation:
+
+[$../equations/bessel8.png]
+
+and the reflection formulae:
+
+[$../equations/bessel9.png]
+
+[$../equations/bessel10.png]
+
+
+[h4 Modified Bessel Functions]
+
+The Bessel functions are valid for complex argument /x/, and an important
+special case is the situation where /x/ is purely imaginary: giving a real
+valued result.  In this case the functions are the two linearly 
+independent solutions to the modified Bessel equation:
+
+[$../equations/mbessel1.png]
+
+The solutions are known as the modified Bessel functions of the first and 
+second kind or occationally as the hyperbolic Bessel functions of the first
+and second kind.  They are denoted I[sub v][space] and K[sub v][space]
+respectively:
+
+[$../equations/mbessel2.png]
+
+[$../equations/mbessel3.png]
+
+These functions are implemented in this library as __cyl_bessel_i and
+__cyl_bessel_k respectively.
+
+The modified Bessel functions satisfy the recurrences relations:
+
+[$../equations/mbessel4.png]
+
+[$../equations/mbessel5.png]
+
+Have the derivatives:
+
+[$../equations/mbessel6.png]
+
+[$../equations/mbessel7.png]
+
+Have the Wronskian relation:
+
+[$../equations/mbessel8.png]
+
+and the reflection formulae:
+
+[$../equations/mbessel9.png]
+
+[$../equations/mbessel10.png]
+
+[h4 Spherical Bessel Functions]
+
+When solving the Helmholtz equation in spherical coordinates by 
+separation of variables, the radial equation has the form:
+
+[$../equations/sbessel1.png]
+
+The two linearly independent solutions to this equation are called the 
+spherical Bessel functions j[sub n][space] and y[sub n][space], and are related to the 
+ordinary Bessel functions J[sub n][space] and Y[sub n][space] by:
+
+[$../equations/sbessel2.png]
+
+The sperical Bessel function of the second kind y[sub n][space]
+is also known as the spherical Neumann function n[sub n].
+
+These functions are implemented in this library as __sph_bessel and
+__sph_neumann.
+
+[endsect]
+

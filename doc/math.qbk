@@ -105,13 +105,21 @@ and use the function's name as the link text]
 [def __ibeta_derivative [link math_toolkit.special.sf_beta.beta_derivative ibeta_derivative]]
 
 [/elliptic integrals]
-[def __ellint_rj  [link math_toolkit.special.elliptic_integrals.ellint_carlson ellint_rj]]
-[def __ellint_rf  [link math_toolkit.special.elliptic_integrals.ellint_carlson ellint_rf]]
-[def __ellint_rc  [link math_toolkit.special.elliptic_integrals.ellint_carlson ellint_rc]]
-[def __ellint_rd  [link math_toolkit.special.elliptic_integrals.ellint_carlson ellint_rd]]
-[def __ellint_1  [link math_toolkit.special.elliptic_integrals.ellint_1 ellint_1]]
-[def __ellint_2  [link math_toolkit.special.elliptic_integrals.ellint_2 ellint_2]]
-[def __ellint_3  [link math_toolkit.special.elliptic_integrals.ellint_3 ellint_3]]
+[def __ellint_rj  [link math_toolkit.special.ellint.ellint_carlson ellint_rj]]
+[def __ellint_rf  [link math_toolkit.special.ellint.ellint_carlson ellint_rf]]
+[def __ellint_rc  [link math_toolkit.special.ellint.ellint_carlson ellint_rc]]
+[def __ellint_rd  [link math_toolkit.special.ellint.ellint_carlson ellint_rd]]
+[def __ellint_1  [link math_toolkit.special.ellint.ellint_1 ellint_1]]
+[def __ellint_2  [link math_toolkit.special.ellint.ellint_2 ellint_2]]
+[def __ellint_3  [link math_toolkit.special.ellint.ellint_3 ellint_3]]
+
+[/Bessel functions]
+[def __cyl_bessel_j  [link math_toolkit.special.bessel.bessel cyl_bessel_j]]
+[def __cyl_neumann  [link math_toolkit.special.bessel.bessel cyl_neumann]]
+[def __cyl_bessel_i  [link math_toolkit.special.bessel.mbessel cyl_bessel_i]]
+[def __cyl_bessel_k  [link math_toolkit.special.bessel.mbessel cyl_bessel_k]]
+[def __sph_bessel  [link math_toolkit.special.bessel.sph_bessel sph_bessel]]
+[def __sph_neumann  [link math_toolkit.special.bessel.sph_bessel sph_neumann]]
 
 [/sinus cardinals]
 [def __sinc_pi  [link math_toolkit.special.sinc.sinc_pi sinc_pi]]
@@ -290,7 +298,16 @@ external graphing application.
 
 [endsect]
 
-[section Elliptic Integrals]
+[section:bessel Bessel Functions]
+
+[include bessel_introduction.qbk]
+[include bessel_jy.qbk]
+[include bessel_ik.qbk]
+[include bessel_spherical.qbk]
+
+[endsect]
+
+[section:ellint Elliptic Integrals]
 
 [include ellint_introduction.qbk]
 [include ellint_carlson.qbk]
