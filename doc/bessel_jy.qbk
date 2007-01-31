@@ -34,6 +34,15 @@ undefined or complex.  For __cyl_bessel_j this occurs when `x < 0` and v is not
 an integer, or when `x == 0` and `v != 0`.  For __cyl_neumann this occurs
 when `x <= 0`.
 
+The following graph illustrates the cyclic nature of J[sub v]:
+
+[$../graphs/bessel_jn.png]
+
+The following graph shows the behaviour of Y[sub v], this is also
+cyclic for large /x/, but tends to -[infin][space] for small /x/:
+
+[$../graphs/bessel_yv.png]
+
 [h4 Testing]
 
 There are two sets of test values: spot values calculated using

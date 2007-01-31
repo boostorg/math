@@ -34,6 +34,14 @@ undefined or complex.  For __cyl_bessel_j this occurs when `x < 0` and v is not
 an integer, or when `x == 0` and `v != 0`.  For __cyl_neumann this occurs
 when `x <= 0`.
 
+The following graph illustrates the exponential behaviour of I[sub v]:
+
+[$../graphs/bessel_i.png]
+
+The following graph illustrates the exponential decay of K[sub v]:
+
+[$../graphs/bessel_k.png]
+
 [h4 Testing]
 
 There are two sets of test values: spot values calculated using

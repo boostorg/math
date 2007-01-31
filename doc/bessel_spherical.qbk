@@ -29,6 +29,16 @@ for the single argument type T.
 The functions return the result of __domain_error whenever the result is
 undefined or complex: this occurs when `x < 0`.
 
+The j[sub v][space] function is cyclic like J[sub v][space] but differs
+in it's behaviour at the origin:
+
+[$../graphs/sph_bessel_j.png]
+
+Likewise y[sub v][space] is also cyclic for large x, but tends to -[infin][space]
+for small /x/:
+
+[$../graphs/sph_bessel_y.png]
+
 [h4 Testing]
 
 There are two sets of test values: spot values calculated using
