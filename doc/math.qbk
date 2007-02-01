@@ -52,6 +52,9 @@
 [def __logic_error [link logic_error logic_error]]
 [def __checked_narrowing_cast [link checked_narrowing_cast checked_narrowing_cast]]
 
+[def __arg_pomotion_rules [link math_toolkit.special.result_type ['result type calculation rules]]]
+[def __sf_result [link math_toolkit.special.result_type ['calculated-result-type]]]
+
 [/ The following macros expand to links to the various special functions
 and use the function's name as the link text]
 
@@ -321,6 +324,7 @@ external graphing application.
 
 [include fpclassify.qbk]
 [include error_handling.qbk]
+[include result_type_calc.qbk]
 [endsect][/section:special Special Functions]
 
 [section:toolkit Toolkit]

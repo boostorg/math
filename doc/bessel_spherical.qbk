@@ -4,10 +4,10 @@
 [h4 Synopsis]
 
    template <class T1, class T2>
-   ``['deduced-real-type]`` sph_bessel(unsigned v, T2 x);
+   ``__sf_result`` sph_bessel(unsigned v, T2 x);
 
    template <class T1, class T2>
-   ``['deduced-real-type]`` sph_neumann(unsigned v, T2 x);
+   ``__sf_result`` sph_neumann(unsigned v, T2 x);
    
    
 [h4 Description]

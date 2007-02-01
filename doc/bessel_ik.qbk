@@ -4,10 +4,10 @@
 [h4 Synopsis]
 
    template <class T1, class T2>
-   ``['deduced-real-type]`` cyl_bessel_i(T1 v, T2 x);
+   ``__sf_result`` cyl_bessel_i(T1 v, T2 x);
 
    template <class T1, class T2>
-   ``['deduced-real-type]`` cyl_bessel_k(T1 v, T2 x);
+   ``__sf_result`` cyl_bessel_k(T1 v, T2 x);
    
    
 [h4 Description]
