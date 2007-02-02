@@ -11,17 +11,17 @@
   namespace boost{ namespace math{
   
   template <class T>
-  T tgamma(T z);
+  ``__sf_result`` tgamma(T z);
   
   template <class T>
-  T tgamma1pm1(T dz);
+  ``__sf_result`` tgamma1pm1(T dz);
   
   }} // namespaces
   
 [h4 Description]
 
   template <class T>
-  T tgamma(T z);
+  ``__sf_result`` tgamma(T z);
   
 Returns the "true gamma" (hence name tgamma) of value z:
 
@@ -36,10 +36,13 @@ efficient approximation that is used where the number of digits in the significa
 of T correspond to a certain __lanczos.  In practice any built in
 floating point type you will encounter has an appropriate __lanczos
 defined for it.  It is also possible, given enough machine time, to generate
-further __lanczos's using the program libs/math/tools/lanczos_generator.cpp
+further __lanczos's using the program libs/math/tools/lanczos_generator.cpp.
+
+The return type of this function is computed using the __arg_pomotion_rules:
+the result is `double` when T is an integer type, and T otherwise.
 
   template <class T>
-  T tgamma1pm1(T dz);
+  ``__sf_result`` tgamma1pm1(T dz);
   
 Returns `tgamma(dz + 1) - 1`.  Internally the implementation does not make
 use of the addition and subtraction implied by the definition, leading to
@@ -47,6 +50,9 @@ accurate results even for very small `dz`.  However, the implementation is
 capped to either 35 digit accuracy, or to the precision of the __lanczos
 associated with type T, whichever is more accurate.
   
+The return type of this function is computed using the __arg_pomotion_rules:
+the result is `double` when T is an integer type, and T otherwise.
+
 [h4 Accuracy]
 
 The following table shows the peak errors (in units of epsilon) 

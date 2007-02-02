@@ -22,6 +22,7 @@
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/real_cast.hpp>
+#include <boost/math/tools/promotion.hpp>
 #include <boost/math/tools/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
@@ -1579,36 +1580,43 @@ T gamma_p_derivative_imp(T a, T x, const L& l)
 } // namespace detail
 
 template <class T>
-inline T tgamma(T z)
+inline typename tools::promote_args<T>::type 
+   tgamma(T z)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::gamma_imp(static_cast<value_type>(z), evaluation_type()), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(detail::gamma_imp(static_cast<value_type>(z), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
-inline T lgamma(T z, int* sign)
+inline typename tools::promote_args<T>::type 
+   lgamma(T z, int* sign)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::lgamma_imp(static_cast<value_type>(z), evaluation_type(), sign), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(detail::lgamma_imp(static_cast<value_type>(z), evaluation_type(), sign), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
-inline T lgamma(T x)
+inline typename tools::promote_args<T>::type 
+   lgamma(T x)
 {
    BOOST_FPU_EXCEPTION_GUARD
    return ::boost::math::lgamma(x, 0);
 }
 
 template <class T>
-inline T tgamma1pm1(T z)
+inline typename tools::promote_args<T>::type 
+   tgamma1pm1(T z)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
    typedef typename mpl::if_c<
       (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits <= 64)),
       mpl::int_<64>,
@@ -1623,13 +1631,15 @@ inline T tgamma1pm1(T z)
 //
 // Full upper incomplete gamma:
 //
-template <class T>
-inline T tgamma(T a, T z)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type
+   tgamma(T1 a, T2 z)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
       static_cast<value_type>(z), false, true,
       evaluation_type()), BOOST_CURRENT_FUNCTION);
@@ -1637,13 +1647,15 @@ inline T tgamma(T a, T z)
 //
 // Full lower incomplete gamma:
 //
-template <class T>
-inline T tgamma_lower(T a, T z)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type
+   tgamma_lower(T1 a, T2 z)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
       static_cast<value_type>(z), false, false,
       evaluation_type()), BOOST_CURRENT_FUNCTION);
@@ -1651,13 +1663,15 @@ inline T tgamma_lower(T a, T z)
 //
 // Regularised upper incomplete gamma:
 //
-template <class T>
-inline T gamma_q(T a, T z)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type
+   gamma_q(T1 a, T2 z)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
       static_cast<value_type>(z), true, true,
       evaluation_type()), BOOST_CURRENT_FUNCTION);
@@ -1665,43 +1679,51 @@ inline T gamma_q(T a, T z)
 //
 // Regularised lower incomplete gamma:
 //
-template <class T>
-inline T gamma_p(T a, T z)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type
+   gamma_p(T1 a, T2 z)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
       static_cast<value_type>(z), true, false,
       evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 // ratios of gamma functions:
-template <class T>
-inline T tgamma_delta_ratio(T z, T delta)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   tgamma_delta_ratio(T1 z, T2 delta)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(z), static_cast<value_type>(delta), evaluation_type()), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(z), static_cast<value_type>(delta), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
-template <class T>
-inline T tgamma_ratio(T a, T b)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   tgamma_ratio(T1 a, T2 b)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b - a), evaluation_type()), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b - a), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
-template <class T>
-T gamma_p_derivative(T a, T x)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   gamma_p_derivative(T1 a, T2 x)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::gamma_p_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(x), evaluation_type()), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(detail::gamma_p_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(x), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 } // namespace math

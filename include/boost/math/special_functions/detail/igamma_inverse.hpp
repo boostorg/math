@@ -334,11 +334,8 @@ private:
    bool invert;
 };
 
-} // namespace detail
-
-
 template <class T>
-T gamma_p_inv(T a, T p)
+T gamma_p_inv_imp(T a, T p)
 {
    using namespace std;  // ADL of std functions.
 
@@ -378,7 +375,7 @@ T gamma_p_inv(T a, T p)
 }
 
 template <class T>
-T gamma_q_inv(T a, T q)
+T gamma_q_inv_imp(T a, T q)
 {
    using namespace std;  // ADL of std functions.
 
@@ -415,6 +412,28 @@ T gamma_q_inv(T a, T q)
    if(guess == lower)
       guess = tools::underflow_error<T>(BOOST_CURRENT_FUNCTION, "Expected result known to be non-zero, but is smaller than the smallest available number.");
    return guess;
+}
+
+} // namespace detail
+
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   gamma_p_inv(T1 a, T2 p)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   return detail::gamma_p_inv_imp(
+      static_cast<result_type>(a),
+      static_cast<result_type>(p));
+}
+
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   gamma_q_inv(T1 a, T2 p)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   return detail::gamma_q_inv_imp(
+      static_cast<result_type>(a),
+      static_cast<result_type>(p));
 }
 
 } // namespace math

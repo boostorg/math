@@ -40,6 +40,8 @@ boostbook standalone
         # Set this one for PDF generation *only*:
         # default pnd graphics are awful in PDF form,
         # better use SVG's instead:
-        #<xsl:param>admon.graphics.extension=".svg"
+        # <xsl:param>admon.graphics.extension=".svg"
     ;
+
+
 

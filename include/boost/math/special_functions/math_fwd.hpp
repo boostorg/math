@@ -42,45 +42,11 @@ namespace boost
    template <class RT>
    RT ibetac_inv(RT a, RT b, RT q); // Incomplete beta complement inverse function.
 
-   // Binomial distribution.
-
-   //template <class AT, class RT> // Binomial distribution (k, n, x)
-   //// Probability of number of events between 0 and k-1 inclusive, if expected probability of success events is success_fraction.
-   //typename tools::promote_arg3<AT, AT, RT>::type
-   //// Return type is the wider of the two (perhaps promoted) floating-point types.
-   //binomial(AT k, AT n, RT success_fraction);
-
-   //template <class AT, class RT> // Binomial distribution complement (k, n, x)
-   //// Probability of number of events between 0 and k-1 inclusive, if expected mean is x.
-   //typename tools::promote_arg3<AT, AT, RT>::type
-   //binomial_c(AT k, AT n, RT success_fraction);
-
-   //template <class AT, class RT>
-   //// success_fraction if number of events between 0 and k-1 inclusive, and probability p.
-   //typename tools::promote_arg3<AT, AT, RT>::type
-   //binomial_inv(AT k,  AT n, RT probability); // Binomial distribution inverse (k, n, p)
 
    // cbrt - cube root.
    template <class RT>
    RT cbrt(RT z);
 
-   // chi_sqr functions.
-   //template <class AT, class RT> // probability chisqr(degrees_of_freedom, chisqr)
-   //typename tools::promote_arg2<RT, AT>::type
-   //// return type is the wider of the two (?promoted) floating point types.
-   //chisqr(AT degrees_of_freedom, RT chisqr);
-
-   //template <class AT, class RT> // complement probability chisqr_c(degrees_of_freedom, chisqr)
-   //typename tools::promote_arg2<RT, AT>::type
-   //chisqr_c(AT degrees_of_freedom, RT chisqr);
-
-   //template <class AT, class RT> // chisqr = chisqr_inv(degrees_of_freedom,  probability)
-   //typename tools::promote_arg2<RT, AT>::type
-   //chisqr_inv(AT degrees_of_freedom, RT probability);
-
-   //template <class AT, class RT> // degrees_of_freedom = chisqr_inv_df(chisqr, probability)
-   //typename tools::promote_arg2<RT, AT>::type // <RT, AT> but both RT.
-   //chisqr_df_inv(RT chisqr, RT probability);
 
    // erf & erfc error functions.
    template <class RT> // Error function.
@@ -105,24 +71,6 @@ namespace boost
    template <class RT>
    RT unchecked_factorial(unsigned int); 
 
-   // Fisher-Snedecor functions.
-
-   //template <class AT, class RT>
-   //typename tools::promote_arg3<AT, AT, RT>::type
-   //// return type is the wider of the three (possibly promoted) floating point types.
-   //fisher(AT degrees_of_freedom1, AT degrees_of_freedom2, RT fisher);
-
-   //template <class AT, class RT>
-   //typename tools::promote_arg3<AT, AT, RT>::type
-   //fisher_c(AT degrees_of_freedom1, AT degrees_of_freedom2, RT fisher);
-
-   //template <class AT, class RT>
-   //typename tools::promote_arg3<AT, AT, RT>::type
-   //fisher_inv(AT degrees_of_freedom1, AT degrees_of_freedom2, RT fisher);
-
-   //template <class AT, class RT>
-   //typename tools::promote_arg3<AT, AT, RT>::type
-   //fisher_c_inv(AT degrees_of_freedom1, AT degrees_of_freedom2, RT fisher);
 
    // Fpclassify - classify floating-point as NaN or infinity...
    template <class T>
@@ -130,24 +78,48 @@ namespace boost
 
    // Gamma functions.
    template <class RT>
-   RT tgamma(RT z);
+   typename tools::promote_args<RT>::type tgamma(RT z);
+
    template <class RT>
-   RT tgamma(RT a, RT z);
+   typename tools::promote_args<RT>::type tgamma1pm1(RT z);
+
+   template <class RT1, class RT2>
+   typename tools::promote_args<RT1, RT2>::type tgamma(RT1 a, RT2 z);
+
    template <class RT>
-   RT lgamma(RT z, int* sign);
+   typename tools::promote_args<RT>::type lgamma(RT z, int* sign);
+
    template <class RT>
-   RT lgamma(RT x);
-   template <class RT>
-   RT tgamma_lower(RT a, RT z);
-   template <class RT>
-   RT gamma_q(RT a, RT z);
-   template <class RT>
-   RT gamma_p(RT a, RT z);
+   typename tools::promote_args<RT>::type lgamma(RT x);
+
+   template <class RT1, class RT2>
+   typename tools::promote_args<RT1, RT2>::type tgamma_lower(RT1 a, RT2 z);
+
+   template <class RT1, class RT2>
+   typename tools::promote_args<RT1, RT2>::type gamma_q(RT1 a, RT2 z);
+
+   template <class RT1, class RT2>
+   typename tools::promote_args<RT1, RT2>::type gamma_p(RT1 a, RT2 z);
+
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type tgamma_delta_ratio(T1 z, T2 delta);
+
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type tgamma_ratio(T1 a, T2 b);
+
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type gamma_p_derivative(T1 a, T2 x);
+
    // gamma inverse.
-   template <class RT>
-   RT gamma_p_inv(RT a, RT p);
-   template <class RT>
-   RT gamma_q_inv(RT a, RT q);
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type gamma_p_inv(T1 a, T2 p);
+
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type gamma_q_inv(T1 a, T2 q);
+
+   // digamma:
+   template <class T>
+   typename tools::promote_args<T>::type digamma(T x);
 
    // Hypotenuse function sqrt(x ^ 2 + y ^ 2).
    template <class T>
@@ -160,14 +132,6 @@ namespace boost
    // Power
    template <class T>
    T powm1(const T, const T);
-
-   //template <class AT, class RT>
-   //typename tools::promote_arg2<RT, AT>::type
-   //students_t(AT degrees_of_freedom1, RT probability); //  probability from t.
-
-   //template <class AT, class RT>
-   //typename tools::promote_arg2<RT, AT>::type
-   //students_t_inv(AT degrees_of_freedom1, RT probability); // t from probability.
 
    // sqrt
    template <class T>

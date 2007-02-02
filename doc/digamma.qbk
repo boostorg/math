@@ -11,7 +11,7 @@
   namespace boost{ namespace math{
   
   template <class T>
-  T digamma(T z);
+  ``__sf_result`` digamma(T z);
   
   }} // namespaces
   
@@ -27,6 +27,9 @@ derivative of the gamma function:
 There is no fully generic version of this function:  all the implementations
 are tuned to specific accuracy levels, the most precise of which delivers
 34-digits of precision.
+
+The return type of this function is computed using the __arg_pomotion_rules:
+the result is of type `double` when T is an integer type, and type T otherwise.
 
 [h4 Accuracy]
 

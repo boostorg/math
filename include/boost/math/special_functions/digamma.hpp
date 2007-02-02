@@ -8,6 +8,7 @@
 
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/evaluation_type.hpp>
+#include <boost/math/tools/promotion.hpp>
 #include <boost/math/tools/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 
@@ -404,9 +405,11 @@ T digamma_imp(T x, const Tag* t)
 } // namespace detail
 
 template <class T>
-T digamma(T x)
+typename tools::promote_args<T>::type 
+   digamma(T x)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
    typedef typename mpl::if_c<
       (std::numeric_limits<T>::digits == 0)
       ||
@@ -423,7 +426,7 @@ T digamma(T x)
       >::type
    >::type tag_type;
 
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::digamma_imp(
+   return tools::checked_narrowing_cast<result_type>(detail::digamma_imp(
       static_cast<value_type>(x),
       static_cast<const tag_type*>(0)), BOOST_CURRENT_FUNCTION);
 }

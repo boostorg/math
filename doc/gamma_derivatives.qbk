@@ -10,8 +10,8 @@
 
    namespace boost{ namespace math{ 
    
-   template <class T>
-   T gamma_p_derivative(T a, T x);
+   template <class T1, class T2>
+   ``__sf_result`` gamma_p_derivative(T1 a, T2 x);
    
    }} // namespaces
    
@@ -25,6 +25,9 @@ gamma function.
 
 Note that the derivative of the function __gamma_q can be obtained by negating
 the result of this function.
+
+The return type of this function is computed using the __arg_pomotion_rules
+when T1 and T2 are different types, otherwise the return type is simply T1.
 
 [h4 Accuracy]
 

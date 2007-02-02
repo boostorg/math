@@ -23,6 +23,7 @@
 #include <boost/type_traits/is_integral.hpp> // for boost::is_integral
 #include <boost/type_traits/is_convertible.hpp> // for boost::is_convertible
 #include <boost/type_traits/is_same.hpp>// for boost::is_same
+#include <boost/type_traits/remove_cv.hpp>// for boost::remove_cv
 // Boost Template meta programming:
 #include <boost/mpl/if.hpp> // for boost::mpl::if_c.
 
@@ -82,15 +83,15 @@ namespace boost
       struct promote_args
       {
          typedef typename promote_args_2<
-            T1,
+            typename remove_cv<T1>::type,
             typename promote_args_2<
-               T2,
+               typename remove_cv<T2>::type,
                typename promote_args_2<
-                  T3,
+                  typename remove_cv<T3>::type,
                   typename promote_args_2<
-                     T4,
+                     typename remove_cv<T4>::type,
                      typename promote_args_2<
-                        T5, T6
+                        typename remove_cv<T5>::type, typename remove_cv<T6>::type
                      >::type
                   >::type
                >::type
