@@ -790,19 +790,21 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
 
 } // namespace detail
 
-template <class T>
-T ibeta_inv(T a, T b, T p, T* py)
+template <class T1, class T2, class T3, class T4>
+typename tools::promote_args<T1, T2, T3, T4>::type  
+   ibeta_inv(T1 a, T2 b, T3 p, T4* py)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
+   typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
 
    if(a <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a);
+      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a);
    if(b <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b);
+      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b);
    if((p < 0) || (p > 1))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument p outside the range [0,1] in the incomplete beta function inverse (got p=%1%).", p);
+      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "Argument p outside the range [0,1] in the incomplete beta function inverse (got p=%1%).", p);
 
    value_type rx, ry;
 
@@ -813,30 +815,33 @@ T ibeta_inv(T a, T b, T p, T* py)
          static_cast<value_type>(1 - p),
          evaluation_type(), &ry);
 
-   if(py) *py = tools::checked_narrowing_cast<T>(ry, BOOST_CURRENT_FUNCTION);
-   return tools::checked_narrowing_cast<T>(rx, BOOST_CURRENT_FUNCTION);
+   if(py) *py = tools::checked_narrowing_cast<T4>(ry, BOOST_CURRENT_FUNCTION);
+   return tools::checked_narrowing_cast<result_type>(rx, BOOST_CURRENT_FUNCTION);
 }
 
-template <class T>
-inline T ibeta_inv(T a, T b, T p)
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type 
+   ibeta_inv(T1 a, T2 b, T3 p)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   return ibeta_inv(a, b, p, static_cast<T*>(0));
+   return ibeta_inv(a, b, p, static_cast<T1*>(0));
 }
 
-template <class T>
-T ibetac_inv(T a, T b, T q, T* py)
+template <class T1, class T2, class T3, class T4>
+typename tools::promote_args<T1, T2, T3, T4>::type 
+   ibetac_inv(T1 a, T2 b, T3 q, T4* py)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
+   typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
 
    if(a <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a);
+      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a);
    if(b <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b);
+      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b);
    if((q < 0) || (q > 1))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument q outside the range [0,1] in the incomplete beta function inverse (got q=%1%).", q);
+      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "Argument q outside the range [0,1] in the incomplete beta function inverse (got q=%1%).", q);
 
    value_type rx, ry;
 
@@ -847,15 +852,16 @@ T ibetac_inv(T a, T b, T q, T* py)
          static_cast<value_type>(q),
          evaluation_type(), &ry);
 
-   if(py) *py = tools::checked_narrowing_cast<T>(ry, BOOST_CURRENT_FUNCTION);
-   return tools::checked_narrowing_cast<T>(rx, BOOST_CURRENT_FUNCTION);
+   if(py) *py = tools::checked_narrowing_cast<T4>(ry, BOOST_CURRENT_FUNCTION);
+   return tools::checked_narrowing_cast<result_type>(rx, BOOST_CURRENT_FUNCTION);
 }
 
-template <class T>
-inline T ibetac_inv(T a, T b, T q)
+template <class RT1, class RT2, class RT3>
+inline typename tools::promote_args<RT1, RT2, RT3>::type 
+   ibetac_inv(RT1 a, RT2 b, RT3 q)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   return ibetac_inv(a, b, q, static_cast<T*>(0));
+   return ibetac_inv(a, b, q, static_cast<RT1*>(0));
 }
 
 } // namespace math

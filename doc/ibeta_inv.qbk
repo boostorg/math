@@ -10,29 +10,29 @@
 
    namespace boost{ namespace math{
    
-   template <class T>
-   T ibeta_inv(T a, T b, T p);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p);
    
-   template <class T>
-   T ibeta_inv(T a, T b, T p, T* py);
+   template <class T1, class T2, class T3, class T4>
+   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, T4* py);
    
-   template <class T>
-   T ibetac_inv(T a, T b, T q);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q);
    
-   template <class T>
-   T ibetac_inv(T a, T b, T q, T* py);
+   template <class T1, class T2, class T3, class T4>
+   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, T4* py);
    
-   template <class T>
-   T ibeta_inva(T b, T x, T p);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibeta_inva(T1 b, T2 x, T3 p);
    
-   template <class T>
-   T ibetac_inva(T b, T x, T q);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibetac_inva(T1 b, T2 x, T3 q);
    
-   template <class T>
-   T ibeta_invb(T a, T x, T p);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibeta_invb(T1 a, T2 x, T3 p);
    
-   template <class T>
-   T ibetac_invb(T a, T x, T q);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibetac_invb(T1 a, T2 x, T3 q);
    
    }} // namespaces
    
@@ -54,11 +54,14 @@ techniques and are consequently several times slower.
 These are implemented here as ibeta_inva and ibeta_invb,
 and complement versions ibetac_inva and ibetac_invb.]
 
-   template <class T>
-   T ibeta_inv(T a, T b, T p);
+The return type of these functions is computed using the __arg_pomotion_rules
+when called with arguments T1...TN of different types.
 
-   template <class T>
-   T ibeta_inv(T a, T b, T p, T* py);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p);
+   
+   template <class T1, class T2, class T3, class T4>
+   ``__sf_result`` ibeta_inv(T1 a, T2 b, T3 p, T4* py);
    
 Returns a value /x/ such that: `p = ibeta(a, b, x);` 
 and sets `*py = 1 - x` when the `py` parameter is provided and is non-null.  
@@ -69,11 +72,11 @@ value stored in `*py` may be non-zero, albeit very small.
 
 Requires:  /a,b > 0/ and /0 <= p <= 1/.
 
-   template <class T>
-   T ibetac_inv(T a, T b, T q);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q);
    
-   template <class T>
-   T ibetac_inv(T a, T b, T q, T* py);
+   template <class T1, class T2, class T3, class T4>
+   ``__sf_result`` ibetac_inv(T1 a, T2 b, T3 q, T4* py);
    
 Returns a value /x/ such that: `q = ibetac(a, b, x);`
 and sets `*py = 1 - x` when the `py` parameter is provided and is non-null.  
@@ -84,29 +87,29 @@ value stored in `*py` may be non-zero, albeit very small.
 
 Requires:  /a,b > 0/ and /0 <= q <= 1/.
 
-   template <class T>
-   T ibeta_inva(T b, T x, T p);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibeta_inva(T1 b, T2 x, T3 p);
 
 Returns a value /a/ such that: `p = ibeta(a, b, x);`
 
 Requires:  /b > 0/, /0 < x < 1/ and /0 <= p <= 1/.
 
-   template <class T>
-   T ibetac_inva(T b, T x, T q);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibetac_inva(T1 b, T2 x, T3 p);
    
 Returns a value /a/ such that: `q = ibetac(a, b, x);`
 
 Requires:  /b > 0/, /0 < x < 1/ and /0 <= q <= 1/.
 
-   template <class T>
-   T ibeta_invb(T a, T x, T p);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibeta_invb(T1 b, T2 x, T3 p);
 
 Returns a value /b/ such that: `p = ibeta(a, b, x);`
 
 Requires:  /a > 0/, /0 < x < 1/ and /0 <= p <= 1/.
 
-   template <class T>
-   T ibetac_invb(T a, T x, T q);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibetac_invb(T1 b, T2 x, T3 p);
    
 Returns a value /b/ such that: `q = ibetac(a, b, x);`
 

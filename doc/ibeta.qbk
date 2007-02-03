@@ -10,17 +10,17 @@
 
    namespace boost{ namespace math{
    
-   template <class T>
-   T ibeta(T a, T b, T x);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibeta(T1 a, T2 b, T3 x);
    
-   template <class T>
-   T ibetac(T a, T b, T x);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibetac(T1 a, T2 b, T3 x);
    
-   template <class T>
-   T beta(T a, T b, T x);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` beta(T1 a, T2 b, T3 x);
    
-   template <class T>
-   T betac(T a, T b, T x);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` betac(T1 a, T2 b, T3 x);
    
    }} // namespaces
    
@@ -36,8 +36,11 @@ applications should use the normalised (or
 
 All of these functions require /a > 0/, /b > 0/ and /0 <= x <= 1/.
 
-   template <class T>
-   T ibeta(T a, T b, T x);
+The return type of these functions is computed using the __arg_pomotion_rules
+when T1, T2 and T3 are different types.
+
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibeta(T1 a, T2 b, T3 x);
 
 Returns the normalised incomplete beta function of a, b and x:
 
@@ -45,22 +48,22 @@ Returns the normalised incomplete beta function of a, b and x:
 
 [$../graphs/ibeta.png]
 
-   template <class T>
-   T ibetac(T a, T zb, T x);   
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibetac(T1 a, T2 b, T3 x);
    
 Returns the normalised complement of the incomplete beta function of a, b and x:
 
 [$../equations/ibeta4.png]
 
-   template <class T>
-   T beta(T a, T b, T x);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` beta(T1 a, T2 b, T3 x);
 
 Returns the full (non-normalised) incomplete beta function of a, b and x:
 
 [$../equations/ibeta1.png]
 
-   template <class T>
-   T betac(T a, T b, T x);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` betac(T1 a, T2 b, T3 x);
 
 Returns the full (non-normalised) complement of the incomplete beta function of a, b and x:
 

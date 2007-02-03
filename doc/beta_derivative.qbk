@@ -10,8 +10,8 @@
 
    namespace boost{ namespace math{ 
    
-   template <class T>
-   T ibeta_derivative(T a, T b, T x);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` ibeta_derivative(T1 a, T2 b, T3 x);
    
    }} // namespaces
    
@@ -22,6 +22,9 @@ computes the partial derivative with respect to /x/ of the incomplete
 beta function __ibeta.
 
 [$../equations/derivative2.png]
+
+The return type of this function is computed using the __arg_pomotion_rules
+when T1, T2 and T3 are different types.
 
 [h4 Accuracy]
 

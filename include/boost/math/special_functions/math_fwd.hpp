@@ -19,7 +19,7 @@
 #ifndef BOOST_MATH_SPECIAL_MATH_FWD_HPP
 #define BOOST_MATH_SPECIAL_MATH_FWD_HPP
 
-//#include <boost/math/tools/promotion.hpp> // for argument promotion.
+#include <boost/math/tools/promotion.hpp> // for argument promotion.
 
 namespace boost
 {
@@ -27,21 +27,45 @@ namespace boost
 	{ // Math functions (in roughly alphabetic order).
 
    // Beta functions.
-   template <class RT>
-   RT beta(RT a, RT b); // Beta function (2 arguments).
-   template <class RT>
-   RT beta(RT a, RT b, RT x);// Beta function (3 arguments).
-   template <class RT>
-   RT betac(RT a, RT b, RT x);
-   template <class RT> 
-   RT ibeta(RT a, RT b, RT x); // Incomplete beta function.
-   template <class RT>
-   RT ibetac(RT a, RT b, RT x); // Incomplete beta complement function.
-   template <class RT>
-   RT ibeta_inv(RT a, RT b, RT p); // Incomplete beta inverse function.
-   template <class RT>
-   RT ibetac_inv(RT a, RT b, RT q); // Incomplete beta complement inverse function.
+   template <class RT1, class RT2>
+   typename tools::promote_args<RT1, RT2>::type 
+         beta(RT1 a, RT2 b); // Beta function (2 arguments).
 
+   template <class RT1, class RT2, class RT3>
+   typename tools::promote_args<RT1, RT2, RT3>::type 
+         beta(RT1 a, RT2 b, RT3 x); // Beta function (3 arguments).
+
+   template <class RT1, class RT2, class RT3>
+   typename tools::promote_args<RT1, RT2, RT3>::type 
+         betac(RT1 a, RT2 b, RT3 x);
+
+   template <class RT1, class RT2, class RT3>
+   typename tools::promote_args<RT1, RT2, RT3>::type 
+         ibeta(RT1 a, RT2 b, RT3 x); // Incomplete beta function.
+
+   template <class RT1, class RT2, class RT3>
+   typename tools::promote_args<RT1, RT2, RT3>::type 
+         ibetac(RT1 a, RT2 b, RT3 x); // Incomplete beta complement function.
+
+   template <class T1, class T2, class T3, class T4>
+   typename tools::promote_args<T1, T2, T3, T4>::type  
+         ibeta_inv(T1 a, T2 b, T3 p, T4* py);
+
+   template <class RT1, class RT2, class RT3>
+   typename tools::promote_args<RT1, RT2, RT3>::type 
+         ibeta_inv(RT1 a, RT2 b, RT3 p); // Incomplete beta inverse function.
+
+   template <class T1, class T2, class T3, class T4>
+   typename tools::promote_args<T1, T2, T3, T4>::type 
+         ibetac_inv(T1 a, T2 b, T3 q, T4* py);
+
+   template <class RT1, class RT2, class RT3>
+   typename tools::promote_args<RT1, RT2, RT3>::type 
+         ibetac_inv(RT1 a, RT2 b, RT3 q); // Incomplete beta complement inverse function.
+
+   template <class RT1, class RT2, class RT3>
+   typename tools::promote_args<RT1, RT2, RT3>::type 
+         ibeta_derivative(RT1 a, RT2 b, RT3 x);  // derivative of incomplete beta
 
    // cbrt - cube root.
    template <class RT>
@@ -70,6 +94,14 @@ namespace boost
    RT factorial(unsigned int);
    template <class RT>
    RT unchecked_factorial(unsigned int); 
+   template <class RT>
+   RT double_factorial(unsigned i);
+
+   template <class RT>
+   typename tools::promote_args<RT>::type falling_factorial(RT x, unsigned n);
+
+   template <class RT>
+   typename tools::promote_args<RT>::type rising_factorial(RT x, unsigned n);
 
 
    // Fpclassify - classify floating-point as NaN or infinity...

@@ -129,7 +129,7 @@ and
    namespace boost{ namespace math{
    
    template <class T>
-   T rising_factorial(T x, int i);
+   ``__sf_result`` rising_factorial(T x, int i);
    
    }} // namespaces
 
@@ -145,6 +145,10 @@ Note that both /x/ and /i/ can be negative as well as positive.
 
 May return the result of __overflow_error if the result is too large
 to represent in type T.
+
+The return type of these functions is computed using the __arg_pomotion_rules:
+the type of the result is `double` if T is an integer type, otherwise the type
+of the result is T.
 
 [h4 Accuracy]
 
@@ -173,7 +177,7 @@ small integer arguments are handled internally by that function.
    namespace boost{ namespace math{
    
    template <class T>
-   T falling_factorial(T x, unsigned i);
+   ``__sf_result`` falling_factorial(T x, unsigned i);
    
    }} // namespaces
 
@@ -187,6 +191,10 @@ negative however.
 
 May return the result of __overflow_error if the result is too large
 to represent in type T.
+
+The return type of these functions is computed using the __arg_pomotion_rules:
+the type of the result is `double` if T is an integer type, otherwise the type
+of the result is T.
 
 [h4 Accuracy]
 

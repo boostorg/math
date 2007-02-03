@@ -7,6 +7,7 @@
 #define BOOST_MATH_SP_FACTORIALS_HPP
 
 #include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/unchecked_factorial.hpp>
 #include <boost/array.hpp>
 #ifdef BOOST_MSVC
@@ -85,11 +86,10 @@ T double_factorial(unsigned i)
    return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
 }
 
-template <class T>
-T falling_factorial(T x, unsigned n);
+namespace detail{
 
 template <class T>
-T rising_factorial(T x, int n)
+T rising_factorial_imp(T x, int n)
 {
    if(x < 0)
    {
@@ -124,7 +124,7 @@ T rising_factorial(T x, int n)
 }
 
 template <class T>
-inline T falling_factorial(T x, unsigned n)
+inline T falling_factorial_imp(T x, unsigned n)
 {
    using namespace std; // ADL of std names
    if(x == 0)
@@ -165,6 +165,26 @@ inline T falling_factorial(T x, unsigned n)
    // for that use case:
    //
    return tgamma_delta_ratio(x + 1, -static_cast<T>(n));
+}
+
+} // namespace detail
+
+template <class RT>
+inline typename tools::promote_args<RT>::type 
+   falling_factorial(RT x, unsigned n)
+{
+   typedef typename tools::promote_args<RT>::type result_type;
+   return detail::falling_factorial_imp(
+      static_cast<result_type>(x), n);
+}
+
+template <class RT>
+inline typename tools::promote_args<RT>::type 
+   rising_factorial(RT x, unsigned n)
+{
+   typedef typename tools::promote_args<RT>::type result_type;
+   return detail::rising_factorial_imp(
+      static_cast<result_type>(x), n);
 }
 
 } // namespace math

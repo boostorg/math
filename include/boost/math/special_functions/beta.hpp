@@ -1104,58 +1104,70 @@ T ibeta_derivative_imp(T a, T b, T x, const L& l)
 // which Lanczos approximation to use
 // and forward to the implementation functions:
 //
-template <class T>
-T beta(T a, T b)
+template <class RT1, class RT2>
+typename tools::promote_args<RT1, RT2>::type 
+   beta(RT1 a, RT2 b)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<T>(detail::beta_imp(static_cast<value_type>(a), static_cast<value_type>(b), evaluation_type()), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<RT1, RT2>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(detail::beta_imp(static_cast<value_type>(a), static_cast<value_type>(b), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
-template <class T>
-T beta(T a, T b, T x)
+template <class RT1, class RT2, class RT3>
+typename tools::promote_args<RT1, RT2, RT3>::type 
+   beta(RT1 a, RT2 b, RT3 x)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), false, false), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), false, false), BOOST_CURRENT_FUNCTION);
 }
 
-template <class T>
-T betac(T a, T b, T x)
+template <class RT1, class RT2, class RT3>
+typename tools::promote_args<RT1, RT2, RT3>::type 
+   betac(RT1 a, RT2 b, RT3 x)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, false), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, false), BOOST_CURRENT_FUNCTION);
 }
 
-template <class T>
-T ibeta(T a, T b, T x)
+template <class RT1, class RT2, class RT3>
+typename tools::promote_args<RT1, RT2, RT3>::type 
+   ibeta(RT1 a, RT2 b, RT3 x)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), false, true), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), false, true), BOOST_CURRENT_FUNCTION);
 }
 
-template <class T>
-T ibetac(T a, T b, T x)
+template <class RT1, class RT2, class RT3>
+typename tools::promote_args<RT1, RT2, RT3>::type 
+   ibetac(RT1 a, RT2 b, RT3 x)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<T>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, true), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type(), true, true), BOOST_CURRENT_FUNCTION);
 }
 
-template <class T>
-T ibeta_derivative(T a, T b, T x)
+template <class RT1, class RT2, class RT3>
+typename tools::promote_args<RT1, RT2, RT3>::type 
+   ibeta_derivative(RT1 a, RT2 b, RT3 x)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename lanczos::lanczos_traits<T>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
-   return tools::checked_narrowing_cast<T>(detail::ibeta_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type()), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   return tools::checked_narrowing_cast<result_type>(detail::ibeta_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), evaluation_type()), BOOST_CURRENT_FUNCTION);
 }
 
 } // namespace math
