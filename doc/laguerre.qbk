@@ -11,24 +11,28 @@
    namespace boost{ namespace math{
    
    template <class T>
-   T laguerre(unsigned n, T x);
+   ``__sf_result`` laguerre(unsigned n, T x);
    
    template <class T>
-   T laguerre(unsigned n, unsigned m, T x);
+   ``__sf_result`` laguerre(unsigned n, unsigned m, T x);
    
-   template <class T>
-   T laguerre_next(unsigned n, T x, T Ln, T Lnm1);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` laguerre_next(unsigned n, T1 x, T2 Ln, T3 Lnm1);
    
-   template <class T>
-   T laguerre_next(unsigned n, unsigned m, T x, T Ln, T Lnm1);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` laguerre_next(unsigned n, unsigned m, T1 x, T2 Ln, T3 Lnm1);
 
    
    }} // namespaces
-
+   
 [h4 Description]
 
+The return type of these functions is computed using the __arg_pomotion_rules:
+note than when there is a single template argument the result is the same type 
+as that argument or `double` if the template argument is an integer type.
+
    template <class T>
-   T laguerre(unsigned n, T x);
+   ``__sf_result`` laguerre(unsigned n, T x);
    
 Returns the value of the Laguerre Polynomial of order /n/ at point /x/:
 
@@ -40,15 +44,15 @@ Laguerre Polynomials:
 [$../graphs/laguerre.png]
    
    template <class T>
-   T laguerre(unsigned n, unsigned m, T x);
+   ``__sf_result`` laguerre(unsigned n, unsigned m, T x);
    
 Returns the Associated Laguerre polynomial of degree /n/ 
 and order /m/ at point /x/:
 
 [$../equations/laguerre_1.png]
    
-   template <class T>
-   T laguerre_next(unsigned n, T x, T Ln, T Lnm1);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` laguerre_next(unsigned n, T1 x, T2 Ln, T3 Lnm1);
    
 Implements the three term recurrence relation for the Laguerre
 polynomials, this function can be used to create a sequence of
@@ -74,8 +78,8 @@ Formally the arguments are:
 [[Lnm1][The value of the polynomial evaluated at degree /n-1/.]]
 ]
    
-   template <class T>
-   T laguerre_next(unsigned n, unsigned m, T x, T Ln, T Lnm1);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` laguerre_next(unsigned n, unsigned m, T1 x, T2 Ln, T3 Lnm1);
 
 Implements the three term recurrence relation for the Associated Laguerre
 polynomials, this function can be used to create a sequence of

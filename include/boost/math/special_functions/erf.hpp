@@ -711,23 +711,23 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<113>& t)
 } // namespace detail
 
 template <class T>
-T erf(T z)
+typename tools::promote_args<T>::type erf(T z)
 {
-   typedef typename remove_cv<T>::type cv_type;
-   typedef typename lanczos::lanczos_traits<cv_type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<cv_type>::evaluation_type evaluation_type;
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
 
    typedef typename mpl::if_c<
-      ::std::numeric_limits<cv_type>::is_specialized == 0,
+      ::std::numeric_limits<result_type>::is_specialized == 0,
       mpl::int_<0>,  // no numeric_limits, use generic solution
       typename mpl::if_c<
-         ::std::numeric_limits<cv_type>::digits <= 53,
+         ::std::numeric_limits<result_type>::digits <= 53,
          mpl::int_<53>,  // double
          typename mpl::if_c<
-            ::std::numeric_limits<cv_type>::digits <= 64,
+            ::std::numeric_limits<result_type>::digits <= 64,
             mpl::int_<64>, // 80-bit long double
             typename mpl::if_c<
-               ::std::numeric_limits<cv_type>::digits <= 113,
+               ::std::numeric_limits<result_type>::digits <= 113,
                mpl::int_<113>, // 128-bit long double
                mpl::int_<0> // too many bits, use generic version.
             >::type
@@ -735,7 +735,7 @@ T erf(T z)
       >::type
    >::type tag_type;
 
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::erf_imp(
+   return tools::checked_narrowing_cast<result_type>(detail::erf_imp(
       static_cast<value_type>(z),
       false,
       evaluation_type(),
@@ -743,23 +743,23 @@ T erf(T z)
 }
 
 template <class T>
-T erfc(T z)
+typename tools::promote_args<T>::type erfc(T z)
 {
-   typedef typename remove_cv<T>::type cv_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<typename remove_cv<T>::type>::evaluation_type evaluation_type;
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
+   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
 
    typedef typename mpl::if_c<
-      ::std::numeric_limits<cv_type>::is_specialized == 0,
+      ::std::numeric_limits<result_type>::is_specialized == 0,
       mpl::int_<0>,  // no numeric_limits, use generic solution
       typename mpl::if_c<
-         ::std::numeric_limits<cv_type>::digits <= 53,
+         ::std::numeric_limits<result_type>::digits <= 53,
          mpl::int_<53>,  // double
          typename mpl::if_c<
-            ::std::numeric_limits<cv_type>::digits <= 64,
+            ::std::numeric_limits<result_type>::digits <= 64,
             mpl::int_<64>, // 80-bit long double
             typename mpl::if_c<
-               ::std::numeric_limits<cv_type>::digits <= 113,
+               ::std::numeric_limits<result_type>::digits <= 113,
                mpl::int_<113>, // 128-bit long double
                mpl::int_<0> // too many bits, use generic version.
             >::type
@@ -767,7 +767,7 @@ T erfc(T z)
       >::type
    >::type tag_type;
 
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::erf_imp(
+   return tools::checked_narrowing_cast<result_type>(detail::erf_imp(
       static_cast<value_type>(z),
       true,
       evaluation_type(),

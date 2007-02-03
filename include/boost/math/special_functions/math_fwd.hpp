@@ -20,6 +20,7 @@
 #define BOOST_MATH_SPECIAL_MATH_FWD_HPP
 
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
+#include <complex>
 
 namespace boost
 {
@@ -74,13 +75,66 @@ namespace boost
 
    // erf & erfc error functions.
    template <class RT> // Error function.
-   RT erf(RT z);
+   typename tools::promote_args<RT>::type erf(RT z);
+
    template <class RT>// Error function complement.
-   RT erfc(RT z);
+   typename tools::promote_args<RT>::type erfc(RT z);
+
    template <class RT>// Error function inverse.
-   RT erf_inv(RT z);
+   typename tools::promote_args<RT>::type erf_inv(RT z);
+
    template <class RT>// Error function complement inverse.
-   RT erfc_inv(RT z);
+   typename tools::promote_args<RT>::type erfc_inv(RT z);
+
+   // Polynomials:
+   template <class T1, class T2, class T3>
+   typename tools::promote_args<T1, T2, T3>::type 
+         legendre_next(unsigned l, T1 x, T2 Pl, T3 Plm1);
+
+   template <class T>
+   typename tools::promote_args<T>::type 
+         legendre_p(int l, T x);
+
+   template <class T>
+   typename tools::promote_args<T>::type 
+         legendre_q(unsigned l, T x);
+
+   template <class T1, class T2, class T3>
+   typename tools::promote_args<T1, T2, T3>::type 
+         legendre_next(unsigned l, unsigned m, T1 x, T2 Pl, T3 Plm1);
+
+   template <class T>
+   typename tools::promote_args<T>::type 
+         legendre_p(int l, int m, T x);
+
+   template <class T1, class T2, class T3>
+   typename tools::promote_args<T1, T2, T3>::type  
+         laguerre_next(unsigned n, T1 x, T2 Ln, T3 Lnm1);
+
+   template <class T1, class T2, class T3>
+   typename tools::promote_args<T1, T2, T3>::type  
+      laguerre_next(unsigned n, unsigned l, T1 x, T2 Pl, T3 Plm1);
+
+   template <class T>
+   typename tools::promote_args<T>::type 
+      hermite(unsigned n, T x);
+
+   template <class T1, class T2, class T3>
+   typename tools::promote_args<T1, T2, T3>::type 
+      hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1);
+
+   template <class T1, class T2>
+   std::complex<typename tools::promote_args<T1, T2>::type> 
+         spherical_harmonic(unsigned n, int m, T1 theta, T2 phi);
+
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type 
+         spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi);
+
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type 
+         spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi);
+
 
    // Exp (x minus 1) functions.
    template <class T>

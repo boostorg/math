@@ -15,10 +15,12 @@ namespace boost{
 namespace math{
 
 // Recurrance relation for Laguerre polynomials:
-template <class T>
-inline T laguerre_next(unsigned n, T x, T Ln, T Lnm1)
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type  
+   laguerre_next(unsigned n, T1 x, T2 Ln, T3 Lnm1)
 {
-   return ((2 * n + 1 - x) * Ln - n * Lnm1) / (n + 1);
+   typedef typename tools::promote_args<T1, T2, T3>::type result_type;
+   return ((2 * n + 1 - result_type(x)) * result_type(Ln) - n * result_type(Lnm1)) / (n + 1);
 }
 
 namespace detail{
@@ -47,17 +49,21 @@ T laguerre_imp(unsigned n, T x)
 } // namespace detail
 
 template <class T>
-inline T laguerre(unsigned n, T x)
+inline typename tools::promote_args<T>::type 
+   laguerre(unsigned n, T x)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::laguerre_imp(n, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(detail::laguerre_imp(n, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
 }
 
 // Recurrence for associated polynomials:
-template <class T>
-inline T laguerre_next(unsigned n, unsigned l, T x, T Pl, T Plm1)
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type  
+   laguerre_next(unsigned n, unsigned l, T1 x, T2 Pl, T3 Plm1)
 {
-   return ((2 * n + l + 1 - x) * Pl - (n + l) * Plm1) / (n+1);
+   typedef typename tools::promote_args<T1, T2, T3>::type result_type;
+   return ((2 * n + l + 1 - result_type(x)) * result_type(Pl) - (n + l) * result_type(Plm1)) / (n+1);
 }
 
 namespace detail{
@@ -90,10 +96,12 @@ T laguerre_imp(unsigned n, unsigned m, T x)
 }
 
 template <class T>
-inline T laguerre(unsigned n, unsigned m, T x)
+inline typename tools::promote_args<T>::type 
+   laguerre(unsigned n, unsigned m, T x)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::laguerre_imp(n, m, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(detail::laguerre_imp(n, m, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
 }
 
 } // namespace math

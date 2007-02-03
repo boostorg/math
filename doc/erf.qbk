@@ -11,17 +11,20 @@
    namespace boost{ namespace math{
    
    template <class T>
-   T erf(T z);
+   ``__sf_result`` erf(T z);
    
    template <class T>
-   T erfc(T z);
+   ``__sf_result`` erfc(T z);
    
    }} // namespaces
+   
+The return type of these functions is computed using the __arg_pomotion_rules:
+the return type is `double` if T is an integer type, and T otherwise.
 
 [h4 Description]
 
    template <class T>
-   T erf(T z);
+   ``__sf_result`` erf(T z);
    
 Returns the [@http://en.wikipedia.org/wiki/Error_function error function]
 [@http://functions.wolfram.com/GammaBetaErf/Erf/ erf] of z:
@@ -31,7 +34,7 @@ Returns the [@http://en.wikipedia.org/wiki/Error_function error function]
 [$../graphs/erf1.png]
 
    template <class T>
-   T erfc(T z);
+   ``__sf_result`` erfc(T z);
    
 Returns the complement of the [@http://functions.wolfram.com/GammaBetaErf/Erfc/ error function] of z:
 

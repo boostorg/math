@@ -319,23 +319,24 @@ T erf_inv_imp(const T& p, const T& q, const boost::mpl::int_<0>*)
 } // namespace detail
 
 template <class T>
-T erfc_inv(T z)
+typename tools::promote_args<T>::type erfc_inv(T z)
 {
+   typedef typename tools::promote_args<T>::type result_type;
    //
    // Begin by testing for domain errors, and other special cases:
    //
    if((z < 0) || (z > 2))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument outside range [0,2] in inverse erfc function (got p=%1%).", z);
+      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "Argument outside range [0,2] in inverse erfc function (got p=%1%).", z);
    if(z == 0)
-      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+      return tools::overflow_error<result_type>(BOOST_CURRENT_FUNCTION);
    if(z == 2)
-      return -tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+      return -tools::overflow_error<result_type>(BOOST_CURRENT_FUNCTION);
    //
    // Normalise the input, so it's in the range [0,1], we will
    // negate the result if z is outside that range.  This is a simple
    // application of the erfc reflection formula: erfc(-z) = 2 - erfc(z)
    //
-   T p, q, s;
+   result_type p, q, s;
    if(z > 1)
    {
       q = 2 - z;
@@ -353,9 +354,9 @@ T erfc_inv(T z)
    // to use, based on the number of bits in the mantissa of T:
    //
    typedef typename mpl::if_c<
-      std::numeric_limits<T>::is_specialized
+      std::numeric_limits<result_type>::is_specialized
       &&
-      (std::numeric_limits<T>::digits <= 64),
+      (std::numeric_limits<result_type>::digits <= 64),
       mpl::int_<64>,
       mpl::int_<0>
    >::type tag_type;
@@ -363,26 +364,27 @@ T erfc_inv(T z)
    // Likewise use internal promotion, so we evaluate at a higher
    // precision internally if it's appropriate:
    //
-   typedef typename tools::evaluation<T>::type eval_type;
+   typedef typename tools::evaluation<result_type>::type eval_type;
    //
    // And get the result, negating where required:
    //
-   return s * tools::checked_narrowing_cast<typename remove_cv<T>::type>(
+   return s * tools::checked_narrowing_cast<result_type>(
       detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), static_cast<tag_type const*>(0)), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
-T erf_inv(T z)
+typename tools::promote_args<T>::type erf_inv(T z)
 {
+   typedef typename tools::promote_args<T>::type result_type;
    //
    // Begin by testing for domain errors, and other special cases:
    //
    if((z < -1) || (z > 1))
-      tools::domain_error<typename remove_cv<T>::type>(BOOST_CURRENT_FUNCTION, "Argument outside range [-1, 1] in inverse erf function (got p=%1%).", z);
+      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "Argument outside range [-1, 1] in inverse erf function (got p=%1%).", z);
    if(z == 1)
-      return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+      return tools::overflow_error<result_type>(BOOST_CURRENT_FUNCTION);
    if(z == -1)
-      return -tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+      return -tools::overflow_error<result_type>(BOOST_CURRENT_FUNCTION);
    if(z == 0)
       return 0;
    //
@@ -390,7 +392,7 @@ T erf_inv(T z)
    // negate the result if z is outside that range.  This is a simple
    // application of the erf reflection formula: erf(-z) = -erf(z)
    //
-   T p, q, s;
+   result_type p, q, s;
    if(z < 0)
    {
       p = -z;
@@ -408,9 +410,9 @@ T erf_inv(T z)
    // to use, based on the number of bits in the mantissa of T:
    //
    typedef typename mpl::if_c<
-      std::numeric_limits<T>::is_specialized
+      std::numeric_limits<result_type>::is_specialized
       &&
-      (std::numeric_limits<T>::digits <= 64),
+      (std::numeric_limits<result_type>::digits <= 64),
       mpl::int_<64>,
       mpl::int_<0>
    >::type tag_type;
@@ -418,11 +420,11 @@ T erf_inv(T z)
    // Likewise use internal promotion, so we evaluate at a higher
    // precision internally if it's appropriate:
    //
-   typedef typename tools::evaluation<T>::type eval_type;
+   typedef typename tools::evaluation<result_type>::type eval_type;
    //
    // And get the result, negating where required:
    //
-   return s * tools::checked_narrowing_cast<typename remove_cv<T>::type>(
+   return s * tools::checked_narrowing_cast<result_type>(
       detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), static_cast<tag_type const*>(0)), BOOST_CURRENT_FUNCTION);
 }
 

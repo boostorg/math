@@ -11,17 +11,20 @@
    namespace boost{ namespace math{
    
    template <class T>
-   T erf_inv(T p);
+   ``__sf_result`` erf_inv(T p);
    
    template <class T>
-   T erfc_inv(T p);
+   ``__sf_result`` erfc_inv(T p);
    
    }} // namespaces
+   
+The return type of these functions is computed using the __arg_pomotion_rules:
+the return type is `double` if T is an integer type, and T otherwise.
 
 [h4 Description]
 
    template <class T>
-   T erf_inv(T z);
+   ``__sf_result`` erf_inv(T z);
    
 Returns the [@http://functions.wolfram.com/GammaBetaErf/InverseErf/ inverse error function]
 of z, that is a value x such that:
@@ -31,7 +34,7 @@ of z, that is a value x such that:
 [$../graphs/erf_inv.png]
 
    template <class T>
-   T erfc_inv(T z);
+   ``__sf_result`` erfc_inv(T z);
    
 Returns the inverse of the complement of the error function of z, that is a
 value x such that:

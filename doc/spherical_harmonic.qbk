@@ -10,21 +10,24 @@
 
    namespace boost{ namespace math{
    
-   template <class T>
-   std::complex<T> spherical_harmonic(unsigned n, int m, T theta, T phi);
+   template <class T1, class T2>
+   std::complex<``__sf_result``> spherical_harmonic(unsigned n, int m, T1 theta, T2 phi);
 
-   template <class T>
-   T spherical_harmonic_r(unsigned n, int m, T theta, T phi);
+   template <class T1, class T2>
+   ``__sf_result`` spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi);
 
-   template <class T>
-   T spherical_harmonic_i(unsigned n, int m, T theta, T phi);
+   template <class T1, class T2>
+   ``__sf_result`` spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi);
       
    }} // namespaces
 
 [h4 Description]
 
-   template <class T>
-   std::complex<T> spherical_harmonic(unsigned n, int m, T theta, T phi);
+The return type of these functions is computed using the __arg_pomotion_rules
+when T1 and T2 are different types.
+
+   template <class T1, class T2>
+   std::complex<``__sf_result``> spherical_harmonic(unsigned n, int m, T1 theta, T2 phi);
    
 Returns the value of the Spherical Harmonic Y[sub n][super m](theta, phi):
 
@@ -57,15 +60,15 @@ See: [@http://mathworld.wolfram.com/SphericalHarmonic.html
 Weisstein, Eric W. "Spherical Harmonic." 
 From MathWorld--A Wolfram Web Resource].  ]
 
-   template <class T>
-   T spherical_harmonic_r(unsigned n, int m, T theta, T phi);
+   template <class T1, class T2>
+   ``__sf_result`` spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi);
    
 Returns the real part of Y[sub n][super m](theta, phi):
 
 [$../equations/spherical_1.png]
 
-   template <class T>
-   T spherical_harmonic_i(unsigned n, int m, T theta, T phi);
+   template <class T1, class T2>
+   ``__sf_result`` spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi);
    
 Returns the imaginary part of Y[sub n][super m](theta, phi):
 

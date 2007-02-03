@@ -15,8 +15,9 @@ namespace boost{
 namespace math{
 
 // Recurrance relation for Hermite polynomials:
-template <class T>
-inline T hermite_next(unsigned n, T x, T Hn, T Hnm1)
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type 
+   hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1)
 {
    return (2 * x * Hn - 2 * n * Hnm1);
 }
@@ -47,10 +48,12 @@ T hermite_imp(unsigned n, T x)
 } // namespace detail
 
 template <class T>
-inline T hermite(unsigned n, T x)
+inline typename tools::promote_args<T>::type 
+   hermite(unsigned n, T x)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::hermite_imp(n, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(detail::hermite_imp(n, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
 }
 
 } // namespace math

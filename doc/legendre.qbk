@@ -11,27 +11,31 @@
    namespace boost{ namespace math{
    
    template <class T>
-   T legendre_p(int n, T x);
+   ``__sf_result`` legendre_p(int n, T x);
    
    template <class T>
-   T legendre_p(int n, int m, T x);
+   ``__sf_result`` legendre_p(int n, int m, T x);
    
    template <class T>
-   T legendre_q(int n, T x);
+   ``__sf_result`` legendre_q(int n, T x);
    
-   template <class T>
-   T legendre_next(unsigned l, T x, T Pl, T Plm1);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` legendre_next(unsigned l, T1 x, T2 Pl, T3 Plm1);
    
-   template <class T>
-   T legendre_next(unsigned l, unsigned m, T x, T Pl, T Plm1);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` legendre_next(unsigned l, unsigned m, T1 x, T2 Pl, T3 Plm1);
 
    
    }} // namespaces
+   
+The return type of these functions is computed using the __arg_pomotion_rules:
+note than when there is a single template argument the result is the same type 
+as that argument or `double` if the template argument is an integer type.
 
 [h4 Description]
 
    template <class T>
-   T legendre_p(int l, T x);
+   ``__sf_result`` legendre_p(int l, T x);
    
 Returns the Legendre Polynomial of the first kind:
 
@@ -49,7 +53,7 @@ Legendre Polynomials:
 [$../graphs/legendre_p1.png]
    
    template <class T>
-   T legendre_p(int l, int m, T x);
+   ``__sf_result`` legendre_p(int l, int m, T x);
    
 Returns the associated Legendre polynomial of the first kind:
 
@@ -81,7 +85,7 @@ Mathematical Functions with Formulas, Graphs, and Mathematical Tables,
  ]
    
    template <class T>
-   T legendre_q(int n, T x);
+   ``__sf_result`` legendre_q(int n, T x);
    
 Returns the value of the Legendre polynomial that is the second solution
 to the Legendre differential equation, for example:
@@ -95,8 +99,8 @@ second kind:
 
 [$../graphs/legendre_q.png]
    
-   template <class T>
-   T legendre_next(unsigned l, T x, T Pl, T Plm1);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` legendre_next(unsigned l, T1 x, T2 Pl, T3 Plm1);
    
 Implements the three term recurrence relation for the Legendre
 polynomials, this function can be used to create a sequence of
@@ -123,8 +127,8 @@ Formally the arguments are:
 [[Plm1][The value of the polynomial evaluated at degree /l-1/.]]
 ]
    
-   template <class T>
-   T legendre_next(unsigned l, unsigned m, T x, T Pl, T Plm1);
+   template <class T1, class T2, class T3>
+   ``__sf_result`` legendre_next(unsigned l, unsigned m, T1 x, T2 Pl, T3 Plm1);
 
 Implements the three term recurrence relation for the Associated Legendre
 polynomials, this function can be used to create a sequence of

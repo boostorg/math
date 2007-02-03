@@ -141,25 +141,31 @@ std::complex<T> spherical_harmonic(unsigned n, int m, U theta, U phi)
 
 } // namespace detail
 
-template <class T>
-inline std::complex<T> spherical_harmonic(unsigned n, int m, T theta, T phi)
+template <class T1, class T2>
+inline std::complex<typename tools::promote_args<T1, T2>::type> 
+   spherical_harmonic(unsigned n, int m, T1 theta, T2 phi)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return detail::spherical_harmonic<T, value_type>(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi));
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return detail::spherical_harmonic<result_type, value_type>(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi));
 }
 
-template <class T>
-inline T spherical_harmonic_r(unsigned n, int m, T theta, T phi)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::spherical_harmonic_r(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi)), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(detail::spherical_harmonic_r(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi)), BOOST_CURRENT_FUNCTION);
 }
 
-template <class T>
-inline T spherical_harmonic_i(unsigned n, int m, T theta, T phi)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::spherical_harmonic_i(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi)), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(detail::spherical_harmonic_i(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi)), BOOST_CURRENT_FUNCTION);
 }
 
 } // namespace math

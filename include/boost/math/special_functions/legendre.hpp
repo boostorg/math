@@ -15,10 +15,12 @@ namespace boost{
 namespace math{
 
 // Recurrance relation for legendre P and Q polynomials:
-template <class T>
-inline T legendre_next(unsigned l, T x, T Pl, T Plm1)
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type 
+   legendre_next(unsigned l, T1 x, T2 Pl, T3 Plm1)
 {
-   return ((2 * l + 1) * x * Pl - l * Plm1) / (l + 1);
+   typedef typename tools::promote_args<T1, T2, T3>::type result_type;
+   return ((2 * l + 1) * result_type(x) * result_type(Pl) - l * result_type(Plm1)) / (l + 1);
 }
 
 namespace detail{
@@ -64,26 +66,32 @@ T legendre_imp(unsigned l, T x, bool second = false)
 } // namespace detail
 
 template <class T>
-inline T legendre_p(int l, T x)
+inline typename tools::promote_args<T>::type 
+   legendre_p(int l, T x)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
    if(l < 0)
-      return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::legendre_imp(-l-1, static_cast<value_type>(x), false), BOOST_CURRENT_FUNCTION);
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::legendre_imp(l, static_cast<value_type>(x), false), BOOST_CURRENT_FUNCTION);
+      return tools::checked_narrowing_cast<result_type>(detail::legendre_imp(-l-1, static_cast<value_type>(x), false), BOOST_CURRENT_FUNCTION);
+   return tools::checked_narrowing_cast<result_type>(detail::legendre_imp(l, static_cast<value_type>(x), false), BOOST_CURRENT_FUNCTION);
 }
 
 template <class T>
-inline T legendre_q(unsigned l, T x)
+inline typename tools::promote_args<T>::type 
+   legendre_q(unsigned l, T x)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::legendre_imp(l, static_cast<value_type>(x), true), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(detail::legendre_imp(l, static_cast<value_type>(x), true), BOOST_CURRENT_FUNCTION);
 }
 
 // Recurrence for associated polynomials:
-template <class T>
-inline T legendre_next(unsigned l, unsigned m, T x, T Pl, T Plm1)
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type 
+   legendre_next(unsigned l, unsigned m, T1 x, T2 Pl, T3 Plm1)
 {
-   return ((2 * l + 1) * x * Pl - (l + m) * Plm1) / (l + 1 - m);
+   typedef typename tools::promote_args<T1, T2, T3>::type result_type;
+   return ((2 * l + 1) * result_type(x) * result_type(Pl) - (l + m) * result_type(Plm1)) / (l + 1 - m);
 }
 
 namespace detail{
@@ -142,10 +150,12 @@ inline T legendre_p_imp(int l, int m, T x)
 }
 
 template <class T>
-inline T legendre_p(int l, int m, T x)
+inline typename tools::promote_args<T>::type 
+   legendre_p(int l, int m, T x)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::legendre_p_imp(l, m, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(detail::legendre_p_imp(l, m, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
 }
 
 } // namespace math
