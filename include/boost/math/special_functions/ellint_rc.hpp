@@ -82,11 +82,13 @@ T ellint_rc_imp(T x, T y)
 
 } // namespace detail
 
-template <typename T>
-inline T ellint_rc(T x, T y)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   ellint_rc(T1 x, T2 y)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(
       detail::ellint_rc_imp(
          static_cast<value_type>(x),
          static_cast<value_type>(y)), BOOST_CURRENT_FUNCTION);

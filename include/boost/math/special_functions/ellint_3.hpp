@@ -266,11 +266,12 @@ T ellint_pi_imp(T v, T k, T vc)
 
 } // namespace detail
 
-template <typename T>
-inline T ellint_3(T k, T v, T phi)
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(
+   typedef typename tools::promote_args<T1, T2, T3>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(
       detail::ellint_pi_imp(
          static_cast<value_type>(v), 
          static_cast<value_type>(phi), 
@@ -278,11 +279,12 @@ inline T ellint_3(T k, T v, T phi)
          static_cast<value_type>(1-v)), BOOST_CURRENT_FUNCTION);
 }
 
-template <typename T>
-inline T ellint_3(T k, T v)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(
       detail::ellint_pi_imp(
          static_cast<value_type>(v), 
          static_cast<value_type>(k),

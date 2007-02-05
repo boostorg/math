@@ -142,11 +142,13 @@ T ellint_rj_imp(T x, T y, T z, T p)
 
 } // namespace detail
 
-template <typename T>
-inline T ellint_rj(T x, T y, T z, T p)
+template <class T1, class T2, class T3, class T4>
+inline typename tools::promote_args<T1, T2, T3, T4>::type 
+   ellint_rj(T1 x, T2 y, T3 z, T4 p)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(
+   typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(
       detail::ellint_rj_imp(
          static_cast<value_type>(x),
          static_cast<value_type>(y),

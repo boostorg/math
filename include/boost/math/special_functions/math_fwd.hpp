@@ -135,6 +135,40 @@ namespace boost
    typename tools::promote_args<T1, T2>::type 
          spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi);
 
+   // Elliptic integrals:
+   template <class T1, class T2, class T3>
+   typename tools::promote_args<T1, T2, T3>::type 
+         ellint_rf(T1 x, T2 y, T3 z);
+
+   template <class T1, class T2, class T3>
+   typename tools::promote_args<T1, T2, T3>::type 
+         ellint_rd(T1 x, T2 y, T3 z);
+
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type 
+         ellint_rc(T1 x, T2 y);
+
+   template <class T1, class T2, class T3, class T4>
+   typename tools::promote_args<T1, T2, T3, T4>::type 
+         ellint_rj(T1 x, T2 y, T3 z, T4 p);
+
+   template <typename T>
+   typename tools::promote_args<T>::type ellint_2(T k);
+
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi);
+
+   template <typename T>
+   typename tools::promote_args<T>::type ellint_1(T k);
+
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi);
+
+   template <class T1, class T2, class T3>
+   typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi);
+
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v);
 
    // Exp (x minus 1) functions.
    template <class T>

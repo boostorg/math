@@ -117,18 +117,20 @@ T ellint_e_imp(T k)
 
 // Complete elliptic integral (Legendre form) of the second kind
 template <typename T>
-inline T ellint_2(T k)
+inline typename tools::promote_args<T>::type ellint_2(T k)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::ellint_e_imp(static_cast<value_type>(k)), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(detail::ellint_e_imp(static_cast<value_type>(k)), BOOST_CURRENT_FUNCTION);
 }
 
 // Elliptic integral (Legendre form) of the second kind
-template <typename T>
-inline T ellint_2(T k, T phi)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi)
 {
-   typedef typename tools::evaluation<typename remove_cv<T>::type>::type value_type;
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::ellint_e_imp(static_cast<value_type>(phi), static_cast<value_type>(k)), BOOST_CURRENT_FUNCTION);
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
+   return tools::checked_narrowing_cast<result_type>(detail::ellint_e_imp(static_cast<value_type>(phi), static_cast<value_type>(k)), BOOST_CURRENT_FUNCTION);
 }
 
 }} // namespaces

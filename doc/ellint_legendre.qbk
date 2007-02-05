@@ -18,11 +18,11 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
   namespace boost { namespace math {
 
-  template <typename T>
-  T ellint_1(T k, T phi);
+  template <class T1, class T2>
+  ``__sf_result`` ellint_1(T1 k, T2 phi);
 
   template <typename T>
-  T ellint_1(T k);
+  ``__sf_result`` ellint_1(T k);
 
   }} // namespaces
   
@@ -33,8 +33,12 @@ These two functions evaluate the incomplete elliptic integral of the first kind
 
 [$../graphs/ellint_1.png]
 
-  template <typename T>
-  T ellint_1(T k, T phi);
+The return type of these functions is computed using the __arg_pomotion_rules
+when T1 and T2 are different types: when they are the same type then the result
+is the same type as the arguments.
+
+  template <class T1, class T2>
+  ``__sf_result`` ellint_1(T1 k, T2 phi);
   
 Returns the incomplete elliptic integral of the first kind ['F([phi], k)]:
 
@@ -43,7 +47,7 @@ Returns the incomplete elliptic integral of the first kind ['F([phi], k)]:
 Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
 
   template <typename T>
-  T ellint_1(T k);
+  ``__sf_result`` ellint_1(T k);
   
 Returns the complete elliptic integral of the first kind ['K(k)]:
 
@@ -100,11 +104,11 @@ and
 
   namespace boost { namespace math {
 
-  template <typename T>
-  T ellint_2(T k, T phi);
+  template <class T1, class T2>
+  ``__sf_result`` ellint_2(T1 k, T2 phi);
 
   template <typename T>
-  T ellint_2(T k);
+  ``__sf_result`` ellint_2(T k);
 
   }} // namespaces
   
@@ -115,8 +119,12 @@ These two functions evaluate the incomplete elliptic integral of the second kind
 
 [$../graphs/ellint_2.png]
 
-  template <typename T>
-  T ellint_2(T k, T phi);
+The return type of these functions is computed using the __arg_pomotion_rules
+when T1 and T2 are different types: when they are the same type then the result
+is the same type as the arguments.
+
+  template <class T1, class T2>
+  ``__sf_result`` ellint_2(T1 k, T2 phi);
   
 Returns the incomplete elliptic integral of the second kind ['E([phi], k)]:
 
@@ -125,7 +133,7 @@ Returns the incomplete elliptic integral of the second kind ['E([phi], k)]:
 Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
 
   template <typename T>
-  T ellint_2(T k);
+  ``__sf_result`` ellint_2(T k);
   
 Returns the complete elliptic integral of the first kind ['E(k)]:
 
@@ -182,11 +190,11 @@ and
 
   namespace boost { namespace math {
 
-  template <typename T>
-  T ellint_3(T k, T n, T phi);
+  template <class T1, class T2, class T3>
+  ``__sf_result`` ellint_3(T1 k, T2 n, T3 phi);
 
-  template <typename T>
-  T ellint_3(T k, T n);
+  template <class T1, class T2>
+  ``__sf_result`` ellint_3(T1 k, T2 n);
 
   }} // namespaces
   
@@ -197,8 +205,12 @@ These two functions evaluate the incomplete elliptic integral of the third kind
 
 [$../graphs/ellint_3.png]
 
-  template <typename T>
-  T ellint_3(T k, T n, T phi);
+The return type of these functions is computed using the __arg_pomotion_rules
+when the arguments are of different types: when they are the same type then the result
+is the same type as the arguments.
+
+  template <class T1, class T2, class T3>
+  ``__sf_result`` ellint_3(T1 k, T2 n, T3 phi);
   
 Returns the incomplete elliptic integral of the third kind ['[Pi](n, [phi], k)]:
 
@@ -213,8 +225,8 @@ would be complex).
 For this reason it is recomended that you keep [phi][space] inside its "natural" range
 of \[0, [pi]\/2\].]
 
-  template <typename T>
-  T ellint_3(T k, T n);
+  template <class T1, class T2>
+  ``__sf_result`` ellint_3(T1 k, T2 n);
   
 Returns the complete elliptic integral of the first kind ['[Pi](n, k)]:
 
