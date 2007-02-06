@@ -11,11 +11,14 @@
    namespace boost{ namespace math{
    
    template <class T>
-   T log1p(T x);
+   ``__sf_result`` log1p(T x);
    
    }} // namespaces
    
 Returns the natural logarithm of `x+1`.
+
+The return type of this function is computed using the __arg_pomotion_rules:
+the return is `double` when /x/ is an integer type and T otherwise.
 
 There are many situations where it is desirable to compute `log(x+1)`. 
 However, for small `x` then `x+1` suffers from catastrophic cancellation errors 
@@ -59,11 +62,14 @@ calculated using NTL::RR at 1000-bit precision.
    namespace boost{ namespace math{
    
    template <class T>
-   T expm1(T x);
+   ``__sf_result`` expm1(T x);
    
    }} // namespaces
    
 Returns e[super x] - 1.
+
+The return type of this function is computed using the __arg_pomotion_rules:
+the return is `double` when /x/ is an integer type and T otherwise.
 
 For small x, then __ex is very close to 1, as a result calculating __exm1 results
 in catastrophic cancellation errors when x is small.  `expm1` calculates __exm1 using
@@ -95,11 +101,14 @@ calculated using NTL::RR at 1000-bit precision.
    namespace boost{ namespace math{
    
    template <class T>
-   T cbrt(T x);
+   ``__sf_result`` cbrt(T x);
    
    }} // namespaces
    
 Returns the cubed root of x: x[super 1/3].
+
+The return type of this function is computed using the __arg_pomotion_rules:
+the return is `double` when /x/ is an integer type and T otherwise.
 
 Implemented using Halley iteration.
    
@@ -124,11 +133,14 @@ calculated using NTL::RR at 1000-bit precision.
    namespace boost{ namespace math{
    
    template <class T>
-   T sqrt1pm1(T x);
+   ``__sf_result`` sqrt1pm1(T x);
    
    }} // namespaces
    
 Returns `sqrt(1+x) - 1`.
+
+The return type of this function is computed using the __arg_pomotion_rules:
+the return is `double` when /x/ is an integer type and T otherwise.
 
 This function is useful when you need the difference between sqrt(x) and 1, when
 x is itself close to 1.
@@ -155,12 +167,15 @@ calculated using NTL::RR at 1000-bit precision.
 
    namespace boost{ namespace math{
    
-   template <class T>
-   T powm1(T x, T y);
+   template <class T1, class T2>
+   ``__sf_result`` powm1(T1 x, T2 y);
    
    }} // namespaces
    
 Returns x[super y ] - 1.
+
+The return type of this function is computed using the __arg_pomotion_rules
+when T1 and T2 are dufferent types.
 
 There are two domains where this is useful: when y is very small, or when
 x is close to 1.
@@ -180,10 +195,13 @@ calculated using NTL::RR at 1000-bit precision.
 
 [section:hypot hypot]
 
-   template <class T>
-   T hypot(T x, T y);
+   template <class T1, class T2>
+   ``__sf_result`` hypot(T1 x, T2 y);
    
 __effects computes [$../equations/hypot.png] in such a way as to avoid undue underflow and overflow.
+
+The return type of this function is computed using the __arg_pomotion_rules
+when T1 and T2 are of different types.
 
 When calculating [$../equations/hypot.png] it's quite easy for the intermediate terms to either
 overflow or underflow, even though the result is in fact perfectly representable.

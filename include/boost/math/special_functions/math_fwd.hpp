@@ -68,11 +68,6 @@ namespace boost
    typename tools::promote_args<RT1, RT2, RT3>::type 
          ibeta_derivative(RT1 a, RT2 b, RT3 x);  // derivative of incomplete beta
 
-   // cbrt - cube root.
-   template <class RT>
-   RT cbrt(RT z);
-
-
    // erf & erfc error functions.
    template <class RT> // Error function.
    typename tools::promote_args<RT>::type erf(RT z);
@@ -170,10 +165,6 @@ namespace boost
    template <class T1, class T2>
    typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v);
 
-   // Exp (x minus 1) functions.
-   template <class T>
-   T expm1(T);
-
    // Factorial functions.
    // Note: not for integral types, at present.
    template <class RT>
@@ -242,20 +233,47 @@ namespace boost
    typename tools::promote_args<T>::type digamma(T x);
 
    // Hypotenuse function sqrt(x ^ 2 + y ^ 2).
-   template <class T>
-   T hypot(T, T);
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type 
+         hypot(T1 x, T2 y);
+
+   // cbrt - cube root.
+   template <class RT>
+   typename tools::promote_args<RT>::type cbrt(RT z);
 
    // log1p is log(x + 1)
    template <class T>
-   T log1p(T);
+   typename tools::promote_args<T>::type log1p(T);
 
-   // Power
+   // Exp (x) minus 1 functions.
    template <class T>
-   T powm1(const T, const T);
+   typename tools::promote_args<T>::type expm1(T);
 
-   // sqrt
+   // Power - 1
+   template <class T1, class T2>
+   inline typename tools::promote_args<T1, T2>::type 
+         powm1(const T1 a, const T2 z);
+
+   // sqrt(1+x) - 1
    template <class T>
-   T sqrt1pm1(const T&);
+   typename tools::promote_args<T>::type sqrt1pm1(const T& val);
+
+   // sinus cardinals:
+   template <class T>
+   typename tools::promote_args<T>::type sinc_pi(T x);
+
+   template <class T>
+   typename tools::promote_args<T>::type sinhc_pi(T x);
+
+   // inverse hyperbolics:
+   template<typename T>
+   typename tools::promote_args<T>::type asinh(const T x);
+
+   template<typename T>
+   typename tools::promote_args<T>::type acosh(const T x);
+
+   template<typename T>
+   typename tools::promote_args<T>::type atanh(const T x);
 
  	} // namespace math
 } // namespace boost

@@ -12,6 +12,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #  include <boost/static_assert.hpp>
@@ -66,9 +67,10 @@ namespace detail
 // no better than log(1+x): which is to say not very well at all.
 //
 template <class T>
-T log1p(T x)
+typename tools::promote_args<T>::type log1p(T x)
 { // The function returns the natural logarithm of 1 + x.
   // A domain error occurs if x < -1.  TODO should there be a check?
+   typedef typename tools::promote_args<T>::type result_type;
    using namespace std;
 
    if(x < -1)
@@ -78,20 +80,20 @@ T log1p(T x)
       return -tools::overflow_error<T>(
          BOOST_CURRENT_FUNCTION);
 
-   T a = fabs(x);
-   if(a > T(0.5L))
-      return log(1 + x);
+   result_type a = abs(result_type(x));
+   if(a > result_type(0.5L))
+      return log(1 + result_type(x));
    // Note that without numeric_limits specialisation support, 
    // epsilon just returns zero, and our "optimisation" will always fail:
-   if(a < tools::epsilon<T>())
+   if(a < tools::epsilon<result_type>())
       return x;
-   detail::log1p_series<T> s(x);
+   detail::log1p_series<result_type> s(x);
    boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-   T result = tools::sum_series(s, tools::digits<T>() + 2, max_iter);
+   result_type result = tools::sum_series(s, tools::digits<T>() + 2, max_iter);
 #else
-   T zero = 0;
-   T result = tools::sum_series(s, tools::digits<T>() + 2, max_iter, zero);
+   result_type zero = 0;
+   result_type result = tools::sum_series(s, tools::digits<T>() + 2, max_iter, zero);
 #endif
    tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
    return result;

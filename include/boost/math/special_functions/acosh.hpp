@@ -15,6 +15,7 @@
 #include <boost/config.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/error_handling.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 
 // This is the inverse of the hyperbolic cosine function.
 
@@ -22,6 +23,8 @@ namespace boost
 {
     namespace math
     {
+       namespace detail
+       {
 #if defined(__GNUC__) && (__GNUC__ < 3)
         // gcc 2.x ignores function scope using declarations,
         // put them in the scope of the enclosing namespace instead:
@@ -34,7 +37,7 @@ namespace boost
 #endif
         
         template<typename T>
-        inline T    acosh(const T x)
+        inline T    acosh_imp(const T x)
         {
             using    ::std::abs;
             using    ::std::sqrt;
@@ -83,6 +86,16 @@ namespace boost
                 return(sqrt(static_cast<T>(2))*result);
             }
         }
+       }
+
+        template<typename T>
+        inline typename tools::promote_args<T>::type acosh(const T x)
+        {
+           typedef typename tools::promote_args<T>::type result_type;
+           return detail::acosh_imp(
+              static_cast<result_type>(x));
+        }
+
     }
 }
 

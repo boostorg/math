@@ -35,16 +35,23 @@ implementation of quaternions and octonions.
 ``
 
    template<typename T> 
-   T sinc_pi(const T x);
+   ``__sf_result`` sinc_pi(const T x);
 
    template<typename T, template<typename> class U> 
    U<T> sinc_pi(const U<T> x);
 
 Computes 
 [link math_toolkit.special.sinc.sinc_overview 
-the Sinus Cardinal] of x. The second form is for complex numbers, 
-quaternions, octonions... Taylor series are used at the origin 
+the Sinus Cardinal] of x:
+
+   sinc_pi(x) = sin(x) / x
+
+The second form is for complex numbers, 
+quaternions, octonions etc. Taylor series are used at the origin 
 to ensure accuracy.
+
+The return type of the first form is computed using the __arg_pomotion_rules
+when T is an integer type.
 
 [endsect]
 
@@ -55,16 +62,23 @@ to ensure accuracy.
 ``
 
    template<typename T> 
-   T sinhc_pi(const T x);
+   ``__sf_result`` sinhc_pi(const T x);
 
    template<typename T, template<typename> class U> 
    U<T> sinhc_pi(const U<T> x);
 
 Computes 
 [link math_toolkit.special.sinc.sinc_overview
-the Hyperbolic Sinus Cardinal] of x. The second form is for 
-complex numbers, quaternions, octonions... Taylor series are used at the origin 
+the Hyperbolic Sinus Cardinal] of x:
+
+   sinhc_pi(x) = sinh(x) / x
+
+The second form is for 
+complex numbers, quaternions, octonions etc. Taylor series are used at the origin 
 to ensure accuracy.
+
+The return type of the first form is computed using the __arg_pomotion_rules
+when T is an integer type.
 
 [endsect]
 

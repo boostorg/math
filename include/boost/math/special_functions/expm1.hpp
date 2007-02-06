@@ -14,6 +14,7 @@
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/evaluation_type.hpp>
 #include <boost/math/tools/rational.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #  include <boost/static_assert.hpp>
@@ -184,22 +185,22 @@ T expm1_imp(T x, const mpl::int_<113>&)
 } // namespace detail
 
 template <class T>
-T expm1(T x)
+typename tools::promote_args<T>::type expm1(T x)
 {
-   typedef typename remove_cv<T>::type cv_type;
-   typedef typename tools::evaluation<cv_type>::type value_type;
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename tools::evaluation<result_type>::type value_type;
 
    typedef typename mpl::if_c<
-      ::std::numeric_limits<cv_type>::is_specialized == 0,
+      ::std::numeric_limits<result_type>::is_specialized == 0,
       mpl::int_<0>,  // no numeric_limits, use generic solution
       typename mpl::if_c<
-         ::std::numeric_limits<cv_type>::digits <= 53,
+         ::std::numeric_limits<result_type>::digits <= 53,
          mpl::int_<53>,  // double
          typename mpl::if_c<
-            ::std::numeric_limits<cv_type>::digits <= 64,
+            ::std::numeric_limits<result_type>::digits <= 64,
             mpl::int_<64>, // 80-bit long double
             typename mpl::if_c<
-               ::std::numeric_limits<cv_type>::digits <= 113,
+               ::std::numeric_limits<result_type>::digits <= 113,
                mpl::int_<113>, // 128-bit long double
                mpl::int_<0> // too many bits, use generic version.
             >::type
@@ -207,7 +208,7 @@ T expm1(T x)
       >::type
    >::type tag_type;
 
-   return tools::checked_narrowing_cast<typename remove_cv<T>::type>(detail::expm1_imp(
+   return tools::checked_narrowing_cast<result_type>(detail::expm1_imp(
       static_cast<value_type>(x),
       tag_type()), BOOST_CURRENT_FUNCTION);
 }

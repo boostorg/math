@@ -78,7 +78,7 @@ and can be computed as [$../equations/special_functions_blurb18.jpeg].
 ``
 
    template<typename T> 
-   T acosh(const T x);
+   ``__sf_result`` acosh(const T x);
 
 Computes the reciprocal of (the restriction to the range of __form1) 
 [link math_toolkit.special.inv_hyper.inv_hyper_over
@@ -87,6 +87,9 @@ Taylor series are used near 1 and Laurent series are used near the
 infinity to ensure accuracy.
 
 If x is in the range __form2 then returns the result of __domain_error.
+
+The return type of this function is computed using the __arg_pomotion_rules:
+the return type is `double` when T is an integer type, and T otherwise.
 
 [endsect]
 
@@ -97,13 +100,16 @@ If x is in the range __form2 then returns the result of __domain_error.
 ``
 
    template<typename T> 
-   T asinh(const T x);
+   ``__sf_result`` asinh(const T x);
 
 Computes the reciprocal of 
 [link math_toolkit.special.inv_hyper.inv_hyper_over 
 the hyperbolic sine function]. 
 Taylor series are used at the origin and Laurent series are used near the 
 infinity to ensure accuracy.
+
+The return type of this function is computed using the __arg_pomotion_rules:
+the return type is `double` when T is an integer type, and T otherwise.
 
 [endsect]
 
@@ -114,7 +120,7 @@ infinity to ensure accuracy.
 ``
 
    template<typename T> 
-   T atanh(const T x);
+   ``__sf_result`` atanh(const T x);
 
 Computes the reciprocal of 
 [link math_toolkit.special.inv_hyper.inv_hyper_over
@@ -139,6 +145,9 @@ then the result of __overflow_error is returned, with
 __form6[space]
 denoting 
 numeric_limits<T>::epsilon().
+
+The return type of this function is computed using the __arg_pomotion_rules:
+the return type is `double` when T is an integer type, and T otherwise.
 
 [endsect]
 

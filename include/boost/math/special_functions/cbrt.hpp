@@ -7,6 +7,7 @@
 #define BOOST_MATH_SF_CBRT_HPP
 
 #include <boost/math/tools/roots.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 
 namespace boost{ namespace math{
 
@@ -26,10 +27,8 @@ namespace detail
 		 T a;
 	};
 
-} // namespace detail
-
 template <class T>
-T cbrt(T z)
+T cbrt_imp(T z)
 {
    using namespace std;
    int exp, sign(1);
@@ -47,6 +46,15 @@ T cbrt(T z)
    T guess = static_cast<T>(ldexp(1.0, exp/3));
    int digits = (tools::digits<T>()) / 2;
    return sign * tools::halley_iterate(detail::cbrt_functor<T>(z), guess, min, max, digits);
+}
+
+} // namespace detail
+
+template <class T>
+inline typename tools::promote_args<T>::type cbrt(T z)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   return detail::cbrt_imp(result_type(z));
 }
 
 } // namespace math

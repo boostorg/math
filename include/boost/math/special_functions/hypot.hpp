@@ -8,6 +8,7 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <cmath>
 #include <algorithm> // for swap
 
@@ -15,10 +16,10 @@
 namespace std{ using ::sqrt; using ::fabs; }
 #endif
 
-namespace boost{ namespace math{
+namespace boost{ namespace math{ namespace detail{
 
 template <class T>
-T hypot(T x, T y)
+T hypot_imp(T x, T y)
 {
    //
    // Normalize x and y, so that both are positive and x >= y:
@@ -51,6 +52,16 @@ T hypot(T x, T y)
    return x * sqrt(1 + rat*rat);
 } // template <class T> T hypot(T x, T y)
 
+}
+
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   hypot(T1 x, T2 y)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   return detail::hypot_imp(
+      static_cast<result_type>(x), static_cast<result_type>(y));
+}
 
 } // namespace math
 } // namespace boost

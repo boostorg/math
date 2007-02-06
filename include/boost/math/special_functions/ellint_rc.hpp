@@ -15,6 +15,7 @@
 
 #include <boost/math/tools/error_handling.hpp>
 #include <boost/math/tools/config.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/evaluation_type.hpp>
 
 // Carlson's degenerate elliptic integral

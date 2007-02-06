@@ -13,6 +13,7 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <cmath>
 #include <boost/limits.hpp>
 #include <string>
@@ -28,6 +29,8 @@ namespace boost
 {
     namespace math
     {
+       namespace detail
+       {
 #if        defined(__GNUC__) && (__GNUC__ < 3)
         // gcc 2.x ignores function scope using declarations,
         // put them in the scope of the enclosing namespace instead:
@@ -42,7 +45,7 @@ namespace boost
         // This is the "Sinus Cardinal" of index Pi.
 
         template<typename T>
-        inline T    sinc_pi(const T x)
+        inline T    sinc_pi_imp(const T x)
         {
 #ifdef    BOOST_NO_STDC_NAMESPACE
             using    ::abs;
@@ -86,6 +89,14 @@ namespace boost
             }
         }
 
+       } // namespace detail
+
+       template <class T>
+       inline typename tools::promote_args<T>::type sinc_pi(T x)
+       {
+          typedef typename tools::promote_args<T>::type result_type;
+          return detail::sinc_pi_imp(static_cast<result_type>(x));
+       }
 
 #ifdef    BOOST_NO_TEMPLATE_TEMPLATES
 #else    /* BOOST_NO_TEMPLATE_TEMPLATES */

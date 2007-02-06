@@ -8,12 +8,13 @@
 
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/assert.hpp>
 
-namespace boost{ namespace math{
+namespace boost{ namespace math{ namespace detail{
 
 template <class T>
-inline T powm1(const T a, const T z)
+inline T powm1_imp(const T a, const T z)
 {
    using namespace std;
 
@@ -25,6 +26,16 @@ inline T powm1(const T a, const T z)
       // otherwise fall though:
    }
    return pow(a, z) - 1;
+}
+
+} // detail
+
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   powm1(const T1 a, const T2 z)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   return detail::powm1_imp(static_cast<result_type>(a), static_cast<result_type>(z));
 }
 
 } // namespace math
