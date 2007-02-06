@@ -114,7 +114,7 @@ Implemented using Halley iteration.
    
 [h4 Accuracy]
 
-For built in floating point types `cbrt`
+For built in floating-point types `cbrt`
 should have approximately 2 epsilon accuracy.
 
 [h4 Testing]
@@ -149,7 +149,7 @@ Implemented in terms of `log1p` and `expm1`.
 
 [h4 Accuracy]
 
-For built in floating point types `sqrt1pm1`
+For built in floating-point types `sqrt1pm1`
 should have approximately 3 epsilon accuracy.
 
 [h4 Testing]
@@ -198,7 +198,8 @@ calculated using NTL::RR at 1000-bit precision.
    template <class T1, class T2>
    ``__sf_result`` hypot(T1 x, T2 y);
    
-__effects computes [$../equations/hypot.png] in such a way as to avoid undue underflow and overflow.
+__effects computes [$../equations/hypot.png]
+in such a way as to avoid undue underflow and overflow.
 
 The return type of this function is computed using the __arg_pomotion_rules
 when T1 and T2 are of different types.

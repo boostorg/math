@@ -13,7 +13,7 @@
 [h4 Description]
 
 The functions __cyl_bessel_j and __cyl_neumann return the result of the
-Bessel functions of the first and second kind's respectively:
+Bessel functions of the first and second kinds respectively:
 
 cyl_bessel_j(v, x) = J[sub v](x)
 
@@ -38,7 +38,7 @@ The following graph illustrates the cyclic nature of J[sub v]:
 
 [$../graphs/bessel_jn.png]
 
-The following graph shows the behaviour of Y[sub v], this is also
+The following graph shows the behaviour of Y[sub v]: this is also
 cyclic for large /x/, but tends to -[infin][space] for small /x/:
 
 [$../graphs/bessel_yv.png]
@@ -46,9 +46,10 @@ cyclic for large /x/, but tends to -[infin][space] for small /x/:
 [h4 Testing]
 
 There are two sets of test values: spot values calculated using
-functions.wolfram.com and a much larger set of tests computed using
-a simplified version of this implementation (with all the special
-case handling removed).
+[@http//:functions.wolfram.com functions.wolfram.com],
+and a much larger set of tests computed using
+a simplified version of this implementation
+(with all the special case handling removed).
 
 [h4 Accuracy]
 
@@ -58,31 +59,31 @@ Cephes libraries.  Note that the cyclic nature of these
 functions means that they have an infinite number of irrational
 roots: in general these functions have arbitarily large /relative/
 errors when the arguments are sufficiently close to a root.  Of
-course the absolute error in such cases is alway small.
-Note that only results for the widest floating point type on the 
+course the absolute error in such cases is always small.
+Note that only results for the widest floating-point type on the 
 system are given as narrower types have __zero_error.  All values
 are relative errors in units of epsilon.
 
 [table Errors Rates in cyl_bessel_j
 [[Significand Size] [Platform and Compiler] [J[sub 0][space] and J[sub 1]] [J[sub v]] [J[sub v][space] (large values of x > 1000)] ]
 [[53] [Win32 / Visual C++ 8.0] 
-      [Peek=2.5 Mean=1.1 \n\nGSL Peek=6.6 \n\nCephes Peek=2.5 Mean=1.1] 
-      [Peek=11 Mean=2.2 \n\nGSL Peek=11 \n\nCephes Peek=17 Mean=2.5] 
-      [Peek=413 Mean=110 \n\nGSL Peek=6x10[super 11] \n\nCephes Peek=2x10[super 5] ] ]
-[[64] [Red Hat Linux IA64 / G++ 3.4] [Peek=7 Mean=3] [Peek=117 Mean=10] [Peek=2x10[super 4][space] Mean=6x10[super 3]] ]
-[[64] [SUSE Linux AMD64 / G++ 4.1] [Peek=7 Mean=3] [Peek=400 Mean=40] [Peek=2x10[super 4][space] Mean=1x10[super 4]] ]
-[[113] [HP-UX / HP aCC 6] [Peek=14 Mean=6] [Peek=29 Mean=3] [Peek=2700 Mean=450] ]
+      [Peak=2.5 Mean=1.1 \n\nGSL Peak=6.6 \n\nCephes Peak=2.5 Mean=1.1] 
+      [Peak=11 Mean=2.2 \n\nGSL Peak=11 \n\nCephes Peak=17 Mean=2.5] 
+      [Peak=413 Mean=110 \n\nGSL Peak=6x10[super 11] \n\nCephes Peak=2x10[super 5] ] ]
+[[64] [Red Hat Linux IA64 / G++ 3.4] [Peak=7 Mean=3] [Peak=117 Mean=10] [Peak=2x10[super 4][space] Mean=6x10[super 3]] ]
+[[64] [SUSE Linux AMD64 / G++ 4.1] [Peak=7 Mean=3] [Peak=400 Mean=40] [Peak=2x10[super 4][space] Mean=1x10[super 4]] ]
+[[113] [HP-UX / HP aCC 6] [Peak=14 Mean=6] [Peak=29 Mean=3] [Peak=2700 Mean=450] ]
 ]
 
 [table Errors Rates in cyl_neumann
 [[Significand Size] [Platform and Compiler] [J[sub 0][space] and J[sub 1]] [J[sub n] (integer orders)] [J[sub v] (fractional orders)] ]
 [[53] [Win32 / Visual C++ 8.0] 
-      [Peek=330 Mean=54 \n\nGSL Peek=34 Mean=9 \n\nCephes Peek=330 Mean=54] 
-      [Peek=923 Mean=83 \n\nGSL Peek=500 Mean=54 \n\nCephes Peek=923 Mean=83] 
-      [Peek=561 Mean=36 \n\nGSL Peek=2x10[super 6][space] Mean\=1x10[super 5][space] \n\nCephes Peek=+INF]]
-[[64] [Red Hat Linux IA64 / G++ 3.4] [Peek=470 Mean=56] [Peek=843 Mean=51] [Peek=741 Mean=51] ]
-[[64] [SUSE Linux AMD64 / G++ 4.1] [Peek=1300 Mean=424] [Peek=2x10[super 4][space] Mean=8x10[super 3]] [Peek=1x10[super 5][space] Mean=6x10[super 3]] ]
-[[113] [HP-UX / HP aCC 6] [Peek=180 Mean=63] [Peek=340 Mean=150] [Peek=2x10[super 4][space] Mean=1200] ]
+      [Peak=330 Mean=54 \n\nGSL Peak=34 Mean=9 \n\nCephes Peak=330 Mean=54] 
+      [Peak=923 Mean=83 \n\nGSL Peak=500 Mean=54 \n\nCephes Peak=923 Mean=83] 
+      [Peak=561 Mean=36 \n\nGSL Peak=2x10[super 6][space] Mean\=1x10[super 5][space] \n\nCephes Peak=+INF]]
+[[64] [Red Hat Linux IA64 / G++ 3.4] [Peak=470 Mean=56] [Peak=843 Mean=51] [Peak=741 Mean=51] ]
+[[64] [SUSE Linux AMD64 / G++ 4.1] [Peak=1300 Mean=424] [Peak=2x10[super 4][space] Mean=8x10[super 3]] [Peak=1x10[super 5][space] Mean=6x10[super 3]] ]
+[[113] [HP-UX / HP aCC 6] [Peak=180 Mean=63] [Peak=340 Mean=150] [Peak=2x10[super 4][space] Mean=1200] ]
 ]
 
 Note that for large /x/ these functions are largely dependent on
@@ -96,8 +97,8 @@ perform much better when the arguments become large, Cephes in particular produc
 some remarkably inaccurate results with some of the test data (no significant figures
 correct), and even GSL performs badly with some inputs to J[sub v].  Note that
 by way of double-checking these results, the worst performing Cephes and GSL cases
-were recomputed using functions.wolfram.com and the result checked against our test 
-data: no errors in the test data were found.
+were recomputed using [@http//:functions.wolfram.com functions.wolfram.com],
+and the result checked against our test data: no errors in the test data were found.
 
 [h4 Implementation]
 
@@ -148,7 +149,7 @@ J.F. Hart et al, ['Computer Approximations], John Wiley & Sons, New York, 1968.
 These approximations are accurate to around 19 decimal digits: therefore
 these methods are not used when type T has more than 64 binary digits.
 
-When /x/ is small J[sub x][space] is best computed directly from the series:
+When /x/ is small, J[sub x][space] is best computed directly from the series:
 
 [$../equations/bessel2.png]
 
@@ -156,7 +157,7 @@ In the general case we compute J[sub v][space] and
 Y[sub v][space] simultaneously.
 
 To get the initial values, let
-[mu] = [nu] - floor([nu] + 1/2), then [mu][space] is the fractional part 
+[mu][space] = [nu] - floor([nu] + 1/2), then [mu][space] is the fractional part 
 of [nu][space] such that
 |[mu]| <= 1/2 (we need this for convergence later). The idea is to
 calculate J[sub [mu]](x), J[sub [mu]+1](x), Y[sub [mu]](x), Y[sub [mu]+1](x)
@@ -209,7 +210,7 @@ where
 g[sub k][space] and h[sub k][space]
 are also computed by recursions (involving gamma functions), but the
 formulas are a little complicated, readers are refered to 
-N.M. Temme, ['On the numerical evaluation of the ordinary bessel function
+N.M. Temme, ['On the numerical evaluation of the ordinary Bessel function
 of the second kind], Journal of Computational Physics, vol 21, 343 (1976).
 Note Temme's series converge only for |[mu]| <= 1/2.
 

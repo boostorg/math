@@ -9,9 +9,9 @@ equation:
 [$../equations/bessel1.png]
 
 where [nu][space] is the /order/ of the equation, and may be an arbitrary
-real or complex number, although integer orders are the most common occurance.
+real or complex number, although integer orders are the most common occurrence.
 
-This library supports either integer or real order's.
+This library supports either integer or real orders.
 
 Since this is a second order differential equation, there must be two
 linearly independent solutions, the first of these is denoted J[sub v][space]
@@ -62,8 +62,8 @@ independent solutions to the modified Bessel equation:
 [$../equations/mbessel1.png]
 
 The solutions are known as the modified Bessel functions of the first and 
-second kind or occationally as the hyperbolic Bessel functions of the first
-and second kind.  They are denoted I[sub v][space] and K[sub v][space]
+second kind (or occasionally as the hyperbolic Bessel functions of the first
+and second kind).  They are denoted I[sub v][space] and K[sub v][space]
 respectively:
 
 [$../equations/mbessel2.png]
@@ -73,7 +73,7 @@ respectively:
 These functions are implemented in this library as __cyl_bessel_i and
 __cyl_bessel_k respectively.
 
-The modified Bessel functions satisfy the recurrences relations:
+The modified Bessel functions satisfy the recurrence relations:
 
 [$../equations/mbessel4.png]
 
@@ -108,7 +108,7 @@ ordinary Bessel functions J[sub n][space] and Y[sub n][space] by:
 
 [$../equations/sbessel2.png]
 
-The sperical Bessel function of the second kind y[sub n][space]
+The spherical Bessel function of the second kind y[sub n][space]
 is also known as the spherical Neumann function n[sub n].
 
 These functions are implemented in this library as __sph_bessel and

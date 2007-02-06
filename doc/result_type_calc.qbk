@@ -59,7 +59,8 @@ a [link math_toolkit.Using_UDT.use_NTL patched NTL library].
 
 These rules are chosen to be compatible with the behaviour of 
 ['ISO/IEC 9899:1999 Programming languages - C]
-and with the ['[@www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]].
+and with the
+[@www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 5].
 
 [endsect]
 

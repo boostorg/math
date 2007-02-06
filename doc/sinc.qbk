@@ -9,19 +9,24 @@
 
 [section:sinc_overview Sinus Cardinal and Hyperbolic Sinus Cardinal Functions Overview]
 
-The Sinus Cardinal family of functions (indexed by the family of indices [^a > 0]) 
+The [@http://mathworld.wolfram.com/SincFunction.html Sinus Cardinal family of functions]
+(indexed by the family of indices [^a > 0]) 
 is defined by 
 [$../equations/special_functions_blurb20.jpeg]; 
 it sees heavy use in signal processing tasks.
 
-By analogy, the Hyperbolic Sinus Cardinal family of functions 
+By analogy, the 
+[@http://mathworld.wolfram.com/SinhcFunction.htm Hyperbolic Sinus Cardinal]
+family of functions 
 (also indexed by the family of indices [^a > 0]) is defined by 
 [$../equations/special_functions_blurb22.jpeg].
 
 These two families of functions are composed of entire functions.
 
-These functions (__sinc_pi and __sinhc_pi) are needed by our 
-implementation of quaternions and octonions.
+These functions (__sinc_pi and __sinhc_pi) are needed by
+[@http://www.boost.org/libs/math/quaternion/quaternion.html our implementation]
+of [@http://mathworld.wolfram.com/Quaternion.html quaternions]
+and [@http://mathworld.wolfram.com/Octonion.html octonions].
 
 [: ['[*Sinus Cardinal of index pi (purple) and Hyperbolic Sinus Cardinal of index pi (red) on R]]]
 [: [$../graphs/sinc_pi_and_sinhc_pi_on_R.png]]
@@ -50,8 +55,6 @@ The second form is for complex numbers,
 quaternions, octonions etc. Taylor series are used at the origin 
 to ensure accuracy.
 
-The return type of the first form is computed using the __arg_pomotion_rules
-when T is an integer type.
 
 [endsect]
 
@@ -67,7 +70,7 @@ when T is an integer type.
    template<typename T, template<typename> class U> 
    U<T> sinhc_pi(const U<T> x);
 
-Computes 
+Computes http://mathworld.wolfram.com/SinhcFunction.html
 [link math_toolkit.special.sinc.sinc_overview
 the Hyperbolic Sinus Cardinal] of x:
 

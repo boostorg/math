@@ -13,7 +13,7 @@
 [h4 Description]
 
 The functions __sph_bessel and __sph_neumann return the result of the
-Spherical Bessel functions of the first and second kind's respectively:
+Spherical Bessel functions of the first and second kinds respectively:
 
 sph_bessel(v, x) = j[sub v](x)
 
@@ -30,7 +30,7 @@ The functions return the result of __domain_error whenever the result is
 undefined or complex: this occurs when `x < 0`.
 
 The j[sub v][space] function is cyclic like J[sub v][space] but differs
-in it's behaviour at the origin:
+in its behaviour at the origin:
 
 [$../graphs/sph_bessel_j.png]
 
@@ -42,9 +42,10 @@ for small /x/:
 [h4 Testing]
 
 There are two sets of test values: spot values calculated using
-functions.wolfram.com and a much larger set of tests computed using
-a simplified version of this implementation (with all the special
-case handling removed).
+[@http://functions.wolfram.com/ functions.wolfram.com],
+and a much larger set of tests computed using
+a simplified version of this implementation
+(with all the special case handling removed).
 
 [h4 Accuracy]
 
@@ -62,13 +63,12 @@ The special cases occur for:
 
 j[sub 0][space]= __sinc_pi(x) = sin(x) / x
 
-and for small ['x < 1] we can use the series:
+and for small ['x < 1], we can use the series:
 
 [$../equations/sbessel5.png]
 
 which neatly avoids the problem of calculating 0/0 that can occur with the
-main definition as x -> 0.
-
+main definition as x [rarr] 0.
 
 [endsect]
 

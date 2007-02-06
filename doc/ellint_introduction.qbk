@@ -19,13 +19,11 @@ Mathworld also contain a lot of useful background information:
 [:[@http://mathworld.wolfram.com/EllipticIntegral.html Weisstein, Eric W. 
 "Elliptic Integral." From MathWorld--A Wolfram Web Resource.]]
 
-As does [@http://en.wikipedia.org/wiki/Elliptic_integral Wikipedia].
+As does [@http://en.wikipedia.org/wiki/Elliptic_integral Wikipedia Elliptic integral].
 
 [h4 Notation]
 
 All variables are real numbers unless otherwise noted.
-
-
 
 [h4 [#ellint_def]Definition]
 
@@ -61,7 +59,7 @@ where
       ['n] is called the characteristic.]
       
 [caution Perhaps more than any other special functions the elliptic
-integrals are expressed in a variety of different ways.  In particular
+integrals are expressed in a variety of different ways.  In particular,
 the final parameter /k/ (the modulus) may be expressed using a modular
 angle [alpha], or a parameter /m/.  These are related by:\n\n
 k = sin[alpha]\n
@@ -125,7 +123,6 @@ where ['x] is nonnegative and ['y] is nonzero.
 
 [note ['R[sub C](x, y) = R[sub F](x, y, y)] \n
       ['R[sub D](x, y, z) = R[sub J](x, y, z, z)]]
-
 
 
 [h4 [#ellint_theorem]Duplication Theorem]
@@ -210,6 +207,5 @@ Numerical Mathematik 13, 305-315.
 Numerical Computation of Incomplete Elliptic Integrals of a General Form.]]
 Celestial Mechanics and Dynamical Astronomy, Volume 59, Number 3 / July, 1994,
 237-251.
-
 
 [endsect]

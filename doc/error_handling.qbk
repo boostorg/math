@@ -58,6 +58,25 @@ The default behaviour of this function is to return a NaN.  However, if type
 is defined when building the library, then a std::domain_error C++ exception 
 is thrown.
 
+This behaviour is chosen to assist compatibility with the behaviour of 
+['ISO/IEC 9899:1999 Programming languages - C]
+and with the
+[@www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 6].
+
+Each of the functions declared above shall return a NaN (Not a Number)
+if any argument value is a NaN, but it shall not report a domain error.
+Otherwise, each of the functions declared above shall report a domain error
+for just those argument values for which:
+
+* the function description's Returns clause explicitly specifies a domain, and those arguments fall outside the specified domain; or
+* the corresponding mathematical function value has a non-zero imaginary component; or
+* the corresponding mathematical function is not mathematically defined.
+
+Note 2: A mathematical function is mathematically defined
+for a given set of argument values if it is explicitly defined
+for that set of argument values or
+if its limiting value exists and does not depend on the direction of approach.
+
 Note that in order to support information-rich error messages when throwing
 exceptions, `Message` must contain
 a __format recognised format specifier: the argument `Val` is inserted into
@@ -66,7 +85,7 @@ the error message according to the specifier used.
 For example if `Message` contains a "%1%" then it is replaced by the value of
 `Val` to the full precision of T, where as "%.3g" would contain the value of
 `Val` to 3 digits.  See the __format documentation for more details.
-   
+
 [#pole_error][h4 Evaluation at a pole]
 
 When a special function is passed an argument that is at a pole
