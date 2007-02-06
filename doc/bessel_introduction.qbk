@@ -29,7 +29,7 @@ Neumann function:
 
 This function is implemented in this library as __cyl_neumann.
 
-The Bessel functions satisfy the recurrences relations:
+The Bessel functions satisfy the recurrence relations:
 
 [$../equations/bessel4.png]
 

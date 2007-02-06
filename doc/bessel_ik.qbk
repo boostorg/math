@@ -153,7 +153,7 @@ where
 [$../equations/mbessel14.png]
 
 ['S] is also a series that is summed along with CF2, see 
-I.J. Thompson and A.R. Barnett, ['Modified bessel functions I_v and K_v
+I.J. Thompson and A.R. Barnett, ['Modified Bessel functions I_v and K_v
     of real order and complex argument to selected accuracy], Computer Physics
     Communications, vol 47, 245 (1987).
 
@@ -168,7 +168,7 @@ where
 
 f[sub k][space] and h[sub k][space]
 are also computed by recursions (involving gamma functions), but the
-formulas are a little complicated, readers are refered to 
+formulas are a little complicated, readers are referred to 
 N.M. Temme, ['On the numerical evaluation of the modified Bessel function
     of the third kind], Journal of Computational Physics, vol 19, 324 (1975).
 Note: Temme's series converge only for |[mu]| <= 1/2.

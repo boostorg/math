@@ -61,21 +61,21 @@ is thrown.
 This behaviour is chosen to assist compatibility with the behaviour of 
 ['ISO/IEC 9899:1999 Programming languages - C]
 and with the
-[@www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 6].
+[@www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 6]:
 
-Each of the functions declared above shall return a NaN (Not a Number)
+[:['"Each of the functions declared above shall return a NaN (Not a Number)
 if any argument value is a NaN, but it shall not report a domain error.
 Otherwise, each of the functions declared above shall report a domain error
-for just those argument values for which:
+for just those argument values for which:]]
 
-* the function description's Returns clause explicitly specifies a domain, and those arguments fall outside the specified domain; or
-* the corresponding mathematical function value has a non-zero imaginary component; or
-* the corresponding mathematical function is not mathematically defined.
+[:['"the function description's Returns clause explicitly specifies a domain, and those arguments fall outside the specified domain; or\n
+"the corresponding mathematical function value has a non-zero imaginary component; or\n
+"the corresponding mathematical function is not mathematically defined.]]
 
-Note 2: A mathematical function is mathematically defined
+[:['"Note 2: A mathematical function is mathematically defined
 for a given set of argument values if it is explicitly defined
 for that set of argument values or
-if its limiting value exists and does not depend on the direction of approach.
+if its limiting value exists and does not depend on the direction of approach."]]
 
 Note that in order to support information-rich error messages when throwing
 exceptions, `Message` must contain

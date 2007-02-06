@@ -57,7 +57,7 @@ The following tables show how the accuracy of these functions
 varies on various platforms, along with comparisons to the GSL and
 Cephes libraries.  Note that the cyclic nature of these
 functions means that they have an infinite number of irrational
-roots: in general these functions have arbitarily large /relative/
+roots: in general these functions have arbitrarily large /relative/
 errors when the arguments are sufficiently close to a root.  Of
 course the absolute error in such cases is always small.
 Note that only results for the widest floating-point type on the 
@@ -132,14 +132,14 @@ than those in A&S 9.2.5).
 
 When the order /v/ is an integer the method first relates the result
 to J[sub 0], J[sub 1], Y[sub 0][space] and Y[sub 1][space] using either
-forwards or backwards recurrence (Millars algorithm) depending upon which is stable.
+forwards or backwards recurrence (Miller's algorithm) depending upon which is stable.
 The values for J[sub 0], J[sub 1], Y[sub 0][space] and Y[sub 1][space] are 
 calculated using the rational minimax approximations on
 root-bracketing intervals for small ['|x|] and Hankel asymptotic
 expansion for large ['|x|]. The coefficients are from:
 
 W.J. Cody, ['ALGORITHM 715: SPECFUN - A Portable FORTRAN Package of 
-Special Function Routines and Test Drivers], ACM Transactions on Mathematmal 
+Special Function Routines and Test Drivers], ACM Transactions on Mathematical 
 Software, vol 19, 22 (1993). 
 
 and
