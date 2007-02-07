@@ -30,6 +30,12 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/static_assert.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4723) // potential divide by 0
+// Suppressing spurious warning in coefficient_of_variation
+#endif
+
 namespace boost{ namespace math{
 
 template <class Distribution>
@@ -81,10 +87,11 @@ typename Distribution::value_type coefficient_of_variation(const Distribution& d
    typedef typename Distribution::value_type value_type;
    value_type m = mean(dist);
    value_type d = standard_deviation(dist);
-   if((m < 1) && (d > m * tools::max_value<value_type>()))
-      return tools::overflow_error<value_type>(
-         BOOST_CURRENT_FUNCTION);
-   return d / m;
+   if((abs(m) < 1) && (d > abs(m) * tools::max_value<value_type>()))
+   { // Checks too that m is not zero,
+      return tools::overflow_error<value_type>(BOOST_CURRENT_FUNCTION);
+   }
+   return d / m; // so MSVC warning on zerodivide is spurious, and suppressed.
 }
 //
 // Next follow overloads of some of the standard accessors with mixed
@@ -148,5 +155,10 @@ typename Dist::value_type median(const Dist& d)
 
 } // namespace math
 } // namespace boost
+
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #endif // BOOST_STATS_DERIVED_HPP
