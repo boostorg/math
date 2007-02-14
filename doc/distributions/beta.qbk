@@ -60,6 +60,11 @@ See also:
 [@http://documents.wolfram.com/calculationcenter/v2/Functions/ListsMatrices/Statistics/BetaDistribution.html beta distribution]
 and [@http://en.wikipedia.org/wiki/Bayesian_statistics Bayesian statistics].
 
+How the beta distribution is used for
+[@http://home.uchicago.edu/~grynav/bayes/ABSLec5.ppt 
+Bayesian analysis of one parameter models]
+is discussed by Jeff Grynaviski.
+
 The [@http://en.wikipedia.org/wiki/Probability_density_function probability density function PDF]
 for the [@http://en.wikipedia.org/wiki/Beta_distribution beta distribution]
 defined on the interval \[0,1\] is given by:
