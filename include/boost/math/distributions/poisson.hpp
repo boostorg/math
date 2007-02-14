@@ -177,14 +177,14 @@ namespace boost
     // Non-member functions to give properties of the distribution.
 
     template <class RealType>
-    const std::pair<RealType, RealType> range(const poisson_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> range(const poisson_distribution<RealType>& /* dist */)
     { // Range of permissible values for random variable k.
 	    using boost::math::tools::max_value;
 	    return std::pair<RealType, RealType>(0, max_value<RealType>()); // Max integer?
     }
 
     template <class RealType>
-    const std::pair<RealType, RealType> support(const poisson_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> support(const poisson_distribution<RealType>& /* dist */)
     { // Range of supported values for random variable k.
 	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	    using boost::math::tools::max_value;

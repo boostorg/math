@@ -244,14 +244,14 @@ namespace boost
     typedef negative_binomial_distribution<double> negative_binomial; // Reserved name of type double.
 
     template <class RealType>
-    const std::pair<RealType, RealType> range(const negative_binomial_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> range(const negative_binomial_distribution<RealType>& /* dist */)
     { // Range of permissible values for random variable k.
 	    using boost::math::tools::max_value;
 	    return std::pair<RealType, RealType>(0, max_value<RealType>()); // max_integer?
     }
 
     template <class RealType>
-    const std::pair<RealType, RealType> support(const negative_binomial_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> support(const negative_binomial_distribution<RealType>& /* dist */)
     { // Range of supported values for random variable k.
 	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	    using boost::math::tools::max_value;
@@ -490,5 +490,9 @@ namespace boost
 // for this distribution have been defined, in order to
 // keep compilers that support two-phase lookup happy.
 #include <boost/math/distributions/detail/derived_accessors.hpp>
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #endif // BOOST_MATH_SPECIAL_NEGATIVE_BINOMIAL_HPP

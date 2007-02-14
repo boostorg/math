@@ -87,7 +87,6 @@ const std::pair<RealType, RealType> support(const lognormal_distribution<RealTyp
 	return std::pair<RealType, RealType>(0,  max_value<RealType>());
 }
 
-
 template <class RealType>
 RealType pdf(const lognormal_distribution<RealType>& dist, const RealType& x)
 {

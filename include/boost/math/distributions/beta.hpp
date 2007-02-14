@@ -270,14 +270,14 @@ namespace boost
     }; // template <class RealType> class beta_distribution
 
     template <class RealType>
-    const std::pair<RealType, RealType> range(const beta_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> range(const beta_distribution<RealType>& /* dist */)
     { // Range of permissible values for random variable x.
       using boost::math::tools::max_value;
       return std::pair<RealType, RealType>(0, 1);
     }
 
     template <class RealType>
-    const std::pair<RealType, RealType> support(const beta_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> support(const beta_distribution<RealType>&  /* dist */)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
       return std::pair<RealType, RealType>(0, 1);

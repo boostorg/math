@@ -175,7 +175,7 @@ namespace boost{ namespace math
   typedef triangular_distribution<double> triangular;
 
   template <class RealType>
-  const std::pair<RealType, RealType> range(const triangular_distribution<RealType>& dist)
+  const std::pair<RealType, RealType> range(const triangular_distribution<RealType>& /* dist */)
   { // Range of permissible values for random variable x.
     using boost::math::tools::max_value;
     return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
@@ -188,7 +188,7 @@ namespace boost{ namespace math
     return std::pair<RealType, RealType>(dist.lower(), dist.upper());
   }
 
-    template <class RealType>
+  template <class RealType>
   RealType pdf(const triangular_distribution<RealType>& dist, const RealType& x)
   {
     RealType lower = dist.lower();
