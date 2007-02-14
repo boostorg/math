@@ -1,0 +1,10 @@
+Statistical Distribution Explorer
+Version 1.0.0.1
+Company jmc
+Copyright Copyright © John Maddock and Paul A. Bristow 2007
+Product Distribution_explorer 1
+Title distribution_explorer
+Mean
+MeanParameter 1 0
+Parameter 2 1
+
