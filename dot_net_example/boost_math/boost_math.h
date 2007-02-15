@@ -4,6 +4,15 @@
 
 using namespace System;
 
+#define TRANSLATE_EXCEPTIONS_BEGIN try{
+
+#define TRANSLATE_EXCEPTIONS_END \
+    }catch(const std::exception& e){  \
+        System::String^ s = gcnew System::String(e.what());\
+        InvalidOperationException^ se = gcnew InvalidOperationException(s);\
+        throw se;  \
+    }
+
 namespace boost_math {
 
    class any_imp
@@ -141,87 +150,127 @@ namespace boost_math {
       // Distribution properties as 'pointer-to-implementions'.
       double mean()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->mean();
+         TRANSLATE_EXCEPTIONS_END
       }
       double median()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->median();
+         TRANSLATE_EXCEPTIONS_END
       }
       double mode()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->mode();
+         TRANSLATE_EXCEPTIONS_END
       }
       double variance()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->variance();
+         TRANSLATE_EXCEPTIONS_END
       }
       double standard_deviation()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->standard_deviation();
+         TRANSLATE_EXCEPTIONS_END
       }
       double coefficient_of_variation()
       { // aka Relative Standard deviation.
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->coefficient_of_variation();
+         TRANSLATE_EXCEPTIONS_END
       }
       double skewness()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->skewness();
+         TRANSLATE_EXCEPTIONS_END
       }
       double kurtosis()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->kurtosis();
+         TRANSLATE_EXCEPTIONS_END
       }
       double kurtosis_excess()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->kurtosis_excess();
+         TRANSLATE_EXCEPTIONS_END
       }
       // Values computed from random variate x.
       double hazard(double x)
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->hazard(x);
+         TRANSLATE_EXCEPTIONS_END
       }
       double chf(double x)
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->chf(x);
+         TRANSLATE_EXCEPTIONS_END
       }
       double cdf(double x)
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->cdf(x);
+         TRANSLATE_EXCEPTIONS_END
       }
       double ccdf(double x)
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->ccdf(x);
-      }
+         TRANSLATE_EXCEPTIONS_END
+     }
       double pdf(double x)
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->pdf(x);
+         TRANSLATE_EXCEPTIONS_END
       }
       double quantile(double x)
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->quantile(x);
+         TRANSLATE_EXCEPTIONS_END
       }
       double quantile_c(double x)
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->quantile_c(x);
+         TRANSLATE_EXCEPTIONS_END
       }
 
       double lowest()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->lowest();
+         TRANSLATE_EXCEPTIONS_END
       }
 
       double uppermost()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->uppermost();
+         TRANSLATE_EXCEPTIONS_END
       }
 
       double lower()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->lower();
+         TRANSLATE_EXCEPTIONS_END
       }
       double upper()
       {
+         TRANSLATE_EXCEPTIONS_BEGIN
          return pimpl->upper();
+         TRANSLATE_EXCEPTIONS_END
       }
 
       // How many distributions are supported:

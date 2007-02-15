@@ -18,7 +18,6 @@ namespace distribution_explorer
   public partial class DistexForm : Form
   {
 
-    distexSplash distexSplashScreen = new distexSplash();
     EventLog log = new EventLog();
     /// <summary>
     /// Main form
@@ -34,7 +33,6 @@ namespace distribution_explorer
 
       InitializeComponent();
 
-      distexSplashScreen.Show();
       Application.DoEvents();
     }
 
@@ -42,6 +40,12 @@ namespace distribution_explorer
     { // Load distribution & parameters names, and default values.
       try
       {
+        // create and show splash screen:
+        this.Hide();
+        distexSplash frmSplash = new distexSplash();
+        frmSplash.Show();
+        frmSplash.Update();
+        // Now load our data while the splash is showing:    
         if (boost_math.any_distribution.size() <= 0)
         {
           MessageBox.Show("Problem loading any distributions, size = " + boost_math.any_distribution.size().ToString());
@@ -55,6 +59,11 @@ namespace distribution_explorer
         parameter1.Text = boost_math.any_distribution.first_param_default(0).ToString();
         parameter2.Text = boost_math.any_distribution.second_param_default(0).ToString();
         parameter3.Text = boost_math.any_distribution.third_param_default(0).ToString();
+        //
+        // sleep and then close splash;
+        Thread.Sleep(3000);
+        frmSplash.Close();
+        this.Visible = true;
       }
       catch
       { //
@@ -130,9 +139,10 @@ namespace distribution_explorer
           CDF_data.Rows[i].Cells[3].Value = ccdf;
         }
       }
-      catch (SystemException)
+      catch (SystemException se)
       {
         // TODO add some proper handling here!
+          MessageBox.Show("Error in random variable value: " + se.Message, "Calculation Error");
       }
     }
 
@@ -150,24 +160,88 @@ namespace distribution_explorer
         parameter3ValueLabel.Text = double.Parse(parameter3.Text).ToString();
 
         // Show computed properties of distribution.
-        mean.Text = dist.mean().ToString();
-        mode.Text = dist.mode().ToString();
-        median.Text = dist.median().ToString();
-        variance.Text = dist.variance().ToString();
-        standard_deviation.Text = dist.standard_deviation().ToString();
-        skewness.Text = dist.skewness().ToString();
-        kurtosis.Text = dist.kurtosis().ToString();
-        kurtosis_excess.Text = dist.kurtosis_excess().ToString();
-        coefficient_of_variation.Text = dist.coefficient_of_variation().ToString();
+        try
+        {
+            mean.Text = dist.mean().ToString();
+        }
+        catch
+        {
+            mean.Text = "Undefined";
+        }
+        try
+        {
+            mode.Text = dist.mode().ToString();
+        }
+        catch
+        {
+            mode.Text = "Undefined";
+        }
+        try
+        {
+            median.Text = dist.median().ToString();
+        }
+        catch
+        {
+            median.Text = "Undefined";
+        }
+        try
+        {
+            variance.Text = dist.variance().ToString();
+        }
+        catch
+        {
+            variance.Text = "Undefined";
+        }
+        try
+        {
+            standard_deviation.Text = dist.standard_deviation().ToString();
+        }
+        catch
+        {
+            standard_deviation.Text = "Undefined";
+        }
+        try
+        {
+            skewness.Text = dist.skewness().ToString();
+        }
+        catch
+        {
+            skewness.Text = "Undefined";
+        }
+        try
+        {
+            kurtosis.Text = dist.kurtosis().ToString();
+        }
+        catch
+        {
+            kurtosis.Text = "Undefined";
+        }
+        try
+        {
+            kurtosis_excess.Text = dist.kurtosis_excess().ToString();
+        }
+        catch
+        {
+            kurtosis_excess.Text = "Undefined";
+        }
+        try
+        {
+            coefficient_of_variation.Text = dist.coefficient_of_variation().ToString();
+        }
+        catch
+        {
+            coefficient_of_variation.Text = "Undefined";
+        }
 
         rangeLowestLabel.Text = dist.lowest().ToString();
         rangeGreatestLabel.Text = dist.uppermost().ToString();
         supportLowerLabel.Text = dist.lower().ToString();
         supportUpperLabel.Text = dist.upper().ToString();
       }
-      catch (SystemException)
+      catch (SystemException se)
       {
         // TODO add some proper handling here!
+        MessageBox.Show(se.Message, "Calculation Error");
       }
     }
 
@@ -194,9 +268,13 @@ namespace distribution_explorer
           }
         }
       }
-      catch (SystemException)
+      catch (SystemException se)
       {
         // TODO add some proper handling here!
+          MessageBox.Show(se.Message + 
+              " Please check the distribution's parameters and try again.", "Distribution Error");
+          this.propertiesTab.SelectedIndex = 0;
+          e.Cancel = true;
       }
     }
 
@@ -216,9 +294,10 @@ namespace distribution_explorer
           QuantileData.Rows[i].Cells[2].Value = ucv;
         }
       }
-      catch (SystemException)
+      catch (SystemException se)
       {
         // TODO add some proper handling here!
+        MessageBox.Show("Error in probability value: " + se.Message, "Calculation Error");
       }
     }
 
@@ -248,9 +327,10 @@ namespace distribution_explorer
           QuantileData.Rows[4].Cells[2].Value = dist.quantile_c(0.33333333333333333);
         }
       }
-      catch (SystemException)
+      catch (SystemException se)
       {
         // TODO add some proper handling here!
+        MessageBox.Show(se.Message, "Calculation Error");
       }
     }
 
@@ -276,9 +356,6 @@ namespace distribution_explorer
 
     private void DistexForm_Activated(object sender, EventArgs e)
     {
-      Thread.Sleep(300);
-      // Seems to take this time to respond to the About OK button.
-      distexSplashScreen.Close();
     }
 
     /// get AssemblyDescription
@@ -328,23 +405,86 @@ namespace distribution_explorer
         double z = double.Parse(parameter3.Text);
         dist = new boost_math.any_distribution(i, x, y, z);
         // Note global dist might not have been calculated yet if no of the tabs clicked.
-        mean.Text = dist.mean().ToString();
+        try
+        {
+            mean.Text = dist.mean().ToString();
+        }
+        catch
+        {
+            mean.Text = "Undefined";
+        }
         sw.WriteLine("Mean" + separator + mean.Text);
-        mode.Text = dist.mode().ToString();
+        try
+        {
+            mode.Text = dist.mode().ToString();
+        }
+        catch
+        {
+            mode.Text = "Undefined";
+        }
         sw.WriteLine("mode" + separator + mode.Text);
-        median.Text = dist.median().ToString();
+        try
+        {
+            median.Text = dist.median().ToString();
+        }
+        catch
+        {
+            median.Text = "Undefined";
+        }
         sw.WriteLine("Median" + separator + median.Text);
-        variance.Text = dist.variance().ToString();
+        try
+        {
+            variance.Text = dist.variance().ToString();
+        }
+        catch
+        {
+            variance.Text = "Undefined";
+        }
         sw.WriteLine("Variance" + separator + variance.Text);
-        standard_deviation.Text = dist.standard_deviation().ToString();
+        try
+        {
+            standard_deviation.Text = dist.standard_deviation().ToString();
+        }
+        catch
+        {
+            standard_deviation.Text = "Undefined";
+        }
         sw.WriteLine("Standard Deviation" + separator + standard_deviation.Text);
-        skewness.Text = dist.skewness().ToString();
-         coefficient_of_variation.Text = dist.coefficient_of_variation().ToString();
-         sw.WriteLine("Cofficient of variation" + separator + coefficient_of_variation.Text);
-         sw.WriteLine("Skewness" + separator + skewness.Text);
-        kurtosis.Text = dist.kurtosis().ToString();
+        try
+        {
+            skewness.Text = dist.skewness().ToString();
+        }
+        catch
+        {
+            skewness.Text = "Undefined";
+        }
+        sw.WriteLine("Skewness" + separator + skewness.Text);
+        try
+        {
+            coefficient_of_variation.Text = dist.coefficient_of_variation().ToString();
+        }
+        catch
+        {
+            coefficient_of_variation.Text = "Undefined";
+        }
+        sw.WriteLine("Cofficient of variation" + separator + coefficient_of_variation.Text);
+        try
+        {
+            kurtosis.Text = dist.kurtosis().ToString();
+        }
+        catch
+        {
+            kurtosis.Text = "Undefined";
+        }
         sw.WriteLine("Kurtosis" + separator + kurtosis.Text);
-        kurtosis_excess.Text = dist.kurtosis_excess().ToString();
+        try
+        {
+            kurtosis_excess.Text = dist.kurtosis_excess().ToString();
+        }
+        catch
+        {
+            kurtosis_excess.Text = "Undefined";
+        }
         sw.WriteLine("Kurtosis excess" + separator + kurtosis_excess.Text);
         sw.WriteLine();
 
@@ -458,7 +598,7 @@ namespace distribution_explorer
 
     private void exitToolStripMenuItem_Click(object sender, EventArgs e)
     { // exit DistexForm
-
+        this.Close();
     }
   } // class DistexForm
 } // namespace distribution_explorer

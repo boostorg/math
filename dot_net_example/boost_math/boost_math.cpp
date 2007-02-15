@@ -11,6 +11,7 @@ namespace boost_math
 
 any_distribution::any_distribution(int t, double arg1, double arg2, double arg3)
 {
+   TRANSLATE_EXCEPTIONS_BEGIN
    // This is where all the work gets done:
    switch(t) // index of distribution to distribution_info distributions[]
    {  // New entires must match distribution names, parameter name(s) and defaults defined below.
@@ -73,6 +74,7 @@ any_distribution::any_distribution(int t, double arg1, double arg2, double arg3)
       // Need some proper error handling here:
       assert(0);
    }
+   TRANSLATE_EXCEPTIONS_END
 } // any_distribution constructor.
 
 struct distribution_info
@@ -112,7 +114,7 @@ distribution_info distributions[] =
    { "Triangular", "Lower", "Mode", "Upper", -1, 0, +1 }, // case 15 3rd parameter!
    // 0, 0.5, 1 also said to 'standard' but this is most like an approximation to Gaussian distribution.
    { "Uniform", "Lower", "Upper", "", 0, 1, 0}, // case 16
-   { "Weibull", "Shape", "Scale", "", 0, 1, 0}, // case 17
+   { "Weibull", "Shape", "Scale", "", 1, 1, 0}, // case 17
 };
 
 // How many distributions are supported:

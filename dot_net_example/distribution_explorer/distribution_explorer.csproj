@@ -10,6 +10,11 @@
     <RootNamespace>distribution_explorer</RootNamespace>
     <AssemblyName>distribution_explorer</AssemblyName>
     <ApplicationIcon>IconToolkit.ico</ApplicationIcon>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ManifestCertificateThumbprint>0A75EA8FB24FE0A9EBAD66E20892BFBB8A65384E</ManifestCertificateThumbprint>
+    <ManifestKeyFile>distribution_explorer_TemporaryKey.pfx</ManifestKeyFile>
+    <GenerateManifests>true</GenerateManifests>
+    <SignManifests>true</SignManifests>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -20,8 +25,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <AutorunEnabled>true</AutorunEnabled>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -118,6 +123,7 @@
     </Content>
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
+    <None Include="distribution_explorer_TemporaryKey.pfx" />
     <None Include="ToolkitLogo.bmp" />
   </ItemGroup>
   <ItemGroup>
