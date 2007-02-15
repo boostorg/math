@@ -491,7 +491,7 @@ namespace boost
 // keep compilers that support two-phase lookup happy.
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
-#ifdef BOOST_MSVC
+#if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
 # pragma warning(pop)
 #endif
 
