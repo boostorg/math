@@ -163,7 +163,7 @@ public:
     BOOST_STATIC_CONSTANT(bool, has_infinity             = limits_type::has_infinity);
     BOOST_STATIC_CONSTANT(bool, has_quiet_NaN            = limits_type::has_quiet_NaN);
     BOOST_STATIC_CONSTANT(bool, has_signaling_NaN        = limits_type::has_signaling_NaN);
-    BOOST_STATIC_CONSTANT(float_denorm_style, has_denorm = (float_denorm_style)limits_type::has_denorm);
+    BOOST_STATIC_CONSTANT(float_denorm_style, has_denorm = limits_type::has_denorm);
     BOOST_STATIC_CONSTANT(bool, has_denorm_loss          = limits_type::has_denorm_loss);
 
     static MyInt1 infinity() throw()      { return limits_type::infinity(); }
@@ -177,7 +177,7 @@ public:
 
     BOOST_STATIC_CONSTANT(bool, traps                    = limits_type::traps);
     BOOST_STATIC_CONSTANT(bool, tinyness_before          = limits_type::tinyness_before);
-    BOOST_STATIC_CONSTANT(float_round_style, round_style = (float_round_style)limits_type::round_style);
+    BOOST_STATIC_CONSTANT(float_round_style, round_style = limits_type::round_style);
 
 };  // std::numeric_limits<MyInt1>
 
@@ -210,7 +210,7 @@ public:
     BOOST_STATIC_CONSTANT(bool, has_infinity             = limits_type::has_infinity);
     BOOST_STATIC_CONSTANT(bool, has_quiet_NaN            = limits_type::has_quiet_NaN);
     BOOST_STATIC_CONSTANT(bool, has_signaling_NaN        = limits_type::has_signaling_NaN);
-    BOOST_STATIC_CONSTANT(float_denorm_style, has_denorm = (float_denorm_style)limits_type::has_denorm);
+    BOOST_STATIC_CONSTANT(float_denorm_style, has_denorm = limits_type::has_denorm);
     BOOST_STATIC_CONSTANT(bool, has_denorm_loss          = limits_type::has_denorm_loss);
 
     static MyUnsigned1 infinity() throw()    { return limits_type::infinity(); }
@@ -225,7 +225,7 @@ public:
 
     BOOST_STATIC_CONSTANT(bool, traps                    = limits_type::traps);
     BOOST_STATIC_CONSTANT(bool, tinyness_before          = limits_type::tinyness_before);
-    BOOST_STATIC_CONSTANT(float_round_style, round_style = (float_round_style)limits_type::round_style);
+    BOOST_STATIC_CONSTANT(float_round_style, round_style = limits_type::round_style);
 
 };  // std::numeric_limits<MyUnsigned1>
 
