@@ -1,7 +1,8 @@
 [section:internals_overview Overview]
 
-This section contains tools that are used in the development and testing
-of this library.  These tools have only minimal documentation, and crucially
+This section contains internal utilities used by the library's implementation
+along with tools used in development and testing.  These tools have 
+only minimal documentation, and crucially
 ['do not have stable interfaces].
 
 There is no doubt that these components can be improved, but they are also

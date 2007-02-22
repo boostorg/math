@@ -85,6 +85,9 @@ template <class Distribution>
 typename Distribution::value_type coefficient_of_variation(const Distribution& dist)
 {
    typedef typename Distribution::value_type value_type;
+
+   using std::abs;
+
    value_type m = mean(dist);
    value_type d = standard_deviation(dist);
    if((abs(m) < 1) && (d > abs(m) * tools::max_value<value_type>()))

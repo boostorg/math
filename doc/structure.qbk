@@ -1,5 +1,18 @@
 [section:structure  Getting About - Directory, Files, Namespaces & Configuration Macros]
 
+[h4 Navigation]
+
+Used in combination with the configured browser key (usually Alt), the
+following keys act as handy shortcuts for common navigation tasks.
+
+[h5 Shortcuts]
+[:
+[^[*p]] - Previous page       \n
+[^[*n]] - Next page           \n
+[^[*h]] - home                \n
+[^[*u]] - Up
+]
+
 [h4 Directory File Structure for Boost Math Functions, Math Constants, & Statistics Distributions]
 
 [h4 boost\/math]

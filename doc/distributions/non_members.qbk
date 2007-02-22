@@ -291,17 +291,24 @@ a defined skewness.
    
 Returns the 'proper' kurtosis (normalized fourth moment) of the distribution /dist/.
 
+kertosis = [beta][sub 2][space]= [mu][sub 4][space] / [mu][sub 2][super 2]
+
+Where [mu][sub i][space] is the i'th central moment of the distribution, and
+in particular [mu][sub 2][space] is the variance of the distribution.
+
+The kurtosis is a measure of the "peakedness" of a distribution.
+
 Note that the literature definition of kurtosis is confusing.
-The definition used here is that used by
+The definition used here is that used by for example
 [@http://mathworld.wolfram.com/Kurtosis.html Wolfram MathWorld]
 (that includes a table of formulae for kurtosis excess for various distributions)
 but NOT the definition of
 [@http://en.wikipedia.org/wiki/Kurtosis kurtosis used by Wikipedia]
-whose tables of distributions all show the (same) formulae labelled kurtosis.
+which treats "kurtosis" and "kurtosis excess" as the same quantity.
 
   kurtosis_excess = 'proper' kurtosis - 3
 
-This subtraction of 3 is convenient so that the kurtosis excess
+This subtraction of 3 is convenient so that the ['kurtosis excess]
 of a normal distribution is zero.
 
 This function may return a __domain_error if the distribution does not have
@@ -315,6 +322,15 @@ a defined kurtosis.
    RealType kurtosis_excess(const ``['Distribution-Type]``<RealType>& dist);
    
 Returns the kurtosis excess of the distribution /dist/.
+
+kurtosis excess = [gamma][sub 2][space]= [mu][sub 4][space] / [mu][sub 2][super 2][space]- 3 = kurtosis - 3
+
+Where [mu][sub i][space] is the i'th central moment of the distribution, and
+in particular [mu][sub 2][space] is the variance of the distribution.
+
+The kurtosis excess is a measure of the "peakedness" of a distribution, and 
+is more widely used than the "kurtosis proper".  It is defined so that
+the kurtosis excess of a normal distribution is zero.
 
 This function may return a __domain_error if the distribution does not have
 a defined kurtosis excess.

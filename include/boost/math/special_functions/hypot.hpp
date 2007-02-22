@@ -24,7 +24,7 @@ T hypot_imp(T x, T y)
    //
    // Normalize x and y, so that both are positive and x >= y:
    //
-   using namespace std; // ADL of std names
+   using std::fabs; using std::sqrt; // ADL of std names
 
    x = fabs(x);
    y = fabs(y);
