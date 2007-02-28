@@ -130,10 +130,6 @@ void test_spots(RealType)
        static_cast<RealType>(5.11111111111111111111111111111111111111111111L),
        tolerance);
 
-  // median NOT implemented.
-  BOOST_CHECK_THROW(
-       median(bernoulli_distribution<RealType>(static_cast<RealType>(0.5L))), std::domain_error);
-
   BOOST_CHECK_THROW(
      quantile(
         bernoulli_distribution<RealType>(static_cast<RealType>(2)), // prob >1
