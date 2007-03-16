@@ -158,7 +158,7 @@ namespace boost{ namespace math
     RealType lower = dist.lower();
     RealType upper = dist.upper();
     RealType result; // of checks.
-    if(false == detail::check_uniform(BOOST_CURRENT_FUNCTION,lower, upper, &result))
+    if(false == detail::check_uniform(BOOST_CURRENT_FUNCTION, lower, upper, &result))
     {
       return result;
     }

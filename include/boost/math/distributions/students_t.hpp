@@ -30,10 +30,10 @@ public:
    typedef RealType value_type;
 
    students_t_distribution(RealType i) : m_df(i)
-   {
+   { // Constructor.
       RealType result;
       detail::check_df(
-         BOOST_CURRENT_FUNCTION, m_df, &result);
+        BOOST_CURRENT_FUNCTION, m_df, &result);
    } // students_t_distribution
 
    RealType degrees_of_freedom()const

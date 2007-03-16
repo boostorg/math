@@ -30,12 +30,12 @@ public:
       : m_mean(mean), m_sd(sd) {}
 
    RealType mean()const
-   {
+   { // location
       return m_mean;
    }
 
    RealType standard_deviation()const
-   {
+   { // scale
       return m_sd;
    }
 private:
@@ -62,8 +62,6 @@ const std::pair<RealType, RealType> support(const normal_distribution<RealType>&
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(),  max_value<RealType>()); // - to + infinity.
 }
-
-
 
 template <class RealType>
 RealType pdf(const normal_distribution<RealType>& dist, const RealType& x)
@@ -95,7 +93,6 @@ RealType cdf(const normal_distribution<RealType>& dist, const RealType& x)
    RealType result;
 
    result = boost::math::erfc(-diff) / 2;
-
    return result;
 }
 
@@ -111,7 +108,6 @@ RealType quantile(const normal_distribution<RealType>& dist, const RealType& p)
 
    r = boost::math::erfc_inv(2 * p);
    r = -r;
-
    r *= sd * constants::root_two<RealType>();
    r += mean;
 
@@ -145,12 +141,9 @@ RealType quantile(const complemented2_type<normal_distribution<RealType>, RealTy
    RealType q = c.param;
 
    RealType r;
-
    r = boost::math::erfc_inv(2 * q);
-
    r *= sd * constants::root_two<RealType>();
    r += mean;
-
    return r;
 }
 
@@ -204,5 +197,5 @@ inline RealType kurtosis_excess(const normal_distribution<RealType>& /*dist*/)
 // keep compilers that support two-phase lookup happy.
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
-#endif // BOOST_STATS_STUDENTS_T_HPP
+#endif // BOOST_STATS_NORMAL_HPP
 
