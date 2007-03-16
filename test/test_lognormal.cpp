@@ -242,6 +242,10 @@ void test_spots(RealType T)
     kurtosis_excess(dist)
     , static_cast<RealType>(4312295840576300.2363383232038251L), tolerance);
 
+   BOOST_CHECK_CLOSE(
+    range(dist).first
+    , static_cast<RealType>(0), tolerance);
+
    //
    // Special cases:
    //
@@ -269,6 +273,14 @@ int test_main(int, char* [])
 	// Check that can generate lognormal distribution using the two convenience methods:
 	boost::math::lognormal myf1(1., 2); // Using typedef
 	lognormal_distribution<> myf2(1., 2); // Using default RealType double.
+
+  // Test range and support using double only,
+  // because it supports numeric_limits max for a pseudo-infinity.
+  BOOST_CHECK_EQUAL(range(myf2).first, 0); // range 0 to +infinity
+  BOOST_CHECK_EQUAL(range(myf2).second, numeric_limits<double>::max());
+  BOOST_CHECK_EQUAL(support(myf2).first, 0); // support 0 to + infinity.
+  BOOST_CHECK_EQUAL(support(myf2).second, numeric_limits<double>::max());
+
 
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
