@@ -141,8 +141,8 @@ template <>
 inline long double epsilon<long double>(const mpl::true_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(long double))
 {
    // numeric_limits on Darwin tells lies here:
-   BOOST_STATIC_ASSERT(std::numeric_limits<long double>::digits == 64);
-   return 1.0842021724855044340074528008699e-19L;
+   BOOST_STATIC_ASSERT(std::numeric_limits<long double>::digits == 106);
+   return 2.4651903288156618919116517665087e-32L;
 }
 #endif
 
