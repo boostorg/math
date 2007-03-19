@@ -13,6 +13,7 @@
 #include <boost/math/distributions/exponential.hpp>
 #include <boost/math/distributions/extreme_value.hpp>
 #include <boost/math/distributions/fisher_f.hpp>
+#include <boost/math/distributions/pareto.hpp>
 #include <boost/math/distributions/weibull.hpp>
 #include <boost/math/distributions/lognormal.hpp>
 
@@ -31,6 +32,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<extreme_value_distribution<RealType> > >();
    function_requires<DistributionConcept<fisher_f_distribution<RealType> > >();
    function_requires<DistributionConcept<students_t_distribution<RealType> > >();
+   function_requires<DistributionConcept<pareto_distribution<RealType> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType> > >();
    function_requires<DistributionConcept<lognormal_distribution<RealType> > >();
 }

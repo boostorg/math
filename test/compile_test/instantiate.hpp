@@ -1,4 +1,5 @@
 //  Copyright John Maddock 2006.
+//  Copyright Paul A. Bristow 2007.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -18,6 +19,7 @@
 #include <boost/math/distributions/lognormal.hpp>
 #include <boost/math/distributions/negative_binomial.hpp>
 #include <boost/math/distributions/normal.hpp>
+#include <boost/math/distributions/pareto.hpp>
 #include <boost/math/distributions/poisson.hpp>
 #include <boost/math/distributions/rayleigh.hpp>
 #include <boost/math/distributions/students_t.hpp>
@@ -70,6 +72,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<negative_binomial_distribution<RealType> > >();
    function_requires<DistributionConcept<normal_distribution<RealType> > >();
    function_requires<DistributionConcept<rayleigh_distribution<RealType> > >();
+   function_requires<DistributionConcept<pareto_distribution<RealType> > >();
    function_requires<DistributionConcept<poisson_distribution<RealType> > >();
    function_requires<DistributionConcept<students_t_distribution<RealType> > >();
    function_requires<DistributionConcept<triangular_distribution<RealType> > >();
