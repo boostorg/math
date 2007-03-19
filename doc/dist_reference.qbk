@@ -16,6 +16,7 @@
 [include distributions/lognormal.qbk]
 [include distributions/negative_binomial.qbk]
 [include distributions/normal.qbk]
+[include distributions/pareto.qbk]
 [include distributions/poisson.qbk]
 [include distributions/rayleigh.qbk]
 [include distributions/students_t.qbk]
