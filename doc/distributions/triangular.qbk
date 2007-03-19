@@ -120,21 +120,21 @@ b is the /upper/ parameter,
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Using the relation: pdf = 0 for x < mode, 2(x-a)/(b-a)(c-a) else 2*(b-x)/((b-a)(b-c))]]
-[[cdf][Using the relation: cdf = 0 for x < mode (x-a)[super 2]/((b-a)(c-a)) else 1 - (b-x)[super 2]/((b-a)(b-c))]]
+[[pdf][Using the relation: pdf = 0 for x < mode, 2(x-a)\/(b-a)(c-a) else 2*(b-x)\/((b-a)(b-c))]]
+[[cdf][Using the relation: cdf = 0 for x < mode (x-a)[super 2]\/((b-a)(c-a)) else 1 - (b-x)[super 2]\/((b-a)(b-c))]]
 [[cdf complement][Using the relation: q = 1 - p ]]
-[[quantile][let p0 = (c-a)/(b-a) the point of inflection on the cdf,
+[[quantile][let p0 = (c-a)\/(b-a) the point of inflection on the cdf,
 then given probability p and q = 1-p:\n
 x = sqrt((b-a)(c-a)p) + a ; for p < p0\n
 x = c                     ; for p == p0\n
 x = b - sqrt((b-a)(b-c)q) ; for p > p0\n (See [@../../../../boost/math/distributions/triangular.hpp /boost/math/distributions/triangular.hpp] for details.)]]
 [[quantile from the complement][As quantile (See [@../../../../boost/math/distributions/triangular.hpp /boost/math/distributions/triangular.hpp] for details.)]]
-[[mean][(a + b + 3) / 3 ]]
-[[variance][(a[super 2]+b[super 2]+c[super 2] - ab - ac - bc)/18]]
+[[mean][(a + b + 3) \/ 3 ]]
+[[variance][(a[super 2]+b[super 2]+c[super 2] - ab - ac - bc)\/18]]
 [[mode][c]]
 [[skewness][(See [@../../../../boost/math/distributions/triangular.hpp /boost/math/distributions/triangular.hpp] for details). ]]
-[[kurtosis][12/5]]
-[[kurtosis excess][-3/5]]
+[[kurtosis][12\/5]]
+[[kurtosis excess][-3\/5]]
 ]
 
 Some 'known good' test values were obtained from
@@ -151,4 +151,5 @@ Some 'known good' test values were obtained from
 Measurement Science Review, Volume 2, Section 1, 2002, Proper Rounding Of The Measurement Results Under The Assumption Of Triangular Distribution.]
 
 [endsect][/section:triangular_dist triangular]
+
 

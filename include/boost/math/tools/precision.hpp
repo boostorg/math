@@ -136,6 +136,16 @@ inline T epsilon(const mpl::true_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
    return std::numeric_limits<T>::epsilon();
 }
 
+#if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
+template <>
+inline long double epsilon<long double>(const mpl::true_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(long double))
+{
+   // numeric_limits on Darwin tells lies here:
+   BOOST_STATIC_ASSERT(std::numeric_limits<long double>::digits == 64);
+   return 1.0842021724855044340074528008699e-19L;
+}
+#endif
+
 template <class T>
 inline T epsilon(const mpl::false_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {

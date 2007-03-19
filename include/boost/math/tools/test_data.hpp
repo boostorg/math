@@ -706,23 +706,28 @@ std::ostream& write_code(std::ostream& os,
 
    os << "#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))\n"
    "   static const boost::array<boost::array<T, "
-   << a->size() << ">, " << data.size() << "> " << name << " = {\n";
+   << a->size() << ">, " << data.size() << "> " << name << " = {{\n";
 
    while(a != b)
    {
+      if(a != data.begin())
+         os << ", \n";
+
       value_type_iterator x, y;
       x = a->begin();
       y = a->end();
-      os << "      ";
+      os << "      { ";
       while(x != y)
       {
-         os << "SC_(" << *x << "), ";
+         if(x != a->begin())
+            os << ", ";
+         os << "SC_(" << *x << ")";
          ++x;
       }
-      os << "\n";
+      os << " }";
       ++a;
    }
-   os << "   };\n#undef SC_\n\n";
+   os << "\n   }};\n#undef SC_\n\n";
    return os;
 }
 

@@ -24,7 +24,7 @@ results, indexed by test, floating point type, platform, and compiler.
 * Improved erf/erfc inverses (rational approximations).
 * Implemented Rational function generation (the Remez method).
 
-[h4 Milestone 3: Review candidate (31st Dec 2006)]
+[h4 Milestone 3: First Review Candidate (31st Dec 2006)]
 
 * Implemented the main probability distribution and density functions.
 * Implemented digamma.
@@ -36,14 +36,15 @@ and brought them into line with the rest of the code.
 * Moved Hubert Holin's existing Boost.Math special functions
 into this library and brought them into line with the rest of the code.
 
+[h4 Milestone 4: Second Review Candidate (1st March 2007)]
+
+* Moved Xiaogang Zhang's Bessel Functions code into the library,
+and brought them into line with the rest of the code.
+* Added C# "Distribution Explorer" demo application.
+
 [h4 Future]
 
-* Some TR1 Special functions are still needed, some of these 
-(Bessel functions) are mostly
-complete as a result of Xiaogang Zhang's participation in
-the Google Summer of Code 2006, refer to the 
-[@https://www.boost-consulting.com:8443/trac/soc/browser/boost/soc/2006
-Boost Consulting Trac Server for the code].
+* Some TR1 Special functions are still needed.
 * Higher level statistical tests, perhaps integrated with Eric Neiblers
 accumulator library.
 

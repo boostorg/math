@@ -325,14 +325,14 @@ inline concepts::std_real_concept log_min_value<concepts::std_real_concept>(BOOS
 template <>
 inline concepts::std_real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
-   return std::numeric_limits<long double>::epsilon();
+   return tools::epsilon<long double>();
 }
 
 template <>
 inline int digits<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 { // Assume number of significand bits is same as long double,
   // unless std::numeric_limits<T>::is_specialized to provide digits.
-   return std::numeric_limits<long double>::digits;
+   return tools::digits<long double>();
 }
 
 } // namespace tools

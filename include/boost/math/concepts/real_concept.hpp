@@ -319,14 +319,14 @@ inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_EXPLIC
 template <>
 inline concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
-   return std::numeric_limits<long double>::epsilon();
+   return tools::epsilon<long double>();
 }
 
 template <>
 inline int digits<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 { // Assume number of significand bits is same as long double,
   // unless std::numeric_limits<T>::is_specialized to provide digits.
-   return std::numeric_limits<long double>::digits;
+   return tools::digits<long double>();
    // Note that if numeric_limits real concept is NOT specialized to provide digits10
    // (or max_digits10) then the default precision of 6 decimal digits will be used
    // by Boost test (giving misleading error messages like

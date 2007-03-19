@@ -117,7 +117,7 @@ namespace boost
 
             using    ::std::numeric_limits;
 
-            static T const    taylor_0_bound = numeric_limits<T>::epsilon();
+            static T const    taylor_0_bound = tools::epsilon<T>();
             static T const    taylor_2_bound = sqrt(taylor_0_bound);
             static T const    taylor_n_bound = sqrt(taylor_2_bound);
 
