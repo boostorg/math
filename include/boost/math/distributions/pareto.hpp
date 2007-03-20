@@ -165,7 +165,7 @@ namespace boost
     typedef pareto_distribution<double> pareto; // Convenience to allow pareto(2., 3.);
 
     template <class RealType>
-    const std::pair<RealType, RealType> range(const pareto_distribution<RealType>& dist)
+    const std::pair<RealType, RealType> range(const pareto_distribution<RealType>& /*dist*/)
     { // Range of permissible values for random variable x.
       using boost::math::tools::max_value;
       return std::pair<RealType, RealType>(0, max_value<RealType>()); // location zero to + infinity.
