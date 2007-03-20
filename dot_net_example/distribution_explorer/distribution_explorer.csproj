@@ -11,21 +11,21 @@
     <AssemblyName>distribution_explorer</AssemblyName>
     <ApplicationIcon>IconToolkit.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <ManifestCertificateThumbprint>0A75EA8FB24FE0A9EBAD66E20892BFBB8A65384E</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>393B9B4A721C946375D6D44F80492CFFA03E57B5</ManifestCertificateThumbprint>
     <ManifestKeyFile>distribution_explorer_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
+    <TargetZone>LocalIntranet</TargetZone>
     <SignManifests>true</SignManifests>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
+    <PublishUrl>\\hetp7\H%24\Distex\</PublishUrl>
+    <Install>false</Install>
+    <InstallFrom>Unc</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <AutorunEnabled>true</AutorunEnabled>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -124,6 +124,7 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
     <None Include="distribution_explorer_TemporaryKey.pfx" />
+    <BaseApplicationManifest Include="Properties\app.manifest" />
     <None Include="ToolkitLogo.bmp" />
   </ItemGroup>
   <ItemGroup>

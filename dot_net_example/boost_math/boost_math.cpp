@@ -52,21 +52,24 @@ any_distribution::any_distribution(int t, double arg1, double arg2, double arg3)
       this->reset(new concrete_distribution<boost::math::normal_distribution<> >(boost::math::normal_distribution<>(arg1, arg2)));
       break;
    case 12:
-      this->reset(new concrete_distribution<boost::math::poisson>(boost::math::poisson(arg1)));
+      this->reset(new concrete_distribution<boost::math::pareto>(boost::math::pareto(arg1, arg2)));
       break;
    case 13:
-      this->reset(new concrete_distribution<boost::math::rayleigh>(boost::math::rayleigh(arg1)));
+      this->reset(new concrete_distribution<boost::math::poisson>(boost::math::poisson(arg1)));
       break;
    case 14:
-      this->reset(new concrete_distribution<boost::math::students_t>(boost::math::students_t(arg1)));
+      this->reset(new concrete_distribution<boost::math::rayleigh>(boost::math::rayleigh(arg1)));
       break;
    case 15:
-      this->reset(new concrete_distribution<boost::math::triangular>(boost::math::triangular(arg1, arg2, arg3)));
+      this->reset(new concrete_distribution<boost::math::students_t>(boost::math::students_t(arg1)));
       break;
    case 16:
-      this->reset(new concrete_distribution<boost::math::uniform>(boost::math::uniform(arg1, arg2)));
+      this->reset(new concrete_distribution<boost::math::triangular>(boost::math::triangular(arg1, arg2, arg3)));
       break;
    case 17:
+      this->reset(new concrete_distribution<boost::math::uniform>(boost::math::uniform(arg1, arg2)));
+      break;
+   case 18:
       this->reset(new concrete_distribution<boost::math::weibull>(boost::math::weibull(arg1, arg2)));
       break;
    default:
@@ -108,13 +111,14 @@ distribution_info distributions[] =
    { "Lognormal", "Location", "Scale", "", 0, 1, 0}, // case 9
    { "Negative Binomial", "Successes", "Probability of success", "", 1, 0.5, 0}, // case 10
    { "Normal (Gaussian)", "Mean", "Standard Deviation", "", 0, 1, 0}, // case 11
-   { "Poisson", "Mean", "", "", 1, 0, 0}, // case 12
-   { "Rayleigh", "Sigma", "", "", 1, 0, 0}, // case 13
-   { "Student's t", "Degrees of Freedom", "", "", 1, 0, 0}, // case 14
-   { "Triangular", "Lower", "Mode", "Upper", -1, 0, +1 }, // case 15 3rd parameter!
+   { "Pareto", "Location", "Shape","", 1, 1, 0}, // case 12
+   { "Poisson", "Mean", "", "", 1, 0, 0}, // case 13
+   { "Rayleigh", "Sigma", "", "", 1, 0, 0}, // case 14
+   { "Student's t", "Degrees of Freedom", "", "", 1, 0, 0}, // case 15
+   { "Triangular", "Lower", "Mode", "Upper", -1, 0, +1 }, // case 16 3rd parameter!
    // 0, 0.5, 1 also said to 'standard' but this is most like an approximation to Gaussian distribution.
-   { "Uniform", "Lower", "Upper", "", 0, 1, 0}, // case 16
-   { "Weibull", "Shape", "Scale", "", 1, 1, 0}, // case 17
+   { "Uniform", "Lower", "Upper", "", 0, 1, 0}, // case 17
+   { "Weibull", "Shape", "Scale", "", 1, 1, 0}, // case 18
 };
 
 // How many distributions are supported:

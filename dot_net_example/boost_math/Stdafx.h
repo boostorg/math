@@ -16,6 +16,7 @@
 #include <boost/math/distributions/lognormal.hpp>
 #include <boost/math/distributions/negative_binomial.hpp>
 #include <boost/math/distributions/normal.hpp>
+#include <boost/math/distributions/pareto.hpp>
 #include <boost/math/distributions/poisson.hpp>
 #include <boost/math/distributions/rayleigh.hpp>
 #include <boost/math/distributions/students_t.hpp>

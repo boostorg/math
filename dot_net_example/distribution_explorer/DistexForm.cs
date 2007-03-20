@@ -40,7 +40,7 @@ namespace distribution_explorer
     { // Load distribution & parameters names, and default values.
       try
       {
-        // create and show splash screen:
+        // Create and show splash screen:
         this.Hide();
         distexSplash frmSplash = new distexSplash();
         frmSplash.Show();
@@ -60,7 +60,7 @@ namespace distribution_explorer
         parameter2.Text = boost_math.any_distribution.second_param_default(0).ToString();
         parameter3.Text = boost_math.any_distribution.third_param_default(0).ToString();
         //
-        // sleep and then close splash;
+        // Sleep and then close splash;
         Thread.Sleep(3000);
         frmSplash.Close();
         this.Visible = true;
@@ -118,6 +118,8 @@ namespace distribution_explorer
         parameter3ValueLabel.Visible = false;
       }
       parameter3.Text = boost_math.any_distribution.third_param_default(i).ToString();
+      // Update tool tips to show total and supported ranges.
+      PropertiesTabPage.ToolTipText = "Shows properties and ranges of chosen distribution.";
     }
 
     private boost_math.any_distribution dist;
@@ -141,7 +143,6 @@ namespace distribution_explorer
       }
       catch (SystemException se)
       {
-        // TODO add some proper handling here!
           MessageBox.Show("Error in random variable value: " + se.Message, "Calculation Error");
       }
     }
@@ -166,7 +167,7 @@ namespace distribution_explorer
         }
         catch
         {
-            mean.Text = "Undefined";
+            mean.Text = "Undefined.";
         }
         try
         {
@@ -174,7 +175,7 @@ namespace distribution_explorer
         }
         catch
         {
-            mode.Text = "Undefined";
+            mode.Text = "Undefined.";
         }
         try
         {
@@ -182,7 +183,7 @@ namespace distribution_explorer
         }
         catch
         {
-            median.Text = "Undefined";
+            median.Text = "Undefined.";
         }
         try
         {
@@ -190,7 +191,7 @@ namespace distribution_explorer
         }
         catch
         {
-            variance.Text = "Undefined";
+            variance.Text = "Undefined.";
         }
         try
         {
@@ -198,7 +199,7 @@ namespace distribution_explorer
         }
         catch
         {
-            standard_deviation.Text = "Undefined";
+            standard_deviation.Text = "Undefined.";
         }
         try
         {
@@ -206,7 +207,7 @@ namespace distribution_explorer
         }
         catch
         {
-            skewness.Text = "Undefined";
+            skewness.Text = "Undefined.";
         }
         try
         {
@@ -214,7 +215,7 @@ namespace distribution_explorer
         }
         catch
         {
-            kurtosis.Text = "Undefined";
+            kurtosis.Text = "Undefined.";
         }
         try
         {
@@ -222,7 +223,7 @@ namespace distribution_explorer
         }
         catch
         {
-            kurtosis_excess.Text = "Undefined";
+            kurtosis_excess.Text = "Undefined.";
         }
         try
         {
@@ -230,18 +231,23 @@ namespace distribution_explorer
         }
         catch
         {
-            coefficient_of_variation.Text = "Undefined";
+            coefficient_of_variation.Text = "Undefined.";
         }
 
         rangeLowestLabel.Text = dist.lowest().ToString();
         rangeGreatestLabel.Text = dist.uppermost().ToString();
         supportLowerLabel.Text = dist.lower().ToString();
         supportUpperLabel.Text = dist.upper().ToString();
+        cdfTabPage.ToolTipText = "Random variate can range from " + rangeLowestLabel.Text
+          + " to " + rangeGreatestLabel.Text
+          + ",\nbut is said to be supported from " + supportLowerLabel.Text
+          + " to " + supportUpperLabel.Text
+          + "\nWithin this supported range the PDF and CDF have values between 0 and 1,\nbut below " + supportLowerLabel.Text + " both are zero, and above "
+          +  supportUpperLabel.Text + " both are unity";
       }
       catch (SystemException se)
       {
-        // TODO add some proper handling here!
-        MessageBox.Show(se.Message, "Calculation Error");
+        MessageBox.Show(se.Message, "Calculation Error!");
       }
     }
 
@@ -270,7 +276,6 @@ namespace distribution_explorer
       }
       catch (SystemException se)
       {
-        // TODO add some proper handling here!
           MessageBox.Show(se.Message + 
               " Please check the distribution's parameters and try again.", "Distribution Error");
           this.propertiesTab.SelectedIndex = 0;
@@ -542,16 +547,15 @@ namespace distribution_explorer
     }
 
     private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-    {
+    { // Same as Save.
       this.saveFileDialog.ShowDialog();
     }
 
     private void contentsToolStripMenuItem_Click(object sender, EventArgs e)
-    {
+    { // In lieu of proper help.
       string helpText = "\n" + AssemblyDescription +
-        //distexSplash.AssemblyDescription +
-        "Version " + Assembly.GetExecutingAssembly().GetName().Version.ToString() +
-       "\nA Windows utility to show the properties of distributions" +
+      "Version " + Assembly.GetExecutingAssembly().GetName().Version.ToString() +
+      "\nA Windows utility to show the properties of distributions" +
       "\n and permits calculation of probability density (or mass) function (PDF)" +
       "\nand cumulative distribution function (CDF) and complement from values provided." +
       "\nQuantiles are also calculated for typical risk (alpha) probabilities" +
@@ -569,7 +573,8 @@ namespace distribution_explorer
       "n" +
       "\nFor more information, including downloads see " +
       "\nhttp://boost-consulting.com/vault/index.php?action=downloadfile&filename=math_toolkit.html&directory=Math%20-%20Numerics&" +
-      "\nCopyright John Maddock & Paul A. Bristow 2007";
+      "\n(Note that .NET framework 2.0 and VCredist are requirements for this program.)" +
+      "\n\nCopyright John Maddock & Paul A. Bristow 2007";
 
       MessageBox.Show("Statistical Distribution Explorer\n" + helpText);
     }
@@ -595,6 +600,9 @@ namespace distribution_explorer
       MessageBox.Show("Print Preview is not yet implemented." +
         "\nSave all values to a text file and print that file.");
     }
+
+
+
 
     private void exitToolStripMenuItem_Click(object sender, EventArgs e)
     { // exit DistexForm
