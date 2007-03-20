@@ -31,7 +31,7 @@ namespace detail
      {
         *result = tools::domain_error<RealType>(
            function,
-           "Random variate is %1% but must be > 0 !", x);
+           "Random variate is %1% but must be >= 0 !", x);
         return false;
      }
      return true;
@@ -74,7 +74,7 @@ typedef lognormal_distribution<double> lognormal;
 
 template <class RealType>
 const std::pair<RealType, RealType> range(const lognormal_distribution<RealType>& /*dist*/)
-{ // Range of permissible values for random variable x.
+{ // Range of permissible values for random variable x is >0 to +infinity.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(0, max_value<RealType>());
 }
