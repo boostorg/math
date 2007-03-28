@@ -286,7 +286,7 @@ namespace boost
     template <class RealType>
     inline RealType mode(const bernoulli_distribution<RealType>& dist)
     {
-      return (dist.success_fraction() <= 0.5) ? 0 : 1; // p = 0.5 can be 0 or 1
+      return static_cast<RealType>((dist.success_fraction() <= 0.5) ? 0 : 1); // p = 0.5 can be 0 or 1
     }
 
     template <class RealType>
