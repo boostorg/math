@@ -20,6 +20,17 @@ namespace boost{ namespace math
 {
 namespace tools
 {
+// If T is not specialized, the functions digits, max_value and min_value,
+// all get synthesised automatically from std::numeric_limits.
+// However, if numeric_limits is not specialised for type RealType,
+// for example with NTL::RR type, then you will get a compiler error
+// when code tries to use these functions, unless you explicitly specialise them.
+
+// For example if the precision of RealType varies at runtime,
+// then numeric_limits support may not be appropriate,
+// see boost/math/tools/ntl.hpp  for examples like
+// template <> NTL::RR max_value<NTL::RR> ...
+// See  Conceptual Requirements for Real Number Types.
 
 template <class T>
 inline int digits(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
