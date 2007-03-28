@@ -470,7 +470,7 @@ void test_spots(RealType T)
     median(trim12), static_cast<RealType>(-0.13397459621556151), tolerance);
   BOOST_CHECK_EQUAL(
     skewness(distu01), static_cast<RealType>(0));
-  // kertosis:
+  // kurtosis:
   BOOST_CHECK_CLOSE_FRACTION(
     kurtosis_excess(distu01), kurtosis(distu01) - static_cast<RealType>(3L), tolerance);
   // kurtosis excess = kurtosis - 3;
