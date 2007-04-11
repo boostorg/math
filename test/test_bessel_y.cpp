@@ -59,7 +59,7 @@ void expected_results()
 #endif
 
    //
-   // HP-uX rates are very slightly higher:
+   // HP-UX rates are very slightly higher:
    //
    add_expected_result(
       ".*",                          // compiler
@@ -75,6 +75,24 @@ void expected_results()
       largest_type,                  // test type(s)
       ".*Y[01Nv].*",           // test data group
       ".*", 400, 200);               // test function
+
+   //
+   // Mac OS X rates are very slightly higher:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                          // platform
+      largest_type,                // test type(s)
+      ".*(Y[nv1]).*",           // test data group
+      ".*", 600000, 100000);             // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                          // platform
+      largest_type,                  // test type(s)
+      ".*Y[0].*",           // test data group
+      ".*", 500, 200);               // test function
 
    //
    // Linux:

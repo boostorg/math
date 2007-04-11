@@ -101,6 +101,51 @@ T relative_error(T a, T b)
    return (std::max)(fabs((a-b)/a), fabs((a-b)/b));
 }
 
+#if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
+template <>
+inline double relative_error<double>(double a, double b)
+{
+   using namespace std;
+   //
+   // On Mac OS X we evaluate "double" functions at "long double" precision,
+   // but "long double" actually has a very slightly narrower range than "double"!  
+   // Therefore use the range of "long double" as our limits since results outside
+   // that range may have been truncated to 0 or INF:
+   //
+   double min_val = (std::max)((double)tools::min_value<long double>(), tools::min_value<double>());
+   double max_val = (std::min)((double)tools::max_value<long double>(), tools::max_value<double>());
+
+   if((a != 0) && (b != 0))
+   {
+      // TODO: use isfinite:
+      if(b > max_val)
+      {
+         if(a > max_val)
+            return 0;  // one infinity is as good as another!
+      }
+      // If the result is denormalised, treat all denorms as equivalent:
+      if((a < min_val) && (a > 0))
+         a = min_val;
+      else if((a > -min_val) && (a < 0))
+         a = -min_val;
+      if((b < min_val) && (b > 0))
+         b = min_val;
+      else if((b > -min_val) && (b < 0))
+         b = -min_val;
+      return (std::max)(fabs((a-b)/a), fabs((a-b)/b));
+   }
+
+   // Handle special case where one or both are zero:
+   if(min_val == 0)
+      return fabs(a-b);
+   if(fabs(a) < min_val)
+      a = min_val;
+   if(fabs(b) < min_val)
+      b = min_val;
+   return (std::max)(fabs((a-b)/a), fabs((a-b)/b));
+}
+#endif
+
 template <class Seq>
 void print_row(const Seq& row)
 {

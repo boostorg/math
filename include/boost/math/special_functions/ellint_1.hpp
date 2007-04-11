@@ -43,6 +43,7 @@ T ellint_f_imp(T phi, T k)
     bool invert = false;
     if(phi < 0)
     {
+       BOOST_MATH_INSTRUMENT_CODE(phi);
        phi = fabs(phi);
        invert = true;
     }
@@ -53,12 +54,14 @@ T ellint_f_imp(T phi, T k)
     {
        // Need to handle infinity as a special case:
        result = tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+       BOOST_MATH_INSTRUMENT_CODE(result);
     }
     else if(phi > 1 / tools::epsilon<T>())
     {
        // Phi is so large that phi%pi is necessarily zero (or garbage),
        // just return the second part of the duplication formula:
        result = 2 * phi * ellint_k_imp(k) / constants::pi<T>();
+       BOOST_MATH_INSTRUMENT_CODE(result);
     }
     else
     {
@@ -70,19 +73,26 @@ T ellint_f_imp(T phi, T k)
        // so rewritten to use fmod instead:
        //
        T rphi = fmod(phi, constants::pi<T>() / 2);
+       BOOST_MATH_INSTRUMENT_CODE(rphi);
        T m = 2 * (phi - rphi) / constants::pi<T>();
+       BOOST_MATH_INSTRUMENT_CODE(m);
        int s = 1;
        if(fmod(m, T(2)) > 0.5)
        {
           m += 1;
           s = -1;
           rphi = constants::pi<T>() / 2 - rphi;
+          BOOST_MATH_INSTRUMENT_CODE(rphi);
        }
        T sinp = sin(rphi);
        T cosp = cos(rphi);
        result = s * sinp * ellint_rf_imp(cosp * cosp, 1 - k * k * sinp * sinp, T(1));
+       BOOST_MATH_INSTRUMENT_CODE(result);
        if(m != 0)
+       {
           result += m * ellint_k_imp(k);
+          BOOST_MATH_INSTRUMENT_CODE(result);
+       }
     }
     return invert ? -result : result;
 }

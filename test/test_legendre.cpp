@@ -119,7 +119,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       "Legendre Polynomials.*Large.*",      // test data group
-      "boost::math::legendre_q", 5000, 500);  // test function
+      "boost::math::legendre_q", 5400, 500);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -155,7 +155,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                  // test type(s)
       "Legendre Polynomials.*Large.*",      // test data group
-      "boost::math::legendre_q", 5000, 500);  // test function
+      "boost::math::legendre_q", 5400, 500);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

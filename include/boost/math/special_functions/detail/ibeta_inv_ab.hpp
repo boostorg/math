@@ -40,6 +40,7 @@ T ibeta_inv_ab_imp(const T& b, const T& z, const T& p, const T& q, bool swap_ab)
    //
    // Special cases first:
    //
+   BOOST_MATH_INSTRUMENT_CODE("b = " << b << " z = " << z << " p = " << p << " q = " << " swap = " << swap_ab);
    if(p == 0)
    {
       return swap_ab ? tools::min_value<T>() : tools::max_value<T>();
@@ -73,6 +74,7 @@ T ibeta_inv_ab_imp(const T& b, const T& z, const T& p, const T& q, bool swap_ab)
    {
       guess = b / 2;
    }
+   BOOST_MATH_INSTRUMENT_CODE("guess = " << guess);
    //
    // Max iterations permitted:
    //

@@ -62,6 +62,18 @@ void expected_results()
    largest_type = "(long\\s+)?double";
 #endif
    //
+   // G++ on Darwin: results are just slightly worse than we might hope for
+   // but still pretty good:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                      // platform
+      largest_type,                  // test type(s)
+      "factorials",                  // test data group
+      "boost::math::tgamma", 100, 15); // test function
+
+   //
    // G++ on Linux, result vary a bit by processor type,
    // on Itanium results are *much* better than listed here,
    // but x86 appears to have much less accurate std::pow
@@ -228,7 +240,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       "near.*",                      // test data group
-      "boost::math::tgamma", 50, 30);  // test function
+      "boost::math::tgamma", 60, 30);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

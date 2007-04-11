@@ -62,6 +62,17 @@ void expected_results()
    largest_type = "(long\\s+)?double";
 #endif
    //
+   // Darwin: just one special case for real_concept:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Mac OS",                          // platform
+      "real_concept",                   // test type(s)
+      "(?i).*large.*",                      // test data group
+      ".*", 400000, 50000);             // test function
+
+   //
    // Linux - results depend quite a bit on the
    // processor type, and how good the std::pow
    // function is for that processor.
@@ -143,7 +154,7 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "(?i).*small.*",                  // test data group
-      ".*", 40, 10);  // test function
+      ".*", 60, 10);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -165,7 +176,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "(?i).*small.*",                      // test data group
-      ".*", 40, 15);  // test function
+      ".*", 60, 15);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

@@ -118,6 +118,17 @@ void expected_results()
       "[^|]*", 500, 100);                // test function
 
    //
+   // Mac OS X:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Mac OS",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 100, 50);                 // test function
+
+   //
    // Large exponent range causes more extreme test cases to be evaluated:
    //
    if(std::numeric_limits<long double>::max_exponent > std::numeric_limits<double>::max_exponent)
@@ -169,7 +180,7 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "boost::math::gamma_p", 300, 50);  // test function
+      "boost::math::gamma_p", 350, 50);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

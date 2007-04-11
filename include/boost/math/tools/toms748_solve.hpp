@@ -8,6 +8,7 @@
 
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/error_handling.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/cstdint.hpp>
 #include <limits>
@@ -289,6 +290,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       c = detail::secant_interpolate(a, b, fa, fb);
       detail::bracket(f, a, b, c, fa, fb, d, fd);
       --count;
+      BOOST_MATH_INSTRUMENT_CODE(" a = " << a << " b = " << b);
 
       if(count && (fa != 0))
       {
@@ -300,6 +302,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
          fe = fd;
          detail::bracket(f, a, b, c, fa, fb, d, fd);
          --count;
+         BOOST_MATH_INSTRUMENT_CODE(" a = " << a << " b = " << b);
       }
    }
 
@@ -320,6 +323,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       if(prof)
       {
          c = detail::quadratic_interpolate(a, b, d, fa, fb, fd, 2);
+         BOOST_MATH_INSTRUMENT_CODE("Can't take cubic step!!!!");
       }
       else
       {
@@ -333,6 +337,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       detail::bracket(f, a, b, c, fa, fb, d, fd);
       if((0 == --count) || (fa == 0) || tol(a, b))
          break;
+      BOOST_MATH_INSTRUMENT_CODE(" a = " << a << " b = " << b);
       //
       // Now another interpolated step:
       //
@@ -340,6 +345,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       if(prof)
       {
          c = detail::quadratic_interpolate(a, b, d, fa, fb, fd, 3);
+         BOOST_MATH_INSTRUMENT_CODE("Can't take cubic step!!!!");
       }
       else
       {
@@ -351,6 +357,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       detail::bracket(f, a, b, c, fa, fb, d, fd);
       if((0 == --count) || (fa == 0) || tol(a, b))
          break;
+      BOOST_MATH_INSTRUMENT_CODE(" a = " << a << " b = " << b);
       //
       // Now we take a double-length secant step:
       //
@@ -377,6 +384,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       detail::bracket(f, a, b, c, fa, fb, d, fd);
       if((0 == --count) || (fa == 0) || tol(a, b))
          break;
+      BOOST_MATH_INSTRUMENT_CODE(" a = " << a << " b = " << b);
       //
       // And finally... check to see if an additional bisection step is 
       // to be taken, we do this if we're not converging fast enough:
@@ -390,6 +398,8 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       fe = fd;
       detail::bracket(f, a, b, a + (b - a) / 2, fa, fb, d, fd);
       --count;
+      BOOST_MATH_INSTRUMENT_CODE("Not converging: Taking a bisection!!!!");
+      BOOST_MATH_INSTRUMENT_CODE(" a = " << a << " b = " << b);
    } // while loop
 
    max_iter -= count;
@@ -443,6 +453,7 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, boo
          b *= factor;
          fb = f(b);
          --count;
+         BOOST_MATH_INSTRUMENT_CODE("a = " << a << " b = " << b << " fa = " << fa << " fb = " << fb << " count = " << count);
       }
    }
    else
@@ -460,12 +471,14 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, boo
          a /= factor;
          fa = f(a);
          --count;
+         BOOST_MATH_INSTRUMENT_CODE("a = " << a << " b = " << b << " fa = " << fa << " fb = " << fb << " count = " << count);
       }
    }
    max_iter -= count;
    max_iter += 1;
    std::pair<T, T> r = toms748_solve(f, a, b, fa, fb, tol, count);
    max_iter += count;
+   BOOST_MATH_INSTRUMENT_CODE("max_iter = " << max_iter << " count = " << count);
    return r;
 }
 

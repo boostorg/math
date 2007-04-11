@@ -56,14 +56,15 @@ void expected_results()
 #endif
    //
    // HP-UX
-   // This is a weird one, HP-UX shows up errors at float
+   // This is a weird one, HP-UX and Mac OS X show up errors at float
    // precision, that don't show up on other platforms.
-   // There appears to be some kind of rounding issue going on:
+   // There appears to be some kind of rounding issue going on (not enough
+   // precision in the input to get the answer right):
    //
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
-      "HP-UX|linux|.*(bsd|BSD).*",      // platform
+      "HP-UX|Mac OS|linux|.*(bsd|BSD).*",      // platform
       "float",                          // test type(s)
       "[^|]*",                          // test data group
       "boost::math::tgamma_ratio[^|]*", 35, 8);                 // test function

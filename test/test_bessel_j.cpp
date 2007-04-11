@@ -91,6 +91,35 @@ void expected_results()
       ".*", 3000, 500);         // test function
 
    //
+   // Mac OS X:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                          // platform
+      largest_type,                      // test type(s)
+      "Bessel JN.*",              // test data group
+      ".*", 40000, 20000);         // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                          // platform
+      largest_type,                      // test type(s)
+      "Bessel J:.*",              // test data group
+      ".*", 50000, 20000);         // test function
+
+   // This shouldn't be required, could be limited test data precision
+   // i.e. not enough bits in double input to get double result.
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                      // platform
+      "double",                      // test type(s)
+      ".*Tricky.*",                  // test data group
+      ".*", 100000, 100000);         // test function
+
+
+   //
    // Linux specific results:
    //
    // sin and cos appear to have only double precision for large

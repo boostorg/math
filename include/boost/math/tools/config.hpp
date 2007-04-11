@@ -67,4 +67,11 @@ inline void check_series_iterations(const char* function, boost::uintmax_t max_i
   #define BOOST_FPU_EXCEPTION_GUARD
 #endif
 
+#ifdef BOOST_MATH_INSTRUMENT
+#define BOOST_MATH_INSTRUMENT_CODE(x) \
+   std::cout << std::setprecision(35) << __FILE__ << ":" << __LINE__ << " " << x << std::endl;
+#else
+#define BOOST_MATH_INSTRUMENT_CODE(x)
+#endif
+
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP

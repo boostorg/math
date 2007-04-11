@@ -47,6 +47,17 @@ void expected_results()
    // Define the max and mean errors expected for
    // various compilers and platforms.
    //
+
+   // Darwin:
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS.*",                    // platform
+      "(long\\s+)?double",           // test type(s)
+      "Beta Function: Medium.*",     // test data group
+      "boost::math::beta", 200, 35); // test function
+
+
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

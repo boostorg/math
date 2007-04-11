@@ -277,9 +277,9 @@ int test_main(int, char* [])
   // Test range and support using double only,
   // because it supports numeric_limits max for a pseudo-infinity.
   BOOST_CHECK_EQUAL(range(myf2).first, 0); // range 0 to +infinity
-  BOOST_CHECK_EQUAL(range(myf2).second, numeric_limits<double>::max());
+  BOOST_CHECK_EQUAL(range(myf2).second, (std::numeric_limits<double>::max)());
   BOOST_CHECK_EQUAL(support(myf2).first, 0); // support 0 to + infinity.
-  BOOST_CHECK_EQUAL(support(myf2).second, numeric_limits<double>::max());
+  BOOST_CHECK_EQUAL(support(myf2).second, (std::numeric_limits<double>::max)());
 
 
 	 // Basic sanity-check spot values.

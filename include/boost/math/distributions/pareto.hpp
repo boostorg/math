@@ -308,6 +308,7 @@ namespace boost
     template <class RealType>
     inline RealType median(const pareto_distribution<RealType>& dist)
     {
+      using namespace std;
       return dist.location() * pow(2, (1/dist.shape()));
     } // median
 
@@ -334,6 +335,7 @@ namespace boost
     template <class RealType>
     inline RealType skewness(const pareto_distribution<RealType>& dist)
     {  
+      using namespace std;
       RealType result;
       RealType shape = dist.shape();
       if (shape > 3)
