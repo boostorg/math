@@ -172,7 +172,7 @@ inline double log1p<double>(double x)
          BOOST_CURRENT_FUNCTION);
    return ::log1p(x); 
 }
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER) && (BOOST_MSVC >= 1400)
 //
 // You should only enable this branch if you are absolutely sure
 // that your compilers optimizer won't mess this code up!!
