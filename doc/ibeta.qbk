@@ -83,11 +83,35 @@ are zero at double precision, may be finite but exceptionally small with
 the wider exponent range of the long double types.
 
 [table Errors In the Function ibeta(a,b,x)
-[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[Significand Size] [Platform and Compiler] [0 < a,b < 10
+
+and
+
+0 < x < 1]  [0 < a,b < 100
+
+and
+
+0 < x < 1][1x10[super -5] < a,b < 1x10[super 5]
+
+and
+
+0 < x < 1]]
 [[53] [Win32, Visual C++ 8] 
-      [Peak=42.3 Mean=2.9\n\n(GSL Peak=682 Mean=32.5)\n(Cephes Peak=42.7 Mean=7.0)]  
-      [Peak=108 Mean=16.6\n\n(GSL Peak=690 Mean=151)\n(Cephes Peak=1545 Mean=218)] 
-      [Peak=4x10[super 3][space] Mean=203\n\n(GSL Peak~3x10[super 5][space] Mean~2x10[super 4][space])\n(Cephes Peak~5x10[super 5][space] Mean~2x10[super 4][space])]]
+      [Peak=42.3 Mean=2.9
+
+(GSL Peak=682 Mean=32.5)
+
+(Cephes Peak=42.7 Mean=7.0)]  
+      [Peak=108 Mean=16.6
+      
+(GSL Peak=690 Mean=151)
+
+(Cephes Peak=1545 Mean=218)] 
+      [Peak=4x10[super 3][space] Mean=203
+      
+(GSL Peak~3x10[super 5][space] Mean~2x10[super 4][space])
+
+(Cephes Peak~5x10[super 5][space] Mean~2x10[super 4][space])]]
 [[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=21.9 Mean=3.1] 
       [Peak=270.7 Mean=26.8] [Peak~5x10[super 4][space] Mean=3x10[super 3][space] ]]
 [[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=15.4 Mean=3.0] [Peak=112.9 Mean=14.3] 
@@ -97,7 +121,19 @@ the wider exponent range of the long double types.
 ]
 
 [table Errors In the Function ibetac(a,b,x)
-[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[Significand Size] [Platform and Compiler] [0 < a,b < 10
+
+and
+
+0 < x < 1]  [0 < a,b < 100
+
+and
+
+0 < x < 1][1x10[super -5] < a,b < 1x10[super 5]
+
+and
+
+0 < x < 1]]
 [[53] [Win32, Visual C++ 8] [Peak=13.9 Mean=2.0]  
       [Peak=56.2 Mean=14] [Peak=3x10[super 3][space] Mean=159]]
 [[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=21.1 Mean=3.6] 
@@ -112,7 +148,19 @@ the wider exponent range of the long double types.
 ]
 
 [table Errors In the Function beta(a, b, x)
-[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[Significand Size] [Platform and Compiler] [0 < a,b < 10
+
+and
+
+0 < x < 1]  [0 < a,b < 100
+
+and
+
+0 < x < 1][1x10[super -5] < a,b < 1x10[super 5]
+
+and
+
+0 < x < 1]]
 [[53] [Win32, Visual C++ 8] [Peak=39 Mean=2.9] [Peak=91 Mean=12.7] [Peak=635 Mean=25]]
 [[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=26 Mean=3.6] [Peak=180.7 Mean=30.1] [Peak~7x10[super 4][space] Mean=3x10[super 3][space] ]]
 [[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=13 Mean=2.4] [Peak=67.1 Mean=13.4] [Peak~7x10[super 4][space] Mean=3x10[super 3][space] ]]
@@ -120,7 +168,19 @@ the wider exponent range of the long double types.
 ]
 
 [table Errors In the Function betac(a,b,x)
-[[Significand Size] [Platform and Compiler] [0 < a,b < 10\nand\n0 < x < 1]  [0 < a,b < 100\nand\n0 < x < 1][1e-5 < a,b < 1e5\nand\n0 < x < 1]]
+[[Significand Size] [Platform and Compiler] [0 < a,b < 10
+
+and
+
+0 < x < 1]  [0 < a,b < 100
+
+and
+
+0 < x < 1][1x10[super -5] < a,b < 1x10[super 5]
+
+and
+
+0 < x < 1]]
 [[53] [Win32, Visual C++ 8] [Peak=12.0 Mean=2.4] [Peak=91 Mean=15] [Peak=4x10[super 3][space] Mean=113]]
 [[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=19.8 Mean=3.8] [Peak=295.1 Mean=33.9] [Peak~1x10[super 5][space] Mean=5x10[super 3][space] ]]
 [[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=11.2 Mean=2.4] [Peak=63.5 Mean=13.6] [Peak~1x10[super 5][space] Mean=5x10[super 3][space]  ]]

@@ -51,18 +51,78 @@ than the one shown will have __zero_error.
 
 [table Errors In the Function erf(z)
 [[Significand Size] [Platform and Compiler] [z < 0.5]  [0.5 < z < 8] [z > 8]]
-[[53] [Win32, Visual C++ 8] [Peak=0 Mean=0\n\n GSL Peak=2.0 Mean=0.3 \n\nCephes Peak=1.1 Mean=0.7]  [Peak=0.9 Mean=0.09 \n\nGSL Peak=2.3 Mean=0.3 \n\nCephes Peak=1.3 Mean=0.2] [Peak=0 Mean=0\n\nGSL Peak=0 Mean=0 \n\nCephes Peak=0 Mean=0]]
-[[64] [RedHat Linux IA32, gcc-3.3] [Peak=0.7 Mean=0.07\n\n Native Peak=0.9 Mean=0.2]  [Peak=0.9 Mean=0.2\n\n Native Peak=0.9 Mean=0.07] [Peak=0 Mean=0\n\n Native Peak=0 Mean=0]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=0.7 Mean=0.07\n\n Native Peak=0 Mean=0]  [Peak=0.9 Mean=0.1\n\n Native Peak=0.5 Mean=0.03] [Peak=0 Mean=0\n\n Native Peak=0 Mean=0]]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=0.8 Mean=0.1\n\n Native Peak=0.9 Mean=0.2]  [Peak=0.9 Mean=0.1\n\n Native Peak=0.5 Mean=0.02] [Peak=0 Mean=0\n\n Native Peak=0 Mean=0]]
+[[53] [Win32, Visual C++ 8] [Peak=0 Mean=0
+
+GSL Peak=2.0 Mean=0.3 
+
+Cephes Peak=1.1 Mean=0.7]  [Peak=0.9 Mean=0.09 
+
+GSL Peak=2.3 Mean=0.3 
+
+Cephes Peak=1.3 Mean=0.2] [Peak=0 Mean=0
+
+GSL Peak=0 Mean=0 
+
+Cephes Peak=0 Mean=0]]
+[[64] [RedHat Linux IA32, gcc-3.3] [Peak=0.7 Mean=0.07
+
+Native Peak=0.9 Mean=0.2]  [Peak=0.9 Mean=0.2
+
+Native Peak=0.9 Mean=0.07] [Peak=0 Mean=0
+
+Native Peak=0 Mean=0]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=0.7 Mean=0.07
+
+Native Peak=0 Mean=0]  [Peak=0.9 Mean=0.1
+
+Native Peak=0.5 Mean=0.03] [Peak=0 Mean=0
+
+Native Peak=0 Mean=0]]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=0.8 Mean=0.1
+
+Native Peak=0.9 Mean=0.2]  [Peak=0.9 Mean=0.1
+
+Native Peak=0.5 Mean=0.02] [Peak=0 Mean=0
+
+Native Peak=0 Mean=0]]
 ]
 
 [table Errors In the Function erfc(z)
 [[Significand Size] [Platform and Compiler] [z < 0.5]  [0.5 < z < 8] [z > 8]]
-[[53] [Win32, Visual C++ 8] [Peak=0.7 Mean=0.06 \n\nGSL Peak=1.0 Mean=0.4 \n\nCephes Peak=0.7 Mean=0.06]  [Peak=0.99 Mean=0.3\n\nGSL Peak=2.6 Mean=0.6 \n\nCephes Peak=3.6 Mean=0.7] [Peak=1.0 Mean=0.2\n\nGSL Peak=3.9 Mean=0.4 \n\nCephes Peak=2.7 Mean=0.4]]
-[[64] [RedHat Linux IA32, gcc-3.3] [Peak=0 Mean=0\n\n Native Peak=0 Mean=0]  [Peak=1.4 Mean=0.3\n\n Native Peak=1.3 Mean=0.3] [Peak=1.6 Mean=0.4\n\n Native Peak=1.3 Mean=0.4]]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=0 Mean=0\n\n Native Peak=0 Mean=0]  [Peak=1.4 Mean=0.3\n\n Native Peak=0 Mean=0] [Peak=1.5 Mean=0.4\n\n Native Peak=0 Mean=0] ]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=0 Mean=0\n\n Native Peak=0 Mean=0]  [Peak=1.5 Mean=0.3\n\n Native Peak=0.9 Mean=0.08] [Peak=1.6 Mean=0.4\n\n Native Peak=0.9 Mean=0.1]]
+[[53] [Win32, Visual C++ 8] [Peak=0.7 Mean=0.06 
+
+GSL Peak=1.0 Mean=0.4 
+
+Cephes Peak=0.7 Mean=0.06]  [Peak=0.99 Mean=0.3
+
+GSL Peak=2.6 Mean=0.6 
+
+Cephes Peak=3.6 Mean=0.7] [Peak=1.0 Mean=0.2
+
+GSL Peak=3.9 Mean=0.4 
+
+Cephes Peak=2.7 Mean=0.4]]
+[[64] [RedHat Linux IA32, gcc-3.3] [Peak=0 Mean=0
+
+Native Peak=0 Mean=0]  [Peak=1.4 Mean=0.3
+
+Native Peak=1.3 Mean=0.3] [Peak=1.6 Mean=0.4
+
+Native Peak=1.3 Mean=0.4]]
+[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=0 Mean=0
+
+Native Peak=0 Mean=0]  [Peak=1.4 Mean=0.3
+
+Native Peak=0 Mean=0] [Peak=1.5 Mean=0.4
+
+Native Peak=0 Mean=0] ]
+[[113] [HPUX IA64, aCC A.06.06] [Peak=0 Mean=0
+
+Native Peak=0 Mean=0]  [Peak=1.5 Mean=0.3
+
+Native Peak=0.9 Mean=0.08] [Peak=1.6 Mean=0.4
+
+Native Peak=0.9 Mean=0.1]]
 ]
 
 [h4 Testing]

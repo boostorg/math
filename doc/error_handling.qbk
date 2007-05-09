@@ -68,9 +68,11 @@ if any argument value is a NaN, but it shall not report a domain error.
 Otherwise, each of the functions declared above shall report a domain error
 for just those argument values for which:]]
 
-[:['"the function description's Returns clause explicitly specifies a domain, and those arguments fall outside the specified domain; or\n
-"the corresponding mathematical function value has a non-zero imaginary component; or\n
-"the corresponding mathematical function is not mathematically defined.]]
+[:['"the function description's Returns clause explicitly specifies a domain, and those arguments fall outside the specified domain; or]
+
+['"the corresponding mathematical function value has a non-zero imaginary component; or]
+
+['"the corresponding mathematical function is not mathematically defined.]]
 
 [:['"Note 2: A mathematical function is mathematically defined
 for a given set of argument values if it is explicitly defined

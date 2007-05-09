@@ -138,11 +138,15 @@ For example if the precision of RealType varies at runtime, then
 [warning
 If `std::numeric_limits<>` is *not specialized*
 for type /RealType/ then the default float precision of 6 decimal digits
-will be used by other Boost programs including:\n\n
-* Boost.Test: giving misleading error messages like\n
-"difference between {9.79796} and {9.79796} exceeds 5.42101e-19%".\n
-* Boost.lexical_cast and Boost.serialization when converting the number
-to a string, causing potentially serious loss of accuracy on output.\n\n
+will be used by other Boost programs including:
+
+Boost.Test: giving misleading error messages like
+
+['"difference between {9.79796} and {9.79796} exceeds 5.42101e-19%".]
+
+Boost.LexicalCast and Boost.Serialization when converting the number
+to a string, causing potentially serious loss of accuracy on output.
+
 Although it might seem obvious that RealType should require `std::numeric_limits`
 to be specialized, this is not sensible for
 `NTL::RR` and similar classes where the number of digits is a runtime 

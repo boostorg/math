@@ -41,11 +41,13 @@ The functions all take the same parameters:
 
 [variablelist Parameters of the root finding functions
 [[F f] [Type F must be a callable function object that accepts one parameter and 
-        returns a tuple:\n\n
-        For the second order iterative methods (Newton Raphson)
+        returns a tuple:
+        
+For the second order iterative methods (Newton Raphson)
         the tuple should have two elements containing the evaluation
-        of the function and it's first derivative.\n\n
-        For the third order methods (Halley and Schroeder) the tuple
+        of the function and it's first derivative.
+        
+For the third order methods (Halley and Schroeder) the tuple
         should have three elements containing the evaluation of
         the function and its first and second derivatives.]]
 [[T guess] [The initial starting value.]]

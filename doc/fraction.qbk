@@ -53,8 +53,9 @@ operations:
 [[Expression] [Description]]
 [[Gen::result_type] [The type that is the result of invoking operator().
   This can be either an arithmetic type, or a std::pair<> of arithmetic types.]]
-[[g()] [Returns an object of type Gen::result_type.\n
-    Each time this operator is called then the next pair of /a/ and /b/
+[[g()] [Returns an object of type Gen::result_type.
+
+Each time this operator is called then the next pair of /a/ and /b/
     values is returned.  Or, if result_type is an arithmetic type,
     then the next /b/ value is returned and all the /a/ values
     are assumed to 1.]]

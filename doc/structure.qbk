@@ -7,9 +7,12 @@ following keys act as handy shortcuts for common navigation tasks.
 
 [h5 Shortcuts]
 [:
-[^[*p]] - Previous page       \n
-[^[*n]] - Next page           \n
-[^[*h]] - home                \n
+[^[*p]] - Previous page
+
+[^[*n]] - Next page
+
+[^[*h]] - home
+
 [^[*u]] - Up
 ]
 

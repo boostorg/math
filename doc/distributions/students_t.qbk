@@ -127,19 +127,28 @@ In the following table /v/ is the degrees of freedom of the distribution,
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = (v \/ (v + t[super 2]))[super (1+v)\/2 ] / (sqrt(v) * __beta(v\/2, 0.5))   ]]
-[[cdf][Using the relations:\n\n
-       p = 1 - z /iff t > 0/\n
-       p = z     /otherwise/\n\n
-       where z is given by:\n\n
-       __ibeta(v \/ 2, 0.5, v \/ (v + t[super 2])) \/ 2 ['iff v < 2t[super 2]]\n
-       __ibetac(0.5, v \/ 2, t[super 2 ] / (v + t[super 2]) \/ 2   /otherwise/\n]]
+[[cdf][Using the relations:
+
+p = 1 - z /iff t > 0/
+
+p = z     /otherwise/
+
+where z is given by:
+
+__ibeta(v \/ 2, 0.5, v \/ (v + t[super 2])) \/ 2 ['iff v < 2t[super 2]]
+
+__ibetac(0.5, v \/ 2, t[super 2 ] / (v + t[super 2]) \/ 2   /otherwise/]]
 [[cdf complement][Using the relation: q = cdf(-t) ]]
-[[quantile][Using the relation: t = sign(p - 0.5) * sqrt(v * y \/ x)\n\n
-            where:\n\n
-            x = __ibeta_inv(v \/ 2, 0.5, 2 * min(p, q))\n
-            y = 1 - x\n\n
-            The quantities /x/ and /y/ are both returned by __ibeta_inv
-            without the subtraction implied above.]]
+[[quantile][Using the relation: t = sign(p - 0.5) * sqrt(v * y \/ x)
+
+where:
+
+x = __ibeta_inv(v \/ 2, 0.5, 2 * min(p, q))
+
+y = 1 - x
+
+The quantities /x/ and /y/ are both returned by __ibeta_inv
+without the subtraction implied above.]]
 [[quantile from the complement][Using the relation: t = -quantile(q)]]
 [[mean][0]]
 [[variance][v \/ (v - 2)]]

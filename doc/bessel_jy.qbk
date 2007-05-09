@@ -67,9 +67,21 @@ are relative errors in units of epsilon.
 [table Errors Rates in cyl_bessel_j
 [[Significand Size] [Platform and Compiler] [J[sub 0][space] and J[sub 1]] [J[sub v]] [J[sub v][space] (large values of x > 1000)] ]
 [[53] [Win32 / Visual C++ 8.0] 
-      [Peak=2.5 Mean=1.1 \n\nGSL Peak=6.6 \n\nCephes Peak=2.5 Mean=1.1] 
-      [Peak=11 Mean=2.2 \n\nGSL Peak=11 \n\nCephes Peak=17 Mean=2.5] 
-      [Peak=413 Mean=110 \n\nGSL Peak=6x10[super 11] \n\nCephes Peak=2x10[super 5] ] ]
+      [Peak=2.5 Mean=1.1 
+
+GSL Peak=6.6 
+
+Cephes Peak=2.5 Mean=1.1] 
+      [Peak=11 Mean=2.2 
+
+GSL Peak=11 
+
+Cephes Peak=17 Mean=2.5] 
+      [Peak=413 Mean=110 
+
+GSL Peak=6x10[super 11] 
+
+Cephes Peak=2x10[super 5] ] ]
 [[64] [Red Hat Linux IA64 / G++ 3.4] [Peak=7 Mean=3] [Peak=117 Mean=10] [Peak=2x10[super 4][space] Mean=6x10[super 3]] ]
 [[64] [SUSE Linux AMD64 / G++ 4.1] [Peak=7 Mean=3] [Peak=400 Mean=40] [Peak=2x10[super 4][space] Mean=1x10[super 4]] ]
 [[113] [HP-UX / HP aCC 6] [Peak=14 Mean=6] [Peak=29 Mean=3] [Peak=2700 Mean=450] ]
@@ -78,9 +90,21 @@ are relative errors in units of epsilon.
 [table Errors Rates in cyl_neumann
 [[Significand Size] [Platform and Compiler] [J[sub 0][space] and J[sub 1]] [J[sub n] (integer orders)] [J[sub v] (fractional orders)] ]
 [[53] [Win32 / Visual C++ 8.0] 
-      [Peak=330 Mean=54 \n\nGSL Peak=34 Mean=9 \n\nCephes Peak=330 Mean=54] 
-      [Peak=923 Mean=83 \n\nGSL Peak=500 Mean=54 \n\nCephes Peak=923 Mean=83] 
-      [Peak=561 Mean=36 \n\nGSL Peak=2x10[super 6][space] Mean\=1x10[super 5][space] \n\nCephes Peak=+INF]]
+      [Peak=330 Mean=54 
+
+GSL Peak=34 Mean=9 
+
+Cephes Peak=330 Mean=54] 
+      [Peak=923 Mean=83 
+
+GSL Peak=500 Mean=54 
+
+Cephes Peak=923 Mean=83] 
+      [Peak=561 Mean=36 
+
+GSL Peak=2x10[super 6][space] Mean\=1x10[super 5][space] 
+
+Cephes Peak=+INF]]
 [[64] [Red Hat Linux IA64 / G++ 3.4] [Peak=470 Mean=56] [Peak=843 Mean=51] [Peak=741 Mean=51] ]
 [[64] [SUSE Linux AMD64 / G++ 4.1] [Peak=1300 Mean=424] [Peak=2x10[super 4][space] Mean=8x10[super 3]] [Peak=1x10[super 5][space] Mean=6x10[super 3]] ]
 [[113] [HP-UX / HP aCC 6] [Peak=180 Mean=63] [Peak=340 Mean=150] [Peak=2x10[super 4][space] Mean=1200] ]

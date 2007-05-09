@@ -69,7 +69,9 @@ are relative errors in units of epsilon.
 
 [table Errors Rates in cyl_bessel_k
 [[Significand Size] [Platform and Compiler] [K[sub v]] ]
-[[53] [Win32 / Visual C++ 8.0] [Peak=9 Mean=2 \n\nGSL Peak=9] ]
+[[53] [Win32 / Visual C++ 8.0] [Peak=9 Mean=2 
+
+GSL Peak=9] ]
 [[64] [Red Hat Linux IA64 / G++ 3.4] [Peak=10 Mean=2] ]
 [[64] [SUSE Linux AMD64 / G++ 4.1] [Peak=10 Mean=2] ]
 [[113] [HP-UX / HP aCC 6] [Peak=12 Mean=5] ]

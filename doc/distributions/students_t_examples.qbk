@@ -23,7 +23,8 @@ distribution with /N-1/ degrees of freedom.
 [Note
 The quantity [alpha][space] is the maximum acceptable risk of falsely rejecting
 the null-hypothesis.  The smaller the value of [alpha] the greater the
-strength of the test.\n\n
+strength of the test.
+
 The confidence level of the test is defined as 1 - [alpha], and often expressed
 as a percentage.  So for example a significance level of 0.05, is equivalent
 to a 95% confidence level.  Refer to 
@@ -112,7 +113,7 @@ by Bob Zarr of NIST in January, 1990 from a heat flow meter
 calibration and stability analysis.
 The corresponding dataplot
 output for this test can be found in 
-@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm 
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm 
 section 3.5.2] of the __handbook.
 
 [pre'''
@@ -242,17 +243,28 @@ can be summarised in the following table:
 [table
 [[Hypothesis][Test]]
 [[The Null-hypothesis: there is
-*no difference* in means]  [Complement of CDF for |t| > significance level / 2:\n\n
-                         ``cdf(complement(dist, fabs(t))) > alpha / 2``]]
+*no difference* in means]  
+[Complement of CDF for |t| > significance level / 2:
+
+`cdf(complement(dist, fabs(t))) > alpha / 2`]]
+
 [[The Alternative-hypothesis: there is
-*difference* in means]  [Complement of CDF for |t| < significance level / 2:\n\n
-                         ``cdf(complement(dist, fabs(t))) < alpha / 2``]]
+*difference* in means]  
+[Complement of CDF for |t| < significance level / 2:
+
+`cdf(complement(dist, fabs(t))) < alpha / 2`]]
+
 [[The Alternative-hypothesis: the sample mean is *less* than
-the true mean.]  [CDF of t < significance level:\n\n
-                         ``cdf(dist, t) < alpha``]]
+the true mean.]  
+[CDF of t < significance level:
+
+`cdf(dist, t) < alpha`]]
+
 [[The Alternative-hypothesis: the sample mean is *greater* than
-the true mean.]  [Complement of CDF of t < significance level:\n\n
-                         ``cdf(complement(dist, t)) < alpha``]]
+the true mean.]  
+[Complement of CDF of t < significance level:
+
+`cdf(complement(dist, t)) < alpha`]]
 ]
 
 [note
@@ -266,7 +278,7 @@ Heat flow data] from the NIST site.  The data set was collected
 by Bob Zarr of NIST in January, 1990 from a heat flow meter 
 calibration and stability analysis.  The corresponding dataplot
 output for this test can be found in 
-@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm 
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm 
 section 3.5.2] of the __handbook.
 
 [pre'''
@@ -572,17 +584,29 @@ in the following table:
 [table
 [[Hypothesis][Test][C++ Code]]
 [[The Null-hypothesis: there is
-*no difference* in means]  [Complement of CDF for |t| > significance level / 2:\n\n
-                         ``cdf(complement(dist, fabs(t))) > alpha / 2``]]
+*no difference* in means]  
+[Complement of CDF for |t| > significance level / 2:
+
+`cdf(complement(dist, fabs(t))) > alpha / 2`]]
+
 [[The Alternative-hypothesis: there is a
-*difference* in means]  [Complement of CDF for |t| < significance level / 2:\n\n
-                         ``cdf(complement(dist, fabs(t))) < alpha / 2``]]
+*difference* in means]  
+[Complement of CDF for |t| < significance level / 2:
+
+`cdf(complement(dist, fabs(t))) < alpha / 2`]]
+
 [[The Alternative-hypothesis: Sample 1 Mean is *less* than
-Sample 2 Mean.]  [CDF of t < significance level:\n\n
-                         ``cdf(dist, t) < alpha``]]
+Sample 2 Mean.]  
+[CDF of t < significance level:
+
+`cdf(dist, t) < alpha`]]
+
 [[The Alternative-hypothesis: Sample 1 Mean is *greater* than
-Sample 2 Mean.]  [Complement of CDF of t < significance level:\n\n
-                         ``cdf(complement(dist, t)) < alpha``]]
+Sample 2 Mean.]  
+
+[Complement of CDF of t < significance level:
+
+`cdf(complement(dist, t)) < alpha`]]
 ]
 
 [note

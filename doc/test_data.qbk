@@ -282,8 +282,10 @@ of bytes otherwise (they are needed to suppress compiler warnings when `T` is
 narrower than a `long double`).
 * It provides a useful customisation point: for example if we were testing
 a user-defined type that has more precision than a `long double` we could change
-it to:\n\n
-[^#define SC_(x) lexical_cast<T>(BOOST_STRINGIZE(x))]\n\n   
+it to:
+
+[^#define SC_(x) lexical_cast<T>(BOOST_STRINGIZE(x))]
+   
 in order to ensure that no truncation of the values occurs prior to conversion
 to `T`.  Note that this isn't used by default as it's rather hard on the compiler
 when the table is large.

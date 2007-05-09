@@ -63,7 +63,8 @@ All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions
 that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable is 0 and 1,
-and the useful supported range is only 0 or 1.\n
+and the useful supported range is only 0 or 1.
+
 Outside this range, functions are undefined, or may throw domain_error exception
 and make an error message available.
 
@@ -79,8 +80,9 @@ In the following table /p/ is the probability of success and /q = 1-p/.
 
 [note The Bernoulli distribution is implemented here as a /strict discrete/ distribution.
 If a generalised version, allowing k to be any real, is required then
-the binomial distribution with a single trial should be used, for example:\n
-  binomial_distribution(1, 0.25)
+the binomial distribution with a single trial should be used, for example:
+
+`binomial_distribution(1, 0.25)`
 ]
 
 [table

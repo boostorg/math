@@ -261,19 +261,26 @@ the context of this distribution:
 [[Function][Meaning]]
 [[__pdf]
    [The probability of obtaining [*exactly k failures] from k+r trials
-   with success fraction p.  For example:\n\n``pdf(negative_binomial(r, p), k)``]]
+   with success fraction p.  For example:
+
+``pdf(negative_binomial(r, p), k)``]]
 [[__cdf]
    [The probability of obtaining [*k failures or fewer] from k+r trials
-   with success fraction p and success on the last trial.  For example:\n\n ``cdf(negative_binomial(r, p), k)``]]
+   with success fraction p and success on the last trial.  For example:
+
+``cdf(negative_binomial(r, p), k)``]]
 [[__ccdf]
    [The probability of obtaining [*more than k failures] from k+r trials
-   with success fraction p and success on the last trial.  For example:\n\n ``cdf(complement(negative_binomial(r, p), k))``]]
+   with success fraction p and success on the last trial.  For example:
+   
+``cdf(complement(negative_binomial(r, p), k))``]]
 [[__quantile]
    [The [*greatest] number of failures k expected to be observed from k+r trials
    with success fraction p, at probability P.  Note that the value returned
    is a real-number, and not an integer.  Depending on the use case you may
-   want to take either the floor or ceiling of the real result.  For example:\n\n
-   ``quantile(negative_binomial(r, p), P)``]]
+   want to take either the floor or ceiling of the real result.  For example:
+   
+``quantile(negative_binomial(r, p), P)``]]
 [[__quantile_c]
    [The [*smallest] number of failures k expected to be observed from k+r trials
    with success fraction p, at probability P.  Note that the value returned
@@ -296,20 +303,27 @@ be successful (the success fraction), /r/ is the number of successes,
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][pdf = exp(lgamma(r + k) - lgamma(r) - lgamma(k+1)) * pow(p, r) * pow((1-p), k)\n
-Implementation is in terms of __ibeta_derivative:\n
+[[pdf][pdf = exp(lgamma(r + k) - lgamma(r) - lgamma(k+1)) * pow(p, r) * pow((1-p), k)
+
+Implementation is in terms of __ibeta_derivative:
+
 (p/(r + k)) * ibeta_derivative(r, static_cast<RealType>(k+1), p)
 The function __ibeta_derivative is used here, since it has already
 been optimised for the lowest possible error - indeed this is really
 just a thin wrapper around part of the internals of the incomplete
-beta function.\n\n
+beta function.
 ]]
-[[cdf][Using the relation: \n
-cdf = I[sub p](r, k+1) = ibeta(r, k+1, p)\n
+[[cdf][Using the relation: 
+
+cdf = I[sub p](r, k+1) = ibeta(r, k+1, p)
+
 = ibeta(r, static_cast<RealType>(k+1), p)]]
-[[cdf complement][Using the relation:\n
-1 - cdf = I[sub p](k+1, r)\n
-= ibetac(r, static_cast<RealType>(k+1), p)\n\n]]
+[[cdf complement][Using the relation:
+
+1 - cdf = I[sub p](k+1, r)
+
+= ibetac(r, static_cast<RealType>(k+1), p)
+]]
 [[quantile][ibeta_invb(r, p, P) - 1]]
 [[quantile from the complement][ibetac_invb(r, p, Q) -1)]]
 [[mean][ `r(1-p)/p` ]]

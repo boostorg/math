@@ -44,18 +44,22 @@ coordinate with [phi][space] in \[0,2[pi]).  This is the convention used in Phys
 and matches the definition used by 
 [@http://documents.wolfram.com/mathematica/functions/SphericalHarmonicY 
 Mathematica in the function SpericalHarmonicY], 
-but is opposite to the usual mathematical conventions.\n\n
+but is opposite to the usual mathematical conventions.
+
 Some other sources include an additional Condon-Shortley phase term of 
 (-1)[super m] in the definition of this function: note however that our
-definition of the associated Legendre polynomial already includes this term.\n\n
-This implementation returns zero for m > n\n\n
+definition of the associated Legendre polynomial already includes this term.
+
+This implementation returns zero for m > n
+
 For [theta][space] outside \[0, [pi]\] and [phi][space] outside \[0, 2[pi]\] this 
 implementation follows the convention used by Mathematica:
 the function is periodic with period [pi][space] in [theta][space] and 2[pi][space] in
 [phi].  Please note that this is not the behaviour one would get
 from a casual application of the function's definition.  Cautious users 
 should keep [theta][space] and [phi][space] to the range \[0, [pi]\] and 
-\[0, 2[pi]\] respectively.\n\n
+\[0, 2[pi]\] respectively.
+
 See: [@http://mathworld.wolfram.com/SphericalHarmonic.html 
 Weisstein, Eric W. "Spherical Harmonic." 
 From MathWorld--A Wolfram Web Resource].  ]
@@ -86,7 +90,9 @@ roots of the associated Legendre function.
 All values are in units of epsilon.
 
 [table Peak Errors In the Sperical Harmonic Functions
-[[Significand Size] [Platform and Compiler] [Errors in range\n0 < l < 20] ]
+[[Significand Size] [Platform and Compiler] [Errors in range
+
+0 < l < 20] ]
 [[53] [Win32, Visual C++ 8] [Peak=2x10[super 4] Mean=700] ]
 [[64] [SUSE Linux IA32, g++ 4.1] [Peak=2900 Mean=100]]
 [[64] [Red Hat Linux IA64, g++ 3.4.4] [Peak=2900 Mean=100] ]

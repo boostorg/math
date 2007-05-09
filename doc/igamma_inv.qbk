@@ -38,7 +38,8 @@ when T1 and T2 are different types, otherwise the return type is simply T1.
 gamma function, they are talking about inverting on parameter /x/.
 These are implemented here as gamma_p_inv and gamma_q_inv, and are by
 far the most efficient of the inverses presented here.
-\n\nThe inverse on the /a/ parameter finds use in some statistical
+
+The inverse on the /a/ parameter finds use in some statistical
 applications but has to be computed by rather brute force numerical
 techniques and is consequently several times slower.
 These are implemented here as gamma_p_inva and gamma_q_inva.]

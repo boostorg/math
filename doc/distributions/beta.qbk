@@ -225,8 +225,11 @@ In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][f(x;[alpha],[beta]) = x[super[alpha] - 1] (1 - x)[super[beta] -1] / B([alpha], [beta])\n\n
-      Implemented using __ibeta_derivative(a, b, x).]]
+[[pdf]
+   [f(x;[alpha],[beta]) = x[super[alpha] - 1] (1 - x)[super[beta] -1] / B([alpha], [beta])
+   
+    Implemented using __ibeta_derivative(a, b, x).]]
+    
 [[cdf][Using the incomplete beta function __ibeta(a, b, x)]]
 [[cdf complement][__ibetac(a, b, x)]]
 [[quantile][Using the inverse incomplete beta function __ibeta_inv(a, b, p)]]
@@ -238,21 +241,30 @@ In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
 [[kurtosis excess][ [$../equations/beta_dist_kurtosis.png]  ]]
 [[kurtosis][`kurtosis + 3`]]
 [[parameter estimation][ ]]
-[[alpha\n
-from mean and variance][`mean * (( (mean * (1 - mean)) / variance)- 1)`]]
-[[beta\n
-from mean and variance][`(1 - mean) * (((mean * (1 - mean)) /variance)-1)`]]
-[[The member functions `estimate_alpha` and `estimate_beta`\n
-  from cdf and probability x\n
-  and *either* `alpha` or `beta`][Implemented in terms of the inverse incomplete beta functions\n
+[[alpha
+
+   from mean and variance][`mean * (( (mean * (1 - mean)) / variance)- 1)`]]
+[[beta
+
+  from mean and variance][`(1 - mean) * (((mean * (1 - mean)) /variance)-1)`]]
+[[The member functions `estimate_alpha` and `estimate_beta`
+
+  from cdf and probability x
+  
+  and *either* `alpha` or `beta`]
+      [Implemented in terms of the inverse incomplete beta functions
+      
 __ibeta_inva, and __ibeta_invb respectively.]]
 [[`estimate_alpha`][`ibeta_inva(beta, x, probability)`]]
 [[`estimate_beta`][`ibeta_invb(alpha, x, probability)`]]
 ]
 
 [h4 References]
-[@http://en.wikipedia.org/wiki/Beta_distribution Wikipedia Beta distribution]\n
-[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm NIST Exploratory Data Analysis]\n
+
+[@http://en.wikipedia.org/wiki/Beta_distribution Wikipedia Beta distribution]
+
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm NIST Exploratory Data Analysis]
+
 [@http://mathworld.wolfram.com/BetaDistribution.html Wolfram MathWorld]
 
 [endsect][/section:beta_dist beta]

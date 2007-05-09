@@ -42,8 +42,20 @@ only results for the widest floating point type on the system are given as
 narrower types have __zero_error.
 
 [table Peak Errors In the Beta Function
-[[Significand Size] [Platform and Compiler] [Errors in range\n0.4 < a,b < 100]  [Errors in range\n1e-6 < a,b < 36]]
-[[53] [Win32, Visual C++ 8] [Peak=99 Mean=22\n\n(GSL Peak=1178 Mean=238)\n(Cephes=1612)]  [Peak=10.7 Mean=2.6\n\n(GSL Peak=12 Mean=2.0)\n(Cephes=174)]]
+[[Significand Size] [Platform and Compiler] [Errors in range
+
+0.4 < a,b < 100]  [Errors in range
+
+1e-6 < a,b < 36]]
+[[53] [Win32, Visual C++ 8] [Peak=99 Mean=22
+
+(GSL Peak=1178 Mean=238)
+
+(Cephes=1612)]  [Peak=10.7 Mean=2.6
+
+(GSL Peak=12 Mean=2.0)
+
+(Cephes=174)]]
 [[64] [Red Hat Linux IA32, g++ 3.4.4] [Peak=112.1 Mean=26.9]  [Peak=15.8 Mean=3.6]]
 [[64] [Red Hat Linux IA64, g++ 3.4.4] [Peak=61.4 Mean=19.5]  [Peak=12.2 Mean=3.6]]
 [[113] [HPUX IA64, aCC A.06.06] [Peak=42.03 Mean=13.94]  [Peak=9.8 Mean=3.1]]

@@ -97,10 +97,12 @@ In the simple case of a polynomial approximation, by interpolating through
 the roots of a Chebyshev polynomial we have in fact created a ['Chebyshev
 approximation] to the function: in terms of /absolute error/
 this is the best a priori choice for the interpolated form we can
-achieve, and typically is very close to the minimax solution.\n
+achieve, and typically is very close to the minimax solution.
+
 However, if we want to optimise for /relative error/, or if the approximation
 is a rational function, then the initial Chebyshev solution can be quite far
-from the ideal minimax solution.  \n
+from the ideal minimax solution.  
+
 A more technical discussion of the theory involved can be found in this
 [@http://math.fullerton.edu/mathews/n2003/ChebyshevPolyMod.html online course].]
 

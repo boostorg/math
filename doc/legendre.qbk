@@ -74,10 +74,14 @@ Mathematica's LegendreP function].  However, uses in the literature
 do not always include this phase term, and strangely the specification
 for the associated Legendre function in the C++ TR1 (assoc_legendre) 
 also omits it, in spite of stating that it uses Abramowitz and Stegun 
-as the final arbiter on these matters.\n\n
-See: \n\n[@http://mathworld.wolfram.com/LegendrePolynomial.html 
+as the final arbiter on these matters.
+
+See: 
+
+[@http://mathworld.wolfram.com/LegendrePolynomial.html 
 Weisstein, Eric W. "Legendre Polynomial." 
-From MathWorld--A Wolfram Web Resource].\n\n
+From MathWorld--A Wolfram Web Resource].
+
 Abramowitz, M. and Stegun, I. A. (Eds.). "Legendre Functions" and 
 "Orthogonal Polynomials." Ch. 22 in Chs. 8 and 22 in Handbook of 
 Mathematical Functions with Formulas, Graphs, and Mathematical Tables, 
@@ -164,7 +168,11 @@ Note that only results for the widest floating point type on the system are
 given as narrower types have __zero_error.
 
 [table Peak Errors In the Legendre P Function
-[[Significand Size] [Platform and Compiler] [Errors in range\n0 < l < 20]  [Errors in range\n20 < l < 120]]
+[[Significand Size] [Platform and Compiler] [Errors in range
+
+0 < l < 20]  [Errors in range
+
+20 < l < 120]]
 [[53] [Win32, Visual C++ 8] [Peak=211 Mean=20]  [Peak=300 Mean=33]]
 [[64] [SUSE Linux IA32, g++ 4.1] [Peak=70 Mean=10]  [Peak=700 Mean=60]]
 [[64] [Red Hat Linux IA64, g++ 3.4.4] [Peak=70 Mean=10]  [Peak=700 Mean=60]]
@@ -172,7 +180,9 @@ given as narrower types have __zero_error.
 ]
 
 [table Peak Errors In the Associated Legendre P Function
-[[Significand Size] [Platform and Compiler] [Errors in range\n0 < l < 20] ]
+[[Significand Size] [Platform and Compiler] [Errors in range
+
+0 < l < 20] ]
 [[53] [Win32, Visual C++ 8] [Peak=1200 Mean=7]]
 [[64] [SUSE Linux IA32, g++ 4.1] [Peak=80 Mean=5]]
 [[64] [Red Hat Linux IA64, g++ 3.4.4] [Peak=80 Mean=5] ]
@@ -180,7 +190,11 @@ given as narrower types have __zero_error.
 ]
 
 [table Peak Errors In the Legendre Q Function
-[[Significand Size] [Platform and Compiler] [Errors in range\n0 < l < 20]  [Errors in range\n20 < l < 120]]
+[[Significand Size] [Platform and Compiler] [Errors in range
+
+0 < l < 20]  [Errors in range
+
+20 < l < 120]]
 [[53] [Win32, Visual C++ 8] [Peak=50 Mean=7]  [Peak=4600 Mean=370]]
 [[64] [SUSE Linux IA32, g++ 4.1] [Peak=51 Mean=8]  [Peak=6000 Mean=480]]
 [[64] [Red Hat Linux IA64, g++ 3.4.4] [Peak=51 Mean=8]  [Peak=6000 Mean=480]]

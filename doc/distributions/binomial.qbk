@@ -212,12 +212,15 @@ want to be 95% sure that the true value is [*less than] some value,
 [note
 In order to obtain a two sided bound on the success fraction, you
 call both `estimate_lower_bound_on_p` *and* `estimate_upper_bound_on_p`
-each with the same arguments.\n
+each with the same arguments.
+
 If the desired risk level
 that the true success fraction lies outside the bounds is [alpha],
-then you pass [alpha]/2 to these functions.\n
+then you pass [alpha]/2 to these functions.
+
 So for example a two sided 95% confidence interval would be obtained
-by passing [alpha] = 0.025 to each of the functions.\n
+by passing [alpha] = 0.025 to each of the functions.
+
 [link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf See worked example.]
 ]
 
@@ -288,19 +291,27 @@ the context of this distribution:
 [[Function][Meaning]]
 [[__pdf]
    [The probability of obtaining [*exactly k successes] from n trials
-   with success fraction p.  For example:\n\n``pdf(binomial(n, p), k)``]]
+   with success fraction p.  For example:
+
+`pdf(binomial(n, p), k)`]]
 [[__cdf]
    [The probability of obtaining [*k successes or fewer] from n trials
-   with success fraction p.  For example:\n\n ``cdf(binomial(n, p), k)``]]
+   with success fraction p.  For example:
+
+`cdf(binomial(n, p), k)`]]
 [[__ccdf]
    [The probability of obtaining [*more than k successes] from n trials
-   with success fraction p.  For example:\n\n ``cdf(complement(binomial(n, p), k))``]]
+   with success fraction p.  For example:
+   
+`cdf(complement(binomial(n, p), k))`]]
 [[__quantile]
    [The [*greatest] number of successes that may be observed from n trials
    with success fraction p, at probability P.  Note that the value returned
    is a real-number, and not an integer.  Depending on the use case you may
-   want to take either the floor or ceiling of the result.  For example:\n\n
-   ``quantile(binomial(n, p), P)``]]
+   want to take either the floor or ceiling of the result.  For example:
+   
+   
+`quantile(binomial(n, p), P)`]]
 [[__quantile_c]
    [The [*smallest] number of successes that may be observed from n trials
    with success fraction p, at probability P.  Note that the value returned
@@ -329,23 +340,31 @@ be successful (the success fraction), /n/ is the number of trials,
 [table
 [[Function][Implementation Notes]]
 [[pdf][Implementation is in terms of __ibeta_derivative: if [sub n]C[sub k ] is the binomial
-       coefficient of a and b, then we have:\n\n
-       [$../equations/binomial_ref1.png]\n\n
-       Which can be evaluated as `ibeta_derivative(k+1, n-k+1, p) / (n+1)`\n\n
-       The function __ibeta_derivative is used here, since it has already
+       coefficient of a and b, then we have:
+       
+[$../equations/binomial_ref1.png]
+
+Which can be evaluated as `ibeta_derivative(k+1, n-k+1, p) / (n+1)`
+
+The function __ibeta_derivative is used here, since it has already
        been optimised for the lowest possible error - indeed this is really
        just a thin wrapper around part of the internals of the incomplete
-       beta function.\n\n
-       There are also various special cases: refer to the code for details.
+       beta function.
+       
+There are also various special cases: refer to the code for details.
        ]]
-[[cdf][Using the relation: \n\n
-       p = I[sub 1-p](n - k, k + 1)\n
-         = 1 - I[sub p](k + 1, n - k)\n
-         = __ibetac(k + 1, n - k, p)\n\n
-         There are also various special cases: refer to the code for details.
+[[cdf][Using the relation: 
+
+``
+p = I[sub 1-p](n - k, k + 1)
+  = 1 - I[sub p](k + 1, n - k)
+  = __ibetac(k + 1, n - k, p)``
+
+There are also various special cases: refer to the code for details.
 ]]
-[[cdf complement][Using the relation: q = __ibeta(k + 1, n - k, p)\n\n
-     There are also various special cases: refer to the code for details. ]]
+[[cdf complement][Using the relation: q = __ibeta(k + 1, n - k, p)
+
+There are also various special cases: refer to the code for details. ]]
 [[quantile][Since the cdf is non-linear in variate /k/ none of the inverse
             incomplete beta functions can be used here.  Instead the quantile
             is found numerically using a derivative free method 

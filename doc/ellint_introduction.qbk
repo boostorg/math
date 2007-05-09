@@ -53,25 +53,37 @@ where
 
 [$../equations/ellint5.png]
 
-[note ['[phi]] is called the amplitude. \n
-      ['k] is called the modulus. \n
-      ['[alpha]] is called the modular angle. \n
-      ['n] is called the characteristic.]
+[note ['[phi]] is called the amplitude.
+
+['k] is called the modulus. 
+
+['[alpha]] is called the modular angle. 
+
+['n] is called the characteristic.]
       
 [caution Perhaps more than any other special functions the elliptic
 integrals are expressed in a variety of different ways.  In particular,
 the final parameter /k/ (the modulus) may be expressed using a modular
-angle [alpha], or a parameter /m/.  These are related by:\n\n
-k = sin[alpha]\n
-m = k[super 2] = sin[super 2][alpha]\n\n
+angle [alpha], or a parameter /m/.  These are related by:
+
+k = sin[alpha]
+
+m = k[super 2] = sin[super 2][alpha]
+
 So that the integral of the third kind (for example) may be expressed as
-either:\n\n
-[Pi](n, [phi], k)\n
-[Pi](n, [phi] \\ [alpha])\n
-[Pi](n, [phi]| m)\n\n
+either:
+
+[Pi](n, [phi], k)
+
+[Pi](n, [phi] \\ [alpha])
+
+[Pi](n, [phi]| m)
+
 To further complicate matters, some texts refer to the ['complement
-of the parameter m], or 1 - m, where:\n\n
-1 - m = 1 - k[super 2] = cos[super 2][alpha]\n\n
+of the parameter m], or 1 - m, where:
+
+1 - m = 1 - k[super 2] = cos[super 2][alpha]
+
 This implementation uses /k/ throughout: this matches the requirements
 of the [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf
 Technical Report on C++ Library Extensions].  However, you should
@@ -121,8 +133,9 @@ Carlson's Degenerate Elliptic Integral
 
 where ['x] is nonnegative and ['y] is nonzero.
 
-[note ['R[sub C](x, y) = R[sub F](x, y, y)] \n
-      ['R[sub D](x, y, z) = R[sub J](x, y, z, z)]]
+[note ['R[sub C](x, y) = R[sub F](x, y, y)] 
+
+['R[sub D](x, y, z) = R[sub J](x, y, z, z)]]
 
 
 [h4 [#ellint_theorem]Duplication Theorem]

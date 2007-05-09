@@ -93,7 +93,8 @@ a requirement that `variance + difference_from_variance > 0`, since no sample
 can have a negative variance!
 
 This procedure uses the method in Diamond, W. J. (1989). 
-Practical Experiment Designs, Van-Nostrand Reinhold, New York.\n  
+Practical Experiment Designs, Van-Nostrand Reinhold, New York.
+  
 See also section on Sample sizes required in
 [@http://www.itl.nist.gov/div898/handbook/prc/section2/prc232.htm the NIST Engineering Statistics Handbook, Section 7.2.3.2].
 

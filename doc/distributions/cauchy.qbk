@@ -93,25 +93,34 @@ In the following table __x0 is the location parameter of the distribution,
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = 1 / ([pi] * [gamma] * (1 + ((x - __x0) / [gamma])[super 2]) ]]
 [[cdf and its complement][
-      The cdf is normally given by:\n\n
-      p = 0.5 + atan(x)/[pi]\n\n
-      But that suffers from cancellation error as x -> -[infin].
-      So recall that for x < 0:\n\n
-      atan(x) = -[pi]/2 - atan(1/x)\n\n
-      Substituting into the above we get:\n\n
-      p = -atan(1/x)  ; x < 0\n\n
-      So the procedure is to calculate the cdf for -fabs(x)
-      using the above formula.  Note that to factor in the location and scale
-      parameters you must substitute (x - __x0) / [gamma][space] for x in the above.\n\n
-      This procedure yields the smaller of /p/ and /q/, so the result
-      may need subtracting from 1 depending on whether we want the complement
-      or not, and whether /x/ is less than __x0 or not.
+The cdf is normally given by:
+
+p = 0.5 + atan(x)/[pi]
+
+But that suffers from cancellation error as x -> -[infin].
+So recall that for `x < 0`:
+
+atan(x) = -[pi]/2 - atan(1/x)
+
+Substituting into the above we get:
+
+p = -atan(1/x)  ; x < 0
+
+So the procedure is to calculate the cdf for -fabs(x)
+using the above formula.  Note that to factor in the location and scale
+parameters you must substitute (x - __x0) / [gamma][space] for x in the above.
+
+This procedure yields the smaller of /p/ and /q/, so the result
+may need subtracting from 1 depending on whether we want the complement
+or not, and whether /x/ is less than __x0 or not.
 ]]
 [[quantile][The same procedure is used irrespective of whether we're starting
             from the probability or it's complement.  First the argument /p/ is
-            reduced to the range \[-0.5, 0.5\], then the relation\n\n
-            x = __x0 [plusminus] [gamma][space] / tan([pi] * p)\n\n
-            is used to obtain the result.  Whether we're adding
+            reduced to the range \[-0.5, 0.5\], then the relation
+            
+x = __x0 [plusminus] [gamma][space] / tan([pi] * p)
+
+is used to obtain the result.  Whether we're adding
             or subtracting from __x0 is determined by whether we're
             starting from the complement or not.]]
 [[mode][The location parameter.]]

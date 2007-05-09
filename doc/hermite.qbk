@@ -71,7 +71,9 @@ Note that only results for the widest floating point type on the system are
 given as narrower types have __zero_error.
 
 [table Peak Errors In the Hermite Polynomial
-[[Significand Size] [Platform and Compiler] [Errors in range\n0 < l < 20] ]
+[[Significand Size] [Platform and Compiler] [Errors in range
+
+0 < l < 20] ]
 [[53] [Win32, Visual C++ 8] [Peak=4.5 Mean=1.5] ]
 [[64] [Red Hat Linux IA32, g++ 4.1] [Peak=6 Mean=2]]
 [[64] [Red Hat Linux IA64, g++ 3.4.4] [Peak=6 Mean=2] ]

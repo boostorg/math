@@ -6,7 +6,7 @@
 
 [/ To use, enclose the template name in square brackets.]
 
-\n
+
 [fnof], 
 [Alpha],  
 [Beta],  
@@ -131,8 +131,8 @@
 [clubs],  
 [hearts],  
 [diams],  
-\n
-\n
+
+
 [endsect]
 
 [/ testsymbols.qbk
