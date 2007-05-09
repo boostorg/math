@@ -25,6 +25,9 @@
 
 [section Overview]
 
+This documentation is 
+[@http://boost-consulting.com/vault/index.php?action=downloadfile&filename=boost_math-1.34.pdf&directory=PDF%20Documentation& also available in printer-friendly PDF format].
+
 The [link boost_math.gcd_lcm Greatest Common Divisor and Least Common Multiple library] 
 provides run-time and compile-time evaluation of the greatest common divisor (GCD) 
 or least common multiple (LCM) of two integers.
@@ -60,4 +63,5 @@ see some use in theoretical physics.
 [include math-quaternion.qbk]
 [include math-octonion.qbk]
 [include math-background.qbk]
+
 
