@@ -35,8 +35,8 @@
 #include <utility>
 
 #if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
-#pragma warning (disable: 4180)
 #  pragma warning(push)
+#  pragma warning (disable: 4180) // qualifier applied to function type has no meaning; ignored
 //#  pragma warning(disable: 4702) // unreachable code
 // in domain_error_imp in error_handling
 #endif
@@ -324,6 +324,10 @@ namespace boost
 // for this distribution have been defined, in order to
 // keep compilers that support two-phase lookup happy.
 #include <boost/math/distributions/detail/derived_accessors.hpp>
+
+#if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
+# pragma warning(pop)
+#endif
 
 #endif // BOOST_MATH_SPECIAL_BERNOULLI_HPP
 
