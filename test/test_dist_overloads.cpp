@@ -5,7 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// test_students_t.cpp
+// test_dist_overloads.cpp
 
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
@@ -27,7 +27,6 @@
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
-
 #include <iostream>
 	using std::cout;
 	using std::endl;
@@ -37,7 +36,7 @@ template <class RealType>
 void test_spots(RealType T)
 {
    // Basic sanity checks,
-   // 2eps as a persentage:
+   // 2 eps as a percentage:
    RealType tolerance = boost::math::tools::epsilon<RealType>() * 2 * 100;
 
 	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
@@ -45,35 +44,35 @@ void test_spots(RealType T)
    for(int i = -4; i <= 4; ++i)
    {
       BOOST_CHECK_CLOSE(
-         ::boost::math::cdf(normal_distribution<RealType>(), i), 
-         ::boost::math::cdf(normal_distribution<RealType>(), static_cast<RealType>(i)), 
+         ::boost::math::cdf(normal_distribution<RealType>(), i),
+         ::boost::math::cdf(normal_distribution<RealType>(), static_cast<RealType>(i)),
          tolerance);
       BOOST_CHECK_CLOSE(
-         ::boost::math::pdf(normal_distribution<RealType>(), i), 
-         ::boost::math::pdf(normal_distribution<RealType>(), static_cast<RealType>(i)), 
+         ::boost::math::pdf(normal_distribution<RealType>(), i),
+         ::boost::math::pdf(normal_distribution<RealType>(), static_cast<RealType>(i)),
          tolerance);
       BOOST_CHECK_CLOSE(
-         ::boost::math::cdf(complement(normal_distribution<RealType>(), i)), 
-         ::boost::math::cdf(complement(normal_distribution<RealType>(), static_cast<RealType>(i))), 
+         ::boost::math::cdf(complement(normal_distribution<RealType>(), i)),
+         ::boost::math::cdf(complement(normal_distribution<RealType>(), static_cast<RealType>(i))),
          tolerance);
       BOOST_CHECK_CLOSE(
-         ::boost::math::hazard(normal_distribution<RealType>(), i), 
-         ::boost::math::hazard(normal_distribution<RealType>(), static_cast<RealType>(i)), 
+         ::boost::math::hazard(normal_distribution<RealType>(), i),
+         ::boost::math::hazard(normal_distribution<RealType>(), static_cast<RealType>(i)),
          tolerance);
       BOOST_CHECK_CLOSE(
-         ::boost::math::chf(normal_distribution<RealType>(), i), 
-         ::boost::math::chf(normal_distribution<RealType>(), static_cast<RealType>(i)), 
+         ::boost::math::chf(normal_distribution<RealType>(), i),
+         ::boost::math::chf(normal_distribution<RealType>(), static_cast<RealType>(i)),
          tolerance);
    }
    for(float f = 0.01f; f < 1; f += 0.01f)
    {
       BOOST_CHECK_CLOSE(
-         ::boost::math::quantile(normal_distribution<RealType>(), f), 
-         ::boost::math::quantile(normal_distribution<RealType>(), static_cast<RealType>(f)), 
+         ::boost::math::quantile(normal_distribution<RealType>(), f),
+         ::boost::math::quantile(normal_distribution<RealType>(), static_cast<RealType>(f)),
          tolerance);
       BOOST_CHECK_CLOSE(
-         ::boost::math::quantile(complement(normal_distribution<RealType>(), f)), 
-         ::boost::math::quantile(complement(normal_distribution<RealType>(), static_cast<RealType>(f))), 
+         ::boost::math::quantile(complement(normal_distribution<RealType>(), f)),
+         ::boost::math::quantile(complement(normal_distribution<RealType>(), static_cast<RealType>(f))),
          tolerance);
    }
 } // template <class RealType>void test_spots(RealType)
