@@ -175,136 +175,6 @@ T beta_imp(T a, T b, const lanczos::undefined_lanczos& /* l */)
 
 
 //
-// Series approximation to the incomplete beta:
-//
-template <class T>
-struct ibeta_series_t
-{
-   typedef T result_type;
-   ibeta_series_t(T a_, T b_, T x_, T mult) : result(mult), x(x_), apn(a_), poch(1-b_), n(1) {}
-   T operator()()
-   {
-      T r = result / apn;
-      apn += 1;
-      result *= poch * x / n;
-      ++n;
-      poch += 1;
-      return r;
-   }
-private:
-   T result, x, apn, poch;
-   int n;
-};
-
-template <class T, class L>
-T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised)
-{
-   using namespace std;
-
-   T result;
-
-   if(normalised)
-   {
-      T prefix = 1;
-      T c = a + b;
-
-      // incomplete beta power term, combined with the Lanczos approximation:
-      T agh = a + L::g() - T(0.5);
-      T bgh = b + L::g() - T(0.5);
-      T cgh = c + L::g() - T(0.5);
-      result = L::lanczos_sum_expG_scaled(c) / (L::lanczos_sum_expG_scaled(a) * L::lanczos_sum_expG_scaled(b));
-      if(a * b < bgh * 10)
-         result *= exp((b - 0.5f) * boost::math::log1p(a / bgh));
-      else
-         result *= pow(cgh / bgh, b - 0.5f);
-      result *= pow(x * cgh / agh, a);
-      result *= sqrt(agh / boost::math::constants::e<T>());
-      result *= prefix;
-   }
-   else
-   {
-      // Non-normalised, just compute the power:
-      result = pow(x, a);
-   }
-   ibeta_series_t<T> s(a, b, x, result);
-   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
-   result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter, s0);
-   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
-   return result;
-}
-//
-// Incomplete Beta series again, this time without Lanczos support:
-//
-template <class T>
-T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczos&, bool normalised)
-{
-   using namespace std;
-
-   T result;
-
-   if(normalised)
-   {
-      T prefix = 1;
-      T c = a + b;
-
-      // figure out integration limits for the gamma function:
-      //T la = (std::max)(T(10), a);
-      //T lb = (std::max)(T(10), b);
-      //T lc = (std::max)(T(10), a+b);
-      T la = a + 5;
-      T lb = b + 5;
-      T lc = a + b + 5;
-
-      // calculate the gamma parts:
-      T sa = detail::lower_gamma_series(a, la, ::boost::math::tools::digits<T>()) / a;
-      sa += detail::upper_gamma_fraction(a, la, ::boost::math::tools::digits<T>());
-      T sb = detail::lower_gamma_series(b, lb, ::boost::math::tools::digits<T>()) / b;
-      sb += detail::upper_gamma_fraction(b, lb, ::boost::math::tools::digits<T>());
-      T sc = detail::lower_gamma_series(c, lc, ::boost::math::tools::digits<T>()) / c;
-      sc += detail::upper_gamma_fraction(c, lc, ::boost::math::tools::digits<T>());
-
-      // and their combined power-terms:
-      T b1 = (x * lc) / la;
-      T b2 = lc/lb;
-      T e1 = lc - la - lb;
-      T lb1 = a * log(b1);
-      T lb2 = b * log(b2);
-
-      if((lb1 >= tools::log_max_value<T>())
-         || (lb1 <= tools::log_min_value<T>())
-         || (lb2 >= tools::log_max_value<T>())
-         || (lb2 <= tools::log_min_value<T>())
-         || (e1 >= tools::log_max_value<T>())
-         || (e1 <= tools::log_min_value<T>()) )
-      {
-         T p = lb1 + lb2 - e1;
-         result = exp(p);
-      }
-      else
-      {
-         result = pow(b1, a);
-         if(a * b < lb * 10)
-            result *= exp(b * boost::math::log1p(a / lb));
-         else
-            result *= pow(b2, b);
-         result /= exp(e1);
-      }
-      // and combine the results:
-      result /= sa * sb / sc;
-   }
-   else
-   {
-      // Non-normalised, just compute the power:
-      result = pow(x, a);
-   }
-   ibeta_series_t<T> s(a, b, x, result);
-   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
-   result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter, s0);
-   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
-   return result;
-}
-
-//
 // Compute the leading power terms in the incomplete Beta:
 //
 // (x^a)(y^b)/Beta(a,b) when normalised, and
@@ -543,6 +413,149 @@ T ibeta_power_terms(T a,
    return result;
 }
 //
+// Series approximation to the incomplete beta:
+//
+template <class T>
+struct ibeta_series_t
+{
+   typedef T result_type;
+   ibeta_series_t(T a_, T b_, T x_, T mult) : result(mult), x(x_), apn(a_), poch(1-b_), n(1) {}
+   T operator()()
+   {
+      T r = result / apn;
+      apn += 1;
+      result *= poch * x / n;
+      ++n;
+      poch += 1;
+      return r;
+   }
+private:
+   T result, x, apn, poch;
+   int n;
+};
+
+template <class T, class L>
+T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised, T* p_derivative, T y)
+{
+   using namespace std;
+
+   T result;
+
+   BOOST_ASSERT((p_derivative == 0) || normalised);
+
+   if(normalised)
+   {
+      T c = a + b;
+
+      // incomplete beta power term, combined with the Lanczos approximation:
+      T agh = a + L::g() - T(0.5);
+      T bgh = b + L::g() - T(0.5);
+      T cgh = c + L::g() - T(0.5);
+      result = L::lanczos_sum_expG_scaled(c) / (L::lanczos_sum_expG_scaled(a) * L::lanczos_sum_expG_scaled(b));
+      if(a * b < bgh * 10)
+         result *= exp((b - 0.5f) * boost::math::log1p(a / bgh));
+      else
+         result *= pow(cgh / bgh, b - 0.5f);
+      result *= pow(x * cgh / agh, a);
+      result *= sqrt(agh / boost::math::constants::e<T>());
+
+      if(p_derivative)
+      {
+         *p_derivative = result * pow(y, b);
+         BOOST_ASSERT(*p_derivative >= 0);
+      }
+   }
+   else
+   {
+      // Non-normalised, just compute the power:
+      result = pow(x, a);
+   }
+   ibeta_series_t<T> s(a, b, x, result);
+   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter, s0);
+   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
+   return result;
+}
+//
+// Incomplete Beta series again, this time without Lanczos support:
+//
+template <class T>
+T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczos&, bool normalised, T* p_derivative, T y)
+{
+   using namespace std;
+
+   T result;
+   BOOST_ASSERT((p_derivative == 0) || normalised);
+
+   if(normalised)
+   {
+      T prefix = 1;
+      T c = a + b;
+
+      // figure out integration limits for the gamma function:
+      //T la = (std::max)(T(10), a);
+      //T lb = (std::max)(T(10), b);
+      //T lc = (std::max)(T(10), a+b);
+      T la = a + 5;
+      T lb = b + 5;
+      T lc = a + b + 5;
+
+      // calculate the gamma parts:
+      T sa = detail::lower_gamma_series(a, la, ::boost::math::tools::digits<T>()) / a;
+      sa += detail::upper_gamma_fraction(a, la, ::boost::math::tools::digits<T>());
+      T sb = detail::lower_gamma_series(b, lb, ::boost::math::tools::digits<T>()) / b;
+      sb += detail::upper_gamma_fraction(b, lb, ::boost::math::tools::digits<T>());
+      T sc = detail::lower_gamma_series(c, lc, ::boost::math::tools::digits<T>()) / c;
+      sc += detail::upper_gamma_fraction(c, lc, ::boost::math::tools::digits<T>());
+
+      // and their combined power-terms:
+      T b1 = (x * lc) / la;
+      T b2 = lc/lb;
+      T e1 = lc - la - lb;
+      T lb1 = a * log(b1);
+      T lb2 = b * log(b2);
+
+      if((lb1 >= tools::log_max_value<T>())
+         || (lb1 <= tools::log_min_value<T>())
+         || (lb2 >= tools::log_max_value<T>())
+         || (lb2 <= tools::log_min_value<T>())
+         || (e1 >= tools::log_max_value<T>())
+         || (e1 <= tools::log_min_value<T>()) )
+      {
+         T p = lb1 + lb2 - e1;
+         result = exp(p);
+      }
+      else
+      {
+         result = pow(b1, a);
+         if(a * b < lb * 10)
+            result *= exp(b * boost::math::log1p(a / lb));
+         else
+            result *= pow(b2, b);
+         result /= exp(e1);
+      }
+      // and combine the results:
+      result /= sa * sb / sc;
+
+      if(p_derivative)
+      {
+         *p_derivative = result * pow(y, b);
+         BOOST_ASSERT(*p_derivative >= 0);
+      }
+   }
+   else
+   {
+      // Non-normalised, just compute the power:
+      result = pow(x, a);
+   }
+   ibeta_series_t<T> s(a, b, x, result);
+   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter, s0);
+   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
+   return result;
+}
+
+//
 // Continued fraction for the incomplete beta:
 //
 template <class T>
@@ -575,10 +588,15 @@ private:
 // Evaluate the incomplete beta via the continued fraction representation:
 //
 template <class T, class L>
-T ibeta_fraction2(T a, T b, T x, T y, const L& l, bool normalised)
+T ibeta_fraction2(T a, T b, T x, T y, const L& l, bool normalised, T* p_derivative)
 {
    using namespace std;
    T result = ibeta_power_terms(a, b, x, y, l, normalised);
+   if(p_derivative)
+   {
+      *p_derivative = result;
+      BOOST_ASSERT(*p_derivative >= 0);
+   }
    if(result == 0)
       return result;
 
@@ -590,9 +608,15 @@ T ibeta_fraction2(T a, T b, T x, T y, const L& l, bool normalised)
 // Computes the difference between ibeta(a,b,x) and ibeta(a+k,b,x):
 //
 template <class T, class L>
-T ibeta_a_step(T a, T b, T x, T y, int k, const L& l, bool normalised)
+T ibeta_a_step(T a, T b, T x, T y, int k, const L& l, bool normalised, T* p_derivative)
 {
-   T prefix = ibeta_power_terms(a, b, x, y, l, normalised)/a;
+   T prefix = ibeta_power_terms(a, b, x, y, l, normalised);
+   if(p_derivative)
+   {
+      *p_derivative = prefix;
+      BOOST_ASSERT(*p_derivative >= 0);
+   }
+   prefix /= a;
    if(prefix == 0)
       return prefix;
    T sum = 1;
@@ -800,13 +824,18 @@ T binomial_ccdf(T n, T k, T x, T y)
 // each domain:
 //
 template <class T, class L>
-T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
+T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised, T* p_derivative)
 {
    using namespace std; // for ADL of std math functions.
 
    bool invert = inv;
    T fract;
    T y = 1 - x;
+
+   BOOST_ASSERT((p_derivative == 0) || normalised);
+
+   if(p_derivative)
+      *p_derivative = -1; // value not set.
 
    if(normalised)
    {
@@ -825,9 +854,21 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Parameter x outside the range [0,1] in the incomplete beta function (got x=%1%).", x);
 
    if(x == 0)
+   {
+      if(p_derivative)
+      {
+         *p_derivative = (a == 1) ? 1 : (a < 1) ? tools::max_value<T>() / 2 : tools::min_value<T>() * 2;
+      }
       return (invert ? (normalised ? 1 : beta_imp(a, b, l)) : 0);
+   }
    if(x == 1)
+   {
+      if(p_derivative)
+      {
+         *p_derivative = (b == 1) ? 1 : (b < 1) ? tools::max_value<T>() / 2 : tools::min_value<T>() * 2;
+      }
       return (invert == 0 ? (normalised ? 1 : beta_imp(a, b, l)) : 0);
+   }
 
    if((std::min)(a, b) <= 1)
    {
@@ -843,12 +884,12 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
          if((a >= (std::min)(T(0.2), b)) || (pow(x, a) <= 0.9))
          {
             if(!invert)
-               fract = ibeta_series(a, b, x, T(0), l, normalised);
+               fract = ibeta_series(a, b, x, T(0), l, normalised, p_derivative, y);
             else
             {
                fract = -(normalised ? 1 : beta_imp(a, b, l));
                invert = false;
-               fract = -ibeta_series(a, b, x, fract, l, normalised);
+               fract = -ibeta_series(a, b, x, fract, l, normalised, p_derivative, y);
             }
          }
          else
@@ -859,12 +900,12 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             if(y >= 0.3)
             {
                if(!invert)
-                  fract = ibeta_series(a, b, x, T(0), l, normalised);
+                  fract = ibeta_series(a, b, x, T(0), l, normalised, p_derivative, y);
                else
                {
                   fract = -(normalised ? 1 : beta_imp(a, b, l));
                   invert = false;
-                  fract = -ibeta_series(a, b, x, fract, l, normalised);
+                  fract = -ibeta_series(a, b, x, fract, l, normalised, p_derivative, y);
                }
             }
             else
@@ -879,7 +920,7 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
                {
                   prefix = 1;
                }
-               fract = ibeta_a_step(a, b, x, y, 20, l, normalised);
+               fract = ibeta_a_step(a, b, x, y, 20, l, normalised, p_derivative);
                if(!invert)
                   fract = beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, l, normalised);
                else
@@ -897,12 +938,12 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
          if((b <= 1) || ((x < 0.1) && (pow(b * x, a) <= 0.7)))
          {
             if(!invert)
-               fract = ibeta_series(a, b, x, T(0), l, normalised);
+               fract = ibeta_series(a, b, x, T(0), l, normalised, p_derivative, y);
             else
             {
                fract = -(normalised ? 1 : beta_imp(a, b, l));
                invert = false;
-               fract = -ibeta_series(a, b, x, fract, l, normalised);
+               fract = -ibeta_series(a, b, x, fract, l, normalised, p_derivative, y);
             }
          }
          else
@@ -914,12 +955,12 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             if(y >= 0.3)
             {
                if(!invert)
-                  fract = ibeta_series(a, b, x, T(0), l, normalised);
+                  fract = ibeta_series(a, b, x, T(0), l, normalised, p_derivative, y);
                else
                {
                   fract = -(normalised ? 1 : beta_imp(a, b, l));
                   invert = false;
-                  fract = -ibeta_series(a, b, x, fract, l, normalised);
+                  fract = -ibeta_series(a, b, x, fract, l, normalised, p_derivative, y);
                }
             }
             else if(a >= 15)
@@ -945,7 +986,7 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
                {
                   prefix = 1;
                }
-               fract = ibeta_a_step(a, b, x, y, 20, l, normalised);
+               fract = ibeta_a_step(a, b, x, y, 20, l, normalised, p_derivative);
                if(!invert)
                   fract = beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, l, normalised);
                else
@@ -991,12 +1032,12 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
          else if(b * x <= 0.7)
          {
             if(!invert)
-               fract = ibeta_series(a, b, x, T(0), l, normalised);
+               fract = ibeta_series(a, b, x, T(0), l, normalised, p_derivative, y);
             else
             {
                fract = -(normalised ? 1 : beta_imp(a, b, l));
                invert = false;
-               fract = -ibeta_series(a, b, x, fract, l, normalised);
+               fract = -ibeta_series(a, b, x, fract, l, normalised, p_derivative, y);
             }
          }
          else if(a > 15)
@@ -1015,7 +1056,7 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             {
                prefix = 1;
             }
-            fract = ibeta_a_step(bbar, a, y, x, n, l, normalised);
+            fract = ibeta_a_step(bbar, a, y, x, n, l, normalised, static_cast<T*>(0));
             fract = beta_small_b_large_a_series(a,  bbar, x, y, fract, T(1), l, normalised);
             fract /= prefix;
          }
@@ -1031,11 +1072,11 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
                --n;
                bbar += 1;
             }
-            fract = ibeta_a_step(bbar, a, y, x, n, l, normalised);
-            fract += ibeta_a_step(a, bbar, x, y, 20, l, normalised);
+            fract = ibeta_a_step(bbar, a, y, x, n, l, normalised, static_cast<T*>(0));
+            fract += ibeta_a_step(a, bbar, x, y, 20, l, normalised, static_cast<T*>(0));
             if(invert)
                fract -= (normalised ? 1 : beta_imp(a, b, l));
-            //fract = ibeta_series(a+20, bbar, x, fract, l, normalised);
+            //fract = ibeta_series(a+20, bbar, x, fract, l, normalised, p_derivative, y);
             fract = beta_small_b_large_a_series(a+20,  bbar, x, y, fract, T(1), l, normalised);
             if(invert)
             {
@@ -1044,13 +1085,40 @@ T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
             }
          }
          else
-            fract = ibeta_fraction2(a, b, x, y, l, normalised);
+            fract = ibeta_fraction2(a, b, x, y, l, normalised, p_derivative);
       }
       else
-         fract = ibeta_fraction2(a, b, x, y, l, normalised);
+         fract = ibeta_fraction2(a, b, x, y, l, normalised, p_derivative);
+   }
+   if(p_derivative)
+   {
+      if(*p_derivative < 0)
+      {
+         *p_derivative = ibeta_power_terms(a, b, x, y, l, true);
+      }
+      T div = y * x;
+
+      if(*p_derivative != 0)
+      {
+         if((tools::max_value<T>() * div < *p_derivative))
+         {
+            // overflow, return an arbitarily large value:
+            *p_derivative = tools::max_value<T>() / 2;
+         }
+         else
+         {
+            *p_derivative /= div;
+         }
+      }
    }
    return invert ? (normalised ? 1 : beta_imp(a, b, l)) - fract : fract;
 } // template <class T, class L>T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
+
+template <class T, class L>
+inline T ibeta_imp(T a, T b, T x, const L& l, bool inv, bool normalised)
+{
+   return ibeta_imp(a, b, x, l, inv, normalised, static_cast<T*>(0));
+}
 
 template <class T, class L>
 T ibeta_derivative_imp(T a, T b, T x, const L& l)

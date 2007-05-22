@@ -141,6 +141,17 @@ std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter)
 
    max_iter -= count;
 
+#ifdef BOOST_MATH_INSTRUMENT
+   std::cout << "Bisection iteration, final count = " << max_iter << std::endl;
+
+   static boost::uintmax_t max_count = 0;
+   if(max_iter > max_count)
+   {
+      max_count = max_iter;
+      std::cout << "Maximum iterations: " << max_iter << std::endl;
+   }
+#endif
+
    return std::make_pair(min, max);
 }
 
@@ -176,7 +187,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
       if(f1 == 0)
       {
          // Oops zero derivative!!!
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
          std::cout << "Newton iteration, zero derivative found" << std::endl;
 #endif
          detail::handle_zero_derivative(f, last_f0, f0, delta, result, guess, min, max);
@@ -185,7 +196,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
       {
          delta = f0 / f1;
       }
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
       std::cout << "Newton iteration, delta = " << delta << std::endl;
 #endif
       if(fabs(delta * 2) > fabs(delta2))
@@ -218,7 +229,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
 
    max_iter -= count;
 
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
    std::cout << "Newton Raphson iteration, final count = " << max_iter << std::endl;
 
    static boost::uintmax_t max_count = 0;
@@ -253,7 +264,9 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
    T delta1 = delta;
    T delta2 = delta;
 
-#ifdef BOOST_INSTRUMENT
+   bool out_of_bounds_sentry = false;
+
+#ifdef BOOST_MATH_INSTRUMENT
    std::cout << "Halley iteration, limit = " << factor << std::endl;
 #endif
 
@@ -269,7 +282,7 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
       if((f1 == 0) && (f2 == 0))
       {
          // Oops zero derivative!!!
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
          std::cout << "Halley iteration, zero derivative found" << std::endl;
 #endif
          detail::handle_zero_derivative(f, last_f0, f0, delta, result, guess, min, max);
@@ -296,14 +309,17 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
          else
             delta = f0 / f1;
       }
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
       std::cout << "Halley iteration, delta = " << delta << std::endl;
 #endif
       T convergence = fabs(delta / delta2);
-      if((convergence > 0.5) && (convergence < 2))
+      if((convergence > 0.8) && (convergence < 2))
       {
          // last two steps haven't converged, try bisection:
          delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
+         // reset delta2 so that this branch will *not* be taken on the
+         // next iteration:
+         delta2 = delta * 3;
       }
       guess = result;
       result -= delta;
@@ -311,17 +327,45 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
       // check for out of bounds step:
       if(result < min)
       {
-         delta = (guess - min) / 2;
-         result = guess - delta;
-         if((result == min) || (result == max))
-            break;
+         T diff = ((fabs(min) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(min))) ? 1000  : result / min;
+         if(fabs(diff) < 1)
+            diff = 1 / diff;
+         if(!out_of_bounds_sentry && (diff > 0) && (diff < 3))
+         {
+            // Only a small out of bounds step, lets assume that the result
+            // is probably approximately at min:
+            delta = 0.99f * (guess  - min);
+            result = guess - delta;
+            out_of_bounds_sentry = true; // only take this branch once!
+         }
+         else
+         {
+            delta = (guess - min) / 2;
+            result = guess - delta;
+            if((result == min) || (result == max))
+               break;
+         }
       }
       else if(result > max)
       {
-         delta = (guess - max) / 2;
-         result = guess - delta;
-         if((result == min) || (result == max))
-            break;
+         T diff = ((fabs(max) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(max))) ? 1000  : result / max;
+         if(fabs(diff) < 1)
+            diff = 1 / diff;
+         if(!out_of_bounds_sentry && (diff > 0) && (diff < 3))
+         {
+            // Only a small out of bounds step, lets assume that the result
+            // is probably approximately at min:
+            delta = 0.99f * (guess  - max);
+            result = guess - delta;
+            out_of_bounds_sentry = true; // only take this branch once!
+         }
+         else
+         {
+            delta = (guess - max) / 2;
+            result = guess - delta;
+            if((result == min) || (result == max))
+               break;
+         }
       }
       // update brackets:
       if(delta > 0)
@@ -332,7 +376,7 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
 
    max_iter -= count;
 
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
    std::cout << "Halley iteration, final count = " << max_iter << std::endl;
 
    static boost::uintmax_t max_count = 0;
@@ -366,7 +410,7 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& ma
    T delta1 = tools::max_value<T>();
    T delta2 = tools::max_value<T>();
 
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
    std::cout << "Schroeder iteration, limit = " << factor << std::endl;
 #endif
 
@@ -382,7 +426,7 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& ma
       if((f1 == 0) && (f2 == 0))
       {
          // Oops zero derivative!!!
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
          std::cout << "Halley iteration, zero derivative found" << std::endl;
 #endif
          detail::handle_zero_derivative(f, last_f0, f0, delta, result, guess, min, max);
@@ -407,7 +451,7 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& ma
       }
       guess = result;
       result -= delta;
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
       std::cout << "Halley iteration, delta = " << delta << std::endl;
 #endif
       if(result <= min)
@@ -433,7 +477,7 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& ma
 
    max_iter -= count;
 
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
    std::cout << "Schroeder iteration, final count = " << max_iter << std::endl;
 
    static boost::uintmax_t max_count = 0;

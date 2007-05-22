@@ -456,7 +456,7 @@ T remez_minimax<T>::iterate()
          sign = -sign;
       }
 
-   #ifdef BOOST_INSTRUMENT
+   #ifdef BOOST_MATH_INSTRUMENT
       for(unsigned i = 0; i < b.size(); ++i)
          std::cout << b[i] << " ";
       std::cout << "\n\n";
@@ -502,13 +502,13 @@ T remez_minimax<T>::iterate()
    num = this->numerator();
    denom = this->denominator();
    T e1 = b[0] - num.evaluate(control_points[0]) / denom.evaluate(control_points[0]);
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
    std::cout << e1;
 #endif
    for(unsigned i = 1; i < b.size(); ++i)
    {
       T e2 = b[i] - num.evaluate(control_points[i]) / denom.evaluate(control_points[i]);
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
       std::cout << " " << e2;
 #endif
       if(e2 * e1 > 0)
@@ -545,7 +545,7 @@ T remez_minimax<T>::iterate()
       e1 = e2;
    }
 
-#ifdef BOOST_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT
    for(unsigned i = 0; i < solution.size(); ++i)
       std::cout << solution[i] << " ";
    std::cout << std::endl << this->numerator() << std::endl;

@@ -46,6 +46,10 @@
 #  define BOOST_FPCLASSIFY_PREFIX
 #endif
 
+#ifdef __MINGW32__
+#  undef BOOST_HAS_FPCLASSIFY
+#endif
+
 #endif
 
 namespace boost{ namespace math{

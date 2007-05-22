@@ -118,7 +118,30 @@ void expected_results()
          largest_type,                  // test type(s)
          ".*Yn.*",              // test data group
          ".*", 30000, 30000);         // test function
-
+   //
+   // MinGW:
+   //
+      add_expected_result(
+         ".*mingw.*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         largest_type,                  // test type(s)
+         ".*Yv.*Random.*",              // test data group
+         ".*", 200000, 200000);         // test function
+      add_expected_result(
+         ".*mingw.*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         largest_type,                  // test type(s)
+         ".*Y[01v].*",              // test data group
+         ".*", 2000, 1000);         // test function
+      add_expected_result(
+         ".*mingw.*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         largest_type,                  // test type(s)
+         ".*Yn.*",              // test data group
+         ".*", 30000, 30000);         // test function
 
    if((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
       && (std::numeric_limits<long double>::digits < 90))

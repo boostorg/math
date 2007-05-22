@@ -239,7 +239,7 @@ int test_main(int, char* [])
    std::cout << "Total iterations consumed = " << total << std::endl;
    std::cout << "Total function invocations consumed = " << invocations << std::endl << std::endl;
 
-   BOOST_CHECK(invocations < 3050);
+   BOOST_CHECK(invocations < 3150);
 
    std::cout << std::setprecision(18);
 

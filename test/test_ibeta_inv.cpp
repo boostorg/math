@@ -99,6 +99,26 @@ void expected_results()
       ".*",                          // test data group
       ".*", 5000000L, 500000);         // test function
    //
+   // MinGW,
+   // Extended exponent range of long double
+   // causes more extreme test cases to be executed:
+   //
+   add_expected_result(
+      ".*mingw.*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "double",                // test type(s)
+      ".*",                          // test data group
+      ".*", 10, 10);         // test function
+   add_expected_result(
+      ".*mingw.*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                // test type(s)
+      ".*",                          // test data group
+      ".*", 300000, 20000);         // test function
+
+   //
    // HP-UX
    // Extended exponent range of long double
    // causes more extreme test cases to be executed:

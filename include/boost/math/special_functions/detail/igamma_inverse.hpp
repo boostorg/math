@@ -297,30 +297,27 @@ struct gamma_p_inverse_func
 
       using namespace std;  // For ADL of std functions.
 
-      T f = !invert ? boost::math::gamma_p(a, x) : boost::math::gamma_q(a, x);
-      T f1 = static_cast<T>(boost::math::detail::regularised_gamma_prefix(value_type(a), value_type(x), evaluation_type()));
+      T f, f1;
+      value_type ft;
+      f = static_cast<T>(boost::math::detail::gamma_incomplete_imp(
+               static_cast<value_type>(a), 
+               static_cast<value_type>(x), 
+               true, invert, evaluation_type(), 
+               &ft));
+      f1 = static_cast<T>(ft);
       T f2;
-      if((x < 1) && (tools::max_value<T>() * x < fabs(f1)))
+      T div = (a - x - 1) / x;
+      f2 = f1;
+      if((fabs(div) > 1) && (tools::max_value<T>() / fabs(div) < f2))
       {
          // overflow:
-         f1 = tools::max_value<T>() / 2;
-         f2 = -f1;
+         f2 = -tools::max_value<T>() / 2;
       }
       else
       {
-         f1 /= x;
-         T div = (a - x - 1) / x;
-         f2 = f1;
-         if((fabs(div) > 1) && (tools::max_value<T>() / fabs(div) < f2))
-         {
-            // overflow:
-            f2 = -tools::max_value<T>() / 2;
-         }
-         else
-         {
-            f2 *= div;
-         }
+         f2 *= div;
       }
+
       if(invert)
       {
          f1 = -f1;
@@ -359,7 +356,7 @@ T gamma_p_inv_imp(T a, T p)
    //
    unsigned digits = (tools::digits<T>() * 2) / 3;
    if((a < 0.125) && (fabs(gamma_p_derivative(a, guess)) > 1 / sqrt(tools::epsilon<T>())))
-      digits = tools::digits<T>();
+      digits = tools::digits<T>() - 2;
    //
    // Go ahead and iterate:
    //

@@ -45,7 +45,7 @@ struct lanczos6
          static_cast<T>(63.99951844938187085666201263218840287667L),
          static_cast<T>(2.506628274631006311133031631822390264407L)
       };
-      static const boost::uint16_t denom[6] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
          static_cast<boost::uint16_t>(0u),
          static_cast<boost::uint16_t>(24u),
          static_cast<boost::uint16_t>(50u),
@@ -67,7 +67,7 @@ struct lanczos6
          static_cast<T>(0.2412010548258800231126240760264822486599L),
          static_cast<T>(0.009446967704539249494420221613134244048319L)
       };
-      static const boost::uint16_t denom[6] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
          static_cast<boost::uint16_t>(0u),
          static_cast<boost::uint16_t>(24u),
          static_cast<boost::uint16_t>(50u),
@@ -142,7 +142,7 @@ struct lanczos11
          static_cast<T>(261.6140441641668190791708576058805625502L),
          static_cast<T>(2.506628274631000502415573855452633787834L)
       };
-      static const boost::uint32_t denom[11] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[11] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(362880u),
          static_cast<boost::uint32_t>(1026576u),
@@ -174,7 +174,7 @@ struct lanczos11
          static_cast<T>(0.004826466289237661857584712046231435101741L),
          static_cast<T>(0.4624429436045378766270459638520555557321e-4L)
       };
-      static const boost::uint32_t denom[11] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[11] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(362880u),
          static_cast<boost::uint32_t>(1026576u),
@@ -266,7 +266,7 @@ struct lanczos13
          static_cast<T>(381.8801248632926870394389468349331394196L),
          static_cast<T>(2.506628274631000502415763426076722427007L)
       };
-      static const boost::uint32_t denom[13] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(39916800u),
          static_cast<boost::uint32_t>(120543840u),
@@ -302,7 +302,7 @@ struct lanczos13
          static_cast<T>(0.0007469903808915448316510079585999893674101L),
          static_cast<T>(0.4903180573459871862552197089738373164184e-5L)
       };
-      static const boost::uint32_t denom[13] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(39916800u),
          static_cast<boost::uint32_t>(120543840u),
@@ -409,7 +409,7 @@ struct lanczos22
          static_cast<T>(1167.501919472435718934219997431551246996L),
          static_cast<T>(2.50662827463100050241576528481104525333L)
       };
-      static const boost::uint64_t denom[22] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[22] = {
          (0uLL),
          (2432902008176640000uLL),
          (8752948036761600000uLL),
@@ -463,7 +463,7 @@ struct lanczos22
          static_cast<T>(0.1753839324538447655939518484052327068859e-6L),
          static_cast<T>(0.3765495513732730583386223384116545391759e-9L)
       };
-      static const boost::uint64_t denom[22] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[22] = {
          (0uLL),
          (2432902008176640000uLL),
          (8752948036761600000uLL),
@@ -581,7 +581,7 @@ struct lanczos6m24
          static_cast<T>(27.5192015197455403062503721613097825345L),
          static_cast<T>(2.50662858515256974113978724717473206342L)
       };
-      static const boost::uint16_t denom[6] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
          static_cast<boost::uint16_t>(0u),
          static_cast<boost::uint16_t>(24u),
          static_cast<boost::uint16_t>(50u),
@@ -603,7 +603,7 @@ struct lanczos6m24
          static_cast<T>(6.595765571169314946316366571954421695196L),
          static_cast<T>(0.6007854010515290065101128585795542383721L)
       };
-      static const boost::uint16_t denom[6] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
          static_cast<boost::uint16_t>(0u),
          static_cast<boost::uint16_t>(24u),
          static_cast<boost::uint16_t>(50u),
@@ -680,7 +680,7 @@ struct lanczos13m53
          static_cast<T>(210.8242777515793458725097339207133627117L),
          static_cast<T>(2.506628274631000270164908177133837338626L)
       };
-      static const boost::uint32_t denom[13] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(39916800u),
          static_cast<boost::uint32_t>(120543840u),
@@ -716,7 +716,7 @@ struct lanczos13m53
          static_cast<T>(0.5098416655656676188125178644804694509993L),
          static_cast<T>(0.006061842346248906525783753964555936883222L)
       };
-      static const boost::uint32_t denom[13] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(39916800u),
          static_cast<boost::uint32_t>(120543840u),
@@ -818,7 +818,7 @@ struct lanczos17m64
          static_cast<T>(488.0063567520005730476791712814838113252L),
          static_cast<T>(2.50662827463100050241576877135758834683L)
       };
-      static const boost::uint64_t denom[17] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[17] = {
          (0uLL),
          (1307674368000uLL),
          (4339163001600uLL),
@@ -862,7 +862,7 @@ struct lanczos17m64
          static_cast<T>(0.002393749522058449186690627996063983095463L),
          static_cast<T>(0.1229541408909435212800785616808830746135e-4L)
       };
-      static const boost::uint64_t denom[17] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[17] = {
          (0uLL),
          (1307674368000uLL),
          (4339163001600uLL),
@@ -1197,9 +1197,6 @@ struct lanczos_traits
 template<>
 struct lanczos_traits<float>
 {
-   //typedef boost::mpl::if_c<
-     // BOOST_MATH_DBL_DIGITS >= 40,
-      //double, float>::type value_type;
    typedef boost::math::tools::evaluation<float>::type value_type;
    typedef boost::mpl::if_c<
       BOOST_MATH_DBL_DIGITS >= 40,
@@ -1210,6 +1207,20 @@ template<>
 struct lanczos_traits<double>
 {
    typedef boost::math::tools::evaluation<double>::type value_type;
+#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   typedef boost::mpl::if_c<
+      BOOST_MATH_DBL_DIGITS >= 100,
+      lanczos13,
+      boost::mpl::if_c<
+         BOOST_MATH_DBL_DIGITS >= 64,
+         lanczos17m64,
+         boost::mpl::if_c<
+            BOOST_MATH_DBL_DIGITS >= 53,
+            lanczos13m53,
+            lanczos6m24>::type
+         >::type
+      >::type evaluation_type;
+#else
    typedef boost::mpl::if_c<
       BOOST_MATH_LDBL_DIGITS >= 100,
       lanczos13,
@@ -1222,6 +1233,7 @@ struct lanczos_traits<double>
             lanczos6m24>::type
          >::type
       >::type evaluation_type;
+#endif
 };
 
 template<>

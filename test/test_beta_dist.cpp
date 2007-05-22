@@ -494,9 +494,9 @@ int test_main(int, char* [])
    BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta11, 0.5), 1.0, 5*std::numeric_limits<double>::epsilon());
    BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta11, 0.0001), 1.0, 5*std::numeric_limits<double>::epsilon());
    BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta11, 0.9999), 1.0, 5*std::numeric_limits<double>::epsilon());
-   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.1), 0.1, std::numeric_limits<double>::epsilon());
-   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.5), 0.5, std::numeric_limits<double>::epsilon());
-   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.9), 0.9, std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.1), 0.1, 2 * std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.5), 0.5, 2 * std::numeric_limits<double>::epsilon());
+   BOOST_CHECK_CLOSE_FRACTION(cdf(mybeta11, 0.9), 0.9, 2 * std::numeric_limits<double>::epsilon());
    BOOST_CHECK_EQUAL(cdf(mybeta11, 1), 1.); // Exact unity expected.
 
    double tol = std::numeric_limits<double>::epsilon() * 10;
@@ -535,8 +535,8 @@ int test_main(int, char* [])
    BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(mybeta22), -144.0 / 168, tol);
    BOOST_CHECK_CLOSE_FRACTION(skewness(beta_distribution<>(3, 5)), 0.30983866769659335081434123198259, tol);
 
-   BOOST_CHECK_EQUAL(beta_distribution<double>::estimate_alpha(mean(mybeta22), variance(mybeta22)), mybeta22.alpha()); // mean, variance, probability. 
-   BOOST_CHECK_EQUAL(beta_distribution<double>::estimate_beta(mean(mybeta22), variance(mybeta22)), mybeta22.beta());// mean, variance, probability. 
+   BOOST_CHECK_CLOSE_FRACTION(beta_distribution<double>::estimate_alpha(mean(mybeta22), variance(mybeta22)), mybeta22.alpha(), tol); // mean, variance, probability. 
+   BOOST_CHECK_CLOSE_FRACTION(beta_distribution<double>::estimate_beta(mean(mybeta22), variance(mybeta22)), mybeta22.beta(), tol);// mean, variance, probability. 
 
    BOOST_CHECK_CLOSE_FRACTION(mybeta22.estimate_alpha(mybeta22.beta(), 0.8, cdf(mybeta22, 0.8)), mybeta22.alpha(), tol);
    BOOST_CHECK_CLOSE_FRACTION(mybeta22.estimate_beta(mybeta22.alpha(), 0.8, cdf(mybeta22, 0.8)), mybeta22.beta(), tol);

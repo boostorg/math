@@ -7,8 +7,35 @@
 #define BOOST_MATH_TOOLS_RATIONAL_HPP
 
 #include <boost/array.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/mpl/int.hpp>
 
+#if BOOST_MATH_POLY_METHOD == 1
+#  define BOOST_HEADER() <BOOST_JOIN(boost/math/tools/detail/polynomial_horner1_, BOOST_MATH_MAX_POLY_ORDER).hpp>
+#  include BOOST_HEADER()
+#  undef BOOST_HEADER
+#elif BOOST_MATH_POLY_METHOD == 2
+#  define BOOST_HEADER() <BOOST_JOIN(boost/math/tools/detail/polynomial_horner2_, BOOST_MATH_MAX_POLY_ORDER).hpp>
+#  include BOOST_HEADER()
+#  undef BOOST_HEADER
+#elif BOOST_MATH_POLY_METHOD == 3
+#  define BOOST_HEADER() <BOOST_JOIN(boost/math/tools/detail/polynomial_horner3_, BOOST_MATH_MAX_POLY_ORDER).hpp>
+#  include BOOST_HEADER()
+#  undef BOOST_HEADER
+#endif
+#if BOOST_MATH_RATIONAL_METHOD == 1
+#  define BOOST_HEADER() <BOOST_JOIN(boost/math/tools/detail/rational_horner1_, BOOST_MATH_MAX_POLY_ORDER).hpp>
+#  include BOOST_HEADER()
+#  undef BOOST_HEADER
+#elif BOOST_MATH_RATIONAL_METHOD == 2
+#  define BOOST_HEADER() <BOOST_JOIN(boost/math/tools/detail/rational_horner2_, BOOST_MATH_MAX_POLY_ORDER).hpp>
+#  include BOOST_HEADER()
+#  undef BOOST_HEADER
+#elif BOOST_MATH_RATIONAL_METHOD == 3
+#  define BOOST_HEADER() <BOOST_JOIN(boost/math/tools/detail/rational_horner3_, BOOST_MATH_MAX_POLY_ORDER).hpp>
+#  include BOOST_HEADER()
+#  undef BOOST_HEADER
+#endif
 namespace boost{ namespace math{ namespace tools{
 
 //
@@ -18,70 +45,6 @@ template <class T, class U>
 U evaluate_polynomial(const T* poly, U const& z, std::size_t count);
 
 namespace detail{
-//
-// These inline functions evaluate polynomials whose size is
-// known at compile time - there's no need for a for-loop
-// just an inline application of Horners rule.
-//
-template <class T, class V>
-inline V evaluate_polynomial_c_imp(const T* a, const V&, const mpl::int_<0>*)
-{
-   return static_cast<V>(0);
-}
-
-template <class T, class V>
-inline V evaluate_polynomial_c_imp(const T* a, const V&, const mpl::int_<1>*)
-{
-   return static_cast<V>(a[0]);
-}
-
-template <class T, class V>
-inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<2>*)
-{
-   return static_cast<V>(a[0] + x * a[1]);
-}
-
-template <class T, class V>
-inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<3>*)
-{
-   return static_cast<V>(((a[2] * x) + a[1]) * x + a[0]);
-}
-
-template <class T, class V>
-inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<4>*)
-{
-   return static_cast<V>(((a[3] * x + a[2]) * x + a[1]) * x + a[0]);
-}
-
-template <class T, class V>
-inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<5>*)
-{
-   return static_cast<V>((((a[4] * x + a[3]) * x + a[2]) * x + a[1]) * x + a[0]);
-}
-
-template <class T, class V>
-inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<6>*)
-{
-   return static_cast<V>(((((a[5] * x + a[4]) * x + a[3]) * x + a[2]) * x + a[1]) * x + a[0]);
-}
-
-template <class T, class V>
-inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<7>*)
-{
-   return static_cast<V>((((((a[6] * x + a[5]) * x + a[4]) * x + a[3]) * x + a[2]) * x + a[1]) * x + a[0]);
-}
-
-template <class T, class V>
-inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<8>*)
-{
-   return static_cast<V>(((((((a[7] * x + a[6]) * x + a[5]) * x + a[4]) * x + a[3]) * x + a[2]) * x + a[1]) * x + a[0]);
-}
-
-template <class T, class V>
-inline V evaluate_polynomial_c_imp(const T* a, const V& x, const mpl::int_<9>*)
-{
-   return static_cast<V>((((((((a[8] * x + a[7]) * x + a[6]) * x + a[5]) * x + a[4]) * x + a[3]) * x + a[2]) * x + a[1]) * x + a[0]);
-}
 
 template <class T, class V, class Tag>
 inline V evaluate_polynomial_c_imp(const T* a, const V& val, const Tag*)
@@ -167,6 +130,19 @@ inline V evaluate_odd_polynomial(const boost::array<T,N>& a, const V& z)
    typedef mpl::int_<N-1> tag_type;
    return a[0] + z * detail::evaluate_polynomial_c_imp(static_cast<const T*>(a.data()) + 1, z*z, static_cast<tag_type const*>(0));
 }
+
+template <class T, class U, class V>
+V evaluate_rational(const T* num, const U* denom, const V& z_, std::size_t count);
+
+namespace detail{
+
+template <class T, class U, class V, class Tag>
+inline V evaluate_rational_c_imp(const T* num, const U* denom, const V& z, const Tag*)
+{
+   return boost::math::tools::evaluate_rational(num, denom, z, Tag::value);
+}
+
+}
 //
 // Rational functions: numerator and denominator must be
 // equal in size.  These always have a for-loop and so may be less
@@ -182,8 +158,8 @@ V evaluate_rational(const T* num, const U* denom, const V& z_, std::size_t count
    V s1, s2;
    if(z <= 1)
    {
-      s1 = num[count-1];
-      s2 = denom[count-1];
+      s1 = static_cast<V>(num[count-1]);
+      s2 = static_cast<V>(denom[count-1]);
       for(int i = (int)count - 2; i >= 0; --i)
       {
          s1 *= z;
@@ -195,8 +171,8 @@ V evaluate_rational(const T* num, const U* denom, const V& z_, std::size_t count
    else
    {
       z = 1 / z;
-      s1 = num[0];
-      s2 = denom[0];
+      s1 = static_cast<V>(num[0]);
+      s2 = static_cast<V>(denom[0]);
       for(unsigned i = 1; i < count; ++i)
       {
          s1 *= z;
@@ -211,13 +187,13 @@ V evaluate_rational(const T* num, const U* denom, const V& z_, std::size_t count
 template <std::size_t N, class T, class U, class V>
 inline V evaluate_rational(const T(&a)[N], const U(&b)[N], const V& z)
 {
-   return evaluate_rational(a, b, z, N);
+   return detail::evaluate_rational_c_imp(a, b, z, static_cast<const mpl::int_<N>*>(0));
 }
 
 template <std::size_t N, class T, class U, class V>
 inline V evaluate_rational(const boost::array<T,N>& a, const boost::array<U,N>& b, const V& z)
 {
-   return evaluate_rational(a.data(), b.data(), z, N);
+   return detail::evaluate_rational_c_imp(a.data(), b.data(), z, static_cast<mpl::int_<N>*>(0));
 }
 
 } // namespace tools

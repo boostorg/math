@@ -3,11 +3,49 @@
 
 #include <boost/math/tools/error_handling.hpp>
 #include <boost/cstdint.hpp> // for boost::uintmax_t
+#include <boost/config.hpp>
 
 #define BOOST_MATH_MAX_ITER 1000000
 
 #if defined(__CYGWIN__) || defined(__FreeBSD__)
-#define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#endif
+//
+// Tune performance options for specific compilers:
+//
+#ifdef BOOST_MSVC
+#  define BOOST_MATH_POLY_METHOD 3
+#  define BOOST_MATH_RATIONAL_METHOD 3
+#elif defined(BOOST_INTEL)
+#  define BOOST_MATH_POLY_METHOD 2
+#  define BOOST_MATH_RATIONAL_METHOD 0
+#elif defined(__GNUC__)
+#  define BOOST_MATH_POLY_METHOD 3
+#  define BOOST_MATH_RATIONAL_METHOD 3
+#  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
+#endif
+
+//
+// The maximum order of polynomial that will be evaluated 
+// via an unrolled specialisation:
+//
+#ifndef BOOST_MATH_MAX_POLY_ORDER
+#  define BOOST_MATH_MAX_POLY_ORDER 17
+#endif 
+//
+// Set the method used to evaluate polynomials and rationals:
+//
+#ifndef BOOST_MATH_POLY_METHOD
+#  define BOOST_MATH_POLY_METHOD 1
+#endif 
+#ifndef BOOST_MATH_RATIONAL_METHOD
+#  define BOOST_MATH_RATIONAL_METHOD 0
+#endif 
+//
+// decide whether to store constants as integers or reals:
+//
+#ifndef BOOST_MATH_INT_TABLE_TYPE
+#  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
 #endif
 
 namespace boost{ namespace math{
@@ -75,3 +113,5 @@ inline void check_series_iterations(const char* function, boost::uintmax_t max_i
 #endif
 
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP
+
+

@@ -158,7 +158,7 @@ T gamma_imp(T z, const L& l)
       if(z * log(z) > tools::log_max_value<T>())
       {
          // we're going to overflow unless this is done with care:
-         T zgh = (z + L::g() - boost::math::constants::half<T>());
+         T zgh = (z + static_cast<T>(L::g()) - boost::math::constants::half<T>());
          if(log(zgh) * z / 2 > tools::log_max_value<T>())
             return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, "Result of tgamma is too large to represent.");
          T hp = pow(zgh, (z / 2) - T(0.25));
@@ -169,7 +169,7 @@ T gamma_imp(T z, const L& l)
       }
       else
       {
-         T zgh = (z + L::g() - boost::math::constants::half<T>());
+         T zgh = (z + static_cast<T>(L::g()) - boost::math::constants::half<T>());
          result *= pow(zgh, z - boost::math::constants::half<T>()) / exp(zgh);
       }
    }
@@ -231,23 +231,23 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const L& /* l */)
       // Maximum Deviation Found (approximation error): 5.900e-24
       //
       static const T P[] = {
-         -0.180355685678449379109e-1L,
-         0.25126649619989678683e-1L,
-         0.494103151567532234274e-1L,
-         0.172491608709613993966e-1L,
-         -0.259453563205438108893e-3L,
-         -0.541009869215204396339e-3L,
-         -0.324588649825948492091e-4L
+         static_cast<T>(-0.180355685678449379109e-1L),
+         static_cast<T>(0.25126649619989678683e-1L),
+         static_cast<T>(0.494103151567532234274e-1L),
+         static_cast<T>(0.172491608709613993966e-1L),
+         static_cast<T>(-0.259453563205438108893e-3L),
+         static_cast<T>(-0.541009869215204396339e-3L),
+         static_cast<T>(-0.324588649825948492091e-4L)
       };
       static const T Q[] = {
-         0.1e1,
-         0.196202987197795200688e1L,
-         0.148019669424231326694e1L,
-         0.541391432071720958364e0L,
-         0.988504251128010129477e-1L,
-         0.82130967464889339326e-2L,
-         0.224936291922115757597e-3L,
-         -0.223352763208617092964e-6L
+         static_cast<T>(0.1e1),
+         static_cast<T>(0.196202987197795200688e1L),
+         static_cast<T>(0.148019669424231326694e1L),
+         static_cast<T>(0.541391432071720958364e0L),
+         static_cast<T>(0.988504251128010129477e-1L),
+         static_cast<T>(0.82130967464889339326e-2L),
+         static_cast<T>(0.224936291922115757597e-3L),
+         static_cast<T>(-0.223352763208617092964e-6L)
       };
 
       static const float Y = 0.158963680267333984375e0f;
@@ -298,22 +298,22 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const L& /* l */)
          static const float Y = 0.52815341949462890625f;
 
          static const T P[] = {
-            0.490622454069039543534e-1L,
-            -0.969117530159521214579e-1L,
-            -0.414983358359495381969e0L,
-            -0.406567124211938417342e0L,
-            -0.158413586390692192217e0L,
-            -0.240149820648571559892e-1L,
-            -0.100346687696279557415e-2L
+            static_cast<T>(0.490622454069039543534e-1L),
+            static_cast<T>(-0.969117530159521214579e-1L),
+            static_cast<T>(-0.414983358359495381969e0L),
+            static_cast<T>(-0.406567124211938417342e0L),
+            static_cast<T>(-0.158413586390692192217e0L),
+            static_cast<T>(-0.240149820648571559892e-1L),
+            static_cast<T>(-0.100346687696279557415e-2L)
          };
          static const T Q[] = {
-            0.1e1L,
-            0.302349829846463038743e1L,
-            0.348739585360723852576e1L,
-            0.191415588274426679201e1L,
-            0.507137738614363510846e0L,
-            0.577039722690451849648e-1L,
-            0.195768102601107189171e-2L
+            static_cast<T>(0.1e1L),
+            static_cast<T>(0.302349829846463038743e1L),
+            static_cast<T>(0.348739585360723852576e1L),
+            static_cast<T>(0.191415588274426679201e1L),
+            static_cast<T>(0.507137738614363510846e0L),
+            static_cast<T>(0.577039722690451849648e-1L),
+            static_cast<T>(0.195768102601107189171e-2L)
          };
 
          T r = tools::evaluate_polynomial(P, zm1) / tools::evaluate_polynomial(Q, zm1);
@@ -343,21 +343,21 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const L& /* l */)
          static const float Y = 0.452017307281494140625f;
 
          static const T P[] = {
-            -0.292329721830270012337e-1L, 
-            0.144216267757192309184e0L,
-            -0.142440390738631274135e0L,
-            0.542809694055053558157e-1L,
-            -0.850535976868336437746e-2L,
-            0.431171342679297331241e-3L
+            static_cast<T>(-0.292329721830270012337e-1L), 
+            static_cast<T>(0.144216267757192309184e0L),
+            static_cast<T>(-0.142440390738631274135e0L),
+            static_cast<T>(0.542809694055053558157e-1L),
+            static_cast<T>(-0.850535976868336437746e-2L),
+            static_cast<T>(0.431171342679297331241e-3L)
          };
          static const T Q[] = {
-            0.1e1,
-            -0.150169356054485044494e1L,
-            0.846973248876495016101e0L,
-            -0.220095151814995745555e0L,
-            0.25582797155975869989e-1L,
-            -0.100666795539143372762e-2L,
-            -0.827193521891290553639e-6L
+            static_cast<T>(0.1e1),
+            static_cast<T>(-0.150169356054485044494e1L),
+            static_cast<T>(0.846973248876495016101e0L),
+            static_cast<T>(-0.220095151814995745555e0L),
+            static_cast<T>(0.25582797155975869989e-1L),
+            static_cast<T>(-0.100666795539143372762e-2L),
+            static_cast<T>(-0.827193521891290553639e-6L)
          };
          T r = zm2 * zm1;
          T R = tools::evaluate_polynomial(P, -zm2) / tools::evaluate_polynomial(Q, -zm2);
@@ -712,7 +712,7 @@ T lgamma_imp(T z, const L& l, int* sign = 0)
    else
    {
       // regular evaluation:
-      T zgh = (z + L::g() - boost::math::constants::half<T>());
+      T zgh = static_cast<T>(z + L::g() - boost::math::constants::half<T>());
       T l = L::lanczos_sum_expG_scaled(z);
       result = log(zgh) - 1;
       result *= z - 0.5f;
@@ -1058,9 +1058,9 @@ template <class T, class L>
 T regularised_gamma_prefix(T a, T z, const L& l)
 {
    using namespace std;
-   T agh = a + L::g() - T(0.5);
+   T agh = a + static_cast<T>(L::g()) - T(0.5);
    T prefix;
-   T d = ((z - a) - L::g() + T(0.5)) / agh;
+   T d = ((z - a) - static_cast<T>(L::g()) + T(0.5)) / agh;
 
    if(a < 1)
    {
@@ -1088,7 +1088,7 @@ T regularised_gamma_prefix(T a, T z, const L& l)
    else if((fabs(d*d*a) <= 100) && (a > 150))
    {
       // special case for large a and a ~ z.
-      prefix = a * log1pmx(d) + z * (0.5 - L::g()) / agh;
+      prefix = a * log1pmx(d) + z * static_cast<T>(0.5 - L::g()) / agh;
       prefix = exp(prefix);
    }
    else
@@ -1231,7 +1231,7 @@ T finite_gamma_q(T a, T x)
 // Upper gamma fraction for half integer a:
 //
 template <class T>
-T finite_half_gamma_q(T a, T x)
+T finite_half_gamma_q(T a, T x, T* p_derivative)
 {
    //
    // Calculates normalised Q when a is a half-integer:
@@ -1252,6 +1252,15 @@ T finite_half_gamma_q(T a, T x)
          sum += term;
       }
       e += sum;
+      if(p_derivative)
+      {
+         *p_derivative = 0;
+      }
+   }
+   else if(p_derivative)
+   {
+      // We'll be dividing by x later, so calculate derivative * x:
+      *p_derivative = sqrt(x) * exp(-x) / constants::root_pi<T>();
    }
    return e;
 }
@@ -1259,7 +1268,8 @@ T finite_half_gamma_q(T a, T x)
 // Main incomplete gamma entry point, handles all four incomplete gamma's:
 //
 template <class T, class L>
-T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
+T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, 
+                       const L& l, T* p_derivative)
 {
    if(a <= 0)
       tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a);
@@ -1269,6 +1279,8 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
    using namespace std;
 
    T result;
+
+   BOOST_ASSERT((p_derivative == 0) || (normalised == true));
 
    bool is_int = floor(a) == a;
    bool is_half_int = (floor(2 * a) == 2 * a) && !is_int;
@@ -1281,14 +1293,19 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
       result = finite_gamma_q(a, x);
       if(normalised == false)
          result *= gamma_imp(a, l);
+      // TODO: calculate derivative inside sum:
+      if(p_derivative)
+         *p_derivative = regularised_gamma_prefix(a, x, l);
    }
    else if(is_half_int && is_small_a && (x > 0.2))
    {
       // calculate Q via finite sum for half integer a:
       invert = !invert;
-      result = finite_half_gamma_q(a, x);
+      result = finite_half_gamma_q(a, x, p_derivative);
       if(normalised == false)
          result *= gamma_imp(a, l);
+      if(p_derivative && (*p_derivative == 0))
+         *p_derivative = regularised_gamma_prefix(a, x, l);
    }
    else if(x < 0.5)
    {
@@ -1299,6 +1316,8 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
       {
          // Compute P:
          result = normalised ? regularised_gamma_prefix(a, x, l) : full_igamma_prefix(a, x);
+         if(p_derivative)
+            *p_derivative = result;
          if(result != 0)
             result *= detail::lower_gamma_series(a, x, boost::math::tools::digits<T>()) / a;
       }
@@ -1309,6 +1328,8 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
          result = tgamma_small_upper_part(a, x, l);
          if(normalised)
             result /= gamma_imp(a, l);
+         if(p_derivative)
+            *p_derivative = regularised_gamma_prefix(a, x, l);
       }
    }
    else if(x < 1.1)
@@ -1320,6 +1341,8 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
       {
          // Compute P:
          result = normalised ? regularised_gamma_prefix(a, x, l) : full_igamma_prefix(a, x);
+         if(p_derivative)
+            *p_derivative = result;
          if(result != 0)
             result *= detail::lower_gamma_series(a, x, boost::math::tools::digits<T>()) / a;
       }
@@ -1330,6 +1353,8 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
          result = tgamma_small_upper_part(a, x, l);
          if(normalised)
             result /= gamma_imp(a, l);
+         if(p_derivative)
+            *p_derivative = regularised_gamma_prefix(a, x, l);
       }
    }
    else
@@ -1394,6 +1419,8 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
          result = igamma_temme_large(a, x, static_cast<tag_type const*>(0));
          if(x >= a)
             invert = !invert;
+         if(p_derivative)
+            *p_derivative = regularised_gamma_prefix(a, x, l);
       }
       else
       {
@@ -1403,6 +1430,8 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
          // Changeover here occurs at P ~ Q ~ 0.5
          //
          result = normalised ? regularised_gamma_prefix(a, x, l) : full_igamma_prefix(a, x);
+         if(p_derivative)
+            *p_derivative = result;
          if(x < a)
          {
             // Compute P:
@@ -1424,9 +1453,29 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
       T gam = normalised ? 1 : gamma_imp(a, l);
       result = gam - result;
    }
+   if(p_derivative)
+   {
+      //
+      // Need to convert prefix term to derivative:
+      //
+      if((x < 1) && (tools::max_value<T>() * x < *p_derivative))
+      {
+         // overflow, just return an arbitrarily large value:
+         *p_derivative = tools::max_value<T>() / 2;
+      }
+
+      *p_derivative /= x;
+   }
 
    return result;
 }
+
+template <class T, class L>
+inline T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, const L& l)
+{
+   return gamma_incomplete_imp(a, x, normalised, invert, l, static_cast<T*>(0));
+}
+
 //
 // Ratios of two gamma functions:
 //

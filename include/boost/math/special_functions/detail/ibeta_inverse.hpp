@@ -166,35 +166,35 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
    // Calculate e1 and put it in terms[1], see the middle of page 151:
    //
    workspace[0] = (2 * s * s - 1) / (3 * s * c);
-   static const int co1[] = { -1, -5, 5 };
+   static const BOOST_MATH_INT_TABLE_TYPE(T, int) co1[] = { -1, -5, 5 };
    workspace[1] = -tools::evaluate_even_polynomial(co1, s, 3) / (36 * sc_2);
-   static const int co2[] = { 1, 21, -69, 46 };
+   static const BOOST_MATH_INT_TABLE_TYPE(T, int) co2[] = { 1, 21, -69, 46 };
    workspace[2] = tools::evaluate_even_polynomial(co2, s, 4) / (1620 * sc_3);
-   static const int co3[] = { 7, -2, 33, -62, 31 };
+   static const BOOST_MATH_INT_TABLE_TYPE(T, int) co3[] = { 7, -2, 33, -62, 31 };
    workspace[3] = -tools::evaluate_even_polynomial(co3, s, 5) / (6480 * sc_4);
-   static const int co4[] = { 25, -52, -17, 88, -115, 46 };
+   static const BOOST_MATH_INT_TABLE_TYPE(T, int) co4[] = { 25, -52, -17, 88, -115, 46 };
    workspace[4] = tools::evaluate_even_polynomial(co4, s, 6) / (90720 * sc_5);
    terms[1] = tools::evaluate_polynomial(workspace, eta0, 5);
    //
    // Now evaluate e2 and put it in terms[2]:
    //
-   static const int co5[] = { 7, 12, -78, 52 };
+   static const BOOST_MATH_INT_TABLE_TYPE(T, int) co5[] = { 7, 12, -78, 52 };
    workspace[0] = -tools::evaluate_even_polynomial(co5, s, 4) / (405 * sc_3);
-   static const int co6[] = { -7, 2, 183, -370, 185 };
+   static const BOOST_MATH_INT_TABLE_TYPE(T, int) co6[] = { -7, 2, 183, -370, 185 };
    workspace[1] = tools::evaluate_even_polynomial(co6, s, 5) / (2592 * sc_4);
-   static const int co7[] = { -533, 776, -1835, 10240, -13525, 5410 };
+   static const BOOST_MATH_INT_TABLE_TYPE(T, int) co7[] = { -533, 776, -1835, 10240, -13525, 5410 };
    workspace[2] = -tools::evaluate_even_polynomial(co7, s, 6) / (204120 * sc_5);
-   static const int co8[] = { -1579, 3747, -3372, -15821, 45588, -45213, 15071 };
+   static const BOOST_MATH_INT_TABLE_TYPE(T, int) co8[] = { -1579, 3747, -3372, -15821, 45588, -45213, 15071 };
    workspace[3] = -tools::evaluate_even_polynomial(co8, s, 7) / (2099520 * sc_6);
    terms[2] = tools::evaluate_polynomial(workspace, eta0, 4);
    //
    // And e3, and put it in terms[3]:
    //
-   static const int co9[] = {449, -1259, -769, 6686, -9260, 3704 };
+   static const BOOST_MATH_INT_TABLE_TYPE(T, int) co9[] = {449, -1259, -769, 6686, -9260, 3704 };
    workspace[0] = tools::evaluate_even_polynomial(co9, s, 6) / (102060 * sc_5);
-   static const int co10[] = { 63149, -151557, 140052, -727469, 2239932, -2251437, 750479 };
+   static const BOOST_MATH_INT_TABLE_TYPE(T, int) co10[] = { 63149, -151557, 140052, -727469, 2239932, -2251437, 750479 };
    workspace[1] = -tools::evaluate_even_polynomial(co10, s, 7) / (20995200 * sc_6);
-   static const int co11[] = { 29233, -78755, 105222, 146879, -1602610, 3195183, -2554139, 729754 };
+   static const BOOST_MATH_INT_TABLE_TYPE(T, int) co11[] = { 29233, -78755, 105222, 146879, -1602610, 3195183, -2554139, 729754 };
    workspace[2] = tools::evaluate_even_polynomial(co11, s, 8) / (36741600 * sc_7);
    terms[3] = tools::evaluate_polynomial(workspace, eta0, 3);
    //
@@ -228,9 +228,9 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
       workspace[0] = s * s;
       workspace[1] = s * c;
       workspace[2] = (1 - 2 * workspace[0]) / 3;
-      static const int co3[] = { 1, -13, 13 };
+      static const BOOST_MATH_INT_TABLE_TYPE(T, int) co3[] = { 1, -13, 13 };
       workspace[3] = tools::evaluate_polynomial(co3, workspace[0], 3) / (36 * s * c);
-      static const int co4[] = { 1, 21, -69, 46 };
+      static const BOOST_MATH_INT_TABLE_TYPE(T, int) co4[] = { 1, 21, -69, 46 };
       workspace[4] = tools::evaluate_polynomial(co4, workspace[0], 4) / (270 * workspace[0] * c * c);
       x = tools::evaluate_polynomial(workspace, eta, 5);
 #ifdef BOOST_INSTRUMENT
@@ -415,16 +415,17 @@ struct ibeta_roots
       using namespace std; // ADL of std names
 
       BOOST_FPU_EXCEPTION_GUARD
-      T f = ibeta_imp(a, b, x, L(), invert, true) - target;
-      T f1 = invert ?
-               -ibeta_power_terms(b, a, 1 - x, x, L(), true)
-               : ibeta_power_terms(a, b, x, 1 - x, L(), true);
+      
+      T f1;
       T y = 1 - x;
+      T f = ibeta_imp(a, b, x, L(), invert, true, &f1) - target;
+      if(invert)
+         f1 = -f1;
       if(y == 0)
          y = tools::min_value<T>() * 64;
       if(x == 0)
          x = tools::min_value<T>() * 64;
-      f1 /= y * x;
+
       T f2 = f1 * (-y * a + (b - 2) * x + 1);
       if(fabs(f2) < y * x * tools::max_value<T>())
          f2 /= (y * x);
@@ -551,19 +552,23 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
                std::swap(p, q);
                invert = !invert;
             }
-            T qpb = pow(q, 1/b);
-            if(qpb > 1e-3)
+            //
+            // Try and compute the easy way first:
+            //
+            T bet = 0;
+            if(b < 2)
+               bet = boost::math::beta(a, b);
+            if(bet != 0)
+            {
+               y = pow(b * q * bet, 1/b);
+               x = 1 - y;
+            }
+            else 
+               y = 1;
+            if(y > 1e-5)
             {
                x = temme_method_3_ibeta_inverse(a, b, p, q);
                y = 1 - x;
-            }
-            else
-            {
-               if(qpb < tools::min_value<T>())
-                  y = pow(b * q * boost::math::beta(a, b), 1/b);
-               else
-                  y = qpb * pow(b * boost::math::beta(a, b), 1/b);
-               x = 1 - y;
             }
          }
       }
@@ -580,8 +585,12 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
       // right side of the inflection point:
       //
       T fs = boost::math::ibeta(a, b, xs) - p;
-      if(fs == 0)
+      if(fabs(fs) / p < tools::epsilon<T>() * 3)
+      {
+         // The result is at the point of inflection, best just return it:
+         *py = invert ? xs : 1 - xs;
          return invert ? 1-xs : xs;
+      }
       if(fs < 0)
       {
          std::swap(a, b);
@@ -699,15 +708,6 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
             y = boost::math::tools::min_value<T>();
          x = 1 - y;
       }
-      /*
-      // heavyweight solution that appears to be no longer required...?
-      else
-      {
-         y = temme_method_3_ibeta_inverse(b, a, q, p);
-         if(y == 0)
-            y = boost::math::tools::min_value<T>();
-         x = 1 - y;
-      }*/
    }
 
    //
@@ -800,11 +800,11 @@ typename tools::promote_args<T1, T2, T3, T4>::type
    typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
 
    if(a <= 0)
-      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a);
+      return tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a);
    if(b <= 0)
-      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b);
+      return tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b);
    if((p < 0) || (p > 1))
-      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "Argument p outside the range [0,1] in the incomplete beta function inverse (got p=%1%).", p);
+      return tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "Argument p outside the range [0,1] in the incomplete beta function inverse (got p=%1%).", p);
 
    value_type rx, ry;
 

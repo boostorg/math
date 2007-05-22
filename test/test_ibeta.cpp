@@ -133,6 +133,25 @@ void expected_results()
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 200000, 10000);                 // test function
+
+   //
+   // MinGW:
+   //
+   add_expected_result(
+      "[^|]*mingw[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      ".*",                          // platform
+      "double",                     // test type(s)
+      "(?i).*large.*",                      // test data group
+      ".*", 20, 10);                 // test function
+   add_expected_result(
+      "[^|]*mingw[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                     // test type(s)
+      "(?i).*large.*",                      // test data group
+      ".*", 200000, 10000);                 // test function
+
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    //
    // No long doubles:
