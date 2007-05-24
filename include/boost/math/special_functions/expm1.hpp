@@ -185,7 +185,7 @@ T expm1_imp(T x, const mpl::int_<113>&)
 } // namespace detail
 
 template <class T>
-typename tools::promote_args<T>::type expm1(T x)
+inline typename tools::promote_args<T>::type expm1(T x)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename tools::evaluation<result_type>::type value_type;

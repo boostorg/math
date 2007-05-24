@@ -133,7 +133,7 @@ namespace boost
                function, N, result);
         }
         template <class RealType>
-        bool check_dist_and_k(const char* function, const RealType& N, const RealType& p, RealType k, RealType* result)
+        inline bool check_dist_and_k(const char* function, const RealType& N, const RealType& p, RealType k, RealType* result)
         {
            if(check_dist(function, N, p, result) == false)
               return false;
@@ -384,7 +384,7 @@ namespace boost
       } // pdf
 
       template <class RealType>
-      RealType cdf(const binomial_distribution<RealType>& dist, const RealType k)
+      inline RealType cdf(const binomial_distribution<RealType>& dist, const RealType k)
       { // Cumulative Distribution Function Binomial.
         // The random variate k is the number of successes in n trials.
         // k argument may be integral, signed, or unsigned, or floating point.
@@ -457,7 +457,7 @@ namespace boost
       } // binomial cdf
 
       template <class RealType>
-      RealType cdf(const complemented2_type<binomial_distribution<RealType>, RealType>& c)
+      inline RealType cdf(const complemented2_type<binomial_distribution<RealType>, RealType>& c)
       { // Complemented Cumulative Distribution Function Binomial.
         // The random variate k is the number of successes in n trials.
         // k argument may be integral, signed, or unsigned, or floating point.

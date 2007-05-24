@@ -52,14 +52,14 @@ private:
 typedef fisher_f_distribution<double> fisher_f;
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const fisher_f_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> range(const fisher_f_distribution<RealType>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(0, max_value<RealType>());
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const fisher_f_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> support(const fisher_f_distribution<RealType>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
@@ -123,7 +123,7 @@ RealType pdf(const fisher_f_distribution<RealType>& dist, const RealType& x)
 } // pdf
 
 template <class RealType>
-RealType cdf(const fisher_f_distribution<RealType>& dist, const RealType& x)
+inline RealType cdf(const fisher_f_distribution<RealType>& dist, const RealType& x)
 {
    RealType df1 = dist.degrees_of_freedom1();
    RealType df2 = dist.degrees_of_freedom2();
@@ -157,7 +157,7 @@ RealType cdf(const fisher_f_distribution<RealType>& dist, const RealType& x)
 } // cdf
 
 template <class RealType>
-RealType quantile(const fisher_f_distribution<RealType>& dist, const RealType& p)
+inline RealType quantile(const fisher_f_distribution<RealType>& dist, const RealType& p)
 {
    RealType df1 = dist.degrees_of_freedom1();
    RealType df2 = dist.degrees_of_freedom2();
@@ -179,7 +179,7 @@ RealType quantile(const fisher_f_distribution<RealType>& dist, const RealType& p
 } // quantile
 
 template <class RealType>
-RealType cdf(const complemented2_type<fisher_f_distribution<RealType>, RealType>& c)
+inline RealType cdf(const complemented2_type<fisher_f_distribution<RealType>, RealType>& c)
 {
    RealType df1 = c.dist.degrees_of_freedom1();
    RealType df2 = c.dist.degrees_of_freedom2();
@@ -214,7 +214,7 @@ RealType cdf(const complemented2_type<fisher_f_distribution<RealType>, RealType>
 }
 
 template <class RealType>
-RealType quantile(const complemented2_type<fisher_f_distribution<RealType>, RealType>& c)
+inline RealType quantile(const complemented2_type<fisher_f_distribution<RealType>, RealType>& c)
 {
    RealType df1 = c.dist.degrees_of_freedom1();
    RealType df2 = c.dist.degrees_of_freedom2();

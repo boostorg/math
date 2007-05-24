@@ -76,14 +76,14 @@ private:
 typedef rayleigh_distribution<double> rayleigh;
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const rayleigh_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> range(const rayleigh_distribution<RealType>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(static_cast<RealType>(1), max_value<RealType>());
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const rayleigh_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> support(const rayleigh_distribution<RealType>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
@@ -91,7 +91,7 @@ const std::pair<RealType, RealType> support(const rayleigh_distribution<RealType
 }
 
 template <class RealType>
-RealType pdf(const rayleigh_distribution<RealType>& dist, const RealType& x)
+inline RealType pdf(const rayleigh_distribution<RealType>& dist, const RealType& x)
 {
    using namespace std; // for ADL of std function exp.
 
@@ -111,7 +111,7 @@ RealType pdf(const rayleigh_distribution<RealType>& dist, const RealType& x)
 } // pdf
 
 template <class RealType>
-RealType cdf(const rayleigh_distribution<RealType>& dist, const RealType& x)
+inline RealType cdf(const rayleigh_distribution<RealType>& dist, const RealType& x)
 {
    using namespace std; // for ADL of std functions
 
@@ -130,7 +130,7 @@ RealType cdf(const rayleigh_distribution<RealType>& dist, const RealType& x)
 } // cdf
 
 template <class RealType>
-RealType quantile(const rayleigh_distribution<RealType>& dist, const RealType& p)
+inline RealType quantile(const rayleigh_distribution<RealType>& dist, const RealType& p)
 {
    using namespace std; // for ADL of std functions
 
@@ -154,7 +154,7 @@ RealType quantile(const rayleigh_distribution<RealType>& dist, const RealType& p
 } // quantile
 
 template <class RealType>
-RealType cdf(const complemented2_type<rayleigh_distribution<RealType>, RealType>& c)
+inline RealType cdf(const complemented2_type<rayleigh_distribution<RealType>, RealType>& c)
 {
    using namespace std; // for ADL of std functions
 
@@ -174,7 +174,7 @@ RealType cdf(const complemented2_type<rayleigh_distribution<RealType>, RealType>
 } // cdf complement
 
 template <class RealType>
-RealType quantile(const complemented2_type<rayleigh_distribution<RealType>, RealType>& c)
+inline RealType quantile(const complemented2_type<rayleigh_distribution<RealType>, RealType>& c)
 {
    using namespace std; // for ADL of std functions, log & sqrt.
 

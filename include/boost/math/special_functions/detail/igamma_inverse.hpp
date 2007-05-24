@@ -72,7 +72,7 @@ T didonato_SN(T a, T x, unsigned N, T tolerance = 0)
 }
 
 template <class T>
-T didonato_FN(T p, T a, T x, unsigned N, T tolerance)
+inline T didonato_FN(T p, T a, T x, unsigned N, T tolerance)
 {
    //
    // Computation of the Incomplete Gamma Function Ratios and their Inverse

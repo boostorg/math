@@ -22,7 +22,7 @@ namespace detail
 {
 
   template <class RealType>
-  bool check_lognormal_x(
+  inline bool check_lognormal_x(
         const char* function,
         RealType const& x,
         RealType* result)
@@ -73,14 +73,14 @@ private:
 typedef lognormal_distribution<double> lognormal;
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const lognormal_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> range(const lognormal_distribution<RealType>& /*dist*/)
 { // Range of permissible values for random variable x is >0 to +infinity.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(0, max_value<RealType>());
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const lognormal_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> support(const lognormal_distribution<RealType>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
@@ -131,7 +131,7 @@ inline RealType cdf(const lognormal_distribution<RealType>& dist, const RealType
 }
 
 template <class RealType>
-RealType quantile(const lognormal_distribution<RealType>& dist, const RealType& p)
+inline RealType quantile(const lognormal_distribution<RealType>& dist, const RealType& p)
 {
    using namespace std;  // for ADL of std functions
 
@@ -149,7 +149,7 @@ RealType quantile(const lognormal_distribution<RealType>& dist, const RealType& 
 }
 
 template <class RealType>
-RealType cdf(const complemented2_type<lognormal_distribution<RealType>, RealType>& c)
+inline RealType cdf(const complemented2_type<lognormal_distribution<RealType>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 
@@ -165,7 +165,7 @@ RealType cdf(const complemented2_type<lognormal_distribution<RealType>, RealType
 }
 
 template <class RealType>
-RealType quantile(const complemented2_type<lognormal_distribution<RealType>, RealType>& c)
+inline RealType quantile(const complemented2_type<lognormal_distribution<RealType>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 

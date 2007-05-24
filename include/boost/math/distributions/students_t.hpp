@@ -59,14 +59,14 @@ private:
 typedef students_t_distribution<double> students_t;
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const students_t_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> range(const students_t_distribution<RealType>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const students_t_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> support(const students_t_distribution<RealType>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
@@ -74,7 +74,7 @@ const std::pair<RealType, RealType> support(const students_t_distribution<RealTy
 }
 
 template <class RealType>
-RealType pdf(const students_t_distribution<RealType>& dist, const RealType& t)
+inline RealType pdf(const students_t_distribution<RealType>& dist, const RealType& t)
 {
    BOOST_FPU_EXCEPTION_GUARD
    using namespace std;  // for ADL of std functions
@@ -104,7 +104,7 @@ RealType pdf(const students_t_distribution<RealType>& dist, const RealType& t)
 } // pdf
 
 template <class RealType>
-RealType cdf(const students_t_distribution<RealType>& dist, const RealType& t)
+inline RealType cdf(const students_t_distribution<RealType>& dist, const RealType& t)
 {
    RealType degrees_of_freedom = dist.degrees_of_freedom();
    // Error check:
@@ -164,7 +164,7 @@ RealType cdf(const students_t_distribution<RealType>& dist, const RealType& t)
 } // cdf
 
 template <class RealType>
-RealType quantile(const students_t_distribution<RealType>& dist, const RealType& p)
+inline RealType quantile(const students_t_distribution<RealType>& dist, const RealType& p)
 {
    using namespace std; // for ADL of std functions
    //
@@ -208,13 +208,13 @@ RealType quantile(const students_t_distribution<RealType>& dist, const RealType&
 } // quantile
 
 template <class RealType>
-RealType cdf(const complemented2_type<students_t_distribution<RealType>, RealType>& c)
+inline RealType cdf(const complemented2_type<students_t_distribution<RealType>, RealType>& c)
 {
    return cdf(c.dist, -c.param);
 }
 
 template <class RealType>
-RealType quantile(const complemented2_type<students_t_distribution<RealType>, RealType>& c)
+inline RealType quantile(const complemented2_type<students_t_distribution<RealType>, RealType>& c)
 {
    return -quantile(c.dist, c.param);
 }

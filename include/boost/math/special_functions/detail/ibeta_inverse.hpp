@@ -791,7 +791,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
 } // namespace detail
 
 template <class T1, class T2, class T3, class T4>
-typename tools::promote_args<T1, T2, T3, T4>::type  
+inline typename tools::promote_args<T1, T2, T3, T4>::type  
    ibeta_inv(T1 a, T2 b, T3 p, T4* py)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -828,7 +828,7 @@ inline typename tools::promote_args<T1, T2, T3>::type
 }
 
 template <class T1, class T2, class T3, class T4>
-typename tools::promote_args<T1, T2, T3, T4>::type 
+inline typename tools::promote_args<T1, T2, T3, T4>::type 
    ibetac_inv(T1 a, T2 b, T3 q, T4* py)
 {
    BOOST_FPU_EXCEPTION_GUARD

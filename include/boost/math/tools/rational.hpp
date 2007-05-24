@@ -60,7 +60,7 @@ inline V evaluate_polynomial_c_imp(const T* a, const V& val, const Tag*)
 // the loop expanded versions above:
 //
 template <class T, class U>
-U evaluate_polynomial(const T* poly, U const& z, std::size_t count)
+inline U evaluate_polynomial(const T* poly, U const& z, std::size_t count)
 {
    BOOST_ASSERT(count > 0);
    U sum = static_cast<U>(poly[count - 1]);

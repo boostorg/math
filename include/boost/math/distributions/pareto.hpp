@@ -28,7 +28,7 @@ namespace boost
     namespace detail
     { // Parameter checking.
       template <class RealType>
-      bool check_pareto_location(
+      inline bool check_pareto_location(
         const char* function,
         RealType location,
         RealType* result)
@@ -57,7 +57,7 @@ namespace boost
       } // bool check_pareto_location
 
       template <class RealType>
-      bool check_pareto_shape(
+      inline bool check_pareto_shape(
         const char* function,
         RealType shape,
         RealType* result)
@@ -86,7 +86,7 @@ namespace boost
       } // bool check_pareto_shape(
 
       template <class RealType>
-      bool check_pareto_x(
+      inline bool check_pareto_x(
         const char* function,
         RealType const& x,
         RealType* result)
@@ -165,14 +165,14 @@ namespace boost
     typedef pareto_distribution<double> pareto; // Convenience to allow pareto(2., 3.);
 
     template <class RealType>
-    const std::pair<RealType, RealType> range(const pareto_distribution<RealType>& /*dist*/)
+    inline const std::pair<RealType, RealType> range(const pareto_distribution<RealType>& /*dist*/)
     { // Range of permissible values for random variable x.
       using boost::math::tools::max_value;
       return std::pair<RealType, RealType>(0, max_value<RealType>()); // location zero to + infinity.
     } // range
 
     template <class RealType>
-    const std::pair<RealType, RealType> support(const pareto_distribution<RealType>& dist)
+    inline const std::pair<RealType, RealType> support(const pareto_distribution<RealType>& dist)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
       using boost::math::tools::max_value;
@@ -180,7 +180,7 @@ namespace boost
     } // support
 
     template <class RealType>
-    RealType pdf(const pareto_distribution<RealType>& dist, const RealType& x)
+    inline RealType pdf(const pareto_distribution<RealType>& dist, const RealType& x)
     {
       using namespace std;  // for ADL of std function pow.
       RealType location = dist.location();
@@ -197,7 +197,7 @@ namespace boost
     } // pdf
 
     template <class RealType>
-    RealType cdf(const pareto_distribution<RealType>& dist, const RealType& x)
+    inline RealType cdf(const pareto_distribution<RealType>& dist, const RealType& x)
     {
       using namespace std;  // for ADL of std function pow.
       RealType location = dist.location();
@@ -215,7 +215,7 @@ namespace boost
     } // cdf
 
     template <class RealType>
-    RealType quantile(const pareto_distribution<RealType>& dist, const RealType& p)
+    inline RealType quantile(const pareto_distribution<RealType>& dist, const RealType& p)
     {
       using namespace std;  // for ADL of std function pow.
       RealType result;
@@ -240,7 +240,7 @@ namespace boost
     } // quantile
 
     template <class RealType>
-    RealType cdf(const complemented2_type<pareto_distribution<RealType>, RealType>& c)
+    inline RealType cdf(const complemented2_type<pareto_distribution<RealType>, RealType>& c)
     {
        using namespace std;  // for ADL of std function pow.
        RealType result;
@@ -261,7 +261,7 @@ namespace boost
     } // cdf complement
     
     template <class RealType>
-    RealType quantile(const complemented2_type<pareto_distribution<RealType>, RealType>& c)
+    inline RealType quantile(const complemented2_type<pareto_distribution<RealType>, RealType>& c)
     {
       using namespace std;  // for ADL of std function pow.
       RealType result;

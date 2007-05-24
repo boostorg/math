@@ -153,37 +153,37 @@ private:
 };
 
 template <class Dist, class RealType>
-complemented2_type<Dist, RealType> complement(const Dist& d, const RealType& r)
+inline complemented2_type<Dist, RealType> complement(const Dist& d, const RealType& r)
 {
    return complemented2_type<Dist, RealType>(d, r);
 }
 
 template <class Dist, class RealType1, class RealType2>
-complemented3_type<Dist, RealType1, RealType2> complement(const Dist& d, const RealType1& r1, const RealType2& r2)
+inline complemented3_type<Dist, RealType1, RealType2> complement(const Dist& d, const RealType1& r1, const RealType2& r2)
 {
    return complemented3_type<Dist, RealType1, RealType2>(d, r1, r2);
 }
 
 template <class Dist, class RealType1, class RealType2, class RealType3>
-complemented4_type<Dist, RealType1, RealType2, RealType3> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3)
+inline complemented4_type<Dist, RealType1, RealType2, RealType3> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3)
 {
    return complemented4_type<Dist, RealType1, RealType2, RealType3>(d, r1, r2, r3);
 }
 
 template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4>
-complemented5_type<Dist, RealType1, RealType2, RealType3, RealType4> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4)
+inline complemented5_type<Dist, RealType1, RealType2, RealType3, RealType4> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4)
 {
    return complemented5_type<Dist, RealType1, RealType2, RealType3, RealType4>(d, r1, r2, r3, r4);
 }
 
 template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5>
-complemented6_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4, const RealType5& r5)
+inline complemented6_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4, const RealType5& r5)
 {
    return complemented6_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5>(d, r1, r2, r3, r4, r5);
 }
 
 template <class Dist, class RealType1, class RealType2, class RealType3, class RealType4, class RealType5, class RealType6>
-complemented7_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5, RealType6> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4, const RealType5& r5, const RealType6& r6)
+inline complemented7_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5, RealType6> complement(const Dist& d, const RealType1& r1, const RealType2& r2, const RealType3& r3, const RealType4& r4, const RealType5& r5, const RealType6& r6)
 {
    return complemented7_type<Dist, RealType1, RealType2, RealType3, RealType4, RealType5, RealType6>(d, r1, r2, r3, r4, r5, r6);
 }

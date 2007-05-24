@@ -45,7 +45,7 @@ inline bool check_df(const char* function, RealType const& df, RealType* result)
 }
 
 template <class RealType>
-bool check_scale(
+inline bool check_scale(
       const char* function,
       RealType scale,
       RealType* result)

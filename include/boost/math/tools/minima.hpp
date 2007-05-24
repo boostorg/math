@@ -132,7 +132,7 @@ std::pair<T, T> brent_find_minima(F f, T min, T max, int bits, boost::uintmax_t&
 }
 
 template <class F, class T>
-std::pair<T, T> brent_find_minima(F f, T min, T max, int digits)
+inline std::pair<T, T> brent_find_minima(F f, T min, T max, int digits)
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
    return brent_find_minima(f, min, max, digits, m);

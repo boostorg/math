@@ -750,7 +750,7 @@ public:
 };
 
 template <class T>
-T upper_gamma_fraction(T a, T z, int bits)
+inline T upper_gamma_fraction(T a, T z, int bits)
 {
    // Multiply result by z^a * e^-z to get the full
    // upper incomplete integral.  Divide by tgamma(z)
@@ -778,7 +778,7 @@ public:
 };
 
 template <class T>
-T lower_gamma_series(T a, T z, int bits)
+inline T lower_gamma_series(T a, T z, int bits)
 {
    // Multiply result by ((z^a) * (e^-z) / a) to get the full
    // lower incomplete integral. Then divide by tgamma(a)
@@ -921,7 +921,7 @@ T tgammap1m1_imp(T dz, Tag const& tag, const L& l)
 }
 
 template <class T, class Tag>
-T tgammap1m1_imp(T dz, Tag const& /*tag*/,
+inline T tgammap1m1_imp(T dz, Tag const& /*tag*/,
                  const ::boost::math::lanczos::undefined_lanczos& l)
 {
    using namespace std; // ADL of std names
@@ -1036,7 +1036,7 @@ T full_igamma_prefix(T a, T z)
 // Helper to compute log(1+x)-x:
 //
 template <class T>
-T log1pmx(T x)
+inline T log1pmx(T x)
 {
    boost::math::detail::log1p_series<T> s(x);
    s();
@@ -1185,7 +1185,7 @@ T regularised_gamma_prefix(T a, T z, const lanczos::undefined_lanczos&)
 // Upper gamma fraction for very small a:
 //
 template <class T, class L>
-T tgamma_small_upper_part(T a, T x, const L& l)
+inline T tgamma_small_upper_part(T a, T x, const L& l)
 {
    using namespace std;  // ADL of std functions.
    //
@@ -1208,7 +1208,7 @@ T tgamma_small_upper_part(T a, T x, const L& l)
 // Upper gamma fraction for integer a:
 //
 template <class T>
-T finite_gamma_q(T a, T x)
+inline T finite_gamma_q(T a, T x)
 {
    //
    // Calculates normalised Q when a is an integer:

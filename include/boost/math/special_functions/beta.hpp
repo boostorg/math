@@ -588,7 +588,7 @@ private:
 // Evaluate the incomplete beta via the continued fraction representation:
 //
 template <class T, class L>
-T ibeta_fraction2(T a, T b, T x, T y, const L& l, bool normalised, T* p_derivative)
+inline T ibeta_fraction2(T a, T b, T x, T y, const L& l, bool normalised, T* p_derivative)
 {
    using namespace std;
    T result = ibeta_power_terms(a, b, x, y, l, normalised);
@@ -638,7 +638,7 @@ T ibeta_a_step(T a, T b, T x, T y, int k, const L& l, bool normalised, T* p_deri
 // it is currently only called for small k.
 //
 template <class T>
-T rising_factorial_ratio(T a, T b, int k)
+inline T rising_factorial_ratio(T a, T b, int k)
 {
    // calculate:
    // (a)(a+1)(a+2)...(a+k-1)
@@ -802,7 +802,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
 // complement of the binomial distribution cdf and use this finite sum.
 //
 template <class T>
-T binomial_ccdf(T n, T k, T x, T y)
+inline T binomial_ccdf(T n, T k, T x, T y)
 {
    using namespace std; // ADL of std names
    T result = pow(x, n);
@@ -1173,7 +1173,7 @@ T ibeta_derivative_imp(T a, T b, T x, const L& l)
 // and forward to the implementation functions:
 //
 template <class RT1, class RT2>
-typename tools::promote_args<RT1, RT2>::type 
+inline typename tools::promote_args<RT1, RT2>::type 
    beta(RT1 a, RT2 b)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1184,7 +1184,7 @@ typename tools::promote_args<RT1, RT2>::type
 }
 
 template <class RT1, class RT2, class RT3>
-typename tools::promote_args<RT1, RT2, RT3>::type 
+inline typename tools::promote_args<RT1, RT2, RT3>::type 
    beta(RT1 a, RT2 b, RT3 x)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1195,7 +1195,7 @@ typename tools::promote_args<RT1, RT2, RT3>::type
 }
 
 template <class RT1, class RT2, class RT3>
-typename tools::promote_args<RT1, RT2, RT3>::type 
+inline typename tools::promote_args<RT1, RT2, RT3>::type 
    betac(RT1 a, RT2 b, RT3 x)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1206,7 +1206,7 @@ typename tools::promote_args<RT1, RT2, RT3>::type
 }
 
 template <class RT1, class RT2, class RT3>
-typename tools::promote_args<RT1, RT2, RT3>::type 
+inline typename tools::promote_args<RT1, RT2, RT3>::type 
    ibeta(RT1 a, RT2 b, RT3 x)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1217,7 +1217,7 @@ typename tools::promote_args<RT1, RT2, RT3>::type
 }
 
 template <class RT1, class RT2, class RT3>
-typename tools::promote_args<RT1, RT2, RT3>::type 
+inline typename tools::promote_args<RT1, RT2, RT3>::type 
    ibetac(RT1 a, RT2 b, RT3 x)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1228,7 +1228,7 @@ typename tools::promote_args<RT1, RT2, RT3>::type
 }
 
 template <class RT1, class RT2, class RT3>
-typename tools::promote_args<RT1, RT2, RT3>::type 
+inline typename tools::promote_args<RT1, RT2, RT3>::type 
    ibeta_derivative(RT1 a, RT2 b, RT3 x)
 {
    BOOST_FPU_EXCEPTION_GUARD

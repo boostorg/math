@@ -711,7 +711,7 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<113>& t)
 } // namespace detail
 
 template <class T>
-typename tools::promote_args<T>::type erf(T z)
+inline typename tools::promote_args<T>::type erf(T z)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
@@ -743,7 +743,7 @@ typename tools::promote_args<T>::type erf(T z)
 }
 
 template <class T>
-typename tools::promote_args<T>::type erfc(T z)
+inline typename tools::promote_args<T>::type erfc(T z)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;

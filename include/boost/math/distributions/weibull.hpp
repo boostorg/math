@@ -21,7 +21,7 @@ namespace boost{ namespace math
 namespace detail{
 
 template <class RealType>
-bool check_weibull_shape(
+inline bool check_weibull_shape(
       const char* function,
       RealType shape,
       RealType* result)
@@ -37,7 +37,7 @@ bool check_weibull_shape(
 }
 
 template <class RealType>
-bool check_weibull_x(
+inline bool check_weibull_x(
       const char* function,
       RealType const& x,
       RealType* result)
@@ -97,14 +97,14 @@ private:
 typedef weibull_distribution<double> weibull;
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const weibull_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> range(const weibull_distribution<RealType>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(0, max_value<RealType>());
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const weibull_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> support(const weibull_distribution<RealType>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
@@ -112,7 +112,7 @@ const std::pair<RealType, RealType> support(const weibull_distribution<RealType>
 }
 
 template <class RealType>
-RealType pdf(const weibull_distribution<RealType>& dist, const RealType& x)
+inline RealType pdf(const weibull_distribution<RealType>& dist, const RealType& x)
 {
    using namespace std;  // for ADL of std functions
 
@@ -154,7 +154,7 @@ inline RealType cdf(const weibull_distribution<RealType>& dist, const RealType& 
 }
 
 template <class RealType>
-RealType quantile(const weibull_distribution<RealType>& dist, const RealType& p)
+inline RealType quantile(const weibull_distribution<RealType>& dist, const RealType& p)
 {
    using namespace std;  // for ADL of std functions
 
@@ -176,7 +176,7 @@ RealType quantile(const weibull_distribution<RealType>& dist, const RealType& p)
 }
 
 template <class RealType>
-RealType cdf(const complemented2_type<weibull_distribution<RealType>, RealType>& c)
+inline RealType cdf(const complemented2_type<weibull_distribution<RealType>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 
@@ -195,7 +195,7 @@ RealType cdf(const complemented2_type<weibull_distribution<RealType>, RealType>&
 }
 
 template <class RealType>
-RealType quantile(const complemented2_type<weibull_distribution<RealType>, RealType>& c)
+inline RealType quantile(const complemented2_type<weibull_distribution<RealType>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 
@@ -234,7 +234,7 @@ inline RealType mean(const weibull_distribution<RealType>& dist)
 }
 
 template <class RealType>
-RealType variance(const weibull_distribution<RealType>& dist)
+inline RealType variance(const weibull_distribution<RealType>& dist)
 {
    RealType shape = dist.shape();
    RealType scale = dist.scale();

@@ -56,7 +56,7 @@ inline typename Distribution::value_type variance(const Distribution& dist)
 }
 
 template <class Distribution, class RealType>
-typename Distribution::value_type hazard(const Distribution& dist, const RealType& x)
+inline typename Distribution::value_type hazard(const Distribution& dist, const RealType& x)
 { // hazard function
   // http://www.itl.nist.gov/div898/handbook/eda/section3/eda362.htm#HAZ
    typedef typename Distribution::value_type value_type;
@@ -82,7 +82,7 @@ inline typename Distribution::value_type chf(const Distribution& dist, const Rea
 }
 
 template <class Distribution>
-typename Distribution::value_type coefficient_of_variation(const Distribution& dist)
+inline typename Distribution::value_type coefficient_of_variation(const Distribution& dist)
 {
    typedef typename Distribution::value_type value_type;
 
@@ -148,7 +148,7 @@ inline typename Distribution::value_type quantile(const complemented2_type<Distr
 }
 
 template <class Dist>
-typename Dist::value_type median(const Dist& d)
+inline typename Dist::value_type median(const Dist& d)
 { // median - default definition for those distributions for which a
   // simple closed form is not known,
   // and for which a domain_error and/or NaN generating function is NOT defined.

@@ -141,7 +141,7 @@ private:
 };
 
 template <class T>
-polynomial<T> operator + (const polynomial<T>& a, const polynomial<T>& b)
+inline polynomial<T> operator + (const polynomial<T>& a, const polynomial<T>& b)
 {
    polynomial<T> result(a);
    result += b;
@@ -149,7 +149,7 @@ polynomial<T> operator + (const polynomial<T>& a, const polynomial<T>& b)
 }
 
 template <class T>
-polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b)
+inline polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b)
 {
    polynomial<T> result(a);
    result -= b;
@@ -157,7 +157,7 @@ polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b)
 }
 
 template <class T>
-polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b)
+inline polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b)
 {
    polynomial<T> result(a);
    result *= b;
@@ -165,7 +165,7 @@ polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b)
 }
 
 template <class T, class U>
-polynomial<T> operator + (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator + (const polynomial<T>& a, const U& b)
 {
    polynomial<T> result(a);
    result += b;
@@ -173,7 +173,7 @@ polynomial<T> operator + (const polynomial<T>& a, const U& b)
 }
 
 template <class T, class U>
-polynomial<T> operator - (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator - (const polynomial<T>& a, const U& b)
 {
    polynomial<T> result(a);
    result -= b;
@@ -181,7 +181,7 @@ polynomial<T> operator - (const polynomial<T>& a, const U& b)
 }
 
 template <class T, class U>
-polynomial<T> operator * (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator * (const polynomial<T>& a, const U& b)
 {
    polynomial<T> result(a);
    result *= b;
@@ -189,7 +189,7 @@ polynomial<T> operator * (const polynomial<T>& a, const U& b)
 }
 
 template <class U, class T>
-polynomial<T> operator + (const U& a, const polynomial<T>& b)
+inline polynomial<T> operator + (const U& a, const polynomial<T>& b)
 {
    polynomial<T> result(b);
    result += a;
@@ -197,7 +197,7 @@ polynomial<T> operator + (const U& a, const polynomial<T>& b)
 }
 
 template <class U, class T>
-polynomial<T> operator - (const U& a, const polynomial<T>& b)
+inline polynomial<T> operator - (const U& a, const polynomial<T>& b)
 {
    polynomial<T> result(a);
    result -= b;
@@ -205,7 +205,7 @@ polynomial<T> operator - (const U& a, const polynomial<T>& b)
 }
 
 template <class U, class T>
-polynomial<T> operator * (const U& a, const polynomial<T>& b)
+inline polynomial<T> operator * (const U& a, const polynomial<T>& b)
 {
    polynomial<T> result(b);
    result *= a;
@@ -213,7 +213,7 @@ polynomial<T> operator * (const U& a, const polynomial<T>& b)
 }
 
 template <class charT, class traits, class T>
-std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly)
+inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly)
 {
    os << "{ ";
    for(unsigned i = 0; i < poly.size(); ++i)

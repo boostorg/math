@@ -53,14 +53,14 @@ private:
 typedef chi_squared_distribution<double> chi_squared;
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const chi_squared_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> range(const chi_squared_distribution<RealType>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(0, max_value<RealType>()); // 0 to + infinity.
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const chi_squared_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> support(const chi_squared_distribution<RealType>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
    return std::pair<RealType, RealType>(0, tools::max_value<RealType>()); // 0 to + infinity.
@@ -105,7 +105,7 @@ RealType pdf(const chi_squared_distribution<RealType>& dist, const RealType& chi
 } // pdf
 
 template <class RealType>
-RealType cdf(const chi_squared_distribution<RealType>& dist, const RealType& chi_square)
+inline RealType cdf(const chi_squared_distribution<RealType>& dist, const RealType& chi_square)
 {
    RealType degrees_of_freedom = dist.degrees_of_freedom();
    // Error check:
@@ -124,7 +124,7 @@ RealType cdf(const chi_squared_distribution<RealType>& dist, const RealType& chi
 } // cdf
 
 template <class RealType>
-RealType quantile(const chi_squared_distribution<RealType>& dist, const RealType& p)
+inline RealType quantile(const chi_squared_distribution<RealType>& dist, const RealType& p)
 {
    RealType degrees_of_freedom = dist.degrees_of_freedom();
    // Error check:
@@ -139,7 +139,7 @@ RealType quantile(const chi_squared_distribution<RealType>& dist, const RealType
 } // quantile
 
 template <class RealType>
-RealType cdf(const complemented2_type<chi_squared_distribution<RealType>, RealType>& c)
+inline RealType cdf(const complemented2_type<chi_squared_distribution<RealType>, RealType>& c)
 {
    RealType const& degrees_of_freedom = c.dist.degrees_of_freedom();
    RealType const& chi_square = c.param;
@@ -159,7 +159,7 @@ RealType cdf(const complemented2_type<chi_squared_distribution<RealType>, RealTy
 }
 
 template <class RealType>
-RealType quantile(const complemented2_type<chi_squared_distribution<RealType>, RealType>& c)
+inline RealType quantile(const complemented2_type<chi_squared_distribution<RealType>, RealType>& c)
 {
    RealType const& degrees_of_freedom = c.dist.degrees_of_freedom();
    RealType const& q = c.param;

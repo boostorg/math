@@ -22,7 +22,7 @@ namespace boost{ namespace math
   namespace detail
   {
     template <class RealType>
-    bool check_triangular_lower(
+    inline bool check_triangular_lower(
       const char* function,
       RealType lower,
       RealType* result)
@@ -41,7 +41,7 @@ namespace boost{ namespace math
     } // bool check_triangular_lower(
 
     template <class RealType>
-    bool check_triangular_mode(
+    inline bool check_triangular_mode(
       const char* function,
       RealType mode,
       RealType* result)
@@ -60,7 +60,7 @@ namespace boost{ namespace math
     } // bool check_triangular_mode(
 
     template <class RealType>
-    bool check_triangular_upper(
+    inline bool check_triangular_upper(
       const char* function,
       RealType upper,
       RealType* result)
@@ -79,7 +79,7 @@ namespace boost{ namespace math
     } // bool check_triangular_upper(
 
     template <class RealType>
-    bool check_triangular_x(
+    inline bool check_triangular_x(
       const char* function,
       RealType const& x,
       RealType* result)
@@ -175,14 +175,14 @@ namespace boost{ namespace math
   typedef triangular_distribution<double> triangular;
 
   template <class RealType>
-  const std::pair<RealType, RealType> range(const triangular_distribution<RealType>& /* dist */)
+  inline const std::pair<RealType, RealType> range(const triangular_distribution<RealType>& /* dist */)
   { // Range of permissible values for random variable x.
     using boost::math::tools::max_value;
     return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
   }
 
   template <class RealType>
-  const std::pair<RealType, RealType> support(const triangular_distribution<RealType>& dist)
+  inline const std::pair<RealType, RealType> support(const triangular_distribution<RealType>& dist)
   { // Range of supported values for random variable x.
     // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
     return std::pair<RealType, RealType>(dist.lower(), dist.upper());
@@ -399,7 +399,7 @@ namespace boost{ namespace math
 
 
   template <class RealType>
-  RealType variance(const triangular_distribution<RealType>& dist)
+  inline RealType variance(const triangular_distribution<RealType>& dist)
   {
     RealType lower = dist.lower();
     RealType mode = dist.mode();

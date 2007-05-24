@@ -35,7 +35,7 @@ inline unsigned digamma_large_lim(const void*)
 // This first one gives 34-digit precision for x >= 20:
 //
 template <class T>
-T digamma_imp_large(T x, const mpl::int_<0>*)
+inline T digamma_imp_large(T x, const mpl::int_<0>*)
 {
    using namespace std; // ADL of std functions.
    static const T P[] = {
@@ -68,7 +68,7 @@ T digamma_imp_large(T x, const mpl::int_<0>*)
 // 19-digit precision for x >= 10:
 //
 template <class T>
-T digamma_imp_large(T x, const mpl::int_<64>*)
+inline T digamma_imp_large(T x, const mpl::int_<64>*)
 {
    using namespace std; // ADL of std functions.
    static const T P[] = {
@@ -95,7 +95,7 @@ T digamma_imp_large(T x, const mpl::int_<64>*)
 // 17-digit precision for x >= 10:
 //
 template <class T>
-T digamma_imp_large(T x, const mpl::int_<53>*)
+inline T digamma_imp_large(T x, const mpl::int_<53>*)
 {
    using namespace std; // ADL of std functions.
    static const T P[] = {
@@ -119,7 +119,7 @@ T digamma_imp_large(T x, const mpl::int_<53>*)
 // 9-digit precision for x >= 10:
 //
 template <class T>
-T digamma_imp_large(T x, const mpl::int_<24>*)
+inline T digamma_imp_large(T x, const mpl::int_<24>*)
 {
    using namespace std; // ADL of std functions.
    static const T P[] = {
@@ -301,7 +301,7 @@ T digamma_imp_1_2(T x, const mpl::int_<53>*)
 // 9-digit precision:
 //
 template <class T>
-T digamma_imp_1_2(T x, const mpl::int_<24>*)
+inline T digamma_imp_1_2(T x, const mpl::int_<24>*)
 {
    //
    // Now the approximation, we use the form:
@@ -405,7 +405,7 @@ T digamma_imp(T x, const Tag* t)
 } // namespace detail
 
 template <class T>
-typename tools::promote_args<T>::type 
+inline typename tools::promote_args<T>::type 
    digamma(T x)
 {
    typedef typename tools::promote_args<T>::type result_type;

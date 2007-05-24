@@ -122,7 +122,7 @@ void bracket(F f, T& a, T& b, T c, T& fa, T& fb, T& d, T& fd)
 }
 
 template <class T>
-T safe_div(T num, T denom, T r)
+inline T safe_div(T num, T denom, T r)
 {
    //
    // return num / denom without overflow,
@@ -139,7 +139,7 @@ T safe_div(T num, T denom, T r)
 }
 
 template <class T>
-T secant_interpolate(const T& a, const T& b, const T& fa, const T& fb)
+inline T secant_interpolate(const T& a, const T& b, const T& fa, const T& fb)
 {
    //
    // Performs standard secant interpolation of [a,b] given

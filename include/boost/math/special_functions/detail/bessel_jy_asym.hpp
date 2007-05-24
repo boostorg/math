@@ -17,7 +17,7 @@
 namespace boost{ namespace math{ namespace detail{
 
 template <class T>
-T asymptotic_bessel_j_large_x_P(T v, T x)
+inline T asymptotic_bessel_j_large_x_P(T v, T x)
 {
    // A&S 9.2.9
    T s = 1;
@@ -30,7 +30,7 @@ T asymptotic_bessel_j_large_x_P(T v, T x)
 }
 
 template <class T>
-T asymptotic_bessel_j_large_x_Q(T v, T x)
+inline T asymptotic_bessel_j_large_x_Q(T v, T x)
 {
    // A&S 9.2.10
    T s = 0;
@@ -42,7 +42,7 @@ T asymptotic_bessel_j_large_x_Q(T v, T x)
 }
 
 template <class T>
-T asymptotic_bessel_j_large_x(T v, T x)
+inline T asymptotic_bessel_j_large_x(T v, T x)
 {
    // 
    // See http://functions.wolfram.com/BesselAiryStruveFunctions/BesselJ/06/02/02/0001/
@@ -57,7 +57,7 @@ T asymptotic_bessel_j_large_x(T v, T x)
 }
 
 template <class T>
-T asymptotic_bessel_y_large_x(T v, T x)
+inline T asymptotic_bessel_y_large_x(T v, T x)
 {
    // 
    // See http://functions.wolfram.com/BesselAiryStruveFunctions/BesselJ/06/02/02/0001/
@@ -72,7 +72,7 @@ T asymptotic_bessel_y_large_x(T v, T x)
 }
 
 template <class T>
-T asymptotic_bessel_amplitude(T v, T x)
+inline T asymptotic_bessel_amplitude(T v, T x)
 {
    // Calculate the amplitude of J(v, x) and Y(v, x) for large
    // x: see A&S 9.2.28.
@@ -113,7 +113,7 @@ T asymptotic_bessel_phase_mx(T v, T x)
 }
 
 template <class T>
-T asymptotic_bessel_y_large_x_2(T v, T x)
+inline T asymptotic_bessel_y_large_x_2(T v, T x)
 {
    // See A&S 9.2.19.
    using namespace std;
@@ -129,7 +129,7 @@ T asymptotic_bessel_y_large_x_2(T v, T x)
 }
 
 template <class T>
-T asymptotic_bessel_j_large_x_2(T v, T x)
+inline T asymptotic_bessel_j_large_x_2(T v, T x)
 {
    // See A&S 9.2.19.
    using namespace std;

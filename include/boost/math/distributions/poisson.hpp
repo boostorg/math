@@ -108,7 +108,7 @@ namespace boost
       } // bool check_k
 
       template <class RealType>
-      bool check_dist_and_k(const char* function, RealType mean, RealType k, RealType* result)
+      inline bool check_dist_and_k(const char* function, RealType mean, RealType k, RealType* result)
       {
         if((check_dist(function, mean, result) == false) ||
           (check_k(function, k, result) == false))
@@ -132,7 +132,7 @@ namespace boost
       } // bool check_prob
 
       template <class RealType>
-      bool check_dist_and_prob(const char* function, RealType mean,  RealType p, RealType* result)
+      inline bool check_dist_and_prob(const char* function, RealType mean,  RealType p, RealType* result)
       {
         if((check_dist(function, mean, result) == false) ||
           (check_prob(function, p, result) == false))
@@ -177,14 +177,14 @@ namespace boost
     // Non-member functions to give properties of the distribution.
 
     template <class RealType>
-    const std::pair<RealType, RealType> range(const poisson_distribution<RealType>& /* dist */)
+    inline const std::pair<RealType, RealType> range(const poisson_distribution<RealType>& /* dist */)
     { // Range of permissible values for random variable k.
 	    using boost::math::tools::max_value;
 	    return std::pair<RealType, RealType>(0, max_value<RealType>()); // Max integer?
     }
 
     template <class RealType>
-    const std::pair<RealType, RealType> support(const poisson_distribution<RealType>& /* dist */)
+    inline const std::pair<RealType, RealType> support(const poisson_distribution<RealType>& /* dist */)
     { // Range of supported values for random variable k.
 	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	    using boost::math::tools::max_value;
@@ -401,7 +401,7 @@ namespace boost
     } // poisson ccdf
 
     template <class RealType>
-    RealType quantile(const poisson_distribution<RealType>& dist, const RealType& p)
+    inline RealType quantile(const poisson_distribution<RealType>& dist, const RealType& p)
     { // Quantile (or Percent Point) Poisson function.
       // Return the number of expected events k for a given probability p.
       RealType result; // of Argument checks:
@@ -434,7 +434,7 @@ namespace boost
    } // quantile
 
     template <class RealType>
-    RealType quantile(const complemented2_type<poisson_distribution<RealType>, RealType>& c)
+    inline RealType quantile(const complemented2_type<poisson_distribution<RealType>, RealType>& c)
     { // Quantile (or Percent Point) of Poisson function.
       // Return the number of expected events k for a given
       // complement of the probability q.

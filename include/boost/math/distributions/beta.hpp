@@ -270,14 +270,14 @@ namespace boost
     }; // template <class RealType> class beta_distribution
 
     template <class RealType>
-    const std::pair<RealType, RealType> range(const beta_distribution<RealType>& /* dist */)
+    inline const std::pair<RealType, RealType> range(const beta_distribution<RealType>& /* dist */)
     { // Range of permissible values for random variable x.
       using boost::math::tools::max_value;
       return std::pair<RealType, RealType>(0, 1);
     }
 
     template <class RealType>
-    const std::pair<RealType, RealType> support(const beta_distribution<RealType>&  /* dist */)
+    inline const std::pair<RealType, RealType> support(const beta_distribution<RealType>&  /* dist */)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
       return std::pair<RealType, RealType>(0, 1);
@@ -356,7 +356,7 @@ namespace boost
     } // kurtosis
 
     template <class RealType>
-    RealType pdf(const beta_distribution<RealType>& dist, const RealType x)
+    inline RealType pdf(const beta_distribution<RealType>& dist, const RealType x)
     { // Probability Density/Mass Function.
       BOOST_FPU_EXCEPTION_GUARD
 
@@ -380,7 +380,7 @@ namespace boost
     } // pdf
 
     template <class RealType>
-    RealType cdf(const beta_distribution<RealType>& dist, const RealType x)
+    inline RealType cdf(const beta_distribution<RealType>& dist, const RealType x)
     { // Cumulative Distribution Function beta.
       using boost::math::tools::domain_error;
       using namespace std; // for ADL of std functions
@@ -410,7 +410,7 @@ namespace boost
     } // beta cdf
 
     template <class RealType>
-    RealType cdf(const complemented2_type<beta_distribution<RealType>, RealType>& c)
+    inline RealType cdf(const complemented2_type<beta_distribution<RealType>, RealType>& c)
     { // Complemented Cumulative Distribution Function beta.
 
       using boost::math::tools::domain_error;
@@ -445,7 +445,7 @@ namespace boost
     } // beta cdf
 
     template <class RealType>
-    RealType quantile(const beta_distribution<RealType>& dist, const RealType& p)
+    inline RealType quantile(const beta_distribution<RealType>& dist, const RealType& p)
     { // Quantile or Percent Point beta function or
       // Inverse Cumulative probability distribution function CDF.
       // Return x (0 <= x <= 1),
@@ -478,7 +478,7 @@ namespace boost
     } // quantile
 
     template <class RealType>
-    RealType quantile(const complemented2_type<beta_distribution<RealType>, RealType>& c)
+    inline RealType quantile(const complemented2_type<beta_distribution<RealType>, RealType>& c)
     { // Complement Quantile or Percent Point beta function .
       // Return the number of expected x for a given
       // complement of the probability q.

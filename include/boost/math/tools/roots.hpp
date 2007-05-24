@@ -156,7 +156,7 @@ std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter)
 }
 
 template <class F, class T, class Tol>
-std::pair<T, T> bisect(F f, T min, T max, Tol tol)
+inline std::pair<T, T> bisect(F f, T min, T max, Tol tol)
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
    return bisect(f, min, max, tol, m);
@@ -244,7 +244,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
 }
 
 template <class F, class T>
-T newton_raphson_iterate(F f, T guess, T min, T max, int digits)
+inline T newton_raphson_iterate(F f, T guess, T min, T max, int digits)
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
    return newton_raphson_iterate(f, guess, min, max, digits, m);
@@ -391,7 +391,7 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
 }
 
 template <class F, class T>
-T halley_iterate(F f, T guess, T min, T max, int digits)
+inline T halley_iterate(F f, T guess, T min, T max, int digits)
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
    return halley_iterate(f, guess, min, max, digits, m);
@@ -492,7 +492,7 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& ma
 }
 
 template <class F, class T>
-T schroeder_iterate(F f, T guess, T min, T max, int digits)
+inline T schroeder_iterate(F f, T guess, T min, T max, int digits)
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
    return schroeder_iterate(f, guess, min, max, digits, m);

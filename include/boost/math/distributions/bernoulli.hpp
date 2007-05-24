@@ -67,7 +67,7 @@ namespace boost
 
       }
       template <class RealType>
-      bool check_dist_and_k(const char* function, const RealType& p, RealType k, RealType* result)
+      inline bool check_dist_and_k(const char* function, const RealType& p, RealType k, RealType* result)
       {
         if(check_dist(function, p, result) == false)
         {
@@ -122,14 +122,14 @@ namespace boost
     typedef bernoulli_distribution<double> bernoulli;
 
     template <class RealType>
-    const std::pair<RealType, RealType> range(const bernoulli_distribution<RealType>& /* dist */)
+    inline const std::pair<RealType, RealType> range(const bernoulli_distribution<RealType>& /* dist */)
     { // Range of permissible values for random variable k = {0, 1}.
       using boost::math::tools::max_value;
       return std::pair<RealType, RealType>(0, 1);
     }
 
     template <class RealType>
-    const std::pair<RealType, RealType> support(const bernoulli_distribution<RealType>& /* dist */)
+    inline const std::pair<RealType, RealType> support(const bernoulli_distribution<RealType>& /* dist */)
     { // Range of supported values for random variable k = {0, 1}.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
       return std::pair<RealType, RealType>(0, 1);
@@ -180,7 +180,7 @@ namespace boost
     } // pdf
 
     template <class RealType>
-    RealType cdf(const bernoulli_distribution<RealType>& dist, const RealType k)
+    inline RealType cdf(const bernoulli_distribution<RealType>& dist, const RealType k)
     { // Cumulative Distribution Function Bernoulli.
       RealType p = dist.success_fraction();
       // Error check:
@@ -204,7 +204,7 @@ namespace boost
     } // bernoulli cdf
 
     template <class RealType>
-    RealType cdf(const complemented2_type<bernoulli_distribution<RealType>, RealType>& c)
+    inline RealType cdf(const complemented2_type<bernoulli_distribution<RealType>, RealType>& c)
     { // Complemented Cumulative Distribution Function bernoulli.
       RealType const& k = c.param;
       bernoulli_distribution<RealType> const& dist = c.dist;
@@ -230,7 +230,7 @@ namespace boost
     } // bernoulli cdf complement
 
     template <class RealType>
-    RealType quantile(const bernoulli_distribution<RealType>& dist, const RealType& p)
+    inline RealType quantile(const bernoulli_distribution<RealType>& dist, const RealType& p)
     { // Quantile or Percent Point Bernoulli function.
       // Return the number of expected successes k either 0 or 1.
       // for a given probability p.
@@ -255,7 +255,7 @@ namespace boost
     } // quantile
 
     template <class RealType>
-    RealType quantile(const complemented2_type<bernoulli_distribution<RealType>, RealType>& c)
+    inline RealType quantile(const complemented2_type<bernoulli_distribution<RealType>, RealType>& c)
     { // Quantile or Percent Point bernoulli function.
       // Return the number of expected successes k for a given
       // complement of the probability q.

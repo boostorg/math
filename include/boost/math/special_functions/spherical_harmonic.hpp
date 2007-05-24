@@ -21,7 +21,7 @@ namespace detail{
 // though.
 //
 template <class T>
-T spherical_harmonic_prefix(unsigned n, unsigned m, T theta)
+inline T spherical_harmonic_prefix(unsigned n, unsigned m, T theta)
 {
    using namespace std;
 

@@ -195,7 +195,7 @@ inline T cyl_bessel_j_imp(int v, T x, const bessel_int_tag&)
 }
 
 template <class T>
-T sph_bessel_j_imp(unsigned n, T x)
+inline T sph_bessel_j_imp(unsigned n, T x)
 {
    using namespace std; // ADL of std names
    if(x < 0)
@@ -272,7 +272,7 @@ T cyl_bessel_i_imp(T v, T x)
 }
 
 template <class T>
-T cyl_bessel_k_imp(T v, T x, const bessel_no_int_tag& t)
+inline T cyl_bessel_k_imp(T v, T x, const bessel_no_int_tag& t)
 {
    using namespace std;
    if(x < 0)
@@ -370,7 +370,7 @@ inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&)
 }
 
 template <class T>
-T sph_neumann_imp(unsigned v, T x)
+inline T sph_neumann_imp(unsigned v, T x)
 {
    using namespace std; // ADL of std names
    //

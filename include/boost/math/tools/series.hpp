@@ -163,48 +163,6 @@ typename Functor::result_type kahan_sum_series(Functor& func, int bits, boost::u
    return result;
 }
 
-/*
-template <class T, std::size_t N>
-class wijngaarden_euler_sum
-{
-public:
-   wijngaarden_euler_sum(T term1)
-   {
-      nterm=1;
-      wksp[0] = 0;
-      sum=0.5*(wksp[1]=term1);
-   }
-
-   void add(T term)
-   {
-      int j;
-      T tmp,dum;
-      tmp=wksp[1];
-      wksp[1]=term;
-      for (j=1;j<=nterm-1;j++)
-      {
-         dum=wksp[j+1];
-         wksp[j+1]=0.5*(wksp[j]+tmp);
-         tmp=dum;
-      }
-      wksp[nterm+1]=0.5*(wksp[nterm]+tmp);
-      if (fabs(wksp[nterm+1]) <= fabs(wksp[nterm])) // Favorable to increase p,
-         sum += (0.5*wksp[++nterm]); // and the table becomes longer.
-      else // Favorable to increase n,
-         sum += wksp[nterm+1];
-   }
-
-   T total()const
-   {
-      return sum;
-   }
-
-private:
-   T sum;
-   T wksp[N];
-   int nterm;
-};
-*/
 } // namespace tools
 } // namespace math
 } // namespace boost

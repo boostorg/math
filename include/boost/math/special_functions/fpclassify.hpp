@@ -82,7 +82,7 @@ inline bool is_nan_helper(T t, const boost::false_type&)
 #endif // defined(BOOST_HAS_FPCLASSIFY) || defined(isnan)
 
 template <class T>
-int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const mpl::true_&)
+inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const mpl::true_&)
 {
    // whenever possible check for Nan's first:
 #ifdef BOOST_HAS_FPCLASSIFY
@@ -116,7 +116,7 @@ int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const mpl::true_&)
 }
 
 template <class T>
-int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const mpl::false_&)
+inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const mpl::false_&)
 {
    // 
    // An unknown type with no numeric_limits support,
@@ -128,7 +128,7 @@ int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const mpl::false_&)
 }  // namespace detail
 
 template <class T>
-int fpclassify BOOST_NO_MACRO_EXPAND(T t)
+inline int fpclassify BOOST_NO_MACRO_EXPAND(T t)
 {
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    if(std::numeric_limits<T>::is_specialized)

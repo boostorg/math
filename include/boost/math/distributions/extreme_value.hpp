@@ -71,14 +71,14 @@ private:
 typedef extreme_value_distribution<double> extreme_value;
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const extreme_value_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> range(const extreme_value_distribution<RealType>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const extreme_value_distribution<RealType>& /*dist*/)
+inline const std::pair<RealType, RealType> support(const extreme_value_distribution<RealType>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
@@ -86,7 +86,7 @@ const std::pair<RealType, RealType> support(const extreme_value_distribution<Rea
 }
 
 template <class RealType>
-RealType pdf(const extreme_value_distribution<RealType>& dist, const RealType& x)
+inline RealType pdf(const extreme_value_distribution<RealType>& dist, const RealType& x)
 {
    using namespace std; // for ADL of std functions
 
@@ -100,7 +100,7 @@ RealType pdf(const extreme_value_distribution<RealType>& dist, const RealType& x
 } // pdf
 
 template <class RealType>
-RealType cdf(const extreme_value_distribution<RealType>& dist, const RealType& x)
+inline RealType cdf(const extreme_value_distribution<RealType>& dist, const RealType& x)
 {
    using namespace std; // for ADL of std functions
 
@@ -139,7 +139,7 @@ RealType quantile(const extreme_value_distribution<RealType>& dist, const RealTy
 } // quantile
 
 template <class RealType>
-RealType cdf(const complemented2_type<extreme_value_distribution<RealType>, RealType>& c)
+inline RealType cdf(const complemented2_type<extreme_value_distribution<RealType>, RealType>& c)
 {
    using namespace std; // for ADL of std functions
 

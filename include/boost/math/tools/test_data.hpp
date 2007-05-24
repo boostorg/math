@@ -75,21 +75,21 @@ struct parameter_info
 };
 
 template <class T>
-parameter_info<T> make_random_param(T start_range, T end_range, int n_points)
+inline parameter_info<T> make_random_param(T start_range, T end_range, int n_points)
 {
    parameter_info<T> result = { random_in_range, start_range, end_range, n_points, 0 };
    return result;
 }
 
 template <class T>
-parameter_info<T> make_periodic_param(T start_range, T end_range, int n_points)
+inline parameter_info<T> make_periodic_param(T start_range, T end_range, int n_points)
 {
    parameter_info<T> result = { periodic_in_range, start_range, end_range, n_points, 0 };
    return result;
 }
 
 template <class T>
-parameter_info<T> make_power_param(T basis, int start_exponent, int end_exponent)
+inline parameter_info<T> make_power_param(T basis, int start_exponent, int end_exponent)
 {
    parameter_info<T> result = { power_series, basis, 0, start_exponent, end_exponent };
    return result;
@@ -320,7 +320,7 @@ private:
 // truncation to float-precision only:
 //
 template <class T>
-float test_data<T>::truncate_to_float(float const * pf)
+inline float test_data<T>::truncate_to_float(float const * pf)
 {
    extern_val = *pf;
    return *pf;
@@ -649,7 +649,7 @@ bool get_user_parameter_info(parameter_info<T>& info, const char* param_name)
 }
 
 template <class charT, class traits, class T>
-std::basic_ostream<charT, traits>& write_csv(std::basic_ostream<charT, traits>& os,
+inline std::basic_ostream<charT, traits>& write_csv(std::basic_ostream<charT, traits>& os,
                                              const test_data<T>& data)
 {
    const charT defarg[] = { ',', ' ', '\0' };

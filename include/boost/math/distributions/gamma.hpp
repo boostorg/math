@@ -22,7 +22,7 @@ namespace detail
 {
 
 template <class RealType>
-bool check_gamma_shape(
+inline bool check_gamma_shape(
       const char* function,
       RealType shape,
       RealType* result)
@@ -38,7 +38,7 @@ bool check_gamma_shape(
 }
 
 template <class RealType>
-bool check_gamma_x(
+inline bool check_gamma_x(
       const char* function,
       RealType const& x,
       RealType* result)
@@ -98,14 +98,14 @@ private:
 // NO typedef because of clash with name of gamma function.
 
 template <class RealType>
-const std::pair<RealType, RealType> range(const gamma_distribution<RealType>& /* dist */)
+inline const std::pair<RealType, RealType> range(const gamma_distribution<RealType>& /* dist */)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(0, max_value<RealType>());
 }
 
 template <class RealType>
-const std::pair<RealType, RealType> support(const gamma_distribution<RealType>& /* dist */)
+inline const std::pair<RealType, RealType> support(const gamma_distribution<RealType>& /* dist */)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
@@ -113,7 +113,7 @@ const std::pair<RealType, RealType> support(const gamma_distribution<RealType>& 
 }
 
 template <class RealType>
-RealType pdf(const gamma_distribution<RealType>& dist, const RealType& x)
+inline RealType pdf(const gamma_distribution<RealType>& dist, const RealType& x)
 {
    using namespace std;  // for ADL of std functions
 
@@ -153,7 +153,7 @@ inline RealType cdf(const gamma_distribution<RealType>& dist, const RealType& x)
 } // cdf
 
 template <class RealType>
-RealType quantile(const gamma_distribution<RealType>& dist, const RealType& p)
+inline RealType quantile(const gamma_distribution<RealType>& dist, const RealType& p)
 {
    using namespace std;  // for ADL of std functions
 
@@ -175,7 +175,7 @@ RealType quantile(const gamma_distribution<RealType>& dist, const RealType& p)
 }
 
 template <class RealType>
-RealType cdf(const complemented2_type<gamma_distribution<RealType>, RealType>& c)
+inline RealType cdf(const complemented2_type<gamma_distribution<RealType>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 
@@ -194,7 +194,7 @@ RealType cdf(const complemented2_type<gamma_distribution<RealType>, RealType>& c
 }
 
 template <class RealType>
-RealType quantile(const complemented2_type<gamma_distribution<RealType>, RealType>& c)
+inline RealType quantile(const complemented2_type<gamma_distribution<RealType>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 
@@ -233,7 +233,7 @@ inline RealType mean(const gamma_distribution<RealType>& dist)
 }
 
 template <class RealType>
-RealType variance(const gamma_distribution<RealType>& dist)
+inline RealType variance(const gamma_distribution<RealType>& dist)
 {
    using namespace std;  // for ADL of std functions
 

@@ -97,7 +97,7 @@ namespace boost
           && check_successes(function, r, result);
       }
       template <class RealType>
-      bool check_dist_and_k(const char* function, const RealType& r, const RealType& p, RealType k, RealType* result)
+      inline bool check_dist_and_k(const char* function, const RealType& r, const RealType& p, RealType k, RealType* result)
       {
         if(check_dist(function, r, p, result) == false)
         {
@@ -244,14 +244,14 @@ namespace boost
     typedef negative_binomial_distribution<double> negative_binomial; // Reserved name of type double.
 
     template <class RealType>
-    const std::pair<RealType, RealType> range(const negative_binomial_distribution<RealType>& /* dist */)
+    inline const std::pair<RealType, RealType> range(const negative_binomial_distribution<RealType>& /* dist */)
     { // Range of permissible values for random variable k.
 	    using boost::math::tools::max_value;
 	    return std::pair<RealType, RealType>(0, max_value<RealType>()); // max_integer?
     }
 
     template <class RealType>
-    const std::pair<RealType, RealType> support(const negative_binomial_distribution<RealType>& /* dist */)
+    inline const std::pair<RealType, RealType> support(const negative_binomial_distribution<RealType>& /* dist */)
     { // Range of supported values for random variable k.
 	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	    using boost::math::tools::max_value;
@@ -322,7 +322,7 @@ namespace boost
     // chf of Negative Binomial distribution provided by derived accessors.
 
     template <class RealType>
-    RealType pdf(const negative_binomial_distribution<RealType>& dist, const RealType k)
+    inline RealType pdf(const negative_binomial_distribution<RealType>& dist, const RealType k)
     { // Probability Density/Mass Function.
       BOOST_FPU_EXCEPTION_GUARD
 
@@ -336,7 +336,7 @@ namespace boost
     } // negative_binomial_pdf
 
     template <class RealType>
-    RealType cdf(const negative_binomial_distribution<RealType>& dist, const RealType k)
+    inline RealType cdf(const negative_binomial_distribution<RealType>& dist, const RealType k)
     { // Cumulative Distribution Function of Negative Binomial.
       using boost::math::ibeta; // Regularized incomplete beta function.
       // k argument may be integral, signed, or unsigned, or floating point.
@@ -361,7 +361,7 @@ namespace boost
     } // cdf Cumulative Distribution Function Negative Binomial.
 
       template <class RealType>
-      RealType cdf(const complemented2_type<negative_binomial_distribution<RealType>, RealType>& c)
+      inline RealType cdf(const complemented2_type<negative_binomial_distribution<RealType>, RealType>& c)
       { // Complemented Cumulative Distribution Function Negative Binomial.
 
       using boost::math::ibetac; // Regularized incomplete beta function complement.
@@ -394,7 +394,7 @@ namespace boost
     } // cdf Cumulative Distribution Function Negative Binomial.
 
     template <class RealType>
-    RealType quantile(const negative_binomial_distribution<RealType>& dist, const RealType& P)
+    inline RealType quantile(const negative_binomial_distribution<RealType>& dist, const RealType& P)
     { // Quantile, percentile/100 or Percent Point Negative Binomial function.
       // Return the number of expected failures k for a given probability p.
 
@@ -438,7 +438,7 @@ namespace boost
     } // RealType quantile(const negative_binomial_distribution dist, p)
 
       template <class RealType>
-      RealType quantile(const complemented2_type<negative_binomial_distribution<RealType>, RealType>& c)
+      inline RealType quantile(const complemented2_type<negative_binomial_distribution<RealType>, RealType>& c)
       { // Quantile or Percent Point Binomial function.
         // Return the number of expected failures k for a given
         // complement of the probability Q = 1 - P.

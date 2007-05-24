@@ -24,7 +24,7 @@ namespace boost { namespace math
 {
 
 template <class T>
-T factorial(unsigned i)
+inline T factorial(unsigned i)
 {
    using namespace std; // Aid ADL for floor.
 
