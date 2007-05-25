@@ -7,6 +7,7 @@
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
 #  pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
+#  pragma warning(disable: 4245) // int/unsigned int conversion
 #endif
 
 #include <boost/math/concepts/real_concept.hpp>
