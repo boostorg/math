@@ -1,4 +1,5 @@
-//  (C) Copyright John Maddock 2006.
+//  Copyright John Maddock 2006.
+//  Copyright Paul A. Bristow 2007
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,6 +10,10 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
+
+#ifdef _MSC_VER
+#pragma warning(disable: 4127) //  conditional expression is constant
+#endif
 
 template <class T>
 void test_classify(T t, const char* type)
@@ -92,7 +97,7 @@ void test_classify(T t, const char* type)
    }
    else
    {
-      std::cout << "Quite NaN's not tested" << std::endl;
+      std::cout << "Quiet NaN's not tested" << std::endl;
    }
    if(std::numeric_limits<T>::has_signaling_NaN)
    {
@@ -133,3 +138,26 @@ int test_main(int, char* [] )
   return 0;
 }
 
+/*
+Autorun "i:\Boost-sandbox\math_toolkit\libs\math\test\MSVC80\debug\test_classify.exe"
+Running 1 test case...
+FP_ZERO: 0
+FP_NORMAL: 1
+FP_INFINITE: 2
+FP_NAN: 3
+FP_SUBNORMAL: 4
+Testing type float
+Testing type double
+Testing type long double
+Testing type real_concept
+Denormalised forms not tested
+Infinity not tested
+Quiet NaN's not tested
+Signaling NaN's not tested
+Test suite "Test Program" passed with:
+  79 assertions out of 79 passed
+  1 test case out of 1 passed
+  Test case "test_main_caller( argc, argv )" passed with:
+    79 assertions out of 79 passed
+
+*/
