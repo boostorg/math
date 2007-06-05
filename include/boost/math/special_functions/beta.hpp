@@ -470,6 +470,8 @@ T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised, T* p_derivative, 
       // Non-normalised, just compute the power:
       result = pow(x, a);
    }
+   if(result < tools::min_value<T>())
+      return 0; // Safeguard: series can't cope with denorms.
    ibeta_series_t<T> s(a, b, x, result);
    boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
    result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter, s0);
@@ -710,7 +712,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const L& l, bool
    // and from from 9.2:
    T prefix;
    T h = regularised_gamma_prefix(b, u, l);
-   if(h == 0)
+   if(h <= tools::min_value<T>())
       return s0;
    if(normalised)
    {
