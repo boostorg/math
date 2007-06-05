@@ -464,6 +464,13 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, boo
       //
       while(sign(fb) == sign(fa))
       {
+         if(fabs(a) < tools::min_value<T>())
+         {
+            // Escape route just in case the answer is zero!
+            max_iter -= count;
+            max_iter += 1;
+            return a > 0 ? std::make_pair(T(0), T(a)) : std::make_pair(T(a), T(0)); 
+         }
          if(count == 0)
             tools::logic_error(BOOST_CURRENT_FUNCTION, "Unable to bracket root, last nearest value was %1%", a);
          b = a;
