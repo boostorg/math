@@ -17,6 +17,8 @@ T sin_pi(T x)
    using namespace std; // ADL of std names
    // sin of pi*x:
    bool invert;
+   if(x < 0.5)
+      return sin(constants::pi<T>() * x);
    if(x < 1)
    {
       invert = true;

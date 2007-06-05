@@ -17,6 +17,8 @@ T cos_pi(T x)
    using namespace std; // ADL of std names
    // cos of pi*x:
    bool invert = false;
+   if(x < 0.5)
+      return cos(constants::pi<T>() * x);
    if(x < 1)
    {
       x = -x;
