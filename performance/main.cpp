@@ -8,35 +8,6 @@
 #include "performance_measure.hpp"
 
 extern void reference_evaluate();
-/*
-extern void polynomial_evaluate();
-extern void polynomial_mixed_evaluate();
-extern void rational_evaluate();
-extern void rational_mixed_evaluate();
-extern void gamma_evaluate();
-extern void lgamma_evaluate();
-extern void erf_evaluate();
-extern void igamma_evaluate();
-extern void igamma_inv_evaluate();
-extern void ibeta_evaluate();
-extern void ibeta_inv_evaluate();
-
-
-
-test_info info[] = {
-   { "polynomial", &polynomial_evaluate },
-   { "polynomial_mixed", &polynomial_mixed_evaluate },
-   { "rational", &rational_evaluate },
-   { "rational_mixed", &rational_mixed_evaluate },
-   { "gamma", &gamma_evaluate },
-   { "lgamma", &lgamma_evaluate },
-   { "erf", &erf_evaluate },
-   { "igamma_inv", &igamma_inv_evaluate },
-   { "igamma", &igamma_evaluate },
-   { "ibeta_inv", &ibeta_inv_evaluate },
-   { "ibeta", &ibeta_evaluate },
-};
-*/
 
 std::map<std::string, double> times;
 std::set<test_info> tests;
@@ -133,12 +104,12 @@ int main(int argc, const char** argv)
             }
          }
       }
+      run_tests();
    }
    else
    {
       show_help();
    }
-   run_tests();
    //
    // This is just to confuse the optimisers:
    //

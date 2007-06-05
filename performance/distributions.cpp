@@ -192,11 +192,13 @@ BOOST_MATH_DISTRIBUTION2_TEST(gamma, real_values, real_values, real_values, prob
 BOOST_MATH_DISTRIBUTION2_TEST(lognormal, real_values, real_values, real_values, probabilities)
 BOOST_MATH_DISTRIBUTION2_TEST(negative_binomial, int_values, probabilities, int_values, probabilities)
 BOOST_MATH_DISTRIBUTION2_TEST(normal, real_values, real_values, real_values, probabilities)
-BOOST_MATH_DISTRIBUTION1_TEST(poisson, real_values, real_values, probabilities)
+BOOST_MATH_DISTRIBUTION1_TEST(poisson, real_values, int_values, probabilities)
 BOOST_MATH_DISTRIBUTION1_TEST(students_t, int_values, real_values, probabilities)
 BOOST_MATH_DISTRIBUTION2_TEST(weibull, real_values, real_values, real_values, probabilities)
 
 #ifdef TEST_R
+
+#define MATHLIB_STANDALONE 1
 
 extern "C" {
 #include "Rmath.h"
@@ -216,7 +218,7 @@ extern "C" {
       {\
          for(unsigned k = 0; k < c_size; ++k)\
          {\
-         result += Rf_p##name (random_variable_table[k], param1_table[i], param2_table[j], 1, 0);\
+            result += p##name (random_variable_table[k], param1_table[i], param2_table[j], 1, 0);\
          }\
       }\
    }\
@@ -237,7 +239,7 @@ extern "C" {
       {\
          for(unsigned k = 0; k < c_size; ++k)\
          {\
-            result += Rf_d##name (random_variable_table[k], param1_table[i], param2_table[j], 0);\
+            result += d##name (random_variable_table[k], param1_table[i], param2_table[j], 0);\
          }\
       }\
    }\
@@ -258,7 +260,7 @@ extern "C" {
          {\
             for(unsigned k = 0; k < c_size; ++k)\
             {\
-               result += Rf_q##name (probability_table[k], param1_table[i], param2_table[j], 1, 0);\
+               result += q##name (probability_table[k], param1_table[i], param2_table[j], 1, 0);\
             }\
          }\
       }\
@@ -278,7 +280,7 @@ extern "C" {
    {\
          for(unsigned k = 0; k < c_size; ++k)\
          {\
-         result += Rf_p##name (random_variable_table[k], param1_table[i], 1, 0);\
+            result += p##name (random_variable_table[k], param1_table[i], 1, 0);\
          }\
    }\
    \
@@ -295,7 +297,7 @@ extern "C" {
    {\
          for(unsigned k = 0; k < c_size; ++k)\
          {\
-            result += Rf_d##name (random_variable_table[k], param1_table[i], 0);\
+            result += d##name (random_variable_table[k], param1_table[i], 0);\
          }\
    }\
    \
@@ -312,32 +314,13 @@ extern "C" {
       {\
             for(unsigned k = 0; k < c_size; ++k)\
             {\
-               result += Rf_q##name (probability_table[k], param1_table[i], 1, 0);\
+               result += q##name (probability_table[k], param1_table[i], 1, 0);\
             }\
       }\
       \
       consume_result(result);\
       set_call_count(a_size * c_size);\
    }
-//
-// The R lib actually gives these non-obvious names that we can't deduce
-// in our own macro code, so create unline forwarders and let R's own
-// macros have control over dispatch to the right algorithm:
-//
-inline double Rf_dnorm(double x, double mu, double sigma, int give_log)
-{
-   return dnorm(x, mu, sigma, give_log);
-}
-
-inline double Rf_pnorm(double x, double mu, double sigma, int lower_tail, int give_log)
-{
-   return pnorm(x, mu, sigma, lower_tail, give_log);
-}
-
-inline double Rf_qnorm(double p, double mu, double sigma, int lower_tail, int log_p)
-{
-   return qnorm(p, mu, sigma, lower_tail, log_p);
-}
 
 BOOST_MATH_R_DISTRIBUTION2_TEST(beta, probabilities, probabilities, probabilities, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(binom, int_values, probabilities, int_values, probabilities)
@@ -349,9 +332,115 @@ BOOST_MATH_R_DISTRIBUTION2_TEST(gamma, real_values, real_values, real_values, pr
 BOOST_MATH_R_DISTRIBUTION2_TEST(lnorm, real_values, real_values, real_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(nbinom, int_values, probabilities, int_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(norm, real_values, real_values, real_values, probabilities)
-BOOST_MATH_R_DISTRIBUTION1_TEST(pois, real_values, real_values, probabilities)
+BOOST_MATH_R_DISTRIBUTION1_TEST(pois, real_values, int_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION1_TEST(t, int_values, real_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(weibull, real_values, real_values, real_values, probabilities)
+
+#endif
+
+#ifdef TEST_CEPHES
+
+extern "C"{
+
+double bdtr(int k, int n, double p);
+double bdtri(int k, int n, double p);
+
+double chdtr(double df, double x);
+double chdtri(double df, double p);
+
+double fdtr(int k, int n, double p);
+double fdtri(int k, int n, double p);
+
+double nbdtr(int k, int n, double p);
+double nbdtri(int k, int n, double p);
+
+}
+
+#define BOOST_MATH_CEPHES_DISTRIBUTION2_TEST(name, param1_table, param2_table, random_variable_table, probability_table) \
+   BOOST_MATH_PERFORMANCE_TEST(BOOST_JOIN(dist, name), "dist-" #name "-cephes-cdf")\
+   {\
+   double result = 0;\
+   unsigned a_size = sizeof(param1_table)/sizeof(param1_table[0]);\
+   unsigned b_size = sizeof(param2_table)/sizeof(param2_table[0]);\
+   unsigned c_size = sizeof(random_variable_table)/sizeof(random_variable_table[0]);\
+   \
+   for(unsigned i = 0; i < a_size; ++i)\
+   {\
+      for(unsigned j = 0; j < b_size; ++j)\
+      {\
+         for(unsigned k = 0; k < c_size; ++k)\
+         {\
+            result += name##dtr (param1_table[i], param2_table[j], random_variable_table[k]);\
+         }\
+      }\
+   }\
+   \
+   consume_result(result);\
+   set_call_count(a_size * b_size * c_size);\
+   }\
+   BOOST_MATH_PERFORMANCE_TEST(BOOST_JOIN(dist_quant, name), "dist-" #name "-cephes-quantile")\
+   {\
+      double result = 0;\
+      unsigned a_size = sizeof(param1_table)/sizeof(param1_table[0]);\
+      unsigned b_size = sizeof(param2_table)/sizeof(param2_table[0]);\
+      unsigned c_size = sizeof(probability_table)/sizeof(probability_table[0]);\
+      \
+      for(unsigned i = 0; i < a_size; ++i)\
+      {\
+         for(unsigned j = 0; j < b_size; ++j)\
+         {\
+            for(unsigned k = 0; k < c_size; ++k)\
+            {\
+               result += name##dtri (param1_table[i], param2_table[j], probability_table[k]);\
+            }\
+         }\
+      }\
+      \
+      consume_result(result);\
+      set_call_count(a_size * b_size * c_size);\
+   }
+
+#define BOOST_MATH_CEPHES_DISTRIBUTION1_TEST(name, param1_table, random_variable_table, probability_table) \
+   BOOST_MATH_PERFORMANCE_TEST(BOOST_JOIN(dist, name), "dist-" #name "-cephes-cdf")\
+   {\
+   double result = 0;\
+   unsigned a_size = sizeof(param1_table)/sizeof(param1_table[0]);\
+   unsigned c_size = sizeof(random_variable_table)/sizeof(random_variable_table[0]);\
+   \
+   for(unsigned i = 0; i < a_size; ++i)\
+   {\
+         for(unsigned k = 0; k < c_size; ++k)\
+         {\
+            result += name##dtr (param1_table[i], random_variable_table[k]);\
+         }\
+   }\
+   \
+   consume_result(result);\
+   set_call_count(a_size * c_size);\
+   }\
+   BOOST_MATH_PERFORMANCE_TEST(BOOST_JOIN(dist_quant, name), "dist-" #name "-cephes-quantile")\
+   {\
+      double result = 0;\
+      unsigned a_size = sizeof(param1_table)/sizeof(param1_table[0]);\
+      unsigned c_size = sizeof(probability_table)/sizeof(probability_table[0]);\
+      \
+      for(unsigned i = 0; i < a_size; ++i)\
+      {\
+            for(unsigned k = 0; k < c_size; ++k)\
+            {\
+               result += name##dtri (param1_table[i], probability_table[k]);\
+            }\
+      }\
+      \
+      consume_result(result);\
+      set_call_count(a_size * c_size);\
+   }
+// Cephes inverse doesn't actually calculate the quantile!!!
+// BOOST_MATH_CEPHES_DISTRIBUTION2_TEST(b, int_values, int_values, probabilities, probabilities)
+BOOST_MATH_CEPHES_DISTRIBUTION1_TEST(ch, int_values, real_values, probabilities)
+BOOST_MATH_CEPHES_DISTRIBUTION2_TEST(f, int_values, int_values, real_values, probabilities)
+// Cephes inverse doesn't calculate the quantile!!!
+// BOOST_MATH_CEPHES_DISTRIBUTION2_TEST(nb, int_values, int_values, probabilities, probabilities)
 
 #endif
 
