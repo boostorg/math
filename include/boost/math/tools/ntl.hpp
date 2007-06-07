@@ -278,11 +278,13 @@ namespace NTL{
    {
       asin_root(NTL::RR const& target) : t(target){}
 
-      std::tr1::tuple<NTL::RR, NTL::RR> operator()(NTL::RR const& p)
+      std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR> operator()(NTL::RR const& p)
       {
-         NTL::RR f0 = sin(p) - t;
+         NTL::RR f0 = sin(p);
          NTL::RR f1 = cos(p);
-         return std::tr1::make_tuple(f0, f1);
+         NTL::RR f2 = -f0;
+         f0 -= t;
+         return std::tr1::make_tuple(f0, f1, f2);
       }
    private:
       NTL::RR t;
@@ -290,9 +292,35 @@ namespace NTL{
 
    inline NTL::RR asin(NTL::RR z)
    {
-      return boost::math::tools::newton_raphson_iterate(
+      return boost::math::tools::halley_iterate(
          asin_root(z), 
          NTL::RR(std::asin(boost::math::tools::real_cast<double>(z))), 
+         NTL::RR(-boost::math::constants::pi<NTL::RR>()/2),
+         NTL::RR(boost::math::constants::pi<NTL::RR>()/2),
+         boost::math::tools::digits<NTL::RR>());
+   }
+
+   struct acos_root
+   {
+      acos_root(NTL::RR const& target) : t(target){}
+
+      std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR> operator()(NTL::RR const& p)
+      {
+         NTL::RR f0 = cos(p);
+         NTL::RR f1 = -sin(p);
+         NTL::RR f2 = -f0;
+         f0 -= t;
+         return std::tr1::make_tuple(f0, f1, f2);
+      }
+   private:
+      NTL::RR t;
+   };
+
+   inline NTL::RR acos(NTL::RR z)
+   {
+      return boost::math::tools::halley_iterate(
+         acos_root(z), 
+         NTL::RR(std::acos(boost::math::tools::real_cast<double>(z))), 
          NTL::RR(-boost::math::constants::pi<NTL::RR>()/2),
          NTL::RR(boost::math::constants::pi<NTL::RR>()/2),
          boost::math::tools::digits<NTL::RR>());
