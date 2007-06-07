@@ -426,6 +426,7 @@ inline std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, Tol tol, boo
 template <class F, class T, class Tol>
 std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, bool rising, Tol tol, boost::uintmax_t& max_iter)
 {
+   using namespace std;
    //
    // Set up inital brackets:
    //
