@@ -15,7 +15,10 @@ double igamma_evaluate2(const boost::array<boost::array<T, 6>, N>& data)
 {
    double result = 0;
    for(unsigned i = 0; i < N; ++i)
+   {
       result += boost::math::gamma_p(data[i][0], data[i][1]);
+      result += boost::math::gamma_q(data[i][0], data[i][1]);
+   }
    return result;
 }
 
@@ -28,7 +31,7 @@ BOOST_MATH_PERFORMANCE_TEST(igamma_test, "igamma")
 
    consume_result(result);
    set_call_count(
-      (sizeof(igamma_big_data) 
+      2 * (sizeof(igamma_big_data) 
       + sizeof(igamma_int_data) 
       + sizeof(igamma_med_data)
       + sizeof(igamma_small_data)) / sizeof(igamma_big_data[0]));
@@ -39,7 +42,10 @@ double igamma_inv_evaluate2(const boost::array<boost::array<T, 6>, N>& data)
 {
    double result = 0;
    for(unsigned i = 0; i < N; ++i)
+   {
       result += boost::math::gamma_p_inv(data[i][0], data[i][5]);
+      result += boost::math::gamma_q_inv(data[i][0], data[i][3]);
+   }
    return result;
 }
 
@@ -52,7 +58,7 @@ BOOST_MATH_PERFORMANCE_TEST(igamma_inv_test, "igamma_inv")
 
    consume_result(result);
    set_call_count(
-      (sizeof(igamma_big_data) 
+      2 * (sizeof(igamma_big_data) 
       + sizeof(igamma_int_data) 
       + sizeof(igamma_med_data)
       + sizeof(igamma_small_data)) / sizeof(igamma_big_data[0]));
@@ -63,7 +69,10 @@ double igamma_inva_evaluate2(const boost::array<boost::array<T, 6>, N>& data)
 {
    double result = 0;
    for(unsigned i = 0; i < N; ++i)
+   {
       result += boost::math::gamma_p_inva(data[i][1], data[i][5]);
+      result += boost::math::gamma_q_inva(data[i][1], data[i][3]);
+   }
    return result;
 }
 
@@ -76,7 +85,7 @@ BOOST_MATH_PERFORMANCE_TEST(igamma_inva_test, "igamma_inva")
 
    consume_result(result);
    set_call_count(
-      (sizeof(igamma_big_data) 
+      2 * (sizeof(igamma_big_data) 
       + sizeof(igamma_int_data) 
       + sizeof(igamma_med_data)
       + sizeof(igamma_small_data)) / sizeof(igamma_big_data[0]));
