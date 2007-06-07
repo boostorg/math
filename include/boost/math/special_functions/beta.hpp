@@ -471,7 +471,7 @@ T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised, T* p_derivative, 
       result = pow(x, a);
    }
    if(result < tools::min_value<T>())
-      return 0; // Safeguard: series can't cope with denorms.
+      return s0; // Safeguard: series can't cope with denorms.
    ibeta_series_t<T> s(a, b, x, result);
    boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
    result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter, s0);
