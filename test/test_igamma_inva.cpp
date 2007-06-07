@@ -80,7 +80,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*",                          // test data group
-      "[^|]*", 2000, 1000);             // test function
+      "[^|]*", 3000, 1000);             // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
