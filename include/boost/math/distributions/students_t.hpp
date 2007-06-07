@@ -85,11 +85,9 @@ inline RealType pdf(const students_t_distribution<RealType>& dist, const RealTyp
    if(false == detail::check_df(
          BOOST_CURRENT_FUNCTION, degrees_of_freedom, &error_result))
       return error_result;
-	 // Might conceivably permit df = +infinity and use normal distribution.
-   // TODO fails for t == 0 and df >=1e16 for ALL fp types.
-   // - probably need to use normal distribution - when available.
-   RealType basem1 = t * t / degrees_of_freedom;
+   // Might conceivably permit df = +infinity and use normal distribution.
    RealType result;
+   RealType basem1 = t * t / degrees_of_freedom;
    if(basem1 < 0.125)
    {
       result = exp(-boost::math::log1p(basem1) * (1+degrees_of_freedom) / 2);
@@ -99,7 +97,6 @@ inline RealType pdf(const students_t_distribution<RealType>& dist, const RealTyp
       result = pow(1 / (1 + basem1), (degrees_of_freedom + 1) / 2);
    }
    result /= sqrt(degrees_of_freedom) * boost::math::beta(degrees_of_freedom / 2, RealType(0.5f));
-
    return result;
 } // pdf
 
@@ -139,12 +136,12 @@ inline RealType cdf(const students_t_distribution<RealType>& dist, const RealTyp
    RealType probability;
    if(degrees_of_freedom > 2 * t2)
    {
-      RealType z = t2 / (degrees_of_freedom + t * t);
+      RealType z = t2 / (degrees_of_freedom + t2);
       probability = ibetac(static_cast<RealType>(0.5), degrees_of_freedom / 2, z) / 2;
    }
    else
    {
-      RealType z = degrees_of_freedom / (degrees_of_freedom + t * t);
+      RealType z = degrees_of_freedom / (degrees_of_freedom + t2);
       probability = ibeta(degrees_of_freedom / 2, static_cast<RealType>(0.5), z) / 2;
    }
    // Check 0 <= probability probability <= 1.
@@ -189,6 +186,11 @@ inline RealType quantile(const students_t_distribution<RealType>& dist, const Re
    if (probability == static_cast<RealType>(0.5))
      return 0;
    //
+   // This next block is disabled in favour of a faster method than
+   // incomplete beta inverse, code retained for future reference:
+   //
+#if 0
+   //
    // Calculate quantile of Student's t using the incomplete beta function inverse:
    //
    probability = (probability > 0.5) ? 1 - probability : probability;
@@ -205,6 +207,15 @@ inline RealType quantile(const students_t_distribution<RealType>& dist, const Re
       t = -t;
 
    return t;
+#endif
+   //
+   // Depending on how many digits RealType has, this may forward
+   // to the incomplete beta inverse as above.  Otherwise uses a
+   // faster method that is accurate to ~15 digits everywhere
+   // and a couple of epsilon at double precision and in the central 
+   // region where most use cases will occur...
+   //
+   return boost::math::detail::fast_students_t_quantile(degrees_of_freedom, probability);
 } // quantile
 
 template <class RealType>

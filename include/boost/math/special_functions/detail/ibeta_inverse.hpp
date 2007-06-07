@@ -9,6 +9,7 @@
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/tools/roots.hpp>
+#include <boost/math/special_functions/detail/t_distribution_inv.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -444,7 +445,7 @@ private:
 };
 
 template <class T, class L>
-T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
+T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
 {
    using namespace std;  // For ADL of math functions.
 
@@ -465,6 +466,16 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
    T lower = 0;
    T upper = 1;
    //
+   // Student's T with b = 0.5 gets handled as a special case, swap
+   // around if the arguments are in the "wrong" order:
+   //
+   if(a == 0.5f)
+   {
+      std::swap(a, b);
+      std::swap(p, q);
+      invert = !invert;
+   }
+   //
    // Handle trivial cases first:
    //
    if(q == 0)
@@ -481,6 +492,12 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
    {
       if(py) *py = 1 - p;
       return p;
+   }
+   else if((b == 0.5f) && (a >= 0.5f))
+   {
+      //
+      // We have a Student's T distribution:
+      x = estimate_ibeta_inv_from_t_dist(a, p, q, &y, l);
    }
    else if(a + b > 5)
    {
@@ -734,7 +751,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& /* l */, T* py)
    //
    if(lower == 0)
    {
-      if(invert)
+      if(invert && (py == 0))
       {
          //
          // We're not interested in answers smaller than machine epsilon:

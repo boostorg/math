@@ -160,6 +160,42 @@ namespace boost
               return false;
            return true;
         }
+
+         template <class T>
+         T inverse_binomial_cornish_fisher(T n, T sf, T p, T q)
+         {
+            using namespace std;
+            // mean:
+            T m = n * sf;
+            // standard deviation:
+            T sigma = sqrt(n * sf * (1 - sf));
+            // skewness
+            T sk = (1 - 2 * sf) / sigma;
+            // kurtosis:
+            // T k = (1 - 6 * sf * (1 - sf) ) / (n * sf * (1 - sf));
+            // Get the inverse of a std normal distribution:
+            T x = boost::math::erfc_inv(p > q ? 2 * q : 2 * p) * constants::root_two<T>();
+            // Set the sign:
+            if(p < 0.5)
+               x = -x;
+            T x2 = x * x;
+            // w is correction term due to skewness
+            T w = x + sk * (x2 - 1) / 6;
+            /*
+            // Add on correction due to kurtosis.
+            // Disabled for now, seems to make things worse?
+            //
+            if(n >= 10)
+               w += k * x * (x2 - 3) / 24 + sk * sk * x * (2 * x2 - 5) / -36;
+               */
+            w = m + sigma * w;
+            if(w < tools::min_value<T>())
+               return sqrt(tools::min_value<T>());
+            if(w > n)
+               return n;
+            return w;
+         }
+
      }
 
     // typedef binomial_distribution<double> binomial;
@@ -566,9 +602,10 @@ namespace boost
         // Error checks:
         using namespace std;  // ADL of std names
         RealType result;
+        RealType trials = dist.trials();
         if(false == binomial_detail::check_dist_and_prob(
            BOOST_CURRENT_FUNCTION,
-           dist.trials(),
+           trials,
            dist.success_fraction(),
            p,
            &result))
@@ -589,20 +626,40 @@ namespace boost
            // so n is the most sensible answer here:
            return dist.trials();
         }
-        if (p <= pow(1 - dist.success_fraction(), dist.trials()))
+        if (p <= pow(1 - dist.success_fraction(), trials))
         { // p <= pdf(dist, 0) == cdf(dist, 0)
 					return 0; // So the only reasonable result is zero.
 				} // And root finder would fail otherwise.
 
         // Solve for quantile numerically:
         //
+        RealType guess = binomial_detail::inverse_binomial_cornish_fisher(trials, dist.success_fraction(), p, 1-p);
+        RealType factor = 8;
+        if(trials > 100)
+           factor = 1.01f; // guess is pretty accurate
+        else if((trials > 10) && (trials - 1 > guess) && (guess > 3))
+           factor = 1.15f; // less accurate but OK.
+        else if(trials < 10)
+        {
+           // pretty inaccurate guess in this area:
+           if(guess > trials / 64)
+           {
+              guess = trials / 4;
+              factor = 2;
+           }
+           else
+              guess = trials / 1024;
+        }
+        else
+           factor = 2; // trials largish, but in far tails.
+
         detail::binomial_functor<RealType> f(dist, p);
         tools::eps_tolerance<RealType> tol(tools::digits<RealType>());
         boost::uintmax_t max_iter = 1000;
         std::pair<RealType, RealType> r = tools::bracket_and_solve_root(
            f,
-           dist.trials() / 2,
-           static_cast<RealType>(8),
+           guess,
+           factor,
            true,
            tol,
            max_iter);
@@ -621,10 +678,11 @@ namespace boost
         // Error checks:
         RealType q = c.param;
         const binomial_distribution<RealType>& dist = c.dist;
+        RealType trials = dist.trials();
         RealType result;
         if(false == binomial_detail::check_dist_and_prob(
            BOOST_CURRENT_FUNCTION,
-           dist.trials(),
+           trials,
            dist.success_fraction(),
            q,
            &result))
@@ -645,23 +703,50 @@ namespace boost
            // so n is the most sensible answer here:
            return dist.trials();
         }
-
-        if (-q <= powm1(1 - dist.success_fraction(), dist.trials()))
-        { // // q <= cdf(complement(dist, 0)) == pdf(dist, 0)
-          return 0; // So the only reasonable result is zero.
-        } // And root finder would fail otherwise.
+        if(trials == 1)
+        {
+           if(-q <= -dist.success_fraction())
+              return 0;
+        }
+        else
+        {
+           if (-q <= expm1(log1p(-dist.success_fraction()) * trials))
+           { // // q <= cdf(complement(dist, 0)) == pdf(dist, 0)
+             return 0; // So the only reasonable result is zero.
+           } // And root finder would fail otherwise.
+        }
 
         // Need to consider the case where
         //
         // Solve for quantile numerically:
         //
+        RealType guess = binomial_detail::inverse_binomial_cornish_fisher(trials, dist.success_fraction(), 1-q, q);
+        RealType factor = 8;
+        if(trials > 100)
+           factor = 1.01f; // guess is pretty accurate
+        else if((trials > 10) && (trials - 1 > guess) && (guess > 3))
+           factor = 1.15f; // less accurate but OK.
+        else if(trials < 10)
+        {
+           // pretty inaccurate guess in this area:
+           if(guess > trials / 64)
+           {
+              guess = trials / 4;
+              factor = 2;
+           }
+           else
+              guess = trials / 1024;
+        }
+        else
+           factor = 2; // trials largish, but in far tails.
+
         detail::binomial_functor<RealType> f(dist, q, true);
         tools::eps_tolerance<RealType> tol(tools::digits<RealType>());
         boost::uintmax_t max_iter = 1000;
         std::pair<RealType, RealType> r = tools::bracket_and_solve_root(
            f,
-           dist.trials() / 2,
-           static_cast<RealType>(8),
+           guess,
+           factor,
            true,
            tol,
            max_iter);
