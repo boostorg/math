@@ -710,7 +710,7 @@ namespace boost
         }
         else
         {
-           if (-q <= expm1(log1p(-dist.success_fraction()) * trials))
+           if (-q <= boost::math::expm1(boost::math::log1p(-dist.success_fraction()) * trials))
            { // // q <= cdf(complement(dist, 0)) == pdf(dist, 0)
              return 0; // So the only reasonable result is zero.
            } // And root finder would fail otherwise.

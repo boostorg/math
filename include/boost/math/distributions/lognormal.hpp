@@ -209,7 +209,7 @@ inline RealType variance(const lognormal_distribution<RealType>& dist)
    if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
       return result;
 
-   return expm1(sigma * sigma) * exp(2 * mu + sigma * sigma);
+   return boost::math::expm1(sigma * sigma) * exp(2 * mu + sigma * sigma);
 }
 
 template <class RealType>
@@ -250,7 +250,7 @@ inline RealType skewness(const lognormal_distribution<RealType>& dist)
    if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
       return result;
 
-   return (ess + 2) * sqrt(expm1(ss));
+   return (ess + 2) * sqrt(boost::math::expm1(ss));
 }
 
 template <class RealType>

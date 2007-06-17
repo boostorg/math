@@ -149,7 +149,7 @@ inline RealType cdf(const complemented2_type<extreme_value_distribution<RealType
    if(0 == detail::verify_scale_b(BOOST_CURRENT_FUNCTION, b, &result))
       return result;
 
-   result = -expm1(-exp((a-c.param)/b));
+   result = -boost::math::expm1(-exp((a-c.param)/b));
 
    return result;
 }

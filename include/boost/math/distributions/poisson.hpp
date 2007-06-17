@@ -391,7 +391,7 @@ namespace boost
       }
       if (k == 0)
       { // Avoid repeated checks on k and mean in gamma_p.
-       return -expm1(-mean);
+         return -boost::math::expm1(-mean);
       }
       // Unlike un-complemented cdf (sum from 0 to k),
       // can't use finite sum from k+1 to infinity for small integral k,
@@ -461,7 +461,7 @@ namespace boost
           return result;
         }
       }
-			if (-q <= expm1(-dist.mean()))
+      if (-q <= boost::math::expm1(-dist.mean()))
 			{ // if q <= cdf(complement for 0 events, then quantile must be zero.
 				return 0;
 			}
