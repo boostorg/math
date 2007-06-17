@@ -133,7 +133,9 @@ int test_main(int, char* [])
    //
 #if !defined(__CYGWIN__) && !defined(__FreeBSD__) && !(defined(__GNUC__) && defined(__sun))
    test((long double)(0), "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test((boost::math::concepts::real_concept)(0), "real_concept");
+#endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "

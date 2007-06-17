@@ -102,7 +102,9 @@ int test_main(int, char* [])
    test_cbrt(0.1F, "float");
    test_cbrt(0.1, "double");
    test_cbrt(0.1L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_cbrt(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
    return 0;
 }
 

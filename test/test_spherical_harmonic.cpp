@@ -312,7 +312,9 @@ int test_main(int, char* [])
    test_spherical_harmonic(0.1, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spherical_harmonic(0.1L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spherical_harmonic(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "

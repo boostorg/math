@@ -1644,7 +1644,9 @@ int test_main(int, char* [])
    test_powm1_sqrtp1m1(1.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_powm1_sqrtp1m1(1.0L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_powm1_sqrtp1m1(boost::math::concepts::real_concept(), "real_concept");
+#endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "
