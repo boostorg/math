@@ -35,10 +35,6 @@ run test_ellint_2.cpp ;
 run test_ellint_3.cpp ;
 run test_erf.cpp ;
 run test_error_handling.cpp ;
-run test_new_error_handling.cpp ;
-run test_policy.cpp ;
-run test_default_policy.cpp ;
-run test_no_policy.cpp ;
 run test_exponential_dist.cpp ;
 run test_extreme_value.cpp ;
 run test_factorials.cpp ;
@@ -146,6 +142,7 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_solve_inc_test.cpp ;
+
 
 
 
