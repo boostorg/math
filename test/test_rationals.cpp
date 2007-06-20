@@ -9,7 +9,8 @@
 #include <boost/array.hpp>
 #include <boost/math/tools/rational.hpp>
 
-#include "test_rational.hpp"
+template <class T, class U>
+void do_test_spots(T, U);
 
 template <class T>
 void test_spots(T t, const char* n)
@@ -23,10 +24,6 @@ void test_spots(T t, const char* n)
    do_test_spots(t, float(0));
    do_test_spots(t, T(0));
 }
-
-extern void test_spots(float t, const char* n);
-extern void test_spots(double t, const char* n);
-extern void test_spots(long double t, const char* n);
 
 int test_main(int, char* [])
 {

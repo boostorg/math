@@ -57,7 +57,29 @@ run test_negative_binomial.cpp ;
 run test_normal.cpp ;
 run test_poisson.cpp ;
 run test_rayleigh.cpp ;
-run test_rationals.cpp test_rational_float.cpp test_rational_double.cpp test_rational_ldouble.cpp ;
+
+run test_rationals.cpp 
+test_rational_instances/test_rational_double1.cpp
+test_rational_instances/test_rational_double2.cpp
+test_rational_instances/test_rational_double3.cpp
+test_rational_instances/test_rational_double4.cpp
+test_rational_instances/test_rational_double5.cpp
+test_rational_instances/test_rational_float1.cpp
+test_rational_instances/test_rational_float2.cpp
+test_rational_instances/test_rational_float3.cpp
+test_rational_instances/test_rational_float4.cpp
+test_rational_instances/test_rational_ldouble1.cpp
+test_rational_instances/test_rational_ldouble2.cpp
+test_rational_instances/test_rational_ldouble3.cpp
+test_rational_instances/test_rational_ldouble4.cpp
+test_rational_instances/test_rational_ldouble5.cpp
+test_rational_instances/test_rational_real_concept1.cpp
+test_rational_instances/test_rational_real_concept2.cpp
+test_rational_instances/test_rational_real_concept3.cpp
+test_rational_instances/test_rational_real_concept4.cpp
+test_rational_instances/test_rational_real_concept5.cpp
+;
+
 run test_remez.cpp ;
 run test_roots.cpp ;
 run test_spherical_harmonic.cpp ;
@@ -142,6 +164,7 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_solve_inc_test.cpp ;
+
 
 
 
