@@ -265,6 +265,24 @@ Neither can you write:
   double p = boost::math::constants::pi; // Context does not allow for disambiguation of overloaded function     
   double p = boost::math::constants::pi(); // Context does not allow for disambiguation of overloaded function     
 
+[h4 Thread safety]
+
+Reporting of error by setting errno should be thread safe already
+(otherwise none of the std lib math functions would be thread safe?).
+If you turn on reporting of errors via exceptions, errno gets left unused anyway.
+
+Other than that, the code is intended to be thread safe *for built in 
+real-number types* : so float, double and long double are all thread safe.
+
+For non-built-in types - NTL::RR for example - initialisation of the various 
+constants used in the implementation is potentially *not* thread safe.  
+This most undesiable, but it would be a signficant challenge to fix it.
+Some compilers may offer the option of having 
+static-constants initialised in a thread safe manner (Commeau, and maybe 
+others?), if that's the case then the problem is solved.  This is a topic of 
+hot debate for the next C++ std revision, so hopefully all compilers 
+will be required to do the right thing here at some point.
+
 [h4 Sources of Test Data]
 
 We found a large number of sources of test data.
