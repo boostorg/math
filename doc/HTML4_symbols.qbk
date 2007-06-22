@@ -3,6 +3,9 @@
 [/ See http://www.htmlhelp.com/reference/html40/entities/symbols.html]
 [/ All (except 2 angle brackets) show OK on Firefox 2.0]
 
+[/ See also Latin-1 aka Western (ISO-8859-1) in latin1_symbols.qbk]
+[/ http://www.htmlhelp.com/reference/html40/entities/latin1.html]
+
 [/ Also some miscellaneous math charaters added to this list - see the end.]
 
 [/ To use, enclose the template name in square brackets.]
@@ -137,7 +140,7 @@
 [template plusminus[]'''&#x00B1;'''] [/  ? plus or minus sign]
 
 [/ 
-Copyright 2006 Paul A. Bristow.
+Copyright 2007 Paul A. Bristow.
 Distributed under the Boost Software License, Version 1.0.
 (See accompanying file LICENSE_1_0.txt or copy at
 http://www.boost.org/LICENSE_1_0.txt).
