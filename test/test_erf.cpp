@@ -1,4 +1,5 @@
-//  (C) Copyright John Maddock 2006.
+//  Copyright John Maddock 2006.
+//  Copyright Paul A. Bristow 2007
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -16,6 +17,14 @@
 #include "test_erf_hooks.hpp"
 #include "handle_test_result.hpp"
 
+#ifdef _MSC_VER
+#  pragma warning(disable: 4127) // conditional expression is constant
+#  pragma warning(disable: 4512) // assignment operator could not be generated
+// but these persist in lambda to produce massive warning output at level 4.
+#endif
+
+// Note needs regex library to link.
+//
 //
 // DESCRIPTION:
 // ~~~~~~~~~~~~
@@ -23,14 +32,14 @@
 // This file tests the functions erf, erfc, and the inverses
 // erf_inv and erfc_inv.  There are two sets of tests, spot
 // tests which compare our results with selected values computed
-// using the online special function calculator at 
+// using the online special function calculator at
 // functions.wolfram.com, while the bulk of the accuracy tests
 // use values generated with NTL::RR at 1000-bit precision
 // and our generic versions of these functions.
 //
 // Note that when this file is first run on a new platform many of
 // these tests will fail: the default accuracy is 1 epsilon which
-// is too tight for most platforms.  In this situation you will 
+// is too tight for most platforms.  In this situation you will
 // need to cast a human eye over the error rates reported and make
 // a judgement as to whether they are acceptable.  Either way please
 // report the results to the Boost mailing list.  Acceptable rates of
@@ -91,7 +100,7 @@ void expected_results()
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
    //
-   std::cout << "Tests run with " << BOOST_COMPILER << ", " 
+   std::cout << "Tests run with " << BOOST_COMPILER << ", "
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
@@ -113,18 +122,18 @@ void do_test_erf(const T& data, const char* type_name, const char* test_name)
    // test erf against data:
    //
    result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
+      data,
+      boost::lambda::bind(funcp,
+         boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[1]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::erf", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::erf;
       result = boost::math::tools::test(
-         data, 
-         boost::lambda::bind(funcp, 
-            boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
+         data,
+         boost::lambda::bind(funcp,
+            boost::lambda::ret<value_type>(boost::lambda::_1[0])),
          boost::lambda::ret<value_type>(boost::lambda::_1[1]));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::erf");
    }
@@ -134,18 +143,18 @@ void do_test_erf(const T& data, const char* type_name, const char* test_name)
    //
    funcp = boost::math::erfc;
    result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
+      data,
+      boost::lambda::bind(funcp,
+         boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[2]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::erfc", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::erfc;
       result = boost::math::tools::test(
-         data, 
-         boost::lambda::bind(funcp, 
-            boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
+         data,
+         boost::lambda::bind(funcp,
+            boost::lambda::ret<value_type>(boost::lambda::_1[0])),
          boost::lambda::ret<value_type>(boost::lambda::_1[2]));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::erfc");
    }
@@ -170,9 +179,9 @@ void do_test_erf_inv(const T& data, const char* type_name, const char* test_name
    //
    funcp = boost::math::erf_inv;
    result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
+      data,
+      boost::lambda::bind(funcp,
+         boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[1]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::erf_inv", test_name);
    std::cout << std::endl;
@@ -195,9 +204,9 @@ void do_test_erfc_inv(const T& data, const char* type_name, const char* test_nam
    //
    funcp = boost::math::erfc_inv;
    result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
+      data,
+      boost::lambda::bind(funcp,
+         boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[1]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::erfc_inv", test_name);
    std::cout << std::endl;
@@ -211,7 +220,7 @@ void test_erf(T, const char* name)
    //
    // The contents are as follows, each row of data contains
    // three items, input value a, input value b and erf(a, b):
-   // 
+   //
 #  include "erf_small_data.ipp"
 
    do_test_erf(erf_small_data, name, "Erf Function: Small Values");
@@ -270,7 +279,7 @@ void test_spots(T, const char* t)
    if(sizeof(T) == sizeof(long double))
       tolerance = boost::math::tools::epsilon<double>() * 100 * 200; // 200 eps %.
 #endif
-  
+
    for(T i = -0.95f; i < 1; i += 0.125f)
    {
       T inv = boost::math::erf_inv(i);
@@ -311,5 +320,3 @@ int test_main(int, char* [])
 #endif
    return 0;
 }
-
-
