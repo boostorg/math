@@ -1,4 +1,5 @@
-// (C) Copyright John Maddock 2006
+// Copyright John Maddock 2006.
+// Copyright Paul A. Bristow 2007.
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -81,17 +82,17 @@ void two_samples_t_test_equal_sd(
    cout << "Alternative Hypothesis              Conclusion\n";
    cout << "Sample 1 Mean != Sample 2 Mean       " ;
    if(q < alpha / 2)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << "Sample 1 Mean <  Sample 2 Mean       ";
    if(cdf(dist, t_stat) < alpha)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << "Sample 1 Mean >  Sample 2 Mean       ";
    if(cdf(complement(dist, t_stat)) < alpha)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << endl << endl;
@@ -169,17 +170,17 @@ void two_samples_t_test_unequal_sd(
    cout << "Alternative Hypothesis              Conclusion\n";
    cout << "Sample 1 Mean != Sample 2 Mean       " ;
    if(q < alpha / 2)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << "Sample 1 Mean <  Sample 2 Mean       ";
    if(cdf(dist, t_stat) < alpha)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << "Sample 1 Mean >  Sample 2 Mean       ";
    if(cdf(complement(dist, t_stat)) < alpha)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << endl << endl;
@@ -221,8 +222,8 @@ T Statistic                                            =  -12.946
 Probability that difference is due to chance           =  7.855e-026
 Results for Alternative Hypothesis and alpha           =  0.0500
 Alternative Hypothesis              Conclusion
-Sample 1 Mean != Sample 2 Mean       ACCEPTED
-Sample 1 Mean <  Sample 2 Mean       ACCEPTED
+Sample 1 Mean != Sample 2 Mean       NOT REJECTED
+Sample 1 Mean <  Sample 2 Mean       NOT REJECTED
 Sample 1 Mean >  Sample 2 Mean       REJECTED
 _______________________________________________
 Student t test for two samples (equal variances)
@@ -239,8 +240,8 @@ T Statistic                                            =  -12.62059
 Probability that difference is due to chance           =  2.637e-030
 Results for Alternative Hypothesis and alpha           =  0.0500
 Alternative Hypothesis              Conclusion
-Sample 1 Mean != Sample 2 Mean       ACCEPTED
-Sample 1 Mean <  Sample 2 Mean       ACCEPTED
+Sample 1 Mean != Sample 2 Mean       NOT REJECTED
+Sample 1 Mean <  Sample 2 Mean       NOT REJECTED
 Sample 1 Mean >  Sample 2 Mean       REJECTED
 _____________________________________________________________
 Estimated sample sizes required for various confidence levels

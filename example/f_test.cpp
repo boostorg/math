@@ -1,4 +1,6 @@
-// (C) Copyright John Maddock 2006
+// Copyright John Maddock 2006
+// Copyright Paul A. Bristow 2007
+
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -23,10 +25,10 @@ void f_test(
 {
    //
    // An F test applied to two sets of data.
-   // We are testing the null hypothesis that the 
-   // standard deviation of the samples is equal, and 
-   // that any variation is down to chance.  We can 
-   // also test the alternative hypothesis that any 
+   // We are testing the null hypothesis that the
+   // standard deviation of the samples is equal, and
+   // that any variation is down to chance.  We can
+   // also test the alternative hypothesis that any
    // difference is not down to chance.
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda359.htm
    //
@@ -80,17 +82,17 @@ void f_test(
    cout << "Alternative Hypothesis                                    Conclusion\n";
    cout << "Standard deviations are unequal (two sided test)          ";
    if((ucv2 < F) || (lcv2 > F))
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << "Standard deviation 1 is less than standard deviation 2    ";
    if(lcv > F)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << "Standard deviation 1 is greater than standard deviation 2 ";
    if(ucv < F)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << endl << endl;
@@ -101,8 +103,8 @@ int main()
    //
    // Run tests for ceramic strength data:
    // see http://www.itl.nist.gov/div898/handbook/eda/section4/eda42a1.htm
-   // The data for this case study were collected by Said Jahanmir of the 
-   // NIST Ceramics Division in 1996 in connection with a NIST/industry 
+   // The data for this case study were collected by Said Jahanmir of the
+   // NIST Ceramics Division in 1996 in connection with a NIST/industry
    // ceramics consortium for strength optimization of ceramic strength.
    //
    f_test(65.54909, 61.85425, 240, 240, 0.05);
@@ -176,6 +178,6 @@ Results for Alternative Hypothesis and alpha           =  0.0500
 Alternative Hypothesis                                    Conclusion
 Standard deviations are unequal (two sided test)          REJECTED
 Standard deviation 1 is less than standard deviation 2    REJECTED
-Standard deviation 1 is greater than standard deviation 2 ACCEPTED
+Standard deviation 1 is greater than standard deviation 2 NOT REJECTED
 
 */

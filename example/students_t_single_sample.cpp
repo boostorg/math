@@ -1,4 +1,6 @@
-// (C) Copyright John Maddock 2006
+// Copyright John Maddock 2006
+// Copyright Paul A. Bristow 2007
+
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -143,17 +145,17 @@ void single_sample_t_test(double M, double Sm, double Sd, unsigned Sn, double al
    cout << "Alternative Hypothesis     Conclusion\n";
    cout << "Mean != " << setprecision(3) << fixed << M << "            ";
    if(q < alpha / 2)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << "Mean  < " << setprecision(3) << fixed << M << "            ";
    if(cdf(dist, t_stat) < alpha)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << "Mean  > " << setprecision(3) << fixed << M << "            ";
    if(cdf(complement(dist, t_stat)) < alpha)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << endl << endl;
@@ -290,9 +292,9 @@ T Statistic                                            =  2611.28380
 Probability that difference is due to chance           =  0.000e+000
 Results for Alternative Hypothesis and alpha           =  0.0500
 Alternative Hypothesis     Conclusion
-Mean != 5.000            ACCEPTED
+Mean != 5.000            NOT REJECTED
 Mean  < 5.000            REJECTED
-Mean  > 5.000            ACCEPTED
+Mean  > 5.000            NOT REJECTED
 _____________________________________________________________
 Estimated sample sizes required for various confidence levels
 _____________________________________________________________
@@ -358,8 +360,8 @@ T Statistic                                            =  -1.97566
 Probability that difference is due to chance           =  9.343e-002
 Results for Alternative Hypothesis and alpha           =  0.1000
 Alternative Hypothesis     Conclusion
-Mean != 38.900            ACCEPTED
-Mean  < 38.900            ACCEPTED
+Mean != 38.900            NOT REJECTED
+Mean  < 38.900            NOT REJECTED
 Mean  > 38.900            REJECTED
 _____________________________________________________________
 Estimated sample sizes required for various confidence levels

@@ -1,4 +1,5 @@
-// (C) Copyright John Maddock 2006
+// Copyright John Maddock 2006
+// Copyright Paul A. Bristow 2007
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -135,17 +136,17 @@ void chi_squared_test(
    cout << "Alternative Hypothesis              Conclusion\n";
    cout << "Standard Deviation != " << setprecision(3) << fixed << D << "            ";
    if((ucv2 < t_stat) || (lcv2 > t_stat))
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << "Standard Deviation  < " << setprecision(3) << fixed << D << "            ";
    if(lcv > t_stat)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << "Standard Deviation  > " << setprecision(3) << fixed << D << "            ";
    if(ucv < t_stat)
-      cout << "ACCEPTED\n";
+      cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
    cout << endl << endl;
@@ -218,10 +219,10 @@ int main()
    //
    // Run tests for silicon wafer fabrication data.
    // see http://www.itl.nist.gov/div898/handbook/prc/section2/prc23.htm
-   // A supplier of 100 ohm.cm silicon wafers claims that his fabrication 
-   // process can produce wafers with sufficient consistency so that the 
-   // standard deviation of resistivity for the lot does not exceed 
-   // 10 ohm.cm. A sample of N = 10 wafers taken from the lot has a 
+   // A supplier of 100 ohm.cm silicon wafers claims that his fabrication
+   // process can produce wafers with sufficient consistency so that the
+   // standard deviation of resistivity for the lot does not exceed
+   // 10 ohm.cm. A sample of N = 10 wafers taken from the lot has a
    // standard deviation of 13.97 ohm.cm
    //
    confidence_limits_on_std_deviation(13.97, 10);
@@ -275,8 +276,8 @@ Lower Critical Value at alpha/2:                       =  7.336e+001
 Results for Alternative Hypothesis and alpha           =  0.0500
 
 Alternative Hypothesis              Conclusion
-Standard Deviation != 0.100            ACCEPTED
-Standard Deviation  < 0.100            ACCEPTED
+Standard Deviation != 0.100            NOT REJECTED
+Standard Deviation  < 0.100            NOT REJECTED
 Standard Deviation  > 0.100            REJECTED
 
 
@@ -344,7 +345,7 @@ Results for Alternative Hypothesis and alpha           =  0.0500
 Alternative Hypothesis              Conclusion
 Standard Deviation != 10.000            REJECTED
 Standard Deviation  < 10.000            REJECTED
-Standard Deviation  > 10.000            ACCEPTED
+Standard Deviation  > 10.000            NOT REJECTED
 
 
 _____________________________________________________________
