@@ -1,4 +1,5 @@
-//  (C) Copyright John Maddock 2006.
+//  Copyright John Maddock 2006.
+//  Copyright Paul A. Bristow 2007
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -458,8 +459,11 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
    // Depending upon which approximation method we use, we may end up
    // calculating either x or y initially (where y = 1-x):
    //
-   T x, y;
-   //
+   T x = 0; // Set to a safe zero to avoid a
+   // MSVC 2005 warning C4701: potentially uninitialized local variable 'x' used
+   // But code inspection appears to ensure that x IS assigned whatever the code path.
+   T y; 
+
    // For some of the methods we can put tighter bounds
    // on the result than simply [0,1]:
    //
@@ -657,7 +661,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
       if((b < a) && (x < 0.2))
       {
          //
-         // Under a limited range of circustances we can improve
+         // Under a limited range of circumstances we can improve
          // our estimate for x, frankly it's clear if this has much effect!
          //
          T ap1 = a - 1;
