@@ -5,6 +5,8 @@
     Use, modification and distribution is subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
+    
+    New syntax color Paul A. Bristow 8 Jun 2007
 =============================================================================*/
 
 /*=============================================================================
@@ -361,8 +363,23 @@
             color: #000000;
         }
     
-    /* Syntax Highlighting */
-        .keyword        { color: #0000AA; }
+        /* New Syntax Highlighting 
+		       using Recognized color keyword names, for example:
+		       http://www.w3.org/TR/SVG/types.html see section 4.2 
+		    */
+		        .keyword        { color: blue; }
+		        .identifier     { color: black; }
+		        .special        { color: magenta; }
+		        .preprocessor   { color: blueviolet; }
+		        .char           { color: teal; }
+		        .comment        { color: green; }
+		        .string         { color: teal; }
+		        .number         { color: red; }
+		        .white_bkd      { background-color: white; }
+		        .dk_grey_bkd    { background-color: dimgray; }
+
+    /* Original Syntax Highlighting 
+        .keyword        { color: blue; }
         .identifier     { color: #000000; }
         .special        { color: #707070; }
         .preprocessor   { color: #402080; }
@@ -372,7 +389,7 @@
         .number         { color: teal; }
         .white_bkd      { background-color: #FFFFFF; }
         .dk_grey_bkd    { background-color: #999999; }
-    
+    */
     /* Copyright, Legal Notice */
         .copyright      
         { 

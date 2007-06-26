@@ -112,10 +112,20 @@ see [@http://www.boost.org/libs/random/ Boost.Random].
 The distributions in the random number library are typically much faster,
 but much less accurate than those in this library.  This reflects the
 differing uses of the two libraries: if you want to conduct statistical
-tests, then you will need the reliable computation of this library, where
-as random numbers are ['random]: so accuracy is not a concern, where
+tests, then you will need the reliable computation of this library,
+whereas random numbers are ['random]: so accuracy is not a concern, where
 as speed most certainly is.
-]
+] [/tip Random numbers that approximate Quantiles of Distributions]
+
+For example, the binomial distribution has two parameters:
+n (the number of trials) and p (the probability of success on one trial).
+
+The `binomial_distribution` constructor therefore has two parameters:
+
+`binomial_distribution(RealType n, RealType p);`
+  
+For this distribution the random variate is k: the number of successes observed.
+The probability density\/mass function (pdf) is therefore written as ['f(k; n, p)].
 
 [tip
 
@@ -127,17 +137,7 @@ are conventionally distinguished (for example in Wikipedia and Wolfram MathWorld
 by placing a semi-colon (or sometimes vertical bar)
 after the random variate (whose value you 'choose'),
 to separate the variate from the parameter(s) that defines the shape of the distribution.
-]
-
-For example, the binomial distribution has two parameters:
-n (the number of trials) and p (the probability of success on one trial).
-
-The `binomial_distribution` constructor therefore has two parameters:
-
-`binomial_distribution(RealType n, RealType p);`
-  
-For this distribution the random variate is k: the number of successes observed.
-The probability density\/mass function (pdf) is therefore written as ['f(k; n, p)].
+] [/tip Random Variates and Distribution Parameters]
 
 As noted above the non-member function `pdf` has one parameter for the distribution object,
 and a second for the random variate.  So taking our binomial distribution 
@@ -152,8 +152,8 @@ MathWorld uses the word 'defined' for this range.
 Non-mathematicians might say it means the 'interesting' smallest range
 of random variate x that has the cdf going from zero to unity.
 Outside are uninteresting zones where the pdf is zero, and the cdf zero or unity.
-Mathematically, the random variate may take an (+ or -) infinite value,
-but this implementation limits it to finite values from the `max` to `min` for the `RealType`.
+Mathematically, the functions may make sense with an (+ or -) infinite value,
+but this implementation limits random variates to finite values from the `max` to `min` for the `RealType`.
 (See [link math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity 
 Handling of Floating-Point Infinity] for rationale).
 

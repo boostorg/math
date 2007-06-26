@@ -8,8 +8,8 @@ you can place on that mean.  Colloquially: "I want an interval that I can be
 P% sure contains the true mean".  (On a technical point, note that 
 the interval either contains the true mean or it does not: the 
 meaning of the confidence level is subtly 
-different from this colloquialism.  More background information can be found 
-[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm on the NIST site]).
+different from this colloquialism.  More background information can be found on the 
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm NIST site]).
 
 The formula for the interval can be expressed as:
 
@@ -20,7 +20,7 @@ Where, ['Y[sub s]] is the sample mean, /s/ is the sample standard deviation,
 ['t[sub ([alpha]/2,N-1)]] is the upper critical value of the Students-t
 distribution with /N-1/ degrees of freedom.
 
-[Note
+[note
 The quantity [alpha][space] is the maximum acceptable risk of falsely rejecting
 the null-hypothesis.  The smaller the value of [alpha] the greater the
 strength of the test.
@@ -30,9 +30,16 @@ as a percentage.  So for example a significance level of 0.05, is equivalent
 to a 95% confidence level.  Refer to 
 [@http://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm 
 "What are confidence intervals?"] in __handbook for more information.
+] [/ Note]
+
+[note
+The usual assumptions of
+[@http://en.wikipedia.org/wiki/Independent_and_identically-distributed_random_variables independent and identically distributed (i.i.d.)]
+variables and [@http://en.wikipedia.org/wiki/Normal_distribution normal distribution]
+of course apply here, as they do in other examples.]
 ]
 
-From the formula it should be clear that:
+From the formula, it should be clear that:
 
 * The width of the confidence interval decreases as the sample size increases.
 * The width increases as the standard deviation increases.
@@ -198,7 +205,18 @@ The following example code is taken from the example program
 [@../../example/students_t_single_sample.cpp students_t_single_sample.cpp].
 
 We'll begin by defining a procedure to determine which of the
-possible hypothesis are accepted or rejected at a given significance level:
+possible hypothesis are rejected or not-rejected
+at a given significance level:
+
+[note
+Non-statisticians might say 'not-rejected' means 'accepted',
+(often of the null-hypothesis) implying, wrongly, that there really *IS* no difference,
+but statisticans eschew this to avoid implying that there is positive evidence of 'no difference'.
+'Not-rejected' here means there is *no evidence* of difference, but there still might well be a difference.
+For example, see [@http://en.wikipedia.org/wiki/Argument_from_ignorance argument from ignorance] and 
+[@http://www.bmj.com/cgi/content/full/311/7003/485 Absence of evidence does not constitute evidence of absence.]
+] [/ note]
+
 
    // Needed includes:
    #include <boost/math/distributions/students_t.hpp>
@@ -299,9 +317,9 @@ section 3.5.2] of the __handbook.
    Results for Alternative Hypothesis and alpha           =  0.0500'''
 
    Alternative Hypothesis     Conclusion
-   Mean != 5.000              ACCEPTED
+   Mean != 5.000              NOT REJECTED
    Mean  < 5.000              REJECTED
-   Mean  > 5.000              ACCEPTED
+   Mean  > 5.000              NOT REJECTED
 ]
 
 You will note the line that says the probability that the difference is
@@ -310,7 +328,7 @@ the probability can never reach zero.  However, in this case the calculated
 probability is smaller than the smallest representable double precision number,
 hence the appearance of a zero here.  Whatever its "true" value is, we know it
 must be extraordinarily small, so the alternative hypothesis - that there is
-a difference in means - is accepted.
+a difference in means - is not rejected.
 
 For comparison the next example data output is taken from
 ['P.K.Hou, O. W. Lau & M.C. Wong, Analyst (1983) vol. 108, p 64.
@@ -368,12 +386,13 @@ Results for Alternative Hypothesis and alpha           =  0.1000'''
 
 Alternative Hypothesis     Conclusion
 Mean != 38.900            REJECTED
-Mean  < 38.900            ACCEPTED
+Mean  < 38.900            NOT REJECTED
 Mean  > 38.900            REJECTED
 ]
 
-In this case we really have a borderline result, and more data should
-be collected.
+In this case, we really have a borderline result,
+and more data (and/or more accurate data),
+is needed for a more convincing conclusion.
 
 [endsect]
 
@@ -638,8 +657,8 @@ section 1.3.5.3] of the __handbook.
    Results for Alternative Hypothesis and alpha           =  0.0500'''
 
    Alternative Hypothesis              Conclusion
-   Sample 1 Mean != Sample 2 Mean       ACCEPTED
-   Sample 1 Mean <  Sample 2 Mean       ACCEPTED
+   Sample 1 Mean != Sample 2 Mean       NOT REJECTED
+   Sample 1 Mean <  Sample 2 Mean       NOT REJECTED
    Sample 1 Mean >  Sample 2 Mean       REJECTED
 ]
 
@@ -714,8 +733,8 @@ are car mileage data again, here's what the output looks like:
    Results for Alternative Hypothesis and alpha           =  0.0500'''
 
    Alternative Hypothesis              Conclusion
-   Sample 1 Mean != Sample 2 Mean       ACCEPTED
-   Sample 1 Mean <  Sample 2 Mean       ACCEPTED
+   Sample 1 Mean != Sample 2 Mean       NOT REJECTED
+   Sample 1 Mean <  Sample 2 Mean       NOT REJECTED
    Sample 1 Mean >  Sample 2 Mean       REJECTED
 ]
 

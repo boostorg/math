@@ -1,6 +1,6 @@
 [article Math Toolkit
-    [quickbook 1.3]
-    [copyright 2006 John Maddock, Paul A. Bristow, Hubert Holin and Xiaogang Zhang]
+    [quickbook 1.4]
+    [copyright 2006-2007 John Maddock, Paul A. Bristow, Hubert Holin and Xiaogang Zhang]
     [purpose Various Special Functions, Statistical Distributions, and Numerical Tools]
     [license
         Distributed under the Boost Software License, Version 1.0.
@@ -12,7 +12,8 @@
     [/last-revision $Date$]
 ]
 
-[include HTML4_symbols.qbk]
+[include HTML4_symbols.qbk] [/ just for testing]
+[include Latin1_symbols.qbk] [/ just for testing]
 
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
@@ -215,14 +216,16 @@ how the library is used to conduct statistical tests.
 
 Provides a small number of high quality 
 [@http://en.wikipedia.org/wiki/Special_functions special functions],
-initially these are be concentrated on functions used in statistical applications.
+initially these were concentrated on functions used in statistical applications
+but now also include some recently standardised in C99 & C++.
 
 The function families currently implemented are the gamma, beta & erf functions
 along with the incomplete gamma and beta functions (four variants
 of each) and all the possible inverses of these, plus digamma and various 
-special power and logarithmic functions.  Future additions will focus on
-those new math functions added in the C++ Technical Report on Standard Library
-Extensions.
+special power and logarithmic functions.  Additions now include
+most new math functions added in the
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf C++ Technical Report on Standard Library
+Extensions].
 
 All the implementations
 are fully generic and support the use of arbitrary "real-number" types,
@@ -367,7 +370,9 @@ external graphing application.
 [include issues.qbk]
 [include credits.qbk]
 [/include test_HTML4_symbols.qbk]
-[endsect][/section:status Status and Roadmap]
+[/include test_Latin1_symbols.qbk]
+
+[endsect][/section:status Status and Roadmap] 
 
 [/ math.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.
