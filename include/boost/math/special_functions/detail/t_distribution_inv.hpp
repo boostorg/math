@@ -1,4 +1,5 @@
-//  (C) Copyright John Maddock 2007.
+//  Copyright John Maddock 2007.
+//  Copyright Paul A. Bristow 2007
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -13,7 +14,7 @@ namespace boost{ namespace math{ namespace detail{
 //
 // The main method used is due to Hill:
 //
-// G. W. Hill, Algorithm 396, Student’s t-Quantiles, 
+// G. W. Hill, Algorithm 396, Student’s t-Quantiles,
 // Communications of the ACM, 13(10): 619-620, Oct., 1970.
 //
 template <class T>
@@ -21,7 +22,7 @@ T inverse_students_t_hill(T ndf, T u)
 {
    using namespace std;
    BOOST_ASSERT(u <= 0.5);
-   
+
    T a, b, c, d, q, x, y;
 
    if (ndf > 1e20f)
@@ -33,7 +34,7 @@ T inverse_students_t_hill(T ndf, T u)
    d = ((94.5f / (b + c) - 3) / b + 1) * sqrt(a * constants::pi<T>() / 2) * ndf;
    y = pow(d * 2 * u, 2 / ndf);
 
-   if (y > (0.05f + a)) 
+   if (y > (0.05f + a))
    {
       //
       // Asymptotic inverse expansion about normal:
@@ -46,11 +47,11 @@ T inverse_students_t_hill(T ndf, T u)
       c += (((0.05f * d * x - 5) * x - 7) * x - 2) * x + b;
       y = (((((0.4f * y + 6.3f) * y + 36) * y + 94.5f) / c - y - 3) / b + 1) * x;
       y = boost::math::expm1(a * y * y);
-   } 
-   else 
+   }
+   else
    {
-      y = ((1 / (((ndf + 6) / (ndf * y) - 0.089f * d - 0.822f) 
-              * (ndf + 2) * 3) + 0.5 / (ndf + 4)) * y - 1) 
+      y = ((1 / (((ndf + 6) / (ndf * y) - 0.089f * d - 0.822f)
+              * (ndf + 2) * 3) + 0.5 / (ndf + 4)) * y - 1)
               * (ndf + 1) / (ndf + 2) + 1 / y;
    }
    q = sqrt(ndf * y);
@@ -62,12 +63,12 @@ T inverse_students_t_hill(T ndf, T u)
 //
 // www.mth.kcl.ac.uk/˜shaww/web_page/papers/Tdistribution06.pdf
 //
-// Shaw, W.T., 2006, "Sampling Student’s T distribution – use of 
-// the inverse cumulative distribution function." 
+// Shaw, W.T., 2006, "Sampling Student’s T distribution – use of
+// the inverse cumulative distribution function."
 // Journal of Computational Finance, Vol 9 Issue 4, pp 37-73, Summer 2006
 //
 template <class T, class L>
-T inverse_students_t_tail_series(T df, T v, T u, const L& l)
+T inverse_students_t_tail_series(T df, T v, T /* u */, const L& l)
 {
    using namespace std;
    // Tail series expansion, see section 6 of Shaw's paper.
@@ -91,8 +92,8 @@ T inverse_students_t_tail_series(T df, T v, T u, const L& l)
    d[3] = -df * (df + 1) * (df + 5) * (((3 * df) + 7) * df -2) / (48 * np2 * np4 * np6);
    np2 *= (df + 2);
    np4 *= (df + 4);
-   d[4] = -df * (df + 1) * (df + 7) * 
-      ( (((((15 * df) + 154) * df + 465) * df + 286) * df - 336) * df + 64 ) 
+   d[4] = -df * (df + 1) * (df + 7) *
+      ( (((((15 * df) + 154) * df + 465) * df + 286) * df - 336) * df + 64 )
       / (384 * np2 * np4 * np6 * (df + 8));
    np2 *= (df + 2);
    d[5] = -df * (df + 1) * (df + 3) * (df + 9)
@@ -101,7 +102,7 @@ T inverse_students_t_tail_series(T df, T v, T u, const L& l)
    np2 *= (df + 2);
    np4 *= (df + 4);
    np6 *= (df + 6);
-   d[6] = -df * (df + 1) * (df + 11) 
+   d[6] = -df * (df + 1) * (df + 11)
             * ((((((((((((945 * df) + 31506) * df + 425858) * df + 2980236) * df + 11266745) * df + 20675018) * df + 7747124) * df - 22574632) * df - 8565600) * df + 18108416) * df - 7099392) * df + 884736)
             / (46080 * np2 * np4 * np6 * (df + 8) * (df + 10) * (df +12));
    //
@@ -142,7 +143,7 @@ T inverse_students_t_body_series(T df, T u, const L& l)
    c[4] = ((((T(1) / 5040) * in + (T(1) / 560)) * in + (T(3) / 112)) * in + T(127) / 5040);
    c[5] = ((((T(1) / 362880) * in + (T(17) / 45360)) * in + (T(67) / 60480)) * in + (T(479) / 45360)) * in + (T(4369) / 362880);
    c[6] = ((((((T(1) / 39916800) * in + (T(2503) / 39916800)) * in + (T(11867) / 19958400)) * in + (T(1285) / 798336)) * in + (T(153161) / 39916800)) * in + (T(34807) / 5702400));
-   c[7] = (((((((T(1) / 6227020800LL) * in + (T(37) / 2402400)) * in + 
+   c[7] = (((((((T(1) / 6227020800LL) * in + (T(37) / 2402400)) * in +
       (T(339929) / 2075673600LL)) * in + (T(67217) / 97297200)) * in +
       (T(870341) / 691891200LL)) * in + (T(70691) / 64864800LL)) * in +
       (T(20036983LL) / 6227020800LL));
@@ -251,7 +252,7 @@ T inverse_students_t(T df, T u, T v, const L& l, bool* pexact = 0)
             //
             // Newton-Raphson iteration of a polynomial case,
             // choice of seed value is taken from Shaw's online
-            // supplement: 
+            // supplement:
             //
             T a = 4 * (u - u * u);//1 - 4 * (u - 0.5f) * (u - 0.5f);
             T b = boost::math::cbrt(a);
@@ -286,7 +287,7 @@ T inverse_students_t(T df, T u, T v, const L& l, bool* pexact = 0)
             //
             // Newton-Raphson iteration of a polynomial case,
             // choice of seed value is taken from Shaw's online
-            // supplement: 
+            // supplement:
             //
             static const T c8 = 0.85994765706259820318168359251872L;
             T a = 4 * (u - u * u); //1 - 4 * (u - 0.5f) * (u - 0.5f);
@@ -299,7 +300,7 @@ T inverse_students_t(T df, T u, T v, const L& l, bool* pexact = 0)
                p0 = p;
                // Next term is given by Eq 42:
                p = 2 * (3 * p + (640 * (160 + p * (24 + p * (p + 4)))) / (-5120 + p * (-2048 - 960 * p + a * p5))) / 7;
-            }while(fabs((p - p0) / p) > tolerance); 
+            }while(fabs((p - p0) / p) > tolerance);
             //
             // Use Eq 45 to extract the result:
             //
@@ -312,7 +313,7 @@ T inverse_students_t(T df, T u, T v, const L& l, bool* pexact = 0)
             //
             // Newton-Raphson iteration of a polynomial case,
             // choice of seed value is taken from Shaw's online
-            // supplement: 
+            // supplement:
             //
             static const T c10 = 0.86781292867813396759105692122285L;
             T a = 4 * (u - u * u); //1 - 4 * (u - 0.5f) * (u - 0.5f);
@@ -324,9 +325,9 @@ T inverse_students_t(T df, T u, T v, const L& l, bool* pexact = 0)
                p6 *= p6 * p6;
                p0 = p;
                // Next term given by Eq 43:
-               p = (8 * p) / 9 + (218750 * (21875 + 4 * p * (625 + p * (75 + 2 * p * (5 + p))))) / 
+               p = (8 * p) / 9 + (218750 * (21875 + 4 * p * (625 + p * (75 + 2 * p * (5 + p))))) /
                   (9 * (-68359375 + 8 * p * (-2343750 + p * (-546875 - 175000 * p + 8 * a * p6))));
-            }while(fabs((p - p0) / p) > tolerance); 
+            }while(fabs((p - p0) / p) > tolerance);
             //
             // Use Eq 45 to extract the result:
             //
@@ -392,7 +393,7 @@ inline T estimate_ibeta_inv_from_t_dist(T a, T p, T q, T* py, const L& l)
 }
 
 template <class T, class L>
-inline T fast_students_t_quantile_imp(T df, T p, const L& l, const mpl::false_*)
+inline T fast_students_t_quantile_imp(T df, T p, const L& /* l */, const mpl::false_*)
 {
    using namespace std;
    //
@@ -441,7 +442,7 @@ T fast_students_t_quantile_imp(T df, T p, const L& l, const mpl::true_*)
    T y = t2 / (df + t2);
    T a = df / 2;
    //
-   // t can be so large that x underflows, 
+   // t can be so large that x underflows,
    // just return our estimate in that case:
    //
    if(xb == 0)
@@ -463,7 +464,7 @@ T fast_students_t_quantile_imp(T df, T p, const L& l, const mpl::true_*)
    // yacas gives:
    //
    // In> PrettyForm(Simplify(D(t) (1 + t^2/v) ^ (-(v+1)/2)))
-   // 
+   //
    //  |                        | v + 1     |     |
    //  |                       -| ----- + 1 |     |
    //  |                        |   2       |     |
@@ -472,7 +473,7 @@ T fast_students_t_quantile_imp(T df, T p, const L& l, const mpl::true_*)
    //  |             | -- + 1 |                   |
    //  | ( v + 1 ) * | v      |               * t |
    // ---------------------------------------------
-   //                       v   
+   //                       v
    //
    // Which after some manipulation is:
    //
