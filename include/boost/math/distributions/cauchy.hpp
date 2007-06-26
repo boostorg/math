@@ -1,4 +1,6 @@
 //  Copyright John Maddock 2006.
+// Copyright Paul A. Bristow 2007.
+
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -124,7 +126,7 @@ RealType quantile_imp(
    return complement ? loc - result : loc + result;
 } // quantile
 
-}
+} // namespace detail
 
 template <class RealType = double>
 class cauchy_distribution
@@ -210,8 +212,14 @@ inline RealType quantile(const complemented2_type<cauchy_distribution<RealType>,
 
 template <class RealType>
 inline RealType mean(const cauchy_distribution<RealType>& )
-{
-   // There is no mean:
+{  // There is no mean:
+#ifdef BOOST_MATH_COMPILE_FAIL_IF_UNDEFINED
+#  ifdef BOOST_MSVC
+#    error Mean of the Cauchy distribution is undefined!
+#  else 
+      BOOST_STATIC_ASSERT(sizeof(RealType) == 0);
+#  endif
+#endif
    return tools::domain_error<RealType>(
       BOOST_CURRENT_FUNCTION,
       "The Cauchy distribution does not have a mean: "
