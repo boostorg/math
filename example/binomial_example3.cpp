@@ -76,15 +76,15 @@ int main()
 } // int main()
 
 /*
-Output is:
 
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\binomial_example3.exe"
+Autorun "i:\boost-sandbox\math_toolkit\libs\math\test\msvc80\debug\binomial_example3.exe"
 Example 3 of using the binomial distribution.
- n       p      k    plek    pgtk    pegk 
-4.0000 0.50000   2 0.68750 0.31250 0.37500
-19.000 0.44000  13 0.99138 0.0086244 0.019386
-100.00 0.75000  67 0.044596 0.95540 0.017002
-2000.0 0.33000 700 0.97251 0.027494 0.0031178
+ n        p     k     plek     pgtk     peqk 
+   4  0.50000   2  0.68750  0.31250  0.37500
+  19  0.44000  13  0.99138  0.00862  0.01939
+ 100  0.75000  67  0.04460  0.95540  0.01700
+2000  0.33000 700  0.97251  0.02749  0.00312
+
 
 
  */
