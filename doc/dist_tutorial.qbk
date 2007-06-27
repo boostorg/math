@@ -26,8 +26,14 @@ For example, to use the Students-t distribution include
 
 [h4 Distributions are Objects]
 
-Each kind of distribution in this library is a class type: this does two
-things:
+Each kind of distribution in this library is a class type.
+
+[tip If you are familiar with statistics libraries using functions,
+and 'Distributions as Objects' seem alien, see
+[link math_toolkit.dist.stat_tut.weg.NAG_library other statistics libraries.]  
+] [/tip]
+
+Making distributions class types does two things:
 
 * It encapsulates the kind of distribution in the C++ type system; 
 so, for example, Students-t distributions are always a different C++ type from 
@@ -331,12 +337,13 @@ Now that you have the basics, the next section looks at some worked examples.
 [include distributions/binomial_example.qbk]
 [include distributions/negative_binomial_example.qbk]
 [include distributions/error_handling_example.qbk]
+[include distributions/NAG_library.qbk]
 
 [endsect][/section:overview Overview]
 
 [include background.qbk]
 
-[endsect][/section:stat_tut Statistical Distributions Tutorial]
+[endsect][/ section:stat_tut Statistical Distributions Tutorial]
 
 [/ dist_tutorial.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.

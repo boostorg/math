@@ -13,7 +13,7 @@
 ]
 
 [include HTML4_symbols.qbk] [/ just for testing]
-[include Latin1_symbols.qbk] [/ just for testing]
+[/include Latin1_symbols.qbk] [/ just for testing]
 
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
@@ -40,7 +40,7 @@
 [def __godfrey [link godfrey Godfrey]]
 [def __pugh [link pugh Pugh]]
 
-[def __caution This is not an official Boost library, it is a library under 
+[def __caution This is an official Boost library, but remains a library under 
                construction, the code is fully functional and robust, but 
                interfaces, library structure, and function and distribution names
                may be changed without notice.]
@@ -201,7 +201,7 @@ upon which higher level statistical tests can be built.
 
 The initial focus is on the central
 [@http://en.wikipedia.org/wiki/Univariate univariate ]
-[@http://mathworld.wolfram.com/StatisticalDistribution.html distributions].\n
+[@http://mathworld.wolfram.com/StatisticalDistribution.html distributions].
 Both [@http://mathworld.wolfram.com/ContinuousDistribution.html continuous]
 (like [@http://mathworld.wolfram.com/NormalDistribution.html normal]
 & [@http://mathworld.wolfram.com/F-Distribution.html Fisher])
