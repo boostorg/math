@@ -28,7 +28,7 @@ using std::setw;
 
 int main()
 {
-  cout << "Example 3 of using the binomial distribution." << endl;
+  cout << "Example 3 of using the binomial distribution to replicate a NAG library call." << endl;
   using boost::math::binomial_distribution;
 
   // This replicates the computation of the examples of using nag-binomial_dist
@@ -59,9 +59,9 @@ int main()
   //             pdf(dist, k) is equivalent to NAG library peqk probability of == k
 
   cout << " n        p     k     plek     pgtk     peqk " << endl;
-  binomial_distribution<>one(4, 0.5);
-  cout << setw(4) << (int)one.trials() <<  "  "  << one.success_fraction() << "   "<< 2 << "  "
-    << cdf(one, 2) << "  " << cdf(complement(one, 2)) << "  " << pdf(one, 2) << endl;
+  binomial_distribution<>my_dist(4, 0.5);
+  cout << setw(4) << (int)my_dist.trials() <<  "  "  << my_dist.success_fraction() << "   "<< 2 << "  "
+    << cdf(my_dist, 2) << "  " << cdf(complement(my_dist, 2)) << "  " << pdf(my_dist, 2) << endl;
   binomial_distribution<>two(19, 0.440);
   cout << setw(4) << (int)two.trials() <<  "  "  << two.success_fraction() << "  " << 13 << "  "
     << cdf(two, 13) << "  " << cdf(complement(two, 13)) << "  " << pdf(two, 13) << endl;
