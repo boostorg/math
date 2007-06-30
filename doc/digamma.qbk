@@ -74,7 +74,7 @@ For arguments in the range [0,1] the recurrence relation:
    
 is used to shift the evaluation to [1,2].
 
-For arguments in the range [1,2] a rational approximation is used (see below).
+For arguments in the range [1,2] a rational approximation [jm_rationals] is used (see below).
 
 For arguments in the range [2,BIG] the recurrence relation:
 
@@ -94,7 +94,7 @@ Choosing BIG=10 for up to 80-bit reals, and BIG=20 for 128-bit reals allows
 the series to truncated after a suitably small number of terms and evaluated
 as a polynomial in `1/(x*x)`.
 
-The rational approximation in the range [1,2] is derived as follows.
+The rational approximation [jm_rationals] in the range [1,2] is derived as follows.
 
 First a high precision approximation to digamma was constructed using a 60-term
 differentiated __lanczos, the form used is:
@@ -118,7 +118,7 @@ the location of the root is known to ~70 digits, and it's not clear whether
 the value calculated by this method meets that requirement: the difficulty
 lies in independently verifying the value obtained.
 
-The rational approximation was optimised for absolute error using the form:
+The rational approximation [jm_rationals] was optimised for absolute error using the form:
 
    digamma(x) = (x - X0)(Y + R(x - 1));
    

@@ -148,7 +148,7 @@ the absolute error is tiny).
 
 For types with up to 113 bits of precision
 (up to and including 128-bit long doubles), root-preserving 
-rational approximations are used
+rational approximations [jm_rationals] are used
 over the intervals [1,2] and [2,3].  Over the interval [2,3] the approximation
 form used is:
 

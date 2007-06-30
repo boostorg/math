@@ -170,7 +170,7 @@ is /exceptionally/ high).
 Finally if the argument is a small integer then table lookup of the factorial
 is used.
 
-The function `tgamma1pm1` is implemented using rational approximations in the
+The function `tgamma1pm1` is implemented using rational approximations [jm_rationals] in the
 region `-0.5 < dz < 2`.  These are the same approximations (and internal routines)
 that are used for __lgamma, and so aren't detailed further here.  The result of
 the approximation is `log(tgamma(dz+1))` which can fed into __expm1 to give

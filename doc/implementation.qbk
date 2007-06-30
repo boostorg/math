@@ -121,11 +121,9 @@ Therefore to get the benefit of helpful error messages, enabling *all* exception
 *and* using try&catch is recommended for all applications.
 However, for simplicity, this is not done for most examples.]
 
-[h4 Handling of Functions that are Not Implemented]
+[h4 Handling of Functions that are Not Mathematically defined]
 
-Functions that are not implemented for any reason,
-usually because they are not defined, (or we were unable to find a definition),
-are handled as domain errors.
+Functions that are not mathematically defined are handled as domain errors.
 
 If the instruction 
 
@@ -214,6 +212,45 @@ Some sources suggest that the Standard Triangular Distribution has
 lower = 0, mode = half and upper = 1.
 However as a approximation for the normal distribution,
 the most common usage, lower = -1, mode = 0 and upper = 1 would be more suitable.
+
+[h4 Rational Approximations Used]
+
+Some of the special functions in this library are implemented via
+rational approximations.  These are either taken from the literature,
+or devised by John Maddock using 
+[link math_toolkit.toolkit.internals2.minimax our Remez code].
+
+Rational rather than Polynomial approximations are used to ensure
+accuracy: polynomial approximations are often wonderful up to
+a certain level of accuracy, but then fail to provide much greater
+accuracy no matter how many more terms are added.
+
+Our own approximations were devised either for added accuracy
+(to support 128-bit long doubles for example), or because
+literature methods were unavailable or under non-BSL
+compatible license.  Our Remez code is known to produce good
+agreement with literature results in fairly simple "toy" cases,
+for more complex cases.  All approximations were checked 
+for convergence and to ensure that
+they were not ill-conditioned (the coefficients can give a 
+theoretically good solution, but the resulting rational function 
+may be un-computable at fixed precision).  
+
+Recomputing using different
+Remez implementations may well produce differing coefficients: the
+problem is well known to be ill conditioned in general, and our Remez implementation
+often found a broad and ill-defined minima for many of these approximations
+(of course for simple "toy" examples like approximating `exp` the minima 
+is well defined, and the coeffiecents should agree no matter whose Remez
+implementation is used).  This should not in general effect the validity
+of the approximations: there's good literature supporting the idea that 
+coefficients can be "in error" without necessarily adversely effecting 
+the result.  Note that "in error" has a special meaning in this context,
+see [@http://front.math.ucdavis.edu/0101.5042 
+"Approximate construction of rational approximations and the effect 
+of error autocorrection.", Grigori Litvinov, eprint arXiv:math/0101042].
+Therefore the coefficients still need to be accurately calculated, even if they can
+be in error compared to the "true" minimax solution.
 
 [h4 Representation of Mathematical Constants]
 

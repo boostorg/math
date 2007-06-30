@@ -67,7 +67,8 @@ the accuracy of the result, given /exact/ input values.
 
 [h4 Implementation]
 
-These functions use a rational approximation to calculate an initial
+These functions use a rational approximation [jm_rationals] 
+to calculate an initial
 approximation to the result that is accurate to ~10[super -19], 
 then only if that has insufficient accuracy compared to the epsilon for T,
 do we clean up the result using

@@ -45,6 +45,8 @@
                interfaces, library structure, and function and distribution names
                may be changed without notice.]
                
+[template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
+[template jm_rationals[] [link math_toolkit.backgrounders.implementation.rational_approximations_used devised by JM]]
 [def __domain_error [link domain_error domain_error]]
 [def __pole_error [link pole_error pole_error]]
 [def __overflow_error [link overflow_error overflow_error]]
@@ -217,15 +219,16 @@ how the library is used to conduct statistical tests.
 Provides a small number of high quality 
 [@http://en.wikipedia.org/wiki/Special_functions special functions],
 initially these were concentrated on functions used in statistical applications
-but now also include some recently standardised in C99 & C++.
+along with those in the [tr1].
 
 The function families currently implemented are the gamma, beta & erf functions
 along with the incomplete gamma and beta functions (four variants
-of each) and all the possible inverses of these, plus digamma and various 
-special power and logarithmic functions.  Additions now include
-most new math functions added in the
-[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf C++ Technical Report on Standard Library
-Extensions].
+of each) and all the possible inverses of these, plus digamma, 
+various factorial functions,
+Bessel functions, elliptic integrals, sinus cardinals (along with their 
+hyperbolic variants), inverse hyperbolic functions, Legrendre/Laguerre/Hermite
+polynomials and various 
+special power and logarithmic functions.
 
 All the implementations
 are fully generic and support the use of arbitrary "real-number" types,

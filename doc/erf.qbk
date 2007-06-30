@@ -153,7 +153,7 @@ the incomplete gamma function.
 
 When the significand (mantissa) size is recognised
 (currently for 53, 64 and 113-bit reals, plus single-precision 24-bit handled via promotion to double)
-then a series of rational approximations are used.
+then a series of rational approximations [jm_rationals] are used.
 
 For `z <= 0.5` then a rational approximation to erf is used, based on the 
 observation that:
