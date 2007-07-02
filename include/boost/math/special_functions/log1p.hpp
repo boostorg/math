@@ -72,6 +72,7 @@ typename tools::promote_args<T>::type log1p(T x)
   // A domain error occurs if x < -1.  TODO should there be a check?
    typedef typename tools::promote_args<T>::type result_type;
    using namespace std;
+   using std::abs;
 
    if(x < -1)
       return tools::domain_error<T>(
