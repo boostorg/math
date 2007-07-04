@@ -356,7 +356,7 @@ void test_spots(RealType)
      pdf(beta_distribution<RealType>(static_cast<RealType>(2), static_cast<RealType>(2)),
      static_cast<RealType>(0.9999)),  // x
      static_cast<RealType>(0.0005999399999999344L), // http://members.aol.com/iandjmsmith/BETAEX.HTM
-      tolerance*10); // Note less accurate.
+      tolerance*10); // Note loss of precision calculating 1-p test value.
 
   //void test_spot(
   //   RealType a,    // alpha a
@@ -596,4 +596,5 @@ test_beta_dist - 0 error(s), 0 warning(s)
 
 
 */
+
 
