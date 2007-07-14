@@ -90,52 +90,52 @@ void test_spots(RealType T)
   RealType tol1000eps = boost::math::tools::epsilon<RealType>() * 1000;
 
    check_pareto(
-      static_cast<RealType>(1.1), // 
-      static_cast<RealType>(5.5),
-      static_cast<RealType>(2.2),
-      static_cast<RealType>(0.97790291308792),
-      static_cast<RealType>(0.0220970869120796),
+      static_cast<RealType>(1.1L), // 
+      static_cast<RealType>(5.5L),
+      static_cast<RealType>(2.2L),
+      static_cast<RealType>(0.97790291308792L),
+      static_cast<RealType>(0.0220970869120796L),
       tol10eps * 4);
 
    check_pareto(
-      static_cast<RealType>(0.5),
-      static_cast<RealType>(10.1),
-      static_cast<RealType>(1.5),
-      static_cast<RealType>(0.99998482686481),
-      static_cast<RealType>(1.51731351900608e-005),
+      static_cast<RealType>(0.5L),
+      static_cast<RealType>(10.1L),
+      static_cast<RealType>(1.5L),
+      static_cast<RealType>(0.99998482686481L),
+      static_cast<RealType>(1.51731351900608e-005L),
       tol100eps * 1000); // Much less accurate as p close to unity.
 
    check_pareto(
-      static_cast<RealType>(0.1),
-      static_cast<RealType>(2.3),
-      static_cast<RealType>(1.5),
-      static_cast<RealType>(0.99802762220697),
-      static_cast<RealType>(0.00197237779302972),
+      static_cast<RealType>(0.1L),
+      static_cast<RealType>(2.3L),
+      static_cast<RealType>(1.5L),
+      static_cast<RealType>(0.99802762220697L),
+      static_cast<RealType>(0.00197237779302972L),
       tol1000eps);
 
    // Example from 23.3 page 259 
    check_pareto(
-      static_cast<RealType>(2.30444301457005),
+      static_cast<RealType>(2.30444301457005L),
       static_cast<RealType>(4),
-      static_cast<RealType>(2.4),
-      static_cast<RealType>(0.15),
-      static_cast<RealType>(0.85),
+      static_cast<RealType>(2.4L),
+      static_cast<RealType>(0.15L),
+      static_cast<RealType>(0.85L),
       tol100eps);
 
    check_pareto(
       static_cast<RealType>(2),
       static_cast<RealType>(3),
-      static_cast<RealType>(3.4),
-      static_cast<RealType>(0.796458375737838),
-      static_cast<RealType>(0.203541624262162),
+      static_cast<RealType>(3.4L),
+      static_cast<RealType>(0.796458375737838L),
+      static_cast<RealType>(0.203541624262162L),
       tol10eps);
 
    check_pareto( // Probability near 0.5
       static_cast<RealType>(2),
       static_cast<RealType>(2),
       static_cast<RealType>(3),
-      static_cast<RealType>(0.5555555555555555555555555555555555555556),
-      static_cast<RealType>(0.4444444444444444444444444444444444444444),
+      static_cast<RealType>(0.5555555555555555555555555555555555555556L),
+      static_cast<RealType>(0.4444444444444444444444444444444444444444L),
       tol5eps); // accurate.
 
 
@@ -163,15 +163,15 @@ void test_spots(RealType T)
    // Compare with values from StatCalc K. Krishnamoorthy,  ISBN 1-58488-635-8 eq 23.1.3
    BOOST_CHECK_CLOSE_FRACTION( // small x
       cdf(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4)), 
-      static_cast<RealType>(0.929570372227626), tol5eps);
+      static_cast<RealType>(0.929570372227626L), tol5eps);
 
    BOOST_CHECK_CLOSE_FRACTION( // small x
       cdf(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4)), 
-      static_cast<RealType>(1 - 0.0704296277723743), tol5eps);
+      static_cast<RealType>(1 - 0.0704296277723743L), tol5eps);
 
    BOOST_CHECK_CLOSE_FRACTION( // small x
       cdf(complement(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4))), 
-      static_cast<RealType>(0.0704296277723743), tol5eps);
+      static_cast<RealType>(0.0704296277723743L), tol5eps);
 
    // quantile
    BOOST_CHECK_EQUAL( // x = location
@@ -184,7 +184,7 @@ void test_spots(RealType T)
 
    BOOST_CHECK_CLOSE_FRACTION( // small x
       cdf(complement(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4))), 
-      static_cast<RealType>(0.0704296277723743), tol5eps);
+      static_cast<RealType>(0.0704296277723743L), tol5eps);
 
     using namespace std; // ADL of std names.
 
@@ -204,10 +204,10 @@ void test_spots(RealType T)
 
     // variance:
    BOOST_CHECK_CLOSE_FRACTION(
-       variance(pareto15), static_cast<RealType>(0.10416666666666667), tol5eps);
+       variance(pareto15), static_cast<RealType>(0.10416666666666667L), tol5eps);
     // std deviation:
     BOOST_CHECK_CLOSE_FRACTION(
-       standard_deviation(pareto15), static_cast<RealType>(0.32274861218395140), tol5eps);
+       standard_deviation(pareto15), static_cast<RealType>(0.32274861218395140L), tol5eps);
     // hazard:   No independent test values found yet.
     //BOOST_CHECK_CLOSE_FRACTION(
     //   hazard(pareto15, x), pdf(pareto15, x) / cdf(complement(pareto15, x)), tol5eps);
@@ -216,23 +216,23 @@ void test_spots(RealType T)
     //   chf(pareto15, x), -log(cdf(complement(pareto15, x))), tol5eps);
     //// coefficient_of_variation:
     BOOST_CHECK_CLOSE_FRACTION(
-       coefficient_of_variation(pareto15), static_cast<RealType>(0.25819888974716110), tol5eps);
+       coefficient_of_variation(pareto15), static_cast<RealType>(0.25819888974716110L), tol5eps);
     // mode:
     BOOST_CHECK_CLOSE_FRACTION(
        mode(pareto15), static_cast<RealType>(1), tol5eps);
 
     BOOST_CHECK_CLOSE_FRACTION(
-       median(pareto15), static_cast<RealType>(1.1486983549970351), tol5eps);
+       median(pareto15), static_cast<RealType>(1.1486983549970351L), tol5eps);
 
     // skewness:
     BOOST_CHECK_CLOSE_FRACTION(
-       skewness(pareto15), static_cast<RealType>(4.6475800154489004), tol5eps);
+       skewness(pareto15), static_cast<RealType>(4.6475800154489004L), tol5eps);
     // kertosis:
     BOOST_CHECK_CLOSE_FRACTION(
-       kurtosis(pareto15), static_cast<RealType>(73.8), tol5eps);
+       kurtosis(pareto15), static_cast<RealType>(73.8L), tol5eps);
     // kertosis excess:
     BOOST_CHECK_CLOSE_FRACTION(
-       kurtosis_excess(pareto15), static_cast<RealType>(70.8), tol5eps);
+       kurtosis_excess(pareto15), static_cast<RealType>(70.8L), tol5eps);
     // Check difference between kurtosis and excess:
     BOOST_CHECK_CLOSE_FRACTION(
       kurtosis_excess(pareto15), kurtosis(pareto15) - static_cast<RealType>(3L), tol5eps);
