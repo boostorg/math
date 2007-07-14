@@ -1,6 +1,5 @@
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2007.
 // Copyright John Maddock 2006.
-
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -84,7 +83,8 @@ void test_spots(RealType T)
 	//RealType tolerance = static_cast<RealType>(std::pow(10., -(4))); // 1e-4 (as fraction, NOT %)
 	//cout << "tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
   // Not used so far: use epsilon tolerances.
-
+    
+  RealType tol2eps = boost::math::tools::epsilon<RealType>() * 2;
   RealType tol5eps = boost::math::tools::epsilon<RealType>() * 5;
   RealType tol10eps = boost::math::tools::epsilon<RealType>() * 10;
   RealType tol100eps = boost::math::tools::epsilon<RealType>() * 100;
@@ -187,8 +187,6 @@ void test_spots(RealType T)
       cdf(complement(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4))), 
       static_cast<RealType>(0.0704296277723743), tol5eps);
 
-    RealType tol2eps = boost::math::tools::epsilon<RealType>() * 2;
-
     using namespace std; // ADL of std names.
 
     pareto_distribution<RealType> pareto15(1, 5);
@@ -241,13 +239,11 @@ void test_spots(RealType T)
       kurtosis_excess(pareto15), kurtosis(pareto15) - static_cast<RealType>(3L), tol5eps);
     // Check kurtosis excess = kurtosis - 3;
 
-
 } // template <class RealType>void test_spots(RealType)
-
 
 int test_main(int, char* [])
 {
-    // Check that can generate pareto distribution using the two convenience methods:
+  // Check that can generate pareto distribution using the two convenience methods:
 	boost::math::pareto myp1(1., 1); // Using typedef
 	pareto_distribution<> myp2(1., 1); // Using default RealType double.
   boost::math::pareto pareto11; // Use default values (location = 1, shape = 1).
@@ -264,9 +260,9 @@ int test_main(int, char* [])
   // Test range and support using double only,
   // because it supports numeric_limits max for pseudo-infinity.
   BOOST_CHECK_EQUAL(range(myp2).first, 0); // range 0 to +infinity
-  BOOST_CHECK_EQUAL(range(myp2).second, numeric_limits<double>::max());
+  BOOST_CHECK_EQUAL(range(myp2).second, (numeric_limits<double>::max)());
   BOOST_CHECK_EQUAL(support(myp2).first, myp2.location()); // support location to + infinity.
-  BOOST_CHECK_EQUAL(support(myp2).second, numeric_limits<double>::max());
+  BOOST_CHECK_EQUAL(support(myp2).second, (numeric_limits<double>::max)());
 
   // Check some bad parameters to the distribution.
 	BOOST_CHECK_THROW(boost::math::pareto mypm1(-1, 1), std::domain_error); // Using typedef
@@ -310,7 +306,6 @@ int test_main(int, char* [])
   BOOST_CHECK_THROW(cdf(pareto11, 0), std::domain_error); // x == 0
   BOOST_CHECK_THROW(cdf(pareto11, -(std::numeric_limits<double>::min)()), std::domain_error); // x = - min,
   BOOST_CHECK_THROW(cdf(pareto11, -(std::numeric_limits<double>::max)()), std::domain_error); // x = - max,
-
  
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tol5eps = 0.0001 %
@@ -327,13 +322,21 @@ int test_main(int, char* [])
       "to pass.</note>" << std::cout;
 #endif
 
-
    return 0;
 } // int test_main(int, char* [])
 
 /*
 
 Output:
+
+Compiling...
+test_pareto.cpp
+Linking...
+Embedding manifest...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_pareto.exe"
+Running 1 test case...
+*** No errors detected
+
 
 
 */
