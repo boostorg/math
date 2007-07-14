@@ -18,7 +18,6 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/special_functions/powm1.hpp>
 
-
 #include <utility> // for BOOST_CURRENT_VALUE?
 
 namespace boost
