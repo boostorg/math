@@ -84,7 +84,6 @@ void test_spots(RealType T)
 	//cout << "tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
   // Not used so far: use epsilon tolerances.
     
-  RealType tol2eps = boost::math::tools::epsilon<RealType>() * 2;
   RealType tol5eps = boost::math::tools::epsilon<RealType>() * 5;
   RealType tol10eps = boost::math::tools::epsilon<RealType>() * 10;
   RealType tol100eps = boost::math::tools::epsilon<RealType>() * 100;
@@ -195,7 +194,7 @@ void test_spots(RealType T)
 
     // mean:
     BOOST_CHECK_CLOSE_FRACTION(
-       mean(pareto15), static_cast<RealType>(1.25), tol2eps); // 1.25 == 5/4
+       mean(pareto15), static_cast<RealType>(1.25), tol5eps); // 1.25 == 5/4
     BOOST_CHECK_EQUAL(
        mean(pareto15), static_cast<RealType>(1.25)); // 1.25 == 5/4 (expect exact so check equal)
  
@@ -205,35 +204,35 @@ void test_spots(RealType T)
 
     // variance:
    BOOST_CHECK_CLOSE_FRACTION(
-       variance(pareto15), static_cast<RealType>(0.10416666666666667), tol2eps);
+       variance(pareto15), static_cast<RealType>(0.10416666666666667), tol5eps);
     // std deviation:
     BOOST_CHECK_CLOSE_FRACTION(
-       standard_deviation(pareto15), static_cast<RealType>(0.32274861218395140), tol2eps);
+       standard_deviation(pareto15), static_cast<RealType>(0.32274861218395140), tol5eps);
     // hazard:   No independent test values found yet.
     //BOOST_CHECK_CLOSE_FRACTION(
-    //   hazard(pareto15, x), pdf(pareto15, x) / cdf(complement(pareto15, x)), tol2eps);
+    //   hazard(pareto15, x), pdf(pareto15, x) / cdf(complement(pareto15, x)), tol5eps);
     //// cumulative hazard:
     //BOOST_CHECK_CLOSE_FRACTION(
-    //   chf(pareto15, x), -log(cdf(complement(pareto15, x))), tol2eps);
+    //   chf(pareto15, x), -log(cdf(complement(pareto15, x))), tol5eps);
     //// coefficient_of_variation:
     BOOST_CHECK_CLOSE_FRACTION(
-       coefficient_of_variation(pareto15), static_cast<RealType>(0.25819888974716110), tol2eps);
+       coefficient_of_variation(pareto15), static_cast<RealType>(0.25819888974716110), tol5eps);
     // mode:
     BOOST_CHECK_CLOSE_FRACTION(
-       mode(pareto15), static_cast<RealType>(1), tol2eps);
+       mode(pareto15), static_cast<RealType>(1), tol5eps);
 
     BOOST_CHECK_CLOSE_FRACTION(
-       median(pareto15), static_cast<RealType>(1.1486983549970351), tol2eps);
+       median(pareto15), static_cast<RealType>(1.1486983549970351), tol5eps);
 
     // skewness:
     BOOST_CHECK_CLOSE_FRACTION(
-       skewness(pareto15), static_cast<RealType>(4.6475800154489004), tol2eps);
+       skewness(pareto15), static_cast<RealType>(4.6475800154489004), tol5eps);
     // kertosis:
     BOOST_CHECK_CLOSE_FRACTION(
-       kurtosis(pareto15), static_cast<RealType>(73.8), tol2eps);
+       kurtosis(pareto15), static_cast<RealType>(73.8), tol5eps);
     // kertosis excess:
     BOOST_CHECK_CLOSE_FRACTION(
-       kurtosis_excess(pareto15), static_cast<RealType>(70.8), tol2eps);
+       kurtosis_excess(pareto15), static_cast<RealType>(70.8), tol5eps);
     // Check difference between kurtosis and excess:
     BOOST_CHECK_CLOSE_FRACTION(
       kurtosis_excess(pareto15), kurtosis(pareto15) - static_cast<RealType>(3L), tol5eps);
