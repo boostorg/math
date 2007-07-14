@@ -74,7 +74,7 @@ void test_spots(RealType T)
       ::boost::math::cdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(-0.5)),              // x
-         static_cast<RealType>(0.35241638234956672582459892377526),                // probability.
+         static_cast<RealType>(0.35241638234956672582459892377526L),                // probability.
 			tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
