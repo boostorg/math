@@ -37,7 +37,8 @@ then a user may substitute his custom specialization.
 
 For example, there are approximations dating back from times when computation was a *lot* more expensive:
 
-H Goldberg and H Levine, Approximate formulas for percentage points and normalisation of t and chi squared, Ann. Math. Stat., 17(4), 216 - 225 (Dec 1946).
+H Goldberg and H Levine, Approximate formulas for percentage points and normalisation of t and chi squared,
+Ann. Math. Stat., 17(4), 216 - 225 (Dec 1946).
 
 A H Carter, Approximations to percentage points of the z-distribution, Biometrika 34(2), 352 - 358 (Dec 1947).
 
@@ -47,12 +48,12 @@ These could still provide sufficient accuracy for some speed-critical applicatio
 
 In order to be accurate enough for as many as possible real types,
 constant values are given to 50 decimal digits if available
-(though many sources proved only accurate to 64-bit doubles).
+(though many sources proved only accurate near to 64-bit double precision).
 Values are specified as long double types by appending L,
-unless they are exactly representable, for example integers.
+unless they are exactly representable, for example integers, or binary fractions like 0.125.
 This avoids the risk of loss of accuracy converting from double, the default type.
 Values are used after static_cast<RealType>(1.2345L)
-to provide the appropriate real type for spot tests.
+to provide the appropriate RealType for spot tests.
 
 Functions that return constants values, like kurtosis for example, are written as
 
@@ -76,6 +77,20 @@ are used in test code along with the occasional fraction `a/b` with `b`
 a power of two (in order to ensure that the result is an exactly 
 representable binary value).
 
+[h4 Tolerance of Tests]
+
+The tolerances need to be set to the maximum of:
+
+* Some epsilon value.
+* The accuracy of the data (often only near 64-bit double).
+
+Otherwise when long double has more digits than the test data, then no 
+amount of tweaking an epsilon based tolerance will work.
+
+A common problem is when tolerances that are suitable for implementations
+like Microsoft VS.NET where double and long double are the same size,
+fail on others where long double is more accurate than double.
+Check first that the suffix L is present, and then that the tolerance is big enough.
 
 [h4 Handling Unsuitable Arguments]
 
