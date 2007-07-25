@@ -15,8 +15,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 
-#include <boost/math/tools/error_handling.hpp>
-#include <boost/math/tools/evaluation_type.hpp>
+#include <boost/math/policy/error_handling.hpp>
 
 // Carlson's elliptic integral of the first kind
 // R_F(x, y, z) = 0.5 * \int_{0}^{\infty} [(t+x)(t+y)(t+z)]^{-1/2} dt
@@ -24,8 +23,8 @@
 
 namespace boost { namespace math { namespace detail{
 
-template <typename T>
-T ellint_rf_imp(T x, T y, T z)
+template <typename T, typename Policy>
+T ellint_rf_imp(T x, T y, T z, const Policy& pol)
 {
     T value, X, Y, Z, E2, E3, u, lambda, tolerance;
     int k;
@@ -33,25 +32,27 @@ T ellint_rf_imp(T x, T y, T z)
     using namespace std;
     using namespace boost::math::tools;
 
+    static const char* function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
+
     if (x < 0 || y < 0 || z < 0)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
+       return policy::raise_domain_error<T>(function,
             "domain error, all arguments must be non-negative, "
             "only sensible result is %1%.",
-            std::numeric_limits<T>::quiet_NaN());
+            std::numeric_limits<T>::quiet_NaN(), pol);
     }
     if (x + y == 0 || y + z == 0 || z + x == 0)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
+       return policy::raise_domain_error<T>(function,
             "domain error, at most one argument can be zero, "
             "only sensible result is %1%.",
-            std::numeric_limits<T>::quiet_NaN());
+            std::numeric_limits<T>::quiet_NaN(), pol);
     }
 
     // Carlson scales error as the 6th power of tolerance,
     // but this seems not to work for types larger than
     // 80-bit reals, this heuristic seems to work OK:
-    if(tools::digits<T>() > 64)
+    if(policy::digits<T, Policy>() > 64)
     {
       tolerance = pow(tools::epsilon<T>(), T(1)/4.25f);
       BOOST_MATH_INSTRUMENT_CODE(tolerance);
@@ -83,7 +84,7 @@ T ellint_rf_imp(T x, T y, T z)
         z = (z + lambda) / 4;
     }
     // Check to see if we gave up too soon:
-    tools::check_series_iterations(BOOST_CURRENT_FUNCTION, k);
+    policy::check_series_iterations(function, k, pol);
     BOOST_MATH_INSTRUMENT_CODE(k);
 
     // Taylor series expansion to the 5th order
@@ -97,17 +98,24 @@ T ellint_rf_imp(T x, T y, T z)
 
 } // namespace detail
 
+template <class T1, class T2, class T3, class Policy>
+inline typename tools::promote_args<T1, T2, T3>::type 
+   ellint_rf(T1 x, T2 y, T3 z, const Policy& pol)
+{
+   typedef typename tools::promote_args<T1, T2, T3>::type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(
+      detail::ellint_rf_imp(
+         static_cast<value_type>(x),
+         static_cast<value_type>(y),
+         static_cast<value_type>(z), pol), "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)");
+}
+
 template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type 
    ellint_rf(T1 x, T2 y, T3 z)
 {
-   typedef typename tools::promote_args<T1, T2, T3>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(
-      detail::ellint_rf_imp(
-         static_cast<value_type>(x),
-         static_cast<value_type>(y),
-         static_cast<value_type>(z)), BOOST_CURRENT_FUNCTION);
+   return ellint_rf(x, y, z, policy::policy<>());
 }
 
 }} // namespaces

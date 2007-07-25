@@ -40,6 +40,12 @@ T cos_pi(T x)
    return invert ? -rem : rem;
 }
 
+template <class T, class Policy>
+inline T cos_pi(T x, const Policy&)
+{
+   return cos_pi(x);
+}
+
 } // namespace math
 } // namespace boost
 #endif

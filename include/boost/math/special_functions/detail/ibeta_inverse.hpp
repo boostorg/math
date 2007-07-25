@@ -52,8 +52,8 @@ private:
 // Journal of Computation and Applied Mathematics 41 (1992) 145-157.
 // Section 2.
 //
-template <class T>
-T temme_method_1_ibeta_inverse(T a, T b, T z)
+template <class T, class Policy>
+T temme_method_1_ibeta_inverse(T a, T b, T z, const Policy& pol)
 {
    using namespace std; // ADL of std names
 
@@ -62,7 +62,7 @@ T temme_method_1_ibeta_inverse(T a, T b, T z)
    // get the first approximation for eta from the inverse
    // error function (Eq: 2.9 and 2.10).
    //
-   T eta0 = boost::math::erfc_inv(2 * z);
+   T eta0 = boost::math::erfc_inv(2 * z, pol);
    eta0 /= -sqrt(a / 2);
 
    T terms[4] = { eta0 };
@@ -130,8 +130,8 @@ T temme_method_1_ibeta_inverse(T a, T b, T z)
 // Journal of Computation and Applied Mathematics 41 (1992) 145-157.
 // Section 3.
 //
-template <class T>
-T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
+template <class T, class Policy>
+T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta, const Policy& pol)
 {
    using namespace std; // ADL of std names
 
@@ -139,7 +139,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
    // Get first estimate for eta, see Eq 3.9 and 3.10,
    // but note there is a typo in Eq 3.10:
    //
-   T eta0 = boost::math::erfc_inv(2 * z);
+   T eta0 = boost::math::erfc_inv(2 * z, pol);
    eta0 /= -sqrt(r / 2);
 
    T s = sin(theta);
@@ -296,7 +296,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
    // And iterate:
    //
    x = tools::newton_raphson_iterate(
-      temme_root_finder<T>(-lu, alpha), x, lower, upper, tools::digits<T>() / 2);
+      temme_root_finder<T>(-lu, alpha), x, lower, upper, policy::digits<T, Policy>() / 2);
 
    return x;
 }
@@ -307,8 +307,8 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta)
 // Journal of Computation and Applied Mathematics 41 (1992) 145-157.
 // Section 4.
 //
-template <class T>
-T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
+template <class T, class Policy>
+T temme_method_3_ibeta_inverse(T a, T b, T p, T q, const Policy& pol)
 {
    using namespace std; // ADL of std names
 
@@ -318,9 +318,9 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
    //
    T eta0;
    if(p < q)
-      eta0 = boost::math::gamma_q_inv(b, p);
+      eta0 = boost::math::gamma_q_inv(b, p, pol);
    else
-      eta0 = boost::math::gamma_p_inv(b, q);
+      eta0 = boost::math::gamma_p_inv(b, q, pol);
    eta0 /= a;
    //
    // Define the variables and powers we'll need later on:
@@ -399,14 +399,14 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q)
    T upper = eta < mu ? 1 : cross;
    T x = (lower + upper) / 2;
    x = tools::newton_raphson_iterate(
-      temme_root_finder<T>(u, mu), x, lower, upper, tools::digits<T>() / 2);
+      temme_root_finder<T>(u, mu), x, lower, upper, policy::digits<T, Policy>() / 2);
 #ifdef BOOST_INSTRUMENT
    std::cout << "Estimating x with Temme method 3: " << x << std::endl;
 #endif
    return x;
 }
 
-template <class T, class L>
+template <class T, class Policy>
 struct ibeta_roots
 {
    ibeta_roots(T _a, T _b, T t, bool inv = false)
@@ -420,7 +420,7 @@ struct ibeta_roots
       
       T f1;
       T y = 1 - x;
-      T f = ibeta_imp(a, b, x, L(), invert, true, &f1) - target;
+      T f = ibeta_imp(a, b, x, Policy(), invert, true, &f1) - target;
       if(invert)
          f1 = -f1;
       if(y == 0)
@@ -445,8 +445,8 @@ private:
    bool invert;
 };
 
-template <class T, class L>
-T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
+template <class T, class Policy>
+T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
 {
    using namespace std;  // For ADL of math functions.
 
@@ -501,7 +501,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
    {
       //
       // We have a Student's T distribution:
-      x = estimate_ibeta_inv_from_t_dist(a, p, q, &y, l);
+      x = estimate_ibeta_inv_from_t_dist(a, p, q, &y, pol);
    }
    else if(a + b > 5)
    {
@@ -529,7 +529,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
          // for x will never be much larger than p, so we don't have
          // to worry about cancellation as long as p is small.
          //
-         x = temme_method_1_ibeta_inverse(a, b, p);
+         x = temme_method_1_ibeta_inverse(a, b, p, pol);
          y = 1 - x;
       }
       else
@@ -550,10 +550,10 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
             T ppa = pow(p, 1/a);
             if((ppa < 0.0025) && (a + b < 200))
             {
-               x = ppa * pow(a * boost::math::beta(a, b), 1/a);
+               x = ppa * pow(a * boost::math::beta(a, b, pol), 1/a);
             }
             else
-               x = temme_method_2_ibeta_inverse(a, b, p, r, theta);
+               x = temme_method_2_ibeta_inverse(a, b, p, r, theta, pol);
             y = 1 - x;
          }
          else
@@ -578,7 +578,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
             //
             T bet = 0;
             if(b < 2)
-               bet = boost::math::beta(a, b);
+               bet = boost::math::beta(a, b, pol);
             if(bet != 0)
             {
                y = pow(b * q * bet, 1/b);
@@ -588,7 +588,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
                y = 1;
             if(y > 1e-5)
             {
-               x = temme_method_3_ibeta_inverse(a, b, p, q);
+               x = temme_method_3_ibeta_inverse(a, b, p, q, pol);
                y = 1 - x;
             }
          }
@@ -605,7 +605,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
       // Now we need to ensure that we start our iteration from the
       // right side of the inflection point:
       //
-      T fs = boost::math::ibeta(a, b, xs) - p;
+      T fs = boost::math::ibeta(a, b, xs, pol) - p;
       if(fabs(fs) / p < tools::epsilon<T>() * 3)
       {
          // The result is at the point of inflection, best just return it:
@@ -619,7 +619,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
          invert = true;
          xs = 1 - xs;
       }
-      T xg = pow(a * p * boost::math::beta(a, b), 1/a);
+      T xg = pow(a * p * boost::math::beta(a, b, pol), 1/a);
       x = xg / (1 + xg);
       y = 1 / (1 + xg);
       //
@@ -641,7 +641,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
       //
       T xs = (a - 1) / (a + b - 2);
       T xs2 = (b - 1) / (a + b - 2);
-      T ps = boost::math::ibeta(a, b, xs) - p;
+      T ps = boost::math::ibeta(a, b, xs, pol) - p;
 
       if(ps < 0)
       {
@@ -654,9 +654,9 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
       // Estimate x and y, using expm1 to get a good estimate
       // for y when it's very small:
       //
-      T lx = log(p * a * boost::math::beta(a, b)) / a;
+      T lx = log(p * a * boost::math::beta(a, b, pol)) / a;
       x = exp(lx);
-      y = x < 0.9 ? 1 - x : -boost::math::expm1(lx);
+      y = x < 0.9 ? 1 - x : -boost::math::expm1(lx, pol);
 
       if((b < a) && (x < 0.2))
       {
@@ -716,7 +716,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
       }
       if(pow(p, 1/a) < 0.5)
       {
-         x = pow(p * a * boost::math::beta(a, b), 1 / a);
+         x = pow(p * a * boost::math::beta(a, b, pol), 1 / a);
          if(x == 0)
             x = boost::math::tools::min_value<T>();
          y = 1 - x;
@@ -724,7 +724,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
       else /*if(pow(q, 1/b) < 0.1)*/
       {
          // model a distorted quarter circle:
-         y = pow(1 - pow(p, b*beta(a, b)), 1/b);
+         y = pow(1 - pow(p, b * boost::math::beta(a, b, pol)), 1/b);
          if(y == 0)
             y = boost::math::tools::min_value<T>();
          x = 1 - y;
@@ -772,7 +772,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
    //
    // Figure out how many digits to iterate towards:
    //
-   int digits = boost::math::tools::digits<T>() / 2;
+   int digits = boost::math::policy::digits<T, Policy>() / 2;
    if((x < 1e-50) && ((a < 1) || (b < 1)))
    {
       //
@@ -792,7 +792,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
    // depending on which is smaller:
    //
    x = boost::math::tools::halley_iterate(
-      boost::math::detail::ibeta_roots<T, L>(a, b, (p < q ? p : q), (p < q ? false : true)), x, lower, upper, digits);
+      boost::math::detail::ibeta_roots<T, Policy>(a, b, (p < q ? p : q), (p < q ? false : true)), x, lower, upper, digits);
    //
    // We don't really want these asserts here, but they are useful for sanity
    // checking that we have the limits right, uncomment if you suspect bugs *only*.
@@ -811,21 +811,27 @@ T ibeta_inv_imp(T a, T b, T p, T q, const L& l, T* py)
 
 } // namespace detail
 
-template <class T1, class T2, class T3, class T4>
+template <class T1, class T2, class T3, class T4, class Policy>
 inline typename tools::promote_args<T1, T2, T3, T4>::type  
-   ibeta_inv(T1 a, T2 b, T3 p, T4* py)
+   ibeta_inv(T1 a, T2 b, T3 p, T4* py, const Policy& pol)
 {
+   static const char* function = "boost::math::ibeta_inv<%1%>(%1%,%1%,%1%)";
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
-   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   typedef typename policy::normalise<
+      Policy, 
+      policy::promote_float<false>, 
+      policy::promote_double<false>, 
+      policy::discrete_quantile<>,
+      policy::assert_undefined<> >::type forwarding_policy;
 
    if(a <= 0)
-      return tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a);
+      return policy::raise_domain_error<result_type>(function, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
-      return tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b);
+      return policy::raise_domain_error<result_type>(function, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b, pol);
    if((p < 0) || (p > 1))
-      return tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "Argument p outside the range [0,1] in the incomplete beta function inverse (got p=%1%).", p);
+      return policy::raise_domain_error<result_type>(function, "Argument p outside the range [0,1] in the incomplete beta function inverse (got p=%1%).", p, pol);
 
    value_type rx, ry;
 
@@ -834,35 +840,54 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
          static_cast<value_type>(b),
          static_cast<value_type>(p),
          static_cast<value_type>(1 - p),
-         evaluation_type(), &ry);
+         forwarding_policy(), &ry);
 
-   if(py) *py = tools::checked_narrowing_cast<T4>(ry, BOOST_CURRENT_FUNCTION);
-   return tools::checked_narrowing_cast<result_type>(rx, BOOST_CURRENT_FUNCTION);
+   if(py) *py = policy::checked_narrowing_cast<T4, forwarding_policy>(ry, function);
+   return policy::checked_narrowing_cast<result_type, forwarding_policy>(rx, function);
+}
+
+template <class T1, class T2, class T3, class T4>
+inline typename tools::promote_args<T1, T2, T3, T4>::type  
+   ibeta_inv(T1 a, T2 b, T3 p, T4* py)
+{
+   return ibeta_inv(a, b, p, py, policy::policy<>());
 }
 
 template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type 
    ibeta_inv(T1 a, T2 b, T3 p)
 {
-   BOOST_FPU_EXCEPTION_GUARD
-   return ibeta_inv(a, b, p, static_cast<T1*>(0));
+   return ibeta_inv(a, b, p, static_cast<T1*>(0), policy::policy<>());
 }
 
-template <class T1, class T2, class T3, class T4>
-inline typename tools::promote_args<T1, T2, T3, T4>::type 
-   ibetac_inv(T1 a, T2 b, T3 q, T4* py)
+template <class T1, class T2, class T3, class Policy>
+inline typename tools::promote_args<T1, T2, T3>::type 
+   ibeta_inv(T1 a, T2 b, T3 p, const Policy& pol)
 {
+   return ibeta_inv(a, b, p, static_cast<T1*>(0), pol);
+}
+
+template <class T1, class T2, class T3, class T4, class Policy>
+inline typename tools::promote_args<T1, T2, T3, T4>::type 
+   ibetac_inv(T1 a, T2 b, T3 q, T4* py, const Policy& pol)
+{
+   static const char* function = "boost::math::ibetac_inv<%1%>(%1%,%1%,%1%)";
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
-   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   typedef typename policy::normalise<
+      Policy, 
+      policy::promote_float<false>, 
+      policy::promote_double<false>, 
+      policy::discrete_quantile<>,
+      policy::assert_undefined<> >::type forwarding_policy;
 
    if(a <= 0)
-      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a);
+      policy::raise_domain_error<result_type>(function, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
-      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b);
+      policy::raise_domain_error<result_type>(function, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b, pol);
    if((q < 0) || (q > 1))
-      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "Argument q outside the range [0,1] in the incomplete beta function inverse (got q=%1%).", q);
+      policy::raise_domain_error<result_type>(function, "Argument q outside the range [0,1] in the incomplete beta function inverse (got q=%1%).", q, pol);
 
    value_type rx, ry;
 
@@ -871,18 +896,31 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
          static_cast<value_type>(b),
          static_cast<value_type>(1 - q),
          static_cast<value_type>(q),
-         evaluation_type(), &ry);
+         forwarding_policy(), &ry);
 
-   if(py) *py = tools::checked_narrowing_cast<T4>(ry, BOOST_CURRENT_FUNCTION);
-   return tools::checked_narrowing_cast<result_type>(rx, BOOST_CURRENT_FUNCTION);
+   if(py) *py = policy::checked_narrowing_cast<T4, forwarding_policy>(ry, function);
+   return policy::checked_narrowing_cast<result_type, forwarding_policy>(rx, function);
+}
+
+template <class T1, class T2, class T3, class T4>
+inline typename tools::promote_args<T1, T2, T3, T4>::type 
+   ibetac_inv(T1 a, T2 b, T3 q, T4* py)
+{
+   return ibetac_inv(a, b, q, py, policy::policy<>());
 }
 
 template <class RT1, class RT2, class RT3>
 inline typename tools::promote_args<RT1, RT2, RT3>::type 
    ibetac_inv(RT1 a, RT2 b, RT3 q)
 {
-   BOOST_FPU_EXCEPTION_GUARD
-   return ibetac_inv(a, b, q, static_cast<RT1*>(0));
+   return ibetac_inv(a, b, q, static_cast<RT1*>(0), policy::policy<>());
+}
+
+template <class RT1, class RT2, class RT3, class Policy>
+inline typename tools::promote_args<RT1, RT2, RT3>::type 
+   ibetac_inv(RT1 a, RT2 b, RT3 q, const Policy& pol)
+{
+   return ibetac_inv(a, b, q, static_cast<RT1*>(0), pol);
 }
 
 } // namespace math

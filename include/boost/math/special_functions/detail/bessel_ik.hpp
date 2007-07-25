@@ -9,7 +9,7 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 #include <boost/math/tools/config.hpp>
 
 // Modified Bessel functions of the first and second kind of fractional order
@@ -20,8 +20,8 @@ namespace detail {
 
 // Calculate K(v, x) and K(v+1, x) by method analogous to
 // Temme, Journal of Computational Physics, vol 21, 343 (1976)
-template <typename T>
-int temme_ik(T v, T x, T* K, T* K1)
+template <typename T, typename Policy>
+int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
 {
     T f, h, p, q, coef, sum, sum1, tolerance;
     T a, b, c, d, sigma, gamma1, gamma2;
@@ -37,8 +37,8 @@ int temme_ik(T v, T x, T* K, T* K1)
     BOOST_ASSERT(abs(x) <= 2);
     BOOST_ASSERT(abs(v) <= 0.5f);
 
-    T gp = tgamma1pm1(v);
-    T gm = tgamma1pm1(-v);
+    T gp = tgamma1pm1(v, pol);
+    T gm = tgamma1pm1(-v, pol);
 
     a = log(x / 2);
     b = exp(v * a);
@@ -76,7 +76,7 @@ int temme_ik(T v, T x, T* K, T* K1)
            break; 
         }
     }
-    check_series_iterations(BOOST_CURRENT_FUNCTION, k);
+    policy::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
 
     *K = sum;
     *K1 = 2 * sum1 / x;
@@ -86,8 +86,8 @@ int temme_ik(T v, T x, T* K, T* K1)
 
 // Evaluate continued fraction fv = I_(v+1) / I_v, derived from
 // Abramowitz and Stegun, Handbook of Mathematical Functions, 1972, 9.1.73
-template <typename T>
-int CF1_ik(T v, T x, T* fv)
+template <typename T, typename Policy>
+int CF1_ik(T v, T x, T* fv, const Policy& pol)
 {
     T C, D, f, a, b, delta, tiny, tolerance;
     int k;
@@ -119,7 +119,7 @@ int CF1_ik(T v, T x, T* fv)
            break; 
         }
     }
-    tools::check_series_iterations(BOOST_CURRENT_FUNCTION, k);
+    policy::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
 
     *fv = f;
 
@@ -129,8 +129,8 @@ int CF1_ik(T v, T x, T* fv)
 // Calculate K(v, x) and K(v+1, x) by evaluating continued fraction
 // z1 / z0 = U(v+1.5, 2v+1, 2x) / U(v+0.5, 2v+1, 2x), see
 // Thompson and Barnett, Computer Physics Communications, vol 47, 245 (1987)
-template <typename T>
-int CF2_ik(T v, T x, T* Kv, T* Kv1)
+template <typename T, typename Policy>
+int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
 {
     using namespace std;
     using namespace boost::math::constants;
@@ -177,7 +177,7 @@ int CF2_ik(T v, T x, T* Kv, T* Kv1)
            break; 
         }
     }
-    tools::check_series_iterations(BOOST_CURRENT_FUNCTION, k);
+    policy::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
 
     *Kv = sqrt(pi<T>() / (2 * x)) * exp(-x) / S;
     *Kv1 = *Kv * (0.5f + v + x + (v * v - 0.25f) * f) / x;
@@ -192,8 +192,8 @@ enum{
 
 // Compute I(v, x) and K(v, x) simultaneously by Temme's method, see
 // Temme, Journal of Computational Physics, vol 19, 324 (1975)
-template <typename T>
-int bessel_ik(T v, T x, T* I, T* K, int kind = need_i | need_k)
+template <typename T, typename Policy>
+int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
 {
     // Kv1 = K_(v+1), fv = I_(v+1) / I_v
     // Ku1 = K_(u+1), fu = I_(u+1) / I_u
@@ -206,6 +206,8 @@ int bessel_ik(T v, T x, T* I, T* K, int kind = need_i | need_k)
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
+    static const char* function = "boost::math::bessel_ik<%1%>(%1%,%1%)";
+
     if (v < 0)
     {
         reflect = true;
@@ -217,8 +219,8 @@ int bessel_ik(T v, T x, T* I, T* K, int kind = need_i | need_k)
 
     if (x < 0)
     {
-        *I = *K = domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Got x = %1% but real argument x must be non-negative, complex number result not supported.", x);
+       *I = *K = policy::raise_domain_error<T>(function,
+            "Got x = %1% but real argument x must be non-negative, complex number result not supported.", x, pol);
         return 1;
     }
     if (x == 0)
@@ -226,7 +228,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind = need_i | need_k)
        Iv = (v == 0) ? static_cast<T>(1) : static_cast<T>(0);
        if(kind & need_k)
        {
-         Kv = tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+         Kv = policy::raise_overflow_error<T>(function, 0, pol);
        }
        else
        {
@@ -236,9 +238,9 @@ int bessel_ik(T v, T x, T* I, T* K, int kind = need_i | need_k)
        if(reflect && (kind & need_i))
        {
            T z = (u + n % 2);
-           Iv = sin_pi(z) == 0 ? 
+           Iv = sin_pi(z, pol) == 0 ? 
                Iv : 
-               tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);   // reflection formula
+               policy::raise_overflow_error<T>(function, 0, pol);   // reflection formula
        }
 
        *I = Iv;
@@ -250,11 +252,11 @@ int bessel_ik(T v, T x, T* I, T* K, int kind = need_i | need_k)
     W = 1 / x;                                 // Wronskian
     if (x <= 2)                                // x in (0, 2]
     {
-        temme_ik(u, x, &Ku, &Ku1);             // Temme series
+        temme_ik(u, x, &Ku, &Ku1, pol);             // Temme series
     }
     else                                       // x in (2, \infty)
     {
-        CF2_ik(u, x, &Ku, &Ku1);               // continued fraction CF2_ik
+        CF2_ik(u, x, &Ku, &Ku1, pol);               // continued fraction CF2_ik
     }
     prev = Ku;
     current = Ku1;
@@ -279,11 +281,11 @@ int bessel_ik(T v, T x, T* I, T* K, int kind = need_i | need_k)
           // x case instead.  Note that the asymptotic expansion
           // isn't very accurate - so it's deliberately very hard 
           // to get here - probably we're going to overflow:
-          Iv = asymptotic_bessel_i_large_x(v, x);
+          Iv = asymptotic_bessel_i_large_x(v, x, pol);
        }
        else
        {
-          CF1_ik(v, x, &fv);                         // continued fraction CF1_ik
+          CF1_ik(v, x, &fv, pol);                         // continued fraction CF1_ik
           Iv = W / (Kv * fv + Kv1);                  // Wronskian relation
        }
     }

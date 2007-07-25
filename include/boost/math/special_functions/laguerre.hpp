@@ -9,7 +9,7 @@
 
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/evaluation_type.hpp>
+#include <boost/math/policy/error_handling.hpp>
 
 namespace boost{
 namespace math{
@@ -46,15 +46,29 @@ T laguerre_imp(unsigned n, T x)
    return p1;
 }
 
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type 
+laguerre(unsigned n, T x, const Policy&, const mpl::true_&)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::laguerre_imp(n, static_cast<value_type>(x)), "boost::math::laguerre<%1%>(unsigned, %1%)");
+}
+
+template <class T>
+inline typename tools::promote_args<T>::type 
+   laguerre(unsigned n, unsigned m, T x, const mpl::false_&)
+{
+   return boost::math::laguerre(n, m, x, policy::policy<>());
+}
+
 } // namespace detail
 
 template <class T>
 inline typename tools::promote_args<T>::type 
    laguerre(unsigned n, T x)
 {
-   typedef typename tools::promote_args<T>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::laguerre_imp(n, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
+   return laguerre(n, x, policy::policy<>());
 }
 
 // Recurrence for associated polynomials:
@@ -68,12 +82,12 @@ inline typename tools::promote_args<T1, T2, T3>::type
 
 namespace detail{
 // Laguerre Associated Polynomial:
-template <class T>
-T laguerre_imp(unsigned n, unsigned m, T x)
+template <class T, class Policy>
+T laguerre_imp(unsigned n, unsigned m, T x, const Policy& pol)
 {
    // Special cases:
    if(m == 0)
-      return laguerre(n, x);
+      return boost::math::laguerre(n, x, pol);
 
    T p0 = 1;
    
@@ -95,13 +109,21 @@ T laguerre_imp(unsigned n, unsigned m, T x)
 
 }
 
-template <class T>
+template <class T, class Policy>
 inline typename tools::promote_args<T>::type 
-   laguerre(unsigned n, unsigned m, T x)
+   laguerre(unsigned n, unsigned m, T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::laguerre_imp(n, m, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::laguerre_imp(n, m, static_cast<value_type>(x), pol), "boost::math::laguerre<%1%>(unsigned, unsigned, %1%)");
+}
+
+template <class T1, class T2>
+inline typename laguerre_result<T1, T2>::type 
+   laguerre(unsigned n, T1 m, T2 x)
+{
+   typedef typename policy::is_policy<T2>::type tag_type;
+   return detail::laguerre(n, m, x, tag_type());
 }
 
 } // namespace math

@@ -60,11 +60,12 @@ inline typename Distribution::value_type hazard(const Distribution& dist, const 
 { // hazard function
   // http://www.itl.nist.gov/div898/handbook/eda/section3/eda362.htm#HAZ
    typedef typename Distribution::value_type value_type;
+   typedef typename Distribution::policy_type policy_type;
    value_type p = cdf(complement(dist, x));
    value_type d = pdf(dist, x);
    if(d > p * tools::max_value<value_type>())
-      return tools::overflow_error<value_type>(
-         BOOST_CURRENT_FUNCTION);
+      return policy::raise_overflow_error<value_type>(
+      "boost::math::hazard(const Distribution&, %1%)", 0, policy_type());
    if(d == 0)
    {
       // This protects against 0/0, but is it the right thing to do?
@@ -85,6 +86,7 @@ template <class Distribution>
 inline typename Distribution::value_type coefficient_of_variation(const Distribution& dist)
 {
    typedef typename Distribution::value_type value_type;
+   typedef typename Distribution::policy_type policy_type;
 
    using std::abs;
 
@@ -92,7 +94,7 @@ inline typename Distribution::value_type coefficient_of_variation(const Distribu
    value_type d = standard_deviation(dist);
    if((abs(m) < 1) && (d > abs(m) * tools::max_value<value_type>()))
    { // Checks too that m is not zero,
-      return tools::overflow_error<value_type>(BOOST_CURRENT_FUNCTION);
+      return policy::raise_overflow_error<value_type>("boost::math::coefficient_of_variation(const Distribution&, %1%)", 0, policy_type());
    }
    return d / m; // so MSVC warning on zerodivide is spurious, and suppressed.
 }
@@ -105,21 +107,18 @@ template <class Distribution, class RealType>
 inline typename Distribution::value_type pdf(const Distribution& dist, const RealType& x)
 {
    typedef typename Distribution::value_type value_type;
-   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
    return pdf(dist, static_cast<value_type>(x));
 }
 template <class Distribution, class RealType>
 inline typename Distribution::value_type cdf(const Distribution& dist, const RealType& x)
 {
    typedef typename Distribution::value_type value_type;
-   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
    return cdf(dist, static_cast<value_type>(x));
 }
 template <class Distribution, class RealType>
 inline typename Distribution::value_type quantile(const Distribution& dist, const RealType& x)
 {
    typedef typename Distribution::value_type value_type;
-   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
    return quantile(dist, static_cast<value_type>(x));
 }
 /*
@@ -127,7 +126,6 @@ template <class Distribution, class RealType>
 inline typename Distribution::value_type chf(const Distribution& dist, const RealType& x)
 {
    typedef typename Distribution::value_type value_type;
-   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
    return chf(dist, static_cast<value_type>(x));
 }
 */
@@ -135,7 +133,6 @@ template <class Distribution, class RealType>
 inline typename Distribution::value_type cdf(const complemented2_type<Distribution, RealType>& c)
 {
    typedef typename Distribution::value_type value_type;
-   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
    return cdf(complement(c.dist, static_cast<value_type>(c.param)));
 }
 
@@ -143,7 +140,6 @@ template <class Distribution, class RealType>
 inline typename Distribution::value_type quantile(const complemented2_type<Distribution, RealType>& c)
 {
    typedef typename Distribution::value_type value_type;
-   BOOST_STATIC_ASSERT((0 == ::boost::is_same<value_type, RealType>::value));
    return quantile(complement(c.dist, static_cast<value_type>(c.param)));
 }
 

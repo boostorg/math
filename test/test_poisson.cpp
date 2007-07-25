@@ -11,6 +11,7 @@
 
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+#define BOOST_MATH_DISCRETE_QUANTILE_POLICY real
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
@@ -416,6 +417,73 @@ void test_spots(RealType)
            static_cast<RealType>(0.9999))),  // complement, so 1-probability < cdf(0)
            static_cast<RealType>(0)); // Expect k = 0 events exactly.
 
+  //
+  // Test quantile policies against test data:
+  //
+#define T RealType
+#include "poisson_quantile.ipp"
+
+  for(unsigned i = 0; i < poisson_quantile_data.size(); ++i)
+  {
+     using namespace boost::math::policy;
+     typedef policy<discrete_quantile<real> > P1;
+     typedef policy<discrete_quantile<integer_below> > P2;
+     typedef policy<discrete_quantile<integer_above> > P3;
+     typedef policy<discrete_quantile<integer_outside> > P4;
+     typedef policy<discrete_quantile<integer_inside> > P5;
+     typedef policy<discrete_quantile<integer_nearest> > P6;
+     RealType tol = boost::math::tools::epsilon<RealType>() * 20;
+     if(!boost::is_floating_point<RealType>::value)
+        tol *= 7;
+     //
+     // Check full real value first:
+     //
+     poisson_distribution<RealType, P1> p1(poisson_quantile_data[i][0]);
+     RealType x = quantile(p1, poisson_quantile_data[i][1]);
+     BOOST_CHECK_CLOSE_FRACTION(x, poisson_quantile_data[i][2], tol);
+     x = quantile(complement(p1, poisson_quantile_data[i][1]));
+     BOOST_CHECK_CLOSE_FRACTION(x, poisson_quantile_data[i][3], tol);
+     //
+     // Now with round down to integer:
+     //
+     poisson_distribution<RealType, P2> p2(poisson_quantile_data[i][0]);
+     x = quantile(p2, poisson_quantile_data[i][1]);
+     BOOST_CHECK_EQUAL(x, floor(poisson_quantile_data[i][2]));
+     x = quantile(complement(p2, poisson_quantile_data[i][1]));
+     BOOST_CHECK_EQUAL(x, floor(poisson_quantile_data[i][3]));
+     //
+     // Now with round up to integer:
+     //
+     poisson_distribution<RealType, P3> p3(poisson_quantile_data[i][0]);
+     x = quantile(p3, poisson_quantile_data[i][1]);
+     BOOST_CHECK_EQUAL(x, ceil(poisson_quantile_data[i][2]));
+     x = quantile(complement(p3, poisson_quantile_data[i][1]));
+     BOOST_CHECK_EQUAL(x, ceil(poisson_quantile_data[i][3]));
+     //
+     // Now with round to integer "outside":
+     //
+     poisson_distribution<RealType, P4> p4(poisson_quantile_data[i][0]);
+     x = quantile(p4, poisson_quantile_data[i][1]);
+     BOOST_CHECK_EQUAL(x, poisson_quantile_data[i][1] < 0.5f ? floor(poisson_quantile_data[i][2]) : ceil(poisson_quantile_data[i][2]));
+     x = quantile(complement(p4, poisson_quantile_data[i][1]));
+     BOOST_CHECK_EQUAL(x, poisson_quantile_data[i][1] < 0.5f ? ceil(poisson_quantile_data[i][3]) : floor(poisson_quantile_data[i][3]));
+     //
+     // Now with round to integer "inside":
+     //
+     poisson_distribution<RealType, P5> p5(poisson_quantile_data[i][0]);
+     x = quantile(p5, poisson_quantile_data[i][1]);
+     BOOST_CHECK_EQUAL(x, poisson_quantile_data[i][1] < 0.5f ? ceil(poisson_quantile_data[i][2]) : floor(poisson_quantile_data[i][2]));
+     x = quantile(complement(p5, poisson_quantile_data[i][1]));
+     BOOST_CHECK_EQUAL(x, poisson_quantile_data[i][1] < 0.5f ? floor(poisson_quantile_data[i][3]) : ceil(poisson_quantile_data[i][3]));
+     //
+     // Now with round to nearest integer:
+     //
+     poisson_distribution<RealType, P6> p6(poisson_quantile_data[i][0]);
+     x = quantile(p6, poisson_quantile_data[i][1]);
+     BOOST_CHECK_EQUAL(x, floor(poisson_quantile_data[i][2] + 0.5f));
+     x = quantile(complement(p6, poisson_quantile_data[i][1]));
+     BOOST_CHECK_EQUAL(x, floor(poisson_quantile_data[i][3] + 0.5f));
+  }
 
 } // template <class RealType>void test_spots(RealType)
 

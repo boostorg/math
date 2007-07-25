@@ -176,7 +176,7 @@ void test_spots(RealType T)
       tolerance);
 
 
-    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5;
+    RealType tol2 = boost::math::tools::epsilon<RealType>() * 5 * 100;  // 5 eps as a persentage
     gamma_distribution<RealType> dist(8, 3);
     RealType x = static_cast<RealType>(0.125);
     using namespace std; // ADL of std names.

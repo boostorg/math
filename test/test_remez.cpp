@@ -100,6 +100,10 @@ void test_rational()
       std::cout << approx1.error_term() << " " << approx1.max_error() << " " << approx1.max_change() << std::endl;
    }
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+#if 0
+   //
+   // This one causes UBLAS to fail on some systems, so disabled for now.
+   //
    std::cout << "Testing expm1 approximation, pinned to origin, relative error, 3+3 term rational\n";
    boost::math::tools::remez_minimax<double> approx2(f, 3, 3, -1, 1, true, true);
    std::cout << "Interpolation Error: " << approx1.max_error() << std::endl;
@@ -109,7 +113,7 @@ void test_rational()
       std::cout << approx2.error_term() << " " << approx2.max_error() << " " << approx2.max_change() << std::endl;
    }
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-
+#endif
    f = std::exp;
    std::cout << "Testing exp approximation, not pinned to origin, abolute error, 3+3 term rational\n";
    boost::math::tools::remez_minimax<double> approx3(f, 3, 3, -1, 1, false, false);

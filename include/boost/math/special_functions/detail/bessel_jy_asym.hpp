@@ -178,18 +178,20 @@ inline T asymptotic_bessel_y_limit(const mpl::int_<113>&)
    return 1245243 /*3128000*/;
 }
 
-template <class T>
+template <class T, class Policy>
 struct bessel_asymptotic_tag
 {
-   typedef typename mpl::if_c<
-      (std::numeric_limits<T>::digits == 0
-      || std::numeric_limits<T>::digits > 113),
+   typedef typename policy::precision<T, Policy>::type precision_type;
+   typedef typename mpl::if_<
+      mpl::or_<
+         mpl::equal_to<precision_type, mpl::int_<0> >,
+         mpl::greater<precision_type, mpl::int_<113> > >,
       mpl::int_<0>,
-      typename mpl::if_c<
-         (std::numeric_limits<T>::digits > 64),
+      typename mpl::if_<
+         mpl::greater<precision_type, mpl::int_<64> >,
          mpl::int_<113>,
-         typename mpl::if_c<
-            (std::numeric_limits<T>::digits > 53),
+         typename mpl::if_<
+            mpl::greater<precision_type, mpl::int_<53> >,
             mpl::int_<64>,
             mpl::int_<53>
          >::type
@@ -227,14 +229,14 @@ inline T asymptotic_bessel_j_limit(const T& v, const mpl::int_<113>&)
    return v2 * 39154 /*85700*/;
 }
 
-template <class T>
-void temme_asyptotic_y_small_x(T v, T x, T* Y, T* Y1)
+template <class T, class Policy>
+void temme_asyptotic_y_small_x(T v, T x, T* Y, T* Y1, const Policy& pol)
 {
    T c = 1;
-   T p = (v / sin_pi(v)) * pow(x / 2, -v) / tgamma(1 - v);
-   T q = (v / sin_pi(v)) * pow(x / 2, v) / tgamma(1 + v);
+   T p = (v / sin_pi(v, pol)) * pow(x / 2, -v) / tgamma(1 - v, pol);
+   T q = (v / sin_pi(v, pol)) * pow(x / 2, v) / tgamma(1 + v, pol);
    T f = (p - q) / v;
-   T g_prefix = sin_pi(v / 2);
+   T g_prefix = sin_pi(v / 2, pol);
    g_prefix *= g_prefix * 2 / v;
    T g = f + g_prefix * q;
    T h = p;
@@ -248,7 +250,7 @@ void temme_asyptotic_y_small_x(T v, T x, T* Y, T* Y1)
       p /= k - v;
       q /= k + v;
       c *= c_mult / k;
-      T c1 = pow(-x * x / 4, k) / factorial<T>(k);
+      T c1 = pow(-x * x / 4, k) / factorial<T>(k, pol);
       g = f + g_prefix * q;
       h = -k * g + p;
       y += c * g;
@@ -261,8 +263,8 @@ void temme_asyptotic_y_small_x(T v, T x, T* Y, T* Y1)
    *Y1 = (-2 / x) * y1;
 }
 
-template <class T>
-T asymptotic_bessel_i_large_x(T v, T x)
+template <class T, class Policy>
+T asymptotic_bessel_i_large_x(T v, T x, const Policy& pol)
 {
    using namespace std;  // ADL of std names
    T s = 1;
@@ -287,7 +289,7 @@ T asymptotic_bessel_i_large_x(T v, T x)
    s = e * (e * s / sqrt(2 * x * constants::pi<T>()));
 
    return (boost::math::isfinite)(s) ? 
-      s : tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+      s : policy::raise_overflow_error<T>("boost::math::asymptotic_bessel_i_large_x<%1%>(%1%,%1%)", 0, pol);
 }
 
 }}} // namespaces

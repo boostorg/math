@@ -9,7 +9,7 @@
 #include <boost/math/special_functions/detail/bessel_j0.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/rational.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 #include <boost/assert.hpp>
 
 // Bessel function of the second kind of order zero
@@ -18,8 +18,8 @@
 
 namespace boost { namespace math { namespace detail{
 
-template <typename T>
-T bessel_y0(T x)
+template <typename T, typename Policy>
+T bessel_y0(T x, const Policy& pol)
 {
     static const T P1[] = {
          static_cast<T>(1.0723538782003176831e+11L),
@@ -123,14 +123,16 @@ T bessel_y0(T x)
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
+    static const char* function = "boost::math::bessel_y0<%1%>(%1%,%1%)";
+
     if (x < 0)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Got x = %1% but x must be non-negative, complex result not supported.", x);
+       return policy::raise_domain_error<T>(function,
+            "Got x = %1% but x must be non-negative, complex result not supported.", x, pol);
     }
     if (x == 0)
     {
-        return -overflow_error<T>(BOOST_CURRENT_FUNCTION);
+       return -policy::raise_overflow_error<T>(function, 0, pol);
     }
     if (x <= 3)                       // x in (0, 3]
     {

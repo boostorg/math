@@ -7,7 +7,7 @@
 #define BOOST_MATH_BESSEL_K0_HPP
 
 #include <boost/math/tools/rational.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 #include <boost/assert.hpp>
 
 // Modified Bessel function of the second kind of order zero
@@ -16,8 +16,8 @@
 
 namespace boost { namespace math { namespace detail{
 
-template <typename T>
-T bessel_k0(T x)
+template <typename T, typename Policy>
+T bessel_k0(T x, const Policy& pol)
 {
     static const T P1[] = {
          static_cast<T>(2.4708152720399552679e+03L),
@@ -75,14 +75,16 @@ T bessel_k0(T x)
     using namespace std;
     using namespace boost::math::tools;
 
+    static const char* function = "boost::math::bessel_k0<%1%>(%1%,%1%)";
+
     if (x < 0)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Got x = %1%, but argument x must be non-negative, complex number result not supported", x);
+       return policy::raise_domain_error<T>(function,
+            "Got x = %1%, but argument x must be non-negative, complex number result not supported", x, pol);
     }
     if (x == 0)
     {
-        return overflow_error<T>(BOOST_CURRENT_FUNCTION);
+       return policy::raise_overflow_error<T>(function, 0, pol);
     }
     if (x <= 1)                         // x in (0, 1]
     {

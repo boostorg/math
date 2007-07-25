@@ -40,6 +40,12 @@ T sin_pi(T x)
    return invert ? -rem : rem;
 }
 
+template <class T, class Policy>
+inline T sin_pi(T x, const Policy&)
+{
+   return boost::math::sin_pi(x);
+}
+
 } // namespace math
 } // namespace boost
 #endif

@@ -2,6 +2,9 @@
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -9,8 +12,10 @@
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/array.hpp>
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
+#endif
 
 #include "handle_test_result.hpp"
 
@@ -43,7 +48,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::tools::digits<double>() == boost::math::tools::digits<long double>())
+   if(boost::math::policy::digits<double, boost::math::policy::policy<> >() == boost::math::policy::digits<long double, boost::math::policy::policy<> >())
    {
       largest_type = "(long\\s+)?double";
    }
@@ -112,6 +117,7 @@ void expected_results()
 template <class T>
 void do_test_tgamma_delta_ratio(const T& data, const char* type_name, const char* test_name)
 {
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -140,6 +146,7 @@ void do_test_tgamma_delta_ratio(const T& data, const char* type_name, const char
          -boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
       boost::lambda::ret<value_type>(boost::lambda::_1[3]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_delta_ratio(a -delta)", test_name);
+#endif
 }
 
 template <class T>
@@ -201,7 +208,9 @@ int test_main(int, char* [])
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_tgamma_ratio(0.1L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    test_tgamma_ratio(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

@@ -20,19 +20,24 @@
 #include <boost/math/special_functions/ellint_2.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 
 // Elliptic integrals (complete and incomplete) of the third kind
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
 
-namespace boost { namespace math { namespace detail{
+namespace boost { namespace math { 
+   
+template <class T1, class T2, class T3, class Policy>
+typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const Policy& pol);
+   
+namespace detail{
 
-template <typename T>
-T ellint_pi_imp(T v, T k, T vc);
+template <typename T, typename Policy>
+T ellint_pi_imp(T v, T k, T vc, const Policy& pol);
 
 // Elliptic integral (Legendre form) of the third kind
-template <typename T>
-T ellint_pi_imp(T v, T phi, T k, T vc)
+template <typename T, typename Policy>
+T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
 {
     // Note vc = 1-v presumably without cancellation error.
     T value, x, y, z, p, t;
@@ -41,10 +46,12 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
+    static const char* function = "boost::math::ellint_3<%1%>(%1%,%1%,%1%)";
+
     if (abs(k) > 1)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Got k = %1%, function requires |k| <= 1", k);
+       return policy::raise_domain_error<T>(function,
+            "Got k = %1%, function requires |k| <= 1", k, pol);
     }
 
     T sphi = sin(fabs(phi));
@@ -52,15 +59,15 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
     if(v > 1 / (sphi * sphi))
     {
         // Complex result is a domain error:
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Got v = %1%, but result is complex for v > 1 / sin^2(phi)", v);
+       return policy::raise_domain_error<T>(function,
+            "Got v = %1%, but result is complex for v > 1 / sin^2(phi)", v, pol);
     }
 
     // Special cases first:
     if(v == 0)
     {
        // A&S 17.7.18 & 19
-       return (k == 0) ? phi : ellint_f_imp(phi, k);
+       return (k == 0) ? phi : ellint_f_imp(phi, k, pol);
     }
     if(phi == constants::pi<T>() / 2)
     {
@@ -71,7 +78,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
        // in a T, this is a bit of a guess as to the users true
        // intent...
        //
-       return ellint_pi_imp(v, k, vc);
+       return ellint_pi_imp(v, k, vc, pol);
     }
     if(k == 0)
     {
@@ -90,7 +97,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
           // v > 1:
           T vcr = sqrt(-vc);
           T arg = vcr * tan(phi);
-          return (boost::math::log1p(arg) - boost::math::log1p(-arg)) / (2 * vcr);
+          return (boost::math::log1p(arg, pol) - boost::math::log1p(-arg, pol)) / (2 * vcr);
        }
     }
 
@@ -106,10 +113,10 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
        T Nm1 = (1 - k2) / (1 - v);
        T p2 = sqrt(-v * (k2 - v) / (1 - v));
        T delta = sqrt(1 - k2 * sphi * sphi);
-       T result = ellint_pi_imp(N, phi, k, Nm1);
+       T result = ellint_pi_imp(N, phi, k, Nm1, pol);
 
        result *= sqrt(Nm1 * (1 - k2 / N));
-       result += ellint_f_imp(phi, k) * k2 / p2;
+       result += ellint_f_imp(phi, k, pol) * k2 / p2;
        result += atan((p2/2) * sin(2 * phi) / delta);
        result /= sqrt((1 - v) * (1 - k2 / v));
        return result;
@@ -162,14 +169,14 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
     if(fabs(phi) > 1 / tools::epsilon<T>())
     {
        if(v > 1)
-          return tools::domain_error<T>(
-            BOOST_CURRENT_FUNCTION,
-            "Got v = %1%, but this is only supported for 0 <= phi <= pi/2", v);
+          return policy::raise_domain_error<T>(
+            function,
+            "Got v = %1%, but this is only supported for 0 <= phi <= pi/2", v, pol);
        //  
        // Phi is so large that phi%pi is necessarily zero (or garbage),
        // just return the second part of the duplication formula:
        //
-       value = 2 * fabs(phi) * ellint_pi_imp(v, k, vc) / constants::pi<T>();
+       value = 2 * fabs(phi) * ellint_pi_imp(v, k, vc, pol) / constants::pi<T>();
     }
     else
     {
@@ -189,9 +196,9 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
           // The region with v > 1 and phi outside [0, pi/2] is
           // currently unsupported:
           //
-          return tools::domain_error<T>(
-            BOOST_CURRENT_FUNCTION,
-            "Got v = %1%, but this is only supported for 0 <= phi <= pi/2", v);
+          return policy::raise_domain_error<T>(
+            function,
+            "Got v = %1%, but this is only supported for 0 <= phi <= pi/2", v, pol);
        }  
        T sinp = sin(rphi);
        T cosp = cos(rphi);
@@ -203,9 +210,9 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
            p = 1 - v * t;
        else
            p = x + vc * t;
-       value = sign * sinp * (ellint_rf_imp(x, y, z) + v * t * ellint_rj_imp(x, y, z, p) / 3);
+       value = sign * sinp * (ellint_rf_imp(x, y, z, pol) + v * t * ellint_rj_imp(x, y, z, p, pol) / 3);
        if(m > 0)
-         value += m * ellint_pi_imp(v, k, vc);
+         value += m * ellint_pi_imp(v, k, vc, pol);
     }
 
     if (phi < 0)
@@ -216,28 +223,30 @@ T ellint_pi_imp(T v, T phi, T k, T vc)
 }
 
 // Complete elliptic integral (Legendre form) of the third kind
-template <typename T>
-T ellint_pi_imp(T v, T k, T vc)
+template <typename T, typename Policy>
+T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
 {
     // Note arg vc = 1-v, possibly without cancellation errors
     using namespace std;
     using namespace boost::math::tools;
 
+    static const char* function = "boost::math::ellint_pi<%1%>(%1%,%1%)";
+
     if (abs(k) >= 1)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Got k = %1%, function requires |k| <= 1", k);
+       return policy::raise_domain_error<T>(function,
+            "Got k = %1%, function requires |k| <= 1", k, pol);
     }
     if(vc <= 0)
     {
        // Result is complex:
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Got v = %1%, function requires v < 1", v);
+       return policy::raise_domain_error<T>(function,
+            "Got v = %1%, function requires v < 1", v, pol);
     }
 
     if(v == 0)
     {
-       return (k == 0) ? boost::math::constants::pi<T>() / 2 : ellint_k_imp(k);
+       return (k == 0) ? boost::math::constants::pi<T>() / 2 : ellint_k_imp(k, pol);
     }
 
     if(v < 0)
@@ -247,10 +256,10 @@ T ellint_pi_imp(T v, T k, T vc)
        T Nm1 = (1 - k2) / (1 - v);
        T p2 = sqrt(-v * (k2 - v) / (1 - v));
 
-       T result = boost::math::detail::ellint_pi_imp(N, k, Nm1);
+       T result = boost::math::detail::ellint_pi_imp(N, k, Nm1, pol);
 
        result *= sqrt(Nm1 * (1 - k2 / N));
-       result += ellint_k_imp(k) * k2 / p2;
+       result += ellint_k_imp(k, pol) * k2 / p2;
        result /= sqrt((1 - v) * (1 - k2 / v));
        return result;
     }
@@ -259,36 +268,57 @@ T ellint_pi_imp(T v, T k, T vc)
     T y = 1 - k * k;
     T z = 1;
     T p = vc;
-    T value = ellint_rf_imp(x, y, z) + v * ellint_rj_imp(x, y, z, p) / 3;
+    T value = ellint_rf_imp(x, y, z, pol) + v * ellint_rj_imp(x, y, z, p, pol) / 3;
 
     return value;
 }
 
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const mpl::false_&)
+{
+   return boost::math::ellint_3(k, v, phi, policy::policy<>());
+}
+
+template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v, const Policy& pol, const mpl::true_&)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(
+      detail::ellint_pi_imp(
+         static_cast<value_type>(v), 
+         static_cast<value_type>(k),
+         static_cast<value_type>(1-v),
+         pol), "boost::math::ellint_3<%1%>(%1%,%1%)");
+}
+
 } // namespace detail
 
-template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi)
+template <class T1, class T2, class T3, class Policy>
+inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(
       detail::ellint_pi_imp(
          static_cast<value_type>(v), 
          static_cast<value_type>(phi), 
          static_cast<value_type>(k),
-         static_cast<value_type>(1-v)), BOOST_CURRENT_FUNCTION);
+         static_cast<value_type>(1-v),
+         pol), "boost::math::ellint_3<%1%>(%1%,%1%,%1%)");
+}
+
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi)
+{
+   typedef typename policy::is_policy<T3>::type tag_type;
+   return detail::ellint_3(k, v, phi, tag_type());
 }
 
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v)
 {
-   typedef typename tools::promote_args<T1, T2>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(
-      detail::ellint_pi_imp(
-         static_cast<value_type>(v), 
-         static_cast<value_type>(k),
-         static_cast<value_type>(1-v)), BOOST_CURRENT_FUNCTION);
+   return ellint_3(k, v, policy::policy<>());
 }
 
 }} // namespaces

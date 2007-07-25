@@ -10,6 +10,7 @@
 // http://mathworld.wolfram.com/TriangularDistribution.html
 // http://en.wikipedia.org/wiki/Triangular_distribution
 
+#include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/complement.hpp>
@@ -21,11 +22,11 @@ namespace boost{ namespace math
 {
   namespace detail
   {
-    template <class RealType>
+    template <class RealType, class Policy>
     inline bool check_triangular_lower(
       const char* function,
       RealType lower,
-      RealType* result)
+      RealType* result, const Policy& pol)
     {
       if((boost::math::isfinite)(lower))
       { // Any finite value is OK.
@@ -33,18 +34,18 @@ namespace boost{ namespace math
       }
       else
       { // Not finite: infinity or NaN.
-        *result = tools::domain_error<RealType>(
+        *result = policy::raise_domain_error<RealType>(
           function,
-          "Lower parameter is %1%, but must be finite!", lower);
+          "Lower parameter is %1%, but must be finite!", lower, pol);
         return false;
       }
     } // bool check_triangular_lower(
 
-    template <class RealType>
+    template <class RealType, class Policy>
     inline bool check_triangular_mode(
       const char* function,
       RealType mode,
-      RealType* result)
+      RealType* result, const Policy& pol)
     {
       if((boost::math::isfinite)(mode))
       { // any finite value is OK.
@@ -52,18 +53,18 @@ namespace boost{ namespace math
       }
       else
       { // Not finite: infinity or NaN.
-        *result = tools::domain_error<RealType>(
+        *result = policy::raise_domain_error<RealType>(
           function,
-          "Mode parameter is %1%, but must be finite!", mode);
+          "Mode parameter is %1%, but must be finite!", mode, pol);
         return false;
       }
     } // bool check_triangular_mode(
 
-    template <class RealType>
+    template <class RealType, class Policy>
     inline bool check_triangular_upper(
       const char* function,
       RealType upper,
-      RealType* result)
+      RealType* result, const Policy& pol)
     {
       if((boost::math::isfinite)(upper))
       { // any finite value is OK.
@@ -71,18 +72,18 @@ namespace boost{ namespace math
       }
       else
       { // Not finite: infinity or NaN.
-        *result = tools::domain_error<RealType>(
+        *result = policy::raise_domain_error<RealType>(
           function,
-          "Upper parameter is %1%, but must be finite!", upper);
+          "Upper parameter is %1%, but must be finite!", upper, pol);
         return false;
       }
     } // bool check_triangular_upper(
 
-    template <class RealType>
+    template <class RealType, class Policy>
     inline bool check_triangular_x(
       const char* function,
       RealType const& x,
-      RealType* result)
+      RealType* result, const Policy& pol)
     {
       if((boost::math::isfinite)(x))
       { // Any finite value is OK
@@ -90,58 +91,59 @@ namespace boost{ namespace math
       }
       else
       { // Not finite: infinity or NaN.
-        *result = tools::domain_error<RealType>(
+        *result = policy::raise_domain_error<RealType>(
           function,
-          "x parameter is %1%, but must be finite!", x);
+          "x parameter is %1%, but must be finite!", x, pol);
         return false;
       }
     } // bool check_triangular_x
 
-    template <class RealType>
+    template <class RealType, class Policy>
     inline bool check_triangular(
       const char* function,
       RealType lower,
       RealType mode,
       RealType upper,
-      RealType* result)
+      RealType* result, const Policy& pol)
     {
-      if(check_triangular_lower(function, lower, result)
-        && check_triangular_mode(function, mode, result)
-        && check_triangular_upper(function, upper, result)
+      if(check_triangular_lower(function, lower, result, pol)
+        && check_triangular_mode(function, mode, result, pol)
+        && check_triangular_upper(function, upper, result, pol)
         && (lower < upper) // lower == upper NOT useful.
         )
       {
         if (mode < lower)
         {
-          *result = tools::domain_error<RealType>(
+          *result = policy::raise_domain_error<RealType>(
             function,
-            "mode parameter is %1%, but must be >= than lower!", lower);
+            "mode parameter is %1%, but must be >= than lower!", lower, pol);
           return false;
         }
         if (mode > upper )
         {
-          *result = tools::domain_error<RealType>(
+          *result = policy::raise_domain_error<RealType>(
             function,
-            "mode parameter is %1%, but must be <= than upper!", upper);
+            "mode parameter is %1%, but must be <= than upper!", upper, pol);
           return false;
         }
         return true;
       }
       else
       { // upper and lower have each been checked before, so must be lower >= upper.
-        *result = tools::domain_error<RealType>(
+        *result = policy::raise_domain_error<RealType>(
           function,
-          "lower parameter is %1%, but must be less than upper!", lower);
+          "lower parameter is %1%, but must be less than upper!", lower, pol);
         return false;
       }
     } // bool check_triangular
   } // namespace detail
 
-  template <class RealType = double>
+  template <class RealType = double, class Policy = policy::policy<> >
   class triangular_distribution
   {
   public:
     typedef RealType value_type;
+    typedef Policy policy_type;
 
     triangular_distribution(RealType lower = -1, RealType mode = 0, RealType upper = 1)
       : m_lower(lower), m_mode(mode), m_upper(upper) // Constructor.
@@ -150,7 +152,7 @@ namespace boost{ namespace math
       // But this is more useful in most applications to approximate normal distribution,
       // where the central value is the most likely and deviations either side equally likely.
       RealType result;
-      detail::check_triangular(BOOST_CURRENT_FUNCTION,lower, mode, upper, &result);
+      detail::check_triangular("boost::math::triangular_distribution<%1%>::triangular_distribution",lower, mode, upper, &result, Policy());
     }
     // Accessor functions.
     RealType lower()const
@@ -174,32 +176,33 @@ namespace boost{ namespace math
 
   typedef triangular_distribution<double> triangular;
 
-  template <class RealType>
-  inline const std::pair<RealType, RealType> range(const triangular_distribution<RealType>& /* dist */)
+  template <class RealType, class Policy>
+  inline const std::pair<RealType, RealType> range(const triangular_distribution<RealType, Policy>& /* dist */)
   { // Range of permissible values for random variable x.
     using boost::math::tools::max_value;
     return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
   }
 
-  template <class RealType>
-  inline const std::pair<RealType, RealType> support(const triangular_distribution<RealType>& dist)
+  template <class RealType, class Policy>
+  inline const std::pair<RealType, RealType> support(const triangular_distribution<RealType, Policy>& dist)
   { // Range of supported values for random variable x.
     // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
     return std::pair<RealType, RealType>(dist.lower(), dist.upper());
   }
 
-  template <class RealType>
-  RealType pdf(const triangular_distribution<RealType>& dist, const RealType& x)
+  template <class RealType, class Policy>
+  RealType pdf(const triangular_distribution<RealType, Policy>& dist, const RealType& x)
   {
+    static const char* function = "boost::math::pdf(const triangular_distribution<%1%>&, %1%)";
     RealType lower = dist.lower();
     RealType mode = dist.mode();
     RealType upper = dist.upper();
     RealType result; // of checks.
-    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION, lower, mode, upper, &result))
+    if(false == detail::check_triangular(function, lower, mode, upper, &result, Policy()))
     {
       return result;
     }
-    if(false == detail::check_triangular_x(BOOST_CURRENT_FUNCTION, x, &result))
+    if(false == detail::check_triangular_x(function, x, &result, Policy()))
     {
       return result;
     }
@@ -223,20 +226,21 @@ namespace boost{ namespace math
     {  // (x > mode)
       return 2 * (upper - x) / ((upper - lower) * (upper - mode));
     }
-  } // RealType pdf(const triangular_distribution<RealType>& dist, const RealType& x)
+  } // RealType pdf(const triangular_distribution<RealType, Policy>& dist, const RealType& x)
 
-  template <class RealType>
-  inline RealType cdf(const triangular_distribution<RealType>& dist, const RealType& x)
+  template <class RealType, class Policy>
+  inline RealType cdf(const triangular_distribution<RealType, Policy>& dist, const RealType& x)
   {
+    static const char* function = "boost::math::cdf(const triangular_distribution<%1%>&, %1%)";
     RealType lower = dist.lower();
     RealType mode = dist.mode();
     RealType upper = dist.upper();
     RealType result; // of checks.
-    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION, lower, mode, upper, &result))
+    if(false == detail::check_triangular(function, lower, mode, upper, &result, Policy()))
     {
       return result;
     }
-    if(false == detail::check_triangular_x(BOOST_CURRENT_FUNCTION, x, &result))
+    if(false == detail::check_triangular_x(function, x, &result, Policy()))
     {
       return result;
     }
@@ -257,21 +261,22 @@ namespace boost{ namespace math
     {
       return 1 - (upper - x) *  (upper - x) / ((upper - lower) * (upper - mode));
     }
-  } // RealType cdf(const triangular_distribution<RealType>& dist, const RealType& x)
+  } // RealType cdf(const triangular_distribution<RealType, Policy>& dist, const RealType& x)
 
-  template <class RealType>
-  RealType quantile(const triangular_distribution<RealType>& dist, const RealType& p)
+  template <class RealType, class Policy>
+  RealType quantile(const triangular_distribution<RealType, Policy>& dist, const RealType& p)
   {
     using namespace std;  // for ADL of std functions (sqrt).
+    static const char* function = "boost::math::quantile(const triangular_distribution<%1%>&, %1%)";
     RealType lower = dist.lower();
     RealType mode = dist.mode();
     RealType upper = dist.upper();
     RealType result; // of checks
-    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION,lower, mode, upper, &result))
+    if(false == detail::check_triangular(function,lower, mode, upper, &result, Policy()))
     {
       return result;
     }
-    if(false == detail::check_probability(BOOST_CURRENT_FUNCTION, p, &result))
+    if(false == detail::check_probability(function, p, &result, Policy()))
     {
       return result;
     }
@@ -299,21 +304,22 @@ namespace boost{ namespace math
     }
     return result;
 
-  } // RealType quantile(const triangular_distribution<RealType>& dist, const RealType& q)
+  } // RealType quantile(const triangular_distribution<RealType, Policy>& dist, const RealType& q)
 
-  template <class RealType>
-  RealType cdf(const complemented2_type<triangular_distribution<RealType>, RealType>& c)
+  template <class RealType, class Policy>
+  RealType cdf(const complemented2_type<triangular_distribution<RealType, Policy>, RealType>& c)
   {
+    static const char* function = "boost::math::cdf(const triangular_distribution<%1%>&, %1%)";
     RealType lower = c.dist.lower();
     RealType mode = c.dist.mode();
     RealType upper = c.dist.upper();
     RealType x = c.param;
     RealType result; // of checks.
-    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION, lower, mode, upper, &result))
+    if(false == detail::check_triangular(function, lower, mode, upper, &result, Policy()))
     {
       return result;
     }
-    if(false == detail::check_triangular_x(BOOST_CURRENT_FUNCTION, x, &result))
+    if(false == detail::check_triangular_x(function, x, &result, Policy()))
     {
       return result;
     }
@@ -333,22 +339,23 @@ namespace boost{ namespace math
     {
       return (upper - x) *  (upper - x) / ((upper - lower) * (upper - mode));
     }
-  } // RealType cdf(const complemented2_type<triangular_distribution<RealType>, RealType>& c)
+  } // RealType cdf(const complemented2_type<triangular_distribution<RealType, Policy>, RealType>& c)
 
-  template <class RealType>
-  RealType quantile(const complemented2_type<triangular_distribution<RealType>, RealType>& c)
+  template <class RealType, class Policy>
+  RealType quantile(const complemented2_type<triangular_distribution<RealType, Policy>, RealType>& c)
   {
     using namespace std;  // Aid ADL for sqrt.
+    static const char* function = "boost::math::quantile(const triangular_distribution<%1%>&, %1%)";
     RealType l = c.dist.lower();
     RealType m = c.dist.mode();
     RealType u = c.dist.upper();
     RealType q = c.param; // probability 0 to 1.
     RealType result; // of checks.
-    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION, l, m, u, &result))
+    if(false == detail::check_triangular(function, l, m, u, &result, Policy()))
     {
       return result;
     }
-    if(false == detail::check_probability(BOOST_CURRENT_FUNCTION, q, &result))
+    if(false == detail::check_probability(function, q, &result, Policy()))
     {
       return result;
     }
@@ -381,56 +388,60 @@ namespace boost{ namespace math
       result = upper - sqrt((upper - lower) * (upper - mode) * q);
     }
     return result;
-  } // RealType quantile(const complemented2_type<triangular_distribution<RealType>, RealType>& c)
+  } // RealType quantile(const complemented2_type<triangular_distribution<RealType, Policy>, RealType>& c)
 
-  template <class RealType>
-  inline RealType mean(const triangular_distribution<RealType>& dist)
+  template <class RealType, class Policy>
+  inline RealType mean(const triangular_distribution<RealType, Policy>& dist)
   {
+    static const char* function = "boost::math::mean(const triangular_distribution<%1%>&)";
     RealType lower = dist.lower();
     RealType mode = dist.mode();
     RealType upper = dist.upper();
     RealType result;  // of checks.
-    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION, lower, mode, upper, &result))
+    if(false == detail::check_triangular(function, lower, mode, upper, &result, Policy()))
     {
       return result;
     }
     return (lower + upper + mode) / 3;
-  } // RealType mean(const triangular_distribution<RealType>& dist)
+  } // RealType mean(const triangular_distribution<RealType, Policy>& dist)
 
 
-  template <class RealType>
-  inline RealType variance(const triangular_distribution<RealType>& dist)
+  template <class RealType, class Policy>
+  inline RealType variance(const triangular_distribution<RealType, Policy>& dist)
   {
+    static const char* function = "boost::math::mean(const triangular_distribution<%1%>&)";
     RealType lower = dist.lower();
     RealType mode = dist.mode();
     RealType upper = dist.upper();
     RealType result; // of checks.
-    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION, lower, mode, upper, &result))
+    if(false == detail::check_triangular(function, lower, mode, upper, &result, Policy()))
     {
       return result;
     }
     return (lower * lower + upper * upper + mode * mode - lower * upper - lower * mode - upper * mode) / 18;
-  } // RealType variance(const triangular_distribution<RealType>& dist)
+  } // RealType variance(const triangular_distribution<RealType, Policy>& dist)
 
-  template <class RealType>
-  inline RealType mode(const triangular_distribution<RealType>& dist)
+  template <class RealType, class Policy>
+  inline RealType mode(const triangular_distribution<RealType, Policy>& dist)
   {
+    static const char* function = "boost::math::mode(const triangular_distribution<%1%>&)";
     RealType mode = dist.mode();
     RealType result; // of checks.
-    if(false == detail::check_triangular_mode(BOOST_CURRENT_FUNCTION, mode, &result))
+    if(false == detail::check_triangular_mode(function, mode, &result, Policy()))
     { // This should never happen!
       return result;
     }
     return mode;
   } // RealType mode
 
-  template <class RealType>
-  inline RealType median(const triangular_distribution<RealType>& dist)
+  template <class RealType, class Policy>
+  inline RealType median(const triangular_distribution<RealType, Policy>& dist)
   {
     using namespace std; // ADL of std functions.
+    static const char* function = "boost::math::median(const triangular_distribution<%1%>&)";
     RealType mode = dist.mode();
     RealType result; // of checks.
-    if(false == detail::check_triangular_mode(BOOST_CURRENT_FUNCTION, mode, &result))
+    if(false == detail::check_triangular_mode(function, mode, &result, Policy()))
     { // This should never happen!
       return result;
     }
@@ -446,46 +457,49 @@ namespace boost{ namespace math
     }
   } // RealType mode
 
-  template <class RealType>
-  inline RealType skewness(const triangular_distribution<RealType>& dist)
+  template <class RealType, class Policy>
+  inline RealType skewness(const triangular_distribution<RealType, Policy>& dist)
   {
     using namespace std;  // for ADL of std functions
     using namespace boost::math::constants; // for root_two
+    static const char* function = "boost::math::skewness(const triangular_distribution<%1%>&)";
 
     RealType lower = dist.lower();
     RealType mode = dist.mode();
     RealType upper = dist.upper();
     RealType result; // of checks.
-    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION,lower, mode, upper, &result))
+    if(false == detail::check_triangular(function,lower, mode, upper, &result, Policy()))
     {
       return result;
     }
     return root_two<RealType>() * (lower + upper - 2 * mode) * (2 * lower - upper - mode) * (lower - 2 * upper + mode) /
       (5 * pow((lower * lower + upper + upper + mode * mode - lower * upper - lower * mode - upper * mode), RealType(3)/RealType(2)));
-  } // RealType skewness(const triangular_distribution<RealType>& dist)
+  } // RealType skewness(const triangular_distribution<RealType, Policy>& dist)
 
-  template <class RealType>
-  inline RealType kurtosis(const triangular_distribution<RealType>& dist)
+  template <class RealType, class Policy>
+  inline RealType kurtosis(const triangular_distribution<RealType, Policy>& dist)
   { // These checks may be belt and braces as should have been checked on construction?
+    static const char* function = "boost::math::kurtosis(const triangular_distribution<%1%>&)";
     RealType lower = dist.lower();
     RealType upper = dist.upper();
     RealType mode = dist.mode();
     RealType result;  // of checks.
-    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION,lower, mode, upper, &result))
+    if(false == detail::check_triangular(function,lower, mode, upper, &result, Policy()))
     {
       return result;
     }
     return static_cast<RealType>(12)/5; //  12/5 = 2.4;
-  } // RealType kurtosis_excess(const triangular_distribution<RealType>& dist)
+  } // RealType kurtosis_excess(const triangular_distribution<RealType, Policy>& dist)
 
-  template <class RealType>
-  inline RealType kurtosis_excess(const triangular_distribution<RealType>& dist)
+  template <class RealType, class Policy>
+  inline RealType kurtosis_excess(const triangular_distribution<RealType, Policy>& dist)
   { // These checks may be belt and braces as should have been checked on construction?
+    static const char* function = "boost::math::kurtosis_excess(const triangular_distribution<%1%>&)";
     RealType lower = dist.lower();
     RealType upper = dist.upper();
     RealType mode = dist.mode();
     RealType result;  // of checks.
-    if(false == detail::check_triangular(BOOST_CURRENT_FUNCTION,lower, mode, upper, &result))
+    if(false == detail::check_triangular(function,lower, mode, upper, &result, Policy()))
     {
       return result;
     }

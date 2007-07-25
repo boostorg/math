@@ -15,7 +15,7 @@
 #include <boost/math/special_functions/detail/simple_complex.hpp>
 #include <boost/math/special_functions/detail/bessel_jy_asym.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <complex>
@@ -28,8 +28,8 @@ namespace detail {
 
 // Calculate Y(v, x) and Y(v+1, x) by Temme's method, see
 // Temme, Journal of Computational Physics, vol 21, 343 (1976)
-template <typename T>
-int temme_jy(T v, T x, T* Y, T* Y1)
+template <typename T, typename Policy>
+int temme_jy(T v, T x, T* Y, T* Y1, const Policy& pol)
 {
     T g, h, p, q, f, coef, sum, sum1, tolerance;
     T a, d, e, sigma;
@@ -41,10 +41,10 @@ int temme_jy(T v, T x, T* Y, T* Y1)
 
     BOOST_ASSERT(fabs(v) <= 0.5f);  // precondition for using this routine
 
-    T gp = tgamma1pm1(v);
-    T gm = tgamma1pm1(-v);
-    T spv = sin_pi(v);
-    T spv2 = sin_pi(v/2);
+    T gp = tgamma1pm1(v, pol);
+    T gm = tgamma1pm1(-v, pol);
+    T spv = sin_pi(v, pol);
+    T spv2 = sin_pi(v/2, pol);
     T xp = pow(x/2, v);
 
     a = log(x / 2);
@@ -88,7 +88,7 @@ int temme_jy(T v, T x, T* Y, T* Y1)
            break; 
         }
     }
-    check_series_iterations(BOOST_CURRENT_FUNCTION, k);
+    policy::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k, pol);
     *Y = -sum;
     *Y1 = -2 * sum1 / x;
 
@@ -97,8 +97,8 @@ int temme_jy(T v, T x, T* Y, T* Y1)
 
 // Evaluate continued fraction fv = J_(v+1) / J_v, see
 // Abramowitz and Stegun, Handbook of Mathematical Functions, 1972, 9.1.73
-template <typename T>
-int CF1_jy(T v, T x, T* fv, int* sign)
+template <typename T, typename Policy>
+int CF1_jy(T v, T x, T* fv, int* sign, const Policy& pol)
 {
     T C, D, f, a, b, delta, tiny, tolerance;
     int k, s = 1;
@@ -129,7 +129,7 @@ int CF1_jy(T v, T x, T* fv, int* sign)
         if (abs(delta - 1.0L) < tolerance) 
         { break; }
     }
-    tools::check_series_iterations(BOOST_CURRENT_FUNCTION, k / 100);
+    policy::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k / 100, pol);
     *fv = -f;
     *sign = s;                              // sign of denominator
 
@@ -145,8 +145,8 @@ struct complex_trait
 
 // Evaluate continued fraction p + iq = (J' + iY') / (J + iY), see
 // Press et al, Numerical Recipes in C, 2nd edition, 1992
-template <typename T>
-int CF2_jy(T v, T x, T* p, T* q)
+template <typename T, typename Policy>
+int CF2_jy(T v, T x, T* p, T* q, const Policy& pol)
 {
     using namespace std;
 
@@ -183,7 +183,7 @@ int CF2_jy(T v, T x, T* p, T* q)
         f *= delta;
         if (abs(delta - one) < tolerance) { break; }
     }
-    tools::check_series_iterations(BOOST_CURRENT_FUNCTION, k);
+    policy::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k, pol);
     *p = real(f);
     *q = imag(f);
 
@@ -197,8 +197,8 @@ enum
 
 // Compute J(v, x) and Y(v, x) simultaneously by Steed's method, see
 // Barnett et al, Computer Physics Communications, vol 8, 377 (1974)
-template <typename T>
-int bessel_jy(T v, T x, T* J, T* Y, int kind = need_j|need_y)
+template <typename T, typename Policy>
+int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
 {
     BOOST_ASSERT(x >= 0);
 
@@ -206,6 +206,8 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind = need_j|need_y)
     T W, p, q, gamma, current, prev, next;
     bool reflect = false;
     int n, k, s;
+
+    static const char* function = "boost::math::bessel_jy<%1%>(%1%,%1%)";
 
     using namespace std;
     using namespace boost::math::tools;
@@ -222,8 +224,8 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind = need_j|need_y)
 
     if (x == 0)
     {
-       *J = *Y = tools::overflow_error<T>(
-          BOOST_CURRENT_FUNCTION);
+       *J = *Y = policy::raise_overflow_error<T>(
+          function, 0, pol);
        return 1;
     }
 
@@ -231,7 +233,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind = need_j|need_y)
     W = T(2) / (x * pi<T>());               // Wronskian
     if (x <= 2)                           // x in (0, 2]
     {
-        if(temme_jy(u, x, &Yu, &Yu1))             // Temme series
+        if(temme_jy(u, x, &Yu, &Yu1, pol))             // Temme series
         {
            // domain error:
            *J = *Y = Yu;
@@ -249,7 +251,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind = need_j|need_y)
         Yv1 = current;
         if(kind&need_j)
         {
-          CF1_jy(v, x, &fv, &s);                 // continued fraction CF1_jy
+          CF1_jy(v, x, &fv, &s, pol);                 // continued fraction CF1_jy
           Jv = W / (Yv * fv - Yv1);           // Wronskian relation
         }
         else
@@ -259,7 +261,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind = need_j|need_y)
     {
         // Get Y(u, x):
         // define tag type that will dispatch to right limits:
-        typedef typename bessel_asymptotic_tag<T>::type tag_type;
+        typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
 
         T lim;
         switch(kind)
@@ -294,7 +296,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind = need_j|need_y)
         }
         else
         {
-           CF1_jy(v, x, &fv, &s);
+           CF1_jy(v, x, &fv, &s, pol);
            // tiny initial value to prevent overflow
            T init = sqrt(tools::min_value<T>());
            prev = fv * s * init;
@@ -308,7 +310,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind = need_j|need_y)
            T ratio = (s * init) / current;     // scaling ratio
            // can also call CF1_jy() to get fu, not much difference in precision
            fu = prev / current;
-           CF2_jy(u, x, &p, &q);                  // continued fraction CF2_jy
+           CF2_jy(u, x, &p, &q, pol);                  // continued fraction CF2_jy
            T t = u / x - fu;                   // t = J'/J
            gamma = (p - t) / q;
            Ju = sign(current) * sqrt(W / (q + gamma * (p - t)));
@@ -338,8 +340,8 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind = need_j|need_y)
     if (reflect)
     {
         T z = (u + n % 2);
-        *J = cos_pi(z) * Jv - sin_pi(z) * Yv;     // reflection formula
-        *Y = sin_pi(z) * Jv + cos_pi(z) * Yv;
+        *J = cos_pi(z, pol) * Jv - sin_pi(z, pol) * Yv;     // reflection formula
+        *Y = sin_pi(z, pol) * Jv + cos_pi(z, pol) * Yv;
     }
     else
     {

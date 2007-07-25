@@ -20,8 +20,8 @@ namespace detail{
 // and imaginary parts.  Does *not* fix up the sign of the result
 // though.
 //
-template <class T>
-inline T spherical_harmonic_prefix(unsigned n, unsigned m, T theta)
+template <class T, class Policy>
+inline T spherical_harmonic_prefix(unsigned n, unsigned m, T theta, const Policy& pol)
 {
    using namespace std;
 
@@ -31,9 +31,9 @@ inline T spherical_harmonic_prefix(unsigned n, unsigned m, T theta)
    T sin_theta = sin(theta);
    T x = cos(theta);
 
-   T leg = detail::legendre_p_imp(n, m, x, pow(fabs(sin_theta), T(m)));
+   T leg = detail::legendre_p_imp(n, m, x, pow(fabs(sin_theta), T(m)), pol);
    
-   T prefix = tgamma_delta_ratio(static_cast<T>(n - m + 1), static_cast<T>(2 * m));
+   T prefix = tgamma_delta_ratio(static_cast<T>(n - m + 1), static_cast<T>(2 * m), pol);
    prefix *= (2 * n + 1) / (4 * constants::pi<T>());
    prefix = sqrt(prefix);
    return prefix * leg;
@@ -41,8 +41,8 @@ inline T spherical_harmonic_prefix(unsigned n, unsigned m, T theta)
 //
 // Real Part:
 //
-template <class T>
-T spherical_harmonic_r(unsigned n, int m, T theta, T phi)
+template <class T, class Policy>
+T spherical_harmonic_r(unsigned n, int m, T theta, T phi, const Policy& pol)
 {
    using namespace std;  // ADL of std functions
 
@@ -63,13 +63,13 @@ T spherical_harmonic_r(unsigned n, int m, T theta, T phi)
          sign = !sign;
    }
    // Get the value and adjust sign as required:
-   T prefix = spherical_harmonic_prefix(n, m, theta);
+   T prefix = spherical_harmonic_prefix(n, m, theta, pol);
    prefix *= cos(m * phi);
    return sign ? -prefix : prefix;
 }
 
-template <class T>
-T spherical_harmonic_i(unsigned n, int m, T theta, T phi)
+template <class T, class Policy>
+T spherical_harmonic_i(unsigned n, int m, T theta, T phi, const Policy& pol)
 {
    using namespace std;  // ADL of std functions
 
@@ -90,13 +90,13 @@ T spherical_harmonic_i(unsigned n, int m, T theta, T phi)
          sign = !sign;
    }
    // Get the value and adjust sign as required:
-   T prefix = spherical_harmonic_prefix(n, m, theta);
+   T prefix = spherical_harmonic_prefix(n, m, theta, pol);
    prefix *= sin(m * phi);
    return sign ? -prefix : prefix;
 }
 
-template <class T, class U>
-std::complex<T> spherical_harmonic(unsigned n, int m, U theta, U phi)
+template <class T, class U, class Policy>
+std::complex<T> spherical_harmonic(unsigned n, int m, U theta, U phi, const Policy& pol)
 {
    using namespace std;
    //
@@ -126,7 +126,7 @@ std::complex<T> spherical_harmonic(unsigned n, int m, U theta, U phi)
    //
    // Calculate the value:
    //
-   U prefix = spherical_harmonic_prefix(n, m, theta);
+   U prefix = spherical_harmonic_prefix(n, m, theta, pol);
    U r = prefix * cos(m * phi);
    U i = prefix * sin(m * phi);
    //
@@ -136,36 +136,58 @@ std::complex<T> spherical_harmonic(unsigned n, int m, U theta, U phi)
       r = -r;
    if(i_sign)
       i = -i;
-   return std::complex<T>(tools::checked_narrowing_cast<T>(r, BOOST_CURRENT_FUNCTION), tools::checked_narrowing_cast<T>(i, BOOST_CURRENT_FUNCTION));
+   static const char* function = "boost::math::spherical_harmonic<%1%>(int, int, %1%, %1%)";
+   return std::complex<T>(policy::checked_narrowing_cast<T, Policy>(r, function), policy::checked_narrowing_cast<T, Policy>(i, function));
 }
 
 } // namespace detail
+
+template <class T1, class T2, class Policy>
+inline std::complex<typename tools::promote_args<T1, T2>::type> 
+   spherical_harmonic(unsigned n, int m, T1 theta, T2 phi, const Policy& pol)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return detail::spherical_harmonic<result_type, value_type>(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi), pol);
+}
 
 template <class T1, class T2>
 inline std::complex<typename tools::promote_args<T1, T2>::type> 
    spherical_harmonic(unsigned n, int m, T1 theta, T2 phi)
 {
+   return boost::math::spherical_harmonic(n, m, theta, phi, policy::policy<>());
+}
+
+template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
+   spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi, const Policy& pol)
+{
    typedef typename tools::promote_args<T1, T2>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return detail::spherical_harmonic<result_type, value_type>(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi));
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::spherical_harmonic_r(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi), pol), "bost::math::spherical_harmonic_r<%1%>(unsigned, int, %1%, %1%)");
 }
 
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type 
    spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi)
 {
+   return boost::math::spherical_harmonic_r(n, m, theta, phi, policy::policy<>());
+}
+
+template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
+   spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi, const Policy& pol)
+{
    typedef typename tools::promote_args<T1, T2>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::spherical_harmonic_r(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi)), BOOST_CURRENT_FUNCTION);
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::spherical_harmonic_i(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi), pol), "boost::math::spherical_harmonic_i<%1%>(unsigned, int, %1%, %1%)");
 }
 
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type 
    spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi)
 {
-   typedef typename tools::promote_args<T1, T2>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::spherical_harmonic_i(n, m, static_cast<value_type>(theta), static_cast<value_type>(phi)), BOOST_CURRENT_FUNCTION);
+   return boost::math::spherical_harmonic_i(n, m, theta, phi, policy::policy<>());
 }
 
 } // namespace math

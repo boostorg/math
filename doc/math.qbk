@@ -359,6 +359,8 @@ external graphing application.
 [include concepts.qbk]
 [endsect][/section:Using_UDT Use with User Defined Floating-Point Types]
 
+[include policy.qbk]
+
 [section:backgrounders Backgrounders]
 [include implementation.qbk]
 [include error.qbk][/relative error NOT handling]

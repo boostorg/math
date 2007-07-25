@@ -16,15 +16,21 @@
 
 namespace boost{ namespace math{
 
-template <class T>
-inline typename tools::promote_args<T>::type sqrt1pm1(const T& val)
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type sqrt1pm1(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    using namespace std;
 
    if(fabs(result_type(val)) > 0.75)
       return sqrt(1 + result_type(val)) - 1;
-   return boost::math::expm1(boost::math::log1p(val) / 2);
+   return boost::math::expm1(boost::math::log1p(val, pol) / 2, pol);
+}
+
+template <class T>
+inline typename tools::promote_args<T>::type sqrt1pm1(const T& val)
+{
+   return sqrt1pm1(val, policy::policy<>());
 }
 
 } // namespace math

@@ -20,7 +20,6 @@
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/special_functions/cos_pi.hpp>
 #include <boost/math/special_functions/sinc.hpp>
-#include <boost/math/tools/evaluation_type.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/promotion.hpp>
 
@@ -28,31 +27,7 @@ namespace boost{ namespace math{
 
 namespace detail{
 
-typedef mpl::int_<0> bessel_no_int_tag;      // No integer optimisation possible.
-typedef mpl::int_<1> bessel_maybe_int_tag;   // Maybe integer optimisation.
-typedef mpl::int_<2> bessel_int_tag;         // Definite integer optimistaion.
-
-template <class T1, class T2>
-struct bessel_traits
-{
-   typedef typename tools::promote_args<
-      T1, T2
-   >::type result_type;
-
-   typedef typename mpl::if_c<
-      (std::numeric_limits<result_type>::is_specialized == 0)
-      || (std::numeric_limits<result_type>::digits == 0)
-      || (std::numeric_limits<result_type>::digits > 64),
-      bessel_no_int_tag,
-      typename mpl::if_<
-         is_integral<T1>,
-         bessel_int_tag,
-         bessel_maybe_int_tag
-      >::type
-   >::type optimisation_tag;
-};
-
-template <class T>
+template <class T, class Policy>
 struct bessel_j_small_z_series_term
 {
    typedef T result_type;
@@ -62,7 +37,7 @@ struct bessel_j_small_z_series_term
    {
       using namespace std;
       mult = x / 2;
-      term = pow(mult, v) / tgamma(v+1);
+      term = pow(mult, v) / boost::math::tgamma(v+1, Policy());
       mult *= -mult;
    }
    T operator()()
@@ -79,7 +54,7 @@ private:
    T term;
 };
 
-template <class T>
+template <class T, class Policy>
 struct sph_bessel_j_small_z_series_term
 {
    typedef T result_type;
@@ -89,7 +64,7 @@ struct sph_bessel_j_small_z_series_term
    {
       using namespace std;
       mult = x / 2;
-      term = pow(mult, T(v)) / tgamma(v+1+T(0.5f));
+      term = pow(mult, T(v)) / boost::math::tgamma(v+1+T(0.5f), Policy());
       mult *= -mult;
    }
    T operator()()
@@ -106,83 +81,84 @@ private:
    T term;
 };
 
-template <class T>
-inline T bessel_j_small_z_series(T v, T x)
+template <class T, class Policy>
+inline T bessel_j_small_z_series(T v, T x, const Policy& pol)
 {
-   bessel_j_small_z_series_term<T> s(v, x);
+   bessel_j_small_z_series_term<T, Policy> s(v, x);
    boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
-   T result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter);
-   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
+   T result = boost::math::tools::sum_series(s, boost::math::policy::digits<T, Policy>(), max_iter);
+   policy::check_series_iterations("boost::math::bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return result;
 }
 
-template <class T>
-inline T sph_bessel_j_small_z_series(unsigned v, T x)
+template <class T, class Policy>
+inline T sph_bessel_j_small_z_series(unsigned v, T x, const Policy& pol)
 {
    using namespace std; // ADL of std names
-   sph_bessel_j_small_z_series_term<T> s(v, x);
+   sph_bessel_j_small_z_series_term<T, Policy> s(v, x);
    boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
-   T result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter);
-   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
+   T result = boost::math::tools::sum_series(s, boost::math::policy::digits<T, Policy>(), max_iter);
+   policy::check_series_iterations("boost::math::sph_bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return result * sqrt(constants::pi<T>() / 4);
 }
 
-template <class T>
-T cyl_bessel_j_imp(T v, T x, const bessel_no_int_tag& t)
+template <class T, class Policy>
+T cyl_bessel_j_imp(T v, T x, const bessel_no_int_tag& t, const Policy& pol)
 {
    using namespace std;
+   static const char* function = "boost::math::bessel_j<%1%>(%1%,%1%)";
    if(x < 0)
    {
       // better have integer v:
       if(floor(v) == v)
       {
-         T r = cyl_bessel_j_imp(v, -x, t);
+         T r = cyl_bessel_j_imp(v, -x, t, pol);
          if(tools::real_cast<int>(v) & 1)
             r = -r;
          return r;
       }
       else
-         return tools::domain_error<T>(
-            BOOST_CURRENT_FUNCTION,
-            "Got x = %1%, but we need x >= 0", x);
+         return policy::raise_domain_error<T>(
+            function,
+            "Got x = %1%, but we need x >= 0", x, pol);
    }
    if(x == 0)
       return (v == 0) ? 1 : (v > 0) ? 0 : 
-         tools::domain_error<T>(
-            BOOST_CURRENT_FUNCTION, 
-            "Got v = %1%, but require v >= 0 or a negative integer: the result would be complex.", v);
+         policy::raise_domain_error<T>(
+            function, 
+            "Got v = %1%, but require v >= 0 or a negative integer: the result would be complex.", v, pol);
    
    
    if((v >= 0) && ((x < 1) || (v > x * x / 4)))
    {
-      return bessel_j_small_z_series(v, x);
+      return bessel_j_small_z_series(v, x, pol);
    }
    
    T j, y;
-   bessel_jy(v, x, &j, &y, need_j);
+   bessel_jy(v, x, &j, &y, need_j, pol);
    return j;
 }
 
-template <class T>
-inline T cyl_bessel_j_imp(T v, T x, const bessel_maybe_int_tag&)
+template <class T, class Policy>
+inline T cyl_bessel_j_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& pol)
 {
    using namespace std;  // ADL of std names.
-   typedef typename bessel_asymptotic_tag<T>::type tag_type;
+   typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
    if((fabs(v) < 200) && (floor(v) == v))
    {
       if(fabs(x) > asymptotic_bessel_j_limit<T>(v, tag_type()))
          return asymptotic_bessel_j_large_x_2(v, x);
       else
-         return bessel_jn(tools::real_cast<int>(v), x);
+         return bessel_jn(tools::real_cast<int>(v), x, pol);
    }
-   return cyl_bessel_j_imp(v, x, bessel_no_int_tag());
+   return cyl_bessel_j_imp(v, x, bessel_no_int_tag(), pol);
 }
 
-template <class T>
-inline T cyl_bessel_j_imp(int v, T x, const bessel_int_tag&)
+template <class T, class Policy>
+inline T cyl_bessel_j_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
 {
    using namespace std;
-   typedef typename bessel_asymptotic_tag<T>::type tag_type;
+   typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
    if(fabs(x) > asymptotic_bessel_j_limit<T>(abs(v), tag_type()))
    {
       T r = asymptotic_bessel_j_large_x_2(static_cast<T>(abs(v)), x);
@@ -191,37 +167,37 @@ inline T cyl_bessel_j_imp(int v, T x, const bessel_int_tag&)
       return r;
    }
    else
-      return bessel_jn(v, x);
+      return bessel_jn(v, x, pol);
 }
 
-template <class T>
-inline T sph_bessel_j_imp(unsigned n, T x)
+template <class T, class Policy>
+inline T sph_bessel_j_imp(unsigned n, T x, const Policy& pol)
 {
    using namespace std; // ADL of std names
    if(x < 0)
-      return tools::domain_error<T>(
-         BOOST_CURRENT_FUNCTION,
-         "Got x = %1%, but function requires x > 0.", x);
+      return policy::raise_domain_error<T>(
+         "boost::math::sph_bessel_j<%1%>(%1%,%1%)",
+         "Got x = %1%, but function requires x > 0.", x, pol);
    //
    // Special case, n == 0 resolves down to the sinus cardinal of x:
    //
    if(n == 0)
-      return boost::math::sinc_pi(x);
+      return boost::math::sinc_pi(x, pol);
    //
    // When x is small we may end up with 0/0, use series evaluation
    // instead, especially as it converges rapidly:
    //
    if(x < 1)
-      return sph_bessel_j_small_z_series(n, x);
+      return sph_bessel_j_small_z_series(n, x, pol);
    //
    // Default case is just a naive evaluation of the definition:
    //
    return sqrt(constants::pi<T>() / (2 * x)) 
-      * cyl_bessel_j_imp(T(n)+T(0.5f), x, bessel_no_int_tag());
+      * cyl_bessel_j_imp(T(n)+T(0.5f), x, bessel_no_int_tag(), pol);
 }
 
-template <class T>
-T cyl_bessel_i_imp(T v, T x)
+template <class T, class Policy>
+T cyl_bessel_i_imp(T v, T x, const Policy& pol)
 {
    //
    // This handles all the bessel I functions, note that we don't optimise
@@ -235,15 +211,15 @@ T cyl_bessel_i_imp(T v, T x)
       // better have integer v:
       if(floor(v) == v)
       {
-         T r = cyl_bessel_i_imp(v, -x);
+         T r = cyl_bessel_i_imp(v, -x, pol);
          if(tools::real_cast<int>(v) & 1)
             r = -r;
          return r;
       }
       else
-         return tools::domain_error<T>(
-            BOOST_CURRENT_FUNCTION,
-            "Got x = %1%, but we need x >= 0", x);
+         return policy::raise_domain_error<T>(
+         "boost::math::cyl_bessel_i<%1%>(%1%,%1%)",
+            "Got x = %1%, but we need x >= 0", x, pol);
    }
    if(x == 0)
    {
@@ -255,7 +231,7 @@ T cyl_bessel_i_imp(T v, T x)
       T e = exp(x / 2);
       return e * (e / sqrt(2 * x * constants::pi<T>()));
    }
-   if(tools::digits<T>() <= 64)
+   if(policy::digits<T, Policy>() <= 64)
    {
       if(v == 0)
       {
@@ -267,77 +243,79 @@ T cyl_bessel_i_imp(T v, T x)
       }
    }
    T I, K;
-   bessel_ik(v, x, &I, &K, need_i);
+   bessel_ik(v, x, &I, &K, need_i, pol);
    return I;
 }
 
-template <class T>
-inline T cyl_bessel_k_imp(T v, T x, const bessel_no_int_tag& t)
+template <class T, class Policy>
+inline T cyl_bessel_k_imp(T v, T x, const bessel_no_int_tag& t, const Policy& pol)
 {
+   static const char* function = "boost::math::cyl_bessel_k<%1%>(%1%,%1%)";
    using namespace std;
    if(x < 0)
    {
-      return tools::domain_error<T>(
-         BOOST_CURRENT_FUNCTION,
-         "Got x = %1%, but we need x > 0", x);
+      return policy::raise_domain_error<T>(
+         function,
+         "Got x = %1%, but we need x > 0", x, pol);
    }
    if(x == 0)
    {
-      return (v == 0) ? tools::overflow_error<T>(BOOST_CURRENT_FUNCTION)
-         : tools::domain_error<T>(
-         BOOST_CURRENT_FUNCTION,
-         "Got x = %1%, but we need x > 0", x);
+      return (v == 0) ? policy::raise_overflow_error<T>(function, 0, pol)
+         : policy::raise_domain_error<T>(
+         function,
+         "Got x = %1%, but we need x > 0", x, pol);
    }
    T I, K;
-   bessel_ik(v, x, &I, &K, need_k);
+   bessel_ik(v, x, &I, &K, need_k, pol);
    return K;
 }
 
-template <class T>
-inline T cyl_bessel_k_imp(T v, T x, const bessel_maybe_int_tag&)
+template <class T, class Policy>
+inline T cyl_bessel_k_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& pol)
 {
    using namespace std;
    if((floor(v) == v))
    {
-      return bessel_kn(tools::real_cast<int>(v), x);
+      return bessel_kn(tools::real_cast<int>(v), x, pol);
    }
-   return cyl_bessel_k_imp(v, x, bessel_no_int_tag());
+   return cyl_bessel_k_imp(v, x, bessel_no_int_tag(), pol);
 }
 
-template <class T>
-inline T cyl_bessel_k_imp(int v, T x, const bessel_int_tag&)
+template <class T, class Policy>
+inline T cyl_bessel_k_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
 {
-   return bessel_kn(v, x);
+   return bessel_kn(v, x, pol);
 }
 
-template <class T>
-inline T cyl_neumann_imp(T v, T x, const bessel_no_int_tag&)
+template <class T, class Policy>
+inline T cyl_neumann_imp(T v, T x, const bessel_no_int_tag&, const Policy& pol)
 {
+   static const char* function = "boost::math::cyl_neumann<%1%>(%1%,%1%)";
    if(x <= 0)
    {
       return (v == 0) && (x == 0) ?
-         tools::overflow_error<T>(BOOST_CURRENT_FUNCTION)
-         : tools::domain_error<T>(
-               BOOST_CURRENT_FUNCTION,
-               "Got x = %1%, but result is complex for x <= 0", x);
+         policy::raise_overflow_error<T>(function, 0, pol)
+         : policy::raise_domain_error<T>(
+               function,
+               "Got x = %1%, but result is complex for x <= 0", x, pol);
    }
    T j, y;
-   bessel_jy(v, x, &j, &y, need_y);
+   bessel_jy(v, x, &j, &y, need_y, pol);
    // 
    // Post evaluation check for internal overflow during evaluation,
    // can occur when x is small and v is large, in which case the result
    // is -INF:
    //
    if(!(boost::math::isfinite)(y))
-      return -tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<T>(function, 0, pol);
    return y;
 }
 
-template <class T>
-inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&)
+template <class T, class Policy>
+inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& pol)
 {
    using namespace std;
-   typedef typename bessel_asymptotic_tag<T>::type tag_type;
+   typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
    if(floor(v) == v)
    {
       if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
@@ -348,16 +326,16 @@ inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&)
          return r;
       }
       else
-         return bessel_yn(tools::real_cast<int>(v), x);
+         return bessel_yn(tools::real_cast<int>(v), x, pol);
    }
-   return cyl_neumann_imp<T>(v, x, bessel_no_int_tag());
+   return cyl_neumann_imp<T>(v, x, bessel_no_int_tag(), pol);
 }
 
-template <class T>
-inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&)
+template <class T, class Policy>
+inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
 {
    using namespace std;
-   typedef typename bessel_asymptotic_tag<T>::type tag_type;
+   typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
    if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
    {
       T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);
@@ -366,91 +344,128 @@ inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&)
       return r;
    }
    else
-      return bessel_yn(tools::real_cast<int>(v), x);
+      return bessel_yn(tools::real_cast<int>(v), x, pol);
 }
 
-template <class T>
-inline T sph_neumann_imp(unsigned v, T x)
+template <class T, class Policy>
+inline T sph_neumann_imp(unsigned v, T x, const Policy& pol)
 {
    using namespace std; // ADL of std names
+   static const char* function = "boost::math::sph_neumann<%1%>(%1%,%1%)";
    //
    // Nothing much to do here but check for errors, and
    // evaluate the function's definition directly:
    //
    if(x < 0)
-      return tools::domain_error<T>(
-         BOOST_CURRENT_FUNCTION,
-         "Got x = %1%, but function requires x > 0.", x);
+      return policy::raise_domain_error<T>(
+         function,
+         "Got x = %1%, but function requires x > 0.", x, pol);
 
    if(x < 2 * tools::min_value<T>())
-      return -tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<T>(function, 0, pol);
 
-   T result = cyl_neumann_imp(T(v)+0.5f, x, bessel_no_int_tag());
+   T result = cyl_neumann_imp(T(v)+0.5f, x, bessel_no_int_tag(), pol);
    T tx = sqrt(constants::pi<T>() / (2 * x));
 
    if((tx > 1) && (tools::max_value<T>() / tx < result))
-      return -tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<T>(function, 0, pol);
 
    return result * tx;
 }
 
 } // namespace detail
 
-template <class T1, class T2>
-inline typename detail::bessel_traits<T1, T2>::result_type cyl_bessel_j(T1 v, T2 x)
+template <class T1, class T2, class Policy>
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j(T1 v, T2 x, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename detail::bessel_traits<T1, T2>::result_type result_type;
-   typedef typename detail::bessel_traits<T1, T2>::optimisation_tag tag_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::cyl_bessel_j_imp<value_type>(v, static_cast<value_type>(x), tag_type()), BOOST_CURRENT_FUNCTION);
+   typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
+   typedef typename detail::bessel_traits<T1, T2, Policy>::optimisation_tag tag_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol), "boost::math::cyl_bessel_j<%1%>(%1%,%1%)");
+}
+
+template <class T1, class T2>
+inline typename detail::bessel_traits<T1, T2, policy::policy<> >::result_type cyl_bessel_j(T1 v, T2 x)
+{
+   return cyl_bessel_j(v, x, policy::policy<>());
+}
+
+template <class T, class Policy>
+inline typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel(unsigned v, T x, const Policy& pol)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::sph_bessel_j_imp<value_type>(v, static_cast<value_type>(x), pol), "boost::math::sph_bessel<%1%>(%1%,%1%)");
 }
 
 template <class T>
-inline typename detail::bessel_traits<T, T>::result_type sph_bessel(unsigned v, T x)
+inline typename detail::bessel_traits<T, T, policy::policy<> >::result_type sph_bessel(unsigned v, T x)
+{
+   return sph_bessel(v, x, policy::policy<>());
+}
+
+template <class T1, class T2, class Policy>
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i(T1 v, T2 x, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename detail::bessel_traits<T, T>::result_type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::sph_bessel_j_imp<value_type>(v, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
+   typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_i_imp<value_type>(v, static_cast<value_type>(x), pol), "boost::math::cyl_bessel_i<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
-inline typename detail::bessel_traits<T1, T2>::result_type cyl_bessel_i(T1 v, T2 x)
+inline typename detail::bessel_traits<T1, T2, policy::policy<> >::result_type cyl_bessel_i(T1 v, T2 x)
+{
+   return cyl_bessel_i(v, x, policy::policy<>());
+}
+
+template <class T1, class T2, class Policy>
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k(T1 v, T2 x, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename detail::bessel_traits<T1, T2>::result_type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::cyl_bessel_i_imp<value_type>(v, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
+   typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
+   typedef typename detail::bessel_traits<T1, T2, Policy>::optimisation_tag tag_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_k_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol), "boost::math::cyl_bessel_k<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
-inline typename detail::bessel_traits<T1, T2>::result_type cyl_bessel_k(T1 v, T2 x)
+inline typename detail::bessel_traits<T1, T2, policy::policy<> >::result_type cyl_bessel_k(T1 v, T2 x)
+{
+   return cyl_bessel_k(v, x, policy::policy<>());
+}
+
+template <class T1, class T2, class Policy>
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann(T1 v, T2 x, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename detail::bessel_traits<T1, T2>::result_type result_type;
-   typedef typename detail::bessel_traits<T1, T2>::optimisation_tag tag_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::cyl_bessel_k_imp<value_type>(v, static_cast<value_type>(x), tag_type()), BOOST_CURRENT_FUNCTION);
+   typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
+   typedef typename detail::bessel_traits<T1, T2, Policy>::optimisation_tag tag_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol), "boost::math::cyl_neumann<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
-inline typename detail::bessel_traits<T1, T2>::result_type cyl_neumann(T1 v, T2 x)
+inline typename detail::bessel_traits<T1, T2, policy::policy<> >::result_type cyl_neumann(T1 v, T2 x)
+{
+   return cyl_neumann(v, x, policy::policy<>());
+}
+
+template <class T, class Policy>
+inline typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann(unsigned v, T x, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename detail::bessel_traits<T1, T2>::result_type result_type;
-   typedef typename detail::bessel_traits<T1, T2>::optimisation_tag tag_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::cyl_neumann_imp<value_type>(v, static_cast<value_type>(x), tag_type()), BOOST_CURRENT_FUNCTION);
+   typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::sph_neumann_imp<value_type>(v, static_cast<value_type>(x), pol), "boost::math::sph_neumann<%1%>(%1%,%1%)");
 }
 
 template <class T>
-inline typename detail::bessel_traits<T, T>::result_type sph_neumann(unsigned v, T x)
+inline typename detail::bessel_traits<T, T, policy::policy<> >::result_type sph_neumann(unsigned v, T x)
 {
-   BOOST_FPU_EXCEPTION_GUARD
-   typedef typename detail::bessel_traits<T, T>::result_type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::sph_neumann_imp<value_type>(v, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
+   return sph_neumann(v, x, policy::policy<>());
 }
 
 } // namespace math

@@ -881,18 +881,17 @@ struct lanczos61UDT
 
 namespace boost{ namespace math{ namespace lanczos{
 
-template<>
-struct lanczos_traits<NTL::RR>
+template<class Policy>
+struct lanczos<NTL::RR, Policy>
 {
-   typedef NTL::RR value_type;
 #ifdef L13
-   typedef lanczos13UDT evaluation_type;
+   typedef lanczos13UDT type;
 #elif defined(L22)
-   typedef lanczos22UDT evaluation_type;
+   typedef lanczos22UDT type;
 #elif defined(L31)
-   typedef lanczos31UDT evaluation_type;
+   typedef lanczos31UDT type;
 #else
-   typedef lanczos61UDT evaluation_type;
+   typedef lanczos61UDT type;
 #endif
 };
 

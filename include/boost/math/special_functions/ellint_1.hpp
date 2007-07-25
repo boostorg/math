@@ -16,28 +16,32 @@
 
 #include <boost/math/special_functions/ellint_rf.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/tools/error_handling.hpp>
-#include <boost/math/tools/evaluation_type.hpp>
+#include <boost/math/policy/error_handling.hpp>
 
 // Elliptic integrals (complete and incomplete) of the first kind
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
 
 namespace boost { namespace math {
 
+template <class T1, class T2, class Policy>
+typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol);
+
 namespace detail{
 
 // Elliptic integral (Legendre form) of the first kind
-template <typename T>
-T ellint_f_imp(T phi, T k)
+template <typename T, typename Policy>
+T ellint_f_imp(T phi, T k, const Policy& pol)
 {
     using namespace std;
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
+    static const char* function = "boost::math::ellint_f<%1%>(%1%,%1%)";
+
     if (abs(k) > 1)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Got k = %1%, function requires |k| <= 1", k);
+       return policy::raise_domain_error<T>(function,
+            "Got k = %1%, function requires |k| <= 1", k, pol);
     }
 
     bool invert = false;
@@ -53,14 +57,14 @@ T ellint_f_imp(T phi, T k)
     if(phi >= tools::max_value<T>())
     {
        // Need to handle infinity as a special case:
-       result = tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+       result = policy::raise_overflow_error<T>(function, 0, pol);
        BOOST_MATH_INSTRUMENT_CODE(result);
     }
     else if(phi > 1 / tools::epsilon<T>())
     {
        // Phi is so large that phi%pi is necessarily zero (or garbage),
        // just return the second part of the duplication formula:
-       result = 2 * phi * ellint_k_imp(k) / constants::pi<T>();
+       result = 2 * phi * ellint_k_imp(k, pol) / constants::pi<T>();
        BOOST_MATH_INSTRUMENT_CODE(result);
     }
     else
@@ -86,11 +90,11 @@ T ellint_f_imp(T phi, T k)
        }
        T sinp = sin(rphi);
        T cosp = cos(rphi);
-       result = s * sinp * ellint_rf_imp(cosp * cosp, 1 - k * k * sinp * sinp, T(1));
+       result = s * sinp * ellint_rf_imp(cosp * cosp, 1 - k * k * sinp * sinp, T(1), pol);
        BOOST_MATH_INSTRUMENT_CODE(result);
        if(m != 0)
        {
-          result += m * ellint_k_imp(k);
+          result += m * ellint_k_imp(k, pol);
           BOOST_MATH_INSTRUMENT_CODE(result);
        }
     }
@@ -98,28 +102,44 @@ T ellint_f_imp(T phi, T k)
 }
 
 // Complete elliptic integral (Legendre form) of the first kind
-template <typename T>
-T ellint_k_imp(T k)
+template <typename T, typename Policy>
+T ellint_k_imp(T k, const Policy& pol)
 {
     using namespace std;
     using namespace boost::math::tools;
 
+    static const char* function = "boost::math::ellint_k<%1%>(%1%)";
+
     if (abs(k) > 1)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Got k = %1%, function requires |k| <= 1", k);
+       return policy::raise_domain_error<T>(function,
+            "Got k = %1%, function requires |k| <= 1", k, pol);
     }
     if (abs(k) == 1)
     {
-        return overflow_error<T>(BOOST_CURRENT_FUNCTION);
+       return policy::raise_overflow_error<T>(function, 0, pol);
     }
 
     T x = 0;
     T y = 1 - k * k;
     T z = 1;
-    T value = ellint_rf_imp(x, y, z);
+    T value = ellint_rf_imp(x, y, z, pol);
 
     return value;
+}
+
+template <typename T, typename Policy>
+inline typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, const mpl::true_&)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::ellint_k_imp(static_cast<value_type>(k), pol), "boost::math::ellint_1<%1%>(%1%)");
+}
+
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const mpl::false_&)
+{
+   return boost::math::ellint_1(k, phi, policy::policy<>());
 }
 
 }
@@ -128,18 +148,23 @@ T ellint_k_imp(T k)
 template <typename T>
 inline typename tools::promote_args<T>::type ellint_1(T k)
 {
-   typedef typename tools::promote_args<T>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::ellint_k_imp(static_cast<value_type>(k)), BOOST_CURRENT_FUNCTION);
+   return ellint_1(k, policy::policy<>());
 }
 
 // Elliptic integral (Legendre form) of the first kind
+template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::ellint_f_imp(static_cast<value_type>(phi), static_cast<value_type>(k), pol), "boost::math::ellint_1<%1%>(%1%,%1%)");
+}
+
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi)
 {
-   typedef typename tools::promote_args<T1, T2>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::ellint_f_imp(static_cast<value_type>(phi), static_cast<value_type>(k)), BOOST_CURRENT_FUNCTION);
+   typedef typename policy::is_policy<T2>::type tag_type;
+   return detail::ellint_1(k, phi, tag_type());
 }
 
 }} // namespaces

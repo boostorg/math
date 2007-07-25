@@ -19,6 +19,7 @@
 #include <boost/throw_exception.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
+#include <boost/math/policy/error_handling.hpp>
 
 
 #include <utility>
@@ -82,8 +83,8 @@ void handle_zero_derivative(F f,
 
 } // namespace
 
-template <class F, class T, class Tol>
-std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter)
+template <class F, class T, class Tol, class Policy>
+std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter, const Policy& pol)
 {
    T fmin = f(min);
    T fmax = f(max);
@@ -95,15 +96,16 @@ std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter)
    //
    // Error checking:
    //
+   static const char* function = "boost::math::tools::bisect<%1%>";
    if(min >= max)
    {
-      tools::logic_error(BOOST_CURRENT_FUNCTION, 
-         "Arguments in wrong order in boost::math::tools::bisect (first arg=%1%)", min);
+      policy::raise_evaluation_error(function, 
+         "Arguments in wrong order in boost::math::tools::bisect (first arg=%1%)", min, pol);
    }
    if(fmin * fmax >= 0)
    {
-      tools::logic_error(BOOST_CURRENT_FUNCTION, 
-         "No change of sign in boost::math::tools::bisect, either there is no root to find, or there are multiple roots in the interval (f(min) = %1%).", fmin);
+      policy::raise_evaluation_error(function, 
+         "No change of sign in boost::math::tools::bisect, either there is no root to find, or there are multiple roots in the interval (f(min) = %1%).", fmin, pol);
    }
 
    //
@@ -156,10 +158,16 @@ std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter)
 }
 
 template <class F, class T, class Tol>
+inline std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter)
+{
+   return bisect(f, min, max, tol, max_iter, policy::policy<>());
+}
+
+template <class F, class T, class Tol>
 inline std::pair<T, T> bisect(F f, T min, T max, Tol tol)
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
-   return bisect(f, min, max, tol, m);
+   return bisect(f, min, max, tol, m, policy::policy<>());
 }
 
 template <class F, class T>

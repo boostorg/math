@@ -97,6 +97,11 @@ namespace boost
           return detail::sinhc_pi_imp(static_cast<result_type>(x));
        }
 
+       template <class T, class Policy>
+       inline typename tools::promote_args<T>::type sinhc_pi(T x, const Policy&)
+       {
+          return boost::math::sinhc_pi(x);
+       }
 
 #ifdef    BOOST_NO_TEMPLATE_TEMPLATES
 #else    /* BOOST_NO_TEMPLATE_TEMPLATES */

@@ -8,37 +8,39 @@
 
 #include <boost/math/special_functions/detail/bessel_y0.hpp>
 #include <boost/math/special_functions/detail/bessel_y1.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 
 // Bessel function of the second kind of integer order
 // Y_n(z) is the dominant solution, forward recurrence always OK (though unstable)
 
 namespace boost { namespace math { namespace detail{
 
-template <typename T>
-T bessel_yn(int n, T x)
+template <typename T, typename Policy>
+T bessel_yn(int n, T x, const Policy& pol)
 {
     T value, factor, current, prev;
 
     using namespace boost::math::tools;
 
+    static const char* function = "boost::math::bessel_yn<%1%>(%1%,%1%)";
+
     if ((x == 0) && (n == 0))
     {
-        return -overflow_error<T>(BOOST_CURRENT_FUNCTION);
+       return -policy::raise_overflow_error<T>(function, 0, pol);
     }
     if (x <= 0)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Got x = %1%, but x must be > 0, complex result not supported.", x);
+       return policy::raise_domain_error<T>(function,
+            "Got x = %1%, but x must be > 0, complex result not supported.", x, pol);
     }
 
     if (n == 0)
     {
-        return bessel_y0(x);
+        return bessel_y0(x, pol);
     }
     if (n == 1)
     {
-        return bessel_y1(x);
+        return bessel_y1(x, pol);
     }
     if (n < 0)
     {
@@ -50,8 +52,8 @@ T bessel_yn(int n, T x)
         factor = 1;
     }
 
-    prev = bessel_y0(x);
-    current = bessel_y1(x);
+    prev = bessel_y0(x, pol);
+    current = bessel_y1(x, pol);
     for (int k = 1; k < n; k++)            // n >= 2
     {
         value = 2 * k * current / x - prev;

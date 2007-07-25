@@ -14,7 +14,7 @@
 #include <cmath>
 #include <boost/config.hpp>
 #include <boost/math/tools/precision.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
 // This is the inverse of the hyperbolic cosine function.
@@ -36,8 +36,8 @@ namespace boost
         using    ::std::numeric_limits;
 #endif
         
-        template<typename T>
-        inline T    acosh_imp(const T x)
+        template<typename T, typename Policy>
+        inline T    acosh_imp(const T x, const Policy& pol)
         {
             using    ::std::abs;
             using    ::std::sqrt;
@@ -52,9 +52,9 @@ namespace boost
             
             if(x < one)
             {
-               return tools::domain_error<T>(
-                  BOOST_CURRENT_FUNCTION,
-                  "acosh requires x >= 1, but got x = %1%.", x);
+               return policy::raise_domain_error<T>(
+                  "boost::math::acosh<%1%>(%1%)",
+                  "acosh requires x >= 1, but got x = %1%.", x, pol);
             }
             else if    (x >= taylor_n_bound)
             {
@@ -88,12 +88,19 @@ namespace boost
         }
        }
 
+        template<typename T, typename Policy>
+        inline typename tools::promote_args<T>::type acosh(const T x, const Policy& pol)
+        {
+           typedef typename tools::promote_args<T>::type result_type;
+           return detail::acosh_imp(
+              static_cast<result_type>(x), pol);
+        }
         template<typename T>
         inline typename tools::promote_args<T>::type acosh(const T x)
         {
            typedef typename tools::promote_args<T>::type result_type;
            return detail::acosh_imp(
-              static_cast<result_type>(x));
+              static_cast<result_type>(x), policy::policy<>());
         }
 
     }

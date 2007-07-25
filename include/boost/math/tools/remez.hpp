@@ -13,6 +13,7 @@
 #include <boost/function/function1.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/policy/policy.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -310,12 +311,12 @@ void remez_minimax<T>::reset(
    if(bits == 0)
    {
       // don't bother about more than float precision:
-      m_precision = (std::min)(24, (digits<T>() / 2) - 2);
+      m_precision = (std::min)(24, (boost::math::policy::digits<T, boost::math::policy::policy<> >() / 2) - 2);
    }
    else
    {
       // can't be more accurate than half the bits of T:
-      m_precision = (std::min)(bits, (digits<T>() / 2) - 2);
+      m_precision = (std::min)(bits, (boost::math::policy::digits<T, boost::math::policy::policy<> >() / 2) - 2);
    }
    m_max_change_history[0] = m_max_change_history[1] = 1;
    init_chebyshev();
@@ -371,12 +372,12 @@ void remez_minimax<T>::reset(
    if(bits == 0)
    {
       // don't bother about more than float precision:
-      m_precision = (std::min)(24, (digits<T>() / 2) - 2);
+      m_precision = (std::min)(24, (boost::math::policy::digits<T, boost::math::policy::policy<> >() / 2) - 2);
    }
    else
    {
       // can't be more accurate than half the bits of T:
-      m_precision = (std::min)(bits, (digits<T>() / 2) - 2);
+      m_precision = (std::min)(bits, (boost::math::policy::digits<T, boost::math::policy::policy<> >() / 2) - 2);
    }
    m_max_change_history[0] = m_max_change_history[1] = 1;
    // do one iteration whatever:

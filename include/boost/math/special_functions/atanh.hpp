@@ -14,7 +14,7 @@
 #include <cmath>
 #include <boost/config.hpp>
 #include <boost/math/tools/precision.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
 // This is the inverse of the hyperbolic tangent function.
@@ -38,8 +38,8 @@ namespace boost
         
         // This is the main fare
         
-        template<typename T>
-        inline T    atanh_imp(const T x)
+        template<typename T, typename Policy>
+        inline T    atanh_imp(const T x, const Policy& pol)
         {
             using    ::std::abs;
             using    ::std::sqrt;
@@ -52,30 +52,30 @@ namespace boost
             
             static T const    taylor_2_bound = sqrt(tools::epsilon<T>());
             static T const    taylor_n_bound = sqrt(taylor_2_bound);
+
+            static const char* function = "boost::math::atanh<%1%>(%1%)";
             
             if        (x < -one)
             {
-               return tools::domain_error<T>(
-                  BOOST_CURRENT_FUNCTION,
-                  "atanh requires x >= -1, but got x = %1%.", x);
+               return policy::raise_domain_error<T>(
+                  function,
+                  "atanh requires x >= -1, but got x = %1%.", x, pol);
             }
             else if    (x < -one + tools::epsilon<T>())
             {
                // -Infinity:
-               return -tools::overflow_error<T>(
-                  BOOST_CURRENT_FUNCTION);
+               return -policy::raise_overflow_error<T>(function, 0, pol);
             }
             else if    (x > one - tools::epsilon<T>())
             {
                // Infinity:
-               return -tools::overflow_error<T>(
-                  BOOST_CURRENT_FUNCTION);
+               return -policy::raise_overflow_error<T>(function, 0, pol);
             }
             else if    (x > +one)
             {
-               return tools::domain_error<T>(
-                  BOOST_CURRENT_FUNCTION,
-                  "atanh requires x <= 1, but got x = %1%.", x);
+               return policy::raise_domain_error<T>(
+                  function,
+                  "atanh requires x <= 1, but got x = %1%.", x, pol);
             }
             else if    (abs(x) >= taylor_n_bound)
             {
@@ -99,12 +99,19 @@ namespace boost
         }
        }
 
+        template<typename T, typename Policy>
+        inline typename tools::promote_args<T>::type atanh(const T x, const Policy& pol)
+        {
+           typedef typename tools::promote_args<T>::type result_type;
+           return detail::atanh_imp(
+              static_cast<result_type>(x), pol);
+        }
         template<typename T>
         inline typename tools::promote_args<T>::type atanh(const T x)
         {
            typedef typename tools::promote_args<T>::type result_type;
            return detail::atanh_imp(
-              static_cast<result_type>(x));
+              static_cast<result_type>(x), policy::policy<>());
         }
 
     }

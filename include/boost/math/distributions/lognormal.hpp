@@ -10,6 +10,7 @@
 // http://mathworld.wolfram.com/LogNormalDistribution.html
 // http://en.wikipedia.org/wiki/Lognormal_distribution
 
+#include <boost/math/distributions/fwd.hpp>
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
@@ -21,17 +22,17 @@ namespace boost{ namespace math
 namespace detail
 {
 
-  template <class RealType>
+  template <class RealType, class Policy>
   inline bool check_lognormal_x(
         const char* function,
         RealType const& x,
-        RealType* result)
+        RealType* result, const Policy& pol)
   {
      if((x < 0) || !(boost::math::isfinite)(x))
      {
-        *result = tools::domain_error<RealType>(
+        *result = policy::raise_domain_error<RealType>(
            function,
-           "Random variate is %1% but must be >= 0 !", x);
+           "Random variate is %1% but must be >= 0 !", x, pol);
         return false;
      }
      return true;
@@ -40,17 +41,18 @@ namespace detail
 } // namespace detail
 
 
-template <class RealType = double>
+template <class RealType = double, class Policy = policy::policy<> >
 class lognormal_distribution
 {
 public:
    typedef RealType value_type;
+   typedef Policy policy_type;
 
    lognormal_distribution(RealType location = 0, RealType scale = 1)
       : m_location(location), m_scale(scale)
    {
       RealType result;
-      detail::check_scale(BOOST_CURRENT_FUNCTION, scale, &result);
+      detail::check_scale("boost::math::lognormal_distribution<%1%>::lognormal_distribution", scale, &result, Policy());
    }
 
    RealType location()const
@@ -72,33 +74,35 @@ private:
 
 typedef lognormal_distribution<double> lognormal;
 
-template <class RealType>
-inline const std::pair<RealType, RealType> range(const lognormal_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline const std::pair<RealType, RealType> range(const lognormal_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x is >0 to +infinity.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(0, max_value<RealType>());
 }
 
-template <class RealType>
-inline const std::pair<RealType, RealType> support(const lognormal_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline const std::pair<RealType, RealType> support(const lognormal_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(0,  max_value<RealType>());
 }
 
-template <class RealType>
-RealType pdf(const lognormal_distribution<RealType>& dist, const RealType& x)
+template <class RealType, class Policy>
+RealType pdf(const lognormal_distribution<RealType, Policy>& dist, const RealType& x)
 {
    using namespace std;  // for ADL of std functions
 
    RealType mu = dist.location();
    RealType sigma = dist.scale();
 
+   static const char* function = "boost::math::pdf(const lognormal_distribution<%1%>&, %1%)";
+
    RealType result;
-   if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
+   if(0 == detail::check_scale(function, sigma, &result, Policy()))
       return result;
-   if(0 == detail::check_lognormal_x(BOOST_CURRENT_FUNCTION, x, &result))
+   if(0 == detail::check_lognormal_x(function, x, &result, Policy()))
       return result;
 
    if(x == 0)
@@ -114,76 +118,84 @@ RealType pdf(const lognormal_distribution<RealType>& dist, const RealType& x)
    return result;
 }
 
-template <class RealType>
-inline RealType cdf(const lognormal_distribution<RealType>& dist, const RealType& x)
+template <class RealType, class Policy>
+inline RealType cdf(const lognormal_distribution<RealType, Policy>& dist, const RealType& x)
 {
    using namespace std;  // for ADL of std functions
 
+   static const char* function = "boost::math::cdf(const lognormal_distribution<%1%>&, %1%)";
+
    RealType result;
-   if(0 == detail::check_lognormal_x(BOOST_CURRENT_FUNCTION, x, &result))
+   if(0 == detail::check_lognormal_x(function, x, &result, Policy()))
       return result;
 
    if(x == 0)
       return 0;
 
-   normal_distribution<RealType> norm(dist.location(), dist.scale());
+   normal_distribution<RealType, Policy> norm(dist.location(), dist.scale());
    return cdf(norm, log(x));
 }
 
-template <class RealType>
-inline RealType quantile(const lognormal_distribution<RealType>& dist, const RealType& p)
+template <class RealType, class Policy>
+inline RealType quantile(const lognormal_distribution<RealType, Policy>& dist, const RealType& p)
 {
    using namespace std;  // for ADL of std functions
 
+   static const char* function = "boost::math::quantile(const lognormal_distribution<%1%>&, %1%)";
+
    RealType result;
-   if(0 == detail::check_probability(BOOST_CURRENT_FUNCTION, p, &result))
+   if(0 == detail::check_probability(function, p, &result, Policy()))
       return result;
 
    if(p == 0)
       return 0;
    if(p == 1)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
+      return policy::raise_overflow_error<RealType>(function, 0, Policy());
 
-   normal_distribution<RealType> norm(dist.location(), dist.scale());
+   normal_distribution<RealType, Policy> norm(dist.location(), dist.scale());
    return exp(quantile(norm, p));
 }
 
-template <class RealType>
-inline RealType cdf(const complemented2_type<lognormal_distribution<RealType>, RealType>& c)
+template <class RealType, class Policy>
+inline RealType cdf(const complemented2_type<lognormal_distribution<RealType, Policy>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 
+   static const char* function = "boost::math::cdf(const lognormal_distribution<%1%>&, %1%)";
+
    RealType result;
-   if(0 == detail::check_lognormal_x(BOOST_CURRENT_FUNCTION, c.param, &result))
+   if(0 == detail::check_lognormal_x(function, c.param, &result, Policy()))
       return result;
 
    if(c.param == 0)
       return 1;
 
-   normal_distribution<RealType> norm(c.dist.location(), c.dist.scale());
+   normal_distribution<RealType, Policy> norm(c.dist.location(), c.dist.scale());
    return cdf(complement(norm, log(c.param)));
 }
 
-template <class RealType>
-inline RealType quantile(const complemented2_type<lognormal_distribution<RealType>, RealType>& c)
+template <class RealType, class Policy>
+inline RealType quantile(const complemented2_type<lognormal_distribution<RealType, Policy>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 
+   static const char* function = "boost::math::quantile(const lognormal_distribution<%1%>&, %1%)";
+
    RealType result;
-   if(0 == detail::check_probability(BOOST_CURRENT_FUNCTION, c.param, &result))
+   if(0 == detail::check_probability(function, c.param, &result, Policy()))
       return result;
 
    if(c.param == 1)
       return 0;
    if(c.param == 0)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
+      return policy::raise_overflow_error<RealType>(function, 0, Policy());
 
-   normal_distribution<RealType> norm(c.dist.location(), c.dist.scale());
+   normal_distribution<RealType, Policy> norm(c.dist.location(), c.dist.scale());
    return exp(quantile(complement(norm, c.param)));
 }
 
-template <class RealType>
-inline RealType mean(const lognormal_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType mean(const lognormal_distribution<RealType, Policy>& dist)
 {
    using namespace std;  // for ADL of std functions
 
@@ -191,14 +203,14 @@ inline RealType mean(const lognormal_distribution<RealType>& dist)
    RealType sigma = dist.scale();
 
    RealType result;
-   if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
+   if(0 == detail::check_scale("boost::math::mean(const lognormal_distribution<%1%>&)", sigma, &result, Policy()))
       return result;
 
    return exp(mu + sigma * sigma / 2);
 }
 
-template <class RealType>
-inline RealType variance(const lognormal_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType variance(const lognormal_distribution<RealType, Policy>& dist)
 {
    using namespace std;  // for ADL of std functions
 
@@ -206,14 +218,14 @@ inline RealType variance(const lognormal_distribution<RealType>& dist)
    RealType sigma = dist.scale();
 
    RealType result;
-   if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
+   if(0 == detail::check_scale("boost::math::variance(const lognormal_distribution<%1%>&)", sigma, &result, Policy()))
       return result;
 
-   return boost::math::expm1(sigma * sigma) * exp(2 * mu + sigma * sigma);
+   return boost::math::expm1(sigma * sigma, Policy()) * exp(2 * mu + sigma * sigma);
 }
 
-template <class RealType>
-inline RealType mode(const lognormal_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType mode(const lognormal_distribution<RealType, Policy>& dist)
 {
    using namespace std;  // for ADL of std functions
 
@@ -221,22 +233,22 @@ inline RealType mode(const lognormal_distribution<RealType>& dist)
    RealType sigma = dist.scale();
 
    RealType result;
-   if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
+   if(0 == detail::check_scale("boost::math::mode(const lognormal_distribution<%1%>&)", sigma, &result, Policy()))
       return result;
 
    return exp(mu - sigma * sigma);
 }
 
-template <class RealType>
-inline RealType median(const lognormal_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType median(const lognormal_distribution<RealType, Policy>& dist)
 {
    using namespace std;  // for ADL of std functions
    RealType mu = dist.location();
    return exp(mu); // e^mu
 }
 
-template <class RealType>
-inline RealType skewness(const lognormal_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType skewness(const lognormal_distribution<RealType, Policy>& dist)
 {
    using namespace std;  // for ADL of std functions
 
@@ -247,14 +259,14 @@ inline RealType skewness(const lognormal_distribution<RealType>& dist)
    RealType ess = exp(ss);
 
    RealType result;
-   if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
+   if(0 == detail::check_scale("boost::math::skewness(const lognormal_distribution<%1%>&)", sigma, &result, Policy()))
       return result;
 
-   return (ess + 2) * sqrt(boost::math::expm1(ss));
+   return (ess + 2) * sqrt(boost::math::expm1(ss, Policy()));
 }
 
-template <class RealType>
-inline RealType kurtosis(const lognormal_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType kurtosis(const lognormal_distribution<RealType, Policy>& dist)
 {
    using namespace std;  // for ADL of std functions
 
@@ -263,14 +275,14 @@ inline RealType kurtosis(const lognormal_distribution<RealType>& dist)
    RealType ss = sigma * sigma;
 
    RealType result;
-   if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
+   if(0 == detail::check_scale("boost::math::kurtosis(const lognormal_distribution<%1%>&)", sigma, &result, Policy()))
       return result;
 
    return exp(4 * ss) + 2 * exp(3 * ss) + 3 * exp(2 * ss) - 3;
 }
 
-template <class RealType>
-inline RealType kurtosis_excess(const lognormal_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType kurtosis_excess(const lognormal_distribution<RealType, Policy>& dist)
 {
    using namespace std;  // for ADL of std functions
 
@@ -279,7 +291,7 @@ inline RealType kurtosis_excess(const lognormal_distribution<RealType>& dist)
    RealType ss = sigma * sigma;
 
    RealType result;
-   if(0 == detail::check_scale(BOOST_CURRENT_FUNCTION, sigma, &result))
+   if(0 == detail::check_scale("boost::math::kurtosis_excess(const lognormal_distribution<%1%>&)", sigma, &result, Policy()))
       return result;
 
    return exp(4 * ss) + 2 * exp(3 * ss) + 3 * exp(2 * ss) - 6;

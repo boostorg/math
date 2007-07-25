@@ -11,7 +11,7 @@
 #include <boost/limits.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
-#include <boost/math/tools/precision.hpp>
+#include <boost/math/policy/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -63,23 +63,25 @@ namespace detail
 // require up to std::numeric_limits<T>::digits+1 terms to be calculated. 
 // It would be much more efficient to use the equivalence:
 //   log(1+x) == (log(1+x) * x) / ((1-x) - 1)
-// Unfortunately optimizing compilers make such a mess of this, that it performs
-// no better than log(1+x): which is to say not very well at all.
+// Unfortunately many optimizing compilers make such a mess of this, that 
+// it performs no better than log(1+x): which is to say not very well at all.
 //
-template <class T>
-typename tools::promote_args<T>::type log1p(T x)
+template <class T, class Policy>
+typename tools::promote_args<T>::type log1p(T x, const Policy& pol)
 { // The function returns the natural logarithm of 1 + x.
   // A domain error occurs if x < -1.  TODO should there be a check?
    typedef typename tools::promote_args<T>::type result_type;
    using namespace std;
    using std::abs;
 
+   static const char* function = "boost::math::log1p<%1%>(%1%)";
+
    if(x < -1)
-      return tools::domain_error<T>(
-         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+      return policy::raise_domain_error<T>(
+         function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -tools::overflow_error<T>(
-         BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<T>(
+         function, 0, pol);
 
    result_type a = abs(result_type(x));
    if(a > result_type(0.5L))
@@ -91,12 +93,12 @@ typename tools::promote_args<T>::type log1p(T x)
    detail::log1p_series<result_type> s(x);
    boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-   result_type result = tools::sum_series(s, tools::digits<T>() + 2, max_iter);
+   result_type result = tools::sum_series(s, policy::digits<result_type, Policy>(), max_iter);
 #else
    result_type zero = 0;
-   result_type result = tools::sum_series(s, tools::digits<T>() + 2, max_iter, zero);
+   result_type result = tools::sum_series(s, policy::digits<result_type, Policy>(), max_iter, zero);
 #endif
-   tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
+   policy::check_series_iterations(function, max_iter, pol);
    return result;
 }
 
@@ -127,50 +129,50 @@ inline long double log1p(long double z)
 #  if (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)) \
    || defined(linux) || defined(__linux) || defined(__linux__) \
    || defined(__hpux)
-template <>
-inline float log1p<float>(float x)
+template <class Policy>
+inline float log1p(float x, const Policy& pol)
 { 
    if(x < -1)
-      return tools::domain_error<float>(
-         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+      return policy::raise_domain_error<float>(
+         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -tools::overflow_error<float>(
-         BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<float>(
+         "log1p<%1%>(%1%)", 0, pol);
    return ::log1pf(x); 
 }
-template <>
-inline long double log1p<long double>(long double x)
+template <class Policy>
+inline long double log1p(long double x, const Policy& pol)
 { 
    if(x < -1)
-      return tools::domain_error<long double>(
-         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+      return policy::raise_domain_error<long double>(
+         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -tools::overflow_error<long double>(
-         BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<long double>(
+         "log1p<%1%>(%1%)", 0, pol);
    return ::log1pl(x); 
 }
 #else
-template <>
-inline float log1p<float>(float x)
+template <class Policy>
+inline float log1p(float x, const Policy& pol)
 { 
    if(x < -1)
-      return tools::domain_error<float>(
-         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+      return policy::raise_domain_error<float>(
+         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -tools::overflow_error<float>(
-         BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<float>(
+         "log1p<%1%>(%1%)", 0, pol);
    return ::log1p(x); 
 }
 #endif
-template <>
-inline double log1p<double>(double x)
+template <class Policy>
+inline double log1p(double x, const Policy& pol)
 { 
    if(x < -1)
-      return tools::domain_error<double>(
-         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+      return policy::raise_domain_error<double>(
+         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -tools::overflow_error<double>(
-         BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<double>(
+         "log1p<%1%>(%1%)", 0, pol);
    return ::log1p(x); 
 }
 #elif defined(_MSC_VER) && (BOOST_MSVC >= 1400)
@@ -179,35 +181,35 @@ inline double log1p<double>(double x)
 // that your compilers optimizer won't mess this code up!!
 // Currently tested with VC8 and Intel 9.1.
 //
-template <>
-inline double log1p<double>(double x)
+template <class Policy>
+inline double log1p(double x, const Policy& pol)
 {
    if(x < -1)
-      return tools::domain_error<double>(
-         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+      return policy::raise_domain_error<double>(
+         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -tools::overflow_error<double>(
-         BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<double>(
+         "log1p<%1%>(%1%)", 0, pol);
    double u = 1+x;
    if(u == 1.0) 
       return x; 
    else
       return log(u)*(x/(u-1.0));
 }
-template <>
-inline float log1p<float>(float x)
+template <class Policy>
+inline float log1p(float x, const Policy& pol)
 {
-   return static_cast<float>(boost::math::log1p<double>(x));
+   return static_cast<float>(boost::math::log1p(static_cast<double>(x), pol));
 }
-template <>
-inline long double log1p<long double>(long double x)
+template <class Policy>
+inline long double log1p(long double x, const Policy& pol)
 {
    if(x < -1)
-      return tools::domain_error<long double>(
-         BOOST_CURRENT_FUNCTION, "log1p(x) requires x > -1, but got x = %1%.", x);
+      return policy::raise_domain_error<long double>(
+         "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -tools::overflow_error<long double>(
-         BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<long double>(
+         "log1p<%1%>(%1%)", 0, pol);
    long double u = 1+x;
    if(u == 1.0) 
       return x; 
@@ -215,6 +217,55 @@ inline long double log1p<long double>(long double x)
       return log(u)*(x/(u-1.0));
 }
 #endif
+
+template <class T>
+inline typename tools::promote_args<T>::type log1p(T x)
+{
+   return boost::math::log1p(x, policy::policy<>());
+}
+//
+// Compute log(1+x)-x:
+//
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type 
+   log1pmx(T x, const Policy& pol)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   using namespace std;
+   static const char* function = "boost::math::log1pmx<%1%>(%1%)";
+
+   if(x < -1)
+      return policy::raise_domain_error<T>(
+         function, "log1pmx(x) requires x > -1, but got x = %1%.", x, pol);
+   if(x == -1)
+      return -policy::raise_overflow_error<T>(
+         function, 0, pol);
+
+   result_type a = abs(result_type(x));
+   if(a > result_type(0.95L))
+      return log(1 + result_type(x)) - result_type(x);
+   // Note that without numeric_limits specialisation support, 
+   // epsilon just returns zero, and our "optimisation" will always fail:
+   if(a < tools::epsilon<result_type>())
+      return -x * x / 2;
+   boost::math::detail::log1p_series<T> s(x);
+   s();
+   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+   T zero = 0;
+   T result = boost::math::tools::sum_series(s, policy::digits<T, Policy>(), max_iter, zero);
+#else
+   T result = boost::math::tools::sum_series(s, policy::digits<T, Policy>(), max_iter);
+#endif
+   policy::check_series_iterations(function, max_iter, pol);
+   return result;
+}
+
+template <class T>
+inline T log1pmx(T x)
+{
+   return log1pmx(x, policy::policy<>());
+}
 
 } // namespace math
 } // namespace boost

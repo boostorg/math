@@ -48,16 +48,11 @@
 namespace boost{ namespace math{ namespace detail{
 
 //
-// Forward declaration, computes log(1+x) - x:
-//
-template <class T>
-T log1pmx(T x);
-//
 // This version will never be called (at runtime), it's a stub used
 // when T is unsuitable to be passed to these routines:
 //
-template <class T>
-inline T igamma_temme_large(T, T, mpl::int_<0> const *)
+template <class T, class Policy>
+inline T igamma_temme_large(T, T, const Policy& pol, mpl::int_<0> const *)
 {
    // stub function, should never actually be called
    BOOST_ASSERT(0);
@@ -67,12 +62,12 @@ inline T igamma_temme_large(T, T, mpl::int_<0> const *)
 // This version is accurate for up to 64-bit mantissa's, 
 // (80-bit long double, or 10^-20).
 //
-template <class T>
-T igamma_temme_large(T a, T x, mpl::int_<64> const *)
+template <class T, class Policy>
+T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<64> const *)
 {
    using namespace std; // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -log1pmx(sigma);
+   T phi = -log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)
@@ -264,7 +259,7 @@ T igamma_temme_large(T a, T x, mpl::int_<64> const *)
    if(x < a)
       result = -result;
 
-   result += boost::math::erfc(sqrt(y)) / 2;
+   result += boost::math::erfc(sqrt(y), pol) / 2;
 
    return result;
 }
@@ -272,12 +267,12 @@ T igamma_temme_large(T a, T x, mpl::int_<64> const *)
 // This one is accurate for 53-bit mantissa's
 // (IEEE double precision or 10^-17).
 //
-template <class T>
-T igamma_temme_large(T a, T x, mpl::int_<53> const *)
+template <class T, class Policy>
+T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<53> const *)
 {
    using namespace std; // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -log1pmx(sigma);
+   T phi = -log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)
@@ -406,7 +401,7 @@ T igamma_temme_large(T a, T x, mpl::int_<53> const *)
    if(x < a)
       result = -result;
 
-   result += boost::math::erfc(sqrt(y)) / 2;
+   result += boost::math::erfc(sqrt(y), pol) / 2;
 
    return result;
 }
@@ -414,12 +409,12 @@ T igamma_temme_large(T a, T x, mpl::int_<53> const *)
 // This one is accurate for 24-bit mantissa's
 // (IEEE float precision, or 10^-8)
 //
-template <class T>
-T igamma_temme_large(T a, T x, mpl::int_<24> const *)
+template <class T, class Policy>
+T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<24> const *)
 {
    using namespace std; // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -log1pmx(sigma);
+   T phi = -log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)
@@ -459,7 +454,7 @@ T igamma_temme_large(T a, T x, mpl::int_<24> const *)
    if(x < a)
       result = -result;
 
-   result += boost::math::erfc(sqrt(y)) / 2;
+   result += boost::math::erfc(sqrt(y), pol) / 2;
 
    return result;
 }
@@ -470,12 +465,12 @@ T igamma_temme_large(T a, T x, mpl::int_<24> const *)
 // It's use for a < 200 is not recomended, that would
 // require many more terms in the polynomials.
 //
-template <class T>
-T igamma_temme_large(T a, T x, mpl::int_<113> const *)
+template <class T, class Policy>
+T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<113> const *)
 {
    using namespace std; // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -log1pmx(sigma);
+   T phi = -log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)
@@ -756,7 +751,7 @@ T igamma_temme_large(T a, T x, mpl::int_<113> const *)
    if(x < a)
       result = -result;
 
-   result += boost::math::erfc(sqrt(y)) / 2;
+   result += boost::math::erfc(sqrt(y), pol) / 2;
 
    return result;
 }

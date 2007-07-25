@@ -12,6 +12,7 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/math/policy/policy.hpp>
 
 #include <iostream>
 #include <iomanip>
@@ -31,17 +32,6 @@ namespace tools
 // see boost/math/tools/ntl.hpp  for examples like
 // template <> NTL::RR max_value<NTL::RR> ...
 // See  Conceptual Requirements for Real Number Types.
-
-template <class T>
-inline int digits(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
-{
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
-#else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
-#endif
-   return std::numeric_limits<T>::digits;
-}
 
 template <class T>
 inline T max_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
@@ -163,7 +153,7 @@ template <class T>
 inline T epsilon(const mpl::false_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    using namespace std;  // for ADL of std names
-   static const T eps = ldexp(static_cast<T>(1), 1-tools::digits<T>());
+   static const T eps = ldexp(static_cast<T>(1), 1-policy::digits<T, policy::policy<> >());
    return eps;
 }
 

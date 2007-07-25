@@ -11,6 +11,7 @@
 // Basic sanity test for Binomial Cumulative Distribution Function.
 
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
+#define BOOST_MATH_DISCRETE_QUANTILE_POLICY real
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
@@ -617,6 +618,70 @@ void test_spots(RealType)
     //6 0.0038452148437500009 0.9996185302734375
     //7 0.00036621093749999984 0.9999847412109375
     //8 1.52587890625e-005 1 1 0
+  }
+#define T RealType
+#include "binomial_quantile.ipp"
+
+  for(unsigned i = 0; i < binomial_quantile_data.size(); ++i)
+  {
+     using namespace boost::math::policy;
+     typedef policy<discrete_quantile<boost::math::policy::real> > P1;
+     typedef policy<discrete_quantile<integer_below> > P2;
+     typedef policy<discrete_quantile<integer_above> > P3;
+     typedef policy<discrete_quantile<integer_outside> > P4;
+     typedef policy<discrete_quantile<integer_inside> > P5;
+     typedef policy<discrete_quantile<integer_nearest> > P6;
+     RealType tol = boost::math::tools::epsilon<RealType>() * 500;
+     if(!boost::is_floating_point<RealType>::value)
+        tol *= 10;  // no lanczos approximation implies less accuracy
+     //
+     // Check full real value first:
+     //
+     binomial_distribution<RealType, P1> p1(binomial_quantile_data[i][0], binomial_quantile_data[i][1]);
+     RealType x = quantile(p1, binomial_quantile_data[i][2]);
+     BOOST_CHECK_CLOSE_FRACTION(x, binomial_quantile_data[i][3], tol);
+     x = quantile(complement(p1, binomial_quantile_data[i][2]));
+     BOOST_CHECK_CLOSE_FRACTION(x, binomial_quantile_data[i][4], tol);
+     //
+     // Now with round down to integer:
+     //
+     binomial_distribution<RealType, P2> p2(binomial_quantile_data[i][0], binomial_quantile_data[i][1]);
+     x = quantile(p2, binomial_quantile_data[i][2]);
+     BOOST_CHECK_EQUAL(x, floor(binomial_quantile_data[i][3]));
+     x = quantile(complement(p2, binomial_quantile_data[i][2]));
+     BOOST_CHECK_EQUAL(x, floor(binomial_quantile_data[i][4]));
+     //
+     // Now with round up to integer:
+     //
+     binomial_distribution<RealType, P3> p3(binomial_quantile_data[i][0], binomial_quantile_data[i][1]);
+     x = quantile(p3, binomial_quantile_data[i][2]);
+     BOOST_CHECK_EQUAL(x, ceil(binomial_quantile_data[i][3]));
+     x = quantile(complement(p3, binomial_quantile_data[i][2]));
+     BOOST_CHECK_EQUAL(x, ceil(binomial_quantile_data[i][4]));
+     //
+     // Now with round to integer "outside":
+     //
+     binomial_distribution<RealType, P4> p4(binomial_quantile_data[i][0], binomial_quantile_data[i][1]);
+     x = quantile(p4, binomial_quantile_data[i][2]);
+     BOOST_CHECK_EQUAL(x, binomial_quantile_data[i][2] < 0.5f ? floor(binomial_quantile_data[i][3]) : ceil(binomial_quantile_data[i][3]));
+     x = quantile(complement(p4, binomial_quantile_data[i][2]));
+     BOOST_CHECK_EQUAL(x, binomial_quantile_data[i][2] < 0.5f ? ceil(binomial_quantile_data[i][4]) : floor(binomial_quantile_data[i][4]));
+     //
+     // Now with round to integer "inside":
+     //
+     binomial_distribution<RealType, P5> p5(binomial_quantile_data[i][0], binomial_quantile_data[i][1]);
+     x = quantile(p5, binomial_quantile_data[i][2]);
+     BOOST_CHECK_EQUAL(x, binomial_quantile_data[i][2] < 0.5f ? ceil(binomial_quantile_data[i][3]) : floor(binomial_quantile_data[i][3]));
+     x = quantile(complement(p5, binomial_quantile_data[i][2]));
+     BOOST_CHECK_EQUAL(x, binomial_quantile_data[i][2] < 0.5f ? floor(binomial_quantile_data[i][4]) : ceil(binomial_quantile_data[i][4]));
+     //
+     // Now with round to nearest integer:
+     //
+     binomial_distribution<RealType, P6> p6(binomial_quantile_data[i][0], binomial_quantile_data[i][1]);
+     x = quantile(p6, binomial_quantile_data[i][2]);
+     BOOST_CHECK_EQUAL(x, floor(binomial_quantile_data[i][3] + 0.5f));
+     x = quantile(complement(p6, binomial_quantile_data[i][2]));
+     BOOST_CHECK_EQUAL(x, floor(binomial_quantile_data[i][4] + 0.5f));
   }
 
 } // template <class RealType>void test_spots(RealType)

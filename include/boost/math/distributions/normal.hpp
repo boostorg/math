@@ -13,18 +13,20 @@
 // From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/NormalDistribution.html
 
+#include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/erf.hpp> // for erf/erfc.
 #include <boost/math/distributions/complement.hpp>
 
 #include <utility>
 
-namespace boost{ namespace math
-{
-template <class RealType = double>
+namespace boost{ namespace math{
+
+template <class RealType = double, class Policy = policy::policy<> >
 class normal_distribution
 {
 public:
    typedef RealType value_type;
+   typedef Policy policy_type;
 
    normal_distribution(RealType mean = 0, RealType sd = 1)
       : m_mean(mean), m_sd(sd) {}
@@ -48,23 +50,23 @@ private:
 
 typedef normal_distribution<double> normal;
 
-template <class RealType>
-inline const std::pair<RealType, RealType> range(const normal_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline const std::pair<RealType, RealType> range(const normal_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + infinity.
 }
 
-template <class RealType>
-inline const std::pair<RealType, RealType> support(const normal_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline const std::pair<RealType, RealType> support(const normal_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(),  max_value<RealType>()); // - to + infinity.
 }
 
-template <class RealType>
-inline RealType pdf(const normal_distribution<RealType>& dist, const RealType& x)
+template <class RealType, class Policy>
+inline RealType pdf(const normal_distribution<RealType, Policy>& dist, const RealType& x)
 {
    using namespace std;  // for ADL of std functions
 
@@ -81,8 +83,8 @@ inline RealType pdf(const normal_distribution<RealType>& dist, const RealType& x
    return result;
 }
 
-template <class RealType>
-inline RealType cdf(const normal_distribution<RealType>& dist, const RealType& x)
+template <class RealType, class Policy>
+inline RealType cdf(const normal_distribution<RealType, Policy>& dist, const RealType& x)
 {
    using namespace std;  // for ADL of std functions
 
@@ -92,12 +94,12 @@ inline RealType cdf(const normal_distribution<RealType>& dist, const RealType& x
    RealType diff = (x - mean) / (sd * constants::root_two<RealType>());
    RealType result;
 
-   result = boost::math::erfc(-diff) / 2;
+   result = boost::math::erfc(-diff, Policy()) / 2;
    return result;
 }
 
-template <class RealType>
-inline RealType quantile(const normal_distribution<RealType>& dist, const RealType& p)
+template <class RealType, class Policy>
+inline RealType quantile(const normal_distribution<RealType, Policy>& dist, const RealType& p)
 {
    using namespace std;  // for ADL of std functions
 
@@ -106,7 +108,7 @@ inline RealType quantile(const normal_distribution<RealType>& dist, const RealTy
 
    RealType r;
 
-   r = boost::math::erfc_inv(2 * p);
+   r = boost::math::erfc_inv(2 * p, Policy());
    r = -r;
    r *= sd * constants::root_two<RealType>();
    r += mean;
@@ -114,8 +116,8 @@ inline RealType quantile(const normal_distribution<RealType>& dist, const RealTy
    return r;
 }
 
-template <class RealType>
-inline RealType cdf(const complemented2_type<normal_distribution<RealType>, RealType>& c)
+template <class RealType, class Policy>
+inline RealType cdf(const complemented2_type<normal_distribution<RealType, Policy>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 
@@ -126,13 +128,13 @@ inline RealType cdf(const complemented2_type<normal_distribution<RealType>, Real
    RealType diff = (x - mean) / (sd * constants::root_two<RealType>());
    RealType result;
 
-   result = boost::math::erfc(diff) / 2;
+   result = boost::math::erfc(diff, Policy()) / 2;
 
    return result;
 }
 
-template <class RealType>
-inline RealType quantile(const complemented2_type<normal_distribution<RealType>, RealType>& c)
+template <class RealType, class Policy>
+inline RealType quantile(const complemented2_type<normal_distribution<RealType, Policy>, RealType>& c)
 {
    using namespace std;  // for ADL of std functions
 
@@ -141,50 +143,50 @@ inline RealType quantile(const complemented2_type<normal_distribution<RealType>,
    RealType q = c.param;
 
    RealType r;
-   r = boost::math::erfc_inv(2 * q);
+   r = boost::math::erfc_inv(2 * q, Policy());
    r *= sd * constants::root_two<RealType>();
    r += mean;
    return r;
 }
 
-template <class RealType>
-inline RealType mean(const normal_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType mean(const normal_distribution<RealType, Policy>& dist)
 {
    return dist.mean();
 }
 
-template <class RealType>
-inline RealType standard_deviation(const normal_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType standard_deviation(const normal_distribution<RealType, Policy>& dist)
 {
    return dist.standard_deviation();
 }
 
-template <class RealType>
-inline RealType mode(const normal_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType mode(const normal_distribution<RealType, Policy>& dist)
 {
    return dist.mean();
 }
 
-template <class RealType>
-inline RealType median(const normal_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType median(const normal_distribution<RealType, Policy>& dist)
 {
    return dist.mean();
 }
 
-template <class RealType>
-inline RealType skewness(const normal_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline RealType skewness(const normal_distribution<RealType, Policy>& /*dist*/)
 {
    return 0;
 }
 
-template <class RealType>
-inline RealType kurtosis(const normal_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline RealType kurtosis(const normal_distribution<RealType, Policy>& /*dist*/)
 {
    return 3;
 }
 
-template <class RealType>
-inline RealType kurtosis_excess(const normal_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline RealType kurtosis_excess(const normal_distribution<RealType, Policy>& /*dist*/)
 {
    return 0;
 }

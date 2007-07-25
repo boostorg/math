@@ -13,6 +13,7 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/policy/policy.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <cmath>
 #include <boost/limits.hpp>
@@ -98,6 +99,13 @@ namespace boost
           return detail::sinc_pi_imp(static_cast<result_type>(x));
        }
 
+       template <class T, class Policy>
+       inline typename tools::promote_args<T>::type sinc_pi(T x, const Policy&)
+       {
+          typedef typename tools::promote_args<T>::type result_type;
+          return detail::sinc_pi_imp(static_cast<result_type>(x));
+       }
+
 #ifdef    BOOST_NO_TEMPLATE_TEMPLATES
 #else    /* BOOST_NO_TEMPLATE_TEMPLATES */
         template<typename T, template<typename> class U>
@@ -150,6 +158,12 @@ namespace boost
 
                 return(result);
             }
+        }
+
+        template<typename T, template<typename> class U, class Policy>
+        inline U<T>    sinc_pi(const U<T> x, const Policy&)
+        {
+           return sinc_pi(x);
         }
 #endif    /* BOOST_NO_TEMPLATE_TEMPLATES */
     }

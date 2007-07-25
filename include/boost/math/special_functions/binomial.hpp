@@ -8,19 +8,20 @@
 
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/beta.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 
 namespace boost{ namespace math{
 
-template <class T>
-T binomial_coefficient(unsigned n, unsigned k)
+template <class T, class Policy>
+T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
 {
    using namespace std;
+   static const char* function = "boost::math::binomial_coefficient<%1%>(unsigned, unsigned)";
    if(k > n)
-      return tools::domain_error<T>(
-         BOOST_CURRENT_FUNCTION, 
+      return policy::raise_domain_error<T>(
+         function, 
          "The binomial coefficient is undefined for k > n, but got k = %1%.",
-         k);
+         k, pol);
    T result;
    if((k == 0) || (k == n))
       return 1;
@@ -38,11 +39,11 @@ T binomial_coefficient(unsigned n, unsigned k)
    {
       // Use the beta function:
       if(k < n - k)
-         result = k * beta(static_cast<T>(k), static_cast<T>(n-k+1));
+         result = k * beta(static_cast<T>(k), static_cast<T>(n-k+1), pol);
       else
-         result = (n - k) * beta(static_cast<T>(k+1), static_cast<T>(n-k));
+         result = (n - k) * beta(static_cast<T>(k+1), static_cast<T>(n-k), pol);
       if(result == 0)
-         return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+         return policy::raise_overflow_error<T>(function, 0, pol);
       result = 1 / result;
    }
    // convert to nearest integer:
@@ -54,9 +55,15 @@ T binomial_coefficient(unsigned n, unsigned k)
 // we'll promote to double:
 //
 template <>
-inline float binomial_coefficient<float>(unsigned n, unsigned k)
+inline float binomial_coefficient<float, policy::policy<> >(unsigned n, unsigned k, const policy::policy<>& pol)
 {
-   return tools::checked_narrowing_cast<float>(binomial_coefficient<double>(n, k), BOOST_CURRENT_FUNCTION);
+   return policy::checked_narrowing_cast<float, policy::policy<> >(binomial_coefficient<double>(n, k, pol), "boost::math::binomial_coefficient<%1%>(unsigned,unsigned)");
+}
+
+template <class T>
+inline T binomial_coefficient(unsigned n, unsigned k)
+{
+   return binomial_coefficient<T>(n, k, policy::policy<>());
 }
 
 } // namespace math

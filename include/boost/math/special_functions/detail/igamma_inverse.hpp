@@ -9,7 +9,7 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/roots.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 
 namespace boost{ namespace math{
 
@@ -71,8 +71,8 @@ T didonato_SN(T a, T x, unsigned N, T tolerance = 0)
    return sum;
 }
 
-template <class T>
-inline T didonato_FN(T p, T a, T x, unsigned N, T tolerance)
+template <class T, class Policy>
+inline T didonato_FN(T p, T a, T x, unsigned N, T tolerance, const Policy& pol)
 {
    //
    // Computation of the Incomplete Gamma Function Ratios and their Inverse
@@ -83,12 +83,12 @@ inline T didonato_FN(T p, T a, T x, unsigned N, T tolerance)
    // See equation 34.
    //
    using namespace std;
-   T u = log(p) + boost::math::lgamma(a + 1);
+   T u = log(p) + boost::math::lgamma(a + 1, pol);
    return exp((u + x - log(didonato_SN(a, x, N, tolerance))) / a);
 }
 
-template <class T>
-T estimate_inverse_gamma(T a, T p, T q)
+template <class T, class Policy>
+T estimate_inverse_gamma(T a, T p, T q, const Policy& pol)
 {
    //
    // In order to understand what's going on here, you will
@@ -107,7 +107,7 @@ T estimate_inverse_gamma(T a, T p, T q)
       result = -log(q);
    else if(a < 1)
    {
-      T g = boost::math::tgamma(a);
+      T g = boost::math::tgamma(a, pol);
       T b = q * g;
       if((b > 0.6) || ((b >= 0.45) && (a >= 0.3)))
       {
@@ -205,7 +205,7 @@ T estimate_inverse_gamma(T a, T p, T q)
          else
          {
             T D = (std::max)(T(2), a * (a - 1));
-            T lg = boost::math::lgamma(a);
+            T lg = boost::math::lgamma(a, pol);
             T lb = log(q) + lg;
             if(lb < -D * 2.3)
             {
@@ -243,10 +243,10 @@ T estimate_inverse_gamma(T a, T p, T q)
       else
       {
          // DiDonato and Morris Eq 35:
-         T z = didonato_FN(p, a, w, 0, T(0));
-         z = didonato_FN(p, a, z, 2, T(0));
-         z = didonato_FN(p, a, z, 2, T(0));
-         z = didonato_FN(p, a, z, 3, T(0));
+         T z = didonato_FN(p, a, w, 0, T(0), pol);
+         z = didonato_FN(p, a, z, 2, T(0), pol);
+         z = didonato_FN(p, a, z, 2, T(0), pol);
+         z = didonato_FN(p, a, z, 3, T(0), pol);
 
          if((z <= 0.01 * (a + 1)) || (z > 0.7 * (a + 1)))
          {
@@ -255,8 +255,8 @@ T estimate_inverse_gamma(T a, T p, T q)
          else
          {
             // DiDonato and Morris Eq 36:
-            T zb = didonato_FN(p, a, z, 100, T(1e-4));
-            T u = log(p) + boost::math::lgamma(a + 1);
+            T zb = didonato_FN(p, a, z, 100, T(1e-4), pol);
+            T u = log(p) + boost::math::lgamma(a + 1, pol);
             result = zb * (1 - (a * log(zb) - zb - u + log(didonato_SN(a, z, 100, T(1e-4)))) / (a - zb));
          }
       }
@@ -264,7 +264,7 @@ T estimate_inverse_gamma(T a, T p, T q)
    return result;
 }
 
-template <class T>
+template <class T, class Policy>
 struct gamma_p_inverse_func
 {
    gamma_p_inverse_func(T a_, T p_, bool inv) : a(a_), p(p_), invert(inv)
@@ -292,8 +292,14 @@ struct gamma_p_inverse_func
       // Calculate P(x) - p and the first two derivates, or if the invert
       // flag is set, then Q(x) - q and it's derivatives.
       //
-      typedef typename lanczos::lanczos_traits<T>::value_type value_type;
-      typedef typename lanczos::lanczos_traits<T>::evaluation_type evaluation_type;
+      typedef typename policy::evaluation<T, Policy>::type value_type;
+      typedef typename lanczos::lanczos<T, Policy>::type evaluation_type;
+      typedef typename policy::normalise<
+         Policy, 
+         policy::promote_float<false>, 
+         policy::promote_double<false>, 
+         policy::discrete_quantile<>,
+         policy::assert_undefined<> >::type forwarding_policy;
 
       using namespace std;  // For ADL of std functions.
 
@@ -302,8 +308,8 @@ struct gamma_p_inverse_func
       f = static_cast<T>(boost::math::detail::gamma_incomplete_imp(
                static_cast<value_type>(a), 
                static_cast<value_type>(x), 
-               true, invert, evaluation_type(), 
-               &ft));
+               true, invert,
+               forwarding_policy(), &ft));
       f1 = static_cast<T>(ft);
       T f2;
       T div = (a - x - 1) / x;
@@ -331,20 +337,22 @@ private:
    bool invert;
 };
 
-template <class T>
-T gamma_p_inv_imp(T a, T p)
+template <class T, class Policy>
+T gamma_p_inv_imp(T a, T p, const Policy& pol)
 {
    using namespace std;  // ADL of std functions.
 
+   static const char* function = "boost::math::gamma_p_inv<%1%>(%1%, %1%)";
+
    if(a <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a in the incomplete gamma function inverse must be >= 0 (got a=%1%).", a);
+      policy::raise_domain_error<T>(function, "Argument a in the incomplete gamma function inverse must be >= 0 (got a=%1%).", a, pol);
    if((p < 0) || (p > 1))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse (got p=%1%).", p);
+      policy::raise_domain_error<T>(function, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse (got p=%1%).", p, pol);
    if(p == 1)
       return tools::max_value<T>();
    if(p == 0)
       return 0;
-   T guess = detail::estimate_inverse_gamma(a, p, 1 - p);
+   T guess = detail::estimate_inverse_gamma(a, p, 1 - p, pol);
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();
@@ -354,37 +362,39 @@ T gamma_p_inv_imp(T a, T p)
    // large convergence is slow, so we'll bump it up to full 
    // precision to prevent premature termination of the root-finding routine.
    //
-   unsigned digits = (tools::digits<T>() * 2) / 3;
-   if((a < 0.125) && (fabs(gamma_p_derivative(a, guess)) > 1 / sqrt(tools::epsilon<T>())))
-      digits = tools::digits<T>() - 2;
+   unsigned digits = (policy::digits<T, Policy>() * 2) / 3;
+   if((a < 0.125) && (fabs(gamma_p_derivative(a, guess, pol)) > 1 / sqrt(tools::epsilon<T>())))
+      digits = policy::digits<T, Policy>() - 2;
    //
    // Go ahead and iterate:
    //
    guess = tools::halley_iterate(
-      detail::gamma_p_inverse_func<T>(a, p, false),
+      detail::gamma_p_inverse_func<T, Policy>(a, p, false),
       guess,
       lower,
       tools::max_value<T>(),
       digits);
    if(guess == lower)
-      guess = tools::underflow_error<T>(BOOST_CURRENT_FUNCTION, "Expected result known to be non-zero, but is smaller than the smallest available number.");
+      guess = policy::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
    return guess;
 }
 
-template <class T>
-T gamma_q_inv_imp(T a, T q)
+template <class T, class Policy>
+T gamma_q_inv_imp(T a, T q, const Policy& pol)
 {
    using namespace std;  // ADL of std functions.
 
+   static const char* function = "boost::math::gamma_q_inv<%1%>(%1%, %1%)";
+
    if(a <= 0)
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Argument a in the incomplete gamma function inverse must be >= 0 (got a=%1%).", a);
+      policy::raise_domain_error<T>(function, "Argument a in the incomplete gamma function inverse must be >= 0 (got a=%1%).", a, pol);
    if((q < 0) || (q > 1))
-      tools::domain_error<T>(BOOST_CURRENT_FUNCTION, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse (got q=%1%).", q);
+      policy::raise_domain_error<T>(function, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse (got q=%1%).", q, pol);
    if(q == 0)
       return tools::max_value<T>();
    if(q == 1)
       return 0;
-   T guess = detail::estimate_inverse_gamma(a, 1 - q, q);
+   T guess = detail::estimate_inverse_gamma(a, 1 - q, q, pol);
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();
@@ -394,43 +404,57 @@ T gamma_q_inv_imp(T a, T q)
    // large convergence is slow, so we'll bump it up to full 
    // precision to prevent premature termination of the root-finding routine.
    //
-   unsigned digits = (tools::digits<T>() * 2) / 3;
-   if((a < 0.125) && (fabs(gamma_p_derivative(a, guess)) > 1 / sqrt(tools::epsilon<T>())))
-      digits = tools::digits<T>();
+   unsigned digits = (policy::digits<T, Policy>() * 2) / 3;
+   if((a < 0.125) && (fabs(gamma_p_derivative(a, guess, pol)) > 1 / sqrt(tools::epsilon<T>())))
+      digits = policy::digits<T, Policy>();
    //
    // Go ahead and iterate:
    //
    guess = tools::halley_iterate(
-      detail::gamma_p_inverse_func<T>(a, q, true),
+      detail::gamma_p_inverse_func<T, Policy>(a, q, true),
       guess,
       lower,
       tools::max_value<T>(),
       digits);
    if(guess == lower)
-      guess = tools::underflow_error<T>(BOOST_CURRENT_FUNCTION, "Expected result known to be non-zero, but is smaller than the smallest available number.");
+      guess = policy::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
    return guess;
 }
 
 } // namespace detail
 
-template <class T1, class T2>
+template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type 
-   gamma_p_inv(T1 a, T2 p)
+   gamma_p_inv(T1 a, T2 p, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    return detail::gamma_p_inv_imp(
       static_cast<result_type>(a),
-      static_cast<result_type>(p));
+      static_cast<result_type>(p), pol);
+}
+
+template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
+   gamma_q_inv(T1 a, T2 p, const Policy& pol)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   return detail::gamma_q_inv_imp(
+      static_cast<result_type>(a),
+      static_cast<result_type>(p), pol);
+}
+
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   gamma_p_inv(T1 a, T2 p)
+{
+   return gamma_p_inv(a, p, policy::policy<>());
 }
 
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type 
    gamma_q_inv(T1 a, T2 p)
 {
-   typedef typename tools::promote_args<T1, T2>::type result_type;
-   return detail::gamma_q_inv_imp(
-      static_cast<result_type>(a),
-      static_cast<result_type>(p));
+   return gamma_q_inv(a, p, policy::policy<>());
 }
 
 } // namespace math

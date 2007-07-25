@@ -10,7 +10,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/roots.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 
 namespace boost{ namespace math{
 
@@ -55,54 +55,80 @@ inline float erf_asymptotic_limit_N(const T&)
 {
    return (std::numeric_limits<float>::max)();
 }
-inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 24>&)
+inline float erf_asymptotic_limit_N(const mpl::int_<24>&)
 {
    return 2.8F;
 }
-inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 53>&)
+inline float erf_asymptotic_limit_N(const mpl::int_<53>&)
 {
    return 4.3F;
 }
-inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 64>&)
+inline float erf_asymptotic_limit_N(const mpl::int_<64>&)
 {
    return 4.8F;
 }
-inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 106>&)
+inline float erf_asymptotic_limit_N(const mpl::int_<106>&)
 {
    return 6.5F;
 }
-inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 113>&)
+inline float erf_asymptotic_limit_N(const mpl::int_<113>&)
 {
    return 6.8F;
 }
 
-template <class T>
+template <class T, class Policy>
 inline T erf_asymptotic_limit()
 {
-   return erf_asymptotic_limit_N(boost::integral_constant<int, std::numeric_limits<T>::digits>());
+   typedef typename policy::precision<T, Policy>::type precision_type;
+   typedef typename mpl::if_<
+      mpl::less_equal<precision_type, mpl::int_<24> >,
+      typename mpl::if_<
+         mpl::less_equal<precision_type, mpl::int_<0> >,
+         mpl::int_<0>,
+         mpl::int_<24>
+      >::type,
+      typename mpl::if_<
+         mpl::less_equal<precision_type, mpl::int_<53> >,
+         mpl::int_<53>,
+         typename mpl::if_<
+            mpl::less_equal<precision_type, mpl::int_<64> >,
+            mpl::int_<64>,
+            typename mpl::if_<
+               mpl::less_equal<precision_type, mpl::int_<106> >,
+               mpl::int_<106>,
+               typename mpl::if_<
+                  mpl::less_equal<precision_type, mpl::int_<113> >,
+                  mpl::int_<113>,
+                  mpl::int_<0>
+               >::type
+            >::type
+         >::type
+      >::type
+   >::type tag_type;
+   return erf_asymptotic_limit_N(tag_type());
 }
 
-template <class T, class L, class Tag>
-T erf_imp(T z, bool invert, const L& l, const Tag& t)
+template <class T, class Policy, class Tag>
+T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 {
    using namespace std;
 
    if(z < 0)
    {
       if(!invert)
-         return -erf_imp(-z, invert, l, t);
+         return -erf_imp(-z, invert, pol, t);
       else
-         return 1 + erf_imp(-z, false, l, t);
+         return 1 + erf_imp(-z, false, pol, t);
    }
 
    T result;
 
-   if(!invert && (z > detail::erf_asymptotic_limit<T>()))
+   if(!invert && (z > detail::erf_asymptotic_limit<T, Policy>()))
    {
       detail::erf_asympt_series_t<T> s(z);
       boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
-      result = boost::math::tools::sum_series(s, boost::math::tools::digits<T>(), max_iter, 1);
-      tools::check_series_iterations(BOOST_CURRENT_FUNCTION, max_iter);
+      result = boost::math::tools::sum_series(s, policy::digits<T, Policy>(), max_iter, 1);
+      policy::check_series_iterations("boost::math::erf<%1%>(%1%, %1%)", max_iter, pol);
    }
    else
    {
@@ -113,13 +139,13 @@ T erf_imp(T z, bool invert, const L& l, const Tag& t)
          result = z * exp(-x);
          result /= sqrt(boost::math::constants::pi<T>());
          if(result != 0)
-            result *= 2 * detail::lower_gamma_series(T(0.5f), x, boost::math::tools::digits<T>());
+            result *= 2 * detail::lower_gamma_series(T(0.5f), x, pol);
       }
       else if(x < 1.1f)
       {
          // Compute Q:
          invert = !invert;
-         result = tgamma_small_upper_part(T(0.5f), x, l);
+         result = tgamma_small_upper_part(T(0.5f), x, pol);
          result /= sqrt(boost::math::constants::pi<T>());
       }
       else
@@ -128,7 +154,7 @@ T erf_imp(T z, bool invert, const L& l, const Tag& t)
          invert = !invert;
          result = z * exp(-x);
          result /= sqrt(boost::math::constants::pi<T>());
-         result *= upper_gamma_fraction(T(0.5f), x, tools::digits<T>());
+         result *= upper_gamma_fraction(T(0.5f), x, policy::digits<T, Policy>());
       }
    }
    if(invert)
@@ -136,19 +162,19 @@ T erf_imp(T z, bool invert, const L& l, const Tag& t)
    return result;
 }
 
-template <class T, class L>
-T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
+template <class T, class Policy>
+T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
 {
    using namespace std;
 
    if(z < 0)
    {
       if(!invert)
-         return -erf_imp(-z, invert, l, t);
+         return -erf_imp(-z, invert, pol, t);
       else if(z < -0.5)
-         return 2 - erf_imp(-z, invert, l, t);
+         return 2 - erf_imp(-z, invert, pol, t);
       else
-         return 1 + erf_imp(-z, false, l, t);
+         return 1 + erf_imp(-z, false, pol, t);
    }
 
    T result;
@@ -169,12 +195,12 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
       }
       else if(z < 1e-10)
       {
-         result = z * 1.125 + z * 0.003379167095512573896158903121545171688;
+         result = z * 1.125 + z * 0.003379167095512573896158903121545171688L;
       }
       else
       {
-         static const T n[7] = { 0.00337916709551257778174, -0.000147024115786688745475, -0.37463022236812520164, 0.0163061594494816999803, -0.0534354147807331748737, 0.00161898096813581982844, -0.0059528010489182840404 };
-         static const T d[7] = { 1, -0.0435089806536379531594, 0.442761965043509204727, -0.017375974533016704678, 0.0772756490303260060769, -0.00210552465858669941879, 0.00544772980263244037286 };
+         static const T n[7] = { 0.00337916709551257778174L, -0.000147024115786688745475L, -0.37463022236812520164L, 0.0163061594494816999803L, -0.0534354147807331748737L, 0.00161898096813581982844L, -0.0059528010489182840404L };
+         static const T d[7] = { 1, -0.0435089806536379531594L, 0.442761965043509204727L, -0.017375974533016704678L, 0.0772756490303260060769L, -0.00210552465858669941879L, 0.00544772980263244037286L };
          result = z * 1.125 + z * tools::evaluate_polynomial(n, z) / tools::evaluate_polynomial(d, z);
       }
    }
@@ -188,8 +214,8 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
       if(z < 0.75)
       {
          // Worst case absolute error found: 8.554649561e-018
-         static const T n[5] = { -0.0361790390718262468222, 0.301888464724047222196, 0.201731143672633894981, 0.0659353268087389983319, 0.00721876720062364930761 };
-         static const T d[6] = { 1, 1.58814245739127341535, 0.99354580430196422336, 0.291753007176902027213, 0.033994791234913855515, -0.000104234653166533504303 };
+         static const T n[5] = { -0.0361790390718262468222L, 0.301888464724047222196L, 0.201731143672633894981L, 0.0659353268087389983319L, 0.00721876720062364930761L };
+         static const T d[6] = { 1, 1.58814245739127341535L, 0.99354580430196422336L, 0.291753007176902027213L, 0.033994791234913855515L, -0.000104234653166533504303L };
          static const float f0 =  0.3440242112F;
          r = tools::evaluate_polynomial(n, z - 0.5) / tools::evaluate_polynomial(d, z - 0.5);
          b = f0;
@@ -197,8 +223,8 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
       else if(z < 1.25)
       {
          // Worst case absolute error found: 6.50251514e-018
-         static const T n[6] = { -0.039787689261113685983, 0.160309168830518003303, 0.163049978514596540313, 0.0710685660158400750009, 0.01497188097404877543, 0.00130080628375002584279 };
-         static const T d[6] = { 1, 1.77564880074171280407, 1.31438791181040008779, 0.509359151038517059748, 0.103958527905812829559, 0.00901292460643094469406 };
+         static const T n[6] = { -0.039787689261113685983L, 0.160309168830518003303L, 0.163049978514596540313L, 0.0710685660158400750009L, 0.01497188097404877543L, 0.00130080628375002584279L };
+         static const T d[6] = { 1, 1.77564880074171280407L, 1.31438791181040008779L, 0.509359151038517059748L, 0.103958527905812829559L, 0.00901292460643094469406L };
          static const float f0 =  0.419990927F;
          r = tools::evaluate_polynomial(n, z - 0.75) / tools::evaluate_polynomial(d, z - 0.75);
          b = f0;
@@ -206,8 +232,8 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
       else if(z < 2.25)
       {
          // Worst case absolute error found: 1.132743504e-017
-         static const T n[6] = { -0.0300838560557949724172, 0.0592886319615167248092, 0.0622294724048409148736, 0.0248575228109427909578, 0.00463781847004901844581, 0.000347305179334822548368 };
-         static const T d[7] = { 1, 1.57915060645728571344, 1.03342495188878679417, 0.35158678814344218974, 0.062469256580984456783, 0.00466640448020624599948, 0.290106403940303572448e-6 };
+         static const T n[6] = { -0.0300838560557949724172L, 0.0592886319615167248092L, 0.0622294724048409148736L, 0.0248575228109427909578L, 0.00463781847004901844581L, 0.000347305179334822548368L };
+         static const T d[7] = { 1, 1.57915060645728571344L, 1.03342495188878679417L, 0.35158678814344218974L, 0.062469256580984456783L, 0.00466640448020624599948L, 0.290106403940303572448e-6L };
          static const float f0 = 0.4898625016F;
          r = tools::evaluate_polynomial(n, z - 1.25) / tools::evaluate_polynomial(d, z - 1.25);
          b = f0;
@@ -215,8 +241,8 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
       else if(z < 3.5)
       {
          // Worst case absolute error found: 3.446364609e-018
-         static const T n[6] = { -0.0117907570137227857015, 0.0162667227692515660221, 0.0175329212378413544794, 0.00620897681269247137578, 0.000986614895094589251706, 0.601354618401624353425e-4 };
-         static const T d[6] = { 1, 1.33374851361555383557, 0.73227756904205983415, 0.207410266363727673685, 0.0304034048466731110163, 0.00185296959991832048613 };
+         static const T n[6] = { -0.0117907570137227857015L, 0.0162667227692515660221L, 0.0175329212378413544794L, 0.00620897681269247137578L, 0.000986614895094589251706L, 0.601354618401624353425e-4L };
+         static const T d[6] = { 1, 1.33374851361555383557L, 0.73227756904205983415L, 0.207410266363727673685L, 0.0304034048466731110163L, 0.00185296959991832048613L };
          static const float f0 = 0.5317370892F;
          r = tools::evaluate_polynomial(n, z - 2.25) / tools::evaluate_polynomial(d, z - 2.25);
          b = f0;
@@ -224,8 +250,8 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
       else if(z < 5.5)
       {
          // Worst case absolute error found: 1.579588208e-018
-         static const T n[6] = { -0.00588219091116732271979, 0.00434428684527812140098, 0.00466899990542371512895, 0.00139937567253199794533, 0.000179205902444982389766, 0.845033527560949509345e-5 };
-         static const T d[6] = { 1, 1.07389345953392962127, 0.470965611895885060643, 0.105594730223366124873, 0.0121252833787344059719, 0.000571755036133730341579 };
+         static const T n[6] = { -0.00588219091116732271979L, 0.00434428684527812140098L, 0.00466899990542371512895L, 0.00139937567253199794533L, 0.000179205902444982389766L, 0.845033527560949509345e-5L };
+         static const T d[6] = { 1, 1.07389345953392962127L, 0.470965611895885060643L, 0.105594730223366124873L, 0.0121252833787344059719L, 0.000571755036133730341579L };
          static const float f0 = 0.5494099855F;
          r = tools::evaluate_polynomial(n, z - 3.5) / tools::evaluate_polynomial(d, z - 3.5);
          b = f0;
@@ -233,8 +259,8 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
       else if(z < 9)
       {
          // Worst case absolute error found: 1.410768708e-017
-         static const T n[5] = { -0.00273864253749621265032, 0.0013089921066773026803, 0.000775841526778089659703, 0.000110909476102006410909, 0.472577590124068298534e-5 };
-         static const T d[6] = { 1, 0.650694792327863647878, 0.161126734432670927888, 0.0180081468446110640846, 0.000767341359508884026192, -0.287636719206664167616e-9 };
+         static const T n[5] = { -0.00273864253749621265032L, 0.0013089921066773026803L, 0.000775841526778089659703L, 0.000110909476102006410909L, 0.472577590124068298534e-5L };
+         static const T d[6] = { 1, 0.650694792327863647878L, 0.161126734432670927888L, 0.0180081468446110640846L, 0.000767341359508884026192L, -0.287636719206664167616e-9L };
          static const float f0 = 0.5580308437F;
          r = tools::evaluate_polynomial(n, z - 5.5) / tools::evaluate_polynomial(d, z - 5.5);
          b = f0;
@@ -242,8 +268,8 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
       else if(z < 14)
       {
          // Worst case absolute error found: 1.458310511e-018
-         static const T n[5] = { -0.000995856413171151859346, 0.000320252910249376187643, 0.000129085624923151780987, 0.121577881306587454509e-4, 0.33293110334156470348e-6 };
-         static const T d[5] = { 1, 0.428034987547594828954, 0.0692297359775940896439, 0.00501515176145997560701, 0.00013733589151338416322 };
+         static const T n[5] = { -0.000995856413171151859346L, 0.000320252910249376187643L, 0.000129085624923151780987L, 0.121577881306587454509e-4L, 0.33293110334156470348e-6L };
+         static const T d[5] = { 1, 0.428034987547594828954L, 0.0692297359775940896439L, 0.00501515176145997560701L, 0.00013733589151338416322L };
          static const float f0 = 0.5617653728F;
          r = tools::evaluate_polynomial(n, z - 9) / tools::evaluate_polynomial(d, z - 9);
          b = f0;
@@ -251,8 +277,8 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
       else if(z < 21)
       {
          // Worst case absolute error found: 1.08182873e-019
-         static const T n[5] = { -0.000395463268432048215535, 0.91155953112698182321e-4, 0.237451641259281193813e-4, 0.145759953022524466816e-5, 0.259395907606548998142e-7 };
-         static const T d[5] = { 1, 0.281604524251560309285, 0.0298468482900092392397, 0.00141114575715338885136, 0.251128951158576064819e-4 };
+         static const T n[5] = { -0.000395463268432048215535L, 0.91155953112698182321e-4L, 0.237451641259281193813e-4L, 0.145759953022524466816e-5L, 0.259395907606548998142e-7L };
+         static const T d[5] = { 1, 0.281604524251560309285L, 0.0298468482900092392397L, 0.00141114575715338885136L, 0.251128951158576064819e-4L };
          static const float f0 = 0.5631566644F;
          r = tools::evaluate_polynomial(n, z - 14) / tools::evaluate_polynomial(d, z - 14);
          b = f0;
@@ -260,8 +286,8 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
       else
       {
          // Worst case absolute error found: 7.010370259e-018
-         static const T n[4] = { -0.000139182098873874523526, 0.395254617101737287826e-4, 0.376801239136290345387e-5, 0.629017242098850415839e-7 };
-         static const T d[4] = { 1, 0.15077096006891495258, 0.00756136203065884121997, 0.000126226197336507576933 };
+         static const T n[4] = { -0.000139182098873874523526L, 0.395254617101737287826e-4L, 0.376801239136290345387e-5L, 0.629017242098850415839e-7L };
+         static const T d[4] = { 1, 0.15077096006891495258L, 0.00756136203065884121997L, 0.000126226197336507576933L };
          static const float f0 = 0.5636912584F;
          r = tools::evaluate_polynomial(n, z - 21) / tools::evaluate_polynomial(d, z - 21);
          b = f0;
@@ -287,19 +313,19 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
 } // template <class T, class L>T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
 
 
-template <class T, class L>
-T erf_imp(T z, bool invert, const L& l, const mpl::int_<64>& t)
+template <class T, class Policy>
+T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
 {
    using namespace std;
 
    if(z < 0)
    {
       if(!invert)
-         return -erf_imp(-z, invert, l, t);
+         return -erf_imp(-z, invert, pol, t);
       else if(z < -0.5)
-         return 2 - erf_imp(-z, invert, l, t);
+         return 2 - erf_imp(-z, invert, pol, t);
       else
-         return 1 + erf_imp(-z, false, l, t);
+         return 1 + erf_imp(-z, false, pol, t);
    }
 
    T result;
@@ -475,19 +501,19 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<64>& t)
 } // template <class T, class L>T erf_imp(T z, bool invert, const L& l, const mpl::int_<64>& t)
 
 
-template <class T, class L>
-T erf_imp(T z, bool invert, const L& l, const mpl::int_<113>& t)
+template <class T, class Policy>
+T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
 {
    using namespace std;
 
    if(z < 0)
    {
       if(!invert)
-         return -erf_imp(-z, invert, l, t);
+         return -erf_imp(-z, invert, pol, t);
       else if(z < -0.5)
-         return 2 - erf_imp(-z, invert, l, t);
+         return 2 - erf_imp(-z, invert, pol, t);
       else
-         return 1 + erf_imp(-z, false, l, t);
+         return 1 + erf_imp(-z, false, pol, t);
    }
 
    T result;
@@ -710,24 +736,30 @@ T erf_imp(T z, bool invert, const L& l, const mpl::int_<113>& t)
 
 } // namespace detail
 
-template <class T>
-inline typename tools::promote_args<T>::type erf(T z)
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type erf(T z, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   typedef typename policy::precision<result_type, Policy>::type precision_type;
+   typedef typename policy::normalise<
+      Policy, 
+      policy::promote_float<false>, 
+      policy::promote_double<false>, 
+      policy::discrete_quantile<>,
+      policy::assert_undefined<> >::type forwarding_policy;
 
-   typedef typename mpl::if_c<
-      ::std::numeric_limits<result_type>::is_specialized == 0,
-      mpl::int_<0>,  // no numeric_limits, use generic solution
-      typename mpl::if_c<
-         ::std::numeric_limits<result_type>::digits <= 53,
+   typedef typename mpl::if_<
+      mpl::less_equal<precision_type, mpl::int_<0> >,
+      mpl::int_<0>,
+      typename mpl::if_<
+         mpl::less_equal<precision_type, mpl::int_<53> >,
          mpl::int_<53>,  // double
-         typename mpl::if_c<
-            ::std::numeric_limits<result_type>::digits <= 64,
+         typename mpl::if_<
+            mpl::less_equal<precision_type, mpl::int_<64> >,
             mpl::int_<64>, // 80-bit long double
-            typename mpl::if_c<
-               ::std::numeric_limits<result_type>::digits <= 113,
+            typename mpl::if_<
+               mpl::less_equal<precision_type, mpl::int_<113> >,
                mpl::int_<113>, // 128-bit long double
                mpl::int_<0> // too many bits, use generic version.
             >::type
@@ -735,43 +767,61 @@ inline typename tools::promote_args<T>::type erf(T z)
       >::type
    >::type tag_type;
 
-   return tools::checked_narrowing_cast<result_type>(detail::erf_imp(
+   return policy::checked_narrowing_cast<result_type, forwarding_policy>(detail::erf_imp(
       static_cast<value_type>(z),
       false,
-      evaluation_type(),
-      tag_type()), BOOST_CURRENT_FUNCTION);
+      forwarding_policy(),
+      tag_type()), "boost::math::erf<%1%>(%1%, %1%)");
+}
+
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type erfc(T z, const Policy& pol)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   typedef typename policy::precision<result_type, Policy>::type precision_type;
+   typedef typename policy::normalise<
+      Policy, 
+      policy::promote_float<false>, 
+      policy::promote_double<false>, 
+      policy::discrete_quantile<>,
+      policy::assert_undefined<> >::type forwarding_policy;
+
+   typedef typename mpl::if_<
+      mpl::less_equal<precision_type, mpl::int_<0> >,
+      mpl::int_<0>,
+      typename mpl::if_<
+         mpl::less_equal<precision_type, mpl::int_<53> >,
+         mpl::int_<53>,  // double
+         typename mpl::if_<
+            mpl::less_equal<precision_type, mpl::int_<64> >,
+            mpl::int_<64>, // 80-bit long double
+            typename mpl::if_<
+               mpl::less_equal<precision_type, mpl::int_<113> >,
+               mpl::int_<113>, // 128-bit long double
+               mpl::int_<0> // too many bits, use generic version.
+            >::type
+         >::type
+      >::type
+   >::type tag_type;
+
+   return policy::checked_narrowing_cast<result_type, forwarding_policy>(detail::erf_imp(
+      static_cast<value_type>(z),
+      true,
+      forwarding_policy(),
+      tag_type()), "boost::math::erfc<%1%>(%1%, %1%)");
+}
+
+template <class T>
+inline typename tools::promote_args<T>::type erf(T z)
+{
+   return boost::math::erf(z, policy::policy<>());
 }
 
 template <class T>
 inline typename tools::promote_args<T>::type erfc(T z)
 {
-   typedef typename tools::promote_args<T>::type result_type;
-   typedef typename lanczos::lanczos_traits<result_type>::value_type value_type;
-   typedef typename lanczos::lanczos_traits<result_type>::evaluation_type evaluation_type;
-
-   typedef typename mpl::if_c<
-      ::std::numeric_limits<result_type>::is_specialized == 0,
-      mpl::int_<0>,  // no numeric_limits, use generic solution
-      typename mpl::if_c<
-         ::std::numeric_limits<result_type>::digits <= 53,
-         mpl::int_<53>,  // double
-         typename mpl::if_c<
-            ::std::numeric_limits<result_type>::digits <= 64,
-            mpl::int_<64>, // 80-bit long double
-            typename mpl::if_c<
-               ::std::numeric_limits<result_type>::digits <= 113,
-               mpl::int_<113>, // 128-bit long double
-               mpl::int_<0> // too many bits, use generic version.
-            >::type
-         >::type
-      >::type
-   >::type tag_type;
-
-   return tools::checked_narrowing_cast<result_type>(detail::erf_imp(
-      static_cast<value_type>(z),
-      true,
-      evaluation_type(),
-      tag_type()), BOOST_CURRENT_FUNCTION);
+   return boost::math::erfc(z, policy::policy<>());
 }
 
 } // namespace math

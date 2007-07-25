@@ -11,6 +11,7 @@
 #include <boost/limits.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 
 #if defined(_MSC_VER) || defined(__BORLANDC__)
 #include <float.h>
@@ -53,8 +54,6 @@
 #endif
 
 namespace boost{ namespace math{
-
-#define BOOST_NO_MACRO_EXPAND /**/
 
 namespace detail{
 

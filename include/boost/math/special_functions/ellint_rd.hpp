@@ -13,8 +13,7 @@
 
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/error_handling.hpp>
-#include <boost/math/tools/evaluation_type.hpp>
+#include <boost/math/policy/error_handling.hpp>
 
 // Carlson's elliptic integral of the second kind
 // R_D(x, y, z) = R_J(x, y, z, z) = 1.5 * \int_{0}^{\infty} [(t+x)(t+y)]^{-1/2} (t+z)^{-3/2} dt
@@ -22,8 +21,8 @@
 
 namespace boost { namespace math { namespace detail{
 
-template <typename T>
-T ellint_rd_imp(T x, T y, T z)
+template <typename T, typename Policy>
+T ellint_rd_imp(T x, T y, T z, const Policy& pol)
 {
     T value, u, lambda, sigma, factor, tolerance;
     T X, Y, Z, EA, EB, EC, ED, EE, S1, S2;
@@ -32,25 +31,27 @@ T ellint_rd_imp(T x, T y, T z)
     using namespace std;
     using namespace boost::math::tools;
 
+    static const char* function = "boost::math::ellint_rd<%1%>(%1%,%1%,%1%)";
+
     if (x < 0)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Argument x must be >= 0, but got %1%", x);
+       return policy::raise_domain_error<T>(function,
+            "Argument x must be >= 0, but got %1%", x, pol);
     }
     if (y < 0)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Argument y must be >= 0, but got %1%", y);
+       return policy::raise_domain_error<T>(function,
+            "Argument y must be >= 0, but got %1%", y, pol);
     }
     if (z <= 0)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Argument z must be > 0, but got %1%", z);
+       return policy::raise_domain_error<T>(function,
+            "Argument z must be > 0, but got %1%", z, pol);
     }
     if (x + y == 0)
     {
-        return domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "At most one argument can be zero, but got, x + y = %1%", x+y);
+       return policy::raise_domain_error<T>(function,
+            "At most one argument can be zero, but got, x + y = %1%", x+y, pol);
     }
 
     // error scales as the 6th power of tolerance
@@ -78,7 +79,7 @@ T ellint_rd_imp(T x, T y, T z)
         z = (z + lambda) / 4;
     }
     // Check to see if we gave up too soon:
-    tools::check_series_iterations(BOOST_CURRENT_FUNCTION, k);
+    policy::check_series_iterations(function, k, pol);
 
     // Taylor series expansion to the 5th order
     EA = X * Y;
@@ -95,17 +96,24 @@ T ellint_rd_imp(T x, T y, T z)
 
 } // namespace detail
 
+template <class T1, class T2, class T3, class Policy>
+inline typename tools::promote_args<T1, T2, T3>::type 
+   ellint_rd(T1 x, T2 y, T3 z, const Policy& pol)
+{
+   typedef typename tools::promote_args<T1, T2, T3>::type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(
+      detail::ellint_rd_imp(
+         static_cast<value_type>(x),
+         static_cast<value_type>(y),
+         static_cast<value_type>(z), pol), "boost::math::ellint_rd<%1%>(%1%,%1%,%1%)");
+}
+
 template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type 
    ellint_rd(T1 x, T2 y, T3 z)
 {
-   typedef typename tools::promote_args<T1, T2, T3>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(
-      detail::ellint_rd_imp(
-         static_cast<value_type>(x),
-         static_cast<value_type>(y),
-         static_cast<value_type>(z)), BOOST_CURRENT_FUNCTION);
+   return ellint_rd(x, y, z, policy::policy<>());
 }
 
 }} // namespaces

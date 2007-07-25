@@ -16,6 +16,8 @@
 // Nor are these defined - several tests underflow by design.
 //#define BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
 //#define BOOST_MATH_THROW_ON_DENORM_ERROR
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#define BOOST_MATH_DISCRETE_QUANTILE_POLICY real
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
@@ -623,17 +625,17 @@ if(std::numeric_limits<RealType>::is_specialized)
    } // test for infinity using std::numeric_limits<>::infinity()
   else
   { // real_concept case, so check it throws rather than returning infinity.
-    BOOST_CHECK_THROW(
+    BOOST_CHECK_EQUAL(
     quantile(  // At P == 1 so k failures should be infinite.
     negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
     static_cast<RealType>(1)),
-    std::overflow_error );
+    boost::math::tools::max_value<RealType>() );
 
-    BOOST_CHECK_THROW(
+    BOOST_CHECK_EQUAL(
     quantile(complement(  // Q zero 1 so P == 1 < cdf(0) so should be exactly infinity.
     negative_binomial_distribution<RealType>(static_cast<RealType>(8), static_cast<RealType>(0.25)),
     static_cast<RealType>(0))),
-    std::overflow_error);
+    boost::math::tools::max_value<RealType>());
   }
   BOOST_CHECK( // Should work for built-in and real_concept.
   quantile(complement(  // Q very near to 1 so P nearly 1  < so should be large > 384.
@@ -718,6 +720,71 @@ if(std::numeric_limits<RealType>::is_specialized)
   static_cast<RealType>(0)), std::domain_error
   );
   // End of check throwing 'duff' out-of-domain values.
+
+#define T RealType
+#include "negative_binomial_quantile.ipp"
+
+  for(unsigned i = 0; i < negative_binomial_quantile_data.size(); ++i)
+  {
+     using namespace boost::math::policy;
+     typedef policy<discrete_quantile<boost::math::policy::real> > P1;
+     typedef policy<discrete_quantile<integer_below> > P2;
+     typedef policy<discrete_quantile<integer_above> > P3;
+     typedef policy<discrete_quantile<integer_outside> > P4;
+     typedef policy<discrete_quantile<integer_inside> > P5;
+     typedef policy<discrete_quantile<integer_nearest> > P6;
+     RealType tol = boost::math::tools::epsilon<RealType>() * 700;
+     if(!boost::is_floating_point<RealType>::value)
+        tol *= 10;  // no lanczos approximation implies less accuracy
+     //
+     // Check full real value first:
+     //
+     negative_binomial_distribution<RealType, P1> p1(negative_binomial_quantile_data[i][0], negative_binomial_quantile_data[i][1]);
+     RealType x = quantile(p1, negative_binomial_quantile_data[i][2]);
+     BOOST_CHECK_CLOSE_FRACTION(x, negative_binomial_quantile_data[i][3], tol);
+     x = quantile(complement(p1, negative_binomial_quantile_data[i][2]));
+     BOOST_CHECK_CLOSE_FRACTION(x, negative_binomial_quantile_data[i][4], tol);
+     //
+     // Now with round down to integer:
+     //
+     negative_binomial_distribution<RealType, P2> p2(negative_binomial_quantile_data[i][0], negative_binomial_quantile_data[i][1]);
+     x = quantile(p2, negative_binomial_quantile_data[i][2]);
+     BOOST_CHECK_EQUAL(x, floor(negative_binomial_quantile_data[i][3]));
+     x = quantile(complement(p2, negative_binomial_quantile_data[i][2]));
+     BOOST_CHECK_EQUAL(x, floor(negative_binomial_quantile_data[i][4]));
+     //
+     // Now with round up to integer:
+     //
+     negative_binomial_distribution<RealType, P3> p3(negative_binomial_quantile_data[i][0], negative_binomial_quantile_data[i][1]);
+     x = quantile(p3, negative_binomial_quantile_data[i][2]);
+     BOOST_CHECK_EQUAL(x, ceil(negative_binomial_quantile_data[i][3]));
+     x = quantile(complement(p3, negative_binomial_quantile_data[i][2]));
+     BOOST_CHECK_EQUAL(x, ceil(negative_binomial_quantile_data[i][4]));
+     //
+     // Now with round to integer "outside":
+     //
+     negative_binomial_distribution<RealType, P4> p4(negative_binomial_quantile_data[i][0], negative_binomial_quantile_data[i][1]);
+     x = quantile(p4, negative_binomial_quantile_data[i][2]);
+     BOOST_CHECK_EQUAL(x, negative_binomial_quantile_data[i][2] < 0.5f ? floor(negative_binomial_quantile_data[i][3]) : ceil(negative_binomial_quantile_data[i][3]));
+     x = quantile(complement(p4, negative_binomial_quantile_data[i][2]));
+     BOOST_CHECK_EQUAL(x, negative_binomial_quantile_data[i][2] < 0.5f ? ceil(negative_binomial_quantile_data[i][4]) : floor(negative_binomial_quantile_data[i][4]));
+     //
+     // Now with round to integer "inside":
+     //
+     negative_binomial_distribution<RealType, P5> p5(negative_binomial_quantile_data[i][0], negative_binomial_quantile_data[i][1]);
+     x = quantile(p5, negative_binomial_quantile_data[i][2]);
+     BOOST_CHECK_EQUAL(x, negative_binomial_quantile_data[i][2] < 0.5f ? ceil(negative_binomial_quantile_data[i][3]) : floor(negative_binomial_quantile_data[i][3]));
+     x = quantile(complement(p5, negative_binomial_quantile_data[i][2]));
+     BOOST_CHECK_EQUAL(x, negative_binomial_quantile_data[i][2] < 0.5f ? floor(negative_binomial_quantile_data[i][4]) : ceil(negative_binomial_quantile_data[i][4]));
+     //
+     // Now with round to nearest integer:
+     //
+     negative_binomial_distribution<RealType, P6> p6(negative_binomial_quantile_data[i][0], negative_binomial_quantile_data[i][1]);
+     x = quantile(p6, negative_binomial_quantile_data[i][2]);
+     BOOST_CHECK_EQUAL(x, floor(negative_binomial_quantile_data[i][3] + 0.5f));
+     x = quantile(complement(p6, negative_binomial_quantile_data[i][2]));
+     BOOST_CHECK_EQUAL(x, floor(negative_binomial_quantile_data[i][4] + 0.5f));
+  }
 
   return;
 } // template <class RealType> void test_spots(RealType) // Any floating-point type RealType.

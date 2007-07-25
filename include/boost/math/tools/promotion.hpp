@@ -26,6 +26,8 @@
 #include <boost/type_traits/remove_cv.hpp>// for boost::remove_cv
 // Boost Template meta programming:
 #include <boost/mpl/if.hpp> // for boost::mpl::if_c.
+#include <boost/mpl/and.hpp> // for boost::mpl::if_c.
+#include <boost/mpl/or.hpp> // for boost::mpl::if_c.
 
 namespace boost
 {
@@ -66,11 +68,11 @@ namespace boost
         typedef typename promote_arg<T1>::type T1P; // T1 perhaps promoted.
         typedef typename promote_arg<T2>::type T2P; // T2 perhaps promoted.
 
-        typedef typename mpl::if_c<
-           ::boost::is_floating_point<T1P>::value && ::boost::is_floating_point<T2P>::value, // both T1P and T2P are floating-point?
-          typename mpl::if_c< ::boost::is_same<long double, T1P>::value || ::boost::is_same<long double, T2P>::value, // either long double?
+        typedef typename mpl::if_<
+          typename mpl::and_<is_floating_point<T1P>, is_floating_point<T2P> >::type, // both T1P and T2P are floating-point?
+          typename mpl::if_< typename mpl::or_<is_same<long double, T1P>, is_same<long double, T2P> >::type, // either long double?
             long double, // then result type is long double.
-          typename mpl::if_c< ::boost::is_same<double, T1P>::value || ::boost::is_same<double, T2P>::value, // either double?
+            typename mpl::if_< typename mpl::or_<is_same<double, T1P>, is_same<double, T2P> >::type, // either double?
             double, // result type is double.
           float // else result type is float.
           >::type

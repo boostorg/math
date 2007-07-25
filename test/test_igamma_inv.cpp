@@ -12,8 +12,10 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
+#endif
 
 #include "test_gamma_hooks.hpp"
 #include "handle_test_result.hpp"
@@ -53,7 +55,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::tools::digits<double>() == boost::math::tools::digits<long double>())
+   if(boost::math::policy::digits<double, boost::math::policy::policy<> >() == boost::math::policy::digits<long double, boost::math::policy::policy<> >())
    {
       largest_type = "(long\\s+)?double";
    }
@@ -202,8 +204,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    // and also demonstrates that you can't in general round-trip these functions.
    // It is however a useful sanity check.
    //
-   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::tools::digits<value_type>()/2)) * 100;
-   if(boost::math::tools::digits<value_type>() < 50)
+   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policy::digits<value_type, boost::math::policy::policy<> >()/2)) * 100;
+   if(boost::math::policy::digits<value_type, boost::math::policy::policy<> >() < 50)
       precision = 1;   // 1% or two decimal digits, all we can hope for when the input is truncated to float
 
    for(unsigned i = 0; i < data.size(); ++i)
@@ -254,6 +256,7 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
 template <class T>
 void do_test_gamma_inv(const T& data, const char* type_name, const char* test_name)
 {
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -284,6 +287,7 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
       bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
       ret<value_type>(_1[3]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_q_inv", test_name);
+#endif
 }
 
 template <class T>
@@ -365,7 +369,9 @@ int test_main(int, char* [])
    test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double");
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 
    test_gamma(0.1F, "float");
@@ -373,7 +379,9 @@ int test_main(int, char* [])
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_gamma(0.1L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    test_gamma(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

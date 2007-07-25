@@ -13,8 +13,8 @@
 
 namespace boost{ namespace math{ namespace detail{
 
-template <class T>
-inline T powm1_imp(const T a, const T z)
+template <class T, class Policy>
+inline T powm1_imp(const T a, const T z, const Policy& pol)
 {
    using namespace std;
 
@@ -22,7 +22,7 @@ inline T powm1_imp(const T a, const T z)
    {
       T p = log(a) * z;
       if(fabs(p) < 2)
-         return boost::math::expm1(p);
+         return boost::math::expm1(p, pol);
       // otherwise fall though:
    }
    return pow(a, z) - 1;
@@ -35,7 +35,15 @@ inline typename tools::promote_args<T1, T2>::type
    powm1(const T1 a, const T2 z)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
-   return detail::powm1_imp(static_cast<result_type>(a), static_cast<result_type>(z));
+   return detail::powm1_imp(static_cast<result_type>(a), static_cast<result_type>(z), policy::policy<>());
+}
+
+template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
+   powm1(const T1 a, const T2 z, const Policy& pol)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   return detail::powm1_imp(static_cast<result_type>(a), static_cast<result_type>(z), pol);
 }
 
 } // namespace math

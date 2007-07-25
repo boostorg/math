@@ -27,8 +27,8 @@ namespace detail
 		 T a;
 	};
 
-template <class T>
-T cbrt_imp(T z)
+template <class T, class Policy>
+T cbrt_imp(T z, const Policy&)
 {
    using namespace std;
    int exp, sign(1);
@@ -44,17 +44,23 @@ T cbrt_imp(T z)
    T min = static_cast<T>(ldexp(0.5, exp/3));
    T max = static_cast<T>(ldexp(2.0, exp/3));
    T guess = static_cast<T>(ldexp(1.0, exp/3));
-   int digits = (tools::digits<T>()) / 2;
+   int digits = (policy::digits<T, Policy>()) / 2;
    return sign * tools::halley_iterate(detail::cbrt_functor<T>(z), guess, min, max, digits);
 }
 
 } // namespace detail
 
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type cbrt(T z, const Policy& pol)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   return detail::cbrt_imp(result_type(z), pol);
+}
+
 template <class T>
 inline typename tools::promote_args<T>::type cbrt(T z)
 {
-   typedef typename tools::promote_args<T>::type result_type;
-   return detail::cbrt_imp(result_type(z));
+   return cbrt(z, policy::policy<>());
 }
 
 } // namespace math

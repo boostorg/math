@@ -10,8 +10,9 @@
 #include <boost/mpl/if.hpp>
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
-#include <boost/math/tools/evaluation_type.hpp>
 #include <boost/math/tools/rational.hpp>
+#include <boost/math/policy/policy.hpp>
+#include <boost/mpl/less_equal.hpp>
 
 #include <limits.h>
 
@@ -32,8 +33,12 @@ namespace boost{ namespace math{ namespace lanczos{
 // Max experimental error (with arbitary precision arithmetic) 9.516e-12
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos6
+struct lanczos6 : public mpl::int_<35>
 {
+   //
+   // Produces slightly better than float precision when evaluated at
+   // double precision:
+   //
    template <class T>
    static T lanczos_sum(const T& z)
    {
@@ -124,8 +129,12 @@ struct lanczos6
 // Max experimental error (with arbitary precision arithmetic) 2.16676e-19
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos11
+struct lanczos11 : public mpl::int_<60>
 {
+   //
+   // Produces slightly better than double precision when evaluated at
+   // extended-double precision:
+   //
    template <class T>
    static T lanczos_sum(const T& z)
    {
@@ -246,8 +255,12 @@ struct lanczos11
 // Max experimental error (with arbitary precision arithmetic) 9.2213e-23
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos13
+struct lanczos13 : public mpl::int_<72>
 {
+   //
+   // Produces slightly better than extended-double precision when evaluated at
+   // higher precision:
+   //
    template <class T>
    static T lanczos_sum(const T& z)
    {
@@ -380,8 +393,12 @@ struct lanczos13
 // Max experimental error (with arbitary precision arithmetic) 2.9524e-38
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos22
+struct lanczos22 : public mpl::int_<120>
 {
+   //
+   // Produces slightly better than 128-bit long-double precision when 
+   // evaluated at higher precision:
+   //
    template <class T>
    static T lanczos_sum(const T& z)
    {
@@ -568,8 +585,11 @@ struct lanczos22
 // Max experimental error (with arbitary precision arithmetic) 8.111667e-8
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos6m24
+struct lanczos6m24 : public mpl::int_<24>
 {
+   //
+   // Use for float precision, when evaluated as a float:
+   //
    template <class T>
    static T lanczos_sum(const T& z)
    {
@@ -660,8 +680,11 @@ struct lanczos6m24
 // Max experimental error (with arbitary precision arithmetic) 1.196214e-17
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos13m53
+struct lanczos13m53 : public mpl::int_<53>
 {
+   //
+   // Use for double precision, when evaluated as a double:
+   //
    template <class T>
    static T lanczos_sum(const T& z)
    {
@@ -794,8 +817,11 @@ struct lanczos13m53
 // Max experimental error (with arbitary precision arithmetic) 2.7699e-26
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos17m64
+struct lanczos17m64 : public mpl::int_<64>
 {
+   //
+   // Use for extended-double precision, when evaluated as an extended-double:
+   //
    template <class T>
    static T lanczos_sum(const T& z)
    {
@@ -952,8 +978,11 @@ struct lanczos17m64
 // Max experimental error (with arbitary precision arithmetic) 1.0541e-38
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos24m113
+struct lanczos24m113 : public mpl::int_<113>
 {
+   //
+   // Use for long-double precision, when evaluated as an long-double:
+   //
    template <class T>
    static T lanczos_sum(const T& z)
    {
@@ -1151,109 +1180,45 @@ struct lanczos24m113
 //
 // placeholder for no lanczos info available:
 //
-struct undefined_lanczos
-{
-};
+struct undefined_lanczos : public mpl::int_<INT_MAX - 1> { };
 
-//
-// lanczos_traits, specialise this to point tgamma etc to
-// the necessary data for type T:
-//
-template <class T>
-struct lanczos_traits
-{
-   typedef T value_type;
-   // typedef undefined_lanczos evaluation_type;
-   typedef typename mpl::if_c<
-      (std::numeric_limits<T>::is_specialized == 0)
-      || (std::numeric_limits<T>::digits > 113),
-      undefined_lanczos,
-      typename mpl::if_c<
-         std::numeric_limits<T>::digits <= 24,
-         lanczos6m24,
-         typename mpl::if_c<
-            std::numeric_limits<T>::digits <= 53,
-            lanczos13m53,
-            typename mpl::if_c<
-               std::numeric_limits<T>::digits <= 64,
-               lanczos17m64,
-               lanczos24m113
-            >::type
-         >::type
-      >::type
-   >::type evaluation_type;
-};
-
+#if 0
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-#define BOOST_MATH_FLT_DIGITS std::numeric_limits<float>::digits
-#define BOOST_MATH_DBL_DIGITS std::numeric_limits<double>::digits
-#define BOOST_MATH_LDBL_DIGITS std::numeric_limits<long double>::digits
+#define BOOST_MATH_FLT_DIGITS ::std::numeric_limits<float>::digits
+#define BOOST_MATH_DBL_DIGITS ::std::numeric_limits<double>::digits
+#define BOOST_MATH_LDBL_DIGITS ::std::numeric_limits<long double>::digits
 #else
 #define BOOST_MATH_FLT_DIGITS FLT_MANT_DIG
 #define BOOST_MATH_DBL_DIGITS DBL_MANT_DIG
 #define BOOST_MATH_LDBL_DIGITS LDBL_MANT_DIG
 #endif
-
-template<>
-struct lanczos_traits<float>
-{
-   typedef boost::math::tools::evaluation<float>::type value_type;
-   typedef boost::mpl::if_c<
-      BOOST_MATH_DBL_DIGITS >= 40,
-      lanczos6, lanczos6m24>::type evaluation_type;
-};
-
-template<>
-struct lanczos_traits<double>
-{
-   typedef boost::math::tools::evaluation<double>::type value_type;
-#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   typedef boost::mpl::if_c<
-      BOOST_MATH_DBL_DIGITS >= 100,
-      lanczos13,
-      boost::mpl::if_c<
-         BOOST_MATH_DBL_DIGITS >= 64,
-         lanczos17m64,
-         boost::mpl::if_c<
-            BOOST_MATH_DBL_DIGITS >= 53,
-            lanczos13m53,
-            lanczos6m24>::type
-         >::type
-      >::type evaluation_type;
-#else
-   typedef boost::mpl::if_c<
-      BOOST_MATH_LDBL_DIGITS >= 100,
-      lanczos13,
-      boost::mpl::if_c<
-         BOOST_MATH_LDBL_DIGITS >= 64,
-         lanczos17m64,
-         boost::mpl::if_c<
-            BOOST_MATH_DBL_DIGITS >= 53,
-            lanczos13m53,
-            lanczos6m24>::type
-         >::type
-      >::type evaluation_type;
 #endif
-};
 
-template<>
-struct lanczos_traits<long double>
+typedef mpl::list<
+   lanczos6m24, 
+/*   lanczos6, */
+   lanczos13m53, 
+/*   lanczos13, */
+   lanczos17m64, 
+   lanczos24m113, 
+   lanczos22, 
+   undefined_lanczos> lanczos_list;
+
+template <class Real, class Policy>
+struct lanczos
 {
-   typedef long double value_type;
-   typedef
-      boost::mpl::if_c<
-         (BOOST_MATH_LDBL_DIGITS < 52),
-            lanczos6m24,
-         boost::mpl::if_c<
-            (BOOST_MATH_LDBL_DIGITS < 55),
-            lanczos13m53,
-            boost::mpl::if_c<
-               (BOOST_MATH_LDBL_DIGITS < 65),
-               lanczos17m64,
-               lanczos24m113
-            >::type
-         >::type
-      >::type evaluation_type;
+   typedef typename mpl::if_<
+      typename mpl::less_equal<
+         typename policy::precision<Real, Policy>::type,
+         mpl::int_<0>
+      >::type,
+      mpl::int_<INT_MAX - 2>,
+      typename policy::precision<Real, Policy>::type
+   >::type target_precision;
+
+   typedef typename mpl::deref<typename mpl::find_if<
+      lanczos_list, 
+      mpl::less_equal<target_precision, mpl::_1> >::type>::type type;
 };
 
 } // namespace lanczos

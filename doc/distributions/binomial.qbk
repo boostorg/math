@@ -302,22 +302,22 @@ the context of this distribution:
 [[__ccdf]
    [The probability of obtaining [*more than k successes] from n trials
    with success fraction p.  For example:
-   
+
 `cdf(complement(binomial(n, p), k))`]]
 [[__quantile]
    [The [*greatest] number of successes that may be observed from n trials
    with success fraction p, at probability P.  Note that the value returned
    is a real-number, and not an integer.  Depending on the use case you may
    want to take either the floor or ceiling of the result.  For example:
-   
-   
+
 `quantile(binomial(n, p), P)`]]
 [[__quantile_c]
    [The [*smallest] number of successes that may be observed from n trials
    with success fraction p, at probability P.  Note that the value returned
    is a real-number, and not an integer.  Depending on the use case you may
    want to take either the floor or ceiling of the result. For example:
-   ``quantile(complement(binomial(n, p), P))``]]
+
+`quantile(complement(binomial(n, p), P))``]]
 ]
 
 [h4 Examples]

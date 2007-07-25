@@ -14,7 +14,6 @@
 #include <cmath>
 #include <boost/config.hpp>
 #include <boost/math/tools/precision.hpp>
-#include <boost/math/tools/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
 // This is the inverse of the hyperbolic sine function.
@@ -94,6 +93,13 @@ namespace boost
 
         template<typename T>
         inline typename tools::promote_args<T>::type asinh(const T x)
+        {
+           typedef typename tools::promote_args<T>::type result_type;
+           return detail::asinh_imp(
+              static_cast<result_type>(x));
+        }
+        template<typename T, typename Policy>
+        inline typename tools::promote_args<T>::type asinh(const T x, const Policy&)
         {
            typedef typename tools::promote_args<T>::type result_type;
            return detail::asinh_imp(

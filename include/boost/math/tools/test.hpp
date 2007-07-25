@@ -10,6 +10,7 @@
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/test/test_tools.hpp>
+#include <stdexcept>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -177,9 +178,21 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
    {
       const row_type& row = a[i];
       value_type point;
-      try{
+      try
+      {
          point = test_func(row);
-      }catch(const std::exception& e)
+      }
+      catch(const std::underflow_error&)
+      {
+         point = 0;
+      }
+      catch(const std::overflow_error&)
+      {
+         point = std::numeric_limits<value_type>::has_infinity ? 
+            std::numeric_limits<value_type>::infinity()
+            : tools::max_value<value_type>();
+      }
+      catch(const std::exception& e)
       {
          std::cerr << e.what() << std::endl;
          print_row(row);

@@ -54,7 +54,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::tools::digits<double>() == boost::math::tools::digits<long double>())
+   if(boost::math::policy::digits<double, boost::math::policy::policy<> >() == boost::math::policy::digits<long double, boost::math::policy::policy<> >())
    {
       largest_type = "(long\\s+)?double";
    }
@@ -115,8 +115,8 @@ void test_inverses(const T& data)
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
-   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::tools::digits<value_type>()/2)) * 100;
-   if(boost::math::tools::digits<value_type>() < 50)
+   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policy::digits<value_type, boost::math::policy::policy<> >()/2)) * 100;
+   if(boost::math::policy::digits<value_type, boost::math::policy::policy<> >() < 50)
       precision = 1;   // 1% or two decimal digits, all we can hope for when the input is truncated
 
    for(unsigned i = 0; i < data.size(); ++i)
@@ -260,6 +260,8 @@ void test_beta(T, const char* name)
 int test_main(int, char* [])
 {
    expected_results();
+   boost::math::ibetac_invb(15.3268413543701171875f, 0.3082362115383148193359375f, 0.913384497165679931640625f);
+   boost::math::ibetac(15.3268413543701171875f, 21.432123240471673235001418f, 0.3082362115383148193359375f);
 #ifdef TEST_GSL
    gsl_set_error_handler_off();
 #endif

@@ -9,6 +9,7 @@
 
 #define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.

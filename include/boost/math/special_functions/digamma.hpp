@@ -7,10 +7,10 @@
 #define BOOST_MATH_SF_DIGAMMA_HPP
 
 #include <boost/math/tools/rational.hpp>
-#include <boost/math/tools/evaluation_type.hpp>
 #include <boost/math/tools/promotion.hpp>
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/mpl/comparison.hpp>
 
 namespace boost{
 namespace math{
@@ -338,8 +338,8 @@ inline T digamma_imp_1_2(T x, const mpl::int_<24>*)
    return result;
 }
 
-template <class T, class Tag>
-T digamma_imp(T x, const Tag* t)
+template <class T, class Tag, class Policy>
+T digamma_imp(T x, const Tag* t, const Policy& pol)
 {
    //
    // This handles reflection of negative arguments, and all our
@@ -367,7 +367,7 @@ T digamma_imp(T x, const Tag* t)
       //
       if(remainder == 0)
       {
-         return tools::pole_error<T>(BOOST_CURRENT_FUNCTION, 0, (1-x));
+         return policy::raise_pole_error<T>("boost::math::digamma<%1%>(%1%)", 0, (1-x), pol);
       }
       result = constants::pi<T>() / tan(constants::pi<T>() * remainder);
    }
@@ -404,31 +404,40 @@ T digamma_imp(T x, const Tag* t)
 
 } // namespace detail
 
-template <class T>
+template <class T, class Policy>
 inline typename tools::promote_args<T>::type 
-   digamma(T x)
+   digamma(T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   typedef typename mpl::if_c<
-      (std::numeric_limits<T>::digits == 0)
-      ||
-      (std::numeric_limits<T>::digits > 64),
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   typedef typename policy::precision<T, Policy>::type precision_type;
+   typedef typename mpl::if_<
+      mpl::or_<
+         mpl::less_equal<precision_type, mpl::int_<0> >,
+         mpl::greater<precision_type, mpl::int_<64> >
+      >,
       mpl::int_<0>,
-      typename mpl::if_c<
-         (std::numeric_limits<T>::digits < 25),
+      typename mpl::if_<
+         mpl::less<precision_type, mpl::int_<25> >,
          mpl::int_<24>,
-         typename mpl::if_c<
-            (std::numeric_limits<T>::digits < 54),
+         typename mpl::if_<
+            mpl::less<precision_type, mpl::int_<54> >,
             mpl::int_<53>,
             mpl::int_<64>
          >::type
       >::type
    >::type tag_type;
 
-   return tools::checked_narrowing_cast<result_type>(detail::digamma_imp(
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::digamma_imp(
       static_cast<value_type>(x),
-      static_cast<const tag_type*>(0)), BOOST_CURRENT_FUNCTION);
+      static_cast<const tag_type*>(0), pol), "boost::math::digamma<%1%>(%1%)");
+}
+
+template <class T>
+inline typename tools::promote_args<T>::type 
+   digamma(T x)
+{
+   return digamma(x, policy::policy<>());
 }
 
 } // namespace math

@@ -16,7 +16,7 @@
 // we could ever wish for!!!
 //
 
-template <class T, class L>
+template <class T, class Policy>
 struct ibeta_roots_1   // for first order algorithms
 {
    ibeta_roots_1(T _a, T _b, T t, bool inv = false) 
@@ -24,14 +24,14 @@ struct ibeta_roots_1   // for first order algorithms
 
    T operator()(const T& x)
    {
-      return boost::math::detail::ibeta_imp(a, b, x, L(), invert, true) - target;
+      return boost::math::detail::ibeta_imp(a, b, x, Policy(), invert, true) - target;
    }
 private:
    T a, b, target;
    bool invert;
 };
 
-template <class T, class L>
+template <class T, class Policy>
 struct ibeta_roots_2   // for second order algorithms
 {
    ibeta_roots_2(T _a, T _b, T t, bool inv = false) 
@@ -39,10 +39,11 @@ struct ibeta_roots_2   // for second order algorithms
 
    std::tr1::tuple<T, T> operator()(const T& x)
    {
-      T f = boost::math::detail::ibeta_imp(a, b, x, L(), invert, true) - target;
+      typedef typename boost::math::lanczos::lanczos<T, Policy>::type L;
+      T f = boost::math::detail::ibeta_imp(a, b, x, Policy(), invert, true) - target;
       T f1 = invert ? 
-               -boost::math::detail::ibeta_power_terms(b, a, 1 - x, x, L(), true) 
-               : boost::math::detail::ibeta_power_terms(a, b, x, 1 - x, L(), true);
+         -boost::math::detail::ibeta_power_terms(b, a, 1 - x, x, L(), true, Policy()) 
+               : boost::math::detail::ibeta_power_terms(a, b, x, 1 - x, L(), true, Policy());
       T y = 1 - x;
       if(y == 0)
          y = boost::math::tools::min_value<T>() * 8;
@@ -59,7 +60,7 @@ private:
    bool invert;
 };
 
-template <class T, class L>
+template <class T, class Policy>
 struct ibeta_roots_3   // for third order algorithms
 {
    ibeta_roots_3(T _a, T _b, T t, bool inv = false) 
@@ -67,10 +68,11 @@ struct ibeta_roots_3   // for third order algorithms
 
    std::tr1::tuple<T, T, T> operator()(const T& x)
    {
-      T f = boost::math::detail::ibeta_imp(a, b, x, L(), invert, true) - target;
+      typedef typename boost::math::lanczos::lanczos<T, Policy>::type L;
+      T f = boost::math::detail::ibeta_imp(a, b, x, Policy(), invert, true) - target;
       T f1 = invert ? 
-               -boost::math::detail::ibeta_power_terms(b, a, 1 - x, x, L(), true) 
-               : boost::math::detail::ibeta_power_terms(a, b, x, 1 - x, L(), true);
+               -boost::math::detail::ibeta_power_terms(b, a, 1 - x, x, L(), true, Policy()) 
+               : boost::math::detail::ibeta_power_terms(a, b, x, 1 - x, L(), true, Policy());
       T y = 1 - x;
       if(y == 0)
          y = boost::math::tools::min_value<T>() * 8;
@@ -92,7 +94,7 @@ private:
 
 double inverse_ibeta_bisect(double a, double b, double z)
 {
-   typedef boost::math::lanczos::lanczos13m53 L;
+   typedef boost::math::policy::policy<> pol;
    bool invert = false;
    int bits = std::numeric_limits<double>::digits;
 
@@ -119,12 +121,11 @@ double inverse_ibeta_bisect(double a, double b, double z)
    double min = 0;
    double max = 1;
    boost::math::tools::eps_tolerance<double> tol(precision);
-   return boost::math::tools::bisect(ibeta_roots_1<double, L>(a, b, z, invert), min, max, tol).first;
+   return boost::math::tools::bisect(ibeta_roots_1<double, pol>(a, b, z, invert), min, max, tol).first;
 }
 
 double inverse_ibeta_newton(double a, double b, double z)
 {
-   typedef boost::math::lanczos::lanczos13m53 L;
    double guess = 0.5;
    bool invert = false;
    int bits = std::numeric_limits<double>::digits;
@@ -151,12 +152,11 @@ double inverse_ibeta_newton(double a, double b, double z)
 
    double min = 0;
    double max = 1;
-   return boost::math::tools::newton_raphson_iterate(ibeta_roots_2<double, L>(a, b, z, invert), guess, min, max, precision);
+   return boost::math::tools::newton_raphson_iterate(ibeta_roots_2<double, boost::math::policy::policy<> >(a, b, z, invert), guess, min, max, precision);
 }
 
 double inverse_ibeta_halley(double a, double b, double z)
 {
-   typedef boost::math::lanczos::lanczos13m53 L;
    double guess = 0.5;
    bool invert = false;
    int bits = std::numeric_limits<double>::digits;
@@ -183,12 +183,11 @@ double inverse_ibeta_halley(double a, double b, double z)
 
    double min = 0;
    double max = 1;
-   return boost::math::tools::halley_iterate(ibeta_roots_3<double, L>(a, b, z, invert), guess, min, max, precision);
+   return boost::math::tools::halley_iterate(ibeta_roots_3<double, boost::math::policy::policy<> >(a, b, z, invert), guess, min, max, precision);
 }
 
 double inverse_ibeta_schroeder(double a, double b, double z)
 {
-   typedef boost::math::lanczos::lanczos13m53 L;
    double guess = 0.5;
    bool invert = false;
    int bits = std::numeric_limits<double>::digits;
@@ -215,7 +214,7 @@ double inverse_ibeta_schroeder(double a, double b, double z)
 
    double min = 0;
    double max = 1;
-   return boost::math::tools::schroeder_iterate(ibeta_roots_3<double, L>(a, b, z, invert), guess, min, max, precision);
+   return boost::math::tools::schroeder_iterate(ibeta_roots_3<double, boost::math::policy::policy<> >(a, b, z, invert), guess, min, max, precision);
 }
 
 
@@ -226,8 +225,8 @@ void test_inverses(const T& data)
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
-   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::tools::digits<value_type>()/2)) * 100;
-   if(boost::math::tools::digits<value_type>() < 50)
+   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policy::digits<value_type, boost::math::policy::policy<> >()/2)) * 100;
+   if(boost::math::policy::digits<value_type, boost::math::policy::policy<> >() < 50)
       precision = 1;   // 1% or two decimal digits, all we can hope for when the input is truncated
 
    for(unsigned i = 0; i < data.size(); ++i)

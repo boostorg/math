@@ -9,6 +9,10 @@
 #  pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
 #  pragma warning(disable: 4245) // int/unsigned int conversion
 #endif
+//
+// Return infinities not exceptions:
+//
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
@@ -206,7 +210,7 @@ void test_spots(T)
       ::boost::math::falling_factorial(static_cast<T>(30.75), 30),
       static_cast<T>(naive_falling_factorial(30.75L, 30)),
       tolerance * 3);
-   if(boost::math::tools::digits<T>() > 50)
+   if(boost::math::policy::digits<T, boost::math::policy::policy<> >() > 50)
    {
       BOOST_CHECK_CLOSE(
          ::boost::math::falling_factorial(static_cast<T>(-30.75L), 30),

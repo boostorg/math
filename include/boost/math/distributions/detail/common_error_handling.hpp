@@ -8,7 +8,7 @@
 #ifndef BOOST_MATH_DISTRIBUTIONS_COMMON_ERROR_HANDLING_HPP
 #define BOOST_MATH_DISTRIBUTIONS_COMMON_ERROR_HANDLING_HPP
 
-#include <boost/math/tools/error_handling.hpp>
+#include <boost/math/policy/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #ifdef BOOST_MSVC
@@ -18,43 +18,44 @@
 
 namespace boost{ namespace math{ namespace detail{
 
-template <class RealType>
-inline bool check_probability(const char* function, RealType const& prob, RealType* result)
+template <class RealType, class Policy>
+inline bool check_probability(const char* function, RealType const& prob, RealType* result, const Policy& pol)
 {
    if((prob < 0) || (prob > 1) || !(boost::math::isfinite)(prob))
    {
-      *result = tools::domain_error<RealType>(
+      *result = policy::raise_domain_error<RealType>(
          function, 
-         "Probability argument is %1%, but must be >= 0 and <= 1 !", prob);
+         "Probability argument is %1%, but must be >= 0 and <= 1 !", prob, pol);
       return false;
    }
    return true;
 }
 
-template <class RealType>
-inline bool check_df(const char* function, RealType const& df, RealType* result)
+template <class RealType, class Policy>
+inline bool check_df(const char* function, RealType const& df, RealType* result, const Policy& pol)
 {
    if((df <= 0) || !(boost::math::isfinite)(df))
    {
-      *result = tools::domain_error<RealType>(
+      *result = policy::raise_domain_error<RealType>(
          function, 
-         "Degrees of freedom argument is %1%, but must be > 0 !", df);
+         "Degrees of freedom argument is %1%, but must be > 0 !", df, pol);
       return false;
    }
    return true;
 }
 
-template <class RealType>
+template <class RealType, class Policy>
 inline bool check_scale(
       const char* function,
       RealType scale,
-      RealType* result)
+      RealType* result,
+      const Policy& pol)
 {
    if((scale < 0) || !(boost::math::isfinite)(scale))
    {
-      *result = tools::domain_error<RealType>(
+      *result = policy::raise_domain_error<RealType>(
          function, 
-         "Scale parameter is %1%, but must be > 0 !", scale);
+         "Scale parameter is %1%, but must be > 0 !", scale, pol);
       return false;
    }
    return true;

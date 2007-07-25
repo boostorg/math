@@ -3,6 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -46,7 +47,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::tools::digits<double>() == boost::math::tools::digits<long double>())
+   if(boost::math::policy::digits<double, boost::math::policy::policy<> >() == boost::math::policy::digits<long double, boost::math::policy::policy<> >())
    {
       largest_type = "(long\\s+)?double|real_concept";
    }

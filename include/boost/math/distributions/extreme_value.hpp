@@ -6,6 +6,7 @@
 #ifndef BOOST_STATS_EXTREME_VALUE_HPP
 #define BOOST_STATS_EXTREME_VALUE_HPP
 
+#include <boost/math/distributions/fwd.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
@@ -33,14 +34,14 @@ namespace detail{
 //
 // Error check:
 //
-template <class RealType>
-inline bool verify_scale_b(const char* function, RealType b, RealType* presult)
+template <class RealType, class Policy>
+inline bool verify_scale_b(const char* function, RealType b, RealType* presult, const Policy& pol)
 {
    if(b <= 0)
    {
-      *presult = tools::domain_error<RealType>(
+      *presult = policy::raise_domain_error<RealType>(
          function,
-         "The scale parameter \"b\" must be > 0, but was: %1%.", b);
+         "The scale parameter \"b\" must be > 0, but was: %1%.", b, pol);
       return false;
    }
    return true;
@@ -48,17 +49,18 @@ inline bool verify_scale_b(const char* function, RealType b, RealType* presult)
 
 } // namespace detail
 
-template <class RealType = double>
+template <class RealType = double, class Policy = policy::policy<> >
 class extreme_value_distribution
 {
 public:
    typedef RealType value_type;
+   typedef Policy policy_type;
 
    extreme_value_distribution(RealType a = 0, RealType b = 1)
       : m_a(a), m_b(b)
    {
       RealType err;
-      detail::verify_scale_b(BOOST_CURRENT_FUNCTION, b, &err);
+      detail::verify_scale_b("boost::math::extreme_value_distribution<%1%>::extreme_value_distribution", b, &err, Policy());
    } // extreme_value_distribution
 
    RealType location()const { return m_a; }
@@ -70,44 +72,44 @@ private:
 
 typedef extreme_value_distribution<double> extreme_value;
 
-template <class RealType>
-inline const std::pair<RealType, RealType> range(const extreme_value_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline const std::pair<RealType, RealType> range(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
 
-template <class RealType>
-inline const std::pair<RealType, RealType> support(const extreme_value_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline const std::pair<RealType, RealType> support(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
 	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 	using boost::math::tools::max_value;
 	return std::pair<RealType, RealType>(-max_value<RealType>(),  max_value<RealType>());
 }
 
-template <class RealType>
-inline RealType pdf(const extreme_value_distribution<RealType>& dist, const RealType& x)
+template <class RealType, class Policy>
+inline RealType pdf(const extreme_value_distribution<RealType, Policy>& dist, const RealType& x)
 {
    using namespace std; // for ADL of std functions
 
    RealType a = dist.location();
    RealType b = dist.scale();
    RealType result;
-   if(0 == detail::verify_scale_b(BOOST_CURRENT_FUNCTION, b, &result))
+   if(0 == detail::verify_scale_b("boost::math::pdf(const extreme_value_distribution<%1%>&, %1%)", b, &result, Policy()))
       return result;
    result = exp((a-x)/b) * exp(-exp((a-x)/b)) / b;
    return result;
 } // pdf
 
-template <class RealType>
-inline RealType cdf(const extreme_value_distribution<RealType>& dist, const RealType& x)
+template <class RealType, class Policy>
+inline RealType cdf(const extreme_value_distribution<RealType, Policy>& dist, const RealType& x)
 {
    using namespace std; // for ADL of std functions
 
    RealType a = dist.location();
    RealType b = dist.scale();
    RealType result;
-   if(0 == detail::verify_scale_b(BOOST_CURRENT_FUNCTION, b, &result))
+   if(0 == detail::verify_scale_b("boost::math::cdf(const extreme_value_distribution<%1%>&, %1%)", b, &result, Policy()))
       return result;
 
    result = exp(-exp((a-x)/b));
@@ -115,107 +117,111 @@ inline RealType cdf(const extreme_value_distribution<RealType>& dist, const Real
    return result;
 } // cdf
 
-template <class RealType>
-RealType quantile(const extreme_value_distribution<RealType>& dist, const RealType& p)
+template <class RealType, class Policy>
+RealType quantile(const extreme_value_distribution<RealType, Policy>& dist, const RealType& p)
 {
    using namespace std; // for ADL of std functions
+
+   static const char* function = "boost::math::quantile(const extreme_value_distribution<%1%>&, %1%)";
 
    RealType a = dist.location();
    RealType b = dist.scale();
    RealType result;
-   if(0 == detail::verify_scale_b(BOOST_CURRENT_FUNCTION, b, &result))
+   if(0 == detail::verify_scale_b(function, b, &result, Policy()))
       return result;
-   if(0 == detail::check_probability(BOOST_CURRENT_FUNCTION, p, &result))
+   if(0 == detail::check_probability(function, p, &result, Policy()))
       return result;
 
    if(p == 0)
-      return -tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<RealType>(function, 0, Policy());
    if(p == 1)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
+      return policy::raise_overflow_error<RealType>(function, 0, Policy());
 
    result = a - log(-log(p)) * b;
 
    return result;
 } // quantile
 
-template <class RealType>
-inline RealType cdf(const complemented2_type<extreme_value_distribution<RealType>, RealType>& c)
+template <class RealType, class Policy>
+inline RealType cdf(const complemented2_type<extreme_value_distribution<RealType, Policy>, RealType>& c)
 {
    using namespace std; // for ADL of std functions
 
    RealType a = c.dist.location();
    RealType b = c.dist.scale();
    RealType result;
-   if(0 == detail::verify_scale_b(BOOST_CURRENT_FUNCTION, b, &result))
+   if(0 == detail::verify_scale_b("boost::math::cdf(const extreme_value_distribution<%1%>&, %1%)", b, &result, Policy()))
       return result;
 
-   result = -boost::math::expm1(-exp((a-c.param)/b));
+   result = -boost::math::expm1(-exp((a-c.param)/b), Policy());
 
    return result;
 }
 
-template <class RealType>
-RealType quantile(const complemented2_type<extreme_value_distribution<RealType>, RealType>& c)
+template <class RealType, class Policy>
+RealType quantile(const complemented2_type<extreme_value_distribution<RealType, Policy>, RealType>& c)
 {
    using namespace std; // for ADL of std functions
+
+   static const char* function = "boost::math::quantile(const extreme_value_distribution<%1%>&, %1%)";
 
    RealType a = c.dist.location();
    RealType b = c.dist.scale();
    RealType q = c.param;
    RealType result;
-   if(0 == detail::verify_scale_b(BOOST_CURRENT_FUNCTION, b, &result))
+   if(0 == detail::verify_scale_b(function, b, &result, Policy()))
       return result;
-   if(0 == detail::check_probability(BOOST_CURRENT_FUNCTION, q, &result))
+   if(0 == detail::check_probability(function, q, &result, Policy()))
       return result;
 
    if(q == 0)
-      return tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
+      return policy::raise_overflow_error<RealType>(function, 0, Policy());
    if(q == 1)
-      return -tools::overflow_error<RealType>(BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<RealType>(function, 0, Policy());
 
-   result = a - log(-boost::math::log1p(-q)) * b;
+   result = a - log(-boost::math::log1p(-q, Policy())) * b;
 
    return result;
 }
 
-template <class RealType>
-inline RealType mean(const extreme_value_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType mean(const extreme_value_distribution<RealType, Policy>& dist)
 {
    RealType a = dist.location();
    RealType b = dist.scale();
    RealType result;
-   if(0 == detail::verify_scale_b(BOOST_CURRENT_FUNCTION, b, &result))
+   if(0 == detail::verify_scale_b("boost::math::mean(const extreme_value_distribution<%1%>&)", b, &result, Policy()))
       return result;
    return a + constants::euler<RealType>() * b;
 }
 
-template <class RealType>
-inline RealType standard_deviation(const extreme_value_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType standard_deviation(const extreme_value_distribution<RealType, Policy>& dist)
 {
    using namespace std; // for ADL of std functions.
 
    RealType b = dist.scale();
    RealType result;
-   if(0 == detail::verify_scale_b(BOOST_CURRENT_FUNCTION, b, &result))
+   if(0 == detail::verify_scale_b("boost::math::standard_deviation(const extreme_value_distribution<%1%>&)", b, &result, Policy()))
       return result;
    return constants::pi<RealType>() * b / sqrt(static_cast<RealType>(6));
 }
 
-template <class RealType>
-inline RealType mode(const extreme_value_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType mode(const extreme_value_distribution<RealType, Policy>& dist)
 {
    return dist.location();
 }
 
-template <class RealType>
-inline RealType median(const extreme_value_distribution<RealType>& dist)
+template <class RealType, class Policy>
+inline RealType median(const extreme_value_distribution<RealType, Policy>& dist)
 {
   using constants::ln_ln_two;
    return dist.location() - dist.scale() * ln_ln_two<RealType>();
 }
 
-template <class RealType>
-inline RealType skewness(const extreme_value_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline RealType skewness(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 {
    //
    // This is 12 * sqrt(6) * zeta(3) / pi^3:
@@ -224,15 +230,15 @@ inline RealType skewness(const extreme_value_distribution<RealType>& /*dist*/)
    return static_cast<RealType>(1.1395470994046486574927930193898461120875997958366L);
 }
 
-template <class RealType>
-inline RealType kurtosis(const extreme_value_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline RealType kurtosis(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 {
    // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
    return RealType(27) / 5;
 }
 
-template <class RealType>
-inline RealType kurtosis_excess(const extreme_value_distribution<RealType>& /*dist*/)
+template <class RealType, class Policy>
+inline RealType kurtosis_excess(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 {
    // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
    return RealType(12) / 5;

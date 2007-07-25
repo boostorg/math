@@ -17,8 +17,8 @@
 
 namespace boost { namespace math { namespace detail{
 
-template <typename T>
-T bessel_jn(int n, T x)
+template <typename T, typename Policy>
+T bessel_jn(int n, T x, const Policy& pol)
 {
     T value(0), factor, current, prev, next;
 
@@ -62,7 +62,7 @@ T bessel_jn(int n, T x)
     {
         T fn; int s;                        // fn = J_(n+1) / J_n
         // |x| <= n, fast convergence for continued fraction CF1
-        boost::math::detail::CF1_jy(static_cast<T>(n), x, &fn, &s);
+        boost::math::detail::CF1_jy(static_cast<T>(n), x, &fn, &s, pol);
         // tiny initial value to prevent overflow
         T init = sqrt(tools::min_value<T>());
         prev = fn * init;

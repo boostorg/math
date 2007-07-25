@@ -100,6 +100,7 @@ int main(int argc, const char** argv)
             if(!found)
             {
                std::cerr << "Unknown option: " << argv[i] << std::endl;
+               show_help();
                return 1;
             }
          }

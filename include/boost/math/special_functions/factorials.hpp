@@ -23,19 +23,26 @@
 namespace boost { namespace math
 {
 
-template <class T>
-inline T factorial(unsigned i)
+template <class T, class Policy>
+inline T factorial(unsigned i, const Policy& pol)
 {
    using namespace std; // Aid ADL for floor.
 
    if(i <= max_factorial<T>::value)
       return unchecked_factorial<T>(i);
-   T result = boost::math::tgamma(static_cast<T>(i+1));
+   T result = boost::math::tgamma(static_cast<T>(i+1), pol);
    if(result > tools::max_value<T>())
       return result; // Overflowed value! (But tgamma will have signalled the error already).
-   return floor(result + 0.5);
+   return floor(result + 0.5f);
 }
 
+template <class T>
+inline T factorial(unsigned i)
+{
+   return factorial<T>(i, policy::policy<>());
+}
+/*
+// Can't have these in a policy enabled world?
 template<>
 inline float factorial<float>(unsigned i)
 {
@@ -51,9 +58,9 @@ inline double factorial<double>(unsigned i)
       return unchecked_factorial<double>(i);
    return tools::overflow_error<double>(BOOST_CURRENT_FUNCTION);
 }
-
-template <class T>
-T double_factorial(unsigned i)
+*/
+template <class T, class Policy>
+T double_factorial(unsigned i, const Policy& pol)
 {
    using namespace std;  // ADL lookup of std names
    if(i & 1)
@@ -68,7 +75,7 @@ T double_factorial(unsigned i)
       // Fallthrough: i is too large to use table lookup, try the 
       // gamma function instead.
       //
-      T result = boost::math::tgamma(static_cast<T>(i) / 2 + 1) / sqrt(constants::pi<T>());
+      T result = boost::math::tgamma(static_cast<T>(i) / 2 + 1, pol) / sqrt(constants::pi<T>());
       if(ldexp(tools::max_value<T>(), -static_cast<int>(i+1) / 2) > result)
          return ceil(result * ldexp(T(1), (i+1) / 2) - 0.5f);
    }
@@ -76,20 +83,26 @@ T double_factorial(unsigned i)
    {
       // even i:
       unsigned n = i / 2;
-      T result = factorial<T>(n);
+      T result = factorial<T>(n, pol);
       if(ldexp(tools::max_value<T>(), -(int)n) > result)
          return result * ldexp(T(1), (int)n);
    }
    //
    // If we fall through to here then the result is infinite:
    //
-   return tools::overflow_error<T>(BOOST_CURRENT_FUNCTION);
+   return policy::raise_overflow_error<T>("boost::math::double_factorial<%1%>(unsigned)", 0, pol);
+}
+
+template <class T>
+inline T double_factorial(unsigned i)
+{
+   return double_factorial<T>(i, policy::policy<>());
 }
 
 namespace detail{
 
-template <class T>
-T rising_factorial_imp(T x, int n)
+template <class T, class Policy>
+T rising_factorial_imp(T x, int n, const Policy& pol)
 {
    if(x < 0)
    {
@@ -108,7 +121,7 @@ T rising_factorial_imp(T x, int n)
          n = -n;
          inv = true;
       }
-      T result = ((n&1) ? -1 : 1) * falling_factorial(-x, n);
+      T result = ((n&1) ? -1 : 1) * falling_factorial(-x, n, pol);
       if(inv)
          result = 1 / result;
       return result;
@@ -120,11 +133,11 @@ T rising_factorial_imp(T x, int n)
    // tgamma_delta_ratio is alreay optimised for that
    // use case:
    //
-   return 1 / tgamma_delta_ratio(x, static_cast<T>(n));
+   return 1 / tgamma_delta_ratio(x, static_cast<T>(n), pol);
 }
 
-template <class T>
-inline T falling_factorial_imp(T x, unsigned n)
+template <class T, class Policy>
+inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
 {
    using namespace std; // ADL of std names
    if(x == 0)
@@ -135,7 +148,7 @@ inline T falling_factorial_imp(T x, unsigned n)
       // For x < 0 we really have a rising factorial
       // modulo a possible change of sign:
       //
-      return (n&1 ? -1 : 1) * rising_factorial(-x, n);
+      return (n&1 ? -1 : 1) * rising_factorial(-x, n, pol);
    }
    if(n == 0)
       return 1;
@@ -149,12 +162,12 @@ inline T falling_factorial_imp(T x, unsigned n)
       unsigned n2 = tools::real_cast<unsigned>(floor(xp1));
       if(n2 == xp1)
          return 0;
-      T result = tgamma_delta_ratio(xp1, -static_cast<T>(n2));
+      T result = tgamma_delta_ratio(xp1, -static_cast<T>(n2), pol);
       x -= n2;
       result *= x;
       ++n2;
       if(n2 < n)
-         result *= falling_factorial(x - 1, n - n2);
+         result *= falling_factorial(x - 1, n - n2, pol);
       return result;
    }
    //
@@ -164,7 +177,7 @@ inline T falling_factorial_imp(T x, unsigned n)
    // because tgamma_delta_ratio is alreay optimised
    // for that use case:
    //
-   return tgamma_delta_ratio(x + 1, -static_cast<T>(n));
+   return tgamma_delta_ratio(x + 1, -static_cast<T>(n), pol);
 }
 
 } // namespace detail
@@ -175,7 +188,16 @@ inline typename tools::promote_args<RT>::type
 {
    typedef typename tools::promote_args<RT>::type result_type;
    return detail::falling_factorial_imp(
-      static_cast<result_type>(x), n);
+      static_cast<result_type>(x), n, policy::policy<>());
+}
+
+template <class RT, class Policy>
+inline typename tools::promote_args<RT>::type 
+   falling_factorial(RT x, unsigned n, const Policy& pol)
+{
+   typedef typename tools::promote_args<RT>::type result_type;
+   return detail::falling_factorial_imp(
+      static_cast<result_type>(x), n, pol);
 }
 
 template <class RT>
@@ -184,7 +206,16 @@ inline typename tools::promote_args<RT>::type
 {
    typedef typename tools::promote_args<RT>::type result_type;
    return detail::rising_factorial_imp(
-      static_cast<result_type>(x), n);
+      static_cast<result_type>(x), n, policy::policy<>());
+}
+
+template <class RT, class Policy>
+inline typename tools::promote_args<RT>::type 
+   rising_factorial(RT x, unsigned n, const Policy& pol)
+{
+   typedef typename tools::promote_args<RT>::type result_type;
+   return detail::rising_factorial_imp(
+      static_cast<result_type>(x), n, pol);
 }
 
 } // namespace math

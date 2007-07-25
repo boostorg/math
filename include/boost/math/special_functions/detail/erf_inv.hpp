@@ -13,8 +13,8 @@ namespace detail{
 // The inverse erf and erfc functions share a common implementation,
 // this version is for 80-bit long double's and smaller:
 //
-template <class T>
-T erf_inv_imp(const T& p, const T& q, const boost::mpl::int_<64>*)
+template <class T, class Policy>
+T erf_inv_imp(const T& p, const T& q, const Policy&, const boost::mpl::int_<64>*)
 {
    using namespace std; // for ADL of std names.
 
@@ -270,7 +270,7 @@ T erf_inv_imp(const T& p, const T& q, const boost::mpl::int_<64>*)
    return result;
 }
 
-template <class T>
+template <class T, class Policy>
 struct erf_roots
 {
    std::tr1::tuple<T,T,T> operator()(const T& guess)
@@ -278,7 +278,7 @@ struct erf_roots
       using namespace std;
       T derivative = sign * (2 / sqrt(constants::pi<T>())) * exp(-(guess * guess));
       T derivative2 = -2 * guess * derivative;
-      return std::tr1::make_tuple(((sign > 0) ? boost::math::erf(guess) : boost::math::erfc(guess)) - target, derivative, derivative2);
+      return std::tr1::make_tuple(((sign > 0) ? boost::math::erf(guess, Policy()) : boost::math::erfc(guess, Policy())) - target, derivative, derivative2);
    }
    erf_roots(T z, int s) : target(z), sign(s) {}
 private:
@@ -286,27 +286,27 @@ private:
    int sign;
 };
 
-template <class T>
-T erf_inv_imp(const T& p, const T& q, const boost::mpl::int_<0>*)
+template <class T, class Policy>
+T erf_inv_imp(const T& p, const T& q, const Policy& pol, const boost::mpl::int_<0>*)
 {
    //
    // Generic version, get a guess that's accurate to 64-bits (10^-19)
    //
-   T guess = erf_inv_imp(p, q, static_cast<mpl::int_<64> const*>(0));
+   T guess = erf_inv_imp(p, q, pol, static_cast<mpl::int_<64> const*>(0));
    T result;
    //
    // If T has more bit's than 64 in it's mantissa then we need to iterate,
    // otherwise we can just return the result:
    //
-   if(tools::digits<T>() > 64)
+   if(policy::digits<T, Policy>() > 64)
    {
       if(p <= 0.5)
       {
-         result = tools::halley_iterate(detail::erf_roots<typename remove_cv<T>::type>(p, 1), guess, static_cast<T>(0), tools::max_value<T>(), (tools::digits<T>() * 2) / 3);
+         result = tools::halley_iterate(detail::erf_roots<typename remove_cv<T>::type, Policy>(p, 1), guess, static_cast<T>(0), tools::max_value<T>(), (policy::digits<T, Policy>() * 2) / 3);
       }
       else
       {
-         result = tools::halley_iterate(detail::erf_roots<typename remove_cv<T>::type>(q, -1), guess, static_cast<T>(0), tools::max_value<T>(), (tools::digits<T>() * 2) / 3);
+         result = tools::halley_iterate(detail::erf_roots<typename remove_cv<T>::type, Policy>(q, -1), guess, static_cast<T>(0), tools::max_value<T>(), (policy::digits<T, Policy>() * 2) / 3);
       }
    }
    else
@@ -318,19 +318,20 @@ T erf_inv_imp(const T& p, const T& q, const boost::mpl::int_<0>*)
 
 } // namespace detail
 
-template <class T>
-typename tools::promote_args<T>::type erfc_inv(T z)
+template <class T, class Policy>
+typename tools::promote_args<T>::type erfc_inv(T z, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    //
    // Begin by testing for domain errors, and other special cases:
    //
+   static const char* function = "boost::math::erfc_inv<%1%>(%1%, %1%)";
    if((z < 0) || (z > 2))
-      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "Argument outside range [0,2] in inverse erfc function (got p=%1%).", z);
+      policy::raise_domain_error<result_type>(function, "Argument outside range [0,2] in inverse erfc function (got p=%1%).", z, pol);
    if(z == 0)
-      return tools::overflow_error<result_type>(BOOST_CURRENT_FUNCTION);
+      return policy::raise_overflow_error<result_type>(function, 0, pol);
    if(z == 2)
-      return -tools::overflow_error<result_type>(BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<result_type>(function, 0, pol);
    //
    // Normalise the input, so it's in the range [0,1], we will
    // negate the result if z is outside that range.  This is a simple
@@ -353,38 +354,45 @@ typename tools::promote_args<T>::type erfc_inv(T z)
    // A bit of meta-programming to figure out which implementation
    // to use, based on the number of bits in the mantissa of T:
    //
-   typedef typename mpl::if_c<
-      std::numeric_limits<result_type>::is_specialized
-      &&
-      (std::numeric_limits<result_type>::digits <= 64),
-      mpl::int_<64>,
-      mpl::int_<0>
+   typedef typename policy::precision<result_type, Policy>::type precision_type;
+   typedef typename mpl::if_<
+      mpl::or_<mpl::less_equal<precision_type, mpl::int_<0> >, mpl::greater<precision_type, mpl::int_<64> > >,
+      mpl::int_<0>,
+      mpl::int_<64>
    >::type tag_type;
    //
    // Likewise use internal promotion, so we evaluate at a higher
    // precision internally if it's appropriate:
    //
-   typedef typename tools::evaluation<result_type>::type eval_type;
+   typedef typename policy::evaluation<result_type, Policy>::type eval_type;
+   typedef typename policy::normalise<
+      Policy, 
+      policy::promote_float<false>, 
+      policy::promote_double<false>, 
+      policy::discrete_quantile<>,
+      policy::assert_undefined<> >::type forwarding_policy;
+
    //
    // And get the result, negating where required:
    //
-   return s * tools::checked_narrowing_cast<result_type>(
-      detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), static_cast<tag_type const*>(0)), BOOST_CURRENT_FUNCTION);
+   return s * policy::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), forwarding_policy(), static_cast<tag_type const*>(0)), function);
 }
 
-template <class T>
-typename tools::promote_args<T>::type erf_inv(T z)
+template <class T, class Policy>
+typename tools::promote_args<T>::type erf_inv(T z, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    //
    // Begin by testing for domain errors, and other special cases:
    //
+   static const char* function = "boost::math::erf_inv<%1%>(%1%, %1%)";
    if((z < -1) || (z > 1))
-      tools::domain_error<result_type>(BOOST_CURRENT_FUNCTION, "Argument outside range [-1, 1] in inverse erf function (got p=%1%).", z);
+      policy::raise_domain_error<result_type>(function, "Argument outside range [-1, 1] in inverse erf function (got p=%1%).", z, pol);
    if(z == 1)
-      return tools::overflow_error<result_type>(BOOST_CURRENT_FUNCTION);
+      return policy::raise_overflow_error<result_type>(function, 0, pol);
    if(z == -1)
-      return -tools::overflow_error<result_type>(BOOST_CURRENT_FUNCTION);
+      return -policy::raise_overflow_error<result_type>(function, 0, pol);
    if(z == 0)
       return 0;
    //
@@ -409,23 +417,45 @@ typename tools::promote_args<T>::type erf_inv(T z)
    // A bit of meta-programming to figure out which implementation
    // to use, based on the number of bits in the mantissa of T:
    //
-   typedef typename mpl::if_c<
-      std::numeric_limits<result_type>::is_specialized
-      &&
-      (std::numeric_limits<result_type>::digits <= 64),
-      mpl::int_<64>,
-      mpl::int_<0>
+   typedef typename policy::precision<result_type, Policy>::type precision_type;
+   typedef typename mpl::if_<
+      mpl::or_<mpl::less_equal<precision_type, mpl::int_<0> >, mpl::greater<precision_type, mpl::int_<64> > >,
+      mpl::int_<0>,
+      mpl::int_<64>
    >::type tag_type;
    //
    // Likewise use internal promotion, so we evaluate at a higher
    // precision internally if it's appropriate:
    //
-   typedef typename tools::evaluation<result_type>::type eval_type;
+   typedef typename policy::evaluation<result_type, Policy>::type eval_type;
+   typedef typename policy::normalise<
+      Policy, 
+      policy::promote_float<false>, 
+      policy::promote_double<false>, 
+      policy::discrete_quantile<>,
+      policy::assert_undefined<> >::type forwarding_policy;
+   //
+   // Likewise use internal promotion, so we evaluate at a higher
+   // precision internally if it's appropriate:
+   //
+   typedef typename policy::evaluation<result_type, Policy>::type eval_type;
    //
    // And get the result, negating where required:
    //
-   return s * tools::checked_narrowing_cast<result_type>(
-      detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), static_cast<tag_type const*>(0)), BOOST_CURRENT_FUNCTION);
+   return s * policy::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), forwarding_policy(), static_cast<tag_type const*>(0)), function);
+}
+
+template <class T>
+inline typename tools::promote_args<T>::type erfc_inv(T z)
+{
+   return erfc_inv(z, policy::policy<>());
+}
+
+template <class T>
+inline typename tools::promote_args<T>::type erf_inv(T z)
+{
+   return erf_inv(z, policy::policy<>());
 }
 
 } // namespace math

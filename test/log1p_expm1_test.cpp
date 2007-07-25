@@ -3,14 +3,18 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/array.hpp>
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
+#endif
 
 #include "handle_test_result.hpp"
 
@@ -65,6 +69,7 @@ void expected_results()
 template <class T>
 void do_test(const T& data, const char* type_name, const char* test_name)
 {
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -96,6 +101,7 @@ void do_test(const T& data, const char* type_name, const char* test_name)
       boost::lambda::ret<value_type>(boost::lambda::_1[2]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::expm1", "log1p and expm1");
    std::cout << std::endl;
+#endif
 }
 
 template <class T>

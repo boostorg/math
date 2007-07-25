@@ -11,8 +11,10 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
+#endif
 
 #include "test_erf_hooks.hpp"
 #include "handle_test_result.hpp"
@@ -107,6 +109,7 @@ void expected_results()
 template <class T>
 void do_test_erf(const T& data, const char* type_name, const char* test_name)
 {
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -160,11 +163,13 @@ void do_test_erf(const T& data, const char* type_name, const char* test_name)
    }
 #endif
    std::cout << std::endl;
+#endif
 }
 
 template <class T>
 void do_test_erf_inv(const T& data, const char* type_name, const char* test_name)
 {
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -185,11 +190,13 @@ void do_test_erf_inv(const T& data, const char* type_name, const char* test_name
       boost::lambda::ret<value_type>(boost::lambda::_1[1]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::erf_inv", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class T>
 void do_test_erfc_inv(const T& data, const char* type_name, const char* test_name)
 {
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -210,6 +217,7 @@ void do_test_erfc_inv(const T& data, const char* type_name, const char* test_nam
       boost::lambda::ret<value_type>(boost::lambda::_1[1]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::erfc_inv", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class T>
@@ -300,7 +308,9 @@ int test_main(int, char* [])
    test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double");
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 
    expected_results();
@@ -310,7 +320,9 @@ int test_main(int, char* [])
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_erf(0.1L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    test_erf(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

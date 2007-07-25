@@ -9,7 +9,7 @@
 
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/evaluation_type.hpp>
+#include <boost/math/policy/error_handling.hpp>
 
 namespace boost{
 namespace math{
@@ -47,13 +47,20 @@ T hermite_imp(unsigned n, T x)
 
 } // namespace detail
 
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type 
+   hermite(unsigned n, T x, const Policy&)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   return policy::checked_narrowing_cast<result_type, Policy>(detail::hermite_imp(n, static_cast<value_type>(x)), "boost::math::hermite<%1%>(unsigned, %1%)");
+}
+
 template <class T>
 inline typename tools::promote_args<T>::type 
    hermite(unsigned n, T x)
 {
-   typedef typename tools::promote_args<T>::type result_type;
-   typedef typename tools::evaluation<result_type>::type value_type;
-   return tools::checked_narrowing_cast<result_type>(detail::hermite_imp(n, static_cast<value_type>(x)), BOOST_CURRENT_FUNCTION);
+   return boost::math::hermite(n, x, policy::policy<>());
 }
 
 } // namespace math

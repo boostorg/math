@@ -6,6 +6,7 @@
 #include <boost/test/test_exec_monitor.hpp>
 #include <boost/array.hpp>
 #include <boost/math/tools/rational.hpp>
+#include <boost/math/tools/precision.hpp>
 
 template <class T, class U>
 void do_test_spots1(T, U)

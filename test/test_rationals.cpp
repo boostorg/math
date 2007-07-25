@@ -8,6 +8,7 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/array.hpp>
 #include <boost/math/tools/rational.hpp>
+#include <iostream>
 
 template <class T, class U>
 void do_test_spots(T, U);

@@ -8,6 +8,7 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/policy/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <cmath>
 #include <algorithm> // for swap
@@ -18,8 +19,8 @@ namespace std{ using ::sqrt; using ::fabs; }
 
 namespace boost{ namespace math{ namespace detail{
 
-template <class T>
-T hypot_imp(T x, T y)
+template <class T, class Policy>
+T hypot_imp(T x, T y, const Policy& pol)
 {
    //
    // Normalize x and y, so that both are positive and x >= y:
@@ -37,7 +38,7 @@ T hypot_imp(T x, T y)
    if(std::numeric_limits<T>::has_infinity
       && ((x == std::numeric_limits<T>::infinity())
       || (y == std::numeric_limits<T>::infinity())))
-      return std::numeric_limits<T>::infinity();
+      return policy::raise_overflow_error<T>("boost::math::hypot<%1%>(%1%,%1%)", 0, pol);
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
@@ -60,7 +61,16 @@ inline typename tools::promote_args<T1, T2>::type
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    return detail::hypot_imp(
-      static_cast<result_type>(x), static_cast<result_type>(y));
+      static_cast<result_type>(x), static_cast<result_type>(y), policy::policy<>());
+}
+
+template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
+   hypot(T1 x, T2 y, const Policy& pol)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   return detail::hypot_imp(
+      static_cast<result_type>(x), static_cast<result_type>(y), pol);
 }
 
 } // namespace math
