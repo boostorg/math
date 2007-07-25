@@ -11,8 +11,8 @@ namespace boost{ namespace math{ namespace detail{
 //
 // lgamma for small arguments:
 //
-template <class T, class Policy>
-T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l */)
+template <class T, class Policy, class L>
+T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l */, const L&)
 {
    // This version uses rational approximations for small
    // values of z accurate enough for 64-bit mantissas
@@ -200,8 +200,8 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l *
    }
    return result;
 }
-template <class T, class Policy>
-T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l */)
+template <class T, class Policy, class L>
+T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l */, const L&)
 {
    //
    // This version uses rational approximations for small
@@ -213,6 +213,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
    if(z < tools::epsilon<T>())
    {
       result = -log(z);
+      BOOST_MATH_INSTRUMENT_CODE(result);
    }
    else if((zm1 == 0) || (zm2 == 0))
    {
@@ -233,6 +234,9 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
          }while(z >= 3);
          zm2 = z - 2;
       }
+      BOOST_MATH_INSTRUMENT_CODE(zm2);
+      BOOST_MATH_INSTRUMENT_CODE(z);
+      BOOST_MATH_INSTRUMENT_CODE(result);
 
       //
       // Use the following form:
@@ -283,6 +287,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
       T r = zm2 * (z + 1);
 
       result +=  r * Y + r * R;
+      BOOST_MATH_INSTRUMENT_CODE(result);
    }
    else
    {
@@ -297,6 +302,9 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
          zm1 = z;
          z += 1;
       }
+      BOOST_MATH_INSTRUMENT_CODE(result);
+      BOOST_MATH_INSTRUMENT_CODE(z);
+      BOOST_MATH_INSTRUMENT_CODE(zm2);
       //
       // Three approximations, on for z in [1,1.35], [1.35,1.625] and [1.625,1]
       //
@@ -351,6 +359,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
          T prefix = zm1 * zm2;
 
          result += prefix * Y + prefix * r;
+         BOOST_MATH_INSTRUMENT_CODE(result);
       }
       else if(z <= 1.625)
       {
@@ -400,6 +409,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
          T R = tools::evaluate_polynomial(P, 0.625 - zm1) / tools::evaluate_polynomial(Q, 0.625 - zm1);
 
          result += r * Y + r * R;
+         BOOST_MATH_INSTRUMENT_CODE(result);
       }
       else
       {
@@ -441,14 +451,15 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
          T R = tools::evaluate_polynomial(P, -zm2) / tools::evaluate_polynomial(Q, -zm2);
 
          result += r * Y + r * R;
+         BOOST_MATH_INSTRUMENT_CODE(result);
       }
    }
+   BOOST_MATH_INSTRUMENT_CODE(result);
    return result;
 }
-template <class T, class Policy>
-T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<0>&, const Policy& pol)
+template <class T, class Policy, class L>
+T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<0>&, const Policy& pol, const L&)
 {
-   typedef typename lanczos::lanczos<T, Policy>::type L;
    //
    // No rational approximations are available because either
    // T has no numeric_limits support (so we can't tell how
@@ -465,12 +476,12 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<0>&, const Policy& pol)
    else if(z < 0.5)
    {
       // taking the log of tgamma reduces the error, no danger of overflow here:
-      result = log(gamma_imp(z, pol));
+      result = log(gamma_imp(z, pol, L()));
    }
    else if(z >= 3)
    {
       // taking the log of tgamma reduces the error, no danger of overflow here:
-      result = log(gamma_imp(z, pol));
+      result = log(gamma_imp(z, pol, L()));
    }
    else if(z >= 1.5)
    {

@@ -228,7 +228,7 @@ T lgamma_imp(T z, const Policy& pol, const L& l, int* sign = 0)
             mpl::less_equal<precision_type, mpl::int_<113> >,
             mpl::int_<113>, mpl::int_<0> >::type
           >::type tag_type;
-      result = lgamma_small_imp(z, z - 1, z - 2, tag_type(), pol);
+      result = lgamma_small_imp(z, z - 1, z - 2, tag_type(), pol, l);
    }
    else if((z >= 3) && (z < 100))
    {
@@ -356,6 +356,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l)
       prefix /= z;
       z += 1;
    }
+   BOOST_MATH_INSTRUMENT_CODE(prefix);
    if((floor(z) == z) && (z < max_factorial<T>::value))
    {
       prefix *= unchecked_factorial<T>(tools::real_cast<unsigned>(z) - 1);
@@ -363,10 +364,14 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l)
    else
    {
       prefix = prefix * pow(z / boost::math::constants::e<T>(), z);
+      BOOST_MATH_INSTRUMENT_CODE(prefix);
       T sum = detail::lower_gamma_series(z, z, pol) / z;
+      BOOST_MATH_INSTRUMENT_CODE(sum);
       sum += detail::upper_gamma_fraction(z, z, ::boost::math::policy::digits<T, Policy>());
+      BOOST_MATH_INSTRUMENT_CODE(sum);
       if(fabs(tools::max_value<T>() / prefix) < fabs(sum))
          return policy::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+      BOOST_MATH_INSTRUMENT_CODE((sum * prefix));
       return sum * prefix;
    }
    return prefix;
@@ -417,12 +422,17 @@ T tgammap1m1_imp(T dz, Policy const& pol, const L& l)
 {
    using namespace std;
 
+   typedef typename policy::precision<T,Policy>::type precision_type;
+
    typedef typename mpl::if_<
-      mpl::less_equal<typename policy::precision<T,Policy>::type, mpl::int_<64> >,
-      mpl::int_<64>,
+      mpl::or_<
+         mpl::less_equal<precision_type, mpl::int_<0> >,
+         mpl::greater<precision_type, mpl::int_<113> >
+      >,
+      mpl::int_<0>,
       typename mpl::if_<
-         mpl::less_equal<typename policy::precision<T,Policy>::type, mpl::int_<113> >,
-         mpl::int_<113>, mpl::int_<0> >::type
+         mpl::less_equal<precision_type, mpl::int_<64> >,
+         mpl::int_<64>, mpl::int_<113> >::type
        >::type tag_type;
 
    T result;
@@ -432,12 +442,14 @@ T tgammap1m1_imp(T dz, Policy const& pol, const L& l)
       {
          // Best method is simply to subtract 1 from tgamma:
          result = boost::math::tgamma(1+dz, pol) - 1;
+         BOOST_MATH_INSTRUMENT_CODE(result);
       }
       else
       {
          // Use expm1 on lgamma:
          result = boost::math::expm1(-boost::math::log1p(dz, pol) 
-            + lgamma_small_imp(dz+2, dz + 1, dz, tag_type(), pol));
+            + lgamma_small_imp(dz+2, dz + 1, dz, tag_type(), pol, l));
+         BOOST_MATH_INSTRUMENT_CODE(result);
       }
    }
    else
@@ -445,12 +457,14 @@ T tgammap1m1_imp(T dz, Policy const& pol, const L& l)
       if(dz < 2)
       {
          // Use expm1 on lgamma:
-         result = boost::math::expm1(lgamma_small_imp(dz+1, dz, dz-1, tag_type(), pol), pol);
+         result = boost::math::expm1(lgamma_small_imp(dz+1, dz, dz-1, tag_type(), pol, l), pol);
+         BOOST_MATH_INSTRUMENT_CODE(result);
       }
       else
       {
          // Best method is simply to subtract 1 from tgamma:
          result = boost::math::tgamma(1+dz, pol) - 1;
+         BOOST_MATH_INSTRUMENT_CODE(result);
       }
    }
 
@@ -468,15 +482,20 @@ inline T tgammap1m1_imp(T dz, Policy const& pol,
    // Start by subracting 1 from tgamma:
    //
    T result = gamma_imp(1 + dz, pol, l) - 1;
+   BOOST_MATH_INSTRUMENT_CODE(result);
    //
    // Test the level of cancellation error observed: we loose one bit
    // for each power of 2 the result is less than 1.  If we would get
    // more bits from our most precise lgamma rational approximation, 
    // then use that instead:
    //
+   BOOST_MATH_INSTRUMENT_CODE((dz > -0.5));
+   BOOST_MATH_INSTRUMENT_CODE((dz < 2));
+   BOOST_MATH_INSTRUMENT_CODE((ldexp(1.0, boost::math::policy::digits<T, Policy>()) * fabs(result) < 1e34));
    if((dz > -0.5) && (dz < 2) && (ldexp(1.0, boost::math::policy::digits<T, Policy>()) * fabs(result) < 1e34))
    {
       result = tgammap1m1_imp(dz, pol, boost::math::lanczos::lanczos24m113());
+      BOOST_MATH_INSTRUMENT_CODE(result);
    }
    return result;
 }
