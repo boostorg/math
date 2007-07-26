@@ -1,6 +1,6 @@
 // example_error_handling.cpp
 
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2007.
 // Copyright John Maddock 2006.
 
 // Use, modification and distribution are subject to the
@@ -8,24 +8,21 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Uncomment these line(s) to enable throw on errors.
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-//#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-//#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-//#define BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
-//#define BOOST_MATH_THROW_ON_DENORM_ERROR
+// Shows use of macro definition to change policy for
+// domain_error - negative degrees of freedom argument
+// for student's t distribution CDF.
+
+// Uncomment this line to see the effect of changing policy.
+// #define BOOST_MATH_DOMAIN_ERROR_POLICY ignore_error
+// Note that these policy #defines MUST preceed the #include of
+// any boost/math #includes.
+// If placed after, they will have no effect!
+// warning C4005: 'BOOST_MATH_OVERFLOW_ERROR_POLICY' : macro redefinition
+// is a warning that it will NOT have the desired effect.
 
 // Boost
 #include <boost/math/distributions/students_t.hpp>
 	using boost::math::students_t;  // Probability of students_t(df, t).
-
-#include <boost/math/tools/error_handling.hpp> // for domain_error.
-	using ::boost::math::tools::domain_error;
-	using ::boost::math::tools::pole_error;
-	using ::boost::math::tools::overflow_error;
-	using ::boost::math::tools::underflow_error;
-	using ::boost::math::tools::denorm_error;
-	using ::boost::math::tools::logic_error;
 
 // std
 #include <iostream>
@@ -40,8 +37,11 @@ int main()
 	cout << "Example error handling using Student's t function. " << endl;
 
   double degrees_of_freedom = -1; double t = -1.; // Bad arguments!
+  // If we use
   // cout << "Probability of Student's t is " << cdf(students_t(-1), -1) << endl; 
-  // Will terminate/abort if #define BOOST_MATH_THROW_ON_DOMAIN_ERROR without try & catch.
+  // Will terminate/abort (without try & catch blocks)
+  // if BOOST_MATH_DOMAIN_ERROR_POLICY has the default value throw_on_error.
+
   try
   {
     cout << "Probability of Student's t is " << cdf(students_t(degrees_of_freedom), t) << endl; 
@@ -51,6 +51,7 @@ int main()
     std::cout <<
       "\n""Message from thrown exception was:\n   " << e.what() << std::endl;
   }
+
 	return 0;
 } // int main()
 
@@ -60,19 +61,20 @@ Output:
 
 Example error handling using Student's t function.
 
-Without
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR 
-
-Probability of Student's t is 1.#QNAN
-
 With
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR 
+#define BOOST_MATH_DOMAIN_ERROR_POLICY ignore_error
 
+Example error handling using Student's t function. 
+Probability of Student's t is 1.#QNAN
+
+Default behaviour without
+
+//#define BOOST_MATH_THROW_ON_DOMAIN_ERROR 
+
+Example error handling using Student's t function. 
 Message from thrown exception was:
-   Error in function __thiscall
-   boost::math::students_t_distribution<double>::students_t_distribution(double):
-   Degrees of freedom argument is -1, but must be > 0 !
+   Error in function boost::math::students_t_distribution<double>::students_t_distribution: Degrees of freedom argument is -1, but must be > 0 !
+
 
 */
