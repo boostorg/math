@@ -5,16 +5,18 @@
 
    namespace boost{ namespace math{ 
       
-   template <class RealType>
+   template <class RealType = double, 
+             class ``__Policy``   = ``__policy_class`` >
    class weibull_distribution;
    
-   typedef weibull_distribution<double> weibull;
+   typedef weibull_distribution<> weibull;
    
-   template <class RealType>
+   template <class RealType, class ``__Policy``>
    class weibull_distribution
    {
    public:
       typedef RealType value_type;
+      typedef Policy   policy_type;
       // Construct:
       weibull_distribution(RealType shape, RealType scale = 1)
       // Accessors:

@@ -179,6 +179,10 @@ and use the function's name as the link text]
 [def __F_distrib [link math_toolkit.dist.dist_ref.dists.f_dist Fisher F Distribution]]
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
 
+[/links to policy]
+[def __Policy [link math_toolkit.policy Policy]]
+[def __policy_class [link math_toolkit.policy.pol_ref.pol_ref_ref policy::policy<>]]
+
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard, 
    __chf, __mean, __median, __mode, __variance, __sd, __skewness, 
    __kurtosis, __kurtosis_excess, __range and __support]

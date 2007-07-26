@@ -36,7 +36,7 @@ to a 95% confidence level.  Refer to
 The usual assumptions of
 [@http://en.wikipedia.org/wiki/Independent_and_identically-distributed_random_variables independent and identically distributed (i.i.d.)]
 variables and [@http://en.wikipedia.org/wiki/Normal_distribution normal distribution]
-of course apply here, as they do in other examples.]
+of course apply here, as they do in other examples.
 ]
 
 From the formula, it should be clear that:
@@ -262,27 +262,27 @@ can be summarised in the following table:
 [[Hypothesis][Test]]
 [[The Null-hypothesis: there is
 *no difference* in means]  
-[Complement of CDF for |t| > significance level / 2:
-
-`cdf(complement(dist, fabs(t))) > alpha / 2`]]
-
-[[The Alternative-hypothesis: there is
-*difference* in means]  
-[Complement of CDF for |t| < significance level / 2:
+[Reject if complement of CDF for |t| < significance level / 2:
 
 `cdf(complement(dist, fabs(t))) < alpha / 2`]]
 
+[[The Alternative-hypothesis: there is
+*difference* in means]  
+[Reject if complement of CDF for |t| > significance level / 2:
+
+`cdf(complement(dist, fabs(t))) > alpha / 2`]]
+
 [[The Alternative-hypothesis: the sample mean is *less* than
 the true mean.]  
-[CDF of t < significance level:
+[Reject if CDF of t > significance level:
 
-`cdf(dist, t) < alpha`]]
+`cdf(dist, t) > alpha`]]
 
 [[The Alternative-hypothesis: the sample mean is *greater* than
 the true mean.]  
-[Complement of CDF of t < significance level:
+[Reject if complement of CDF of t > significance level:
 
-`cdf(complement(dist, t)) < alpha`]]
+`cdf(complement(dist, t)) > alpha`]]
 ]
 
 [note
@@ -604,28 +604,28 @@ in the following table:
 [[Hypothesis][Test][C++ Code]]
 [[The Null-hypothesis: there is
 *no difference* in means]  
-[Complement of CDF for |t| > significance level / 2:
+[Reject if complement of CDF for |t| < significance level / 2:
 
-`cdf(complement(dist, fabs(t))) > alpha / 2`]]
+`cdf(complement(dist, fabs(t))) < alpha / 2`]]
 
 [[The Alternative-hypothesis: there is a
 *difference* in means]  
-[Complement of CDF for |t| < significance level / 2:
+[Reject if complement of CDF for |t| > significance level / 2:
 
 `cdf(complement(dist, fabs(t))) < alpha / 2`]]
 
 [[The Alternative-hypothesis: Sample 1 Mean is *less* than
 Sample 2 Mean.]  
-[CDF of t < significance level:
+[Reject if CDF of t > significance level:
 
-`cdf(dist, t) < alpha`]]
+`cdf(dist, t) > alpha`]]
 
 [[The Alternative-hypothesis: Sample 1 Mean is *greater* than
 Sample 2 Mean.]  
 
-[Complement of CDF of t < significance level:
+[Reject if complement of CDF of t > significance level:
 
-`cdf(complement(dist, t)) < alpha`]]
+`cdf(complement(dist, t)) > alpha`]]
 ]
 
 [note

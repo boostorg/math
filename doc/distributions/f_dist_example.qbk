@@ -66,27 +66,20 @@ summarises the options available:
 [table
 [[Hypothesis][Test]]
 [[The null-hypothesis: there is no difference in standard deviations (two sided test)]
-      [F[sub (1-alpha/2; N1-1, N2-1)] < F < F[sub (alpha/2; N1-1, N2-1)] ]]
+      [Reject if F <= F[sub (1-alpha/2; N1-1, N2-1)] or F >= F[sub (alpha/2; N1-1, N2-1)] ]]
 [[The alternative hypothesis: there is a difference in means (two sided test)]
-      [F < F[sub (1-alpha/2; N1-1, N2-1)] or F > F[sub (alpha/2; N1-1, N2-1)] ]]
+      [Reject if F[sub (1-alpha/2; N1-1, N2-1)] <= F <= F[sub (alpha/2; N1-1, N2-1)] ]]
 [[The alternative hypothesis: Standard deviation of sample 1 is greater
 than that of sample 2]
-      [F > F[sub (alpha; N1-1, N2-1)] ]]
+      [Reject if F < F[sub (alpha; N1-1, N2-1)] ]]
 [[The alternative hypothesis: Standard deviation of sample 1 is less
 than that of sample 2]
-      [F < F[sub (1-alpha; N1-1, N2-1)] ]]
+      [Reject if F > F[sub (1-alpha; N1-1, N2-1)] ]]
 ]
 
 Where F[sub (1-alpha; N1-1, N2-1)] is the lower critical value of the F distribution
 with degrees of freedom N1-1 and N2-1, and F[sub (alpha; N1-1, N2-1)] is the upper
 critical value of the F distribution with degrees of freedom N1-1 and N2-1.
-
-[note
-The above tests are formulated in terms of ['acceptance] because it's
-easier to understand the concepts involved.  However, good experimental
-design suggests that hypothesis should be ['rejected] not ['accepted].
-Therefore you should decide which of the above situations represents your
-null-hypothesis, and then reject the hypothesis only if the test above ['fails].]
 
 The upper and lower critical values can be computed using the quantile function:
 

@@ -158,25 +158,18 @@ The various hypothesis that can be tested are summarised in the following table:
 [table
 [[Hypothesis][Test]]
 [[The null-hypothesis: there is no difference in standard deviation from the specified value]
-    [ [chi][super 2][sub (1-alpha/2; N-1)] <= T <= [chi][super 2][sub (alpha/2; N-1)] ]]
+    [ Reject if T < [chi][super 2][sub (1-alpha/2; N-1)] or T > [chi][super 2][sub (alpha/2; N-1)] ]]
 [[The alternative hypothesis: there is a difference in standard deviation from the specified value]
-    [ [chi][super 2][sub (1-alpha/2; N-1)] > T  or [chi][super 2][sub (alpha/2; N-1)] < T ]]
+    [ Reject if [chi][super 2][sub (1-alpha/2; N-1)] >= T  >= [chi][super 2][sub (alpha/2; N-1)] ]]
 [[The alternative hypothesis: the standard deviation is less than the specified value]
-    [ [chi][super 2][sub (1-alpha; N-1)] > T ]]
+    [ Reject if [chi][super 2][sub (1-alpha; N-1)] <= T ]]
 [[The alternative hypothesis: the standard deviation is greater than the specified value]
-    [ [chi][super 2][sub (alpha; N-1)] < T ]]
+    [ Reject if [chi][super 2][sub (alpha; N-1)] >= T ]]
 ]
 
 Where [chi][super 2][sub (alpha; N-1)] is the upper critical value of the 
 Chi Squared distribution, and [chi][super 2][sub (1-alpha; N-1)] is the
 lower critical value.  
-
-[note
-The table above is framed in terms of acceptance of hypothesis.
-However, good experimental design dictates that you should formulate
-a hypothesis and then try and reject it.  You should therefore decide
-which of the above situations corresponds to your null-hypothesis, and
-reject it if the test given above ['fails].]
 
 Recall that the lower critical value is the same
 as the quantile, and the upper critical value is the same as the quantile

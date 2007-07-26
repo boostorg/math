@@ -416,6 +416,8 @@ namespace boost
         RealType m_p; // success_fraction
       }; // template <class RealType, class Policy> class binomial_distribution
 
+      typedef binomial_distribution<> binomial;
+
       template <class RealType, class Policy>
       const std::pair<RealType, RealType> range(const binomial_distribution<RealType, Policy>& dist)
       { // Range of permissible values for random variable k.

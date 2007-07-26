@@ -28,11 +28,9 @@ and is called
   
 The equivalent using this Boost C++ library is:
 
-  using boost::math::binomial_distribution;
-  // Get name in the right namespace (avoids very long names).
-  binomial_distribution(RealType n, RealType p); // Default RealType is double,
+  using namespace boost::math;  // Using declaration avoids very long names.
   
-  binomial_distribution<>my_dist(4, 0.5); //  NAG n = 4, p = 0.5
+  binomial my_dist(4, 0.5); // c.f. NAG n = 4, p = 0.5
   
 and values can be output thus:
 
@@ -44,11 +42,11 @@ and values can be output thus:
     << pdf(my_dist, 2) << endl;            // NAG peqk with k = 2
 
 
-cdf(dist, k) is equivalent to NAG library plek, lower tail probability of <= k
+`cdf(dist, k)` is equivalent to NAG library `plek`, lower tail probability of <= k
 
-cdf(complement(dist, k)) is equivalent to NAG library pgtk, upper tail probability of > k
+`cdf(complement(dist, k))` is equivalent to NAG library `pgtk`, upper tail probability of > k
 
-pdf(dist, k) is equivalent to NAG library peqk, point probability of == k
+`pdf(dist, k)` is equivalent to NAG library `peqk`, point probability of == k
 
 See [@../../example/binomial_example3.cpp binomial_example3.cpp] for details.
 

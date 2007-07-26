@@ -5,16 +5,18 @@
 
    namespace boost{ namespace math{ 
       
-   template <class RealType>
+   template <class RealType = double, 
+             class ``__Policy``   = ``__policy_class`` >
    class rayleigh_distribution;
    
-   typedef rayleigh_distribution<double> rayleigh;
+   typedef rayleigh_distribution<> rayleigh;
    
-   template <class RealType>
+   template <class RealType, class ``__Policy``>
    class rayleigh_distribution
    {
    public:
       typedef RealType value_type;
+      typedef Policy   policy_type;
       // Construct:
       rayleigh_distribution(RealType sigma = 1)
       // Accessors:

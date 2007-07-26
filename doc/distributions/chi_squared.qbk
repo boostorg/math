@@ -4,16 +4,18 @@
 
    namespace boost{ namespace math{ 
 
-   template <class RealType = double>
+   template <class RealType = double, 
+             class ``__Policy``   = ``__policy_class`` >
    class chi_squared_distribution;
 
-   typedef chi_squared_distribution<double> chi_squared;
+   typedef chi_squared_distribution<> chi_squared;
 
-   template <class RealType>
+   template <class RealType, class ``__Policy``>
    class chi_squared_distribution
    {
    public:
-      typedef RealType value_type;
+      typedef RealType  value_type;
+      typedef Policy    policy_type;
 
       // Constructor:
       chi_squared_distribution(RealType i);

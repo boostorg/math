@@ -2,11 +2,18 @@
 
 ``#include <boost/math/distributions/cauchy.hpp>``
 
-   template <class RealType = double>
+   template <class RealType = double, 
+             class ``__Policy``   = ``__policy_class`` >
+   class cauchy_distribution;
+   
+   typedef cauchy_distribution<> cauchy;
+   
+   template <class RealType, class ``__Policy``>
    class cauchy_distribution
    {
    public:
-      typedef RealType value_type;
+      typedef RealType  value_type;
+      typedef Policy    policy_type;
 
       cauchy_distribution(RealType location = 0, RealType scale = 1);
       

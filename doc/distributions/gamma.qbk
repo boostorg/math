@@ -4,11 +4,13 @@
 
    namespace boost{ namespace math{ 
       
-   template <class RealType = double>
+   template <class RealType = double, 
+             class ``__Policy``   = ``__policy_class`` >
    class gamma_distribution
    {
    public:
       typedef RealType value_type;
+      typedef Policy   policy_type;
 
       gamma_distribution(RealType shape, RealType scale = 1)
 
@@ -30,9 +32,14 @@ integer value > 0, the Erlang distribution is not separately implemented.
 
 [note
 To avoid potential confusion with the gamma functions, this
-distribution does not define a typedef 
-`typedef gamma_distibution<double> gamma`, instead if you want 
-a double precision gamma distribution you can use `boost::gamma_distribution<>`]
+distribution does not provide the typedef:
+
+``typedef gamma_distibution<double> gamma;`` 
+
+Instead if you want 
+a double precision gamma distribution you can use 
+
+``boost::gamma_distribution<>``]
 
 For shape parameter /k/ and scale parameter [theta][space] it is defined by the
 probability density function:

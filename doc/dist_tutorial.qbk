@@ -20,17 +20,23 @@ provides a few worked examples of applying the library to statistical tests.
 All the code in this library is inside namespace boost::math.
 
 In order to use a distribution /my_distribution/ you will need to include
-the header <boost/math/distributions/my_distribution.hpp>.
-For example, to use the Students-t distribution include
-<boost/math/distributions/students_t.hpp>
+either the header <boost/math/distributions/my_distribution.hpp> or
+the "include everything" header: <boost/math/distributions.hpp>.
+
+For example, to use the Students-t distribution include either
+<boost/math/distributions/students_t.hpp> or
+<boost/math/distributions.hpp>
 
 [h4 Distributions are Objects]
 
 Each kind of distribution in this library is a class type.
 
+TODO: we need to mention and link to policies here.
+
 [tip If you are familiar with statistics libraries using functions,
 and 'Distributions as Objects' seem alien, see
-[link math_toolkit.dist.stat_tut.weg.NAG_library other statistics libraries.]  
+[link math_toolkit.dist.stat_tut.weg.NAG_library the comparison to 
+other statistics libraries.]  
 ] [/tip]
 
 Making distributions class types does two things:
@@ -47,8 +53,9 @@ to the Students-t object when it is constructed.
 Although the distribution classes in this library are templates, there
 are typedefs on type /double/ that mostly take the usual name of the
 distribution
-(except where there is a clash with a function name: beta, gamma, binomial,
-in which case using the default RealType = double is nearly as convenient).
+(except where there is a clash with a function of the same name: beta and gamma,
+in which case using the default template arguments - `RealType = double` - 
+is nearly as convenient).
 Probably 95% of uses are covered by these typedefs:
 
    using namespace boost::math;
@@ -56,10 +63,9 @@ Probably 95% of uses are covered by these typedefs:
    // Construct a students_t distribution with 4 degrees of freedom:
    students_t d1(4);
    
-   // Construct a double binomial distribution 
-   // with probability of success 0.3
-   // and 20 trials in total:
-   binomial_distribution<> d2(20, 0.3); // Note: _distribution<> !
+   // Construct a double-precision beta distribution 
+   // with parameters a = 10, b = 20
+   beta_distribution<> d2(10, 20); // Note: _distribution<> suffix !
    
 If you need to use the distributions with a type other than `double`,
 then you can instantiate the template directly: the names of the 
@@ -115,12 +121,11 @@ If you want random numbers that are distributed in a specific way,
 for example in a uniform, normal or triangular,
 see [@http://www.boost.org/libs/random/ Boost.Random].
 
-The distributions in the random number library are typically much faster,
-but much less accurate than those in this library.  This reflects the
-differing uses of the two libraries: if you want to conduct statistical
-tests, then you will need the reliable computation of this library,
-whereas random numbers are ['random]: so accuracy is not a concern, where
-as speed most certainly is.
+The distributions in the random number library are typically much faster
+to compute than the quantiles provided by this library: although
+in principal you can use a quantile to convert a uniformly distributed random
+number to another distribution, there are much faster algorithms
+available that are specific to random number generation.
 ] [/tip Random numbers that approximate Quantiles of Distributions]
 
 For example, the binomial distribution has two parameters:
@@ -184,6 +189,7 @@ Users wanting to enforce a strict mathematical model may use `floor`
 or `ceil` functions on the random variate prior to calling the distribution 
 function.
 
+TODO: this is out of date, rewrite when we have a tutorial to link to.
 Likewise the `quantile` function will return a real value: users should use
 either the `floor` or `ceil` functions to convert the result to the nearest
 integer.  However, whether it makes more sense to take the floor or the 

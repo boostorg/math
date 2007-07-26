@@ -4,12 +4,13 @@
 ``#include <boost/math/distributions/uniform.hpp>``
 
    namespace boost{ namespace math{
-      template <class RealType>
-      class uniform_distribution;
+    template <class RealType = double, 
+              class ``__Policy``   = ``__policy_class`` >
+    class uniform_distribution;
       
-    typedef uniform_distribution<double> uniform;
+    typedef uniform_distribution<> uniform;
 
-    template <class RealType = double>
+    template <class RealType, class ``__Policy``>
     class uniform_distribution
     {
     public:

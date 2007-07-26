@@ -60,8 +60,8 @@ to go straight to the function you want if you already know its name.
 
 [h4 [#math.dist.cdf]Cumulative Distribution Function]
 
-   template <class RealType>
-   RealType cdf(const ``['Distribution-Type]``<RealType>& dist, const RealType& x);
+   template <class RealType, class ``__Policy``>
+   RealType cdf(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist, const RealType& x);
    
 The __cdf is the probability that 
 the variable takes a value less than or equal to x.  It is equivalent
@@ -105,8 +105,8 @@ normal distribution:
 
 [h4 [#math.dist.hazard]Hazard Function]
 
-   template <class RealType>
-   RealType hazard(const ``['Distribution-Type]``<RealType>& dist, const RealType& x);
+   template <class RealType, class ``__Policy``>
+   RealType hazard(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist, const RealType& x);
 
 Returns the __hazard of /x/ and distibution /dist/.
 
@@ -121,8 +121,8 @@ density function rather than the hazard function.]
 
 [h4 [#math.dist.chf]Cumulative Hazard Function]
 
-   template <class RealType>
-   RealType chf(const ``['Distribution-Type]``<RealType>& dist, const RealType& x);
+   template <class RealType, class ``__Policy``>
+   RealType chf(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist, const RealType& x);
 
 Returns the __chf of /x/ and distibution /dist/.
 
@@ -136,8 +136,8 @@ Some authors refer to this as simply the "Hazard Function".]
 
 [h4 [#math.dist.mean]mean]
 
-   template<class RealType>
-   RealType mean(const ``['Distribution-Type]``<RealType>& dist);
+   template<class RealType, class ``__Policy``>
+   RealType mean(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
    
 Returns the mean of the distribution /dist/.
 
@@ -146,15 +146,15 @@ a defined mean (for example the Cauchy distribution).
 
 [h4 [#math.dist.median]median]
 
-   template<class RealType>
-   RealType median(const ``['Distribution-Type]``<RealType>& dist);
+   template<class RealType, class ``__Policy``>
+   RealType median(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
    
 Returns the median of the distribution /dist/.
 
 [h4 [#math.dist.mode]mode]
 
-   template<class RealType>
-   RealType mode(const ``['Distribution-Type]``<RealType>& dist);
+   template<class RealType, ``__Policy``>
+   RealType mode(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
    
 Returns the mode of the distribution /dist/.
 
@@ -163,8 +163,8 @@ a defined mode.
 
 [h4 [#math.dist.pdf]Probability Density Function]
 
-   template <class RealType>
-   RealType pdf(const ``['Distribution-Type]``<RealType>& dist, const RealType& x);
+   template <class RealType, class ``__Policy``>
+   RealType pdf(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist, const RealType& x);
    
 For a continuous function, the probability density function (pdf) returns 
 the probability that the variate has the value x. 
@@ -184,15 +184,15 @@ For example for a standard normal distribution the pdf looks like this:
 
 [h4 [#math.dist.range]range]
 
-   template<class RealType>
-   std::pair<RealType, RealType> range(const ``['Distribution-Type]``<RealType>& dist);
+   template<class RealType, class ``__Policy``>
+   std::pair<RealType, RealType> range(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
    
 Returns the valid range of the random variable over distribution /dist/.
 
 [h4 [#math.dist.quantile]Quantile]
 
-   template <class RealType>
-   RealType quantile(const ``['Distribution-Type]``<RealType>& dist, const RealType& p);
+   template <class RealType, class ``__Policy``>
+   RealType quantile(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist, const RealType& p);
    
 The quantile is best viewed as the inverse of the __cdf, it returns
 a value /x/ such that `cdf(dist, x) == p`.
@@ -242,8 +242,8 @@ distribution:
 
 [h4 [#math.dist.sd]Standard Deviation]
 
-   template <class RealType>
-   RealType standard_deviation(const ``['Distribution-Type]``<RealType>& dist);
+   template <class RealType, class ``__Policy``>
+   RealType standard_deviation(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
    
 Returns the standard deviation of distribution /dist/.   
 
@@ -252,8 +252,8 @@ a defined standard deviation.
 
 [h4 [#math.dist.support]support]
 
-   template<class RealType>
-   std::pair<RealType, RealType> support(const ``['Distribution-Type]``<RealType>& dist);
+   template<class RealType, class ``__Policy``>
+   std::pair<RealType, RealType> support(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
    
 Returns the supported range of random variable over the distribution /dist/.
 
@@ -266,8 +266,8 @@ Outside are uninteresting zones where the pdf is zero, and the cdf zero or unity
 
 [h4 [#math.dist.variance]Variance]
 
-   template <class RealType>
-   RealType variance(const ``['Distribution-Type]``<RealType>& dist);
+   template <class RealType, class ``__Policy``>
+   RealType variance(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
    
 Returns the variance of the distribution /dist/.
 
@@ -276,8 +276,8 @@ a defined variance.
 
 [h4 [#math.dist.skewness]Skewness]
 
-   template <class RealType>
-   RealType skewness(const ``['Distribution-Type]``<RealType>& dist);
+   template <class RealType, class ``__Policy``>
+   RealType skewness(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
    
 Returns the skewness of the distribution /dist/.
 
@@ -286,8 +286,8 @@ a defined skewness.
 
 [h4 [#math.dist.kurtosis]Kurtosis]
 
-   template <class RealType>
-   RealType kurtosis(const ``['Distribution-Type]``<RealType>& dist);
+   template <class RealType, class ``__Policy``>
+   RealType kurtosis(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
    
 Returns the 'proper' kurtosis (normalized fourth moment) of the distribution /dist/.
 
@@ -318,8 +318,8 @@ a defined kurtosis.
 
 [h4 [#math.dist.kurtosis_excess]Kurtosis excess]
 
-   template <class RealType>
-   RealType kurtosis_excess(const ``['Distribution-Type]``<RealType>& dist);
+   template <class RealType, ``__Policy``>
+   RealType kurtosis_excess(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);
    
 Returns the kurtosis excess of the distribution /dist/.
 

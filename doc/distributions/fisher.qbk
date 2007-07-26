@@ -4,12 +4,13 @@
 
    namespace boost{ namespace math{ 
       
-   template <class RealType = double>
+   template <class RealType = double, 
+             class ``__Policy``   = ``__policy_class`` >
    class fisher_f_distribution;
    
-   typedef fisher_f_distribution<double> fisher_f;
+   typedef fisher_f_distribution<> fisher_f;
 
-   template <class RealType>
+   template <class RealType, class ``__Policy``>
    class fisher_f_distribution
    {
    public:

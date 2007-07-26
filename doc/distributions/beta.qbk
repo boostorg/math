@@ -4,17 +4,20 @@
 
    namespace boost{ namespace math{ 
    
-   template <class RealType = double>
+    template <class RealType = double, 
+              class ``__Policy``   = ``__policy_class`` >
    class beta_distribution;
    
    // typedef beta_distribution<double> beta;
    // Note that this is deliberately NOT provided,
    // to avoid a clash with the function name beta.
    
-   template <class RealType>
+   template <class RealType, class ``__Policy``>
    class beta_distribution
    {
    public:
+      typedef RealType  value_type;
+      typedef Policy    policy_type;
       // Constructor from two shape parameters, alpha & beta:
       beta_distribution(RealType a, RealType b);
       

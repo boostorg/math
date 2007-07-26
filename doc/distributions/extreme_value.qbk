@@ -2,7 +2,13 @@
 
 ``#include <boost/math/distributions/extreme.hpp>``
 
-   template <class RealType = double>
+   template <class RealType = double, 
+             class ``__Policy``   = ``__policy_class`` >
+   class extreme_value_distribution;
+
+   typedef extreme_value_distribution<> extreme_value;
+
+   template <class RealType, class ``__Policy``>
    class extreme_value_distribution
    {
    public:
@@ -13,8 +19,6 @@
       RealType scale()const;
       RealType location()const;
    };
-
-   typedef extreme_value_distribution<double> extreme_value;
 
 There are various
 [@http://mathworld.wolfram.com/ExtremeValueDistribution.html extreme value distributions]

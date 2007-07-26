@@ -5,12 +5,13 @@
 
    namespace boost{ namespace math{ 
       
-   template <class RealType>
+   template <class RealType = double, 
+             class ``__Policy``   = ``__policy_class`` >
    class pareto_distribution;
    
-   typedef pareto_distribution<double> pareto;
+   typedef pareto_distribution<> pareto;
    
-   template <class RealType>
+   template <class RealType, class ``__Policy``>
    class pareto_distribution
    {
    public:
