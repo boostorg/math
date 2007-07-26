@@ -24,7 +24,7 @@ following keys act as handy shortcuts for common navigation tasks.
 
 *  \/*constants*  Templated definition of some highly accurate math constants (in constants.hpp).
   
-*  \/*special_functions*  Math functions generally regarded as 'special', like beta, cbrt, erf, gamma, lgamma, tgamma ... (Some of these are specified in C++, and C99/TR1, and perhaps TR2).
+*  \/*special_functions*  Math functions generally regarded as 'special', like beta, cbrt, erf, gamma, lgamma, tgamma ... (Some of these are specified in C++, and C99\/TR1, and perhaps TR2).
                      
 * \/*distributions*  Distributions used in mathematics and, especially, statistics: Gaussian, Students-t, Fisher, Binomial ...
                      
@@ -64,17 +64,13 @@ Functions that may have more general use, like `digits` (significand), `max_valu
 See [link math_toolkit.dist.stat_tut  Statistical Distributions Tutorial] and
 [link math_toolkit.dist.dist_ref Statistical Distributions Reference]
 and [link math_toolkit.special Special Functions]
-[h4 Configuration Macros - Controlling Throwing of Exceptions]
+[h4 Configuration Policy Macros - Controlling Handling Arguments, Undefined Functions, Throwing of Exceptions, Accuracy, ]
 
-* *BOOST_MATH_THROW_ON_DOMAIN_ERROR*
-If the macro BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined when building the library, then a std::domain_error C++ exception is thrown.  Arguments outside defined range are common, and since several other errors, including pole_error, also may throw a domain_error, defining this macro is generally recommended to get helpful error messages, but using a try and catch blocks are also recommended.  See 
-
-* *BOOST_MATH_THROW_ON_OVERFLOW_ERROR* By default, overflow returns infinity. 
-* *BOOST_MATH_THROW_ON_UNDERFLOW_ERROR* By default, underflow returns zero. 
-* *BOOST_MATH_THROW_ON_DENORM_ERROR* By default, denormalization is ignored.
-* *BOOST_MATH_THROW_ON_POLE_ERROR* By default, pole error is the same as domain_error.
+* *BOOST_MATH_DOMAIN_ERROR_POLICY*
 
 See [link math_toolkit.special.error_handling Error handling]
+
+See [link math_toolkit.policy Error handling]
 and [@../../example/error_handling_example.cpp error_handling_example.cpp].
 
 [endsect][/sect:structure Getting About - Directory, Namespace & File structure]
