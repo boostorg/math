@@ -1,4 +1,6 @@
-//  Copyright John Maddock 2006.
+//  Copyright John Maddock 2006-7.
+//  Copyright Paul A. Bristow 2007.
+
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -52,6 +54,10 @@
 # pragma warning(push)
 # pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
 # pragma warning(disable: 4127) // conditional expression is constant.
+# pragma warning(disable: 4100) // unreferenced formal parameter.
+// Several variables made comments,
+// but some difficulty as whether referenced on not may depend on macro values.
+// So to be safe, 4100 warnings suppressed.
 #endif
 
 namespace boost{ namespace math{
@@ -1152,7 +1158,7 @@ T gamma_p_derivative_imp(T a, T x, const Policy& pol)
 
 template <class T, class Policy>
 inline typename tools::promote_args<T>::type 
-   tgamma(T z, const Policy& pol, const mpl::true_)
+   tgamma(T z, const Policy& /* pol */, const mpl::true_)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
@@ -1243,7 +1249,7 @@ inline typename tools::promote_args<T>::type
 
 template <class T, class Policy>
 inline typename tools::promote_args<T>::type 
-   tgamma1pm1(T z, const Policy& pol)
+   tgamma1pm1(T z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
@@ -1320,7 +1326,7 @@ inline typename tools::promote_args<T1, T2>::type
 //
 template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type
-   gamma_q(T1 a, T2 z, const Policy& pol)
+   gamma_q(T1 a, T2 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -1377,7 +1383,7 @@ inline typename tools::promote_args<T1, T2>::type
 // ratios of gamma functions:
 template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type 
-   tgamma_delta_ratio(T1 z, T2 delta, const Policy& pol)
+   tgamma_delta_ratio(T1 z, T2 delta, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2>::type result_type;
