@@ -775,7 +775,7 @@ inline typename tools::promote_args<T>::type erf(T z, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type erfc(T z, const Policy& pol)
+inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policy::evaluation<result_type, Policy>::type value_type;

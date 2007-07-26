@@ -186,7 +186,7 @@ T expm1_imp(T x, const mpl::int_<113>&, const P&)
 } // namespace detail
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type expm1(T x, const Policy& pol)
+inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policy::evaluation<result_type, Policy>::type value_type;
