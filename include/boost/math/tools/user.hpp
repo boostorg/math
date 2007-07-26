@@ -1,7 +1,16 @@
+// Copyright John Maddock 2007.
+// Copyright Paul A. Bristow 2007.
 
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MATH_TOOLS_USER_HPP
 #define BOOST_MATH_TOOLS_USER_HPP
+
+// This file can be modified by the user to change the default policies.
+// See "Changing the Policy Defaults" in documentation.
 
 //
 // The maximum number of iterations in series evaluations etc:
@@ -18,7 +27,7 @@
 // #define BOOST_MATH_POLY_METHOD 3
 // #define BOOST_MATH_RATIONAL_METHOD 3
 //
-// The maximum order of polynomial that will be evaluated 
+// The maximum order of polynomial that will be evaluated
 // via an unrolled specialisation:
 //
 // #define BOOST_MATH_MAX_POLY_ORDER 17
@@ -70,8 +79,9 @@
 //
 // #define BOOST_MATH_DISCRETE_QUANTILE_POLICY integer_outside
 //
-// If a function is mathemematically undefined (for example the Cauchy 
-// distribution has no mean), then do we stop the code from compiling?
+// If a function is mathematically undefined
+// (for example the Cauchy distribution has no mean),
+// then do we stop the code from compiling?
 //
 // #define BOOST_MATH_ASSERT_UNDEFINED_POLICY true
 
