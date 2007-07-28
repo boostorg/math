@@ -1,7 +1,5 @@
 [section:gamma_derivatives Derivative of the Incomplete Gamma Function]
 
-[caution __caution ]
-
 [h4 Synopsis]
 
 ``
@@ -13,6 +11,9 @@
    template <class T1, class T2>
    ``__sf_result`` gamma_p_derivative(T1 a, T2 x);
    
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` gamma_p_derivative(T1 a, T2 x, const ``__Policy``&);
+   
    }} // namespaces
    
 [h4 Description]
@@ -22,6 +23,8 @@ implements the partial derivative with respect to /x/ of the incomplete
 gamma function.
 
 [$../equations/derivative1.png]
+
+[optional_policy]
 
 Note that the derivative of the function __gamma_q can be obtained by negating
 the result of this function.

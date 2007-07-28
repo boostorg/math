@@ -224,6 +224,8 @@ object of a type convertible to `RealType`.
 [[Expression][Result Type][Notes]]
 [[DistributionType::value_type][RealType]
       [The real-number type /RealType/ upon which the distribution operates.]]
+[[DistributionType::policy_type][RealType]
+      [The __Policy to use when evaluating functions that depend on this distribution.]]
 [[d = cd][Distribution&][Distribution types are assignable.]]
 [[Distribution(cd)][Distribution][Distribution types are copy constructible.]]
 [[pdf(cd, cr)][RealType][Returns the PDF of the distribution.]]

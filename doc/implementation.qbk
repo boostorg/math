@@ -1,5 +1,7 @@
 [section:implementation Additional Implementation Notes]
 
+TODO: the error handling in this section is out of date and needs a re-write!!
+
 The majority of the implementation notes are included with the documentation
 of each function or distribution.  The notes here are of a more general nature,
 and reflect more the general implementation philosophy used.

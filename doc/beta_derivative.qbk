@@ -1,7 +1,5 @@
 [section:beta_derivative Derivative of the Incomplete Beta Function]
 
-[caution __caution ]
-
 [h4 Synopsis]
 
 ``
@@ -12,6 +10,9 @@
    
    template <class T1, class T2, class T3>
    ``__sf_result`` ibeta_derivative(T1 a, T2 b, T3 x);
+   
+   template <class T1, class T2, class T3, class ``__Policy``>
+   ``__sf_result`` ibeta_derivative(T1 a, T2 b, T3 x, const ``__Policy``&);
    
    }} // namespaces
    
@@ -25,6 +26,8 @@ beta function __ibeta.
 
 The return type of this function is computed using the __arg_pomotion_rules
 when T1, T2 and T3 are different types.
+
+[optional_policy]
 
 [h4 Accuracy]
 

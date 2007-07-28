@@ -1,9 +1,5 @@
 [section:gamma_ratios Ratios of Gamma Functions]
 
-[caution __caution ]
-
-[h4 Synopsis]
-
 ``
 #include <boost/math/special_functions/gamma.hpp>
 ``
@@ -13,8 +9,14 @@
    template <class T1, class T2>
    ``__sf_result`` tgamma_ratio(T1 a, T2 b);
    
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` tgamma_ratio(T1 a, T2 b, const ``__Policy``&);
+   
    template <class T1, class T2>
    ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta);
+   
+   template <class T1, class T2, class Policy>
+   ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta, const ``__Policy``&);
    
    }} // namespaces
    
@@ -23,18 +25,28 @@
    template <class T1, class T2> 
    ``__sf_result`` tgamma_ratio(T1 a, T2 b);
    
+   template <class T1, class T2, class ``__Policy``> 
+   ``__sf_result`` tgamma_ratio(T1 a, T2 b, const ``__Policy``&);
+   
 Returns the ratio of gamma functions:
 
 [$../equations/gamma_ratio0.png]
+
+[optional_policy]
 
 Internally this just calls `tgamma_delta_ratio(a, b-a)`.
    
    template <class T1, class T2>
    ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta);
    
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` tgamma_delta_ratio(T1 a, T2 delta, const ``__Policy``&);
+   
 Returns the ratio of gamma functions:
 
 [$../equations/gamma_ratio1.png]
+
+[optional_policy]
 
 Note that the result is calculated accurately even when /delta/ is
 small compared to /a/: indeed even if /a+delta ~ a/.  The function is

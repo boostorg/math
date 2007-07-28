@@ -6,9 +6,14 @@
    template <class T1, class T2>
    ``__sf_result`` sph_bessel(unsigned v, T2 x);
 
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` sph_bessel(unsigned v, T2 x, const ``__Policy``&);
+
    template <class T1, class T2>
    ``__sf_result`` sph_neumann(unsigned v, T2 x);
    
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` sph_neumann(unsigned v, T2 x, const ``__Policy``&);
    
 [h4 Description]
 
@@ -25,6 +30,8 @@ where:
 
 The return type of these functions is computed using the __arg_pomotion_rules
 for the single argument type T.
+
+[optional_policy]
 
 The functions return the result of __domain_error whenever the result is
 undefined or complex: this occurs when `x < 0`.

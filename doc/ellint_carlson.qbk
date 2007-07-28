@@ -8,8 +8,6 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 [section:ellint_carlson Elliptic Integrals - Carlson Form]
 
-[caution __caution ]
-
 [heading Synopsis]
 
 ``
@@ -20,6 +18,9 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
   template <class T1, class T2, class T3>
   ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z)
+
+  template <class T1, class T2, class T3, class ``__Policy``>
+  ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z, const ``__Policy``&)
 
   }} // namespaces
 
@@ -33,6 +34,9 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   template <class T1, class T2, class T3>
   ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z)
 
+  template <class T1, class T2, class T3, class ``__Policy``>
+  ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z, const ``__Policy``&)
+
   }} // namespaces
 
 
@@ -45,6 +49,9 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   template <class T1, class T2, class T3, class T4>
   ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p)
 
+  template <class T1, class T2, class T3, class T4, class ``__Policy``>
+  ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p, const ``__Policy``&)
+
   }} // namespaces
 
 
@@ -56,6 +63,9 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
   template <class T1, class T2>
   ``__sf_result`` ellint_rc(T1 x, T2 y)
+
+  template <class T1, class T2, class ``__Policy``>
+  ``__sf_result`` ellint_rc(T1 x, T2 y, const ``__Policy``&)
 
   }} // namespaces
 
@@ -75,6 +85,9 @@ as the arguments.
   template <class T1, class T2, class T3>
   ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z)
   
+  template <class T1, class T2, class T3, class ``__Policy``>
+  ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z, const ``__Policy``&)
+  
 Returns Carlson's Elliptic Integral R[sub F]:
 
 [$../equations/ellint9.png]
@@ -82,8 +95,13 @@ Returns Carlson's Elliptic Integral R[sub F]:
 Requires that all of the arguments are non-negative, and at most
 one may be zero.  Otherwise returns the result of __domain_error.
 
+[optional_policy]
+
   template <class T1, class T2, class T3>
   ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z)
+  
+  template <class T1, class T2, class T3, class ``__Policy``>
+  ``__sf_result`` ellint_rd(T1 x, T2 y, T3 z, const ``__Policy``&)
   
 Returns Carlson's elliptic integral R[sub D]:
 
@@ -92,8 +110,13 @@ Returns Carlson's elliptic integral R[sub D]:
 Requires that x and y are non-negative, with at most one of them
 zero, and that z >= 0.  Otherwise returns the result of __domain_error.
 
+[optional_policy]
+
   template <class T1, class T2, class T3, class T4>
   ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p)
+
+  template <class T1, class T2, class T3, class T4, class ``__Policy``>
+  ``__sf_result`` ellint_rj(T1 x, T2 y, T3 z, T4 p, const ``__Policy``&)
 
 Returns Carlson's elliptic integral R[sub J]:
   
@@ -101,6 +124,8 @@ Returns Carlson's elliptic integral R[sub J]:
 
 Requires that x, y and z are non-negative, with at most one of them
 zero, and that ['p != 0].  Otherwise returns the result of __domain_error.
+
+[optional_policy]
 
 When ['p < 0] the function returns the
 [@http://en.wikipedia.org/wiki/Cauchy_principal_value Cauchy principal value]
@@ -111,12 +136,17 @@ using the relation:
   template <class T1, class T2>
   ``__sf_result`` ellint_rc(T1 x, T2 y)
 
+  template <class T1, class T2, class ``__Policy``>
+  ``__sf_result`` ellint_rc(T1 x, T2 y, const ``__Policy``&)
+
 Returns Carlson's elliptic integral R[sub C]:
   
 [$../equations/ellint12.png]
 
 Requires that ['x > 0] and that ['y != 0].  
 Otherwise returns the result of __domain_error.
+
+[optional_policy]
 
 When ['y < 0] the function returns the
 [@http://mathworld.wolfram.com/CauchyPrincipalValue.html Cauchy principal value]

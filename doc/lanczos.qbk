@@ -1,7 +1,5 @@
 [section:lanczos The Lanczos Approximation]
 
-[caution __caution ]
-
 [h4 Motivation]
 
 ['Why base gamma and gamma-like functions on the Lanczos approximation?]

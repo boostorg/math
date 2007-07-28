@@ -13,6 +13,9 @@
    template <class T>
    T factorial(unsigned i);
    
+   template <class T, class ``__Policy``>
+   T factorial(unsigned i, const ``__Policy``&);
+   
    template <class T>
    T unchecked_factorial(unsigned i);
    
@@ -26,7 +29,12 @@
    template <class T>
    T factorial(unsigned i);
 
+   template <class T, class ``__Policy``>
+   T factorial(unsigned i, const ``__Policy``&);
+
 Returns [^i!].
+
+[optional_policy]
 
 For [^i <= max_factorial<T>::value] this is implemented by table lookup, 
 for larger values of [^i], this function is implemented in terms of __tgamma.  
@@ -86,9 +94,14 @@ implemented in terms of __tgamma for larger arguments.
    template <class T>
    T double_factorial(unsigned i);
    
+   template <class T, class ``__Policy``>
+   T double_factorial(unsigned i, const ``__Policy``&);
+   
    }} // namespaces
 
 Returns [^i!!].  
+
+[optional_policy]
 
 May return the result of __overflow_error if the result is too large
 to represent in type T.  The implementation is designed to be optimised
@@ -131,6 +144,9 @@ and
    template <class T>
    ``__sf_result`` rising_factorial(T x, int i);
    
+   template <class T, class ``__Policy``>
+   ``__sf_result`` rising_factorial(T x, int i, const ``__Policy``&);
+   
    }} // namespaces
 
 Returns the rising factorial of /x/ and /i/:
@@ -142,6 +158,8 @@ or
 rising_factorial(x, i) = x(x+1)(x+2)(x+3)...(x+i)
                           
 Note that both /x/ and /i/ can be negative as well as positive.
+
+[optional_policy]
 
 May return the result of __overflow_error if the result is too large
 to represent in type T.
@@ -179,6 +197,9 @@ small integer arguments are handled internally by that function.
    template <class T>
    ``__sf_result`` falling_factorial(T x, unsigned i);
    
+   template <class T, class ``__Policy``>
+   ``__sf_result`` falling_factorial(T x, unsigned i, const ``__Policy``&);
+   
    }} // namespaces
 
 Returns the falling factorial of /x/ and /i/:
@@ -188,6 +209,8 @@ falling_factorial(x, i) = x(x-1)(x-2)(x-3)...(x-i+1)
 Note that this function is only defined for positive /i/, hence the
 `unsigned` second argument.  Argument /x/ can be either positive or
 negative however.
+
+[optional_policy]
 
 May return the result of __overflow_error if the result is too large
 to represent in type T.
@@ -225,11 +248,16 @@ small integer arguments are handled internally by that function.
    template <class T>
    T binomial_coefficient(unsigned n, unsigned k);
 
+   template <class T, class ``__Policy``>
+   T binomial_coefficient(unsigned n, unsigned k, const ``__Policy``&);
+
    }} // namespaces
 
 Returns the binomial coefficient: [sub n]C[sub k].
 
 Requires k <= n.
+
+[optional_policy]
 
 May return the result of __overflow_error if the result is too large
 to represent in type T.

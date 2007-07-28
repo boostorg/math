@@ -1,7 +1,5 @@
 [section:lgamma Log Gamma]
 
-[caution __caution ]
-
 [h4 Synopsis]
 
 ``
@@ -13,8 +11,14 @@
    template <class T>
    ``__sf_result`` lgamma(T z);
    
+   template <class T, class ``__Policy``>
+   ``__sf_result`` lgamma(T z, const ``__Policy``&);
+   
    template <class T>
    ``__sf_result`` lgamma(T z, int* sign);
+   
+   template <class T, class ``__Policy``>
+   ``__sf_result`` lgamma(T z, int* sign, const ``__Policy``&);
    
    }} // namespaces
 
@@ -26,6 +30,8 @@ The [@http://en.wikipedia.org/wiki/Gamma_function lgamma function] is defined by
 
 The second form of the function takes a pointer to an integer,
 which if non-null is set on output to the sign of tgamma(z).
+
+[optional_policy]
 
 [$../graphs/lgamma.png]
 

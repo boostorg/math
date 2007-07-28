@@ -1,7 +1,5 @@
 [section:sph_harm Spherical Harmonics]
 
-[caution __caution ]
-
 [h4 Synopsis]
 
 ``
@@ -13,11 +11,20 @@
    template <class T1, class T2>
    std::complex<``__sf_result``> spherical_harmonic(unsigned n, int m, T1 theta, T2 phi);
 
+   template <class T1, class T2, class ``__Policy``>
+   std::complex<``__sf_result``> spherical_harmonic(unsigned n, int m, T1 theta, T2 phi, const ``__Policy``&);
+
    template <class T1, class T2>
    ``__sf_result`` spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi);
 
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi, const ``__Policy``&);
+
    template <class T1, class T2>
    ``__sf_result`` spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi);
+      
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi, const ``__Policy``&);
       
    }} // namespaces
 
@@ -26,8 +33,13 @@
 The return type of these functions is computed using the __arg_pomotion_rules
 when T1 and T2 are different types.
 
+[optional_policy]
+
    template <class T1, class T2>
    std::complex<``__sf_result``> spherical_harmonic(unsigned n, int m, T1 theta, T2 phi);
+   
+   template <class T1, class T2, class ``__Policy``>
+   std::complex<``__sf_result``> spherical_harmonic(unsigned n, int m, T1 theta, T2 phi, const ``__Policy``&);
    
 Returns the value of the Spherical Harmonic Y[sub n][super m](theta, phi):
 
@@ -67,12 +79,18 @@ From MathWorld--A Wolfram Web Resource].  ]
    template <class T1, class T2>
    ``__sf_result`` spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi);
    
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` spherical_harmonic_r(unsigned n, int m, T1 theta, T2 phi, const ``__Policy``&);
+   
 Returns the real part of Y[sub n][super m](theta, phi):
 
 [$../equations/spherical_1.png]
 
    template <class T1, class T2>
    ``__sf_result`` spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi);
+   
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi, const ``__Policy``&);
    
 Returns the imaginary part of Y[sub n][super m](theta, phi):
 

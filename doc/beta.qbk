@@ -1,7 +1,5 @@
 [section:beta_function Beta]
 
-[caution __caution ]
-
 [h4 Synopsis]
 
 ``
@@ -13,6 +11,9 @@
    template <class T1, class T2>
    ``__sf_result`` beta(T1 a, T2 b);
    
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` beta(T1 a, T2 b, const ``__Policy``&);
+   
    }} // namespaces
 
 [h4 Description]
@@ -22,6 +23,8 @@ The beta function is defined by:
 [$../equations/beta1.png]
 
 [$../graphs/beta.png]
+
+[optional_policy]
 
 There are effectively two versions of this function internally: a fully
 generic version that is slow, but reasonably accurate, and a much more

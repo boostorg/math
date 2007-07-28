@@ -1,6 +1,8 @@
 [section:error_handling Error Handling]
 
-[caution __caution ]
+[caution This documentation is out of date.  
+
+TODO: rewrite me please!! ]
 
 [def __format [@../../libs/format/index.html Boost.Format]]
 

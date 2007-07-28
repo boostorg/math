@@ -42,6 +42,24 @@ into this library and brought them into line with the rest of the code.
 and brought them into line with the rest of the code.
 * Added C# "Distribution Explorer" demo application.
 
+[h4 Milestone 5: Post Review First Official Release (in Progress)]
+
+['The documentation for this first release is still being worked upon.]
+
+* Added Policy based framework that allows fine grained control
+over function behaviour.
+* [*Breaking change:] Changed default behaviour for domain, pole and overflow errors
+to throw an exception (based on review feedback), this
+behaviour can be customised using __Policy's.
+* [*Breaking change:] Changed exception thrown when an internal evaluation error
+occurs to boost::math::evaluation_error.
+* [*Breaking change:] Changed discrete quantiles to return an integer result:
+this is anything up to 20 times faster than finding the true root, this
+behaviour can be customised using __Policy's.
+* Polynomial/rational function evaluation is now customisable and hopefully
+faster than before.
+* Added performance test program.
+
 [h4 Future]
 
 * Some TR1 Special functions are still needed.

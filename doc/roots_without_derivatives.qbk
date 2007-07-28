@@ -1,7 +1,5 @@
 [section:roots2 Root Finding Without Derivatives]
 
-[caution __caution ]
-
 [h4 Synopsis]
 
 ``
@@ -27,6 +25,16 @@
          T max, 
          Tol tol);
 
+   template <class F, class T, class Tol, class ``__Policy``>
+   std::pair<T, T> 
+      bisect(
+         F f, 
+         T min, 
+         T max, 
+         Tol tol, 
+         boost::uintmax_t& max_iter,
+         const ``__Policy``&);
+
    template <class F, class T, class Tol>
    std::pair<T, T> 
       bracket_and_solve_root(
@@ -37,6 +45,17 @@
          Tol tol, 
          boost::uintmax_t& max_iter);
 
+   template <class F, class T, class Tol, class ``__Policy``>
+   std::pair<T, T> 
+      bracket_and_solve_root(
+         F f, 
+         const T& guess, 
+         const T& factor, 
+         bool rising, 
+         Tol tol, 
+         boost::uintmax_t& max_iter,
+         const ``__Policy``&);
+
    template <class F, class T, class Tol>
    std::pair<T, T> 
       toms748_solve(
@@ -45,6 +64,16 @@
          const T& b, 
          Tol tol, 
          boost::uintmax_t& max_iter);
+
+   template <class F, class T, class Tol, class ``__Policy``>
+   std::pair<T, T> 
+      toms748_solve(
+         F f, 
+         const T& a, 
+         const T& b, 
+         Tol tol, 
+         boost::uintmax_t& max_iter,
+         const ``__Policy``&);
 
    template <class F, class T, class Tol>
    std::pair<T, T> 
@@ -57,12 +86,25 @@
          Tol tol, 
          boost::uintmax_t& max_iter);
 
+   template <class F, class T, class Tol, class ``__Policy``>
+   std::pair<T, T> 
+      toms748_solve(
+         F f, 
+         const T& a, 
+         const T& b, 
+         const T& fa, 
+         const T& fb, 
+         Tol tol, 
+         boost::uintmax_t& max_iter,
+         const ``__Policy``&);
+
    // Termination conditions:
    template <class T>
    struct eps_tolerance;
 
    struct equal_floor;
    struct equal_ceil;
+   struct equal_nearest_integer;
    
    }}} // namespaces
    
@@ -111,7 +153,17 @@ only rarely, but may be useful in some specific circumstances.
          T max, 
          Tol tol);
 
-These two functions locate the root using bisection, function arguments are:
+   template <class F, class T, class Tol, class ``__Policy``>
+   std::pair<T, T> 
+      bisect(
+         F f, 
+         T min, 
+         T max, 
+         Tol tol, 
+         boost::uintmax_t& max_iter,
+         const ``__Policy``&);
+
+These functions locate the root using bisection, function arguments are:
 
 [variablelist
 [[f]  [A unary functor which is the function whose root is to be found.]]
@@ -123,6 +175,8 @@ These two functions locate the root using bisection, function arguments are:
         will return the current brackets enclosing the root when /tol(min,max)/ becomes true.]]
 [[max_iter][The maximum number of invocations of /f(x)/ to make while searching for the root.]]
 ]
+
+[optional_policy]
 
 Returns: a pair of values /r/ that bracket the root so that:
 
@@ -153,6 +207,17 @@ because the termination condition /tol/ was satisfied.
          Tol tol, 
          boost::uintmax_t& max_iter);
 
+   template <class F, class T, class Tol, class ``__Policy``>
+   std::pair<T, T> 
+      bracket_and_solve_root(
+         F f, 
+         const T& guess, 
+         const T& factor, 
+         bool rising, 
+         Tol tol, 
+         boost::uintmax_t& max_iter,
+         const ``__Policy``&);
+
 This is a convenience function that calls /toms748_solve/ internally
 to find the root of /f(x)/.  It's usable only when /f(x)/ is a monotonic
 function, and the location of the root is known approximately, and in
@@ -177,6 +242,8 @@ particular it is known whether the root is occurs for positive or negative
 [[max_iter] [The maximum number of function invocations to perform in the search 
             for the root.]]
 ]
+
+[optional_policy]
          
 Returns: a pair of values /r/ that bracket the root so that:
 
@@ -206,6 +273,16 @@ because the termination condition /tol/ was satisfied.
          Tol tol, 
          boost::uintmax_t& max_iter);
 
+   template <class F, class T, class Tol, class ``__Policy``>
+   std::pair<T, T> 
+      toms748_solve(
+         F f, 
+         const T& a, 
+         const T& b, 
+         Tol tol, 
+         boost::uintmax_t& max_iter,
+         const ``__Policy``&);
+
    template <class F, class T, class Tol>
    std::pair<T, T> 
       toms748_solve(
@@ -216,6 +293,18 @@ because the termination condition /tol/ was satisfied.
          const T& fb, 
          Tol tol, 
          boost::uintmax_t& max_iter);
+         
+   template <class F, class T, class Tol, class ``__Policy``>
+   std::pair<T, T> 
+      toms748_solve(
+         F f, 
+         const T& a, 
+         const T& b, 
+         const T& fa, 
+         const T& fb, 
+         Tol tol, 
+         boost::uintmax_t& max_iter,
+         const ``__Policy``&);
          
 These two functions implement TOMS Algorithm 748: it uses a mixture of
 cubic, quadratic and linear (secant) interpolation to locate the root of
@@ -239,6 +328,8 @@ cubic, quadratic and linear (secant) interpolation to locate the root of
             for the root.  On exit /max_iter/ is set to actual number of function
             invocations used.]]
 ]
+
+[optional_policy]
 
 Returns: a pair of values /r/ that bracket the root so that:
 
@@ -293,6 +384,16 @@ of the interval have the same /floor/.
 This termination condition is used when you want to find an integer result
 that is the /ceil/ of the true root.  It will terminate as soon as both ends
 of the interval have the same /ceil/.
+
+   struct equal_nearest_integer
+   {
+      equal_nearest_integer();
+      template <class T> bool operator()(const T& a, const T& b)const;
+   };
+
+This termination condition is used when you want to find an integer result
+that is the /closest/ to the true root.  It will terminate as soon as both ends
+of the interval round to the same nearest integer.
 
 [h4 Implementation]
 

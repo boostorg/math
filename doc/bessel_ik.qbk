@@ -6,8 +6,14 @@
    template <class T1, class T2>
    ``__sf_result`` cyl_bessel_i(T1 v, T2 x);
 
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` cyl_bessel_i(T1 v, T2 x, const ``__Policy``&);
+
    template <class T1, class T2>
    ``__sf_result`` cyl_bessel_k(T1 v, T2 x);
+   
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` cyl_bessel_k(T1 v, T2 x, const ``__Policy``&);
    
    
 [h4 Description]
@@ -28,6 +34,8 @@ where:
 The return type of these functions is computed using the __arg_pomotion_rules
 when T1 and T2 are different types.  The functions are also optimised for the
 relatively common case that T1 is an integer.
+
+[optional_policy]
 
 The functions return the result of __domain_error whenever the result is
 undefined or complex.  For __cyl_bessel_j this occurs when `x < 0` and v is not

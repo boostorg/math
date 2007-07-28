@@ -1,7 +1,5 @@
 [section:rational Polynomial and Rational Function Evaluation]
 
-[caution __caution ]
-
 [h4 synopsis]
 
 ``
@@ -156,6 +154,9 @@ in parallel to make the most of the processors floating-point pipeline.
 If /v/ is greater than one, then the polynomials are evaluated in reverse
 order as polynomials in ['1\/v]: this avoids unnecessary numerical overflow when the
 coefficients are large.
+
+TODO: mention second order Horner's method and other evaluation options, 
+plus config, and performance test app.
 
 [endsect][/section:rational Polynomial and Rational Function Evaluation]
 

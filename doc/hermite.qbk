@@ -1,7 +1,5 @@
 [section:hermite Hermite Polynomials]
 
-[caution __caution ]
-
 [h4 Synopsis]
 
 ``
@@ -12,6 +10,9 @@
    
    template <class T>
    ``__sf_result`` hermite(unsigned n, T x);
+   
+   template <class T, class ``__Policy``>
+   ``__sf_result`` hermite(unsigned n, T x, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
    ``__sf_result`` hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1);
@@ -27,9 +28,14 @@ as that argument or `double` if the template argument is an integer type.
    template <class T>
    ``__sf_result`` hermite(unsigned n, T x);
    
+   template <class T, class ``__Policy``>
+   ``__sf_result`` hermite(unsigned n, T x, const ``__Policy``&);
+   
 Returns the value of the Hermite Polynomial of order /n/ at point /x/:
 
 [$../equations/hermite_0.png]
+
+[optional_policy]
 
 The following graph illustrates the behaviour of the first few 
 Hermite Polynomials:

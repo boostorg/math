@@ -64,7 +64,10 @@ Functions that may have more general use, like `digits` (significand), `max_valu
 See [link math_toolkit.dist.stat_tut  Statistical Distributions Tutorial] and
 [link math_toolkit.dist.dist_ref Statistical Distributions Reference]
 and [link math_toolkit.special Special Functions]
+
 [h4 Configuration Policy Macros - Controlling Handling Arguments, Undefined Functions, Throwing of Exceptions, Accuracy, ]
+
+TODO: this is out of date, rewrite me!!
 
 * *BOOST_MATH_DOMAIN_ERROR_POLICY*
 

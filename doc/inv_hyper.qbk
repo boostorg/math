@@ -77,8 +77,11 @@ and can be computed as [$../equations/special_functions_blurb18.jpeg].
 #include <boost/math/special_functions/acosh.hpp>
 ``
 
-   template<typename T> 
+   template<class T> 
    ``__sf_result`` acosh(const T x);
+
+   template<class T, class ``__Policy``> 
+   ``__sf_result`` acosh(const T x, const ``__Policy``&);
 
 Computes the reciprocal of (the restriction to the range of __form1) 
 [link math_toolkit.special.inv_hyper.inv_hyper_over
@@ -91,6 +94,8 @@ If x is in the range __form2 then returns the result of __domain_error.
 The return type of this function is computed using the __arg_pomotion_rules:
 the return type is `double` when T is an integer type, and T otherwise.
 
+[optional_policy]
+
 [endsect]
 
 [section:asinh asinh]
@@ -99,8 +104,11 @@ the return type is `double` when T is an integer type, and T otherwise.
 #include <boost/math/special_functions/asinh.hpp>
 ``
 
-   template<typename T> 
+   template<class T> 
    ``__sf_result`` asinh(const T x);
+
+   template<class T, class ``__Policy``> 
+   ``__sf_result`` asinh(const T x, const ``__Policy``&);
 
 Computes the reciprocal of 
 [link math_toolkit.special.inv_hyper.inv_hyper_over 
@@ -111,6 +119,8 @@ infinity to ensure accuracy.
 The return type of this function is computed using the __arg_pomotion_rules:
 the return type is `double` when T is an integer type, and T otherwise.
 
+[optional_policy]
+
 [endsect]
 
 [section:atanh atanh]
@@ -119,13 +129,18 @@ the return type is `double` when T is an integer type, and T otherwise.
 #include <boost/math/special_functions/atanh.hpp>
 ``
 
-   template<typename T> 
+   template<class T> 
    ``__sf_result`` atanh(const T x);
+
+   template<class T, class ``__Policy``> 
+   ``__sf_result`` atanh(const T x, const ``__Policy``&);
 
 Computes the reciprocal of 
 [link math_toolkit.special.inv_hyper.inv_hyper_over
 the hyperbolic tangent function], at x. 
 Taylor series are used at the origin to ensure accuracy.
+
+[optional_policy]
 
 If x is in the range 
 __form3
