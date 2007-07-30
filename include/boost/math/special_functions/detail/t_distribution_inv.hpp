@@ -68,7 +68,7 @@ T inverse_students_t_hill(T ndf, T u, const Policy& pol)
 // Journal of Computational Finance, Vol 9 Issue 4, pp 37-73, Summer 2006
 //
 template <class T, class Policy>
-T inverse_students_t_tail_series(T df, T v, T u, const Policy& pol)
+T inverse_students_t_tail_series(T df, T v, T /* u */, const Policy& pol)
 {
    using namespace std;
    // Tail series expansion, see section 6 of Shaw's paper.
