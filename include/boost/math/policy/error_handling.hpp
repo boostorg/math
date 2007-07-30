@@ -454,11 +454,11 @@ inline bool check_denorm(T val, R* result, const char* function, const Policy& p
 }
 
 template <class R, class T>
-inline bool check_overflow(T val, R* result, const char* function, const overflow_error<ignore_error>&){ return false; }
+inline bool check_overflow(T /*val*/, R* /*result*/, const char* /*function*/, const overflow_error<ignore_error>&){ return false; }
 template <class R, class T>
-inline bool check_underflow(T val, R* result, const char* function, const underflow_error<ignore_error>&){ return false; }
+inline bool check_underflow(T /*val*/, R* /*result*/, const char* /*function*/, const underflow_error<ignore_error>&){ return false; }
 template <class R, class T>
-inline bool check_denorm(T val, R* result, const char* function, const denorm_error<ignore_error>&){ return false; }
+inline bool check_denorm(T /*val*/, R* /*result*/, const char* /*function*/, const denorm_error<ignore_error>&){ return false; }
 
 }
 
