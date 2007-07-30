@@ -12,7 +12,8 @@
 // domain_error - negative degrees of freedom argument
 // for student's t distribution CDF.
 
-// Uncomment this line to see the effect of changing policy.
+// Uncomment this line to see the effect of changing policy,
+// to ignore the error & return NaN instead of throwing an exception.
 // #define BOOST_MATH_DOMAIN_ERROR_POLICY ignore_error
 // Note that these policy #defines MUST preceed the #include of
 // any boost/math #includes.
@@ -68,9 +69,7 @@ With
 Example error handling using Student's t function. 
 Probability of Student's t is 1.#QNAN
 
-Default behaviour without
-
-//#define BOOST_MATH_THROW_ON_DOMAIN_ERROR 
+Default behaviour without:
 
 Example error handling using Student's t function. 
 Message from thrown exception was:
