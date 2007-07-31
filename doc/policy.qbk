@@ -51,7 +51,7 @@ There are two orthogonal aspects to error handling:
 
 What to do with the error is encapsulated by an enumerated type:
 
-   namespace boost{ namespace math{ namespace policy{
+   namespace boost { namespace math { namespace policies {
    
    enum error_policy_type
    {
@@ -149,57 +149,57 @@ which are summarised in the following table:
    [Policy Class]
       [Description]]
 [[Domain Error]
-   [boost::math::policy::domain_error<['action]>]
+   [boost::math::policies::domain_error<['action]>]
       [Raised when more or more arguments are outside the 
       defined range of the function.
 
-      Defaults to `boost::math::policy::domain_error<throw_on_error>`
+      Defaults to `boost::math::policies::domain_error<throw_on_error>`
 
       When the action is set to ['throw_on_error] 
       then throws `std::domain_error`]]
 [[Pole Error]
-   [boost::math::policy::pole_error<['action]>]
+   [boost::math::policies::pole_error<['action]>]
       [Raised when more or more arguments would cause the function
       to be evaluated at a pole.
 
-      Defaults to `boost::math::policy::pole_error<throw_on_error>`
+      Defaults to `boost::math::policies::pole_error<throw_on_error>`
 
       When the action is ['throw_on_error] then
       throw a `std::domain_error`]]
 [[Overflow Error]
-   [boost::math::policy::overflow_error<['action]>]
+   [boost::math::policies::overflow_error<['action]>]
       [Raised when the result of the function is outside
       the representable range of the floating point type used.
 
-      Defaults to `boost::math::policy::overflow_error<throw_on_error>`.
+      Defaults to `boost::math::policies::overflow_error<throw_on_error>`.
 
       When the action is ['throw_on_error] then throws a `std::overflow_error`.]]
 [[Underflow Error]
-   [boost::math::policy::underflow_error<['action]>]
+   [boost::math::policies::underflow_error<['action]>]
       [Raised when the result of the function is too small
       to be represented in the floating point type used.
 
-      Defaults to `boost::math::policy::underflow_error<ignore_error>`
+      Defaults to `boost::math::policies::underflow_error<ignore_error>`
 
       When the specified action is ['throw_on_error] then
       throws a `std::underflow_error`]]
 [[Denorm Error]
-   [boost::math::policy::denorm_error<['action]>]
+   [boost::math::policies::denorm_error<['action]>]
       [Raised when the result of the function is a
       denormalised value.
 
-      Defaults to `boost::math::policy::denorm_error<ignore_error>`
+      Defaults to `boost::math::policies::denorm_error<ignore_error>`
 
       When the action is ['throw_on_error] then throws a `std::underflow_error`]]
 [[Evaluation Error]
-   [boost::math::policy::evaluation_error<['action]>]
+   [boost::math::policies::evaluation_error<['action]>]
       [Raised when the result of the function is well defined and
       finite, but we were unable to compute it.  Typically
       this occurs when an iterative method fails to converge.
       Of course ideally this error should never be raised: feel free
       to report it as a bug if it is!
 
-      Defaults to `boost::math::policy::evaluation_error<throw_on_error>`
+      Defaults to `boost::math::policies::evaluation_error<throw_on_error>`
 
       When the action is ['throw_on_error] then throws `boost::math::evaluation_error`]]
 ]
@@ -212,7 +212,7 @@ using:
 
    #include <boost/math/special_functions/gamma.hpp>
    
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    using namespace boost::math;
    
    // Define a policy:
@@ -239,7 +239,7 @@ rather than throw exceptions, then we can use:
 
    #include <boost/math/distributions/normal.hpp>
    
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    using namespace boost::math;
    
    // Define a policy:
@@ -264,12 +264,12 @@ effect whether internal promotion takes place or not:
 
 [table
 [[Policy][Meaning]]
-[[`boost::math::policy::promote_float<B>`]
+[[`boost::math::policies::promote_float<B>`]
    [Indicates whether `float` arguments should be promoted to `double`
-   precision internally: defaults to `boost::math::policy::promote_float<true>`]]
-[[`boost::math::policy::promote_double<B>`]
+   precision internally: defaults to `boost::math::policies::promote_float<true>`]]
+[[`boost::math::policies::promote_double<B>`]
    [Indicates whether `double` arguments should be promoted to `long double`
-   precision internally: defaults to `boost::math::policy::promote_double<true>`]]
+   precision internally: defaults to `boost::math::policies::promote_double<true>`]]
 ]
 
 [h4 Examples]
@@ -279,7 +279,7 @@ Suppose we want `tgamma` to be evaluated without internal promotion to
 
    #include <boost/math/special_functions/gamma.hpp>
    
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    using namespace boost::math;
    
    // Define a policy:
@@ -298,7 +298,7 @@ without promoting `float` to `double`, then we could use:
 
    #include <boost/math/distributions/normal.hpp>
    
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    using namespace boost::math;
    
    // Define a policy:
@@ -346,7 +346,7 @@ For example:
 
    #include <boost/math/distributions/cauchy.hpp>
    
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    using namespace boost::math;
    
    // This will not compile, cauchy has no mean!
@@ -391,7 +391,7 @@ result.  For example:
    #include <boost/math/distributions/negative_binomial.hpp>
    
    using namespace boost::math;
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    
    typedef negative_binomial_distribution<
          double, 
@@ -453,7 +453,7 @@ For example:
    #include <boost/math/distributions/negative_binomial.hpp>
    
    using namespace boost::math;
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    
    typedef negative_binomial_distribution<
          double, 
@@ -500,7 +500,7 @@ For example:
    #include <boost/math/distributions/negative_binomial.hpp>
    
    using namespace boost::math;
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    
    typedef negative_binomial_distribution<
          double, 
@@ -549,7 +549,7 @@ For example we could calculate tgamma to approximately 5 decimal digits using:
    #include <boost/math/special_functions/gamma.hpp>
    
    using namespace boost::math;
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    
    typedef policy<digits10<5> > pol;
    
@@ -560,7 +560,7 @@ Or again using ['make_policy]:
    #include <boost/math/special_functions/gamma.hpp>
    
    using namespace boost::math;
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    
    double t = tgamma(12, policy<digits10<5> >());
 
@@ -569,7 +569,7 @@ And for a quantile of a distribution to approximately 25-bit precision:
    #include <boost/math/distributions/normal.hpp>
    
    using namespace boost::math;
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    
    double q = quantile(
          normal_distribution<double, policy<digits2<25> >(), 
@@ -698,7 +698,7 @@ or distribution header.  For example:
    
    namespace myspace{
    
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    
    // Define a policy that does not throw on overflow:
    typedef policy<overflow_error<errno_on_error> > my_policy;
@@ -735,7 +735,7 @@ specify the floating-point type to use:
    
    namespace myspace{
    
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    
    // Define a policy to use, in this case we want all the distribution
    // accessor functions to compile, even if they are mathematically
@@ -829,69 +829,69 @@ but are documented briefly here for the sake of completeness.
    policy<...>::domain_error_type
    
 Specifies how domain errors are handled, will be an instance of
-`boost::math::policy::domain_error<>` with the template argument to
+`boost::math::policies::domain_error<>` with the template argument to
 `domain_error` one of the `error_policy_type` enumerated values.
 
    policy<...>::pole_error_type
    
 Specifies how pole-errors are handled, will be an instance of
-`boost::math::policy::pole_error<>` with the template argument to
+`boost::math::policies::pole_error<>` with the template argument to
 `pole_error` one of the `error_policy_type` enumerated values.
 
    policy<...>::overflow_error_type
    
 Specifies how overflow errors are handled, will be an instance of
-`boost::math::policy::overflow_error<>` with the template argument to
+`boost::math::policies::overflow_error<>` with the template argument to
 `overflow_error` one of the `error_policy_type` enumerated values.
 
    policy<...>::underflow_error_type
    
 Specifies how underflow errors are handled, will be an instance of
-`boost::math::policy::underflow_error<>` with the template argument to
+`boost::math::policies::underflow_error<>` with the template argument to
 `underflow_error` one of the `error_policy_type` enumerated values.
 
    policy<...>::denorm_error_type
    
 Specifies how denorm errors are handled, will be an instance of
-`boost::math::policy::denorm_error<>` with the template argument to
+`boost::math::policies::denorm_error<>` with the template argument to
 `denorm_error` one of the `error_policy_type` enumerated values.
 
    policy<...>::evaluation_error_type
    
 Specifies how evaluation errors are handled, will be an instance of
-`boost::math::policy::evaluation_error<>` with the template argument to
+`boost::math::policies::evaluation_error<>` with the template argument to
 `evaluation_error` one of the `error_policy_type` enumerated values.
 
    policy<...>::precision_type
    
 Specifies the internal precision to use in binary digits (uses zero
 to represent whatever the default precision is).  Will be an instance
-of `boost::math::policy::digits2<N>` which in turn inherits from 
+of `boost::math::policies::digits2<N>` which in turn inherits from 
 `boost::mpl::int_<N>`.
 
    policy<...>::promote_float_type
    
 Specifies whether or not to promote `float` arguments to `double` precision
-internally.  Will be an instance of `boost::math::policy::promote_float<B>`
+internally.  Will be an instance of `boost::math::policies::promote_float<B>`
 which in turn inherits from `boost::mpl::bool_<B>`.
 
    policy<...>::promote_double_type
    
 Specifies whether or not to promote `double` arguments to `long double` precision
-internally.  Will be an instance of `boost::math::policy::promote_float<B>`
+internally.  Will be an instance of `boost::math::policies::promote_float<B>`
 which in turn inherits from `boost::mpl::bool_<B>`.
 
    policy<...>::discrete_quantile_type
    
 Specifies how discrete quantiles are evaluated, will be an instance
-of `boost::math::policy::discrete_quantile<>` instantiated with one of
+of `boost::math::policies::discrete_quantile<>` instantiated with one of
 the `discrete_quantile_policy_type` enumerated type.
 
    policy<...>::assert_undefined_type
    
 Specifies whether mathematically-undefined properties are
 asserted as compile-time errors, or treated as runtime errors
-instead.  Will be an instance of `boost::math::policy::assert_undefined<B>`
+instead.  Will be an instance of `boost::math::policies::assert_undefined<B>`
 which in turn inherits from `boost::math::mpl::bool_<B>`.
 
 
