@@ -435,7 +435,11 @@ T tgammap1m1_imp(T dz, Policy const& pol, const L& l)
          mpl::less_equal<precision_type, mpl::int_<0> >,
          mpl::greater<precision_type, mpl::int_<113> >
       >,
-      mpl::int_<0>,
+      typename mpl::if_<
+         is_same<L, lanczos::lanczos24m113>,
+         mpl::int_<113>,
+         mpl::int_<0>
+      >::type,
       typename mpl::if_<
          mpl::less_equal<precision_type, mpl::int_<64> >,
          mpl::int_<64>, mpl::int_<113> >::type

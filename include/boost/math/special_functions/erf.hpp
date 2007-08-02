@@ -195,13 +195,13 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
       }
       else if(z < 1e-10)
       {
-         result = T(z * 1.125 + z * 0.003379167095512573896158903121545171688L);
+         result = static_cast<T>(z * 1.125f + z * 0.003379167095512573896158903121545171688L);
       }
       else
       {
          static const T n[7] = { 0.00337916709551257778174L, -0.000147024115786688745475L, -0.37463022236812520164L, 0.0163061594494816999803L, -0.0534354147807331748737L, 0.00161898096813581982844L, -0.0059528010489182840404L };
          static const T d[7] = { 1, -0.0435089806536379531594L, 0.442761965043509204727L, -0.017375974533016704678L, 0.0772756490303260060769L, -0.00210552465858669941879L, 0.00544772980263244037286L };
-         result = T(z * 1.125 + z * tools::evaluate_polynomial(n, z) / tools::evaluate_polynomial(d, z));
+         result = static_cast<T>(z * 1.125f + z * tools::evaluate_polynomial(n, z) / tools::evaluate_polynomial(d, z));
       }
    }
    else if((z < 14) || ((z < 28) && invert))
