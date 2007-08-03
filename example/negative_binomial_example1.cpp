@@ -58,6 +58,9 @@
 // see also http://www.math.uah.edu/stat/bernoulli/Introduction.xhtml
 // http://www.codecogs.com/pages/catgen.php?category=stats/dists/discrete
 
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+// Avoid throwing an exception (the default policy) and just return infinity.
+
 #include <boost/math/distributions/negative_binomial.hpp> // for negative_binomial_distribution
   using boost::math::negative_binomial_distribution;
 	using boost::math::negative_binomial; // typedef provides default type is double.
@@ -230,6 +233,67 @@ Probability of meeting sales quota on or before 8th house is 0.17367
 If the confidence of meeting sales quota is 0.17367, then the finishing house is 8
 Message from thrown exception was:
    Error in function boost::math::quantile(const negative_binomial_distribution<double>&, double): Probability argument is 1, which implies infinite failures !
+
+After adding 
+
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+
+to get the previous overflow policy
+
+Compiling...
+negative_binomial_example1.cpp
+Linking...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\negative_binomial_example1.exe"
+Example 1 using the Negative Binomial Distribution.  ..\..\..\..\..\..\boost-sandbox\math_toolkit\libs\math\example\negative_binomial_example1.cpp Fri Aug  3 14:13:05 2007 140050727
+Selling candy bars - an example of using the negative binomial distribution. 
+An example by Dr. Diane Evans,
+Professor of Mathematics at Rose-Hulman Institute of Technology,
+see http://en.wikipedia.org/wiki/Negative_binomial_distribution
+Pat has a sales per house success rate of 0.4.
+Therefore he would, on average, sell 40 bars after trying 100 houses.
+With a success rate of 0.4, he might expect, on average,
+ to need to visit about 12 houses in order to sell all 5 candy bars. 
+Probability that Pat finishes on the 5th house is f(5) = 0.10033
+Probability that Pat finishes on the 6th house is 0.03072
+Probability that Pat finishes on the 7th house is 0.055296
+Probability that Pat finishes on the 8th house is 0.077414
+Probability that Pat finishes on or before the 8th house is sum 
+pdf(sales_quota) + pdf(6) + pdf(7) + pdf(8) = 0.17367
+Probability of selling his quota of 5 candy bars
+on or before the 8th house is 0.17367
+Probability that Pat finishes exactly on the 10th house is 0.10033
+Probability of selling his quota of 5 candy bars
+on or before the 10th house is 0.3669
+Probability that Pat finishes on the 11th house is 0.10033
+Probability of selling his quota of 5 candy bars
+on or before the 11th house is 0.46723
+Probability that Pat finishes on the 12th house is 0.094596
+Probability of selling his quota of 5 candy bars
+on or before the 12th house is 0.56182
+Probability of selling his quota of 5 candy bars
+on or before the 31th house is 0.99897
+Probability of failing to sell his quota of 5 candy bars
+even after visiting all 30  houses is 0.0010314
+Probability of meeting sales quota on or before 8th house is 0.17367
+If the confidence of meeting sales quota is 0.17367, then the finishing house is 8
+If the confidence of meeting sales quota is 1, then the finishing house is 1.#INF
+If the confidence of meeting sales quota is 0, then the finishing house is 5
+If the confidence of meeting sales quota is 0.99849, then the finishing house is 31
+If confidence of meeting quota is zero (we assume all houses are successful sales), then finishing house is 5
+If confidence of meeting quota is 0, then finishing house is 5
+If confidence of meeting quota is 0.001, then finishing house is 5
+If confidence of meeting quota is 0.01, then finishing house is 5
+If confidence of meeting quota is 0.05, then finishing house is 6
+If confidence of meeting quota is 0.1, then finishing house is 7
+If confidence of meeting quota is 0.5, then finishing house is 12
+If confidence of meeting quota is 0.9, then finishing house is 18
+If confidence of meeting quota is 0.95, then finishing house is 21
+If confidence of meeting quota is 0.99, then finishing house is 25
+If confidence of meeting quota is 0.999, then finishing house is 32
+If confidence of meeting quota is 1, then finishing house is 1.#INF
+If we demand a confidence of meeting sales quota of unity,
+then we can never be certain of selling 5 bars, so the finishing house is infinite!
+
 
 */
 
