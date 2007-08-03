@@ -196,6 +196,8 @@ and use the function's name as the link text]
 [template floorlr[x][lfloor][x][rfloor]]
 [template ceil[x] '''&#x2308;'''[x]'''&#x2309;''']
 
+[template header_file[file] [@../../../../[file] [file]]]
+
 [template optional_policy[] 
 The final __Policy argument is optional and can be used to
 control the behaviour of the function: how it handles errors, 

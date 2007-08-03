@@ -295,7 +295,7 @@ template <class T>
 inline T raise_denorm_error(
            const char* , 
            const char* , 
-           const T& /* val */,
+           const T& val,
            const  ::boost::math::policies::denorm_error< ::boost::math::policies::errno_on_error>&)
 {
    errno = ERANGE;

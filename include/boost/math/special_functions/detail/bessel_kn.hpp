@@ -34,28 +34,33 @@ T bessel_kn(int n, T x, const Policy& pol)
        return policies::raise_overflow_error<T>(function, 0, pol);
     }
 
-    if (n == 0)
-    {
-        return bessel_k0(x, pol);
-    }
-    if (n == 1)
-    {
-        return bessel_k1(x, pol);
-    }
     if (n < 0)
     {
         n = -n;                             // K_{-n}(z) = K_n(z)
     }
-
-    prev = bessel_k0(x, pol);
-    current = bessel_k1(x, pol);
-    for (int k = 1; k < n; k++)            // n >= 2
+    if (n == 0)
     {
-        value = 2 * k * current / x + prev;
-        prev = current;
-        current = value;
+        value = bessel_k0(x, pol);
     }
-
+    else if (n == 1)
+    {
+        value = bessel_k1(x, pol);
+    }
+    else
+    {
+       prev = bessel_k0(x, pol);
+       current = bessel_k1(x, pol);
+       int k = 1;
+       BOOST_ASSERT(k < n);
+       do
+       {
+           value = 2 * k * current / x + prev;
+           prev = current;
+           current = value;
+           ++k;
+       }
+       while(k < n);
+    }
     return value;
 }
 

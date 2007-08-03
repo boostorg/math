@@ -7,7 +7,7 @@
 
 extern void other_test();
 
-int main(int argc, char* argv[])
+int main(int argc, char* [])
 {
    if(argc > 10000)
    {

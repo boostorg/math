@@ -64,7 +64,8 @@ T ellint_rf_imp(T x, T y, T z, const Policy& pol)
     }
 
     // duplication
-    for (k = 1; k < BOOST_MATH_MAX_ITER; k++)
+    k = 1;
+    do
     {
         u = (x + y + z) / 3;
         X = (u - x) / u;
@@ -82,7 +83,10 @@ T ellint_rf_imp(T x, T y, T z, const Policy& pol)
         x = (x + lambda) / 4;
         y = (y + lambda) / 4;
         z = (z + lambda) / 4;
+        ++k;
     }
+    while(k < BOOST_MATH_MAX_ITER);
+
     // Check to see if we gave up too soon:
     policies::check_series_iterations(function, k, pol);
     BOOST_MATH_INSTRUMENT_CODE(k);

@@ -58,8 +58,9 @@ T ellint_rc_imp(T x, T y, const Policy& pol)
     else
        prefix = 1;
 
-    // duplication
-    for (k = 1; k < BOOST_MATH_MAX_ITER; k++)
+    // duplication:
+    k = 1;
+    do
     {
         u = (x + y + y) / 3;
         S = y / u - 1;               // 1 - x / u = 2 * S
@@ -72,7 +73,8 @@ T ellint_rc_imp(T x, T y, const Policy& pol)
         lambda = 2 * sx * sy + y;
         x = (x + lambda) / 4;
         y = (y + lambda) / 4;
-    }
+        ++k;
+    }while(k < BOOST_MATH_MAX_ITER);
     // Check to see if we gave up too soon:
     policies::check_series_iterations(function, k, pol);
 

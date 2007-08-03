@@ -98,7 +98,8 @@ T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
     // duplication
     sigma = 0;
     factor = 1;
-    for (k = 1; k < BOOST_MATH_MAX_ITER; k++)
+    k = 1;
+    do
     {
         u = (x + y + z + p + p) / 5;
         X = (u - x) / u;
@@ -123,7 +124,10 @@ T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
         y = (y + lambda) / 4;
         z = (z + lambda) / 4;
         p = (p + lambda) / 4;
+        ++k;
     }
+    while(k < BOOST_MATH_MAX_ITER);
+
     // Check to see if we gave up too soon:
     policies::check_series_iterations(function, k, pol);
 

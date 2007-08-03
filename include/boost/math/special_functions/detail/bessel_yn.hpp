@@ -34,14 +34,9 @@ T bessel_yn(int n, T x, const Policy& pol)
             "Got x = %1%, but x must be > 0, complex result not supported.", x, pol);
     }
 
-    if (n == 0)
-    {
-        return bessel_y0(x, pol);
-    }
-    if (n == 1)
-    {
-        return bessel_y1(x, pol);
-    }
+    //
+    // Reflection comes first:
+    //
     if (n < 0)
     {
         factor = (n & 0x1) ? -1 : 1;  // Y_{-n}(z) = (-1)^n Y_n(z)
@@ -52,16 +47,30 @@ T bessel_yn(int n, T x, const Policy& pol)
         factor = 1;
     }
 
-    prev = bessel_y0(x, pol);
-    current = bessel_y1(x, pol);
-    for (int k = 1; k < n; k++)            // n >= 2
+    if (n == 0)
     {
-        value = 2 * k * current / x - prev;
-        prev = current;
-        current = value;
+        value = bessel_y0(x, pol);
     }
-    value *= factor;
-
+    else if (n == 1)
+    {
+        value = factor * bessel_y1(x, pol);
+    }
+    else
+    {
+       prev = bessel_y0(x, pol);
+       current = bessel_y1(x, pol);
+       int k = 1;
+       BOOST_ASSERT(k < n);
+       do
+       {
+           value = 2 * k * current / x - prev;
+           prev = current;
+           current = value;
+           ++k;
+       }
+       while(k < n);
+       value *= factor;
+    }
     return value;
 }
 
