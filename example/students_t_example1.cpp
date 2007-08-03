@@ -83,7 +83,7 @@ int main()
 	// cout << "Student's t = " << t << endl;
 
 	cout.precision(5); // Useful accuracy is only a few decimal digits, but seems to give at least 5.
-	cout << "Probability of Student's t is " << cdf(students_t(degrees_of_freedom), abs(t)) << endl; //  0.90657, is 1 tailed.
+	cout << "Probability of Student's t is " << cdf(students_t(degrees_of_freedom), std::abs(t)) << endl; //  0.90657, is 1 tailed.
 	// So there is insufficient evidence of a difference to meet a 95% (1 in 20) criterion.
 
 	return 0;
@@ -110,4 +110,5 @@ students_t_example1 - 0 error(s), 0 warning(s)
 
 
 */
+
 
