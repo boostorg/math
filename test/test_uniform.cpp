@@ -1,4 +1,4 @@
-// Copyright Paul Bristow 2006.
+// Copyright Paul Bristow 2007.
 // Copyright John Maddock 2006.
 
 // Use, modification and distribution are subject to the
@@ -8,21 +8,9 @@
 
 // test_uniform.cpp
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-//#define BOOST_MATH_THROW_ON_UNDERFLOW_ERROR 
-// Ignore underflow to zero.
-
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-#  pragma warning(disable: 4180) // qualifier applied to function type has no meaning; ignored.
-#  if !(defined _SCL_SECURE_NO_DEPRECATE) || (_SCL_SECURE_NO_DEPRECATE == 0)
-#    pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
-#  endif
 #endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
@@ -72,9 +60,9 @@ void check_uniform(RealType lower, RealType upper, RealType x, RealType p, RealT
 } // void check_uniform
 
 template <class RealType>
-void test_spots(RealType T)
+void test_spots(RealType)
 {
-   // Basic santity checks
+   // Basic sanity checks
    //
    // These test values were generated for the normal distribution
    // using the online calculator at 
@@ -83,7 +71,7 @@ void test_spots(RealType T)
    // Tolerance is just over 5 decimal digits expressed as a fraction:
    // that's the limit of the test data.
 	RealType tolerance = 2e-5f;  
-	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
+	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << "." << endl;
 
    using std::exp;
 
@@ -110,10 +98,10 @@ void test_spots(RealType T)
     { // BOOST_CHECK tests for infinity using std::numeric_limits<>::infinity()
       // Note that infinity is not implemented for real_concept, so these tests
       // are only done for types, like built-in float, double.. that have infinity.
-      // Note that these assume that  BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined.
-      // #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR would give a throw here.
-      // #define BOOST_MATH_THROW_ON_DOMAIN_ERROR IS defined, so the throw path
-      // of error handling is tested below with BOOST_CHECK_THROW tests.
+    // Note that these assume that  BOOST_MATH_OVERFLOW_ERROR_POLICY is NOT throw_on_error.
+    // #define BOOST_MATH_OVERFLOW_ERROR_POLICY == throw_on_error would give a throw here.
+    // #define BOOST_MATH_DOMAIN_ERROR_POLICY == throw_on_error IS defined, so the throw path
+    // of error handling is tested below with BOOST_CHECK_THROW tests.
 
      BOOST_CHECK_THROW( // x == infinity should NOT be OK.
        pdf(uniform_distribution<RealType>(0, 1), static_cast<RealType>(std::numeric_limits<RealType>::infinity())), 
@@ -295,7 +283,7 @@ void test_spots(RealType T)
    tolerance = (std::max)(
       boost::math::tools::epsilon<RealType>(),
       static_cast<RealType>(boost::math::tools::epsilon<double>())) * 5; // 5 eps as a fraction.
-	 cout << "Tolerance (as fraction) for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
+	 cout << "Tolerance (as fraction) for type " << typeid(RealType).name()  << " is " << tolerance << "." << endl;
    uniform_distribution<RealType> distu01(0, 1);
    RealType x = static_cast<RealType>(0.5);
    using namespace std; // ADL of std names.
@@ -336,10 +324,11 @@ void test_spots(RealType T)
   { // BOOST_CHECK tests for infinity using std::numeric_limits<>::infinity()
     // Note that infinity is not implemented for real_concept, so these tests
     // are only done for types, like built-in float, double, long double, that have infinity.
-    // Note that these assume that BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined.
-    // #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR would give a throw here.
-    // #define BOOST_MATH_THROW_ON_DOMAIN_ERROR IS defined, so the throw path
+    // Note that these assume that  BOOST_MATH_OVERFLOW_ERROR_POLICY is NOT throw_on_error.
+    // #define BOOST_MATH_OVERFLOW_ERROR_POLICY == throw_on_error would give a throw here.
+    // #define BOOST_MATH_DOMAIN_ERROR_POLICY == throw_on_error IS defined, so the throw path
     // of error handling is tested below with BOOST_CHECK_THROW tests.
+
     BOOST_CHECK_THROW(pdf(distu01, std::numeric_limits<RealType>::infinity()),  std::domain_error);
     BOOST_CHECK_THROW(pdf(distu01, -std::numeric_limits<RealType>::infinity()),  std::domain_error);
    } // test for infinity using std::numeric_limits<>::infinity()
@@ -443,9 +432,6 @@ int test_main(int, char* [])
 
 Output:
 
-Compiling...
-test_uniform.cpp
-Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_uniform.exe"
 Running 1 test case...
 Tolerance for type float is 2e-005.
@@ -457,9 +443,8 @@ Tolerance (as fraction) for type long double is 1.11022e-015.
 Tolerance for type class boost::math::concepts::real_concept is 2e-005.
 Tolerance (as fraction) for type class boost::math::concepts::real_concept is 1.11022e-015.
 *** No errors detected
-Build Time 0:06
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_uniform\Debug\BuildLog.htm"
 
 */
+
 
 

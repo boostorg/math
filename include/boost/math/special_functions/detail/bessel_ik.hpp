@@ -76,7 +76,7 @@ int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
            break; 
         }
     }
-    policy::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
+    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
 
     *K = sum;
     *K1 = 2 * sum1 / x;
@@ -119,7 +119,7 @@ int CF1_ik(T v, T x, T* fv, const Policy& pol)
            break; 
         }
     }
-    policy::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
+    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
 
     *fv = f;
 
@@ -177,7 +177,7 @@ int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
            break; 
         }
     }
-    policy::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
+    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
 
     *Kv = sqrt(pi<T>() / (2 * x)) * exp(-x) / S;
     *Kv1 = *Kv * (0.5f + v + x + (v * v - 0.25f) * f) / x;
@@ -219,7 +219,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
 
     if (x < 0)
     {
-       *I = *K = policy::raise_domain_error<T>(function,
+       *I = *K = policies::raise_domain_error<T>(function,
             "Got x = %1% but real argument x must be non-negative, complex number result not supported.", x, pol);
         return 1;
     }
@@ -228,7 +228,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
        Iv = (v == 0) ? static_cast<T>(1) : static_cast<T>(0);
        if(kind & need_k)
        {
-         Kv = policy::raise_overflow_error<T>(function, 0, pol);
+         Kv = policies::raise_overflow_error<T>(function, 0, pol);
        }
        else
        {
@@ -240,7 +240,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
            T z = (u + n % 2);
            Iv = sin_pi(z, pol) == 0 ? 
                Iv : 
-               policy::raise_overflow_error<T>(function, 0, pol);   // reflection formula
+               policies::raise_overflow_error<T>(function, 0, pol);   // reflection formula
        }
 
        *I = Iv;

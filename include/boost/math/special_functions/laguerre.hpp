@@ -51,15 +51,15 @@ inline typename tools::promote_args<T>::type
 laguerre(unsigned n, T x, const Policy&, const mpl::true_&)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   return policy::checked_narrowing_cast<result_type, Policy>(detail::laguerre_imp(n, static_cast<value_type>(x)), "boost::math::laguerre<%1%>(unsigned, %1%)");
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::laguerre_imp(n, static_cast<value_type>(x)), "boost::math::laguerre<%1%>(unsigned, %1%)");
 }
 
 template <class T>
 inline typename tools::promote_args<T>::type 
    laguerre(unsigned n, unsigned m, T x, const mpl::false_&)
 {
-   return boost::math::laguerre(n, m, x, policy::policy<>());
+   return boost::math::laguerre(n, m, x, policies::policy<>());
 }
 
 } // namespace detail
@@ -68,7 +68,7 @@ template <class T>
 inline typename tools::promote_args<T>::type 
    laguerre(unsigned n, T x)
 {
-   return laguerre(n, x, policy::policy<>());
+   return laguerre(n, x, policies::policy<>());
 }
 
 // Recurrence for associated polynomials:
@@ -114,15 +114,15 @@ inline typename tools::promote_args<T>::type
    laguerre(unsigned n, unsigned m, T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   return policy::checked_narrowing_cast<result_type, Policy>(detail::laguerre_imp(n, m, static_cast<value_type>(x), pol), "boost::math::laguerre<%1%>(unsigned, unsigned, %1%)");
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::laguerre_imp(n, m, static_cast<value_type>(x), pol), "boost::math::laguerre<%1%>(unsigned, unsigned, %1%)");
 }
 
 template <class T1, class T2>
 inline typename laguerre_result<T1, T2>::type 
    laguerre(unsigned n, T1 m, T2 x)
 {
-   typedef typename policy::is_policy<T2>::type tag_type;
+   typedef typename policies::is_policy<T2>::type tag_type;
    return detail::laguerre(n, m, x, tag_type());
 }
 
@@ -130,4 +130,5 @@ inline typename laguerre_result<T1, T2>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_LAGUERRE_HPP
+
 

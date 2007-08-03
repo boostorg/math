@@ -1,7 +1,7 @@
 // test_beta_dist.cpp
 
 // Copyright John Maddock 2006.
-// Copyright  Paul A. Bristow 2006.
+// Copyright  Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -13,7 +13,6 @@
 // http://members.aol.com/iandjmsmith/BETAEX.HTM  beta distribution calculator
 // Appreas to be a 64-bit calculator showing 17 decimal digit (last is noisy).
 // Similar to mathCAD?
-
 
 // http://www.nuhertz.com/statmat/distributions.html#Beta
 // Pretty graphs and explanations for most distributions.
@@ -27,12 +26,8 @@
 // Beta Buster also calculates alpha and beta from mode & percentile estimates.
 // This is NOT (yet) implemented.
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
 #endif
 
 #include <boost/math/distributions/beta.hpp> // for beta_distribution
@@ -462,17 +457,12 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
-#ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is defined to throw on domain error." << endl;
-#else
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
-#endif
    // Check that can generate beta distribution using one convenience methods:
    beta_distribution<> mybeta11(1., 1.); // Using default RealType double.
    // but that
    // boost::math::beta mybeta1(1., 1.); // Using typedef fails.
    // error C2039: 'beta' : is not a member of 'boost::math'
-
+ 
    // Basic sanity-check spot values.
 
    // Some simple checks using double only.
@@ -484,7 +474,6 @@ int test_main(int, char* [])
    BOOST_CHECK_EQUAL(mode(mybeta22), 0.5); // 2-1 / (2+2-2) = 1/2 exactly.
    beta_distribution<> mybetaH2(0.5, 2.); // 
    beta_distribution<> mybetaH3(0.5, 3.); // 
-
 
    // Check a few values using double.
    BOOST_CHECK_EQUAL(pdf(mybeta11, 1), 1); // is uniform unity over 0 to 1,
@@ -548,7 +537,6 @@ int test_main(int, char* [])
    cout << "numeric_limits<real_concept>::digits10 " << numeric_limits<real_concept>::digits10 << endl;
    cout << "numeric_limits<real_concept>::epsilon " << numeric_limits<real_concept>::epsilon() << endl;
 
-
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
    test_spots(0.0F); // Test float.
    test_spots(0.0); // Test double.
@@ -565,13 +553,8 @@ int test_main(int, char* [])
 
 Output is:
 
------- Build started: Project: test_beta_dist, Configuration: Debug Win32 ------
-Compiling...
-test_beta_dist.cpp
-Linking...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_beta_dist.exe"
+-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_beta_dist.exe"
 Running 1 test case...
-BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
 numeric_limits<real_concept>::is_specialized 0
 numeric_limits<real_concept>::digits 0
 numeric_limits<real_concept>::digits10 0
@@ -589,12 +572,7 @@ Boost::math::tools::epsilon = 2.22045e-016
 std::numeric_limits::epsilon = 0
 epsilon = 2.22045e-016, Tolerance = 2.22045e-011%.
 *** No errors detected
-Build Time 0:07
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_beta_dist\Debug\BuildLog.htm"
-test_beta_dist - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
-
-
 */
+
 
 

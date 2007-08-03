@@ -18,7 +18,7 @@
 
 namespace boost{ namespace math{
 
-   template <class RealType = double, class Policy = policy::policy<> >
+   template <class RealType = double, class Policy = policies::policy<> >
 class chi_squared_distribution
 {
 public:
@@ -84,7 +84,7 @@ RealType pdf(const chi_squared_distribution<RealType, Policy>& dist, const RealT
 
    if((chi_square < 0) || !(boost::math::isfinite)(chi_square))
    {
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function, "Chi Square parameter was %1%, but must be > 0 !", chi_square, Policy());
    }
 
@@ -93,7 +93,7 @@ RealType pdf(const chi_squared_distribution<RealType, Policy>& dist, const RealT
       // Handle special cases:
       if(degrees_of_freedom < 2)
       {
-         return policy::raise_overflow_error<RealType>(
+         return policies::raise_overflow_error<RealType>(
             function, 0, Policy());
       }
       else if(degrees_of_freedom == 2)
@@ -123,7 +123,7 @@ inline RealType cdf(const chi_squared_distribution<RealType, Policy>& dist, cons
 
    if((chi_square < 0) || !(boost::math::isfinite)(chi_square))
    {
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function, "Chi Square parameter was %1%, but must be > 0 !", chi_square, Policy());
    }
 
@@ -160,7 +160,7 @@ inline RealType cdf(const complemented2_type<chi_squared_distribution<RealType, 
 
    if((chi_square < 0) || !(boost::math::isfinite)(chi_square))
    {
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function, "Chi Square parameter was %1%, but must be > 0 !", chi_square, Policy());
    }
 
@@ -202,7 +202,7 @@ inline RealType mode(const chi_squared_distribution<RealType, Policy>& dist)
    RealType df = dist.degrees_of_freedom();
    static const char* function = "boost::math::mode(const chi_squared_distribution<%1%>&)";
    if(df <= 2)
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function,
          "The Chi-Squared distribution only has a mode for degrees of freedom >= 2, but got degrees of freedom = %1%.",
          df, Policy());
@@ -300,13 +300,13 @@ RealType chi_squared_distribution<RealType, Policy>::estimate_degrees_of_freedom
       hint = 1;
 
    detail::df_estimator<RealType, Policy> f(alpha, beta, variance, difference_from_variance);
-   tools::eps_tolerance<RealType> tol(policy::digits<RealType, Policy>());
+   tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
    boost::uintmax_t max_iter = 10000;
    std::pair<RealType, RealType> r = tools::bracket_and_solve_root(f, hint, RealType(2), false, tol, max_iter, Policy());
    RealType result = r.first + (r.second - r.first) / 2;
    if(max_iter == 10000)
    {
-      policy::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
+      policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
          " either there is no answer to how many degrees of freedom are required"
          " or the answer is infinite.  Current best guess is %1%", result, Policy());
    }

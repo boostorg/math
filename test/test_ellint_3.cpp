@@ -1,11 +1,10 @@
-//  Copyright (c) 2006 Xiaogang Zhang
-//  Copyright (c) 2006 John Maddock
+// Copyright 2006 Xiaogang Zhang
+// Copyright 2006 John Maddock
+// Copyright Paul A. Bristow 2007.
+
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
 
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
@@ -48,7 +47,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policy::digits<double, boost::math::policy::policy<> >() == boost::math::policy::digits<long double, boost::math::policy::policy<> >())
+   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       largest_type = "(long\\s+)?double";
    }

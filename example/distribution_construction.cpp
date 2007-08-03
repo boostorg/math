@@ -1,19 +1,11 @@
 // distribution_construction.cpp
 
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
-#endif
 
 // Examples of using constructing distributions, mainly negative_binomial.
 // The structure of distributions is rather different from some other
@@ -37,7 +29,7 @@
 
 int main()
 {
-	cout << "Examples of constructing Distributions (Negative_binomial).";
+	cout << "Examples of constructing Distributions (negative_binomial).";
   #if defined(__FILE__) && defined(__TIMESTAMP__)
   	cout << "  " << __FILE__ << ' ' << __TIMESTAMP__ << ' '<< _MSC_FULL_VER << "\n";
   #endif
@@ -127,10 +119,10 @@ int main()
 
 Output is:
 
-Examples of constructing Distributions (Negative_binomial).  ..\..\..\..\..\..\boost-sandbox\libs\math_functions\example\distribution_construction.cpp Wed Nov 22 14:31:51 2006 140050727
-
+Examples of constructing Distributions (Negative_binomial).  ..\..\..\..\..\..\Boost-sandbox\
 
 */
+
 
 
 

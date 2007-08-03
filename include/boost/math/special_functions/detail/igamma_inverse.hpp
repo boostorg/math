@@ -10,6 +10,7 @@
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/policy/error_handling.hpp>
+#include <boost/tr1/tuple.hpp>
 
 namespace boost{ namespace math{
 
@@ -292,14 +293,14 @@ struct gamma_p_inverse_func
       // Calculate P(x) - p and the first two derivates, or if the invert
       // flag is set, then Q(x) - q and it's derivatives.
       //
-      typedef typename policy::evaluation<T, Policy>::type value_type;
+      typedef typename policies::evaluation<T, Policy>::type value_type;
       typedef typename lanczos::lanczos<T, Policy>::type evaluation_type;
-      typedef typename policy::normalise<
+      typedef typename policies::normalise<
          Policy, 
-         policy::promote_float<false>, 
-         policy::promote_double<false>, 
-         policy::discrete_quantile<>,
-         policy::assert_undefined<> >::type forwarding_policy;
+         policies::promote_float<false>, 
+         policies::promote_double<false>, 
+         policies::discrete_quantile<>,
+         policies::assert_undefined<> >::type forwarding_policy;
 
       using namespace std;  // For ADL of std functions.
 
@@ -345,9 +346,9 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
    static const char* function = "boost::math::gamma_p_inv<%1%>(%1%, %1%)";
 
    if(a <= 0)
-      policy::raise_domain_error<T>(function, "Argument a in the incomplete gamma function inverse must be >= 0 (got a=%1%).", a, pol);
+      policies::raise_domain_error<T>(function, "Argument a in the incomplete gamma function inverse must be >= 0 (got a=%1%).", a, pol);
    if((p < 0) || (p > 1))
-      policy::raise_domain_error<T>(function, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse (got p=%1%).", p, pol);
+      policies::raise_domain_error<T>(function, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse (got p=%1%).", p, pol);
    if(p == 1)
       return tools::max_value<T>();
    if(p == 0)
@@ -362,9 +363,9 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
    // large convergence is slow, so we'll bump it up to full 
    // precision to prevent premature termination of the root-finding routine.
    //
-   unsigned digits = (policy::digits<T, Policy>() * 2) / 3;
+   unsigned digits = (policies::digits<T, Policy>() * 2) / 3;
    if((a < 0.125) && (fabs(gamma_p_derivative(a, guess, pol)) > 1 / sqrt(tools::epsilon<T>())))
-      digits = policy::digits<T, Policy>() - 2;
+      digits = policies::digits<T, Policy>() - 2;
    //
    // Go ahead and iterate:
    //
@@ -375,7 +376,7 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
       tools::max_value<T>(),
       digits);
    if(guess == lower)
-      guess = policy::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
+      guess = policies::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
    return guess;
 }
 
@@ -387,9 +388,9 @@ T gamma_q_inv_imp(T a, T q, const Policy& pol)
    static const char* function = "boost::math::gamma_q_inv<%1%>(%1%, %1%)";
 
    if(a <= 0)
-      policy::raise_domain_error<T>(function, "Argument a in the incomplete gamma function inverse must be >= 0 (got a=%1%).", a, pol);
+      policies::raise_domain_error<T>(function, "Argument a in the incomplete gamma function inverse must be >= 0 (got a=%1%).", a, pol);
    if((q < 0) || (q > 1))
-      policy::raise_domain_error<T>(function, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse (got q=%1%).", q, pol);
+      policies::raise_domain_error<T>(function, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse (got q=%1%).", q, pol);
    if(q == 0)
       return tools::max_value<T>();
    if(q == 1)
@@ -404,9 +405,9 @@ T gamma_q_inv_imp(T a, T q, const Policy& pol)
    // large convergence is slow, so we'll bump it up to full 
    // precision to prevent premature termination of the root-finding routine.
    //
-   unsigned digits = (policy::digits<T, Policy>() * 2) / 3;
+   unsigned digits = (policies::digits<T, Policy>() * 2) / 3;
    if((a < 0.125) && (fabs(gamma_p_derivative(a, guess, pol)) > 1 / sqrt(tools::epsilon<T>())))
-      digits = policy::digits<T, Policy>();
+      digits = policies::digits<T, Policy>();
    //
    // Go ahead and iterate:
    //
@@ -417,7 +418,7 @@ T gamma_q_inv_imp(T a, T q, const Policy& pol)
       tools::max_value<T>(),
       digits);
    if(guess == lower)
-      guess = policy::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
+      guess = policies::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
    return guess;
 }
 
@@ -447,18 +448,19 @@ template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type 
    gamma_p_inv(T1 a, T2 p)
 {
-   return gamma_p_inv(a, p, policy::policy<>());
+   return gamma_p_inv(a, p, policies::policy<>());
 }
 
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type 
    gamma_q_inv(T1 a, T2 p)
 {
-   return gamma_q_inv(a, p, policy::policy<>());
+   return gamma_q_inv(a, p, policies::policy<>());
 }
 
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_IGAMMA_INVERSE_HPP
+
 

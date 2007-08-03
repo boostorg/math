@@ -30,7 +30,7 @@ namespace detail
   {
      if((x < 0) || !(boost::math::isfinite)(x))
      {
-        *result = policy::raise_domain_error<RealType>(
+        *result = policies::raise_domain_error<RealType>(
            function,
            "Random variate is %1% but must be >= 0 !", x, pol);
         return false;
@@ -41,7 +41,7 @@ namespace detail
 } // namespace detail
 
 
-template <class RealType = double, class Policy = policy::policy<> >
+template <class RealType = double, class Policy = policies::policy<> >
 class lognormal_distribution
 {
 public:
@@ -150,7 +150,7 @@ inline RealType quantile(const lognormal_distribution<RealType, Policy>& dist, c
    if(p == 0)
       return 0;
    if(p == 1)
-      return policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    normal_distribution<RealType, Policy> norm(dist.location(), dist.scale());
    return exp(quantile(norm, p));
@@ -188,7 +188,7 @@ inline RealType quantile(const complemented2_type<lognormal_distribution<RealTyp
    if(c.param == 1)
       return 0;
    if(c.param == 0)
-      return policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    normal_distribution<RealType, Policy> norm(c.dist.location(), c.dist.scale());
    return exp(quantile(complement(norm, c.param)));
@@ -306,4 +306,5 @@ inline RealType kurtosis_excess(const lognormal_distribution<RealType, Policy>& 
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_STATS_STUDENTS_T_HPP
+
 

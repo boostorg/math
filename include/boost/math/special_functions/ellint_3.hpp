@@ -50,7 +50,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
 
     if (abs(k) > 1)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Got k = %1%, function requires |k| <= 1", k, pol);
     }
 
@@ -59,7 +59,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
     if(v > 1 / (sphi * sphi))
     {
         // Complex result is a domain error:
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Got v = %1%, but result is complex for v > 1 / sin^2(phi)", v, pol);
     }
 
@@ -169,7 +169,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
     if(fabs(phi) > 1 / tools::epsilon<T>())
     {
        if(v > 1)
-          return policy::raise_domain_error<T>(
+          return policies::raise_domain_error<T>(
             function,
             "Got v = %1%, but this is only supported for 0 <= phi <= pi/2", v, pol);
        //  
@@ -196,7 +196,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
           // The region with v > 1 and phi outside [0, pi/2] is
           // currently unsupported:
           //
-          return policy::raise_domain_error<T>(
+          return policies::raise_domain_error<T>(
             function,
             "Got v = %1%, but this is only supported for 0 <= phi <= pi/2", v, pol);
        }  
@@ -234,13 +234,13 @@ T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
 
     if (abs(k) >= 1)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Got k = %1%, function requires |k| <= 1", k, pol);
     }
     if(vc <= 0)
     {
        // Result is complex:
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Got v = %1%, function requires v < 1", v, pol);
     }
 
@@ -276,15 +276,15 @@ T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
 template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const mpl::false_&)
 {
-   return boost::math::ellint_3(k, v, phi, policy::policy<>());
+   return boost::math::ellint_3(k, v, phi, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v, const Policy& pol, const mpl::true_&)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   return policy::checked_narrowing_cast<result_type, Policy>(
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(
       detail::ellint_pi_imp(
          static_cast<value_type>(v), 
          static_cast<value_type>(k),
@@ -298,8 +298,8 @@ template <class T1, class T2, class T3, class Policy>
 inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   return policy::checked_narrowing_cast<result_type, Policy>(
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(
       detail::ellint_pi_imp(
          static_cast<value_type>(v), 
          static_cast<value_type>(phi), 
@@ -311,14 +311,14 @@ inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 ph
 template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi)
 {
-   typedef typename policy::is_policy<T3>::type tag_type;
+   typedef typename policies::is_policy<T3>::type tag_type;
    return detail::ellint_3(k, v, phi, tag_type());
 }
 
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v)
 {
-   return ellint_3(k, v, policy::policy<>());
+   return ellint_3(k, v, policies::policy<>());
 }
 
 }} // namespaces

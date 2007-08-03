@@ -57,23 +57,23 @@ namespace boost
             
             if        (x < -one)
             {
-               return policy::raise_domain_error<T>(
+               return policies::raise_domain_error<T>(
                   function,
                   "atanh requires x >= -1, but got x = %1%.", x, pol);
             }
             else if    (x < -one + tools::epsilon<T>())
             {
                // -Infinity:
-               return -policy::raise_overflow_error<T>(function, 0, pol);
+               return -policies::raise_overflow_error<T>(function, 0, pol);
             }
             else if    (x > one - tools::epsilon<T>())
             {
                // Infinity:
-               return -policy::raise_overflow_error<T>(function, 0, pol);
+               return -policies::raise_overflow_error<T>(function, 0, pol);
             }
             else if    (x > +one)
             {
-               return policy::raise_domain_error<T>(
+               return policies::raise_domain_error<T>(
                   function,
                   "atanh requires x <= 1, but got x = %1%.", x, pol);
             }
@@ -111,11 +111,12 @@ namespace boost
         {
            typedef typename tools::promote_args<T>::type result_type;
            return detail::atanh_imp(
-              static_cast<result_type>(x), policy::policy<>());
+              static_cast<result_type>(x), policies::policy<>());
         }
 
     }
 }
 
 #endif /* BOOST_ATANH_HPP */
+
 

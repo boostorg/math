@@ -85,7 +85,7 @@ T gamma_inva_imp(const T& z, const T& p, const T& q, const Policy& pol)
    //
    // Tolerance: full precision.
    //
-   tools::eps_tolerance<T> tol(policy::digits<T, Policy>());
+   tools::eps_tolerance<T> tol(policies::digits<T, Policy>());
    //
    // Now figure out a starting guess for what a may be, 
    // we'll start out with a value that'll put p or q
@@ -140,7 +140,7 @@ T gamma_inva_imp(const T& z, const T& p, const T& q, const Policy& pol)
    //
    std::pair<T, T> r = bracket_and_solve_root(f, guess, factor, false, tol, max_iter, pol);
    if(max_iter >= 200)
-      policy::raise_evaluation_error<T>("boost::math::gamma_p_inva<%1%>(%1%, %1%)", "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first, pol);
+      policies::raise_evaluation_error<T>("boost::math::gamma_p_inva<%1%>(%1%, %1%)", "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first, pol);
    return (r.first + r.second) / 2;
 }
 
@@ -161,17 +161,18 @@ inline T gamma_q_inva(T x, T q, const Policy& pol)
 template <class T>
 inline T gamma_p_inva(T x, T p)
 {
-   return detail::gamma_inva_imp(x, p, 1 - p, policy::policy<>());
+   return detail::gamma_inva_imp(x, p, 1 - p, policies::policy<>());
 }
 
 template <class T>
 inline T gamma_q_inva(T x, T q)
 {
-   return detail::gamma_inva_imp(x, 1 - q, q, policy::policy<>());
+   return detail::gamma_inva_imp(x, 1 - q, q, policies::policy<>());
 }
 
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_SP_DETAIL_GAMMA_INVA
+
 

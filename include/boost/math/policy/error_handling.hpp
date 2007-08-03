@@ -1,4 +1,6 @@
 //  Copyright John Maddock 2007.
+//  Copyright Paul A. Bristow 2007.
+
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -34,7 +36,7 @@ public:
    evaluation_error(const std::string& s) : std::runtime_error(s){}
 };
 
-namespace policy{
+namespace policies{
 //
 // Forward declarations of user error handlers, 
 // it's up to the user to provide the definition of these:
@@ -52,7 +54,8 @@ T user_denorm_error(const char* function, const char* message, const T& val);
 template <class T>
 T user_evaluation_error(const char* function, const char* message, const T& val);
 
-namespace detail{
+namespace detail
+{
 
 template <class E, class T>
 void raise_error(const char* function, const char* message)
@@ -84,7 +87,7 @@ void raise_error(const char* function, const char* message, const T& val)
   msg += ": ";
   msg += message;
 
-  int prec = 2 + (boost::math::policy::digits<T, boost::math::policy::policy<> >() * 30103UL) / 100000UL;
+  int prec = 2 + (boost::math::policies::digits<T, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
   msg = (boost::format(msg) % boost::io::group(std::setprecision(prec), val)).str();
 
   E e(msg);
@@ -96,7 +99,7 @@ inline T raise_domain_error(
            const char* function, 
            const char* message, 
            const T& val, 
-           const ::boost::math::policy::domain_error< ::boost::math::policy::throw_on_error>&)
+           const ::boost::math::policies::domain_error< ::boost::math::policies::throw_on_error>&)
 {
    raise_error<std::domain_error, T>(function, message, val);
    // we never get here:
@@ -108,7 +111,7 @@ inline T raise_domain_error(
            const char* , 
            const char* , 
            const T& , 
-           const ::boost::math::policy::domain_error< ::boost::math::policy::ignore_error>&)
+           const ::boost::math::policies::domain_error< ::boost::math::policies::ignore_error>&)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
@@ -120,7 +123,7 @@ inline T raise_domain_error(
            const char* , 
            const char* , 
            const T& , 
-           const ::boost::math::policy::domain_error< ::boost::math::policy::errno_on_error>&)
+           const ::boost::math::policies::domain_error< ::boost::math::policies::errno_on_error>&)
 {
    errno = EDOM;
    // This may or may not do the right thing, but the user asked for the error
@@ -133,7 +136,7 @@ inline T raise_domain_error(
            const char* function, 
            const char* message, 
            const T& val, 
-           const  ::boost::math::policy::domain_error< ::boost::math::policy::user_error>&)
+           const  ::boost::math::policies::domain_error< ::boost::math::policies::user_error>&)
 {
    return user_domain_error(function, message, val);
 }
@@ -143,9 +146,9 @@ inline T raise_pole_error(
            const char* function, 
            const char* message, 
            const T& val, 
-           const  ::boost::math::policy::pole_error< ::boost::math::policy::throw_on_error>&)
+           const  ::boost::math::policies::pole_error< ::boost::math::policies::throw_on_error>&)
 {
-   return boost::math::policy::detail::raise_domain_error(function, message, val,  ::boost::math::policy::domain_error< ::boost::math::policy::throw_on_error>());
+   return boost::math::policies::detail::raise_domain_error(function, message, val,  ::boost::math::policies::domain_error< ::boost::math::policies::throw_on_error>());
 }
 
 template <class T>
@@ -153,9 +156,9 @@ inline T raise_pole_error(
            const char* function, 
            const char* message, 
            const T& val, 
-           const  ::boost::math::policy::pole_error< ::boost::math::policy::ignore_error>&)
+           const  ::boost::math::policies::pole_error< ::boost::math::policies::ignore_error>&)
 {
-   return  ::boost::math::policy::detail::raise_domain_error(function, message, val,  ::boost::math::policy::domain_error< ::boost::math::policy::ignore_error>());
+   return  ::boost::math::policies::detail::raise_domain_error(function, message, val,  ::boost::math::policies::domain_error< ::boost::math::policies::ignore_error>());
 }
 
 template <class T>
@@ -163,9 +166,9 @@ inline T raise_pole_error(
            const char* function, 
            const char* message, 
            const T& val, 
-           const  ::boost::math::policy::pole_error< ::boost::math::policy::errno_on_error>&)
+           const  ::boost::math::policies::pole_error< ::boost::math::policies::errno_on_error>&)
 {
-   return  ::boost::math::policy::detail::raise_domain_error(function, message, val,  ::boost::math::policy::domain_error< ::boost::math::policy::errno_on_error>());
+   return  ::boost::math::policies::detail::raise_domain_error(function, message, val,  ::boost::math::policies::domain_error< ::boost::math::policies::errno_on_error>());
 }
 
 template <class T>
@@ -173,7 +176,7 @@ inline T raise_pole_error(
            const char* function, 
            const char* message, 
            const T& val, 
-           const  ::boost::math::policy::pole_error< ::boost::math::policy::user_error>&)
+           const  ::boost::math::policies::pole_error< ::boost::math::policies::user_error>&)
 {
    return user_pole_error(function, message, val);
 }
@@ -182,7 +185,7 @@ template <class T>
 inline T raise_overflow_error(
            const char* function, 
            const char* message, 
-           const  ::boost::math::policy::overflow_error< ::boost::math::policy::throw_on_error>&)
+           const  ::boost::math::policies::overflow_error< ::boost::math::policies::throw_on_error>&)
 {
    raise_error<std::overflow_error, T>(function, message ? message : "numeric overflow");
    // we never get here:
@@ -193,7 +196,7 @@ template <class T>
 inline T raise_overflow_error(
            const char* , 
            const char* , 
-           const  ::boost::math::policy::overflow_error< ::boost::math::policy::ignore_error>&)
+           const  ::boost::math::policies::overflow_error< ::boost::math::policies::ignore_error>&)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
@@ -204,7 +207,7 @@ template <class T>
 inline T raise_overflow_error(
            const char* , 
            const char* , 
-           const  ::boost::math::policy::overflow_error< ::boost::math::policy::errno_on_error>&)
+           const  ::boost::math::policies::overflow_error< ::boost::math::policies::errno_on_error>&)
 {
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
@@ -216,7 +219,7 @@ template <class T>
 inline T raise_overflow_error(
            const char* function, 
            const char* message, 
-           const  ::boost::math::policy::overflow_error< ::boost::math::policy::user_error>&)
+           const  ::boost::math::policies::overflow_error< ::boost::math::policies::user_error>&)
 {
    return user_overflow_error(function, message, std::numeric_limits<T>::infinity());
 }
@@ -225,7 +228,7 @@ template <class T>
 inline T raise_underflow_error(
            const char* function, 
            const char* message, 
-           const  ::boost::math::policy::underflow_error< ::boost::math::policy::throw_on_error>&)
+           const  ::boost::math::policies::underflow_error< ::boost::math::policies::throw_on_error>&)
 {
    raise_error<std::underflow_error, T>(function, message ? message : "numeric underflow");
    // we never get here:
@@ -236,30 +239,30 @@ template <class T>
 inline T raise_underflow_error(
            const char* , 
            const char* , 
-           const  ::boost::math::policy::underflow_error< ::boost::math::policy::ignore_error>&)
+           const  ::boost::math::policies::underflow_error< ::boost::math::policies::ignore_error>&)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return 0;
+   return T(0);
 }
 
 template <class T>
 inline T raise_underflow_error(
-           const char* , 
-           const char* , 
-           const  ::boost::math::policy::underflow_error< ::boost::math::policy::errno_on_error>&)
+           const char* /* function */, 
+           const char* /* message */, 
+           const  ::boost::math::policies::underflow_error< ::boost::math::policies::errno_on_error>&)
 {
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   return 0;
+   return T(0);
 }
 
 template <class T>
 inline T raise_underflow_error(
            const char* function, 
            const char* message, 
-           const  ::boost::math::policy::underflow_error< ::boost::math::policy::user_error>&)
+           const  ::boost::math::policies::underflow_error< ::boost::math::policies::user_error>&)
 {
    return user_underflow_error(function, message, T(0));
 }
@@ -268,20 +271,20 @@ template <class T>
 inline T raise_denorm_error(
            const char* function, 
            const char* message, 
-           const T& val,
-           const  ::boost::math::policy::denorm_error< ::boost::math::policy::throw_on_error>&)
+           const T& /* val */,
+           const  ::boost::math::policies::denorm_error< ::boost::math::policies::throw_on_error>&)
 {
    raise_error<std::underflow_error, T>(function, message ? message : "denormalised result");
    // we never get here:
-   return 0;
+   return T(0);
 }
 
 template <class T>
 inline T raise_denorm_error(
            const char* , 
            const char* , 
-           const T& val,
-           const  ::boost::math::policy::denorm_error< ::boost::math::policy::ignore_error>&)
+           const T&  val,
+           const  ::boost::math::policies::denorm_error< ::boost::math::policies::ignore_error>&)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
@@ -292,8 +295,8 @@ template <class T>
 inline T raise_denorm_error(
            const char* , 
            const char* , 
-           const T& val,
-           const  ::boost::math::policy::denorm_error< ::boost::math::policy::errno_on_error>&)
+           const T& /* val */,
+           const  ::boost::math::policies::denorm_error< ::boost::math::policies::errno_on_error>&)
 {
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
@@ -306,7 +309,7 @@ inline T raise_denorm_error(
            const char* function, 
            const char* message, 
            const T& val,
-           const  ::boost::math::policy::denorm_error< ::boost::math::policy::user_error>&)
+           const  ::boost::math::policies::denorm_error< ::boost::math::policies::user_error>&)
 {
    return user_denorm_error(function, message, val);
 }
@@ -316,11 +319,11 @@ inline T raise_evaluation_error(
            const char* function, 
            const char* message, 
            const T& val, 
-           const  ::boost::math::policy::evaluation_error< ::boost::math::policy::throw_on_error>&)
+           const  ::boost::math::policies::evaluation_error< ::boost::math::policies::throw_on_error>&)
 {
    raise_error<boost::math::evaluation_error, T>(function, message, val);
    // we never get here:
-   return 0;
+   return T(0);
 }
 
 template <class T>
@@ -328,7 +331,7 @@ inline T raise_evaluation_error(
            const char* , 
            const char* , 
            const T& val, 
-           const  ::boost::math::policy::evaluation_error< ::boost::math::policy::ignore_error>&)
+           const  ::boost::math::policies::evaluation_error< ::boost::math::policies::ignore_error>&)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
@@ -340,7 +343,7 @@ inline T raise_evaluation_error(
            const char* , 
            const char* , 
            const T& val, 
-           const  ::boost::math::policy::evaluation_error< ::boost::math::policy::errno_on_error>&)
+           const  ::boost::math::policies::evaluation_error< ::boost::math::policies::errno_on_error>&)
 {
    errno = EDOM;
    // This may or may not do the right thing, but the user asked for the error
@@ -353,7 +356,7 @@ inline T raise_evaluation_error(
            const char* function, 
            const char* message, 
            const T& val, 
-           const  ::boost::math::policy::evaluation_error< ::boost::math::policy::user_error>&)
+           const  ::boost::math::policies::evaluation_error< ::boost::math::policies::user_error>&)
 {
    return user_evaluation_error(function, message, val);
 }
@@ -418,7 +421,8 @@ inline T raise_evaluation_error(const char* function, const char* message, const
 //
 // checked_narrowing_cast:
 //
-namespace detail{
+namespace detail
+{
 
 template <class R, class T, class Policy>
 inline bool check_overflow(T val, R* result, const char* function, const Policy& pol)
@@ -453,14 +457,15 @@ inline bool check_denorm(T val, R* result, const char* function, const Policy& p
    return false;
 }
 
+// Default instantiations with ignore_error policy.
 template <class R, class T>
-inline bool check_overflow(T /*val*/, R* /*result*/, const char* /*function*/, const overflow_error<ignore_error>&){ return false; }
+inline bool check_overflow(T /* val */, R* /* result */, const char* /* function */, const overflow_error<ignore_error>&){ return false; }
 template <class R, class T>
-inline bool check_underflow(T /*val*/, R* /*result*/, const char* /*function*/, const underflow_error<ignore_error>&){ return false; }
+inline bool check_underflow(T /* val */, R* /* result */, const char* /* function */, const underflow_error<ignore_error>&){ return false; }
 template <class R, class T>
-inline bool check_denorm(T /*val*/, R* /*result*/, const char* /*function*/, const denorm_error<ignore_error>&){ return false; }
+inline bool check_denorm(T /* val */, R* /* result*/, const char* /* function */, const denorm_error<ignore_error>&){ return false; }
 
-}
+} // namespace detail
 
 template <class R, class Policy, class T>
 inline R checked_narrowing_cast(T val, const char* function)
@@ -491,7 +496,7 @@ inline void check_series_iterations(const char* function, boost::uintmax_t max_i
          "Series evaluation exceeded %1% iterations, giving up now.", max_iter, pol);
 }
 
-} //namespace policy
+} //namespace policies
 
 }} // namespaces boost/math
 

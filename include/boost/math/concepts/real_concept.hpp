@@ -325,13 +325,13 @@ inline concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts
 
 } // namespace tools
 
-namespace policy{
+namespace policies{
 
 template <>
 inline int digits<concepts::real_concept, policy<> >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 { // Assume number of significand bits is same as long double,
   // unless std::numeric_limits<T>::is_specialized to provide digits.
-   return boost::math::policy::digits<long double, boost::math::policy::policy<> >();
+   return boost::math::policies::digits<long double, boost::math::policies::policy<> >();
    // Note that if numeric_limits real concept is NOT specialized to provide digits10
    // (or max_digits10) then the default precision of 6 decimal digits will be used
    // by Boost test (giving misleading error messages like
@@ -373,4 +373,5 @@ inline int digits<concepts::real_concept, policy<discrete_quantile<integer_neare
 } // namespace boost
 
 #endif // BOOST_MATH_REAL_CONCEPT_HPP
+
 

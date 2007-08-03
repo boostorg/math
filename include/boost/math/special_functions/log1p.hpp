@@ -77,10 +77,10 @@ typename tools::promote_args<T>::type log1p(T x, const Policy& pol)
    static const char* function = "boost::math::log1p<%1%>(%1%)";
 
    if(x < -1)
-      return policy::raise_domain_error<T>(
+      return policies::raise_domain_error<T>(
          function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policy::raise_overflow_error<T>(
+      return -policies::raise_overflow_error<T>(
          function, 0, pol);
 
    result_type a = abs(result_type(x));
@@ -93,12 +93,12 @@ typename tools::promote_args<T>::type log1p(T x, const Policy& pol)
    detail::log1p_series<result_type> s(x);
    boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-   result_type result = tools::sum_series(s, policy::digits<result_type, Policy>(), max_iter);
+   result_type result = tools::sum_series(s, policies::digits<result_type, Policy>(), max_iter);
 #else
    result_type zero = 0;
-   result_type result = tools::sum_series(s, policy::digits<result_type, Policy>(), max_iter, zero);
+   result_type result = tools::sum_series(s, policies::digits<result_type, Policy>(), max_iter, zero);
 #endif
-   policy::check_series_iterations(function, max_iter, pol);
+   policies::check_series_iterations(function, max_iter, pol);
    return result;
 }
 
@@ -133,10 +133,10 @@ template <class Policy>
 inline float log1p(float x, const Policy& pol)
 { 
    if(x < -1)
-      return policy::raise_domain_error<float>(
+      return policies::raise_domain_error<float>(
          "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policy::raise_overflow_error<float>(
+      return -policies::raise_overflow_error<float>(
          "log1p<%1%>(%1%)", 0, pol);
    return ::log1pf(x); 
 }
@@ -144,10 +144,10 @@ template <class Policy>
 inline long double log1p(long double x, const Policy& pol)
 { 
    if(x < -1)
-      return policy::raise_domain_error<long double>(
+      return policies::raise_domain_error<long double>(
          "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policy::raise_overflow_error<long double>(
+      return -policies::raise_overflow_error<long double>(
          "log1p<%1%>(%1%)", 0, pol);
    return ::log1pl(x); 
 }
@@ -156,10 +156,10 @@ template <class Policy>
 inline float log1p(float x, const Policy& pol)
 { 
    if(x < -1)
-      return policy::raise_domain_error<float>(
+      return policies::raise_domain_error<float>(
          "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policy::raise_overflow_error<float>(
+      return -policies::raise_overflow_error<float>(
          "log1p<%1%>(%1%)", 0, pol);
    return ::log1p(x); 
 }
@@ -168,10 +168,10 @@ template <class Policy>
 inline double log1p(double x, const Policy& pol)
 { 
    if(x < -1)
-      return policy::raise_domain_error<double>(
+      return policies::raise_domain_error<double>(
          "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policy::raise_overflow_error<double>(
+      return -policies::raise_overflow_error<double>(
          "log1p<%1%>(%1%)", 0, pol);
    return ::log1p(x); 
 }
@@ -185,10 +185,10 @@ template <class Policy>
 inline double log1p(double x, const Policy& pol)
 {
    if(x < -1)
-      return policy::raise_domain_error<double>(
+      return policies::raise_domain_error<double>(
          "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policy::raise_overflow_error<double>(
+      return -policies::raise_overflow_error<double>(
          "log1p<%1%>(%1%)", 0, pol);
    double u = 1+x;
    if(u == 1.0) 
@@ -205,10 +205,10 @@ template <class Policy>
 inline long double log1p(long double x, const Policy& pol)
 {
    if(x < -1)
-      return policy::raise_domain_error<long double>(
+      return policies::raise_domain_error<long double>(
          "log1p<%1%>(%1%)", "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policy::raise_overflow_error<long double>(
+      return -policies::raise_overflow_error<long double>(
          "log1p<%1%>(%1%)", 0, pol);
    long double u = 1+x;
    if(u == 1.0) 
@@ -221,7 +221,7 @@ inline long double log1p(long double x, const Policy& pol)
 template <class T>
 inline typename tools::promote_args<T>::type log1p(T x)
 {
-   return boost::math::log1p(x, policy::policy<>());
+   return boost::math::log1p(x, policies::policy<>());
 }
 //
 // Compute log(1+x)-x:
@@ -235,10 +235,10 @@ inline typename tools::promote_args<T>::type
    static const char* function = "boost::math::log1pmx<%1%>(%1%)";
 
    if(x < -1)
-      return policy::raise_domain_error<T>(
+      return policies::raise_domain_error<T>(
          function, "log1pmx(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
-      return -policy::raise_overflow_error<T>(
+      return -policies::raise_overflow_error<T>(
          function, 0, pol);
 
    result_type a = abs(result_type(x));
@@ -253,22 +253,23 @@ inline typename tools::promote_args<T>::type
    boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    T zero = 0;
-   T result = boost::math::tools::sum_series(s, policy::digits<T, Policy>(), max_iter, zero);
+   T result = boost::math::tools::sum_series(s, policies::digits<T, Policy>(), max_iter, zero);
 #else
-   T result = boost::math::tools::sum_series(s, policy::digits<T, Policy>(), max_iter);
+   T result = boost::math::tools::sum_series(s, policies::digits<T, Policy>(), max_iter);
 #endif
-   policy::check_series_iterations(function, max_iter, pol);
+   policies::check_series_iterations(function, max_iter, pol);
    return result;
 }
 
 template <class T>
 inline T log1pmx(T x)
 {
-   return log1pmx(x, policy::policy<>());
+   return log1pmx(x, policies::policy<>());
 }
 
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_LOG1P_INCLUDED
+
 

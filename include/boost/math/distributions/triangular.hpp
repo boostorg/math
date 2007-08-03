@@ -34,7 +34,7 @@ namespace boost{ namespace math
       }
       else
       { // Not finite: infinity or NaN.
-        *result = policy::raise_domain_error<RealType>(
+        *result = policies::raise_domain_error<RealType>(
           function,
           "Lower parameter is %1%, but must be finite!", lower, pol);
         return false;
@@ -53,7 +53,7 @@ namespace boost{ namespace math
       }
       else
       { // Not finite: infinity or NaN.
-        *result = policy::raise_domain_error<RealType>(
+        *result = policies::raise_domain_error<RealType>(
           function,
           "Mode parameter is %1%, but must be finite!", mode, pol);
         return false;
@@ -72,7 +72,7 @@ namespace boost{ namespace math
       }
       else
       { // Not finite: infinity or NaN.
-        *result = policy::raise_domain_error<RealType>(
+        *result = policies::raise_domain_error<RealType>(
           function,
           "Upper parameter is %1%, but must be finite!", upper, pol);
         return false;
@@ -91,7 +91,7 @@ namespace boost{ namespace math
       }
       else
       { // Not finite: infinity or NaN.
-        *result = policy::raise_domain_error<RealType>(
+        *result = policies::raise_domain_error<RealType>(
           function,
           "x parameter is %1%, but must be finite!", x, pol);
         return false;
@@ -114,14 +114,14 @@ namespace boost{ namespace math
       {
         if (mode < lower)
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "mode parameter is %1%, but must be >= than lower!", lower, pol);
           return false;
         }
         if (mode > upper )
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "mode parameter is %1%, but must be <= than upper!", upper, pol);
           return false;
@@ -130,7 +130,7 @@ namespace boost{ namespace math
       }
       else
       { // upper and lower have each been checked before, so must be lower >= upper.
-        *result = policy::raise_domain_error<RealType>(
+        *result = policies::raise_domain_error<RealType>(
           function,
           "lower parameter is %1%, but must be less than upper!", lower, pol);
         return false;
@@ -138,7 +138,7 @@ namespace boost{ namespace math
     } // bool check_triangular
   } // namespace detail
 
-  template <class RealType = double, class Policy = policy::policy<> >
+  template <class RealType = double, class Policy = policies::policy<> >
   class triangular_distribution
   {
   public:
@@ -516,5 +516,6 @@ namespace boost{ namespace math
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_STATS_TRIANGULAR_HPP
+
 
 

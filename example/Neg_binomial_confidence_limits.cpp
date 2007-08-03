@@ -1,21 +1,16 @@
 // Copyright John Maddock 2006
-// Copyright Paul A. Bristow 2006
+// Copyright Paul A. Bristow 2007
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifdef _MSC_VER
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-#endif
+#include <boost/math/distributions/negative_binomial.hpp>
 
 #include <iostream>
 using std::cout;
 using std::endl;
 #include <iomanip>
-#include <boost/math/distributions/negative_binomial.hpp>
 
 void confidence_limits_on_frequency(unsigned trials, unsigned successes)
 {
@@ -57,8 +52,8 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate bounds:
-      double l = negative_binomial::estimate_lower_bound_on_p(trials, successes, alpha[i]/2);
-      double u = negative_binomial::estimate_upper_bound_on_p(trials, successes, alpha[i]/2);
+      double l = negative_binomial::find_lower_bound_on_p(trials, successes, alpha[i]/2);
+      double u = negative_binomial::find_upper_bound_on_p(trials, successes, alpha[i]/2);
       // Print Limits:
       cout << fixed << setprecision(5) << setw(15) << right << l;
       cout << fixed << setprecision(5) << setw(15) << right << u << endl;
@@ -93,14 +88,14 @@ ___________________________________________
 Confidence        Lower          Upper
  Value (%)        Limit          Limit
 ___________________________________________
-    50.000        0.08701        0.18675
-    75.000        0.06229        0.23163
-    90.000        0.04217        0.28262
-    95.000        0.03207        0.31698
-    99.000        0.01764        0.38713
-    99.900        0.00786        0.47093
-    99.990        0.00358        0.54084
-    99.999        0.00165        0.60020
+    50.000        0.04812        0.13554
+    75.000        0.03078        0.17727
+    90.000        0.01807        0.22637
+    95.000        0.01235        0.26028
+    99.000        0.00530        0.33111
+    99.900        0.00164        0.41802
+    99.990        0.00051        0.49202
+    99.999        0.00016        0.55574
 ___________________________________________
 2-Sided Confidence Limits For Success Ratio
 ___________________________________________
@@ -112,14 +107,14 @@ ___________________________________________
 Confidence        Lower          Upper
  Value (%)        Limit          Limit
 ___________________________________________
-    50.000        0.08929        0.11824
-    75.000        0.08023        0.12959
-    90.000        0.07144        0.14199
-    95.000        0.06618        0.15021
-    99.000        0.05664        0.16698
-    99.900        0.04676        0.18756
-    99.990        0.03944        0.20571
-    99.999        0.03371        0.22226
+    50.000        0.08462        0.11350
+    75.000        0.07580        0.12469
+    90.000        0.06726        0.13695
+    95.000        0.06216        0.14508
+    99.000        0.05293        0.16170
+    99.900        0.04343        0.18212
+    99.990        0.03641        0.20017
+    99.999        0.03095        0.21664
 ___________________________________________
 2-Sided Confidence Limits For Success Ratio
 ___________________________________________
@@ -131,14 +126,14 @@ ___________________________________________
 Confidence        Lower          Upper
  Value (%)        Limit          Limit
 ___________________________________________
-    50.000        0.09585        0.10491
-    75.000        0.09277        0.10822
-    90.000        0.08963        0.11172
-    95.000        0.08767        0.11399
-    99.000        0.08390        0.11850
-    99.900        0.07966        0.12385
-    99.990        0.07621        0.12845
-    99.999        0.07325        0.13256
-
+    50.000        0.09536        0.10445
+    75.000        0.09228        0.10776
+    90.000        0.08916        0.11125
+    95.000        0.08720        0.11352
+    99.000        0.08344        0.11802
+    99.900        0.07921        0.12336
+    99.990        0.07577        0.12795
+    99.999        0.07282        0.13206
 */
+
 

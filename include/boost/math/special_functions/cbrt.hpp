@@ -44,7 +44,7 @@ T cbrt_imp(T z, const Policy&)
    T min = static_cast<T>(ldexp(0.5, exp/3));
    T max = static_cast<T>(ldexp(2.0, exp/3));
    T guess = static_cast<T>(ldexp(1.0, exp/3));
-   int digits = (policy::digits<T, Policy>()) / 2;
+   int digits = (policies::digits<T, Policy>()) / 2;
    return sign * tools::halley_iterate(detail::cbrt_functor<T>(z), guess, min, max, digits);
 }
 
@@ -60,12 +60,13 @@ inline typename tools::promote_args<T>::type cbrt(T z, const Policy& pol)
 template <class T>
 inline typename tools::promote_args<T>::type cbrt(T z)
 {
-   return cbrt(z, policy::policy<>());
+   return cbrt(z, policies::policy<>());
 }
 
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_SF_CBRT_HPP
+
 
 

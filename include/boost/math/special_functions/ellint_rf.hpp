@@ -36,14 +36,14 @@ T ellint_rf_imp(T x, T y, T z, const Policy& pol)
 
     if (x < 0 || y < 0 || z < 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "domain error, all arguments must be non-negative, "
             "only sensible result is %1%.",
             std::numeric_limits<T>::quiet_NaN(), pol);
     }
     if (x + y == 0 || y + z == 0 || z + x == 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "domain error, at most one argument can be zero, "
             "only sensible result is %1%.",
             std::numeric_limits<T>::quiet_NaN(), pol);
@@ -52,7 +52,7 @@ T ellint_rf_imp(T x, T y, T z, const Policy& pol)
     // Carlson scales error as the 6th power of tolerance,
     // but this seems not to work for types larger than
     // 80-bit reals, this heuristic seems to work OK:
-    if(policy::digits<T, Policy>() > 64)
+    if(policies::digits<T, Policy>() > 64)
     {
       tolerance = pow(tools::epsilon<T>(), T(1)/4.25f);
       BOOST_MATH_INSTRUMENT_CODE(tolerance);
@@ -84,7 +84,7 @@ T ellint_rf_imp(T x, T y, T z, const Policy& pol)
         z = (z + lambda) / 4;
     }
     // Check to see if we gave up too soon:
-    policy::check_series_iterations(function, k, pol);
+    policies::check_series_iterations(function, k, pol);
     BOOST_MATH_INSTRUMENT_CODE(k);
 
     // Taylor series expansion to the 5th order
@@ -103,8 +103,8 @@ inline typename tools::promote_args<T1, T2, T3>::type
    ellint_rf(T1 x, T2 y, T3 z, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   return policy::checked_narrowing_cast<result_type, Policy>(
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(
       detail::ellint_rf_imp(
          static_cast<value_type>(x),
          static_cast<value_type>(y),
@@ -115,7 +115,7 @@ template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type 
    ellint_rf(T1 x, T2 y, T3 z)
 {
-   return ellint_rf(x, y, z, policy::policy<>());
+   return ellint_rf(x, y, z, policies::policy<>());
 }
 
 }} // namespaces

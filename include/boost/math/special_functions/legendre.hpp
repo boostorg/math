@@ -32,7 +32,7 @@ T legendre_imp(unsigned l, T x, const Policy& pol, bool second = false)
    static const char* function = "boost::math::legrendre_p<%1%>(unsigned, %1%)";
    // Error handling:
    if((x < -1) || (x > 1))
-      return policy::raise_domain_error<T>(
+      return policies::raise_domain_error<T>(
          function,
          "The Legendre Polynomial is defined for"
          " -1 <= x <= 1, but got x = %1%.", x, pol);
@@ -71,18 +71,18 @@ inline typename tools::promote_args<T>::type
    legendre_p(int l, T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
    static const char* function = "boost::math::legendre_p<%1%>(unsigned, %1%)";
    if(l < 0)
-      return policy::checked_narrowing_cast<result_type, Policy>(detail::legendre_imp(-l-1, static_cast<value_type>(x), pol, false), function);
-   return policy::checked_narrowing_cast<result_type, Policy>(detail::legendre_imp(l, static_cast<value_type>(x), pol, false), function);
+      return policies::checked_narrowing_cast<result_type, Policy>(detail::legendre_imp(-l-1, static_cast<value_type>(x), pol, false), function);
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::legendre_imp(l, static_cast<value_type>(x), pol, false), function);
 }
 
 template <class T>
 inline typename tools::promote_args<T>::type 
    legendre_p(int l, T x)
 {
-   return boost::math::legendre_p(l, x, policy::policy<>());
+   return boost::math::legendre_p(l, x, policies::policy<>());
 }
 
 template <class T, class Policy>
@@ -90,15 +90,15 @@ inline typename tools::promote_args<T>::type
    legendre_q(unsigned l, T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   return policy::checked_narrowing_cast<result_type, Policy>(detail::legendre_imp(l, static_cast<value_type>(x), pol, true), "boost::math::legendre_q<%1%>(unsigned, %1%)");
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::legendre_imp(l, static_cast<value_type>(x), pol, true), "boost::math::legendre_q<%1%>(unsigned, %1%)");
 }
 
 template <class T>
 inline typename tools::promote_args<T>::type 
    legendre_q(unsigned l, T x)
 {
-   return boost::math::legendre_q(l, x, policy::policy<>());
+   return boost::math::legendre_q(l, x, policies::policy<>());
 }
 
 // Recurrence for associated polynomials:
@@ -117,7 +117,7 @@ T legendre_p_imp(int l, int m, T x, T sin_theta_power, const Policy& pol)
 {
    // Error handling:
    if((x < -1) || (x > 1))
-      return policy::raise_domain_error<T>(
+      return policies::raise_domain_error<T>(
       "boost::math::legendre_p<%1%>(int, int, %1%)",
          "The associated Legendre Polynomial is defined for"
          " -1 <= x <= 1, but got x = %1%.", x, pol);
@@ -170,19 +170,20 @@ inline typename tools::promote_args<T>::type
    legendre_p(int l, int m, T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   return policy::checked_narrowing_cast<result_type, Policy>(detail::legendre_p_imp(l, m, static_cast<value_type>(x), pol), "bost::math::legendre_p<%1%>(int, int, %1%)");
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::legendre_p_imp(l, m, static_cast<value_type>(x), pol), "bost::math::legendre_p<%1%>(int, int, %1%)");
 }
 
 template <class T>
 inline typename tools::promote_args<T>::type 
    legendre_p(int l, int m, T x)
 {
-   return boost::math::legendre_p(l, m, x, policy::policy<>());
+   return boost::math::legendre_p(l, m, x, policies::policy<>());
 }
 
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_LEGENDRE_HPP
+
 

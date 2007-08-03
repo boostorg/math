@@ -1209,11 +1209,11 @@ struct lanczos
 {
    typedef typename mpl::if_<
       typename mpl::less_equal<
-         typename policy::precision<Real, Policy>::type,
+         typename policies::precision<Real, Policy>::type,
          mpl::int_<0>
       >::type,
       mpl::int_<INT_MAX - 2>,
-      typename policy::precision<Real, Policy>::type
+      typename policies::precision<Real, Policy>::type
    >::type target_precision;
 
    typedef typename mpl::deref<typename mpl::find_if<
@@ -1226,5 +1226,6 @@ struct lanczos
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_LANCZOS
+
 
 

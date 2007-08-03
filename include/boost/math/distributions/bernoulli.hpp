@@ -1,7 +1,7 @@
 // boost\math\distributions\bernoulli.hpp
 
 // Copyright John Maddock 2006.
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -35,13 +35,6 @@
 
 #include <utility>
 
-#if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
-#  pragma warning(push)
-#  pragma warning (disable: 4180) // qualifier applied to function type has no meaning; ignored
-//#  pragma warning(disable: 4702) // unreachable code
-// in domain_error_imp in error_handling
-#endif
-
 namespace boost
 {
   namespace math
@@ -50,11 +43,11 @@ namespace boost
     {
       // Common error checking routines for bernoulli distribution functions:
       template <class RealType, class Policy>
-      inline bool check_success_fraction(const char* function, const RealType& p, RealType* result, const Policy& pol)
+      inline bool check_success_fraction(const char* function, const RealType& p, RealType* result, const Policy& /* pol */)
       {
         if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Success fraction argument is %1%, but must be >= 0 and <= 1 !", p, Policy());
           return false;
@@ -62,7 +55,7 @@ namespace boost
         return true;
       }
       template <class RealType, class Policy>
-      inline bool check_dist(const char* function, const RealType& p, RealType* result, const Policy& pol)
+      inline bool check_dist(const char* function, const RealType& p, RealType* result, const Policy& /* pol */)
       {
         return check_success_fraction(function, p, result, Policy());
       }
@@ -75,7 +68,7 @@ namespace boost
         }
         if(!(boost::math::isfinite)(k) || !((k == 0) || (k == 1)))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Number of successes argument is %1%, but must be 0 or 1 !", k, pol);
           return false;
@@ -83,7 +76,7 @@ namespace boost
        return true;
       }
       template <class RealType, class Policy>
-      inline bool check_dist_and_prob(const char* function, RealType p, RealType prob, RealType* result, const Policy& Pol)
+      inline bool check_dist_and_prob(const char* function, RealType p, RealType prob, RealType* result, const Policy& /* pol */)
       {
         if(check_dist(function, p, result, Policy()) && detail::check_probability(function, prob, result, Policy()) == false)
         {
@@ -94,7 +87,7 @@ namespace boost
     } // namespace bernoulli_detail
 
 
-    template <class RealType = double, class Policy = policy::policy<> >
+    template <class RealType = double, class Policy = policies::policy<> >
     class bernoulli_distribution
     {
     public:
@@ -326,10 +319,7 @@ namespace boost
 // keep compilers that support two-phase lookup happy.
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
-#if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
-# pragma warning(pop)
-#endif
-
 #endif // BOOST_MATH_SPECIAL_BERNOULLI_HPP
+
 
 

@@ -62,16 +62,16 @@ namespace NTL
 
 namespace boost{ namespace math{ 
    
-namespace policy{
+namespace policies{
 
 template<>
-inline int digits<NTL::RR, boost::math::policy::policy<> >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
+inline int digits<NTL::RR, boost::math::policies::policy<> >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 {
    return NTL::RR::precision();
 }
 
 template<>
-inline int digits<NTL::RR, boost::math::policy::policy<boost::math::policy::detail::forwarding_arg1, boost::math::policy::detail::forwarding_arg2> >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
+inline int digits<NTL::RR, boost::math::policies::policy<boost::math::policies::detail::forwarding_arg1, boost::math::policies::detail::forwarding_arg2> >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 {
    return NTL::RR::precision();
 }
@@ -185,7 +185,7 @@ inline NTL::RR log_min_value<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR)
 template <>
 inline NTL::RR epsilon<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
 {
-   return ldexp(NTL::RR(1), 1-boost::math::policy::digits<NTL::RR, boost::math::policy::policy<> >());
+   return ldexp(NTL::RR(1), 1-boost::math::policies::digits<NTL::RR, boost::math::policies::policy<> >());
 }
 
 } // namespace tools
@@ -304,7 +304,7 @@ namespace NTL{
          NTL::RR(std::asin(boost::math::tools::real_cast<double>(z))), 
          NTL::RR(-boost::math::constants::pi<NTL::RR>()/2),
          NTL::RR(boost::math::constants::pi<NTL::RR>()/2),
-         boost::math::policy::digits<NTL::RR, boost::math::policy::policy<> >());
+         boost::math::policies::digits<NTL::RR, boost::math::policies::policy<> >());
    }
 
    struct acos_root
@@ -330,7 +330,7 @@ namespace NTL{
          NTL::RR(std::acos(boost::math::tools::real_cast<double>(z))), 
          NTL::RR(-boost::math::constants::pi<NTL::RR>()/2),
          NTL::RR(boost::math::constants::pi<NTL::RR>()/2),
-         boost::math::policy::digits<NTL::RR, boost::math::policy::policy<> >());
+         boost::math::policies::digits<NTL::RR, boost::math::policies::policy<> >());
    }
 
    struct atan_root
@@ -357,7 +357,7 @@ namespace NTL{
          NTL::RR(std::atan(boost::math::tools::real_cast<double>(z))), 
          -boost::math::constants::pi<NTL::RR>()/2,
          boost::math::constants::pi<NTL::RR>()/2,
-         boost::math::policy::digits<NTL::RR, boost::math::policy::policy<> >());
+         boost::math::policies::digits<NTL::RR, boost::math::policies::policy<> >());
    }
 
    inline NTL::RR sinh(NTL::RR z)
@@ -382,6 +382,7 @@ namespace NTL{
 
 
 #endif // BOOST_MATH_TOOLS_NTL_HPP
+
 
 
 

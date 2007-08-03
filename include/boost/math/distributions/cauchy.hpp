@@ -35,7 +35,7 @@ inline bool check_cauchy_scale(const char* func, RealType scale, RealType* resul
 {
    if(scale <= 0)
    {
-      *result = policy::raise_domain_error<RealType>(
+      *result = policies::raise_domain_error<RealType>(
          func,
          "The scale parameter for the Cauchy distribution must be > 0 but got %1%.",
          scale, pol);
@@ -105,9 +105,9 @@ RealType quantile_imp(
    using namespace std; // for ADL of std functions
    // Special cases:
    if(p == 1)
-      return (complement ? -1 : 1) * policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return (complement ? -1 : 1) * policies::raise_overflow_error<RealType>(function, 0, Policy());
    if(p == 0)
-      return (complement ? 1 : -1) * policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return (complement ? 1 : -1) * policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    RealType result;
    RealType loc = dist.location();
@@ -130,7 +130,7 @@ RealType quantile_imp(
 
 } // namespace detail
 
-template <class RealType = double, class Policy = policy::policy<> >
+template <class RealType = double, class Policy = policies::policy<> >
 class cauchy_distribution
 {
 public:
@@ -216,17 +216,10 @@ inline RealType quantile(const complemented2_type<cauchy_distribution<RealType, 
 template <class RealType, class Policy>
 inline RealType mean(const cauchy_distribution<RealType, Policy>&)
 {  // There is no mean:
-#ifdef BOOST_MATH_COMPILE_FAIL_IF_UNDEFINED
-#  ifdef BOOST_MSVC
-#    error Mean of the Cauchy distribution is undefined!
-#  else 
-      BOOST_STATIC_ASSERT(sizeof(RealType) == 0);
-#  endif
-#endif
    typedef typename Policy::assert_undefined_type assert_type;
    BOOST_STATIC_ASSERT(assert_type::value == 0);
 
-   return policy::raise_domain_error<RealType>(
+   return policies::raise_domain_error<RealType>(
       "boost::math::mean(cauchy<%1%>&)",
       "The Cauchy distribution does not have a mean: "
       "the only possible return value is %1%.",
@@ -240,7 +233,7 @@ inline RealType variance(const cauchy_distribution<RealType, Policy>& /*dist*/)
    typedef typename Policy::assert_undefined_type assert_type;
    BOOST_STATIC_ASSERT(assert_type::value == 0);
 
-   return policy::raise_domain_error<RealType>(
+   return policies::raise_domain_error<RealType>(
       "boost::math::variance(cauchy<%1%>&)",
       "The Cauchy distribution does not have a variance: "
       "the only possible return value is %1%.",
@@ -265,7 +258,7 @@ inline RealType skewness(const cauchy_distribution<RealType, Policy>& /*dist*/)
    typedef typename Policy::assert_undefined_type assert_type;
    BOOST_STATIC_ASSERT(assert_type::value == 0);
 
-   return policy::raise_domain_error<RealType>(
+   return policies::raise_domain_error<RealType>(
       "boost::math::skewness(cauchy<%1%>&)",
       "The Cauchy distribution does not have a skewness: "
       "the only possible return value is %1%.",
@@ -279,7 +272,7 @@ inline RealType kurtosis(const cauchy_distribution<RealType, Policy>& /*dist*/)
    typedef typename Policy::assert_undefined_type assert_type;
    BOOST_STATIC_ASSERT(assert_type::value == 0);
 
-   return policy::raise_domain_error<RealType>(
+   return policies::raise_domain_error<RealType>(
       "boost::math::kurtosis(cauchy<%1%>&)",
       "The Cauchy distribution does not have a kurtosis: "
       "the only possible return value is %1%.",
@@ -293,7 +286,7 @@ inline RealType kurtosis_excess(const cauchy_distribution<RealType, Policy>& /*d
    typedef typename Policy::assert_undefined_type assert_type;
    BOOST_STATIC_ASSERT(assert_type::value == 0);
 
-   return policy::raise_domain_error<RealType>(
+   return policies::raise_domain_error<RealType>(
       "boost::math::kurtosis_excess(cauchy<%1%>&)",
       "The Cauchy distribution does not have a kurtosis: "
       "the only possible return value is %1%.",

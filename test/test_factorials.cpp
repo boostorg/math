@@ -5,13 +5,10 @@
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
 #  pragma warning(disable: 4245) // int/unsigned int conversion
 #endif
-//
+
 // Return infinities not exceptions:
-//
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
 #include <boost/math/concepts/real_concept.hpp>
@@ -210,7 +207,7 @@ void test_spots(T)
       ::boost::math::falling_factorial(static_cast<T>(30.75), 30),
       static_cast<T>(naive_falling_factorial(30.75L, 30)),
       tolerance * 3);
-   if(boost::math::policy::digits<T, boost::math::policy::policy<> >() > 50)
+   if(boost::math::policies::digits<T, boost::math::policies::policy<> >() > 50)
    {
       BOOST_CHECK_CLOSE(
          ::boost::math::falling_factorial(static_cast<T>(-30.75L), 30),
@@ -328,24 +325,16 @@ int test_main(int, char* [])
 
 Output is:
 
------- Build started: Project: test_factorials, Configuration: Debug Win32 ------
-Compiling...
-test_factorials.cpp
-Linking...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_factorials.exe"
 Running 1 test case...
-*** No errors detected
-Build Time 0:05
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_factorials\Debug\BuildLog.htm"
-test_factorials - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
-
+Types double and long double have the same number of floating-point significand bits (53) on this platform.
 max factorial for float 34
 max factorial for double 170
 max factorial for long double 170
-
+max factorial for real_concept 100
+*** No errors detected
 
 */
+
 
 
 

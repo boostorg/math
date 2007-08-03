@@ -18,7 +18,7 @@
 
 namespace boost{ namespace math{
 
-template <class RealType = double, class Policy = policy::policy<> >
+template <class RealType = double, class Policy = policies::policy<> >
 class fisher_f_distribution
 {
 public:
@@ -86,7 +86,7 @@ RealType pdf(const fisher_f_distribution<RealType, Policy>& dist, const RealType
 
    if((x < 0) || !(boost::math::isfinite)(x))
    {
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function, "Random variable parameter was %1%, but must be > 0 !", x, Policy());
    }
 
@@ -94,7 +94,7 @@ RealType pdf(const fisher_f_distribution<RealType, Policy>& dist, const RealType
    {
       // special cases:
       if(df1 < 2)
-         return policy::raise_overflow_error<RealType>(
+         return policies::raise_overflow_error<RealType>(
             function, 0, Policy());
       else if(df1 == 2)
          return 1;
@@ -142,7 +142,7 @@ inline RealType cdf(const fisher_f_distribution<RealType, Policy>& dist, const R
 
    if((x < 0) || !(boost::math::isfinite)(x))
    {
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function, "Random Variable parameter was %1%, but must be > 0 !", x, Policy());
    }
 
@@ -201,7 +201,7 @@ inline RealType cdf(const complemented2_type<fisher_f_distribution<RealType, Pol
 
    if((x < 0) || !(boost::math::isfinite)(x))
    {
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function, "Random Variable parameter was %1%, but must be > 0 !", x, Policy());
    }
 
@@ -259,7 +259,7 @@ inline RealType mean(const fisher_f_distribution<RealType, Policy>& dist)
       return error_result;
    if(df2 <= 2)
    {
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function, "Second degree of freedom was %1% but must be > 2 in order for the distribution to have a mean.", df2, Policy());
    }
    return df2 / (df2 - 2);
@@ -280,7 +280,7 @@ inline RealType variance(const fisher_f_distribution<RealType, Policy>& dist)
       return error_result;
    if(df2 <= 4)
    {
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function, "Second degree of freedom was %1% but must be > 4 in order for the distribution to have a valid variance.", df2, Policy());
    }
    return 2 * df2 * df2 * (df1 + df2 - 2) / (df1 * (df2 - 2) * (df2 - 2) * (df2 - 4));
@@ -301,7 +301,7 @@ inline RealType mode(const fisher_f_distribution<RealType, Policy>& dist)
       return error_result;
    if(df2 <= 2)
    {
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function, "Second degree of freedom was %1% but must be > 2 in order for the distribution to have a mode.", df2, Policy());
    }
    return df2 * (df1 - 2) / (df1 * (df2 + 2));
@@ -332,7 +332,7 @@ inline RealType skewness(const fisher_f_distribution<RealType, Policy>& dist)
       return error_result;
    if(df2 <= 6)
    {
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function, "Second degree of freedom was %1% but must be > 6 in order for the distribution to have a skewness.", df2, Policy());
    }
    return 2 * (df2 + 2 * df1 - 2) * sqrt((2 * df2 - 8) / (df1 * (df2 + df1 - 2))) / (df2 - 6);
@@ -363,7 +363,7 @@ inline RealType kurtosis_excess(const fisher_f_distribution<RealType, Policy>& d
       return error_result;
    if(df2 <= 8)
    {
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function, "Second degree of freedom was %1% but must be > 8 in order for the distribution to have a kutosis.", df2, Policy());
    }
    RealType df2_2 = df2 * df2;

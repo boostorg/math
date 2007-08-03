@@ -1,4 +1,4 @@
-// Copyright Paul Bristow 2006.
+// Copyright Paul Bristow 2007.
 // Copyright John Maddock 2006.
 
 // Use, modification and distribution are subject to the
@@ -8,22 +8,9 @@
 
 // test_triangular.cpp
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-//#define BOOST_MATH_THROW_ON_UNDERFLOW_ERROR 
-// Ignore underflow to zero.
-
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-#  pragma warning(disable: 4180) // qualifier applied to function type has no meaning; ignored.
-#  if !(defined _SCL_SECURE_NO_DEPRECATE) || (_SCL_SECURE_NO_DEPRECATE == 0)
-#    pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
-#  pragma warning(disable: 4305) // 'initializing' : truncation from 'long double' to 'float'
-#  endif
+#  pragma warning(disable: 4305) // truncation from 'long double' to 'float'
 #endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
@@ -79,7 +66,7 @@ void check_triangular(RealType lower, RealType mode, RealType upper, RealType x,
 } // void check_triangular
 
 template <class RealType>
-void test_spots(RealType T)
+void test_spots(RealType)
 {
   // Basic sanity checks:
   //
@@ -91,7 +78,7 @@ void test_spots(RealType T)
   RealType tolerance = boost::math::tools::epsilon<RealType>() * 5; // 5 eps as a fraction.
   RealType tol5eps = boost::math::tools::epsilon<RealType>() * 5; // 5 eps as a fraction.
 
-  cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
+  cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << "." << endl;
   
   using namespace std; // for ADL of std::exp;
 
@@ -227,9 +214,9 @@ void test_spots(RealType T)
   { // BOOST_CHECK tests for infinity using std::numeric_limits<>::infinity()
     // Note that infinity is not implemented for real_concept, so these tests
     // are only done for types, like built-in float, double.. that have infinity.
-    // Note that these assume that  BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined.
-    // #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR would give a throw here.
-    // #define BOOST_MATH_THROW_ON_DOMAIN_ERROR IS defined, so the throw path
+    // Note that these assume that  BOOST_MATH_OVERFLOW_ERROR_POLICY is NOT throw_on_error.
+    // #define BOOST_MATH_OVERFLOW_ERROR_POLICY == throw_on_error would give a throw here.
+    // #define BOOST_MATH_DOMAIN_ERROR_POLICY == throw_on_error IS defined, so the throw path
     // of error handling is tested below with BOOST_CHECK_THROW tests.
 
     BOOST_CHECK_THROW( // x == infinity NOT OK.
@@ -440,7 +427,7 @@ void test_spots(RealType T)
   tolerance = (std::max)(
     boost::math::tools::epsilon<RealType>(),
     static_cast<RealType>(boost::math::tools::epsilon<double>())) * 5; // 5 eps as a fraction.
-  cout << "Tolerance (as fraction) for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
+  cout << "Tolerance (as fraction) for type " << typeid(RealType).name()  << " is " << tolerance << "." << endl;
   triangular_distribution<RealType> distu01(0, 1);
   RealType x = static_cast<RealType>(0.5);
   using namespace std; // ADL of std names.
@@ -481,9 +468,9 @@ void test_spots(RealType T)
   { // BOOST_CHECK tests for infinity using std::numeric_limits<>::infinity()
     // Note that infinity is not implemented for real_concept, so these tests
     // are only done for types, like built-in float, double.. that have infinity.
-    // Note that these assume that  BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined.
-    // #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR would give a throw here.
-    // #define BOOST_MATH_THROW_ON_DOMAIN_ERROR IS defined, so the throw path
+    // Note that these assume that  BOOST_MATH_OVERFLOW_ERROR_POLICY is NOT throw_on_error.
+    // #define BOOST_MATH_OVERFLOW_ERROR_POLICY == throw_on_error would give a throw here.
+    // #define BOOST_MATH_DOMAIN_ERROR_POLICY == throw_on_error IS defined, so the throw path
     // of error handling is tested below with BOOST_CHECK_THROW tests.
 
     BOOST_CHECK_EQUAL(pdf(distu01, std::numeric_limits<RealType>::infinity()),  0);
@@ -685,22 +672,13 @@ int test_main(int, char* [])
 
 Output:
 
-Compiling...
-test_triangular.cpp
-Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_triangular.exe"
 Running 1 test case...
-0
 Distribution 0
-0
 Distribution 1
-1
 Distribution 2
-0.35355339059327373
 Distribution 3
-0.5
 Distribution 4
--0.13397459621556151
 Tolerance for type float is 5.96046e-007.
 Tolerance for type double is 1.11022e-015.
 Tolerance for type long double is 1.11022e-015.
@@ -709,7 +687,7 @@ Tolerance for type class boost::math::concepts::real_concept is 1.11022e-015.
 
 
 
-
 */
+
 
 

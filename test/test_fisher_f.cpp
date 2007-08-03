@@ -1,22 +1,12 @@
-// test_chi_squared.cpp
+// test_fisher_squared.cpp
 
 // Copyright Paul A. Bristow 2006.
-// Copyright John Maddock 2006.
+// Copyright John Maddock 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
@@ -520,11 +510,6 @@ int test_main(int, char* [])
 
 
   // Basic sanity-check spot values.
-#ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is defined to throw on domain error." << endl;
-#else
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
-#endif
 
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float.
@@ -542,14 +527,8 @@ int test_main(int, char* [])
 
 Output is:
 
------- Build started: Project: test_fisher, Configuration: Debug Win32 ------
-Compiling...
-test_fisher_f.cpp
-Linking...
-Embedding manifest...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_fisher.exe"
 Running 1 test case...
-BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
 Tolerance = 0.2%.
 Tolerance = 5.96046e-005%.
 Tolerance = 5.96046e-005%.
@@ -563,12 +542,8 @@ Tolerance = 0.2%.
 Tolerance = 1.11022e-013%.
 Tolerance = 1.11022e-013%.
 *** No errors detected
-Build Time 0:12
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_fisher\Debug\BuildLog.htm"
-test_fisher - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
-
 
 */
+
 
 

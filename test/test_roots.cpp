@@ -94,7 +94,7 @@ private:
 
 double inverse_ibeta_bisect(double a, double b, double z)
 {
-   typedef boost::math::policy::policy<> pol;
+   typedef boost::math::policies::policy<> pol;
    bool invert = false;
    int bits = std::numeric_limits<double>::digits;
 
@@ -152,7 +152,7 @@ double inverse_ibeta_newton(double a, double b, double z)
 
    double min = 0;
    double max = 1;
-   return boost::math::tools::newton_raphson_iterate(ibeta_roots_2<double, boost::math::policy::policy<> >(a, b, z, invert), guess, min, max, precision);
+   return boost::math::tools::newton_raphson_iterate(ibeta_roots_2<double, boost::math::policies::policy<> >(a, b, z, invert), guess, min, max, precision);
 }
 
 double inverse_ibeta_halley(double a, double b, double z)
@@ -183,7 +183,7 @@ double inverse_ibeta_halley(double a, double b, double z)
 
    double min = 0;
    double max = 1;
-   return boost::math::tools::halley_iterate(ibeta_roots_3<double, boost::math::policy::policy<> >(a, b, z, invert), guess, min, max, precision);
+   return boost::math::tools::halley_iterate(ibeta_roots_3<double, boost::math::policies::policy<> >(a, b, z, invert), guess, min, max, precision);
 }
 
 double inverse_ibeta_schroeder(double a, double b, double z)
@@ -214,7 +214,7 @@ double inverse_ibeta_schroeder(double a, double b, double z)
 
    double min = 0;
    double max = 1;
-   return boost::math::tools::schroeder_iterate(ibeta_roots_3<double, boost::math::policy::policy<> >(a, b, z, invert), guess, min, max, precision);
+   return boost::math::tools::schroeder_iterate(ibeta_roots_3<double, boost::math::policies::policy<> >(a, b, z, invert), guess, min, max, precision);
 }
 
 
@@ -225,8 +225,8 @@ void test_inverses(const T& data)
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
-   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policy::digits<value_type, boost::math::policy::policy<> >()/2)) * 100;
-   if(boost::math::policy::digits<value_type, boost::math::policy::policy<> >() < 50)
+   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policies::digits<value_type, boost::math::policies::policy<> >()/2)) * 100;
+   if(boost::math::policies::digits<value_type, boost::math::policies::policy<> >() < 50)
       precision = 1;   // 1% or two decimal digits, all we can hope for when the input is truncated
 
    for(unsigned i = 0; i < data.size(); ++i)
@@ -293,5 +293,6 @@ int test_main(int, char* [])
    test_beta(0.1, "double");
    return 0;
 }
+
 
 

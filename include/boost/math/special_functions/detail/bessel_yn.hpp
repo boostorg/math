@@ -26,11 +26,11 @@ T bessel_yn(int n, T x, const Policy& pol)
 
     if ((x == 0) && (n == 0))
     {
-       return -policy::raise_overflow_error<T>(function, 0, pol);
+       return -policies::raise_overflow_error<T>(function, 0, pol);
     }
     if (x <= 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Got x = %1%, but x must be > 0, complex result not supported.", x, pol);
     }
 

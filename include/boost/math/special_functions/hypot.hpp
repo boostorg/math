@@ -38,7 +38,7 @@ T hypot_imp(T x, T y, const Policy& pol)
    if(std::numeric_limits<T>::has_infinity
       && ((x == std::numeric_limits<T>::infinity())
       || (y == std::numeric_limits<T>::infinity())))
-      return policy::raise_overflow_error<T>("boost::math::hypot<%1%>(%1%,%1%)", 0, pol);
+      return policies::raise_overflow_error<T>("boost::math::hypot<%1%>(%1%,%1%)", 0, pol);
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
@@ -61,7 +61,7 @@ inline typename tools::promote_args<T1, T2>::type
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    return detail::hypot_imp(
-      static_cast<result_type>(x), static_cast<result_type>(y), policy::policy<>());
+      static_cast<result_type>(x), static_cast<result_type>(y), policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
@@ -77,4 +77,5 @@ inline typename tools::promote_args<T1, T2>::type
 } // namespace boost
 
 #endif // BOOST_MATH_HYPOT_INCLUDED
+
 

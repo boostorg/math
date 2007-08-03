@@ -47,12 +47,11 @@
 
 namespace boost{ namespace math{ namespace detail{
 
-//
 // This version will never be called (at runtime), it's a stub used
 // when T is unsuitable to be passed to these routines:
 //
 template <class T, class Policy>
-inline T igamma_temme_large(T, T, const Policy& pol, mpl::int_<0> const *)
+inline T igamma_temme_large(T, T, const Policy& /* pol */, mpl::int_<0> const *)
 {
    // stub function, should never actually be called
    BOOST_ASSERT(0);

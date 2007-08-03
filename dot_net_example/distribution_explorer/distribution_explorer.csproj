@@ -17,7 +17,7 @@
     <TargetZone>LocalIntranet</TargetZone>
     <SignManifests>true</SignManifests>
     <PublishUrl>\\hetp7\H%24\Distex\</PublishUrl>
-    <Install>false</Install>
+    <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>

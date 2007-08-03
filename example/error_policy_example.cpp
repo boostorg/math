@@ -29,9 +29,9 @@ using boost::math::students_t;  // Probability of students_t(df, t) convenience 
 #include <stdexcept>
 	using std::exception;
 
-using boost::math::policy::policy;
-using boost::math::policy::domain_error;
-using boost::math::policy::ignore_error;
+using boost::math::policies::policy;
+using boost::math::policies::domain_error;
+using boost::math::policies::ignore_error;
 
 // Define a (bad?) policy to ignore domain errors ('bad' arguments):
 typedef policy<

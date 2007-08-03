@@ -127,12 +127,12 @@ T bessel_y0(T x, const Policy& pol)
 
     if (x < 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Got x = %1% but x must be non-negative, complex result not supported.", x, pol);
     }
     if (x == 0)
     {
-       return -policy::raise_overflow_error<T>(function, 0, pol);
+       return -policies::raise_overflow_error<T>(function, 0, pol);
     }
     if (x <= 3)                       // x in (0, 3]
     {

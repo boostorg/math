@@ -1,7 +1,7 @@
 // test_bernoulli.cpp
 
 // Copyright John Maddock 2006.
-// Copyright  Paul A. Bristow 2006.
+// Copyright  Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -10,13 +10,8 @@
 
 // Basic sanity test for Bernoulli Cumulative Distribution Function.
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#endif
+// Default domain error policy is
+// #define BOOST_MATH_DOMAIN_ERROR_POLICY throw_on_error
 
 #include <boost/math/distributions/bernoulli.hpp> // for bernoulli_distribution
 using boost::math::bernoulli_distribution;
@@ -242,11 +237,6 @@ int test_main(int, char* [])
  // 
 
   // Basic sanity-check spot values.
-#ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is defined to throw on domain error." << endl;
-#else
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
-#endif
 
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float.
@@ -261,20 +251,17 @@ int test_main(int, char* [])
 
 /*
 
-
 Output is:
 
-test_bernoulli.cpp
-Linking...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_bernouilli.exe"
 Running 1 test case...
-BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
 Tolerance for type float is 1.19e-005 (or 0.00119%).
 Tolerance for type double is 2.22e-014 (or 2.22e-012%).
 Tolerance for type long double is 2.22e-014 (or 2.22e-012%).
 Tolerance for type class boost::math::concepts::real_concept is 2.22e-014 (or 2.22e-012%).
 *** No errors detected
 
+No warnings MSVC level 4 31 Jul 2007
 
 */
+
 

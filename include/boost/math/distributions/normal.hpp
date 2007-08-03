@@ -21,7 +21,7 @@
 
 namespace boost{ namespace math{
 
-template <class RealType = double, class Policy = policy::policy<> >
+template <class RealType = double, class Policy = policies::policy<> >
 class normal_distribution
 {
 public:
@@ -200,4 +200,5 @@ inline RealType kurtosis_excess(const normal_distribution<RealType, Policy>& /*d
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_STATS_NORMAL_HPP
+
 

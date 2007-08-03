@@ -1,6 +1,6 @@
 // boost\math\special_functions\negative_binomial.hpp
 
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -55,7 +55,7 @@
 #include <limits> // using std::numeric_limits;
 #include <utility>
 
-#if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
+#if defined (BOOST_MSVC)
 #  pragma warning(push)
 #  pragma warning(disable: 4702) // unreachable code.
 // in domain_error_imp in error_handling.
@@ -73,7 +73,7 @@ namespace boost
       {
         if( !(boost::math::isfinite)(r) || (r <= 0) )
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Number of successes argument is %1%, but must be > 0 !", r, pol);
           return false;
@@ -85,7 +85,7 @@ namespace boost
       {
         if( !(boost::math::isfinite)(p) || (p < 0) || (p > 1) )
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Success fraction argument is %1%, but must be >= 0 and <= 1 !", p, pol);
           return false;
@@ -107,7 +107,7 @@ namespace boost
         }
         if( !(boost::math::isfinite)(k) || (k < 0) )
         { // Check k failures.
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Number of failures argument is %1%, but must be >= 0 !", k, pol);
           return false;
@@ -126,7 +126,7 @@ namespace boost
       } // check_dist_and_prob
     } //  namespace negative_binomial_detail
 
-    template <class RealType = double, class Policy = policy::policy<> >
+    template <class RealType = double, class Policy = policies::policy<> >
     class negative_binomial_distribution
     {
     public:
@@ -153,7 +153,7 @@ namespace boost
         return m_r;
       }
 
-      static RealType estimate_lower_bound_on_p(
+      static RealType find_lower_bound_on_p(
         RealType trials,
         RealType successes,
         RealType alpha) // alpha 0.05 equivalent to 95% for one-sided test.
@@ -176,9 +176,9 @@ namespace boost
         // http://www.ucs.louisiana.edu/~kxk4695/Discrete_new.pdf
         //
         return ibeta_inv(successes, failures + 1, alpha, static_cast<RealType*>(0), Policy());
-      } // estimate_lower_bound_on_p
+      } // find_lower_bound_on_p
 
-      static RealType estimate_upper_bound_on_p(
+      static RealType find_upper_bound_on_p(
         RealType trials,
         RealType successes,
         RealType alpha) // alpha 0.05 equivalent to 95% for one-sided test.
@@ -204,12 +204,12 @@ namespace boost
         // http://www.ucs.louisiana.edu/~kxk4695/Discrete_new.pdf
         //
         return ibetac_inv(successes, failures, alpha, static_cast<RealType*>(0), Policy());
-      } // estimate_upper_bound_on_p
+      } // find_upper_bound_on_p
 
       // Estimate number of trials :
       // "How many trials do I need to be P% sure of seeing k or fewer failures?"
 
-      static RealType estimate_minimum_number_of_trials(
+      static RealType find_minimum_number_of_trials(
         RealType k,     // number of failures (k >= 0).
         RealType p,     // success fraction 0 <= p <= 1.
         RealType alpha) // risk level threshold 0 <= alpha <= 1.
@@ -224,9 +224,9 @@ namespace boost
 
         result = ibeta_inva(k + 1, p, alpha, Policy());  // returns n - k
         return result + k;
-      } // RealType estimate_number_of_failures
+      } // RealType find_number_of_failures
 
-      static RealType estimate_maximum_number_of_trials(
+      static RealType find_maximum_number_of_trials(
         RealType k,     // number of failures (k >= 0).
         RealType p,     // success fraction 0 <= p <= 1.
         RealType alpha) // risk level threshold 0 <= alpha <= 1.
@@ -241,7 +241,7 @@ namespace boost
 
         result = ibetac_inva(k + 1, p, alpha, Policy());  // returns n - k
         return result + k;
-      } // RealType estimate_number_of_trials complemented
+      } // RealType find_number_of_trials complemented
 
     private:
       RealType m_r; // successes.
@@ -274,7 +274,7 @@ namespace boost
     //template <class RealType, class Policy>
     //inline RealType median(const negative_binomial_distribution<RealType, Policy>& dist)
     //{ // Median of negative_binomial_distribution is not defined.
-    //  return policy::raise_domain_error<RealType>(BOOST_CURRENT_FUNCTION, "Median is not implemented, result is %1%!", std::numeric_limits<RealType>::quiet_NaN());
+    //  return policies::raise_domain_error<RealType>(BOOST_CURRENT_FUNCTION, "Median is not implemented, result is %1%!", std::numeric_limits<RealType>::quiet_NaN());
     //} // median
     // Now implemented via quantile(half) in derived accessors.
 
@@ -439,7 +439,7 @@ namespace boost
       // Special cases.
       if (P == 1)
       {  // Would need +infinity failures for total confidence.
-        result = policy::raise_overflow_error<RealType>(
+        result = policies::raise_overflow_error<RealType>(
             function,
             "Probability argument is 1, which implies infinite failures !", Policy());
         return result;
@@ -528,7 +528,7 @@ namespace boost
        if(Q == 0)
        {  // Probability 1 - Q  == 1 so infinite failures to achieve certainty.
           // Would need +infinity failures for total confidence.
-          result = policy::raise_overflow_error<RealType>(
+          result = policies::raise_overflow_error<RealType>(
              function,
              "Probability argument complement is 0, which implies infinite failures !", Policy());
           return result;
@@ -575,7 +575,7 @@ namespace boost
 // keep compilers that support two-phase lookup happy.
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
-#if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
+#if defined (BOOST_MSVC)
 # pragma warning(pop)
 #endif
 

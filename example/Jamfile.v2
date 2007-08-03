@@ -10,6 +10,7 @@ import testing ;
 project 
     : requirements 
       <toolset>gcc:<cxxflags>-Wno-missing-braces
+      <toolset>msvc:<cxxflags>-W4
       <include>../../..
     ;
 
@@ -25,9 +26,10 @@ run chi_square_std_dev_test.cpp ;
 run neg_binomial_sample_sizes.cpp ;
 run f_test.cpp ;
 run distribution_construction.cpp ;
-run error_handling_examples.cpp ;
+run error_handling_example.cpp ;
 run error_policy_example.cpp ;
 run error_policies_example.cpp ;
+
 
 
 

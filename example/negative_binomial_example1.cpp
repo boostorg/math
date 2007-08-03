@@ -1,24 +1,11 @@
 // negative_binomial_example1.cpp
 
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-//#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-// If this is enabled then quantile(nb, 1) will throw thus:
-// Message from thrown exception was:
-// Error in function double __cdecl boost::math::quantile<double>(const class boost::math::negative_binomial_distribution<double> &,const double &): Probability argument is 1, which implies infinite failures !
-
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
-#endif
 
 // Example 1 of using negative_binomial distribution.
 
@@ -84,8 +71,6 @@
 	using std::noshowpoint;
 #include <iomanip>
 	using std::setprecision;
-
-#include <cassert>
 
 int main()
 {
@@ -211,70 +196,43 @@ int main()
 
 Output is:
 
-Example 1 using the Negative Binomial Distribution.  ..\..\..\..\..\..\boost-san
-dbox\libs\math_functions\example\negative_binomial_example1.cpp Wed Nov 22 18:33
-:26 2006 140050727
-
-Selling candy bars - an example of using the negative binomial distribution.
+Example 1 using the Negative Binomial Distribution.  ..\..\..\..\..\..\Boost-sandbox\math_toolkit\libs\math\example\negative_binomial_example1.cpp Wed Aug  1 14:12:58 2007 140050727
+Selling candy bars - an example of using the negative binomial distribution. 
 An example by Dr. Diane Evans,
 Professor of Mathematics at Rose-Hulman Institute of Technology,
 see http://en.wikipedia.org/wiki/Negative_binomial_distribution
-
 Pat has a sales per house success rate of 0.4.
 Therefore he would, on average, sell 40 bars after trying 100 houses.
 With a success rate of 0.4, he might expect, on average,
- to need to visit about 12 houses in order to sell all 5 candy bars.
+ to need to visit about 12 houses in order to sell all 5 candy bars. 
 Probability that Pat finishes on the 5th house is f(5) = 0.10033
 Probability that Pat finishes on the 6th house is 0.03072
 Probability that Pat finishes on the 7th house is 0.055296
 Probability that Pat finishes on the 8th house is 0.077414
-Probability that Pat finishes on or before the 8th house is sum
+Probability that Pat finishes on or before the 8th house is sum 
 pdf(sales_quota) + pdf(6) + pdf(7) + pdf(8) = 0.17367
-
 Probability of selling his quota of 5 candy bars
 on or before the 8th house is 0.17367
-
 Probability that Pat finishes exactly on the 10th house is 0.10033
-
 Probability of selling his quota of 5 candy bars
 on or before the 10th house is 0.3669
 Probability that Pat finishes on the 11th house is 0.10033
-
 Probability of selling his quota of 5 candy bars
 on or before the 11th house is 0.46723
 Probability that Pat finishes on the 12th house is 0.094596
-
 Probability of selling his quota of 5 candy bars
 on or before the 12th house is 0.56182
-
 Probability of selling his quota of 5 candy bars
 on or before the 31th house is 0.99897
-
 Probability of failing to sell his quota of 5 candy bars
 even after visiting all 30  houses is 0.0010314
 Probability of meeting sales quota on or before 8th house is 0.17367
 If the confidence of meeting sales quota is 0.17367, then the finishing house is 8
-If the confidence of meeting sales quota is 1, then the finishing house is 1.#INF
-If the confidence of meeting sales quota is 0, then the finishing house is 5
-If the confidence of meeting sales quota is 0.99849, then the finishing house is 30
-If confidence of meeting quota is zero (we assume all houses are successful sale
-s), then finishing house is 5
-If confidence of meeting quota is 0, then finishing house is 5
-If confidence of meeting quota is 0.001, then finishing house is 5
-If confidence of meeting quota is 0.01, then finishing house is 5
-If confidence of meeting quota is 0.05, then finishing house is 7
-If confidence of meeting quota is 0.1, then finishing house is 8
-If confidence of meeting quota is 0.5, then finishing house is 12
-If confidence of meeting quota is 0.9, then finishing house is 18
-If confidence of meeting quota is 0.95, then finishing house is 21
-If confidence of meeting quota is 0.99, then finishing house is 25
-If confidence of meeting quota is 0.999, then finishing house is 32
-If confidence of meeting quota is 1, then finishing house is 1.#INF
-If we demand a confidence of meeting sales quota of unity, then we can never be
-certain of selling 5 bars, so the finishing house is infinite!
-Press any key to continue . . .
+Message from thrown exception was:
+   Error in function boost::math::quantile(const negative_binomial_distribution<double>&, double): Probability argument is 1, which implies infinite failures !
 
 */
+
 
 
 

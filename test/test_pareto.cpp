@@ -14,20 +14,9 @@
 // From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/paretoDistribution.html
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW
-
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-#  if !(defined _SCL_SECURE_NO_DEPRECATE) || (_SCL_SECURE_NO_DEPRECATE == 0)
-#    pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
-     // #define _SCL_SECURE_NO_DEPRECATE = 1 // avoid C4996 warning.
-#  endif
-//#  pragma warning(disable: 4244) // conversion from 'double' to 'float', possible loss of data.
 #endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
@@ -77,13 +66,13 @@
   } // check_pareto
 
 template <class RealType>
-void test_spots(RealType T)
+void test_spots(RealType)
 {
-   // Basic sanity checks
+  // Basic sanity checks.
 	//RealType tolerance = static_cast<RealType>(std::pow(10., -(4))); // 1e-4 (as fraction, NOT %)
 	//cout << "tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
   // Not used so far: use epsilon tolerances.
-    
+   
   RealType tol5eps = boost::math::tools::epsilon<RealType>() * 5;
   RealType tol10eps = boost::math::tools::epsilon<RealType>() * 10;
   RealType tol100eps = boost::math::tools::epsilon<RealType>() * 100;
@@ -339,4 +328,5 @@ Running 1 test case...
 
 
 */
+
 

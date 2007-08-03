@@ -1,23 +1,12 @@
 // test_chi_squared.cpp
 
 // Copyright Paul A. Bristow 2006.
-// Copyright John Maddock 2006.
+// Copyright John Maddock 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-//#  pragma warning(disable: 4244) //  conversion from 'const double' to 'float'.
-#endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
@@ -539,11 +528,6 @@ int test_main(int, char* [])
   chi_squared mychisqr2(8);
 
   // Basic sanity-check spot values.
-#ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is defined to throw on domain error." << endl;
-#else
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
-#endif
 
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float.
@@ -556,25 +540,18 @@ int test_main(int, char* [])
 } // int test_main(int, char* [])
 
 /*
------- Rebuild All started: Project: test_chi_squared, Configuration: Debug Win32 ------
-Deleting intermediate and output files for project 'test_chi_squared', configuration 'Debug|Win32'
-Compiling...
-test_chi_squared.cpp
-Linking...
+
+Output:
+
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_chi_squared.exe"
 Running 1 test case...
-BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
 Tolerance = 0.1%.
 Tolerance = 0.1%.
 Tolerance = 0.1%.
 Tolerance = 0.1%.
 *** No errors detected
-Build Time 0:09
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_chi_squared\Debug\BuildLog.htm"
-test_chi_squared - 0 error(s), 0 warning(s)
-========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
-
 
 */
+
 
 

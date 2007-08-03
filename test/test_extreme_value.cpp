@@ -7,19 +7,6 @@
 
 // test_extreme_value.cpp
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-//#  pragma warning(disable: 4535) // calling _set_se_translator() requires /EHa (in Boost.test)
-// Enable C++ Exceptions Yes With SEH Exceptions (/EHa) prevents warning 4535.
-#endif
-
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/extreme_value.hpp>
 	 using boost::math::extreme_value_distribution;
@@ -68,17 +55,17 @@ void test_spot(RealType a, RealType b, RealType x, RealType p, RealType q, RealT
 }
 
 template <class RealType>
-void test_spots(RealType T)
+void test_spots(RealType)
 {
    // Basic sanity checks.
-   // 50eps as a persentage, up to a maximum of double precision
+   // 50eps as a percentage, up to a maximum of double precision
    // (that's the limit of our test data).
    RealType tolerance = (std::max)(
       static_cast<RealType>(boost::math::tools::epsilon<double>()),
       boost::math::tools::epsilon<RealType>());
    tolerance *= 50 * 100;  
 
-	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
+	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
    // Results calculated by punching numbers into a calculator,
    // and using the formula at http://mathworld.wolfram.com/ExtremeValueDistribution.html
@@ -201,7 +188,6 @@ int test_main(int, char* [])
 	boost::math::extreme_value mycev1(1.); // Using typedef
 	extreme_value_distribution<> myev2(1.); // Using default RealType double.
 
-
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
@@ -225,23 +211,12 @@ int test_main(int, char* [])
 
 Output is:
 
------- Rebuild All started: Project: test_extreme_value, Configuration: Debug Win32 ------
-Deleting intermediate and output files for project 'test_extreme_value', configuration 'Debug|Win32'
-Compiling...
-test_extreme_value.cpp
-Linking...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_extreme_value.exe"
-Running 1 test case...
+-Running 1 test case...
 Tolerance for type float is 0.000596046 %
 Tolerance for type double is 1.11022e-012 %
 Tolerance for type long double is 1.11022e-012 %
 Tolerance for type class boost::math::concepts::real_concept is 1.11022e-012 %
 *** No errors detected
-Build Time 0:05
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_extreme_value\Debug\BuildLog.htm"
-test_extreme_value - 0 error(s), 0 warning(s)
-========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
-
-
 */
+
 

@@ -88,7 +88,7 @@ int temme_jy(T v, T x, T* Y, T* Y1, const Policy& pol)
            break; 
         }
     }
-    policy::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k, pol);
+    policies::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k, pol);
     *Y = -sum;
     *Y1 = -2 * sum1 / x;
 
@@ -129,7 +129,7 @@ int CF1_jy(T v, T x, T* fv, int* sign, const Policy& pol)
         if (abs(delta - 1.0L) < tolerance) 
         { break; }
     }
-    policy::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k / 100, pol);
+    policies::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k / 100, pol);
     *fv = -f;
     *sign = s;                              // sign of denominator
 
@@ -183,7 +183,7 @@ int CF2_jy(T v, T x, T* p, T* q, const Policy& pol)
         f *= delta;
         if (abs(delta - one) < tolerance) { break; }
     }
-    policy::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k, pol);
+    policies::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k, pol);
     *p = real(f);
     *q = imag(f);
 
@@ -224,7 +224,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
 
     if (x == 0)
     {
-       *J = *Y = policy::raise_overflow_error<T>(
+       *J = *Y = policies::raise_overflow_error<T>(
           function, 0, pol);
        return 1;
     }

@@ -30,7 +30,7 @@ inline bool check_weibull_shape(
 {
    if((shape < 0) || !(boost::math::isfinite)(shape))
    {
-      *result = policy::raise_domain_error<RealType>(
+      *result = policies::raise_domain_error<RealType>(
          function,
          "Shape parameter is %1%, but must be > 0 !", shape, pol);
       return false;
@@ -46,7 +46,7 @@ inline bool check_weibull_x(
 {
    if((x < 0) || !(boost::math::isfinite)(x))
    {
-      *result = policy::raise_domain_error<RealType>(
+      *result = policies::raise_domain_error<RealType>(
          function,
          "Random variate is %1% but must be >= 0 !", x, pol);
       return false;
@@ -66,7 +66,7 @@ inline bool check_weibull(
 
 } // namespace detail
 
-template <class RealType = double, class Policy = policy::policy<> >
+template <class RealType = double, class Policy = policies::policy<> >
 class weibull_distribution
 {
 public:
@@ -177,7 +177,7 @@ inline RealType quantile(const weibull_distribution<RealType, Policy>& dist, con
       return result;
 
    if(p == 1)
-      return policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    result = scale * pow(-boost::math::log1p(-p, Policy()), 1 / shape);
 
@@ -223,7 +223,7 @@ inline RealType quantile(const complemented2_type<weibull_distribution<RealType,
       return result;
 
    if(q == 0)
-      return policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    result = scale * pow(-log(q), 1 / shape);
 
@@ -378,4 +378,5 @@ inline RealType kurtosis(const weibull_distribution<RealType, Policy>& dist)
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_STATS_WEIBULL_HPP
+
 

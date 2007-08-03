@@ -32,7 +32,7 @@ inline bool verify_lambda(const char* function, RealType l, RealType* presult, c
 {
    if(l <= 0)
    {
-      *presult = policy::raise_domain_error<RealType>(
+      *presult = policies::raise_domain_error<RealType>(
          function,
          "The scale parameter \"lambda\" must be > 0, but was: %1%.", l, pol);
       return false;
@@ -45,7 +45,7 @@ inline bool verify_exp_x(const char* function, RealType x, RealType* presult, co
 {
    if(x < 0)
    {
-      *presult = policy::raise_domain_error<RealType>(
+      *presult = policies::raise_domain_error<RealType>(
          function,
          "The random variable must be >= 0, but was: %1%.", x, pol);
       return false;
@@ -55,7 +55,7 @@ inline bool verify_exp_x(const char* function, RealType x, RealType* presult, co
 
 } // namespace detail
 
-template <class RealType = double, class Policy = policy::policy<> >
+template <class RealType = double, class Policy = policies::policy<> >
 class exponential_distribution
 {
 public:
@@ -144,7 +144,7 @@ inline RealType quantile(const exponential_distribution<RealType, Policy>& dist,
    if(p == 0)
       return 0;
    if(p == 1)
-      return policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    result = -boost::math::log1p(-p, Policy()) / lambda;
    return result;
@@ -187,7 +187,7 @@ inline RealType quantile(const complemented2_type<exponential_distribution<RealT
    if(q == 1)
       return 0;
    if(q == 0)
-      return policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    result = -log(q) / lambda;
    return result;

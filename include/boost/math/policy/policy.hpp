@@ -22,7 +22,7 @@
 #include <boost/math/tools/config.hpp>
 #include <limits>
 
-namespace boost{ namespace math{ namespace policy{
+namespace boost{ namespace math{ namespace policies{
 
 //
 // Define macros for our default policies, if they're not defined already:
@@ -210,7 +210,7 @@ struct precision
 public:
 #ifdef __BORLANDC__
    typedef typename mpl::if_c<
-      (Digits2::value > ::boost::math::policy::detail::precision<Digits10,Digits2>::digits2_type::value),
+      (Digits2::value > ::boost::math::policies::detail::precision<Digits10,Digits2>::digits2_type::value),
       Digits2, digits2_type>::type type;
 #else
    typedef typename mpl::if_c<
@@ -261,12 +261,12 @@ struct is_default_policy_imp
 
 template <class T> struct is_valid_policy 
 : public mpl::bool_< 
-   ::boost::math::policy::detail::is_valid_policy_imp<T>::value>
+   ::boost::math::policies::detail::is_valid_policy_imp<T>::value>
 {};
 
 template <class T> struct is_default_policy 
 : public mpl::bool_< 
-   ::boost::math::policy::detail::is_default_policy_imp<T>::value>
+   ::boost::math::policies::detail::is_default_policy_imp<T>::value>
 {
    template <class U>
    struct apply
@@ -345,17 +345,17 @@ private:
    //
    // Validate all our arguments:
    //
-   BOOST_STATIC_ASSERT(::boost::math::policy::detail::is_valid_policy<A1>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policy::detail::is_valid_policy<A2>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policy::detail::is_valid_policy<A3>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policy::detail::is_valid_policy<A4>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policy::detail::is_valid_policy<A5>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policy::detail::is_valid_policy<A6>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policy::detail::is_valid_policy<A7>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policy::detail::is_valid_policy<A8>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policy::detail::is_valid_policy<A9>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policy::detail::is_valid_policy<A10>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policy::detail::is_valid_policy<A11>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A1>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A2>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A3>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A4>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A5>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A6>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A7>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A8>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A9>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A10>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A11>::value);
    //
    // Typelist of the arguments:
    //
@@ -642,8 +642,8 @@ struct precision
          ((::std::numeric_limits<Real>::digits <= precision_type::value) 
          || (Policy::precision_type::value <= 0)),
 #else
-         ((::std::numeric_limits<Real>::digits <= ::boost::math::policy::precision<Real, Policy>::precision_type::value)
-         || (::boost::math::policy::precision<Real, Policy>::precision_type::value <= 0)),
+         ((::std::numeric_limits<Real>::digits <= ::boost::math::policies::precision<Real, Policy>::precision_type::value)
+         || (::boost::math::policies::precision<Real, Policy>::precision_type::value <= 0)),
 #endif
          // Default case, full precision for RealType:
          digits2< ::std::numeric_limits<Real>::digits>,
@@ -690,9 +690,10 @@ struct is_policy_imp
 }
 
 template <class P>
-struct is_policy : public mpl::bool_< ::boost::math::policy::detail::is_policy_imp<P>::value> {};
+struct is_policy : public mpl::bool_< ::boost::math::policies::detail::is_policy_imp<P>::value> {};
 
 }}} // namespaces
 
 #endif // BOOST_MATH_POLICY_HPP
+
 

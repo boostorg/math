@@ -42,24 +42,24 @@ private:
 // in the root no longer being bracketed.
 //
 template <class Real, class Tol>
-void adjust_bounds(Real& a, Real& b, Tol const& tol){}
+void adjust_bounds(Real& /* a */, Real& /* b */, Tol const& /* tol */){}
 
 template <class Real>
-void adjust_bounds(Real& a, Real& b, tools::equal_floor const& tol)
+void adjust_bounds(Real& /* a */, Real& b, tools::equal_floor const& /* tol */)
 {
    using namespace std;
    b -= tools::epsilon<Real>() * b;
 }
 
 template <class Real>
-void adjust_bounds(Real& a, Real& b, tools::equal_ceil const& tol)
+void adjust_bounds(Real& a, Real& /* b */, tools::equal_ceil const& /* tol */)
 {
    using namespace std;
    a += tools::epsilon<Real>() * a;
 }
 
 template <class Real>
-void adjust_bounds(Real& a, Real& b, tools::equal_nearest_integer const& tol)
+void adjust_bounds(Real& a, Real& b, tools::equal_nearest_integer const& /* tol */)
 {
    using namespace std;
    a += tools::epsilon<Real>() * a;
@@ -101,7 +101,7 @@ typename Dist::value_type
 
    value_type fa = f(guess);
    boost::uintmax_t count = max_iter - 1;
-   value_type fb(fa), a(guess), b;
+   value_type fb(fa), a(guess), b =0; // Compiler warning C4701: potentially uninitialized local variable 'b' used
 
    if(fa == 0)
       return guess;
@@ -211,7 +211,7 @@ typename Dist::value_type
          while(sign(fb) == sign(fa))
          {
             if(count == 0)
-               policy::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, policy_type());
+               policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, policy_type());
             a = b;
             fa = fb;
             b *= multiplier;
@@ -238,7 +238,7 @@ typename Dist::value_type
                return 0;
             }
             if(count == 0)
-               policy::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, policy_type());
+               policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, policy_type());
             b = a;
             fb = fa;
             a /= multiplier;
@@ -289,7 +289,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& guess,
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
-      const policy::discrete_quantile<policy::real>&,
+      const policies::discrete_quantile<policies::real>&,
       boost::uintmax_t& max_iter)
 {
    if(p <= pdf(dist, 0))
@@ -301,7 +301,7 @@ inline typename Dist::value_type
       guess, 
       multiplier, 
       adder, 
-      tools::eps_tolerance<typename Dist::value_type>(policy::digits<typename Dist::value_type, typename Dist::policy_type>()),
+      tools::eps_tolerance<typename Dist::value_type>(policies::digits<typename Dist::value_type, typename Dist::policy_type>()),
       max_iter);
 }
 
@@ -314,7 +314,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& guess,
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
-      const policy::discrete_quantile<policy::integer_outside>&,
+      const policies::discrete_quantile<policies::integer_outside>&,
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
@@ -356,7 +356,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& guess,
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
-      const policy::discrete_quantile<policy::integer_inside>&,
+      const policies::discrete_quantile<policies::integer_inside>&,
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
@@ -398,7 +398,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& guess,
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
-      const policy::discrete_quantile<policy::integer_below>&,
+      const policies::discrete_quantile<policies::integer_below>&,
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
@@ -425,7 +425,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& guess,
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
-      const policy::discrete_quantile<policy::integer_above>&,
+      const policies::discrete_quantile<policies::integer_above>&,
       boost::uintmax_t& max_iter)
 {
    using namespace std;
@@ -451,7 +451,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& guess,
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
-      const policy::discrete_quantile<policy::integer_nearest>&,
+      const policies::discrete_quantile<policies::integer_nearest>&,
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
@@ -477,4 +477,5 @@ inline typename Dist::value_type
 }}} // namespaces
 
 #endif // BOOST_MATH_DISTRIBUTIONS_DETAIL_INV_DISCRETE_QUANTILE
+
 

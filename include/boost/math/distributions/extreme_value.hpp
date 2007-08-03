@@ -39,7 +39,7 @@ inline bool verify_scale_b(const char* function, RealType b, RealType* presult, 
 {
    if(b <= 0)
    {
-      *presult = policy::raise_domain_error<RealType>(
+      *presult = policies::raise_domain_error<RealType>(
          function,
          "The scale parameter \"b\" must be > 0, but was: %1%.", b, pol);
       return false;
@@ -49,7 +49,7 @@ inline bool verify_scale_b(const char* function, RealType b, RealType* presult, 
 
 } // namespace detail
 
-template <class RealType = double, class Policy = policy::policy<> >
+template <class RealType = double, class Policy = policies::policy<> >
 class extreme_value_distribution
 {
 public:
@@ -133,9 +133,9 @@ RealType quantile(const extreme_value_distribution<RealType, Policy>& dist, cons
       return result;
 
    if(p == 0)
-      return -policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return -policies::raise_overflow_error<RealType>(function, 0, Policy());
    if(p == 1)
-      return policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    result = a - log(-log(p)) * b;
 
@@ -175,9 +175,9 @@ RealType quantile(const complemented2_type<extreme_value_distribution<RealType, 
       return result;
 
    if(q == 0)
-      return policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return policies::raise_overflow_error<RealType>(function, 0, Policy());
    if(q == 1)
-      return -policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return -policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    result = a - log(-boost::math::log1p(-q, Policy())) * b;
 

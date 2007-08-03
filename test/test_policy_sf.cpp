@@ -19,7 +19,7 @@
 
 namespace test{
 
-   typedef boost::math::policy::policy<> policy;
+   typedef boost::math::policies::policy<> policy;
 
    BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(policy);
 
@@ -123,6 +123,7 @@ int test_main(int, char* [])
    TEST_POLICY_SF(sph_neumann(3, 5));
    return 0;
 }
+
 
 
 

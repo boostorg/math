@@ -16,7 +16,7 @@
 #include <boost/math/special_functions.hpp>
 #include <boost/math/concepts/distributions.hpp>
 
-typedef boost::math::policy::policy<> test_policy;
+typedef boost::math::policies::policy<> test_policy;
 
 namespace test{
 

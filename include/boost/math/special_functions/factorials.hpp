@@ -39,7 +39,7 @@ inline T factorial(unsigned i, const Policy& pol)
 template <class T>
 inline T factorial(unsigned i)
 {
-   return factorial<T>(i, policy::policy<>());
+   return factorial<T>(i, policies::policy<>());
 }
 /*
 // Can't have these in a policy enabled world?
@@ -90,13 +90,13 @@ T double_factorial(unsigned i, const Policy& pol)
    //
    // If we fall through to here then the result is infinite:
    //
-   return policy::raise_overflow_error<T>("boost::math::double_factorial<%1%>(unsigned)", 0, pol);
+   return policies::raise_overflow_error<T>("boost::math::double_factorial<%1%>(unsigned)", 0, pol);
 }
 
 template <class T>
 inline T double_factorial(unsigned i)
 {
-   return double_factorial<T>(i, policy::policy<>());
+   return double_factorial<T>(i, policies::policy<>());
 }
 
 namespace detail{
@@ -188,7 +188,7 @@ inline typename tools::promote_args<RT>::type
 {
    typedef typename tools::promote_args<RT>::type result_type;
    return detail::falling_factorial_imp(
-      static_cast<result_type>(x), n, policy::policy<>());
+      static_cast<result_type>(x), n, policies::policy<>());
 }
 
 template <class RT, class Policy>
@@ -206,7 +206,7 @@ inline typename tools::promote_args<RT>::type
 {
    typedef typename tools::promote_args<RT>::type result_type;
    return detail::rising_factorial_imp(
-      static_cast<result_type>(x), n, policy::policy<>());
+      static_cast<result_type>(x), n, policies::policy<>());
 }
 
 template <class RT, class Policy>

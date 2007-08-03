@@ -1,4 +1,5 @@
 // Copyright John Maddock 2006.
+// Copyright Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -6,19 +7,6 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // test_dist_overloads.cpp
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-//#  pragma warning(disable: 4535) // calling _set_se_translator() requires /EHa (in Boost.test)
-// Enable C++ Exceptions Yes With SEH Exceptions (/EHa) prevents warning 4535.
-#endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/normal.hpp>
@@ -33,13 +21,13 @@
 	using std::setprecision;
 
 template <class RealType>
-void test_spots(RealType T)
+void test_spots(RealType)
 {
    // Basic sanity checks,
    // 2 eps as a percentage:
    RealType tolerance = boost::math::tools::epsilon<RealType>() * 2 * 100;
 
-	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
+	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
    for(int i = -4; i <= 4; ++i)
    {
@@ -97,4 +85,17 @@ int test_main(int, char* [])
 
    return 0;
 } // int test_main(int, char* [])
+
+/*
+
+Output:
+
+Running 1 test case...
+Tolerance for type float is 2.38419e-005 %
+Tolerance for type double is 4.44089e-014 %
+Tolerance for type long double is 4.44089e-014 %
+Tolerance for type class boost::math::concepts::real_concept is 4.44089e-014 %
+*** No errors detected
+
+*/
 

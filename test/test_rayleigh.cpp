@@ -7,17 +7,9 @@
 
 // test_rayleigh.cpp
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-//#  pragma warning(disable: 4535) // calling _set_se_translator() requires /EHa (in Boost.test)
-// Enable C++ Exceptions Yes With SEH Exceptions (/EHa) prevents warning 4535.
 #endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
@@ -314,21 +306,14 @@ int test_main(int, char* [])
 
 Output is:
 
------- Build started: Project: test_rayleigh_dist, Configuration: Debug Win32 ------
-Compiling...
-test_rayleigh.cpp
-Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_rayleigh.exe"
 Running 1 test case...
-Tolerance for type float is 5.96046e-006 %
-Tolerance for type double is 1.11022e-014 %
-Tolerance for type long double is 1.11022e-014 %
-Tolerance for type class boost::math::concepts::real_concept is 1.11022e-014 %
+Tolerance for type float is 0.000119209 %
+Tolerance for type double is 2.22045e-013 %
+Tolerance for type long double is 2.22045e-013 %
+Tolerance for type class boost::math::concepts::real_concept is 2.22045e-013 %
 *** No errors detected
 
-
-
-
-
 */
+
 

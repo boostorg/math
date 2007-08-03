@@ -35,22 +35,22 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
 
     if (x < 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Argument x must be >= 0, but got %1%", x, pol);
     }
     if (y < 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Argument y must be >= 0, but got %1%", y, pol);
     }
     if (z <= 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Argument z must be > 0, but got %1%", z, pol);
     }
     if (x + y == 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "At most one argument can be zero, but got, x + y = %1%", x+y, pol);
     }
 
@@ -79,7 +79,7 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
         z = (z + lambda) / 4;
     }
     // Check to see if we gave up too soon:
-    policy::check_series_iterations(function, k, pol);
+    policies::check_series_iterations(function, k, pol);
 
     // Taylor series expansion to the 5th order
     EA = X * Y;
@@ -101,8 +101,8 @@ inline typename tools::promote_args<T1, T2, T3>::type
    ellint_rd(T1 x, T2 y, T3 z, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   return policy::checked_narrowing_cast<result_type, Policy>(
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(
       detail::ellint_rd_imp(
          static_cast<value_type>(x),
          static_cast<value_type>(y),
@@ -113,7 +113,7 @@ template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type 
    ellint_rd(T1 x, T2 y, T3 z)
 {
-   return ellint_rd(x, y, z, policy::policy<>());
+   return ellint_rd(x, y, z, policies::policy<>());
 }
 
 }} // namespaces

@@ -79,7 +79,7 @@ inline float erf_asymptotic_limit_N(const mpl::int_<113>&)
 template <class T, class Policy>
 inline T erf_asymptotic_limit()
 {
-   typedef typename policy::precision<T, Policy>::type precision_type;
+   typedef typename policies::precision<T, Policy>::type precision_type;
    typedef typename mpl::if_<
       mpl::less_equal<precision_type, mpl::int_<24> >,
       typename mpl::if_<
@@ -127,8 +127,8 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
    {
       detail::erf_asympt_series_t<T> s(z);
       boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
-      result = boost::math::tools::sum_series(s, policy::digits<T, Policy>(), max_iter, 1);
-      policy::check_series_iterations("boost::math::erf<%1%>(%1%, %1%)", max_iter, pol);
+      result = boost::math::tools::sum_series(s, policies::digits<T, Policy>(), max_iter, 1);
+      policies::check_series_iterations("boost::math::erf<%1%>(%1%, %1%)", max_iter, pol);
    }
    else
    {
@@ -154,7 +154,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
          invert = !invert;
          result = z * exp(-x);
          result /= sqrt(boost::math::constants::pi<T>());
-         result *= upper_gamma_fraction(T(0.5f), x, policy::digits<T, Policy>());
+         result *= upper_gamma_fraction(T(0.5f), x, policies::digits<T, Policy>());
       }
    }
    if(invert)
@@ -737,17 +737,17 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
 } // namespace detail
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type erf(T z, const Policy& pol)
+inline typename tools::promote_args<T>::type erf(T z, const Policy& /* pol */)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   typedef typename policy::precision<result_type, Policy>::type precision_type;
-   typedef typename policy::normalise<
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::precision<result_type, Policy>::type precision_type;
+   typedef typename policies::normalise<
       Policy, 
-      policy::promote_float<false>, 
-      policy::promote_double<false>, 
-      policy::discrete_quantile<>,
-      policy::assert_undefined<> >::type forwarding_policy;
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
 
    typedef typename mpl::if_<
       mpl::less_equal<precision_type, mpl::int_<0> >,
@@ -767,7 +767,7 @@ inline typename tools::promote_args<T>::type erf(T z, const Policy& pol)
       >::type
    >::type tag_type;
 
-   return policy::checked_narrowing_cast<result_type, forwarding_policy>(detail::erf_imp(
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::erf_imp(
       static_cast<value_type>(z),
       false,
       forwarding_policy(),
@@ -778,14 +778,14 @@ template <class T, class Policy>
 inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   typedef typename policy::precision<result_type, Policy>::type precision_type;
-   typedef typename policy::normalise<
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::precision<result_type, Policy>::type precision_type;
+   typedef typename policies::normalise<
       Policy, 
-      policy::promote_float<false>, 
-      policy::promote_double<false>, 
-      policy::discrete_quantile<>,
-      policy::assert_undefined<> >::type forwarding_policy;
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
 
    typedef typename mpl::if_<
       mpl::less_equal<precision_type, mpl::int_<0> >,
@@ -805,7 +805,7 @@ inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
       >::type
    >::type tag_type;
 
-   return policy::checked_narrowing_cast<result_type, forwarding_policy>(detail::erf_imp(
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::erf_imp(
       static_cast<value_type>(z),
       true,
       forwarding_policy(),
@@ -815,13 +815,13 @@ inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
 template <class T>
 inline typename tools::promote_args<T>::type erf(T z)
 {
-   return boost::math::erf(z, policy::policy<>());
+   return boost::math::erf(z, policies::policy<>());
 }
 
 template <class T>
 inline typename tools::promote_args<T>::type erfc(T z)
 {
-   return boost::math::erfc(z, policy::policy<>());
+   return boost::math::erfc(z, policies::policy<>());
 }
 
 } // namespace math
@@ -830,5 +830,6 @@ inline typename tools::promote_args<T>::type erfc(T z)
 #include <boost/math/special_functions/detail/erf_inv.hpp>
 
 #endif // BOOST_MATH_SPECIAL_ERF_HPP
+
 
 

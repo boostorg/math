@@ -31,7 +31,7 @@
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
 
-#if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
+#if defined (BOOST_MSVC)
 #  pragma warning(push)
 #  pragma warning(disable: 4702) // unreachable code
 // in domain_error_imp in error_handling
@@ -51,7 +51,7 @@ namespace boost
       {
         if(!(boost::math::isfinite)(alpha) || (alpha <= 0))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Alpha argument is %1%, but must be > 0 !", alpha, pol);
           return false;
@@ -64,7 +64,7 @@ namespace boost
       {
         if(!(boost::math::isfinite)(beta) || (beta <= 0))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Beta argument is %1%, but must be > 0 !", beta, pol);
           return false;
@@ -77,7 +77,7 @@ namespace boost
       {
         if((p < 0) || (p > 1) || !(boost::math::isfinite)(p))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Probability argument is %1%, but must be >= 0 and <= 1 !", p, pol);
           return false;
@@ -90,7 +90,7 @@ namespace boost
       {
         if(!(boost::math::isfinite)(x) || (x < 0) || (x > 1))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "x argument is %1%, but must be >= 0 and <= 1 !", x, pol);
           return false;
@@ -124,7 +124,7 @@ namespace boost
       {
         if(!(boost::math::isfinite)(mean) || (mean <= 0))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "mean argument is %1%, but must be > 0 !", mean, pol);
           return false;
@@ -136,7 +136,7 @@ namespace boost
       {
         if(!(boost::math::isfinite)(variance) || (variance <= 0))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "variance argument is %1%, but must be > 0 !", variance, pol);
           return false;
@@ -149,7 +149,7 @@ namespace boost
     // is deliberately NOT included to avoid a name clash with the beta function.
     // Use beta_distribution<> mybeta(...) to construct type double.
 
-    template <class RealType = double, class Policy = policy::policy<> >
+    template <class RealType = double, class Policy = policies::policy<> >
     class beta_distribution
     {
     public:
@@ -311,7 +311,7 @@ namespace boost
       RealType result;
       if ((dist.alpha() <= 1))
       {
-        result = policy::raise_domain_error<RealType>(
+        result = policies::raise_domain_error<RealType>(
           function,
           "mode undefined for alpha = %1%, must be > 1!", dist.alpha(), Policy());
         return result;
@@ -319,7 +319,7 @@ namespace boost
 
       if ((dist.beta() <= 1))
       {
-        result = policy::raise_domain_error<RealType>(
+        result = policies::raise_domain_error<RealType>(
           function,
           "mode undefined for beta = %1%, must be > 1!", dist.beta(), Policy());
         return result;
@@ -535,9 +535,10 @@ namespace boost
 // keep compilers that support two-phase lookup happy.
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
-#if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
+#if defined (BOOST_MSVC)
 # pragma warning(pop)
 #endif
 
 #endif // BOOST_MATH_DIST_BETA_HPP
+
 

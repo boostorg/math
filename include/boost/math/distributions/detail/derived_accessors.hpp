@@ -64,7 +64,7 @@ inline typename Distribution::value_type hazard(const Distribution& dist, const 
    value_type p = cdf(complement(dist, x));
    value_type d = pdf(dist, x);
    if(d > p * tools::max_value<value_type>())
-      return policy::raise_overflow_error<value_type>(
+      return policies::raise_overflow_error<value_type>(
       "boost::math::hazard(const Distribution&, %1%)", 0, policy_type());
    if(d == 0)
    {
@@ -94,7 +94,7 @@ inline typename Distribution::value_type coefficient_of_variation(const Distribu
    value_type d = standard_deviation(dist);
    if((abs(m) < 1) && (d > abs(m) * tools::max_value<value_type>()))
    { // Checks too that m is not zero,
-      return policy::raise_overflow_error<value_type>("boost::math::coefficient_of_variation(const Distribution&, %1%)", 0, policy_type());
+      return policies::raise_overflow_error<value_type>("boost::math::coefficient_of_variation(const Distribution&, %1%)", 0, policy_type());
    }
    return d / m; // so MSVC warning on zerodivide is spurious, and suppressed.
 }

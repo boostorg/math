@@ -1,7 +1,7 @@
 // boost\math\distributions\poisson.hpp
 
 // Copyright John Maddock 2006.
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -47,13 +47,6 @@
 
 #include <utility>
 
-#if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
-#  pragma warning(push)
-#  pragma warning(disable: 4702) // unreachable code
-// in domain_error_imp in error_handling
-#  pragma warning(disable: 4189) // local variable is initialized but not referenced
-#endif
-
 namespace boost
 {
   namespace math
@@ -67,7 +60,7 @@ namespace boost
             const typename Dist::value_type& guess,
             const typename Dist::value_type& multiplier,
             const typename Dist::value_type& adder,
-            const policy::discrete_quantile<policy::integer_nearest>&,
+            const policies::discrete_quantile<policies::integer_nearest>&,
             boost::uintmax_t& max_iter);
       template <class Dist>
       inline typename Dist::value_type 
@@ -77,7 +70,7 @@ namespace boost
             const typename Dist::value_type& guess,
             const typename Dist::value_type& multiplier,
             const typename Dist::value_type& adder,
-            const policy::discrete_quantile<policy::integer_above>&,
+            const policies::discrete_quantile<policies::integer_above>&,
             boost::uintmax_t& max_iter);
       template <class Dist>
       inline typename Dist::value_type 
@@ -87,7 +80,7 @@ namespace boost
             const typename Dist::value_type& guess,
             const typename Dist::value_type& multiplier,
             const typename Dist::value_type& adder,
-            const policy::discrete_quantile<policy::integer_below>&,
+            const policies::discrete_quantile<policies::integer_below>&,
             boost::uintmax_t& max_iter);
       template <class Dist>
       inline typename Dist::value_type 
@@ -97,7 +90,7 @@ namespace boost
             const typename Dist::value_type& guess,
             const typename Dist::value_type& multiplier,
             const typename Dist::value_type& adder,
-            const policy::discrete_quantile<policy::integer_outside>&,
+            const policies::discrete_quantile<policies::integer_outside>&,
             boost::uintmax_t& max_iter);
       template <class Dist>
       inline typename Dist::value_type 
@@ -107,7 +100,7 @@ namespace boost
             const typename Dist::value_type& guess,
             const typename Dist::value_type& multiplier,
             const typename Dist::value_type& adder,
-            const policy::discrete_quantile<policy::integer_inside>&,
+            const policies::discrete_quantile<policies::integer_inside>&,
             boost::uintmax_t& max_iter);
       template <class Dist>
       inline typename Dist::value_type 
@@ -117,7 +110,7 @@ namespace boost
             const typename Dist::value_type& guess,
             const typename Dist::value_type& multiplier,
             const typename Dist::value_type& adder,
-            const policy::discrete_quantile<policy::real>&,
+            const policies::discrete_quantile<policies::real>&,
             boost::uintmax_t& max_iter);
      }
     namespace poisson_detail
@@ -131,7 +124,7 @@ namespace boost
       {
         if(!(boost::math::isfinite)(mean) || (mean < 0))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Mean argument is %1%, but must be >= 0 !", mean, pol);
           return false;
@@ -144,7 +137,7 @@ namespace boost
       { // mean == 0 is considered an error.
         if( !(boost::math::isfinite)(mean) || (mean <= 0))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Mean argument is %1%, but must be > 0 !", mean, pol);
           return false;
@@ -163,7 +156,7 @@ namespace boost
       {
         if((k < 0) || !(boost::math::isfinite)(k))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Number of events k argument is %1%, but must be >= 0 !", k, pol);
           return false;
@@ -187,7 +180,7 @@ namespace boost
       { // Check 0 <= p <= 1
         if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
         {
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Probability argument is %1%, but must be >= 0 and <= 1 !", p, pol);
           return false;
@@ -208,7 +201,7 @@ namespace boost
 
     } // namespace poisson_detail
 
-    template <class RealType = double, class Policy = policy::policy<> >
+    template <class RealType = double, class Policy = policies::policy<> >
     class poisson_distribution
     {
     public:
@@ -601,10 +594,6 @@ namespace boost
   } // namespace math
 } // namespace boost
 
-#if defined(BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
-# pragma warning(pop)
-#endif
-
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to
 // keep compilers that support two-phase lookup happy.
@@ -612,5 +601,6 @@ namespace boost
 #include <boost/math/distributions/detail/inv_discrete_quantile.hpp>
 
 #endif // BOOST_MATH_SPECIAL_POISSON_HPP
+
 
 

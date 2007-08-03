@@ -296,7 +296,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta, const Policy
    // And iterate:
    //
    x = tools::newton_raphson_iterate(
-      temme_root_finder<T>(-lu, alpha), x, lower, upper, policy::digits<T, Policy>() / 2);
+      temme_root_finder<T>(-lu, alpha), x, lower, upper, policies::digits<T, Policy>() / 2);
 
    return x;
 }
@@ -399,7 +399,7 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q, const Policy& pol)
    T upper = eta < mu ? 1 : cross;
    T x = (lower + upper) / 2;
    x = tools::newton_raphson_iterate(
-      temme_root_finder<T>(u, mu), x, lower, upper, policy::digits<T, Policy>() / 2);
+      temme_root_finder<T>(u, mu), x, lower, upper, policies::digits<T, Policy>() / 2);
 #ifdef BOOST_INSTRUMENT
    std::cout << "Estimating x with Temme method 3: " << x << std::endl;
 #endif
@@ -772,7 +772,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
    //
    // Figure out how many digits to iterate towards:
    //
-   int digits = boost::math::policy::digits<T, Policy>() / 2;
+   int digits = boost::math::policies::digits<T, Policy>() / 2;
    if((x < 1e-50) && ((a < 1) || (b < 1)))
    {
       //
@@ -818,20 +818,20 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
    static const char* function = "boost::math::ibeta_inv<%1%>(%1%,%1%,%1%)";
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   typedef typename policy::normalise<
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
       Policy, 
-      policy::promote_float<false>, 
-      policy::promote_double<false>, 
-      policy::discrete_quantile<>,
-      policy::assert_undefined<> >::type forwarding_policy;
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
 
    if(a <= 0)
-      return policy::raise_domain_error<result_type>(function, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a, pol);
+      return policies::raise_domain_error<result_type>(function, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
-      return policy::raise_domain_error<result_type>(function, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b, pol);
+      return policies::raise_domain_error<result_type>(function, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b, pol);
    if((p < 0) || (p > 1))
-      return policy::raise_domain_error<result_type>(function, "Argument p outside the range [0,1] in the incomplete beta function inverse (got p=%1%).", p, pol);
+      return policies::raise_domain_error<result_type>(function, "Argument p outside the range [0,1] in the incomplete beta function inverse (got p=%1%).", p, pol);
 
    value_type rx, ry;
 
@@ -842,22 +842,22 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
          static_cast<value_type>(1 - p),
          forwarding_policy(), &ry);
 
-   if(py) *py = policy::checked_narrowing_cast<T4, forwarding_policy>(ry, function);
-   return policy::checked_narrowing_cast<result_type, forwarding_policy>(rx, function);
+   if(py) *py = policies::checked_narrowing_cast<T4, forwarding_policy>(ry, function);
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(rx, function);
 }
 
 template <class T1, class T2, class T3, class T4>
 inline typename tools::promote_args<T1, T2, T3, T4>::type  
    ibeta_inv(T1 a, T2 b, T3 p, T4* py)
 {
-   return ibeta_inv(a, b, p, py, policy::policy<>());
+   return ibeta_inv(a, b, p, py, policies::policy<>());
 }
 
 template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type 
    ibeta_inv(T1 a, T2 b, T3 p)
 {
-   return ibeta_inv(a, b, p, static_cast<T1*>(0), policy::policy<>());
+   return ibeta_inv(a, b, p, static_cast<T1*>(0), policies::policy<>());
 }
 
 template <class T1, class T2, class T3, class Policy>
@@ -874,20 +874,20 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
    static const char* function = "boost::math::ibetac_inv<%1%>(%1%,%1%,%1%)";
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   typedef typename policy::normalise<
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
       Policy, 
-      policy::promote_float<false>, 
-      policy::promote_double<false>, 
-      policy::discrete_quantile<>,
-      policy::assert_undefined<> >::type forwarding_policy;
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
 
    if(a <= 0)
-      policy::raise_domain_error<result_type>(function, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a, pol);
+      policies::raise_domain_error<result_type>(function, "The argument a to the incomplete beta function inverse must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)
-      policy::raise_domain_error<result_type>(function, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b, pol);
+      policies::raise_domain_error<result_type>(function, "The argument b to the incomplete beta function inverse must be greater than zero (got b=%1%).", b, pol);
    if((q < 0) || (q > 1))
-      policy::raise_domain_error<result_type>(function, "Argument q outside the range [0,1] in the incomplete beta function inverse (got q=%1%).", q, pol);
+      policies::raise_domain_error<result_type>(function, "Argument q outside the range [0,1] in the incomplete beta function inverse (got q=%1%).", q, pol);
 
    value_type rx, ry;
 
@@ -898,22 +898,22 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
          static_cast<value_type>(q),
          forwarding_policy(), &ry);
 
-   if(py) *py = policy::checked_narrowing_cast<T4, forwarding_policy>(ry, function);
-   return policy::checked_narrowing_cast<result_type, forwarding_policy>(rx, function);
+   if(py) *py = policies::checked_narrowing_cast<T4, forwarding_policy>(ry, function);
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(rx, function);
 }
 
 template <class T1, class T2, class T3, class T4>
 inline typename tools::promote_args<T1, T2, T3, T4>::type 
    ibetac_inv(T1 a, T2 b, T3 q, T4* py)
 {
-   return ibetac_inv(a, b, q, py, policy::policy<>());
+   return ibetac_inv(a, b, q, py, policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3>
 inline typename tools::promote_args<RT1, RT2, RT3>::type 
    ibetac_inv(RT1 a, RT2 b, RT3 q)
 {
-   return ibetac_inv(a, b, q, static_cast<RT1*>(0), policy::policy<>());
+   return ibetac_inv(a, b, q, static_cast<RT1*>(0), policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
@@ -927,5 +927,6 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_IGAMMA_INVERSE_HPP
+
 
 

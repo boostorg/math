@@ -1,6 +1,8 @@
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
+// Copyright John Maddock 2006.
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/tools/ntl.hpp>
 #include <boost/math/tools/dual_precision.hpp>
@@ -145,4 +147,5 @@ int test_main(int argc, char*argv [])
 
    return 0;
 }
+
 

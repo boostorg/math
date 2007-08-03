@@ -41,7 +41,7 @@ namespace boost
           }
           else
           {
-            *result = policy::raise_domain_error<RealType>(
+            *result = policies::raise_domain_error<RealType>(
               function,
               "Location parameter is %1%, but must be > 0!", location, pol);
             return false;
@@ -49,7 +49,7 @@ namespace boost
         }
         else
         { // Not finite.
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Location parameter is %1%, but must be finite!", location, pol);
           return false;
@@ -70,7 +70,7 @@ namespace boost
           }
           else
           {
-            *result = policy::raise_domain_error<RealType>(
+            *result = policies::raise_domain_error<RealType>(
               function,
               "Shape parameter is %1%, but must be > 0!", shape, pol);
             return false;
@@ -78,7 +78,7 @@ namespace boost
         }
         else
         { // Not finite.
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "Shape parameter is %1%, but must be finite!", shape, pol);
           return false;
@@ -99,7 +99,7 @@ namespace boost
           }
           else
           {
-            *result = policy::raise_domain_error<RealType>(
+            *result = policies::raise_domain_error<RealType>(
               function,
               "x parameter is %1%, but must be > 0 !", x, pol);
             return false;
@@ -107,7 +107,7 @@ namespace boost
         }
         else
         { // Not finite..
-          *result = policy::raise_domain_error<RealType>(
+          *result = policies::raise_domain_error<RealType>(
             function,
             "x parameter is %1%, but must be finite!", x, pol);
           return false;
@@ -127,7 +127,7 @@ namespace boost
 
     } // namespace detail
 
-    template <class RealType = double, class Policy = policy::policy<> >
+    template <class RealType = double, class Policy = policies::policy<> >
     class pareto_distribution
     {
     public:
@@ -349,7 +349,7 @@ namespace boost
       }
       else
       {
-        result = policy::raise_domain_error<RealType>(
+        result = policies::raise_domain_error<RealType>(
           function,
           "variance is undefined for shape <= 2, but got %1%.", dist.shape(), Policy());
       }
@@ -375,7 +375,7 @@ namespace boost
       }
       else
       {
-        result = policy::raise_domain_error<RealType>(
+        result = policies::raise_domain_error<RealType>(
           function,
           "skewness is undefined for shape <= 3, but got %1%.", dist.shape(), Policy());
       }
@@ -399,7 +399,7 @@ namespace boost
       }
       else
       {
-        result = policy::raise_domain_error<RealType>(
+        result = policies::raise_domain_error<RealType>(
           function,
           "kurtosis_excess is undefined for shape <= 4, but got %1%.", shape, Policy());
       }
@@ -423,7 +423,7 @@ namespace boost
       }
       else
       {
-        result = policy::raise_domain_error<RealType>(
+        result = policies::raise_domain_error<RealType>(
           function,
           "kurtosis_excess is undefined for shape <= 4, but got %1%.", dist.shape(), Policy());
       }
@@ -439,4 +439,5 @@ namespace boost
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_STATS_PARETO_HPP
+
 

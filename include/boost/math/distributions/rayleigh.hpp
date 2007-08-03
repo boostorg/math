@@ -30,7 +30,7 @@ namespace detail
   {
      if(sigma <= 0)
      {
-        *presult = policy::raise_domain_error<RealType>(
+        *presult = policies::raise_domain_error<RealType>(
            function,
            "The scale parameter \"sigma\" must be > 0, but was: %1%.", sigma, pol);
         return false;
@@ -43,7 +43,7 @@ namespace detail
   {
      if(x < 0)
      {
-        *presult = policy::raise_domain_error<RealType>(
+        *presult = policies::raise_domain_error<RealType>(
            function,
            "The random variable must be >= 0, but was: %1%.", x, pol);
         return false;
@@ -52,7 +52,7 @@ namespace detail
   } // bool verify_rayleigh_x
 } // namespace detail
 
-template <class RealType = double, class Policy = policy::policy<> >
+template <class RealType = double, class Policy = policies::policy<> >
 class rayleigh_distribution
 {
 public:
@@ -152,7 +152,7 @@ inline RealType quantile(const rayleigh_distribution<RealType, Policy>& dist, co
    }
    if(p == 1)
    {
-     return policy::raise_overflow_error<RealType>(function, 0, Policy());
+     return policies::raise_overflow_error<RealType>(function, 0, Policy());
    }
    result = sqrt(-2 * sigma * sigma * boost::math::log1p(-p, Policy()));
    return result;
@@ -202,7 +202,7 @@ inline RealType quantile(const complemented2_type<rayleigh_distribution<RealType
    }
    if(q == 0)
    {
-     return policy::raise_overflow_error<RealType>(function, 0, Policy());
+     return policies::raise_overflow_error<RealType>(function, 0, Policy());
    }
    result = sqrt(-2 * sigma * sigma * log(q));
    return result;

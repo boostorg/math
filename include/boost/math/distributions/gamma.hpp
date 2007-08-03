@@ -30,7 +30,7 @@ inline bool check_gamma_shape(
 {
    if((shape <= 0) || !(boost::math::isfinite)(shape))
    {
-      *result = policy::raise_domain_error<RealType>(
+      *result = policies::raise_domain_error<RealType>(
          function,
          "Shape parameter is %1%, but must be > 0 !", shape, pol);
       return false;
@@ -46,7 +46,7 @@ inline bool check_gamma_x(
 {
    if((x < 0) || !(boost::math::isfinite)(x))
    {
-      *result = policy::raise_domain_error<RealType>(
+      *result = policies::raise_domain_error<RealType>(
          function,
          "Random variate is %1% but must be >= 0 !", x, pol);
       return false;
@@ -66,7 +66,7 @@ inline bool check_gamma(
 
 } // namespace detail
 
-template <class RealType = double, class Policy = policy::policy<> >
+template <class RealType = double, class Policy = policies::policy<> >
 class gamma_distribution
 {
 public:
@@ -175,7 +175,7 @@ inline RealType quantile(const gamma_distribution<RealType, Policy>& dist, const
       return result;
 
    if(p == 1)
-      return policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    result = gamma_p_inv(shape, p, Policy()) * scale;
 
@@ -221,7 +221,7 @@ inline RealType quantile(const complemented2_type<gamma_distribution<RealType, P
       return result;
 
    if(q == 0)
-      return policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    result = gamma_q_inv(shape, q, Policy()) * scale;
 
@@ -279,7 +279,7 @@ inline RealType mode(const gamma_distribution<RealType, Policy>& dist)
       return result;
 
    if(shape < 1)
-      return policy::raise_domain_error<RealType>(
+      return policies::raise_domain_error<RealType>(
          function,
          "The mode of the gamma distribution is only defined for values of the shape parameter >= 1, but got %1%.",
          shape, Policy());
@@ -344,4 +344,5 @@ inline RealType kurtosis(const gamma_distribution<RealType, Policy>& dist)
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_STATS_GAMMA_HPP
+
 

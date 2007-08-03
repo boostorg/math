@@ -1,6 +1,6 @@
 // test_negative_binomial.cpp
 
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2007.
 // Copyright John Maddock 2006.
 
 // Use, modification and distribution are subject to the
@@ -10,20 +10,13 @@
 
 // Tests for Negative Binomial Distribution.
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-// Note BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined - see below.
-// Note that there defines must be placed BEFORE #includes.
-// Nor are these defined - several tests underflow by design.
-//#define BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
-//#define BOOST_MATH_THROW_ON_DENORM_ERROR
+// Note that these defines must be placed BEFORE #includes.
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+// because several tests overflow & underflow by design.
 #define BOOST_MATH_DISCRETE_QUANTILE_POLICY real
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4180) // qualifier applied to function type has no meaning; ignored
 #endif
 
 #include <boost/math/distributions/negative_binomial.hpp> // for negative_binomial_distribution
@@ -102,14 +95,14 @@ void test_spot( // Test a single spot value against 'known good' values.
     }
     // estimate success ratio:
     BOOST_CHECK_CLOSE(
-      negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
+      negative_binomial_distribution<RealType>::find_lower_bound_on_p(
       N+k, N, P),
       p, tol);
     // Note we bump up the sample size here, purely for the sake of the test,
     // internally the function has to adjust the sample size so that we get
     // the right upper bound, our test undoes this, so we can verify the result.
     BOOST_CHECK_CLOSE(
-      negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
+      negative_binomial_distribution<RealType>::find_upper_bound_on_p(
       N+k+1, N, Q),
       p, tol);
 
@@ -121,14 +114,14 @@ void test_spot( // Test a single spot value against 'known good' values.
        // the naive estimate of p = successes / (sample size)
        //
       BOOST_CHECK(
-        negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
+        negative_binomial_distribution<RealType>::find_lower_bound_on_p(
         N+k, N, Q)
         <=
-        negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
+        negative_binomial_distribution<RealType>::find_upper_bound_on_p(
         N+k, N, Q)
         );
       BOOST_CHECK(
-        negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
+        negative_binomial_distribution<RealType>::find_lower_bound_on_p(
         N+k, N, Q)
         <=
         N / (N+k)
@@ -136,7 +129,7 @@ void test_spot( // Test a single spot value against 'known good' values.
       BOOST_CHECK(
         N / (N+k)
         <=
-        negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
+        negative_binomial_distribution<RealType>::find_upper_bound_on_p(
         N+k, N, Q)
         );
     }
@@ -144,14 +137,14 @@ void test_spot( // Test a single spot value against 'known good' values.
     {
        // As above but when P is small.
       BOOST_CHECK(
-        negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
+        negative_binomial_distribution<RealType>::find_lower_bound_on_p(
         N+k, N, P)
         <=
-        negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
+        negative_binomial_distribution<RealType>::find_upper_bound_on_p(
         N+k, N, P)
         );
       BOOST_CHECK(
-        negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
+        negative_binomial_distribution<RealType>::find_lower_bound_on_p(
         N+k, N, P)
         <=
         N / (N+k)
@@ -159,18 +152,18 @@ void test_spot( // Test a single spot value against 'known good' values.
       BOOST_CHECK(
         N / (N+k)
         <=
-        negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
+        negative_binomial_distribution<RealType>::find_upper_bound_on_p(
         N+k, N, P)
         );
     }
 
     // Estimate sample size:
     BOOST_CHECK_CLOSE(
-      negative_binomial_distribution<RealType>::estimate_minimum_number_of_trials(
+      negative_binomial_distribution<RealType>::find_minimum_number_of_trials(
       k, p, P),
       N+k, tol);
     BOOST_CHECK_CLOSE(
-      negative_binomial_distribution<RealType>::estimate_maximum_number_of_trials(
+      negative_binomial_distribution<RealType>::find_maximum_number_of_trials(
          k, p, Q),
       N+k, tol);
 
@@ -599,10 +592,10 @@ if(std::numeric_limits<RealType>::is_specialized)
   { // BOOST_CHECK tests for infinity using std::numeric_limits<>::infinity()
     // Note that infinity is not implemented for real_concept, so these tests
     // are only done for types, like built-in float, double.. that have infinity.
-    // Note that these assume that  BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined.
-    // #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR would give a throw here.
-    // #define BOOST_MATH_THROW_ON_DOMAIN_ERROR IS defined, so the throw path
-    // of error handling is tested below with BOOST_CHECK_THROW tests.
+    // Note that these assume that  BOOST_MATH_OVERFLOW_ERROR_POLICY is NOT throw_on_error.
+    // #define BOOST_MATH_THROW_ON_OVERFLOW_POLICY ==  throw_on_error would throw here.
+    // #define BOOST_MAT_DOMAIN_ERROR_POLICY IS defined throw_on_error,
+    //  so the throw path of error handling is tested below with BOOST_CHECK_THROW tests.
 
     BOOST_CHECK(
     quantile(  // At P == 1 so k failures should be infinite.
@@ -726,8 +719,8 @@ if(std::numeric_limits<RealType>::is_specialized)
 
   for(unsigned i = 0; i < negative_binomial_quantile_data.size(); ++i)
   {
-     using namespace boost::math::policy;
-     typedef policy<discrete_quantile<boost::math::policy::real> > P1;
+     using namespace boost::math::policies;
+     typedef policy<discrete_quantile<boost::math::policies::real> > P1;
      typedef policy<discrete_quantile<integer_below> > P2;
      typedef policy<discrete_quantile<integer_above> > P3;
      typedef policy<discrete_quantile<integer_outside> > P4;
@@ -797,22 +790,7 @@ int test_main(int, char* [])
 	negative_binomial_distribution<> myf2(2., 0.5); // Using default RealType double.
 
   // Basic sanity-check spot values.
-#ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is defined to throw on domain error." << endl;
-#else
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
-#endif
 
-#ifdef BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-  cout << "BOOST_MATH_THROW_ON_OVERFLOW_ERROR" << " is defined to throw on overflow error." << endl;
-#else
-  cout << "BOOST_MATH_THROW_ON_OVERFLOW_ERROR" << " is NOT defined, so NO throw on overflow error." << endl;
-#endif
-#ifdef BOOST_MATH_THROW_ON_UNDERFLOW_ERROR
-  cout << "BOOST_MATH_THROW_ON_UNDERFLOW_ERROR" << " is defined to throw on underflow error." << endl;
-#else
-  cout << "BOOST_MATH_THROW_ON_UNDERFLOW_ERROR" << " is NOT defined, so NO throw on underflow error." << endl;
-#endif
   // Test some simple double only examples.
   negative_binomial_distribution<double> my8dist(8., 0.25);
   // 8 successes (r), 0.25 success fraction = 35% or 1 in 4 successes.
@@ -842,14 +820,8 @@ int test_main(int, char* [])
 
 /*
 
-Compiling...
-test_negative_binomial.cpp
-Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_negative_binomial.exe"
 Running 1 test case...
-BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
-BOOST_MATH_THROW_ON_OVERFLOW_ERROR is NOT defined, so NO throw on overflow error.
-BOOST_MATH_THROW_ON_UNDERFLOW_ERROR is NOT defined, so NO throw on underflow error.
 Tolerance = 0.0119209%.
 Tolerance 5 eps = 5.96046e-007%.
 Tolerance = 2.22045e-011%.

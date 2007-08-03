@@ -43,7 +43,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policy::digits<double, boost::math::policy::policy<> >() == boost::math::policy::digits<long double, boost::math::policy::policy<> >())
+   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       largest_type = "(long\\s+)?double";
    }
@@ -189,5 +189,6 @@ int test_main(int, char* [])
 #endif
    return 0;
 }
+
 
 

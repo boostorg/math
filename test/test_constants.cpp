@@ -1,4 +1,4 @@
-// Copyright Paul Bristow 2006.
+// Copyright Paul Bristow 2007.
 // Copyright John Maddock 2006.
 
 // Use, modification and distribution are subject to the
@@ -8,15 +8,6 @@
 
 // test_constants.cpp
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-//#define BOOST_MATH_THROW_ON_UNDERFLOW_ERROR 
-// Ignore underflow to zero.
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#endif
-
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
@@ -25,9 +16,9 @@
 #include <boost/math/tools/test.hpp> 
 
 template <class RealType>
-void test_spots(RealType T)
+void test_spots(RealType)
 {
-   // Basic santity checks for constants.
+   // Basic sanity checks for constants.
 
 	RealType tolerance = static_cast<RealType>(2e-15);  // double
 	//cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
@@ -82,13 +73,11 @@ int test_main(int, char* [])
 
 Output:
 
-test_constants.cpp
-Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_constants.exe"
 Running 1 test case...
 *** No errors detected
 
-
 */
+
 
 

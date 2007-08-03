@@ -78,12 +78,12 @@ T expm1_imp(T x, const mpl::int_<0>&, const Policy& pol)
    detail::expm1_series<T> s(x);
    boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-   T result = tools::sum_series(s, policy::digits<T, Policy>(), max_iter);
+   T result = tools::sum_series(s, policies::digits<T, Policy>(), max_iter);
 #else
    T zero = 0;
-   T result = tools::sum_series(s, policy::digits<T, Policy>(), max_iter, zero);
+   T result = tools::sum_series(s, policies::digits<T, Policy>(), max_iter, zero);
 #endif
-   policy::check_series_iterations("boost::math::expm1<%1%>(%1%)", max_iter, pol);
+   policies::check_series_iterations("boost::math::expm1<%1%>(%1%)", max_iter, pol);
    return result;
 }
 
@@ -189,14 +189,14 @@ template <class T, class Policy>
 inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   typedef typename policy::precision<result_type, Policy>::type precision_type;
-   typedef typename policy::normalise<
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::precision<result_type, Policy>::type precision_type;
+   typedef typename policies::normalise<
       Policy, 
-      policy::promote_float<false>, 
-      policy::promote_double<false>, 
-      policy::discrete_quantile<>,
-      policy::assert_undefined<> >::type forwarding_policy;
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
 
    typedef typename mpl::if_c<
       ::std::numeric_limits<result_type>::is_specialized == 0,
@@ -216,7 +216,7 @@ inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
       >::type
    >::type tag_type;
 
-   return policy::checked_narrowing_cast<result_type, forwarding_policy>(detail::expm1_imp(
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::expm1_imp(
       static_cast<value_type>(x),
       tag_type(), forwarding_policy()), "boost::math::expm1<%1%>(%1%)");
 }
@@ -230,18 +230,18 @@ inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
 
 #ifdef BOOST_HAS_EXPM1
 #  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
-inline float expm1(float x, const policy::policy<>&){ return ::expm1f(x); }
-inline long double expm1(long double x, const policy::policy<>&){ return ::expm1l(x); }
+inline float expm1(float x, const policies::policy<>&){ return ::expm1f(x); }
+inline long double expm1(long double x, const policies::policy<>&){ return ::expm1l(x); }
 #else
-inline float expm1(float x, const policy::policy<>&){ return ::expm1(x); }
+inline float expm1(float x, const policies::policy<>&){ return ::expm1(x); }
 #endif
-inline double expm1(double x, const policy::policy<>&){ return ::expm1(x); }
+inline double expm1(double x, const policies::policy<>&){ return ::expm1(x); }
 #endif
 
 template <class T>
 inline typename tools::promote_args<T>::type expm1(T x)
 {
-   return expm1(x, policy::policy<>());
+   return expm1(x, policies::policy<>());
 }
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
@@ -263,4 +263,5 @@ inline long double expm1(long double z)
 } // namespace boost
 
 #endif // BOOST_MATH_HYPOT_INCLUDED
+
 

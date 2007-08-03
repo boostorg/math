@@ -1,25 +1,12 @@
 // Copyright John Maddock 2006.
+// Copyright Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// test_lognormal.cpp
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-#  if !(defined _SCL_SECURE_NO_DEPRECATE) || (_SCL_SECURE_NO_DEPRECATE == 0)
-#    pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
-#  endif
-#endif
+// test_weibull.cpp
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
@@ -68,9 +55,9 @@ void check_weibull(RealType shape, RealType scale, RealType x, RealType p, RealT
 }
 
 template <class RealType>
-void test_spots(RealType T)
+void test_spots(RealType)
 {
-   // Basic santity checks
+   // Basic sanity checks
    //
    // These test values were generated for the normal distribution
    // using the online calculator at 
@@ -79,7 +66,7 @@ void test_spots(RealType T)
    // Tolerance is just over 5 decimal digits expressed as a persentage:
    // that's the limit of the test data.
 	RealType tolerance = 2e-5f * 100;  
-	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
+	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
    using std::exp;
 
@@ -264,7 +251,7 @@ void test_spots(RealType T)
    tolerance = (std::max)(
       boost::math::tools::epsilon<RealType>(),
       static_cast<RealType>(boost::math::tools::epsilon<double>())) * 5 * 100; // 5 eps as a percentage
-	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
+	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
    weibull_distribution<RealType> dist(2, 3);
    RealType x = static_cast<RealType>(0.125);
    using namespace std; // ADL of std names.
@@ -367,6 +354,25 @@ int test_main(int, char* [])
 
    return 0;
 } // int test_main(int, char* [])
+
+/*
+
+Output:
+
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_weibull.exe"
+Running 1 test case...
+Tolerance for type float is 0.002 %
+Tolerance for type float is 5.96046e-005 %
+Tolerance for type double is 0.002 %
+Tolerance for type double is 1.11022e-013 %
+Tolerance for type long double is 0.002 %
+Tolerance for type long double is 1.11022e-013 %
+Tolerance for type class boost::math::concepts::real_concept is 0.002 %
+Tolerance for type class boost::math::concepts::real_concept is 1.11022e-013 %
+*** No errors detected
+
+*/
+
 
 
 

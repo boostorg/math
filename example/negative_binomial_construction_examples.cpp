@@ -1,19 +1,11 @@
 // negative_binomial_example2.cpp
 
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4996) // 'std::char_traits<char>::copy' was declared deprecated.
-#endif
 
 // Example 2 of using constructing distributions, mainly negative_binomial.
 
@@ -98,9 +90,11 @@ int main()
 
 Output is:
 
+math_toolkit\libs\math\example\negative_binomial_construction_examples.cpp Wed Aug  1 13:59:34 2007 140050727
 
 
 */
+
 
 
 

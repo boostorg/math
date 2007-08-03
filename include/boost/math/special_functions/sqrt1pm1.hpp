@@ -30,13 +30,14 @@ inline typename tools::promote_args<T>::type sqrt1pm1(const T& val, const Policy
 template <class T>
 inline typename tools::promote_args<T>::type sqrt1pm1(const T& val)
 {
-   return sqrt1pm1(val, policy::policy<>());
+   return sqrt1pm1(val, policies::policy<>());
 }
 
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_SQRT1PM1
+
 
 
 

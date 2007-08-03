@@ -99,12 +99,12 @@ std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter, c
    static const char* function = "boost::math::tools::bisect<%1%>";
    if(min >= max)
    {
-      policy::raise_evaluation_error(function, 
+      policies::raise_evaluation_error(function, 
          "Arguments in wrong order in boost::math::tools::bisect (first arg=%1%)", min, pol);
    }
    if(fmin * fmax >= 0)
    {
-      policy::raise_evaluation_error(function, 
+      policies::raise_evaluation_error(function, 
          "No change of sign in boost::math::tools::bisect, either there is no root to find, or there are multiple roots in the interval (f(min) = %1%).", fmin, pol);
    }
 
@@ -160,14 +160,14 @@ std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter, c
 template <class F, class T, class Tol>
 inline std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter)
 {
-   return bisect(f, min, max, tol, max_iter, policy::policy<>());
+   return bisect(f, min, max, tol, max_iter, policies::policy<>());
 }
 
 template <class F, class T, class Tol>
 inline std::pair<T, T> bisect(F f, T min, T max, Tol tol)
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
-   return bisect(f, min, max, tol, m, policy::policy<>());
+   return bisect(f, min, max, tol, m, policies::policy<>());
 }
 
 template <class F, class T>
@@ -511,4 +511,5 @@ inline T schroeder_iterate(F f, T guess, T min, T max, int digits)
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
+
 

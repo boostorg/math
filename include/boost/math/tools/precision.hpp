@@ -153,7 +153,7 @@ template <class T>
 inline T epsilon(const mpl::false_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    using namespace std;  // for ADL of std names
-   static const T eps = ldexp(static_cast<T>(1), 1-policy::digits<T, policy::policy<> >());
+   static const T eps = ldexp(static_cast<T>(1), 1-policies::digits<T, policies::policy<> >());
    return eps;
 }
 

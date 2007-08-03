@@ -14,17 +14,17 @@
 #include <boost/math/special_functions/gamma.hpp>
 using boost::math::tgamma;
 
-using boost::math::policy::policy;
+using boost::math::policies::policy;
 // Possible errors
-using boost::math::policy::overflow_error;
-using boost::math::policy::underflow_error;
-using boost::math::policy::domain_error;
-using boost::math::policy::pole_error;
-using boost::math::policy::denorm_error;
-using boost::math::policy::evaluation_error;
+using boost::math::policies::overflow_error;
+using boost::math::policies::underflow_error;
+using boost::math::policies::domain_error;
+using boost::math::policies::pole_error;
+using boost::math::policies::denorm_error;
+using boost::math::policies::evaluation_error;
 
-using boost::math::policy::errno_on_error;
-//using boost::math::policy::ignore_error;
+using boost::math::policies::errno_on_error;
+//using boost::math::policies::ignore_error;
 
 //using namespace boost::math::policies;
 //using namespace boost::math;

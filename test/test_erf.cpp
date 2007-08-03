@@ -19,14 +19,6 @@
 #include "test_erf_hooks.hpp"
 #include "handle_test_result.hpp"
 
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant
-#  pragma warning(disable: 4512) // assignment operator could not be generated
-// but these persist in lambda to produce massive warning output at level 4.
-#endif
-
-// Note needs regex library to link.
-//
 //
 // DESCRIPTION:
 // ~~~~~~~~~~~~
@@ -332,3 +324,145 @@ int test_main(int, char* [])
 #endif
    return 0;
 }
+
+/*
+
+Output:
+
+test_erf.cpp
+Compiling manifest to resources...
+Linking...
+Embedding manifest...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_erf.exe"
+Running 1 test case...
+Testing basic sanity checks for type float
+Testing basic sanity checks for type double
+Testing basic sanity checks for type long double
+Testing basic sanity checks for type real_concept
+Tests run with Microsoft Visual C++ version 8.0, Dinkumware standard library version 405, Win32
+Testing Erf Function: Small Values with type float
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<float> Max = 0 RMS Mean=0
+boost::math::erfc<float> Max = 0 RMS Mean=0
+Testing Erf Function: Medium Values with type float
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<float> Max = 0 RMS Mean=0
+boost::math::erfc<float> Max = 0 RMS Mean=0
+Testing Erf Function: Large Values with type float
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<float> Max = 0 RMS Mean=0
+boost::math::erfc<float> Max = 0 RMS Mean=0
+Testing Inverse Erf Function with type float
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf_inv<float> Max = 0 RMS Mean=0
+Testing Inverse Erfc Function with type float
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erfc_inv<float> Max = 0 RMS Mean=0
+Testing Erf Function: Small Values with type double
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<double> Max = 0 RMS Mean=0
+boost::math::erfc<double> Max = 0.7857 RMS Mean=0.06415
+    worst case at row: 149
+    { 0.3343, 0.3636, 0.6364 }
+Testing Erf Function: Medium Values with type double
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<double> Max = 0.9219 RMS Mean=0.1016
+    worst case at row: 273
+    { 0.5252, 0.5424, 0.4576 }
+boost::math::erfc<double> Max = 1.08 RMS Mean=0.3224
+    worst case at row: 287
+    { 0.8461, 0.7685, 0.2315 }
+Testing Erf Function: Large Values with type double
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<double> Max = 0 RMS Mean=0
+boost::math::erfc<double> Max = 1.048 RMS Mean=0.2032
+    worst case at row: 50
+    { 20.96, 1, 4.182e-193 }
+Testing Inverse Erf Function with type double
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf_inv<double> Max = 1.124 RMS Mean=0.5082
+    worst case at row: 98
+    { 0.9881, 1.779 }
+Testing Inverse Erfc Function with type double
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erfc_inv<double> Max = 1.124 RMS Mean=0.5006
+    worst case at row: 98
+    { 1.988, -1.779 }
+Testing Erf Function: Small Values with type long double
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<long double> Max = 0 RMS Mean=0
+boost::math::erfc<long double> Max = 0.7857 RMS Mean=0.06415
+    worst case at row: 149
+    { 0.3343, 0.3636, 0.6364 }
+Testing Erf Function: Medium Values with type long double
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<long double> Max = 0.9219 RMS Mean=0.1016
+    worst case at row: 273
+    { 0.5252, 0.5424, 0.4576 }
+boost::math::erfc<long double> Max = 1.08 RMS Mean=0.3224
+    worst case at row: 287
+    { 0.8461, 0.7685, 0.2315 }
+Testing Erf Function: Large Values with type long double
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<long double> Max = 0 RMS Mean=0
+boost::math::erfc<long double> Max = 1.048 RMS Mean=0.2032
+    worst case at row: 50
+    { 20.96, 1, 4.182e-193 }
+Testing Inverse Erf Function with type long double
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf_inv<long double> Max = 1.124 RMS Mean=0.5082
+    worst case at row: 98
+    { 0.9881, 1.779 }
+Testing Inverse Erfc Function with type long double
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erfc_inv<long double> Max = 1.124 RMS Mean=0.5006
+    worst case at row: 98
+    { 1.988, -1.779 }
+Testing Erf Function: Small Values with type real_concept
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<real_concept> Max = 1.271 RMS Mean=0.5381
+    worst case at row: 144
+    { 0.0109, 0.0123, 0.9877 }
+boost::math::erfc<real_concept> Max = 0.7857 RMS Mean=0.07777
+    worst case at row: 149
+    { 0.3343, 0.3636, 0.6364 }
+Testing Erf Function: Medium Values with type real_concept
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<real_concept> Max = 22.5 RMS Mean=4.224
+    worst case at row: 233
+    { -0.7852, -0.7332, 1.733 }
+Peak error greater than expected value of 20
+i:/boost-sandbox/math_toolkit/libs/math/test/handle_test_result.hpp(146): error in "test_main_caller( argc, argv )": check bounds.first >= max_error_found failed
+boost::math::erfc<real_concept> Max = 97.77 RMS Mean=8.373
+    worst case at row: 289
+    { 0.9849, 0.8363, 0.1637 }
+Peak error greater than expected value of 20
+i:/boost-sandbox/math_toolkit/libs/math/test/handle_test_result.hpp(146): error in "test_main_caller( argc, argv )": check bounds.first >= max_error_found failed
+Mean error greater than expected value of 6
+i:/boost-sandbox/math_toolkit/libs/math/test/handle_test_result.hpp(151): error in "test_main_caller( argc, argv )": check bounds.second >= mean_error_found failed
+Testing Erf Function: Large Values with type real_concept
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf<real_concept> Max = 0 RMS Mean=0
+boost::math::erfc<real_concept> Max = 1.395 RMS Mean=0.2908
+    worst case at row: 11
+    { 10.99, 1, 1.87e-054 }
+Testing Inverse Erf Function with type real_concept
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erf_inv<real_concept> Max = 1.124 RMS Mean=0.5082
+    worst case at row: 98
+    { 0.9881, 1.779 }
+Testing Inverse Erfc Function with type real_concept
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+boost::math::erfc_inv<real_concept> Max = 1.124 RMS Mean=0.5006
+    worst case at row: 98
+    { 1.988, -1.779 }
+Test suite "Test Program" failed with:
+  181 assertions out of 184 passed
+  3 assertions out of 184 failed
+  1 test case out of 1 failed
+  Test case "test_main_caller( argc, argv )" failed with:
+    181 assertions out of 184 passed
+    3 assertions out of 184 failed
+Build Time 0:15
+
+*/

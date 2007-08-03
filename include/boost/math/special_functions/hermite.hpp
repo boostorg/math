@@ -52,19 +52,20 @@ inline typename tools::promote_args<T>::type
    hermite(unsigned n, T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   return policy::checked_narrowing_cast<result_type, Policy>(detail::hermite_imp(n, static_cast<value_type>(x)), "boost::math::hermite<%1%>(unsigned, %1%)");
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::hermite_imp(n, static_cast<value_type>(x)), "boost::math::hermite<%1%>(unsigned, %1%)");
 }
 
 template <class T>
 inline typename tools::promote_args<T>::type 
    hermite(unsigned n, T x)
 {
-   return boost::math::hermite(n, x, policy::policy<>());
+   return boost::math::hermite(n, x, policies::policy<>());
 }
 
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_HERMITE_HPP
+
 

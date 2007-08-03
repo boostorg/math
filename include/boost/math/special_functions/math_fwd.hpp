@@ -214,7 +214,7 @@ namespace boost
    struct laguerre_result
    {
       typedef typename mpl::if_<
-         policy::is_policy<T2>,
+         policies::is_policy<T2>,
          typename tools::promote_args<T1>::type,
          typename tools::promote_args<T2>::type
       >::type type;
@@ -545,7 +545,7 @@ namespace boost
             T1, T2
          >::type result_type;
 
-         typedef typename policy::precision<result_type, Policy>::type precision_type;
+         typedef typename policies::precision<result_type, Policy>::type precision_type;
 
          typedef typename mpl::if_<
             mpl::or_<
@@ -566,37 +566,37 @@ namespace boost
    typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j(T1 v, T2 x, const Policy& pol);
 
    template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policy::policy<> >::result_type cyl_bessel_j(T1 v, T2 x);
+   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j(T1 v, T2 x);
 
    template <class T, class Policy>
    typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel(unsigned v, T x, const Policy& pol);
 
    template <class T>
-   typename detail::bessel_traits<T, T, policy::policy<> >::result_type sph_bessel(unsigned v, T x);
+   typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel(unsigned v, T x);
 
    template <class T1, class T2, class Policy>
    typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i(T1 v, T2 x, const Policy& pol);
 
    template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policy::policy<> >::result_type cyl_bessel_i(T1 v, T2 x);
+   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i(T1 v, T2 x);
 
    template <class T1, class T2, class Policy>
    typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k(T1 v, T2 x, const Policy& pol);
 
    template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policy::policy<> >::result_type cyl_bessel_k(T1 v, T2 x);
+   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k(T1 v, T2 x);
 
    template <class T1, class T2, class Policy>
    typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann(T1 v, T2 x, const Policy& pol);
 
    template <class T1, class T2>
-   typename detail::bessel_traits<T1, T2, policy::policy<> >::result_type cyl_neumann(T1 v, T2 x);
+   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann(T1 v, T2 x);
 
    template <class T, class Policy>
    typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann(unsigned v, T x, const Policy& pol);
 
    template <class T>
-   typename detail::bessel_traits<T, T, policy::policy<> >::result_type sph_neumann(unsigned v, T x);
+   typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann(unsigned v, T x);
 
    template <class T, class Policy>
    T sin_pi(T x, const Policy&);

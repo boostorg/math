@@ -90,7 +90,7 @@ T ibeta_inv_ab_imp(const T& b, const T& z, const T& p, const T& q, bool swap_ab,
    //
    // Tolerance: full precision.
    //
-   tools::eps_tolerance<T> tol(policy::digits<T, Policy>());
+   tools::eps_tolerance<T> tol(policies::digits<T, Policy>());
    //
    // Now figure out a starting guess for what a may be, 
    // we'll start out with a value that'll put p or q
@@ -149,7 +149,7 @@ T ibeta_inv_ab_imp(const T& b, const T& z, const T& p, const T& q, bool swap_ab,
    boost::uintmax_t max_iter = 200;
    std::pair<T, T> r = bracket_and_solve_root(f, guess, factor, swap_ab ? true : false, tol, max_iter, pol);
    if(max_iter >= 200)
-      policy::raise_evaluation_error<T>("boost::math::ibeta_invab_imp<%1%>(%1%,%1%,%1%)", "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first, pol);
+      policies::raise_evaluation_error<T>("boost::math::ibeta_invab_imp<%1%>(%1%,%1%,%1%)", "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first, pol);
    return (r.first + r.second) / 2;
 }
 
@@ -182,29 +182,30 @@ inline T ibetac_invb(T b, T x, T q, const Policy& pol)
 template <class T>
 inline T ibeta_inva(T b, T x, T p)
 {
-   return detail::ibeta_inv_ab_imp(b, x, p, 1 - p, false, policy::policy<>());
+   return detail::ibeta_inv_ab_imp(b, x, p, 1 - p, false, policies::policy<>());
 }
 
 template <class T>
 inline T ibetac_inva(T b, T x, T q)
 {
-   return detail::ibeta_inv_ab_imp(b, x, 1 - q, q, false, policy::policy<>());
+   return detail::ibeta_inv_ab_imp(b, x, 1 - q, q, false, policies::policy<>());
 }
 
 template <class T>
 inline T ibeta_invb(T b, T x, T p)
 {
-   return detail::ibeta_inv_ab_imp(b, x, p, 1 - p, true, policy::policy<>());
+   return detail::ibeta_inv_ab_imp(b, x, p, 1 - p, true, policies::policy<>());
 }
 
 template <class T>
 inline T ibetac_invb(T b, T x, T q)
 {
-   return detail::ibeta_inv_ab_imp(b, x, 1 - q, q, true, policy::policy<>());
+   return detail::ibeta_inv_ab_imp(b, x, 1 - q, q, true, policies::policy<>());
 }
 
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_SP_DETAIL_BETA_INV_AB
+
 

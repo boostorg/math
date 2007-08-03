@@ -24,7 +24,7 @@
 
 namespace boost{ namespace math{
 
-template <class RealType = double, class Policy = policy::policy<> >
+template <class RealType = double, class Policy = policies::policy<> >
 class students_t_distribution
 {
 public:
@@ -170,9 +170,9 @@ inline RealType quantile(const students_t_distribution<RealType, Policy>& dist, 
 
    // Special cases, regardless of degrees_of_freedom.
    if (probability == 0)
-      return -policy::raise_overflow_error<RealType>(function, 0, Policy());
+      return -policies::raise_overflow_error<RealType>(function, 0, Policy());
    if (probability == 1)
-     return policy::raise_overflow_error<RealType>(function, 0, Policy());
+     return policies::raise_overflow_error<RealType>(function, 0, Policy());
    if (probability == static_cast<RealType>(0.5))
      return 0;
    //
@@ -273,13 +273,13 @@ RealType students_t_distribution<RealType, Policy>::estimate_degrees_of_freedom(
       hint = 1;
 
    detail::sample_size_func<RealType, Policy> f(alpha, beta, sd, difference_from_mean);
-   tools::eps_tolerance<RealType> tol(policy::digits<RealType, Policy>());
+   tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
    boost::uintmax_t max_iter = 10000;
    std::pair<RealType, RealType> r = tools::bracket_and_solve_root(f, hint, RealType(2), false, tol, max_iter, Policy());
    RealType result = r.first + (r.second - r.first) / 2;
    if(max_iter == 10000)
    {
-      policy::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
+      policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
          " either there is no answer to how many degrees of freedom are required"
          " or the answer is infinite.  Current best guess is %1%", result, Policy());
    }
@@ -322,7 +322,7 @@ inline RealType skewness(const students_t_distribution<RealType, Policy>& dist)
 {
    if(dist.degrees_of_freedom() <= 3)
    {
-      policy::raise_domain_error<RealType>(
+      policies::raise_domain_error<RealType>(
          "boost::math::skewness(students_t_distribution<%1%> const&, %1%)",
          "Skewness is undefined for degrees of freedom <= 3, but got %1%.",
          dist.degrees_of_freedom(), Policy());
@@ -336,7 +336,7 @@ inline RealType kurtosis(const students_t_distribution<RealType, Policy>& dist)
    RealType df = dist.degrees_of_freedom();
    if(df <= 3)
    {
-      policy::raise_domain_error<RealType>(
+      policies::raise_domain_error<RealType>(
          "boost::math::kurtosis(students_t_distribution<%1%> const&, %1%)",
          "Skewness is undefined for degrees of freedom <= 3, but got %1%.",
          df, Policy());
@@ -351,7 +351,7 @@ inline RealType kurtosis_excess(const students_t_distribution<RealType, Policy>&
    RealType df = dist.degrees_of_freedom();
    if(df <= 3)
    {
-      policy::raise_domain_error<RealType>(
+      policies::raise_domain_error<RealType>(
          "boost::math::kurtosis_excess(students_t_distribution<%1%> const&, %1%)",
          "Skewness is undefined for degrees of freedom <= 3, but got %1%.",
          df, Policy());

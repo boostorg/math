@@ -283,7 +283,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
    a = ax;
    b = bx;
    if(a >= b)
-      policy::raise_domain_error(
+      policies::raise_domain_error(
          function, 
          "Parameters a and b out of order: a=%1%", a, pol);
    fa = fax;
@@ -300,7 +300,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
    }
 
    if(boost::math::sign(fa) * boost::math::sign(fb) > 0)
-      policy::raise_domain_error(
+      policies::raise_domain_error(
          function, 
          "Parameters a and b do not bracket the root: a=%1%", a, pol);
    // dummy value for fd, e and fe:
@@ -441,7 +441,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
 template <class F, class T, class Tol>
 inline std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const T& fbx, Tol tol, boost::uintmax_t& max_iter)
 {
-   return toms748_solve(f, ax, bx, fax, fbx, tol, max_iter, policy::policy<>());
+   return toms748_solve(f, ax, bx, fax, fbx, tol, max_iter, policies::policy<>());
 }
 
 template <class F, class T, class Tol, class Policy>
@@ -456,7 +456,7 @@ inline std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, Tol tol, boo
 template <class F, class T, class Tol>
 inline std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, Tol tol, boost::uintmax_t& max_iter)
 {
-   return toms748_solve(f, ax, bx, tol, max_iter, policy::policy<>());
+   return toms748_solve(f, ax, bx, tol, max_iter, policies::policy<>());
 }
 
 template <class F, class T, class Tol, class Policy>
@@ -485,7 +485,7 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, boo
       while(sign(fb) == sign(fa))
       {
          if(count == 0)
-            policy::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, pol);
+            policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, pol);
          a = b;
          fa = fb;
          b *= factor;
@@ -510,7 +510,7 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, boo
             return a > 0 ? std::make_pair(T(0), T(a)) : std::make_pair(T(a), T(0)); 
          }
          if(count == 0)
-            policy::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, pol);
+            policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, pol);
          b = a;
          fb = fa;
          a /= factor;
@@ -530,7 +530,7 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, boo
 template <class F, class T, class Tol>
 inline std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, bool rising, Tol tol, boost::uintmax_t& max_iter)
 {
-   return bracket_and_solve_root(f, guess, factor, rising, tol, max_iter, policy::policy<>());
+   return bracket_and_solve_root(f, guess, factor, rising, tol, max_iter, policies::policy<>());
 }
 
 } // namespace tools

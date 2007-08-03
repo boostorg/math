@@ -1,24 +1,12 @@
 // Copyright John Maddock 2006.
+// Copyright Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// test_students_t.cpp
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-//#  pragma warning(disable: 4535) // calling _set_se_translator() requires /EHa (in Boost.test)
-// Enable C++ Exceptions Yes With SEH Exceptions (/EHa) prevents warning 4535.
-#endif
+// test_exponential_dist.cpp
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/exponential.hpp>
@@ -77,9 +65,14 @@ void test_spots(RealType T)
    RealType tolerance = (std::max)(
       static_cast<RealType>(boost::math::tools::epsilon<double>()),
       boost::math::tools::epsilon<RealType>());
-   tolerance *= 50 * 100;  
-
-	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
+   tolerance *= 50 * 100; 
+   // #  pragma warning(disable: 4100) // unreferenced formal parameter.
+   // prevent his spurious warning.
+   if (T != 0)
+   {
+     cout << "Expect parameter T == 0!" << endl;
+   }
+	 cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
 
    test_spot(
       static_cast<RealType>(0.5), // lambda
@@ -288,22 +281,11 @@ int test_main(int, char* [])
 
 Output is:
 
------- Build started: Project: test_exponential_dist, Configuration: Debug Win32 ------
-Compiling...
-test_exponential_dist.cpp
-Linking...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_exponential_dist.exe"
 Running 1 test case...
 Tolerance for type float is 0.000596046 %
 Tolerance for type double is 1.11022e-012 %
 Tolerance for type long double is 1.11022e-012 %
 Tolerance for type class boost::math::concepts::real_concept is 1.11022e-012 %
-Build Time 0:05
-Build log was saved at "file://c:\data\boost\sandbox\boost-sandbox\libs\math_functions\IDE\math_toolkit\test_distribution\Debug\BuildLog.htm"
-test_distribution - 0 error(s), 1 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
-
-
-
+*** No errors detected
 
 */

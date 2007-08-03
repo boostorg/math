@@ -1,4 +1,4 @@
-// example_policy_normal.cpp
+// error_policies_example.cpp
 
 // Copyright Paul A. Bristow 2007.
 // Copyright John Maddock 2007.
@@ -17,8 +17,8 @@
 
 //  using namespace boost::math;
 //.\error_policy_normal.cpp(30) : error C2872: 'policy' : ambiguous symbol
-//        could be 'I:\Boost-sandbox\math_toolkit\boost/math/policy/policy.hpp(392) : boost::math::policy::policy'
-//        or 'boost::math::policy'
+//        could be 'I:\Boost-sandbox\math_toolkit\boost/math/policy/policy.hpp(392) : boost::math::policies::policy'
+//        or 'boost::math::policies'
 
   // So can't use this using namespace command.
 // Suppose we want a statistical distribution to return infinities,
@@ -29,16 +29,16 @@
 	using std::cout;
 	using std::endl;
 
-using boost::math::policy::policy;
+using boost::math::policies::policy;
 // Possible errors
-using boost::math::policy::overflow_error;
-using boost::math::policy::underflow_error;
-using boost::math::policy::domain_error;
-using boost::math::policy::pole_error;
-using boost::math::policy::denorm_error;
-using boost::math::policy::evaluation_error;
+using boost::math::policies::overflow_error;
+using boost::math::policies::underflow_error;
+using boost::math::policies::domain_error;
+using boost::math::policies::pole_error;
+using boost::math::policies::denorm_error;
+using boost::math::policies::evaluation_error;
 
-using boost::math::policy::ignore_error;
+using boost::math::policies::ignore_error;
 
 // Define a custom policy to ignore just overflow:
 typedef policy<

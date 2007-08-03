@@ -14,19 +14,6 @@
 // Basic sanity test for Student's t probability (quantile) (0. < p < 1).
 // and Student's t probability Quantile (0. < p < 1).
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-//#  pragma warning(disable: 4535) // calling _set_se_translator() requires /EHa (in Boost.test)
-// Enable C++ Exceptions Yes With SEH Exceptions (/EHa) prevents warning 4535.
-#endif
-
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
@@ -64,7 +51,7 @@ RealType naive_pdf(RealType v, RealType t)
 }
 
 template <class RealType>
-void test_spots(RealType T)
+void test_spots(RealType)
 {
   // Basic sanity checks
 	RealType tolerance = static_cast<RealType>(std::pow(10., -(6-2))); // 1e-6 (as %)
@@ -75,7 +62,7 @@ void test_spots(RealType T)
 	// http://faculty.vassar.edu/lowry/tsamp.html
 	// df = 5, +/-t = 2.0, 1-tailed = 0.050970, 2-tailed = 0.101939
 
-	cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
+	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
 	// http://en.wikipedia.org/wiki/Student%27s_t_distribution#Table_of_selected_values
   // Using tabulated value of t = 3.182 for 0.975, 3 df, one-sided.
@@ -393,6 +380,7 @@ int test_main(int, char* [])
   using namespace boost::math;
   students_t myst1(2); // Using typedef
 	students_t_distribution<> myst2(2); // Using default RealType double.
+	//students_t_distribution<double> myst3(2); // Using explicit RealType double.
 
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
@@ -415,11 +403,6 @@ int test_main(int, char* [])
 
 /*
 
------- Rebuild All started: Project: test_students_t, Configuration: Debug Win32 ------
-Deleting intermediate and output files for project 'test_students_t', configuration 'Debug|Win32'
-Compiling...
-test_students_t.cpp
-Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_students_t.exe"
 Running 1 test case...
 Tolerance for type float is 0.0001 %
@@ -427,10 +410,7 @@ Tolerance for type double is 0.0001 %
 Tolerance for type long double is 0.0001 %
 Tolerance for type class boost::math::concepts::real_concept is 0.0001 %
 *** No errors detected
-Build Time 0:14
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_students_t\Debug\BuildLog.htm"
-test_students_t - 0 error(s), 0 warning(s)
-========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
 
 */
+
 

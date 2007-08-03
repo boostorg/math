@@ -112,7 +112,7 @@ T bessel_y1(T x, const Policy& pol)
 
     if (x <= 0)
     {
-       return policy::raise_domain_error<T>("bost::math::bessel_y1<%1%>(%1%,%1%)",
+       return policies::raise_domain_error<T>("bost::math::bessel_y1<%1%>(%1%,%1%)",
             "Got x == %1%, but x must be > 0, complex result not supported.", x, pol);
     }
     if (x <= 4)                       // x in (0, 4]

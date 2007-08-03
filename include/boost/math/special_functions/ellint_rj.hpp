@@ -38,27 +38,27 @@ T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
 
     if (x < 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Argument x must be non-negative, but got x = %1%", x, pol);
     }
     if(y < 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Argument y must be non-negative, but got y = %1%", y, pol);
     }
     if(z < 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Argument z must be non-negative, but got z = %1%", z, pol);
     }
     if(p == 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Argument p must not be zero, but got p = %1%", p, pol);
     }
     if (x + y == 0 || y + z == 0 || z + x == 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "At most one argument can be zero, "
             "only possible result is %1%.", std::numeric_limits<T>::quiet_NaN(), pol);
     }
@@ -125,7 +125,7 @@ T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
         p = (p + lambda) / 4;
     }
     // Check to see if we gave up too soon:
-    policy::check_series_iterations(function, k, pol);
+    policies::check_series_iterations(function, k, pol);
 
     // Taylor series expansion to the 5th order
     EA = X * Y + Y * Z + Z * X;
@@ -148,8 +148,8 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
    ellint_rj(T1 x, T2 y, T3 z, T4 p, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
-   typedef typename policy::evaluation<result_type, Policy>::type value_type;
-   return policy::checked_narrowing_cast<result_type, Policy>(
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(
       detail::ellint_rj_imp(
          static_cast<value_type>(x),
          static_cast<value_type>(y),
@@ -162,7 +162,7 @@ template <class T1, class T2, class T3, class T4>
 inline typename tools::promote_args<T1, T2, T3, T4>::type 
    ellint_rj(T1 x, T2 y, T3 z, T4 p)
 {
-   return ellint_rj(x, y, z, p, policy::policy<>());
+   return ellint_rj(x, y, z, p, policies::policy<>());
 }
 
 }} // namespaces

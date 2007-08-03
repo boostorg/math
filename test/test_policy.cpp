@@ -24,7 +24,7 @@ bool check_same(const P1&, const P2&)
 
 int test_main(int, char* [])
 {
-   using namespace boost::math::policy;
+   using namespace boost::math::policies;
    using namespace boost;
    BOOST_CHECK(is_domain_error<domain_error<ignore_error> >::value);
    BOOST_CHECK(0 == is_domain_error<pole_error<ignore_error> >::value);
@@ -225,5 +225,6 @@ int test_main(int, char* [])
 
    return 0;
 } // int test_main(int, char* [])
+
 
 

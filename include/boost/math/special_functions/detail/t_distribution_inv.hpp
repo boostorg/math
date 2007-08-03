@@ -198,7 +198,7 @@ T inverse_students_t(T df, T u, T v, const Policy& pol, bool* pexact = 0)
       // we have integer degrees of freedom, try for the special
       // cases first:
       //
-      T tolerance = ldexp(1.0f, (2 * policy::digits<T, Policy>()) / 3);
+      T tolerance = ldexp(1.0f, (2 * policies::digits<T, Policy>()) / 3);
 
       switch(boost::math::tools::real_cast<int>(df))
       {
@@ -402,7 +402,7 @@ inline T fast_students_t_quantile_imp(T df, T p, const Policy& pol, const mpl::f
    T t, x, y;
    x = ibeta_inv(df / 2, T(0.5), 2 * probability, &y, pol);
    if(df * y > tools::max_value<T>() * x)
-      t = policy::raise_overflow_error<T>("boost::math::students_t_quantile<%1%>(%1%,%1%)", 0, pol);
+      t = policies::raise_overflow_error<T>("boost::math::students_t_quantile<%1%>(%1%,%1%)", 0, pol);
    else
       t = sqrt(df * y / x);
    //
@@ -487,22 +487,23 @@ T fast_students_t_quantile_imp(T df, T p, const Policy& pol, const mpl::true_*)
 template <class T, class Policy>
 inline T fast_students_t_quantile(T df, T p, const Policy& pol)
 {
-   typedef typename policy::evaluation<T, Policy>::type value_type;
-   typedef typename policy::normalise<
+   typedef typename policies::evaluation<T, Policy>::type value_type;
+   typedef typename policies::normalise<
       Policy, 
-      policy::promote_float<false>, 
-      policy::promote_double<false>, 
-      policy::discrete_quantile<>,
-      policy::assert_undefined<> >::type forwarding_policy;
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
 
    typedef mpl::bool_<
       (std::numeric_limits<T>::digits <= 53)
        &&
       (std::numeric_limits<T>::is_specialized)> tag_type;
-   return policy::checked_narrowing_cast<T, forwarding_policy>(fast_students_t_quantile_imp(static_cast<value_type>(df), static_cast<value_type>(p), pol, static_cast<tag_type*>(0)), "boost::math::students_t_quantile<%1%>(%1%,%1%,%1%)");
+   return policies::checked_narrowing_cast<T, forwarding_policy>(fast_students_t_quantile_imp(static_cast<value_type>(df), static_cast<value_type>(p), pol, static_cast<tag_type*>(0)), "boost::math::students_t_quantile<%1%>(%1%,%1%,%1%)");
 }
 
 }}} // namespaces
 
 #endif // BOOST_MATH_SF_DETAIL_INV_T_HPP
+
 

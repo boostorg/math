@@ -181,7 +181,7 @@ inline T asymptotic_bessel_y_limit(const mpl::int_<113>&)
 template <class T, class Policy>
 struct bessel_asymptotic_tag
 {
-   typedef typename policy::precision<T, Policy>::type precision_type;
+   typedef typename policies::precision<T, Policy>::type precision_type;
    typedef typename mpl::if_<
       mpl::or_<
          mpl::equal_to<precision_type, mpl::int_<0> >,
@@ -289,7 +289,7 @@ T asymptotic_bessel_i_large_x(T v, T x, const Policy& pol)
    s = e * (e * s / sqrt(2 * x * constants::pi<T>()));
 
    return (boost::math::isfinite)(s) ? 
-      s : policy::raise_overflow_error<T>("boost::math::asymptotic_bessel_i_large_x<%1%>(%1%,%1%)", 0, pol);
+      s : policies::raise_overflow_error<T>("boost::math::asymptotic_bessel_i_large_x<%1%>(%1%,%1%)", 0, pol);
 }
 
 }}} // namespaces

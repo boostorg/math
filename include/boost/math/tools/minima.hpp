@@ -19,7 +19,7 @@ template <class F, class T>
 std::pair<T, T> brent_find_minima(F f, T min, T max, int bits, boost::uintmax_t& max_iter)
 {
    using namespace std;
-   bits = (std::min)(policy::digits<T, policy::policy<> >() / 2, bits);
+   bits = (std::min)(policies::digits<T, policies::policy<> >() / 2, bits);
    T tolerance = static_cast<T>(ldexp(1.0, 1-bits));
    T x;  // minima so far
    T w;  // second best point
@@ -142,5 +142,6 @@ inline std::pair<T, T> brent_find_minima(F f, T min, T max, int digits)
 }}} // namespaces
 
 #endif
+
 
 

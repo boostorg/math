@@ -81,12 +81,12 @@ T bessel_k1(T x, const Policy& pol)
 
     if (x < 0)
     {
-       return policy::raise_domain_error<T>(function,
+       return policies::raise_domain_error<T>(function,
             "Got x = %1%, but argument x must be non-negative, complex number result not supported.", x, pol);
     }
     if (x == 0)
     {
-       return policy::raise_overflow_error<T>(function, 0, pol);
+       return policies::raise_overflow_error<T>(function, 0, pol);
     }
     if (x <= 1)                         // x in (0, 1]
     {

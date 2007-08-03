@@ -1,15 +1,16 @@
-// Copyright Paul A. Bristow 2006
+// Copyright Paul A. Bristow 2007
 // Copyright John Maddock 2006
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifdef _MSC_VER
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-#endif
+#include <boost/math/distributions/negative_binomial.hpp>
+using boost::math::negative_binomial;
+  // RealType find_number_of_trials(
+  // RealType k,     // number of failures, k >= 0.
+  // RealType p,     // success fraction 0 <= p <= 1.
+  // RealType probability) // probability threshold 0 <= p <= 0.
 
 #include <iostream>
 using std::cout;
@@ -18,16 +19,9 @@ using std::fixed;
 using std::right;
 #include <iomanip>
 using std::setprecision;
-using std::setw;
+using std::setw; 
 
-#include <boost/math/distributions/negative_binomial.hpp>
-using boost::math::negative_binomial;
-  // RealType estimate_number_of_trials(
-  // RealType k,     // number of failures, k >= 0.
-  // RealType p,     // success fraction 0 <= p <= 1.
-  // RealType probability) // probability threshold 0 <= p <= 0.
- 
-void estimate_number_of_trials(double failures, double p)
+void find_number_of_trials(double failures, double p)
 {
    // trials = number of trials
    // failures = number of failures before achieving required success(es).
@@ -51,40 +45,35 @@ void estimate_number_of_trials(double failures, double p)
   for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    { // Confidence values %:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]) << "      "
-      // estimate_minimum_number_of_trials
-      << setw(6) << right << (int)ceil(negative_binomial::estimate_minimum_number_of_trials(failures, p, alpha[i])) << endl;
+      // find_minimum_number_of_trials
+      << setw(6) << right << (int)ceil(negative_binomial::find_minimum_number_of_trials(failures, p, alpha[i])) << endl;
    }
    cout << endl;
-} // void estimate_number_of_trials(double fails, double p)
+} // void find_number_of_trials(double fails, double p)
 
 
 int main()
 {
-	 estimate_number_of_trials(5, 0.5);
-	 estimate_number_of_trials(50, 0.5);
-	 estimate_number_of_trials(500, 0.5);
-	 estimate_number_of_trials(50, 0.1);
-	 estimate_number_of_trials(500, 0.1);
-	 estimate_number_of_trials(5, 0.9);
-	 estimate_number_of_trials(10-5, 0.4); // See Evans example in Wikipedia.
+	 find_number_of_trials(5, 0.5);
+	 find_number_of_trials(50, 0.5);
+	 find_number_of_trials(500, 0.5);
+	 find_number_of_trials(50, 0.1);
+	 find_number_of_trials(500, 0.1);
+	 find_number_of_trials(5, 0.9);
+	 find_number_of_trials(10-5, 0.4); // See Evans example in Wikipedia.
     return 0;
 } // int main()
 
 
 /*
 
------- Build started: Project: neg_binomial_sample_sizes, Configuration: Debug Win32 ------
-Compiling...
-neg_binomial_sample_sizes.cpp
-Linking...
+Output is:
+
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\neg_binomial_sample_sizes.exe"
-
 Target number of failures = 5,   Success fraction = 50%
-
-
 ____________________________
 Confidence        Min Number
- Value (%)        Of Trials
+ Value (%)        Of Trials 
 ____________________________
     50.000          11
     75.000          14
@@ -94,14 +83,10 @@ ____________________________
     99.900          27
     99.990          31
     99.999          36
-
-
 Target number of failures = 50.000,   Success fraction = 50.000%
-
-
 ____________________________
 Confidence        Min Number
- Value (%)        Of Trials
+ Value (%)        Of Trials 
 ____________________________
     50.000         101
     75.000         109
@@ -111,14 +96,10 @@ ____________________________
     99.900         137
     99.990         146
     99.999         154
-
-
 Target number of failures = 500.000,   Success fraction = 50.000%
-
-
 ____________________________
 Confidence        Min Number
- Value (%)        Of Trials
+ Value (%)        Of Trials 
 ____________________________
     50.000        1001
     75.000        1023
@@ -128,14 +109,10 @@ ____________________________
     99.900        1104
     99.990        1126
     99.999        1146
-
-
 Target number of failures = 50.000,   Success fraction = 10.000%
-
-
 ____________________________
 Confidence        Min Number
- Value (%)        Of Trials
+ Value (%)        Of Trials 
 ____________________________
     50.000          56
     75.000          58
@@ -145,14 +122,10 @@ ____________________________
     99.900          66
     99.990          68
     99.999          71
-
-
 Target number of failures = 500.000,   Success fraction = 10.000%
-
-
 ____________________________
 Confidence        Min Number
- Value (%)        Of Trials
+ Value (%)        Of Trials 
 ____________________________
     50.000         556
     75.000         562
@@ -162,14 +135,10 @@ ____________________________
     99.900         583
     99.990         588
     99.999         594
-
-
 Target number of failures = 5.000,   Success fraction = 90.000%
-
-
 ____________________________
 Confidence        Min Number
- Value (%)        Of Trials
+ Value (%)        Of Trials 
 ____________________________
     50.000          57
     75.000          73
@@ -179,14 +148,10 @@ ____________________________
     99.900         159
     99.990         189
     99.999         217
-
-
 Target number of failures = 5.000,   Success fraction = 40.000%
-
-
 ____________________________
 Confidence        Min Number
- Value (%)        Of Trials
+ Value (%)        Of Trials 
 ____________________________
     50.000          10
     75.000          11
@@ -196,11 +161,6 @@ ____________________________
     99.900          21
     99.990          25
     99.999          28
-
-Build Time 0:03
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\neg_binomial_sample_sizes\Debug\BuildLog.htm"
-neg_binomial_sample_sizes - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 
 */

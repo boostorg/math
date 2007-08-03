@@ -18,7 +18,7 @@ T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
    using namespace std;
    static const char* function = "boost::math::binomial_coefficient<%1%>(unsigned, unsigned)";
    if(k > n)
-      return policy::raise_domain_error<T>(
+      return policies::raise_domain_error<T>(
          function, 
          "The binomial coefficient is undefined for k > n, but got k = %1%.",
          k, pol);
@@ -43,7 +43,7 @@ T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
       else
          result = (n - k) * beta(static_cast<T>(k+1), static_cast<T>(n-k), pol);
       if(result == 0)
-         return policy::raise_overflow_error<T>(function, 0, pol);
+         return policies::raise_overflow_error<T>(function, 0, pol);
       result = 1 / result;
    }
    // convert to nearest integer:
@@ -55,15 +55,15 @@ T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
 // we'll promote to double:
 //
 template <>
-inline float binomial_coefficient<float, policy::policy<> >(unsigned n, unsigned k, const policy::policy<>& pol)
+inline float binomial_coefficient<float, policies::policy<> >(unsigned n, unsigned k, const policies::policy<>& pol)
 {
-   return policy::checked_narrowing_cast<float, policy::policy<> >(binomial_coefficient<double>(n, k, pol), "boost::math::binomial_coefficient<%1%>(unsigned,unsigned)");
+   return policies::checked_narrowing_cast<float, policies::policy<> >(binomial_coefficient<double>(n, k, pol), "boost::math::binomial_coefficient<%1%>(unsigned,unsigned)");
 }
 
 template <class T>
 inline T binomial_coefficient(unsigned n, unsigned k)
 {
-   return binomial_coefficient<T>(n, k, policy::policy<>());
+   return binomial_coefficient<T>(n, k, policies::policy<>());
 }
 
 } // namespace math
@@ -71,4 +71,5 @@ inline T binomial_coefficient(unsigned n, unsigned k)
 
 
 #endif // BOOST_MATH_SF_BINOMIAL_HPP
+
 

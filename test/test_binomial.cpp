@@ -1,7 +1,7 @@
 // test_binomial.cpp
 
 // Copyright John Maddock 2006.
-// Copyright  Paul A. Bristow 2006.
+// Copyright  Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -10,13 +10,10 @@
 
 // Basic sanity test for Binomial Cumulative Distribution Function.
 
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
 #define BOOST_MATH_DISCRETE_QUANTILE_POLICY real
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
-#  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
 #endif
 
 #include <boost/math/distributions/binomial.hpp> // for binomial_distribution
@@ -624,8 +621,8 @@ void test_spots(RealType)
 
   for(unsigned i = 0; i < binomial_quantile_data.size(); ++i)
   {
-     using namespace boost::math::policy;
-     typedef policy<discrete_quantile<boost::math::policy::real> > P1;
+     using namespace boost::math::policies;
+     typedef policy<discrete_quantile<boost::math::policies::real> > P1;
      typedef policy<discrete_quantile<integer_below> > P2;
      typedef policy<discrete_quantile<integer_above> > P3;
      typedef policy<discrete_quantile<integer_outside> > P4;
@@ -688,7 +685,6 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
-
 	// Check that can generate binomial distribution using one convenience methods:
 	binomial_distribution<> mybn2(1., 0.5); // Using default RealType double.
   // but that
@@ -696,11 +692,6 @@ int test_main(int, char* [])
   // error C2039: 'binomial' : is not a member of 'boost::math'
 
   // Basic sanity-check spot values.
-#ifdef BOOST_MATH_THROW_ON_DOMAIN_ERROR
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is defined to throw on domain error." << endl;
-#else
-  cout << "BOOST_MATH_THROW_ON_DOMAIN_ERROR" << " is NOT defined, so NO throw on domain error." << endl;
-#endif
 
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float.
@@ -722,72 +713,14 @@ int test_main(int, char* [])
 
 /*
 
-
 Output is:
 
------- Build started: Project: test_binomial, Configuration: Debug Win32 ------
-Compiling...
-test_binomial.cpp
-Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_binomial.exe"
 Running 1 test case...
-BOOST_MATH_THROW_ON_DOMAIN_ERROR is defined to throw on domain error.
 Tolerance = 0.0119209%.
-mean(my8dist) = 2
-my8dist.trials() = 8
-my8dist.success_fraction() = 0.25
-0 0.100113 0.100113 0.100113 0
-1 0.266968 0.367081 0.367081 0
-2 0.311462 0.678543 0.678543 0
-3 0.207642 0.886185 0.886185 0
-4 0.0865173 0.972702 0.972702 0
-5 0.0230713 0.995773 0.995773 0
-6 0.00384521 0.999619 0.999619 0
-7 0.000366211 0.999985 0.999985 0
-8 1.52588e-005 1 1 0
 Tolerance = 2.22045e-011%.
-mean(my8dist) = 2
-my8dist.trials() = 8
-my8dist.success_fraction() = 0.25
-0 0.100113 0.100113 0.100113 0
-1 0.266968 0.367081 0.367081 0
-2 0.311462 0.678543 0.678543 0
-3 0.207642 0.886185 0.886185 0
-4 0.0865173 0.972702 0.972702 0
-5 0.0230713 0.995773 0.995773 0
-6 0.00384521 0.999619 0.999619 0
-7 0.000366211 0.999985 0.999985 0
-8 1.52588e-005 1 1 0
 Tolerance = 2.22045e-011%.
-mean(my8dist) = 2
-my8dist.trials() = 8
-my8dist.success_fraction() = 0.25
-0 0.100113 0.100113 0.100113 0
-1 0.266968 0.367081 0.367081 0
-2 0.311462 0.678543 0.678543 0
-3 0.207642 0.886185 0.886185 0
-4 0.0865173 0.972702 0.972702 0
-5 0.0230713 0.995773 0.995773 0
-6 0.00384521 0.999619 0.999619 0
-7 0.000366211 0.999985 0.999985 0
-8 1.52588e-005 1 1 0
 Tolerance = 2.22045e-011%.
-mean(my8dist) = 2
-my8dist.trials() = 8
-my8dist.success_fraction() = 0.25
-0 0.100113 0.100113 0.100113 0
-1 0.266968 0.367081 0.367081 0
-2 0.311462 0.678543 0.678543 0
-3 0.207642 0.886185 0.886185 0
-4 0.0865173 0.972702 0.972702 0
-5 0.0230713 0.995773 0.995773 0
-6 0.00384521 0.999619 0.999619 0
-7 0.000366211 0.999985 0.999985 0
-8 1.52588e-005 1 1 -6.66134e-016
 *** No errors detected
-Build Time 0:08
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_binomial\Debug\BuildLog.htm"
-test_binomial - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 */

@@ -311,12 +311,12 @@ void remez_minimax<T>::reset(
    if(bits == 0)
    {
       // don't bother about more than float precision:
-      m_precision = (std::min)(24, (boost::math::policy::digits<T, boost::math::policy::policy<> >() / 2) - 2);
+      m_precision = (std::min)(24, (boost::math::policies::digits<T, boost::math::policies::policy<> >() / 2) - 2);
    }
    else
    {
       // can't be more accurate than half the bits of T:
-      m_precision = (std::min)(bits, (boost::math::policy::digits<T, boost::math::policy::policy<> >() / 2) - 2);
+      m_precision = (std::min)(bits, (boost::math::policies::digits<T, boost::math::policies::policy<> >() / 2) - 2);
    }
    m_max_change_history[0] = m_max_change_history[1] = 1;
    init_chebyshev();
@@ -372,12 +372,12 @@ void remez_minimax<T>::reset(
    if(bits == 0)
    {
       // don't bother about more than float precision:
-      m_precision = (std::min)(24, (boost::math::policy::digits<T, boost::math::policy::policy<> >() / 2) - 2);
+      m_precision = (std::min)(24, (boost::math::policies::digits<T, boost::math::policies::policy<> >() / 2) - 2);
    }
    else
    {
       // can't be more accurate than half the bits of T:
-      m_precision = (std::min)(bits, (boost::math::policy::digits<T, boost::math::policy::policy<> >() / 2) - 2);
+      m_precision = (std::min)(bits, (boost::math::policies::digits<T, boost::math::policies::policy<> >() / 2) - 2);
    }
    m_max_change_history[0] = m_max_change_history[1] = 1;
    // do one iteration whatever:
@@ -658,4 +658,5 @@ polynomial<T> remez_minimax<T>::denominator()const
 }}} // namespaces
 
 #endif // BOOST_MATH_TOOLS_REMEZ_HPP
+
 

@@ -51,7 +51,7 @@ void expected_results()
    //
    const char* largest_type;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   if(boost::math::policy::digits<double, boost::math::policy::policy<> >() == boost::math::policy::digits<long double, boost::math::policy::policy<> >())
+   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       largest_type = "(long\\s+)?double";
    }
@@ -130,8 +130,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    // and also demonstrates that you can't in general round-trip these functions.
    // It is however a useful sanity check.
    //
-   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policy::digits<value_type, boost::math::policy::policy<> >()/2)) * 100;
-   if(boost::math::policy::digits<value_type, boost::math::policy::policy<> >() < 50)
+   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policies::digits<value_type, boost::math::policies::policy<> >()/2)) * 100;
+   if(boost::math::policies::digits<value_type, boost::math::policies::policy<> >() < 50)
       precision = 1;   // 1% or two decimal digits, all we can hope for when the input is truncated to float
 
    for(unsigned i = 0; i < data.size(); ++i)
@@ -266,5 +266,6 @@ int test_main(int, char* [])
 #endif
    return 0;
 }
+
 
 

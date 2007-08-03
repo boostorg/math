@@ -35,7 +35,7 @@ inline typename tools::promote_args<T1, T2>::type
    powm1(const T1 a, const T2 z)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
-   return detail::powm1_imp(static_cast<result_type>(a), static_cast<result_type>(z), policy::policy<>());
+   return detail::powm1_imp(static_cast<result_type>(a), static_cast<result_type>(z), policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
@@ -50,6 +50,7 @@ inline typename tools::promote_args<T1, T2>::type
 } // namespace boost
 
 #endif // BOOST_MATH_POWM1
+
 
 
 

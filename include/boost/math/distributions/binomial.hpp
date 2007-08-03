@@ -1,7 +1,7 @@
 // boost\math\distributions\binomial.hpp
 
 // Copyright John Maddock 2006.
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -76,7 +76,6 @@
 // To enforce the strict mathematical model, users should use floor or ceil functions
 // on k outside this function to ensure that k is integral.
 
-
 #ifndef BOOST_MATH_SPECIAL_BINOMIAL_HPP
 #define BOOST_MATH_SPECIAL_BINOMIAL_HPP
 
@@ -87,12 +86,6 @@
 #include <boost/math/distributions/detail/inv_discrete_quantile.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
-
-#if defined (BOOST_MSVC) && defined(BOOST_MATH_THROW_ON_DOMAIN_ERROR)
-#  pragma warning(push)
-//#  pragma warning(disable: 4702) // unreachable code
-// in domain_error_imp in error_handling
-#endif
 
 #include <utility>
 
@@ -111,7 +104,7 @@ namespace boost
         {
            if((N < 0) || !(boost::math::isfinite)(N))
            {
-               *result = policy::raise_domain_error<RealType>(
+               *result = policies::raise_domain_error<RealType>(
                   function,
                   "Number of Trials argument is %1%, but must be >= 0 !", N, pol);
                return false;
@@ -123,7 +116,7 @@ namespace boost
         {
            if((p < 0) || (p > 1) || !(boost::math::isfinite)(p))
            {
-               *result = policy::raise_domain_error<RealType>(
+               *result = policies::raise_domain_error<RealType>(
                   function,
                   "Success fraction argument is %1%, but must be >= 0 and <= 1 !", p, pol);
                return false;
@@ -145,14 +138,14 @@ namespace boost
               return false;
            if((k < 0) || !(boost::math::isfinite)(k))
            {
-               *result = policy::raise_domain_error<RealType>(
+               *result = policies::raise_domain_error<RealType>(
                   function,
                   "Number of Successes argument is %1%, but must be >= 0 !", k, pol);
                return false;
            }
            if(k > N)
            {
-               *result = policy::raise_domain_error<RealType>(
+               *result = policies::raise_domain_error<RealType>(
                   function,
                   "Number of Successes argument is %1%, but must be <= Number of Trials !", k, pol);
                return false;
@@ -282,7 +275,7 @@ namespace boost
     // is deliberately NOT included to avoid a name clash with function.
     //typedef binomial_distribution<double> binomial; // Reserved name of type double.
 
-    template <class RealType = double, class Policy = policy::policy<> >
+    template <class RealType = double, class Policy = policies::policy<> >
     class binomial_distribution
     {
     public:
@@ -728,4 +721,5 @@ namespace boost
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_MATH_SPECIAL_BINOMIAL_HPP
+
 

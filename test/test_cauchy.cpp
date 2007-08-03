@@ -1,25 +1,22 @@
 // Copyright John Maddock 2006.
+// Copyright Paul A. Bristow 2007
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// test_cauchy.cpp
-
-#define BOOST_MATH_THROW_ON_DOMAIN_ERROR
-#define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
-#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+// test_cauchy.cpp Test Cauchy distribution
 
 #ifdef _MSC_VER
-#  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
+// Seems an entirely spurious warning - formal parameter T IS used - get error if /* T */
 //#  pragma warning(disable: 4535) // calling _set_se_translator() requires /EHa (in Boost.test)
 // Enable C++ Exceptions Yes With SEH Exceptions (/EHa) prevents warning 4535.
 #endif
+
+// #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false 
+// To compile even if Cauchy mean is used.
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/cauchy.hpp>
@@ -649,26 +646,29 @@ void test_spots(RealType T)
        median(dist),
        static_cast<RealType>(0));
    //
-   // Things that are errors:
+   // Things that now don't compile (BOOST-STATIC_ASSERT_FAILURE) by default.
+   // #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false 
+   // To compile even if Cauchy mean is used.
+   // See policy reference, mathematically undefined function policies
    //
-   BOOST_CHECK_THROW(
-       mean(dist),
-       std::domain_error);
-   BOOST_CHECK_THROW(
-       variance(dist),
-       std::domain_error);
-   BOOST_CHECK_THROW(
-       standard_deviation(dist),
-       std::domain_error);
-   BOOST_CHECK_THROW(
-       kurtosis(dist),
-       std::domain_error);
-   BOOST_CHECK_THROW(
-       kurtosis_excess(dist),
-       std::domain_error);
-   BOOST_CHECK_THROW(
-       skewness(dist),
-       std::domain_error);
+   //BOOST_CHECK_THROW(
+   //    mean(dist),
+   //    std::domain_error);
+   //BOOST_CHECK_THROW(
+   //    variance(dist),
+   //    std::domain_error);
+   //BOOST_CHECK_THROW(
+   //    standard_deviation(dist),
+   //    std::domain_error);
+   //BOOST_CHECK_THROW(
+   //    kurtosis(dist),
+   //    std::domain_error);
+   //BOOST_CHECK_THROW(
+   //    kurtosis_excess(dist),
+   //    std::domain_error);
+   //BOOST_CHECK_THROW(
+   //    skewness(dist),
+   //    std::domain_error);
    BOOST_CHECK_THROW(
        quantile(dist, RealType(0.0)),
        std::overflow_error);
@@ -715,10 +715,6 @@ int test_main(int, char* [])
 /*
 Output:
 
------- Build started: Project: test_cauchy, Configuration: Debug Win32 ------
-Compiling...
-test_cauchy.cpp
-Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_cauchy.exe"
 Running 1 test case...
 Tolerance for type float is 0.000596046 %
@@ -726,10 +722,7 @@ Tolerance for type double is 1.11022e-012 %
 Tolerance for type long double is 1.11022e-012 %
 Tolerance for type class boost::math::concepts::real_concept is 1.11022e-012 %
 *** No errors detected
-Build Time 0:05
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\test_cauchy\Debug\BuildLog.htm"
-test_cauchy - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 */
+
 
