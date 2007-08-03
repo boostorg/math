@@ -334,3 +334,71 @@ int test_main(int, char* [])
 
     return 0;
 }
+
+/*
+
+test_carlson.cpp
+Linking...
+Embedding manifest...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_carlson.exe"
+Running 1 test case...
+Tests run with Microsoft Visual C++ version 8.0, Dinkumware standard library version 405, Win32
+Testing: RF: Random data
+boost::math::ellint_rf<float> Max = 0 RMS Mean=0
+Testing: RC: Random data
+boost::math::ellint_rc<float> Max = 0 RMS Mean=0
+Testing: RJ: Random data
+boost::math::ellint_rf<float> Max = 0 RMS Mean=0
+Testing: RD: Random data
+boost::math::ellint_rd<float> Max = 0 RMS Mean=0
+Testing: RF: Random data
+boost::math::ellint_rf<double> Max = 2.949 RMS Mean=0.7498
+    worst case at row: 377
+    { 3.418e+025, 2.594e-005, 3.264e-012, 6.169e-012 }
+Testing: RC: Random data
+boost::math::ellint_rc<double> Max = 2.396 RMS Mean=0.6283
+    worst case at row: 10
+    { 1.97e-029, 3.224e-025, 2.753e+012 }
+Testing: RJ: Random data
+boost::math::ellint_rf<double> Max = 152.9 RMS Mean=11.15
+    worst case at row: 633
+    { 1.876e+016, 0.000278, 3.796e-006, -4.412e-005, -1.656e-005 }
+Testing: RD: Random data
+boost::math::ellint_rd<double> Max = 2.586 RMS Mean=0.8614
+    worst case at row: 45
+    { 2.111e-020, 8.757e-026, 1.923e-023, 1.004e+033 }
+Testing: RF: Random data
+boost::math::ellint_rf<long double> Max = 2.949 RMS Mean=0.7498
+    worst case at row: 377
+    { 3.418e+025, 2.594e-005, 3.264e-012, 6.169e-012 }
+Testing: RC: Random data
+boost::math::ellint_rc<long double> Max = 2.396 RMS Mean=0.6283
+    worst case at row: 10
+    { 1.97e-029, 3.224e-025, 2.753e+012 }
+Testing: RJ: Random data
+boost::math::ellint_rf<long double> Max = 152.9 RMS Mean=11.15
+    worst case at row: 633
+    { 1.876e+016, 0.000278, 3.796e-006, -4.412e-005, -1.656e-005 }
+Testing: RD: Random data
+boost::math::ellint_rd<long double> Max = 2.586 RMS Mean=0.8614
+    worst case at row: 45
+    { 2.111e-020, 8.757e-026, 1.923e-023, 1.004e+033 }
+Testing: RF: Random data
+boost::math::ellint_rf<real_concept> Max = 2.949 RMS Mean=0.7498
+    worst case at row: 377
+    { 3.418e+025, 2.594e-005, 3.264e-012, 6.169e-012 }
+Testing: RC: Random data
+boost::math::ellint_rc<real_concept> Max = 2.396 RMS Mean=0.6283
+    worst case at row: 10
+    { 1.97e-029, 3.224e-025, 2.753e+012 }
+Testing: RJ: Random data
+boost::math::ellint_rf<real_concept> Max = 152.9 RMS Mean=11.15
+    worst case at row: 633
+    { 1.876e+016, 0.000278, 3.796e-006, -4.412e-005, -1.656e-005 }
+Testing: RD: Random data
+boost::math::ellint_rd<real_concept> Max = 2.586 RMS Mean=0.8614
+    worst case at row: 45
+    { 2.111e-020, 8.757e-026, 1.923e-023, 1.004e+033 }
+*** No errors detected
+
+*/
