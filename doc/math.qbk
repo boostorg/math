@@ -181,7 +181,8 @@ and use the function's name as the link text]
 
 [/links to policy]
 [def __Policy [link math_toolkit.policy Policy]]
-[def __policy_class [link math_toolkit.policy.pol_ref.pol_ref_ref policy::policy<>]]
+[def __policy_class [link math_toolkit.policy.pol_ref.pol_ref_ref policies::policy<>]]
+[def __math_undefined [link math_toolkit.policy.pol_ref.assert_undefined mathematically undefined function]]
 
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard, 
    __chf, __mean, __median, __mode, __variance, __sd, __skewness, 

@@ -37,13 +37,13 @@ basic arithmetic operations.  Maybe this is telling us something, or maybe not
 
 [h4 Elliptic Integrals]
 
-* Carlsons algorithms are essentially unchanged from Xiaogang Zhang's
+* Carlson's algorithms are essentially unchanged from Xiaogang Zhang's
 Google Summer of Code student project, and are based on Carlson's
 original papers.  However, Carlson has revised his algorithms since then
 (refer to the references in the elliptic integral docs for a list), to
 improve performance and accuracy, we may be able to take advantage
 of these improvements too (Low Priority).
-* Carlsons algorithms (mainly R[sub J]) are somewhat prone to
+* Carlson's algorithms (mainly R[sub J]) are somewhat prone to
 internal overflow/underflow when the arguments are very large or small.
 The homogeneity relations: \n
 R[sub F](ka, kb, kc) = k[super -1/2] R[sub F](a, b, c)\n
@@ -79,8 +79,6 @@ for very high precision types (Low Priority).
 [h4 Statistical distributions]
 
 * Student's t Perhaps switch to normal distribution as a better approximation for very large degrees of freedom?
-
-* Some distributions say the range may include infinity, but is not always implemented; nor is it clear if and how it should be.
 
 [endsect][/section:issues Known Issues, and Todo List]
 

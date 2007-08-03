@@ -335,7 +335,7 @@ we can have them return the result of a domain error instead
 
 This behaviour is controlled by the `assert_undefined<>` policy:
 
-   namespace boost{ namespace math{ namespace policy{
+   namespace boost{ namespace math{ namespace policies {
 
    template <bool b>
    class assert_undefined;
@@ -579,9 +579,22 @@ And for a quantile of a distribution to approximately 25-bit precision:
 
 [section:policy_defaults Changing the Policy Defaults]
 
-If you want to alter the defaults for any of 
-the policies then you can do so by defining various macros in
-boost/math/tools/user.hpp:
+You can use the various macros below to change any (or all) of the policies.
+
+You can make a local change by placing a macro definition *before*
+a function or distribution #include.
+
+[caution If you place it after the #include it will have no effect,
+(or it will affect only any other following #includes).]
+
+[caution There is a danger of One-Definition-Rule violations if you 
+add ad-hock macros to more than one source files: these must be set the same in *every 
+translation unit*.]
+
+If you want to alter the defaults for any or all of 
+the policies for *all* functions and distributions, installation-wide,
+then you can do so by defining various macros in
+boost/math/tools/user.hpp.
 
 [h5 BOOST_MATH_DOMAIN_ERROR_POLICY]
 
@@ -675,6 +688,14 @@ a domain error. Then we could add the following to boost/math/tools/user.hpp:
    #define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error
    #define BOOST_MATH_DISCRETE_QUANTILE_POLICY real
    #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+   
+or we could place these definitions *before*
+
+   #include <boost/math/distributions/normal.hpp>
+     using boost::math::normal_distribution;
+
+in a source .cpp file.
+[/ TODO could use a normal example here?]
 
 [endsect][/section:policy_defaults Changing the Policy Defaults]
 
@@ -935,4 +956,5 @@ code internally.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
 
