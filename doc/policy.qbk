@@ -44,7 +44,7 @@ control:
 
 * What action to take when an error occurs.
 * What happens when you call a function that is mathematically undefined
-( for example if you ask for the mean of a Cauchy distribution).
+(for example if you ask for the mean of a Cauchy distribution).
 * What happens when you ask for a quantile of a discrete distribution.
 * Whether the library is allowed to internally promote `float` to `double`
 and `double` to `long double` in order to improve precision.
@@ -56,7 +56,7 @@ for the given policies.
 
 For this reason a Policy is a /type/: in fact it's an instance of the 
 class template `boost::math::policies::policy<>`.  This class is just a 
-compile-time-container of user defined policies (sometimes called a typelist):
+compile-time-container of user-defined policies (sometimes called a typelist):
 
    using namespace boost::math::policies;
    //
@@ -87,7 +87,7 @@ stop reading now!
    down for lower quantiles and rounded up for upper quantiles - see TODO LINK HERE!!]]
 ]
 
-What's more if you define you're own policy type, then it automatically
+What's more, if you define your own policy type, then it automatically
 inherits the defaults for any policies not explicitly set, so given:
 
    using namespace boost::math::policies;
@@ -107,9 +107,9 @@ The details follow later, but basically policies can be set by either:
 * Defining some macros that change the default behaviour: this is the 
    recomended method for setting installation-wide policies.
 * By instantiating a distribution object with an explicit policy:
-   this is mainly reserved for add-hock policy changes.
+   this is mainly reserved for ad hoc policy changes.
 * By passing a policy to a special function as an optional final argument:
-   this is mainly reserved for add-hock policy changes.
+   this is mainly reserved for ad hoc policy changes.
 * By using some helper macros to define a set of functions or distributions
 in the current namespace that use a specific policy: this is the
 recomended method for setting policies on a project- or translation-unit-wide
@@ -131,13 +131,13 @@ exception.  There is however a very important caveat to this:
 [*['Default policies changed by setting configuration macros must be changed
 uniformly in every translation unit in the program.]] 
 
-Failure to follow this rule may result in violations of the "one
-definition rule" and result in unpredictable program behaviour.]
+Failure to follow this rule may result in violations of the "One
+Definition Rule (ODR)" and result in unpredictable program behaviour.]
 
 That means there are only two safe ways to use these macros:
 
-* Edit them in [@../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp], so that the defaults are set
-on an installation-wide basis.  Unfortunately this may not be convenient if
+* Edit them in [@../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp],
+so that the defaults are set on an installation-wide basis.  Unfortunately this may not be convenient if
 you are using a pre-installed Boost distribution (on Linux for example).
 * Set the defines in your project's makefile or build environment, so that they
 are set uniformly across all translation units.
@@ -148,11 +148,11 @@ What you should not do is:
 almost certainly will break your program, unless you're absolutely
 certain that the program is restricted to a single translation unit.
 
-And, yes you will find examples in our test programs where we break this
-rule: but only because we know they are will will always be a single
+And, yes, you will find examples in our test programs where we break this
+rule: but only because we know there will always be a single
 translation unit only: don't say that you weren't warned!
 
-[heading Setting Policies for Distributions on an Ad-Hock Basis]
+[heading Setting Policies for Distributions on an Ad Hoc Basis]
 
 All of the statistical distributions in this library are class templates
 that accept two template parameters, both with sensible defaults, for
@@ -183,7 +183,7 @@ Which outputs:
 
 [pre quantile is: 40]
 
-[heading Changing the Policy on an Ad-Hock Basis for the Special Functions]
+[heading Changing the Policy on an Ad Hoc Basis for the Special Functions]
 
 All of the special functions in this library come in two overloaded forms,
 one with a final "policy" parameter, and one without.  For example:
@@ -198,7 +198,7 @@ one with a final "policy" parameter, and one without.  For example:
    
    }} // namespaces
    
-Normally the second version is just a forwarding wrapper to the first
+Normally, the second version is just a forwarding wrapper to the first
 like this:
 
    template <class RealType>
@@ -218,7 +218,7 @@ throw an exception:
 
 [policy_eg_1]
 
-Which outputs:
+that outputs:
 
 [pre 
 Result of tgamma(30000) is: 1.#INF
@@ -227,9 +227,9 @@ Result of tgamma(-10) is: 1.#QNAN
 errno = 33
 ]
 
-Alternatively, for ad-hock use, we can use the `make_policy`
-helper function to create a policy for us, this useage is more
-verbose, so is probably only of use when a policy is going
+Alternatively, for ad hoc use, we can use the `make_policy`
+helper function to create a policy for us: this usage is more
+verbose, so is probably only preferred when a policy is going
 to be used once only:
 
 [import ../example/policy_eg_2.cpp]
@@ -837,7 +837,8 @@ You can make a local change by placing a macro definition *before*
 a function or distribution #include.
 
 [caution If you place it after the #include it will have no effect,
-(or it will affect only any other following #includes).]
+(and it will affect only any other following #includes).
+This is probably not what you intend!]
 
 [caution There is a danger of One-Definition-Rule violations if you 
 add ad-hock macros to more than one source files: these must be set the same in *every 
