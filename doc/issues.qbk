@@ -37,20 +37,22 @@ basic arithmetic operations.  Maybe this is telling us something, or maybe not
 
 [h4 Elliptic Integrals]
 
+[template para[text] '''<para>'''[text]'''</para>''']
+
 * Carlson's algorithms are essentially unchanged from Xiaogang Zhang's
 Google Summer of Code student project, and are based on Carlson's
 original papers.  However, Carlson has revised his algorithms since then
 (refer to the references in the elliptic integral docs for a list), to
 improve performance and accuracy, we may be able to take advantage
 of these improvements too (Low Priority).
-* Carlson's algorithms (mainly R[sub J]) are somewhat prone to
+* [para Carlson's algorithms (mainly R[sub J]) are somewhat prone to
 internal overflow/underflow when the arguments are very large or small.
-The homogeneity relations: \n
-R[sub F](ka, kb, kc) = k[super -1/2] R[sub F](a, b, c)\n
-and\n
-R[sub J](ka, kb, kc, kr) = k[super -3/2] R[sub J](a, b, c, r)\n
-could be used to sidestep trouble here: provided the problem domains
-can be accurately identified. (Medium Priority).
+The homogeneity relations:]
+[para R[sub F](ka, kb, kc) = k[super -1/2] R[sub F](a, b, c)]
+[para and]
+[para R[sub J](ka, kb, kc, kr) = k[super -3/2] R[sub J](a, b, c, r)]
+[para could be used to sidestep trouble here: provided the problem domains
+can be accurately identified. (Medium Priority).]
 * Carlson's R[sub C] can be reduced to elementary funtions (asin and log),
 would it be more efficient evaluated this way, rather than by Carlson's
 algorithms? (Low Priority).
