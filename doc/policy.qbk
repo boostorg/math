@@ -280,7 +280,7 @@ class template, but without the "_distribution" suffix.
 
 [policy_eg_6]
 
-As before the same mechanism works well at file scope as well, by using an unnamed 
+As before, the same mechanism works well at file scope as well: by using an unnamed 
 namespace, we can ensure that these declarations don't conflict with any
 alternate policies present in other translation units:
 
