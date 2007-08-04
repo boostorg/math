@@ -255,11 +255,38 @@ visible in global scope for the current file only.
 
 [policy_eg_4]
 
-The same mechanism works well at file scope as well:
+The same mechanism works well at file scope as well, by using an unnamed 
+namespace, we can ensure that these declarations don't conflict with any
+alternate policies present in other translation units:
 
 [import ../example/policy_eg_5.cpp]
 
 [policy_eg_5]
+
+Handling the statistical distributions is very similar except that now
+the macro BOOST_MATH_DECLARE_DISTRIBUTIONS accepts two parameters: the
+floating point type to use, and the policy type to apply.  For example:
+
+   BOOST_MATH_DECLARE_DISTRIBUTIONS(double, mypolicy)
+   
+Results a set of typedefs being defined like this:
+
+   typedef boost::math::normal_distribution<double, mypolicy> normal;
+   
+The name of each typedef is the same as the name of the distribution 
+class template, but without the "_distribution" suffix.
+
+[import ../example/policy_eg_6.cpp]
+
+[policy_eg_6]
+
+As before the same mechanism works well at file scope as well, by using an unnamed 
+namespace, we can ensure that these declarations don't conflict with any
+alternate policies present in other translation units:
+
+[import ../example/policy_eg_7.cpp]
+
+[policy_eg_7]
 
 [endsect][/section:pol_Tutorial Policy Tutorial]
 

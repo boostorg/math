@@ -53,23 +53,5 @@ int main()
       << quantile(complement(binom, 0.05)) << std::endl;
 }
 
-/*`
-
-Which outputs:
-
-[pre
-Result of quantile(norm, 0) is: -1.#INF
-errno = 34
-Result of quantile(norm, 1) is: 1.#INF
-errno = 34
-Result of quantile(binom, 0.05) is: 1
-Result of quantile(complement(binom, 0.05)) is: 8
-]
-
-This mechanism is particularly useful when we want to define a 
-project-wide policy, and don't want to modify the Boost source
-or set - possibly fragile and easy to forget - project wide 
-build macros.
-
-*/ //] ends quickbook imported section
+//] ends quickbook imported section
 
