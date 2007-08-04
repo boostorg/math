@@ -45,7 +45,7 @@ run policy_eg_2.cpp ;
 run policy_eg_3.cpp ;
 run policy_eg_4.cpp ;
 run policy_eg_5.cpp ;
-run statistics_functions_example1.cpp ;
+# run statistics_functions_example1.cpp ; needs update to use accumulator
 run students_t_example1.cpp ;
 run students_t_example2.cpp ;
 run students_t_example3.cpp ;
