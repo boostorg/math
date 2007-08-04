@@ -36,7 +36,7 @@ typedef policy<
    domain_error<errno_on_error>,
    pole_error<errno_on_error>,
    overflow_error<errno_on_error>,
-   evaluation_error<errno_on_error> 
+   evaluation_error<errno_on_error>
 > c_policy;
 
 /*`
@@ -57,10 +57,10 @@ that all look something like this:
 
 ``
 template <class RealType>
-inline typename boost::math::tools::promote_args<RT>::type 
+inline typename boost::math::tools::promote_args<RT>::type
    tgamma(RT z)
-{ 
-   return boost::math::tgamma(z, c_policy()); 
+{
+   return boost::math::tgamma(z, c_policy());
 }
 ``
 
@@ -73,10 +73,10 @@ So that when we call `C::tgamma(z)` we really end up calling
 int main()
 {
    errno = 0;
-   std::cout << "Result of tgamma(30000) is: " 
+   std::cout << "Result of tgamma(30000) is: "
       << C::tgamma(30000) << std::endl;
    std::cout << "errno = " << errno << std::endl;
-   std::cout << "Result of tgamma(-10) is: " 
+   std::cout << "Result of tgamma(-10) is: "
       << C::tgamma(-10) << std::endl;
    std::cout << "errno = " << errno << std::endl;
 }
@@ -92,10 +92,11 @@ Result of C::tgamma(-10) is: 1.#QNAN
 errno = 33
 ]
 
-This mechanism is particularly useful when we want to define a 
+This mechanism is particularly useful when we want to define a
 project-wide policy, and don't want to modify the Boost source
-or set - possibly fragile and easy to forget - project wide 
+or set - possibly fragile and easy to forget - project wide
 build macros.
 
-*/ //] ends quickbook imported section
+*/
+//]
 
