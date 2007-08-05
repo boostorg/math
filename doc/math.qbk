@@ -12,8 +12,8 @@
     [/last-revision $Date$]
 ]
 
-[include HTML4_symbols.qbk] [/ just for testing]
-[/include Latin1_symbols.qbk] [/ just for testing]
+[include html4_symbols.qbk] [/ just for testing]
+[/include latin1_symbols.qbk] [/ just for testing]
 
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]

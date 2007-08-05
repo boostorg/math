@@ -343,7 +343,7 @@ Now that you have the basics, the next section looks at some worked examples.
 [include distributions/binomial_example.qbk]
 [include distributions/negative_binomial_example.qbk]
 [include distributions/error_handling_example.qbk]
-[include distributions/NAG_library.qbk]
+[include distributions/nag_library.qbk]
 
 [endsect][/section:overview Overview]
 
