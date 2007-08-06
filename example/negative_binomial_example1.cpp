@@ -72,8 +72,11 @@
 	using std::cout;
 	using std::endl;
 	using std::noshowpoint;
+  using std::fixed;
+  using std::right;
 #include <iomanip>
-	using std::setprecision;
+  using std::setprecision;
+  using std::setw; 
 
 int main()
 {
@@ -166,25 +169,81 @@ int main()
     cout << "If the confidence of meeting sales quota is " << 0.
         << ", then the finishing house is " << quantile(nb, 0.) + sales_quota << endl;
 
+    cout << "If the confidence of meeting sales quota is " << 0.5
+        << ", then the finishing house is " << quantile(nb, 0.5) + sales_quota << endl;
+
     cout << "If the confidence of meeting sales quota is " << 1 - 0.00151 // 30 th
         << ", then the finishing house is " << quantile(nb, 1 - 0.00151) + sales_quota << endl;
 
     // If the opposite is true, we don't want to assume any confidence, then
-    // this is tantamount to assuming that the first sales_quota will be successful.
+    // this is tantamount to assuming that all the first sales_quota will be successful sales.
     cout << "If confidence of meeting quota is zero (we assume all houses are successful sales)" 
       ", then finishing house is " << sales_quota << endl;
 
-
-    int const pssize  = 11;
-    double ps[pssize] = {0., 0.001, 0.01, 0.05, 0.1, 0.5, 0.9, 0.95, 0.99, 0.999, 1.};
-    for (int i = 0; i < pssize; i++)
+    //int const pssize  = 11;
+    double ps[] = {0., 0.001, 0.01, 0.05, 0.1, 0.5, 0.9, 0.95, 0.99, 0.999, 1.};
+    // Confidence as fraction = 1-alpha, as percent =  100 * (1-alpha[i])
+    for (int i = 0; i < sizeof(ps)/sizeof(ps[0]); i++)
     {
       cout << "If confidence of meeting quota is " << ps[i]
-        << ", then finishing house is " << ceil(quantile(nb, ps[i])) + sales_quota << endl;
-    }
+        << ", then finishing house is " << ceil(quantile(nb, ps[i])) + sales_quota
+        << endl;
+   }
+   cout << "If we demand a confidence of meeting sales quota of unity"
+     ", then we can never be certain of selling 5 bars, so the finishing house is infinite!"  << endl;
 
-    cout << "If we demand a confidence of meeting sales quota of unity"
-      ", then we can never be certain of selling 5 bars, so the finishing house is infinite!"  << endl;
+       // Define a table of significance levels:
+   double alpha[] = { 1.,  0.99999, 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 , 0.000000001};
+
+   // Now turn the question on its head as ask how many houses for a given confidence.
+
+   cout << "\n"
+     "Confidence (%)   Minimum houses for "  << sales_quota << " sales" << endl;
+   for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
+   { // Confidence values %:
+      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]) << "      "
+      // find_minimum_number_of_trials
+      << setw(6) << right
+      << (int)ceil(negative_binomial::find_minimum_number_of_trials(sales_quota, success_fraction, alpha[i]))
+      << endl;
+    }
+    cout << endl;
+
+    /*
+    Notes:
+Confidence (%)   Minimum houses for 5 sales
+     0.000           5  only if confidence is really zero can we assume that all visits will be successful.
+     0.001           6  So even a tiny increase means we must allow for one failure to sell.
+    50.000          10 
+    
+  But above using  quantile(nb, 0.5) + sales_quota
+
+" If the confidence of meeting sales quota is 0.5, then the finishing house is 12 "
+
+Probability of selling his quota of 5 candy bars
+on or before the 10th house is 0.3669
+
+Probability that Pat finishes on the 11th house is 0.10033
+Probability of selling his quota of 5 candy bars
+on or before the 11th house is 0.46723
+
+Probability that Pat finishes on the 12th house is 0.094596
+Probability of selling his quota of 5 candy bars
+on or before the 12th house is 0.56182
+
+So is this formula wrong / over optimistic?
+
+    75.000          11
+    90.000          13
+    95.000          15
+    99.000          18
+    99.900          21
+    99.990          25
+    99.999          28 
+
+    */
+
+
   }
   catch(const std::exception& e)
    {
@@ -244,7 +303,8 @@ Compiling...
 negative_binomial_example1.cpp
 Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\negative_binomial_example1.exe"
-Example 1 using the Negative Binomial Distribution.  ..\..\..\..\..\..\boost-sandbox\math_toolkit\libs\math\example\negative_binomial_example1.cpp Fri Aug  3 14:13:05 2007 140050727
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\negative_binomial_example1.exe"
+Example 1 using the Negative Binomial Distribution.  ..\..\..\..\..\..\boost-sandbox\math_toolkit\libs\math\example\negative_binomial_example1.cpp Mon Aug  6 12:57:09 2007 140050727
 Selling candy bars - an example of using the negative binomial distribution. 
 An example by Dr. Diane Evans,
 Professor of Mathematics at Rose-Hulman Institute of Technology,
@@ -278,6 +338,7 @@ Probability of meeting sales quota on or before 8th house is 0.17367
 If the confidence of meeting sales quota is 0.17367, then the finishing house is 8
 If the confidence of meeting sales quota is 1, then the finishing house is 1.#INF
 If the confidence of meeting sales quota is 0, then the finishing house is 5
+If the confidence of meeting sales quota is 0.5, then the finishing house is 12
 If the confidence of meeting sales quota is 0.99849, then the finishing house is 31
 If confidence of meeting quota is zero (we assume all houses are successful sales), then finishing house is 5
 If confidence of meeting quota is 0, then finishing house is 5
@@ -291,9 +352,18 @@ If confidence of meeting quota is 0.95, then finishing house is 21
 If confidence of meeting quota is 0.99, then finishing house is 25
 If confidence of meeting quota is 0.999, then finishing house is 32
 If confidence of meeting quota is 1, then finishing house is 1.#INF
-If we demand a confidence of meeting sales quota of unity,
-then we can never be certain of selling 5 bars, so the finishing house is infinite!
-
+If we demand a confidence of meeting sales quota of unity, then we can never be certain of selling 5 bars, so the finishing house is infinite!
+Confidence (%)   Minimum houses for 5 sales
+     0.000           5
+     0.001           6
+    50.000          10
+    75.000          11
+    90.000          13
+    95.000          15
+    99.000          18
+    99.900          21
+    99.990          25
+    99.999          28
 
 */
 
