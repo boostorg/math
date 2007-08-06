@@ -1,3 +1,5 @@
+// neg_binomial_sample_sizes.cpp
+
 // Copyright Paul A. Bristow 2007
 // Copyright John Maddock 2006
 // Use, modification and distribution are subject to the
@@ -7,10 +9,12 @@
 
 #include <boost/math/distributions/negative_binomial.hpp>
 using boost::math::negative_binomial;
-  // RealType find_number_of_trials(
-  // RealType k,     // number of failures, k >= 0.
-  // RealType p,     // success fraction 0 <= p <= 1.
-  // RealType probability) // probability threshold 0 <= p <= 0.
+
+// Default RealType is double so this permits use of:
+double find_minimum_number_of_trials(
+double k,     // number of failures (events), k >= 0.
+double p,     // fraction of trails for which event occurs, 0 <= p <= 1.
+double probability); // probability threshold, 0 <= probability <= 1.
 
 #include <iostream>
 using std::cout;
@@ -21,17 +25,45 @@ using std::right;
 using std::setprecision;
 using std::setw; 
 
+//[neg_binomial_sample_sizes
+
+/*`
+It centres around a routine that prints out
+a table of minimum sample sizes for various probability thresholds:
+*/
+  void find_number_of_trials(double failures, double p);
+/*`
+First define a table of significance levels: these are the maximum 
+acceptable probability that /failure/ or fewer events will be observed.
+*/
+  double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
+/*`
+Confidence value as % is (1 - alpha) * 100, so alpha 0.05 == 95% confidence
+that the desired number of failures will be observed.
+
+Much of the rest of the program is pretty-printing, the important part
+is in the calculation of minimum number of trials required for each
+value of alpha using:
+
+  (int)ceil(negative_binomial::find_minimum_number_of_trials(failures, p, alpha[i]);
+
+*/
+
+/*`
+
+find_minimum_number_of_trials returns a double,
+so ceil rounds this up to ensure we have an integral minimum number of trials.
+
+*/
+  
 void find_number_of_trials(double failures, double p)
 {
    // trials = number of trials
    // failures = number of failures before achieving required success(es).
-   // p         = success ratio.
+   // p        = success fraction (0 <= p <= 1.).
    //
    // Calculate how many trials we need to ensure the
    // required number of failures DOES exceed "failures".
-
-   // Define a table of significance levels:
-   double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
 
   cout << "\n""Target number of failures = " << failures;
   cout << ",   Success fraction = " << 100 * p << "%" << endl;
@@ -41,16 +73,20 @@ void find_number_of_trials(double failures, double p)
            "Confidence        Min Number\n"
            " Value (%)        Of Trials \n"
            "____________________________\n";
-   // Now print out the data for the table rows.
+   // Now print out the data for the alpha table values.
   for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    { // Confidence values %:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]) << "      "
       // find_minimum_number_of_trials
-      << setw(6) << right << (int)ceil(negative_binomial::find_minimum_number_of_trials(failures, p, alpha[i])) << endl;
+      << setw(6) << right
+      << (int)ceil(negative_binomial::find_minimum_number_of_trials(failures, p, alpha[i]))
+      << endl;
    }
    cout << endl;
-} // void find_number_of_trials(double fails, double p)
+} // void find_number_of_trials(double failures, double p)
 
+/*` finally we can produce some tables of minimum trials for the chosen confidence levels:
+*/
 
 int main()
 {
@@ -64,6 +100,7 @@ int main()
     return 0;
 } // int main()
 
+//]  [/neg_binomial_sample_sizes.cpp end of Quickbook in C++ markup]
 
 /*
 
@@ -161,6 +198,5 @@ ____________________________
     99.900          21
     99.990          25
     99.999          28
-
 
 */
