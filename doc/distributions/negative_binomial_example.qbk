@@ -84,73 +84,38 @@ quite close and nearly symmetric to the observed value of 0.1.
 
 [section:neg_binom_size_eg Estimating Sample Sizes for the Negative Binomial.]
 
-Imagine you have an event (let's call it a "failure") that you know will 
-occur in 1 in N trials.  You may want to know how many trials you need to
-conduct to be 100P% sure of observing at least k such failures.  
+Imagine you have an event
+(let's call it a "failure" - though we could equally well call it a success if we felt it was a 'good' event)
+that you know will occur in 1 in N trials.  You may want to know how many trials you need to
+conduct to be P% sure of observing at least k such failures.  
 If the failure events follow a negative binomial
-distribution (each trial either succeeds or does not)
-then the static member function `negative_binomial_distibution<>::estimate_minimum_number_of_trials`
-can be used to estimate the minimum number of trials required to be 100P% sure
+distribution (each trial either succeeds or fails)
+then the static member function `negative_binomial_distibution<>::find_minimum_number_of_trials`
+can be used to estimate the minimum number of trials required to be P% sure
 of observing the desired number of failures.
 
 The example program 
 [@../../example/neg_binomial_sample_sizes.cpp neg_binomial_sample_sizes.cpp]
-demonstrates its usage.  It centres around a routine that prints out
-a table of minimum sample sizes for various probability thresholds:
+demonstrates its usage. 
 
-   void estimate_max_sample_size(
-      double p,              // success fraction.
-      unsigned failures)    // Total number of observed failures required.
-   {
+[import ../../example/neg_binomial_sample_sizes.cpp]
+[neg_binomial_sample_sizes]
 
-The routine then declares a table of probability thresholds: these are the
-maximum acceptable probability that /failure/ or fewer events will be
-observed.
-
-   double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
-
-Much of the rest of the program is pretty-printing, the important part
-is in the calculation of minimum number of trials required for each
-value of alpha:
-
-   cout << "\n""Target number of failures = " << failures;
-   cout << ",   Success fraction = " << 100 * p << "%" << endl;
-   
-   // Print table header:
-   cout << "\n\n"
-        "____________________________\n"
-        "Confidence        Min Number\n"
-        " Value (%)        Of Trials \n"
-        "____________________________\n";
-   
-   // Now print out the data for the table rows.
-   for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
-   { 
-      // Confidence values %:
-      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]) << "      "
-         // estimate_minimum_number_of_trials
-         << setw(6) << right 
-         << ceil(negative_binomial::estimate_minimum_number_of_trials(
-                     failures, p, alpha[i])) << endl;
-   }
-   cout << endl;
-
-Note that since we're
-calculating the /minimum/ number of trials required, we'll err on the safe
-side and take the ceiling of the result.  Had we been calculating the
+[note Since we're calculating the /minimum/ number of trials required,
+we'll err on the safe side and take the ceiling of the result.
+Had we been calculating the
 /maximum/ number of trials permitted to observe less than a certain 
 number of /failures/ then we would have taken the floor instead.  We
-would also have called `estimate_maximum_number_of_trials` like this:
-
-   floor(negative_binomial::estimate_maximum_number_of_trials(
-            failures, p, alpha[i]))
-            
+would also have called `find_minimum_number_of_trials` like this:
+``
+   floor(negative_binomial::find_minimum_number_of_trials(failures, p, alpha[i]))
+``            
 which would give us the largest number of trials we could conduct and
-still be 100P% sure of observing /failures or less/ failure events, when the
-probability of success is /p/.
+still be P% sure of observing /failures or less/ failure events, when the
+probability of success is /p/.]
 
 We'll finish off by looking at some sample output, firstly suppose
-we wish to observe at least 5 "failures" with a 50/50 chance of
+we wish to observe at least 5 "failures" with a 50/50 (0.5) chance of
 success or failure:
 
 [pre
@@ -194,7 +159,6 @@ ____________________________
 
 So now 103 trials are required to observe at least 5 failures with
 95% certainty.
-
 
 [endsect][/section:neg_binom_size_eg Estimating Sample Sizes.]
 
