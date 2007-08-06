@@ -74,6 +74,7 @@
 	using std::noshowpoint;
   using std::fixed;
   using std::right;
+  using std::left;
 #include <iomanip>
   using std::setprecision;
   using std::setw; 
@@ -180,7 +181,7 @@ int main()
     cout << "If confidence of meeting quota is zero (we assume all houses are successful sales)" 
       ", then finishing house is " << sales_quota << endl;
 
-    //int const pssize  = 11;
+
     double ps[] = {0., 0.001, 0.01, 0.05, 0.1, 0.5, 0.9, 0.95, 0.99, 0.999, 1.};
     // Confidence as fraction = 1-alpha, as percent =  100 * (1-alpha[i])
     for (int i = 0; i < sizeof(ps)/sizeof(ps[0]); i++)
@@ -192,6 +193,12 @@ int main()
    cout << "If we demand a confidence of meeting sales quota of unity"
      ", then we can never be certain of selling 5 bars, so the finishing house is infinite!"  << endl;
 
+   cout << "\n""Probability (%)    House for (last) " << sales_quota << " th sale." << endl;
+   for (int i = (int)sales_quota; i < all_houses + 5; i++)
+   {
+     cout << left << setw(6) << cdf(nb, i - sales_quota) << "    " << setw(3) << i<< endl;
+   }
+   cout << endl;
        // Define a table of significance levels:
    double alpha[] = { 1.,  0.99999, 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 , 0.000000001};
 
@@ -364,6 +371,113 @@ Confidence (%)   Minimum houses for 5 sales
     99.900          21
     99.990          25
     99.999          28
+
+
+    Diagnostic output+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+------ Build started: Project: negative_binomial_example1, Configuration: Debug Win32 ------
+Compiling...
+negative_binomial_example1.cpp
+Linking...
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\negative_binomial_example1.exe"
+Example 1 using the Negative Binomial Distribution.  ..\..\..\..\..\..\boost-sandbox\math_toolkit\libs\math\example\negative_binomial_example1.cpp Mon Aug  6 15:06:46 2007 140050727
+Selling candy bars - an example of using the negative binomial distribution. 
+An example by Dr. Diane Evans,
+Professor of Mathematics at Rose-Hulman Institute of Technology,
+see http://en.wikipedia.org/wiki/Negative_binomial_distribution
+Pat has a sales per house success rate of 0.4.
+Therefore he would, on average, sell 40 bars after trying 100 houses.
+With a success rate of 0.4, he might expect, on average,
+ to need to visit about 12 houses in order to sell all 5 candy bars. 
+Probability that Pat finishes on the 5th house is f(5) = 0.10033
+Probability that Pat finishes on the 6th house is 0.03072
+Probability that Pat finishes on the 7th house is 0.055296
+Probability that Pat finishes on the 8th house is 0.077414
+Probability that Pat finishes on or before the 8th house is sum 
+pdf(sales_quota) + pdf(6) + pdf(7) + pdf(8) = 0.17367
+Probability of selling his quota of 5 candy bars
+on or before the 8th house is 0.17367
+Probability that Pat finishes exactly on the 10th house is 0.10033
+Probability of selling his quota of 5 candy bars
+on or before the 10th house is 0.3669
+Probability that Pat finishes on the 11th house is 0.10033
+Probability of selling his quota of 5 candy bars
+on or before the 11th house is 0.46723
+Probability that Pat finishes on the 12th house is 0.094596
+Probability of selling his quota of 5 candy bars
+on or before the 12th house is 0.56182
+Probability of selling his quota of 5 candy bars
+on or before the 31th house is 0.99897
+Probability of failing to sell his quota of 5 candy bars
+even after visiting all 30  houses is 0.0010314
+Probability of meeting sales quota on or before 8th house is 0.17367
+If the confidence of meeting sales quota is 0.17367, then the finishing house is 8
+If the confidence of meeting sales quota is 1, then the finishing house is 1.#INF
+If the confidence of meeting sales quota is 0, then the finishing house is 5
+If the confidence of meeting sales quota is 0.5, then the finishing house is 12
+If the confidence of meeting sales quota is 0.99849, then the finishing house is 31
+If confidence of meeting quota is zero (we assume all houses are successful sales), then finishing house is 5
+If confidence of meeting quota is 0, then finishing house is 5
+If confidence of meeting quota is 0.001, then finishing house is 5
+If confidence of meeting quota is 0.01, then finishing house is 5
+If confidence of meeting quota is 0.05, then finishing house is 6
+If confidence of meeting quota is 0.1, then finishing house is 7
+If confidence of meeting quota is 0.5, then finishing house is 12
+If confidence of meeting quota is 0.9, then finishing house is 18
+If confidence of meeting quota is 0.95, then finishing house is 21
+If confidence of meeting quota is 0.99, then finishing house is 25
+If confidence of meeting quota is 0.999, then finishing house is 32
+If confidence of meeting quota is 1, then finishing house is 1.#INF
+If we demand a confidence of meeting sales quota of unity, then we can never be certain of selling 5 bars, so the finishing house is infinite!
+Probability (%)    House for (last) 5 th sale.
+0.01024    5  
+0.04096    6  
+0.096256    7  
+0.17367    8  
+0.26657    9  
+0.3669    10 
+0.46723    11 
+0.56182    12   <<<<<<<<<<<< 0.5 should at least 12?
+0.64696    13 
+0.72074    14 
+0.78272    15 
+0.83343    16 
+0.874     17 
+0.90583    18 <<<<<<<<<<<<<<<<< 0.9 should be at least 18
+0.93039    19 
+0.94905    20 
+0.96304    21 
+0.97342    22 
+0.98103    23 
+0.98655    24 
+0.99053    25 
+0.99337    26 
+0.99539    27 
+0.99681    28 
+0.9978    29 
+0.99849    30 
+0.99897    31 
+0.9993    32 
+0.99952    33 
+0.99968    34 
+
+Confidence (%)   Minimum houses for 5 sales
+     0.000           5
+     0.001           6
+    50.000          10
+    75.000          11
+    90.000          13
+    95.000          15
+    99.000          18
+    99.900          21
+    99.990          25
+    99.999          28
+   100.000          40
+Build Time 0:03
+Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\negative_binomial_example1\Debug\BuildLog.htm"
+negative_binomial_example1 - 0 error(s), 0 warning(s)
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
 
 */
 
