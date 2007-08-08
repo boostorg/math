@@ -48,7 +48,7 @@ void test_spot( // Test a single spot value against 'known good' values.
                RealType Q,    // Complement of CDF.
                RealType tol)  // Test tolerance.
 {
-  boost::math::negative_binomial_distribution<RealType> bn(N, p);
+   boost::math::negative_binomial_distribution<RealType> bn(N, p);
    BOOST_CHECK_EQUAL(N, bn.successes());
    BOOST_CHECK_EQUAL(p, bn.success_fraction());
    BOOST_CHECK_CLOSE(

@@ -292,6 +292,16 @@ alternate policies present in other translation units:
 
 [policy_eg_7]
 
+[heading Calling User Defined Error Handlers]
+
+[import ../example/policy_eg_8.cpp]
+
+[policy_eg_8]
+
+[import ../example/policy_eg_9.cpp]
+
+[policy_eg_9]
+
 [endsect][/section:pol_Tutorial Policy Tutorial]
 
 [section:pol_ref Policy Reference]
