@@ -3,8 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Note that this file contains quickbook markup as well as code
-// and comments, don't change any of the special comment markups!
+// Note that this file contains quickbook mark-up as well as code
+// and comments, don't change any of the special comment mark-ups!
 
 #include <iostream>
 

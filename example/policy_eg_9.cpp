@@ -3,8 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Note that this file contains quickbook markup as well as code
-// and comments, don't change any of the special comment markups!
+// Note that this file contains quickbook mark-up as well as code
+// and comments, don't change any of the special comment mark-ups!
 
 #include <iostream>
 
@@ -303,11 +303,11 @@ Result of tgamma(-190.5) is: 0
 ]
 
 Notice how some of the calls result in an error handler being called more
-than once, or for more than one handler to be called: this is an artifact
+than once, or for more than one handler to be called: this is an artefact
 of the fact that many functions are implemented in terms of one or more
 sub-routines each of which may have it's own error handling.  For example
-tgamma(-190.5) is implemented in terms of tgamma(190.5) - which overflows -
-the reflection formula for tgamma then notices that it's dividing by
+`tgamma(-190.5)` is implemented in terms of `tgamma(190.5)` - which overflows -
+the reflection formula for `tgamma` then notices that it's dividing by
 infinity and underflows.
 
 */

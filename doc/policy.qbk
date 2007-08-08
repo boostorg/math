@@ -34,275 +34,7 @@ You can control policies:
 
 [endsect][/section:pol_overview Policy Overview]
 
-[section:pol_tutorial Policy Tutorial]
-
-[heading So Just What is a Policy Anyway?]
-
-A policy is a compile-time mechanism for customising the behaviour of a 
-special function, or a statistical distribution.  With Policies you can
-control:
-
-* What action to take when an error occurs.
-* What happens when you call a function that is mathematically undefined
-(for example if you ask for the mean of a Cauchy distribution).
-* What happens when you ask for a quantile of a discrete distribution.
-* Whether the library is allowed to internally promote `float` to `double`
-and `double` to `long double` in order to improve precision.
-* What precision to use when calculating the result.
-
-Some of these policies could arguably be runtime variables, but then we couldn't
-use compile-time dispatch internally to select the best evaluation method
-for the given policies.
-
-For this reason a Policy is a /type/: in fact it's an instance of the 
-class template `boost::math::policies::policy<>`.  This class is just a 
-compile-time-container of user-defined policies (sometimes called a typelist):
-
-   using namespace boost::math::policies;
-   //
-   // Define a policy that sets ::errno on overflow, and does
-   // not promote double to long double internally:
-   //
-   typedef policy<domain_error<errno_on_error>, promote_double<false> > mypolicy;
-
-[heading Policies Have Sensible Defaults]
-
-Most of the time you can just ignore the policy framework, the defaults for 
-the various policies are as follows, if these work OK for you then you can
-stop reading now!
-
-[variablelist
-[[Domain Error][Throws a `std::domain_error` exception.]]
-[[Pole Error][Occurs when a function is evaluated at a pole: throws a `std::domain_error` exception.]]
-[[Overflow Error][Throws a `std::overflow_error` exception.]]
-[[Underflow][Ignores the underflow, and returns zero.]]
-[[Denormalised Result][Ignores the fact that the result is denormalised, and returns it]]
-[[Internal Evaluation Error][Throws a `boost::math::evaluation_error` exception.]]
-[[Promotion of float to double][Does occur by default - gives full float precision results.]]
-[[Promotion of double to long double][Does occur by default if long double offers
-   more precision than double.]]
-[[Precision of Approximation Used][By default uses an approximation that 
-   will result in the lowest level of error for the type of the result.]]
-[[Behaviour of Discrete Quantiles][Returns an integer result that is rounded
-   down for lower quantiles and rounded up for upper quantiles - see TODO LINK HERE!!]]
-]
-
-What's more, if you define your own policy type, then it automatically
-inherits the defaults for any policies not explicitly set, so given:
-
-   using namespace boost::math::policies;
-   //
-   // Define a policy that sets ::errno on overflow, and does
-   // not promote double to long double internally:
-   //
-   typedef policy<domain_error<errno_on_error>, promote_double<false> > mypolicy;
-
-then `mypolicy` defines a policy where only the overflow error handling and
-`double`-promotion policies differ from the defaults.
-
-[heading So How are Policies Used Anyway?]
-
-The details follow later, but basically policies can be set by either:
-
-* Defining some macros that change the default behaviour: this is the 
-   recomended method for setting installation-wide policies.
-* By instantiating a distribution object with an explicit policy:
-   this is mainly reserved for ad hoc policy changes.
-* By passing a policy to a special function as an optional final argument:
-   this is mainly reserved for ad hoc policy changes.
-* By using some helper macros to define a set of functions or distributions
-in the current namespace that use a specific policy: this is the
-recomended method for setting policies on a project- or translation-unit-wide
-basis.
-
-The following sections introduce these methods in more detail.
-
-[heading Changing the Policy Defaults]
-
-The default policies used by the library are changed by the usual
-configuration macro method.
-
-For example passing `-DBOOST_MATH_DOMAIN_ERROR_POLICY=errno_on_error` to
-your compiler will cause domain errors to set `::errno` and return a NaN
-rather than the usual default behaviour of throwing a `std::domain_error`
-exception.  There is however a very important caveat to this:
-
-[important
-[*['Default policies changed by setting configuration macros must be changed
-uniformly in every translation unit in the program.]] 
-
-Failure to follow this rule may result in violations of the "One
-Definition Rule (ODR)" and result in unpredictable program behaviour.]
-
-That means there are only two safe ways to use these macros:
-
-* Edit them in [@../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp],
-so that the defaults are set on an installation-wide basis.  Unfortunately this may not be convenient if
-you are using a pre-installed Boost distribution (on Linux for example).
-* Set the defines in your project's makefile or build environment, so that they
-are set uniformly across all translation units.
-
-What you should not do is:
-
-* Set the defines in the source file using `#define` as doing so
-almost certainly will break your program, unless you're absolutely
-certain that the program is restricted to a single translation unit.
-
-And, yes, you will find examples in our test programs where we break this
-rule: but only because we know there will always be a single
-translation unit only: don't say that you weren't warned!
-
-[import ../example/error_handling_example.cpp]
-
-[error_handling_example]
-
-[heading Setting Policies for Distributions on an Ad Hoc Basis]
-
-All of the statistical distributions in this library are class templates
-that accept two template parameters, both with sensible defaults, for
-example:
-
-   namespace boost{ namespace math{
-   
-   template <class RealType = double, class Policy = policies::policy<> >
-   class fisher_f_distribution;
-   
-   typedef fisher_f_distribution<> fisher_f;
-   
-   }}
-   
-So if you use the shorthand-typedef for the distribution, then you get
-`double` precision arithmetic and all the default policies.
-
-However, say for example we wanted to evaluate the quantile
-of the binomial distribution at float precision, without internal
-promotion to double, and with the result rounded to the /nearest/
-integer, then here's how it can be done:
-
-[import ../example/policy_eg_3.cpp]
-
-[policy_eg_3]
-
-Which outputs:
-
-[pre quantile is: 40]
-
-[heading Changing the Policy on an Ad Hoc Basis for the Special Functions]
-
-All of the special functions in this library come in two overloaded forms,
-one with a final "policy" parameter, and one without.  For example:
-
-   namespace boost{ namespace math{
-   
-   template <class RealType, class Policy>
-   RealType tgamma(RealType, const Policy&);
-   
-   template <class RealType>
-   RealType tgamma(RealType);
-   
-   }} // namespaces
-   
-Normally, the second version is just a forwarding wrapper to the first
-like this:
-
-   template <class RealType>
-   inline RealType tgamma(RealType x)
-   {
-      return tgamma(x, policies::policy<>());
-   }
-
-So calling a special function with a specific policy
-is just a matter of defining the policy type to use
-and passing it as the final parameter.  For example,
-suppose we want tgamma to behave in a C-compatible
-fashion and set errno when an error occurs, and never
-throw an exception:
-
-[import ../example/policy_eg_1.cpp]
-
-[policy_eg_1]
-
-that outputs:
-
-[pre 
-Result of tgamma(30000) is: 1.#INF
-errno = 34
-Result of tgamma(-10) is: 1.#QNAN
-errno = 33
-]
-
-Alternatively, for ad hoc use, we can use the `make_policy`
-helper function to create a policy for us: this usage is more
-verbose, so is probably only preferred when a policy is going
-to be used once only:
-
-[import ../example/policy_eg_2.cpp]
-
-[policy_eg_2]
-
-[heading Setting Policies at Namespace or Translation Unit Scope]
-
-Sometimes what you want to do is just change a set of policies within 
-the current scope: the one thing you should not do in this situation
-is use the configuration macros, as this can lead to "One Definition
-Rule" violations.  Instead this library provides a pair of macros
-especially for this purpose.
-
-Let's consider the special functions first: we can declare a set of
-forwarding functions that all use a specific policy using the
-macro BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(['Policy]).  This
-macro should be used either inside a unique namespace set aside for the 
-purpose, or an unnamed namespace if you just want the functions
-visible in global scope for the current file only.  
-
-[import ../example/policy_eg_4.cpp]
-
-[policy_eg_4]
-
-The same mechanism works well at file scope as well, by using an unnamed 
-namespace, we can ensure that these declarations don't conflict with any
-alternate policies present in other translation units:
-
-[import ../example/policy_eg_5.cpp]
-
-[policy_eg_5]
-
-Handling the statistical distributions is very similar except that now
-the macro BOOST_MATH_DECLARE_DISTRIBUTIONS accepts two parameters: the
-floating point type to use, and the policy type to apply.  For example:
-
-   BOOST_MATH_DECLARE_DISTRIBUTIONS(double, mypolicy)
-   
-Results a set of typedefs being defined like this:
-
-   typedef boost::math::normal_distribution<double, mypolicy> normal;
-   
-The name of each typedef is the same as the name of the distribution 
-class template, but without the "_distribution" suffix.
-
-[import ../example/policy_eg_6.cpp]
-
-[policy_eg_6]
-
-As before, the same mechanism works well at file scope as well: by using an unnamed 
-namespace, we can ensure that these declarations don't conflict with any
-alternate policies present in other translation units:
-
-[import ../example/policy_eg_7.cpp]
-
-[policy_eg_7]
-
-[heading Calling User Defined Error Handlers]
-
-[import ../example/policy_eg_8.cpp]
-
-[policy_eg_8]
-
-[import ../example/policy_eg_9.cpp]
-
-[policy_eg_9]
-
-[endsect][/section:pol_Tutorial Policy Tutorial]
+[include policy_tutorial.qbk]
 
 [section:pol_ref Policy Reference]
 
@@ -347,7 +79,7 @@ Will throw one of the following exceptions, depending upon the
 
 [h5 errno_on_error]
 
-Will set global ::errno to one of the following values depending 
+Will set global `::errno` to one of the following values depending 
 upon the error type, and then return the same value as if the error
 had been ignored:
  [table
@@ -362,9 +94,9 @@ had been ignored:
 
 [h5 ignore_error]
 
-Will return a one of the values below depending on the error type (::errno is NOT changed)::
+Will return a one of the values below depending on the error type (`::errno` is NOT changed)::
  [table
-    [[Error Type][errno value]]
+    [[Error Type][Returned Value]]
     [[Domain Error][std::numeric_limits<T>::quiet_NaN()]]
     [[Pole Error][std::numeric_limits<T>::quiet_NaN()]]
     [[Overflow Error][std::numeric_limits<T>::infinity()]]
@@ -703,7 +435,7 @@ The variables x and y are now defined so that:
    cdf(negative_binomial(20), x) <= 0.05
    cdf(negative_binomial(20), y) >= 0.95
    
-In other words we guarantee ['at least 90% coverage in the cenrtal region overall], 
+In other words we guarantee ['at least 90% coverage in the central region overall], 
 and also ['no more than 5% coverage in each tail].
 
 [h5 integer_inside]
@@ -740,7 +472,7 @@ The variables x and y are now defined so that:
    cdf(negative_binomial(20), x) >= 0.05
    cdf(negative_binomial(20), y) <= 0.95
    
-In other words we guarantee ['at no more than 90% coverage in the cenrtal region overall], 
+In other words we guarantee ['at no more than 90% coverage in the central region overall], 
 and also ['at least 5% coverage in each tail].
 
 [h5 integer_below]
@@ -810,7 +542,7 @@ These policies are specified at compile-time, because many of the special
 functions use compile-time-dispatch to select which approximation to use
 based on the precision requested and the numeric type being used.
 
-For example we could calculate tgamma to approximately 5 decimal digits using:
+For example we could calculate `tgamma` to approximately 5 decimal digits using:
 
    #include <boost/math/special_functions/gamma.hpp>
    
@@ -910,7 +642,7 @@ actions for error handing: `throw_on_error`, `errno_on_error`,
 Defines how many decimal digits to use in internal computations: 
 defaults to `0` - meaning use all available digits - but can be set
 to some other decimal value.  Since setting this is likely to have
-a substantial impact on accuracy, it's not generally recomended
+a substantial impact on accuracy, it's not generally recommended
 that you change this from the default.
 
 [h5 BOOST_MATH_PROMOTE_FLOAT_POLICY]
@@ -929,7 +661,7 @@ to `true`, but can be set to `false` to turn promotion of
 
 [h5 BOOST_MATH_DISCRETE_QUANTILE_POLICY]
 
-Determines how disrete quantiles return their results: either
+Determines how discrete quantiles return their results: either
 as an integer, or as a real value, can be set to one of the
 enumerated values: `real`, `integer_outside`, `integer_inside`,
 `integer_below`, `integer_above`, `integer_nearest`.  Defaults to
@@ -947,7 +679,7 @@ at runtime whether or not a particular property is well defined.
 
 [h5 Example]
 
-Suppose we want overflow errors to set errno and return an infinity,
+Suppose we want overflow errors to set `::errno` and return an infinity,
 discrete quantiles to return a real-valued result (rather than round to
 integer), and for mathematically undefined functions to compile, but return
 a domain error. Then we could add the following to boost/math/tools/user.hpp:

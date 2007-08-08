@@ -3,8 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Note that this file contains quickbook markup as well as code
-// and comments, don't change any of the special comment markups!
+// Note that this file contains quickbook mark-up as well as code
+// and comments, don't change any of the special comment mark-ups!
 
 #include <iostream>
 
@@ -13,7 +13,7 @@
 /*`
 
 Suppose we want our own user-defined error handlers rather than the 
-any of the default ones supplied by the libary to be used.  If
+any of the default ones supplied by the library to be used.  If
 we set the policy for a specific type of error to `user_error`
 then the library will call a user-supplied error handler.
 These are forward declared, but not defined in
