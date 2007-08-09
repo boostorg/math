@@ -83,13 +83,13 @@ T user_domain_error(const char* function, const char* message, const T& val)
    msg += ": \n";
    int prec = 2 + (std::numeric_limits<T>::digits * 30103UL) / 100000UL;
    msg += (boost::format(message) % boost::io::group(std::setprecision(prec), val)).str();
-   /*
+   /*`
    Now we just have to do something with the message, we could throw an 
    exception, but for the purposes of this example we'll just dump the message
    to std::cerr:
    */
    std::cerr << msg << std::endl;
-   /*
+   /*`
    Finally the only sensible value we can return from a domain error is a NaN:
    */
    return std::numeric_limits<T>::quiet_NaN();
@@ -246,7 +246,7 @@ template <class RealType>
 inline typename boost::math::tools::promote_args<RT>::type
    tgamma(RT z)
 {
-   return boost::math::tgamma(z, c_policy());
+   return boost::math::tgamma(z, user_error_policy());
 }
 ``
 

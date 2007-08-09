@@ -109,7 +109,8 @@ Example error handling using Student's t function.
 BOOST_MATH_DOMAIN_ERROR_POLICY is set to: throw_on_error
 
 Message from thrown exception was:
-   Error in function boost::math::students_t_distribution<double>::students_t_distribution: Degrees of freedom argument is -1, but must be > 0 !
+   Error in function boost::math::students_t_distribution<double>::students_t_distribution: 
+   Degrees of freedom argument is -1, but must be > 0 !
 ]
 
 Alternatively let's build with:

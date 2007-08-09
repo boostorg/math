@@ -3,7 +3,9 @@
 [section:pol_overview Policy Overview]
 
 Policies are a powerful fine-grain mechanism that allow you to customise the
-behaviour of this library according to your needs.
+behaviour of this library according to your needs.  There is more information
+available in the [link math_toolkit.policy.pol_tutorial policy tutorial] 
+and the [link math_toolkit.policy.pol_ref policy reference].
 
 Unless you find that the default policy behaviour
 when encountering 'bad' argument values does not meet your needs,
@@ -23,7 +25,7 @@ Using policies you can control:
 * How [link math_toolkit.policy.pol_ref.internal_promotion accuracy is controlled by internal promotion] to use more precise types.
 * What working [link math_toolkit.policy.pol_ref.precision_pol precision] should be used to calculate results.
 * What do to when a [link math_toolkit.policy.pol_ref.assert_undefined mathematically undefined function]
-  is used. Compile or not?
+  is used:  Should this raise a run-time or compile-time error?
 * Whether [link math_toolkit.policy.pol_ref.discrete_quant_ref discrete functions],
   like the binomial, should return real or only integral values, and how they are rounded.
   
@@ -31,6 +33,9 @@ You can control policies:
 
 * Using [link math_toolkit.policy.pol_ref.policy_defaults macros] to change any default policy.
 * At your chosen [link math_toolkit.policy.pol_ref.namespace_pol namespace scope] for distributions and/or functions.
+* In an ad-hoc manner [link math_toolkit.policy.pol_tutorial.ad_hoc_sf_policies 
+by passing a specific policy to a special function], or to a 
+[link math_toolkit.policy.pol_tutorial.ad_hoc_dist_policies statistical distribution].
 
 [endsect][/section:pol_overview Policy Overview]
 
@@ -112,6 +117,8 @@ Will call a user defined error handler: these are forward declared
 in boost/math/policies/error_handling.hpp, but the actual definitions
 must be provided by the user:
 
+   namespace boost{ namespace math{ namespace policies{
+   
    template <class T>
    T user_domain_error(const char* function, const char* message, const T& val);
    
@@ -129,13 +136,20 @@ must be provided by the user:
    
    template <class T>
    T user_evaluation_error(const char* function, const char* message, const T& val);
+   
+   }}} // namespaces
 
-Note that the strings ['function] and ['message] contain "%1%" format specifiers
+Note that the strings ['function] and ['message] may contain "%1%" format specifiers
 designed to be used in conjunction with Boost.Format.  
 If these strings are to be presented to the program's end-user then 
 the "%1%" format specifier
-should be replaced with the name of type T in the ['function] string, and the
-specifier in the ['message] string should be replaced with the value of ['val].
+should be replaced with the name of type T in the ['function] string, and 
+if there is a %1% specifier in the ['message] string then it 
+should be replaced with the value of ['val].
+
+There is more information on user-defined error handlers in
+the [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
+tutorial here].
 
 [h4 Kinds of Error Raised]                  
 
@@ -208,48 +222,16 @@ Suppose we want a call to `tgamma` to behave in a C-compatible way and set globa
 `::errno` rather than throw an exception, we can achieve this at the call site
 using:
 
-   #include <boost/math/special_functions/gamma.hpp>
-   
-   using namespace boost::math::policies;
-   using namespace boost::math;
-   
-   // Define a policy:
-   typedef policy<
-         domain_error<errno_on_error>, 
-         pole_error<errno_on_error>,
-         overflow_error<errno_on_error>,
-         evaluation_error<errno_on_error> 
-         > my_policy;
-         
-   // call the function:
-   double t = tgamma(some_value, my_policy());
-   
-   // Alternatively we could use make_policy and define everything at the call site:
-   t = tgamma(some_value, make_policy(
-            domain_error<errno_on_error>(), 
-            pole_error<errno_on_error>(),
-            overflow_error<errno_on_error>(),
-            evaluation_error<errno_on_error>() 
-         ));
+[import ../example/policy_ref_snip1.cpp]
+
+[policy_ref_snip1]
    
 Suppose we want a statistical distribution to return infinities,
 rather than throw exceptions, then we can use:
 
-   #include <boost/math/distributions/normal.hpp>
-   
-   using namespace boost::math::policies;
-   using namespace boost::math;
-   
-   // Define a policy:
-   typedef policy<
-         overflow_error<ignore_error>
-         > my_policy;
-         
-   // Define the distribution:
-   typedef normal_distribution<double, my_policy> my_norm;
-   
-   // Get a quantile:
-   double q = quantile(my_norm(), 0.05);
+[import ../example/policy_ref_snip2.cpp]
+
+[policy_ref_snip2]
 
 [endsect][/section:error_handling_policies Error Handling Policies]
 
@@ -275,40 +257,16 @@ effect whether internal promotion takes place or not:
 Suppose we want `tgamma` to be evaluated without internal promotion to
 `long double`, then we could use:
 
-   #include <boost/math/special_functions/gamma.hpp>
-   
-   using namespace boost::math::policies;
-   using namespace boost::math;
-   
-   // Define a policy:
-   typedef policy<
-         promote_double<false> 
-         > my_policy;
-         
-   // Call the function:
-   double t = tgamma(some_value, my_policy());
-   
-   // Alternatively we could use make_policy and define everything at the call site:
-   t = tgamma(some_value, make_policy(promote_double<false>()));
+[import policy_ref_snip3]
+
+[policy_ref_snip3]
    
 Alternatively, suppose we want a distribution to perform calculations
 without promoting `float` to `double`, then we could use:
 
-   #include <boost/math/distributions/normal.hpp>
-   
-   using namespace boost::math::policies;
-   using namespace boost::math;
-   
-   // Define a policy:
-   typedef policy<
-         promote_float<false>
-         > my_policy;
-         
-   // Define the distribution:
-   typedef normal_distribution<float, my_policy> my_norm;
-   
-   // Get a quantile:
-   float q = quantile(my_norm(), 0.05f);
+[import ../example/policy_ref_snip4.cpp]
+
+[policy_ref_snip4]
    
 [endsect][/section:internal_promotion Internal Promotion Policies]
 
@@ -386,22 +344,9 @@ The values that `discrete_quantile` can take have the following meanings:
 Ignores the discreteness of the distribution, and returns a real-valued 
 result.  For example:
 
-   #include <boost/math/distributions/negative_binomial.hpp>
-   
-   using namespace boost::math;
-   using namespace boost::math::policies;
-   
-   typedef negative_binomial_distribution<
-         double, 
-         policy<discrete_quantile<integer_inside> > 
-      > dist_type;
-      
-   double x, y;
-   
-   // Lower quantile:
-   x = quantile(dist_type(20, 0.3), 0.05);
-   // Upper quantile:
-   y = quantile(complement(dist_type(20, 0.3), 0.05));
+[import ../example/policy_ref_snip5.cpp]
+
+[policy_ref_snip5]
    
 Results in `x = 27.3898` and `y = 68.1584`.
 
@@ -417,16 +362,9 @@ This is normally the safest rounding policy, since it ensures that both
 one and two sided intervals are guaranteed to have ['at least] 
 the requested coverage.  For example:
 
-   #include <boost/math/distributions/negative_binomial.hpp>
-   
-   using namespace boost::math;
-   
-   double x, y;
-   
-   // Lower quantile rounded down:
-   x = quantile(negative_binomial(20), 0.05);
-   // Upper quantile rounded up:
-   y = quantile(complement(negative_binomial(20), 0.05));
+[import ../example/policy_ref_snip6.cpp]
+
+[policy_ref_snip6]
    
 Results in `x = 27` (rounded down from 27.3898) and `y = 69` (rounded up from 68.1584).
 
@@ -448,22 +386,9 @@ This is the opposite of ['integer_outside]: an integer value is returned so that
 
 For example:
 
-   #include <boost/math/distributions/negative_binomial.hpp>
-   
-   using namespace boost::math;
-   using namespace boost::math::policies;
-   
-   typedef negative_binomial_distribution<
-         double, 
-         policy<discrete_quantile<integer_inside> > 
-      > dist_type;
-      
-   double x, y;
-   
-   // Lower quantile rounded up:
-   x = quantile(dist_type(20), 0.05);
-   // Upper quantile rounded down:
-   y = quantile(complement(dist_type(20), 0.05));
+[import ../example/policy_ref_snip7.cpp]
+
+[policy_ref_snip7]
    
 Results in `x = 28` (rounded up from 27.3898) and `y = 68` (rounded down from 68.1584).
 
@@ -495,22 +420,9 @@ For example:
 
 For example:
 
-   #include <boost/math/distributions/negative_binomial.hpp>
-   
-   using namespace boost::math;
-   using namespace boost::math::policies;
-   
-   typedef negative_binomial_distribution<
-         double, 
-         policy<discrete_quantile<integer_nearest> > 
-      > dist_type;
-      
-   double x, y;
-   
-   // Lower quantile rounded up:
-   x = quantile(dist_type(20), 0.05);
-   // Upper quantile rounded down:
-   y = quantile(complement(dist_type(20), 0.05));
+[import ../example/policy_ref_snip8.cpp]
+
+[policy_ref_snip8]
 
 Results in `x = 27` (rounded from 27.3898) and `y = 68` (rounded from 68.1584).
 
@@ -544,34 +456,21 @@ based on the precision requested and the numeric type being used.
 
 For example we could calculate `tgamma` to approximately 5 decimal digits using:
 
-   #include <boost/math/special_functions/gamma.hpp>
-   
-   using namespace boost::math;
-   using namespace boost::math::policies;
-   
-   typedef policy<digits10<5> > pol;
-   
-   double t = tgamma(12, pol());
+[import ../example/policy_ref_snip9.cpp]
+
+[policy_ref_snip9]
    
 Or again using ['make_policy]:
 
-   #include <boost/math/special_functions/gamma.hpp>
-   
-   using namespace boost::math;
-   using namespace boost::math::policies;
-   
-   double t = tgamma(12, policy<digits10<5> >());
+[import ../example/policy_ref_snip10.cpp]
+
+[policy_ref_snip10]
 
 And for a quantile of a distribution to approximately 25-bit precision:
 
-   #include <boost/math/distributions/normal.hpp>
-   
-   using namespace boost::math;
-   using namespace boost::math::policies;
-   
-   double q = quantile(
-         normal_distribution<double, policy<digits2<25> >(), 
-         0.05);
+[import ../example/policy_ref_snip11.cpp]
+
+[policy_ref_snip11]
 
 [endsect][/section:precision_pol Precision Policies]
 
@@ -582,18 +481,18 @@ You can use the various macros below to change any (or all) of the policies.
 You can make a local change by placing a macro definition *before*
 a function or distribution #include.
 
-[caution If you place it after the #include it will have no effect,
-(and it will affect only any other following #includes).
-This is probably not what you intend!]
-
 [caution There is a danger of One-Definition-Rule violations if you 
 add ad-hock macros to more than one source files: these must be set the same in *every 
 translation unit*.]
 
+[caution If you place it after the #include it will have no effect,
+(and it will affect only any other following #includes).
+This is probably not what you intend!]
+
 If you want to alter the defaults for any or all of 
 the policies for *all* functions and distributions, installation-wide,
 then you can do so by defining various macros in
-boost/math/tools/user.hpp.
+[@../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp].
 
 [h5 BOOST_MATH_DOMAIN_ERROR_POLICY]
 
@@ -714,25 +613,9 @@ and:
 You can use either of these macros after including any special function
 or distribution header.  For example:
 
-   #include <boost/math/special_functions/gamma.hpp>
-   
-   namespace myspace{
-   
-   using namespace boost::math::policies;
-   
-   // Define a policy that does not throw on overflow:
-   typedef policy<overflow_error<errno_on_error> > my_policy;
+[import ../example/policy_ref_snip12.cpp]
 
-   // Define the special functions in this scope to use the policy:   
-   BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(my_policy)
-   
-   }
-   
-   //
-   // Now we can use myspace::tgamma etc.
-   // They will automatically use "my_policy":
-   //
-   double t = myspace::tgamma(30.0); // will not throw on overflow
+[policy_ref_snip12]
 
 In this example, using BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS results in
 a set of thin inline forwarding functions being defined:
@@ -743,35 +626,18 @@ a set of thin inline forwarding functions being defined:
    template <class T>
    inline T lgamma(T a) ( return ::boost::math::lgamma(a, mypolicy()); }
    
-and so on.  Note that a forwarding function is defined for all the special
+and so on.  Note that while a forwarding function is defined for all the special
 functions, however, unless you include the specific header for the special
-function you use (or boost/math/special_functions.hpp), you will get 
-linker errors from undefined functions.
+function you use (or boost/math/special_functions.hpp to include everything), 
+you will get linker errors from functions that are forward declared, but not
+defined.
 
 We can do the same thing with the distributions, but this time we need to
 specify the floating-point type to use:
 
-   #include <boost/math/distributions/cauchy.hpp>
-   
-   namespace myspace{
-   
-   using namespace boost::math::policies;
-   
-   // Define a policy to use, in this case we want all the distribution
-   // accessor functions to compile, even if they are mathematically
-   // undefined:
-   typedef policy<assert_undefined<false> > my_policy;
-   
-   BOOST_MATH_DECLARE_DISTRIBUTIONS(double, my_policy)
-   
-   }
-   
-   // Now we can use myspace::cauchy etc, which will use policy
-   // myspace::mypolicy:
-   //
-   // This compiles but raises a domain error at runtime:
-   //
-   double d = mean(myspace::cauchy()); 
+[import ../example/policy_ref_snip13.cpp]
+
+[policy_ref_snip13]
    
 In this example the result of BOOST_MATH_DECLARE_DISTRIBUTIONS is to
 declare a typedef for each distribution like this:
@@ -942,7 +808,15 @@ The `normalise` class template converts one instantiation of the
 `policy` class into a normalised form.  This is used internally
 to reduce code bloat: so that instantiating a special function
 on `policy<A,B>` or `policy<B,A>` actually both generate the same
-code internally.
+code internally.  
+
+Further more, `normalise` can be used to combine
+a policy with one or more policies: for example many of the
+special functions will use this to set policies which they don't
+make use of to their default values, before forwarding to the actual
+implementation.  In this way code bloat is reduced, since the
+actual implementation depends only on the policy types that they
+actually use.
 
 [endsect][/section:pol_ref_ref Policy Class Reference]
 

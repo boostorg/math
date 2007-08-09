@@ -94,7 +94,7 @@ template <class RealType>
 inline typename boost::math::tools::promote_args<RT>::type
    tgamma(RT z)
 {
-   return boost::math::tgamma(z, c_policy());
+   return boost::math::tgamma(z, user_error_policy());
 }
 ``
 

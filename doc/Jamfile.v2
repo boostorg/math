@@ -10,6 +10,13 @@ boostbook standalone
     :
         math
     :
+        # Path for links to Boost:
+        <xsl:param>boost.root=$(boost-root)
+        # Path for libraries index:
+        <xsl:param>boost.libraries=$(boost-root)/libs/libraries.htm
+        # Use the main Boost stylesheet:
+        <xsl:param>html.stylesheet=../../../../../../trunk/doc/html/boostbook.css
+
         # HTML options first:
         # Use graphics not text for navigation:
         <xsl:param>navig.graphics=1
@@ -43,7 +50,6 @@ boostbook standalone
         # better use SVG's instead:
         # <xsl:param>admon.graphics.extension=".svg"
     ;
-
 
 
 

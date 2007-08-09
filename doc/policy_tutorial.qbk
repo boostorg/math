@@ -21,7 +21,7 @@ for the given policies.
 
 For this reason a Policy is a /type/: in fact it's an instance of the 
 class template `boost::math::policies::policy<>`.  This class is just a 
-compile-time-container of user-defined policies (sometimes called a type-list):
+compile-time-container of user-selected policies (sometimes called a type-list):
 
    using namespace boost::math::policies;
    //
@@ -43,7 +43,7 @@ stop reading now!
 [[Pole Error][Occurs when a function is evaluated at a pole: throws a `std::domain_error` exception.]]
 [[Overflow Error][Throws a `std::overflow_error` exception.]]
 [[Underflow][Ignores the underflow, and returns zero.]]
-[[Denormalised Result][Ignores the fact that the result is denormalised, and returns it]]
+[[Denormalised Result][Ignores the fact that the result is denormalised, and returns it.]]
 [[Internal Evaluation Error][Throws a `boost::math::evaluation_error` exception.]]
 [[Promotion of float to double][Does occur by default - gives full float precision results.]]
 [[Promotion of double to long double][Does occur by default if long double offers
@@ -73,16 +73,16 @@ then `mypolicy` defines a policy where only the overflow error handling and
 
 The details follow later, but basically policies can be set by either:
 
-* Defining some macros that change the default behaviour: this is the 
-   recommended method for setting installation-wide policies.
+* Defining some macros that change the default behaviour: [*this is the 
+   recommended method for setting installation-wide policies].
 * By instantiating a distribution object with an explicit policy:
    this is mainly reserved for ad hoc policy changes.
 * By passing a policy to a special function as an optional final argument:
    this is mainly reserved for ad hoc policy changes.
 * By using some helper macros to define a set of functions or distributions
-in the current namespace that use a specific policy: this is the
+in the current namespace that use a specific policy: [*this is the
 recommended method for setting policies on a project- or translation-unit-wide
-basis.
+basis].
 
 The following sections introduce these methods in more detail.
 
@@ -121,7 +121,7 @@ certain that the program is restricted to a single translation unit.
 
 And, yes, you will find examples in our test programs where we break this
 rule: but only because we know there will always be a single
-translation unit only: don't say that you weren't warned!
+translation unit only: ['don't say that you weren't warned!]
 
 [import ../example/error_handling_example.cpp]
 
@@ -144,7 +144,9 @@ example:
    
    }}
    
-So if you use the shorthand-typedef for the distribution, then you get
+This policy gets used by all the accessor functions that accept
+a distribution as an argument, and forwarded to all the functions called
+by these.  So if you use the shorthand-typedef for the distribution, then you get
 `double` precision arithmetic and all the default policies.
 
 However, say for example we wanted to evaluate the quantile
@@ -197,7 +199,7 @@ throw an exception:
 
 [policy_eg_1]
 
-that outputs:
+which outputs:
 
 [pre 
 Result of tgamma(30000) is: 1.#INF
@@ -260,6 +262,13 @@ class template, but without the "_distribution" suffix.
 [import ../example/policy_eg_6.cpp]
 
 [policy_eg_6]
+
+[note
+There is an important limitation to note: you can not use the macros
+BOOST_MATH_DECLARE_DISTRIBUTIONS and BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS
+['in the same namespace],  as doing so creates ambiguities between functions
+and distributions of the same name.
+]
 
 As before, the same mechanism works well at file scope as well: by using an unnamed 
 namespace, we can ensure that these declarations don't conflict with any

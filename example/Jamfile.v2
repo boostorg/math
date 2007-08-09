@@ -24,17 +24,17 @@ project
       <include>../../..
     ;
 
-run C_error_policy_example.cpp ;
-run Neg_binomial_confidence_limits.cpp ;
 run binomial_confidence_limits.cpp ;
 run binomial_example3.cpp ;
 run binomial_sample_sizes.cpp ;
+run c_error_policy_example.cpp ;
 run chi_square_std_dev_test.cpp ;
 run distribution_construction.cpp ;
 run error_handling_example.cpp ;
 run error_policies_example.cpp ;
 run error_policy_example.cpp ;
 run f_test.cpp ;
+run neg_binomial_confidence_limits.cpp ;
 run neg_binomial_sample_sizes.cpp ;
 run negative_binomial_construction_examples.cpp ;
 run negative_binomial_example1.cpp ;
@@ -45,10 +45,29 @@ run policy_eg_2.cpp ;
 run policy_eg_3.cpp ;
 run policy_eg_4.cpp ;
 run policy_eg_5.cpp ;
-# run statistics_functions_example1.cpp ; needs update to use accumulator
+run policy_eg_6.cpp ;
+run policy_eg_7.cpp ;
+run policy_eg_8.cpp ;
+run policy_eg_9.cpp ;
+run policy_ref_snip1.cpp ;
+run policy_ref_snip10.cpp ;
+run policy_ref_snip11.cpp ;
+run policy_ref_snip12.cpp ;
+run policy_ref_snip13.cpp ;
+run policy_ref_snip2.cpp ;
+run policy_ref_snip3.cpp ;
+run policy_ref_snip4.cpp ;
+run policy_ref_snip5.cpp ;
+run policy_ref_snip6.cpp ;
+run policy_ref_snip7.cpp ;
+run policy_ref_snip8.cpp ;
+run policy_ref_snip9.cpp ;
+#run statistics_functions_example1.cpp ;
 run students_t_example1.cpp ;
 run students_t_example2.cpp ;
 run students_t_example3.cpp ;
 run students_t_single_sample.cpp ;
 run students_t_two_samples.cpp ;
+
+
 
