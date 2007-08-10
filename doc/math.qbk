@@ -40,10 +40,10 @@
 [def __godfrey [link godfrey Godfrey]]
 [def __pugh [link pugh Pugh]]
 
-[def __caution This is an official Boost library, but remains a library under 
+[def __caution This is now an official Boost library, but remains a library under 
                construction, the code is fully functional and robust, but 
                interfaces, library structure, and function and distribution names
-               may be changed without notice.]
+               may still be changed without notice.]
                
 [template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
 [template jm_rationals[] [link math_toolkit.backgrounders.implementation.rational_approximations_used devised by JM]]
@@ -183,6 +183,7 @@ and use the function's name as the link text]
 [def __Policy [link math_toolkit.policy Policy]]
 [def __policy_class [link math_toolkit.policy.pol_ref.pol_ref_ref policies::policy<>]]
 [def __math_undefined [link math_toolkit.policy.pol_ref.assert_undefined mathematically undefined function]]
+[def __math_discrete [link math_toolkit.policy.pol_ref.discrete_quant_ref Discrete Quantile Policies function]]
 
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard, 
    __chf, __mean, __median, __mode, __variance, __sd, __skewness, 

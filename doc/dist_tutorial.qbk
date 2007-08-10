@@ -189,12 +189,15 @@ Users wanting to enforce a strict mathematical model may use `floor`
 or `ceil` functions on the random variate prior to calling the distribution 
 function.
 
-TODO: this is out of date, rewrite when we have a tutorial to link to.
 Likewise the `quantile` function will return a real value: users should use
 either the `floor` or `ceil` functions to convert the result to the nearest
 integer.  However, whether it makes more sense to take the floor or the 
 ceiling of the result, depends both on the distribution, and the particular 
 use case.  So some common sense needs to be applied as well!
+
+[link __Policy Policies] provide a specific method of controlling
+the behaviour of any or all the discrete distributions using
+[link __math_discrete policies].
 
 For similar reasons continuous distributions with parameters like "degrees of freedom"
 that might appear to be integral, are treated as real values
