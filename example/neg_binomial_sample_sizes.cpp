@@ -96,7 +96,7 @@ int main()
 	 find_number_of_trials(50, 0.1);
 	 find_number_of_trials(500, 0.1);
 	 find_number_of_trials(5, 0.9);
-	 find_number_of_trials(10-5, 0.4); // See Evans example in Wikipedia.
+
     return 0;
 } // int main()
 
