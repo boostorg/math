@@ -59,7 +59,7 @@ namespace boost{ namespace math{ namespace policies{
 #endif
 #endif
 #ifndef BOOST_MATH_DISCRETE_QUANTILE_POLICY
-#define BOOST_MATH_DISCRETE_QUANTILE_POLICY integer_outside
+#define BOOST_MATH_DISCRETE_QUANTILE_POLICY integer_round_outwards
 #endif
 #ifndef BOOST_MATH_ASSERT_UNDEFINED_POLICY
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY true
@@ -170,11 +170,11 @@ BOOST_MATH_META_BOOL(assert_undefined, BOOST_MATH_ASSERT_UNDEFINED_POLICY);
 enum discrete_quantile_policy_type
 {
    real,
-   integer_outside,
-   integer_inside,
-   integer_below,
-   integer_above,
-   integer_nearest
+   integer_round_outwards,
+   integer_round_inwards,
+   integer_round_down,
+   integer_round_up,
+   integer_round_nearest
 };
 
 BOOST_MATH_META_INT(discrete_quantile_policy_type, discrete_quantile, BOOST_MATH_DISCRETE_QUANTILE_POLICY);

@@ -49,6 +49,7 @@ run policy_eg_6.cpp ;
 run policy_eg_7.cpp ;
 run policy_eg_8.cpp ;
 run policy_eg_9.cpp ;
+run policy_eg_10.cpp ;
 run policy_ref_snip1.cpp ;
 run policy_ref_snip10.cpp ;
 run policy_ref_snip11.cpp ;
@@ -68,6 +69,7 @@ run students_t_example2.cpp ;
 run students_t_example3.cpp ;
 run students_t_single_sample.cpp ;
 run students_t_two_samples.cpp ;
+
 
 
 

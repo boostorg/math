@@ -77,7 +77,7 @@
 //
 // What do discrete quantiles return?
 //
-// #define BOOST_MATH_DISCRETE_QUANTILE_POLICY integer_outside
+// #define BOOST_MATH_DISCRETE_QUANTILE_POLICY integer_round_outwards
 //
 // If a function is mathematically undefined
 // (for example the Cauchy distribution has no mean),

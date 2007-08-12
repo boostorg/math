@@ -15,7 +15,7 @@ using namespace boost::math::policies;
 
 typedef negative_binomial_distribution<
       double, 
-      policy<discrete_quantile<integer_nearest> > 
+      policy<discrete_quantile<integer_round_nearest> > 
    > dist_type;
    
 // Lower quantile rounded up:

@@ -51,7 +51,9 @@ stop reading now!
 [[Precision of Approximation Used][By default uses an approximation that 
    will result in the lowest level of error for the type of the result.]]
 [[Behaviour of Discrete Quantiles][Returns an integer result that is rounded
-   down for lower quantiles and rounded up for upper quantiles - see TODO LINK HERE!!]]
+   down for lower quantiles and rounded up for upper quantiles - see 
+   [link math_toolkit.policy.pol_tutorial.understand_dis_quant the tutorial
+   on discrete distribution quantiles.]]]
 ]
 
 What's more, if you define your own policy type, then it automatically
@@ -289,6 +291,165 @@ alternate policies present in other translation units:
 [import ../example/policy_eg_9.cpp]
 
 [policy_eg_9]
+
+[endsect]
+
+[section:understand_dis_quant Understanding Quantiles of Discrete Distributions]
+
+Discrete distributions present us with a problem when calculating the 
+quantile: we are starting from a continuous real-valued variable - the
+probability - but the result (the value of the random variable)
+should really be discrete.
+
+Consider for example a Binomial distribution, with a sample size of
+50, and a success fraction of 0.5.  There are a variety of ways
+we can plot a discrete distribution, but if we plot the PDF 
+as a step-function then it looks something like this:
+
+[$../graphs/binomial_pdf.png]
+
+Now lets suppose that the user asks for a the quantile that corresponds
+to a probability of 0.05, if we zoom in on the CDF for that region here's
+what we see:
+
+[$../graphs/binomial_quantile_1.png]
+
+As can be seen there is no random variable that corresponds to
+a probability of exactly 0.05, so we're left with two choices as 
+shown in the figure:
+
+* We could round the result down to 18.
+* We could round the result up to 19.
+
+In fact there's actually a third choice as well: we could "pretend" that the
+distribution was continuous and return a real valued result: in this case we
+would calculate a result of approximately 18.701 (this accurately 
+reflects the fact that the result is nearer to 19 than 18).
+
+By using policies we can offer any of the above as options, but that
+still leaves the question: ['What is actually the right thing to do?]
+
+And in particular: ['What policy should we use by default?]
+
+In coming to an answer we should realise that:
+
+* Calculating an integer result is often much faster than
+calculating a real-valued result: in fact in our tests it
+was up to 20 times faster.
+* Normally people calculate quantiles so that they can perform
+a test of some kind: ['"If the random variable is less than N
+then we can reject our null-hypothesis with 90% confidence."]
+
+So there is a genuine benefit to calculating an integer result
+as well as it being "the right thing to do" from a philosophical
+point of view.  What's more if someone asks for a quantile at 0.05,
+then we can normally assume that they are asking for 
+['[*at least] 95% of the probability to the right of the value chosen,
+and [*no more than] 5% of the probability to the left of the value chosen.]
+
+In the above binomial example we would therefore round the result down to 18.
+
+The converse applies to upper-quantiles: If the probability is greater than
+0.5 we would want to round the quantile up, ['so that [*at least] the requested
+probability is to the left of the value returned, and [*no more than] 1 - the
+requested probability is to the right of the value returned.]
+
+Likewise for two-sided intervals, we would round lower quantiles down, 
+and upper quantiles up.  This ensures that we have ['at least the requested
+probability in the central region] and ['no more than 1 minus the requested
+probability in the tail areas.]
+
+For example, taking our 50 sample binomial distribution with a success fraction
+of 0.5, if we wanted a two sided 90% confidence interval, then we would ask
+for the 0.05 and 0.95 quantiles with the results ['rounded outwards] so that
+['at least 90% of the probability] is in the central area:
+
+[$../graphs/binomial_pdf_3.png]
+
+So far so good, but there is in fact a trap waiting for the unwary here:
+
+   quantile(binomial(50, 0.5), 0.05);
+   
+returns 18 as the result, which is what we would expect from the graph above,
+and indeed there is no x greater than 18 for which:
+
+   cdf(binomial(50, 0.5), x) <= 0.05;
+   
+However:
+
+   quantile(binomial(50, 0.5), 0.95);
+
+returns 31, and indeed while there is no x less than 31 for which:
+
+   cdf(binomial(50, 0.5), x) >= 0.95;
+   
+We might naively expect that for this symmetrical distribution the result
+would be 32 (since 32 = 50 - 18), but we need to remember that the cdf of
+the binomial is /inclusive/ of the random variable.  So while the left tail 
+area /includes/ the quantile returned, the right tail area always excludes
+an upper quantile value: since that "belongs" to the central area.
+
+Look at the graph above to see what's going on here: the lower quantile
+of 18 belongs to the left tail, so any value <= 18 is in the left tail.
+The upper quantile of 31 on the other hand belongs to the central area,
+so the tail area actually starts at 32, so any value > 31 is in the 
+right tail.
+
+Therefore if U and L are the upper and lower quantiles respectively, then
+a random variable X is in the tail area - where we would reject the null
+hypothesis if:
+
+   X <= L || X > U
+   
+And the a variable X is inside the central region if:
+
+   L < X <= U
+   
+The moral here is to ['always be very careful with your comparisons
+when dealing with a discrete distribution], and if in doubt, 
+['base your comparisons on CDF's instead].
+
+[heading Other Rounding Policies are Available]
+
+As you would expect from a section on policies, you won't be surprised
+to know that other rounding options are available:
+
+[variablelist
+
+[[integer_round_outwards]
+   [This is the default policy as described above: lower quantiles
+   are rounded down (probability < 0.5), and upper quantiles 
+   (probability > 0.5) are rounded up.
+   
+   This gives /no more than/ the requested probability
+   in the tails, and /at least/ the requested probability
+   in the central area.]]
+[[integer_round_inwards]
+   [This is the exact opposite of the default policy:
+   lower quantiles
+   are rounded up (probability < 0.5), 
+   and upper quantiles (probability > 0.5) are rounded down.
+   
+   This gives /at least/ the requested probability
+   in the tails, and /no more than/ the requested probability
+   in the central area.]]
+[[integer_round_down][This policy will always round the result down
+   no matter whether it is an upper or lower quantile]]
+[[integer_round_up][This policy will always round the result up
+   no matter whether it is an upper or lower quantile]]
+[[integer_round_nearest][This policy will always round the result 
+   to the nearest integer
+   no matter whether it is an upper or lower quantile]]
+[[real][This policy will return a real valued result
+   for the quantile of a discrete distribution: this is
+   generally much slower than finding an integer result
+   but does allow for more sophisticated rounding policies.]]
+
+]
+
+[import ../example/policy_eg_10.cpp]
+
+[policy_eg_10]
 
 [endsect]
 

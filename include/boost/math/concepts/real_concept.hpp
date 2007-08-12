@@ -348,23 +348,23 @@ inline int digits<concepts::real_concept, policy<discrete_quantile<real> > >(BOO
 { return digits<concepts::real_concept, policy<> >(); }
 
 template <>
-inline int digits<concepts::real_concept, policy<discrete_quantile<integer_below> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline int digits<concepts::real_concept, policy<discrete_quantile<integer_round_down> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 { return digits<concepts::real_concept, policy<> >(); }
 
 template <>
-inline int digits<concepts::real_concept, policy<discrete_quantile<integer_above> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline int digits<concepts::real_concept, policy<discrete_quantile<integer_round_up> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 { return digits<concepts::real_concept, policy<> >(); }
 
 template <>
-inline int digits<concepts::real_concept, policy<discrete_quantile<integer_outside> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline int digits<concepts::real_concept, policy<discrete_quantile<integer_round_outwards> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 { return digits<concepts::real_concept, policy<> >(); }
 
 template <>
-inline int digits<concepts::real_concept, policy<discrete_quantile<integer_inside> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline int digits<concepts::real_concept, policy<discrete_quantile<integer_round_inwards> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 { return digits<concepts::real_concept, policy<> >(); }
 
 template <>
-inline int digits<concepts::real_concept, policy<discrete_quantile<integer_nearest> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline int digits<concepts::real_concept, policy<discrete_quantile<integer_round_nearest> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 { return digits<concepts::real_concept, policy<> >(); }
 
 }

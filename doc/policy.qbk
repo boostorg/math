@@ -257,7 +257,7 @@ effect whether internal promotion takes place or not:
 Suppose we want `tgamma` to be evaluated without internal promotion to
 `long double`, then we could use:
 
-[import policy_ref_snip3]
+[import ../example/policy_ref_snip3.cpp]
 
 [policy_ref_snip3]
    
@@ -327,11 +327,11 @@ discrete quantiles work, and how integer results are rounded:
    enum discrete_quantile_policy_type
    {
       real,
-      integer_outside,
-      integer_inside,
-      integer_below,
-      integer_above,
-      integer_nearest
+      integer_round_outwards,
+      integer_round_inwards,
+      integer_round_down,
+      integer_round_up,
+      integer_round_nearest
    };
    
    template <discrete_quantile_policy_type>
@@ -350,7 +350,7 @@ result.  For example:
    
 Results in `x = 27.3898` and `y = 68.1584`.
 
-[h5 integer_outside]
+[h5 integer_round_outwards]
 
 This is the default policy: an integer value is returned so that:
 
@@ -376,9 +376,9 @@ The variables x and y are now defined so that:
 In other words we guarantee ['at least 90% coverage in the central region overall], 
 and also ['no more than 5% coverage in each tail].
 
-[h5 integer_inside]
+[h5 integer_round_inwards]
 
-This is the opposite of ['integer_outside]: an integer value is returned so that:
+This is the opposite of ['integer_round_outwards]: an integer value is returned so that:
 
 * Lower quantiles (where the probability is less than 0.5) are rounded
 ['up].
@@ -400,17 +400,17 @@ The variables x and y are now defined so that:
 In other words we guarantee ['at no more than 90% coverage in the central region overall], 
 and also ['at least 5% coverage in each tail].
 
-[h5 integer_below]
+[h5 integer_round_down]
 
 Always rounds down to an integer value, no matter whether it's an upper 
 or a lower quantile.
 
-[h5 integer_above]
+[h5 integer_round_up]
 
 Always rounds up to an integer value, no matter whether it's an upper 
 or a lower quantile.
 
-[h5 integer_nearest]
+[h5 integer_round_nearest]
 
 Always rounds to the nearest integer value, no matter whether it's an upper 
 or a lower quantile.  This will produce the requested coverage
@@ -562,9 +562,9 @@ to `true`, but can be set to `false` to turn promotion of
 
 Determines how discrete quantiles return their results: either
 as an integer, or as a real value, can be set to one of the
-enumerated values: `real`, `integer_outside`, `integer_inside`,
-`integer_below`, `integer_above`, `integer_nearest`.  Defaults to
-`integer_outside`.
+enumerated values: `real`, `integer_round_outwards`, `integer_round_inwards`,
+`integer_round_down`, `integer_round_up`, `integer_round_nearest`.  Defaults to
+`integer_round_outwards`.
 
 [h5 BOOST_MATH_ASSERT_UNDEFINED_POLICY]
 

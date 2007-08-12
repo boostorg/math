@@ -314,7 +314,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& guess,
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
-      const policies::discrete_quantile<policies::integer_outside>&,
+      const policies::discrete_quantile<policies::integer_round_outwards>&,
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
@@ -356,7 +356,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& guess,
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
-      const policies::discrete_quantile<policies::integer_inside>&,
+      const policies::discrete_quantile<policies::integer_round_inwards>&,
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
@@ -398,7 +398,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& guess,
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
-      const policies::discrete_quantile<policies::integer_below>&,
+      const policies::discrete_quantile<policies::integer_round_down>&,
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
@@ -425,7 +425,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& guess,
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
-      const policies::discrete_quantile<policies::integer_above>&,
+      const policies::discrete_quantile<policies::integer_round_up>&,
       boost::uintmax_t& max_iter)
 {
    using namespace std;
@@ -451,7 +451,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& guess,
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
-      const policies::discrete_quantile<policies::integer_nearest>&,
+      const policies::discrete_quantile<policies::integer_round_nearest>&,
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;

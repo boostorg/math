@@ -41,7 +41,7 @@ typedef policy<
    // Don't promote double -> long double internally:
    promote_double<false>,
    // Return the closest integer result for discrete quantiles:
-   discrete_quantile<integer_nearest>
+   discrete_quantile<integer_round_nearest>
 > my_policy;
 
 /*`

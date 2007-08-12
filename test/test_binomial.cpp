@@ -623,11 +623,11 @@ void test_spots(RealType)
   {
      using namespace boost::math::policies;
      typedef policy<discrete_quantile<boost::math::policies::real> > P1;
-     typedef policy<discrete_quantile<integer_below> > P2;
-     typedef policy<discrete_quantile<integer_above> > P3;
-     typedef policy<discrete_quantile<integer_outside> > P4;
-     typedef policy<discrete_quantile<integer_inside> > P5;
-     typedef policy<discrete_quantile<integer_nearest> > P6;
+     typedef policy<discrete_quantile<integer_round_down> > P2;
+     typedef policy<discrete_quantile<integer_round_up> > P3;
+     typedef policy<discrete_quantile<integer_round_outwards> > P4;
+     typedef policy<discrete_quantile<integer_round_inwards> > P5;
+     typedef policy<discrete_quantile<integer_round_nearest> > P6;
      RealType tol = boost::math::tools::epsilon<RealType>() * 500;
      if(!boost::is_floating_point<RealType>::value)
         tol *= 10;  // no lanczos approximation implies less accuracy

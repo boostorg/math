@@ -16,7 +16,7 @@
 using namespace boost::math::policies;
 typedef policy<
    promote_float<false>, 
-   discrete_quantile<integer_nearest> 
+   discrete_quantile<integer_round_nearest> 
 > mypolicy;
 //
 // Then define a distribution that uses it:
