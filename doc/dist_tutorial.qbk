@@ -189,6 +189,8 @@ Users wanting to enforce a strict mathematical model may use `floor`
 or `ceil` functions on the random variate prior to calling the distribution 
 function.
 
+TODO: this still needs rewriting, we don't return a real value any more but an integer result!
+
 Likewise the `quantile` function will return a real value: users should use
 either the `floor` or `ceil` functions to convert the result to the nearest
 integer.  However, whether it makes more sense to take the floor or the 
