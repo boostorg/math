@@ -271,10 +271,6 @@ namespace boost
 
      }
 
-    // typedef binomial_distribution<double> binomial;
-    // is deliberately NOT included to avoid a name clash with function.
-    //typedef binomial_distribution<double> binomial; // Reserved name of type double.
-
     template <class RealType = double, class Policy = policies::policy<> >
     class binomial_distribution
     {
@@ -410,6 +406,9 @@ namespace boost
       }; // template <class RealType, class Policy> class binomial_distribution
 
       typedef binomial_distribution<> binomial;
+          // typedef binomial_distribution<double> binomial;
+			    // IS now included since no longer a name clash with function binomial.
+			    //typedef binomial_distribution<double> binomial; // Reserved name of type double.
 
       template <class RealType, class Policy>
       const std::pair<RealType, RealType> range(const binomial_distribution<RealType, Policy>& dist)
@@ -649,13 +648,13 @@ namespace boost
 
       template <class RealType, class Policy>
       inline RealType quantile(const binomial_distribution<RealType, Policy>& dist, const RealType& p)
-      { 
+      {
          return binomial_detail::quantile_imp(dist, p, 1-p);
       } // quantile
 
       template <class RealType, class Policy>
       RealType quantile(const complemented2_type<binomial_distribution<RealType, Policy>, RealType>& c)
-      {         
+      {
          return binomial_detail::quantile_imp(c.dist, 1-c.param, c.param);
       } // quantile
 
