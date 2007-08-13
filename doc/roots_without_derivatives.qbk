@@ -170,7 +170,9 @@ These functions locate the root using bisection, function arguments are:
 [[min] [The left bracket of the interval known to contain the root.]]
 [[max] [The right bracket of the interval known to contain the root.
         It is a precondition that /min < max/ and /f(min)*f(max) <= 0/,
-        the function calls __logic_error if these preconditions are violated.]]
+        the function signals evaluation error if these preconditions are violated.
+        The action taken is controlled by the evaluation error policy.
+        A best guess may be returned, perhaps significantly wrong.]]
 [[tol]  [A binary functor that specifies the termination condition: the function
         will return the current brackets enclosing the root when /tol(min,max)/ becomes true.]]
 [[max_iter][The maximum number of invocations of /f(x)/ to make while searching for the root.]]

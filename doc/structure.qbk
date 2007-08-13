@@ -67,14 +67,8 @@ and [link math_toolkit.special Special Functions]
 
 [h4 Configuration Policy Macros - Controlling Handling Arguments, Undefined Functions, Throwing of Exceptions, Accuracy, ]
 
-TODO: this is out of date, rewrite me!!
-
-* *BOOST_MATH_DOMAIN_ERROR_POLICY*
-
-See [link math_toolkit.special.error_handling Error handling]
-
-See [link math_toolkit.policy Error handling]
-and [@../../example/error_handling_example.cpp error_handling_example.cpp].
+See [link math_toolkit.policy Policy]
+on the default behaviour (that may well be suitable) and, if not, how to control it.
 
 [endsect][/sect:structure Getting About - Directory, Namespace & File structure]
 
