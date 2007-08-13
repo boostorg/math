@@ -1,7 +1,5 @@
 [section:implementation Additional Implementation Notes]
 
-TODO: the error handling in this section is out of date and needs a re-write!!
-
 The majority of the implementation notes are included with the documentation
 of each function or distribution.  The notes here are of a more general nature,
 and reflect more the general implementation philosophy used.
@@ -37,12 +35,15 @@ for example, when calculating inverse functions).
 If these prove accurate enough to be "fit for his purpose",
 then a user may substitute his custom specialization.
 
-For example, there are approximations dating back from times when computation was a *lot* more expensive:
+For example, there are approximations dating back from times
+when computation was a *lot* more expensive:
 
-H Goldberg and H Levine, Approximate formulas for percentage points and normalisation of t and chi squared,
+H Goldberg and H Levine, Approximate formulas for
+percentage points and normalisation of t and chi squared,
 Ann. Math. Stat., 17(4), 216 - 225 (Dec 1946).
 
-A H Carter, Approximations to percentage points of the z-distribution, Biometrika 34(2), 352 - 358 (Dec 1947).
+A H Carter, Approximations to percentage points of the z-distribution,
+Biometrika 34(2), 352 - 358 (Dec 1947).
 
 These could still provide sufficient accuracy for some speed-critical applications.
 
@@ -90,8 +91,8 @@ Otherwise when long double has more digits than the test data, then no
 amount of tweaking an epsilon based tolerance will work.
 
 A common problem is when tolerances that are suitable for implementations
-like Microsoft VS.NET where double and long double are the same size,
-fail on others where long double is more accurate than double.
+like Microsoft VS.NET where double and long double are the same size:
+tests fail on other systems where long double is more accurate than double.
 Check first that the suffix L is present, and then that the tolerance is big enough.
 
 [h4 Handling Unsuitable Arguments]
@@ -126,6 +127,9 @@ and with the
 [@www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 5].
 [link math_toolkit.special.error_handling See also domain_error].
 
+See __policy_ref for details of the error handling policies that should allow 
+a user to comply with any of these recommendations, as well as other behaviour.
+
 See [link math_toolkit.special.error_handling error handling]
 for a detailed explanation of the mechanism, and
 [link math_toolkit.dist.stat_tut.weg.error_eg error_handling example]
@@ -140,17 +144,19 @@ However, for simplicity, this is not done for most examples.]
 
 [h4 Handling of Functions that are Not Mathematically defined]
 
-Functions that are not mathematically defined are handled as domain errors.
+Functions that are not mathematically defined,
+like the Cauchy mean, fail to compile by default .
+[__math_undefined A policy] allows control of this.
 
-If the instruction 
+If the policy is to permit undefined functions, then calling them
+throws a domain error, by default.  But the error policy can be set
+to not throw, and to return NaN instead.  For example, 
 
-`#define BOOST_MATH_THROW_ON_DOMAIN_ERROR`
+`#define BOOST_MATH_DOMAIN_ERROR_POLICY ignore_error` 
 
-appears before the first Boost include, then if the un-implemented function is called,
-a domain_error exception will be thrown,
-and caught to provide an appropriate error message.
-
-Otherwise the value of std::numeric_limits<T>::quiet_NaN() will be returned.
+appears before the first Boost include,
+then if the un-implemented function is called,
+mean(cauchy<>()) will return std::numeric_limits<T>::quiet_NaN().
 
 [warning If `std::numeric_limits<T>::has_quiet_NaN` is false
 (for example T is a User-defined type),
@@ -196,8 +202,11 @@ to be diagnosed promptly rather than just continuing.
 The code also became much more complicated, more error-prone,
 much more work to test, and much less readable.
 
+Overflow, underflow, denorm can be handled using __error_policy.
+
 We have also tried to catch boundary cases where the mathematical specification
 would result in divide by zero or overflow and signalling these similarly.
+What happens at (and near), poles can be controlled through __error_policy.
 
 [h4 Scale, Shape and Location]
 
@@ -366,7 +375,7 @@ lognormal, normal, Parteo, Student's t, triangular, uniform, and Weibull.]
 It calculates pdf, cdf, survivor, log survivor, hazard, tail areas,
 & critical values for 5 tail values.
 
-It is also the only independent source found for the Weibull distribution,
+It is also the only independent source found for the Weibull distribution;
 unfortunately it appears to suffer from very poor accuracy in areas where 
 the underlying special function is known to be difficult to implement.
 
