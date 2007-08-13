@@ -63,6 +63,11 @@ the probability of observing k successes in N trials, with the
 probability of success on a single trial denoted by p. The 
 binomial distribution assumes that p is fixed for all trials.
 
+[note The random variable for the binomial distribution is the number of successes,
+(the number of trials is a fixed property of the distribution)
+whereas for the negative binomial,
+the random variable is the number of trials, for a fixed number of successes.]
+
 The PDF for the binomial distribution is given by:
 
 [$../equations/binomial_ref2.png]
