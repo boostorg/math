@@ -30,7 +30,7 @@ compile-time-container of user-selected policies (sometimes called a type-list):
    //
    typedef policy<domain_error<errno_on_error>, promote_double<false> > mypolicy;
 
-[endsect]
+[endsect][/section:what_is_a_policy So Just What is a Policy Anyway?]
 
 [section:policy_tut_defaults Policies Have Sensible Defaults]
 
@@ -51,9 +51,8 @@ stop reading now!
 [[Precision of Approximation Used][By default uses an approximation that 
    will result in the lowest level of error for the type of the result.]]
 [[Behaviour of Discrete Quantiles][Returns an integer result that is rounded
-   down for lower quantiles and rounded up for upper quantiles - see 
-   [link math_toolkit.policy.pol_tutorial.understand_dis_quant the tutorial
-   on discrete distribution quantiles.]]]
+   down for lower quantiles and rounded up for upper quantiles by default
+   but see - __math_discrete on other policies.]]
 ]
 
 What's more, if you define your own policy type, then it automatically
@@ -69,7 +68,7 @@ inherits the defaults for any policies not explicitly set, so given:
 then `mypolicy` defines a policy where only the overflow error handling and
 `double`-promotion policies differ from the defaults.
 
-[endsect]
+[endsect][/section:policy_tut_defaults Policies Have Sensible Defaults]
 
 [section:policy_usage So How are Policies Used Anyway?]
 
@@ -88,7 +87,7 @@ basis].
 
 The following sections introduce these methods in more detail.
 
-[endsect]
+[endsect][/section:policy_usage So How are Policies Used Anyway?]
 
 [section:changing_policy_defaults Changing the Policy Defaults]
 
@@ -110,12 +109,13 @@ Definition Rule (ODR)" and result in unpredictable program behaviour.]
 That means there are only two safe ways to use these macros:
 
 * Edit them in [@../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp],
-so that the defaults are set on an installation-wide basis.  Unfortunately this may not be convenient if
+so that the defaults are set on an installation-wide basis.
+Unfortunately this may not be convenient if
 you are using a pre-installed Boost distribution (on Linux for example).
 * Set the defines in your project's Makefile or build environment, so that they
 are set uniformly across all translation units.
 
-What you should not do is:
+What you should *not* do is:
 
 * Set the defines in the source file using `#define` as doing so
 almost certainly will break your program, unless you're absolutely
@@ -126,10 +126,9 @@ rule: but only because we know there will always be a single
 translation unit only: ['don't say that you weren't warned!]
 
 [import ../example/error_handling_example.cpp]
-
 [error_handling_example]
 
-[endsect]
+[endsect][/section:changing_policy_defaults Changing the Policy Defaults]
 
 [section:ad_hoc_dist_policies Setting Policies for Distributions on an Ad Hoc Basis]
 
@@ -164,7 +163,7 @@ Which outputs:
 
 [pre quantile is: 40]
 
-[endsect]
+[endsect][/section:ad_hoc_dist_policies Setting Policies for Distributions on an Ad Hoc Basis]
 
 [section:ad_hoc_sf_policies Changing the Policy on an Ad Hoc Basis for the Special Functions]
 
@@ -219,7 +218,7 @@ to be used once only:
 
 [policy_eg_2]
 
-[endsect]
+[endsect][/section:ad_hoc_sf_policies Changing the Policy on an Ad Hoc Basis for the Special Functions]
 
 [section:namespace_policies Setting Policies at Namespace or Translation Unit Scope]
 
@@ -280,7 +279,7 @@ alternate policies present in other translation units:
 
 [policy_eg_7]
 
-[endsect]
+[endsect][/section:namespace_policies Setting Policies at Namespace or Translation Unit Scope]
 
 [section:user_defined_error_policies Calling User Defined Error Handlers]
 
@@ -292,7 +291,7 @@ alternate policies present in other translation units:
 
 [policy_eg_9]
 
-[endsect]
+[endsect][/section:user_defined_error_policies Calling User Defined Error Handlers]
 
 [section:understand_dis_quant Understanding Quantiles of Discrete Distributions]
 

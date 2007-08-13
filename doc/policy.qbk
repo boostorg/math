@@ -7,7 +7,8 @@ behaviour of this library according to your needs.  There is more information
 available in the [link math_toolkit.policy.pol_tutorial policy tutorial] 
 and the [link math_toolkit.policy.pol_ref policy reference].
 
-Unless you find that the default policy behaviour
+Unless you find that the [link math_toolkit.policy.pol_tutorial.policy_tut_defaults
+ default policy behaviour]
 when encountering 'bad' argument values does not meet your needs,
 you should not need to worry about policies.
 
@@ -233,7 +234,7 @@ rather than throw exceptions, then we can use:
 
 [policy_ref_snip2]
 
-[endsect][/section:error_handling_policies Error Handling Policies]
+[endsect] [/section:error_handling_policies Error Handling Policies]
 
 [section:internal_promotion Internal Promotion Policies]
 
@@ -258,17 +259,15 @@ Suppose we want `tgamma` to be evaluated without internal promotion to
 `long double`, then we could use:
 
 [import ../example/policy_ref_snip3.cpp]
-
 [policy_ref_snip3]
    
 Alternatively, suppose we want a distribution to perform calculations
 without promoting `float` to `double`, then we could use:
 
 [import ../example/policy_ref_snip4.cpp]
-
 [policy_ref_snip4]
    
-[endsect][/section:internal_promotion Internal Promotion Policies]
+[endsect] [/section:internal_promotion Internal Promotion Policies]
 
 [section:assert_undefined Mathematically Undefined Function Policies]
 
@@ -327,11 +326,11 @@ discrete quantiles work, and how integer results are rounded:
    enum discrete_quantile_policy_type
    {
       real,
-      integer_round_outwards,
-      integer_round_inwards,
-      integer_round_down,
-      integer_round_up,
-      integer_round_nearest
+      integer_outside, // default
+      integer_inside,
+      integer_below,
+      integer_above,
+      integer_nearest
    };
    
    template <discrete_quantile_policy_type>
@@ -345,7 +344,6 @@ Ignores the discreteness of the distribution, and returns a real-valued
 result.  For example:
 
 [import ../example/policy_ref_snip5.cpp]
-
 [policy_ref_snip5]
    
 Results in `x = 27.3898` and `y = 68.1584`.
@@ -363,7 +361,6 @@ one and two sided intervals are guaranteed to have ['at least]
 the requested coverage.  For example:
 
 [import ../example/policy_ref_snip6.cpp]
-
 [policy_ref_snip6]
    
 Results in `x = 27` (rounded down from 27.3898) and `y = 69` (rounded up from 68.1584).
@@ -474,7 +471,7 @@ And for a quantile of a distribution to approximately 25-bit precision:
 
 [endsect][/section:precision_pol Precision Policies]
 
-[section:policy_defaults Changing the Policy Defaults]
+[section:policy_defaults Using macros to Change the Policy Defaults]
 
 You can use the various macros below to change any (or all) of the policies.
 
@@ -593,7 +590,6 @@ or we could place these definitions *before*
      using boost::math::normal_distribution;
 
 in a source .cpp file.
-[/ TODO could use a normal example here?]
 
 [endsect][/section:policy_defaults Changing the Policy Defaults]
 
