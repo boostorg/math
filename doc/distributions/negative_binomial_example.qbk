@@ -160,6 +160,90 @@ ____________________________
 So now 103 trials are required to observe at least 5 failures with
 95% certainty.
 
-[endsect][/section:neg_binom_size_eg Estimating Sample Sizes.]
+[endsect] [/section:neg_binom_size_eg Estimating Sample Sizes.]
 
-[endsect][/section:neg_binom_eg Negative Binomial Distribution Examples]
+[section:negative_binomial_example1 Negative Binomial example 1.]
+
+The example program 
+[@../../example/negative_binomial_example1.cpp negative_binomial_example1.cpp (full source code)]
+demonstrates a simple use to find the probability of meeting a sale quota.
+
+Based on [@http://en.wikipedia.org/wiki/Negative_binomial_distribution
+a problem by Dr. Diane Evans,
+Professor of Mathematics at Rose-Hulman Institute of Technology].
+
+Pat is required to sell candy bars to raise money for the 6th grade field trip.
+There are thirty houses in the neighborhood,
+and Pat is not supposed to return home until five candy bars have been sold.
+So the child goes door to door, selling candy bars.
+At each house, there is a 0.4 probability (40%) of selling one candy bar
+and a 0.6 probability (60%) of selling nothing.
+
+What is the probability mass (density) function for selling the last (fifth)
+candy bar at the nth house?
+
+The Negative Binomial(r, p) distribution describes the probability of k failures
+and r successes in k+r Bernoulli(p) trials with success on the last trial.
+(A [@http://en.wikipedia.org/wiki/Bernoulli_distribution Bernoulli trial]
+is one with only two possible outcomes, success of failure,
+and p is the probability of success).
+Selling five candy bars means getting five successes, so successes r = 5.
+The total number of trials (n) in this case, houses visited) this takes is therefore
+  = sucesses + failures or k + r = k + 5.
+The random variable we are interested in is the number of houses (k)
+that must be visited to sell five candy bars,
+so we substitute k = n 5 into a negative_binomial(5, 0.4) mass (density) function
+and obtain the following mass (density) function of the distribution of houses (for n >= 5):
+Obviously, the best case is that Pat makes sales on all the first five houses.
+
+What is the probability that Pat finishes ON the tenth house?
+
+  f(10) = 0.1003290624, or about 1 in 10
+
+What is the probability that Pat finishes ON OR BEFORE reaching the eighth house?
+
+To finish on or before the eighth house,
+Pat must finish at the fifth, sixth, seventh, or eighth house.
+Sum those probabilities:
+
+   f(5) = 0.01024
+   f(6) = 0.03072
+   f(7) = 0.055296
+   f(8) = 0.0774144
+   sum {j=5 to 8} f(j) = 0.17367
+
+What is the probability that Pat exhausts all 30 houses in the neighborhood,
+and still doesn't sell the required 5 candy bars?
+
+1 - sum{j=5 to 30} f(j) = 1 - incomplete beta (p = 0.4)(5, 30-5+1) =~ 1 - 0.99849 = 0.00151 = 0.15%.
+
+See also [@http://www.math.uah.edu/stat/bernoulli/Introduction.xhtml bernoulli] and
+[@http://www.codecogs.com/pages/catgen.php?category=stats/dists/discrete discrete distributions].
+
+In this example, we will deliberately produce a variety of calculations
+and outputs to demonstrate the ways that the negative binomial distribution
+can be implemented with this library,
+and it is also deliberately over-commented.
+
+[import ../../example/negative_binomial_example1.cpp]
+[negative_binomial_eg1_1]
+
+[endsect] [/section:negative_binomial_example1]
+
+[section:negative_binomial_example2 Negative Binomial example 2.]
+Example program showing output of a table of values of cdf and pdf for various k failures.
+[import ../../example/negative_binomial_example2.cpp]
+[neg_binomial_example2]
+[neg_binomial_example2_1]
+[endsect] [/section:negative_binomial_example1 Negative Binomial example 2.]
+
+[section:negative_binomial_example3 Negative Binomial example 3.]
+The example program 
+[@../../example/negative_binomial_example3.cpp negative_binomial_example3.cpp (full source code)]
+demonstrates example from K. Krishnamoorthy.
+[import ../../example/negative_binomial_example3.cpp]
+[neg_binomial_example3]
+[neg_binomial_example3_1]
+[endsect] [/section:negative_binomial_example1 Negative Binomial example 3.]
+
+[endsect] [/section:neg_binom_eg Negative Binomial Distribution Examples]

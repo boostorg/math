@@ -58,6 +58,13 @@ k failures and r successes with success on the last trial.
 The negative_binomial distribution 
 assumes that success_fraction p is fixed for all (k + r) trials.
 
+[note The random variable for the negative binomial distribution is the number of trials,
+(the number of successes is a fixed property of the distribution)
+whereas for the binomial,
+the random variable is the number of successes, for a fixed number of trials.]
+
+
+
 It has the PDF:
 
 [$../equations/neg_binomial_ref.png]
