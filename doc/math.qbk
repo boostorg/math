@@ -52,7 +52,6 @@
 [def __overflow_error [link overflow_error overflow_error]]
 [def __underflow_error [link underflow_error underflow_error]]
 [def __denorm_error [link denorm_error denorm_error]]
-[def __logic_error [link logic_error logic_error]]
 [def __checked_narrowing_cast [link checked_narrowing_cast checked_narrowing_cast]]
 
 [def __arg_pomotion_rules [link math_toolkit.special.result_type ['result type calculation rules]]]
@@ -180,15 +179,19 @@ and use the function's name as the link text]
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
 
 [/links to policy]
-[def __Policy [link math_toolkit.policy Policy]]
+[def __Policy [link math_toolkit.policy Policy]] [/ Used in distribution template specifications]
+[def __policy_section [link math_toolkit.policy Policies]] [/ Used in text to refer too.]
 [def __policy_class [link math_toolkit.policy.pol_ref.pol_ref_ref policies::policy<>]]
 [def __math_undefined [link math_toolkit.policy.pol_ref.assert_undefined mathematically undefined function]]
-[def __math_discrete [link math_toolkit.policy.pol_ref.discrete_quant_ref Discrete Quantile Policies function]]
+[def __policy_ref [link math_toolkit.policy.pol_ref policy reference]]
+[def __math_discrete [link math_toolkit.policy.pol_ref.discrete_quant_ref discrete functions]]
+[def __error_policy [link math_toolkit.policy.pol_ref.error_handling_policies error handling policies]]
+[def __changing_policy_defaults [link math_toolkit.policy.pol_ref.policy_defaults changing policies defaults]]
+[def __user_error_handling [link math_toolkit.policy.pol_tutorial.user_defined_error_policies user error handling]]
 
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard, 
    __chf, __mean, __median, __mode, __variance, __sd, __skewness, 
    __kurtosis, __kurtosis_excess, __range and __support]
-
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
@@ -271,19 +274,18 @@ testing a special function against tabulated test data, and for
 the rapid generation of test data and/or data for output to an 
 external graphing application.
 
-[endsect][/section:intro Introduction]
+[endsect] [/section:intro Introduction]
 
 [include structure.qbk] [/getting about]
 
 [section:dist Statistical Distributions and Functions]
 [include dist_tutorial.qbk]
 [include dist_reference.qbk]
-[endsect][/section:dist Statistical Distributions and Functions]
+[endsect] [/section:dist Statistical Distributions and Functions]
 
 [section:special Special Functions]
 
 [section:sf_gamma Gamma Functions]
-
 [include tgamma.qbk]
 [include lgamma.qbk]
 [include digamma.qbk]
@@ -291,61 +293,49 @@ external graphing application.
 [include igamma.qbk]
 [include igamma_inv.qbk]
 [include gamma_derivatives.qbk]
-
-[endsect]
+[endsect] [/section:sf_gamma Gamma Functions]
 
 [include factorials.qbk]
 
 [section:sf_beta Beta Functions]
-
 [include beta.qbk]
 [include ibeta.qbk]
 [include ibeta_inv.qbk]
 [include beta_derivative.qbk]
-
-[endsect]
+[endsect] [/section:sf_beta Beta Functions]
 
 [section:sf_erf Error Functions]
-
 [include erf.qbk]
 [include erf_inv.qbk]
-
-[endsect]
+[endsect] [/section:sf_erf Error Functions]
 
 [section:sf_poly Polynomials]
-
 [include legendre.qbk]
 [include laguerre.qbk]
 [include hermite.qbk]
 [include spherical_harmonic.qbk]
-
-[endsect]
+[endsect] [/section:sf_poly Polynomials]
 
 [section:bessel Bessel Functions]
-
 [include bessel_introduction.qbk]
 [include bessel_jy.qbk]
 [include bessel_ik.qbk]
 [include bessel_spherical.qbk]
-
-[endsect]
+[endsect] [/section:bessel Bessel Functions]
 
 [section:ellint Elliptic Integrals]
-
 [include ellint_introduction.qbk]
 [include ellint_carlson.qbk]
 [include ellint_legendre.qbk]
-
-[endsect]
+[endsect] [/section:ellint Elliptic Integrals]
 
 [include powers.qbk]
 [include sinc.qbk]
 [include inv_hyper.qbk]
-
 [include fpclassify.qbk]
 [include error_handling.qbk]
 [include result_type_calc.qbk]
-[endsect][/section:special Special Functions]
+[endsect] [/section:special Special Functions]
 
 [section:toolkit Internal Details and Tools (Experimental)]
 
@@ -358,30 +348,30 @@ external graphing application.
 [include roots.qbk]
 [include roots_without_derivatives.qbk]
 [include minima.qbk]
-[endsect][/section: internal tools]
+[endsect] [/section:internals1 Reused Utilities]
 
 [section:internals2 Testing and Development]
 [include polynomial.qbk]
 [include minimax.qbk]
 [include relative_error.qbk]
 [include test_data.qbk]
-[endsect][/section: internal tools]
+[endsect] [/section:internals2 Testing and Development]
 
-[endsect][/section:toolkit Toolkit]
+[endsect] [/section:toolkit Toolkit]
 
 [section:Using_UDT Use with User Defined Floating-Point Types]
 [include concepts.qbk]
-[endsect][/section:Using_UDT Use with User Defined Floating-Point Types]
+[endsect] [/section:Using_UDT Use with User Defined Floating-Point Types]
 
 [include policy.qbk]
 
 [section:backgrounders Backgrounders]
 [include implementation.qbk]
-[include error.qbk][/relative error NOT handling]
+[include error.qbk] [/relative error NOT handling]
 [include lanczos.qbk]
 [include remez.qbk]
 [include references.qbk]
-[endsect][/section:backgrounds Backgrounders]
+[endsect] [/section:backgrounds Backgrounders]
 
 [section:status Status and Roadmap]
 [include roadmap.qbk]
@@ -391,7 +381,7 @@ external graphing application.
 [/include test_HTML4_symbols.qbk]
 [/include test_Latin1_symbols.qbk]
 
-[endsect][/section:status Status and Roadmap] 
+[endsect] [/section:status Status and Roadmap] 
 
 [/ math.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.
