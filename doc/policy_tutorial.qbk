@@ -50,9 +50,27 @@ stop reading now!
    more precision than double.]]
 [[Precision of Approximation Used][By default uses an approximation that 
    will result in the lowest level of error for the type of the result.]]
-[[Behaviour of Discrete Quantiles][Returns an integer result that is rounded
-   down for lower quantiles and rounded up for upper quantiles by default
-   but see - __math_discrete on other policies.]]
+[[Behaviour of Discrete Quantiles]
+   [
+   The quantile function will by default return an integer result that has been
+   /rounded outwards/.  That is to say lower quantiles (where the probability is
+   less than 0.5) are rounded downward, and upper quantiles (where the probability
+   is greater than 0.5) are rounded upwards.  This behaviour
+   ensures that if an X% quantile is requested, then /at least/ the requested
+   coverage will be present in the central region, and /no more than/
+   the requested coverage will be present in the tails.
+
+This behaviour can be changed so that the quantile functions are rounded
+   differently, or even return a real-valued result using 
+   [link math_toolkit.policy.pol_overview Policies].  It is strongly
+   recommended that you read the tutorial 
+   [link math_toolkit.policy.pol_tutorial.understand_dis_quant
+   Understanding Quantiles of Discrete Distributions] before
+   using the quantile function on a discrete distribution.  The
+   [link math_toolkit.policy.pol_ref.discrete_quant_ref reference docs] 
+   describe how to change the rounding policy
+   for these distributions.
+]]
 ]
 
 What's more, if you define your own policy type, then it automatically

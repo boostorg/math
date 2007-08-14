@@ -83,6 +83,7 @@ vary the success fraction /p/:
 
 [$../graphs/binomial_pdf_2.png]
 
+[discrete_quantile_warning Binomial]
    
 [h4 Member Functions]
 

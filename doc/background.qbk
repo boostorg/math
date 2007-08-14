@@ -51,6 +51,28 @@ Generally speaking there is no loss of performance from allowing real-values
 parameters: the underlying special functions contain optimizations for 
 integer-valued arguments when applicable.
 
+[caution
+The quantile function of a discrete distribution will by 
+default return an integer result that has been
+/rounded outwards/.  That is to say lower quantiles (where the probability is
+less than 0.5) are rounded downward, and upper quantiles (where the probability
+is greater than 0.5) are rounded upwards.  This behaviour
+ensures that if an X% quantile is requested, then /at least/ the requested
+coverage will be present in the central region, and /no more than/
+the requested coverage will be present in the tails.
+
+This behaviour can be changed so that the quantile functions are rounded
+differently, or even return a real-valued result using 
+[link math_toolkit.policy.pol_overview Policies].  It is strongly
+recommended that you read the tutorial 
+[link math_toolkit.policy.pol_tutorial.understand_dis_quant
+Understanding Quantiles of Discrete Distributions] before
+using the quantile function on a discrete distribution.  The
+[link math_toolkit.policy.pol_ref.discrete_quant_ref reference docs] 
+describe how to change the rounding policy
+for these distributions.
+]
+
 [endsect]
 
 

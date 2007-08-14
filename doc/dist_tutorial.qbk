@@ -31,7 +31,10 @@ For example, to use the Students-t distribution include either
 
 Each kind of distribution in this library is a class type.
 
-[link math_toolkit.policy Policies] provide fine-grained control of their behaviour.]
+[link math_toolkit.policy Policies] provide fine-grained control 
+of the behaviour of these classes, allowing the user to customise
+behaviour such as how errors are handled, or how the quantiles
+of discrete distribtions behave.
 
 [tip If you are familiar with statistics libraries using functions,
 and 'Distributions as Objects' seem alien, see
@@ -189,19 +192,29 @@ Users wanting to enforce a strict mathematical model may use `floor`
 or `ceil` functions on the random variate prior to calling the distribution 
 function.
 
-TODO: this still needs rewriting, we don't return a real value any more but an integer result!
+The quantile functions for these distributions are hard to specify
+in a manner that will satisfy everyone all of the time.  The default
+behaviour is to return an integer result, that has been rounded 
+/outwards/: that is to say, lower quantiles - where the probablity
+is less than 0.5 are rounded down, while upper quantiles - where
+the probability is greater than 0.5 - are rounded up.  This behaviour
+ensures that if an X% quantile is requested, then /at least/ the requested
+coverage will be present in the central region, and /no more than/
+the requested coverage will be present in the tails.
 
-Likewise the `quantile` function will return a real value: users should use
-either the `floor` or `ceil` functions to convert the result to the nearest
-integer.  However, whether it makes more sense to take the floor or the 
-ceiling of the result, depends both on the distribution, and the particular 
-use case.  So some common sense needs to be applied as well!
+This behaviour can be changed so that the quantile functions are rounded
+differently, or return a real-valued result using 
+[link math_toolkit.policy.pol_overview Policies].  It is strongly
+recommended that you read the tutorial 
+[link math_toolkit.policy.pol_tutorial.understand_dis_quant
+Understanding Quantiles of Discrete Distributions] before
+using the quantile function on a discrete distribtion.  The
+[link math_toolkit.policy.pol_ref.discrete_quant_ref reference docs] 
+describe how to change the rounding policy
+for these distributions.
 
-[link math_toolkit.policy.pol_overview Policies] provide a specific method of controlling
-the behaviour of any or all the discrete distributions using
-[link math_toolkit.policy.pol_ref.discrete_quant_ref policies].
-
-For similar reasons continuous distributions with parameters like "degrees of freedom"
+For similar reasons continuous distributions with parameters like 
+"degrees of freedom"
 that might appear to be integral, are treated as real values
 (and are promoted from integer to floating-point if necessary).
 In this case however, there are a small number of situations where non-integral

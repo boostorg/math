@@ -43,6 +43,8 @@ The following graph illustrates how the PDF varies with the parameter [lambda]:
 
 [$../graphs/poisson.png]
 
+[discrete_quantile_warning Poisson]
+
 [h4 Member Functions]
 
    poisson_distribution(RealType mean = 1);

@@ -93,7 +93,8 @@ This real-valued version is also called the Polya Distribution.
 The Poisson distribution is a generalization of the Pascal distribution,
 where the success parameter r is an integer: to obtain the Pascal
 distribution you must ensure that an integer value is provided for r,
-and take integer values (floor or ceiling) from functions like quantile that return successes.
+and take integer values (floor or ceiling) from functions that return 
+a number of successes.
 
 For large values of r (successes), the negative binomial distribution
 converges to the Poisson distribution.
@@ -107,6 +108,7 @@ The Poisson distribution is a special case for large successes
 
 poisson([lambda]) = lim [sub r [rarr] [infin]] [space] negative_binomial(r, r / ([lambda] + r)))
 
+[discrete_quantile_warning Negative Binomial]
    
 [h4 Member Functions]
 
