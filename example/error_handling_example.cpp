@@ -12,12 +12,11 @@
 // and comments, don't change any of the special comment markups!
 
 //[error_handling_example
-
-/*` 
+/*`
 The following example demonstrates the effect of
 setting the macro BOOST_MATH_DOMAIN_ERROR_POLICY
-when an invalid argument is encountered.  For the 
-purposes of this example we'll pass a negative
+when an invalid argument is encountered.  For the
+purposes of this example, we'll pass a negative
 degrees of freedom parameter to the student's t
 distribution.
 
@@ -35,7 +34,7 @@ Alternatively we could use:
 To ensure the `::errno` is set when a domain error occurs
 as well as returning a NaN.
 
-This is safe provided the program consists of a single 
+This is safe provided the program consists of a single
 translation unit /and/ we place the define /before/ any
 #includes.  Note that should we add the define after the includes
 then it will have no effect!  A warning such as:
@@ -68,13 +67,13 @@ is set up to handle either an exception or a NaN:
 */
 
 int main()
-{  
+{
    cout << "Example error handling using Student's t function. " << endl;
-   cout << "BOOST_MATH_DOMAIN_ERROR_POLICY is set to: " 
+   cout << "BOOST_MATH_DOMAIN_ERROR_POLICY is set to: "
       << BOOST_STRINGIZE(BOOST_MATH_DOMAIN_ERROR_POLICY) << endl;
 
    double degrees_of_freedom = -1; // A bad argument!
-   double t = 10; 
+   double t = 10;
 
    try
    {
@@ -109,7 +108,7 @@ Example error handling using Student's t function.
 BOOST_MATH_DOMAIN_ERROR_POLICY is set to: throw_on_error
 
 Message from thrown exception was:
-   Error in function boost::math::students_t_distribution<double>::students_t_distribution: 
+   Error in function boost::math::students_t_distribution<double>::students_t_distribution:
    Degrees of freedom argument is -1, but must be > 0 !
 ]
 
@@ -141,4 +140,4 @@ errno is set to: 33
 
 */
 
-//] end quickbook markup
+//] [error_handling_eg end quickbook markup]
