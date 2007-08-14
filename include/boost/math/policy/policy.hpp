@@ -22,7 +22,16 @@
 #include <boost/math/tools/config.hpp>
 #include <limits>
 
-namespace boost{ namespace math{ namespace policies{
+namespace boost{ namespace math{ 
+
+namespace tools{
+
+template <class T>
+int digits(BOOST_EXPLICIT_TEMPLATE_TYPE(T));
+
+}
+
+namespace policies{
 
 //
 // Define macros for our default policies, if they're not defined already:
