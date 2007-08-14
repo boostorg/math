@@ -217,8 +217,8 @@ and still doesn't sell the required 5 candy bars?
 
 1 - sum{j=5 to 30} f(j) = 1 - incomplete beta (p = 0.4)(5, 30-5+1) =~ 1 - 0.99849 = 0.00151 = 0.15%.
 
-See also [@http://www.math.uah.edu/stat/bernoulli/Introduction.xhtml bernoulli] and
-[@http://www.codecogs.com/pages/catgen.php?category=stats/dists/discrete discrete distributions].
+See also [@ http://en.wikipedia.org/wiki/Bernoulli_distribution Bernoulli distribution]
+and [@http://www.math.uah.edu/stat/bernoulli/Introduction.xhtml Bernoulli applications].
 
 In this example, we will deliberately produce a variety of calculations
 and outputs to demonstrate the ways that the negative binomial distribution
