@@ -323,15 +323,12 @@ inline concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts
    return tools::epsilon<long double>();
 }
 
-} // namespace tools
-
-namespace policies{
-
 template <>
-inline int digits<concepts::real_concept, policy<> >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{ // Assume number of significand bits is same as long double,
-  // unless std::numeric_limits<T>::is_specialized to provide digits.
-   return boost::math::policies::digits<long double, boost::math::policies::policy<> >();
+inline int digits<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+{ 
+   // Assume number of significand bits is same as long double,
+   // unless std::numeric_limits<T>::is_specialized to provide digits.
+   return tools::digits<long double>();
    // Note that if numeric_limits real concept is NOT specialized to provide digits10
    // (or max_digits10) then the default precision of 6 decimal digits will be used
    // by Boost test (giving misleading error messages like
@@ -339,35 +336,7 @@ inline int digits<concepts::real_concept, policy<> >(BOOST_EXPLICIT_TEMPLATE_TYP
    // and by Boost lexical cast and serialization causing loss of accuracy.
 }
 
-template <>
-inline int digits<concepts::real_concept, policy<detail::forwarding_arg1, detail::forwarding_arg2 > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{ return digits<concepts::real_concept, policy<> >(); }
-
-template <>
-inline int digits<concepts::real_concept, policy<discrete_quantile<real> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{ return digits<concepts::real_concept, policy<> >(); }
-
-template <>
-inline int digits<concepts::real_concept, policy<discrete_quantile<integer_round_down> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{ return digits<concepts::real_concept, policy<> >(); }
-
-template <>
-inline int digits<concepts::real_concept, policy<discrete_quantile<integer_round_up> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{ return digits<concepts::real_concept, policy<> >(); }
-
-template <>
-inline int digits<concepts::real_concept, policy<discrete_quantile<integer_round_outwards> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{ return digits<concepts::real_concept, policy<> >(); }
-
-template <>
-inline int digits<concepts::real_concept, policy<discrete_quantile<integer_round_inwards> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{ return digits<concepts::real_concept, policy<> >(); }
-
-template <>
-inline int digits<concepts::real_concept, policy<discrete_quantile<integer_round_nearest> > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{ return digits<concepts::real_concept, policy<> >(); }
-
-}
+} // namespace tools
 
 } // namespace math
 } // namespace boost

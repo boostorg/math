@@ -34,6 +34,17 @@ namespace tools
 // See  Conceptual Requirements for Real Number Types.
 
 template <class T>
+inline int digits(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
+{
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
+#else
+   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
+#endif
+   return std::numeric_limits<T>::digits;
+}
+
+template <class T>
 inline T max_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS

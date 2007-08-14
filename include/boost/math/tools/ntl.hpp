@@ -62,23 +62,13 @@ namespace NTL
 
 namespace boost{ namespace math{ 
    
-namespace policies{
-
-template<>
-inline int digits<NTL::RR, boost::math::policies::policy<> >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
-{
-   return NTL::RR::precision();
-}
-
-template<>
-inline int digits<NTL::RR, boost::math::policies::policy<boost::math::policies::detail::forwarding_arg1, boost::math::policies::detail::forwarding_arg2> >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
-{
-   return NTL::RR::precision();
-}
-
-}
-
 namespace tools{
+
+template<>
+inline int digits<NTL::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(NTL::RR))
+{
+   return NTL::RR::precision();
+}
 
 template <>
 inline float real_cast<float, NTL::RR>(NTL::RR t)

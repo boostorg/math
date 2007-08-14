@@ -653,16 +653,33 @@ struct precision
    >::type type;
 };
 
+namespace detail{
+
 template <class T, class Policy>
-inline int digits(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
+inline int digits_imp(mpl::true_ const&)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
 #else
    BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
 #endif
-   typedef typename precision<T, Policy>::type p_t;
+   typedef typename boost::math::policies::precision<T, Policy>::type p_t;
    return p_t::value;
+}
+
+template <class T, class Policy>
+inline int digits_imp(mpl::false_ const&)
+{
+   return tools::digits<T>();
+}
+
+} // namespace detail
+
+template <class T, class Policy>
+inline int digits()
+{
+   typedef mpl::bool_< std::numeric_limits<T>::is_specialized > tag_type;
+   return detail::digits_imp<T, Policy>(tag_type());
 }
 
 namespace detail{

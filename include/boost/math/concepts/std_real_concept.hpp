@@ -329,23 +329,14 @@ inline concepts::std_real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(conc
    return tools::epsilon<long double>();
 }
 
-} // namespace tools
-
-namespace policies{
-
 template <>
-inline int digits<concepts::std_real_concept, boost::math::policies::policy<> >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline int digits<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 { // Assume number of significand bits is same as long double,
   // unless std::numeric_limits<T>::is_specialized to provide digits.
-   return digits<long double, policy<> >();
-}
-template <>
-inline int digits<concepts::std_real_concept, policy<detail::forwarding_arg1, detail::forwarding_arg2 > >(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
-{ return digits<concepts::std_real_concept, policy<> >(); }
-
-
+   return digits<long double>();
 }
 
+} // namespace tools
 } // namespace math
 } // namespace boost
 
