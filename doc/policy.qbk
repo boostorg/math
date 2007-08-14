@@ -326,11 +326,11 @@ discrete quantiles work, and how integer results are rounded:
    enum discrete_quantile_policy_type
    {
       real,
-      integer_outside, // default
-      integer_inside,
-      integer_below,
-      integer_above,
-      integer_nearest
+      integer_round_outwards, // default
+      integer_round_inwards,
+      integer_round_down,
+      integer_round_up,
+      integer_round_nearest
    };
    
    template <discrete_quantile_policy_type>

@@ -15,7 +15,7 @@
 First we need to #define macros to control the error and discrete handling policies.
 For this simple example, we want to avoid throwing an exception (the default policy) and just return infinity.
 We want to treat the distribution as if it was continuous, so we choose a policy of real,
-rather than the default policy integer_outside.
+rather than the default policy integer_round_outwards.
 */
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #define BOOST_MATH_DISCRETE_QUANTILE_POLICY real

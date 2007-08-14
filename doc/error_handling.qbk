@@ -16,14 +16,8 @@ handlers that define how errors are handled by the special functions
 in this library. See __user_error_handling.
 
 There are also some pre-processor macro defines that can be used to
-__changing_policy_defaults changing policies defaults.
-
-The various kind of errors are described in more detail below.
-
-[h4 Example - using the macro BOOST_MATH_DOMAIN_ERROR_POLICY]
-
-[/import ../../example/error_handling_example.cpp] [/ already imported so use a link instead.]
-[/error_handling_example]
+[link math_toolkit.policy.pol_ref.policy_defaults
+change the policy defaults].
 
 An example is at the Policy tutorial in
 [link math_toolkit.policy.pol_tutorial.changing_policy_defaults Changing the Policy Defaults].
@@ -32,21 +26,24 @@ Full source code of this typical example of passing a 'bad' argument
 (negative degrees of freedom) to Student's t distribution 
 is at [@../../example/error_handling_example.cpp error_handling_example.cpp].
 
+The various kind of errors are described in more detail below.
+
 [#domain_error][h4 Domain Errors]
 
 When a special function is passed an argument that is outside the range
 of values for which that function is defined, then the function returns
 the result of:
 
-   boost::math::tools::domain_error<T>(FunctionName, Message, Val);
+   boost::math::policy::raise_domain_error<T>(FunctionName, Message, Val, __Policy);
    
 Where
 `T` is the floating-point type passed to the function, `FunctionName` is the 
 name of the function, `Message` is an error message describing the problem, 
-and Val is the value that was out of range.
+Val is the value that was out of range, and __Policy is the current policy
+in use for the function that was called.
 
 The default policy behaviour of this function is to throw a 
-std::domain_error C++ exception.  But if the policy is to ignore
+std::domain_error C++ exception.  But if the __Policy is to ignore
 the error, or set global ::errno, then a NaN will be returned.
 
 This behaviour is chosen to assist compatibility with the behaviour of 
@@ -85,15 +82,16 @@ When a special function is passed an argument that is at a pole
 without a well defined residual value, then the function returns
 the result of:
 
-   boost::math::tools::pole_error<T>(FunctionName, Message, Val);
+   boost::math::policy::pole_error<T>(FunctionName, Message, Val, __Policy);
    
 Where
 `T` is the floating point type passed to the function, `FunctionName` is the 
 name of the function, `Message` is an error message describing the problem, 
-and `Val` is the value of the argument that is at a pole.
+`Val` is the value of the argument that is at a pole, and __Policy is the 
+current policy in use for the function that was called.
 
 The default behaviour of this function is to throw a std::domain_error exception.
-But __error_policy can be used to change this, for example to ignore_error
+But __error_policy can be used to change this, for example to `ignore_error`
 and return NaN.
 
 Note that in order to support information-rich error messages when throwing
@@ -110,16 +108,18 @@ For example if `Message` contains a "%1%" then it is replaced by the value of
 When the result of a special function is too large to fit in the argument
 floating-point type, then the function returns the result of:
 
-   boost::math::tools::overflow_error<T>(FunctionName, Message);
+   boost::math::policy::overflow_error<T>(FunctionName, Message, __Policy);
    
 Where
 `T` is the floating-point type passed to the function, `FunctionName` is the 
-name of the function, and `Message` is an error message describing the problem.
+name of the function, `Message` is an error message describing the problem,
+and __Policy is the current policy
+in use for the function that was called.
 
 The default policy for this function is that `std::overflow_error` 
-C++ exception is thrown. But if, for example, an ignore_error policy 
+C++ exception is thrown. But if, for example, an `ignore_error` policy 
 is used, then returns `std::numeric_limits<T>::infinity()`.
-However if the type `T` doesn't support infinities,
+In this situation if the type `T` doesn't support infinities,
 the maximum value for the type is returned.
 
 [#underflow_error][h4 Numeric Underflow]
@@ -127,40 +127,48 @@ the maximum value for the type is returned.
 If the result of a special function is known to be non-zero, but the
 calculated result underflows to zero, then the function returns the result of:
 
-   boost::math::tools::underflow_error<T>(FunctionName, Message);
+   boost::math::policy::underflow_error<T>(FunctionName, Message, __Policy);
    
 Where
 `T` is the floating point type passed to the function, `FunctionName` is the 
-name of the function, and `Message` is an error message describing the problem.
+name of the function, `Message` is an error message describing the problem,
+and __Policy is the current policy
+in use for the called function.
 
-The default version of this function throws an `std::underflow_error` 
-C++ exception.  But with another policy, like ignore_error, returns zero.
+The default version of this function returns zero.
+But with another policy, like `throw_on_error`, 
+throws an `std::underflow_error` C++ exception.  
 
 [#denorm_error][h4 Denormalisation Errors]
 
 If the result of a special function is a denormalised value /z/ then the function
 returns the result of:
 
-   boost::math::tools::denorm_error<T>(z, FunctionName, Message);
+   boost::math::policy::denorm_error<T>(z, FunctionName, Message, __Policy);
    
 Where
 `T` is the floating point type passed to the function, `FunctionName` is the 
-name of the function, and `Message` is an error message describing the problem.
+name of the function, `Message` is an error message describing the problem,
+and __Policy is the current policy
+in use for the called function.
 
-The default version of this function throws an `std::underflow_error` 
-C++ exception.  But with another policy, like ignore_error, returns /z/. 
+The default version of this function returns /z/.
+But with another policy, like `throw_on_error` 
+throws an `std::underflow_error` C++ exception.
 
 [#evaluation_error][h4 Evaluation Errors]
 
 When a special function calculates a result that is known to be erroneous,
 or where the result is incalculable then it calls:
 
-   boost::math::tools::evaluation_error<T>(FunctionName, Message, Val);
+   boost::math::policy::evaluation_error<T>(FunctionName, Message, Val, __Policy);
    
 Where
 `T` is the floating point type passed to the function, `FunctionName` is the 
 name of the function, `Message` is an error message describing the problem,
-and `Val` is the erroneous value.
+`Val` is the erroneous value,
+and __Policy is the current policy
+in use for the called function.
 
 The default behaviour of this function is to throw a `std::evaluation_error`.
 
@@ -182,15 +190,12 @@ its result using double precision internally.  Many of the errors listed
 above may therefore occur not during evaluation, but when converting 
 the result to the narrower result type.  The function:
 
-   template <class T, class U>
+   template <class T, class __Policy, class U>
    T checked_narrowing_cast(U const& val, const char* function);
    
 Is used to perform these conversions, and will call the error handlers
 listed above on [link overflow_error overflow], 
 [link underflow_error underflow] or [link denorm_error denormalisation].
-
-Obviously if T and U are the same type or if T is at least as wide as U, 
-then no checks are performed.
 
 [endsect][/section:error_handling Error Handling]
 

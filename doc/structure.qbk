@@ -20,25 +20,61 @@ following keys act as handy shortcuts for common navigation tasks.
 
 [h4 boost\/math]
 
-*  \/*concepts* Prototype defining the *essential* features of a RealType class (see real_concept.hpp). Most applications will use `double` as the RealType (and short `typedef` names of distributions are reserved for this type where possible), a few will use `float` or `long double`, but it is also possible to use higher precision types like __NTL_RR or __NTL_quad_float that conform to the requirements specified by real_concept.
+[variablelist
+[[\/concepts\/]
+   [Prototype defining the *essential* features of a RealType 
+   class (see real_concept.hpp). Most applications will use `double` 
+   as the RealType (and short `typedef` names of distributions are 
+   reserved for this type where possible), a few will use `float` or 
+   `long double`, but it is also possible to use higher precision types 
+   like __NTL_RR that conform to the requirements specified by real_concept.]]
 
-*  \/*constants*  Templated definition of some highly accurate math constants (in constants.hpp).
+[[\/constants\/]
+   [Templated definition of some highly accurate math 
+   constants (in constants.hpp).]]
   
-*  \/*special_functions*  Math functions generally regarded as 'special', like beta, cbrt, erf, gamma, lgamma, tgamma ... (Some of these are specified in C++, and C99\/TR1, and perhaps TR2).
+[[\/distributions\/]
+   [Distributions used in mathematics and, especially, statistics: 
+   Gaussian, Students-t, Fisher, Binomial etc]]
+
+[[\/policy\/]
+   [Policy framework, for handling user requested behaviour modifications.]]
                      
-* \/*distributions*  Distributions used in mathematics and, especially, statistics: Gaussian, Students-t, Fisher, Binomial ...
+[[\/special_functions\/]
+   [Math functions generally regarded as 'special', like beta, 
+   cbrt, erf, gamma, lgamma, tgamma ... (Some of these are specified in 
+   C++, and C99\/TR1, and perhaps TR2).]]
                      
-* \/*tools*  Tools used by functions, like evaluating polynomials, continued fractions, root finding, precision and limits, and by tests. Some will find application outside this package.
+[[\/tools\/]
+   [Tools used by functions, like evaluating polynomials, continued fractions, 
+   root finding, precision and limits, and by tests. Some will 
+   find application outside this package.]]
+]
   
-[h4 boost/libs]
-*   \/*doc*  Documentation source files in Quickbook format processed into html and pdf formats.
+[h4 boost\/libs]
+
+[variablelist
+[[\/doc\/]
+   [Documentation source files in Quickbook format processed into 
+   html and pdf formats.]]
    
-*   \/*examples*  Examples and demos of using math functions and distributions.
+[[\/examples\/]
+   [Examples and demos of using math functions and distributions.]]
    
-*   \/*test*  Test files, in various .cpp files, most using Boost.Test (some with test data as .ipp files, usually generated using NTL RR type with ample precision for the type, often for precisions suitable for up to 256-bit significand real types).
+[[\/performance\/]
+   [Performance testing and tuning program.]]
    
-*   \/*tools* Programs used to generate test data.  Also changes to the
-[@http://shoup.net/ntl/ NTL] released package to provide a few additional (and vital) extra features.
+[[\/test\/]
+   [Test files, in various .cpp files, most using Boost.Test 
+   (some with test data as .ipp files, usually generated using NTL RR 
+   type with ample precision for the type, often for precisions 
+   suitable for up to 256-bit significand real types).]]
+   
+[[\/tools\/]
+   [Programs used to generate test data.  Also changes to the
+   [@http://shoup.net/ntl/ NTL] released package to provide a few additional 
+   (and vital) extra features.]]
+]
    
    
 [h4 Namespaces for Boost Math Functions, Math Constants and Statistics Distributions]
@@ -67,8 +103,31 @@ and [link math_toolkit.special Special Functions]
 
 [h4 Configuration Policy Macros - Controlling Handling Arguments, Undefined Functions, Throwing of Exceptions, Accuracy, ]
 
-See [link math_toolkit.policy Policy]
-on the default behaviour (that may well be suitable) and, if not, how to control it.
+There are some configuration macros that can be used to control how the
+library behaves.  These are part of the Policy framework:
+
+Using policies you can control:
+
+* [link math_toolkit.policy.pol_ref.error_handling_policies How results from 'bad' arguments are handled],
+   including those that cannot be fully evaluated.
+* How [link math_toolkit.policy.pol_ref.internal_promotion accuracy is controlled by internal promotion] to use more precise types.
+* What working [link math_toolkit.policy.pol_ref.precision_pol precision] should be used to calculate results.
+* What do to when a [link math_toolkit.policy.pol_ref.assert_undefined mathematically undefined function]
+  is used:  Should this raise a run-time or compile-time error?
+* Whether [link math_toolkit.policy.pol_ref.discrete_quant_ref discrete functions],
+  like the binomial, should return real or only integral values, and how they are rounded.
+  
+You can control policies:
+
+* Using [link math_toolkit.policy.pol_ref.policy_defaults macros] to change any default policy.
+* At your chosen [link math_toolkit.policy.pol_ref.namespace_pol namespace scope] for distributions and/or functions.
+* In an ad-hoc manner [link math_toolkit.policy.pol_tutorial.ad_hoc_sf_policies 
+by passing a specific policy to a special function], or to a 
+[link math_toolkit.policy.pol_tutorial.ad_hoc_dist_policies statistical distribution].
+
+See also the 
+[link math_toolkit.policy.pol_tutorial policy tutorial], and 
+[link math_toolkit.policy.pol_ref policy reference].
 
 [endsect][/sect:structure Getting About - Directory, Namespace & File structure]
 

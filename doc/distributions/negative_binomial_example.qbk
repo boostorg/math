@@ -196,11 +196,11 @@ so we substitute k = n 5 into a negative_binomial(5, 0.4) mass (density) functio
 and obtain the following mass (density) function of the distribution of houses (for n >= 5):
 Obviously, the best case is that Pat makes sales on all the first five houses.
 
-What is the probability that Pat finishes ON the tenth house?
+What is the probability that Pat finishes /on the tenth house/?
 
   f(10) = 0.1003290624, or about 1 in 10
 
-What is the probability that Pat finishes ON OR BEFORE reaching the eighth house?
+What is the probability that Pat finishes /on or before/ reaching the eighth house?
 
 To finish on or before the eighth house,
 Pat must finish at the fifth, sixth, seventh, or eighth house.
