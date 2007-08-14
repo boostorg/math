@@ -1,3 +1,6 @@
+NOte now obselete - see deistribution_construction.cpp
+
+
 // negative_binomial_example2.cpp
 
 // Copyright Paul A. Bristow 2007.
@@ -7,7 +10,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Example 2 of using constructing distributions, mainly negative_binomial.
+// Example 2 of using constructing distributions, shown here for negative_binomial.
 
 #include <boost/math/distributions/negative_binomial.hpp> // for negative_binomial_distribution
   using boost::math::negative_binomial_distribution; // default type is double.
@@ -20,22 +23,44 @@
 
 int main()
 {
-	cout << "Example 2 constructing Distributions (Negative_binomial).";
-  #if defined(__FILE__) && defined(__TIMESTAMP__)
-  	cout << "  " << __FILE__ << ' ' << __TIMESTAMP__ << ' '<< _MSC_FULL_VER << "\n";
-  #endif
-	cout << endl;
-
   // Several examples of constructing distributions, for example, negative binomial:
+  // A negative binomial with 8 successes and a success fraction 0.25, 25% or 1 in 4 is constructed like this:
 
-  // Fundamentally constructed like this:
   boost::math::negative_binomial_distribution<double> mydist0(8., 0.25);
   // But this is inconveniently long.
 
+  // The prefix boost::math:: can be avoided by 
   using boost::math::negative_binomial_distribution;
   // Allows convenient reference to negative_binomial_distribution.
 
-  // You can provide the type explicitly thus:
+  negative_binomial_distribution<>  mydist9(8., 0.25); // Uses default RealType = double.
+  // But the name "negative_binomial_distribution" is still inconveniently long,
+  // so for most distributions, a typedef is provided, for example:
+
+  // typedef negative_binomial_distribution<double> negative_binomial; // Reserved name of type double.
+
+  using boost::math::negative_binomial; // Allows convenient access to the name negative_binomial.
+
+  // Some examples using the provided typedef:
+  // Allows convenient reference to negative_binomial of default type double.
+  negative_binomial mydist10(5., 0.4); // Both arguments double.
+  // And automatic conversion takes place, so you can use integers and floats:
+  negative_binomial mydist11(5, 0.4); // Using provided typedef double, int and double arguments.
+  // This is probably the most common usage.
+  negative_binomial mydist12(5., 0.4F); // Double and float arguments. 
+  negative_binomial mydist13(5, 1); // Both arguments integer.
+
+  // But for cases when the typdef distribution name
+  // would clash with a math special function
+  // (for example binomial, beta and gamma)
+  // the typedef is deliberately not provided, and
+  // the longer version(s) must be used.
+  // For example:
+  using namespace boost::math;
+  // NOT binomial myb010(1, 0.5); but
+  binomial_distribution<> myb1(1, 0.5);
+
+  // You can also provide the type RealType explicitly thus:
   negative_binomial_distribution<double> mydist1(8., 0.25); // Explicit double.
   negative_binomial_distribution<float>  mydist2(8., 0.25); // Explicit float, double arguments -> float.
   negative_binomial_distribution<float>  mydist3(8, 0.25); // Explicit float, integer & double arguments -> float.
@@ -57,40 +82,11 @@ int main()
   // defaults for the mean and standard deviation thus:
   // normal_distribution(RealType mean = 0, RealType sd = 1)
 
-  negative_binomial_distribution<>  mydist9(8., 0.25); // Uses default RealType = double.
-  // But the name "negative_binomial_distribution" is still inconveniently long,
-  // so for most distributions, a typedef is provided, for example:
-
-  // typedef negative_binomial_distribution<double> negative_binomial; // Reserved name of type double.
-
-  // Some examples using the provided typedef:
-  using boost::math::negative_binomial; // Convenient access to the name.
-  // Allows convenient reference to negative_binomial of default type double.
-  negative_binomial mydist10(5., 0.4); // Both arguments double.
-  // And automatic conversion takes place, so you can use integers and floats:
-  negative_binomial mydist11(5, 0.4); // Using provided typedef double, int and double arguments.
-  // This is probably the most common usage.
-  negative_binomial mydist12(5., 0.4F); // Double and float arguments. 
-  negative_binomial mydist13(5, 1); // Both arguments integer.
-
-  // But for cases when the typdef distribution name
-  // would clash with a math special function
-  // (for example binomial, beta and gamma)
-  // the typedef is deliberately not provided, and
-  // the longer version(s) must be used.
-  // For example:
-  using namespace boost::math;
-  // NOT binomial myb010(1, 0.5); but
-  binomial_distribution<> myb1(1, 0.5);
-
  	return 0;
 }  // int main()
 
 /*
 
-Output is:
-
-math_toolkit\libs\math\example\negative_binomial_construction_examples.cpp Wed Aug  1 13:59:34 2007 140050727
 
 
 */
