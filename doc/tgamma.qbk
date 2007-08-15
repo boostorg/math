@@ -71,7 +71,7 @@ the result is `double` when T is an integer type, and T otherwise.
 
 The following table shows the peak errors (in units of epsilon) 
 found on various platforms with various floating point types, 
-along with comparisons to the __gsl, __glibc, __hpc and Cephes libraries.
+along with comparisons to the __gsl, __glibc, __hpc and __cephes libraries.
 Unless otherwise specified any floating point type that is narrower
 than the one shown will have __zero_error.
 
@@ -82,22 +82,22 @@ than the one shown will have __zero_error.
 
 (GSL=3.9)
 
-(Cephes=3.0)] 
+(__cephes=3.0)] 
 [Peak=2.0 Mean=1.1
 
 (GSL=4.5)
 
-(Cephes=1)]    
+(__cephes=1)]    
 [Peak=2.0 Mean=1.1
 
 (GSL=7.9)
 
-(Cephes=1.0)] 
+(__cephes=1.0)] 
 [Peak=2.6 Mean=1.3
 
 (GSL=2.5)
 
-(Cephes=2.7)] ]
+(__cephes=2.7)] ]
 [[64]            [Linux IA32 / GCC]  
 [Peak=300 Mean=49.5
 

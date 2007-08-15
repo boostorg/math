@@ -196,6 +196,7 @@ and use the function's name as the link text]
 [def __gsl [@http://www.gnu.org/software/gsl/ GSL-1.9]]
 [def __glibc [@http://www.gnu.org/software/libc/ GNU C Lib]]
 [def __hpc [@http://docs.hp.com/en/B9106-90010/index.html HP-UX C Library]]
+[def __cephes [@http://www.netlib.org/cephes/ Cephes]]
 
 
 [/ Some composite templates]

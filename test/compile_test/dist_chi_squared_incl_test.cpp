@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/chi_squared.hpp>
 
+template class boost::math::chi_squared_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::chi_squared_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::chi_squared_distribution<long double, boost::math::policies::policy<> >;

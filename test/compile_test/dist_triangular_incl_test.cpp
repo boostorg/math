@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/triangular.hpp>
 
+template class boost::math::triangular_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::triangular_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::triangular_distribution<long double, boost::math::policies::policy<> >;

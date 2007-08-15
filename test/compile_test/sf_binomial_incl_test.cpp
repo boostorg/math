@@ -8,3 +8,6 @@
 //
 #include <boost/math/special_functions/binomial.hpp>
 
+template float boost::math::binomial_coefficient<float>(unsigned, unsigned);
+template double boost::math::binomial_coefficient<double>(unsigned, unsigned);
+template long double boost::math::binomial_coefficient<long double>(unsigned, unsigned);

@@ -96,7 +96,7 @@ Returns the full (non-normalised) complement of the incomplete beta function of 
 [h4 Accuracy]
 
 The following tables give peak and mean relative errors in over various domains of
-a, b and x, along with comparisons to the __gsl and Cephes libraries.  
+a, b and x, along with comparisons to the __gsl and __cephes libraries.  
 Note that only results for the widest floating-point type on the system are given as
 narrower types have __zero_error.
 
@@ -125,17 +125,17 @@ and
 
 (GSL Peak=682 Mean=32.5)
 
-(Cephes Peak=42.7 Mean=7.0)]  
+(__cephes Peak=42.7 Mean=7.0)]  
       [Peak=108 Mean=16.6
       
 (GSL Peak=690 Mean=151)
 
-(Cephes Peak=1545 Mean=218)] 
+(__cephes Peak=1545 Mean=218)] 
       [Peak=4x10[super 3][space] Mean=203
       
 (GSL Peak~3x10[super 5][space] Mean~2x10[super 4][space])
 
-(Cephes Peak~5x10[super 5][space] Mean~2x10[super 4][space])]]
+(__cephes Peak~5x10[super 5][space] Mean~2x10[super 4][space])]]
 [[64] [Redhat Linux IA32, gcc-3.4.4] [Peak=21.9 Mean=3.1] 
       [Peak=270.7 Mean=26.8] [Peak~5x10[super 4][space] Mean=3x10[super 3][space] ]]
 [[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=15.4 Mean=3.0] [Peak=112.9 Mean=14.3] 

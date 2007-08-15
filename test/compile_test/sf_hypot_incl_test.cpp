@@ -8,3 +8,6 @@
 //
 #include <boost/math/special_functions/hypot.hpp>
 
+template float boost::math::hypot<float>(float, float);
+template double boost::math::hypot<double>(double, double);
+template long double boost::math::hypot<long double>(long double, long double);

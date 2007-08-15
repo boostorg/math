@@ -6,6 +6,9 @@
 #ifndef BOOST_MATH_TOOLS_SIGN_HPP
 #define BOOST_MATH_TOOLS_SIGN_HPP
 
+#include <cmath>
+#include <cstdlib>
+
 namespace boost{ namespace math{ 
 
 template <class T>

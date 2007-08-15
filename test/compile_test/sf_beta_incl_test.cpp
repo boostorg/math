@@ -8,3 +8,19 @@
 //
 #include <boost/math/special_functions/beta.hpp>
 
+template float boost::math::beta<float>(float, float);
+template double boost::math::beta<double>(double, double);
+template long double boost::math::beta<long double>(long double, long double);
+
+template float boost::math::ibeta<float>(float, float, float);
+template double boost::math::ibeta<double>(double, double, double);
+template long double boost::math::ibeta<long double>(long double, long double, long double);
+
+template float boost::math::ibeta_inv<float>(float, float, float);
+template double boost::math::ibeta_inv<double>(double, double, double);
+template long double boost::math::ibeta_inv<long double>(long double, long double, long double);
+
+template float boost::math::ibeta_inva<float>(float, float, float);
+template double boost::math::ibeta_inva<double>(double, double, double);
+template long double boost::math::ibeta_inva<long double>(long double, long double, long double);
+

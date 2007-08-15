@@ -8,4 +8,7 @@
 //
 #include <boost/math/special_functions/sin_pi.hpp>
 
+template float boost::math::sin_pi<float>(float);
+template double boost::math::sin_pi<double>(double);
+template long double boost::math::sin_pi<long double>(long double);
 

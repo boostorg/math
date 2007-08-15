@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/lognormal.hpp>
 
+template class boost::math::lognormal_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::lognormal_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::lognormal_distribution<long double, boost::math::policies::policy<> >;

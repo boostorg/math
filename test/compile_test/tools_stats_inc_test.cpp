@@ -8,3 +8,4 @@
 //
 #include <boost/math/tools/stats.hpp>
 
+template class boost::math::tools::stats<double>;

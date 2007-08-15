@@ -8,3 +8,15 @@
 //
 #include <boost/math/special_functions/legendre.hpp>
 
+template float boost::math::legendre_p<float>(int, float);
+template double boost::math::legendre_p<double>(int, double);
+template long double boost::math::legendre_p<long double>(int, long double);
+
+template float boost::math::legendre_p<float>(int, int, float);
+template double boost::math::legendre_p<double>(int, int, double);
+template long double boost::math::legendre_p<long double>(int, int, long double);
+
+template float boost::math::legendre_q<float>(unsigned, float);
+template double boost::math::legendre_q<double>(unsigned, double);
+template long double boost::math::legendre_q<long double>(unsigned, long double);
+

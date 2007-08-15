@@ -8,3 +8,6 @@
 //
 #include <boost/math/special_functions/digamma.hpp>
 
+template float boost::math::digamma<float>(float);
+template double boost::math::digamma<double>(double);
+template long double boost::math::digamma<long double>(long double);

@@ -6,6 +6,15 @@
 #ifndef BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
 #define BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
 
+#include <utility>
+#include <cmath>
+#include <stdexcept>
+
+#include <boost/math/tools/config.hpp>
+#include <boost/cstdint.hpp>
+#include <boost/assert.hpp>
+#include <boost/throw_exception.hpp>
+
 #ifdef BOOST_MSVC
 #pragma warning(push)
 #pragma warning(disable: 4512)
@@ -14,17 +23,10 @@
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
-#include <boost/cstdint.hpp>
-#include <boost/assert.hpp>
-#include <boost/throw_exception.hpp>
+
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/policy/error_handling.hpp>
-
-
-#include <utility>
-#include <cmath>
-#include <stdexcept>
 
 namespace boost{ namespace math{ namespace tools{
 

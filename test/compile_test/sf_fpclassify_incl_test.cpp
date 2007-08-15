@@ -8,3 +8,21 @@
 //
 #include <boost/math/special_functions/fpclassify.hpp>
 
+template int boost::math::fpclassify<float>(float);
+template int boost::math::fpclassify<double>(double);
+template int boost::math::fpclassify<long double>(long double);
+
+template bool boost::math::isfinite<float>(float);
+template bool boost::math::isfinite<double>(double);
+template bool boost::math::isfinite<long double>(long double);
+
+template bool boost::math::isinf<float>(float);
+template bool boost::math::isinf<double>(double);
+template bool boost::math::isinf<long double>(long double);
+
+template bool boost::math::isnormal<float>(float);
+template bool boost::math::isnormal<double>(double);
+template bool boost::math::isnormal<long double>(long double);
+
+
+

@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/binomial.hpp>
 
+template class boost::math::binomial_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::binomial_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::binomial_distribution<long double, boost::math::policies::policy<> >;

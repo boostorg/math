@@ -34,7 +34,7 @@ T sin_pi(T x)
    if(rem > 0.5f)
       rem = 1 - rem;
    if(rem == 0.5f)
-      return invert ? -1 : 1;
+      return static_cast<T>(invert ? -1 : 1);
    
    rem = sin(constants::pi<T>() * rem);
    return invert ? -rem : rem;

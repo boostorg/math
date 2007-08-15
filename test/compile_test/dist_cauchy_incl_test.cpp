@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/cauchy.hpp>
 
+template class boost::math::cauchy_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::cauchy_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::cauchy_distribution<long double, boost::math::policies::policy<> >;

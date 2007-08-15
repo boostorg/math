@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/poisson.hpp>
 
+template class boost::math::poisson_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::poisson_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::poisson_distribution<long double, boost::math::policies::policy<> >;

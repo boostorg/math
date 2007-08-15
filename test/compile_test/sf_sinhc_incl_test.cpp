@@ -8,3 +8,6 @@
 //
 #include <boost/math/special_functions/sinhc.hpp>
 
+template float boost::math::sinhc_pi<float>(float);
+template double boost::math::sinhc_pi<double>(double);
+template long double boost::math::sinhc_pi<long double>(long double);

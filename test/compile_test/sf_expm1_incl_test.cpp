@@ -8,3 +8,6 @@
 //
 #include <boost/math/special_functions/expm1.hpp>
 
+template float boost::math::expm1<float>(float);
+template double boost::math::expm1<double>(double);
+template long double boost::math::expm1<long double>(long double);

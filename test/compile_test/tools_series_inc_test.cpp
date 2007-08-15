@@ -8,3 +8,18 @@
 //
 #include <boost/math/tools/series.hpp>
 
+struct Functor
+{
+   typedef double result_type;
+   double operator()();
+};
+#define U double
+
+template Functor::result_type boost::math::tools::sum_series<Functor>(Functor& func, int bits);
+template Functor::result_type boost::math::tools::sum_series<Functor>(Functor& func, int bits, boost::uintmax_t& max_terms);
+template Functor::result_type boost::math::tools::sum_series<Functor, U>(Functor& func, int bits, U init_value);
+template Functor::result_type boost::math::tools::sum_series<Functor, U>(Functor& func, int bits, boost::uintmax_t& max_terms, U init_value);
+template Functor::result_type boost::math::tools::kahan_sum_series<Functor>(Functor& func, int bits);
+template Functor::result_type boost::math::tools::kahan_sum_series<Functor>(Functor& func, int bits, boost::uintmax_t& max_terms);
+
+

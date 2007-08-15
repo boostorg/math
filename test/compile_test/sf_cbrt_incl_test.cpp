@@ -8,3 +8,6 @@
 //
 #include <boost/math/special_functions/cbrt.hpp>
 
+template float boost::math::cbrt<float>(float);
+template double boost::math::cbrt<double>(double);
+template long double boost::math::cbrt<long double>(long double);

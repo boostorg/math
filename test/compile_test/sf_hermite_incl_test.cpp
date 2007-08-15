@@ -8,3 +8,6 @@
 //
 #include <boost/math/special_functions/hermite.hpp>
 
+template float boost::math::hermite<float>(unsigned, float);
+template double boost::math::hermite<double>(unsigned, double);
+template long double boost::math::hermite<long double>(unsigned, long double);

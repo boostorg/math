@@ -42,7 +42,6 @@ public:
    {
       using namespace std;
 
-      T m = mean();
       T t = m_squared_total - m_total * m_total / m_count;
       t /= m_count;
       return t;
@@ -51,7 +50,6 @@ public:
    {
       using namespace std;
 
-      T m = mean();
       T t = m_squared_total - m_total * m_total / m_count;
       t /= (m_count-1);
       return t;

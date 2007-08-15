@@ -8,3 +8,7 @@
 //
 #include <boost/math/distributions/beta.hpp>
 
+template class boost::math::beta_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::beta_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::beta_distribution<long double, boost::math::policies::policy<> >;
+

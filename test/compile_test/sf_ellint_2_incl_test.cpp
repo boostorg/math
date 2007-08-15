@@ -8,3 +8,10 @@
 //
 #include <boost/math/special_functions/ellint_2.hpp>
 
+template float boost::math::ellint_2<float>(float, float);
+template double boost::math::ellint_2<double>(double, double);
+template long double boost::math::ellint_2<long double>(long double, long double);
+
+template float boost::math::ellint_2<float>(float);
+template double boost::math::ellint_2<double>(double);
+template long double boost::math::ellint_2<long double>(long double);

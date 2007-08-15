@@ -202,7 +202,7 @@ inline typename tools::promote_args<RT>::type
 
 template <class RT>
 inline typename tools::promote_args<RT>::type 
-   rising_factorial(RT x, unsigned n)
+   rising_factorial(RT x, int n)
 {
    typedef typename tools::promote_args<RT>::type result_type;
    return detail::rising_factorial_imp(
@@ -211,7 +211,7 @@ inline typename tools::promote_args<RT>::type
 
 template <class RT, class Policy>
 inline typename tools::promote_args<RT>::type 
-   rising_factorial(RT x, unsigned n, const Policy& pol)
+   rising_factorial(RT x, int n, const Policy& pol)
 {
    typedef typename tools::promote_args<RT>::type result_type;
    return detail::rising_factorial_imp(

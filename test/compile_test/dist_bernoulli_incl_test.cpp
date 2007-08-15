@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/bernoulli.hpp>
 
+template class boost::math::bernoulli_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::bernoulli_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::bernoulli_distribution<long double, boost::math::policies::policy<> >;

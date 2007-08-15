@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/fisher_f.hpp>
 
+template class boost::math::fisher_f_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::fisher_f_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::fisher_f_distribution<long double, boost::math::policies::policy<> >;

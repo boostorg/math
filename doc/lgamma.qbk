@@ -52,7 +52,7 @@ The following table shows the peak errors (in units of epsilon)
 found on various platforms
 with various floating point types, along with comparisons to the 
 __gsl, __glibc, __hpc and
-Cephes libraries. Unless otherwise specified any
+__cephes libraries. Unless otherwise specified any
 floating point type that is narrower than the one shown will have
 __zero_error.
 
@@ -66,16 +66,16 @@ a low absolute error can be guaranteed.
 [[53]            [Win32 Visual C++ 8]  
 [Peak=0.88 Mean=0.14
 
-(GSL=33) (Cephes=1.5)] 
+(GSL=33) (__cephes=1.5)] 
 [Peak=0.96 Mean=0.46
 
-(GSL=5.2) (Cephes=1.1)]    
+(GSL=5.2) (__cephes=1.1)]    
 [Peak=0.86 Mean=0.46
 
-(GSL=1168) (Cephes~500000)] 
+(GSL=1168) (__cephes~500000)] 
 [Peak=4.2 Mean=1.3
 
-(GSL=25) (Cephes=1.6)] ]
+(GSL=25) (__cephes=1.6)] ]
 [[64]            [Linux IA32 / GCC]  
 [Peak=1.9 Mean=0.43
 

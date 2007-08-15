@@ -8,3 +8,6 @@
 //
 #include <boost/math/special_functions/sinc.hpp>
 
+template float boost::math::sinc_pi<float>(float);
+template double boost::math::sinc_pi<double>(double);
+template long double boost::math::sinc_pi<long double>(long double);

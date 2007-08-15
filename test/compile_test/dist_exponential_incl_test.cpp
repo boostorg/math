@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/exponential.hpp>
 
+template class boost::math::exponential_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::exponential_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::exponential_distribution<long double, boost::math::policies::policy<> >;

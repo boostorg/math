@@ -63,7 +63,7 @@ a simplified version of this implementation
 
 The following tables show how the accuracy of these functions
 varies on various platforms, along with comparisons to the __gsl and
-Cephes libraries.  Note that the cyclic nature of these
+__cephes libraries.  Note that the cyclic nature of these
 functions means that they have an infinite number of irrational
 roots: in general these functions have arbitrarily large /relative/
 errors when the arguments are sufficiently close to a root.  Of
@@ -79,17 +79,17 @@ are relative errors in units of epsilon.
 
 GSL Peak=6.6 
 
-Cephes Peak=2.5 Mean=1.1] 
+__cephes Peak=2.5 Mean=1.1] 
       [Peak=11 Mean=2.2 
 
 GSL Peak=11 
 
-Cephes Peak=17 Mean=2.5] 
+__cephes Peak=17 Mean=2.5] 
       [Peak=413 Mean=110 
 
 GSL Peak=6x10[super 11] 
 
-Cephes Peak=2x10[super 5] ] ]
+__cephes Peak=2x10[super 5] ] ]
 [[64] [Red Hat Linux IA64 / G++ 3.4] [Peak=7 Mean=3] [Peak=117 Mean=10] [Peak=2x10[super 4][space] Mean=6x10[super 3]] ]
 [[64] [SUSE Linux AMD64 / G++ 4.1] [Peak=7 Mean=3] [Peak=400 Mean=40] [Peak=2x10[super 4][space] Mean=1x10[super 4]] ]
 [[113] [HP-UX / HP aCC 6] [Peak=14 Mean=6] [Peak=29 Mean=3] [Peak=2700 Mean=450] ]
@@ -102,17 +102,17 @@ Cephes Peak=2x10[super 5] ] ]
 
 GSL Peak=34 Mean=9 
 
-Cephes Peak=330 Mean=54] 
+__cephes Peak=330 Mean=54] 
       [Peak=923 Mean=83 
 
 GSL Peak=500 Mean=54 
 
-Cephes Peak=923 Mean=83] 
+__cephes Peak=923 Mean=83] 
       [Peak=561 Mean=36 
 
 GSL Peak=1.4x10[super 6][space] Mean\=7x10[super 4][space] 
 
-Cephes Peak=+INF]]
+__cephes Peak=+INF]]
 [[64] [Red Hat Linux IA64 / G++ 3.4] [Peak=470 Mean=56] [Peak=843 Mean=51] [Peak=741 Mean=51] ]
 [[64] [SUSE Linux AMD64 / G++ 4.1] [Peak=1300 Mean=424] [Peak=2x10[super 4][space] Mean=8x10[super 3]] [Peak=1x10[super 5][space] Mean=6x10[super 3]] ]
 [[113] [HP-UX / HP aCC 6] [Peak=180 Mean=63] [Peak=340 Mean=150] [Peak=2x10[super 4][space] Mean=1200] ]
@@ -121,14 +121,14 @@ Cephes Peak=+INF]]
 Note that for large /x/ these functions are largely dependent on
 the accuracy of the `std::sin` and `std::cos` functions.
 
-Comparison to GSL and Cephes is interesting: both Cephes and this library optimise
+Comparison to GSL and __cephes is interesting: both __cephes and this library optimise
 the integer order case - leading to identical results - simply using the general 
 case is for the most part slightly more accurate though, as noted by the 
 better accuracy of GSL in the integer argument cases.  This implementation tends to
-perform much better when the arguments become large, Cephes in particular produces
+perform much better when the arguments become large, __cephes in particular produces
 some remarkably inaccurate results with some of the test data (no significant figures
 correct), and even GSL performs badly with some inputs to J[sub v].  Note that
-by way of double-checking these results, the worst performing Cephes and GSL cases
+by way of double-checking these results, the worst performing __cephes and GSL cases
 were recomputed using [@http//:functions.wolfram.com functions.wolfram.com],
 and the result checked against our test data: no errors in the test data were found.
 

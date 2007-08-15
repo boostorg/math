@@ -6,13 +6,14 @@
 #ifndef BOOST_MATH_TOOLS_TEST_DATA_HPP
 #define BOOST_MATH_TOOLS_TEST_DATA_HPP
 
+#include <boost/config.hpp>
 #include <boost/assert.hpp>
-#include <boost/algorithm/string/trim.hpp>
 #ifdef BOOST_MSVC
 #  pragma warning(push)
-#  pragma warning(disable: 4127 4701 )
+#  pragma warning(disable: 4127 4701 4512)
 #  pragma warning(disable: 4130) // '==' : logical operation on address of string constant.
 #endif
+#include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>
 #ifdef BOOST_MSVC
 #pragma warning(pop)
@@ -404,6 +405,10 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
 template <class T>
 bool get_user_parameter_info(parameter_info<T>& info, const char* param_name)
 {
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4127)
+#endif
    std::string line;
    do{
       std::cout << "What kind of distribution do you require for parameter " << param_name << "?\n"
@@ -646,6 +651,9 @@ bool get_user_parameter_info(parameter_info<T>& info, const char* param_name)
    }
 
    return true;
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 }
 
 template <class charT, class traits, class T>

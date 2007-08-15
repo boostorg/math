@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/uniform.hpp>
 
+template class boost::math::uniform_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::uniform_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::uniform_distribution<long double, boost::math::policies::policy<> >;

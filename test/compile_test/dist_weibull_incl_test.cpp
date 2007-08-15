@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/weibull.hpp>
 
+template class boost::math::weibull_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::weibull_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::weibull_distribution<long double, boost::math::policies::policy<> >;

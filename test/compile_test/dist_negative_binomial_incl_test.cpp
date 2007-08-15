@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/negative_binomial.hpp>
 
+template class boost::math::negative_binomial_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::negative_binomial_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::negative_binomial_distribution<long double, boost::math::policies::policy<> >;

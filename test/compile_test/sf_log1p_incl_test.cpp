@@ -8,3 +8,6 @@
 //
 #include <boost/math/special_functions/log1p.hpp>
 
+template float boost::math::log1p<float>(float);
+template double boost::math::log1p<double>(double);
+template long double boost::math::log1p<long double>(long double);

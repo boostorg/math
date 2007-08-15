@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/gamma.hpp>
 
+template class boost::math::gamma_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::gamma_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::gamma_distribution<long double, boost::math::policies::policy<> >;

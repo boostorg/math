@@ -8,3 +8,17 @@
 //
 #include <boost/math/special_functions/spherical_harmonic.hpp>
 
+template std::complex<float> boost::math::spherical_harmonic<float>(unsigned, int, float, float);
+template std::complex<double> boost::math::spherical_harmonic<double>(unsigned, int, double, double);
+template std::complex<long double> boost::math::spherical_harmonic<long double>(unsigned, int, long double, long double);
+
+template float boost::math::spherical_harmonic_r<float>(unsigned, int, float, float);
+template double boost::math::spherical_harmonic_r<double>(unsigned, int, double, double);
+template long double boost::math::spherical_harmonic_r<long double>(unsigned, int, long double, long double);
+
+template float boost::math::spherical_harmonic_i<float>(unsigned, int, float, float);
+template double boost::math::spherical_harmonic_i<double>(unsigned, int, double, double);
+template long double boost::math::spherical_harmonic_i<long double>(unsigned, int, long double, long double);
+
+
+

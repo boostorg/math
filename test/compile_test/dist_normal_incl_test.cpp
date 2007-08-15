@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/normal.hpp>
 
+template class boost::math::normal_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::normal_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::normal_distribution<long double, boost::math::policies::policy<> >;

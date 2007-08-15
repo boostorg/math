@@ -221,10 +221,6 @@ namespace boost
       { // Private data getter function.
         return m_l;
       }
-
-      // Parameter estimation:
-      static RealType estimate_mean(RealType n, RealType k); // vector/array k TODO ????
-
     private:
       // Data member, initialized by constructor.
       RealType m_l; // mean number of occurrences.

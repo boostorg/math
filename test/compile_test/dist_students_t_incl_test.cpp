@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/students_t.hpp>
 
+template class boost::math::students_t_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::students_t_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::students_t_distribution<long double, boost::math::policies::policy<> >;

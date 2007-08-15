@@ -40,7 +40,7 @@ when T1 and T2 are different types.
 [h4 Accuracy]
 
 The following table shows peak errors for various domains of input arguments,
-along with comparisons to the __gsl and Cephes libraries.  Note that
+along with comparisons to the __gsl and __cephes libraries.  Note that
 only results for the widest floating point type on the system are given as
 narrower types have __zero_error.
 
@@ -54,11 +54,11 @@ narrower types have __zero_error.
 
 (GSL Peak=1178 Mean=238)
 
-(Cephes=1612)]  [Peak=10.7 Mean=2.6
+(__cephes=1612)]  [Peak=10.7 Mean=2.6
 
 (GSL Peak=12 Mean=2.0)
 
-(Cephes=174)]]
+(__cephes=174)]]
 [[64] [Red Hat Linux IA32, g++ 3.4.4] [Peak=112.1 Mean=26.9]  [Peak=15.8 Mean=3.6]]
 [[64] [Red Hat Linux IA64, g++ 3.4.4] [Peak=61.4 Mean=19.5]  [Peak=12.2 Mean=3.6]]
 [[113] [HPUX IA64, aCC A.06.06] [Peak=42.03 Mean=13.94]  [Peak=9.8 Mean=3.1]]

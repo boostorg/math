@@ -21,10 +21,10 @@
    ``__sf_result`` legendre_p(int n, int m, T x, const ``__Policy``&);
    
    template <class T>
-   ``__sf_result`` legendre_q(int n, T x);
+   ``__sf_result`` legendre_q(unsigned n, T x);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` legendre_q(int n, T x, const ``__Policy``&);
+   ``__sf_result`` legendre_q(unsigned n, T x, const ``__Policy``&);
    
    template <class T1, class T2, class T3>
    ``__sf_result`` legendre_next(unsigned l, T1 x, T2 Pl, T3 Plm1);
@@ -104,10 +104,10 @@ Mathematical Functions with Formulas, Graphs, and Mathematical Tables,
  ]
    
    template <class T>
-   ``__sf_result`` legendre_q(int n, T x);
+   ``__sf_result`` legendre_q(unsigned n, T x);
    
    template <class T, class ``__Policy``>
-   ``__sf_result`` legendre_q(int n, T x, const ``__Policy``&);
+   ``__sf_result`` legendre_q(unsigned n, T x, const ``__Policy``&);
    
 Returns the value of the Legendre polynomial that is the second solution
 to the Legendre differential equation, for example:

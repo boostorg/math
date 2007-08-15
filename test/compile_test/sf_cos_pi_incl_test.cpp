@@ -8,4 +8,7 @@
 //
 #include <boost/math/special_functions/cos_pi.hpp>
 
+template float boost::math::cos_pi<float>(float);
+template double boost::math::cos_pi<double>(double);
+template long double boost::math::cos_pi<long double>(long double);
 

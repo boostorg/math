@@ -8,3 +8,6 @@
 //
 #include <boost/math/distributions/extreme_value.hpp>
 
+template class boost::math::extreme_value_distribution<float, boost::math::policies::policy<> >;
+template class boost::math::extreme_value_distribution<double, boost::math::policies::policy<> >;
+template class boost::math::extreme_value_distribution<long double, boost::math::policies::policy<> >;
