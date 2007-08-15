@@ -2,7 +2,7 @@
 
 See also the reference documentation for the __binomial_distrib.
 
-[section:binomial_coinflip_example_example Binomial Coin-Flipping Example Example]
+[section:binomial_coinflip_example Binomial Coin-Flipping Example Example]
 
 [import ../../example/binomial_coinflip_example.cpp]
 [binomial_coinflip_example1]
@@ -10,7 +10,29 @@ See also the reference documentation for the __binomial_distrib.
 See [@../../example/binomial_coinflip_example.cpp binomial_coinflip_example.cpp]
 for full source code and output.
 
-[endsect] [/section:binomial_coinflip_example_example Binomial Coin-Flipping example]
+[endsect] [/section:binomial_quiz_example_example Binomial Quiz example]
+
+[section:binomial_quiz_example Binomial Quiz Example Example]
+
+[import ../../example/binomial_quiz_example.cpp]
+[binomial_quiz_example1]
+
+A subroutine to tabulate confidence limits for observed successes in some trials.
+The true success fraction is, of course,
+successes divided by an 'infinite' number of such trials,
+but this gives us a guide to the confidence we have have in the success_fraction
+we observe with the limited number of trials used.
+It could guide us to assess how many trials we would need to be more sure.
+
+[binomial_confidence_limits]
+[binomial_quiz_example2]
+[discrete_quantile_real]
+[binomial_quiz_example3]
+
+See [@../../example/binomial_quiz_example.cpp binomial_quiz_example.cpp]
+for full source code and output.
+
+[endsect] [/section:binomial_coinflip_quiz Binomial Coin-Flipping example]
 
 [section:binom_conf Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution]
 
