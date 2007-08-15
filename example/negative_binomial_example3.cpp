@@ -46,33 +46,39 @@ int main()
     // K. Krishnamoorthy, Handbook of Statistical Distributions with Applications,
     // ISBN 1 58488 635 8, page 100, example 7.3.1
     // r successes = 20, k failures = 18, and success probability (fraction) = 0.6
-    negative_binomial nbk(20, 0.6); // successes, success fraction.
+    negative_binomial nbk(20, 0.6); // successes, success_fraction.
     cout.precision(6); // default precision.
-    cout << "probability of < 18 = cdf(18) = " <<  cdf(nbk, 18) << endl; // = 0.862419
-    cout << "probability of >= 18 = 1 - cdf(17) = " <<  1 - cdf(nbk, 17) << endl; //  = 0.181983
-    // But this may suffer from inaccuracy, so mcuh better to use the complement.
-    cout << "probability of >= 18 = cdf(complement(nbk, 17))  = "
+    cout << "Probability of <= 18, P(X <= 18) == cdf(18) = " <<  cdf(nbk, 18) << endl; // = 0.862419
+    cout << "Probability of > 18, P(X < 18) ==  1 - cdf(18) = " <<  1 - cdf(nbk, 18) << endl; // = 0.137581
+    // But this may suffer from inaccuracy, so much better to use the complement.
+    cout << "Probability of > 18, P(X < 18) ==  1 - cdf(18) = " <<  cdf(complement(nbk, 18)) << endl; // 0.137581
+    // And, of course, the sum of probability of X <= 18 and X > 18 really should be unity!
+    BOOST_ASSERT(cdf(nbk, 18) + cdf(complement(nbk, 18))); //  = 0.862419 + 0.137581 == 1
+    cout << "Probability of < 18 == <= 17 == cdf(17) = " << cdf(nbk, 17) << endl; //
+    cout << "Probability of >= 18 == > 17 == 1 - cdf(17) = " <<  1 - cdf(nbk, 17) << endl; // 0.181983
+    // But this may suffer from inaccuracy, so much better to use the complement.
+    cout << "Probability of >= 18 == > 17 == cdf(complement(nbk, 17))  = "
       << cdf(complement(nbk, 17)) << endl; //  = 0.181983
-    cout << "probability of == 18 = pdf(18) = " <<  pdf(nbk, 18) << endl; //  0.044402
-    cout << "probability of exactly 18 = pdf(18) = " <<  pdf(nbk, 18) << endl; // 0.044402
+    cout << "Probability of exactly == 18, P(X =18) = pdf(18) = " <<  pdf(nbk, 18) << endl; // 0.044402
+    cout << endl;
 //] [/negative_binomial_example3_1 Quickbook end]
   }
   { // Example 7.3.2 to find the success probability when r = 4, k = 5, P(X <= k) = 0.56 and
     // calculates success probability = 0.417137.
     negative_binomial nb(4, 0.417137);
-    cout << cdf(nb, 5) << endl; // expect P(X <= k) = 0.56 got 0.560001
+    cout <<  "P(X <= k) = " << cdf(nb, 5) << endl; // expect P(X <= k) = 0.56 got 0.560001
     // Now check the inverse by calculating the k failures.
-    cout << quantile(nb, 0.56) << endl; // expect to get k = 5. and got 5.000000
+    cout << " k = " << quantile(nb, 0.56) << endl; // expect to get k = 5. and got 5.000000
     // P(X <= k) = 0.56001
     // P(X >= k) = 0.55406
     // P(X == k) = 0.114061
-
+    // Compute moments:
     // mean 5.58918, sd 3.66045, mode = 4, cv = 0.654918, skew 1.03665, Mean dev 2.86877, kurtosis 4.57463
     cout << "Mean = " << mean(nb) //  5.589176
       << ", sd = " << standard_deviation(nb) 
       << ", Coefficient of variation (sd/mean) = " << standard_deviation(nb) / mean(nb) 
       << ", mode = " << mode(nb) << ", skew " << skewness(nb) 
-      << ", mean deviation = " << "??" // perhaps todo?
+     // << ", mean deviation = " << "??" // perhaps todo?
       << ", kurt = " << kurtosis(nb) << endl; 
   }
   { // 7.3.3 Coin flipping.  What are chances that 10th head will occur at the 12th flip.
@@ -130,45 +136,51 @@ int main()
     cout << "The rounding style for a double type is: " 
       << numeric_limits<double>::round_style << endl;
   }
-  { // K. Krishnamoorthy, ISBN 1 58488 635 8, page 102, section 7.4 
+  { // K. Krishnamoorthy, ISBN 1 58488 635 8, page 102, section 7.4 & 7.5
     // Suppose required k + r trials to get the rth success.
     double r = 5;     double k = 25; // Example 7.5.1 values
     double rm1 = r -1; // r-1 is the penultimate success.
     double p = rm1/ (rm1 + k); 
-    // A point estimate of the actual proportion of defective items.
+    // A point estimate phat of the actual proportion of defective items.
     //  0.137931
-    // 'True' estimate, if this was all the items ever available is successes/failures = r/k = 5/25 = 0.2
-    // so the point estimate 'how we are doing from the info so far' is rather less at 0.14.
+    // 'True' estimate, if this was all the items ever available, is successes/failures = r/k = 5/25 = 0.2
+    // so the point estimate 'how we are doing from the info so far' is rather less at 0.138.
     cout << "Uniformly minimum variance unbiased estimator of success probability is " << p << endl; 
     double v = 0.5 * p * p * (1 - p) * (k + k + 2 - p) / (k * (k - p + 2));
     cout << "Variance of estimator is " << v << endl;  // 0.000633
-    cout << "Standard deviation of estimator is " << sqrt(v) << endl;  // 0.025 - seems small?
+    cout << "Standard deviation of estimator is " << sqrt(v) << endl;  // 0.025 - seems smallish?
+    // Would expect point estimate 0.14 + a couple of sd = 0.25 * 2 = 0.05 = 1.9 ~= 0.2?
+    // So perhaps near enough?
 
     // Section 7.5 testing the true success probability.
     // 7.5.1  A lot is inspected randomly.  5th defective found at 30th inspection.
     // so 25 are OK and 5 are duds.
     // Using StatCalc r = 5, k = 25, so r + r = 30, value for p0 0.3
     negative_binomial nb(5, 0.2); // 1/3rd are defective?
-    cout << cdf(nb, 25) << endl; // 0.812924
-    cout << quantile(nb, 0.3) << endl; // 7.344587
-    // TODO?
+    cout << "P(X <= 25) = " << cdf(nb, 25) << endl; //  0.744767
+    cout << "quantile(nb, 0.3) = " << quantile(nb, 0.3) << endl; // 13
+    // Don't understand what the p-value calculation does.
+    // TODO????
   }
   return 0;
 }  // int main()
 
 
-
 /*
 
-Example 3 Negative_binomial .  ..\..\..\..\..\..\boost-sandbox\math_toolkit\libs\math\example\negative_binomial_example3.cpp Mon Aug 13 14:32:28 2007 140050727
-probability of < 18 = cdf(18) = 0.862419
-probability of >= 18 = 1 - cdf(17) = 0.181983
-probability of >= 18 = cdf(complement(nbk, 17))  = 0.181983
-probability of == 18 = pdf(18) = 0.0444024
-probability of exactly 18 = pdf(18) = 0.0444024
-0.560001
-5
-Mean = 5.58918, sd = 3.66045, Coefficient of variation (sd/mean) = 0.654918, mode = 4, skew 1.03665, mean deviation = ??, kurt = 4.57463
+Output is:
+
+Example 3 Negative_binomial, Krishnamoorthy applications.  ..\..\..\..\..\..\boost-sandbox\math_toolkit\libs\math\example\negative_binomial_example3.cpp Wed Aug 15 11:08:14 2007
+Probability of <= 18, P(X <= 18) == cdf(18) = 0.862419
+Probability of > 18, P(X < 18) ==  1 - cdf(18) = 0.137581
+Probability of > 18, P(X < 18) ==  1 - cdf(18) = 0.137581
+Probability of < 18 == <= 17 == cdf(17) = 0.818017
+Probability of >= 18 == > 17 == 1 - cdf(17) = 0.181983
+Probability of >= 18 == > 17 == cdf(complement(nbk, 17))  = 0.181983
+Probability of exactly == 18, P(X =18) = pdf(18) = 0.0444024
+P(X <= k) = 0.560001
+ k = 5
+Mean = 5.58918, sd = 3.66045, Coefficient of variation (sd/mean) = 0.654918, mode = 4, skew 1.03665, kurt = 4.57463
 Probability that 10th head will occur at the 12th flip is 0.0134277
 P(X == k) 0.0134277
 Probability that 10th head will occur before the 12th flip is 0.00585938
@@ -186,8 +198,10 @@ The rounding style for a double type is: 1
 Uniformly minimum variance unbiased estimator of success probability is 0.137931
 Variance of estimator is 0.000633295
 Standard deviation of estimator is 0.0251654
-0.744767
+P(X <= 25) = 0.744767
 13
+
+
 */
 
 
