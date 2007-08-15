@@ -40,7 +40,7 @@ when T1 and T2 are different types.
 [h4 Accuracy]
 
 The following table shows peak errors for various domains of input arguments,
-plus comparisons to other open source implementations where available.  Note that
+along with comparisons to the __gsl and Cephes libraries.  Note that
 only results for the widest floating point type on the system are given as
 narrower types have __zero_error.
 

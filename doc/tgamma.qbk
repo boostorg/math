@@ -70,7 +70,8 @@ the result is `double` when T is an integer type, and T otherwise.
 [h4 Accuracy]
 
 The following table shows the peak errors (in units of epsilon) 
-found on various platforms with various floating point types.
+found on various platforms with various floating point types, 
+along with comparisons to the __gsl, __glibc, __hpc and Cephes libraries.
 Unless otherwise specified any floating point type that is narrower
 than the one shown will have __zero_error.
 
@@ -100,42 +101,42 @@ than the one shown will have __zero_error.
 [[64]            [Linux IA32 / GCC]  
 [Peak=300 Mean=49.5
 
-(Native Peak=395 Mean=89)]           
+(__glibc Peak=395 Mean=89)]           
 [Peak=3.0 Mean=1.4
 
-(Native Peak=11 Mean=3.3)]    
+(__glibc Peak=11 Mean=3.3)]    
 [Peak=5.0 Mean=1.8
 
-(Native Peak=0.92 Mean=0.2)]       
+(__glibc Peak=0.92 Mean=0.2)]       
 [Peak=157 Mean=65
 
-(Native Peak=205 Mean=108)]   ]
+(__glibc Peak=205 Mean=108)]   ]
 [[64]            [Linux IA64 / GCC]  
-[Peak=2.8 Mean=0.9
+[__glibc Peak 2.8 Mean=0.9
 
-(Native=0.7)]           
+(__glibc Peak 0.7)]           
 [Peak=4.8 Mean=1.5
 
-(Native=0)]    
+(__glibc Peak 0)]    
 [Peak=4.8 Mean=1.5
 
-(Native=0)]       
+(__glibc Peak 0)]       
 
 [Peak=5.0 Mean=1.7
-(Native 0)]           ]
+(__glibc Peak 0)]           ]
 [[113]           [HPUX IA64, aCC A.06.06]    
 [Peak=2.5 Mean=1.1
 
-(Native=0)] 
+(__hpc Peak 0)] 
 [Peak=3.5 Mean=1.7
 
-(Native=0)]    
+(__hpc Peak 0)]    
 [Peak=3.5 Mean=1.6
 
-(Native=0)] 
+(__hpc Peak 0)] 
 [Peak=5.2 Mean=1.92
 
-(Native=0)]  ]
+(__hpc Peak 0)]  ]
 ]
 
 [h4 Testing]

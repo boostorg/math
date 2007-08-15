@@ -61,7 +61,7 @@ a simplified version of this implementation
 [h4 Accuracy]
 
 The following tables show how the accuracy of these functions
-varies on various platforms, along with a comparison to the GSL library.  
+varies on various platforms, along with a comparison to the __gsl library.  
 Note that only results for the widest floating-point type on the 
 system are given, as narrower types have __zero_error.  All values
 are relative errors in units of epsilon.

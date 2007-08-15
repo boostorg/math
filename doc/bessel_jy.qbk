@@ -62,7 +62,7 @@ a simplified version of this implementation
 [h4 Accuracy]
 
 The following tables show how the accuracy of these functions
-varies on various platforms, along with comparisons to the GSL and
+varies on various platforms, along with comparisons to the __gsl and
 Cephes libraries.  Note that the cyclic nature of these
 functions means that they have an infinite number of irrational
 roots: in general these functions have arbitrarily large /relative/
@@ -110,7 +110,7 @@ GSL Peak=500 Mean=54
 Cephes Peak=923 Mean=83] 
       [Peak=561 Mean=36 
 
-GSL Peak=2x10[super 6][space] Mean\=1x10[super 5][space] 
+GSL Peak=1.4x10[super 6][space] Mean\=7x10[super 4][space] 
 
 Cephes Peak=+INF]]
 [[64] [Red Hat Linux IA64 / G++ 3.4] [Peak=470 Mean=56] [Peak=843 Mean=51] [Peak=741 Mean=51] ]

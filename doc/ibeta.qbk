@@ -96,7 +96,7 @@ Returns the full (non-normalised) complement of the incomplete beta function of 
 [h4 Accuracy]
 
 The following tables give peak and mean relative errors in over various domains of
-a, b and x, along with comparisons to other open source implementations where available.  
+a, b and x, along with comparisons to the __gsl and Cephes libraries.  
 Note that only results for the widest floating-point type on the system are given as
 narrower types have __zero_error.
 

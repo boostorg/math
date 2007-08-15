@@ -42,7 +42,7 @@ immune to optimizer-induced errors.
 
 Finally when BOOST_HAS_LOG1P is defined then the `float/double/long double` 
 specializations of this template simply forward to the platform's 
-native implementation of this function.
+native (POSIX) implementation of this function.
 
 [h4 Accuracy]
 
@@ -86,7 +86,7 @@ a series expansion when x is small (giving an accuracy of less than __te).
 
 Finally when BOOST_HAS_EXPM1 is defined then the `float/double/long double` 
 specializations of this template simply forward to the platform's 
-native implementation of this function.
+native (POSIX) implementation of this function.
    
 [h4 Accuracy]
 

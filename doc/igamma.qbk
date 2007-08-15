@@ -103,7 +103,7 @@ Returns the full (non-normalised) upper incomplete gamma function of a and z:
 [h4 Accuracy]
 
 The following tables give peak and mean relative errors in over various domains of
-a and z, along with comparisons to other open source implementations where available.  
+a and z, along with comparisons to the __gsl and Cephes libraries.
 Note that only results for the widest floating point type on the system are given as
 narrower types have __zero_error.
 
@@ -119,37 +119,37 @@ All values are in units of epsilon.
 
 [table Errors In the Function gamma_p(a,z)
 [[Significand Size] [Platform and Compiler] 
-[0.5 < a < 100
+   [0.5 < a < 100
 
-and
+   and
 
-0.01*a < z < 100*a]  
-[1x10[super -12] < a < 5x10[super -2]
+   0.01*a < z < 100*a]  
+      [1x10[super -12] < a < 5x10[super -2]
 
-and
+      and
 
-0.01*a < z < 100*a] 
-[1e-6 < a < 1.7x10[super 6]
+      0.01*a < z < 100*a] 
+         [1e-6 < a < 1.7x10[super 6]
 
-and
+         and
 
-1 < z < 100*a]]
+         1 < z < 100*a]]
 [[53] [Win32, Visual C++ 8] 
-[Peak=36 Mean=9.1
+   [Peak=36 Mean=9.1
 
-(GSL Peak=342 Mean=46)
+   (GSL Peak=342 Mean=46)
 
-(Cephes Peak=491 Mean=102)]  
-[Peak=4.5 Mean=1.4
+   (Cephes Peak=491 Mean=102)]  
+      [Peak=4.5 Mean=1.4
 
-(GSL Peak=4.8 Mean=0.76)
+      (GSL Peak=4.8 Mean=0.76)
 
-(Cephes Peak=21 Mean=5.6)] 
-[Peak=244 Mean=21
+      (Cephes Peak=21 Mean=5.6)] 
+         [Peak=244 Mean=21
 
-(GSL Peak=1022 Mean=1054)
+         (GSL Peak=1022 Mean=1054)
 
-(Cephes Peak~8x10[super 6] Mean~7x10[super 4])]]
+         (Cephes Peak~8x10[super 6] Mean~7x10[super 4])]]
 [[64] [RedHat Linux IA32, gcc-3.3] [Peak=241 Mean=36]  [Peak=4.7 Mean=1.5] [Peak~30,220 Mean=1929]]
 [[64] [Redhat Linux IA64, gcc-3.4] [Peak=41 Mean=10]  [Peak=4.7 Mean=1.4] [Peak~30,790 Mean=1864]]
 [[113] [HPUX IA64, aCC A.06.06] [Peak=40.2 Mean=10.2]  [Peak=5 Mean=1.6] [Peak=5,476 Mean=440]]
