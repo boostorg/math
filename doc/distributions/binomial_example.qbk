@@ -2,6 +2,16 @@
 
 See also the reference documentation for the __binomial_distrib.
 
+[section:binomial_coinflip_example_example Binomial Coin-Flipping Example Example]
+
+[import ../../example/binomial_coinflip_example.cpp]
+[binomial_coinflip_example1]
+
+See [@../../example/binomial_coinflip_example.cpp binomial_coinflip_example.cpp]
+for full source code and output.
+
+[endsect] [/section:binomial_coinflip_example_example Binomial Coin-Flipping example]
+
 [section:binom_conf Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution]
 
 Imagine you have a process that follows a binomial distribution: for each
@@ -295,5 +305,6 @@ In this case, even 1000 uses of the component would still yield a
 less than 1 in 1000 chance of observing a component failure 
 (i.e. a 99.9% chance of no failure).
 
-[endsect]
+[endsect] [/section:binom_size_eg Estimating Sample Sizes for a Binomial Distribution.]
+
 [endsect][/section:binom_eg Binomial Distribution]
