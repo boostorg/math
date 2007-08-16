@@ -1,6 +1,7 @@
 // boost\math\special_functions\negative_binomial.hpp
 
 // Copyright Paul A. Bristow 2007.
+// Copyright John Maddock 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -10,6 +11,7 @@
 // http://en.wikipedia.org/wiki/negative_binomial_distribution
 // http://mathworld.wolfram.com/NegativeBinomialDistribution.html
 // http://documents.wolfram.com/teachersedition/Teacher/Statistics/DiscreteDistributions.html
+
 // The negative binomial distribution NegativeBinomialDistribution[n, p]
 // is the distribution of the number (k) of failures that occur in a sequence of trials before
 // r successes have occurred, where the probability of success in each trial is p.
@@ -27,7 +29,10 @@
 // However because of the method of calculation using a continuous gamma function,
 // it is convenient to treat it as if a continous function,
 // and permit non-integral values of k.
-// To enforce the strict mathematical model, users should use floor or ceil functions
+
+// However, by default the policy is to use discrete_quantile_policy.
+
+// To enforce the strict mathematical model, users should use conversion
 // on k outside this function to ensure that k is integral.
 
 // MATHCAD cumulative negative binomial pnbinom(k, n, p)
@@ -57,7 +62,8 @@
 
 #if defined (BOOST_MSVC)
 #  pragma warning(push)
-#  pragma warning(disable: 4702) // unreachable code.
+// This believed not now necessary, so commented out.
+//#  pragma warning(disable: 4702) // unreachable code.
 // in domain_error_imp in error_handling.
 #endif
 
@@ -226,22 +232,22 @@ namespace boost
         return result + k;
       } // RealType find_number_of_failures
 
-      static RealType find_maximum_number_of_trials(
-        RealType k,     // number of failures (k >= 0).
-        RealType p,     // success fraction 0 <= p <= 1.
-        RealType alpha) // risk level threshold 0 <= alpha <= 1.
-      {
-        static const char* function = "boost::math::negative_binomial<%1%>::estimate_maximum_number_of_trials";
-        // Error checks:
-        RealType result;
-        if(false == negative_binomial_detail::check_dist_and_k(
-          function, RealType(1), p, k, &result, Policy())
-          &&  detail::check_probability(function, alpha, &result, Policy()))
-        { return result; }
+      //static RealType find_maximum_number_of_trials(
+      //  RealType k,     // number of failures (k >= 0).
+      //  RealType p,     // success fraction 0 <= p <= 1.
+      //  RealType alpha) // risk level threshold 0 <= alpha <= 1.
+      //{
+      //  static const char* function = "boost::math::negative_binomial<%1%>::estimate_maximum_number_of_trials";
+      //  // Error checks:
+      //  RealType result;
+      //  if(false == negative_binomial_detail::check_dist_and_k(
+      //    function, RealType(1), p, k, &result, Policy())
+      //    &&  detail::check_probability(function, alpha, &result, Policy()))
+      //  { return result; }
 
-        result = ibetac_inva(k + 1, p, alpha, Policy());  // returns n - k
-        return result + k;
-      } // RealType find_number_of_trials complemented
+      //  result = ibetac_inva(k + 1, p, alpha, Policy());  // returns n - k
+      //  return result + k;
+      //} // RealType find_number_of_trials complemented
 
     private:
       RealType m_r; // successes.
