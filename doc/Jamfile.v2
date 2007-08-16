@@ -43,6 +43,8 @@ boostbook standalone
         <xsl:param>page.margin.inner=0.5in
         # Margin size:
         <xsl:param>page.margin.outer=0.5in
+        # Paper type = A4
+        <xsl:param>paper.type=A4
         # Yes, we want graphics for admonishments:
         <xsl:param>admon.graphics=1
         # Set this one for PDF generation *only*:
@@ -50,6 +52,7 @@ boostbook standalone
         # better use SVG's instead:
         # <xsl:param>admon.graphics.extension=".svg"
     ;
+
 
 
 
