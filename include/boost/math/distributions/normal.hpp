@@ -1,4 +1,6 @@
 //  Copyright John Maddock 2006.
+//  Copyright Paul A. Bristow 2007.
+
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -29,7 +31,7 @@ public:
    typedef Policy policy_type;
 
    normal_distribution(RealType mean = 0, RealType sd = 1)
-      : m_mean(mean), m_sd(sd) {}
+      : m_mean(mean), m_sd(sd) {}  // Default is a 'standard' normal distribution.
 
    RealType mean()const
    { // location
