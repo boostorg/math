@@ -144,6 +144,7 @@ void expected_results()
          ".*Yn.*",              // test data group
          ".*", 30000, 30000);         // test function
 
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
       && (std::numeric_limits<long double>::digits < 90))
    {
@@ -163,6 +164,7 @@ void expected_results()
          ".*Yv.*",              // test data group
          ".*", 80, 70);         // test function
    }
+#endif
    //
    // defaults are based on MSVC-8 on Win32:
    //

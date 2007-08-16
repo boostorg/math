@@ -134,7 +134,7 @@ void expected_results()
       ".*", 40000, 30000);         // test function
 
 
-
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
       && (std::numeric_limits<long double>::digits < 90))
    {
@@ -192,7 +192,7 @@ void expected_results()
          ".*(JN|j).*|.*Tricky.*",       // test data group
          ".*", 33000, 20000);               // test function
    }
-
+#endif
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
