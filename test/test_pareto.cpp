@@ -68,15 +68,16 @@
 template <class RealType>
 void test_spots(RealType)
 {
-  // Basic sanity checks.
-	//RealType tolerance = static_cast<RealType>(std::pow(10., -(4))); // 1e-4 (as fraction, NOT %)
-	//cout << "tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
-  // Not used so far: use epsilon tolerances.
-   
-  RealType tol5eps = boost::math::tools::epsilon<RealType>() * 5;
-  RealType tol10eps = boost::math::tools::epsilon<RealType>() * 10;
-  RealType tol100eps = boost::math::tools::epsilon<RealType>() * 100;
-  RealType tol1000eps = boost::math::tools::epsilon<RealType>() * 1000;
+   // Basic sanity checks.
+   //
+   // Tolerance are based on units of epsilon, but capped at
+   // double precision, since that's the limit of out test data:
+   //
+   RealType tol = (std::max)((RealType)boost::math::tools::epsilon<double>(), boost::math::tools::epsilon<RealType>());
+   RealType tol5eps = tol * 5;
+   RealType tol10eps = tol * 10;
+   RealType tol100eps = tol * 100;
+   RealType tol1000eps = tol * 1000;
 
    check_pareto(
       static_cast<RealType>(1.1L), // 

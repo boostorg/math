@@ -456,7 +456,7 @@ bool get_user_parameter_info(parameter_info<T>& info, const char* param_name)
       return false;
    }while(true);
 
-   switch(info.type)
+   switch(info.type & ~dummy_param)
    {
    case random_in_range:
    case periodic_in_range:
@@ -648,6 +648,8 @@ bool get_user_parameter_info(parameter_info<T>& info, const char* param_name)
       }while(true);
 
       break;
+   default:
+      BOOST_ASSERT(0); // should never get here!!
    }
 
    return true;

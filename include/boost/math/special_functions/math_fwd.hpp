@@ -342,10 +342,10 @@ namespace boost
    typename tools::promote_args<RT>::type falling_factorial(RT x, unsigned n, const Policy& pol);
 
    template <class RT>
-   typename tools::promote_args<RT>::type rising_factorial(RT x, unsigned n);
+   typename tools::promote_args<RT>::type rising_factorial(RT x, int n);
 
    template <class RT, class Policy>
-   typename tools::promote_args<RT>::type rising_factorial(RT x, unsigned n, const Policy& pol);
+   typename tools::promote_args<RT>::type rising_factorial(RT x, int n, const Policy& pol);
 
    // Fpclassify - classify floating-point as NaN or infinity...
    template <class T>

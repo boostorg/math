@@ -170,9 +170,9 @@ BOOST_MATH_META_INT(error_policy_type, evaluation_error, BOOST_MATH_EVALUATION_E
 //
 // Policy types for internal promotion:
 //
-BOOST_MATH_META_BOOL(promote_float, BOOST_MATH_PROMOTE_FLOAT_POLICY);
-BOOST_MATH_META_BOOL(promote_double, BOOST_MATH_PROMOTE_DOUBLE_POLICY);
-BOOST_MATH_META_BOOL(assert_undefined, BOOST_MATH_ASSERT_UNDEFINED_POLICY);
+BOOST_MATH_META_BOOL(promote_float, BOOST_MATH_PROMOTE_FLOAT_POLICY)
+BOOST_MATH_META_BOOL(promote_double, BOOST_MATH_PROMOTE_DOUBLE_POLICY)
+BOOST_MATH_META_BOOL(assert_undefined, BOOST_MATH_ASSERT_UNDEFINED_POLICY)
 //
 // Policy types for discrete quantiles:
 //
@@ -186,12 +186,12 @@ enum discrete_quantile_policy_type
    integer_round_nearest
 };
 
-BOOST_MATH_META_INT(discrete_quantile_policy_type, discrete_quantile, BOOST_MATH_DISCRETE_QUANTILE_POLICY);
+BOOST_MATH_META_INT(discrete_quantile_policy_type, discrete_quantile, BOOST_MATH_DISCRETE_QUANTILE_POLICY)
 //
 // Precision:
 //
-BOOST_MATH_META_INT(int, digits10, BOOST_MATH_DIGITS10_POLICY);
-BOOST_MATH_META_INT(int, digits2, 0);
+BOOST_MATH_META_INT(int, digits10, BOOST_MATH_DIGITS10_POLICY)
+BOOST_MATH_META_INT(int, digits2, 0)
 //
 // Define the names for each possible policy:
 //

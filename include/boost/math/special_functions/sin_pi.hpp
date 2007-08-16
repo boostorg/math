@@ -6,6 +6,8 @@
 #ifndef BOOST_MATH_SIN_PI_HPP
 #define BOOST_MATH_SIN_PI_HPP
 
+#include <cmath>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/constants/constants.hpp>
 

@@ -579,7 +579,8 @@ int test_main(int, char* [])
 
 	// (Parameter value, arbitrarily zero, only communicates the floating-point type).
   test_spots(0.0F); // Test float.
-	test_spots(0.0); // Test double.
+  test_spots(0.0); // Test double.
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   if (numeric_limits<long double>::digits10 > numeric_limits<double>::digits10)
   { // long double is better than double (so not MSVC where they are same).
 	  test_spots(0.0L); // Test long double.
@@ -588,7 +589,7 @@ int test_main(int, char* [])
   #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
   #endif
-
+#endif
 	return 0;
 } // int test_main(int, char* [])
 
