@@ -29,7 +29,7 @@ struct max_factorial;
 template <>
 inline float unchecked_factorial<float>(unsigned i)
 {
-   static const boost::array<float, 35> factorials = {
+   static const boost::array<float, 35> factorials = {{
       1.0F,
       1.0F,
       2.0F,
@@ -65,7 +65,7 @@ inline float unchecked_factorial<float>(unsigned i)
       0.26313083693369353016721801216e36F,
       0.868331761881188649551819440128e37F,
       0.29523279903960414084761860964352e39F,
-   };
+   }};
 
    return factorials[i];
 }
@@ -80,7 +80,7 @@ struct max_factorial<float>
 template <>
 inline long double unchecked_factorial<long double>(unsigned i)
 {
-   static const boost::array<long double, 171> factorials = {
+   static const boost::array<long double, 171> factorials = {{
       1L,
       1L,
       2L,
@@ -252,7 +252,7 @@ inline long double unchecked_factorial<long double>(unsigned i)
       0.2526075744973198387538018869171341146786e303L,
       0.4269068009004705274939251888899566538069e305L,
       0.7257415615307998967396728211129263114717e307L,
-   };
+   }};
 
    return factorials[i];
 }
@@ -279,7 +279,7 @@ struct max_factorial<double>
 template <class T>
 inline T unchecked_factorial(unsigned i)
 {
-   static const boost::array<T, 101> factorials = {
+   static const boost::array<T, 101> factorials = {{
       boost::lexical_cast<T>("1"),
       boost::lexical_cast<T>("1"),
       boost::lexical_cast<T>("2"),
@@ -381,7 +381,7 @@ inline T unchecked_factorial(unsigned i)
       boost::lexical_cast<T>("9426890448883247745626185743057242473809693764078951663494238777294707070023223798882976159207729119823605850588608460429412647567360000000000000000000000"),
       boost::lexical_cast<T>("933262154439441526816992388562667004907159682643816214685929638952175999932299156089414639761565182862536979208272237582511852109168640000000000000000000000"),
       boost::lexical_cast<T>("93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000"),
-   };
+   }};
 
    return factorials[i];
 }

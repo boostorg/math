@@ -430,7 +430,7 @@ inline bool check_overflow(T val, R* result, const char* function, const Policy&
    using namespace std;
    if(fabs(val) > tools::max_value<R>())
    {
-      *result = static_cast<R>(raise_overflow_error<R>(function, 0, pol));
+      *result = static_cast<R>(boost::math::policies::detail::raise_overflow_error<R>(function, 0, pol));
       return true;
    }
    return false;
@@ -440,7 +440,7 @@ inline bool check_underflow(T val, R* result, const char* function, const Policy
 {
    if((val != 0) && (static_cast<R>(val) == 0))
    {
-      *result = static_cast<R>(raise_underflow_error<R>(function, 0, pol));
+      *result = static_cast<R>(boost::math::policies::detail::raise_underflow_error<R>(function, 0, pol));
       return true;
    }
    return false;
@@ -451,7 +451,7 @@ inline bool check_denorm(T val, R* result, const char* function, const Policy& p
    using namespace std;
    if((fabs(val) < static_cast<T>(tools::min_value<R>())) && (static_cast<R>(val) != 0))
    {
-      *result = static_cast<R>(raise_denorm_error<R>(function, 0, static_cast<R>(val), pol));
+      *result = static_cast<R>(boost::math::policies::detail::raise_denorm_error<R>(function, 0, static_cast<R>(val), pol));
       return true;
    }
    return false;

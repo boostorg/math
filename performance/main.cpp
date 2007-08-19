@@ -8,6 +8,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include "performance_measure.hpp"
+#include <boost/math/policy/policy.hpp>
 
 extern void reference_evaluate();
 
@@ -78,6 +79,35 @@ bool add_named_test(const char* name)
    return found;
 }
 
+void print_current_config()
+{
+   std::cout << "Currently, polynomial evaluation uses method " << BOOST_MATH_POLY_METHOD << std::endl;
+   std::cout << "Currently, rational function evaluation uses method " << BOOST_MATH_RATIONAL_METHOD << std::endl;
+   if(BOOST_MATH_POLY_METHOD + BOOST_MATH_RATIONAL_METHOD > 0)
+      std::cout << "Currently, the largest order of polynomial or rational function"
+         " that uses a method other than 0, is " << BOOST_MATH_MAX_POLY_ORDER << std::endl;
+   bool uses_mixed_tables = boost::is_same<BOOST_MATH_INT_TABLE_TYPE(double, int), int>::value;
+   if(uses_mixed_tables)
+      std::cout << "Currently, rational functions with integer coefficients are evaluated using mixed integer/real arithmetic" << std::endl;
+   else
+      std::cout << "Currently, rational functions with integer coefficients are evaluated using all real arithmetic (integer coefficients are actually stored as reals)" << std::endl << std::endl;
+   std::cout << "Policies are currently set as follows:\n\n";
+   std::cout << "Policy                                  Value\n";
+   std::cout << "BOOST_MATH_DOMAIN_ERROR_POLICY          " << BOOST_STRINGIZE(BOOST_MATH_DOMAIN_ERROR_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_POLE_ERROR_POLICY            " << BOOST_STRINGIZE(BOOST_MATH_POLE_ERROR_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_OVERFLOW_ERROR_POLICY        " << BOOST_STRINGIZE(BOOST_MATH_OVERFLOW_ERROR_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_UNDERFLOW_ERROR_POLICY       " << BOOST_STRINGIZE(BOOST_MATH_UNDERFLOW_ERROR_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_DENORM_ERROR_POLICY          " << BOOST_STRINGIZE(BOOST_MATH_DENORM_ERROR_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_EVALUATION_ERROR_POLICY      " << BOOST_STRINGIZE(BOOST_MATH_EVALUATION_ERROR_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_DIGITS10_POLICY              " << BOOST_STRINGIZE(BOOST_MATH_DIGITS10_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_PROMOTE_FLOAT_POLICY         " << BOOST_STRINGIZE(BOOST_MATH_PROMOTE_FLOAT_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_PROMOTE_DOUBLE_POLICY        " << BOOST_STRINGIZE(BOOST_MATH_PROMOTE_DOUBLE_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_DISCRETE_QUANTILE_POLICY     " << BOOST_STRINGIZE(BOOST_MATH_DISCRETE_QUANTILE_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_ASSERT_UNDEFINED_POLICY      " << BOOST_STRINGIZE(BOOST_MATH_ASSERT_UNDEFINED_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_MAX_ITER                     " << BOOST_STRINGIZE(BOOST_MATH_MAX_ITER) << std::endl;
+
+}
+
 int main(int argc, const char** argv)
 {
    try{
@@ -92,16 +122,7 @@ int main(int argc, const char** argv)
          }
          else if(std::strcmp(argv[i], "--tune") == 0)
          {
-            std::cout << "Currently, polynomial evaluation uses method " << BOOST_MATH_POLY_METHOD << std::endl;
-            std::cout << "Currently, rational function evaluation uses method " << BOOST_MATH_RATIONAL_METHOD << std::endl;
-            if(BOOST_MATH_POLY_METHOD + BOOST_MATH_RATIONAL_METHOD > 0)
-               std::cout << "Currently, the largest order of polynomial or rational function"
-                  " that uses a method other than 0, is " << BOOST_MATH_MAX_POLY_ORDER << std::endl;
-            bool uses_mixed_tables = boost::is_same<BOOST_MATH_INT_TABLE_TYPE(double, int), int>::value;
-            if(uses_mixed_tables)
-               std::cout << "Currently, rational functions with integer coefficients are evaluated using mixed integer/real arithmetic" << std::endl;
-            else
-               std::cout << "Currently, rational functions with integer coefficients are evaluated using all real arithmetic (integer coefficients are actually stored as reals)" << std::endl;
+            print_current_config();
             add_named_test("Polynomial-method-0");
             add_named_test("Polynomial-method-1");
             add_named_test("Polynomial-method-2");
@@ -121,6 +142,7 @@ int main(int argc, const char** argv)
          }
          else if(std::strcmp(argv[i], "--all") == 0)
          {
+            print_current_config();
             std::set<test_info>::const_iterator a(all_tests().begin()), b(all_tests().end());
             while(a != b)
             {
