@@ -9,7 +9,7 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/roots.hpp>
-#include <boost/math/policy/error_handling.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/tr1/tuple.hpp>
 
 namespace boost{ namespace math{

@@ -11,7 +11,7 @@
 #include <boost/limits.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
-#include <boost/math/policy/error_handling.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS

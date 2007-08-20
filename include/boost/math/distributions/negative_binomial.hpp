@@ -232,22 +232,22 @@ namespace boost
         return result + k;
       } // RealType find_number_of_failures
 
-      //static RealType find_maximum_number_of_trials(
-      //  RealType k,     // number of failures (k >= 0).
-      //  RealType p,     // success fraction 0 <= p <= 1.
-      //  RealType alpha) // risk level threshold 0 <= alpha <= 1.
-      //{
-      //  static const char* function = "boost::math::negative_binomial<%1%>::estimate_maximum_number_of_trials";
-      //  // Error checks:
-      //  RealType result;
-      //  if(false == negative_binomial_detail::check_dist_and_k(
-      //    function, RealType(1), p, k, &result, Policy())
-      //    &&  detail::check_probability(function, alpha, &result, Policy()))
-      //  { return result; }
+      static RealType find_maximum_number_of_trials(
+        RealType k,     // number of failures (k >= 0).
+        RealType p,     // success fraction 0 <= p <= 1.
+        RealType alpha) // risk level threshold 0 <= alpha <= 1.
+      {
+        static const char* function = "boost::math::negative_binomial<%1%>::estimate_maximum_number_of_trials";
+        // Error checks:
+        RealType result;
+        if(false == negative_binomial_detail::check_dist_and_k(
+          function, RealType(1), p, k, &result, Policy())
+          &&  detail::check_probability(function, alpha, &result, Policy()))
+        { return result; }
 
-      //  result = ibetac_inva(k + 1, p, alpha, Policy());  // returns n - k
-      //  return result + k;
-      //} // RealType find_number_of_trials complemented
+        result = ibetac_inva(k + 1, p, alpha, Policy());  // returns n - k
+        return result + k;
+      } // RealType find_number_of_trials complemented
 
     private:
       RealType m_r; // successes.

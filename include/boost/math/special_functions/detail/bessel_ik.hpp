@@ -9,7 +9,7 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/policy/error_handling.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/config.hpp>
 
 // Modified Bessel functions of the first and second kind of fractional order

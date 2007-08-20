@@ -12,7 +12,7 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/if.hpp>
-#include <boost/math/policy/policy.hpp>
+#include <boost/math/policies/policy.hpp>
 
 #include <iostream>
 #include <iomanip>

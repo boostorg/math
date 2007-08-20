@@ -13,7 +13,7 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
-#include <boost/math/policy/policy.hpp>
+#include <boost/math/policies/policy.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <cmath>
 #include <boost/limits.hpp>

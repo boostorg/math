@@ -24,7 +24,7 @@
 #include <boost/limits.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/precision.hpp>
-#include <boost/math/policy/policy.hpp>
+#include <boost/math/policies/policy.hpp>
 
 #include <ostream>
 #include <istream>

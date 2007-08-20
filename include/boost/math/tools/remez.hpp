@@ -13,7 +13,7 @@
 #include <boost/function/function1.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/policy/policy.hpp>
+#include <boost/math/policies/policy.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 

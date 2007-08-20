@@ -11,7 +11,7 @@
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/math/tools/rational.hpp>
-#include <boost/math/policy/policy.hpp>
+#include <boost/math/policies/policy.hpp>
 #include <boost/mpl/less_equal.hpp>
 
 #include <limits.h>

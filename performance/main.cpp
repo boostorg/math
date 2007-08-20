@@ -8,7 +8,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include "performance_measure.hpp"
-#include <boost/math/policy/policy.hpp>
+#include <boost/math/policies/policy.hpp>
 
 extern void reference_evaluate();
 

@@ -15,7 +15,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/policy/policy.hpp>
+#include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/cstdint.hpp>
 #ifdef BOOST_MSVC

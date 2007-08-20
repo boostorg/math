@@ -9,7 +9,7 @@
 #ifndef BOOST_MATH_DISTRIBUTIONS_COMMON_ERROR_HANDLING_HPP
 #define BOOST_MATH_DISTRIBUTIONS_COMMON_ERROR_HANDLING_HPP
 
-#include <boost/math/policy/error_handling.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #ifdef BOOST_MSVC

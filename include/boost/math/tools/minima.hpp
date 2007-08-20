@@ -10,7 +10,7 @@
 #include <utility>
 #include <cmath>
 #include <boost/math/tools/precision.hpp>
-#include <boost/math/policy/policy.hpp>
+#include <boost/math/policies/policy.hpp>
 #include <boost/cstdint.hpp>
 
 namespace boost{ namespace math{ namespace tools{

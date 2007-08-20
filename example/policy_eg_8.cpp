@@ -17,7 +17,7 @@ any of the default ones supplied by the library to be used.  If
 we set the policy for a specific type of error to `user_error`
 then the library will call a user-supplied error handler.
 These are forward declared, but not defined in
-boost/math/policy/error_handling.hpp like this:
+boost/math/policies/error_handling.hpp like this:
 
    namespace boost{ namespace math{ namespace policy{
 

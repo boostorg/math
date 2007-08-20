@@ -26,7 +26,7 @@
 
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
-#include <boost/math/policy/error_handling.hpp>
+#include <boost/math/policies/error_handling.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 

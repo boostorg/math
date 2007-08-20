@@ -15,7 +15,7 @@
 
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/policy/error_handling.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/ellint_rc.hpp>
 
 // Carlson's elliptic integral of the third kind

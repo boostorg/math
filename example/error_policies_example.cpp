@@ -17,7 +17,7 @@
 
 //  using namespace boost::math;
 //.\error_policy_normal.cpp(30) : error C2872: 'policy' : ambiguous symbol
-//        could be 'I:\Boost-sandbox\math_toolkit\boost/math/policy/policy.hpp(392) : boost::math::policies::policy'
+//        could be 'I:\Boost-sandbox\math_toolkit\boost/math/policies/policy.hpp(392) : boost::math::policies::policy'
 //        or 'boost::math::policies'
 
   // So can't use this using namespace command.

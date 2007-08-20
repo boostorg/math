@@ -7,7 +7,7 @@
 #define BOOST_MATH_BESSEL_K0_HPP
 
 #include <boost/math/tools/rational.hpp>
-#include <boost/math/policy/error_handling.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/assert.hpp>
 
 // Modified Bessel function of the second kind of order zero

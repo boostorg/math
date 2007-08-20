@@ -8,7 +8,7 @@
 
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/promotion.hpp>
-#include <boost/math/policy/error_handling.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/mpl/comparison.hpp>
 

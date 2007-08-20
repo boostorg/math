@@ -14,7 +14,7 @@
 #include <cmath>
 #include <boost/config.hpp>
 #include <boost/math/tools/precision.hpp>
-#include <boost/math/policy/error_handling.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
 // This is the inverse of the hyperbolic cosine function.

@@ -20,7 +20,7 @@
 #define BOOST_MATH_SPECIAL_MATH_FWD_HPP
 
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
-#include <boost/math/policy/policy.hpp>
+#include <boost/math/policies/policy.hpp>
 #include <boost/mpl/comparison.hpp>
 #include <complex>
 

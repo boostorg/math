@@ -25,7 +25,7 @@
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/promotion.hpp>
-#include <boost/math/policy/error_handling.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/log1p.hpp>
