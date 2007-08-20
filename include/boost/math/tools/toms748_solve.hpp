@@ -242,21 +242,32 @@ T cubic_interpolate(const T& a, const T& b, const T& d,
    // inside [a, b], so we fall back to quadratic
    // interpolation in case of an erroneous result.
    //
+   BOOST_MATH_INSTRUMENT_CODE(" a = " << a << " b = " << b
+      << " d = " << d << " e = " << e << " fa = " << fa << " fb = " << fb 
+      << " fd = " << fd << " fe = " << fe);
    T q11 = (d - e) * fd / (fe - fd);
    T q21 = (b - d) * fb / (fd - fb);
    T q31 = (a - b) * fa / (fb - fa);
    T d21 = (b - d) * fd / (fd - fb);
    T d31 = (a - b) * fb / (fb - fa);
+   BOOST_MATH_INSTRUMENT_CODE(
+      "q11 = " << q11 << " q21 = " << q21 << " q31 = " << q31
+      << " d21 = " << d21 << " d31 = " << d31);
    T q22 = (d21 - q11) * fb / (fe - fb);
    T q32 = (d31 - q21) * fa / (fd - fa);
    T d32 = (d31 - q21) * fd / (fd - fa);
    T q33 = (d32 - q22) * fa / (fe - fa);
    T c = q31 + q32 + q33 + a;
+   BOOST_MATH_INSTRUMENT_CODE(
+      "q22 = " << q22 << " q32 = " << q32 << " d32 = " << d32
+      << " q33 = " << q33 << " c = " << c);
 
    if((c <= a) || (c >= b))
    {
       // Out of bounds step, fall back to quadratic interpolation:
       c = quadratic_interpolate(a, b, d, fa, fb, fd, 3);
+   BOOST_MATH_INSTRUMENT_CODE(
+      "Out of bounds interpolation, falling back to quadratic interpolation. c = " << c);
    }
 
    return c;
@@ -343,7 +354,8 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       // then variable prof will get set to true, and we'll end up
       // taking a quadratic step instead.
       //
-      bool prof = (fa == fb) || (fa == fd) || (fa == fe) || (fb == fd) || (fb == fe) || (fd == fe);
+      T min_diff = tools::min_value<T>() * 32;
+      bool prof = (fabs(fa - fb) < min_diff) || (fabs(fa - fd) < min_diff) || (fabs(fa - fe) < min_diff) || (fabs(fb - fd) < min_diff) || (fabs(fb - fe) < min_diff) || (fabs(fd - fe) < min_diff);
       if(prof)
       {
          c = detail::quadratic_interpolate(a, b, d, fa, fb, fd, 2);
@@ -365,7 +377,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
       //
       // Now another interpolated step:
       //
-      prof = (fa == fb) || (fa == fd) || (fa == fe) || (fb == fd) || (fb == fe) || (fd == fe);
+      prof = (fabs(fa - fb) < min_diff) || (fabs(fa - fd) < min_diff) || (fabs(fa - fe) < min_diff) || (fabs(fb - fd) < min_diff) || (fabs(fb - fe) < min_diff) || (fabs(fd - fe) < min_diff);
       if(prof)
       {
          c = detail::quadratic_interpolate(a, b, d, fa, fb, fd, 3);

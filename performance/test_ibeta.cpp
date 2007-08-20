@@ -64,9 +64,13 @@ double ibeta_invab_evaluate2(const boost::array<boost::array<T, 7>, N>& data)
    double result = 0;
    for(unsigned i = 0; i < N; ++i)
    {
+      //std::cout << "ibeta_inva(" << data[i][1] << "," << data[i][2] << "," << data[i][5] << ");" << std::endl;
       result += boost::math::ibeta_inva(data[i][1], data[i][2], data[i][5]);
+      //std::cout << "ibeta_invb(" << data[i][0] << "," << data[i][2] << "," << data[i][5] << ");" << std::endl;
       result += boost::math::ibeta_invb(data[i][0], data[i][2], data[i][5]);
+      //std::cout << "ibetac_inva(" << data[i][1] << "," << data[i][2] << "," << data[i][6] << ");" << std::endl;
       result += boost::math::ibetac_inva(data[i][1], data[i][2], data[i][6]);
+      //std::cout << "ibetac_invb(" << data[i][0] << "," << data[i][2] << "," << data[i][6] << ");" << std::endl;
       result += boost::math::ibetac_invb(data[i][0], data[i][2], data[i][6]);
    }
    return result;
