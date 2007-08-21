@@ -263,7 +263,7 @@ Or to be more specific, to avoid 'using namespaces ...' statements:
   using boost::math::policies::policy;
   using boost::math::policies::discrete_quantile;
   using boost::math::policies::real;
-  using boost::math::policies::integer_outside; // Default.
+  using boost::math::policies::integer_round_outwards; // Default.
   typedef boost::math::policies::policy<discrete_quantile<real> > real_quantile_policy;
 /*`Add a binomial distribution called real_quantile_binomial that uses real_quantile_policy.
 */
