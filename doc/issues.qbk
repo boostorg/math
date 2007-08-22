@@ -37,8 +37,6 @@ basic arithmetic operations.  Maybe this is telling us something, or maybe not
 
 [h4 Elliptic Integrals]
 
-[template para[text] '''<para>'''[text]'''</para>''']
-
 * Carlson's algorithms are essentially unchanged from Xiaogang Zhang's
 Google Summer of Code student project, and are based on Carlson's
 original papers.  However, Carlson has revised his algorithms since then

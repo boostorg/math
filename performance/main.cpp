@@ -10,6 +10,12 @@
 #include "performance_measure.hpp"
 #include <boost/math/policies/policy.hpp>
 
+#ifdef TEST_GSL
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_message.h>
+#endif
+
+
 extern void reference_evaluate();
 
 std::map<std::string, double> times;
@@ -111,6 +117,10 @@ void print_current_config()
 int main(int argc, const char** argv)
 {
    try{
+
+#ifdef TEST_GSL
+   gsl_set_error_handler_off();
+#endif
 
    if(argc >= 2)
    {

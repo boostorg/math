@@ -172,11 +172,17 @@ and use the function's name as the link text]
 [/ distribution def names end in distrib to avoid clashes]
 [def __beta_distrib [link math_toolkit.dist.dist_ref.dists.beta_dist Beta Distribution]]
 [def __binomial_distrib [link math_toolkit.dist.dist_ref.dists.binomial_dist Binomial Distribution]]
-[def __negative_binomial_distrib [link math_toolkit.dist.dist_ref.dists.negative_binomial_dist Negative Binomial Distribution]]
+[def __cauchy_distrib [link math_toolkit.dist.dist_ref.dists.cauchy_dist Cauchy Distribution]]
 [def __chi_squared_distrib [link math_toolkit.dist.dist_ref.dists.chi_squared_dist Chi Squared Distribution]]
-[def __normal_distrib [link math_toolkit.dist.dist_ref.dists.normal_dist Normal Distribution]]
+[def __exp_distrib [link math_toolkit.dist.dist_ref.dists.exp_dist Exponential Distribution]]
 [def __F_distrib [link math_toolkit.dist.dist_ref.dists.f_dist Fisher F Distribution]]
+[def __gamma_distrib [link math_toolkit.dist.dist_ref.dists.gamma_dist Gamma Distribution]]
+[def __lognormal_distrib [link math_toolkit.dist.dist_ref.dists.lognormal_dist Log-normal Distribution]]
+[def __negative_binomial_distrib [link math_toolkit.dist.dist_ref.dists.negative_binomial_dist Negative Binomial Distribution]]
+[def __normal_distrib [link math_toolkit.dist.dist_ref.dists.normal_dist Normal Distribution]]
+[def __poisson_distrib [link math_toolkit.dist.dist_ref.dists.poisson_dist Poisson Distribution]]
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
+[def __weibull_distrib [link math_toolkit.dist.dist_ref.dists.weibull Weibull Distribution]]
 
 [/links to policy]
 [def __Policy [link math_toolkit.policy Policy]] [/ Used in distribution template specifications]
@@ -312,6 +318,8 @@ external graphing application.
 [endsect] [/section:intro Introduction]
 
 [include structure.qbk] [/getting about]
+
+[include performance.qbk]
 
 [section:dist Statistical Distributions and Functions]
 [include dist_tutorial.qbk]

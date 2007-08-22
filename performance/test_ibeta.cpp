@@ -150,7 +150,7 @@ BOOST_MATH_PERFORMANCE_TEST(ibeta_inv_test, "ibeta_inv-cephes")
 
 #endif
 
-#ifdef TEST_GSL___
+#ifdef TEST_GSL
 //
 // This test segfaults inside GSL....
 //

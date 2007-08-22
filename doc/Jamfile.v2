@@ -16,6 +16,10 @@ boostbook standalone
         <xsl:param>boost.libraries=$(boost-root)/libs/libraries.htm
         # Use the main Boost stylesheet:
         <xsl:param>html.stylesheet=../../../../../../trunk/doc/html/boostbook.css
+        
+        # Some general style settings:
+        <xsl:param>table.footnote.number.format=1
+        <xsl:param>footnote.number.format=1
 
         # HTML options first:
         # Use graphics not text for navigation:

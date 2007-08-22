@@ -132,7 +132,7 @@ double igamma_inv_evaluate_cephes(const boost::array<boost::array<T, 6>, N>& dat
       result += igami(data[i][0], data[i][3]); // note needs complement of probability!!
    return result;
 }
-/*
+
 //
 // This test does not run to completion, gets stuck
 // in infinite loop inside cephes....
@@ -151,7 +151,6 @@ BOOST_MATH_PERFORMANCE_TEST(igamma_inv_test, "igamma_inv-cephes")
       + sizeof(igamma_med_data)
       + sizeof(igamma_small_data)) / sizeof(igamma_big_data[0]));
 }
-*/
 #endif
 
 #ifdef TEST_GSL
