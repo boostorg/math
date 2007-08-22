@@ -40,30 +40,29 @@ from 0.5 to some other value to simulate an unfair coin,
 say 0.6 for one with chewing gum on the tail,
 so it is more likely to fall tails down and heads up).
 
-First we need to some includes and using statements to be able to use the binomial distribution, and get started:
+First we need to some includes and using statements to be able to use the binomial distribution, some std input and output, and get started:
 */
 
 #include <boost/math/distributions/binomial.hpp>
   using boost::math::binomial;
 
 #include <iostream>
-  using std::cout;
-  using std::endl;
-  using std::left;
+  using std::cout;  using std::endl;  using std::left;
 #include <iomanip>
-    using std::setw;
+  using std::setw;
 
 int main()
 {
   cout << "Using Binomial distribution to predict how many heads and tails." << endl;
   try
-  { // (See note with the catch block about why try'n'catch is a good idea).
+  { // (See note with the catch block about why a try'n'catch is a good idea).
 /*`
 First, construct a binomial distribution with parameters success_fraction 1/2, and how many flips.
 */
     const double success_fraction = 0.5; // = 50% = 1/2 for a 'fair' coin.
     int flips = 10; 
     binomial flip(flips, success_fraction);
+
     cout.precision(4); // Might be able to calculate an appropriate precision from how many flips?
 /*`
  Then some examples of using Binomial moments (and echoing the parameters).
@@ -88,7 +87,7 @@ Now we show a variety of predictions on the probability of heads:
     cout << "Probability of getting no heads is " << pdf(flip, 0) << endl;
     cout << "Probability of getting at least one head is " << 1. - pdf(flip, 0) << endl;
 /*`
-But this may be inaccurate, so better to use either of
+But this last complement may be inaccurate, so better to use either of
 */
     cout << "Probability of getting 0 or 1 heads is "
       << pdf(flip, 0) + pdf(flip, 1) << endl; // sum of exactly == probabilities
@@ -100,7 +99,7 @@ Or we can use the cdf.
 /*`
 Note that using
 */
-    cout << "Probability of getting 9 or 10 heads is " << 1 - cdf(flip, 8) << endl;
+    cout << "Probability of getting 9 or 10 heads is " << 1. - cdf(flip, 8) << endl;
 /*`
 is less accurate than using the complement
 */
@@ -124,8 +123,9 @@ Certainly for a bigger range like, 3 to 7
       // P(X <= 7) - P(X <= 2) == P(X < 3)
       << cdf(flip, 7) - cdf(flip, 2) << endl;
     cout << endl;
+
 /*`
-Finally print two tables of probability for the exactly and at least a number of heads.
+Finally, print two tables of probability for the /exactly/ and /at least/ a number of heads.
 */
     // Print a table of probability for the exactly a number of heads.
     cout << "Probability of getting exactly (==) heads" << endl;
@@ -138,13 +138,15 @@ Finally print two tables of probability for the exactly and at least a number of
     } // for i
     cout << endl;
 
-    // Tabulate the probability of getting between zero and 0 to 10 heads.
+    // Tabulate the probability of getting between zero heads and 0 upto 10 heads.
     cout << "Probability of getting upto (<=) heads" << endl;
     for (int successes = 0; successes <= flips; successes++) 
-    { // Say success means getting a head (or equally success means getting a tail).
+    { // Say success means getting a head
+      // (equally success could mean getting a tail).
       double probability = cdf(flip, successes); // P(X <= heads)
       cout << setw(2) << successes << "        " << setw(10) << left
-        << probability << " or 1 in " << 1. / probability << ", or " << probability * 100. << "%"<< endl;
+        << probability << " or 1 in " << 1. / probability << ", or "
+        << probability * 100. << "%"<< endl;
     } // for i
 /*`
 The last (0 to 10 heads) must, of course, be 100% probability.
