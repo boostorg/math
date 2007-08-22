@@ -360,6 +360,7 @@ Now that you have the basics, the next section looks at some worked examples.
 [include distributions/f_dist_example.qbk]
 [include distributions/binomial_example.qbk]
 [include distributions/negative_binomial_example.qbk]
+[include distributions/normal_example.qbk]
 [include distributions/error_handling_example.qbk]
 [include distributions/nag_library.qbk]
 
