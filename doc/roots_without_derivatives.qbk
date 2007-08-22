@@ -117,14 +117,14 @@ been shown to be optimal for a certain classes of smooth functions.
 
 Alternatively, there is a simple bisection routine which can be useful
 in its own right in some situations, or alternatively for narrowing 
-down the range containing the root prior to calling a more advanced
+down the range containing the root, prior to calling a more advanced
 algorithm.
 
 All the algorithms in this section reduce the diameter of the enclosing
 interval with the same asymptotic efficiency with which they locate the 
 root.  This is in contrast to the derivative based methods which may /never/
 significantly reduce the enclosing interval, even though they rapidly approach
-the root.  This is also in contrast to some other derivate free methods
+the root.  This is also in contrast to some other derivative-free methods
 (for example the methods of [@http://en.wikipedia.org/wiki/Brent%27s_method Brent or Dekker)]
 which only reduce the enclosing interval on the final step.
 Therefore these methods return a std::pair containing the enclosing interval found,
@@ -194,7 +194,7 @@ or
 
 where /m/ is the initial value of /max_iter/ passed to the function.
 
-In other words it's up to the caller to verify whether termination occurred
+In other words, it's up to the caller to verify whether termination occurred
 as a result of exceeding /max_iter/ function invocations (easily done by 
 checking the value of /max_iter/ when the function returns), rather than 
 because the termination condition /tol/ was satisfied.
@@ -261,7 +261,7 @@ or
 
 where /m/ is the initial value of /max_iter/ passed to the function.
 
-In other words it's up to the caller to verify whether termination occurred
+In other words, it's up to the caller to verify whether termination occurred
 as a result of exceeding /max_iter/ function invocations (easily done by 
 checking the value of /max_iter/ when the function returns), rather than 
 because the termination condition /tol/ was satisfied.
@@ -347,7 +347,7 @@ or
 
 where /m/ is the initial value of /max_iter/ passed to the function.
 
-In other words it's up to the caller to verify whether termination occurred
+In other words, it's up to the caller to verify whether termination occurred
 as a result of exceeding /max_iter/ function invocations (easily done by 
 checking the value of /max_iter/), rather than because the termination 
 condition /tol/ was satisfied.
