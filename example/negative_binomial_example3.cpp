@@ -151,16 +151,6 @@ int main()
     cout << "Standard deviation of estimator is " << sqrt(v) << endl;  // 0.025 - seems smallish?
     // Would expect point estimate 0.14 + a couple of sd = 0.25 * 2 = 0.05 = 1.9 ~= 0.2?
     // So perhaps near enough?
-
-    // Section 7.5 testing the true success probability.
-    // 7.5.1  A lot is inspected randomly.  5th defective found at 30th inspection.
-    // so 25 are OK and 5 are duds.
-    // Using StatCalc r = 5, k = 25, so r + r = 30, value for p0 0.3
-    negative_binomial nb(5, 0.2); // 1/3rd are defective?
-    cout << "P(X <= 25) = " << cdf(nb, 25) << endl; //  0.744767
-    cout << "quantile(nb, 0.3) = " << quantile(nb, 0.3) << endl; // 13
-    // Don't understand what the p-value calculation does.
-    // TODO????
   }
   return 0;
 }  // int main()
