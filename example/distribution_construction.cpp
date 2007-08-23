@@ -61,8 +61,9 @@ int main()
   /*`
   we can reduce typing.
 
-  Since the vast majority of applications use double,
-  the RealType default is chosen to be double, so we can also write:
+  Since the vast majority of applications use will be using double precision,
+  the template argument to the distribution (RealType) defaults
+  to type double, so we can also write:
   */
 
   negative_binomial_distribution<> mydist9(8., 0.25); // Uses default RealType = double.
@@ -85,12 +86,12 @@ int main()
   using boost::math::negative_binomial;
   
   /*`
-  we have a convenient reference to negative_binomial_distribution<double> thus:
+  we have a convenient typedef to `negative_binomial_distribution<double>`:
   */
   negative_binomial mydist(8., 0.25);
 
   /*`
-  Some more examples using the provided convenience typedef:
+  Some more examples using the convenience typedef:
   */
   negative_binomial mydist10(5., 0.4); // Both arguments double.
   /*`
@@ -138,13 +139,28 @@ int main()
   /*`
   We can, of course, still provide the type explicitly thus:
   */
-  negative_binomial_distribution<double> mydist1(8., 0.25); // Explicit double.
-  negative_binomial_distribution<float>  mydist2(8., 0.25); // Explicit float, double arguments -> float.
-  negative_binomial_distribution<float>  mydist3(8, 0.25); // Explicit float, integer & double arguments -> float.
-  negative_binomial_distribution<float>  mydist4(8.F, 0.25F); // Explicit float, float arguments, no conversion.
-  negative_binomial_distribution<float>  mydist5(8, 1); // Explicit integer, integer arguments -> float.
-  negative_binomial_distribution<double> mydist6(8., 0.25); // Explicit double.
-  negative_binomial_distribution<long double> mydist7(8., 0.25); // Explicit long double.
+  
+  // Explicit double precision:
+  negative_binomial_distribution<double>        mydist1(8., 0.25); 
+
+  // Explicit float precision, double arguments are truncated to float:
+  negative_binomial_distribution<float>         mydist2(8., 0.25);
+
+  // Explicit float precision, integer & double arguments converted to float.
+  negative_binomial_distribution<float>         mydist3(8, 0.25); 
+
+  // Explicit float precision, float arguments, so no conversion:
+  negative_binomial_distribution<float>         mydist4(8.F, 0.25F); 
+
+  // Explicit float precision, integer arguments promoted to float.
+  negative_binomial_distribution<float>         mydist5(8, 1); 
+
+  // Explicit double precision:
+  negative_binomial_distribution<double>        mydist6(8., 0.25); 
+
+  // Explicit long double precision:
+  negative_binomial_distribution<long double>   mydist7(8., 0.25); 
+
   /*`
   And if you have your own RealType called MyFPType,
   for example NTL RR (an arbitrary precision type), then we can write:
@@ -167,7 +183,14 @@ int main()
   defaults for the mean and standard deviation thus:
   
       normal_distribution(RealType mean = 0, RealType sd = 1);
+
+  So in this case we can write:
   */
+  using boost::math::normal;
+  
+  normal norm1;       // Standard normal distribution.
+  normal norm2(2);    // Mean = 2, std deviation = 1.
+  normal norm3(2, 3); // Mean = 2, std deviation = 3.
 
   return 0;
 }  // int main()

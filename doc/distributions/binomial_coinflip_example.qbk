@@ -4,6 +4,8 @@
 [binomial_coinflip_example1]
 
 See [@../../example/binomial_coinflip_example.cpp binomial_coinflip_example.cpp]
-for full source code and output.
+for full source code the program output looks like this:
+
+[binomial_coinflip_example_output]
 
 [endsect] [/section:binomial_coinflip_example_example Binomial Coin-Flipping example]
