@@ -49,12 +49,16 @@ standard deviation /sd/.
 Requires sd > 0, otherwise __domain_error is called.
 
    RealType mean()const;
+   RealType location()const;   
    
-Returns the /mean/ of this distribution.
+both return the /mean/ of this distribution.
    
    RealType standard_deviation()const;
+   RealType scale()const;
       
-Returns the /standard deviation/ of this distribution.
+both return the /standard deviation/ of this distribution.
+(Redundant location and scale function are provided to match other similar distributions,
+allowing the functions find_location and find_scale to be used generically).
 
 [h4 Non-member Accessors]
 

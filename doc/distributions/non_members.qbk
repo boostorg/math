@@ -98,10 +98,12 @@ function in a call to `complement`, for example:
    // print survival function for x=2.0:
    std::cout << cdf(complement(norm, 2.0)) << std::endl;
 
-For example the following graph shows the complement of the cdf for the
+For example the following graph shows the __complement of the cdf for the
 normal distribution:
 
 [$../graphs/survival.png]
+
+See __why_complement for why the complement is useful and when it should be used.
 
 [h4 [#math.dist.hazard]Hazard Function]
 
