@@ -2,7 +2,7 @@
 
 See also the reference documentation for the __binomial_distrib.
 
-[section:binomial_coinflip_example Binomial Coin-Flipping Example Example]
+[section:binomial_coinflip_example Binomial Coin-Flipping Example]
 
 [import ../../example/binomial_coinflip_example.cpp]
 [binomial_coinflip_example1]
@@ -12,7 +12,7 @@ for full source code, the program output looks like this:
 
 [binomial_coinflip_example_output]
 
-[endsect] [/section:binomial_quiz_example_example Binomial Quiz example]
+[endsect] [/section:binomial_coinflip_example Binomial coinflip example]
 
 [section:binomial_quiz_example Binomial Quiz Example Example]
 
