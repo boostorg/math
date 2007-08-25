@@ -91,7 +91,7 @@ Now we show a variety of predictions on the probability of heads:
     cout << "Probability of getting no heads is " << pdf(flip, 0) << endl;
     cout << "Probability of getting at least one head is " << 1. - pdf(flip, 0) << endl;
 /*`
-When we want to calculate the probabilty for a range or values we can sum the PDF's:
+When we want to calculate the probability for a range or values we can sum the PDF's:
 */
     cout << "Probability of getting 0 or 1 heads is "
       << pdf(flip, 0) + pdf(flip, 1) << endl; // sum of exactly == probabilities

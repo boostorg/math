@@ -57,13 +57,13 @@ int main()
           << setprecision(precision) << setw(12) << pdf(s, z) << endl;
       }
       cout.precision(6); // default
-      /*`And the area under the normal curve from -[infin] upto z,
+      /*`And the area under the normal curve from -[infin] up to z,
       the cumulative distribution function (cdf).
 */
       // For a standard normal distribution 
       cout << "Standard normal mean = "<< s.mean()
         << ", standard deviation = " << s.standard_deviation() << endl;
-      cout << "Integral (area under the curve) from - infinity upto z " << endl;
+      cout << "Integral (area under the curve) from - infinity up to z " << endl;
       cout << "  z " "      cdf " << endl;
       for (double z = -range; z < range + step; z += step)
       {
@@ -129,16 +129,16 @@ that the true occurrence frequency lies *inside* the calculated interval.
 
 /*`Notice the distinction between one-sided (also called one-tailed)
 where we are using a > *or* < test (and not both)
-and considering the area of the tail (integral) from z upto +[infin],
+and considering the area of the tail (integral) from z up to +[infin],
 and a two-sided test where we are using two > *and* < tests, and thus considering two tails,
-from -[infin] upto z low and z high upto +[infin].
+from -[infin] up to z low and z high up to +[infin].
 
 So the 2-sided values alpha[i] are calculated using alpha[i]/2.
 
 If we consider a simple example of alpha = 0.05, then for a two-sided test,
-the lower tail area from -[infin] upto -1.96 is 0.025 (alpha/2)
-and the upper tail area from +z upto +1.96 is also  0.025 (alpha/2),
-and the area between -1.96 upto 12.96 is alpha = 0.95.
+the lower tail area from -[infin] up to -1.96 is 0.025 (alpha/2)
+and the upper tail area from +z up to +1.96 is also  0.025 (alpha/2),
+and the area between -1.96 up to 12.96 is alpha = 0.95.
 and the sum of the two tails is 0.025 + 0.025 = 0.05,
 
 */
@@ -165,19 +165,23 @@ easy to remember proportion of values that lie within 1, 2 and 3 standard deviat
 /*`
 To a useful precision, the 1, 2 & 3 percentages are 68, 95 and 99.7,
 and these are worth memorising as useful 'rules of thumb', as, for example, in
-[@http://en.wikipedia.org/wiki/Standard_deviation standard deviation]
+[@http://en.wikipedia.org/wiki/Standard_deviation standard deviation]:
 
+[pre
 Fraction 1 standard deviation within either side of mean is 0.683
 Fraction 2 standard deviations within either side of mean is 0.954
 Fraction 3 standard deviations within either side of mean is 0.997
+]
 
 We could of course get some really accurate values for these
 [@http://en.wikipedia.org/wiki/Confidence_interval confidence intervals]
 by using cout.precision(15);
 
+[pre 
 Fraction 1 standard deviation within either side of mean is 0.682689492137086
 Fraction 2 standard deviations within either side of mean is 0.954499736103642
 Fraction 3 standard deviations within either side of mean is 0.997300203936740
+]
 
 But before you get too excited about this impressive precision,
 don't forget that the *confidence intervals of the standard deviation* are surprisingly wide,
@@ -220,7 +224,8 @@ we construct a normal distribution called /bulbs/ with these values:
 /*`
 [note Real-life failures are often very ab-normal,
 with a significant number that 'dead-on-arrival' or suffer failure very early in their life:
-the lifetime of the suvivors of 'early mortality' may be well described by the normal distribution.]
+the lifetime of the survivors of 'early mortality' may be well described by the normal distribution.]
+*/
 //] [/normal_bulbs_example1 Quickbook end]
   }
   { 
@@ -445,7 +450,7 @@ Probability distribution function values
 3      0.0044318484119380075
 4      0.00013383022576488537
 Standard normal mean = 0, standard deviation = 1
-Integral (area under the curve) from - infinity upto z 
+Integral (area under the curve) from - infinity up to z 
   z       cdf 
 -4     3.1671241833119979e-005
 -3     0.0013498980316300959

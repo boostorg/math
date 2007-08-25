@@ -5,7 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Simple example of computing probabilitiesfor a binomial random variable.
+// Simple example of computing probabilities for a binomial random variable.
 // Replication of source nag_binomial_dist (g01bjc).
 
 // Shows how to replace NAG C library calls by Boost Math Toolkit C++ calls.
@@ -32,7 +32,7 @@ int main()
   using boost::math::binomial_distribution;
 
   // This replicates the computation of the examples of using nag-binomial_dist
-  // using g01bjc in section g01 Somple Calculations on Statistical Data.
+  // using g01bjc in section g01 Sample Calculations on Statistical Data.
   // http://www.nag.co.uk/numeric/cl/manual/pdf/G01/g01bjc.pdf
   // Program results section 8.3 page 3.g01bjc.3
     //8.2. Program Data

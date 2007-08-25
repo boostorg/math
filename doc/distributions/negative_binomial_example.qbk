@@ -230,7 +230,7 @@ and it is also deliberately over-commented.
 
 [endsect] [/section:negative_binomial_example1]
 
-[section:negative_binomial_example2 Negative Binomial example 2.]
+[section:negative_binomial_example2 Negative Binomial Table Printing Example.]
 Example program showing output of a table of values of cdf and pdf for various k failures.
 [import ../../example/negative_binomial_example2.cpp]
 [neg_binomial_example2]
