@@ -14,7 +14,7 @@ for full source code, the program output looks like this:
 
 [endsect] [/section:binomial_coinflip_example Binomial coinflip example]
 
-[section:binomial_quiz_example Binomial Quiz Example Example]
+[section:binomial_quiz_example Binomial Quiz Example]
 
 [import ../../example/binomial_quiz_example.cpp]
 [binomial_quiz_example1]
