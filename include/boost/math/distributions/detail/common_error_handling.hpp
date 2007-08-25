@@ -1,5 +1,5 @@
 // Copyright John Maddock 2006.
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2006, 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -12,12 +12,8 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-#ifdef BOOST_MSVC
-# pragma warning(push)
-//# pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
-#endif
-
-namespace boost{ namespace math{ namespace detail{
+namespace boost{ namespace math{ namespace detail
+{
 
 template <class RealType, class Policy>
 inline bool check_probability(const char* function, RealType const& prob, RealType* result, const Policy& pol)
@@ -61,10 +57,6 @@ inline bool check_scale(
    }
    return true;
 }
-
-#ifdef BOOST_MSVC
-# pragma warning(pop)
-#endif
 
 } // namespace detail
 } // namespace math
