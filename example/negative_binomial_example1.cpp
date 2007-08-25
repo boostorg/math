@@ -85,7 +85,7 @@ The probability that he will finish on EXACTLY on any house
 is the Probability Density Function (pdf).
 */
     cout << "Probability that Pat finishes on the " << sales_quota << "th house is "
-      << "f(5) = " << pdf(nb, nb.successes()) << endl;
+      << "f(5) = " << pdf(nb, 5 - sales_quota) << endl;
     cout << "Probability that Pat finishes on the 6th house is "
       << pdf(nb, 6 - sales_quota) << endl;
     cout << "Probability that Pat finishes on the 7th house is "
@@ -97,7 +97,7 @@ is the Probability Density Function (pdf).
     cout << "Probability that Pat finishes on or before the 8th house is sum "
       "\n" << "pdf(sales_quota) + pdf(6) + pdf(7) + pdf(8) = "
       // Sum each of the mass/density probabilities for houses sales_quota = 5, 6, 7, & 8.
-      << pdf(nb, sales_quota - sales_quota) // 0
+      << pdf(nb, 5 - sales_quota) // 0
       + pdf(nb, 6 - sales_quota) // 1
       + pdf(nb, 7 - sales_quota) // 2
       + pdf(nb, 8 - sales_quota) // 3

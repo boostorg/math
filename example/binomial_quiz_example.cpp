@@ -15,24 +15,20 @@
 
 //[binomial_quiz_example1
 /*`
- A multiple choice test has four possible answers to each of 16 questions.
- A student quesses the answer to each question,
- so the probability of getting a correct answer on any given question is 1/4 = 0.25.
- The conditions of the binomial experiment are assumed to be met:
- n = 16 questions constitute the trials;
- each question results in one of two possible outcomes (correct or incorrect);
- the probability of being correct is 0.25 and is constant if no knowledge about the subject is assumed;
- the questions are answered independently if the student's answer to a question
- in no way influences his/her answer to another question.
+A multiple choice test has four possible answers to each of 16 questions.
+A student guesses the answer to each question,
+so the probability of getting a correct answer on any given question is 1/4 = 0.25.
+The conditions of the binomial experiment are assumed to be met:
+n = 16 questions constitute the trials;
+each question results in one of two possible outcomes (correct or incorrect);
+the probability of being correct is 0.25 and is constant if no knowledge about the subject is assumed;
+the questions are answered independently if the student's answer to a question
+in no way influences his/her answer to another question.
 
- The number of correct answers, X, is distributed as a binomial random variable
- with binomial distribution parameters n = 16 and p = 0.25.
- The program below displays the probabilities for each of the 17 possible outcomes,
- i.e., for X = 0, 1, ..., 16, in a line chart.
-*/
-// #define BOOST_MATH_DISCRETE_QUANTILE_POLICY real
-/*`
-For information on the effect of this define, see section on quantiles below.
+The number of correct answers, X, is distributed as a binomial random variable
+with binomial distribution parameters n = 16 and p = 0.25.
+The program below displays the probabilities for each of the 17 possible outcomes,
+i.e., for X = 0, 1, ..., 16, in a line chart.
 
 First we need to be able to use the binomial distribution constructor
 (and some std input/output, of course)
@@ -52,7 +48,7 @@ using std::fixed;
 #include <iomanip>
 using std::setw;
 using std::setprecision;
-// ][/binomial_quiz_example1]
+//][/binomial_quiz_example1]
 
 //[binomial_confidence_limits
 void confidence_limits_on_frequency(unsigned trials, unsigned successes)
@@ -105,9 +101,10 @@ int main()
   try
   {
   cout << "Binomial distribution example - guessing in a quiz." << endl;
-/*`The number of correct answers, X, is distributed as a binomial random variable
-with binomial distribution parameters n = 16 and p = 0.25.
-*/
+  /*`
+  The number of correct answers, X, is distributed as a binomial random variable
+  with binomial distribution parameters n = 16 and p = 0.25.
+  */
   cout.precision(5); // Might be able to calculate a best value for this?
   int questions = 16;
   int answers = 4; // possible answers to each question.
@@ -115,17 +112,21 @@ with binomial distribution parameters n = 16 and p = 0.25.
   // Caution:  = answers / questions would be zero (because they are integers)!
   int pass_score = 11;
 
-/*`Construct our Binomial distribution.
-*/
+  /*`
+  Construct our Binomial distribution.
+  */
   binomial quiz(questions, success_fraction);
-/*`and display the parameters we used.
-*/
+  /*`
+  and display the parameters we used.
+  */
   cout << "In a quiz with " << quiz.trials()
     << " questions and with a probability of guessing right of "
     << quiz.success_fraction() * 100 << " %" 
     << " or 1 in " << static_cast<int>(1. / quiz.success_fraction()) << endl;
-/*`Show some probabilities of just guessing: these don't give any encouragement to guessers!
-*/
+  /*`
+  Show some probabilities of just guessing: these don't give any 
+  encouragement to guessers!
+  */
   cout << "Probability of getting none right is " << pdf(quiz, 0) << endl; // 0.010023
   cout << "Probability of getting at least one right is " << 1 - pdf(quiz, 1) << endl; // 0.94655
   cout << "Probability of getting none or one right is " << pdf(quiz, 0) + pdf(quiz, 1) << endl; // 0.063476
@@ -150,8 +151,9 @@ with binomial distribution parameters n = 16 and p = 0.25.
     << cdf(complement(quiz, pass_score-1))
     << " only 1 in " << 1/cdf(complement(quiz, pass_score-1)) << endl;
 
-/*`Tabulate probability versus number right.
-*/
+  /*`
+  Tabulate probability versus number right.
+  */
   cout << "\n" "Guessed right Probability" << right << endl;
   for (int successes = 0; successes <= questions; successes++)
   {
@@ -173,9 +175,10 @@ with binomial distribution parameters n = 16 and p = 0.25.
   {
     cout << setw(2) << score << "                " << cdf(complement(quiz, score)) << endl;
   }
-/*`Calculate the probability of getting a range of guesses right,
-first by adding the exact probabilities of each of low ... high.
-*/
+  /*`
+  Calculate the probability of getting a range of guesses right,
+  first by adding the exact probabilities of each of low ... high.
+  */
   int low = 3;
   int high = 5;
   double sum = 0.;
@@ -187,8 +190,9 @@ first by adding the exact probabilities of each of low ... high.
     << low << " and " << high << " answers right by guessing is "
     << sum  << endl; // 0.61323
 
-/*`Or, better, we can use the difference of cdfs instead:
-*/
+  /*`
+  Or, better, we can use the difference of cdfs instead:
+  */
   cout << "The probability of getting between " << low << " and " << high << " answers right by guessing is "
     <<  cdf(quiz, high) - cdf(quiz, low - 1) << endl; // 0.61323
   // And a few more combinations of high and low choices:
@@ -205,9 +209,10 @@ first by adding the exact probabilities of each of low ... high.
   cout << "The probability of getting between " << low << " and " << high << " answers right by guessing is "
     <<  cdf(quiz, high) - cdf(quiz, low - 1) << endl; // P 3 to 5 right
 
-/*`Using Binomial distribution moments,
-we can say more about the spread of results from guessing.
-*/
+  /*`
+  Using Binomial distribution moments,
+  we can say more about the spread of results from guessing.
+  */
   cout << "By guessing, on average, one can expect to get " << mean(quiz) << " correct answers." << endl;
   cout << "Standard deviation is " << standard_deviation(quiz) << endl;
   cout << "So about 2/3 will lie within 1 standard deviation and get between "
@@ -218,8 +223,10 @@ we can say more about the spread of results from guessing.
 
 
 
-/*`Show the use of quantiles (percentiles or percentage points) for a few probability levels:
-*/
+  /*`
+  Show the use of quantiles (percentiles or percentage points) for a 
+  few probability levels:
+  */
   cout << "Quantiles" << endl;
   cout << "Quartiles " << quantile(quiz, 0.25) << " to "
     << quantile(complement(quiz, 0.25)) << endl; // Quartiles 2.2821 4.6212
@@ -240,8 +247,9 @@ we can say more about the spread of results from guessing.
 //] [/binomial_quiz_example2]
 
 //[discrete_quantile_real
-/*`The quantiles values are controlled by the discrete quantile policy chosen.
-The default is integer_outside,
+/*`
+The quantiles values are controlled by the discrete quantile policy chosen.
+The default is `integer_round_outwards`,
 so the lower quantile is rounded down, and the upper quantile is rounded up.
 
 We can control the policy for all distributions by
@@ -250,11 +258,12 @@ at the head of the program would make this policy apply
 to this *one, and only*, translation unit.
 
 Or we can create a (typedef for) policy that has discrete quantiles real.
-*/using namespace boost::math::policies;
+*/
+  using namespace boost::math::policies;
 /*`
 Convenient for all policy and typelist values like discrete_quantile.
 */
-using namespace boost::math;
+  using namespace boost::math;
 /*`
 for binomial_distribution
 
@@ -265,15 +274,18 @@ Or to be more specific, to avoid 'using namespaces ...' statements:
   using boost::math::policies::real;
   using boost::math::policies::integer_round_outwards; // Default.
   typedef boost::math::policies::policy<discrete_quantile<real> > real_quantile_policy;
-/*`Add a binomial distribution called real_quantile_binomial that uses real_quantile_policy.
-*/
+  /*`
+  Add a binomial distribution called real_quantile_binomial that uses real_quantile_policy.
+  */
   using boost::math::binomial_distribution;
   typedef binomial_distribution<double, real_quantile_policy> real_quantile_binomial;
-/*`Construct a distribution of this custom real_quantile_binomial distribution;
-*/
+  /*`
+  Construct a distribution of this custom real_quantile_binomial distribution;
+  */
   real_quantile_binomial quiz_real(questions, success_fraction);
-/*`And use this to show some quantiles - that now have real rather than integer values.
-*/
+  /*`
+  And use this to show some quantiles - that now have real rather than integer values.
+  */
 
   cout << "Real Quartiles " << quantile(quiz_real, 0.25) << " to "
     << quantile(complement(quiz_real, 0.25)) << endl; // Real Quartiles 2.2821 to 4.6212
@@ -282,9 +294,8 @@ Or to be more specific, to avoid 'using namespaces ...' statements:
 
 //[binomial_quiz_example3
 
-/*`Now we can repeat the 
-
-/*`Confidence intervals for various confidences 1 - alpha,
+/*`
+Now we can repeat the confidence intervals for various confidences 1 - alpha,
 probability as % = 100 * (1 - alpha[i]), so alpha 0.05 = 95% confidence.
 */
   double alpha[] = {0.5, 0.33, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001};

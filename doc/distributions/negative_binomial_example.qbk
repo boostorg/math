@@ -162,7 +162,7 @@ So now 103 trials are required to observe at least 5 failures with
 
 [endsect] [/section:neg_binom_size_eg Estimating Sample Sizes.]
 
-[section:negative_binomial_example1 Negative Binomial example 1.]
+[section:negative_binomial_example1 Negative Binomial Sales Quota Example.]
 
 The example program 
 [@../../example/negative_binomial_example1.cpp negative_binomial_example1.cpp (full source code)]
@@ -192,7 +192,7 @@ The total number of trials (n) in this case, houses visited) this takes is there
   = sucesses + failures or k + r = k + 5.
 The random variable we are interested in is the number of houses (k)
 that must be visited to sell five candy bars,
-so we substitute k = n 5 into a negative_binomial(5, 0.4) mass (density) function
+so we substitute k = n - 5 into a negative_binomial(5, 0.4) mass (density) function
 and obtain the following mass (density) function of the distribution of houses (for n >= 5):
 Obviously, the best case is that Pat makes sales on all the first five houses.
 
