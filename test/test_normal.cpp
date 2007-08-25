@@ -256,6 +256,11 @@ int test_main(int, char* [])
   boost::math::normal myn01; // Use default values.
   // Note NOT myn01() as the compiler will interpret as a function!
 
+  // Check the synonyms, provided to allow generic use of find_location and find_scale.
+  BOOST_CHECK_EQUAL(myn01.mean(), myn01.location());
+  BOOST_CHECK_EQUAL(myn01.standard_deviation(), myn01.scale());
+
+
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
