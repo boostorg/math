@@ -1,4 +1,5 @@
-// Copyright John Maddock 2006.
+// Copyright John Maddock 2006, 2007.
+// Copyright Paul A. Bristow 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -18,7 +19,7 @@
 
 namespace boost{ namespace math{
 
-   template <class RealType = double, class Policy = policies::policy<> >
+template <class RealType = double, class Policy = policies::policy<> >
 class chi_squared_distribution
 {
 public:
@@ -47,10 +48,10 @@ public:
 
 private:
    //
-   // Data members:
+   // Data member:
    //
    RealType m_df;  // degrees of freedom are a real number.
-};
+}; // class chi_squared_distribution
 
 typedef chi_squared_distribution<double> chi_squared;
 
@@ -247,7 +248,8 @@ inline RealType kurtosis_excess(const chi_squared_distribution<RealType, Policy>
 //
 // Parameter estimation comes last:
 //
-namespace detail{
+namespace detail
+{
 
 template <class RealType, class Policy>
 struct df_estimator
@@ -278,7 +280,7 @@ private:
    RealType alpha, beta, ratio;
 };
 
-}
+} // namespace detail
 
 template <class RealType, class Policy>
 RealType chi_squared_distribution<RealType, Policy>::estimate_degrees_of_freedom(
