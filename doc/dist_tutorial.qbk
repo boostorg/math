@@ -221,7 +221,7 @@ In this case however, there are a small number of situations where non-integral
 degrees of freedom do have a genuine meaning.
 ]
 
-
+[#complements]
 [h4 Complements are supported too]
 
 Often you don't want the value of the CDF, but its complement, which is
@@ -229,6 +229,8 @@ to say `1-p` rather than `p`.  You could calculate the CDF and subtract
 it from `1`, but if `p` is very close to `1` then cancellation error
 will cause you to lose significant digits.  In extreme cases, `p` may
 actually be equal to `1`, even though the true value of the complement is non-zero.
+
+[link why_complements Why complements?]
 
 In this library, whenever you want to receive a complement, just wrap
 all the function arguments in a call to `complement(...)`, for example:
@@ -276,6 +278,7 @@ and the ['upper critical value] is given by:
 which return 4.82 and 14.63 respectively.
 ]
 
+[#why_complements]
 [tip
 
 [*Why bother with complements anyway?]
@@ -351,7 +354,7 @@ to be estimated from other information.
 
 Now that you have the basics, the next section looks at some worked examples.
 
-[endsect][/section:stat_tut Statistical Functions Tutorial]
+[endsect] [/section:overview Overview]
 
 [section:weg Worked Examples]
 [include distributions/distribution_construction_example.qbk]
@@ -364,11 +367,11 @@ Now that you have the basics, the next section looks at some worked examples.
 [include distributions/error_handling_example.qbk]
 [include distributions/nag_library.qbk]
 
-[endsect][/section:overview Overview]
+[endsect] [/section:weg Worked Examples]
 
 [include background.qbk]
 
-[endsect][/ section:stat_tut Statistical Distributions Tutorial]
+[endsect] [/ section:stat_tut Statistical Distributions Tutorial]
 
 [/ dist_tutorial.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.
