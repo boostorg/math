@@ -42,6 +42,17 @@ public:
    { // scale
       return m_sd;
    }
+   // Synonyms, provided to allow generic use of find_location and find_scale.
+   RealType location()const
+   { // location
+      return m_mean;
+   }
+
+   RealType scale()const
+   { // scale
+      return m_sd;
+   }
+
 private:
    //
    // Data members:
