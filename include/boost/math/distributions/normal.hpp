@@ -1,5 +1,5 @@
-//  Copyright John Maddock 2006.
-//  Copyright Paul A. Bristow 2007.
+//  Copyright John Maddock 2006, 2007.
+//  Copyright Paul A. Bristow 2006, 2007.
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -42,12 +42,12 @@ public:
    { // scale
       return m_sd;
    }
+
    // Synonyms, provided to allow generic use of find_location and find_scale.
    RealType location()const
    { // location
       return m_mean;
    }
-
    RealType scale()const
    { // scale
       return m_sd;
@@ -57,9 +57,9 @@ private:
    //
    // Data members:
    //
-   RealType m_mean;  // distribution mean
-   RealType m_sd;    // distribution standard deviation
-};
+   RealType m_mean;  // distribution mean or location.
+   RealType m_sd;    // distribution standard deviation or scale.
+}; // class normal_distribution
 
 typedef normal_distribution<double> normal;
 
