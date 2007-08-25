@@ -1,3 +1,13 @@
+//  Copyright John Maddock 2006, 2007.
+//  Copyright Paul A. Bristow 2006, 2007.
+
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+// This file includes *all* the special functions.
+// this may be useful if many are used
+// - to avoid including each function individually.
 
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_HPP
 #define BOOST_MATH_SPECIAL_FUNCTIONS_HPP
@@ -39,4 +49,3 @@
 #include <boost/math/special_functions/sqrt1pm1.hpp>
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_HPP
-
