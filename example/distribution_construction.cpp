@@ -33,22 +33,21 @@ First we need some includes to access the negative binomial distribution
 #include <boost/math/distributions/binomial.hpp> // for binomial_distribution.
 #include <boost/math/distributions/beta.hpp> // for beta_distribution.
 #include <boost/math/distributions/gamma.hpp> // for gamma_distribution.
-
-//] [/distribution_construction1 end of Quickbook in C++ markup]
-
-//[distribution_construction2
-
 /*`
 Several examples of constructing distributions follow:
 */
+//] [/distribution_construction1 end of Quickbook in C++ markup]
+
+
+
 
 int main()
 {
-  /*` 
-  First, a negative binomial distribution with 8 successes
-  and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
-  */
-
+//[distribution_construction2
+/*` 
+First, a negative binomial distribution with 8 successes
+and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
+*/
   boost::math::negative_binomial_distribution<double> mydist0(8., 0.25);
   /*`
   But this is inconveniently long, so by writing
@@ -70,7 +69,7 @@ int main()
 
   /*`
   But the name "negative_binomial_distribution" is still inconveniently long,
-  so for most distributions, a conveniance typedef is provided, for example:
+  so for most distributions, a convenience typedef is provided, for example:
 
      typedef negative_binomial_distribution<double> negative_binomial; // Reserved name of type double.
 
