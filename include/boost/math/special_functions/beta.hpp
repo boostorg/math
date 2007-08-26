@@ -476,7 +476,7 @@ T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised, T* p_derivative, 
    if(result < tools::min_value<T>())
       return s0; // Safeguard: series can't cope with denorms.
    ibeta_series_t<T> s(a, b, x, result);
-   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    result = boost::math::tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter, s0);
    policies::check_series_iterations("boost::math::ibeta<%1%>(%1%, %1%, %1%)", max_iter, pol);
    return result;
@@ -556,7 +556,7 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
    if(result < tools::min_value<T>())
       return s0; // Safeguard: series can't cope with denorms.
    ibeta_series_t<T> s(a, b, x, result);
-   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    result = boost::math::tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter, s0);
    policies::check_series_iterations("boost::math::ibeta<%1%>(%1%, %1%, %1%)", max_iter, pol);
    return result;

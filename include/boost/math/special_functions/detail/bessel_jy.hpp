@@ -33,7 +33,7 @@ int temme_jy(T v, T x, T* Y, T* Y1, const Policy& pol)
 {
     T g, h, p, q, f, coef, sum, sum1, tolerance;
     T a, d, e, sigma;
-    int k;
+    unsigned long k;
 
     using namespace std;
     using namespace boost::math::tools;
@@ -73,7 +73,7 @@ int temme_jy(T v, T x, T* Y, T* Y1, const Policy& pol)
 
     // series summation
     tolerance = tools::epsilon<T>();
-    for (k = 1; k < BOOST_MATH_MAX_ITER; k++)
+    for (k = 1; k < policies::get_max_series_iterations<Policy>(); k++)
     {
         f = (k * f + p + q) / (k*k - v2);
         p /= k - v;
@@ -101,7 +101,8 @@ template <typename T, typename Policy>
 int CF1_jy(T v, T x, T* fv, int* sign, const Policy& pol)
 {
     T C, D, f, a, b, delta, tiny, tolerance;
-    int k, s = 1;
+    unsigned long k;
+    int s = 1;
 
     using namespace std;
 
@@ -114,7 +115,7 @@ int CF1_jy(T v, T x, T* fv, int* sign, const Policy& pol)
     tiny = sqrt(tools::min_value<T>());
     C = f = tiny;                           // b0 = 0, replace with tiny
     D = 0.0L;
-    for (k = 1; k < BOOST_MATH_MAX_ITER * 100; k++)
+    for (k = 1; k < policies::get_max_series_iterations<Policy>() * 100; k++)
     {
         a = -1;
         b = 2 * (v + k) / x;
@@ -154,7 +155,7 @@ int CF2_jy(T v, T x, T* p, T* q, const Policy& pol)
 
     complex_type C, D, f, a, b, delta, one(1);
     T tiny, zero(0.0L);
-    int k;
+    unsigned long k;
 
     // |x| >= |v|, CF2_jy converges rapidly
     // |x| -> 0, CF2_jy fails to converge
@@ -166,7 +167,7 @@ int CF2_jy(T v, T x, T* p, T* q, const Policy& pol)
     tiny = sqrt(tools::min_value<T>());
     C = f = complex_type(-0.5f/x, 1.0L);
     D = 0;
-    for (k = 1; k < BOOST_MATH_MAX_ITER; k++)
+    for (k = 1; k < policies::get_max_series_iterations<Policy>(); k++)
     {
         a = (k - 0.5f)*(k - 0.5f) - v*v;
         if (k == 1)
@@ -205,7 +206,8 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
     T u, Jv, Ju, Yv, Yv1, Yu, Yu1(0), fv, fu;
     T W, p, q, gamma, current, prev, next;
     bool reflect = false;
-    int n, k, s;
+    unsigned n, k;
+    int s;
 
     static const char* function = "boost::math::bessel_jy<%1%>(%1%,%1%)";
 
@@ -219,7 +221,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
         v = -v;                             // v is non-negative from here
         kind = need_j|need_y;               // need both for reflection formula
     }
-    n = real_cast<int>(v + 0.5L);
+    n = real_cast<unsigned>(v + 0.5L);
     u = v - n;                              // -1/2 <= u < 1/2
 
     if (x == 0)

@@ -91,7 +91,7 @@ typename tools::promote_args<T>::type log1p(T x, const Policy& pol)
    if(a < tools::epsilon<result_type>())
       return x;
    detail::log1p_series<result_type> s(x);
-   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    result_type result = tools::sum_series(s, policies::digits<result_type, Policy>(), max_iter);
 #else
@@ -250,7 +250,7 @@ inline typename tools::promote_args<T>::type
       return -x * x / 2;
    boost::math::detail::log1p_series<T> s(x);
    s();
-   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    T zero = 0;
    T result = boost::math::tools::sum_series(s, policies::digits<T, Policy>(), max_iter, zero);

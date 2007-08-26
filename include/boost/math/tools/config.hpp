@@ -7,8 +7,6 @@
 
 #include <boost/math/tools/user.hpp>
 
-#define BOOST_MATH_MAX_ITER 1000000
-
 #if defined(__CYGWIN__) || defined(__FreeBSD__)
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif

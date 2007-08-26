@@ -26,7 +26,7 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
 {
     T value, u, lambda, sigma, factor, tolerance;
     T X, Y, Z, EA, EB, EC, ED, EE, S1, S2;
-    int k;
+    unsigned long k;
 
     using namespace std;
     using namespace boost::math::tools;
@@ -80,7 +80,7 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
         z = (z + lambda) / 4;
         ++k;
     }
-    while(k < BOOST_MATH_MAX_ITER);
+    while(k < policies::get_max_series_iterations<Policy>());
 
     // Check to see if we gave up too soon:
     policies::check_series_iterations(function, k, pol);

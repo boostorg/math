@@ -76,7 +76,7 @@ T expm1_imp(T x, const mpl::int_<0>&, const Policy& pol)
    if(a < tools::epsilon<T>())
       return x;
    detail::expm1_series<T> s(x);
-   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    T result = tools::sum_series(s, policies::digits<T, Policy>(), max_iter);
 #else

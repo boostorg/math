@@ -487,7 +487,7 @@ namespace boost
       return gamma_q_inva(dist.mean(), p, Policy()) - 1;
       */
       typedef typename Policy::discrete_quantile_type discrete_type;
-      boost::uintmax_t max_iter = 200;
+      boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
       RealType guess, factor = 8;
       RealType z = dist.mean();
       if(z < 1)
@@ -555,7 +555,7 @@ namespace boost
       return gamma_p_inva(dist.mean(), q, Policy()) -1;
       */
       typedef typename Policy::discrete_quantile_type discrete_type;
-      boost::uintmax_t max_iter = 200;
+      boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
       RealType guess, factor = 8;
       RealType z = dist.mean();
       if(z < 1)

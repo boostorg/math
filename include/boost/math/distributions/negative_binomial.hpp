@@ -483,7 +483,7 @@ namespace boost
       //
       // Max iterations permitted:
       //
-      boost::uintmax_t max_iter = 200;
+      boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
       typedef typename Policy::discrete_quantile_type discrete_type;
       return detail::inverse_discrete_quantile(
          dist,
@@ -560,7 +560,7 @@ namespace boost
        //
        // Max iterations permitted:
        //
-       boost::uintmax_t max_iter = 200;
+       boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
        typedef typename Policy::discrete_quantile_type discrete_type;
        return detail::inverse_discrete_quantile(
           dist,

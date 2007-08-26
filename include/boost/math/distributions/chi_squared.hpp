@@ -303,10 +303,10 @@ RealType chi_squared_distribution<RealType, Policy>::estimate_degrees_of_freedom
 
    detail::df_estimator<RealType, Policy> f(alpha, beta, variance, difference_from_variance);
    tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
-   boost::uintmax_t max_iter = 10000;
+   boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
    std::pair<RealType, RealType> r = tools::bracket_and_solve_root(f, hint, RealType(2), false, tol, max_iter, Policy());
    RealType result = r.first + (r.second - r.first) / 2;
-   if(max_iter == 10000)
+   if(max_iter == policies::get_max_root_iterations<Policy>())
    {
       policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
          " either there is no answer to how many degrees of freedom are required"

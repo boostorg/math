@@ -85,7 +85,7 @@ template <class T, class Policy>
 inline T bessel_j_small_z_series(T v, T x, const Policy& pol)
 {
    bessel_j_small_z_series_term<T, Policy> s(v, x);
-   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    T result = boost::math::tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter);
    policies::check_series_iterations("boost::math::bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return result;
@@ -96,7 +96,7 @@ inline T sph_bessel_j_small_z_series(unsigned v, T x, const Policy& pol)
 {
    using namespace std; // ADL of std names
    sph_bessel_j_small_z_series_term<T, Policy> s(v, x);
-   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    T result = boost::math::tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter);
    policies::check_series_iterations("boost::math::sph_bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return result * sqrt(constants::pi<T>() / 4);

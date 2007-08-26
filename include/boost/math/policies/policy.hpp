@@ -73,6 +73,12 @@ namespace policies{
 #ifndef BOOST_MATH_ASSERT_UNDEFINED_POLICY
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY true
 #endif
+#ifndef BOOST_MATH_MAX_SERIES_ITERATION_POLICY
+#define BOOST_MATH_MAX_SERIES_ITERATION_POLICY 1000000
+#endif
+#ifndef BOOST_MATH_MAX_ROOT_ITERATION_POLICY
+#define BOOST_MATH_MAX_ROOT_ITERATION_POLICY 200
+#endif
 
 #if !defined(__BORLANDC__)
 #define BOOST_MATH_META_INT(type, name, Default)\
@@ -192,6 +198,11 @@ BOOST_MATH_META_INT(discrete_quantile_policy_type, discrete_quantile, BOOST_MATH
 //
 BOOST_MATH_META_INT(int, digits10, BOOST_MATH_DIGITS10_POLICY)
 BOOST_MATH_META_INT(int, digits2, 0)
+//
+// Iterations:
+//
+BOOST_MATH_META_INT(unsigned long, max_series_iterations, BOOST_MATH_MAX_SERIES_ITERATION_POLICY)
+BOOST_MATH_META_INT(unsigned long, max_root_iterations, BOOST_MATH_MAX_ROOT_ITERATION_POLICY)
 //
 // Define the names for each possible policy:
 //
@@ -347,7 +358,9 @@ template <class A1 = default_policy,
           class A8 = default_policy,
           class A9 = default_policy,
           class A10 = default_policy,
-          class A11 = default_policy>
+          class A11 = default_policy,
+          class A12 = default_policy,
+          class A13 = default_policy>
 struct policy
 {
 private:
@@ -365,10 +378,12 @@ private:
    BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A9>::value);
    BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A10>::value);
    BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A11>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A12>::value);
+   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A13>::value);
    //
    // Typelist of the arguments:
    //
-   typedef mpl::list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11> arg_list;
+   typedef mpl::list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13> arg_list;
 
 public:
    typedef typename detail::find_arg<arg_list, is_domain_error<mpl::_1>, domain_error<> >::type domain_error_type;
@@ -398,6 +413,11 @@ public:
    // Mathematically undefined properties:
    //
    typedef typename detail::find_arg<arg_list, is_assert_undefined<mpl::_1>, discrete_quantile<> >::type assert_undefined_type;
+   //
+   // Max iterations:
+   //
+   typedef typename detail::find_arg<arg_list, is_max_series_iterations<mpl::_1>, max_series_iterations<> >::type max_series_iterations_type;
+   typedef typename detail::find_arg<arg_list, is_max_root_iterations<mpl::_1>, max_root_iterations<> >::type max_root_iterations_type;
 };
 //
 // These full specializations are defined to reduce the amount of
@@ -423,6 +443,8 @@ public:
    typedef promote_double<> promote_double_type;
    typedef discrete_quantile<> discrete_quantile_type;
    typedef assert_undefined<> assert_undefined_type;
+   typedef max_series_iterations<> max_series_iterations_type;
+   typedef max_root_iterations<> max_root_iterations_type;
 };
 
 template <>
@@ -444,6 +466,8 @@ public:
    typedef promote_double<false> promote_double_type;
    typedef discrete_quantile<> discrete_quantile_type;
    typedef assert_undefined<> assert_undefined_type;
+   typedef max_series_iterations<> max_series_iterations_type;
+   typedef max_root_iterations<> max_root_iterations_type;
 };
 
 template <class Policy, 
@@ -457,11 +481,13 @@ template <class Policy,
           class A8 = default_policy,
           class A9 = default_policy,
           class A10 = default_policy,
-          class A11 = default_policy>
+          class A11 = default_policy,
+          class A12 = default_policy,
+          class A13 = default_policy>
 struct normalise
 {
 private:
-   typedef mpl::list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11> arg_list;
+   typedef mpl::list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13> arg_list;
    typedef typename detail::find_arg<arg_list, is_domain_error<mpl::_1>, typename Policy::domain_error_type >::type domain_error_type;
    typedef typename detail::find_arg<arg_list, is_pole_error<mpl::_1>, typename Policy::pole_error_type >::type pole_error_type;
    typedef typename detail::find_arg<arg_list, is_overflow_error<mpl::_1>, typename Policy::overflow_error_type >::type overflow_error_type;
@@ -488,6 +514,11 @@ private:
    //
    typedef typename detail::find_arg<arg_list, is_assert_undefined<mpl::_1>, discrete_quantile<> >::type assert_undefined_type;
    //
+   // Max iterations:
+   //
+   typedef typename detail::find_arg<arg_list, is_max_series_iterations<mpl::_1>, max_series_iterations<> >::type max_series_iterations_type;
+   typedef typename detail::find_arg<arg_list, is_max_root_iterations<mpl::_1>, max_root_iterations<> >::type max_root_iterations_type;
+   //
    // Define a typelist of the policies:
    //
    typedef mpl::vector<
@@ -501,7 +532,9 @@ private:
       promote_float_type,
       promote_double_type,
       discrete_quantile_type,
-      assert_undefined_type> result_list;
+      assert_undefined_type,
+      max_series_iterations_type,
+      max_root_iterations_type> result_list;
    //
    // Remove all the policies that are the same as the default:
    //
@@ -509,7 +542,7 @@ private:
    //
    // Pad out the list with defaults:
    //
-   typedef typename detail::append_N<reduced_list, default_policy, (12 - ::boost::mpl::size<reduced_list>::value)>::type result_type;
+   typedef typename detail::append_N<reduced_list, default_policy, (14 - ::boost::mpl::size<reduced_list>::value)>::type result_type;
 public:
    typedef policy<
       typename mpl::at<result_type, mpl::int_<0> >::type,
@@ -522,7 +555,9 @@ public:
       typename mpl::at<result_type, mpl::int_<7> >::type,
       typename mpl::at<result_type, mpl::int_<8> >::type,
       typename mpl::at<result_type, mpl::int_<9> >::type,
-      typename mpl::at<result_type, mpl::int_<10> >::type > type;
+      typename mpl::at<result_type, mpl::int_<10> >::type,
+      typename mpl::at<result_type, mpl::int_<11> >::type,
+      typename mpl::at<result_type, mpl::int_<12> >::type > type;
 };
 //
 // Full specialisation to speed up compilation of the common case:
@@ -689,6 +724,20 @@ inline int digits()
 {
    typedef mpl::bool_< std::numeric_limits<T>::is_specialized > tag_type;
    return detail::digits_imp<T, Policy>(tag_type());
+}
+
+template <class Policy>
+inline unsigned long get_max_series_iterations()
+{
+   typedef typename Policy::max_series_iterations_type iter_type;
+   return iter_type::value;
+}
+
+template <class Policy>
+inline unsigned long get_max_root_iterations()
+{
+   typedef typename Policy::max_root_iterations_type iter_type;
+   return iter_type::value;
 }
 
 namespace detail{

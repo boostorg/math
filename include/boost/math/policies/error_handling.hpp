@@ -490,7 +490,7 @@ inline R checked_narrowing_cast(T val, const char* function)
 template <class Policy>
 inline void check_series_iterations(const char* function, boost::uintmax_t max_iter, const Policy& pol)
 {
-   if(max_iter >= BOOST_MATH_MAX_ITER)
+   if(max_iter >= policies::get_max_series_iterations<Policy>())
       raise_evaluation_error<boost::uintmax_t>(
          function,
          "Series evaluation exceeded %1% iterations, giving up now.", max_iter, pol);

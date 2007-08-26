@@ -317,7 +317,7 @@ inline T lower_gamma_series(T a, T z, const Policy& pol)
    // lower incomplete integral. Then divide by tgamma(a)
    // to get the normalised value.
    lower_incomplete_gamma_series<T> s(a, z);
-   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    int bits = policies::digits<T, Policy>();
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    T zero = 0;
@@ -729,7 +729,7 @@ inline T tgamma_small_upper_part(T a, T x, const Policy& pol)
    T result = tgamma1pm1(a, pol) - powm1(x, a, pol);
    result /= a;
    detail::small_gamma2_series<T> s(a, x);
-   boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    T zero = 0;
    result -= pow(x, a) * tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter, zero);

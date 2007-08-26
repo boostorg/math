@@ -126,7 +126,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
    if(!invert && (z > detail::erf_asymptotic_limit<T, Policy>()))
    {
       detail::erf_asympt_series_t<T> s(z);
-      boost::uintmax_t max_iter = BOOST_MATH_MAX_ITER;
+      boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
       result = boost::math::tools::sum_series(s, policies::digits<T, Policy>(), max_iter, 1);
       policies::check_series_iterations("boost::math::erf<%1%>(%1%, %1%)", max_iter, pol);
    }

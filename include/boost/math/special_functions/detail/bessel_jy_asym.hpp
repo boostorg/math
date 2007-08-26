@@ -244,7 +244,7 @@ void temme_asyptotic_y_small_x(T v, T x, T* Y, T* Y1, const Policy& pol)
 
    T y(c * g), y1(c * h);
 
-   for(int k = 1; k < BOOST_MATH_MAX_ITER; ++k)
+   for(int k = 1; k < policies::get_max_series_iterations<Policy>(); ++k)
    {
       f = (k * f + p + q) / (k*k - v*v);
       p /= k - v;

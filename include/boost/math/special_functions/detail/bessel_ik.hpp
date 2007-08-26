@@ -25,7 +25,7 @@ int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
 {
     T f, h, p, q, coef, sum, sum1, tolerance;
     T a, b, c, d, sigma, gamma1, gamma2;
-    int k;
+    unsigned long k;
 
     using namespace std;
     using namespace boost::math::tools;
@@ -62,7 +62,7 @@ int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
 
     // series summation
     tolerance = tools::epsilon<T>();
-    for (k = 1; k < BOOST_MATH_MAX_ITER; k++)
+    for (k = 1; k < policies::get_max_series_iterations<Policy>(); k++)
     {
         f = (k * f + p + q) / (k*k - v*v);
         p /= k - v;
@@ -90,7 +90,7 @@ template <typename T, typename Policy>
 int CF1_ik(T v, T x, T* fv, const Policy& pol)
 {
     T C, D, f, a, b, delta, tiny, tolerance;
-    int k;
+    unsigned long k;
 
     using namespace std;
 
@@ -103,7 +103,7 @@ int CF1_ik(T v, T x, T* fv, const Policy& pol)
     tiny = sqrt(tools::min_value<T>());
     C = f = tiny;                           // b0 = 0, replace with tiny
     D = 0;
-    for (k = 1; k < BOOST_MATH_MAX_ITER; k++)
+    for (k = 1; k < policies::get_max_series_iterations<Policy>(); k++)
     {
         a = 1;
         b = 2 * (v + k) / x;
@@ -136,7 +136,7 @@ int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
     using namespace boost::math::constants;
 
     T S, C, Q, D, f, a, b, q, delta, tolerance, current, prev;
-    int k;
+    unsigned long k;
 
     // |x| >= |v|, CF2_ik converges rapidly
     // |x| -> 0, CF2_ik fails to converge
@@ -154,7 +154,7 @@ int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
     current = 1;                                  // q1
     Q = C = -a;                                   // Q1 = C1 because q1 = 1
     S = 1 + Q * delta;                            // S1
-    for (k = 2; k < BOOST_MATH_MAX_ITER; k++)     // starting from 2
+    for (k = 2; k < policies::get_max_series_iterations<Policy>(); k++)     // starting from 2
     {
         // continued fraction f = z1 / z0
         a -= 2 * (k - 1);
@@ -200,7 +200,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
     T u, Iv, Kv, Kv1, Ku, Ku1, fv;
     T W, current, prev, next;
     bool reflect = false;
-    int n, k;
+    unsigned n, k;
 
     using namespace std;
     using namespace boost::math::tools;
@@ -214,7 +214,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
         v = -v;                             // v is non-negative from here
         kind |= need_k;
     }
-    n = tools::real_cast<int>(v + 0.5f);
+    n = tools::real_cast<unsigned>(v + 0.5f);
     u = v - n;                              // -1/2 <= u < 1/2
 
     if (x < 0)

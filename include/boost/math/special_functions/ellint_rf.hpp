@@ -27,7 +27,7 @@ template <typename T, typename Policy>
 T ellint_rf_imp(T x, T y, T z, const Policy& pol)
 {
     T value, X, Y, Z, E2, E3, u, lambda, tolerance;
-    int k;
+    unsigned long k;
 
     using namespace std;
     using namespace boost::math::tools;
@@ -85,7 +85,7 @@ T ellint_rf_imp(T x, T y, T z, const Policy& pol)
         z = (z + lambda) / 4;
         ++k;
     }
-    while(k < BOOST_MATH_MAX_ITER);
+    while(k < policies::get_max_series_iterations<Policy>());
 
     // Check to see if we gave up too soon:
     policies::check_series_iterations(function, k, pol);

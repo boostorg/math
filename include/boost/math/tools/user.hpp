@@ -12,11 +12,6 @@
 // This file can be modified by the user to change the default policies.
 // See "Changing the Policy Defaults" in documentation.
 
-//
-// The maximum number of iterations in series evaluations etc:
-//
-// #define BOOST_MATH_MAX_ITER 1000000
-//
 // define this if the platform has no long double functions,
 // or if the long double versions have only double precision:
 //
@@ -84,6 +79,14 @@
 // then do we stop the code from compiling?
 //
 // #define BOOST_MATH_ASSERT_UNDEFINED_POLICY true
+//
+// Maximum series iterstions permitted:
+//
+// #define BOOST_MATH_MAX_SERIES_ITERATION_POLICY 1000000
+//
+// Maximum root finding steps permitted:
+//
+// define BOOST_MATH_MAX_ROOT_ITERATION_POLICY 200
 
 #endif // BOOST_MATH_TOOLS_USER_HPP
 
