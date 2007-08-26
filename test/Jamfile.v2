@@ -125,7 +125,7 @@ compile  compile_test/dist_extreme_value_incl_test.cpp ;
 compile  compile_test/dist_fisher_f_incl_test.cpp ;
 compile  compile_test/dist_gamma_incl_test.cpp ;
 compile  compile_test/dist_lognormal_incl_test.cpp ;
-compile  compile_test/dist_negative_binomial_incl_test.cpp ;
+compile  compile_test/dist_neg_binom_incl_test.cpp ;
 compile  compile_test/dist_normal_incl_test.cpp ;
 compile  compile_test/dist_poisson_incl_test.cpp ;
 compile  compile_test/dist_students_t_incl_test.cpp ;
@@ -163,7 +163,7 @@ compile  compile_test/sf_sign_incl_test.cpp ;
 compile  compile_test/sf_sin_pi_incl_test.cpp ;
 compile  compile_test/sf_sinc_incl_test.cpp ;
 compile  compile_test/sf_sinhc_incl_test.cpp ;
-compile  compile_test/sf_spherical_harmonic_incl_test.cpp ;
+compile  compile_test/sf_sph_harm_incl_test.cpp ;
 compile  compile_test/sf_sqrt1pm1_incl_test.cpp ;
 compile  compile_test/std_real_concept_check.cpp ;
 compile  compile_test/tools_config_inc_test.cpp ;
@@ -181,6 +181,7 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_solve_inc_test.cpp ;
+
 
 
 

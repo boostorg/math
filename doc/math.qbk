@@ -402,9 +402,9 @@ external graphing application.
 
 [endsect] [/section:toolkit Toolkit]
 
-[section:Using_UDT Use with User Defined Floating-Point Types]
+[section:using_udt Use with User Defined Floating-Point Types]
 [include concepts.qbk]
-[endsect] [/section:Using_UDT Use with User Defined Floating-Point Types]
+[endsect] [/section:using_udt Use with User Defined Floating-Point Types]
 
 [include policy.qbk]
 

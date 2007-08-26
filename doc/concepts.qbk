@@ -1,4 +1,4 @@
-[section:use_NTL Using With NTL - a High-Precision Floating-Point Library]
+[section:use_ntl Using With NTL - a High-Precision Floating-Point Library]
 
 The special functions and tools in this library can be used with
 [@http://shoup.net/ntl/doc/RR.txt NTL::RR (an arbitrary precision number type)],
@@ -33,7 +33,7 @@ approximation, just include that header before any of the special
 function headers (if you don't use it, you'll get a slower, but
 fully generic implementation for all of the gamma-like functions).
 
-[endsect][/section:use_NTL Using With NTL - a High Precision Floating-Point Library]
+[endsect][/section:use_ntl Using With NTL - a High Precision Floating-Point Library]
 
 [section:concepts Conceptual Requirements for Real Number Types]
 
@@ -41,7 +41,7 @@ The functions, and statistical distributions in this library can be used with
 any type /RealType/ that meets the conceptual requirements given below.  All
 the built in floating point types will meet these requirements.  
 User defined types that meet the requirements can also be used.  For example,
-with [link math_toolkit.Using_UDT.use_NTL minor modifications] two of the types 
+with [link math_toolkit.using_udt.use_ntl minor modifications] two of the types 
 provided with [@http://shoup.net/ntl/ NTL (RR and quad_float)] can be used.
 
 The guiding principal behind these requirements, is that a /RealType/
@@ -301,7 +301,7 @@ that instantiates every template in this library with type
    
    }}} // namespaces
 
-`real_concept` is an archetype for [link math_toolkit.Using_UDT.concepts 
+`real_concept` is an archetype for [link math_toolkit.using_udt.concepts 
 user defined real types], it
 declares it's standard library functions in it's own
 namespace: these will only be found if they are called unqualified
@@ -310,11 +310,11 @@ this type is useable at runtime:
 this allows code that would not otherwise be exercised by the built-in
 floating point types to be tested.  There is no std::numeric_limits<>
 support for this type, since this is not a conceptual requirement
-for [link math_toolkit.Using_UDT.concepts RealType]'s.
+for [link math_toolkit.using_udt.concepts RealType]'s.
 
 NTL RR is an example of a type meeting the requirements that this type
 models, but note minor additions are needed - see ntl.diff and documentation
-[link math_toolkit.Using_UDT.use_NTL "Using With NTL - a High-Precision Floating-Point Library"].
+[link math_toolkit.using_udt.use_ntl "Using With NTL - a High-Precision Floating-Point Library"].
 
 There is no specific test case for type `real_concept`, instead, since this
 type is usable at runtime, each individual test case as well as testing
@@ -335,7 +335,7 @@ type is usable at runtime, each individual test case as well as testing
    }}} // namespaces
    
 The class template `distribution_archetype` is a model of the
-[link math_toolkit.Using_UDT.dist_concept Distribution concept].
+[link math_toolkit.using_udt.dist_concept Distribution concept].
 
 The class template `DistributionConcept` is a 
 [@../../../../libs/concept_check/index.html concept checking class] 
@@ -345,11 +345,11 @@ The test program
 [@../../test/distribution_concept_check.cpp distribution_concept_check.cpp]
 is responsible for using `DistributionConcept` to verify that all the
 distributions in this library conform to the 
-[link math_toolkit.Using_UDT.dist_concept Distribution concept].
+[link math_toolkit.using_udt.dist_concept Distribution concept].
 
 The class template `DistributionConcept` verifies the existence 
 (but not proper function) of the non-member accessors
-required by the [link math_toolkit.Using_UDT.dist_concept Distribution concept].
+required by the [link math_toolkit.using_udt.dist_concept Distribution concept].
 These are checked by calls like
 
 v = pdf(dist, x); // (Result v is ignored).

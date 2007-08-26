@@ -20,10 +20,10 @@ and how many successes were observed.  The static member functions
 `negative_binomial_distribution<>::find_upper_bound_on_p`
 allow you to calculate the confidence intervals for your estimate of the success fraction.
 
-The sample program [@../../example/neg_binomial_confidence_limits.cpp 
-neg_binomial_confidence_limits.cpp] illustrates their use.
+The sample program [@../../example/neg_binom_confidence_limits.cpp 
+neg_binom_confidence_limits.cpp] illustrates their use.
 
-[import ../../example/neg_binomial_confidence_limits.cpp]
+[import ../../example/neg_binom_confidence_limits.cpp]
 
 [neg_binomial_confidence_limits]
 Let's see some sample output for a 1 in 10

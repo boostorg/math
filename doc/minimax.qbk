@@ -33,7 +33,7 @@ wish you can just add the function to approximate as a new variant
 after the existing examples.
 
 In addition to those two files, the program needs to be linked to
-a [link math_toolkit.Using_UDT.use_NTL patched NTL library to compile].
+a [link math_toolkit.using_udt.use_ntl patched NTL library to compile].
 
 Note that the function /f/ must return the rational part of the
 approximation: for example if you are approximating a function

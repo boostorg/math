@@ -55,7 +55,7 @@ And for user defined types, all of the following return an NTL::RR result:
    
 In the last case, quad_float is convertible to RR, but not vice-versa, so
 the result will be an NTL::RR.  Note that this assumes that you are using
-a [link math_toolkit.Using_UDT.use_NTL patched NTL library].
+a [link math_toolkit.using_udt.use_ntl patched NTL library].
 
 These rules are chosen to be compatible with the behaviour of 
 ['ISO/IEC 9899:1999 Programming languages - C]
