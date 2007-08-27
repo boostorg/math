@@ -33,10 +33,10 @@ among others.
 
 [: ['[*Graph of exp on R]] ]
 
-[: [$../graphs/exp_on_R.png] ]
+[: [$../graphs/exp_on_r.png] ]
 
 [: ['[*Real and Imaginary parts of exp on C]]]
-[: [$../graphs/Im_exp_on_C.png]]
+[: [$../graphs/im_exp_on_c.png]]
 
 The hyperbolic functions are defined as power series which 
 can be computed (for reals, complex, quaternions and octonions) as:
