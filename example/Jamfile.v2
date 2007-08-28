@@ -27,6 +27,7 @@ project
 run binomial_confidence_limits.cpp ;
 run binomial_example3.cpp ;
 run binomial_sample_sizes.cpp ;
+run binomial_example_nag.cpp ;
 run c_error_policy_example.cpp ;
 run chi_square_std_dev_test.cpp ;
 run distribution_construction.cpp ;
