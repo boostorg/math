@@ -1,5 +1,4 @@
-[section:NAG_library Comparison with C, R, FORTRAN-style Free Functions]
-
+[section:nag_library Comparison with C, R, FORTRAN-style Free Functions]
 
 You are probably familiar with a statistics library that has free functions,
 for example the classic [@http://nag.com/numeric/CL/CLdescription.asp NAG C library]
