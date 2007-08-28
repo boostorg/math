@@ -53,23 +53,24 @@
 
 #endif
 
-namespace boost{ namespace math{
-
-namespace detail{
+namespace boost{ 
 
 #if defined(BOOST_HAS_FPCLASSIFY) || defined(isnan)
+//
+// This must not be located in any namespace under boost::math
+// otherwise we can get into an infinite loop if isnan is
+// a #define for "isnan" !
+//
+namespace math_detail{
 
 template <class T>
 inline bool is_nan_helper(T t, const boost::true_type&)
 {
-#ifdef BOOST_HAS_FPCLASSIFY
-   if( BOOST_FPCLASSIFY_PREFIX fpclassify(t) == FP_NAN)
-      return true;
-#elif defined(isnan)
-   if(isnan(t))
-      return true;
+#ifdef isnan
+   return isnan(t);
+#else // BOOST_HAS_FPCLASSIFY
+   return (BOOST_FPCLASSIFY_PREFIX fpclassify(t) == FP_NAN);
 #endif
-   return false;
 }
 
 template <class T>
@@ -78,17 +79,23 @@ inline bool is_nan_helper(T t, const boost::false_type&)
    return false;
 }
 
+}
+
 #endif // defined(BOOST_HAS_FPCLASSIFY) || defined(isnan)
+
+namespace math{
+
+namespace detail{
 
 template <class T>
 inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const mpl::true_&)
 {
    // whenever possible check for Nan's first:
 #ifdef BOOST_HAS_FPCLASSIFY
-   if(detail::is_nan_helper(t, ::boost::is_floating_point<T>()))
+   if(::boost::math_detail::is_nan_helper(t, ::boost::is_floating_point<T>()))
       return FP_NAN;
 #elif defined(isnan)
-   if(detail::is_nan_helper(t, ::boost::is_floating_point<T>()))
+   if(boost::math_detail::is_nan_helper(t, ::boost::is_floating_point<T>()))
       return FP_NAN;
 #elif defined(_MSC_VER) || defined(__BORLANDC__)
    if(::_isnan(boost::math::tools::real_cast<double>(t)))
@@ -204,9 +211,9 @@ inline bool isnan BOOST_NO_MACRO_EXPAND(T t)
    return (::boost::math::fpclassify)(t) == FP_NAN;
 }
 #ifdef isnan
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return isnan(t); }
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return isnan(t); }
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return isnan(t); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return ::boost::math_detail::is_nan_helper(t, boost::true_type()); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return ::boost::math_detail::is_nan_helper(t, boost::true_type()); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return ::boost::math_detail::is_nan_helper(t, boost::true_type()); }
 #elif defined(BOOST_MSVC)
 #  pragma warning(push)
 #  pragma warning(disable: 4800) // forcing value to bool 'true' or 'false' 

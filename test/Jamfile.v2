@@ -11,7 +11,7 @@ project
     : requirements 
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
-      <toolset>acc:<cxxflags>+W2068,2461,2236,4070
+      <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069
       <toolset>intel:<cxxflags>-Qwd264,239
       <toolset>intel:<cxxflags>/nologo 
       <toolset>intel:<linkflags>/nologo 
@@ -181,6 +181,7 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_solve_inc_test.cpp ;
+
 
 
 
