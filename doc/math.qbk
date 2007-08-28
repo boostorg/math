@@ -205,6 +205,9 @@ and use the function's name as the link text]
 [def __cephes [@http://www.netlib.org/cephes/ Cephes]]
 
 
+[def __why_complements [link why_complements why complements?]]
+[def __complements [link complements complements]]
+
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
 [template sub[x]'''<subscript>'''[x]'''</subscript>''']
@@ -324,6 +327,7 @@ external graphing application.
 [section:dist Statistical Distributions and Functions]
 [include dist_tutorial.qbk]
 [include dist_reference.qbk]
+[include dist_algorithms.qbk]
 [endsect] [/section:dist Statistical Distributions and Functions]
 
 [section:special Special Functions]
