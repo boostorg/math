@@ -163,8 +163,9 @@ The last (0 to 10 heads) must, of course, be 100% probability.
   }
   catch(const std::exception& e)
   {
-    //[#coinflip_eg_catch]
+    //
     /*`
+    [#coinflip_eg_catch]
     It is always essential to include try & catch blocks because
     default policies are to throw exceptions on arguments that
     are out of domain or cause errors like numeric-overflow.

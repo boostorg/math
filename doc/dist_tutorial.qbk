@@ -38,7 +38,7 @@ of discrete distribtions behave.
 
 [tip If you are familiar with statistics libraries using functions,
 and 'Distributions as Objects' seem alien, see
-[link math_toolkit.dist.stat_tut.weg.NAG_library the comparison to 
+[link math_toolkit.dist.stat_tut.weg.nag_library the comparison to 
 other statistics libraries.]  
 ] [/tip]
 
