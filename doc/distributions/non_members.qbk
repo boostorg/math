@@ -103,7 +103,7 @@ normal distribution:
 
 [$../graphs/survival.png]
 
-See __why_complement for why the complement is useful and when it should be used.
+See __why_complements for why the complement is useful and when it should be used.
 
 [h4 [#math.dist.hazard]Hazard Function]
 
@@ -212,6 +212,8 @@ distribution:
 [$../graphs/quantile.png]
 
 [h4 [#math.dist.quantile_c]Quantile from the complement of the probability.]
+[link complements complements]
+
 
    template <class Distribution, class RealType>
    RealType quantile(const ``['Unspecified-Complement-Type]``<Distribution, RealType>& comp);
@@ -229,6 +231,8 @@ the arguments in a call to the quantile function in a call to
 The function computes a value /x/ such that
 `cdf(complement(dist, x)) == q` where /q/ is complement of the
 probability.
+
+[link why_complements Why complements?]
 
 This function is also called the inverse survival function, and is the
 same as calculating the ['upper critical value] of a distribution.
