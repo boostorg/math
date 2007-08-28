@@ -19,8 +19,11 @@
       // Construct:
       normal_distribution(RealType mean = 0, RealType sd = 1);
       // Accessors:
-      RealType mean()const;
-      RealType standard_deviation()const;
+      RealType mean()const; // location.
+      RealType standard_deviation()const; // scale.
+      // Synonyms, provided to allow generic use of find_location and find_scale.
+      RealType location()const;
+      RealType scale()const;
    };
    
    }} // namespaces
