@@ -6,13 +6,13 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Simple example of computing probabilities and quantiles for 
+// Simple example of computing probabilities and quantiles for
 // a Bernoulli random variable representing the flipping of a coin.
 
 // http://mathworld.wolfram.com/CoinTossing.html
 // http://en.wikipedia.org/wiki/Bernoulli_trial
 // Weisstein, Eric W. "Dice." From MathWorld--A Wolfram Web Resource.
-// http://mathworld.wolfram.com/Dice.html 
+// http://mathworld.wolfram.com/Dice.html
 // http://en.wikipedia.org/wiki/Bernoulli_distribution
 // http://mathworld.wolfram.com/BernoulliDistribution.html
 //
@@ -29,7 +29,7 @@ is coin flipping.
 A variable in such a sequence may be called a Bernoulli variable.
 
 This example shows using the Binomial distribution to predict the probability
-of heads and tails when throwing a coin. 
+of heads and tails when throwing a coin.
 
 The number of correct answers (say heads),
 X, is distributed as a binomial random variable
@@ -55,16 +55,16 @@ int main()
 {
   cout << "Using Binomial distribution to predict how many heads and tails." << endl;
   try
-  { 
+  {
 /*`
-See note [link binomial_coinflip_example_catch_block
-with the catch block] about why a try and catch block is always a good idea.
+See note [link coinflip_eg_catch with the catch block]
+about why a try and catch block is always a good idea.
 
-First, construct a binomial distribution with parameters success_fraction 
+First, construct a binomial distribution with parameters success_fraction
 1/2, and how many flips.
 */
     const double success_fraction = 0.5; // = 50% = 1/2 for a 'fair' coin.
-    int flips = 10; 
+    int flips = 10;
     binomial flip(flips, success_fraction);
 
     cout.precision(4);
@@ -77,7 +77,7 @@ First, construct a binomial distribution with parameters success_fraction
     cout << "Standard deviation is " << standard_deviation(flip) << endl;
     cout << "So about 2/3 will lie within 1 standard deviation and get between "
       <<  ceil(mean(flip) - standard_deviation(flip))  << " and "
-      << floor(mean(flip) + standard_deviation(flip)) << " correct." << endl; 
+      << floor(mean(flip) + standard_deviation(flip)) << " correct." << endl;
     cout << "Skewness is " << skewness(flip) << endl;
     // Skewness of binomial distributions is only zero (symmetrical)
     // if success_fraction is exactly one half,
@@ -109,8 +109,8 @@ is less accurate than using the complement
 */
     cout << "Probability of getting 9 or 10 heads is " << cdf(complement(flip, 8)) << endl;
 /*`
-Since the subtraction may involve 
-[@http://docs.sun.com/source/806-3568/ncg_goldberg.html cancellation error], 
+Since the subtraction may involve
+[@http://docs.sun.com/source/806-3568/ncg_goldberg.html cancellation error],
 where as `cdf(complement(flip, 8))`
 does not use such a subtraction internally, and so does not exhibit the problem.
 
@@ -138,10 +138,10 @@ Finally, print two tables of probability for the /exactly/ and /at least/ a numb
 */
     // Print a table of probability for the exactly a number of heads.
     cout << "Probability of getting exactly (==) heads" << endl;
-    for (int successes = 0; successes <= flips; successes++) 
+    for (int successes = 0; successes <= flips; successes++)
     { // Say success means getting a head (or equally success means getting a tail).
       double probability = pdf(flip, successes);
-      cout << left << setw(2) << successes << "     " << setw(10) 
+      cout << left << setw(2) << successes << "     " << setw(10)
         << probability << " or 1 in " << 1. / probability
         << ", or " << probability * 100. << "%" << endl;
     } // for i
@@ -149,7 +149,7 @@ Finally, print two tables of probability for the /exactly/ and /at least/ a numb
 
     // Tabulate the probability of getting between zero heads and 0 upto 10 heads.
     cout << "Probability of getting upto (<=) heads" << endl;
-    for (int successes = 0; successes <= flips; successes++) 
+    for (int successes = 0; successes <= flips; successes++)
     { // Say success means getting a head
       // (equally success could mean getting a tail).
       double probability = cdf(flip, successes); // P(X <= heads)
@@ -163,14 +163,14 @@ The last (0 to 10 heads) must, of course, be 100% probability.
   }
   catch(const std::exception& e)
   {
-    /*` 
-    [#binomial_coinflip_example_catch_block]
+    //[#coinflip_eg_catch]
+    /*`
     It is always essential to include try & catch blocks because
-    default policies are to throw exceptions on arguments that 
+    default policies are to throw exceptions on arguments that
     are out of domain or cause errors like numeric-overflow.
 
     Lacking try & catch blocks, the program will abort, whereas the
-    message below from the thrown exception will give some helpful 
+    message below from the thrown exception will give some helpful
     clues as to the cause of the problem.
     */
     std::cout <<
