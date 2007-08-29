@@ -425,7 +425,7 @@ void test_spots(RealType)
     tolerance);
   tolerance = (std::max)(
     boost::math::tools::epsilon<RealType>(),
-    static_cast<RealType>(boost::math::tools::epsilon<double>())) * 5; // 5 eps as a fraction.
+    static_cast<RealType>(boost::math::tools::epsilon<double>())) * 10; // 10 eps as a fraction.
   cout << "Tolerance (as fraction) for type " << typeid(RealType).name()  << " is " << tolerance << "." << endl;
   triangular_distribution<RealType> tridef; // (-1, 0, 1) // default
   RealType x = static_cast<RealType>(0.5);
