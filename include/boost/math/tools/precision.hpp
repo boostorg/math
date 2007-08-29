@@ -148,7 +148,7 @@ inline T epsilon(const mpl::true_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
    return std::numeric_limits<T>::epsilon();
 }
 
-#if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
+#if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && (LDBL_MANT_DIG == 106)
 template <>
 inline long double epsilon<long double>(const mpl::true_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(long double))
 {
