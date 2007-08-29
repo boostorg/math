@@ -1,5 +1,5 @@
-//  Copyright John Maddock 2006.
-//  Copyright Paul A. Bristow 2006.
+//  Copyright John Maddock 2006, 2007.
+//  Copyright Paul A. Bristow 2006, 2007.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -147,9 +147,9 @@ namespace boost{ namespace math
 
     triangular_distribution(RealType lower = -1, RealType mode = 0, RealType upper = 1)
       : m_lower(lower), m_mode(mode), m_upper(upper) // Constructor.
-    { // Evans says standard is lower 0, mode 1/2, upper 1,
+    { // Evans says 'standard triangular' is lower 0, mode 1/2, upper 1,
       // has median sqrt(c/2) for c <=1/2 and 1 - sqrt(1-c)/2 for c >= 1/2
-      // But this is more useful in most applications to approximate normal distribution,
+      // But this -1, 0, 1 is more useful in most applications to approximate normal distribution,
       // where the central value is the most likely and deviations either side equally likely.
       RealType result;
       detail::check_triangular("boost::math::triangular_distribution<%1%>::triangular_distribution",lower, mode, upper, &result, Policy());
@@ -504,7 +504,7 @@ namespace boost{ namespace math
       return result;
     }
     return static_cast<RealType>(-3)/5; // - 3/5 = -0.6
-    // Assuming mathworld really means kurtosis excess?  Wikipedia corrected to match this.
+    // Assuming mathworld really means kurtosis excess?  Wikipedia now corrected to match this.
   }
 
 } // namespace math
