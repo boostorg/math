@@ -14,6 +14,7 @@
 
 [include html4_symbols.qbk] [/ just for testing]
 [/include latin1_symbols.qbk] [/ just for testing]
+[include common_overviews.qbk][/ overviews that appear in more than one place!]
 
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
@@ -52,6 +53,7 @@
 [def __overflow_error [link overflow_error overflow_error]]
 [def __underflow_error [link underflow_error underflow_error]]
 [def __denorm_error [link denorm_error denorm_error]]
+[def __evaluation_error [link evaluation_error evaluation_error]]
 [def __checked_narrowing_cast [link checked_narrowing_cast checked_narrowing_cast]]
 
 [def __arg_pomotion_rules [link math_toolkit.special.result_type ['result type calculation rules]]]
@@ -252,6 +254,8 @@ for these distributions.
 ]
 ]
 
+[section:main_overview Overview]
+
 [section:intro About the Math Toolkit]
 
 This library is divided into three interconnected parts:
@@ -322,7 +326,15 @@ external graphing application.
 
 [include structure.qbk] [/getting about]
 
-[include performance.qbk]
+[section:pol_overview Configuration and Policies]
+[policy_overview]
+[endsect][/section:pol_overview Configuration and Policies]
+
+[section:perf_over Performance]
+[performance_overview]
+[endsect]
+
+[endsect][/section:main_overview Overview]
 
 [section:dist Statistical Distributions and Functions]
 [include dist_tutorial.qbk]
@@ -411,6 +423,8 @@ external graphing application.
 [endsect] [/section:using_udt Use with User Defined Floating-Point Types]
 
 [include policy.qbk]
+
+[include performance.qbk]
 
 [section:backgrounders Backgrounders]
 [include implementation.qbk]

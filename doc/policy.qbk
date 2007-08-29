@@ -1,43 +1,7 @@
 [section:policy Policies]
 
 [section:pol_overview Policy Overview]
-
-Policies are a powerful fine-grain mechanism that allow you to customise the
-behaviour of this library according to your needs.  There is more information
-available in the [link math_toolkit.policy.pol_tutorial policy tutorial] 
-and the [link math_toolkit.policy.pol_ref policy reference].
-
-Unless you find that the [link math_toolkit.policy.pol_tutorial.policy_tut_defaults
- default policy behaviour]
-when encountering 'bad' argument values does not meet your needs,
-you should not need to worry about policies.
-
-Policies are a compile-time mechanism that allow you to change 
-error-handling or calculation precision either
-program wide, or at the call site.
-
-Although the policy mechanism itself is rather complicated,
-in practice it is easy to use, and very flexible.
-
-Using policies you can control:
-
-* [link math_toolkit.policy.pol_ref.error_handling_policies How results from 'bad' arguments are handled],
-   including those that cannot be fully evaluated.
-* How [link math_toolkit.policy.pol_ref.internal_promotion accuracy is controlled by internal promotion] to use more precise types.
-* What working [link math_toolkit.policy.pol_ref.precision_pol precision] should be used to calculate results.
-* What do to when a [link math_toolkit.policy.pol_ref.assert_undefined mathematically undefined function]
-  is used:  Should this raise a run-time or compile-time error?
-* Whether [link math_toolkit.policy.pol_ref.discrete_quant_ref discrete functions],
-  like the binomial, should return real or only integral values, and how they are rounded.
-  
-You can control policies:
-
-* Using [link math_toolkit.policy.pol_ref.policy_defaults macros] to change any default policy.
-* At your chosen [link math_toolkit.policy.pol_ref.namespace_pol namespace scope] for distributions and/or functions.
-* In an ad-hoc manner [link math_toolkit.policy.pol_tutorial.ad_hoc_sf_policies 
-by passing a specific policy to a special function], or to a 
-[link math_toolkit.policy.pol_tutorial.ad_hoc_dist_policies statistical distribution].
-
+[policy_overview]
 [endsect][/section:pol_overview Policy Overview]
 
 [include policy_tutorial.qbk]
@@ -471,6 +435,27 @@ And for a quantile of a distribution to approximately 25-bit precision:
 
 [endsect][/section:precision_pol Precision Policies]
 
+[section:iteration_pol Iteration Limits Policies]
+
+There are two policies that effect the iterative algorithms
+used to implement the special functions in this library:
+
+   template <unsigned long limit = BOOST_MATH_MAX_SERIES_ITERATION_POLICY>
+   class max_series_iterations;
+   
+   template <unsigned long limit = BOOST_MATH_MAX_ROOT_ITERATION_POLICY>
+   class max_root_iterations;
+
+The class `max_series_iterations` determines the maximum number of
+iterations permitted in a series evaluation, before the special
+function gives up and returns the result of __evaluation_error.
+
+The class `max_root_iterations` determines the maximum number
+of iterations permitted in a root-finding algorithm before the special
+function gives up and returns the result of __evaluation_error.
+
+[endsect][/section:iteration_pol Iteration Limits Policies]
+
 [section:policy_defaults Using macros to Change the Policy Defaults]
 
 You can use the various macros below to change any (or all) of the policies.
@@ -572,6 +557,18 @@ undefined function will not compile.  When set to `false` then the function
 will compile but return the result of a domain error: this can be useful
 for some generic code, that needs to work with all distributions and determine
 at runtime whether or not a particular property is well defined.
+
+[h5 BOOST_MATH_MAX_SERIES_ITERATION_POLICY]
+
+Determines how many series iterations a special function is permitted
+to perform before it gives up and returns an __evaluation_error:
+Defaults to 1000000.
+   
+[h5 BOOST_MATH_MAX_ROOT_ITERATION_POLICY]
+
+Determines how many root-finding iterations a special function is permitted
+to perform before it gives up and returns an __evaluation_error:
+Defaults to 200.
 
 [h5 Example]
 

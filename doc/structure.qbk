@@ -1,6 +1,4 @@
-[section:structure  Getting About - Directory, Files, Namespaces & Configuration Macros]
-
-[h4 Navigation]
+[section:navigation Navigation]
 
 Used in combination with the configured browser key (usually Alt), the
 following keys act as handy shortcuts for common navigation tasks.
@@ -16,7 +14,9 @@ following keys act as handy shortcuts for common navigation tasks.
 [^[*u]] - Up
 ]
 
-[h4 Directory File Structure for Boost Math Functions, Math Constants, & Statistics Distributions]
+[endsect]
+
+[section:directories Directory File Structure for Boost Math Functions, Math Constants, & Statistics Distributions]
 
 [h4 boost\/math]
 
@@ -75,9 +75,10 @@ following keys act as handy shortcuts for common navigation tasks.
    [@http://shoup.net/ntl/ NTL] released package to provide a few additional 
    (and vital) extra features.]]
 ]
+
+[endsect]
    
-   
-[h4 Namespaces for Boost Math Functions, Math Constants and Statistics Distributions]
+[section:namespaces Namespaces for Boost Math Functions, Math Constants and Statistics Distributions]
    
 All math functions and distributions are in `namespace boost::math`
    
@@ -94,42 +95,8 @@ and can be instantiated with the help of the reserved name `students_t`(for `Rea
 Functions not intended for use by applications are in `boost::math::detail`.
 
 Functions that may have more general use, like `digits` (significand), `max_value`, `min_value` and `epsilon` are in `boost::math::tools`.
-   
-[h4 Using Functions and Distributions]
 
-See [link math_toolkit.dist.stat_tut  Statistical Distributions Tutorial] and
-[link math_toolkit.dist.dist_ref Statistical Distributions Reference]
-and [link math_toolkit.special Special Functions]
-
-[h4 Configuration Policy Macros - Controlling Handling Arguments, Undefined Functions, Throwing of Exceptions, Accuracy, ]
-
-There are some configuration macros that can be used to control how the
-library behaves.  These are part of the Policy framework:
-
-Using policies you can control:
-
-* [link math_toolkit.policy.pol_ref.error_handling_policies How results from 'bad' arguments are handled],
-   including those that cannot be fully evaluated.
-* How [link math_toolkit.policy.pol_ref.internal_promotion accuracy is controlled by internal promotion] to use more precise types.
-* What working [link math_toolkit.policy.pol_ref.precision_pol precision] should be used to calculate results.
-* What do to when a [link math_toolkit.policy.pol_ref.assert_undefined mathematically undefined function]
-  is used:  Should this raise a run-time or compile-time error?
-* Whether [link math_toolkit.policy.pol_ref.discrete_quant_ref discrete functions],
-  like the binomial, should return real or only integral values, and how they are rounded.
-  
-You can control policies:
-
-* Using [link math_toolkit.policy.pol_ref.policy_defaults macros] to change any default policy.
-* At your chosen [link math_toolkit.policy.pol_ref.namespace_pol namespace scope] for distributions and/or functions.
-* In an ad-hoc manner [link math_toolkit.policy.pol_tutorial.ad_hoc_sf_policies 
-by passing a specific policy to a special function], or to a 
-[link math_toolkit.policy.pol_tutorial.ad_hoc_dist_policies statistical distribution].
-
-See also the 
-[link math_toolkit.policy.pol_tutorial policy tutorial], and 
-[link math_toolkit.policy.pol_ref policy reference].
-
-[endsect][/sect:structure Getting About - Directory, Namespace & File structure]
+[endsect]
 
 [/ structure.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.

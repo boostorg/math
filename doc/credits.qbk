@@ -20,6 +20,11 @@ remaining editorial mistakes are his fault).
 Xiaogang Zhang worked on the Bessel functions and elliptic integrals for his
 Google Summer of Code project 2006.
 
+We are also indebted to Matthias Schabel for managing the formal Boost-review
+of this library, and to all the reviewers - including Guillaume Melquiond,
+Arnaldur Gylfason, John Phillips, Stephan Tolksdorf and Jeff Garland 
+- for their many helpful comments.
+
 [endsect][/section:roadmap Roadmap]
 
 [/ 

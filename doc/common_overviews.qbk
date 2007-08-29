@@ -1,0 +1,85 @@
+
+
+[template policy_overview[]
+
+Policies are a powerful fine-grain mechanism that allow you to customise the
+behaviour of this library according to your needs.  There is more information
+available in the [link math_toolkit.policy.pol_tutorial policy tutorial] 
+and the [link math_toolkit.policy.pol_ref policy reference].
+
+Generally speaking unless you find that the 
+[link math_toolkit.policy.pol_tutorial.policy_tut_defaults
+ default policy behaviour]
+when encountering 'bad' argument values does not meet your needs,
+you should not need to worry about policies.
+
+Policies are a compile-time mechanism that allow you to change 
+error-handling or calculation precision either
+program wide, or at the call site.
+
+Although the policy mechanism itself is rather complicated,
+in practice it is easy to use, and very flexible.
+
+Using policies you can control:
+
+* [link math_toolkit.policy.pol_ref.error_handling_policies How results from 'bad' arguments are handled],
+   including those that cannot be fully evaluated.
+* How [link math_toolkit.policy.pol_ref.internal_promotion accuracy is controlled by internal promotion] to use more precise types.
+* What working [link math_toolkit.policy.pol_ref.precision_pol precision] should be used to calculate results.
+* What do to when a [link math_toolkit.policy.pol_ref.assert_undefined mathematically undefined function]
+  is used:  Should this raise a run-time or compile-time error?
+* Whether [link math_toolkit.policy.pol_ref.discrete_quant_ref discrete functions],
+  like the binomial, should return real or only integral values, and how they are rounded.
+* How many iterations a special function is permitted to perform in
+  a series evaluation or root finding algorithm before it gives up and raises an
+  __evaluation_error.
+  
+You can control policies:
+
+* Using [link math_toolkit.policy.pol_ref.policy_defaults macros] to change any default policy.
+* At your chosen [link math_toolkit.policy.pol_ref.namespace_pol namespace scope] for distributions and/or functions.
+* In an ad-hoc manner [link math_toolkit.policy.pol_tutorial.ad_hoc_sf_policies 
+by passing a specific policy to a special function], or to a 
+[link math_toolkit.policy.pol_tutorial.ad_hoc_dist_policies statistical distribution].
+
+]
+
+[template performance_overview[]
+
+By and large the performance of this library should be acceptable
+for most needs.  However, you should note that the library's primary
+emphasis is on accuracy and numerical stability, and /not/ speed.
+
+In terms of the algorithms used, this library aims to use the same "best
+of breed" algorithms as many other libraries: the principle difference
+is that this library is implemented in C++ - taking advantage of all
+the abstraction mechanisms that C++ offers - where as most traditional
+numeric libraries are implemented in C or FORTRAN.  Traditionally
+languages such as C or FORTAN are perceived as easier to optimise
+than more complex languages like C++, so in a sense this library
+provides a good test of current compiler technology, and the 
+"abstraction penalty" - if any - of C++ compared to other languages.
+
+The two most important things you can do to ensure the best performance
+from this library are:
+
+# Turn on your compilers optimisations: the difference between "release"
+and "debug" builds can easily be a [link math_toolkit.perf.getting_best factor of 20].
+# Pick your compiler carefully: [link math_toolkit.perf.comp_compilers
+performance differences of up to 
+8 fold] have been found between some windows compilers for example.
+
+The [link math_toolkit.perf performance section] contains more 
+information on the performance
+of this library, what you can do to fine tune it, and how this library
+compares to some other open source alternatives.
+
+]
+
+[/ math.qbk
+  Copyright 2007 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+

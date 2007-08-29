@@ -1,31 +1,14 @@
-
-[section:perf Performance]
-
 [template perf[name value] [value]]
 [template para[text] '''<para>'''[text]'''</para>''']
 
-By and large the performance of this library should be acceptable
-for most needs.  However, you should note that the library's primary
-emphasis is on accuracy and numerical stability, and /not/ speed.
+[section:perf Performance]
 
-In terms of the algorithms used, this library aims to use the same "best
-of breed" algorithms as many other libraries: the principle difference
-is that this library is implemented in C++ - taking advantage of all
-the abstraction mechanisms that C++ offers - where as most traditional
-numeric libraries are implemented in C or FORTRAN.  Traditionally
-languages such as C or FORTAN are perceived as easier to optimise
-than more complex languages like C++, so in a sense this library
-provides a good test of current compiler technology, and the 
-"abstraction penalty" - if any - of C++ compared to other languages.
+[section:perf_over Performance Overview]
+[performance_overview]
+[endsect]
 
-[heading Getting the Best Performance from this Library]
+[section:interp Interpretting these Results]
 
-By far the most important thing you can do when using this library
-is turn on your compiler's optimisation options.  As the following 
-table shows the penalty for using the library in debug mode can be 
-quite large.  
-
-[caution 
 In all of the following tables, the best performing
 result in each row, is assigned a relative value of "1" and shown
 in bold, so a score of "2" means ['"twice as slow as the best 
@@ -36,15 +19,24 @@ Result were obtained on a system
 with an Intel 2.8GHz Pentium 4 processor with 2Gb of RAM and running
 either Windows XP or Mandriva Linux.  
 
-As usual
+[caution As usual
 with performance results these should be taken with a large pinch
 of salt: relative performance is known to shift quite a bit depending
 upon the architecture of the particular test system used.  Further
 more, our performance results were obtained using our own test data:
 these test values are designed to provide good coverage of our code and test
 all the appropriate corner cases.  They do not necessarily represent
-"typical" usage: whatever that may be.
+"typical" usage: whatever that may be!
 ]
+
+[endsect]
+
+[section:getting_best Getting the Best Performance from this Library]
+
+By far the most important thing you can do when using this library
+is turn on your compiler's optimisation options.  As the following 
+table shows the penalty for using the library in debug mode can be 
+quite large.  
 
 [table  Performance Comparison of Release and Debug Settings
 [[Function]
@@ -60,14 +52,16 @@ all the appropriate corner cases.  They do not necessarily represent
 [[__erf][[perf msvc-debug-erf..[para 16.65][para (1.028e-006s)]]][[perf msvc-erf..[para *1.00*][para (6.173e-008s)]]]]
 [[__erf_inv][[perf msvc-debug-erf_inv..[para 19.28][para (1.215e-006s)]]][[perf msvc-erf_inv..[para *1.00*][para (6.302e-008s)]]]]
 [[__ibeta and __ibetac][[perf msvc-debug-ibeta..[para 8.32][para (1.540e-005s)]]][[perf msvc-ibeta..[para *1.00*][para (1.852e-006s)]]]]
-[[__ibeta_inv and ibetac_inv][[perf msvc-debug-ibeta_inv..[para 10.25][para (7.492e-005s)]]][[perf msvc-ibeta_inv..[para *1.00*][para (7.311e-006s)]]]]
+[[__ibeta_inv and __ibetac_inv][[perf msvc-debug-ibeta_inv..[para 10.25][para (7.492e-005s)]]][[perf msvc-ibeta_inv..[para *1.00*][para (7.311e-006s)]]]]
 [[__ibeta_inva, __ibetac_inva, __ibeta_invb and __ibetac_invb][[perf msvc-debug-ibeta_invab..[para 8.57][para (2.441e-004s)]]][[perf msvc-ibeta_invab..[para *1.00*][para (2.847e-005s)]]]]
-[[__gamma_p and gamma_q][[perf msvc-debug-igamma..[para 10.98][para (1.044e-005s)]]][[perf msvc-igamma..[para *1.00*][para (9.504e-007s)]]]]
-[[__gamma_p_inv and gamma_q_inv][[perf msvc-debug-igamma_inv..[para 10.25][para (3.721e-005s)]]][[perf msvc-igamma_inv..[para *1.00*][para (3.631e-006s)]]]]
-[[__gamma_p_inva and gamma_q_inva][[perf msvc-debug-igamma_inva..[para 11.26][para (1.124e-004s)]]][[perf msvc-igamma_inva..[para *1.00*][para (9.982e-006s)]]]]
+[[__gamma_p and __gamma_q][[perf msvc-debug-igamma..[para 10.98][para (1.044e-005s)]]][[perf msvc-igamma..[para *1.00*][para (9.504e-007s)]]]]
+[[__gamma_p_inv and __gamma_q_inv][[perf msvc-debug-igamma_inv..[para 10.25][para (3.721e-005s)]]][[perf msvc-igamma_inv..[para *1.00*][para (3.631e-006s)]]]]
+[[__gamma_p_inva and __gamma_q_inva][[perf msvc-debug-igamma_inva..[para 11.26][para (1.124e-004s)]]][[perf msvc-igamma_inva..[para *1.00*][para (9.982e-006s)]]]]
 ]
 
-[heading Comparing Compilers]
+[endsect]
+
+[section:comp_compilers Comparing Compilers]
 
 After a good choice of build settings the next most important thing 
 you can do, is choose your compiler
@@ -93,14 +87,16 @@ demands (thankfully GCC-4.x is somewhat better in this respect).
 [[__erf][[perf intel-erf..[para *1.00*][para (4.118e-008s)]]][[perf msvc-erf..[para 1.50][para (6.173e-008s)]]][[perf gcc-erf..[para 3.24][para (1.336e-007s)]]]]
 [[__erf_inv][[perf intel-erf_inv..[para *1.00*][para (4.439e-008s)]]][[perf msvc-erf_inv..[para 1.42][para (6.302e-008s)]]][[perf gcc-erf_inv..[para 7.88][para (3.500e-007s)]]]]
 [[__ibeta and __ibetac][[perf intel-ibeta..[para *1.00*][para (1.631e-006s)]]][[perf msvc-ibeta..[para 1.14][para (1.852e-006s)]]][[perf gcc-ibeta..[para 3.05][para (4.975e-006s)]]]]
-[[__ibeta_inv and ibetac_inv][[perf intel-ibeta_inv..[para *1.00*][para (6.133e-006s)]]][[perf msvc-ibeta_inv..[para 1.19][para (7.311e-006s)]]][[perf gcc-ibeta_inv..[para 2.60][para (1.597e-005s)]]]]
+[[__ibeta_inv and __ibetac_inv][[perf intel-ibeta_inv..[para *1.00*][para (6.133e-006s)]]][[perf msvc-ibeta_inv..[para 1.19][para (7.311e-006s)]]][[perf gcc-ibeta_inv..[para 2.60][para (1.597e-005s)]]]]
 [[__ibeta_inva, __ibetac_inva, __ibeta_invb and __ibetac_invb][[perf intel-ibeta_invab..[para *1.00*][para (2.453e-005s)]]][[perf msvc-ibeta_invab..[para 1.16][para (2.847e-005s)]]][[perf gcc-ibeta_invab..[para 2.83][para (6.947e-005s)]]]]
-[[__gamma_p and gamma_q][[perf intel-igamma..[para *1.00*][para (6.735e-007s)]]][[perf msvc-igamma..[para 1.41][para (9.504e-007s)]]][[perf gcc-igamma..[para 2.78][para (1.872e-006s)]]]]
-[[__gamma_p_inv and gamma_q_inv][[perf intel-igamma_inv..[para *1.00*][para (2.637e-006s)]]][[perf msvc-igamma_inv..[para 1.38][para (3.631e-006s)]]][[perf gcc-igamma_inv..[para 3.31][para (8.736e-006s)]]]]
-[[__gamma_p_inva and gamma_q_inva][[perf intel-igamma_inva..[para *1.00*][para (7.716e-006s)]]][[perf msvc-igamma_inva..[para 1.29][para (9.982e-006s)]]][[perf gcc-igamma_inva..[para 2.56][para (1.974e-005s)]]]]
+[[__gamma_p and __gamma_q][[perf intel-igamma..[para *1.00*][para (6.735e-007s)]]][[perf msvc-igamma..[para 1.41][para (9.504e-007s)]]][[perf gcc-igamma..[para 2.78][para (1.872e-006s)]]]]
+[[__gamma_p_inv and __gamma_q_inv][[perf intel-igamma_inv..[para *1.00*][para (2.637e-006s)]]][[perf msvc-igamma_inv..[para 1.38][para (3.631e-006s)]]][[perf gcc-igamma_inv..[para 3.31][para (8.736e-006s)]]]]
+[[__gamma_p_inva and __gamma_q_inva][[perf intel-igamma_inva..[para *1.00*][para (7.716e-006s)]]][[perf msvc-igamma_inva..[para 1.29][para (9.982e-006s)]]][[perf gcc-igamma_inva..[para 2.56][para (1.974e-005s)]]]]
 ]
 
-[heading Performance Tuning Macros]
+[endsect]
+
+[section:tuning Performance Tuning Macros]
 
 There are a small number of performance tuning options
 that are determined by configuration macros.  These should be set
@@ -231,14 +227,15 @@ functions or distributions.  See also the
 [[__erf][[perf gcc-4_2-ld-erf..[para 1.48][para (1.387e-007s)]]][[perf gcc-4_2-erf..[para *1.00*][para (9.377e-008s)]]]]
 [[__erf_inv][[perf gcc-4_2-ld-erf_inv..[para 1.11][para (4.009e-007s)]]][[perf gcc-4_2-erf_inv..[para *1.00*][para (3.598e-007s)]]]]
 [[__ibeta and __ibetac][[perf gcc-4_2-ld-ibeta..[para 1.29][para (5.354e-006s)]]][[perf gcc-4_2-ibeta..[para *1.00*][para (4.137e-006s)]]]]
-[[__ibeta_inv and ibetac_inv][[perf gcc-4_2-ld-ibeta_inv..[para 1.44][para (2.220e-005s)]]][[perf gcc-4_2-ibeta_inv..[para *1.00*][para (1.538e-005s)]]]]
+[[__ibeta_inv and __ibetac_inv][[perf gcc-4_2-ld-ibeta_inv..[para 1.44][para (2.220e-005s)]]][[perf gcc-4_2-ibeta_inv..[para *1.00*][para (1.538e-005s)]]]]
 [[__ibeta_inva, __ibetac_inva, __ibeta_invb and __ibetac_invb][[perf gcc-4_2-ld-ibeta_invab..[para 1.25][para (7.009e-005s)]]][[perf gcc-4_2-ibeta_invab..[para *1.00*][para (5.607e-005s)]]]]
-[[__gamma_p and gamma_q][[perf gcc-4_2-ld-igamma..[para 1.26][para (3.116e-006s)]]][[perf gcc-4_2-igamma..[para *1.00*][para (2.464e-006s)]]]]
-[[__gamma_p_inv and gamma_q_inv][[perf gcc-4_2-ld-igamma_inv..[para 1.27][para (1.178e-005s)]]][[perf gcc-4_2-igamma_inv..[para *1.00*][para (9.291e-006s)]]]]
-[[__gamma_p_inva and gamma_q_inva][[perf gcc-4_2-ld-igamma_inva..[para 1.20][para (2.765e-005s)]]][[perf gcc-4_2-igamma_inva..[para *1.00*][para (2.311e-005s)]]]]
+[[__gamma_p and __gamma_q][[perf gcc-4_2-ld-igamma..[para 1.26][para (3.116e-006s)]]][[perf gcc-4_2-igamma..[para *1.00*][para (2.464e-006s)]]]]
+[[__gamma_p_inv and __gamma_q_inv][[perf gcc-4_2-ld-igamma_inv..[para 1.27][para (1.178e-005s)]]][[perf gcc-4_2-igamma_inv..[para *1.00*][para (9.291e-006s)]]]]
+[[__gamma_p_inva and __gamma_q_inva][[perf gcc-4_2-ld-igamma_inva..[para 1.20][para (2.765e-005s)]]][[perf gcc-4_2-igamma_inva..[para *1.00*][para (2.311e-005s)]]]]
 ]
 
-[heading Comparisons to Other Open Source Libraries]
+[endsect]
+[section:comparisons Comparisons to Other Open Source Libraries]
 
 We've run our performance tests both for our own code, and against other
 open source implementations of the same functions.  The results are 
@@ -279,7 +276,7 @@ R-2.5.0 compiled in "standalone mode" with MinGW-3.4
 [table A Comparison to the R Statistical Library on Windows XP
 [[Statistical Function][Boost][R]]
 [[__beta_distrib CDF][[perf msvc-dist-beta-cdf..[para 1.20][para (1.916e-006s)]]][[perf msvc-dist-beta-R-cdf..[para *1.00*][para (1.597e-006s)]]]]
-[[__beta_distrib Quantile][[perf msvc-dist-beta-quantile..[para *1.00*][para (6.570e-006s)]]][[perf msvc-dist-beta-R-quantile..[para 74.66[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]][para (4.905e-004s)]][para (4.905e-004s)]]]]
+[[__beta_distrib Quantile][[perf msvc-dist-beta-quantile..[para *1.00*][para (6.570e-006s)]]][[perf msvc-dist-beta-R-quantile..[para 74.66[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]][para (4.905e-004s)]]]]
 [[__binomial_distrib CDF][[perf msvc-dist-binomial-cdf..[para *1.00*][para (5.276e-007s)]]][[perf msvc-dist-binom-R-cdf..[para 2.45][para (1.293e-006s)]]]]
 [[__binomial_distrib Quantile][[perf msvc-dist-binomial-quantile..[para *1.00*][para (4.013e-006s)]]][[perf msvc-dist-binom-R-quantile..[para 1.32][para (5.280e-006s)]]]]
 [[__cauchy_distrib CDF][[perf msvc-dist-cauchy-cdf..[para *1.00*][para (1.231e-007s)]]][[perf msvc-dist-cauchy-R-cdf..[para 1.28][para (1.576e-007s)]]]]
@@ -295,7 +292,7 @@ R-2.5.0 compiled in "standalone mode" with MinGW-3.4
 [[__lognormal_distrib CDF][[perf msvc-dist-lognormal-cdf..[para *1.00*][para (2.078e-007s)]]][[perf msvc-dist-lnorm-R-cdf..[para 1.41][para (2.930e-007s)]]]]
 [[__lognormal_distrib Quantile][[perf msvc-dist-lognormal-quantile..[para *1.00*][para (6.692e-007s)]]][[perf msvc-dist-lnorm-R-quantile..[para 1.63][para (1.090e-006s)]]]]
 [[__negative_binomial_distrib CDF][[perf msvc-dist-negative_binomial-cdf..[para *1.00*][para (9.005e-007s)]]][[perf msvc-dist-nbinom-R-cdf..[para 2.42][para (2.178e-006s)]]]]
-[[__negative_binomial_distrib Quantile][[perf msvc-dist-negative_binomial-quantile..[para *1.00*][para (9.601e-006s)]]][[perf msvc-dist-nbinom-R-quantile..[para 53.59[footnote The R library appears to use a linear-search strategy, that can perform very badly in a small number of pathological cases, but may or may not be more efficient in "typical" cases]][para (5.145e-004s)]][para (5.145e-004s)]]]]
+[[__negative_binomial_distrib Quantile][[perf msvc-dist-negative_binomial-quantile..[para *1.00*][para (9.601e-006s)]]][[perf msvc-dist-nbinom-R-quantile..[para 53.59[footnote The R library appears to use a linear-search strategy, that can perform very badly in a small number of pathological cases, but may or may not be more efficient in "typical" cases]][para (5.145e-004s)]]]]
 [[__normal_distrib CDF][[perf msvc-dist-normal-cdf..[para *1.00*][para (5.926e-008s)]]][[perf msvc-dist-norm-R-cdf..[para 3.01][para (1.785e-007s)]]]]
 [[__normal_distrib Quantile][[perf msvc-dist-normal-quantile..[para *1.00*][para (1.248e-007s)]]][[perf msvc-dist-norm-R-quantile..[para 1.05][para (1.311e-007s)]]]]
 [[__poisson_distrib CDF][[perf msvc-dist-poisson-cdf..[para *1.00*][para (8.999e-007s)]]][[perf msvc-dist-pois-R-cdf..[para 2.42][para (2.175e-006s)]]]]
@@ -314,7 +311,7 @@ machine, with the test program and R-2.5.0 compiled with GNU G++ 4.2.0.
 [table A Comparison to the R Statistical Library on Linux
 [[Statistical Function][Boost][R]]
 [[__beta_distrib CDF][[perf gcc-4_2-dist-beta-cdf..[para 1.71][para (3.508e-006s)]]][[perf gcc-4_2-dist-beta-R-cdf..[para *1.00*][para (2.050e-006s)]]]]
-[[__beta_distrib Quantile][[perf gcc-4_2-dist-beta-quantile..[para *1.00*][para (1.294e-005s)]]][[perf gcc-4_2-dist-beta-R-quantile..[para 44.06[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]][para (5.701e-004s)]][para (5.701e-004s)]]]]
+[[__beta_distrib Quantile][[perf gcc-4_2-dist-beta-quantile..[para *1.00*][para (1.294e-005s)]]][[perf gcc-4_2-dist-beta-R-quantile..[para 44.06[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]][para (5.701e-004s)]]]]
 [[__binomial_distrib CDF][[perf gcc-4_2-dist-binomial-cdf..[para 1.22][para (1.342e-006s)]]][[perf gcc-4_2-dist-binom-R-cdf..[para *1.00*][para (1.104e-006s)]]]]
 [[__binomial_distrib Quantile][[perf gcc-4_2-dist-binomial-quantile..[para 1.36][para (7.083e-006s)]]][[perf gcc-4_2-dist-binom-R-quantile..[para *1.00*][para (5.194e-006s)]]]]
 [[__cauchy_distrib CDF][[perf gcc-4_2-dist-cauchy-cdf..[para *1.00*][para (1.372e-007s)]]][[perf gcc-4_2-dist-cauchy-R-cdf..[para 1.47][para (2.017e-007s)]]]]
@@ -330,7 +327,7 @@ machine, with the test program and R-2.5.0 compiled with GNU G++ 4.2.0.
 [[__lognormal_distrib CDF][[perf gcc-4_2-dist-lognormal-cdf..[para *1.00*][para (1.782e-007s)]]][[perf gcc-4_2-dist-lnorm-R-cdf..[para 2.00][para (3.564e-007s)]]]]
 [[__lognormal_distrib Quantile][[perf gcc-4_2-dist-lognormal-quantile..[para *1.00*][para (7.093e-007s)]]][[perf gcc-4_2-dist-lnorm-R-quantile..[para 1.07][para (7.607e-007s)]]]]
 [[__negative_binomial_distrib CDF][[perf gcc-4_2-dist-negative_binomial-cdf..[para 1.03][para (2.209e-006s)]]][[perf gcc-4_2-dist-nbinom-R-cdf..[para *1.00*][para (2.141e-006s)]]]]
-[[__negative_binomial_distrib Quantile][[perf gcc-4_2-dist-negative_binomial-quantile..[para *1.00*][para (1.826e-005s)]]][[perf gcc-4_2-dist-nbinom-R-quantile..[para 30.07[footnote The R library appears to use a linear-search strategy, that can perform very badly in a small number of pathological cases, but may or may not be more efficient in "typical" cases]][para (5.490e-004s)]][para (5.490e-004s)]]]]
+[[__negative_binomial_distrib Quantile][[perf gcc-4_2-dist-negative_binomial-quantile..[para *1.00*][para (1.826e-005s)]]][[perf gcc-4_2-dist-nbinom-R-quantile..[para 30.07[footnote The R library appears to use a linear-search strategy, that can perform very badly in a small number of pathological cases, but may or may not be more efficient in "typical" cases]][para (5.490e-004s)]]]]
 [[__normal_distrib CDF][[perf gcc-4_2-dist-normal-cdf..[para *1.00*][para (8.542e-008s)]]][[perf gcc-4_2-dist-norm-R-cdf..[para 2.09][para (1.782e-007s)]]]]
 [[__normal_distrib Quantile][[perf gcc-4_2-dist-normal-quantile..[para *1.00*][para (1.362e-007s)]]][[perf gcc-4_2-dist-norm-R-quantile..[para 1.26][para (1.722e-007s)]]]]
 [[__poisson_distrib CDF][[perf gcc-4_2-dist-poisson-cdf..[para 1.10][para (1.953e-006s)]]][[perf gcc-4_2-dist-pois-R-cdf..[para *1.00*][para (1.775e-006s)]]]]
@@ -342,7 +339,7 @@ machine, with the test program and R-2.5.0 compiled with GNU G++ 4.2.0.
 ]
 
 [endsect]
-
+[endsect]
 
 
 
