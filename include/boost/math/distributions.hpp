@@ -34,8 +34,9 @@
 #include <boost/math/distributions/weibull.hpp>
 // find location and shape for appropriate distributions,
 // normal, cauchy, lognormal, symmetric triangular
-#include <boost/math/distributions/find_scale.hpp>
-#include <boost/math/distributions/find_location.hpp>
+// Disabled for now, these are still work in progress.
+//#include <boost/math/distributions/find_scale.hpp>
+//#include <boost/math/distributions/find_location.hpp>
 
 #endif // BOOST_MATH_DISTRIBUTIONS_HPP
 
