@@ -20,7 +20,7 @@
 #include <boost/math/distributions/triangular.hpp>
 using boost::math::triangular_distribution;
 #include <boost/math/tools/test.hpp>
-#include <boost/math/special_functions\fpclassify.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 
 #include <iostream>
 using std::cout;
@@ -699,6 +699,7 @@ Tolerance for type class boost::math::concepts::real_concept is 1.11022e-015.
 
 
 */
+
 
 
 
