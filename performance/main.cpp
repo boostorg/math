@@ -1,3 +1,9 @@
+//  Copyright John Maddock 2007.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#include "required_defines.hpp"
 
 #include <map>
 #include <set>
@@ -110,8 +116,8 @@ void print_current_config()
    std::cout << "BOOST_MATH_PROMOTE_DOUBLE_POLICY        " << BOOST_STRINGIZE(BOOST_MATH_PROMOTE_DOUBLE_POLICY) << std::endl;
    std::cout << "BOOST_MATH_DISCRETE_QUANTILE_POLICY     " << BOOST_STRINGIZE(BOOST_MATH_DISCRETE_QUANTILE_POLICY) << std::endl;
    std::cout << "BOOST_MATH_ASSERT_UNDEFINED_POLICY      " << BOOST_STRINGIZE(BOOST_MATH_ASSERT_UNDEFINED_POLICY) << std::endl;
-   std::cout << "BOOST_MATH_MAX_ITER                     " << BOOST_STRINGIZE(BOOST_MATH_MAX_ITER) << std::endl;
-
+   std::cout << "BOOST_MATH_MAX_SERIES_ITERATION_POLICY  " << BOOST_STRINGIZE(BOOST_MATH_MAX_SERIES_ITERATION_POLICY) << std::endl;
+   std::cout << "BOOST_MATH_MAX_ROOT_ITERATION_POLICY    " << BOOST_STRINGIZE(BOOST_MATH_MAX_ROOT_ITERATION_POLICY) << std::endl;
 }
 
 int main(int argc, const char** argv)

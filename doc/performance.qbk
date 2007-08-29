@@ -339,6 +339,26 @@ machine, with the test program and R-2.5.0 compiled with GNU G++ 4.2.0.
 ]
 
 [endsect]
+
+[section:perf_test_app The Performance Test Application]
+
+Under ['boost-path]\/libs\/math\/performance you will find a 
+(fairly rudimentary) performance test application for this library.
+
+To run this application yourself, build the all the .cpp files in
+['boost-path]\/libs\/math\/performance into an application using
+your usual release-build settings.  Run the application with --help
+to see a full list of options, or with --all to test everything 
+(which takes quite a while), or with --tune to test the 
+[link math_toolkit.perf.tuning available performance tuning options].
+
+If you want to use this application to test the effect of changing
+any of the __policy_section, then you will need to build and run it twice: 
+once with the default __policy_section, and then a second time with the 
+__policy_section you want to test set as the default.
+
+[endsect]
+
 [endsect]
 
 

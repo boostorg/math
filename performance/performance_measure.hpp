@@ -1,3 +1,7 @@
+//  Copyright John Maddock 2007.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MATH_PERFORMANCE_MEASURE_HPP
 #define BOOST_MATH_PERFORMANCE_MEASURE_HPP
@@ -79,3 +83,4 @@ inline test_info::test_info(const char* n, void (*p)())
 
 
 #endif // BOOST_MATH_PERFORMANCE_MEASURE_HPP
+

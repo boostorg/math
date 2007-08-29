@@ -3,14 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "required_defines.hpp"
-
-#include "performance_measure.hpp"
-
-void reference_evaluate()
-{
-   consume_result(2.0);
-   set_call_count(1);
-}
-
+#define BOOST_MATH_DOMAIN_ERROR_POLICY errno_on_error
+#define BOOST_MATH_POLE_ERROR_POLICY errno_on_error
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error
 
