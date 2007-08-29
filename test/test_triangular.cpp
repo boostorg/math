@@ -379,7 +379,7 @@ void test_spots(RealType)
     const triangular_distribution<RealType>* const dist = dists[i];
     //cout << "Distribution " << i << endl;
     BOOST_CHECK_EQUAL(quantile(complement(*dists[i], 1.)), quantile(*dists[i], 0.));
-    for (int j = 0; j < sizeof(xs) /sizeof(RealType); j++)
+    for (unsigned j = 0; j < sizeof(xs) /sizeof(RealType); j++)
     {
       RealType x = xs[j];
       BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], x), quantile(complement(*dist, 1 - x)),  tol5eps); 
@@ -641,7 +641,7 @@ int test_main(int, char* [])
   cout << showpos << setprecision(2) << endl;
 
   //triangular_distribution<double>& dist = trim12; 
-  for (int i = 0; i < sizeof(xs) /sizeof(double); i++)
+  for (unsigned i = 0; i < sizeof(xs) /sizeof(double); i++)
   {
     double x = xs[i] * (trim12.upper() - trim12.lower()) + trim12.lower();
     double dx = cdf(trim12, x);
