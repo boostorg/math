@@ -11,14 +11,16 @@
 #include <boost/math/distributions/fwd.hpp> // for all distribution signatures.
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/policies/policy.hpp>
-  using boost::math::policies::policy;
+// using boost::math::policies::policy;
+// using boost::math::complement; // will be needed by users who want complement,
+// but NOT placed here to avoid putting it in global scope.
 
 namespace boost
 {
   namespace math
   {
   // Function to find location of random variable z
-   // to give probability p (given scale)
+  // to give probability p (given scale)
   // Apply to normal, lognormal, extreme value, Cauchy, (and symmetrical triangular).
   // TODO use concepts to enforce this.
 
@@ -61,18 +63,20 @@ namespace boost
            function, "scale parameter was %1%, but must be finite!", scale, pol);
       }
         
-      cout << "z " << z << ", p " << p << ",  quantile(Dist(), p) "
-        << quantile(Dist(), p) << ", quan * scale " << quantile(Dist(), p) * scale << endl;
+      //cout << "z " << z << ", p " << p << ",  quantile(Dist(), p) "
+      //  << quantile(Dist(), p) << ", quan * scale " << quantile(Dist(), p) * scale << endl;
       return z - (quantile(Dist(), p) * scale);
     } // find_location
 
-    // So the user can start from the complement of the probability.
+    // So the user can start from the complement q = (1 - p) of the probability p,
+    // for example, l = find_location<normal>(complement(z, q, sd));
 
     template <class Dist, class Real1, class Real2, class Real3>
     inline typename Dist::value_type find_location(
       complemented3_type<Real1, Real2, Real3> const& c)
     {
-       return c.dist - quantile(Dist(), c.param2) * c.param1;
+       // cout << "z " << c.dist << ", quantile (Dist(), " << c.param1 << ") * scale " << c.param2 << endl;
+       return c.dist - quantile(Dist(), c.param1) * c.param2;
        //       z    - (quantile(Dist(),  p)      *   scale
     }
 
