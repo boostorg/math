@@ -54,6 +54,7 @@ run test_error_handling.cpp ;
 run test_exponential_dist.cpp ;
 run test_extreme_value.cpp ;
 run test_factorials.cpp ;
+run test_find_location.cpp ;
 run test_fisher_f.cpp ;
 run test_gamma.cpp ;
 run test_gamma_dist.cpp ;
@@ -166,6 +167,7 @@ compile  compile_test/sf_sinhc_incl_test.cpp ;
 compile  compile_test/sf_sph_harm_incl_test.cpp ;
 compile  compile_test/sf_sqrt1pm1_incl_test.cpp ;
 compile  compile_test/std_real_concept_check.cpp ;
+compile  compile_test/test_traits.cpp ;
 compile  compile_test/tools_config_inc_test.cpp ;
 compile  compile_test/tools_fraction_inc_test.cpp ;
 compile  compile_test/tools_minima_inc_test.cpp ;
@@ -181,6 +183,7 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_solve_inc_test.cpp ;
+
 
 
 
