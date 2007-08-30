@@ -488,6 +488,9 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
       }
       T g = exp(-z * z) / z;
       result = g * b + g * r;
+      BOOST_MATH_INSTRUMENT_CODE("r = " << r);
+      BOOST_MATH_INSTRUMENT_CODE("b = " << b);
+      BOOST_MATH_INSTRUMENT_CODE("g = " << g);
    }
    else
    {
