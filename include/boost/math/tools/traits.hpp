@@ -4,6 +4,20 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+/*
+This header defines two traits classes, both in namespace boost::math::tools.
+
+is_distribution<D>::value is true iff D has overloaded "cdf" and
+"quantile" functions, plus member typedefs value_type and policy_type.  
+It's not much of a definitive test frankly,
+but if it looks like a distribution and quacks like a distribution
+then it must be a distribution.
+
+is_scaled_distribution<D>::value is true iff D is a distribution
+as defined above, and has member functions "scale" and "location".
+
+*/
+
 #ifndef BOOST_STATS_IS_DISTRIBUTION_HPP
 #define BOOST_STATS_IS_DISTRIBUTION_HPP
 
