@@ -73,31 +73,33 @@ void expected_results()
    largest_type = "(long\\s+)?double";
 #endif
    //
-   // Linux,
+   // Linux etc,
    // Extended exponent range of long double
    // causes more extreme test cases to be executed:
    //
+#if LDBL_MANT_DIG == 64
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "linux",                       // platform
+      ".*",                       // platform
       "double",                      // test type(s)
       ".*",                          // test data group
       ".*", 20, 10);            // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "linux",                       // platform
+      ".*",                       // platform
       "long double",                      // test type(s)
       ".*",                          // test data group
       ".*", 200000, 100000);            // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "linux",                          // platform
+      ".*",                          // platform
       "real_concept",                // test type(s)
       ".*",                          // test data group
       ".*", 5000000L, 500000);         // test function
+#endif
    //
    // MinGW,
    // Extended exponent range of long double

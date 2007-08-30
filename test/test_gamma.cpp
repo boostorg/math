@@ -103,7 +103,7 @@ void expected_results()
       "linux",                       // platform
       largest_type,                  // test type(s)
       "near (1|2|-10)",              // test data group
-      "boost::math::tgamma", 8, 5);  // test function
+      "boost::math::tgamma", 10, 5);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -208,7 +208,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       "near (1|2|-10)",              // test data group
-      "boost::math::tgamma", 8, 5);  // test function
+      "boost::math::tgamma", 10, 5);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

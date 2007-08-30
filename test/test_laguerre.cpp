@@ -79,14 +79,14 @@ void expected_results()
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "linux.*",                          // platform
+      "linux.*|Mac OS",                          // platform
       largest_type,                  // test type(s)
       ".*",      // test data group
       ".*", 40000, 1000);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "linux.*",                          // platform
+      "linux.*|Mac OS",                          // platform
       "real_concept",                  // test type(s)
       ".*",      // test data group
       ".*", 40000, 1000);  // test function

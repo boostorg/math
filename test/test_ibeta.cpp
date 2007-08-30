@@ -94,29 +94,29 @@ void expected_results()
       "(?i).*medium.*",                     // test data group
       ".*", 300, 80);  // test function
    //
-   // deficiencies in pow function really kick in here for
+   // Deficiencies in pow function really kick in here for
    // large arguments.  Note also that the tests here get
    // *very* extreme due to the increased exponent range
-   // of 80-bit long doubles.
+   // of 80-bit long doubles.  Also effect Mac OS.
    //
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
-      "linux",                          // platform
+      "linux|Mac OS",                          // platform
       "double",                     // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 40, 20);                 // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
-      "linux",                          // platform
+      "linux|Mac OS",                          // platform
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 200000, 10000);                 // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
-      "linux",                          // platform
+      "linux|Mac OS",                          // platform
       "real_concept",                   // test type(s)
       "(?i).*medium.*",                 // test data group
       ".*", 350, 100);  // test function

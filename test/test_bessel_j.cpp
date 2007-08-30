@@ -116,7 +116,7 @@ void expected_results()
       "Mac OS",                      // platform
       "double",                      // test type(s)
       ".*Tricky.*",                  // test data group
-      ".*", 100000, 100000);         // test function
+      ".*", 200000, 200000);         // test function
 
 
    //

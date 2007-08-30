@@ -58,6 +58,25 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
+
+   //
+   // Mac OS has higher error rates, why?
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                          // platform
+      largest_type,                  // test type(s)
+      ".*",                          // test data group
+      ".*", 100, 50);                 // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                          // platform
+      "real_concept",                // test type(s)
+      ".*",                          // test data group
+      ".*", 100, 50);                 // test function
+
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

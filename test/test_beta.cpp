@@ -51,7 +51,7 @@ void expected_results()
    // Define the max and mean errors expected for
    // various compilers and platforms.
    //
-
+#if LDBL_MANT_DIG == 106
    // Darwin:
    add_expected_result(
       ".*",                          // compiler
@@ -60,7 +60,7 @@ void expected_results()
       "(long\\s+)?double",           // test type(s)
       "Beta Function: Medium.*",     // test data group
       "boost::math::beta", 200, 35); // test function
-
+#endif
 
    add_expected_result(
       ".*",                          // compiler
@@ -89,7 +89,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       "Beta Function: Small.*",      // test data group
-      "boost::math::beta", 15, 6);   // test function
+      "boost::math::beta", 15, 15);   // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -103,7 +103,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       "Beta Function: Divergent.*",  // test data group
-      "boost::math::beta", 15, 8);   // test function
+      "boost::math::beta", 25, 8);   // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,

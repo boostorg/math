@@ -91,9 +91,9 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       "Mac OS",                          // platform
-      largest_type,                  // test type(s)
+      "long double|real_concept",        // test type(s)
       ".*Y[0].*",           // test data group
-      ".*", 500, 200);               // test function
+      ".*", 1200, 1000);               // test function
 
    //
    // Linux:
