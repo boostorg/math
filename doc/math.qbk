@@ -56,8 +56,8 @@
 [def __evaluation_error [link evaluation_error evaluation_error]]
 [def __checked_narrowing_cast [link checked_narrowing_cast checked_narrowing_cast]]
 
-[def __arg_pomotion_rules [link math_toolkit.special.result_type ['result type calculation rules]]]
-[def __sf_result [link math_toolkit.special.result_type ['calculated-result-type]]]
+[def __arg_pomotion_rules [link math_toolkit.main_overview.result_type ['result type calculation rules]]]
+[def __sf_result [link math_toolkit.main_overview.result_type ['calculated-result-type]]]
 
 [/ The following macros expand to links to the various special functions
 and use the function's name as the link text]
@@ -263,26 +263,29 @@ This library is divided into three interconnected parts:
 [h4 Statistical Distributions]
 
 Provide a reasonably comprehensive set of
-[@http://en.wikipedia.org/wiki/List_of_probability_distributions statistical distributions],
+[link math_toolkit.dist statistical distributions],
 upon which higher level statistical tests can be built.
 
 The initial focus is on the central
 [@http://en.wikipedia.org/wiki/Univariate univariate ]
 [@http://mathworld.wolfram.com/StatisticalDistribution.html distributions].
 Both [@http://mathworld.wolfram.com/ContinuousDistribution.html continuous]
-(like [@http://mathworld.wolfram.com/NormalDistribution.html normal]
-& [@http://mathworld.wolfram.com/F-Distribution.html Fisher])
+(like [link math_toolkit.dist.dist_ref.dists.normal_dist normal]
+& [link math_toolkit.dist.dist_ref.dists.f_dist Fisher])
 and [@http://mathworld.wolfram.com/DiscreteDistribution.html discrete]
-(like [@http://mathworld.wolfram.com/BinomialDistribution.html binomial]
-& [@http://mathworld.wolfram.com/PoissonDistribution.html Poisson]) distributions are provided.
+(like [link math_toolkit.dist.dist_ref.dists.binomial_dist binomial]
+& [link math_toolkit.dist.dist_ref.dists.poisson_dist Poisson]) 
+distributions are provided.
 
-A tutorial is provided, along with a series of worked examples illustrating
+A [link math_toolkit.dist.stat_tut comprehensive tutorial is provided], 
+along with a series of 
+[link math_toolkit.dist.stat_tut.weg worked examples] illustrating
 how the library is used to conduct statistical tests.
 
 [h4 Mathematical Special Functions]
 
 Provides a small number of high quality 
-[@http://en.wikipedia.org/wiki/Special_functions special functions],
+[link math_toolkit.special special functions],
 initially these were concentrated on functions used in statistical applications
 along with those in the [tr1].
 
@@ -303,28 +306,44 @@ sizes: typically `float`, `double` or `long double`.
 
 [h4 Implementation Toolkit]
 
-Provides many of the tools required to implement 
+Provides [link math_toolkit.toolkit many of the tools] required to implement 
 mathematical special functions: hopefully the presence of 
 these will encourage other authors to contribute more special
-function implementations in the future.  
+function implementations in the future.  These tools are currently
+considered experimental: they are "exposed implementation details"
+whose interfaces and\/or implementations may change.
 
-There are helpers for the evaluation of infinite series, continued
-fractions and rational approximations.  
+There are helpers for the 
+[link math_toolkit.toolkit.internals1.series_evaluation 
+evaluation of infinite series], 
+[link math_toolkit.toolkit.internals1.cf continued
+fractions] and [link math_toolkit.toolkit.internals1.rational
+rational approximations].
 
-There is a fairly comprehensive set of root finding and function minimisation 
-algorithms: both with and without derivative support.
+There is a fairly comprehensive set of root finding and 
+[link math_toolkit.toolkit.internals1.minima function minimisation 
+algorithms]: the root finding algorithms are both 
+[link math_toolkit.toolkit.internals1.roots with] and 
+[link math_toolkit.toolkit.internals1.roots2 without] derivative support.
 
-A Remez algorithm implementation allows for the locating of minimax rational
+A [link math_toolkit.toolkit.internals2.minimax 
+Remez algorithm implementation] allows for the locating of minimax rational
 approximations.
 
-There are also (experimental) classes for the manipulation of polynomials, for 
-testing a special function against tabulated test data, and for 
-the rapid generation of test data and/or data for output to an 
+There are also (experimental) classes for the 
+[link math_toolkit.toolkit.internals2.polynomials manipulation of polynomials], for 
+[link math_toolkit.toolkit.internals2.error_test 
+testing a special function against tabulated test data], and for 
+the [link math_toolkit.toolkit.internals2.test_data
+rapid generation of test data] and/or data for output to an 
 external graphing application.
 
 [endsect] [/section:intro Introduction]
 
 [include structure.qbk] [/getting about]
+
+[include result_type_calc.qbk]
+[include error_handling.qbk]
 
 [section:pol_overview Configuration and Policies]
 [policy_overview]
@@ -392,8 +411,6 @@ external graphing application.
 [include sinc.qbk]
 [include inv_hyper.qbk]
 [include fpclassify.qbk]
-[include error_handling.qbk]
-[include result_type_calc.qbk]
 [endsect] [/section:special Special Functions]
 
 [section:toolkit Internal Details and Tools (Experimental)]

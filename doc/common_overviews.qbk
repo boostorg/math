@@ -36,11 +36,17 @@ Using policies you can control:
   
 You can control policies:
 
-* Using [link math_toolkit.policy.pol_ref.policy_defaults macros] to change any default policy.
-* At your chosen [link math_toolkit.policy.pol_ref.namespace_pol namespace scope] for distributions and/or functions.
+* Using [link math_toolkit.policy.pol_ref.policy_defaults macros] to 
+change any default policy: the is the prefered method for installation
+wide policies.
+* At your chosen [link math_toolkit.policy.pol_ref.namespace_pol 
+namespace scope] for distributions and/or functions: this is the 
+prefered method for project, namespace, or translation unit scope
+policies.
 * In an ad-hoc manner [link math_toolkit.policy.pol_tutorial.ad_hoc_sf_policies 
 by passing a specific policy to a special function], or to a 
-[link math_toolkit.policy.pol_tutorial.ad_hoc_dist_policies statistical distribution].
+[link math_toolkit.policy.pol_tutorial.ad_hoc_dist_policies 
+statistical distribution].
 
 ]
 

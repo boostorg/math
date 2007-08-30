@@ -16,7 +16,7 @@ following keys act as handy shortcuts for common navigation tasks.
 
 [endsect]
 
-[section:directories Directory File Structure for Boost Math Functions, Math Constants, & Statistics Distributions]
+[section:directories Directory and File Structure]
 
 [h4 boost\/math]
 
@@ -37,7 +37,7 @@ following keys act as handy shortcuts for common navigation tasks.
    [Distributions used in mathematics and, especially, statistics: 
    Gaussian, Students-t, Fisher, Binomial etc]]
 
-[[\/policy\/]
+[[\/policies\/]
    [Policy framework, for handling user requested behaviour modifications.]]
                      
 [[\/special_functions\/]
@@ -78,7 +78,7 @@ following keys act as handy shortcuts for common navigation tasks.
 
 [endsect]
    
-[section:namespaces Namespaces for Boost Math Functions, Math Constants and Statistics Distributions]
+[section:namespaces Namespaces]
    
 All math functions and distributions are in `namespace boost::math`
    
@@ -94,7 +94,11 @@ and can be instantiated with the help of the reserved name `students_t`(for `Rea
    
 Functions not intended for use by applications are in `boost::math::detail`.
 
-Functions that may have more general use, like `digits` (significand), `max_value`, `min_value` and `epsilon` are in `boost::math::tools`.
+Functions that may have more general use, like `digits` 
+(significand), `max_value`, `min_value` and `epsilon` are in 
+`boost::math::tools`.
+
+__Policy and configuration information is in namespace `boost::math::policies`.
 
 [endsect]
 

@@ -1,11 +1,24 @@
 
 [section:result_type Calculation of the Type of the Result]
 
+The functions in this library are all overloaded to accept
+mixed floating point (or mixed integer and floating point type)
+arguments.  So for example:
+
+   foo(1.0, 2.0);
+   foo(1.0f, 2);
+   foo(1.0, 2L);
+
+etc, are all valid calls, as long as "foo" is a function taking two 
+floating-point arguments.  But that leaves the question:
+
 [blurb ['"Given a special function with N arguments of
 types T1, T2, T3 ... TN, then what type is the result?"]]
 
-If all the arguments are of the same (floating point) type then the 
-result is the same type as the arguments, otherwise, the type of the result
+[*If all the arguments are of the same (floating point) type then the 
+result is the same type as the arguments.]
+
+Otherwise, the type of the result
 is computed using the following logic:
 
 # Any arguments that are not template arguments are disregarded from 
