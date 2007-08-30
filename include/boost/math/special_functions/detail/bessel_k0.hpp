@@ -19,6 +19,8 @@ namespace boost { namespace math { namespace detail{
 template <typename T, typename Policy>
 T bessel_k0(T x, const Policy& pol)
 {
+    BOOST_MATH_INSTRUMENT_CODE(x);
+
     static const T P1[] = {
          static_cast<T>(2.4708152720399552679e+03L),
          static_cast<T>(5.9169059852270512312e+03L),
@@ -100,6 +102,10 @@ T bessel_k0(T x, const Policy& pol)
         r = evaluate_polynomial(P3, y) / evaluate_polynomial(Q3, y);
         factor = exp(-x) / sqrt(x);
         value = factor * r;
+        BOOST_MATH_INSTRUMENT_CODE("y = " << y);
+        BOOST_MATH_INSTRUMENT_CODE("r = " << r);
+        BOOST_MATH_INSTRUMENT_CODE("factor = " << factor);
+        BOOST_MATH_INSTRUMENT_CODE("value = " << value);
     }
 
     return value;

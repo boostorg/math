@@ -113,6 +113,8 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 {
    using namespace std;
 
+   BOOST_MATH_INSTRUMENT_CODE("Generic erf_imp called");
+
    if(z < 0)
    {
       if(!invert)
@@ -166,6 +168,8 @@ template <class T, class Policy>
 T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
 {
    using namespace std;
+
+   BOOST_MATH_INSTRUMENT_CODE("53-bit precision erf_imp called");
 
    if(z < 0)
    {
@@ -317,6 +321,8 @@ template <class T, class Policy>
 T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
 {
    using namespace std;
+
+   BOOST_MATH_INSTRUMENT_CODE("64-bit precision erf_imp called");
 
    if(z < 0)
    {
@@ -505,6 +511,8 @@ template <class T, class Policy>
 T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
 {
    using namespace std;
+
+   BOOST_MATH_INSTRUMENT_CODE("113-bit precision erf_imp called");
 
    if(z < 0)
    {
@@ -749,6 +757,10 @@ inline typename tools::promote_args<T>::type erf(T z, const Policy& /* pol */)
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
+   BOOST_MATH_INSTRUMENT_CODE("result_type = " << typeid(result_type).name());
+   BOOST_MATH_INSTRUMENT_CODE("value_type = " << typeid(value_type).name());
+   BOOST_MATH_INSTRUMENT_CODE("precision_type = " << typeid(precision_type).name());
+
    typedef typename mpl::if_<
       mpl::less_equal<precision_type, mpl::int_<0> >,
       mpl::int_<0>,
@@ -766,6 +778,8 @@ inline typename tools::promote_args<T>::type erf(T z, const Policy& /* pol */)
          >::type
       >::type
    >::type tag_type;
+
+   BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeid(tag_type).name());
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::erf_imp(
       static_cast<value_type>(z),
@@ -787,6 +801,10 @@ inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
+   BOOST_MATH_INSTRUMENT_CODE("result_type = " << typeid(result_type).name());
+   BOOST_MATH_INSTRUMENT_CODE("value_type = " << typeid(value_type).name());
+   BOOST_MATH_INSTRUMENT_CODE("precision_type = " << typeid(precision_type).name());
+
    typedef typename mpl::if_<
       mpl::less_equal<precision_type, mpl::int_<0> >,
       mpl::int_<0>,
@@ -804,6 +822,8 @@ inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
          >::type
       >::type
    >::type tag_type;
+
+   BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeid(tag_type).name());
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::erf_imp(
       static_cast<value_type>(z),
