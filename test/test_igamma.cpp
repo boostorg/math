@@ -399,7 +399,7 @@ void test_spots(T)
    // basic sanity checks, tolerance is 10 epsilon expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 1000;
-#if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && (LDBL_MANT_DIG == 106)
+#if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
    tolerance *= 10;
 #endif
    BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(5), static_cast<T>(1)), static_cast<T>(23.912163676143750903709045060494956383977723517065L), tolerance);
