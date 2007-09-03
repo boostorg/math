@@ -28,7 +28,7 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
     T X, Y, Z, EA, EB, EC, ED, EE, S1, S2;
     unsigned long k;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
 
     static const char* function = "boost::math::ellint_rd<%1%>(%1%,%1%,%1%)";

@@ -47,21 +47,21 @@ void adjust_bounds(Real& /* a */, Real& /* b */, Tol const& /* tol */){}
 template <class Real>
 void adjust_bounds(Real& /* a */, Real& b, tools::equal_floor const& /* tol */)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    b -= tools::epsilon<Real>() * b;
 }
 
 template <class Real>
 void adjust_bounds(Real& a, Real& /* b */, tools::equal_ceil const& /* tol */)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    a += tools::epsilon<Real>() * a;
 }
 
 template <class Real>
 void adjust_bounds(Real& a, Real& b, tools::equal_nearest_integer const& /* tol */)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    a += tools::epsilon<Real>() * a;
    b -= tools::epsilon<Real>() * b;
 }
@@ -85,7 +85,7 @@ typename Dist::value_type
 
    static const char* function = "boost::math::do_inverse_discrete_quantile<%1%>";
 
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    distribution_quantile_finder<Dist> f(dist, p, q);
    //
@@ -318,7 +318,7 @@ inline typename Dist::value_type
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
-   using namespace std;
+   BOOST_MATH_STD_USING
    if(p <= pdf(dist, 0))
       return 0;
    //
@@ -360,7 +360,7 @@ inline typename Dist::value_type
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
-   using namespace std;
+   BOOST_MATH_STD_USING
    if(p <= pdf(dist, 0))
       return 0;
    //
@@ -402,7 +402,7 @@ inline typename Dist::value_type
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
-   using namespace std;
+   BOOST_MATH_STD_USING
    if(p <= pdf(dist, 0))
       return 0;
    return floor(do_inverse_discrete_quantile(
@@ -428,7 +428,7 @@ inline typename Dist::value_type
       const policies::discrete_quantile<policies::integer_round_up>&,
       boost::uintmax_t& max_iter)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    if(p <= pdf(dist, 0))
       return 0;
    return ceil(do_inverse_discrete_quantile(
@@ -455,7 +455,7 @@ inline typename Dist::value_type
       boost::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
-   using namespace std;
+   BOOST_MATH_STD_USING
    if(p <= pdf(dist, 0))
       return 0;
    //

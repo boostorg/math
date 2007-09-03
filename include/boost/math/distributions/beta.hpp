@@ -340,7 +340,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType skewness(const beta_distribution<RealType, Policy>& dist)
     {
-      using namespace std; // ADL of std functions.
+      BOOST_MATH_STD_USING // ADL of std functions.
       RealType a = dist.alpha();
       RealType b = dist.beta();
       return (2 * (b-a) * sqrt(a + b + 1)) / ((a + b + 2) * sqrt(a * b));
@@ -370,7 +370,7 @@ namespace boost
 
       static const char* function = "boost::math::pdf(beta_distribution<%1%> const&, %1%)";
 
-      using namespace std; // for ADL of std functions
+      BOOST_MATH_STD_USING // for ADL of std functions
 
       RealType a = dist.alpha();
       RealType b = dist.beta();
@@ -391,7 +391,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType cdf(const beta_distribution<RealType, Policy>& dist, const RealType x)
     { // Cumulative Distribution Function beta.
-      using namespace std; // for ADL of std functions
+      BOOST_MATH_STD_USING // for ADL of std functions
 
       static const char* function = "boost::math::cdf(beta_distribution<%1%> const&, %1%)";
 
@@ -423,7 +423,7 @@ namespace boost
     inline RealType cdf(const complemented2_type<beta_distribution<RealType, Policy>, RealType>& c)
     { // Complemented Cumulative Distribution Function beta.
 
-      using namespace std; // for ADL of std functions
+      BOOST_MATH_STD_USING // for ADL of std functions
 
       static const char* function = "boost::math::cdf(beta_distribution<%1%> const&, %1%)";
 

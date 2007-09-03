@@ -87,7 +87,7 @@ struct remez_max_error_function
 
    T operator()(const T& x)
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
       return -fabs(func(x));
    }
 private:
@@ -192,7 +192,7 @@ private:
 template <class T>
 void remez_minimax<T>::init_chebyshev()
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    //
    // Fill in the zeros:
    //
@@ -405,7 +405,7 @@ inline remez_minimax<T>::remez_minimax(
 template <class T>
 T remez_minimax<T>::iterate()
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    matrix_type A(unknowns, unknowns);
    vector_type b(unknowns);
 

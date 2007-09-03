@@ -40,7 +40,7 @@ public:
    }
    simple_complex& operator /= (const simple_complex& o)
    { 
-      using namespace std;
+      BOOST_MATH_STD_USING
       T lr;
       T li;
       if(fabs(o.r) > fabs(o.i))

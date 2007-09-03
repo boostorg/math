@@ -254,7 +254,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType mode(const poisson_distribution<RealType, Policy>& dist)
     { // mode.
-      using namespace std; // ADL of std functions.
+      BOOST_MATH_STD_USING // ADL of std functions.
       return floor(dist.mean());
     }
 
@@ -280,7 +280,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType skewness(const poisson_distribution<RealType, Policy>& dist)
     { // skewness = sqrt(l).
-      using namespace std; // ADL of std functions.
+      BOOST_MATH_STD_USING // ADL of std functions.
       return 1 / sqrt(dist.mean());
     }
 
@@ -311,7 +311,7 @@ namespace boost
       // Probability that there are EXACTLY k occurrences (or arrivals).
       BOOST_FPU_EXCEPTION_GUARD
 
-      using namespace std; // for ADL of std functions.
+      BOOST_MATH_STD_USING // for ADL of std functions.
 
       RealType mean = dist.mean();
       // Error check:
@@ -372,7 +372,7 @@ namespace boost
       // The terms are not summed directly (at least for larger k)
       // instead the incomplete gamma integral is employed,
 
-      using namespace std; // for ADL of std function exp.
+      BOOST_MATH_STD_USING // for ADL of std function exp.
 
       RealType mean = dist.mean();
       // Error checks:
@@ -477,7 +477,7 @@ namespace boost
         }
       }
       /*
-      using namespace std; // ADL of std functions.
+      BOOST_MATH_STD_USING // ADL of std functions.
       // if(p == 0) NOT necessarily zero!
       // Not necessarily any special value of k because is unlimited.
 			if (p <= exp(-dist.mean()))

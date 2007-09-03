@@ -16,7 +16,7 @@ namespace boost{ namespace math{ namespace detail{
 template <class T, class Policy>
 inline T powm1_imp(const T a, const T z, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    if((fabs(a) < 1) || (fabs(z) < 1))
    {

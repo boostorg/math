@@ -36,7 +36,7 @@ private:
 template <class T, class Policy>
 T inverse_negative_binomial_cornish_fisher(T n, T sf, T sfc, T p, T q, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    // mean:
    T m = n * (sfc) / sf;
    T t = sqrt(n * (sfc));
@@ -69,7 +69,7 @@ T inverse_negative_binomial_cornish_fisher(T n, T sf, T sfc, T p, T q, const Pol
 template <class T, class Policy>
 T ibeta_inv_ab_imp(const T& b, const T& z, const T& p, const T& q, bool swap_ab, const Policy& pol)
 {
-   using namespace std;  // for ADL of std lib math functions
+   BOOST_MATH_STD_USING  // for ADL of std lib math functions
    //
    // Special cases first:
    //

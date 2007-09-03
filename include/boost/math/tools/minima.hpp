@@ -18,7 +18,7 @@ namespace boost{ namespace math{ namespace tools{
 template <class F, class T>
 std::pair<T, T> brent_find_minima(F f, T min, T max, int bits, boost::uintmax_t& max_iter)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    bits = (std::min)(policies::digits<T, policies::policy<> >() / 2, bits);
    T tolerance = static_cast<T>(ldexp(1.0, 1-bits));
    T x;  // minima so far
@@ -129,7 +129,7 @@ std::pair<T, T> brent_find_minima(F f, T min, T max, int bits, boost::uintmax_t&
 
    max_iter -= count;
 
-   return make_pair(x, fx);
+   return std::make_pair(x, fx);
 }
 
 template <class F, class T>

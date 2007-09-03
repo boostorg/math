@@ -64,7 +64,7 @@ inline T igamma_temme_large(T, T, const Policy& /* pol */, mpl::int_<0> const *)
 template <class T, class Policy>
 T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<64> const *)
 {
-   using namespace std; // ADL of std functions
+   BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
    T phi = -log1pmx(sigma, pol);
    T y = a * phi;
@@ -269,7 +269,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<64> const *)
 template <class T, class Policy>
 T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<53> const *)
 {
-   using namespace std; // ADL of std functions
+   BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
    T phi = -log1pmx(sigma, pol);
    T y = a * phi;
@@ -411,7 +411,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<53> const *)
 template <class T, class Policy>
 T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<24> const *)
 {
-   using namespace std; // ADL of std functions
+   BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
    T phi = -log1pmx(sigma, pol);
    T y = a * phi;
@@ -467,7 +467,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<24> const *)
 template <class T, class Policy>
 T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<113> const *)
 {
-   using namespace std; // ADL of std functions
+   BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
    T phi = -log1pmx(sigma, pol);
    T y = a * phi;

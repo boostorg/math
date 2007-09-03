@@ -95,7 +95,7 @@ inline const std::pair<RealType, RealType> support(const rayleigh_distribution<R
 template <class RealType, class Policy>
 inline RealType pdf(const rayleigh_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std; // for ADL of std function exp.
+   BOOST_MATH_STD_USING // for ADL of std function exp.
 
    RealType sigma = dist.sigma();
    RealType result;
@@ -116,7 +116,7 @@ inline RealType pdf(const rayleigh_distribution<RealType, Policy>& dist, const R
 template <class RealType, class Policy>
 inline RealType cdf(const rayleigh_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    RealType result;
    RealType sigma = dist.sigma();
@@ -136,7 +136,7 @@ inline RealType cdf(const rayleigh_distribution<RealType, Policy>& dist, const R
 template <class RealType, class Policy>
 inline RealType quantile(const rayleigh_distribution<RealType, Policy>& dist, const RealType& p)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    RealType result;
    RealType sigma = dist.sigma();
@@ -161,7 +161,7 @@ inline RealType quantile(const rayleigh_distribution<RealType, Policy>& dist, co
 template <class RealType, class Policy>
 inline RealType cdf(const complemented2_type<rayleigh_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    RealType result;
    RealType sigma = c.dist.sigma();
@@ -182,7 +182,7 @@ inline RealType cdf(const complemented2_type<rayleigh_distribution<RealType, Pol
 template <class RealType, class Policy>
 inline RealType quantile(const complemented2_type<rayleigh_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std; // for ADL of std functions, log & sqrt.
+   BOOST_MATH_STD_USING // for ADL of std functions, log & sqrt.
 
    RealType result;
    RealType sigma = c.dist.sigma();

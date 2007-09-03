@@ -27,7 +27,7 @@ T estimate_inverse_s(T p, T q)
    //
    // See equation 32.
    //
-   using namespace std;
+   BOOST_MATH_STD_USING
    T t;
    if(p < 0.5)
    {
@@ -83,7 +83,7 @@ inline T didonato_FN(T p, T a, T x, unsigned N, T tolerance, const Policy& pol)
    //
    // See equation 34.
    //
-   using namespace std;
+   BOOST_MATH_STD_USING
    T u = log(p) + boost::math::lgamma(a + 1, pol);
    return exp((u + x - log(didonato_SN(a, x, N, tolerance))) / a);
 }
@@ -100,7 +100,7 @@ T estimate_inverse_gamma(T a, T p, T q, const Policy& pol)
    // ACM Transactions on Mathematical Software, Vol. 12, No. 4,
    // December 1986, Pages 377-393.
    //
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T result;
 
@@ -302,7 +302,7 @@ struct gamma_p_inverse_func
          policies::discrete_quantile<>,
          policies::assert_undefined<> >::type forwarding_policy;
 
-      using namespace std;  // For ADL of std functions.
+      BOOST_MATH_STD_USING  // For ADL of std functions.
 
       T f, f1;
       value_type ft;
@@ -341,7 +341,7 @@ private:
 template <class T, class Policy>
 T gamma_p_inv_imp(T a, T p, const Policy& pol)
 {
-   using namespace std;  // ADL of std functions.
+   BOOST_MATH_STD_USING  // ADL of std functions.
 
    static const char* function = "boost::math::gamma_p_inv<%1%>(%1%, %1%)";
 
@@ -383,7 +383,7 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
 template <class T, class Policy>
 T gamma_q_inv_imp(T a, T q, const Policy& pol)
 {
-   using namespace std;  // ADL of std functions.
+   BOOST_MATH_STD_USING  // ADL of std functions.
 
    static const char* function = "boost::math::gamma_q_inv<%1%>(%1%, %1%)";
 

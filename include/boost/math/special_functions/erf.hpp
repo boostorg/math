@@ -25,7 +25,7 @@ struct erf_asympt_series_t
 {
    erf_asympt_series_t(T z) : xx(2 * -z * z), tk(1)
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
       result = -exp(-z * z) / sqrt(boost::math::constants::pi<T>());
       result /= z;
    }
@@ -34,7 +34,7 @@ struct erf_asympt_series_t
 
    T operator()()
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
       T r = result;
       result *= tk / xx;
       tk += 2;
@@ -111,7 +111,7 @@ inline T erf_asymptotic_limit()
 template <class T, class Policy, class Tag>
 T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    BOOST_MATH_INSTRUMENT_CODE("Generic erf_imp called");
 
@@ -167,7 +167,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 template <class T, class Policy>
 T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    BOOST_MATH_INSTRUMENT_CODE("53-bit precision erf_imp called");
 
@@ -320,7 +320,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
 template <class T, class Policy>
 T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    BOOST_MATH_INSTRUMENT_CODE("64-bit precision erf_imp called");
 
@@ -513,7 +513,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
 template <class T, class Policy>
 T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    BOOST_MATH_INSTRUMENT_CODE("113-bit precision erf_imp called");
 

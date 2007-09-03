@@ -71,7 +71,7 @@ typename tools::promote_args<T>::type log1p(T x, const Policy& pol)
 { // The function returns the natural logarithm of 1 + x.
   // A domain error occurs if x < -1.  TODO should there be a check?
    typedef typename tools::promote_args<T>::type result_type;
-   using namespace std;
+   BOOST_MATH_STD_USING
    using std::abs;
 
    static const char* function = "boost::math::log1p<%1%>(%1%)";
@@ -231,7 +231,7 @@ inline typename tools::promote_args<T>::type
    log1pmx(T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   using namespace std;
+   BOOST_MATH_STD_USING
    static const char* function = "boost::math::log1pmx<%1%>(%1%)";
 
    if(x < -1)

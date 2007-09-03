@@ -68,7 +68,7 @@ namespace detail
 template <class T, class Policy>
 T expm1_imp(T x, const mpl::int_<0>&, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T a = fabs(x);
    if(a > T(0.5L))
@@ -90,7 +90,7 @@ T expm1_imp(T x, const mpl::int_<0>&, const Policy& pol)
 template <class T, class P>
 T expm1_imp(T x, const mpl::int_<53>&, const P&)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T a = fabs(x);
    if(a > T(0.5L))
@@ -109,7 +109,7 @@ T expm1_imp(T x, const mpl::int_<53>&, const P&)
 template <class T, class P>
 T expm1_imp(T x, const mpl::int_<64>&, const P&)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T a = fabs(x);
    if(a > T(0.5L))
@@ -144,7 +144,7 @@ T expm1_imp(T x, const mpl::int_<64>&, const P&)
 template <class T, class P>
 T expm1_imp(T x, const mpl::int_<113>&, const P&)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T a = fabs(x);
    if(a > T(0.5L))

@@ -32,7 +32,7 @@ namespace detail{
 template <typename T, typename Policy>
 T ellint_f_imp(T phi, T k, const Policy& pol)
 {
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
@@ -105,7 +105,7 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
 template <typename T, typename Policy>
 T ellint_k_imp(T k, const Policy& pol)
 {
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
 
     static const char* function = "boost::math::ellint_k<%1%>(%1%)";

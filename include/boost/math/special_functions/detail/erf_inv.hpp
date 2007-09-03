@@ -16,7 +16,7 @@ namespace detail{
 template <class T, class Policy>
 T erf_inv_imp(const T& p, const T& q, const Policy&, const boost::mpl::int_<64>*)
 {
-   using namespace std; // for ADL of std names.
+   BOOST_MATH_STD_USING // for ADL of std names.
 
    T result = 0;
    
@@ -275,7 +275,7 @@ struct erf_roots
 {
    std::tr1::tuple<T,T,T> operator()(const T& guess)
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
       T derivative = sign * (2 / sqrt(constants::pi<T>())) * exp(-(guess * guess));
       T derivative2 = -2 * guess * derivative;
       return std::tr1::make_tuple(((sign > 0) ? boost::math::erf(guess, Policy()) : boost::math::erfc(guess, Policy())) - target, derivative, derivative2);

@@ -25,7 +25,7 @@ struct temme_root_finder
 
    std::tr1::tuple<T, T> operator()(T x)
    {
-      using namespace std; // ADL of std names
+      BOOST_MATH_STD_USING // ADL of std names
 
       T y = 1 - x;
       if(y == 0)
@@ -55,7 +55,7 @@ private:
 template <class T, class Policy>
 T temme_method_1_ibeta_inverse(T a, T b, T z, const Policy& pol)
 {
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
 
    const T r2 = sqrt(T(2));
    //
@@ -133,7 +133,7 @@ T temme_method_1_ibeta_inverse(T a, T b, T z, const Policy& pol)
 template <class T, class Policy>
 T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta, const Policy& pol)
 {
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
 
    //
    // Get first estimate for eta, see Eq 3.9 and 3.10,
@@ -310,7 +310,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta, const Policy
 template <class T, class Policy>
 T temme_method_3_ibeta_inverse(T a, T b, T p, T q, const Policy& pol)
 {
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
 
    //
    // Begin by getting an initial approximation for the quantity
@@ -414,7 +414,7 @@ struct ibeta_roots
 
    std::tr1::tuple<T, T, T> operator()(T x)
    {
-      using namespace std; // ADL of std names
+      BOOST_MATH_STD_USING // ADL of std names
 
       BOOST_FPU_EXCEPTION_GUARD
       
@@ -448,7 +448,7 @@ private:
 template <class T, class Policy>
 T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
 {
-   using namespace std;  // For ADL of math functions.
+   BOOST_MATH_STD_USING  // For ADL of math functions.
 
    //
    // The flag invert is set to true if we swap a for b and p for q,

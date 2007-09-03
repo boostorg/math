@@ -64,7 +64,7 @@ T bessel_i1(T x)
     };
     T value, factor, r, w;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
 
     w = abs(x);

@@ -27,7 +27,7 @@ namespace detail{
 template <class T, class L, class Policy>
 T beta_imp(T a, T b, const L&, const Policy& pol)
 {
-   using namespace std;  // for ADL of std names
+   BOOST_MATH_STD_USING  // for ADL of std names
 
    if(a <= 0)
       policies::raise_domain_error<T>("boost::math::beta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got a=%1%).", a, pol);
@@ -111,7 +111,7 @@ T beta_imp(T a, T b, const L&, const Policy& pol)
 template <class T, class Policy>
 T beta_imp(T a, T b, const lanczos::undefined_lanczos& /* l */, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    if(a <= 0)
       policies::raise_domain_error<T>("boost::math::beta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got a=%1%).", a, pol);
@@ -195,7 +195,7 @@ T ibeta_power_terms(T a,
                         bool normalised,
                         const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    if(!normalised)
    {
@@ -352,7 +352,7 @@ T ibeta_power_terms(T a,
                         bool normalised,
                         const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    if(!normalised)
    {
@@ -440,7 +440,7 @@ private:
 template <class T, class L, class Policy>
 T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised, T* p_derivative, T y, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T result;
 
@@ -487,7 +487,7 @@ T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised, T* p_derivative, 
 template <class T, class Policy>
 T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczos&, bool normalised, T* p_derivative, T y, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T result;
    BOOST_ASSERT((p_derivative == 0) || normalised);
@@ -598,7 +598,7 @@ template <class T, class Policy>
 inline T ibeta_fraction2(T a, T b, T x, T y, const Policy& pol, bool normalised, T* p_derivative)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
-   using namespace std;
+   BOOST_MATH_STD_USING
    T result = ibeta_power_terms(a, b, x, y, lanczos_type(), normalised, pol);
    if(p_derivative)
    {
@@ -703,7 +703,7 @@ template <class T, class Policy>
 T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& pol, bool normalised)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
-   using namespace std;
+   BOOST_MATH_STD_USING
    //
    // This is DiDonato and Morris's BGRAT routine, see Eq's 9 through 9.6.
    //
@@ -814,7 +814,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
 template <class T>
 inline T binomial_ccdf(T n, T k, T x, T y)
 {
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
    T result = pow(x, n);
    T term = result;
    for(unsigned i = tools::real_cast<unsigned>(n - 1); i > k; --i)
@@ -838,7 +838,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
 {
    static const char* function = "boost::math::ibeta<%1%>(%1%, %1%, %1%)";
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
-   using namespace std; // for ADL of std math functions.
+   BOOST_MATH_STD_USING // for ADL of std math functions.
 
    bool invert = inv;
    T fract;

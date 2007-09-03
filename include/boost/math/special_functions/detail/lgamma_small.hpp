@@ -19,7 +19,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l *
    // (80-bit long doubles), works well for 53-bit doubles as well.
    // L is only used to select the Lanczos function.
 
-   using namespace std;  // for ADL of std names
+   BOOST_MATH_STD_USING  // for ADL of std names
    T result = 0;
    if(z < tools::epsilon<T>())
    {
@@ -208,7 +208,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
    // values of z accurate enough for 113-bit mantissas
    // (128-bit long doubles).
    //
-   using namespace std;  // for ADL of std names
+   BOOST_MATH_STD_USING  // for ADL of std names
    T result = 0;
    if(z < tools::epsilon<T>())
    {
@@ -467,7 +467,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<0>&, const Policy& pol, co
    // what to do with.... we do have a Lanczos approximation
    // though, and that can be used to keep errors under control.
    //
-   using namespace std;  // for ADL of std names
+   BOOST_MATH_STD_USING  // for ADL of std names
    T result = 0;
    if(z < tools::epsilon<T>())
    {

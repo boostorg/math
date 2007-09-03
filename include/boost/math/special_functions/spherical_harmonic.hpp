@@ -23,7 +23,7 @@ namespace detail{
 template <class T, class Policy>
 inline T spherical_harmonic_prefix(unsigned n, unsigned m, T theta, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    if(m > n)
       return 0;
@@ -44,7 +44,7 @@ inline T spherical_harmonic_prefix(unsigned n, unsigned m, T theta, const Policy
 template <class T, class Policy>
 T spherical_harmonic_r(unsigned n, int m, T theta, T phi, const Policy& pol)
 {
-   using namespace std;  // ADL of std functions
+   BOOST_MATH_STD_USING  // ADL of std functions
 
    bool sign = false;
    if(m < 0)
@@ -71,7 +71,7 @@ T spherical_harmonic_r(unsigned n, int m, T theta, T phi, const Policy& pol)
 template <class T, class Policy>
 T spherical_harmonic_i(unsigned n, int m, T theta, T phi, const Policy& pol)
 {
-   using namespace std;  // ADL of std functions
+   BOOST_MATH_STD_USING  // ADL of std functions
 
    bool sign = false;
    if(m < 0)
@@ -98,7 +98,7 @@ T spherical_harmonic_i(unsigned n, int m, T theta, T phi, const Policy& pol)
 template <class T, class U, class Policy>
 std::complex<T> spherical_harmonic(unsigned n, int m, U theta, U phi, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    //
    // Sort out the signs:
    //

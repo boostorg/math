@@ -163,7 +163,7 @@ namespace boost
          template <class T, class Policy>
          T inverse_binomial_cornish_fisher(T n, T sf, T p, T q, const Policy& pol)
          {
-            using namespace std;
+            BOOST_MATH_STD_USING
             // mean:
             T m = n * sf;
             // standard deviation:
@@ -202,7 +202,7 @@ namespace boost
         // for a given probability p.
         //
         // Error checks:
-        using namespace std;  // ADL of std names
+        BOOST_MATH_STD_USING  // ADL of std names
         RealType result;
         RealType trials = dist.trials();
         RealType success_fraction = dist.success_fraction();
@@ -441,7 +441,7 @@ namespace boost
       { // Probability Density/Mass Function.
         BOOST_FPU_EXCEPTION_GUARD
 
-        using namespace std; // for ADL of std functions
+        BOOST_MATH_STD_USING // for ADL of std functions
 
         RealType n = dist.trials();
 
@@ -518,7 +518,7 @@ namespace boost
         // P = I[1-p]( n-k, k+1).
         //   = 1 - I[p](k + 1, n - k)
 
-        using namespace std; // for ADL of std functions
+        BOOST_MATH_STD_USING // for ADL of std functions
 
         RealType n = dist.trials();
         RealType p = dist.success_fraction();
@@ -590,7 +590,7 @@ namespace boost
         // Q = 1 -I[1-p]( n-k, k+1).
         //   = I[p](k + 1, n - k)
 
-        using namespace std; // for ADL of std functions
+        BOOST_MATH_STD_USING // for ADL of std functions
 
         RealType const& k = c.param;
         binomial_distribution<RealType, Policy> const& dist = c.dist;
@@ -661,7 +661,7 @@ namespace boost
       template <class RealType, class Policy>
       inline RealType mode(const binomial_distribution<RealType, Policy>& dist)
       {
-         using namespace std; // ADL of std functions.
+         BOOST_MATH_STD_USING // ADL of std functions.
          RealType p = dist.success_fraction();
          RealType n = dist.trials();
          return floor(p * (n + 1));
@@ -678,7 +678,7 @@ namespace boost
         // Bounds for median and 50 percetage point of binomial and negative binomial distribution
         // Metrika, ISSN	0026-1335 (Print) 1435-926X (Online)
         // Volume 41, Number 1 / December, 1994, DOI	10.1007/BF01895303
-         using namespace std; // ADL of std functions.
+         BOOST_MATH_STD_USING // ADL of std functions.
          RealType p = dist.success_fraction();
          RealType n = dist.trials();
          // Wikipedia says one of floor(np) -1, floor (np), floor(np) +1
@@ -688,7 +688,7 @@ namespace boost
       template <class RealType, class Policy>
       inline RealType skewness(const binomial_distribution<RealType, Policy>& dist)
       {
-         using namespace std; // ADL of std functions.
+         BOOST_MATH_STD_USING // ADL of std functions.
          RealType p = dist.success_fraction();
          RealType n = dist.trials();
          return (1 - 2 * p) / sqrt(n * p * (1 - p));

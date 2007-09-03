@@ -90,7 +90,7 @@ inline const std::pair<RealType, RealType> support(const extreme_value_distribut
 template <class RealType, class Policy>
 inline RealType pdf(const extreme_value_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    RealType a = dist.location();
    RealType b = dist.scale();
@@ -104,7 +104,7 @@ inline RealType pdf(const extreme_value_distribution<RealType, Policy>& dist, co
 template <class RealType, class Policy>
 inline RealType cdf(const extreme_value_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    RealType a = dist.location();
    RealType b = dist.scale();
@@ -120,7 +120,7 @@ inline RealType cdf(const extreme_value_distribution<RealType, Policy>& dist, co
 template <class RealType, class Policy>
 RealType quantile(const extreme_value_distribution<RealType, Policy>& dist, const RealType& p)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    static const char* function = "boost::math::quantile(const extreme_value_distribution<%1%>&, %1%)";
 
@@ -145,7 +145,7 @@ RealType quantile(const extreme_value_distribution<RealType, Policy>& dist, cons
 template <class RealType, class Policy>
 inline RealType cdf(const complemented2_type<extreme_value_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    RealType a = c.dist.location();
    RealType b = c.dist.scale();
@@ -161,7 +161,7 @@ inline RealType cdf(const complemented2_type<extreme_value_distribution<RealType
 template <class RealType, class Policy>
 RealType quantile(const complemented2_type<extreme_value_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    static const char* function = "boost::math::quantile(const extreme_value_distribution<%1%>&, %1%)";
 
@@ -198,7 +198,7 @@ inline RealType mean(const extreme_value_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType standard_deviation(const extreme_value_distribution<RealType, Policy>& dist)
 {
-   using namespace std; // for ADL of std functions.
+   BOOST_MATH_STD_USING // for ADL of std functions.
 
    RealType b = dist.scale();
    RealType result;

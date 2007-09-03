@@ -68,7 +68,7 @@ RealType cdf_imp(const cauchy_distribution<RealType, Policy>& dist, const RealTy
    // using the above formula, and then subtract from 1 when required
    // to get the result.
    //
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    RealType result;
    RealType loc = dist.location();
@@ -102,7 +102,7 @@ RealType quantile_imp(
    // from the location parameter depending on whether `complement` is true.
    //
    static const char* function = "boost::math::quantile(cauchy<%1%>&, %1%)";
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
    // Special cases:
    if(p == 1)
       return (complement ? -1 : 1) * policies::raise_overflow_error<RealType>(function, 0, Policy());

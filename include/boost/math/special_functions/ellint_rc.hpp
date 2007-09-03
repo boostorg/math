@@ -29,7 +29,7 @@ T ellint_rc_imp(T x, T y, const Policy& pol)
     T value, S, u, lambda, tolerance, prefix;
     unsigned long k;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
 
     static const char* function = "boost::math::ellint_rc<%1%>(%1%,%1%)";

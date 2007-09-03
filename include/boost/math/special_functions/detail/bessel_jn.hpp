@@ -22,7 +22,7 @@ T bessel_jn(int n, T x, const Policy& pol)
 {
     T value(0), factor, current, prev, next;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
 
     if (n == 0)
     {

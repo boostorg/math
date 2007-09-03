@@ -176,7 +176,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType pdf(const pareto_distribution<RealType, Policy>& dist, const RealType& x)
     {
-      using namespace std;  // for ADL of std function pow.
+      BOOST_MATH_STD_USING  // for ADL of std function pow.
       static const char* function = "boost::math::pdf(const pareto_distribution<%1%>&, %1%)";
       RealType location = dist.location();
       RealType shape = dist.shape();
@@ -196,7 +196,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType cdf(const pareto_distribution<RealType, Policy>& dist, const RealType& x)
     {
-      using namespace std;  // for ADL of std function pow.
+      BOOST_MATH_STD_USING  // for ADL of std function pow.
       static const char* function = "boost::math::cdf(const pareto_distribution<%1%>&, %1%)";
       RealType location = dist.location();
       RealType shape = dist.shape();
@@ -219,7 +219,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType quantile(const pareto_distribution<RealType, Policy>& dist, const RealType& p)
     {
-      using namespace std;  // for ADL of std function pow.
+      BOOST_MATH_STD_USING  // for ADL of std function pow.
       static const char* function = "boost::math::quantile(const pareto_distribution<%1%>&, %1%)";
       RealType result;
       RealType location = dist.location();
@@ -246,7 +246,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType cdf(const complemented2_type<pareto_distribution<RealType, Policy>, RealType>& c)
     {
-       using namespace std;  // for ADL of std function pow.
+       BOOST_MATH_STD_USING  // for ADL of std function pow.
        static const char* function = "boost::math::cdf(const pareto_distribution<%1%>&, %1%)";
        RealType result;
        RealType x = c.param;
@@ -268,7 +268,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType quantile(const complemented2_type<pareto_distribution<RealType, Policy>, RealType>& c)
     {
-      using namespace std;  // for ADL of std function pow.
+      BOOST_MATH_STD_USING  // for ADL of std function pow.
       static const char* function = "boost::math::quantile(const pareto_distribution<%1%>&, %1%)";
       RealType result;
       RealType q = c.param;
@@ -327,7 +327,7 @@ namespace boost
       {
         return result;
       }
-      using namespace std;
+      BOOST_MATH_STD_USING
       return dist.location() * pow(RealType(2), (1/dist.shape()));
     } // median
 
@@ -359,7 +359,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType skewness(const pareto_distribution<RealType, Policy>& dist)
     {  
-      using namespace std;
+      BOOST_MATH_STD_USING
       RealType result;
       RealType shape = dist.shape();
       static const char* function = "boost::math::pdf(const pareto_distribution<%1%>&, %1%)";

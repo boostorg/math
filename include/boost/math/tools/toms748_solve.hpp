@@ -21,12 +21,12 @@ class eps_tolerance
 public:
    eps_tolerance(unsigned bits)
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
       eps = (std::max)(T(ldexp(1.0F, 1-bits)), 2 * tools::epsilon<T>());
    }
    bool operator()(const T& a, const T& b)
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
       return (fabs(a - b) / (std::min)(fabs(a), fabs(b))) <= eps;
    }
 private:
@@ -39,7 +39,7 @@ struct equal_floor
    template <class T>
    bool operator()(const T& a, const T& b)
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
       return floor(a) == floor(b);
    }
 };
@@ -50,7 +50,7 @@ struct equal_ceil
    template <class T>
    bool operator()(const T& a, const T& b)
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
       return ceil(a) == ceil(b);
    }
 };
@@ -61,7 +61,7 @@ struct equal_nearest_integer
    template <class T>
    bool operator()(const T& a, const T& b)
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
       return floor(a + 0.5f) == floor(b + 0.5f);
    }
 };
@@ -79,7 +79,7 @@ void bracket(F f, T& a, T& b, T c, T& fa, T& fb, T& d, T& fd)
    // the interval.  In other words d is the third best guess
    // to the root.
    //
-   using namespace std;  // For ADL of std math functions
+   BOOST_MATH_STD_USING  // For ADL of std math functions
    T tol = tools::epsilon<T>() * 2;
    //
    // If the interval [a,b] is very small, or if c is too close 
@@ -139,7 +139,7 @@ inline T safe_div(T num, T denom, T r)
    // return num / denom without overflow,
    // return r if overflow would occur.
    //
-   using namespace std;  // For ADL of std math functions
+   BOOST_MATH_STD_USING  // For ADL of std math functions
 
    if(fabs(denom) < 1)
    {
@@ -161,7 +161,7 @@ inline T secant_interpolate(const T& a, const T& b, const T& fa, const T& fb)
    // that the function is unlikely to be smooth with a root very
    // close to a or b.
    //
-   using namespace std;  // For ADL of std math functions
+   BOOST_MATH_STD_USING  // For ADL of std math functions
 
    T tol = tools::epsilon<T>() * 5;
    T c = a - (fa / (fb - fa)) * (b - a);
@@ -282,7 +282,7 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
    // Main entry point and logic for Toms Algorithm 748
    // root finder.
    //
-   using namespace std;  // For ADL of std math functions
+   BOOST_MATH_STD_USING  // For ADL of std math functions
 
    static const char* function = "boost::math::tools::toms748_solve<%1%>";
 
@@ -474,7 +474,7 @@ inline std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, Tol tol, boo
 template <class F, class T, class Tol, class Policy>
 std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, bool rising, Tol tol, boost::uintmax_t& max_iter, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    static const char* function = "boost::math::tools::bracket_and_solve_root<%1%>";
    //
    // Set up inital brackets:

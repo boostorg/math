@@ -117,7 +117,7 @@ inline const std::pair<RealType, RealType> support(const gamma_distribution<Real
 template <class RealType, class Policy>
 inline RealType pdf(const gamma_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::pdf(const gamma_distribution<%1%>&, %1%)";
 
@@ -141,7 +141,7 @@ inline RealType pdf(const gamma_distribution<RealType, Policy>& dist, const Real
 template <class RealType, class Policy>
 inline RealType cdf(const gamma_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::cdf(const gamma_distribution<%1%>&, %1%)";
 
@@ -161,7 +161,7 @@ inline RealType cdf(const gamma_distribution<RealType, Policy>& dist, const Real
 template <class RealType, class Policy>
 inline RealType quantile(const gamma_distribution<RealType, Policy>& dist, const RealType& p)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::quantile(const gamma_distribution<%1%>&, %1%)";
 
@@ -185,7 +185,7 @@ inline RealType quantile(const gamma_distribution<RealType, Policy>& dist, const
 template <class RealType, class Policy>
 inline RealType cdf(const complemented2_type<gamma_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::quantile(const gamma_distribution<%1%>&, %1%)";
 
@@ -206,7 +206,7 @@ inline RealType cdf(const complemented2_type<gamma_distribution<RealType, Policy
 template <class RealType, class Policy>
 inline RealType quantile(const complemented2_type<gamma_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::quantile(const gamma_distribution<%1%>&, %1%)";
 
@@ -231,7 +231,7 @@ inline RealType quantile(const complemented2_type<gamma_distribution<RealType, P
 template <class RealType, class Policy>
 inline RealType mean(const gamma_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::mean(const gamma_distribution<%1%>&)";
 
@@ -249,7 +249,7 @@ inline RealType mean(const gamma_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType variance(const gamma_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::variance(const gamma_distribution<%1%>&)";
 
@@ -267,7 +267,7 @@ inline RealType variance(const gamma_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType mode(const gamma_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::mode(const gamma_distribution<%1%>&)";
 
@@ -296,7 +296,7 @@ inline RealType mode(const gamma_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType skewness(const gamma_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::skewness(const gamma_distribution<%1%>&)";
 
@@ -314,7 +314,7 @@ inline RealType skewness(const gamma_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType kurtosis_excess(const gamma_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::kurtosis_excess(const gamma_distribution<%1%>&)";
 

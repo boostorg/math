@@ -27,7 +27,7 @@ int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
     T a, b, c, d, sigma, gamma1, gamma2;
     unsigned long k;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
@@ -92,7 +92,7 @@ int CF1_ik(T v, T x, T* fv, const Policy& pol)
     T C, D, f, a, b, delta, tiny, tolerance;
     unsigned long k;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
 
     // |x| <= |v|, CF1_ik converges rapidly
     // |x| > |v|, CF1_ik needs O(|x|) iterations to converge
@@ -132,7 +132,7 @@ int CF1_ik(T v, T x, T* fv, const Policy& pol)
 template <typename T, typename Policy>
 int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
 {
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::constants;
 
     T S, C, Q, D, f, a, b, q, delta, tolerance, current, prev;
@@ -202,7 +202,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
     bool reflect = false;
     unsigned n, k;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 

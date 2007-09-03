@@ -20,7 +20,7 @@ template <class T, class Policy>
 inline typename tools::promote_args<T>::type sqrt1pm1(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    if(fabs(result_type(val)) > 0.75)
       return sqrt(1 + result_type(val)) - 1;

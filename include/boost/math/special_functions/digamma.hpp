@@ -37,7 +37,7 @@ inline unsigned digamma_large_lim(const void*)
 template <class T>
 inline T digamma_imp_large(T x, const mpl::int_<0>*)
 {
-   using namespace std; // ADL of std functions.
+   BOOST_MATH_STD_USING // ADL of std functions.
    static const T P[] = {
       0.083333333333333333333333333333333333333333333333333L,
       -0.0083333333333333333333333333333333333333333333333333L,
@@ -70,7 +70,7 @@ inline T digamma_imp_large(T x, const mpl::int_<0>*)
 template <class T>
 inline T digamma_imp_large(T x, const mpl::int_<64>*)
 {
-   using namespace std; // ADL of std functions.
+   BOOST_MATH_STD_USING // ADL of std functions.
    static const T P[] = {
       0.083333333333333333333333333333333333333333333333333L,
       -0.0083333333333333333333333333333333333333333333333333L,
@@ -97,7 +97,7 @@ inline T digamma_imp_large(T x, const mpl::int_<64>*)
 template <class T>
 inline T digamma_imp_large(T x, const mpl::int_<53>*)
 {
-   using namespace std; // ADL of std functions.
+   BOOST_MATH_STD_USING // ADL of std functions.
    static const T P[] = {
       0.083333333333333333333333333333333333333333333333333L,
       -0.0083333333333333333333333333333333333333333333333333L,
@@ -121,7 +121,7 @@ inline T digamma_imp_large(T x, const mpl::int_<53>*)
 template <class T>
 inline T digamma_imp_large(T x, const mpl::int_<24>*)
 {
-   using namespace std; // ADL of std functions.
+   BOOST_MATH_STD_USING // ADL of std functions.
    static const T P[] = {
       0.083333333333333333333333333333333333333333333333333L,
       -0.0083333333333333333333333333333333333333333333333333L,
@@ -345,7 +345,7 @@ T digamma_imp(T x, const Tag* t, const Policy& pol)
    // This handles reflection of negative arguments, and all our
    // error handling, then forwards to the T-specific approximation.
    //
-   using namespace std; // ADL of std functions.
+   BOOST_MATH_STD_USING // ADL of std functions.
 
    T result = 0;
    //

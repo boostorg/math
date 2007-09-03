@@ -20,7 +20,7 @@ namespace boost{ namespace math{ namespace detail{
 template <class T, class Policy>
 T inverse_students_t_hill(T ndf, T u, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    BOOST_ASSERT(u <= 0.5);
 
    T a, b, c, d, q, x, y;
@@ -70,7 +70,7 @@ T inverse_students_t_hill(T ndf, T u, const Policy& pol)
 template <class T, class Policy>
 T inverse_students_t_tail_series(T df, T v, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    // Tail series expansion, see section 6 of Shaw's paper.
    // w is calculated using Eq 60:
    T w = boost::math::tgamma_delta_ratio(df / 2, constants::half<T>(), pol)
@@ -121,7 +121,7 @@ T inverse_students_t_tail_series(T df, T v, const Policy& pol)
 template <class T, class Policy>
 T inverse_students_t_body_series(T df, T u, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    //
    // Body series for small N:
    //
@@ -181,7 +181,7 @@ T inverse_students_t(T df, T u, T v, const Policy& pol, bool* pexact = 0)
    // v = 1 - u.
    // l = lanczos type to use.
    //
-   using namespace std;
+   BOOST_MATH_STD_USING
    bool invert = false;
    T result = 0;
    if(pexact)
@@ -393,7 +393,7 @@ inline T estimate_ibeta_inv_from_t_dist(T a, T p, T q, T* py, const Policy& pol)
 template <class T, class Policy>
 inline T fast_students_t_quantile_imp(T df, T p, const Policy& pol, const mpl::false_*)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    //
    // Need to use inverse incomplete beta to get
    // required precision so not so fast:
@@ -416,7 +416,7 @@ inline T fast_students_t_quantile_imp(T df, T p, const Policy& pol, const mpl::f
 template <class T, class Policy>
 T fast_students_t_quantile_imp(T df, T p, const Policy& pol, const mpl::true_*)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    bool invert = false;
    if((df < 2) && (floor(df) != df))
       return boost::math::detail::fast_students_t_quantile_imp(df, p, pol, static_cast<mpl::false_*>(0));

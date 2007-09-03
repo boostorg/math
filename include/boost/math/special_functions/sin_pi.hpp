@@ -16,7 +16,7 @@ namespace boost{ namespace math{
 template <class T>
 T sin_pi(T x)
 {
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
    // sin of pi*x:
    bool invert;
    if(x < 0.5)

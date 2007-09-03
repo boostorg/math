@@ -92,7 +92,7 @@ inline const std::pair<RealType, RealType> support(const lognormal_distribution<
 template <class RealType, class Policy>
 RealType pdf(const lognormal_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    RealType mu = dist.location();
    RealType sigma = dist.scale();
@@ -121,7 +121,7 @@ RealType pdf(const lognormal_distribution<RealType, Policy>& dist, const RealTyp
 template <class RealType, class Policy>
 inline RealType cdf(const lognormal_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::cdf(const lognormal_distribution<%1%>&, %1%)";
 
@@ -139,7 +139,7 @@ inline RealType cdf(const lognormal_distribution<RealType, Policy>& dist, const 
 template <class RealType, class Policy>
 inline RealType quantile(const lognormal_distribution<RealType, Policy>& dist, const RealType& p)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::quantile(const lognormal_distribution<%1%>&, %1%)";
 
@@ -159,7 +159,7 @@ inline RealType quantile(const lognormal_distribution<RealType, Policy>& dist, c
 template <class RealType, class Policy>
 inline RealType cdf(const complemented2_type<lognormal_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::cdf(const lognormal_distribution<%1%>&, %1%)";
 
@@ -177,7 +177,7 @@ inline RealType cdf(const complemented2_type<lognormal_distribution<RealType, Po
 template <class RealType, class Policy>
 inline RealType quantile(const complemented2_type<lognormal_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::quantile(const lognormal_distribution<%1%>&, %1%)";
 
@@ -197,7 +197,7 @@ inline RealType quantile(const complemented2_type<lognormal_distribution<RealTyp
 template <class RealType, class Policy>
 inline RealType mean(const lognormal_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    RealType mu = dist.location();
    RealType sigma = dist.scale();
@@ -212,7 +212,7 @@ inline RealType mean(const lognormal_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType variance(const lognormal_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    RealType mu = dist.location();
    RealType sigma = dist.scale();
@@ -227,7 +227,7 @@ inline RealType variance(const lognormal_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType mode(const lognormal_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    RealType mu = dist.location();
    RealType sigma = dist.scale();
@@ -242,7 +242,7 @@ inline RealType mode(const lognormal_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType median(const lognormal_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
    RealType mu = dist.location();
    return exp(mu); // e^mu
 }
@@ -250,7 +250,7 @@ inline RealType median(const lognormal_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType skewness(const lognormal_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    //RealType mu = dist.location();
    RealType sigma = dist.scale();
@@ -268,7 +268,7 @@ inline RealType skewness(const lognormal_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType kurtosis(const lognormal_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    //RealType mu = dist.location();
    RealType sigma = dist.scale();
@@ -284,7 +284,7 @@ inline RealType kurtosis(const lognormal_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType kurtosis_excess(const lognormal_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    // RealType mu = dist.location();
    RealType sigma = dist.scale();

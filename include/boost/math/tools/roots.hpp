@@ -175,7 +175,7 @@ inline std::pair<T, T> bisect(F f, T min, T max, Tol tol)
 template <class F, class T>
 T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T f0(0), f1, last_f0(0);
    T result = guess;
@@ -263,7 +263,7 @@ inline T newton_raphson_iterate(F f, T guess, T min, T max, int digits)
 template <class F, class T>
 T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T f0(0), f1, f2;
    T result = guess;
@@ -410,7 +410,7 @@ inline T halley_iterate(F f, T guess, T min, T max, int digits)
 template <class F, class T>
 T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T f0(0), f1, f2, last_f0(0);
    T result = guess;

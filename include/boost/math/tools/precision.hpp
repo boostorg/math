@@ -124,7 +124,7 @@ inline T log_max_value(const mpl::int_<0>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T
 #else
    BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
 #endif
-   using namespace std;
+   BOOST_MATH_STD_USING
    static const T val = log((std::numeric_limits<T>::max)());
    return val;
 }
@@ -137,7 +137,7 @@ inline T log_min_value(const mpl::int_<0>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T
 #else
    BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
 #endif
-   using namespace std;
+   BOOST_MATH_STD_USING
    static const T val = log((std::numeric_limits<T>::max)());
    return val;
 }
@@ -163,7 +163,7 @@ inline long double epsilon<long double>(const mpl::true_& BOOST_APPEND_EXPLICIT_
 template <class T>
 inline T epsilon(const mpl::false_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
-   using namespace std;  // for ADL of std names
+   BOOST_MATH_STD_USING  // for ADL of std names
    static const T eps = ldexp(static_cast<T>(1), 1-policies::digits<T, policies::policy<> >());
    return eps;
 }
@@ -185,7 +185,7 @@ inline T log_max_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
    return detail::log_max_value<T>(tag_type());
 #else
    BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
-   using namespace std;
+   BOOST_MATH_STD_USING
    static const T val = log((std::numeric_limits<T>::max)());
    return val;
 #endif
@@ -207,7 +207,7 @@ inline T log_min_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
    return detail::log_min_value<T>(tag_type());
 #else
    BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
-   using namespace std;
+   BOOST_MATH_STD_USING
    static const T val = log((std::numeric_limits<T>::min)());
    return val;
 #endif

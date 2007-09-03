@@ -54,7 +54,7 @@ struct calculate_result_type
 template <class T>
 T relative_error(T a, T b)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    //
    // If math.h has no long double support we can't rely
@@ -106,7 +106,7 @@ T relative_error(T a, T b)
 template <>
 inline double relative_error<double>(double a, double b)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    //
    // On Mac OS X we evaluate "double" functions at "long double" precision,
    // but "long double" actually has a very slightly narrower range than "double"!  

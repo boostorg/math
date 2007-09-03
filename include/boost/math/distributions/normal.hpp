@@ -81,7 +81,7 @@ inline const std::pair<RealType, RealType> support(const normal_distribution<Rea
 template <class RealType, class Policy>
 inline RealType pdf(const normal_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    RealType sd = dist.standard_deviation();
    RealType mean = dist.mean();
@@ -99,7 +99,7 @@ inline RealType pdf(const normal_distribution<RealType, Policy>& dist, const Rea
 template <class RealType, class Policy>
 inline RealType cdf(const normal_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    RealType sd = dist.standard_deviation();
    RealType mean = dist.mean();
@@ -114,7 +114,7 @@ inline RealType cdf(const normal_distribution<RealType, Policy>& dist, const Rea
 template <class RealType, class Policy>
 inline RealType quantile(const normal_distribution<RealType, Policy>& dist, const RealType& p)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    RealType sd = dist.standard_deviation();
    RealType mean = dist.mean();
@@ -132,7 +132,7 @@ inline RealType quantile(const normal_distribution<RealType, Policy>& dist, cons
 template <class RealType, class Policy>
 inline RealType cdf(const complemented2_type<normal_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    RealType sd = c.dist.standard_deviation();
    RealType mean = c.dist.mean();
@@ -149,7 +149,7 @@ inline RealType cdf(const complemented2_type<normal_distribution<RealType, Polic
 template <class RealType, class Policy>
 inline RealType quantile(const complemented2_type<normal_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    RealType sd = c.dist.standard_deviation();
    RealType mean = c.dist.mean();

@@ -40,7 +40,7 @@ public:
    boost::uintmax_t count()const{ return m_count; }
    T variance()const
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
 
       T t = m_squared_total - m_total * m_total / m_count;
       t /= m_count;
@@ -48,7 +48,7 @@ public:
    }
    T variance1()const
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
 
       T t = m_squared_total - m_total * m_total / m_count;
       t /= (m_count-1);
@@ -56,7 +56,7 @@ public:
    }
    T rms()const
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
 
       return sqrt(m_squared_total / static_cast<T>(m_count));
    }

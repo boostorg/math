@@ -112,7 +112,7 @@ namespace boost
         inline U<T>    sinc_pi(const U<T> x)
         {
 #if defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL) || defined(__GNUC__)
-            using namespace std;
+            BOOST_MATH_STD_USING
 #elif    defined(BOOST_NO_STDC_NAMESPACE)
             using    ::abs;
             using    ::sin;

@@ -26,7 +26,7 @@ namespace boost { namespace math
 template <class T, class Policy>
 inline T factorial(unsigned i, const Policy& pol)
 {
-   using namespace std; // Aid ADL for floor.
+   BOOST_MATH_STD_USING // Aid ADL for floor.
 
    if(i <= max_factorial<T>::value)
       return unchecked_factorial<T>(i);
@@ -62,7 +62,7 @@ inline double factorial<double>(unsigned i)
 template <class T, class Policy>
 T double_factorial(unsigned i, const Policy& pol)
 {
-   using namespace std;  // ADL lookup of std names
+   BOOST_MATH_STD_USING  // ADL lookup of std names
    if(i & 1)
    {
       // odd i:
@@ -139,7 +139,7 @@ T rising_factorial_imp(T x, int n, const Policy& pol)
 template <class T, class Policy>
 inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
 {
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
    if(x == 0)
       return 0;
    if(x < 0)

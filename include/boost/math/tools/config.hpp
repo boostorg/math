@@ -46,6 +46,34 @@
 #ifndef BOOST_MATH_INT_TABLE_TYPE
 #  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
 #endif
+//
+// Helper macro for using statements:
+//
+#define BOOST_MATH_STD_USING \
+   using std::abs;\
+   using std::acos;\
+   using std::cos;\
+   using std::fmod;\
+   using std::modf;\
+   using std::tan;\
+   using std::asin;\
+   using std::cosh;\
+   using std::frexp;\
+   using std::pow;\
+   using std::tanh;\
+   using std::atan;\
+   using std::exp;\
+   using std::ldexp;\
+   using std::sin;\
+   using std::atan2;\
+   using std::fabs;\
+   using std::log;\
+   using std::sinh;\
+   using std::ceil;\
+   using std::floor;\
+   using std::log10;\
+   using std::sqrt;
+
 
 namespace boost{ namespace math{
 namespace tools

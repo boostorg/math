@@ -35,7 +35,7 @@ struct bessel_j_small_z_series_term
    bessel_j_small_z_series_term(T v_, T x)
       : N(0), v(v_)
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
       mult = x / 2;
       term = pow(mult, v) / boost::math::tgamma(v+1, Policy());
       mult *= -mult;
@@ -62,7 +62,7 @@ struct sph_bessel_j_small_z_series_term
    sph_bessel_j_small_z_series_term(unsigned v_, T x)
       : N(0), v(v_)
    {
-      using namespace std;
+      BOOST_MATH_STD_USING
       mult = x / 2;
       term = pow(mult, T(v)) / boost::math::tgamma(v+1+T(0.5f), Policy());
       mult *= -mult;
@@ -94,7 +94,7 @@ inline T bessel_j_small_z_series(T v, T x, const Policy& pol)
 template <class T, class Policy>
 inline T sph_bessel_j_small_z_series(unsigned v, T x, const Policy& pol)
 {
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
    sph_bessel_j_small_z_series_term<T, Policy> s(v, x);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    T result = boost::math::tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter);
@@ -105,7 +105,7 @@ inline T sph_bessel_j_small_z_series(unsigned v, T x, const Policy& pol)
 template <class T, class Policy>
 T cyl_bessel_j_imp(T v, T x, const bessel_no_int_tag& t, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    static const char* function = "boost::math::bessel_j<%1%>(%1%,%1%)";
    if(x < 0)
    {
@@ -142,7 +142,7 @@ T cyl_bessel_j_imp(T v, T x, const bessel_no_int_tag& t, const Policy& pol)
 template <class T, class Policy>
 inline T cyl_bessel_j_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& pol)
 {
-   using namespace std;  // ADL of std names.
+   BOOST_MATH_STD_USING  // ADL of std names.
    typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
    if((fabs(v) < 200) && (floor(v) == v))
    {
@@ -157,7 +157,7 @@ inline T cyl_bessel_j_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& p
 template <class T, class Policy>
 inline T cyl_bessel_j_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
    if(fabs(x) > asymptotic_bessel_j_limit<T>(abs(v), tag_type()))
    {
@@ -173,7 +173,7 @@ inline T cyl_bessel_j_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
 template <class T, class Policy>
 inline T sph_bessel_j_imp(unsigned n, T x, const Policy& pol)
 {
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
    if(x < 0)
       return policies::raise_domain_error<T>(
          "boost::math::sph_bessel_j<%1%>(%1%,%1%)",
@@ -205,7 +205,7 @@ T cyl_bessel_i_imp(T v, T x, const Policy& pol)
    // algorithm is at least as inefficient as the general case (the general
    // case has better error handling too).
    //
-   using namespace std;
+   BOOST_MATH_STD_USING
    if(x < 0)
    {
       // better have integer v:
@@ -251,7 +251,7 @@ template <class T, class Policy>
 inline T cyl_bessel_k_imp(T v, T x, const bessel_no_int_tag& /* t */, const Policy& pol)
 {
    static const char* function = "boost::math::cyl_bessel_k<%1%>(%1%,%1%)";
-   using namespace std;
+   BOOST_MATH_STD_USING
    if(x < 0)
    {
       return policies::raise_domain_error<T>(
@@ -273,7 +273,7 @@ inline T cyl_bessel_k_imp(T v, T x, const bessel_no_int_tag& /* t */, const Poli
 template <class T, class Policy>
 inline T cyl_bessel_k_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    if((floor(v) == v))
    {
       return bessel_kn(tools::real_cast<int>(v), x, pol);
@@ -314,7 +314,7 @@ inline T cyl_neumann_imp(T v, T x, const bessel_no_int_tag&, const Policy& pol)
 template <class T, class Policy>
 inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
    if(floor(v) == v)
    {
@@ -334,7 +334,7 @@ inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& po
 template <class T, class Policy>
 inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
    if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
    {
@@ -350,7 +350,7 @@ inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
 template <class T, class Policy>
 inline T sph_neumann_imp(unsigned v, T x, const Policy& pol)
 {
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
    static const char* function = "boost::math::sph_neumann<%1%>(%1%,%1%)";
    //
    // Nothing much to do here but check for errors, and

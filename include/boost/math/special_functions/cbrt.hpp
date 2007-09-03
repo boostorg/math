@@ -30,8 +30,8 @@ namespace detail
 template <class T, class Policy>
 T cbrt_imp(T z, const Policy&)
 {
-   using namespace std;
-   int exp, sign(1);
+   BOOST_MATH_STD_USING
+   int i_exp, sign(1);
    if(z < 0)
    {
       z = -z;
@@ -40,10 +40,10 @@ T cbrt_imp(T z, const Policy&)
    if(z == 0)
       return 0;
 
-   frexp(z, &exp);
-   T min = static_cast<T>(ldexp(0.5, exp/3));
-   T max = static_cast<T>(ldexp(2.0, exp/3));
-   T guess = static_cast<T>(ldexp(1.0, exp/3));
+   frexp(z, &i_exp);
+   T min = static_cast<T>(ldexp(0.5, i_exp/3));
+   T max = static_cast<T>(ldexp(2.0, i_exp/3));
+   T guess = static_cast<T>(ldexp(1.0, i_exp/3));
    int digits = (policies::digits<T, Policy>()) / 2;
    return sign * tools::halley_iterate(detail::cbrt_functor<T>(z), guess, min, max, digits);
 }

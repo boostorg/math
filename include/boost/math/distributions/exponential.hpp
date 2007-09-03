@@ -95,7 +95,7 @@ inline const std::pair<RealType, RealType> support(const exponential_distributio
 template <class RealType, class Policy>
 inline RealType pdf(const exponential_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    static const char* function = "boost::math::pdf(const exponential_distribution<%1%>&, %1%)";
 
@@ -112,7 +112,7 @@ inline RealType pdf(const exponential_distribution<RealType, Policy>& dist, cons
 template <class RealType, class Policy>
 inline RealType cdf(const exponential_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    static const char* function = "boost::math::cdf(const exponential_distribution<%1%>&, %1%)";
 
@@ -130,7 +130,7 @@ inline RealType cdf(const exponential_distribution<RealType, Policy>& dist, cons
 template <class RealType, class Policy>
 inline RealType quantile(const exponential_distribution<RealType, Policy>& dist, const RealType& p)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    static const char* function = "boost::math::quantile(const exponential_distribution<%1%>&, %1%)";
 
@@ -153,7 +153,7 @@ inline RealType quantile(const exponential_distribution<RealType, Policy>& dist,
 template <class RealType, class Policy>
 inline RealType cdf(const complemented2_type<exponential_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    static const char* function = "boost::math::cdf(const exponential_distribution<%1%>&, %1%)";
 
@@ -171,7 +171,7 @@ inline RealType cdf(const complemented2_type<exponential_distribution<RealType, 
 template <class RealType, class Policy>
 inline RealType quantile(const complemented2_type<exponential_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
 
    static const char* function = "boost::math::quantile(const exponential_distribution<%1%>&, %1%)";
 

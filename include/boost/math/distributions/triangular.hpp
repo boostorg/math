@@ -266,7 +266,7 @@ namespace boost{ namespace math
   template <class RealType, class Policy>
   RealType quantile(const triangular_distribution<RealType, Policy>& dist, const RealType& p)
   {
-    using namespace std;  // for ADL of std functions (sqrt).
+    BOOST_MATH_STD_USING  // for ADL of std functions (sqrt).
     static const char* function = "boost::math::quantile(const triangular_distribution<%1%>&, %1%)";
     RealType lower = dist.lower();
     RealType mode = dist.mode();
@@ -344,7 +344,7 @@ namespace boost{ namespace math
   template <class RealType, class Policy>
   RealType quantile(const complemented2_type<triangular_distribution<RealType, Policy>, RealType>& c)
   {
-    using namespace std;  // Aid ADL for sqrt.
+    BOOST_MATH_STD_USING  // Aid ADL for sqrt.
     static const char* function = "boost::math::quantile(const triangular_distribution<%1%>&, %1%)";
     RealType l = c.dist.lower();
     RealType m = c.dist.mode();
@@ -437,7 +437,7 @@ namespace boost{ namespace math
   template <class RealType, class Policy>
   inline RealType median(const triangular_distribution<RealType, Policy>& dist)
   {
-    using namespace std; // ADL of std functions.
+    BOOST_MATH_STD_USING // ADL of std functions.
     static const char* function = "boost::math::median(const triangular_distribution<%1%>&)";
     RealType mode = dist.mode();
     RealType result; // of checks.
@@ -460,7 +460,7 @@ namespace boost{ namespace math
   template <class RealType, class Policy>
   inline RealType skewness(const triangular_distribution<RealType, Policy>& dist)
   {
-    using namespace std;  // for ADL of std functions
+    BOOST_MATH_STD_USING  // for ADL of std functions
     using namespace boost::math::constants; // for root_two
     static const char* function = "boost::math::skewness(const triangular_distribution<%1%>&)";
 

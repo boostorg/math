@@ -72,7 +72,7 @@ inline const std::pair<RealType, RealType> support(const chi_squared_distributio
 template <class RealType, class Policy>
 RealType pdf(const chi_squared_distribution<RealType, Policy>& dist, const RealType& chi_square)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
    RealType degrees_of_freedom = dist.degrees_of_freedom();
    // Error check:
    RealType error_result;
@@ -226,7 +226,7 @@ inline RealType mode(const chi_squared_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType skewness(const chi_squared_distribution<RealType, Policy>& dist)
 {
-   using namespace std; // For ADL
+   BOOST_MATH_STD_USING // For ADL
    RealType df = dist.degrees_of_freedom();
    return sqrt (8 / df);  // == 2 * sqrt(2 / df);
 }

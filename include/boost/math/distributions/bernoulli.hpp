@@ -286,7 +286,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType skewness(const bernoulli_distribution<RealType, Policy>& dist)
     {
-      using namespace std;; // Aid ADL for sqrt.
+      BOOST_MATH_STD_USING; // Aid ADL for sqrt.
       RealType p = dist.success_fraction();
       return (1 - 2 * p) / sqrt(p * (1 - p));
     }

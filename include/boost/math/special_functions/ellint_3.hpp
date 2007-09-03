@@ -42,7 +42,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
     // Note vc = 1-v presumably without cancellation error.
     T value, x, y, z, p, t;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
@@ -227,7 +227,7 @@ template <typename T, typename Policy>
 T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
 {
     // Note arg vc = 1-v, possibly without cancellation errors
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
 
     static const char* function = "boost::math::ellint_pi<%1%>(%1%,%1%)";

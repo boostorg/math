@@ -79,7 +79,7 @@ template <class RealType, class Policy>
 inline RealType pdf(const students_t_distribution<RealType, Policy>& dist, const RealType& t)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    RealType degrees_of_freedom = dist.degrees_of_freedom();
    // Error check:
@@ -152,7 +152,7 @@ inline RealType cdf(const students_t_distribution<RealType, Policy>& dist, const
 template <class RealType, class Policy>
 inline RealType quantile(const students_t_distribution<RealType, Policy>& dist, const RealType& p)
 {
-   using namespace std; // for ADL of std functions
+   BOOST_MATH_STD_USING // for ADL of std functions
    //
    // Obtain parameters:
    //

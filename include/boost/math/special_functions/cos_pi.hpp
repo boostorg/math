@@ -16,7 +16,7 @@ namespace boost{ namespace math{
 template <class T>
 T cos_pi(T x)
 {
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
    // cos of pi*x:
    bool invert = false;
    if(x < 0.5)

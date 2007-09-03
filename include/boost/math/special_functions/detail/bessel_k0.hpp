@@ -74,7 +74,7 @@ T bessel_k0(T x, const Policy& pol)
     };
     T value, factor, r, r1, r2;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
 
     static const char* function = "boost::math::bessel_k0<%1%>(%1%,%1%)";

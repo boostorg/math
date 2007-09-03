@@ -72,7 +72,7 @@ inline const std::pair<RealType, RealType> support(const fisher_f_distribution<R
 template <class RealType, class Policy>
 RealType pdf(const fisher_f_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
    RealType df1 = dist.degrees_of_freedom1();
    RealType df2 = dist.degrees_of_freedom2();
    // Error check:
@@ -319,7 +319,7 @@ template <class RealType, class Policy>
 inline RealType skewness(const fisher_f_distribution<RealType, Policy>& dist)
 {
    static const char* function = "boost::math::skewness(fisher_f_distribution<%1%> const&)";
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
    // See http://mathworld.wolfram.com/F-Distribution.html
    RealType df1 = dist.degrees_of_freedom1();
    RealType df2 = dist.degrees_of_freedom2();

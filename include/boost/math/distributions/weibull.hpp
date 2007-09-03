@@ -117,7 +117,7 @@ inline const std::pair<RealType, RealType> support(const weibull_distribution<Re
 template <class RealType, class Policy>
 inline RealType pdf(const weibull_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::pdf(const weibull_distribution<%1%>, %1%)";
 
@@ -142,7 +142,7 @@ inline RealType pdf(const weibull_distribution<RealType, Policy>& dist, const Re
 template <class RealType, class Policy>
 inline RealType cdf(const weibull_distribution<RealType, Policy>& dist, const RealType& x)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::cdf(const weibull_distribution<%1%>, %1%)";
 
@@ -163,7 +163,7 @@ inline RealType cdf(const weibull_distribution<RealType, Policy>& dist, const Re
 template <class RealType, class Policy>
 inline RealType quantile(const weibull_distribution<RealType, Policy>& dist, const RealType& p)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::quantile(const weibull_distribution<%1%>, %1%)";
 
@@ -187,7 +187,7 @@ inline RealType quantile(const weibull_distribution<RealType, Policy>& dist, con
 template <class RealType, class Policy>
 inline RealType cdf(const complemented2_type<weibull_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::cdf(const weibull_distribution<%1%>, %1%)";
 
@@ -208,7 +208,7 @@ inline RealType cdf(const complemented2_type<weibull_distribution<RealType, Poli
 template <class RealType, class Policy>
 inline RealType quantile(const complemented2_type<weibull_distribution<RealType, Policy>, RealType>& c)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::quantile(const weibull_distribution<%1%>, %1%)";
 
@@ -233,7 +233,7 @@ inline RealType quantile(const complemented2_type<weibull_distribution<RealType,
 template <class RealType, class Policy>
 inline RealType mean(const weibull_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::mean(const weibull_distribution<%1%>)";
 
@@ -271,7 +271,7 @@ inline RealType variance(const weibull_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType mode(const weibull_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std function pow.
+   BOOST_MATH_STD_USING  // for ADL of std function pow.
 
    static const char* function = "boost::math::mode(const weibull_distribution<%1%>)";
 
@@ -290,7 +290,7 @@ inline RealType mode(const weibull_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType median(const weibull_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std function pow.
+   BOOST_MATH_STD_USING  // for ADL of std function pow.
 
    static const char* function = "boost::math::median(const weibull_distribution<%1%>)";
 
@@ -310,7 +310,7 @@ inline RealType median(const weibull_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType skewness(const weibull_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::skewness(const weibull_distribution<%1%>)";
 
@@ -336,7 +336,7 @@ inline RealType skewness(const weibull_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType kurtosis_excess(const weibull_distribution<RealType, Policy>& dist)
 {
-   using namespace std;  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions
 
    static const char* function = "boost::math::kurtosis_excess(const weibull_distribution<%1%>)";
 

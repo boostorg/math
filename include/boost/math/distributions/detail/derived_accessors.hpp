@@ -44,7 +44,7 @@ typename Distribution::value_type variance(const Distribution& dist);
 template <class Distribution>
 inline typename Distribution::value_type standard_deviation(const Distribution& dist)
 {
-   using namespace std;  // ADL of sqrt.
+   BOOST_MATH_STD_USING  // ADL of sqrt.
    return sqrt(variance(dist));
 }
 
@@ -78,7 +78,7 @@ template <class Distribution, class RealType>
 inline typename Distribution::value_type chf(const Distribution& dist, const RealType& x)
 { // cumulative hazard function.
   // http://www.itl.nist.gov/div898/handbook/eda/section3/eda362.htm#HAZ
-   using namespace std;
+   BOOST_MATH_STD_USING
    return -log(cdf(complement(dist, x)));
 }
 

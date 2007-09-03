@@ -75,7 +75,7 @@ template <class T>
 inline bool is_odd(T v, const boost::false_type&)
 {
    // Oh dear can't cast T to int!
-   using namespace std;
+   BOOST_MATH_STD_USING
    T modulus = v - 2 * floor(v/2);
    return static_cast<bool>(modulus != 0);
 }
@@ -90,7 +90,7 @@ T sinpx(T z)
 {
    // Ad hoc function calculates x * sin(pi * x),
    // taking extra care near when x is near a whole number.
-   using namespace std;
+   BOOST_MATH_STD_USING
    int sign = 1;
    if(z < 0)
    {
@@ -124,7 +124,7 @@ T sinpx(T z)
 template <class T, class Policy, class L>
 T gamma_imp(T z, const Policy& pol, const L& l)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T result = 1;
 
@@ -201,7 +201,7 @@ T lgamma_imp(T z, const Policy& pol, const L& l, int* sign = 0)
    }
 #endif
 
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    static const char* function = "boost::math::lgamma<%1%>(%1%)";
 
@@ -337,7 +337,7 @@ template <class T, class Policy>
 T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l)
 {
    static const char* function = "boost::math::tgamma<%1%>(%1%)";
-   using namespace std;
+   BOOST_MATH_STD_USING
    if((z <= 0) && (floor(z) == z))
       return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
    if(z <= -20)
@@ -387,7 +387,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l)
 template <class T, class Policy>
 T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l, int*sign)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    static const char* function = "boost::math::lgamma<%1%>(%1%)";
    T result = 0;
@@ -427,7 +427,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l, int*si
 template <class T, class Policy, class L>
 T tgammap1m1_imp(T dz, Policy const& pol, const L& l)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    typedef typename policies::precision<T,Policy>::type precision_type;
 
@@ -486,7 +486,7 @@ template <class T, class Policy>
 inline T tgammap1m1_imp(T dz, Policy const& pol,
                  const ::boost::math::lanczos::undefined_lanczos& l)
 {
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
    //
    // There should be a better solution than this, but the
    // algebra isn't easy for the general case....
@@ -541,7 +541,7 @@ private:
 template <class T, class Policy>
 T full_igamma_prefix(T a, T z, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T prefix;
    T alz = a * log(z);
@@ -592,7 +592,7 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
 template <class T, class Policy, class L>
 T regularised_gamma_prefix(T a, T z, const Policy& pol, const L& l)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    T agh = a + static_cast<T>(L::g()) - T(0.5);
    T prefix;
    T d = ((z - a) - static_cast<T>(L::g()) + T(0.5)) / agh;
@@ -674,7 +674,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const L& l)
 template <class T, class Policy>
 T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined_lanczos&)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    T limit = (std::max)(T(10), a);
    T sum = detail::lower_gamma_series(a, limit, pol) / a;
@@ -722,7 +722,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
 template <class T, class Policy>
 inline T tgamma_small_upper_part(T a, T x, const Policy& pol)
 {
-   using namespace std;  // ADL of std functions.
+   BOOST_MATH_STD_USING  // ADL of std functions.
    //
    // Compute the full upper fraction (Q) when a is very small:
    //
@@ -748,7 +748,7 @@ inline T finite_gamma_q(T a, T x)
    //
    // Calculates normalised Q when a is an integer:
    //
-   using namespace std;
+   BOOST_MATH_STD_USING
    T sum = exp(-x);
    if(sum != 0)
    {
@@ -771,7 +771,7 @@ T finite_half_gamma_q(T a, T x, T* p_derivative, const Policy& pol)
    //
    // Calculates normalised Q when a is a half-integer:
    //
-   using namespace std;
+   BOOST_MATH_STD_USING
    T e = boost::math::erfc(sqrt(x), pol);
    if((e != 0) && (a > 1))
    {
@@ -812,7 +812,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
    if(x < 0)
       policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
 
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
 
@@ -1015,7 +1015,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
 template <class T, class Policy, class L>
 T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const L&)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    T zgh = z + L::g() - constants::half<T>();
    T result;
    if(fabs(delta) < 10)
@@ -1036,7 +1036,7 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const L&)
 template <class T, class Policy>
 T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const lanczos::undefined_lanczos&)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    //
    // The upper gamma fraction is *very* slow for z < 6, actually it's very
    // slow to converge everywhere but recursing until z > 6 gets rid of the
@@ -1073,7 +1073,7 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const lanczos:
 template <class T, class Policy>
 T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    if(z <= 0)
       policies::raise_domain_error<T>("boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got a=%1%).", z, pol);

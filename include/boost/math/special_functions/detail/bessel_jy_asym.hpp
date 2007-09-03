@@ -49,7 +49,7 @@ inline T asymptotic_bessel_j_large_x(T v, T x)
    //
    // Also A&S 9.2.5
    //
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
    T chi = fabs(x) - constants::pi<T>() * (2 * v + 1) / 4;
    return sqrt(2 / (constants::pi<T>() * x))
       * (asymptotic_bessel_j_large_x_P(v, x) * cos(chi) 
@@ -64,7 +64,7 @@ inline T asymptotic_bessel_y_large_x(T v, T x)
    //
    // Also A&S 9.2.5
    //
-   using namespace std; // ADL of std names
+   BOOST_MATH_STD_USING // ADL of std names
    T chi = fabs(x) - constants::pi<T>() * (2 * v + 1) / 4;
    return sqrt(2 / (constants::pi<T>() * x))
       * (asymptotic_bessel_j_large_x_P(v, x) * sin(chi) 
@@ -76,7 +76,7 @@ inline T asymptotic_bessel_amplitude(T v, T x)
 {
    // Calculate the amplitude of J(v, x) and Y(v, x) for large
    // x: see A&S 9.2.28.
-   using namespace std;
+   BOOST_MATH_STD_USING
    T s = 1;
    T mu = 4 * v * v;
    T txq = 2 * x;
@@ -116,7 +116,7 @@ template <class T>
 inline T asymptotic_bessel_y_large_x_2(T v, T x)
 {
    // See A&S 9.2.19.
-   using namespace std;
+   BOOST_MATH_STD_USING
    // Get the phase and amplitude:
    T ampl = asymptotic_bessel_amplitude(v, x);
    T phase = asymptotic_bessel_phase_mx(v, x);
@@ -132,7 +132,7 @@ template <class T>
 inline T asymptotic_bessel_j_large_x_2(T v, T x)
 {
    // See A&S 9.2.19.
-   using namespace std;
+   BOOST_MATH_STD_USING
    // Get the phase and amplitude:
    T ampl = asymptotic_bessel_amplitude(v, x);
    T phase = asymptotic_bessel_phase_mx(v, x);
@@ -156,7 +156,7 @@ template <class T>
 inline T asymptotic_bessel_y_limit(const mpl::int_<0>&)
 {
    // default case:
-   using namespace std;
+   BOOST_MATH_STD_USING
    return 2.25 / pow(100 * tools::epsilon<T>() / T(0.001f), T(0.2f));
 }
 template <class T>
@@ -203,7 +203,7 @@ template <class T>
 inline T asymptotic_bessel_j_limit(const T& v, const mpl::int_<0>&)
 {
    // default case:
-   using namespace std;
+   BOOST_MATH_STD_USING
    T v2 = (std::max)(T(3), v * v);
    return v2 / pow(100 * tools::epsilon<T>() / T(2e-5f), T(0.17f));
 }
@@ -266,7 +266,7 @@ void temme_asyptotic_y_small_x(T v, T x, T* Y, T* Y1, const Policy& pol)
 template <class T, class Policy>
 T asymptotic_bessel_i_large_x(T v, T x, const Policy& pol)
 {
-   using namespace std;  // ADL of std names
+   BOOST_MATH_STD_USING  // ADL of std names
    T s = 1;
    T mu = 4 * v * v;
    T ex = 8 * x;

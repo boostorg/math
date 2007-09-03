@@ -35,7 +35,7 @@ int temme_jy(T v, T x, T* Y, T* Y1, const Policy& pol)
     T a, d, e, sigma;
     unsigned long k;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
@@ -104,7 +104,7 @@ int CF1_jy(T v, T x, T* fv, int* sign, const Policy& pol)
     unsigned long k;
     int s = 1;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
 
     // |x| <= |v|, CF1_jy converges rapidly
     // |x| > |v|, CF1_jy needs O(|x|) iterations to converge
@@ -149,7 +149,7 @@ struct complex_trait
 template <typename T, typename Policy>
 int CF2_jy(T v, T x, T* p, T* q, const Policy& pol)
 {
-    using namespace std;
+    BOOST_MATH_STD_USING
 
     typedef typename complex_trait<T>::type complex_type;
 
@@ -211,7 +211,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
 
     static const char* function = "boost::math::bessel_jy<%1%>(%1%,%1%)";
 
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 

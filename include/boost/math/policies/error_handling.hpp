@@ -427,7 +427,7 @@ namespace detail
 template <class R, class T, class Policy>
 inline bool check_overflow(T val, R* result, const char* function, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    if(fabs(val) > tools::max_value<R>())
    {
       *result = static_cast<R>(boost::math::policies::detail::raise_overflow_error<R>(function, 0, pol));
@@ -448,7 +448,7 @@ inline bool check_underflow(T val, R* result, const char* function, const Policy
 template <class R, class T, class Policy>
 inline bool check_denorm(T val, R* result, const char* function, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    if((fabs(val) < static_cast<T>(tools::min_value<R>())) && (static_cast<R>(val) != 0))
    {
       *result = static_cast<R>(boost::math::policies::detail::raise_denorm_error<R>(function, 0, static_cast<R>(val), pol));

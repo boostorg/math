@@ -34,7 +34,7 @@ private:
 template <class T, class Policy>
 T inverse_poisson_cornish_fisher(T lambda, T p, T q, const Policy& pol)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
    // mean:
    T m = lambda;
    // standard deviation:
@@ -65,7 +65,7 @@ T inverse_poisson_cornish_fisher(T lambda, T p, T q, const Policy& pol)
 template <class T, class Policy>
 T gamma_inva_imp(const T& z, const T& p, const T& q, const Policy& pol)
 {
-   using namespace std;  // for ADL of std lib math functions
+   BOOST_MATH_STD_USING  // for ADL of std lib math functions
    //
    // Special cases first:
    //

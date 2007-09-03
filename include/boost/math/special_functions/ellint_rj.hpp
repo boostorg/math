@@ -31,7 +31,7 @@ T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
     T X, Y, Z, P, EA, EB, EC, E2, E3, S1, S2, S3;
     unsigned long k;
 
-    using namespace std;
+    BOOST_MATH_STD_USING
     using namespace boost::math::tools;
 
     static const char* function = "boost::math::ellint_rj<%1%>(%1%,%1%,%1%)";

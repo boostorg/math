@@ -8,6 +8,7 @@
 
 #include <cmath>
 #include <boost/cstdint.hpp>
+#include <boost/math/tools/config.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -17,7 +18,7 @@ namespace boost{ namespace math{ namespace tools{
 template <class Functor>
 typename Functor::result_type sum_series(Functor& func, int bits)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    typedef typename Functor::result_type result_type;
 
@@ -35,7 +36,7 @@ typename Functor::result_type sum_series(Functor& func, int bits)
 template <class Functor>
 typename Functor::result_type sum_series(Functor& func, int bits, boost::uintmax_t& max_terms)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    typedef typename Functor::result_type result_type;
 
@@ -59,7 +60,7 @@ typename Functor::result_type sum_series(Functor& func, int bits, boost::uintmax
 template <class Functor, class U>
 typename Functor::result_type sum_series(Functor& func, int bits, U init_value)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    typedef typename Functor::result_type result_type;
 
@@ -78,7 +79,7 @@ typename Functor::result_type sum_series(Functor& func, int bits, U init_value)
 template <class Functor, class U>
 typename Functor::result_type sum_series(Functor& func, int bits, boost::uintmax_t& max_terms, U init_value)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    typedef typename Functor::result_type result_type;
 
@@ -114,7 +115,7 @@ typename Functor::result_type sum_series(Functor& func, int bits, boost::uintmax
 template <class Functor>
 typename Functor::result_type kahan_sum_series(Functor& func, int bits)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    typedef typename Functor::result_type result_type;
 
@@ -137,7 +138,7 @@ typename Functor::result_type kahan_sum_series(Functor& func, int bits)
 template <class Functor>
 typename Functor::result_type kahan_sum_series(Functor& func, int bits, boost::uintmax_t& max_terms)
 {
-   using namespace std;
+   BOOST_MATH_STD_USING
 
    typedef typename Functor::result_type result_type;
 
