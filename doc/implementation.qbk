@@ -125,12 +125,12 @@ This implementation is believed to follow these proposals and to assist compatib
 ['ISO/IEC 9899:1999 Programming languages - C]
 and with the
 [@www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 5].
-[link math_toolkit.special.error_handling See also domain_error].
+[link math_toolkit.main_overview.error_handling See also domain_error].
 
 See __policy_ref for details of the error handling policies that should allow 
 a user to comply with any of these recommendations, as well as other behaviour.
 
-See [link math_toolkit.special.error_handling error handling]
+See [link math_toolkit.main_overview.error_handling error handling]
 for a detailed explanation of the mechanism, and
 [link math_toolkit.dist.stat_tut.weg.error_eg error_handling example]
 and 

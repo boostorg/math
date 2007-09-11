@@ -1,6 +1,6 @@
 [section:error_eg Error Handling Example]
 
-See [link math_toolkit.special.error_handling error handling documentation]
+See [link math_toolkit.main_overview.error_handling error handling documentation]
 for a detailed explanation of the mechanism of handling errors,
 including the common "bad" arguments to distributions and functions,
 and how to use __policy_section to control it.
