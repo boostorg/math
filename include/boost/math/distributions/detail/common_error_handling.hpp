@@ -11,6 +11,7 @@
 
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+// using boost::math::isfinite;
 
 namespace boost{ namespace math{ namespace detail
 {
@@ -48,8 +49,8 @@ inline bool check_scale(
       RealType* result,
       const Policy& pol)
 {
-   if((scale < 0) || !(boost::math::isfinite)(scale))
-   {
+   if((scale <= 0) || !(boost::math::isfinite)(scale))
+   { // Assume scale == 0 is NOT valid for any distribution.
       *result = policies::raise_domain_error<RealType>(
          function,
          "Scale parameter is %1%, but must be > 0 !", scale, pol);
@@ -57,6 +58,41 @@ inline bool check_scale(
    }
    return true;
 }
+
+template <class RealType, class Policy>
+inline bool check_location(
+      const char* function,
+      RealType location,
+      RealType* result,
+      const Policy& pol)
+{
+   if(!(boost::math::isfinite)(location))
+   {
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Location parameter is %1%, but must be finite!", location, pol);
+      return false;
+   }
+   return true;
+}
+
+template <class RealType, class Policy>
+inline bool check_x(
+      const char* function,
+      RealType location,
+      RealType* result,
+      const Policy& pol)
+{
+   if(!(boost::math::isfinite)(location))
+   {
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Random variate x is %1%, but must be finite!", location, pol);
+      return false;
+   }
+   return true;
+}
+
 
 } // namespace detail
 } // namespace math
