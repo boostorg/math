@@ -81,7 +81,6 @@ void test_spots(RealType)
    // give only 5 or 6 *fixed* places, so small values have fewer
    // digits.
 
-
 	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
    check_normal(
@@ -260,6 +259,21 @@ int test_main(int, char* [])
   BOOST_CHECK_EQUAL(myn01.mean(), myn01.location());
   BOOST_CHECK_EQUAL(myn01.standard_deviation(), myn01.scale());
 
+  // Check some bad parameters to the distribution,
+  // using just double because it has numeric_limit infinity etc.
+	BOOST_CHECK_THROW(boost::math::normal nbad1(+std::numeric_limits<double>::infinity(), 1), std::domain_error); // +infinite mean
+	BOOST_CHECK_THROW(boost::math::normal nbad1(-std::numeric_limits<double>::infinity(), 1), std::domain_error); // -infinite mean
+	BOOST_CHECK_THROW(boost::math::normal nbad1(0, std::numeric_limits<double>::infinity()), std::domain_error); // infinite sd
+	BOOST_CHECK_THROW(boost::math::normal nbad1(0, 0), std::domain_error); // zero sd
+	BOOST_CHECK_THROW(boost::math::normal nbad1(0, -1), std::domain_error); // negative sd
+
+  // Test on extreme values of random variate x, using just double because it has numeric_limit infinity etc..
+  // No longer allow x to be + or - infinity, then these tests should throw.
+  BOOST_CHECK_THROW(pdf(myn01, +std::numeric_limits<double>::infinity()), std::domain_error); // x = + infinity
+  BOOST_CHECK_THROW(cdf(myn01, +std::numeric_limits<double>::infinity()), std::domain_error); // x = + infinity
+  BOOST_CHECK_THROW(cdf(complement(myn01, +std::numeric_limits<double>::infinity())), std::domain_error); // x = + infinity
+  BOOST_CHECK_THROW(quantile(myn01, +std::numeric_limits<double>::infinity()), std::domain_error); // p = + infinity
+  BOOST_CHECK_THROW(quantile(complement(myn01, +std::numeric_limits<double>::infinity())), std::domain_error); // p = + infinity
 
 	 // Basic sanity-check spot values.
 	// (Parameter value, arbitrarily zero, only communicates the floating point type).
