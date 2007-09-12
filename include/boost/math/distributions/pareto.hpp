@@ -63,7 +63,7 @@ namespace boost
         RealType* result, const Policy& pol)
       {
         if((boost::math::isfinite)(shape))
-        { // Any finite value is OK.
+        { // Any finite value > 0 is OK.
           if (shape > 0)
           {
             return true;
