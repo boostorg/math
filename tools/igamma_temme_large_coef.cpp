@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -54,15 +54,15 @@ RR alpha(unsigned k)
    return result;
 }
 
-RR gamma(unsigned k)
+boost::math::ntl::RR gamma(unsigned k)
 {
-   static map<unsigned, RR> data;
+   static map<unsigned, boost::math::ntl::RR> data;
 
-   map<unsigned, RR>::const_iterator pos = data.find(k);
+   map<unsigned, boost::math::ntl::RR>::const_iterator pos = data.find(k);
    if(pos != data.end())
       return (*pos).second;
 
-   RR result = (k&1) ? -1 : 1;
+   boost::math::ntl::RR result = (k&1) ? -1 : 1;
 
    for(unsigned i = 1; i <= (2 * k + 1); i += 2)
       result *= i;
@@ -71,16 +71,16 @@ RR gamma(unsigned k)
    return result;
 }
 
-RR Coeff(unsigned n, unsigned k)
+boost::math::ntl::RR Coeff(unsigned n, unsigned k)
 {
-   map<unsigned, map<unsigned, RR> > data;
+   map<unsigned, map<unsigned, boost::math::ntl::RR> > data;
    if(data.empty())
-      data[0][0] = RR(-1) / 3;
+      data[0][0] = boost::math::ntl::RR(-1) / 3;
 
-   map<unsigned, map<unsigned, RR> >::const_iterator p1 = data.find(n);
+   map<unsigned, map<unsigned, boost::math::ntl::RR> >::const_iterator p1 = data.find(n);
    if(p1 != data.end())
    {
-      map<unsigned, RR>::const_iterator p2 = p1->second.find(k);
+      map<unsigned, boost::math::ntl::RR>::const_iterator p2 = p1->second.find(k);
       if(p2 != p1->second.end())
       {
          return p2->second;
@@ -93,12 +93,12 @@ RR Coeff(unsigned n, unsigned k)
    if(k == 0)
    {
       // special case:
-      RR result = (n+2) * alpha(n+2);
+      boost::math::ntl::RR result = (n+2) * alpha(n+2);
       data[n][k] = result;
       return result;
    }
    // general case:
-   RR result = gamma(k) * Coeff(n, 0) + (n+2) * Coeff(n+2, k-1);
+   boost::math::ntl::RR result = gamma(k) * Coeff(n, 0) + (n+2) * Coeff(n+2, k-1);
    data[n][k] = result;
    return result;
 }

@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/test.hpp>
@@ -16,21 +16,21 @@
 using namespace boost::math::tools;
 using namespace std;
 
-std::tr1::tuple<NTL::RR, NTL::RR> 
-   tgamma_ratio(const NTL::RR& a, const NTL::RR& delta)
+std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> 
+   tgamma_ratio(const boost::math::ntl::RR& a, const boost::math::ntl::RR& delta)
 {
    if(delta > a)
       throw std::domain_error("");
-   NTL::RR tg = boost::math::tgamma(a);
-   NTL::RR r1 = tg / boost::math::tgamma(a + delta);
-   NTL::RR r2 = tg / boost::math::tgamma(a - delta);
+   boost::math::ntl::RR tg = boost::math::tgamma(a);
+   boost::math::ntl::RR r1 = tg / boost::math::tgamma(a + delta);
+   boost::math::ntl::RR r2 = tg / boost::math::tgamma(a - delta);
    if((r1 > (std::numeric_limits<float>::max)()) || (r2 > (std::numeric_limits<float>::max)()))
       throw std::domain_error("");
 
    return std::tr1::make_tuple(r1, r2);
 }
 
-NTL::RR tgamma_ratio2(const NTL::RR& a, const NTL::RR& b)
+boost::math::ntl::RR tgamma_ratio2(const boost::math::ntl::RR& a, const boost::math::ntl::RR& b)
 {
    return boost::math::tgamma(a) / boost::math::tgamma(b);
 }
@@ -38,11 +38,11 @@ NTL::RR tgamma_ratio2(const NTL::RR& a, const NTL::RR& b)
 
 int test_main(int argc, char*argv [])
 {
-   NTL::RR::SetPrecision(1000);
-   NTL::RR::SetOutputPrecision(40);
+   boost::math::ntl::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(40);
 
-   parameter_info<NTL::RR> arg1, arg2;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1, arg2;
+   test_data<boost::math::ntl::RR> data;
 
    bool cont;
    std::string line;

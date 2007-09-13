@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -29,7 +29,7 @@ float force_truncate(const float* f)
    return external_f;
 }
 
-float truncate_to_float(NTL::RR r)
+float truncate_to_float(boost::math::ntl::RR r)
 {
    float f = boost::math::tools::real_cast<float>(r);
    return force_truncate(&f);
@@ -43,20 +43,20 @@ std::tr1::variate_generator<std::tr1::mt19937, std::tr1::uniform_real<float> > g
 
 struct ibeta_inv_data_generator
 {
-   std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR> operator()
-      (NTL::RR bp, NTL::RR x_, NTL::RR p_)
+   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()
+      (boost::math::ntl::RR bp, boost::math::ntl::RR x_, boost::math::ntl::RR p_)
    {
-      float b = truncate_to_float(real_cast<float>(gen() * pow(NTL::RR(10), bp))); 
+      float b = truncate_to_float(real_cast<float>(gen() * pow(boost::math::ntl::RR(10), bp))); 
       float x = truncate_to_float(real_cast<float>(x_));
       float p = truncate_to_float(real_cast<float>(p_));
       std::cout << b << " " << x << " " << p << std::flush;
-      NTL::RR inv = boost::math::ibeta_inva(NTL::RR(b), NTL::RR(x), NTL::RR(p));
+      boost::math::ntl::RR inv = boost::math::ibeta_inva(boost::math::ntl::RR(b), boost::math::ntl::RR(x), boost::math::ntl::RR(p));
       std::cout << " " << inv << std::flush;
-      NTL::RR invc = boost::math::ibetac_inva(NTL::RR(b), NTL::RR(x), NTL::RR(p));
+      boost::math::ntl::RR invc = boost::math::ibetac_inva(boost::math::ntl::RR(b), boost::math::ntl::RR(x), boost::math::ntl::RR(p));
       std::cout << " " << invc << std::endl;
-      NTL::RR invb = boost::math::ibeta_invb(NTL::RR(b), NTL::RR(x), NTL::RR(p));
+      boost::math::ntl::RR invb = boost::math::ibeta_invb(boost::math::ntl::RR(b), boost::math::ntl::RR(x), boost::math::ntl::RR(p));
       std::cout << " " << invb << std::flush;
-      NTL::RR invbc = boost::math::ibetac_invb(NTL::RR(b), NTL::RR(x), NTL::RR(p));
+      boost::math::ntl::RR invbc = boost::math::ibetac_invb(boost::math::ntl::RR(b), boost::math::ntl::RR(x), boost::math::ntl::RR(p));
       std::cout << " " << invbc << std::endl;
       return std::tr1::make_tuple(b, x, p, inv, invc, invb, invbc);
    }
@@ -64,22 +64,22 @@ struct ibeta_inv_data_generator
 
 int test_main(int argc, char*argv [])
 {
-   NTL::RR::SetPrecision(1000);
-   NTL::RR::SetOutputPrecision(100);
+   boost::math::ntl::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(100);
 
    bool cont;
    std::string line;
 
-   parameter_info<NTL::RR> arg1, arg2, arg3;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1, arg2, arg3;
+   test_data<boost::math::ntl::RR> data;
 
    std::cout << "Welcome.\n"
       "This program will generate spot tests for the inverse incomplete beta function:\n"
       "  ibeta_inva(a, p) and ibetac_inva(a, q)\n\n";
 
-   arg1 = make_periodic_param(NTL::RR(-5), NTL::RR(6), 11);
-   arg2 = make_random_param(NTL::RR(0.0001), NTL::RR(1), 10);
-   arg3 = make_random_param(NTL::RR(0.0001), NTL::RR(1), 10);
+   arg1 = make_periodic_param(boost::math::ntl::RR(-5), boost::math::ntl::RR(6), 11);
+   arg2 = make_random_param(boost::math::ntl::RR(0.0001), boost::math::ntl::RR(1), 10);
+   arg3 = make_random_param(boost::math::ntl::RR(0.0001), boost::math::ntl::RR(1), 10);
 
    arg1.type |= dummy_param;
    arg2.type |= dummy_param;

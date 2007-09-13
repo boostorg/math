@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -29,7 +29,7 @@ float force_truncate(const float* f)
    return external_f;
 }
 
-float truncate_to_float(NTL::RR r)
+float truncate_to_float(boost::math::ntl::RR r)
 {
    float f = boost::math::tools::real_cast<float>(r);
    return force_truncate(&f);
@@ -43,14 +43,14 @@ float truncate_to_float(NTL::RR r)
 //
 struct igamma_data_generator
 {
-   std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR> operator()(NTL::RR a, NTL::RR x)
+   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR a, boost::math::ntl::RR x)
    {
       // very naively calculate spots:
-      NTL::RR z;
+      boost::math::ntl::RR z;
       switch((int)real_cast<float>(x))
       {
       case 1:
-         z = truncate_to_float((std::min)(NTL::RR(1), a/100));
+         z = truncate_to_float((std::min)(boost::math::ntl::RR(1), a/100));
          break;
       case 2:
          z = truncate_to_float(a / 2);
@@ -68,17 +68,17 @@ struct igamma_data_generator
          z = truncate_to_float(a * 2);
          break;
       case 7:
-         z = truncate_to_float((std::max)(NTL::RR(100), a*100));
+         z = truncate_to_float((std::max)(boost::math::ntl::RR(100), a*100));
          break;
       default:
          BOOST_ASSERT(0 == "Can't get here!!");
       }
 
-      //NTL::RR g = boost::math::tgamma(a);
-      NTL::RR lg = boost::math::tgamma_lower(a, z);
-      NTL::RR ug = boost::math::tgamma(a, z);
-      NTL::RR rlg = boost::math::gamma_p(a, z);
-      NTL::RR rug = boost::math::gamma_q(a, z);
+      //boost::math::ntl::RR g = boost::math::tgamma(a);
+      boost::math::ntl::RR lg = boost::math::tgamma_lower(a, z);
+      boost::math::ntl::RR ug = boost::math::tgamma(a, z);
+      boost::math::ntl::RR rlg = boost::math::gamma_p(a, z);
+      boost::math::ntl::RR rug = boost::math::gamma_q(a, z);
 
       return std::tr1::make_tuple(z, ug, rug, lg, rlg);
    }
@@ -86,10 +86,10 @@ struct igamma_data_generator
 
 struct gamma_inverse_generator
 {
-   std::tr1::tuple<NTL::RR, NTL::RR> operator()(const NTL::RR a, const NTL::RR p)
+   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(const boost::math::ntl::RR a, const boost::math::ntl::RR p)
    {
-      NTL::RR x1 = boost::math::gamma_p_inv(a, p);
-      NTL::RR x2 = boost::math::gamma_q_inv(a, p);
+      boost::math::ntl::RR x1 = boost::math::gamma_p_inv(a, p);
+      boost::math::ntl::RR x2 = boost::math::gamma_q_inv(a, p);
       std::cout << "Inverse for " << a << " " << p << std::endl;
       return std::tr1::make_tuple(x1, x2);
    }
@@ -97,10 +97,10 @@ struct gamma_inverse_generator
 
 struct gamma_inverse_generator_a
 {
-   std::tr1::tuple<NTL::RR, NTL::RR> operator()(const NTL::RR x, const NTL::RR p)
+   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(const boost::math::ntl::RR x, const boost::math::ntl::RR p)
    {
-      NTL::RR x1 = boost::math::gamma_p_inva(x, p);
-      NTL::RR x2 = boost::math::gamma_q_inva(x, p);
+      boost::math::ntl::RR x1 = boost::math::gamma_p_inva(x, p);
+      boost::math::ntl::RR x2 = boost::math::gamma_q_inva(x, p);
       std::cout << "Inverse for " << x << " " << p << std::endl;
       return std::tr1::make_tuple(x1, x2);
    }
@@ -109,14 +109,14 @@ struct gamma_inverse_generator_a
 
 int test_main(int argc, char*argv [])
 {
-   NTL::RR::SetPrecision(1000);
-   NTL::RR::SetOutputPrecision(100);
+   boost::math::ntl::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(100);
 
    bool cont;
    std::string line;
 
-   parameter_info<NTL::RR> arg1, arg2;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1, arg2;
+   test_data<boost::math::ntl::RR> data;
 
    if((argc >= 2) && (std::strcmp(argv[1], "-inverse") == 0))
    {
@@ -152,7 +152,7 @@ int test_main(int argc, char*argv [])
    }
    else
    {
-      arg2 = make_periodic_param(NTL::RR(1), NTL::RR(8), 7);
+      arg2 = make_periodic_param(boost::math::ntl::RR(1), boost::math::ntl::RR(8), 7);
       arg2.type |= boost::math::tools::dummy_param;
 
       std::cout << "Welcome.\n"

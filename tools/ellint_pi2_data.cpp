@@ -3,8 +3,8 @@
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-#include <boost/math/tools/ntl.hpp>
-#include <boost/math/tools/dual_precision.hpp>
+#include <boost/math/bindings/rr.hpp>
+//#include <boost/math/tools/dual_precision.hpp>
 #include <boost/math/tools/test_data.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/ellint_2.hpp>
@@ -21,11 +21,11 @@ int test_main(int argc, char*argv [])
 {
    using namespace boost::math::tools;
 
-   NTL::RR::SetOutputPrecision(50);
-   NTL::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(50);
+   boost::math::ntl::RR::SetPrecision(1000);
 
-   parameter_info<NTL::RR> arg1, arg2;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1, arg2;
+   test_data<boost::math::ntl::RR> data;
 
    bool cont;
    std::string line;
@@ -39,7 +39,7 @@ int test_main(int argc, char*argv [])
       if(0 == get_user_parameter_info(arg2, "k"))
          return 1;
 
-      NTL::RR (*fp)(NTL::RR, NTL::RR) = &ellint_3;
+      boost::math::ntl::RR (*fp)(boost::math::ntl::RR, boost::math::ntl::RR) = &ellint_3;
       data.insert(fp, arg2, arg1);
 
       std::cout << "Any more data [y/n]?";

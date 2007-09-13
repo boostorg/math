@@ -1,16 +1,16 @@
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <boost/limits.hpp>
 #include <vector>
 
 void write_table(unsigned max_exponent)
 {
-   NTL::RR max = ldexp(NTL::RR(1), max_exponent);
+   boost::math::ntl::RR max = ldexp(boost::math::ntl::RR(1), max_exponent);
 
-   std::vector<NTL::RR> factorials;
+   std::vector<boost::math::ntl::RR> factorials;
    factorials.push_back(1);
 
-   NTL::RR f(1);
+   boost::math::ntl::RR f(1);
    unsigned i = 1;
 
    while(f < max)
@@ -33,7 +33,7 @@ void write_table(unsigned max_exponent)
 
 int main()
 {
-   NTL::RR::SetPrecision(300);
-   NTL::RR::SetOutputPrecision(40);
+   boost::math::ntl::RR::SetPrecision(300);
+   boost::math::ntl::RR::SetOutputPrecision(40);
    write_table(16384/*std::numeric_limits<float>::max_exponent*/);
 }

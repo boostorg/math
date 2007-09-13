@@ -20,7 +20,7 @@ float force_truncate(const float* f)
    return external_f;
 }
 
-float truncate_to_float(NTL::RR r)
+float truncate_to_float(boost::math::ntl::RR r)
 {
    float f = boost::math::tools::real_cast<float>(r);
    return force_truncate(&f);
@@ -28,11 +28,11 @@ float truncate_to_float(NTL::RR r)
 
 int test_main(int argc, char*argv [])
 {
-   NTL::RR::SetPrecision(1000);
-   NTL::RR::SetOutputPrecision(40);
+   boost::math::ntl::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(40);
 
-   parameter_info<NTL::RR> arg1;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1;
+   test_data<boost::math::ntl::RR> data;
 
    bool cont;
    std::string line;

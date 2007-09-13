@@ -6,7 +6,7 @@
 #define BOOST_UBLAS_TYPE_CHECK_EPSILON (type_traits<real_type>::type_sqrt (boost::math::tools::epsilon <real_type>()))
 #define BOOST_UBLAS_TYPE_CHECK_MIN (type_traits<real_type>::type_sqrt ( boost::math::tools::min_value<real_type>()))
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <boost/math/tools/remez.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/spirit/core.hpp>
@@ -17,17 +17,17 @@
 #include <string>
 #include <boost/test/included/test_exec_monitor.hpp> // for test_main
 
-extern NTL::RR f(const NTL::RR& x, int variant);
+extern boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant);
 extern void show_extra(
-   const boost::math::tools::polynomial<NTL::RR>& n, 
-   const boost::math::tools::polynomial<NTL::RR>& d, 
-   const NTL::RR& x_offset, 
-   const NTL::RR& y_offset, 
+   const boost::math::tools::polynomial<boost::math::ntl::RR>& n, 
+   const boost::math::tools::polynomial<boost::math::ntl::RR>& d, 
+   const boost::math::ntl::RR& x_offset, 
+   const boost::math::ntl::RR& y_offset, 
    int variant);
 
 using namespace boost::spirit;
 
-NTL::RR a(0), b(1);   // range to optimise over
+boost::math::ntl::RR a(0), b(1);   // range to optimise over
 bool rel_error(true);
 bool pin(false);
 int orderN(3);
@@ -38,12 +38,12 @@ bool started(false);
 int variant(0);
 int skew(0);
 int brake(50);
-NTL::RR x_offset(0), y_offset(0);
+boost::math::ntl::RR x_offset(0), y_offset(0);
 bool auto_offset_y;
 
-boost::shared_ptr<boost::math::tools::remez_minimax<NTL::RR> > p_remez;
+boost::shared_ptr<boost::math::tools::remez_minimax<boost::math::ntl::RR> > p_remez;
 
-NTL::RR the_function(const NTL::RR& val)
+boost::math::ntl::RR the_function(const boost::math::ntl::RR& val)
 {
    return f(val + x_offset, variant) + y_offset;
 }
@@ -59,7 +59,7 @@ void step_some(unsigned count)
          //
          if(auto_offset_y)
          {
-            NTL::RR fa, fb, fm;
+            boost::math::ntl::RR fa, fb, fm;
             fa = f(a + x_offset, variant);
             fb = f(b + x_offset, variant);
             fm = f((a+b)/2 + x_offset, variant);
@@ -70,12 +70,12 @@ void step_some(unsigned count)
          //
          // Truncate offsets to float precision:
          //
-         x_offset = NTL::RoundToPrecision(x_offset, 20);
-         y_offset = NTL::RoundToPrecision(y_offset, 20);
+         x_offset = NTL::RoundToPrecision(x_offset.value(), 20);
+         y_offset = NTL::RoundToPrecision(y_offset.value(), 20);
          //
          // Construct new Remez state machine:
          //
-         p_remez.reset(new boost::math::tools::remez_minimax<NTL::RR>(
+         p_remez.reset(new boost::math::tools::remez_minimax<boost::math::ntl::RR>(
             &the_function, 
             orderN, orderD, 
             a, b, 
@@ -93,7 +93,7 @@ void step_some(unsigned count)
       {
          std::cout << "Stepping..." << std::endl;
          p_remez->set_brake(brake);
-         NTL::RR r = p_remez->iterate();
+         boost::math::ntl::RR r = p_remez->iterate();
          NTL::RR::SetOutputPrecision(3);
          std::cout 
             << "Maximum Deviation Found:                     " << std::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(p_remez->max_error()) << std::endl
@@ -117,12 +117,12 @@ void show(const char*, const char*)
    NTL::RR::SetPrecision(working_precision);
    if(started)
    {
-      boost::math::tools::polynomial<NTL::RR> n = p_remez->numerator();
-      boost::math::tools::polynomial<NTL::RR> d = p_remez->denominator();
+      boost::math::tools::polynomial<boost::math::ntl::RR> n = p_remez->numerator();
+      boost::math::tools::polynomial<boost::math::ntl::RR> d = p_remez->denominator();
       int prec = 2 + (target_precision * 3010LL)/10000;
       std::cout << std::scientific << std::setprecision(prec);
       NTL::RR::SetOutputPrecision(prec);
-      boost::numeric::ublas::vector<NTL::RR> v = p_remez->zero_points();
+      boost::numeric::ublas::vector<boost::math::ntl::RR> v = p_remez->zero_points();
       
       std::cout << "  Zeros = {\n";
       for(unsigned i = 0; i < v.size(); ++i)
@@ -167,8 +167,8 @@ void show(const char*, const char*)
 void do_graph(unsigned points)
 {
    NTL::RR::SetPrecision(working_precision);
-   NTL::RR step = (b - a) / (points - 1);
-   NTL::RR x = a;
+   boost::math::ntl::RR step = (b - a) / (points - 1);
+   boost::math::ntl::RR x = a;
    while(points > 1)
    {
       NTL::RR::SetOutputPrecision(10);
@@ -189,7 +189,7 @@ void graph(const char*, const char*)
 template <class T>
 void do_test(T, const char* name)
 {
-   NTL::RR::SetPrecision(working_precision);
+   boost::math::ntl::RR::SetPrecision(working_precision);
    if(started)
    {
       //
@@ -205,11 +205,11 @@ void do_test(T, const char* name)
       // (in theory) the largest deviation should occur.  For good
       // measure we'll test at the zeros as well:
       //
-      boost::numeric::ublas::vector<NTL::RR> 
+      boost::numeric::ublas::vector<boost::math::ntl::RR> 
          zeros(p_remez->zero_points()),
          cheb(p_remez->chebyshev_points());
 
-      NTL::RR max_error(0);
+      boost::math::ntl::RR max_error(0);
 
       //
       // Do the tests at the zeros:
@@ -218,10 +218,10 @@ void do_test(T, const char* name)
       std::cout << "Absissa        Error\n";
       for(unsigned i = 0; i < zeros.size(); ++i)
       {
-         NTL::RR true_result = the_function(zeros[i]);
+         boost::math::ntl::RR true_result = the_function(zeros[i]);
          T absissa = boost::math::tools::real_cast<T>(zeros[i]);
-         NTL::RR test_result = n.evaluate(absissa) / d.evaluate(absissa);
-         NTL::RR err;
+         boost::math::ntl::RR test_result = n.evaluate(absissa) / d.evaluate(absissa);
+         boost::math::ntl::RR err;
          if(rel_error)
          {
             err = boost::math::tools::relative_error(test_result, true_result);
@@ -240,10 +240,10 @@ void do_test(T, const char* name)
       //
       for(unsigned i = 0; i < cheb.size(); ++i)
       {
-         NTL::RR true_result = the_function(cheb[i]);
+         boost::math::ntl::RR true_result = the_function(cheb[i]);
          T absissa = boost::math::tools::real_cast<T>(cheb[i]);
-         NTL::RR test_result = n.evaluate(absissa) / d.evaluate(absissa);
-         NTL::RR err;
+         boost::math::ntl::RR test_result = n.evaluate(absissa) / d.evaluate(absissa);
+         boost::math::ntl::RR err;
          if(rel_error)
          {
             err = boost::math::tools::relative_error(test_result, true_result);
@@ -290,7 +290,7 @@ void test_all(const char*, const char*)
 template <class T>
 void do_test_n(T, const char* name, unsigned count)
 {
-   NTL::RR::SetPrecision(working_precision);
+   boost::math::ntl::RR::SetPrecision(working_precision);
    if(started)
    {
       //
@@ -302,20 +302,20 @@ void do_test_n(T, const char* name, unsigned count)
       n = p_remez->numerator();
       d = p_remez->denominator();
 
-      NTL::RR max_error(0);
-      NTL::RR step = (b - a) / count;
+      boost::math::ntl::RR max_error(0);
+      boost::math::ntl::RR step = (b - a) / count;
 
       //
       // Do the tests at the zeros:
       //
       std::cout << "Starting tests at " << name << " precision...\n";
       std::cout << "Absissa        Error\n";
-      for(NTL::RR x = a; x <= b; x += step)
+      for(boost::math::ntl::RR x = a; x <= b; x += step)
       {
-         NTL::RR true_result = the_function(x);
+         boost::math::ntl::RR true_result = the_function(x);
          T absissa = boost::math::tools::real_cast<T>(x);
-         NTL::RR test_result = n.evaluate(absissa) / d.evaluate(absissa);
-         NTL::RR err;
+         boost::math::ntl::RR test_result = n.evaluate(absissa) / d.evaluate(absissa);
+         boost::math::ntl::RR err;
          if(rel_error)
          {
             err = boost::math::tools::relative_error(test_result, true_result);
@@ -339,7 +339,7 @@ void do_test_n(T, const char* name, unsigned count)
 
 void test_n(unsigned n)
 {
-   do_test_n(NTL::RR(), "NTL::RR", n);
+   do_test_n(boost::math::ntl::RR(), "boost::math::ntl::RR", n);
 }
 
 void test_float_n(unsigned n)

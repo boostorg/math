@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <fstream>
 
 #include <boost/math/tools/test_data.hpp>
@@ -13,9 +13,9 @@ using namespace std;
 
 struct cube_data_generator
 {
-   NTL::RR operator()(NTL::RR z)
+   boost::math::ntl::RR operator()(boost::math::ntl::RR z)
    {
-      NTL::RR result = z*z*z;
+      boost::math::ntl::RR result = z*z*z;
       // if result is out of range of a float, 
       // don't include in test data as it messes up our results:
       if(result > (std::numeric_limits<float>::max)())
@@ -28,11 +28,11 @@ struct cube_data_generator
 
 int main(int argc, char* argv[])
 {
-   NTL::RR::SetPrecision(1000);
-   NTL::RR::SetOutputPrecision(40);
+   boost::math::ntl::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(40);
 
-   parameter_info<NTL::RR> arg1;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1;
+   test_data<boost::math::ntl::RR> data;
 
    std::cout << "Welcome.\n"
       "This program will generate spot tests for the cbrt function:\n\n";

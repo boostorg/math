@@ -4,8 +4,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/tools/ntl.hpp>
-#include <boost/math/tools/dual_precision.hpp>
+#include <boost/math/bindings/rr.hpp>
+//#include <boost/math/tools/dual_precision.hpp>
 #include <boost/math/tools/test_data.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/ellint_3.hpp>
@@ -21,42 +21,42 @@ float truncate_to_float(float const * pf)
    return *pf;
 }
 
-std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR, NTL::RR> generate_rf_data(NTL::RR n)
+std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rf_data(boost::math::ntl::RR n)
 {
    static std::tr1::mt19937 r;
    std::tr1::uniform_real<float> ur(0, 1);
    std::tr1::uniform_int<int> ui(-100, 100);
    float x = ur(r);
    x = ldexp(x, ui(r));
-   NTL::RR xr(truncate_to_float(&x));
+   boost::math::ntl::RR xr(truncate_to_float(&x));
    float y = ur(r);
    y = ldexp(y, ui(r));
-   NTL::RR yr(truncate_to_float(&y));
+   boost::math::ntl::RR yr(truncate_to_float(&y));
    float z = ur(r);
    z = ldexp(z, ui(r));
-   NTL::RR zr(truncate_to_float(&z));
+   boost::math::ntl::RR zr(truncate_to_float(&z));
 
-   NTL::RR result = boost::math::ellint_rf(xr, yr, zr);
+   boost::math::ntl::RR result = boost::math::ellint_rf(xr, yr, zr);
    return std::tr1::make_tuple(xr, yr, zr, result);
 }
 
-std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR> generate_rc_data(NTL::RR n)
+std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rc_data(boost::math::ntl::RR n)
 {
    static std::tr1::mt19937 r;
    std::tr1::uniform_real<float> ur(0, 1);
    std::tr1::uniform_int<int> ui(-100, 100);
    float x = ur(r);
    x = ldexp(x, ui(r));
-   NTL::RR xr(truncate_to_float(&x));
+   boost::math::ntl::RR xr(truncate_to_float(&x));
    float y = ur(r);
    y = ldexp(y, ui(r));
-   NTL::RR yr(truncate_to_float(&y));
+   boost::math::ntl::RR yr(truncate_to_float(&y));
 
-   NTL::RR result = boost::math::ellint_rc(xr, yr);
+   boost::math::ntl::RR result = boost::math::ellint_rc(xr, yr);
    return std::tr1::make_tuple(xr, yr, result);
 }
 
-std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR> generate_rj_data(NTL::RR n)
+std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rj_data(boost::math::ntl::RR n)
 {
    static std::tr1::mt19937 r;
    std::tr1::uniform_real<float> ur(0, 1);
@@ -64,39 +64,39 @@ std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR> generate_rj_data(NT
    std::tr1::uniform_int<int> ui(-100, 100);
    float x = ur(r);
    x = ldexp(x, ui(r));
-   NTL::RR xr(truncate_to_float(&x));
+   boost::math::ntl::RR xr(truncate_to_float(&x));
    float y = ur(r);
    y = ldexp(y, ui(r));
-   NTL::RR yr(truncate_to_float(&y));
+   boost::math::ntl::RR yr(truncate_to_float(&y));
    float z = ur(r);
    z = ldexp(z, ui(r));
-   NTL::RR zr(truncate_to_float(&z));
+   boost::math::ntl::RR zr(truncate_to_float(&z));
    float p = nur(r);
    p = ldexp(p, ui(r));
-   NTL::RR pr(truncate_to_float(&p));
+   boost::math::ntl::RR pr(truncate_to_float(&p));
 
    boost::math::ellint_rj(x, y, z, p);
 
-   NTL::RR result = boost::math::ellint_rj(xr, yr, zr, pr);
+   boost::math::ntl::RR result = boost::math::ellint_rj(xr, yr, zr, pr);
    return std::tr1::make_tuple(xr, yr, zr, pr, result);
 }
 
-std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR, NTL::RR> generate_rd_data(NTL::RR n)
+std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rd_data(boost::math::ntl::RR n)
 {
    static std::tr1::mt19937 r;
    std::tr1::uniform_real<float> ur(0, 1);
    std::tr1::uniform_int<int> ui(-100, 100);
    float x = ur(r);
    x = ldexp(x, ui(r));
-   NTL::RR xr(truncate_to_float(&x));
+   boost::math::ntl::RR xr(truncate_to_float(&x));
    float y = ur(r);
    y = ldexp(y, ui(r));
-   NTL::RR yr(truncate_to_float(&y));
+   boost::math::ntl::RR yr(truncate_to_float(&y));
    float z = ur(r);
    z = ldexp(z, ui(r));
-   NTL::RR zr(truncate_to_float(&z));
+   boost::math::ntl::RR zr(truncate_to_float(&z));
 
-   NTL::RR result = boost::math::ellint_rd(xr, yr, zr);
+   boost::math::ntl::RR result = boost::math::ellint_rd(xr, yr, zr);
    return std::tr1::make_tuple(xr, yr, zr, result);
 }
 
@@ -104,11 +104,11 @@ int test_main(int argc, char*argv [])
 {
    using namespace boost::math::tools;
 
-   NTL::RR::SetOutputPrecision(50);
-   NTL::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(50);
+   boost::math::ntl::RR::SetPrecision(1000);
 
-   parameter_info<NTL::RR> arg1, arg2;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1, arg2;
+   test_data<boost::math::ntl::RR> data;
 
    bool cont;
    std::string line;
@@ -121,7 +121,7 @@ int test_main(int argc, char*argv [])
       std::cout << "Number of points: ";
       std::cin >> count;
       
-      arg1 = make_periodic_param(NTL::RR(0), NTL::RR(1), count);
+      arg1 = make_periodic_param(boost::math::ntl::RR(0), boost::math::ntl::RR(1), count);
       arg1.type |= dummy_param;
 
       //

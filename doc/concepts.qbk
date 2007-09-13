@@ -2,29 +2,19 @@
 
 The special functions and tools in this library can be used with
 [@http://shoup.net/ntl/doc/RR.txt NTL::RR (an arbitrary precision number type)],
-and to a lesser extent with [@http://shoup.net/ntl/doc/quad_float.txt 
-NTL::quad_float] (128-bit, using 106 significand bits).
-[@http://shoup.net/ntl/ Refer to NTL: A Library for doing Number Theory by 
+via the bindings in [@../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp].
+[@http://shoup.net/ntl/ See also NTL: A Library for doing Number Theory by 
 Victor Shoup]
 
-In order to do so you will need to apply the following patch to 
-NTL: [@../tools/ntl.diff libs/math/tools/ntl.diff].
-This patch adds trivial converting constructors to NTL::RR and NTL::quad_float,
-and forces conversions to RR to proceed via `long double` rather than `double`.
-The latter change is essential to accurately measure relative errors between
-high precision calculations (using NTL::RR) and fixed precision calculations
-(using `long double`).  These occur if, for example, you are generating additional
-__lanczos's or rational approximations suitable for use with `long double`.
+Unfortunately `NTL::RR` doesn't quite satisfy our conceptual requirements,
+so there is a very thin wrapper class `boost::math::ntl::RR` defined in
+[@../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp] that you
+should use in place of `NTL::RR`.  The class is intended to be a drop-in 
+replacement for the "real" NTL::RR that adds some syntactic sugar to keep
+this library happy, plus some of the standard library functions not implemented
+in NTL.
 
-You will also need to include NTL via the header `<boost/math/tools/ntl.hpp>`
-and include that header /before/ you include any of the special function headers.
-The rationale for this is that the header `<boost/math/tools/ntl.hpp>` includes some traits classes
-and boilerplate code (mostly runtime substitutes for numeric_limits) that are
-required by the special functions.  Unfortunately, some of the stricter compilers
-require these definitions to be seen before the templates that will use them are
-parsed.
-
-Finally there is a high precision __lanczos suitable for use with NTL::RR,
+Finally there is a high precision __lanczos suitable for use with `boost::math::ntl::RR`,
 used at 1000-bit precision in 
 [@../tools/ntl_rr_lanczos.hpp libs/math/tools/ntl_rr_lanczos.hpp].  
 The approximation has a theoretical precision of > 90 decimal digits, 
@@ -41,8 +31,9 @@ The functions, and statistical distributions in this library can be used with
 any type /RealType/ that meets the conceptual requirements given below.  All
 the built in floating point types will meet these requirements.  
 User defined types that meet the requirements can also be used.  For example,
-with [link math_toolkit.using_udt.use_ntl minor modifications] two of the types 
-provided with [@http://shoup.net/ntl/ NTL (RR and quad_float)] can be used.
+with [link math_toolkit.using_udt.use_ntl a thin wrapper class] one of the types 
+provided with [@http://shoup.net/ntl/ NTL (RR)] can be used.  Submissions
+of binding to other extended precision types would also be most welcome!
 
 The guiding principal behind these requirements, is that a /RealType/
 behaves just like a built in floating point type.

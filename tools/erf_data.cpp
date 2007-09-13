@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/erf.hpp> // for inverses
@@ -25,7 +25,7 @@ float force_truncate(const float* f)
    return external_f;
 }
 
-float truncate_to_float(NTL::RR r)
+float truncate_to_float(boost::math::ntl::RR r)
 {
    float f = boost::math::tools::real_cast<float>(r);
    return force_truncate(&f);
@@ -33,7 +33,7 @@ float truncate_to_float(NTL::RR r)
 
 struct erf_data_generator
 {
-   std::tr1::tuple<NTL::RR, NTL::RR> operator()(NTL::RR z)
+   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR z)
    {
       // very naively calculate spots using the gamma function at high precision:
       int sign = 1;
@@ -42,9 +42,9 @@ struct erf_data_generator
          sign = -1;
          z = -z;
       }
-      NTL::RR g1, g2;
-      g1 = boost::math::tgamma_lower(NTL::RR(0.5), z * z);
-      g1 /= sqrt(boost::math::constants::pi<NTL::RR>());
+      boost::math::ntl::RR g1, g2;
+      g1 = boost::math::tgamma_lower(boost::math::ntl::RR(0.5), z * z);
+      g1 /= sqrt(boost::math::constants::pi<boost::math::ntl::RR>());
       g1 *= sign;
 
       if(z < 0.5)
@@ -53,8 +53,8 @@ struct erf_data_generator
       }
       else
       {
-         g2 = boost::math::tgamma(NTL::RR(0.5), z * z);
-         g2 /= sqrt(boost::math::constants::pi<NTL::RR>());
+         g2 = boost::math::tgamma(boost::math::ntl::RR(0.5), z * z);
+         g2 /= sqrt(boost::math::constants::pi<boost::math::ntl::RR>());
       }
       if(sign < 1)
          g2 = 2 - g2;
@@ -119,12 +119,12 @@ void asymptotic_limit(int Bits)
       << terms << " terms." << std::endl;
 }
 
-std::tr1::tuple<NTL::RR, NTL::RR> erfc_inv(NTL::RR r)
+std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> erfc_inv(boost::math::ntl::RR r)
 {
-   NTL::RR x = exp(-r * r);
-   x = NTL::RoundToPrecision(x, 64);
+   boost::math::ntl::RR x = exp(-r * r);
+   x = NTL::RoundToPrecision(x.value(), 64);
    std::cout << x << "   ";
-   NTL::RR result = boost::math::erfc_inv(x);
+   boost::math::ntl::RR result = boost::math::erfc_inv(x);
    std::cout << result << std::endl;
    return std::tr1::make_tuple(x, result);
 }
@@ -132,11 +132,11 @@ std::tr1::tuple<NTL::RR, NTL::RR> erfc_inv(NTL::RR r)
 
 int test_main(int argc, char*argv [])
 {
-   NTL::RR::SetPrecision(1000);
-   NTL::RR::SetOutputPrecision(40);
+   boost::math::ntl::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(40);
 
-   parameter_info<NTL::RR> arg1;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1;
+   test_data<boost::math::ntl::RR> data;
 
    bool cont;
    std::string line;
@@ -154,18 +154,18 @@ int test_main(int argc, char*argv [])
       }
       else if(strcmp(argv[1], "--erf_inv") == 0)
       {
-         NTL::RR (*f)(NTL::RR);
+         boost::math::ntl::RR (*f)(boost::math::ntl::RR);
          f = boost::math::erf_inv;
          std::cout << "Welcome.\n"
             "This program will generate spot tests for the inverse erf function:\n";
          std::cout << "Enter the number of data points: ";
          int points;
          std::cin >> points;
-         data.insert(f, make_random_param(NTL::RR(-1), NTL::RR(1), points));
+         data.insert(f, make_random_param(boost::math::ntl::RR(-1), boost::math::ntl::RR(1), points));
       }
       else if(strcmp(argv[1], "--erfc_inv") == 0)
       {
-         std::tr1::tuple<NTL::RR, NTL::RR> (*f)(NTL::RR);
+         std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> (*f)(boost::math::ntl::RR);
          f = erfc_inv;
          std::cout << "Welcome.\n"
             "This program will generate spot tests for the inverse erfc function:\n";
@@ -175,7 +175,7 @@ int test_main(int argc, char*argv [])
          std::cout << "Enter the number of data points: ";
          int points;
          std::cin >> points;
-         parameter_info<NTL::RR> arg = make_random_param(NTL::RR(0), NTL::RR(max_val), points);
+         parameter_info<boost::math::ntl::RR> arg = make_random_param(boost::math::ntl::RR(0), boost::math::ntl::RR(max_val), points);
          arg.type |= dummy_param;
          data.insert(f, arg);
       }

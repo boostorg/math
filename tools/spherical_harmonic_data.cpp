@@ -1,5 +1,5 @@
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <boost/math/tools/test_data.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/spherical_harmonic.hpp>
@@ -45,11 +45,11 @@ int test_main(int argc, char*argv [])
 {
    using namespace boost::math::tools;
 
-   NTL::RR::SetOutputPrecision(50);
-   NTL::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(50);
+   boost::math::ntl::RR::SetPrecision(1000);
 
-   parameter_info<NTL::RR> arg1, arg2, arg3;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1, arg2, arg3;
+   test_data<boost::math::ntl::RR> data;
 
    bool cont;
    std::string line;
@@ -64,7 +64,7 @@ int test_main(int argc, char*argv [])
       arg2.type |= dummy_param;
       arg3 = arg2;
 
-      data.insert(&spherical_harmonic_data<NTL::RR>, arg1);
+      data.insert(&spherical_harmonic_data<boost::math::ntl::RR>, arg1);
 
       std::cout << "Any more data [y/n]?";
       std::getline(std::cin, line);

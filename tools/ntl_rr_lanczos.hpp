@@ -6,7 +6,7 @@
 #ifndef BOOST_LARGE_LANCZOS_HPP
 #define BOOST_LARGE_LANCZOS_HPP
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <boost/math/special_functions/lanczos.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -882,7 +882,7 @@ struct lanczos61UDT
 namespace boost{ namespace math{ namespace lanczos{
 
 template<class Policy>
-struct lanczos<NTL::RR, Policy>
+struct lanczos<boost::math::ntl::RR, Policy>
 {
 #ifdef L13
    typedef lanczos13UDT type;

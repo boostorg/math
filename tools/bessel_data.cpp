@@ -5,7 +5,7 @@
 //
 // Computes test data for the various bessel functions using
 // archived - deliberately naive - version of the code.
-// We'll rely on the high precision of NTL::RR to get us out of
+// We'll rely on the high precision of boost::math::ntl::RR to get us out of
 // trouble and not worry about how long the calculations take.
 // This provides a reasonably independent set of test data to
 // compare against newly added asymptotic expansions etc.
@@ -13,7 +13,7 @@
 #include <fstream>
 
 #include <boost/math/tools/test_data.hpp>
-#include <libs/math_functions/tools/ntl_rr_lanczos.hpp>
+#include "ntl_rr_lanczos.hpp"
 
 #include <boost/math/special_functions/bessel.hpp>
 
@@ -49,14 +49,14 @@ int bessel_jy_bare(T v, T x, T* J, T* Y, int kind = need_j|need_y)
 
     if (x < 0)
     {
-       *J = *Y = tools::domain_error<T>(BOOST_CURRENT_FUNCTION,
-            "Real argument x=%1% must be non-negative, complex number result not supported", x);
+       *J = *Y = policies::raise_domain_error<T>("",
+          "Real argument x=%1% must be non-negative, complex number result not supported", x, policies::policy<>());
         return 1;
     }
     if (x == 0)
     {
-       *J = *Y = tools::overflow_error<T>(
-          BOOST_CURRENT_FUNCTION, 0);
+       *J = *Y = policies::raise_overflow_error<T>(
+          "", 0, policies::policy<>());
        return 1;
     }
 
@@ -64,7 +64,7 @@ int bessel_jy_bare(T v, T x, T* J, T* Y, int kind = need_j|need_y)
     W = T(2) / (x * pi<T>());               // Wronskian
     if (x <= 2)                           // x in (0, 2]
     {
-        if(temme_jy(u, x, &Yu, &Yu1))             // Temme series
+       if(temme_jy(u, x, &Yu, &Yu1, policies::policy<>()))             // Temme series
         {
            // domain error:
            *J = *Y = Yu;
@@ -80,13 +80,13 @@ int bessel_jy_bare(T v, T x, T* J, T* Y, int kind = need_j|need_y)
         }
         Yv = prev;
         Yv1 = current;
-        CF1_jy(v, x, &fv, &s);                 // continued fraction CF1
+        CF1_jy(v, x, &fv, &s, policies::policy<>());                 // continued fraction CF1
         Jv = W / (Yv * fv - Yv1);           // Wronskian relation
     }
     else                                    // x in (2, \infty)
     {
         // Get Y(u, x):
-        CF1_jy(v, x, &fv, &s);
+        CF1_jy(v, x, &fv, &s, policies::policy<>());
         // tiny initial value to prevent overflow
         T init = sqrt(tools::min_value<T>());
         prev = fv * s * init;
@@ -100,7 +100,7 @@ int bessel_jy_bare(T v, T x, T* J, T* Y, int kind = need_j|need_y)
         T ratio = (s * init) / current;     // scaling ratio
         // can also call CF1() to get fu, not much difference in precision
         fu = prev / current;
-        CF2_jy(u, x, &p, &q);                  // continued fraction CF2
+        CF2_jy(u, x, &p, &q, policies::policy<>());                  // continued fraction CF2
         T t = u / x - fu;                   // t = J'/J
         gamma = (p - t) / q;
         Ju = sign(current) * sqrt(W / (q + gamma * (p - t)));
@@ -168,16 +168,16 @@ T cyl_bessel_i_bare(T v, T x)
          return r;
       }
       else
-         return tools::domain_error<T>(
-            BOOST_CURRENT_FUNCTION,
-            "Got x = %1%, but we need x >= 0", x);
+         return policies::raise_domain_error<T>(
+            "",
+            "Got x = %1%, but we need x >= 0", x, policies::policy<>());
    }
    if(x == 0)
    {
       return (v == 0) ? 1 : 0;
    }
    T I, K;
-   boost::math::detail::bessel_ik(v, x, &I, &K);
+   boost::math::detail::bessel_ik(v, x, &I, &K, 0xffff, policies::policy<>());
 
    std::cout << progress++ << ":   I(" << v << ", " << x << ") = " << I << std::endl;
 
@@ -193,19 +193,19 @@ T cyl_bessel_k_bare(T v, T x)
    using namespace std;
    if(x < 0)
    {
-      return tools::domain_error<T>(
-         BOOST_CURRENT_FUNCTION,
-         "Got x = %1%, but we need x > 0", x);
+      return policies::raise_domain_error<T>(
+         "",
+         "Got x = %1%, but we need x > 0", x, policies::policy<>());
    }
    if(x == 0)
    {
-      return (v == 0) ? tools::overflow_error<T>(BOOST_CURRENT_FUNCTION, 0)
-         : tools::domain_error<T>(
-         BOOST_CURRENT_FUNCTION,
-         "Got x = %1%, but we need x > 0", x);
+      return (v == 0) ? policies::raise_overflow_error<T>("", 0, policies::policy<>())
+         : policies::raise_domain_error<T>(
+         "",
+         "Got x = %1%, but we need x > 0", x, policies::policy<>());
    }
    T I, K;
-   bessel_ik(v, x, &I, &K);
+   bessel_ik(v, x, &I, &K, 0xFFFF, policies::policy<>());
 
    std::cout << progress++ << ":   K(" << v << ", " << x << ") = " << K << std::endl;
 
@@ -219,7 +219,7 @@ template <class T>
 T cyl_neumann_bare(T v, T x)
 {
    T j, y;
-   bessel_jy(v, x, &j, &y);
+   bessel_jy(v, x, &j, &y, 0xFFFF, policies::policy<>());
 
    std::cout << progress++ << ":   Y(" << v << ", " << x << ") = " << y << std::endl;
 
@@ -267,11 +267,11 @@ int main(int argc, char* argv[])
    std::cout << sph_bessel_j_bare(0., 0.1185395751953125e4) << std::endl;
    std::cout << sph_bessel_j_bare(22., 0.6540834903717041015625) << std::endl;
 
-   parameter_info<NTL::RR> arg1, arg2;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1, arg2;
+   test_data<boost::math::ntl::RR> data;
 
-   NTL::RR::SetPrecision(1000); 
-   NTL::RR::SetOutputPrecision(40);
+   boost::math::ntl::RR::SetPrecision(1000); 
+   boost::math::ntl::RR::SetOutputPrecision(40);
 
    int functype = 0;
    std::string letter = "J";
@@ -315,7 +315,7 @@ int main(int argc, char* argv[])
    do{
       get_user_parameter_info(arg1, "v");
       get_user_parameter_info(arg2, "x");
-      NTL::RR (*fp)(NTL::RR, NTL::RR);
+      boost::math::ntl::RR (*fp)(boost::math::ntl::RR, boost::math::ntl::RR);
       if(functype == func_J) 
          fp = cyl_bessel_j_bare;
       else if(functype == func_I) 

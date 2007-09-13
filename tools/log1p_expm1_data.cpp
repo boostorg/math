@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <fstream>
 
 #include <boost/math/tools/test_data.hpp>
@@ -15,7 +15,7 @@ using namespace std;
 
 struct data_generator
 {
-   std::tr1::tuple<NTL::RR, NTL::RR> operator()(NTL::RR z)
+   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR z)
    {
       return std::tr1::make_tuple(boost::math::log1p(z), boost::math::expm1(z));
    }
@@ -23,11 +23,11 @@ struct data_generator
 
 int main(int argc, char* argv[])
 {
-   NTL::RR::SetPrecision(1000);
-   NTL::RR::SetOutputPrecision(40);
+   boost::math::ntl::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(40);
 
-   parameter_info<NTL::RR> arg1;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1;
+   test_data<boost::math::ntl::RR> data;
 
    std::cout << "Welcome.\n"
       "This program will generate spot tests for the log1p and expm1 functions:\n\n";

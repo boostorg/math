@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/tools/ntl.hpp>
+#include <boost/math/bindings/rr.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/beta.hpp>
@@ -87,7 +87,7 @@ template <class T>
 T get_ibeta_fraction1(T a, T b, T x)
 {
    ibeta_fraction1_t<T> f(a, b, x);
-   T fract = boost::math::tools::continued_fraction_a(f, boost::math::policies::digits<T, boost::math::policies<> >());
+   T fract = boost::math::tools::continued_fraction_a(f, boost::math::policies::digits<T, boost::math::policies::policy<> >());
    T denom = (a * (fract + 1));
    T num = pow(x, a) * pow(1 - x, b);
    if(num == 0)
@@ -166,7 +166,7 @@ float force_truncate(const float* f)
    return external_f;
 }
 
-float truncate_to_float(NTL::RR r)
+float truncate_to_float(boost::math::ntl::RR r)
 {
    float f = boost::math::tools::real_cast<float>(r);
    return force_truncate(&f);
@@ -180,14 +180,14 @@ std::tr1::variate_generator<std::tr1::mt19937, std::tr1::uniform_real<float> > g
 
 struct beta_data_generator
 {
-   std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR> operator()(NTL::RR ap, NTL::RR bp, NTL::RR x_)
+   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR ap, boost::math::ntl::RR bp, boost::math::ntl::RR x_)
    {
-      float a = truncate_to_float(real_cast<float>(gen() * pow(NTL::RR(10), ap)));      
-      float b = truncate_to_float(real_cast<float>(gen() * pow(NTL::RR(10), bp))); 
+      float a = truncate_to_float(real_cast<float>(gen() * pow(boost::math::ntl::RR(10), ap)));      
+      float b = truncate_to_float(real_cast<float>(gen() * pow(boost::math::ntl::RR(10), bp))); 
       float x = truncate_to_float(real_cast<float>(x_));
       std::cout << a << " " << b << " " << x << std::endl;
-      std::pair<NTL::RR, NTL::RR> ib_full = ibeta_fraction1(NTL::RR(a), NTL::RR(b), NTL::RR(x));
-      std::pair<NTL::RR, NTL::RR> ib_reg = ibeta_fraction1_regular(NTL::RR(a), NTL::RR(b), NTL::RR(x));
+      std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_full = ibeta_fraction1(boost::math::ntl::RR(a), boost::math::ntl::RR(b), boost::math::ntl::RR(x));
+      std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_reg = ibeta_fraction1_regular(boost::math::ntl::RR(a), boost::math::ntl::RR(b), boost::math::ntl::RR(x));
       return std::tr1::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
    }
 };
@@ -195,71 +195,71 @@ struct beta_data_generator
 // medium sized values:
 struct beta_data_generator_medium
 {
-   std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR> operator()(NTL::RR x_)
+   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR x_)
    {
-      NTL::RR a = gen2();      
-      NTL::RR b = gen2(); 
-      NTL::RR x = x_;
-      a = ConvPrec(a, 22);
-      b = ConvPrec(b, 22);
-      x = ConvPrec(x, 22);
+      boost::math::ntl::RR a = gen2();      
+      boost::math::ntl::RR b = gen2(); 
+      boost::math::ntl::RR x = x_;
+      a = ConvPrec(a.value(), 22);
+      b = ConvPrec(b.value(), 22);
+      x = ConvPrec(x.value(), 22);
       std::cout << a << " " << b << " " << x << std::endl;
-      //NTL::RR exp_beta = boost::math::beta(a, b, x);
-      std::pair<NTL::RR, NTL::RR> ib_full = ibeta_fraction1(NTL::RR(a), NTL::RR(b), NTL::RR(x));
+      //boost::math::ntl::RR exp_beta = boost::math::beta(a, b, x);
+      std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_full = ibeta_fraction1(boost::math::ntl::RR(a), boost::math::ntl::RR(b), boost::math::ntl::RR(x));
       /*exp_beta = boost::math::tools::relative_error(ib_full.first, exp_beta);
       if(exp_beta > 1e-40)
       {
          std::cout << exp_beta << std::endl;
       }*/
-      std::pair<NTL::RR, NTL::RR> ib_reg = ibeta_fraction1_regular(NTL::RR(a), NTL::RR(b), NTL::RR(x));
+      std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_reg = ibeta_fraction1_regular(boost::math::ntl::RR(a), boost::math::ntl::RR(b), boost::math::ntl::RR(x));
       return std::tr1::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
    }
 };
 
 struct beta_data_generator_small
 {
-   std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR> operator()(NTL::RR x_)
+   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR x_)
    {
       float a = truncate_to_float(gen2()/10);      
       float b = truncate_to_float(gen2()/10); 
       float x = truncate_to_float(real_cast<float>(x_));
       std::cout << a << " " << b << " " << x << std::endl;
-      std::pair<NTL::RR, NTL::RR> ib_full = ibeta_fraction1(NTL::RR(a), NTL::RR(b), NTL::RR(x));
-      std::pair<NTL::RR, NTL::RR> ib_reg = ibeta_fraction1_regular(NTL::RR(a), NTL::RR(b), NTL::RR(x));
+      std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_full = ibeta_fraction1(boost::math::ntl::RR(a), boost::math::ntl::RR(b), boost::math::ntl::RR(x));
+      std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_reg = ibeta_fraction1_regular(boost::math::ntl::RR(a), boost::math::ntl::RR(b), boost::math::ntl::RR(x));
       return std::tr1::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
    }
 };
 
 struct beta_data_generator_int
 {
-   std::tr1::tuple<NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR, NTL::RR> operator()(NTL::RR a, NTL::RR b, NTL::RR x_)
+   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR a, boost::math::ntl::RR b, boost::math::ntl::RR x_)
    {
       float x = truncate_to_float(real_cast<float>(x_));
       std::cout << a << " " << b << " " << x << std::endl;
-      std::pair<NTL::RR, NTL::RR> ib_full = ibeta_fraction1(a, b, NTL::RR(x));
-      std::pair<NTL::RR, NTL::RR> ib_reg = ibeta_fraction1_regular(a, b, NTL::RR(x));
+      std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_full = ibeta_fraction1(a, b, boost::math::ntl::RR(x));
+      std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_reg = ibeta_fraction1_regular(a, b, boost::math::ntl::RR(x));
       return std::tr1::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
    }
 };
 
 int test_main(int, char* [])
 {
-   NTL::RR::SetPrecision(1000);
-   NTL::RR::SetOutputPrecision(40);
+   boost::math::ntl::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(40);
 
-   parameter_info<NTL::RR> arg1, arg2, arg3, arg4, arg5;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1, arg2, arg3, arg4, arg5;
+   test_data<boost::math::ntl::RR> data;
 
    std::cout << "Welcome.\n"
       "This program will generate spot tests for the incomplete beta functions:\n"
       "  beta(a, b, x) and ibeta(a, b, x)\n\n"
       "This is not an interactive program be prepared for a long wait!!!\n\n";
 
-   arg1 = make_periodic_param(NTL::RR(-5), NTL::RR(6), 11);
-   arg2 = make_periodic_param(NTL::RR(-5), NTL::RR(6), 11);
-   arg3 = make_random_param(NTL::RR(0.0001), NTL::RR(1), 10);
-   arg4 = make_random_param(NTL::RR(0.0001), NTL::RR(1), 100 /*500*/);
-   arg5 = make_periodic_param(NTL::RR(1), NTL::RR(41), 10);
+   arg1 = make_periodic_param(boost::math::ntl::RR(-5), boost::math::ntl::RR(6), 11);
+   arg2 = make_periodic_param(boost::math::ntl::RR(-5), boost::math::ntl::RR(6), 11);
+   arg3 = make_random_param(boost::math::ntl::RR(0.0001), boost::math::ntl::RR(1), 10);
+   arg4 = make_random_param(boost::math::ntl::RR(0.0001), boost::math::ntl::RR(1), 100 /*500*/);
+   arg5 = make_periodic_param(boost::math::ntl::RR(1), boost::math::ntl::RR(41), 10);
 
    arg1.type |= dummy_param;
    arg2.type |= dummy_param;
@@ -274,16 +274,16 @@ int test_main(int, char* [])
    //data.insert(beta_data_generator_small(), arg4);
    data.insert(beta_data_generator_int(), arg5, arg5, arg3);
 
-   test_data<NTL::RR>::const_iterator i, j;
+   test_data<boost::math::ntl::RR>::const_iterator i, j;
    i = data.begin();
    j = data.end();
    while(i != j)
    {
-      NTL::RR v1 = beta((*i)[0], (*i)[1], (*i)[2]);
-      NTL::RR v2 = relative_error(v1, (*i)[3]);
+      boost::math::ntl::RR v1 = beta((*i)[0], (*i)[1], (*i)[2]);
+      boost::math::ntl::RR v2 = relative_error(v1, (*i)[3]);
       std::string s = boost::lexical_cast<std::string>((*i)[3]);
-      NTL::RR v3 = boost::lexical_cast<NTL::RR>(s);
-      NTL::RR v4 = relative_error(v3, (*i)[3]);
+      boost::math::ntl::RR v3 = boost::lexical_cast<boost::math::ntl::RR>(s);
+      boost::math::ntl::RR v4 = relative_error(v3, (*i)[3]);
       if(v2 > 1e-40)
       {
          std::cout << v2 << std::endl;

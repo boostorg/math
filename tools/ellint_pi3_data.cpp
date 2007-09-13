@@ -6,8 +6,8 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include <boost/math/tools/ntl.hpp>
-#include <boost/math/tools/dual_precision.hpp>
+#include <boost/math/bindings/rr.hpp>
+//#include <boost/math/tools/dual_precision.hpp>
 #include <boost/math/tools/test_data.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/math/special_functions/ellint_3.hpp>
@@ -23,13 +23,13 @@ float truncate_to_float(float const * pf)
    return *pf;
 }
 
-std::tr1::tuple<NTL::RR, NTL::RR> generate_data(NTL::RR n, NTL::RR phi)
+std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> generate_data(boost::math::ntl::RR n, boost::math::ntl::RR phi)
 {
    static std::tr1::mt19937 r;
    std::tr1::uniform_real<float> ui(0, 1);
    float k = ui(r);
-   NTL::RR kr(truncate_to_float(&k));
-   NTL::RR result = boost::math::ellint_3(kr, n, phi);
+   boost::math::ntl::RR kr(truncate_to_float(&k));
+   boost::math::ntl::RR result = boost::math::ellint_3(kr, n, phi);
    return std::tr1::make_tuple(kr, result);
 }
 
@@ -37,11 +37,11 @@ int test_main(int argc, char*argv [])
 {
    using namespace boost::math::tools;
 
-   NTL::RR::SetOutputPrecision(50);
-   NTL::RR::SetPrecision(1000);
+   boost::math::ntl::RR::SetOutputPrecision(50);
+   boost::math::ntl::RR::SetPrecision(1000);
 
-   parameter_info<NTL::RR> arg1, arg2;
-   test_data<NTL::RR> data;
+   parameter_info<boost::math::ntl::RR> arg1, arg2;
+   test_data<boost::math::ntl::RR> data;
 
    bool cont;
    std::string line;
