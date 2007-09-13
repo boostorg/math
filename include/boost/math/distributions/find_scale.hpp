@@ -11,9 +11,9 @@
 #include <boost/math/distributions/fwd.hpp> // for all distribution signatures.
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/policies/policy.hpp>
+// using boost::math::policies::policy;
 #include <boost/math/tools/traits.hpp>
 #include <boost/static_assert.hpp>
-// using boost::math::policies::policy;
 // using boost::math::complement; // will be needed by users who want complement,
 // but NOT placed here to avoid putting it in global scope.
 
@@ -23,22 +23,23 @@ namespace boost
   {
   // Function to find location of random variable z
   // to give probability p (given scale)
-  // Apply to normal, lognormal, extreme value, Cauchy, (and symmetrical triangular).
-  // BOOST_STATIC_ASSERTs are used to enforce this.
+  // Applies to normal, lognormal, extreme value, Cauchy, (and symmetrical triangular),
+  // distributions that have scale.
+  // BOOST_STATIC_ASSERTs, see below, are used to enforce this.
 
     template <class Dist, class Policy>
     inline
       typename Dist::value_type find_scale( // For example, normal mean.
       typename Dist::value_type z, // location of random variable z to give probability, P(X > z) == p.
-      // For example, a nominal minimum acceptable z, so that p * 100 % are > z
+      // For example, a nominal minimum acceptable weight z, so that p * 100 % are > z
       typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% > z.
-      typename Dist::value_type location, // location parameter, for example, normal mean.
+      typename Dist::value_type location, // location parameter, for example, normal distribution mean.
       const Policy& pol 
       )
     {
       BOOST_STATIC_ASSERT(::boost::math::tools::is_distribution<Dist>::value); 
       BOOST_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value); 
-      static const char* function = "boost::math::find_scale<%1%>&, %1%)";
+      static const char* function = "boost::math::find_scale<Dist, Policy>(%1%, %1%, %1%, Policy)";
 
       if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
       {
@@ -48,21 +49,40 @@ namespace boost
       if(!(boost::math::isfinite)(z))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
-           function, "z parameter was %1%, but must be finite!", z, pol);
+           function, "find_scale z parameter was %1%, but must be finite!", z, pol);
       }
       if(!(boost::math::isfinite)(location))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
-           function, "location parameter was %1%, but must be finite!", location, pol);
+           function, "find_scale location parameter was %1%, but must be finite!", location, pol);
       }
         
       //cout << "z " << z << ", p " << p << ",  quantile(Dist(), p) "
-      //<< quantile(Dist(), p) << ", x - mean " << z - location 
+      //<< quantile(Dist(), p) << ", z - mean " << z - location 
       //<<", sd " << (z - location)  / quantile(Dist(), p) << endl;
 
-       return (z - location)  // difference between desired x and current.
-         / quantile(Dist(), p);
+      //quantile(N01, 0.001) -3.09023
+      //quantile(N01, 0.01) -2.32635
+      //quantile(N01, 0.05) -1.64485
+      //quantile(N01, 0.333333) -0.430728
+      //quantile(N01, 0.5) 0  
+      //quantile(N01, 0.666667) 0.430728
+      //quantile(N01, 0.9) 1.28155
+      //quantile(N01, 0.95) 1.64485
+      //quantile(N01, 0.99) 2.32635
+      //quantile(N01, 0.999) 3.09023
 
+      Dist::value_type result = 
+      (z - location)  // difference between desired x and current location.
+         / quantile(Dist(), p); // standard distribution.
+
+      if (result <= 0)
+      { // If policy isn't to throw, return the scale <= 0.
+        policies::raise_evaluation_error<Dist::value_type>(function,
+          "Computed scale (%1%) is <= 0!" " Was the complement intended?",
+         result, Policy());
+      }
+      return result;
     } // find_scale
 
     template <class Dist>
@@ -72,7 +92,7 @@ namespace boost
       // For example, a nominal minimum acceptable z, so that p * 100 % are > z
       typename Dist::value_type p, // probability value desired at x, say 0.95 for 95% > z.
       typename Dist::value_type location) // location parameter, for example, mean.
-    { // Forward to find_scale with default policy.
+    { // Forward to find_scale using the default policy.
        return (find_scale<Dist>(z, p, location, policies::policy<>()));
     } // find_scale
 
@@ -90,10 +110,23 @@ namespace boost
       //  << quantile(Dist(), c.param1) //q
       //  << endl;
 
-      return -(c.dist - c.param2) / quantile(Dist(), c.param1);
-      //     (  z    - location) / (quantile(Dist(),  p) 
-    }
+     BOOST_STATIC_ASSERT(::boost::math::tools::is_distribution<Dist>::value); 
+     BOOST_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value); 
+     static const char* function = "boost::math::find_scale<Dist, Policy>(complement(%1%, %1%, %1%, Policy))";
 
+      Dist::value_type result = 
+     (c.dist - c.param2)  // difference between desired x and current location.
+        / quantile(complement(Dist(), c.param1));
+      //     (  z    - location) / (quantile(complement(Dist(),  q)) 
+     if (result <= 0)
+     { // If policy isn't to throw, return the scale <= 0.
+        policies::raise_evaluation_error<Dist::value_type>(function,
+          "Computed scale (%1%) is <= 0!" " Was the complement intended?",
+         result, policies::policy<>());
+     }
+
+     return result;
+   }
   } // namespace boost
 } // namespace math
 
