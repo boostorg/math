@@ -11,7 +11,9 @@ If so, you may find 'Distributions as Objects' unfamiliar, if not alien.
 
 However, *do not panic*, both definition and usage are not really very different.
 
-A very simple example of generating the same values for the binomial distribution follows.
+A very simple example of generating the same values as the 
+[@http://nag.com/numeric/CL/CLdescription.asp NAG C library] 
+for the binomial distribution follows.
 (If you find slightly different values, the Boost C++ version, using double or better,
 is very likely to be the more accurate.
 Of course, accuracy is not usually a concern for most applications of this function).
@@ -28,7 +30,6 @@ and is called
 The equivalent using this Boost C++ library is:
 
   using namespace boost::math;  // Using declaration avoids very long names.
-  
   binomial my_dist(4, 0.5); // c.f. NAG n = 4, p = 0.5
   
 and values can be output thus:
@@ -40,14 +41,13 @@ and values can be output thus:
     << cdf(complement(my_dist, 2)) << "  " // NAG pgtk with k = 2
     << pdf(my_dist, 2) << endl;            // NAG peqk with k = 2
 
-
 `cdf(dist, k)` is equivalent to NAG library `plek`, lower tail probability of <= k
 
 `cdf(complement(dist, k))` is equivalent to NAG library `pgtk`, upper tail probability of > k
 
 `pdf(dist, k)` is equivalent to NAG library `peqk`, point probability of == k
 
-See [@../../example/binomial_example_NAG_C.cpp binomial_example_NAG_C.cpp] for details.
+See [@../../example/binomial_example_nag.cpp binomial_example_nag.cpp] for details.
 
-[endsect][/ section:nag_library Comparison with C, R, FORTRAN-style Free Functions]
+[endsect] [/section:nag_library Comparison with C, R, FORTRAN-style Free Functions]
 
