@@ -472,7 +472,7 @@ inline std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, Tol tol, boo
 }
 
 template <class F, class T, class Tol, class Policy>
-std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, bool rising, Tol tol, boost::uintmax_t& max_iter, const Policy& pol)
+std::pair<T, T> bracket_and_solve_root(F f, const T& guess, T factor, bool rising, Tol tol, boost::uintmax_t& max_iter, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    static const char* function = "boost::math::tools::bracket_and_solve_root<%1%>";
@@ -498,6 +498,15 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, boo
       {
          if(count == 0)
             policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, pol);
+         //
+         // Heuristic: every 20 iterations we double the growth factor in case the
+         // initial guess was *really* bad !
+         //
+         if((max_iter - count) % 20 == 0)
+            factor *= 2;
+         //
+         // Now go ahead and move are guess by "factor":
+         //
          a = b;
          fa = fb;
          b *= factor;
@@ -523,6 +532,15 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, boo
          }
          if(count == 0)
             policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, pol);
+         //
+         // Heuristic: every 20 iterations we double the growth factor in case the
+         // initial guess was *really* bad !
+         //
+         if((max_iter - count) % 20 == 0)
+            factor *= 2;
+         //
+         // Now go ahead and move are guess by "factor":
+         //
          b = a;
          fb = fa;
          a /= factor;
