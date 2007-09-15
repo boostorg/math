@@ -33,6 +33,7 @@ First we need some includes to access the negative binomial distribution
 #include <boost/math/distributions/binomial.hpp> // for binomial_distribution.
 #include <boost/math/distributions/beta.hpp> // for beta_distribution.
 #include <boost/math/distributions/gamma.hpp> // for gamma_distribution.
+#include <boost/math/distributions/normal.hpp> // for normal_distribution.
 /*`
 Several examples of constructing distributions follow:
 */
