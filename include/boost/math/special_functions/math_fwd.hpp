@@ -22,7 +22,7 @@
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
 #include <boost/math/policies/policy.hpp>
 #include <boost/mpl/comparison.hpp>
-#include <complex>
+#include <boost/config/no_tr1/complex.hpp>
 
 #define BOOST_NO_MACRO_EXPAND /**/
 
