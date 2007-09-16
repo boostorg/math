@@ -46,7 +46,7 @@ location parameter changes:
 
 [$../graphs/cauchy1.png]
 
-While the following graph shows how the shape parameter alters
+While the following graph shows how the shape (scale) parameter alters
 the distribution:
 
 [$../graphs/cauchy2.png]
@@ -85,7 +85,7 @@ Alternately, the functions __mean, __sd,
 __variance, __skewness, __kurtosis and __kurtosis_excess will all
 return a __domain_error if called.
 
-The domain of the random variable is \[-[infin], +[infin]\].
+The domain of the random variable is \[-[max_value], +[min_value]\].
 
 [h4 Accuracy]
 
@@ -98,7 +98,7 @@ and as such should have very low error rates.
 [def __x0 x[sub 0 ]]
 
 In the following table __x0 is the location parameter of the distribution, 
-[gamma][space] is it's scale parameter,
+[gamma][space] is its scale parameter,
 /x/ is the random variate, /p/ is the probability and /q = 1-p/.
 
 [table
@@ -147,7 +147,7 @@ is used to obtain the result.  Whether we're adding
 [endsect][/section:cauchy_dist Cauchi]
 
 [/ cauchy.qbk
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2007 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
