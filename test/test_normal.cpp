@@ -93,10 +93,12 @@ void test_spots(RealType)
     normal_distribution<RealType> N01;
   if(std::numeric_limits<RealType>::has_infinity)
   {
-    BOOST_CHECK_EQUAL(pdf(N01, +std::numeric_limits<double>::infinity()), 0); // x = + infinity, pdf = 0
-    BOOST_CHECK_EQUAL(pdf(N01, -std::numeric_limits<double>::infinity()), 0); // x = - infinity, pdf = 0
-    BOOST_CHECK_EQUAL(cdf(N01, +std::numeric_limits<double>::infinity()), 1); // x = + infinity, cdf = 1
-    BOOST_CHECK_EQUAL(cdf(N01, -std::numeric_limits<double>::infinity()), 0); // x = - infinity, cdf = 0
+    BOOST_CHECK_EQUAL(pdf(N01, +std::numeric_limits<RealType>::infinity()), 0); // x = + infinity, pdf = 0
+    BOOST_CHECK_EQUAL(pdf(N01, -std::numeric_limits<RealType>::infinity()), 0); // x = - infinity, pdf = 0
+    BOOST_CHECK_EQUAL(cdf(N01, +std::numeric_limits<RealType>::infinity()), 1); // x = + infinity, cdf = 1
+    BOOST_CHECK_EQUAL(cdf(N01, -std::numeric_limits<RealType>::infinity()), 0); // x = - infinity, cdf = 0
+    BOOST_CHECK_EQUAL(cdf(complement(N01, +std::numeric_limits<RealType>::infinity())), 0); // x = + infinity, c cdf = 0
+    BOOST_CHECK_EQUAL(cdf(complement(N01, -std::numeric_limits<RealType>::infinity())), 1); // x = - infinity, c cdf = 1
     BOOST_CHECK_THROW(boost::math::normal_distribution<RealType> nbad1(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), std::domain_error); // +infinite mean
 	  BOOST_CHECK_THROW(boost::math::normal_distribution<RealType> nbad1(-std::numeric_limits<RealType>::infinity(),  static_cast<RealType>(1)), std::domain_error); // -infinite mean
 	  BOOST_CHECK_THROW(boost::math::normal_distribution<RealType> nbad1(static_cast<RealType>(0), std::numeric_limits<RealType>::infinity()), std::domain_error); // infinite sd
