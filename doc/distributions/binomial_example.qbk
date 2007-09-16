@@ -26,10 +26,8 @@ but this gives us a guide to the confidence we have have in the success_fraction
 we observe with the limited number of trials used.
 It could guide us to assess how many trials we would need to be more sure.
 
-[binomial_confidence_limits]
 [binomial_quiz_example2]
 [discrete_quantile_real]
-[binomial_quiz_example3]
 
 See [@../../example/binomial_quiz_example.cpp binomial_quiz_example.cpp]
 for full source code and output.
