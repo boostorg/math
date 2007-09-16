@@ -74,6 +74,15 @@ void test_spots(RealType)
   BOOST_CHECK_THROW(find_location<normal>(0., -1., numeric_limits<double>::quiet_NaN()),
     std::domain_error); // scale not finite
 
+  BOOST_CHECK_THROW(find_location<normal>(complement(0., -1., 0.)), std::domain_error); // p below 0 to 1.
+  BOOST_CHECK_THROW(find_location<normal>(complement(0., 2., 0.)), std::domain_error); // p above 0 to 1.
+  BOOST_CHECK_THROW(find_location<normal>(complement(numeric_limits<double>::infinity(), 0.5, 0.)),
+    std::domain_error); // z not finite.
+  BOOST_CHECK_THROW(find_location<normal>(complement(numeric_limits<double>::quiet_NaN(), -1., 0.)),
+    std::domain_error); // z not finite
+  BOOST_CHECK_THROW(find_location<normal>(complement(0., -1., numeric_limits<double>::quiet_NaN())),
+    std::domain_error); // scale not finite
+
   //// Check for ab-use with unsuitable distribution(s) when concept check implemented.
   // BOOST_CHECK_THROW(find_location<pareto>(0., 0.5, 0.), std::domain_error); // pareto can't be used with find_location.
 
@@ -90,6 +99,11 @@ void test_spots(RealType)
     ignore_domain_policy())); // probability outside [0, 1]
   BOOST_CHECK_NO_THROW(find_location<normal>(numeric_limits<double>::infinity(), -1, 1,
     ignore_domain_policy())); // z not finite.
+
+  BOOST_CHECK_NO_THROW(find_location<normal>(complement(0, -1, 1,
+    ignore_domain_policy()))); // probability outside [0, 1]
+  BOOST_CHECK_NO_THROW(find_location<normal>(complement(numeric_limits<double>::infinity(), -1, 1,
+    ignore_domain_policy()))); // z not finite.
 
   // Find location to give a probability p (0.05) of z (-2)
   RealType sd = static_cast<RealType>(1); // normal default standard deviation = 1.
@@ -127,7 +141,6 @@ int test_main(int, char* [])
   // (Parameter value, arbitrarily zero, only communicates the floating-point type).
   test_spots(0.0F); // Test float.
   test_spots(0.0); // Test double.
-  test_spots(0.0L); // Test long double.
   #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_spots(0.0L); // Test long double.
   #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0582))
@@ -151,10 +164,8 @@ Running 1 test case...
 Tolerance for type float is 1.19e-005 (or 0.00119%).
 Tolerance for type double is 2.22e-014 (or 2.22e-012%).
 Tolerance for type long double is 2.22e-014 (or 2.22e-012%).
-Tolerance for type long double is 2.22e-014 (or 2.22e-012%).
 Tolerance for type class boost::math::concepts::real_concept is 2.22e-014 (or 2.22e-012%).
 *** No errors detected
-
 
 */
 

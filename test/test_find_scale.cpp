@@ -74,8 +74,21 @@ void test_spots(RealType)
   BOOST_CHECK_THROW(find_scale<normal>(0., -1., numeric_limits<double>::quiet_NaN()),
     std::domain_error); // scale not finite
 
+
+  BOOST_CHECK_THROW(find_scale<normal>(complement(0., -1., 0.)), std::domain_error); // p below 0 to 1.
+  BOOST_CHECK_THROW(find_scale<normal>(complement(0., 2., 0.)), std::domain_error); // p above 0 to 1.
+  BOOST_CHECK_THROW(find_scale<normal>(complement(numeric_limits<double>::infinity(), 0.5, 0.)),
+    std::domain_error); // z not finite.
+  BOOST_CHECK_THROW(find_scale<normal>(complement(numeric_limits<double>::quiet_NaN(), -1., 0.)),
+    std::domain_error); // z not finite
+  BOOST_CHECK_THROW(find_scale<normal>(complement(0., -1., numeric_limits<double>::quiet_NaN())),
+    std::domain_error); // scale not finite
+
+  BOOST_CHECK_THROW(find_scale<normal>(complement(0., -1., 0.)), std::domain_error); // p below 0 to 1.
+
+
   // Check for ab-use with unsuitable distribution(s), for example,
-  // pareto disribution (and most others) can't be used with find_scale (or find_location)
+  // pareto distribution (and most others) can't be used with find_scale (or find_location)
   // because they lack the scale and location attributes.
   // BOOST_CHECK_THROW(find_scale<pareto>(0., 0.5, 0.), std::domain_error);
   // correctly fails to compile in find_scale() at
@@ -94,6 +107,9 @@ void test_spots(RealType)
     ignore_domain_policy())); // probability outside [0, 1]
   BOOST_CHECK_NO_THROW(find_scale<normal>(numeric_limits<double>::infinity(), -1, 1,
     ignore_domain_policy())); // z not finite.
+  BOOST_CHECK_NO_THROW(find_scale<normal>(complement(0, -1, 1, ignore_domain_policy()))); // probability outside [0, 1]
+  BOOST_CHECK_NO_THROW(find_scale<normal>(complement(numeric_limits<double>::infinity(), -1, 1,
+    ignore_domain_policy()))); // z not finite.
 
   RealType l = 0.; // standard normal distribution.
   RealType sd = static_cast<RealType>(1); // normal default standard deviation = 1.
@@ -102,7 +118,6 @@ void test_spots(RealType)
   //cout << "Standard normal distribution with standard deviation = " << sd 
   //  << " has " << "fraction <= " << z << " = "  << cdf(n01, z) << endl;
   // Standard normal distribution with standard deviation = 1 has fraction <= -2 = 0.0227501
-
 
   //normal_distribution<RealType> np001pc(l, sd); // Same mean(location) but with standard_deviation (scale) changed.
   //cout << "Normal distribution with standard deviation = " << s 
@@ -115,14 +130,15 @@ void test_spots(RealType)
   //cout << "Mean " << l << ", z " << z << ",  p " << p
   //  << ", sd " << sd << ", find_scale " << s 
   //  << ", difference in sd " << s - sd << endl;
-  // Mean 0, z -2,  p 0.001, sd 1, find_scale 0.647201, difference in sd -0.352799
+  // Mean 0, z -2,  p 0.001, sd 1, find_scale 0.64720053440907599, difference in sd -0.352799
 
+  cout.precision(17);
+  BOOST_CHECK_CLOSE_FRACTION(s, static_cast<RealType>(0.64720053440907599L), tolerance);
 
   normal_distribution<RealType> np001pc(l, s); // Same mean(location) but with standard_deviation (scale) changed.
   //cout << "Normal distribution with standard deviation = " << s 
   //  << " has " << "fraction <= " << z << " = "  << cdf(np001pc, z) << endl;
   // Normal distribution with standard deviation = 0.647201 has fraction <= -2 = 0.001
-
 
   // Check cdf such that only fraction p really is below changed standard deviation s. 
   BOOST_CHECK_CLOSE_FRACTION(p, cdf(np001pc, z), tolerance);
@@ -135,7 +151,11 @@ void test_spots(RealType)
 
   // Check that can use the complement version too.
   RealType q = 1 - p; // complement.
-  s = find_scale<normal_distribution<RealType> >(complement(z, q, l));
+  s = find_scale<normal_distribution<RealType> >(complement(z, q, l)); // Implicit default policy.
+  BOOST_CHECK_CLOSE_FRACTION(s, static_cast<RealType>(0.64720053440907599L), tolerance);
+  s = find_scale<normal_distribution<RealType> >(complement(z, q, l, policy<>())); // Explicit default policy.
+  BOOST_CHECK_CLOSE_FRACTION(s, static_cast<RealType>(0.64720053440907599L), tolerance);
+
   normal_distribution<RealType> np95pc(l, s); // Same mean(location) but with new standard_deviation (scale).
 
   //cout << "Mean " << l << ", z " << z << ",  q " << q
@@ -155,10 +175,9 @@ int test_main(int, char* [])
    // (Parameter value, arbitrarily zero, only communicates the floating-point type).
   test_spots(0.0F); // Test float.
   test_spots(0.0); // Test double.
-  test_spots(0.0L); // Test long double.
   #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_spots(0.0L); // Test long double.
-  #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0582))
+    #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0582))
     test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
   #endif
   #else
@@ -179,10 +198,8 @@ Running 1 test case...
 Tolerance for type float is 1.19e-005 (or 0.00119%).
 Tolerance for type double is 2.22e-014 (or 2.22e-012%).
 Tolerance for type long double is 2.22e-014 (or 2.22e-012%).
-Tolerance for type long double is 2.22e-014 (or 2.22e-012%).
 Tolerance for type class boost::math::concepts::real_concept is 2.22e-014 (or 2.22e-012%).
 *** No errors detected
-
 
 
 */
