@@ -251,8 +251,8 @@ using the quantile function on the [NAME] distribution.  The
 [link math_toolkit.policy.pol_ref.discrete_quant_ref reference docs] 
 describe how to change the rounding policy
 for these distributions.
-]
-]
+] [/ caution]
+] [/ template discrete_quantile_warning]
 
 [section:main_overview Overview]
 
@@ -272,12 +272,11 @@ for these distributions.
 [performance_overview]
 [endsect]
 
-[endsect][/section:main_overview Overview]
+[endsect] [/section:main_overview Overview]
 
 [section:dist Statistical Distributions and Functions]
 [include dist_tutorial.qbk]
 [include dist_reference.qbk]
-[include dist_algorithms.qbk]
 [endsect] [/section:dist Statistical Distributions and Functions]
 
 [section:special Special Functions]

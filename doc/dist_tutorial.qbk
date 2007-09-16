@@ -357,7 +357,7 @@ Now that you have the basics, the next section looks at some worked examples.
 [endsect] [/section:overview Overview]
 
 [section:weg Worked Examples]
-[include distributions/distribution_construction_example.qbk]
+[include distributions/distribution_construction.qbk]
 [include distributions/students_t_examples.qbk]
 [include distributions/chi_squared_examples.qbk]
 [include distributions/f_dist_example.qbk]
@@ -365,8 +365,8 @@ Now that you have the basics, the next section looks at some worked examples.
 [include distributions/negative_binomial_example.qbk]
 [include distributions/normal_example.qbk]
 [include distributions/error_handling_example.qbk]
+[include distributions/find_location_and_scale.qbk]
 [include distributions/nag_library.qbk]
-
 [endsect] [/section:weg Worked Examples]
 
 [include background.qbk]

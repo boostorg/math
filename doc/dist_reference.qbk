@@ -26,7 +26,10 @@
 
 [endsect][/section:dists Distributions]
 
+[include dist_algorithms.qbk]
+
 [endsect][/section:dist_ref Statistical Distributions and Functions Reference]
+
 
 [section:future Extras/Future Directions]
 
