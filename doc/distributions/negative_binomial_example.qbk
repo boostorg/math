@@ -237,13 +237,6 @@ Example program showing output of a table of values of cdf and pdf for various k
 [neg_binomial_example2_1]
 [endsect] [/section:negative_binomial_example1 Negative Binomial example 2.]
 
-[section:negative_binomial_example3 Negative Binomial example 3.]
-The example program 
-[@../../example/negative_binomial_example3.cpp negative_binomial_example3.cpp (full source code)]
-demonstrates example from K. Krishnamoorthy.
-[import ../../example/negative_binomial_example3.cpp]
-[neg_binomial_example3]
-[neg_binomial_example3_1]
 [endsect] [/section:negative_binomial_example1 Negative Binomial example 3.]
 
 [endsect] [/section:neg_binom_eg Negative Binomial Distribution Examples]
