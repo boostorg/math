@@ -68,7 +68,11 @@ allowing the functions find_location and find_scale to be used generically).
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
 
-The domain of the random variable is \[-[infin], +[infin]\].
+The domain of the random variable is \[-[max_value], +[min_value]\].
+However, the pdf of +[infin] and -[infin] = 0 is also supported,
+and cdf at -[infin] = 0, cdf at +[infin] = 1,
+and complement cdf -[infin] = 1 and +[infin] = 0,
+if RealType permits.
 
 [h4 Accuracy]
 
@@ -98,7 +102,7 @@ and /s/ is its standard deviation.
 [endsect][/section:normal_dist Normal]
 
 [/ normal.qbk
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2007 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
