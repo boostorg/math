@@ -23,6 +23,7 @@ project
       <toolset>msvc:<cxxflags>/wd4510 
       <toolset>msvc:<cxxflags>/wd4127 
       <toolset>msvc:<cxxflags>/wd4701 
+      <toolset>msvc:<cxxflags>/wd4127 
       <include>../../..
       <source>/boost/regex//boost_regex
       <link>shared:<define>BOOST_REGEX_DYN_LINK=1
@@ -55,6 +56,7 @@ run test_exponential_dist.cpp ;
 run test_extreme_value.cpp ;
 run test_factorials.cpp ;
 run test_find_location.cpp ;
+run test_find_scale.cpp ;
 run test_fisher_f.cpp ;
 run test_gamma.cpp ;
 run test_gamma_dist.cpp ;
