@@ -50,51 +50,6 @@ using std::setw;
 using std::setprecision;
 //][/binomial_quiz_example1]
 
-//[binomial_confidence_limits
-void confidence_limits_on_frequency(unsigned trials, unsigned successes)
-{  // trials = Total number of trials, successes = Total number of observed successes.
-
-  // Calculate confidence limits for an observed
-  // frequency of occurrence that follows a binomial distribution.
-  // Print out general info:
-  cout <<
-    "___________________________________________\n"
-    "2-Sided Confidence Limits For Success Ratio\n"
-    "___________________________________________\n\n";
-  cout << setprecision(7);
-  cout << setw(40) << left << "Number of Observations"
-   << "=  " << trials << "\n";
-  cout << setw(40) << left << "Number of successes"
-   << "=  " << successes << "\n";
-  cout << setw(40) << left << "Sample frequency of occurrence"
-   << "=  " << double(successes) / trials << "\n";
-
-  // Define a table of significance levels:
-  double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
-  //
-  // Print table header:
-  //
-  cout << "\n\n"
-         "___________________________________________\n"
-         "Confidence        Lower          Upper\n"
-         " Value (%)        Limit          Limit\n"
-         "___________________________________________\n";
-
-  for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
-  { // Now print out the data for the table rows.
-    // Confidence value:
-    cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
-    // Calculate bounds:
-    double l = binomial::estimate_lower_bound_on_p(trials, successes, alpha[i]/2);
-    double u = binomial::estimate_upper_bound_on_p(trials, successes, alpha[i]/2);
-    // And print limits:
-    cout << fixed << setprecision(5) << setw(15) << right << l;
-    cout << fixed << setprecision(5) << setw(15) << right << u << endl;
-  }
-  cout << endl;
-} // void confidence_limits_on_frequency()
-//] [/binomial_confidence_limits]
-
 //[binomial_quiz_example2
 int main()
 {
@@ -221,8 +176,6 @@ int main()
   cout << "Mode (the most frequent) is " << mode(quiz) << endl;
   cout << "Skewness is " << skewness(quiz) << endl;
 
-
-
   /*`
   Show the use of quantiles (percentiles or percentage points) for a 
   few probability levels:
@@ -291,41 +244,6 @@ Or to be more specific, to avoid 'using namespaces ...' statements:
     << quantile(complement(quiz_real, 0.25)) << endl; // Real Quartiles 2.2821 to 4.6212
 
 //] [/discrete_quantile_real]
-
-//[binomial_quiz_example3
-
-/*`
-Now we can repeat the confidence intervals for various confidences 1 - alpha,
-probability as % = 100 * (1 - alpha[i]), so alpha 0.05 = 95% confidence.
-*/
-  double alpha[] = {0.5, 0.33, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001};
-
-  cout << "\n\n"
-    "Confidence %       Lower          Upper ""\n";
-  for (unsigned int i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
-  {
-    cout << fixed << setprecision(3) << setw(10) << right << 100 * (1 - alpha[i]);
-    double l = real_quantile_binomial::estimate_lower_bound_on_p(questions, answers, alpha[i]/2);
-    double u = real_quantile_binomial::estimate_upper_bound_on_p(questions, answers, alpha[i]/2);
-    cout << fixed << setprecision(5) << setw(15) << right << l;
-    cout << fixed << setprecision(5) << setw(15) << right << u << endl;
-  }
-  cout << endl;
-
-  // static RealType estimate_lower_bound_on_p(RealType trials, RealType successes, RealType probability)
-  int successes = 11;
-  cout << "Success fraction " << quiz.success_fraction() << ", "
-    << quiz.trials() << " correct needed, " << successes << " successes " << endl;
-  cout << "Lower bound = " << binomial::estimate_lower_bound_on_p(quiz.trials(), successes, 0.05) << endl;  // 0.51560
-  // Bounds now  0.45165 to 0.86789 ???? 
-  // Or equivalently:
-  cout << "Lower bound = " << quiz.estimate_lower_bound_on_p(quiz.trials(), successes, 0.05) << endl;  // 0.51560
-  cout << "Upper bound = " << quiz.estimate_upper_bound_on_p(quiz.trials(), successes, 0.05) << endl;  // 0.86789
-
-  // Print a table of showing upper and lower bounds for a range of confidence levels.
-  confidence_limits_on_frequency(20, 2); // 20 trials, 2 successes
-  confidence_limits_on_frequency(200, 20);
-  confidence_limits_on_frequency(2000, 200);
   }
   catch(const std::exception& e)
   { // Always useful to include try & catch blocks because
@@ -338,7 +256,7 @@ probability as % = 100 * (1 - alpha[i]), so alpha 0.05 = 95% confidence.
   }
   return 0;
 } // int main()
-//] [/binomial_quiz_example3]
+
 
 
 /*
@@ -346,10 +264,18 @@ probability as % = 100 * (1 - alpha[i]), so alpha 0.05 = 95% confidence.
 Output is:
 
 Binomial distribution example - guessing in a quiz.
-In a quiz with 16 and with a probability of guessing right of 25 % or 1 in 4
+In a quiz with 16 questions and with a probability of guessing right of 25 % or 1 in 4
 Probability of getting none right is 0.010023
-Probability of getting at least one right is 0.98998
+Probability of getting at least one right is 0.94655
+Probability of getting none or one right is 0.063476
 Probability of getting exactly one right is 0.053454
+Probability of getting exactly 11 right is 0.00024713
+Probability of getting > 10 right (to pass) is 0.00028524
+The probability of getting all the answers wrong by chance is 0.010023
+The probability of getting all the answers right by chance is 2.3283e-010
+The probability of getting exactly 11 answers right by guessing is 0.00024713
+The probability of getting less then 11(< 11) answers right by guessing is 0.99996
+The probability of getting at least 11(>= 11) answers right by guessing is 0.00028524 only 1 in 3505.8
 Guessed right Probability
  0             0.010023
  1             0.053454
@@ -368,16 +294,6 @@ Guessed right Probability
 14             2.5146e-007
 15             1.1176e-008
 16             2.3283e-010
-By guessing, on average, one can expect to get 4 correct answers.
-Standard deviation is 1.7321
-So about 2/3 will lie within 1 standard deviation and get between 3 and 5 correct.
-Mode (the most frequent) is 4
-Skewness is 0.28868
-The probability of getting all the answers wrong by chance is 0.010023
-The probability of getting all the answers right by chance is 2.3283e-010
-The probability of getting exactly 11 answers right by guessing is 0.00024713
-The probability of getting at most 11(<= 11) answers right by guessing is 0.99996
-The probability of getting at least 11(>= 11) answers right by guessing is 3.8107e-005
 At most (<=)
 Guessed right   Probability
  0                0.010023
@@ -421,6 +337,12 @@ The probability of getting between 3 and 5 answers right by guessing is 0.61323
 The probability of getting between 1 and 6 answers right by guessing is 0.91042
 The probability of getting between 1 and 8 answers right by guessing is 0.98251
 The probability of getting between 4 and 4 answers right by guessing is 0.2252
+The probability of getting between 3 and 5 answers right by guessing is 0.61323
+By guessing, on average, one can expect to get 4 correct answers.
+Standard deviation is 1.7321
+So about 2/3 will lie within 1 standard deviation and get between 3 and 5 correct.
+Mode (the most frequent) is 4
+Skewness is 0.28868
 Quantiles
 Quartiles 2 to 5
 1 sd 2 to 5
@@ -430,81 +352,6 @@ Deciles 1 to 6
 2 to 98% 0 to 8
 If guessing then percentiles 1 to 99% will get 0 to 8 right.
 Real Quartiles 2.2821 to 4.6212
-Using quantiles:
-  p    plim 
-0.01 0.010022595757618546
-  q    qlim 
-0.98999999999999999 -0.98997740424238145
-com 99% 0 0
-Confidence %       Lower          Upper 
-    50.000        0.16108        0.36424
-    67.000        0.13651        0.40078
-    75.000        0.12318        0.42258
-    90.000        0.09025        0.48440
-    95.000        0.07266        0.52377
-    99.000        0.04545        0.59913
-    99.900        0.02427        0.68125
-    99.990        0.01329        0.74363
-    99.999        0.00737        0.79236
-Success fraction 0.25000, 16.00000 trials
-Lower bound = 0.45165
-Lower bound = 0.45165
-Upper bound = 0.86789
-___________________________________________
-2-Sided Confidence Limits For Success Ratio
-___________________________________________
-Number of Observations                  =  20
-Number of successes                     =  2
-Sample frequency of occurrence          =  0.1000000
-___________________________________________
-Confidence        Lower          Upper
- Value (%)        Limit          Limit
-___________________________________________
-    50.000        0.04812        0.18675
-    75.000        0.03078        0.23163
-    90.000        0.01807        0.28262
-    95.000        0.01235        0.31698
-    99.000        0.00530        0.38713
-    99.900        0.00164        0.47093
-    99.990        0.00051        0.54084
-    99.999        0.00016        0.60020
-___________________________________________
-2-Sided Confidence Limits For Success Ratio
-___________________________________________
-Number of Observations                  =  200
-Number of successes                     =  20
-Sample frequency of occurrence          =  0.1000000
-___________________________________________
-Confidence        Lower          Upper
- Value (%)        Limit          Limit
-___________________________________________
-    50.000        0.08462        0.11824
-    75.000        0.07580        0.12959
-    90.000        0.06726        0.14199
-    95.000        0.06216        0.15021
-    99.000        0.05293        0.16698
-    99.900        0.04343        0.18756
-    99.990        0.03641        0.20571
-    99.999        0.03095        0.22226
-___________________________________________
-2-Sided Confidence Limits For Success Ratio
-___________________________________________
-Number of Observations                  =  2000
-Number of successes                     =  200
-Sample frequency of occurrence          =  0.1000000
-___________________________________________
-Confidence        Lower          Upper
- Value (%)        Limit          Limit
-___________________________________________
-    50.000        0.09536        0.10491
-    75.000        0.09228        0.10822
-    90.000        0.08916        0.11172
-    95.000        0.08720        0.11399
-    99.000        0.08344        0.11850
-    99.900        0.07921        0.12385
-    99.990        0.07577        0.12845
-    99.999        0.07282        0.13256
-Build Time 0:03
 
 */
 
