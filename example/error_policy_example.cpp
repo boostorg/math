@@ -19,7 +19,7 @@
 // Boost
 #include <boost/math/distributions/students_t.hpp>
 using boost::math::students_t_distribution;  // Probability of students_t(df, t).
-using boost::math::students_t;  // Probability of students_t(df, t) convenience typedef.
+using boost::math::students_t;  // Probability of students_t(df, t) convenience typedef for double.
 
 // std
 #include <iostream>
@@ -45,13 +45,25 @@ int main()
 {  // Example of error handling of bad argument(s) to a distribution.
 	cout << "Example error handling using Student's t function. " << endl;
 
-  double degrees_of_freedom = -1; double t = -1.; // Bad arguments!
+  double degrees_of_freedom = -1; double t = -1.; // Two 'bad' arguments!
 
   try
   {
     cout << "Probability of ignore_error Student's t is " << cdf(my_students_t(degrees_of_freedom), t) << endl;
     cout << "Probability of default error policy Student's t is " << endl;
-    cout << cdf(students_t(-1), -1) << endl;
+    // BY contrast the students_t distribution default domain error policy is to throw,
+    cout << cdf(students_t(-1), -1) << endl;  // so this will throw.
+    /*`
+    Message from thrown exception was:
+   Error in function boost::math::students_t_distribution<double>::students_t_distribution:
+   Degrees of freedom argument is -1, but must be > 0 !
+   */
+
+    // We could also define a 'custom' distribution
+    // with an "ignore overflow error policy" in a single statement:
+    using boost::math::policies::overflow_error;
+    students_t_distribution<double, policy<overflow_error<ignore_error> > > students_t_no_throw(-1);
+
   }
   catch(const std::exception& e)
   {
