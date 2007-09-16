@@ -13,7 +13,8 @@
 
 /*`
 First we need to #define macros to control the error and discrete handling policies.
-For this simple example, we want to avoid throwing an exception (the default policy) and just return infinity.
+For this simple example, we want to avoid throwing
+an exception (the default policy) and just return infinity.
 We want to treat the distribution as if it was continuous, so we choose a policy of real,
 rather than the default policy integer_round_outwards.
 */
@@ -65,27 +66,27 @@ int main()
     int all_houses = 30; // The number of houses on the estate.
 
     cout <<"Selling candy bars - using the negative binomial distribution." 
-      << "\n""by Dr. Diane Evans,"
-      "\n""Professor of Mathematics at Rose-Hulman Institute of Technology,"
-      << "\n""see http://en.wikipedia.org/wiki/Negative_binomial_distribution""\n"
+      << "\nby Dr. Diane Evans,"
+      "\nProfessor of Mathematics at Rose-Hulman Institute of Technology,"
+      << "\nsee http://en.wikipedia.org/wiki/Negative_binomial_distribution\n"
       << endl;
     cout << "Pat has a sales per house success rate of " << success_fraction
-      << ".""\n""Therefore he would, on average, sell " << nb.success_fraction() * 100
+      << ".\nTherefore he would, on average, sell " << nb.success_fraction() * 100
       << " bars after trying 100 houses." << endl;
 
     cout << "With a success rate of " << nb.success_fraction() 
-      << ", he might expect, on average,""\n"
+      << ", he might expect, on average,\n"
         " to need to visit about " << success_fraction * all_houses
         << " houses in order to sell all " << nb.successes() << " candy bars. " << endl;
 /*`
 To finish on or before the 8th house, Pat must finish at the 5th, 6th, 7th or 8th house.
 (Obviously he could not finish on fewer than 5 houses because he must sell 5 candy bars.
-So the 5th house is the first  that he could possibly finish on).
+So the 5th house is the first that he could possibly finish on).
 The probability that he will finish on EXACTLY on any house
 is the Probability Density Function (pdf).
 */
     cout << "Probability that Pat finishes on the " << sales_quota << "th house is "
-      << "f(5) = " << pdf(nb, 5 - sales_quota) << endl;
+      << pdf(nb, 5 - sales_quota) << endl;
     cout << "Probability that Pat finishes on the 6th house is "
       << pdf(nb, 6 - sales_quota) << endl;
     cout << "Probability that Pat finishes on the 7th house is "
@@ -105,26 +106,26 @@ is the Probability Density Function (pdf).
 
     // Or using the negative binomial *cumulative* distribution function
     // (cdf instead sum of the pdfs):
-    cout << "\n""Probability of selling his quota of " << sales_quota
-      << " candy bars""\n""on or before the " << 8 << "th house is "
+    cout << "\nProbability of selling his quota of " << sales_quota
+      << " candy bars\non or before the " << 8 << "th house is "
       << cdf(nb, 8 - sales_quota) << endl;
 
-    cout << "\n""Probability that Pat finishes exactly on the 10th house is "
+    cout << "\nProbability that Pat finishes exactly on the 10th house is "
       << pdf(nb, 10 - sales_quota) << endl;
-    cout << "\n""Probability of selling his quota of " << sales_quota
-      << " candy bars""\n""on or before the " << 10 << "th house is "
+    cout << "\nProbability of selling his quota of " << sales_quota
+      << " candy bars\non or before the " << 10 << "th house is "
       << cdf(nb, 10 - sales_quota) << endl;
 
     cout << "Probability that Pat finishes on the 11th house is "
       << pdf(nb, 11 - sales_quota) << endl;
-    cout << "\n""Probability of selling his quota of " << sales_quota
-      << " candy bars""\n""on or before the " << 11 << "th house is "
+    cout << "\nProbability of selling his quota of " << sales_quota
+      << " candy bars\non or before the " << 11 << "th house is "
       << cdf(nb, 11 - sales_quota) << endl;
 
     cout << "Probability that Pat finishes on the 12th house is "
       << pdf(nb, 12 - sales_quota) << endl;
-    cout << "\n""Probability of selling his quota of " << sales_quota
-      << " candy bars""\n""on or before the " << 12 << "th house is "
+    cout << "\nProbability of selling his quota of " << sales_quota
+      << " candy bars\non or before the " << 12 << "th house is "
       << cdf(nb, 12 - sales_quota) << endl;
 
 /*`
@@ -132,13 +133,18 @@ Finally consider the risk of Pat not selling his quota of 5 bars
 even after visiting all the houses.
 Calculate the probability that he would sell on the (non-existent) last-plus-1 house.
 */
-    cout << "\n""Probability of selling his quota of " << sales_quota
-      << " candy bars""\n""on or before the " << all_houses + 1 << "th house is "
-      << cdf(nb, all_houses + 1 - sales_quota) << endl;
-    // So the risk of failing even at the 31th (non-existent) house is 1 - this probability.
-    cout << "\n""Probability of failing to sell his quota of " << sales_quota
-      << " candy bars""\n""even after visiting all " << all_houses << "  houses is "
-      << 1 - cdf(nb, all_houses - sales_quota + 1) << endl;
+    cout << "\nProbability of selling his quota of " << sales_quota
+      << " candy bars\non or before the " << all_houses << "th house is "
+      << cdf(nb, all_houses - sales_quota) << endl;
+
+/*`So the risk of failing even at the 31th (non-existent) house is 1 - this probability,
+  ``1 - cdf(nb, all_houses - sales_quota``
+But using this expression may cause serious inaccuracy,
+so it would be much better to use the complement of the cdf:
+*/
+    cout << "\nProbability of failing to sell his quota of " << sales_quota
+      << " candy bars\neven after visiting all " << all_houses << " houses is "
+      << cdf(complement(nb, all_houses - sales_quota)) << endl;
 
     double p = cdf(nb, (8 - sales_quota)); 
     cout << "Probability of meeting sales quota on or before 8th house is "<< p << endl;
@@ -146,7 +152,7 @@ Calculate the probability that he would sell on the (non-existent) last-plus-1 h
     cout << "If the confidence of meeting sales quota is " << p
         << ", then the finishing house is " << quantile(nb, p) + sales_quota << endl;
 /*`
-Also try demanding absolute certainty that all 5 will be sold,
+Also demanding absolute certainty that all 5 will be sold,
 which implies an infinite number of trials.
 (Of course, there are only 30 houses on the estate,
 so he can't even be certain of selling his quota).
@@ -182,7 +188,7 @@ to assuming that all the first sales_quota trials will be successful sales.
    cout << "If we demand a confidence of meeting sales quota of unity"
      ", then we can never be certain of selling 5 bars, so the finishing house is infinite!"  << endl;
 
-   cout << "\n""Probability (%)    House for (last) " << sales_quota << " th sale." << endl;
+   cout << "\nProbability (%)    House for (last) " << sales_quota << " th sale." << endl;
    for (int i = (int)sales_quota; i < all_houses + 5; i++)
    {
      cout << left << setw(6) << cdf(nb, i - sales_quota) << "    " << setw(3) << i<< endl;
@@ -192,7 +198,7 @@ to assuming that all the first sales_quota trials will be successful sales.
   catch(const std::exception& e)
   { // Since we have set an overflow policy of ignore_error,
     // an exception should never be thrown.
-     std::cout << "\n""Message from thrown exception was:\n " << e.what() << std::endl;
+     std::cout << "\nMessage from thrown exception was:\n " << e.what() << std::endl;
   }
 	return 0;
 }  // int main()
@@ -203,7 +209,7 @@ to assuming that all the first sales_quota trials will be successful sales.
 
 Output is:
 
-Example 1 using the Negative Binomial Distribution.  ..\..\..\..\..\..\boost-sandbox\math_toolkit\libs\math\example\negative_binomial_example1.cpp Sun Aug 12 22:28:11 2007
+Example 1 using the Negative Binomial Distribution.  ..\..\..\..\..\..\boost-sandbox\math_toolkit\libs\math\example\negative_binomial_example1.cpp Sun Sep 16 11:52:52 2007
 Selling candy bars - using the negative binomial distribution.
 by Dr. Diane Evans,
 Professor of Mathematics at Rose-Hulman Institute of Technology,
@@ -212,7 +218,7 @@ Pat has a sales per house success rate of 0.4.
 Therefore he would, on average, sell 40 bars after trying 100 houses.
 With a success rate of 0.4, he might expect, on average,
  to need to visit about 12 houses in order to sell all 5 candy bars. 
-Probability that Pat finishes on the 5th house is f(5) = 0.10033
+Probability that Pat finishes on the 5th house is 0.01024
 Probability that Pat finishes on the 6th house is 0.03072
 Probability that Pat finishes on the 7th house is 0.055296
 Probability that Pat finishes on the 8th house is 0.077414
@@ -230,9 +236,11 @@ Probability that Pat finishes on the 12th house is 0.094596
 Probability of selling his quota of 5 candy bars
 on or before the 12th house is 0.56182
 Probability of selling his quota of 5 candy bars
-on or before the 31th house is 0.99897
+on or before the 30th house is 0.99849
 Probability of failing to sell his quota of 5 candy bars
-even after visiting all 30  houses is 0.0010314
+even after visiting all 30 houses is 0.0015101
+Probability of failing to sell his quota of 5 candy bars
+even after visiting all 30 houses is 0.0015101
 Probability of meeting sales quota on or before 8th house is 0.17367
 If the confidence of meeting sales quota is 0.17367, then the finishing house is 8
 If the confidence of meeting sales quota is 1, then the finishing house is 1.#INF
@@ -251,23 +259,21 @@ If confidence of meeting quota is 0.95, then finishing house is 21
 If confidence of meeting quota is 0.99, then finishing house is 25
 If confidence of meeting quota is 0.999, then finishing house is 32
 If confidence of meeting quota is 1, then finishing house is 1.#INF
-If we demand a confidence of meeting sales quota of unity,
-then we can never be certain of selling 5 bars,
-so the finishing house is infinite!
+If we demand a confidence of meeting sales quota of unity, then we can never be certain of selling 5 bars, so the finishing house is infinite!
 Probability (%)    House for (last) 5 th sale.
 0.01024    5  
 0.04096    6  
-0.096256   7  
+0.096256    7  
 0.17367    8  
 0.26657    9  
-0.3669     10 
+0.3669    10 
 0.46723    11 
 0.56182    12 
 0.64696    13 
 0.72074    14 
 0.78272    15 
 0.83343    16 
-0.874      17 
+0.874     17 
 0.90583    18 
 0.93039    19 
 0.94905    20 
@@ -279,12 +285,13 @@ Probability (%)    House for (last) 5 th sale.
 0.99337    26 
 0.99539    27 
 0.99681    28 
-0.9978     29 
+0.9978    29 
 0.99849    30 
 0.99897    31 
-0.9993     32 
+0.9993    32 
 0.99952    33 
-0.99968    34
+0.99968    34 
+
 
 */
 
