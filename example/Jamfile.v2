@@ -21,6 +21,7 @@ project
       <toolset>msvc:<cxxflags>/wd4510 
       <toolset>msvc:<cxxflags>/wd4127 
       <toolset>msvc:<cxxflags>/wd4701 
+      <toolset>msvc:<cxxflags>/wd4127 
       <include>../../..
     ;
 
@@ -40,7 +41,7 @@ run neg_binomial_sample_sizes.cpp ;
 run negative_binomial_construction_examples.cpp ;
 run negative_binomial_example1.cpp ;
 run negative_binomial_example2.cpp ;
-run negative_binomial_example3.cpp ;
+# run negative_binomial_example3.cpp ;
 run policy_eg_1.cpp ;
 run policy_eg_2.cpp ;
 run policy_eg_3.cpp ;
