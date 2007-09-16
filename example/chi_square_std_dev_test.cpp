@@ -1,15 +1,10 @@
-// Copyright John Maddock 2006
+// Copyright John Maddock 2006, 2007
 // Copyright Paul A. Bristow 2007
+
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#ifdef _MSC_VER
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#  pragma warning(disable: 4510) // default constructor could not be generated.
-#  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-#endif
 
 #include <iostream>
 #include <iomanip>
@@ -159,6 +154,9 @@ void chi_squared_sample_sized(
    using namespace std;
    using namespace boost::math;
 
+   try
+   {
+
    // Print out general info:
    cout <<
       "_____________________________________________________________\n"
@@ -170,7 +168,7 @@ void chi_squared_sample_sized(
    //
    // Define a table of significance levels:
    //
-   double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
+   double alpha[] = { 0.5, 0.33333333333333333333333, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
    //
    // Print table header:
    //
@@ -178,7 +176,7 @@ void chi_squared_sample_sized(
            "_______________________________________________________________\n"
            "Confidence       Estimated          Estimated\n"
            " Value (%)      Sample Size        Sample Size\n"
-           "                (lower one         (upper one\n"
+           "                (lower one-         (upper one-\n"
            "                 sided test)        sided test)\n"
            "_______________________________________________________________\n";
    //
@@ -188,14 +186,14 @@ void chi_squared_sample_sized(
    {
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
-      // calculate df for a lower single sided test:
+      // calculate df for a lower single-sided test:
       double df = chi_squared::estimate_degrees_of_freedom(
          -diff, alpha[i], alpha[i], variance);
       // convert to sample size:
       double size = ceil(df) + 1;
       // Print size:
       cout << fixed << setprecision(0) << setw(16) << right << size;
-      // calculate df for an upper single sided test:
+      // calculate df for an upper single-sided test:
       df = chi_squared::estimate_degrees_of_freedom(
          diff, alpha[i], alpha[i], variance);
       // convert to sample size:
@@ -204,7 +202,21 @@ void chi_squared_sample_sized(
       cout << fixed << setprecision(0) << setw(16) << right << size << endl;
    }
    cout << endl;
+   }
+  catch(const std::exception& e)
+  { // Always useful to include try & catch blocks because default policies
+    // are to throw exceptions on arguments that cause errors like underflow, overflow.
+    // Lacking try & catch blocks, the program will abort without a message below,
+    // which may give some helpful clues as to the cause of the exception.
+    std::cout <<
+      "\n""Message from thrown exception was:\n   " << e.what() << std::endl;
+  }
 }
+
+//Message from thrown exception was:  for alpha 0.5
+//   Error in function boost::math::tools::bracket_and_solve_root<double>:
+//Unable to bracket root, last nearest value was 1.2446030555722283e-058
+
 
 int main()
 {
