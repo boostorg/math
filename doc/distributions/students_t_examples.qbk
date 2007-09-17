@@ -350,7 +350,7 @@ atomic absorption.
    Sample Mean - Expected Test Mean                       =  -1.10000
    Degrees of Freedom                                     =  2
    T Statistic                                            =  -1.97566
-   Probability that difference is due to chance           =  9.343e-002
+   Probability that difference is due to chance           =  1.869e-001
 
    Results for Alternative Hypothesis and alpha           =  0.0500'''
 
@@ -380,7 +380,7 @@ Expected True Mean                                     =  38.90000
 Sample Mean - Expected Test Mean                       =  -1.10000
 Degrees of Freedom                                     =  2
 T Statistic                                            =  -1.97566
-Probability that difference is due to chance           =  9.343e-002
+Probability that difference is due to chance           =  1.869e-001
 
 Results for Alternative Hypothesis and alpha           =  0.1000'''
 
@@ -592,7 +592,7 @@ complement of the probability:
    students_t dist(v);
    double q = cdf(complement(dist, fabs(t_stat)));
    cout << setw(55) << left << "Probability that difference is due to chance" << "=  " 
-      << setprecision(3) << scientific << q << "\n\n";
+      << setprecision(3) << scientific << 2 * q << "\n\n";
 
 Here we've used the absolute value of the t-statistic, because we initially
 want to know simply whether there is a difference or not (a two-sided test).
@@ -652,7 +652,7 @@ section 1.3.5.3] of the __handbook.
    Degrees of Freedom                                     =  326.00000
    Pooled Standard Deviation                              =  326.00000
    T Statistic                                            =  -12.62059
-   Probability that difference is due to chance           =  2.637e-030
+   Probability that difference is due to chance           =  5.273e-030
 
    Results for Alternative Hypothesis and alpha           =  0.0500'''
 
@@ -663,7 +663,7 @@ section 1.3.5.3] of the __handbook.
 ]
 
 So with a probability that the difference is due to chance of just
-2.637e-030, we can safely conclude that there is indeed a difference.
+5.273e-030, we can safely conclude that there is indeed a difference.
 
 The tests on the alternative hypothesis show that the Sample 1 Mean is
 greater than that for Sample 2: in this case Sample 1 represents the 
@@ -728,7 +728,7 @@ are car mileage data again, here's what the output looks like:
    Sample 2 Standard Deviation                            =  6.1077
    Degrees of Freedom                                     =  136.87
    T Statistic                                            =  -12.946
-   Probability that difference is due to chance           =  7.855e-026
+   Probability that difference is due to chance           =  1.571e-025
 
    Results for Alternative Hypothesis and alpha           =  0.0500'''
 
@@ -740,7 +740,7 @@ are car mileage data again, here's what the output looks like:
 
 This time allowing the variances in the two samples to differ has yielded
 a higher likelihood that the observed difference is down to chance alone
-(7.855e-026 compared to 2.637e-030 when equal variances were assumed).
+(1.571e-025 compared to 5.273e-030 when equal variances were assumed).
 However, the conclusion remains the same: US cars are less fuel efficient
 than Japanese models.
 

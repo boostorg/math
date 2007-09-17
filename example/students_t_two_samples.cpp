@@ -72,7 +72,7 @@ void two_samples_t_test_equal_sd(
    students_t dist(v);
    double q = cdf(complement(dist, fabs(t_stat)));
    cout << setw(55) << left << "Probability that difference is due to chance" << "=  "
-      << setprecision(3) << scientific << q << "\n\n";
+      << setprecision(3) << scientific << 2 * q << "\n\n";
    //
    // Finally print out results of alternative hypothesis:
    //
@@ -160,7 +160,7 @@ void two_samples_t_test_unequal_sd(
    students_t dist(v);
    double q = cdf(complement(dist, fabs(t_stat)));
    cout << setw(55) << left << "Probability that difference is due to chance" << "=  "
-      << setprecision(3) << scientific << q << "\n\n";
+      << setprecision(3) << scientific << 2 * q << "\n\n";
    //
    // Finally print out results of alternative hypothesis:
    //
@@ -208,61 +208,50 @@ Compiling...
 students_t_two_samples.cpp
 Linking...
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\students_t_two_samples.exe"
-_________________________________________________
-Student t test for two samples (unequal variances)
-_________________________________________________
+_______________________________________________
+Student t test for two samples (equal variances)
+_______________________________________________
+
 Number of Observations (Sample 1)                      =  249
 Sample 1 Mean                                          =  20.145
 Sample 1 Standard Deviation                            =  6.4147
 Number of Observations (Sample 2)                      =  79
 Sample 2 Mean                                          =  30.481
 Sample 2 Standard Deviation                            =  6.1077
-Degrees of Freedom                                     =  136.87
-T Statistic                                            =  -12.946
-Probability that difference is due to chance           =  7.855e-026
+Degrees of Freedom                                     =  326
+Pooled Standard Deviation                              =  326
+T Statistic                                            =  -12.621
+Probability that difference is due to chance           =  5.273e-030
+
 Results for Alternative Hypothesis and alpha           =  0.0500
+
 Alternative Hypothesis              Conclusion
 Sample 1 Mean != Sample 2 Mean       NOT REJECTED
 Sample 1 Mean <  Sample 2 Mean       NOT REJECTED
 Sample 1 Mean >  Sample 2 Mean       REJECTED
-_______________________________________________
-Student t test for two samples (equal variances)
-_______________________________________________
+
+
+_________________________________________________
+Student t test for two samples (unequal variances)
+_________________________________________________
+
 Number of Observations (Sample 1)                      =  249
 Sample 1 Mean                                          =  20.14458
 Sample 1 Standard Deviation                            =  6.41470
 Number of Observations (Sample 2)                      =  79
 Sample 2 Mean                                          =  30.48101
 Sample 2 Standard Deviation                            =  6.10771
-Degrees of Freedom                                     =  326.00000
-Pooled Standard Deviation                              =  326.00000
-T Statistic                                            =  -12.62059
-Probability that difference is due to chance           =  2.637e-030
+Degrees of Freedom                                     =  136.87499
+T Statistic                                            =  -12.94627
+Probability that difference is due to chance           =  1.571e-025
+
 Results for Alternative Hypothesis and alpha           =  0.0500
+
 Alternative Hypothesis              Conclusion
 Sample 1 Mean != Sample 2 Mean       NOT REJECTED
 Sample 1 Mean <  Sample 2 Mean       NOT REJECTED
 Sample 1 Mean >  Sample 2 Mean       REJECTED
-_____________________________________________________________
-Estimated sample sizes required for various confidence levels
-_____________________________________________________________
-Sample 1 Mean                           =  20.14458
-Sample 1 Standard Deviation             =  6.41470
-Sample 1 Size                           =  249
-Sample 2 Mean                           =  30.48101
-Sample 2 Standard Deviation             =  6.10771
-_______________________________________________________________________
-Confidence     Estimated Sample Size          Estimated Sample 2 Size
- Value (%)     (With Two Equal Sizes)        (With Fixed Sample 1 Size)
-_______________________________________________________________________
-    50.000                           1                           0
-    75.000                           2                           1
-    90.000                           3                           1
-    95.000                           4                           2
-    99.000                           6                           3
-    99.900                          10                           4
-    99.990                          14                           6
-    99.999                          18                           8
+
 Build Time 0:03
 Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_two_samples\Debug\BuildLog.htm"
 students_t_two_samples - 0 error(s), 0 warning(s)
