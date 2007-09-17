@@ -22,11 +22,6 @@
 
 #include <utility>
 
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4127) // conditional expression is constant
-#endif
-
 namespace boost{ namespace math{
 
 template <class RealType = double, class Policy = policies::policy<> >
@@ -101,11 +96,15 @@ inline RealType pdf(const normal_distribution<RealType, Policy>& dist, const Rea
    RealType mean = dist.mean();
 
    static const char* function = "boost::math::pdf(const normal_distribution<%1%>&, %1%)";
-
-   if(std::numeric_limits<RealType>::has_infinity && abs(x) == std::numeric_limits<RealType>::infinity())
-   { // pdf + and - infinity is zero.
-     return 0;
+   if((boost::math::isinf)(x))
+   {
+     return 0; // pdf + and - infinity is zero.
    }
+   // Theis produces MSVC 4127 warnings, so the above used instead.
+   //if(std::numeric_limits<RealType>::has_infinity && abs(x) == std::numeric_limits<RealType>::infinity())
+   //{ // pdf + and - infinity is zero.
+   //  return 0;
+   //}
 
    RealType result;
    if(false == detail::check_scale(function, sd, &result, Policy()))
@@ -148,14 +147,20 @@ inline RealType cdf(const normal_distribution<RealType, Policy>& dist, const Rea
    {
       return result;
    }
-   if(std::numeric_limits<RealType>::has_infinity && x == std::numeric_limits<RealType>::infinity())
-   { // cdf +infinity is unity.
-     return 1;
+   if((boost::math::isinf)(x))
+   {
+     if(x < 0) return 0; // -infinity
+     return 1; // + infinity
    }
-   if(std::numeric_limits<RealType>::has_infinity && x == -std::numeric_limits<RealType>::infinity())
-   { // cdf -infinity is zero.
-     return 0;
-   }
+   // These produce MSVC 4127 warnings, so the above used instead.
+   //if(std::numeric_limits<RealType>::has_infinity && x == std::numeric_limits<RealType>::infinity())
+   //{ // cdf +infinity is unity.
+   //  return 1;
+   //}
+   //if(std::numeric_limits<RealType>::has_infinity && x == -std::numeric_limits<RealType>::infinity())
+   //{ // cdf -infinity is zero.
+   //  return 0;
+   //}
    if(false == detail::check_x(function, x, &result, Policy()))
    {
      return result;
@@ -199,14 +204,20 @@ inline RealType cdf(const complemented2_type<normal_distribution<RealType, Polic
    RealType x = c.param;
    static const char* function = "boost::math::cdf(const complement(normal_distribution<%1%>&), %1%)";
 
-   if(std::numeric_limits<RealType>::has_infinity && x == std::numeric_limits<RealType>::infinity())
-   { // cdf complement +infinity is zero.
-     return 0;
+   if((boost::math::isinf)(x))
+   {
+     if(x < 0) return 1; // cdf complement -infinity is unity.
+     return 0; // cdf complement +infinity is zero
    }
-   if(std::numeric_limits<RealType>::has_infinity && x == -std::numeric_limits<RealType>::infinity())
-   { // cdf complement -infinity is unity.
-     return 1;
-   }
+   // These produce MSVC 4127 warnings, so the above used instead.
+   //if(std::numeric_limits<RealType>::has_infinity && x == std::numeric_limits<RealType>::infinity())
+   //{ // cdf complement +infinity is zero.
+   //  return 0;
+   //}
+   //if(std::numeric_limits<RealType>::has_infinity && x == -std::numeric_limits<RealType>::infinity())
+   //{ // cdf complement -infinity is unity.
+   //  return 1;
+   //}
    RealType result;
    if(false == detail::check_scale(function, sd, &result, Policy()))
       return result;
@@ -286,10 +297,6 @@ inline RealType kurtosis_excess(const normal_distribution<RealType, Policy>& /*d
 
 } // namespace math
 } // namespace boost
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to
