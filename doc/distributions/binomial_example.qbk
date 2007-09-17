@@ -18,14 +18,6 @@ for full source code, the program output looks like this:
 
 [import ../../example/binomial_quiz_example.cpp]
 [binomial_quiz_example1]
-
-A subroutine to tabulate confidence limits for observed successes in some trials.
-The true success fraction is, of course,
-successes divided by an 'infinite' number of such trials,
-but this gives us a guide to the confidence we have have in the success_fraction
-we observe with the limited number of trials used.
-It could guide us to assess how many trials we would need to be more sure.
-
 [binomial_quiz_example2]
 [discrete_quantile_real]
 
