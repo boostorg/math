@@ -1,4 +1,4 @@
-//  Copyright John Maddock 2006.
+// Copyright John Maddock 2006, 2007.
 // Copyright Paul A. Bristow 2007.
 
 //  Use, modification and distribution are subject to the
@@ -8,16 +8,16 @@
 #ifndef BOOST_STATS_CAUCHY_HPP
 #define BOOST_STATS_CAUCHY_HPP
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+#endif
+
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <cmath>
-
-#ifdef BOOST_MSVC
-# pragma warning(push)
-# pragma warning(disable: 4702) // unreachable code (return after raise_domain_error throw).
-#endif
 
 #include <utility>
 
@@ -29,20 +29,6 @@ class cauchy_distribution;
 
 namespace detail
 {
-
-template <class RealType, class Policy>
-inline bool check_cauchy_scale(const char* func, RealType scale, RealType* result, const Policy& pol)
-{
-   if(scale <= 0)
-   {
-      *result = policies::raise_domain_error<RealType>(
-         func,
-         "The scale parameter for the Cauchy distribution must be > 0 but got %1%.",
-         scale, pol);
-      return false;
-   }
-   return true;
-}
 
 template <class RealType, class Policy>
 RealType cdf_imp(const cauchy_distribution<RealType, Policy>& dist, const RealType& x, bool complement)
@@ -69,21 +55,37 @@ RealType cdf_imp(const cauchy_distribution<RealType, Policy>& dist, const RealTy
    // to get the result.
    //
    BOOST_MATH_STD_USING // for ADL of std functions
-
+   static const char* function = "boost::math::cdf(cauchy<%1%>&, %1%)";
    RealType result;
-   RealType loc = dist.location();
+   RealType location = dist.location();
    RealType scale = dist.scale();
-   if(0 == detail::check_cauchy_scale("boost::math::cdf(cauchy<%1%>&, %1%)", scale, &result, Policy()))
+   if(false == detail::check_location(function, location, &result, Policy()))
+   {
+     return result;
+   }
+   if(false == detail::check_scale(function, scale, &result, Policy()))
+   {
       return result;
-   RealType mx = -fabs((x - loc) / scale);
-
-   // special case first:
+   }
+   if(std::numeric_limits<RealType>::has_infinity && x == std::numeric_limits<RealType>::infinity())
+   { // cdf +infinity is unity.
+     return static_cast<RealType>((complement) ? 0 : 1);
+   }
+   if(std::numeric_limits<RealType>::has_infinity && x == -std::numeric_limits<RealType>::infinity())
+   { // cdf -infinity is zero.
+     return static_cast<RealType>((complement) ? 1 : 0);
+   }
+   if(false == detail::check_x(function, x, &result, Policy()))
+   { // Catches x == NaN
+      return result;
+   }
+   RealType mx = -fabs((x - location) / scale); // scale is > 0
    if(mx > -tools::epsilon<RealType>() / 8)
+   {  // special case first: x extremely close to location.
       return 0.5;
-
+   }
    result = -atan(1 / mx) / constants::pi<RealType>();
-
-   return (((x > loc) != complement) ? 1	- result : result);
+   return (((x > location) != complement) ? 1	- result : result);
 } // cdf
 
 template <class RealType, class Policy>
@@ -92,40 +94,53 @@ RealType quantile_imp(
       const RealType& p,
       bool complement)
 {
+   // This routine implements the quantile for the Cauchy distribution,
+   // the value p may be the probability, or its complement if complement=true.
    //
-   // This routine implements the quantile for the Cauchy distibution,
-   // the value p may be the probability or it's complement if complement=true.
-   //
-   // The proceedure first performs argument reduction on p to avoid error
+   // The procedure first performs argument reduction on p to avoid error
    // when calculating the tangent, then calulates the distance from the
    // mid-point of the distribution.  This is either added or subtracted
    // from the location parameter depending on whether `complement` is true.
    //
    static const char* function = "boost::math::quantile(cauchy<%1%>&, %1%)";
    BOOST_MATH_STD_USING // for ADL of std functions
-   // Special cases:
-   if(p == 1)
-      return (complement ? -1 : 1) * policies::raise_overflow_error<RealType>(function, 0, Policy());
-   if(p == 0)
-      return (complement ? 1 : -1) * policies::raise_overflow_error<RealType>(function, 0, Policy());
 
    RealType result;
-   RealType loc = dist.location();
+   RealType location = dist.location();
    RealType scale = dist.scale();
-   if(0 == detail::check_cauchy_scale(function, scale, &result, Policy()))
+   if(false == detail::check_location(function, location, &result, Policy()))
+   {
+     return result;
+   }
+   if(false == detail::check_scale(function, scale, &result, Policy()))
+   {
       return result;
-   if(0 == detail::check_probability(function, p, &result, Policy()))
+   }
+   if(false == detail::check_probability(function, p, &result, Policy()))
+   {
       return result;
+   }
+   // Special cases:
+   if(p == 1)
+   {
+      return (complement ? -1 : 1) * policies::raise_overflow_error<RealType>(function, 0, Policy());
+   }
+   if(p == 0)
+   {
+      return (complement ? 1 : -1) * policies::raise_overflow_error<RealType>(function, 0, Policy());
+   }
 
-   // argument reduction of p:
-   RealType P = p - floor(p);
+   RealType P = p - floor(p);   // argument reduction of p:
    if(P > 0.5)
+   {
       P = P - 1;
-   // special case:
-   if(P == 0.5)
-      return loc;
+   }
+   if(P == 0.5)   // special case:
+   {
+      return location;
+   }
    result = -scale / tan(constants::pi<RealType>() * P);
-   return complement ? loc - result : loc + result;
+   return complement ? location - result : location + result;
 } // quantile
 
 } // namespace detail
@@ -137,11 +152,13 @@ public:
    typedef RealType value_type;
    typedef Policy policy_type;
 
-   cauchy_distribution(RealType a = 0, RealType b = 1)
-      : m_a(a), m_hg(b)
+   cauchy_distribution(RealType location = 0, RealType scale = 1)
+      : m_a(location), m_hg(scale)
    {
-      RealType r;
-      detail::check_cauchy_scale("boost::math::cauchy<%1%>::cauchy", b, &r, Policy());
+    static const char* function = "boost::math::cauchy_distribution<%1%>::cauchy_distribution";
+     RealType result;
+     detail::check_location(function, location, &result, Policy());
+     detail::check_scale(function, scale, &result, Policy());
    } // cauchy_distribution
 
    RealType location()const
@@ -154,8 +171,8 @@ public:
    }
 
 private:
-   RealType m_a;    // The location, this is the median of the distribution
-   RealType m_hg;   // The scale, this is the half width at half height.
+   RealType m_a;    // The location, this is the median of the distribution.
+   RealType m_hg;   // The scale )or shape), this is the half width at half height.
 };
 
 typedef cauchy_distribution<double> cauchy;
@@ -176,15 +193,30 @@ inline const std::pair<RealType, RealType> support(const cauchy_distribution<Rea
 
 template <class RealType, class Policy>
 inline RealType pdf(const cauchy_distribution<RealType, Policy>& dist, const RealType& x)
-{
+{  
+  static const char* function = "boost::math::pdf(cauchy<%1%>&, %1%)";
    RealType result;
-   RealType loc = dist.location();
+   RealType location = dist.location();
    RealType scale = dist.scale();
-   if(0 == detail::check_cauchy_scale("boost::math::pdf(cauchy<%1%>&, %1%)", scale, &result, Policy()))
+   if(false == detail::check_scale("boost::math::pdf(cauchy<%1%>&, %1%)", scale, &result, Policy()))
+   {
       return result;
+   }
+   if(false == detail::check_location("boost::math::pdf(cauchy<%1%>&, %1%)", location, &result, Policy()))
+   {
+      return result;
+   }
 
-   RealType xs = (x - loc) / scale;
+   if(std::numeric_limits<RealType>::has_infinity && abs(x) == std::numeric_limits<RealType>::infinity())
+   { // pdf + and - infinity is zero.
+     return 0;
+   }
+   if(false == detail::check_x(function, x, &result, Policy()))
+   { // Catches x = NaN
+      return result;
+   }
 
+   RealType xs = (x - location) / scale;
    result = 1 / (constants::pi<RealType>() * scale * (1 + xs * xs));
    return result;
 } // pdf
@@ -205,13 +237,13 @@ template <class RealType, class Policy>
 inline RealType cdf(const complemented2_type<cauchy_distribution<RealType, Policy>, RealType>& c)
 {
    return detail::cdf_imp(c.dist, c.param, true);
-}
+} //  cdf complement
 
 template <class RealType, class Policy>
 inline RealType quantile(const complemented2_type<cauchy_distribution<RealType, Policy>, RealType>& c)
 {
    return detail::quantile_imp(c.dist, c.param, true);
-}
+} // quantile complement
 
 template <class RealType, class Policy>
 inline RealType mean(const cauchy_distribution<RealType, Policy>&)
@@ -296,8 +328,8 @@ inline RealType kurtosis_excess(const cauchy_distribution<RealType, Policy>& /*d
 } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
-# pragma warning(pop)
+#ifdef _MSC_VER
+#pragma warning(pop)
 #endif
 
 // This include must be at the end, *after* the accessors

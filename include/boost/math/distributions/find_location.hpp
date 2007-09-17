@@ -23,8 +23,8 @@ namespace boost
   {
   // Function to find location of random variable z
   // to give probability p (given scale)
-  // Apply to normal, lognormal, extreme value, Cauchy, (and symmetrical triangular).
-  // TODO use concepts to enforce this.
+  // Applies to normal, lognormal, extreme value, Cauchy, (and symmetrical triangular),
+  // enforced by BOOST_STATIC_ASSERT below.
 
     template <class Dist, class Policy>
     inline
@@ -37,8 +37,10 @@ namespace boost
       )
     {
       BOOST_STATIC_ASSERT(::boost::math::tools::is_distribution<Dist>::value); 
-      BOOST_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value); 
-      static const char* function = "boost::math::find_location<%1%>&, %1%)";
+      BOOST_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value);
+      // Will fail to compile here if try to use with a distribution without scale & location,
+      // for example pareto, and many others.
+      static const char* function = "boost::math::find_location<Dist, Policy>&, %1%)";
 
       if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
       {
@@ -76,13 +78,61 @@ namespace boost
     // for example, l = find_location<normal>(complement(z, q, sd));
 
     template <class Dist, class Real1, class Real2, class Real3>
-    inline typename Dist::value_type find_location(
+    inline typename Dist::value_type find_location( // Default policy.
       complemented3_type<Real1, Real2, Real3> const& c)
     {
+      static const char* function = "boost::math::find_location<Dist, Policy>&, %1%)";
+
+      Dist::value_type p = c.param1;
+      if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
+      {
+       return policies::raise_domain_error<typename Dist::value_type>(
+           function, "Probability parameter was %1%, but must be >= 0 and <= 1!", p, policies::policy<>());
+      }
+      Dist::value_type z = c.dist;
+      if(!(boost::math::isfinite)(z))
+      {
+       return policies::raise_domain_error<typename Dist::value_type>(
+           function, "z parameter was %1%, but must be finite!", z, policies::policy<>());
+      }
+      Dist::value_type scale = c.param2;
+      if(!(boost::math::isfinite)(scale))
+      {
+       return policies::raise_domain_error<typename Dist::value_type>(
+           function, "scale parameter was %1%, but must be finite!", scale, policies::policy<>());
+      }
        // cout << "z " << c.dist << ", quantile (Dist(), " << c.param1 << ") * scale " << c.param2 << endl;
-       return c.dist - quantile(Dist(), c.param1) * c.param2;
-       //       z    - (quantile(Dist(),  p)      *   scale
-    }
+       return z - quantile(Dist(), p) * scale;
+    } // find_location complement
+
+
+    template <class Dist, class Real1, class Real2, class Real3, class Real4>
+    inline typename Dist::value_type find_location( // Explicit policy.
+      complemented4_type<Real1, Real2, Real3, Real4> const& c)
+    {
+      static const char* function = "boost::math::find_location<Dist, Policy>&, %1%)";
+
+      Dist::value_type p = c.param1;
+      if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
+      {
+       return policies::raise_domain_error<typename Dist::value_type>(
+           function, "Probability parameter was %1%, but must be >= 0 and <= 1!", p, c.param3);
+      }
+      Dist::value_type z = c.dist;
+      if(!(boost::math::isfinite)(z))
+      {
+       return policies::raise_domain_error<typename Dist::value_type>(
+           function, "z parameter was %1%, but must be finite!", z, c.param3);
+      }
+      Dist::value_type scale = c.param2;
+      if(!(boost::math::isfinite)(scale))
+      {
+       return policies::raise_domain_error<typename Dist::value_type>(
+           function, "scale parameter was %1%, but must be finite!", scale, c.param3);
+      }
+       // cout << "z " << c.dist << ", quantile (Dist(), " << c.param1 << ") * scale " << c.param2 << endl;
+       return z - quantile(Dist(), p) * scale;
+    } // find_location complement
 
   } // namespace boost
 } // namespace math

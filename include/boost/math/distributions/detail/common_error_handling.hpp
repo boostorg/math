@@ -1,4 +1,4 @@
-// Copyright John Maddock 2006.
+// Copyright John Maddock 2006, 2007.
 // Copyright Paul A. Bristow 2006, 2007.
 
 // Use, modification and distribution are subject to the
@@ -79,20 +79,22 @@ inline bool check_location(
 template <class RealType, class Policy>
 inline bool check_x(
       const char* function,
-      RealType location,
+      RealType x,
       RealType* result,
       const Policy& pol)
 {
-   if(!(boost::math::isfinite)(location))
+   if(!(boost::math::isfinite)(x))
    {
       *result = policies::raise_domain_error<RealType>(
          function,
-         "Random variate x is %1%, but must be finite!", location, pol);
+         "Random variate x is %1%, but must be finite!", x, pol);
       return false;
    }
    return true;
+   // Note that this test catches both infinity and NaN.
+   // Some special cases permit x to be infinite, so these must be tested 1st,
+   // leaving this test to catch any NaNs.  see Normal and cauchy for example.
 }
-
 
 } // namespace detail
 } // namespace math
