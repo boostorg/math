@@ -17,8 +17,9 @@
 
 #ifdef _MSC_VER
 #pragma warning (disable: 4127) // conditional expression is constant
+// caused by using   if(std::numeric_limits<RealType>::has_infinity)
+// and   if (std::numeric_limits<RealType>::has_quiet_NaN)
 #endif
-
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
