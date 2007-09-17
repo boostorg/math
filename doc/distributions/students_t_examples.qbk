@@ -601,7 +601,7 @@ or less than that of the first: all the possible tests are summed up
 in the following table:
 
 [table
-[[Hypothesis][Test][C++ Code]]
+[[Hypothesis][Test]]
 [[The Null-hypothesis: there is
 *no difference* in means]  
 [Reject if complement of CDF for |t| < significance level / 2:
