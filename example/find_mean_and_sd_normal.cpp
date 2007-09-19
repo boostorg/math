@@ -139,8 +139,7 @@ cout << "Setting the packer to " << nominal_mean << " will mean that "
 
 After examining the weight distribution of a large number of packs, we might decide that,
 after all, the assumption of a normal distribution is not really justified.
-We might find that the fit is better to a
-[link __cauchy_distrib  Cauchy-Lorentz distribution].
+We might find that the fit is better to a __cauchy_distrib.
 This distribution has wider 'wings', so that whereas most of the values
 are closer to the mean than the normal, there are also more values than 'normal'
 that lie further from the mean than the normal.
