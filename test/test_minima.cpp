@@ -1,4 +1,6 @@
-//  (C) Copyright John Maddock 2006.
+//  Copyright John Maddock 2006.
+//  Copyright Paul A. Bristow 2007.
+
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -20,20 +22,20 @@ struct poly_test
 };
 
 template <class T>
-void test_minima(T, const char* name)
+void test_minima(T, const char* /* name */)
 {
    std::pair<T, T> m = boost::math::tools::brent_find_minima(poly_test<T>(), T(-10), T(10), 50);
-   BOOST_CHECK_CLOSE(m.first, T(3), 0.001);
-   BOOST_CHECK_CLOSE(m.second, T(4), 0.001);
+   BOOST_CHECK_CLOSE(m.first, T(3), T(0.001));
+   BOOST_CHECK_CLOSE(m.second, T(4), T(0.001));
 
    T (*fp)(T);
    fp = boost::math::lgamma;
 
    m = boost::math::tools::brent_find_minima(fp, T(0.5), T(10), 50);
-   BOOST_CHECK_CLOSE(m.first, T(1.461632), 0.1);
+   BOOST_CHECK_CLOSE(m.first, T(1.461632), T(0.1));
    fp = boost::math::tgamma;
    m = boost::math::tools::brent_find_minima(fp, T(0.5), T(10), 50);
-   BOOST_CHECK_CLOSE(m.first, T(1.461632), 0.1);
+   BOOST_CHECK_CLOSE(m.first, T(1.461632), T(0.1));
 }
 
 int test_main(int, char* [])
