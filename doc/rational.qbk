@@ -155,8 +155,15 @@ If /v/ is greater than one, then the polynomials are evaluated in reverse
 order as polynomials in ['1\/v]: this avoids unnecessary numerical overflow when the
 coefficients are large.
 
-TODO: mention second order Horner's method and other evaluation options, 
-plus config, and performance test app.
+Both the polynomial and rational function evaluation algorithms can be
+tuned using various configuration macros to provide optimal performance
+for a particular combination of compiler and platform.  This includes
+support for second-order Horner's methods.  The various options are
+[link math_toolkit.perf.tuning documented here].  However, the performance
+benefits to be gained from these are marginal on most current hardware,
+consequently it's best to run the 
+[link math_toolkit.perf.perf_test_app performance test application] before
+changing the default settings.
 
 [endsect][/section:rational Polynomial and Rational Function Evaluation]
 

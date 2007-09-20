@@ -26,7 +26,7 @@ Using policies you can control:
    including those that cannot be fully evaluated.
 * How [link math_toolkit.policy.pol_ref.internal_promotion accuracy is controlled by internal promotion] to use more precise types.
 * What working [link math_toolkit.policy.pol_ref.precision_pol precision] should be used to calculate results.
-* What do to when a [link math_toolkit.policy.pol_ref.assert_undefined mathematically undefined function]
+* What to do when a [link math_toolkit.policy.pol_ref.assert_undefined mathematically undefined function]
   is used:  Should this raise a run-time or compile-time error?
 * Whether [link math_toolkit.policy.pol_ref.discrete_quant_ref discrete functions],
   like the binomial, should return real or only integral values, and how they are rounded.
