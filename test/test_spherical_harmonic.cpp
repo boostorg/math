@@ -18,17 +18,17 @@
 // DESCRIPTION:
 // ~~~~~~~~~~~~
 //
-// This file tests the Spherical Harmonic Functions.  
+// This file tests the Spherical Harmonic Functions.
 // There are two sets of tests, spot
 // tests which compare our results with selected values computed
-// using the online special function calculator at 
+// using the online special function calculator at
 // functions.wolfram.com, while the bulk of the accuracy tests
 // use values generated with NTL::RR at 1000-bit precision
 // and our generic versions of these functions.
 //
 // Note that when this file is first run on a new platform many of
 // these tests will fail: the default accuracy is 1 epsilon which
-// is too tight for most platforms.  In this situation you will 
+// is too tight for most platforms.  In this situation you will
 // need to cast a human eye over the error rates reported and make
 // a judgement as to whether they are acceptable.  Either way please
 // report the results to the Boost mailing list.  Acceptable rates of
@@ -91,7 +91,7 @@ void expected_results()
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
    //
-   std::cout << "Tests run with " << BOOST_COMPILER << ", " 
+   std::cout << "Tests run with " << BOOST_COMPILER << ", "
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
@@ -115,8 +115,8 @@ void do_test_spherical_harmonic(const T& data, const char* type_name, const char
    // test Spheric Harmonic against data:
    //
    result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(funcp, 
+      data,
+      boost::lambda::bind(funcp,
          boost::lambda::ret<unsigned>(
             boost::lambda::bind(
             cf,
@@ -126,7 +126,7 @@ void do_test_spherical_harmonic(const T& data, const char* type_name, const char
             cf,
             boost::lambda::ret<value_type>(boost::lambda::_1[1]))),
          boost::lambda::ret<value_type>(boost::lambda::_1[2]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[3])), 
+         boost::lambda::ret<value_type>(boost::lambda::_1[3])),
       boost::lambda::ret<value_type>(boost::lambda::_1[4]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::spherical_harmonic_r", test_name);
 
@@ -135,8 +135,8 @@ void do_test_spherical_harmonic(const T& data, const char* type_name, const char
    // test Spheric Harmonic against data:
    //
    result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(funcp, 
+      data,
+      boost::lambda::bind(funcp,
          boost::lambda::ret<unsigned>(
             boost::lambda::bind(
             cf,
@@ -146,7 +146,7 @@ void do_test_spherical_harmonic(const T& data, const char* type_name, const char
             cf,
             boost::lambda::ret<value_type>(boost::lambda::_1[1]))),
          boost::lambda::ret<value_type>(boost::lambda::_1[2]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[3])), 
+         boost::lambda::ret<value_type>(boost::lambda::_1[3])),
       boost::lambda::ret<value_type>(boost::lambda::_1[5]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::spherical_harmonic_i", test_name);
 
@@ -154,7 +154,7 @@ void do_test_spherical_harmonic(const T& data, const char* type_name, const char
 }
 
 template <class T>
-void test_complex_spherical_harmonic(const T& data, const char* name, boost::mpl::true_ const &)
+void test_complex_spherical_harmonic(const T& data, const char* /* name */, boost::mpl::true_ const &)
 {
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
@@ -186,7 +186,7 @@ void test_complex_spherical_harmonic(const T& data, const char* name, boost::mpl
 }
 
 template <class T>
-void test_complex_spherical_harmonic(const T& data, const char* name, boost::mpl::false_ const &)
+void test_complex_spherical_harmonic(const T& /* data */, const char* /* name */, boost::mpl::false_ const &)
 {
    // T is not a built in type, can't use std::complex with it...
 }
@@ -199,7 +199,7 @@ void test_spherical_harmonic(T, const char* name)
    //
    // The contents are as follows, each row of data contains
    // three items, input value a, input value b and erf(a, b):
-   // 
+   //
 #  include "spherical_harmonic.ipp"
 
    do_test_spherical_harmonic(spherical_harmonic, name, "Spherical Harmonics");
@@ -218,7 +218,7 @@ void test_spots(T, const char* t)
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(3, 2, static_cast<T>(0.5), static_cast<T>(0)), static_cast<T>(0.2061460599687871330692286791802688341213L), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(20, 10, static_cast<T>(0.75), static_cast<T>(-0.25)), static_cast<T>(0.06197787102219208244041677775577045124092L), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_i(20, 10, static_cast<T>(0.75), static_cast<T>(-0.25)), static_cast<T>(0.04629885158895932341185988759669916977920L), tolerance);
-   
+
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(40, 15, static_cast<T>(-0.75), static_cast<T>(2.25)), static_cast<T>(0.2806904825045745687343492963236868973484L), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_i(40, 15, static_cast<T>(-0.75), static_cast<T>(2.25)), static_cast<T>(-0.2933918444656603582282372590387544902135L), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_r(40, 15, static_cast<T>(-0.75), static_cast<T>(-2.25)), static_cast<T>(0.2806904825045745687343492963236868973484L), tolerance);

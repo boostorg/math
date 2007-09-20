@@ -1,9 +1,15 @@
-//  Copyright (c) 2006 Xiaogang Zhang
-//  Copyright (c) 2006 John Maddock
-//
+//  Copyright Xiaogang Zhang 2006
+//  Copyright John Maddock 2006, 2007
+//  Copyright Paul A. Bristow 2007
+
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#ifdef _MSC_VER
+#  pragma warning(disable : 4756) // overflow in constant arithmetic
+// Constants are too big for float case, but this doesn't matter for test.
+#endif
 
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
@@ -18,17 +24,17 @@
 // DESCRIPTION:
 // ~~~~~~~~~~~~
 //
-// This file tests the Elliptic Integrals of the first kind.  
+// This file tests the Elliptic Integrals of the first kind.
 // There are two sets of tests, spot
 // tests which compare our results with selected values computed
-// using the online special function calculator at 
+// using the online special function calculator at
 // functions.wolfram.com, while the bulk of the accuracy tests
 // use values generated with NTL::RR at 1000-bit precision
 // and our generic versions of these functions.
 //
 // Note that when this file is first run on a new platform many of
 // these tests will fail: the default accuracy is 1 epsilon which
-// is too tight for most platforms.  In this situation you will 
+// is too tight for most platforms.  In this situation you will
 // need to cast a human eye over the error rates reported and make
 // a judgement as to whether they are acceptable.  Either way please
 // report the results to the Boost mailing list.  Acceptable rates of
@@ -79,7 +85,7 @@ void expected_results()
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
    //
-   std::cout << "Tests run with " << BOOST_COMPILER << ", " 
+   std::cout << "Tests run with " << BOOST_COMPILER << ", "
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
@@ -94,14 +100,14 @@ void do_test_ellint_f(T& data, const char* type_name, const char* test)
 
     value_type (*fp2)(value_type, value_type) = boost::math::ellint_1;
     boost::math::tools::test_result<value_type> result;
- 
+
     result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(fp2, 
+      data,
+      boost::lambda::bind(fp2,
          boost::lambda::ret<value_type>(boost::lambda::_1[1]),
          boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[2]));
-   handle_test_result(result, data[result.worst()], result.worst(), 
+   handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "boost::math::ellint_1", test);
 
    std::cout << std::endl;
@@ -119,11 +125,11 @@ void do_test_ellint_k(T& data, const char* type_name, const char* test)
 
    value_type (*fp1)(value_type) = boost::math::ellint_1;
    result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(fp1, 
+      data,
+      boost::lambda::bind(fp1,
          boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[1]));
-   handle_test_result(result, data[result.worst()], result.worst(), 
+   handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "boost::math::ellint_1", test);
 
    std::cout << std::endl;
@@ -133,7 +139,7 @@ template <typename T>
 void test_spots(T, const char* type_name)
 {
     // Function values calculated on http://functions.wolfram.com/
-    // Note that Mathematica's EllipticF accepts k^2 as the second parameter. 
+    // Note that Mathematica's EllipticF accepts k^2 as the second parameter.
     #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
     static const boost::array<boost::array<T, 3>, 19> data1 = {
         SC_(0), SC_(0), SC_(0),
@@ -165,7 +171,7 @@ void test_spots(T, const char* type_name)
     do_test_ellint_f(ellint_f_data, type_name, "Elliptic Integral F: Random Data");
 
     // Function values calculated on http://functions.wolfram.com/
-    // Note that Mathematica's EllipticK accepts k^2 as the second parameter. 
+    // Note that Mathematica's EllipticK accepts k^2 as the second parameter.
     #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
     static const boost::array<boost::array<T, 2>, 9> data2 = {
         SC_(0), SC_(1.5707963267948966192313216916397514420985846996876),

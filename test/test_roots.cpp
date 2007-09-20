@@ -19,7 +19,7 @@
 template <class T, class Policy>
 struct ibeta_roots_1   // for first order algorithms
 {
-   ibeta_roots_1(T _a, T _b, T t, bool inv = false) 
+   ibeta_roots_1(T _a, T _b, T t, bool inv = false)
       : a(_a), b(_b), target(t), invert(inv) {}
 
    T operator()(const T& x)
@@ -34,15 +34,15 @@ private:
 template <class T, class Policy>
 struct ibeta_roots_2   // for second order algorithms
 {
-   ibeta_roots_2(T _a, T _b, T t, bool inv = false) 
+   ibeta_roots_2(T _a, T _b, T t, bool inv = false)
       : a(_a), b(_b), target(t), invert(inv) {}
 
    std::tr1::tuple<T, T> operator()(const T& x)
    {
       typedef typename boost::math::lanczos::lanczos<T, Policy>::type L;
       T f = boost::math::detail::ibeta_imp(a, b, x, Policy(), invert, true) - target;
-      T f1 = invert ? 
-         -boost::math::detail::ibeta_power_terms(b, a, 1 - x, x, L(), true, Policy()) 
+      T f1 = invert ?
+         -boost::math::detail::ibeta_power_terms(b, a, 1 - x, x, L(), true, Policy())
                : boost::math::detail::ibeta_power_terms(a, b, x, 1 - x, L(), true, Policy());
       T y = 1 - x;
       if(y == 0)
@@ -63,15 +63,15 @@ private:
 template <class T, class Policy>
 struct ibeta_roots_3   // for third order algorithms
 {
-   ibeta_roots_3(T _a, T _b, T t, bool inv = false) 
+   ibeta_roots_3(T _a, T _b, T t, bool inv = false)
       : a(_a), b(_b), target(t), invert(inv) {}
 
    std::tr1::tuple<T, T, T> operator()(const T& x)
    {
       typedef typename boost::math::lanczos::lanczos<T, Policy>::type L;
       T f = boost::math::detail::ibeta_imp(a, b, x, Policy(), invert, true) - target;
-      T f1 = invert ? 
-               -boost::math::detail::ibeta_power_terms(b, a, 1 - x, x, L(), true, Policy()) 
+      T f1 = invert ?
+               -boost::math::detail::ibeta_power_terms(b, a, 1 - x, x, L(), true, Policy())
                : boost::math::detail::ibeta_power_terms(a, b, x, 1 - x, L(), true, Policy());
       T y = 1 - x;
       if(y == 0)
@@ -232,8 +232,8 @@ void test_inverses(const T& data)
    for(unsigned i = 0; i < data.size(); ++i)
    {
       //
-      // These inverse tests are thrown off if the output of the 
-      // incomplete beta is too close to 1: basically there is insuffient 
+      // These inverse tests are thrown off if the output of the
+      // incomplete beta is too close to 1: basically there is insuffient
       // information left in the value we're using as input to the inverse
       // to be able to get back to the original value.
       //
@@ -267,14 +267,14 @@ void test_inverses(const T& data)
 }
 
 template <class T>
-void test_beta(T, const char* name)
+void test_beta(T, const char* /* name */)
 {
    //
    // The actual test data is rather verbose, so it's in a separate file
    //
    // The contents are as follows, each row of data contains
    // five items, input value a, input value b, integration limits x, beta(a, b, x) and ibeta(a, b, x):
-   // 
+   //
 #  include "ibeta_small_data.ipp"
 
    test_inverses(ibeta_small_data);

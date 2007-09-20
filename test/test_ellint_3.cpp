@@ -1,10 +1,15 @@
-// Copyright 2006 Xiaogang Zhang
-// Copyright 2006 John Maddock
-// Copyright Paul A. Bristow 2007.
+//  Copyright Xiaogang Zhang 2006
+//  Copyright John Maddock 2006, 2007
+//  Copyright Paul A. Bristow 2007
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#ifdef _MSC_VER
+#  pragma warning(disable : 4756) // overflow in constant arithmetic
+// Constants are too big for float case, but this doesn't matter for test.
+#endif
 
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
@@ -19,17 +24,17 @@
 // DESCRIPTION:
 // ~~~~~~~~~~~~
 //
-// This file tests the Elliptic Integrals of the third kind.  
+// This file tests the Elliptic Integrals of the third kind.
 // There are two sets of tests, spot
 // tests which compare our results with selected values computed
-// using the online special function calculator at 
+// using the online special function calculator at
 // functions.wolfram.com, while the bulk of the accuracy tests
 // use values generated with NTL::RR at 1000-bit precision
 // and our generic versions of these functions.
 //
 // Note that when this file is first run on a new platform many of
 // these tests will fail: the default accuracy is 1 epsilon which
-// is too tight for most platforms.  In this situation you will 
+// is too tight for most platforms.  In this situation you will
 // need to cast a human eye over the error rates reported and make
 // a judgement as to whether they are acceptable.  Either way please
 // report the results to the Boost mailing list.  Acceptable rates of
@@ -94,7 +99,7 @@ void expected_results()
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
    //
-   std::cout << "Tests run with " << BOOST_COMPILER << ", " 
+   std::cout << "Tests run with " << BOOST_COMPILER << ", "
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
@@ -108,15 +113,15 @@ void do_test_ellint_pi3(T& data, const char* type_name, const char* test)
 
     value_type (*fp2)(value_type, value_type, value_type) = boost::math::ellint_3;
     boost::math::tools::test_result<value_type> result;
- 
+
     result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(fp2, 
+      data,
+      boost::lambda::bind(fp2,
          boost::lambda::ret<value_type>(boost::lambda::_1[2]),
          boost::lambda::ret<value_type>(boost::lambda::_1[0]),
          boost::lambda::ret<value_type>(boost::lambda::_1[1])),
       boost::lambda::ret<value_type>(boost::lambda::_1[3]));
-   handle_test_result(result, data[result.worst()], result.worst(), 
+   handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "boost::math::ellint_3", test);
 
    std::cout << std::endl;
@@ -133,14 +138,14 @@ void do_test_ellint_pi2(T& data, const char* type_name, const char* test)
 
     value_type (*fp2)(value_type, value_type) = boost::math::ellint_3;
     boost::math::tools::test_result<value_type> result;
- 
+
     result = boost::math::tools::test(
-      data, 
-      boost::lambda::bind(fp2, 
+      data,
+      boost::lambda::bind(fp2,
          boost::lambda::ret<value_type>(boost::lambda::_1[1]),
          boost::lambda::ret<value_type>(boost::lambda::_1[0])),
       boost::lambda::ret<value_type>(boost::lambda::_1[2]));
-   handle_test_result(result, data[result.worst()], result.worst(), 
+   handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "boost::math::ellint_3", test);
 
    std::cout << std::endl;
