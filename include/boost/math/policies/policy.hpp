@@ -19,6 +19,7 @@
 #include <boost/mpl/size.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/assert.hpp>
 #include <boost/math/tools/config.hpp>
 #include <limits>
 
