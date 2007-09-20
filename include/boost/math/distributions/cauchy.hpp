@@ -206,11 +206,16 @@ inline RealType pdf(const cauchy_distribution<RealType, Policy>& dist, const Rea
    {
       return result;
    }
-
-   if(std::numeric_limits<RealType>::has_infinity && abs(x) == std::numeric_limits<RealType>::infinity())
-   { // pdf + and - infinity is zero.
-     return 0;
+   if((boost::math::isinf)(x))
+   {
+     return 0; // pdf + and - infinity is zero.
    }
+   // These produce MSVC 4127 warnings, so the above used instead.
+   //if(std::numeric_limits<RealType>::has_infinity && abs(x) == std::numeric_limits<RealType>::infinity())
+   //{ // pdf + and - infinity is zero.
+   //  return 0;
+   //}
+
    if(false == detail::check_x(function, x, &result, Policy()))
    { // Catches x = NaN
       return result;
