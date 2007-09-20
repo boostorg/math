@@ -239,7 +239,7 @@ In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
 [[quantile from the complement][__ibetac_inv(a, b, q)]]
 [[mean][`a/(a+b)`]]
 [[variance][`a * b / (a+b)^2 * (a + b + 1)`]]
-[[mode][`(a-1) / (a + b + 2)`]]
+[[mode][`(a-1) / (a + b - 2)`]]
 [[skewness][`2 (b-a) sqrt(a+b+1)/(a+b+2) * sqrt(a * b)`]]
 [[kurtosis excess][ [$../equations/beta_dist_kurtosis.png]  ]]
 [[kurtosis][`kurtosis + 3`]]
