@@ -6,6 +6,8 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifdef _MSC_VER
+#  pragma warning(disable : 4127) // conditional expression is constant
+#  pragma warning(disable : 4512) // assignment operator could not be generated
 #  pragma warning(disable : 4756) // overflow in constant arithmetic
 // Constants are too big for float case, but this doesn't matter for test.
 #endif
