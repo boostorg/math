@@ -113,10 +113,10 @@ cout << "Setting the packer to " << nominal_mean << " will mean that "
   << " is " << cdf(complement(nominal_packs, minimum_weight)) << endl;
 // Setting the packer to 3.06449 will mean that fraction of packs >= 2.9 is 0.95
 
-/*`This calculation is generalized as the free function called find_location.
+/*`
+This calculation is generalized as the free function called
+[link to math_toolkit.dist.dist_ref.dist_algorithms find_location].
 
-
-TODO link to find_location docs
 To use this we will need to
 */
 
