@@ -187,14 +187,14 @@ void chi_squared_sample_sized(
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate df for a lower single-sided test:
-      double df = chi_squared::estimate_degrees_of_freedom(
+      double df = chi_squared::find_degrees_of_freedom(
          -diff, alpha[i], alpha[i], variance);
       // convert to sample size:
       double size = ceil(df) + 1;
       // Print size:
       cout << fixed << setprecision(0) << setw(16) << right << size;
       // calculate df for an upper single-sided test:
-      df = chi_squared::estimate_degrees_of_freedom(
+      df = chi_squared::find_degrees_of_freedom(
          diff, alpha[i], alpha[i], variance);
       // convert to sample size:
       size = ceil(df) + 1;

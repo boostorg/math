@@ -115,7 +115,7 @@ cout << "Setting the packer to " << nominal_mean << " will mean that "
 
 /*`
 This calculation is generalized as the free function called
-[link to math_toolkit.dist.dist_ref.dist_algorithms find_location].
+[link math_toolkit.dist.dist_ref.dist_algorithms find_location].
 
 To use this we will need to
 */

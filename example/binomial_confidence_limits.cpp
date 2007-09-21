@@ -56,14 +56,14 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // Calculate Clopper Pearson bounds:
-      double l = binomial_distribution<>::estimate_lower_bound_on_p(trials, successes, alpha[i]/2);
-      double u = binomial_distribution<>::estimate_upper_bound_on_p(trials, successes, alpha[i]/2);
+      double l = binomial_distribution<>::find_lower_bound_on_p(trials, successes, alpha[i]/2);
+      double u = binomial_distribution<>::find_upper_bound_on_p(trials, successes, alpha[i]/2);
       // Print Clopper Pearson Limits:
       cout << fixed << setprecision(5) << setw(15) << right << l;
       cout << fixed << setprecision(5) << setw(15) << right << u;
       // Calculate Jeffreys Prior Bounds:
-      l = binomial_distribution<>::estimate_lower_bound_on_p(trials, successes, alpha[i]/2, binomial_distribution<>::jeffreys_prior_interval);
-      u = binomial_distribution<>::estimate_upper_bound_on_p(trials, successes, alpha[i]/2, binomial_distribution<>::jeffreys_prior_interval);
+      l = binomial_distribution<>::find_lower_bound_on_p(trials, successes, alpha[i]/2, binomial_distribution<>::jeffreys_prior_interval);
+      u = binomial_distribution<>::find_upper_bound_on_p(trials, successes, alpha[i]/2, binomial_distribution<>::jeffreys_prior_interval);
       // Print Jeffreys Prior Limits:
       cout << fixed << setprecision(5) << setw(15) << right << l;
       cout << fixed << setprecision(5) << setw(15) << right << u << std::endl;

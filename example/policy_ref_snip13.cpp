@@ -6,6 +6,10 @@
 // Note that this file contains quickbook mark-up as well as code
 // and comments, don't change any of the special comment mark-ups!
 
+#ifdef _MSC_VER
+#pragma warning (disable : 4189) //  'd' : local variable is initialized but not referenced
+#endif
+
 //[policy_ref_snip13
 
 #include <boost/math/distributions/cauchy.hpp>
@@ -30,8 +34,9 @@ BOOST_MATH_DECLARE_DISTRIBUTIONS(double, my_policy)
 //
 void test_cauchy()
 {
-   try{
-      double d = mean(myspace::cauchy()); 
+   try
+   {
+      double d = mean(myspace::cauchy());
    }
    catch(const std::domain_error& e)
    {

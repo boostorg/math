@@ -76,13 +76,13 @@ namespace detail
 } // namespace detail
 
 template <class RealType, class Policy>
-RealType normal_distribution<RealType, Policy>::estimate_standard_deviation(
+RealType normal_distribution<RealType, Policy>::find_standard_deviation(
       RealType difference_from_mean,
       RealType mean,
       RealType sd,
       RealType hint) // Best guess available - current sd if none better?
 {
-   static const char* function = "boost::math::normal_distribution<%1%>::estimate_standard_deviation";
+   static const char* function = "boost::math::normal_distribution<%1%>::find_standard_deviation";
 
    // Check for domain errors:
    RealType error_result;
@@ -108,7 +108,7 @@ RealType normal_distribution<RealType, Policy>::estimate_standard_deviation(
          " or the answer is infinite.  Current best guess is %1%", result, Policy());
    }
    return result;
-} // estimate_standard_deviation
+} // find_standard_deviation
 } // namespace tools
 } // namespace math
 } // namespace boost

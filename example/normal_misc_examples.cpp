@@ -389,7 +389,6 @@ especially if based on a few measurements.
 
 //] [/normal_bulbs_example4 Quickbook end]
   }
-// So we should package this as estimate_mean and sd????
 
   { // K. Krishnamoorthy, Handbook of Statistical Distributions with Applications,
     // ISBN 1 58488 635 8, page 125, example 10.3.8

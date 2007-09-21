@@ -23,7 +23,7 @@
       RealType degrees_of_freedom()const;
       
       // degrees of freedom estimation:
-      static RealType estimate_degrees_of_freedom(
+      static RealType find_degrees_of_freedom(
          RealType difference_from_mean,
          RealType alpha,
          RealType beta,
@@ -71,7 +71,7 @@ meaningful under certain circumstances.
    
 Returns the number of degrees of freedom of this distribution.
 
-   static RealType estimate_degrees_of_freedom(
+   static RealType find_degrees_of_freedom(
       RealType difference_from_mean,
       RealType alpha,
       RealType beta,

@@ -22,8 +22,9 @@ project
       <toolset>msvc:<cxxflags>/wd4610 
       <toolset>msvc:<cxxflags>/wd4510 
       <toolset>msvc:<cxxflags>/wd4127 
-      <toolset>msvc:<cxxflags>/wd4701 
-      <toolset>msvc:<cxxflags>/wd4127 
+      <toolset>msvc:<cxxflags>/wd4701 # needed for lexical cast - temporary.
+      # <toolset>msvc:<cxxflags>/wd4506 has no effect?
+      # suppress xstring(237) : warning C4506: no definition for inline function
       <include>../../..
       <source>/boost/regex//boost_regex
       <link>shared:<define>BOOST_REGEX_DYN_LINK=1

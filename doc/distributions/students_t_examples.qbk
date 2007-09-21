@@ -419,7 +419,7 @@ estimated sample sizes for various confidence levels:
    using namespace boost::math;
    using namespace std;   
 
-   void single_sample_estimate_df(
+   void single_sample_find_df(
       double M,          // M = true mean.
       double Sm,         // Sm = Sample Mean.
       double Sd)         // Sd = Sample Standard Deviation.
@@ -442,7 +442,7 @@ begins with the table header:
 
 And now the important part: the sample sizes required.  Class
 `students_t_distribution` has a static member function
-`estimate_degrees_of_freedom` that will calculate how large
+`find_degrees_of_freedom` that will calculate how large
 a sample size needs to be in order to give a definitive result.
 
 The first argument is the difference between the means that you
@@ -458,7 +458,7 @@ Also note that for a two-sided test, alpha must be divided by 2.
 The final parameter of the function is the standard deviation of the sample.
 
 In this example, we assume that alpha and beta are the same, and call
-`estimate_degrees_of_freedom` twice: once with alpha for a one-sided test,
+`find_degrees_of_freedom` twice: once with alpha for a one-sided test,
 and once with alpha/2 for a two-sided test.
 
       for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
@@ -466,14 +466,14 @@ and once with alpha/2 for a two-sided test.
          // Confidence value:
          cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
          // calculate df for single sided test:
-         double df = students_t::estimate_degrees_of_freedom(
+         double df = students_t::find_degrees_of_freedom(
             fabs(M - Sm), alpha[i], alpha[i], Sd);
          // convert to sample size:
          double size = ceil(df) + 1;
          // Print size:
          cout << fixed << setprecision(0) << setw(16) << right << size;
          // calculate df for two sided test:
-         df = students_t::estimate_degrees_of_freedom(
+         df = students_t::find_degrees_of_freedom(
             fabs(M - Sm), alpha[i]/2, alpha[i], Sd);
          // convert to sample size:
          size = ceil(df) + 1;

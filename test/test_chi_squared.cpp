@@ -508,16 +508,16 @@ void test_spots(RealType)
     // Subsequent tests just test our empirically generated values, they
     // catch regressions, but otherwise aren't worth much.
     BOOST_CHECK_EQUAL(
-       ceil(chi_squared_distribution<RealType>::estimate_degrees_of_freedom(
+       ceil(chi_squared_distribution<RealType>::find_degrees_of_freedom(
          55, 0.05f, 0.01f, 100)), static_cast<RealType>(170));
     BOOST_CHECK_EQUAL(
-       ceil(chi_squared_distribution<RealType>::estimate_degrees_of_freedom(
+       ceil(chi_squared_distribution<RealType>::find_degrees_of_freedom(
          10, 0.05f, 0.01f, 100)), static_cast<RealType>(3493));
     BOOST_CHECK_EQUAL(
-       ceil(chi_squared_distribution<RealType>::estimate_degrees_of_freedom(
+       ceil(chi_squared_distribution<RealType>::find_degrees_of_freedom(
          -55, 0.05f, 0.01f, 100)), static_cast<RealType>(49));
     BOOST_CHECK_EQUAL(
-       ceil(chi_squared_distribution<RealType>::estimate_degrees_of_freedom(
+       ceil(chi_squared_distribution<RealType>::find_degrees_of_freedom(
          -10, 0.05f, 0.01f, 100)), static_cast<RealType>(2826));
 } // template <class RealType>void test_spots(RealType)
 

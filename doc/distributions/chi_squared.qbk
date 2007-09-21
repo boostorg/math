@@ -24,7 +24,7 @@
       RealType degrees_of_freedom()const;
 
       // Parameter estimation:
-      static RealType estimate_degrees_of_freedom(
+      static RealType find_degrees_of_freedom(
          RealType difference_from_mean,
          RealType alpha,
          RealType beta,
@@ -63,7 +63,7 @@ Requires v > 0, otherwise calls __domain_error.
       
 Returns the parameter /v/ from which this object was constructed.
 
-      static RealType estimate_degrees_of_freedom(
+      static RealType find_degrees_of_freedom(
          RealType difference_from_variance,
          RealType alpha,
          RealType beta,

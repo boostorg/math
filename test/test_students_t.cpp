@@ -330,42 +330,42 @@ void test_spots(RealType)
     // freedom required, particularly when the result is small.
     //
     BOOST_CHECK_EQUAL(
-       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+       ceil(students_t_distribution<RealType>::find_degrees_of_freedom(
          static_cast<RealType>(0.5),
          static_cast<RealType>(0.005),
          static_cast<RealType>(0.01),
          static_cast<RealType>(1.0))),
          99);
     BOOST_CHECK_EQUAL(
-       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+       ceil(students_t_distribution<RealType>::find_degrees_of_freedom(
          static_cast<RealType>(1.5),
          static_cast<RealType>(0.005),
          static_cast<RealType>(0.01),
          static_cast<RealType>(1.0))),
          14);
     BOOST_CHECK_EQUAL(
-       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+       ceil(students_t_distribution<RealType>::find_degrees_of_freedom(
          static_cast<RealType>(0.5),
          static_cast<RealType>(0.025),
          static_cast<RealType>(0.01),
          static_cast<RealType>(1.0))),
          76);
     BOOST_CHECK_EQUAL(
-       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+       ceil(students_t_distribution<RealType>::find_degrees_of_freedom(
          static_cast<RealType>(1.5),
          static_cast<RealType>(0.025),
          static_cast<RealType>(0.01),
          static_cast<RealType>(1.0))),
          11);
     BOOST_CHECK_EQUAL(
-       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+       ceil(students_t_distribution<RealType>::find_degrees_of_freedom(
          static_cast<RealType>(0.5),
          static_cast<RealType>(0.05),
          static_cast<RealType>(0.01),
          static_cast<RealType>(1.0))),
          65);
     BOOST_CHECK_EQUAL(
-       ceil(students_t_distribution<RealType>::estimate_degrees_of_freedom(
+       ceil(students_t_distribution<RealType>::find_degrees_of_freedom(
          static_cast<RealType>(1.5),
          static_cast<RealType>(0.05),
          static_cast<RealType>(0.01),

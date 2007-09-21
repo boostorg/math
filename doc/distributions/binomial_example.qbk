@@ -35,8 +35,8 @@ frequency with which successes occur, the best estimate is given simply
 by /k/ \/ /N/, for /k/ successes out of /N/ trials.  However our confidence in that
 estimate will be shaped by how many trials were conducted, and how many successes
 were observed.  The static member functions 
-`binomial_distribution<>::estimate_lower_bound_on_p` and
-`binomial_distribution<>::estimate_upper_bound_on_p` allow you to calculate
+`binomial_distribution<>::find_lower_bound_on_p` and
+`binomial_distribution<>::find_upper_bound_on_p` allow you to calculate
 the confidence intervals for your estimate of the occurrence frequency.
 
 The sample program [@../../example/binomial_confidence_limits.cpp 
@@ -87,8 +87,8 @@ Some pretty printing of the table header follows:
 
 
 And now for the important part - the intervals themselves - for each
-value of /alpha/, we call `estimate_lower_bound_on_p` and 
-`estimate_lower_upper_on_p` to obtain lower and upper bounds
+value of /alpha/, we call `find_lower_bound_on_p` and 
+`find_lower_upper_on_p` to obtain lower and upper bounds
 respectively.  Note that since we are calculating a two-sided interval,
 we must divide the value of alpha in two.
 
@@ -122,18 +122,18 @@ methods in this example:
          // Confidence value:
          cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
          // Calculate Clopper Pearson bounds:
-         double l = binomial_distribution<>::estimate_lower_bound_on_p(
+         double l = binomial_distribution<>::find_lower_bound_on_p(
                         trials, successes, alpha[i]/2);
-         double u = binomial_distribution<>::estimate_upper_bound_on_p(
+         double u = binomial_distribution<>::find_upper_bound_on_p(
                         trials, successes, alpha[i]/2);
          // Print Clopper Pearson Limits:
          cout << fixed << setprecision(5) << setw(15) << right << l;
          cout << fixed << setprecision(5) << setw(15) << right << u;
          // Calculate Jeffreys Prior Bounds:
-         l = binomial_distribution<>::estimate_lower_bound_on_p(
+         l = binomial_distribution<>::find_lower_bound_on_p(
                trials, successes, alpha[i]/2, 
                binomial_distribution<>::jeffreys_prior_interval);
-         u = binomial_distribution<>::estimate_upper_bound_on_p(
+         u = binomial_distribution<>::find_upper_bound_on_p(
                trials, successes, alpha[i]/2, 
                binomial_distribution<>::jeffreys_prior_interval);
          // Print Jeffreys Prior Limits:
@@ -217,7 +217,7 @@ N "uses" (for some suitable definition of "use").  You may want to schedule
 routine replacement of the component so that its chance of failure between
 routine replacements is less than P%.  If the failures follow a binomial
 distribution (each time the component is "used" it either fails or does not)
-then the static member function `binomial_distibution<>::estimate_maximum_number_of_trials`
+then the static member function `binomial_distibution<>::find_maximum_number_of_trials`
 can be used to estimate the maximum number of "uses" of that component for some
 acceptable risk level /alpha/.
 
@@ -226,7 +226,7 @@ The example program
 demonstrates its usage.  It centres on a routine that prints out
 a table of maximum sample sizes for various probability thresholds:
 
-   void estimate_max_sample_size(
+   void find_max_sample_size(
       double p,              // success ratio.
       unsigned successes)    // Total number of observed successes permitted.
    {
@@ -248,7 +248,7 @@ value of alpha:
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate trials:
-      double t = binomial::estimate_maximum_number_of_trials(
+      double t = binomial::find_maximum_number_of_trials(
                      successes, p, alpha[i]);
       t = floor(t);
       // Print Trials:
@@ -259,7 +259,7 @@ Note that since we're
 calculating the maximum number of trials permitted, we'll err on the safe
 side and take the floor of the result.  Had we been calculating the
 /minimum/ number of trials required to observe a certain number of /successes/
-using `estimate_minimum_number_of_trials` we would have taken the ceiling instead.
+using `find_minimum_number_of_trials` we would have taken the ceiling instead.
 
 We'll finish off by looking at some sample output, firstly for
 a 1 in 1000 chance of component failure with each use:

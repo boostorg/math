@@ -303,7 +303,7 @@ have to be in order to produce a definitive result?"
 
 The class template [link math_toolkit.dist.dist_ref.dists.chi_squared_dist 
 chi_squared_distribution] has a static method 
-`estimate_degrees_of_freedom` that will calculate this value for
+`find_degrees_of_freedom` that will calculate this value for
 some acceptable risk of type I failure /alpha/, type II failure 
 /beta/, and difference from the standard deviation /diff/.  Please
 note that the method used works on variance, and not standard deviation
@@ -343,7 +343,7 @@ sample variance is less than the true value by /diff/ and one
 where it is greater than the true value by /diff/.  Thanks to the
 asymmetric nature of the Chi Squared distribution these two values will
 not be the same, the difference in their calculation differs only in the
-sign of /diff/ that's passed to `estimate_degrees_of_freedom`.  Finally
+sign of /diff/ that's passed to `find_degrees_of_freedom`.  Finally
 in this example we'll simply things, and let risk level /beta/ be the 
 same as /alpha/:
 
@@ -362,14 +362,14 @@ same as /alpha/:
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate df for a lower single sided test:
-      double df = chi_squared::estimate_degrees_of_freedom(
+      double df = chi_squared::find_degrees_of_freedom(
          -diff, alpha[i], alpha[i], variance);
       // convert to sample size:
       double size = ceil(df) + 1;
       // Print size:
       cout << fixed << setprecision(0) << setw(16) << right << size;
       // calculate df for an upper single sided test:
-      df = chi_squared::estimate_degrees_of_freedom(
+      df = chi_squared::find_degrees_of_freedom(
          diff, alpha[i], alpha[i], variance);
       // convert to sample size:
       size = ceil(df) + 1;

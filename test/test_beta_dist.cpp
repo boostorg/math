@@ -94,18 +94,18 @@ void test_spot(
       // Estimate alpha & beta from mean and variance:
 
       BOOST_CHECK_CLOSE_FRACTION(
-         beta_distribution<RealType>::estimate_alpha(mean(abeta), variance(abeta)),
+         beta_distribution<RealType>::find_alpha(mean(abeta), variance(abeta)),
          abeta.alpha(), tol);
       BOOST_CHECK_CLOSE_FRACTION(
-         beta_distribution<RealType>::estimate_beta(mean(abeta), variance(abeta)),
+         beta_distribution<RealType>::find_beta(mean(abeta), variance(abeta)),
          abeta.beta(), tol);
 
       // Estimate sample alpha and beta from others:
       BOOST_CHECK_CLOSE_FRACTION(
-         beta_distribution<RealType>::estimate_alpha(abeta.beta(), x, P),
+         beta_distribution<RealType>::find_alpha(abeta.beta(), x, P),
          abeta.alpha(), tol);
       BOOST_CHECK_CLOSE_FRACTION(
-         beta_distribution<RealType>::estimate_beta(abeta.alpha(), x, P),
+         beta_distribution<RealType>::find_beta(abeta.alpha(), x, P),
          abeta.beta(), tol);
    } // if((P < 0.99) && (Q < 0.99)
   
@@ -524,11 +524,11 @@ int test_main(int, char* [])
    BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(mybeta22), -144.0 / 168, tol);
    BOOST_CHECK_CLOSE_FRACTION(skewness(beta_distribution<>(3, 5)), 0.30983866769659335081434123198259, tol);
 
-   BOOST_CHECK_CLOSE_FRACTION(beta_distribution<double>::estimate_alpha(mean(mybeta22), variance(mybeta22)), mybeta22.alpha(), tol); // mean, variance, probability. 
-   BOOST_CHECK_CLOSE_FRACTION(beta_distribution<double>::estimate_beta(mean(mybeta22), variance(mybeta22)), mybeta22.beta(), tol);// mean, variance, probability. 
+   BOOST_CHECK_CLOSE_FRACTION(beta_distribution<double>::find_alpha(mean(mybeta22), variance(mybeta22)), mybeta22.alpha(), tol); // mean, variance, probability. 
+   BOOST_CHECK_CLOSE_FRACTION(beta_distribution<double>::find_beta(mean(mybeta22), variance(mybeta22)), mybeta22.beta(), tol);// mean, variance, probability. 
 
-   BOOST_CHECK_CLOSE_FRACTION(mybeta22.estimate_alpha(mybeta22.beta(), 0.8, cdf(mybeta22, 0.8)), mybeta22.alpha(), tol);
-   BOOST_CHECK_CLOSE_FRACTION(mybeta22.estimate_beta(mybeta22.alpha(), 0.8, cdf(mybeta22, 0.8)), mybeta22.beta(), tol);
+   BOOST_CHECK_CLOSE_FRACTION(mybeta22.find_alpha(mybeta22.beta(), 0.8, cdf(mybeta22, 0.8)), mybeta22.alpha(), tol);
+   BOOST_CHECK_CLOSE_FRACTION(mybeta22.find_beta(mybeta22.alpha(), 0.8, cdf(mybeta22, 0.8)), mybeta22.beta(), tol);
 
 
    beta_distribution<real_concept> rcbeta22(2, 2); // Using RealType real_concept.

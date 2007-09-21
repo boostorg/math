@@ -22,6 +22,7 @@ project
       <toolset>msvc:<cxxflags>/wd4127 
       <toolset>msvc:<cxxflags>/wd4701 
       <toolset>msvc:<cxxflags>/wd4127 
+      <toolset>msvc:<cxxflags>/wd4305 
       <include>../../..
     ;
 
@@ -38,7 +39,7 @@ run error_policy_example.cpp ;
 run f_test.cpp ;
 run neg_binom_confidence_limits.cpp ;
 run neg_binomial_sample_sizes.cpp ;
-run negative_binomial_construction_examples.cpp ;
+# run negative_binomial_construction_examples.cpp ; delete for now
 run negative_binomial_example1.cpp ;
 run negative_binomial_example2.cpp ;
 # run negative_binomial_example3.cpp ;

@@ -24,21 +24,21 @@
       RealType successes() const;
       
       // Bounds on success fraction:
-      static RealType estimate_lower_bound_on_p(
+      static RealType find_lower_bound_on_p(
          RealType trials, 
          RealType successes,
          RealType probability); // alpha
-      static RealType estimate_upper_bound_on_p(
+      static RealType find_upper_bound_on_p(
          RealType trials, 
          RealType successes,
          RealType probability); // alpha
          
       // Estimate min/max number of trials:
-      static RealType estimate_minimum_number_of_trials(
+      static RealType find_minimum_number_of_trials(
          RealType k,     // Number of failures.
          RealType p,     // Success fraction.
          RealType probability); // Probability threshold alpha.
-      static RealType estimate_maximum_number_of_trials(
+      static RealType find_maximum_number_of_trials(
          RealType k,     // Number of failures.
          RealType p,     // Success fraction.
          RealType probability); // Probability threshold alpha.
@@ -133,7 +133,7 @@ Returns the parameter /r/ from which this distribution was constructed.
 
 [h5 Lower Bound on Parameter p]
 
-      static RealType estimate_lower_bound_on_p(
+      static RealType find_lower_bound_on_p(
         RealType failures, 
         RealType successes,
         RealType probability) // (0 <= alpha <= 1), 0.05 equivalent to 95% confidence.
@@ -152,7 +152,7 @@ the best estimate for the success fraction is simply ['r/n], but if you
 want to be 95% sure that the true value is [*greater than] some value, 
 ['p[sub min]], then:
 
-   p``[sub min]`` = negative_binomial_distribution<RealType>::estimate_lower_bound_on_p(
+   p``[sub min]`` = negative_binomial_distribution<RealType>::find_lower_bound_on_p(
                        failures, successes, 0.05);
 
 [link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
@@ -169,7 +169,7 @@ Computational statistics and data analysis, 2005, vol. 48, no3, 605-621].
 
 [h5 Upper Bound on Parameter p]
 
-   static RealType estimate_upper_bound_on_p(
+   static RealType find_upper_bound_on_p(
       RealType trials, 
       RealType successes,
       RealType alpha); // (0 <= alpha <= 1), 0.05 equivalent to 95% confidence.
@@ -188,7 +188,7 @@ best estimate for the success fraction is simply ['k/n], but if you
 want to be 95% sure that the true value is [*less than] some value, 
 ['p[sub max]], then:
 
-   p``[sub max]`` = negative_binomial_distribution<RealType>::estimate_upper_bound_on_p(
+   p``[sub max]`` = negative_binomial_distribution<RealType>::find_upper_bound_on_p(
                        r, k, 0.05);
 
 [link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
@@ -205,7 +205,7 @@ Computational statistics and data analysis, 2005, vol. 48, no3, 605-621].
 
 [h5 Estimating Number of Trials to Ensure at Least a Certain Number of Failures]
 
-   static RealType estimate_minimum_number_of_trials(
+   static RealType find_minimum_number_of_trials(
       RealType k,     // number of failures.
       RealType p,     // success fraction.
       RealType alpha); // probability threshold (0.05 equivalent to 95%).
@@ -221,7 +221,7 @@ probability that [*more than k failures will be observed].
 
 For example:
    
-   negative_binomial_distribution<RealType>::estimate_minimum_number_of_trials(10, 0.5, 0.05);
+   negative_binomial_distribution<RealType>::find_minimum_number_of_trials(10, 0.5, 0.05);
       
 Returns the smallest number of trials we must conduct to be 95% sure
 of seeing 10 failures that occur with frequency one half.
@@ -235,7 +235,7 @@ of observing k failures or fewer.
 
 [h5 Estimating Number of Trials to Ensure a Maximum Number of Failures or Less]
 
-   static RealType estimate_maximum_number_of_trials(
+   static RealType find_maximum_number_of_trials(
       RealType k,     // number of failures.
       RealType p,     // success fraction.
       RealType alpha); // probability threshold (0.05 equivalent to 95%).
@@ -251,7 +251,7 @@ a certain probability that [*k failures or fewer will be observed].
 
 For example:
    
-   negative_binomial_distribution<RealType>::estimate_maximum_number_of_trials(0, 1.0-1.0/1000000, 0.05);
+   negative_binomial_distribution<RealType>::find_maximum_number_of_trials(0, 1.0-1.0/1000000, 0.05);
       
 Returns the largest number of trials we can conduct and still be 95% sure
 of seeing no failures that occur with frequency one in one million.
@@ -345,10 +345,10 @@ cdf = I[sub p](r, k+1) = ibeta(r, k+1, p)
 [[kurtosis][`6 / r + (p * p) / r * (1 - p )`]]
 [[kurtosis excess][`6 / r + (p * p) / r * (1 - p ) -3`]]
 [[parameter estimation member functions][]]
-[[`estimate_lower_bound_on_p`][ibeta_inv(successes, failures + 1, alpha)]]
-[[`estimate_upper_bound_on_p`][ibetac_inv(successes, failures, alpha) plus see comments in code.]]
-[[`estimate_minimum_number_of_trials`][ibeta_inva(k + 1, p, alpha)]]
-[[`estimate_maximum_number_of_trials`][ibetac_inva(k + 1, p, alpha)]]
+[[`find_lower_bound_on_p`][ibeta_inv(successes, failures + 1, alpha)]]
+[[`find_upper_bound_on_p`][ibetac_inv(successes, failures, alpha) plus see comments in code.]]
+[[`find_minimum_number_of_trials`][ibeta_inva(k + 1, p, alpha)]]
+[[`find_maximum_number_of_trials`][ibetac_inva(k + 1, p, alpha)]]
 ]
 
 Implementation notes:

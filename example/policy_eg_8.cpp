@@ -1,4 +1,5 @@
 //  Copyright John Maddock 2007.
+//  Copyright Paul a. Bristow 2007
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -6,13 +7,18 @@
 // Note that this file contains quickbook mark-up as well as code
 // and comments, don't change any of the special comment mark-ups!
 
+#ifdef _MSC_VER
+# pragma warning (disable : 4100) // 'unreferenced formal parameter
+#endif
+
+
 #include <iostream>
 
 //[policy_eg_8
 
 /*`
 
-Suppose we want our own user-defined error handlers rather than the 
+Suppose we want our own user-defined error handlers rather than the
 any of the default ones supplied by the library to be used.  If
 we set the policy for a specific type of error to `user_error`
 then the library will call a user-supplied error handler.

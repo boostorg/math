@@ -323,7 +323,7 @@ can answer questions like this, and are necessarily different for
 each distribution.  They are implemented as static member functions
 of the distributions, for example:
 
-   students_t::estimate_degrees_of_freedom(
+   students_t::find_degrees_of_freedom(
       1.3,        // difference from true mean to detect
       0.05,       // maximum risk of falsely rejecting the null-hypothesis.
       0.1,        // maximum risk of falsely failing to reject the null-hypothesis.

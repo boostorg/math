@@ -26,23 +26,23 @@
       RealType beta() const;
       
       // Parameter estimators of alpha or beta from mean and variance.
-      static RealType estimate_alpha(
+      static RealType find_alpha(
         RealType mean, // Expected value of mean.
         RealType variance); // Expected value of variance.
       
-      static RealType estimate_beta(
+      static RealType find_beta(
         RealType mean, // Expected value of mean.
         RealType variance); // Expected value of variance.
   
       // Parameter estimators from from
       // either alpha or beta, and x and probability.
       
-      static RealType estimate_alpha(
+      static RealType find_alpha(
         RealType beta, // from beta.
         RealType x, //  x.
         RealType probability); // cdf
       
-      static RealType estimate_beta(
+      static RealType find_beta(
         RealType alpha, // alpha.
         RealType x, // probability x.
         RealType probability); // probability cdf.
@@ -148,21 +148,21 @@ Pooled Prevalence Calculator] and
 [@http://www.epi.ucdavis.edu/diagnostictests/betabuster.html Beta Buster]
 but this is not yet implemented here.
 
-      static RealType estimate_alpha(
+      static RealType find_alpha(
         RealType mean, // Expected value of mean.
         RealType variance); // Expected value of variance.
         
 Returns the unique value of [alpha][space] that corresponds to a 
 beta distribution with mean /mean/ and variance /variance/.
       
-      static RealType estimate_beta(
+      static RealType find_beta(
         RealType mean, // Expected value of mean.
         RealType variance); // Expected value of variance.
   
 Returns the unique value of [beta][space] that corresponds to a 
 beta distribution with mean /mean/ and variance /variance/.
       
-      static RealType estimate_alpha(
+      static RealType find_alpha(
         RealType beta, // from beta.
         RealType x, //  x.
         RealType probability); // probability cdf
@@ -170,7 +170,7 @@ beta distribution with mean /mean/ and variance /variance/.
 Returns the value of [alpha][space] that gives:
 `cdf(beta_distribution<RealType>(alpha, beta), x) == probability`.
       
-      static RealType estimate_beta(
+      static RealType find_beta(
         RealType alpha, // alpha.
         RealType x, // probability x.
         RealType probability); // probability cdf.
@@ -250,7 +250,7 @@ In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
 [[beta
 
   from mean and variance][`(1 - mean) * (((mean * (1 - mean)) /variance)-1)`]]
-[[The member functions `estimate_alpha` and `estimate_beta`
+[[The member functions `find_alpha` and `find_beta`
 
   from cdf and probability x
   
@@ -258,8 +258,8 @@ In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
       [Implemented in terms of the inverse incomplete beta functions
       
 __ibeta_inva, and __ibeta_invb respectively.]]
-[[`estimate_alpha`][`ibeta_inva(beta, x, probability)`]]
-[[`estimate_beta`][`ibeta_invb(alpha, x, probability)`]]
+[[`find_alpha`][`ibeta_inva(beta, x, probability)`]]
+[[`find_beta`][`ibeta_invb(alpha, x, probability)`]]
 ]
 
 [h4 References]

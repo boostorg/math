@@ -161,7 +161,7 @@ void single_sample_t_test(double M, double Sm, double Sd, unsigned Sn, double al
    cout << endl << endl;
 }
 
-void single_sample_estimate_df(double M, double Sm, double Sd)
+void single_sample_find_df(double M, double Sm, double Sd)
 {
    //
    // M = true mean.
@@ -201,14 +201,14 @@ void single_sample_estimate_df(double M, double Sm, double Sd)
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate df for single sided test:
-      double df = students_t::estimate_degrees_of_freedom(
+      double df = students_t::find_degrees_of_freedom(
          fabs(M - Sm), alpha[i], alpha[i], Sd);
       // convert to sample size:
       double size = ceil(df) + 1;
       // Print size:
       cout << fixed << setprecision(0) << setw(16) << right << size;
       // calculate df for two sided test:
-      df = students_t::estimate_degrees_of_freedom(
+      df = students_t::find_degrees_of_freedom(
          fabs(M - Sm), alpha[i]/2, alpha[i], Sd);
       // convert to sample size:
       size = ceil(df) + 1;
@@ -228,7 +228,7 @@ int main()
    //
    confidence_limits_on_mean(9.261460, 0.2278881e-01, 195);
    single_sample_t_test(5, 9.261460, 0.2278881e-01, 195, 0.05);
-   single_sample_estimate_df(5, 9.261460, 0.2278881e-01);
+   single_sample_find_df(5, 9.261460, 0.2278881e-01);
 
    //
    // Data for this example from:
@@ -247,7 +247,7 @@ int main()
    // 90% test:
    single_sample_t_test(38.9, 37.8, 0.964365, 3, 0.1);
    // parameter estimate:
-   single_sample_estimate_df(38.9, 37.8, 0.964365);
+   single_sample_find_df(38.9, 37.8, 0.964365);
 
    return 0;
 }

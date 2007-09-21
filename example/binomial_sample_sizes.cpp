@@ -14,7 +14,7 @@
 #include <iomanip>
 #include <boost/math/distributions/binomial.hpp>
 
-void estimate_max_sample_size(double p, unsigned successes)
+void find_max_sample_size(double p, unsigned successes)
 {
    //
    // p         = success ratio.
@@ -56,7 +56,7 @@ void estimate_max_sample_size(double p, unsigned successes)
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate trials:
-      double t = binomial_distribution<>::estimate_maximum_number_of_trials(successes, p, alpha[i]);
+      double t = binomial_distribution<>::find_maximum_number_of_trials(successes, p, alpha[i]);
       t = floor(t);
       // Print Trials:
       cout << fixed << setprecision(0) << setw(15) << right << t << endl;
@@ -66,10 +66,10 @@ void estimate_max_sample_size(double p, unsigned successes)
 
 int main()
 {
-   estimate_max_sample_size(1.0/1000, 0);
-   estimate_max_sample_size(1.0/10000, 0);
-   estimate_max_sample_size(1.0/100000, 0);
-   estimate_max_sample_size(1.0/1000000, 0);
+   find_max_sample_size(1.0/1000, 0);
+   find_max_sample_size(1.0/10000, 0);
+   find_max_sample_size(1.0/100000, 0);
+   find_max_sample_size(1.0/1000000, 0);
 
    return 0;
 }
