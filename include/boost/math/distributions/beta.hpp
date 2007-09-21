@@ -182,11 +182,11 @@ namespace boost
       // http://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm
       // http://www.epi.ucdavis.edu/diagnostictests/betabuster.html
 
-      static RealType estimate_alpha(
+      static RealType find_alpha(
         RealType mean, // Expected value of mean.
         RealType variance) // Expected value of variance.
       {
-        static const char* function = "boost::math::beta_distribution<%1%>::estimate_alpha";
+        static const char* function = "boost::math::beta_distribution<%1%>::find_alpha";
         RealType result; // of error checks.
         if(false ==
           beta_detail::check_mean(
@@ -199,13 +199,13 @@ namespace boost
           return result;
         }
         return mean * (( (mean * (1 - mean)) / variance)- 1);
-      } // RealType estimate_alpha
+      } // RealType find_alpha
 
-      static RealType estimate_beta(
+      static RealType find_beta(
         RealType mean, // Expected value of mean.
         RealType variance) // Expected value of variance.
       {
-        static const char* function = "boost::math::beta_distribution<%1%>::estimate_beta";
+        static const char* function = "boost::math::beta_distribution<%1%>::find_beta";
         RealType result; // of error checks.
         if(false ==
           beta_detail::check_mean(
@@ -218,17 +218,17 @@ namespace boost
           return result;
         }
         return (1 - mean) * (((mean * (1 - mean)) /variance)-1);
-      } //  RealType estimate_beta
+      } //  RealType find_beta
 
       // Estimate alpha & beta from either alpha or beta, and x and probability.
       // Uses for these parameter estimators are unclear.
 
-      static RealType estimate_alpha(
+      static RealType find_alpha(
         RealType beta, // from beta.
         RealType x, //  x.
         RealType probability) // cdf
       {
-        static const char* function = "boost::math::beta_distribution<%1%>::estimate_alpha";
+        static const char* function = "boost::math::beta_distribution<%1%>::find_alpha";
         RealType result; // of error checks.
         if(false ==
           beta_detail::check_prob(
@@ -244,15 +244,15 @@ namespace boost
           return result;
         }
         return ibeta_inva(beta, x, probability, Policy());
-      } // RealType estimate_alpha(beta, a, probability)
+      } // RealType find_alpha(beta, a, probability)
 
-      static RealType estimate_beta(
+      static RealType find_beta(
         // ibeta_invb(T b, T x, T p); (alpha, x, cdf,)
         RealType alpha, // alpha.
         RealType x, // probability x.
         RealType probability) // probability cdf.
       {
-        static const char* function = "boost::math::beta_distribution<%1%>::estimate_beta";
+        static const char* function = "boost::math::beta_distribution<%1%>::find_beta";
         RealType result; // of error checks.
         if(false ==
           beta_detail::check_prob(
@@ -268,7 +268,7 @@ namespace boost
           return result;
         }
         return ibeta_invb(alpha, x, probability, Policy());
-      } //  RealType estimate_beta(alpha, x, probability)
+      } //  RealType find_beta(alpha, x, probability)
 
     private:
       RealType m_alpha; // Two parameters of the beta distribution.

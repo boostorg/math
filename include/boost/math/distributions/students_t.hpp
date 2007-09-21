@@ -44,7 +44,7 @@ public:
    }
 
    // Parameter estimation:
-   static RealType estimate_degrees_of_freedom(
+   static RealType find_degrees_of_freedom(
       RealType difference_from_mean,
       RealType alpha,
       RealType beta,
@@ -252,14 +252,14 @@ struct sample_size_func
 }  // namespace detail
 
 template <class RealType, class Policy>
-RealType students_t_distribution<RealType, Policy>::estimate_degrees_of_freedom(
+RealType students_t_distribution<RealType, Policy>::find_degrees_of_freedom(
       RealType difference_from_mean,
       RealType alpha,
       RealType beta,
       RealType sd,
       RealType hint)
 {
-   static const char* function = "boost::math::students_t_distribution<%1%>::estimate_degrees_of_freedom";
+   static const char* function = "boost::math::students_t_distribution<%1%>::find_degrees_of_freedom";
    //
    // Check for domain errors:
    //

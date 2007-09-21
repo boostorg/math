@@ -39,7 +39,7 @@ public:
    }
 
    // Parameter estimation:
-   static RealType estimate_degrees_of_freedom(
+   static RealType find_degrees_of_freedom(
       RealType difference_from_variance,
       RealType alpha,
       RealType beta,
@@ -283,14 +283,14 @@ private:
 } // namespace detail
 
 template <class RealType, class Policy>
-RealType chi_squared_distribution<RealType, Policy>::estimate_degrees_of_freedom(
+RealType chi_squared_distribution<RealType, Policy>::find_degrees_of_freedom(
    RealType difference_from_variance,
    RealType alpha,
    RealType beta,
    RealType variance,
    RealType hint)
 {
-   static const char* function = "boost::math::chi_squared_distribution<%1%>::estimate_degrees_of_freedom(%1%,%1%,%1%,%1%,%1%)";
+   static const char* function = "boost::math::chi_squared_distribution<%1%>::find_degrees_of_freedom(%1%,%1%,%1%,%1%,%1%)";
    // Check for domain errors:
    RealType error_result;
    if(false == detail::check_probability(

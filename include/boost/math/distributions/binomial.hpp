@@ -309,13 +309,13 @@ namespace boost
       // these functions are used
       // to obtain confidence intervals for the success fraction.
       //
-      static RealType estimate_lower_bound_on_p(
+      static RealType find_lower_bound_on_p(
          RealType trials,
          RealType successes,
          RealType probability,
          interval_type t = clopper_pearson_exact_interval)
       {
-        static const char* function = "boost::math::binomial_distribution<%1%>::estimate_lower_bound_on_p";
+        static const char* function = "boost::math::binomial_distribution<%1%>::find_lower_bound_on_p";
         // Error checks:
         RealType result;
         if(false == binomial_detail::check_dist_and_k(
@@ -334,13 +334,13 @@ namespace boost
         return (t == clopper_pearson_exact_interval) ? ibeta_inv(successes, trials - successes + 1, probability, static_cast<RealType*>(0), Policy())
            : ibeta_inv(successes + 0.5f, trials - successes + 0.5f, probability, static_cast<RealType*>(0), Policy());
       }
-      static RealType estimate_upper_bound_on_p(
+      static RealType find_upper_bound_on_p(
          RealType trials,
          RealType successes,
          RealType probability,
          interval_type t = clopper_pearson_exact_interval)
       {
-        static const char* function = "boost::math::binomial_distribution<%1%>::estimate_upper_bound_on_p";
+        static const char* function = "boost::math::binomial_distribution<%1%>::find_upper_bound_on_p";
         // Error checks:
         RealType result;
         if(false == binomial_detail::check_dist_and_k(
@@ -362,12 +362,12 @@ namespace boost
       //    or
       // "How many trials can I have to be P% sure of seeing fewer than k events?"
       //
-      static RealType estimate_minimum_number_of_trials(
+      static RealType find_minimum_number_of_trials(
          RealType k,     // number of events
          RealType p,     // success fraction
          RealType alpha) // risk level
       {
-        static const char* function = "boost::math::binomial_distribution<%1%>::estimate_minimum_number_of_trials";
+        static const char* function = "boost::math::binomial_distribution<%1%>::find_minimum_number_of_trials";
         // Error checks:
         RealType result;
         if(false == binomial_detail::check_dist_and_k(
@@ -381,12 +381,12 @@ namespace boost
         return result + k;
       }
 
-      static RealType estimate_maximum_number_of_trials(
+      static RealType find_maximum_number_of_trials(
          RealType k,     // number of events
          RealType p,     // success fraction
          RealType alpha) // risk level
       {
-        static const char* function = "boost::math::binomial_distribution<%1%>::estimate_maximum_number_of_trials";
+        static const char* function = "boost::math::binomial_distribution<%1%>::find_maximum_number_of_trials";
         // Error checks:
         RealType result;
         if(false == binomial_detail::check_dist_and_k(

@@ -164,7 +164,7 @@ namespace boost
         RealType successes,
         RealType alpha) // alpha 0.05 equivalent to 95% for one-sided test.
       {
-        static const char* function = "boost::math::negative_binomial<%1%>::estimate_lower_bound_on_p";
+        static const char* function = "boost::math::negative_binomial<%1%>::find_lower_bound_on_p";
         RealType result;  // of error checks.
         RealType failures = trials - successes;
         if(false == detail::check_probability(function, alpha, &result, Policy())
@@ -189,7 +189,7 @@ namespace boost
         RealType successes,
         RealType alpha) // alpha 0.05 equivalent to 95% for one-sided test.
       {
-        static const char* function = "boost::math::negative_binomial<%1%>::estimate_upper_bound_on_p";
+        static const char* function = "boost::math::negative_binomial<%1%>::find_upper_bound_on_p";
         RealType result;  // of error checks.
         RealType failures = trials - successes;
         if(false == negative_binomial_detail::check_dist_and_k(
@@ -220,7 +220,7 @@ namespace boost
         RealType p,     // success fraction 0 <= p <= 1.
         RealType alpha) // risk level threshold 0 <= alpha <= 1.
       {
-        static const char* function = "boost::math::negative_binomial<%1%>::estimate_minimum_number_of_trials";
+        static const char* function = "boost::math::negative_binomial<%1%>::find_minimum_number_of_trials";
         // Error checks:
         RealType result;
         if(false == negative_binomial_detail::check_dist_and_k(
@@ -237,7 +237,7 @@ namespace boost
         RealType p,     // success fraction 0 <= p <= 1.
         RealType alpha) // risk level threshold 0 <= alpha <= 1.
       {
-        static const char* function = "boost::math::negative_binomial<%1%>::estimate_maximum_number_of_trials";
+        static const char* function = "boost::math::negative_binomial<%1%>::find_maximum_number_of_trials";
         // Error checks:
         RealType result;
         if(false == negative_binomial_detail::check_dist_and_k(
