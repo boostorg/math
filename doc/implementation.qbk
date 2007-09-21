@@ -187,10 +187,10 @@ Mathematica Basic Statistics.] give more detail, in particular for discrete dist
 
 Some functions and distributions are well defined with + or - infinity as 
 argument(s), but after some experiments with handling infinite arguments 
-as special cases, we concluded that it was more useful to forbid this,
-and instead to return the result of __domain_error.
+as special cases, we concluded that it was generally more useful to forbid this,
+and instead to return the result of __domain_error.  
 
-Handling infinity as special cases was additionally complicated 
+Handling infinity as special cases is additionally complicated 
 because, unlike built-in types on most - but not all - platforms, 
 not all User-Defined Types are 
 specialized to provide `std::numeric_limits<RealType>::infinity()`
@@ -201,6 +201,10 @@ or overflow in the users code, and it will be more helpful for this
 to be diagnosed promptly rather than just continuing.
 The code also became much more complicated, more error-prone,
 much more work to test, and much less readable.
+
+However in a few cases, for example normal, where we felt it obvious,
+we have permitted argument(s) to be infinity,
+provided infinity is implemented for the realType on that implementation.
 
 Overflow, underflow, denorm can be handled using __error_policy.
 
