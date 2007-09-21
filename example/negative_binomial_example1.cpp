@@ -418,10 +418,10 @@ Message from thrown exception was:
  Number of failures argument is -1, but must be >= 0 !
 ]
 */
+//] [/ negative_binomial_eg1_2]
   }
 	return 0;
 }  // int main()
-//] [/ negative_binomial_eg1_2]
 
 
 /*
