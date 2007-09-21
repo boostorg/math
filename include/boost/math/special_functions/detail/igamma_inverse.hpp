@@ -17,7 +17,7 @@ namespace boost{ namespace math{
 namespace detail{
 
 template <class T>
-T estimate_inverse_s(T p, T q)
+T find_inverse_s(T p, T q)
 {
    //
    // Computation of the Incomplete Gamma Function Ratios and their Inverse
@@ -89,7 +89,7 @@ inline T didonato_FN(T p, T a, T x, unsigned N, T tolerance, const Policy& pol)
 }
 
 template <class T, class Policy>
-T estimate_inverse_gamma(T a, T p, T q, const Policy& pol)
+T find_inverse_gamma(T a, T p, T q, const Policy& pol)
 {
    //
    // In order to understand what's going on here, you will
@@ -180,7 +180,7 @@ T estimate_inverse_gamma(T a, T p, T q, const Policy& pol)
    else
    {
       // DiDonato and Morris Eq 31:
-      T s = estimate_inverse_s(p, q);
+      T s = find_inverse_s(p, q);
 
       T s_2 = s * s;
       T s_3 = s_2 * s;
@@ -353,7 +353,7 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
       return tools::max_value<T>();
    if(p == 0)
       return 0;
-   T guess = detail::estimate_inverse_gamma(a, p, 1 - p, pol);
+   T guess = detail::find_inverse_gamma(a, p, 1 - p, pol);
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();
@@ -395,7 +395,7 @@ T gamma_q_inv_imp(T a, T q, const Policy& pol)
       return tools::max_value<T>();
    if(q == 1)
       return 0;
-   T guess = detail::estimate_inverse_gamma(a, 1 - q, q, pol);
+   T guess = detail::find_inverse_gamma(a, 1 - q, q, pol);
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();

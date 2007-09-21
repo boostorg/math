@@ -501,7 +501,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
    {
       //
       // We have a Student's T distribution:
-      x = estimate_ibeta_inv_from_t_dist(a, p, q, &y, pol);
+      x = find_ibeta_inv_from_t_dist(a, p, q, &y, pol);
    }
    else if(a + b > 5)
    {

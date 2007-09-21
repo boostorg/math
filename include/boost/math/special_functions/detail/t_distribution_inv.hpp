@@ -379,7 +379,7 @@ calculate_real:
 }
 
 template <class T, class Policy>
-inline T estimate_ibeta_inv_from_t_dist(T a, T p, T q, T* py, const Policy& pol)
+inline T find_ibeta_inv_from_t_dist(T a, T p, T q, T* py, const Policy& pol)
 {
    T u = (p > q) ? 0.5f - q / 2 : p / 2;
    T v = 1 - u; // u < 0.5 so no cancellation error
