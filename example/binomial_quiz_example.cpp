@@ -127,7 +127,7 @@ to use the Cumulative Distribution Function (cdf) instead:
 [pre
 Probability of getting none or one right is 0.0634764
 ]
-Since the cdf is inclusive, we can get the probability of getting upto 10 right ( <= ) 
+Since the cdf is inclusive, we can get the probability of getting up to 10 right ( <= ) 
 */
   cout << "Probability of getting <= 10 right (to fail) is " << cdf(quiz, 10) << endl;
 /*`
@@ -162,8 +162,11 @@ If we want a < rather than a <= test, because the CDF is inclusive, we must subt
 [pre
 Probability of getting less than 11 (< 11) answers right by guessing is 0.999715
 ]
-and similarly to get a > rather than a >= test, because the cdf complement is also inclusive,
+and similarly to get a >= rather than a > test
 we also need to subtract one from the score (and can again check the sum is unity).
+This is because if the cdf is /inclusive/, 
+then its complement must be /exclusive/ otherwise there would be one possible
+outcome counted twice!
 */
   cout << "Probability of getting at least " << pass_score 
     << "(>= " << pass_score << ") answers right by guessing is "
@@ -208,7 +211,7 @@ Guessed OK   Probability
 16           1
 ]
 */
-  cout << "\n" "At least (>=)""\n""Guessed OK   Probability" << right << endl;
+  cout << "\n" "At least (>)""\n""Guessed OK   Probability" << right << endl;
   for (int score = 0; score <= questions; score++)
   {
     cout << setw(2) << score << "           "  << setprecision(10)
@@ -216,7 +219,7 @@ Guessed OK   Probability
   }
 /*`
 [pre
-At least (>=)
+At least (>)
 Guessed OK   Probability
  0           0.9899774042
  1           0.9365235602
@@ -345,8 +348,10 @@ But we might believe that the real values tell us a little more - see
 [link math_toolkit.policy.pol_tutorial.understand_dis_quant Understanding Discrete Quantile Policy].
 
 We could control the policy for *all* distributions by
+
   #define BOOST_MATH_DISCRETE_QUANTILE_POLICY real
-at the head of the program would make this policy apply
+
+  at the head of the program would make this policy apply
 to this *one, and only*, translation unit.
 
 Or we can now create a (typedef for) policy that has discrete quantiles real 
@@ -363,7 +368,7 @@ Add a custom binomial distribution called ``real_quantile_binomial`` that uses `
   using boost::math::binomial_distribution;
   typedef binomial_distribution<double, real_quantile_policy> real_quantile_binomial;
 /*`
-Construct a distribution of this custom ``real_quantile_binomial distribution``
+Construct an object of this custom distribution:
 */
   real_quantile_binomial quiz_real(questions, success_fraction);
 /*`

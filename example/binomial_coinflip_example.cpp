@@ -40,7 +40,7 @@ from 0.5 to some other value to simulate an unfair coin,
 say 0.6 for one with chewing gum on the tail,
 so it is more likely to fall tails down and heads up).
 
-First we need to some includes and using statements to be able to use the binomial distribution, some std input and output, and get started:
+First we need some includes and using statements to be able to use the binomial distribution, some std input and output, and get started:
 */
 
 #include <boost/math/distributions/binomial.hpp>

@@ -39,9 +39,11 @@ for example, wind velocity and direction may be combined to yield a wind speed,
 or real and imaginary components may have absolute values that are Rayleigh distributed.
 
 The following graph illustrates how the Probability density Function(pdf) varies with the shape parameter [sigma]:
+
 [$../graphs/rayleigh_pdf.png]
 
 and the Cumulative Distribution Function (cdf)
+
 [$../graphs/rayleigh_cdf.png]
 
 [h4 Related distributions]

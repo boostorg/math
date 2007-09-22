@@ -184,7 +184,9 @@ are not currently used, but may be if further special functions are added.
 In addition, for efficient and accurate results, a __lanczos is highly desirable.
 You may be able to adapt an existing approximation from 
 [@../../../../boost/math/special_functions/lanczos.hpp
-boost/math/special_functions/lanczos.hpp]: you will need change
+boost/math/special_functions/lanczos.hpp] or
+[@../tools/ntl_rr_lanczos.hpp libs/math/tools/ntl_rr_lanczos.hpp]: 
+you will need change
 static_cast's to lexical_cast's, and the constants to /strings/ 
 (in order to ensure the coefficients aren't truncated to long double)
 and then specialise `lanczos_traits` for type T.  Otherwise you may have to hack 
@@ -304,7 +306,7 @@ support for this type, since this is not a conceptual requirement
 for [link math_toolkit.using_udt.concepts RealType]'s.
 
 NTL RR is an example of a type meeting the requirements that this type
-models, but note minor additions are needed - see ntl.diff and documentation
+models, but note that use of a thin wrapper class is required: refer to
 [link math_toolkit.using_udt.use_ntl "Using With NTL - a High-Precision Floating-Point Library"].
 
 There is no specific test case for type `real_concept`, instead, since this

@@ -222,6 +222,8 @@ on or before the 12th house is 0.56182
 ]
 Finally consider the risk of Pat not selling his quota of 5 bars
 even after visiting all the houses.
+Calculate the probability that he /will/ sell on 
+or before the last house:
 Calculate the probability that he would sell all his quota on the very last house.
 */
     cout << "Probability that Pat finishes on the " << all_houses
@@ -245,6 +247,10 @@ Probability of selling his quota of 5 bars
 on or before the 30th house is 0.99849
 ]
 
+/*`So the risk of failing even after visiting all the houses is 1 - this probability,
+  ``1 - cdf(nb, all_houses - sales_quota``
+But using this expression may cause serious inaccuracy,
+so it would be much better to use the complement of the cdf:
 So the risk of failing even at, or after, the 31th (non-existent) houses is 1 - this probability,
   ``1 - cdf(nb, all_houses - sales_quota)`` 
 But using this expression may cause serious inaccuracy. 
