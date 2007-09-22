@@ -105,6 +105,67 @@ _____________________________________________
 So at the 95% confidence level we conclude that the standard deviation
 is between 0.00551 and 0.00729.
 
+[h4 Confidence intervals as a function of the number of observations]
+
+Similarly, we can also list the confidence intervals for the standard deviation
+for the common confidence levels 95%, for increasing numbers of observations.
+
+(The standard deviation is here assumed unity,
+so we can simply multiply a particular standard deviation,
+0.0062789 in the example above, by these values to get the confidence limits).
+
+[pre'''
+____________________________________________________
+Confidence level (two-sided)            =  0.0500000
+Standard Deviation                      =  1.0000000
+________________________________________
+Observations        Lower          Upper
+                    Limit          Limit
+________________________________________
+         2         0.4461        31.9102
+         3         0.5207         6.2847
+         4         0.5665         3.7285
+         5         0.5991         2.8736
+         6         0.6242         2.4526
+         7         0.6444         2.2021
+         8         0.6612         2.0353
+         9         0.6755         1.9158
+        10         0.6878         1.8256
+        15         0.7321         1.5771
+        20         0.7605         1.4606
+        30         0.7964         1.3443
+        40         0.8192         1.2840
+        50         0.8353         1.2461
+        60         0.8476         1.2197
+       100         0.8780         1.1617
+       120         0.8875         1.1454
+      1000         0.9580         1.0459
+     10000         0.9863         1.0141
+     50000         0.9938         1.0062
+    100000         0.9956         1.0044
+   1000000         0.9986         1.0014
+''']
+
+With just 2 observations the limits are from *0.445* up to to *31.9*,
+so the standard deviation might be about *half*
+the observed value up to *30 times* the observed value!
+
+Estimating a standard deviation with just a handful of values leaves a very great uncertainty,
+especially the upper limit.
+Note especially how far the upper limit is skewed from the most likely standard deviation.
+
+Even for 10 observations, normally considered a reasonable number,
+the range is still from 0.69 to 1.8, about a range of 0.7 to 2,
+and is still highly skewed with an upper limit *twice* the median.
+
+When we have 1000 observations, the estimate of the standard deviation is starting to look convincing,
+with a range from 0.95 to 1.05 - now near symmetrical, but still about + or - 5%.
+
+Only when we have 10000 or more repeated observations can we start to be reasonably confident
+(provided we are sure that other factors like drift are not creeping in).
+
+For 10000 observations, the interval is 0.99 to 1.1 - finally a really convincing + or -1% confidence.
+
 [endsect][/section:chi_sq_intervals Confidence Intervals on the Standard Deviation]
 
 [section:chi_sq_test Chi-Square Test for the Standard Deviation]
