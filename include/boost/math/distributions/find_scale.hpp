@@ -72,13 +72,13 @@ namespace boost
       //quantile(N01, 0.99) 2.32635
       //quantile(N01, 0.999) 3.09023
 
-      Dist::value_type result = 
+      typename Dist::value_type result = 
         (z - location)  // difference between desired x and current location.
         / quantile(Dist(), p); // standard distribution.
 
       if (result <= 0)
       { // If policy isn't to throw, return the scale <= 0.
-        policies::raise_evaluation_error<Dist::value_type>(function,
+        policies::raise_evaluation_error<typename Dist::value_type>(function,
           "Computed scale (%1%) is <= 0!" " Was the complement intended?",
           result, Policy());
       }
@@ -113,32 +113,32 @@ namespace boost
 
       // Checks on arguments, as not complemented version,
       // Explicit policy.
-      Dist::value_type q = c.param1;
+      typename Dist::value_type q = c.param1;
       if(!(boost::math::isfinite)(q) || (q < 0) || (q > 1))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "Probability parameter was %1%, but must be >= 0 and <= 1!", q, c.param3);
       }
-      Dist::value_type z = c.dist;
+      typename Dist::value_type z = c.dist;
       if(!(boost::math::isfinite)(z))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "find_scale z parameter was %1%, but must be finite!", z, c.param3);
       }
-      Dist::value_type location = c.param2;
+      typename Dist::value_type location = c.param2;
       if(!(boost::math::isfinite)(location))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "find_scale location parameter was %1%, but must be finite!", location, c.param3);
       }
 
-      Dist::value_type result = 
+      typename Dist::value_type result = 
         (c.dist - c.param2)  // difference between desired x and current location.
         / quantile(complement(Dist(), c.param1));
       //     (  z    - location) / (quantile(complement(Dist(),  q)) 
       if (result <= 0)
       { // If policy isn't to throw, return the scale <= 0.
-        policies::raise_evaluation_error<Dist::value_type>(function,
+        policies::raise_evaluation_error<typename Dist::value_type>(function,
           "Computed scale (%1%) is <= 0!" " Was the complement intended?",
           result, Policy());
       }
@@ -165,32 +165,32 @@ namespace boost
 
       // Checks on arguments, as not complemented version,
       // default policy policies::policy<>().
-      Dist::value_type q = c.param1;
+      typename Dist::value_type q = c.param1;
       if(!(boost::math::isfinite)(q) || (q < 0) || (q > 1))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "Probability parameter was %1%, but must be >= 0 and <= 1!", q, policies::policy<>());
       }
-      Dist::value_type z = c.dist;
+      typename Dist::value_type z = c.dist;
       if(!(boost::math::isfinite)(z))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "find_scale z parameter was %1%, but must be finite!", z, policies::policy<>());
       }
-      Dist::value_type location = c.param2;
+      typename Dist::value_type location = c.param2;
       if(!(boost::math::isfinite)(location))
       {
         return policies::raise_domain_error<typename Dist::value_type>(
           function, "find_scale location parameter was %1%, but must be finite!", location, policies::policy<>());
       }
 
-      Dist::value_type result = 
+      typename Dist::value_type result = 
         (z - location)  // difference between desired x and current location.
         / quantile(complement(Dist(), q));
       //     (  z    - location) / (quantile(complement(Dist(),  q)) 
       if (result <= 0)
       { // If policy isn't to throw, return the scale <= 0.
-        policies::raise_evaluation_error<Dist::value_type>(function,
+        policies::raise_evaluation_error<typename Dist::value_type>(function,
           "Computed scale (%1%) is <= 0!" " Was the complement intended?",
           result, policies::policy<>()); // This is only the default policy - also Want a version with Policy here.
       }

@@ -83,19 +83,19 @@ namespace boost
     {
       static const char* function = "boost::math::find_location<Dist, Policy>&, %1%)";
 
-      Dist::value_type p = c.param1;
+      typename Dist::value_type p = c.param1;
       if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "Probability parameter was %1%, but must be >= 0 and <= 1!", p, policies::policy<>());
       }
-      Dist::value_type z = c.dist;
+      typename Dist::value_type z = c.dist;
       if(!(boost::math::isfinite)(z))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "z parameter was %1%, but must be finite!", z, policies::policy<>());
       }
-      Dist::value_type scale = c.param2;
+      typename Dist::value_type scale = c.param2;
       if(!(boost::math::isfinite)(scale))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
@@ -112,19 +112,19 @@ namespace boost
     {
       static const char* function = "boost::math::find_location<Dist, Policy>&, %1%)";
 
-      Dist::value_type p = c.param1;
+      typename Dist::value_type p = c.param1;
       if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "Probability parameter was %1%, but must be >= 0 and <= 1!", p, c.param3);
       }
-      Dist::value_type z = c.dist;
+      typename Dist::value_type z = c.dist;
       if(!(boost::math::isfinite)(z))
       {
        return policies::raise_domain_error<typename Dist::value_type>(
            function, "z parameter was %1%, but must be finite!", z, c.param3);
       }
-      Dist::value_type scale = c.param2;
+      typename Dist::value_type scale = c.param2;
       if(!(boost::math::isfinite)(scale))
       {
        return policies::raise_domain_error<typename Dist::value_type>(

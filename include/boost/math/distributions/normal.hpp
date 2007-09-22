@@ -34,11 +34,11 @@ public:
    normal_distribution(RealType mean = 0, RealType sd = 1)
       : m_mean(mean), m_sd(sd)
    { // Default is a 'standard' normal distribution N01.
-     static const char* function = "boost::math::normal_distribution(const normal_distribution<%1%>&, %1%)";
+     static const char* function = "boost::math::normal_distribution<%1%>::normal_distribution";
 
      RealType result;
-     detail::check_scale("boost::math::normal_distribution<%1%>::normal_distribution", sd, &result, Policy());
-     detail::check_location("boost::math::normal_distribution<%1%>::normal_distribution", mean, &result, Policy());
+     detail::check_scale(function, sd, &result, Policy());
+     detail::check_location(function, mean, &result, Policy());
    }
 
    RealType mean()const
