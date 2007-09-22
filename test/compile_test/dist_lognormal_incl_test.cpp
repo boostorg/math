@@ -7,6 +7,16 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/distributions/lognormal.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
+
+void check()
+{
+   TEST_DIST_FUNC(lognormal)
+}
 
 template class boost::math::lognormal_distribution<float, boost::math::policies::policy<> >;
 template class boost::math::lognormal_distribution<double, boost::math::policies::policy<> >;

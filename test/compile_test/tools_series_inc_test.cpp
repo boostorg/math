@@ -7,6 +7,11 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/tools/series.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
 struct Functor
 {
@@ -15,11 +20,16 @@ struct Functor
 };
 #define U double
 
-template Functor::result_type boost::math::tools::sum_series<Functor>(Functor& func, int bits);
-template Functor::result_type boost::math::tools::sum_series<Functor>(Functor& func, int bits, boost::uintmax_t& max_terms);
-template Functor::result_type boost::math::tools::sum_series<Functor, U>(Functor& func, int bits, U init_value);
-template Functor::result_type boost::math::tools::sum_series<Functor, U>(Functor& func, int bits, boost::uintmax_t& max_terms, U init_value);
-template Functor::result_type boost::math::tools::kahan_sum_series<Functor>(Functor& func, int bits);
-template Functor::result_type boost::math::tools::kahan_sum_series<Functor>(Functor& func, int bits, boost::uintmax_t& max_terms);
+Functor func;
+boost::uintmax_t uim = 0;
 
+void check()
+{
+   check_result<Functor::result_type>(boost::math::tools::sum_series<Functor>(func, i));
+   check_result<Functor::result_type>(boost::math::tools::sum_series<Functor>(func, i, uim));
+   check_result<Functor::result_type>(boost::math::tools::sum_series<Functor, U>(func, i, d));
+   check_result<Functor::result_type>(boost::math::tools::sum_series<Functor, U>(func, i, uim, d));
+   check_result<Functor::result_type>(boost::math::tools::kahan_sum_series<Functor>(func, i));
+   check_result<Functor::result_type>(boost::math::tools::kahan_sum_series<Functor>(func, i, uim));
+}
 

@@ -7,14 +7,22 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/laguerre.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template float boost::math::laguerre<float>(unsigned, float);
-template double boost::math::laguerre<double>(unsigned, double);
-template long double boost::math::laguerre<long double>(unsigned, long double);
+void check()
+{
+   check_result<float>(boost::math::laguerre<float>(u, f));
+   check_result<double>(boost::math::laguerre<double>(u, d));
+   check_result<long double>(boost::math::laguerre<long double>(u, l));
 
-typedef boost::math::policies::policy<> def_pol;
+   typedef boost::math::policies::policy<> def_pol;
+   def_pol p;
 
-template float boost::math::laguerre<float, def_pol>(unsigned, unsigned, float, const def_pol&);
-template double boost::math::laguerre<double, def_pol>(unsigned, unsigned, double, const def_pol&);
-template long double boost::math::laguerre<long double, def_pol>(unsigned, unsigned, long double, const def_pol&);
-
+   check_result<float>(boost::math::laguerre<float, def_pol>(u, u, f, p));
+   check_result<double>(boost::math::laguerre<double, def_pol>(u, u, d, p));
+   check_result<long double>(boost::math::laguerre<long double, def_pol>(u, u, l, p));
+}

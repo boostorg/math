@@ -7,6 +7,16 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/distributions/students_t.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
+
+void check()
+{
+   TEST_DIST_FUNC(students_t)
+}
 
 template class boost::math::students_t_distribution<float, boost::math::policies::policy<> >;
 template class boost::math::students_t_distribution<double, boost::math::policies::policy<> >;

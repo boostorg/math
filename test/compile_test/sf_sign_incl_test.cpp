@@ -7,16 +7,23 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/sign.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template int boost::math::sign<float>(const float&);
-template int boost::math::sign<double>(const double&);
-template int boost::math::sign<long double>(const long double&);
+void check()
+{
+   check_result<int>(boost::math::sign<float>(f));
+   check_result<int>(boost::math::sign<double>(d));
+   check_result<int>(boost::math::sign<long double>(l));
 
-template int boost::math::signbit<float>(const float&);
-template int boost::math::signbit<double>(const double&);
-template int boost::math::signbit<long double>(const long double&);
+   check_result<int>(boost::math::signbit<float>(f));
+   check_result<int>(boost::math::signbit<double>(d));
+   check_result<int>(boost::math::signbit<long double>(l));
 
-template float boost::math::copysign<float>(const float&, const float&);
-template double boost::math::copysign<double>(const double&, const double&);
-template long double boost::math::copysign<long double>(const long double&, const long double&);
-
+   check_result<float>(boost::math::copysign<float>(f, f));
+   check_result<double>(boost::math::copysign<double>(d, d));
+   check_result<long double>(boost::math::copysign<long double>(l, l));
+}

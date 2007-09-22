@@ -194,7 +194,9 @@ inline const std::pair<RealType, RealType> support(const cauchy_distribution<Rea
 template <class RealType, class Policy>
 inline RealType pdf(const cauchy_distribution<RealType, Policy>& dist, const RealType& x)
 {  
-  static const char* function = "boost::math::pdf(cauchy<%1%>&, %1%)";
+   BOOST_MATH_STD_USING  // for ADL of std functions
+
+   static const char* function = "boost::math::pdf(cauchy<%1%>&, %1%)";
    RealType result;
    RealType location = dist.location();
    RealType scale = dist.scale();

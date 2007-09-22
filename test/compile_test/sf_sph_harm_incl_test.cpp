@@ -7,18 +7,25 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/spherical_harmonic.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template std::complex<float> boost::math::spherical_harmonic<float>(unsigned, int, float, float);
-template std::complex<double> boost::math::spherical_harmonic<double>(unsigned, int, double, double);
-template std::complex<long double> boost::math::spherical_harmonic<long double>(unsigned, int, long double, long double);
+void check()
+{
+   check_result<std::complex<float> >(boost::math::spherical_harmonic<float>(u, i, f, f));
+   check_result<std::complex<double> >(boost::math::spherical_harmonic<double>(u, i, d, d));
+   check_result<std::complex<long double> >(boost::math::spherical_harmonic<long double>(u, i, l, l));
 
-template float boost::math::spherical_harmonic_r<float>(unsigned, int, float, float);
-template double boost::math::spherical_harmonic_r<double>(unsigned, int, double, double);
-template long double boost::math::spherical_harmonic_r<long double>(unsigned, int, long double, long double);
+   check_result<float>(boost::math::spherical_harmonic_r<float>(u, i, f, f));
+   check_result<double>(boost::math::spherical_harmonic_r<double>(u, i, d, d));
+   check_result<long double>(boost::math::spherical_harmonic_r<long double>(u, i, l, l));
 
-template float boost::math::spherical_harmonic_i<float>(unsigned, int, float, float);
-template double boost::math::spherical_harmonic_i<double>(unsigned, int, double, double);
-template long double boost::math::spherical_harmonic_i<long double>(unsigned, int, long double, long double);
-
+   check_result<float>(boost::math::spherical_harmonic_i<float>(u, i, f, f));
+   check_result<double>(boost::math::spherical_harmonic_i<double>(u, i, d, d));
+   check_result<long double>(boost::math::spherical_harmonic_i<long double>(u, i, l, l));
+}
 
 

@@ -7,22 +7,29 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/fpclassify.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template int boost::math::fpclassify<float>(float);
-template int boost::math::fpclassify<double>(double);
-template int boost::math::fpclassify<long double>(long double);
+void check()
+{
+   check_result<int>(boost::math::fpclassify<float>(f));
+   check_result<int>(boost::math::fpclassify<double>(d));
+   check_result<int>(boost::math::fpclassify<long double>(l));
 
-template bool boost::math::isfinite<float>(float);
-template bool boost::math::isfinite<double>(double);
-template bool boost::math::isfinite<long double>(long double);
+   check_result<bool>(boost::math::isfinite<float>(f));
+   check_result<bool>(boost::math::isfinite<double>(d));
+   check_result<bool>(boost::math::isfinite<long double>(l));
 
-template bool boost::math::isinf<float>(float);
-template bool boost::math::isinf<double>(double);
-template bool boost::math::isinf<long double>(long double);
+   check_result<bool>(boost::math::isinf<float>(f));
+   check_result<bool>(boost::math::isinf<double>(d));
+   check_result<bool>(boost::math::isinf<long double>(l));
 
-template bool boost::math::isnormal<float>(float);
-template bool boost::math::isnormal<double>(double);
-template bool boost::math::isnormal<long double>(long double);
-
+   check_result<bool>(boost::math::isnormal<float>(f));
+   check_result<bool>(boost::math::isnormal<double>(d));
+   check_result<bool>(boost::math::isnormal<long double>(l));
+}
 
 

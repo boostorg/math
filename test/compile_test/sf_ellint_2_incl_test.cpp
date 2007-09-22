@@ -7,11 +7,19 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/ellint_2.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template float boost::math::ellint_2<float>(float, float);
-template double boost::math::ellint_2<double>(double, double);
-template long double boost::math::ellint_2<long double>(long double, long double);
+void check()
+{
+   check_result<float>(boost::math::ellint_2<float>(f, f));
+   check_result<double>(boost::math::ellint_2<double>(d, d));
+   check_result<long double>(boost::math::ellint_2<long double>(l, l));
 
-template float boost::math::ellint_2<float>(float);
-template double boost::math::ellint_2<double>(double);
-template long double boost::math::ellint_2<long double>(long double);
+   check_result<float>(boost::math::ellint_2<float>(f));
+   check_result<double>(boost::math::ellint_2<double>(d));
+   check_result<long double>(boost::math::ellint_2<long double>(l));
+}

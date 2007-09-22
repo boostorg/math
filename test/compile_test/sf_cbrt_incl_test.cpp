@@ -7,7 +7,15 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/cbrt.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template float boost::math::cbrt<float>(float);
-template double boost::math::cbrt<double>(double);
-template long double boost::math::cbrt<long double>(long double);
+void check()
+{
+   check_result<float>(boost::math::cbrt<float>(f));
+   check_result<double>(boost::math::cbrt<double>(d));
+   check_result<long double>(boost::math::cbrt<long double>(l));
+}

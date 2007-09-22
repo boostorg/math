@@ -7,6 +7,16 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/distributions/exponential.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
+
+void check()
+{
+   TEST_DIST_FUNC(exponential)
+}
 
 template class boost::math::exponential_distribution<float, boost::math::policies::policy<> >;
 template class boost::math::exponential_distribution<double, boost::math::policies::policy<> >;

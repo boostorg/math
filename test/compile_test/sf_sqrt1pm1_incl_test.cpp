@@ -7,7 +7,15 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/sqrt1pm1.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template float boost::math::sqrt1pm1<float>(const float&);
-template double boost::math::sqrt1pm1<double>(const double&);
-template long double boost::math::sqrt1pm1<long double>(const long double&);
+void check()
+{
+   check_result<float>(boost::math::sqrt1pm1<float>(f));
+   check_result<double>(boost::math::sqrt1pm1<double>(d));
+   check_result<long double>(boost::math::sqrt1pm1<long double>(l));
+}

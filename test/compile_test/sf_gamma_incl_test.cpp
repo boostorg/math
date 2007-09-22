@@ -7,48 +7,55 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/gamma.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template float boost::math::tgamma<float>(float);
-template double boost::math::tgamma<double>(double);
-template long double boost::math::tgamma<long double>(long double);
+void check()
+{
+   check_result<float>(boost::math::tgamma<float>(f));
+   check_result<double>(boost::math::tgamma<double>(d));
+   check_result<long double>(boost::math::tgamma<long double>(l));
 
-template float boost::math::lgamma<float>(float);
-template double boost::math::lgamma<double>(double);
-template long double boost::math::lgamma<long double>(long double);
+   check_result<float>(boost::math::lgamma<float>(f));
+   check_result<double>(boost::math::lgamma<double>(d));
+   check_result<long double>(boost::math::lgamma<long double>(l));
 
-template float boost::math::gamma_p<float>(float, float);
-template double boost::math::gamma_p<double>(double, double);
-template long double boost::math::gamma_p<long double>(long double, long double);
+   check_result<float>(boost::math::gamma_p<float>(f, f));
+   check_result<double>(boost::math::gamma_p<double>(d, d));
+   check_result<long double>(boost::math::gamma_p<long double>(l, l));
 
-template float boost::math::gamma_q<float>(float, float);
-template double boost::math::gamma_q<double>(double, double);
-template long double boost::math::gamma_q<long double>(long double, long double);
+   check_result<float>(boost::math::gamma_q<float>(f, f));
+   check_result<double>(boost::math::gamma_q<double>(d, d));
+   check_result<long double>(boost::math::gamma_q<long double>(l, l));
 
-template float boost::math::gamma_p_inv<float>(float, float);
-template double boost::math::gamma_p_inv<double>(double, double);
-template long double boost::math::gamma_p_inv<long double>(long double, long double);
+   check_result<float>(boost::math::gamma_p_inv<float>(f, f));
+   check_result<double>(boost::math::gamma_p_inv<double>(d, d));
+   check_result<long double>(boost::math::gamma_p_inv<long double>(l, l));
 
-template float boost::math::gamma_q_inv<float>(float, float);
-template double boost::math::gamma_q_inv<double>(double, double);
-template long double boost::math::gamma_q_inv<long double>(long double, long double);
+   check_result<float>(boost::math::gamma_q_inv<float>(f, f));
+   check_result<double>(boost::math::gamma_q_inv<double>(d, d));
+   check_result<long double>(boost::math::gamma_q_inv<long double>(l, l));
 
-template float boost::math::gamma_p_inva<float>(float, float);
-template double boost::math::gamma_p_inva<double>(double, double);
-template long double boost::math::gamma_p_inva<long double>(long double, long double);
+   check_result<float>(boost::math::gamma_p_inva<float>(f, f));
+   check_result<double>(boost::math::gamma_p_inva<double>(d, d));
+   check_result<long double>(boost::math::gamma_p_inva<long double>(l, l));
 
-template float boost::math::gamma_q_inva<float>(float, float);
-template double boost::math::gamma_q_inva<double>(double, double);
-template long double boost::math::gamma_q_inva<long double>(long double, long double);
+   check_result<float>(boost::math::gamma_q_inva<float>(f, f));
+   check_result<double>(boost::math::gamma_q_inva<double>(d, d));
+   check_result<long double>(boost::math::gamma_q_inva<long double>(l, l));
 
-template float boost::math::gamma_p_derivative<float>(float, float);
-template double boost::math::gamma_p_derivative<double>(double, double);
-template long double boost::math::gamma_p_derivative<long double>(long double, long double);
+   check_result<float>(boost::math::gamma_p_derivative<float>(f, f));
+   check_result<double>(boost::math::gamma_p_derivative<double>(d, d));
+   check_result<long double>(boost::math::gamma_p_derivative<long double>(l, l));
 
-template float boost::math::tgamma_ratio<float>(float, float);
-template double boost::math::tgamma_ratio<double>(double, double);
-template long double boost::math::tgamma_ratio<long double>(long double, long double);
+   check_result<float>(boost::math::tgamma_ratio<float>(f, f));
+   check_result<double>(boost::math::tgamma_ratio<double>(d, d));
+   check_result<long double>(boost::math::tgamma_ratio<long double>(l, l));
 
-template float boost::math::tgamma_delta_ratio<float>(float, float);
-template double boost::math::tgamma_delta_ratio<double>(double, double);
-template long double boost::math::tgamma_delta_ratio<long double>(long double, long double);
-
+   check_result<float>(boost::math::tgamma_delta_ratio<float>(f, f));
+   check_result<double>(boost::math::tgamma_delta_ratio<double>(d, d));
+   check_result<long double>(boost::math::tgamma_delta_ratio<long double>(l, l));
+}

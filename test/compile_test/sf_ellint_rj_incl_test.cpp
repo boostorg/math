@@ -7,7 +7,15 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/ellint_rj.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template float boost::math::ellint_rj<float>(float, float, float, float);
-template double boost::math::ellint_rj<double>(double, double, double, double);
-template long double boost::math::ellint_rj<long double>(long double, long double, long double, long double);
+void check()
+{
+   check_result<float>(boost::math::ellint_rj<float>(f, f, f, f));
+   check_result<double>(boost::math::ellint_rj<double>(d, d, d, d));
+   check_result<long double>(boost::math::ellint_rj<long double>(l, l, l, l));
+}

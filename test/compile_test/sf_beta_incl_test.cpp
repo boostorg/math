@@ -31,3 +31,4 @@ void check()
    check_result<double>(boost::math::ibeta_inva<double>(d, d, d));
    check_result<long double>(boost::math::ibeta_inva<long double>(l, l, l));
 }
+

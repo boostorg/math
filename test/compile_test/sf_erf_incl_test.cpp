@@ -7,20 +7,27 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/erf.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template float boost::math::erf<float>(float);
-template double boost::math::erf<double>(double);
-template long double boost::math::erf<long double>(long double);
+void check()
+{
+   check_result<float>(boost::math::erf<float>(f));
+   check_result<double>(boost::math::erf<double>(d));
+   check_result<long double>(boost::math::erf<long double>(l));
 
-template float boost::math::erfc<float>(float);
-template double boost::math::erfc<double>(double);
-template long double boost::math::erfc<long double>(long double);
+   check_result<float>(boost::math::erfc<float>(f));
+   check_result<double>(boost::math::erfc<double>(d));
+   check_result<long double>(boost::math::erfc<long double>(l));
 
-template float boost::math::erf_inv<float>(float);
-template double boost::math::erf_inv<double>(double);
-template long double boost::math::erf_inv<long double>(long double);
+   check_result<float>(boost::math::erf_inv<float>(f));
+   check_result<double>(boost::math::erf_inv<double>(d));
+   check_result<long double>(boost::math::erf_inv<long double>(l));
 
-template float boost::math::erfc_inv<float>(float);
-template double boost::math::erfc_inv<double>(double);
-template long double boost::math::erfc_inv<long double>(long double);
-
+   check_result<float>(boost::math::erfc_inv<float>(f));
+   check_result<double>(boost::math::erfc_inv<double>(d));
+   check_result<long double>(boost::math::erfc_inv<long double>(l));
+}

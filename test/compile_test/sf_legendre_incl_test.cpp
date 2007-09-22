@@ -7,16 +7,23 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/legendre.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template float boost::math::legendre_p<float>(int, float);
-template double boost::math::legendre_p<double>(int, double);
-template long double boost::math::legendre_p<long double>(int, long double);
+void check()
+{
+   check_result<float>(boost::math::legendre_p<float>(i, f));
+   check_result<double>(boost::math::legendre_p<double>(i, d));
+   check_result<long double>(boost::math::legendre_p<long double>(i, l));
 
-template float boost::math::legendre_p<float>(int, int, float);
-template double boost::math::legendre_p<double>(int, int, double);
-template long double boost::math::legendre_p<long double>(int, int, long double);
+   check_result<float>(boost::math::legendre_p<float>(i, i, f));
+   check_result<double>(boost::math::legendre_p<double>(i, i, d));
+   check_result<long double>(boost::math::legendre_p<long double>(i, i, l));
 
-template float boost::math::legendre_q<float>(unsigned, float);
-template double boost::math::legendre_q<double>(unsigned, double);
-template long double boost::math::legendre_q<long double>(unsigned, long double);
-
+   check_result<float>(boost::math::legendre_q<float>(u, f));
+   check_result<double>(boost::math::legendre_q<double>(u, d));
+   check_result<long double>(boost::math::legendre_q<long double>(u, l));
+}

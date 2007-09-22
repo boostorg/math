@@ -7,17 +7,28 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/tools/roots.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-typedef double (*F)(double);
-typedef std::pair<double, double> (*F2)(double);
-typedef std::tr1::tuple<double, double, double> (*F3)(double);
-#define T double
-typedef boost::math::tools::eps_tolerance<double> Tol;
+void check()
+{
+   typedef double (*F)(double);
+   typedef std::pair<double, double> (*F2)(double);
+   typedef std::tr1::tuple<double, double, double> (*F3)(double);
+   typedef boost::math::tools::eps_tolerance<double> Tol;
+   Tol tol(u);
+   boost::uintmax_t max_iter = 0;
+   F f = 0;
+   F2 f2 = 0;
+   F3 f3 = 0;
 
-template std::pair<T, T> boost::math::tools::bisect<F, T, Tol>(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter);
-template std::pair<T, T> boost::math::tools::bisect<F, T, Tol>(F f, T min, T max, Tol tol);
-template T boost::math::tools::newton_raphson_iterate<F2, T>(F2 f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
-template T boost::math::tools::halley_iterate<F3, T>(F3 f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
-template T boost::math::tools::schroeder_iterate<F3, T>(F3 f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
-
+   check_result<std::pair<double, double> >(boost::math::tools::bisect<F, double, Tol>(f, d, d, tol, max_iter));
+   check_result<std::pair<double, double> >(boost::math::tools::bisect<F, double, Tol>(f, d, d, tol));
+   check_result<double>(boost::math::tools::newton_raphson_iterate<F2, double>(f2, d, d, d, i, max_iter));
+   check_result<double>(boost::math::tools::halley_iterate<F3, double>(f3, d, d, d, i, max_iter));
+   check_result<double>(boost::math::tools::schroeder_iterate<F3, double>(f3, d, d, d, i, max_iter));
+}
 

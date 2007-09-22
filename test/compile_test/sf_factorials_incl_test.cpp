@@ -7,21 +7,28 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/special_functions/factorials.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
 
-template float boost::math::factorial<float>(unsigned);
-template double boost::math::factorial<double>(unsigned);
-template long double boost::math::factorial<long double>(unsigned);
+void check()
+{
+   check_result<float>(boost::math::factorial<float>(u));
+   check_result<double>(boost::math::factorial<double>(u));
+   check_result<long double>(boost::math::factorial<long double>(u));
 
-template float boost::math::double_factorial<float>(unsigned);
-template double boost::math::double_factorial<double>(unsigned);
-template long double boost::math::double_factorial<long double>(unsigned);
+   check_result<float>(boost::math::double_factorial<float>(u));
+   check_result<double>(boost::math::double_factorial<double>(u));
+   check_result<long double>(boost::math::double_factorial<long double>(u));
 
-template float boost::math::rising_factorial<float>(float, int);
-template double boost::math::rising_factorial<double>(double, int);
-template long double boost::math::rising_factorial<long double>(long double, int);
+   check_result<float>(boost::math::rising_factorial<float>(f, i));
+   check_result<double>(boost::math::rising_factorial<double>(d, i));
+   check_result<long double>(boost::math::rising_factorial<long double>(l, i));
 
-template float boost::math::falling_factorial<float>(float, unsigned int);
-template double boost::math::falling_factorial<double>(double, unsigned int);
-template long double boost::math::falling_factorial<long double>(long double, unsigned int);
-
+   check_result<float>(boost::math::falling_factorial<float>(f, u));
+   check_result<double>(boost::math::falling_factorial<double>(d, u));
+   check_result<long double>(boost::math::falling_factorial<long double>(l, u));
+}
 

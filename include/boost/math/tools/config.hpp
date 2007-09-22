@@ -4,6 +4,7 @@
 #include <boost/cstdint.hpp> // for boost::uintmax_t
 #include <boost/config.hpp>
 #include <algorithm>  // for min and max
+#include <cmath>
 
 #include <boost/math/tools/user.hpp>
 
