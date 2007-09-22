@@ -18,7 +18,7 @@ The code has been compiled and tested with:
 [[Borland 5.8.2][Windows][Almost works: some effort has been put into porting to this compiler.
       However, during testing a number of instances were encountered where this compiler
       generated incorrect code: completely omitting a function call seemingly at random.
-      For this reason, we cannot recoment using this library with this compiler, as the
+      For this reason, [*we cannot recoment using this library with this compiler], as the
       correct operation of the code cannot be guarenteed.]]
 [[MSVC 8.0][Windows][Warning free at level 4]]
 ]

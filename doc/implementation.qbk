@@ -145,8 +145,9 @@ However, for simplicity, this is not done for most examples.]
 [h4 Handling of Functions that are Not Mathematically defined]
 
 Functions that are not mathematically defined,
-like the Cauchy mean, fail to compile by default .
-[__math_undefined A policy] allows control of this.
+like the Cauchy mean, fail to compile by default.
+[link math_toolkit.policy.pol_ref.assert_undefined A policy] 
+allows control of this.
 
 If the policy is to permit undefined functions, then calling them
 throws a domain error, by default.  But the error policy can be set
@@ -252,15 +253,15 @@ or devised by John Maddock using
 
 Rational rather than Polynomial approximations are used to ensure
 accuracy: polynomial approximations are often wonderful up to
-a certain level of accuracy, but then fail to provide much greater
+a certain level of accuracy, but then quite often fail to provide much greater
 accuracy no matter how many more terms are added.
 
 Our own approximations were devised either for added accuracy
 (to support 128-bit long doubles for example), or because
 literature methods were unavailable or under non-BSL
 compatible license.  Our Remez code is known to produce good
-agreement with literature results in fairly simple "toy" cases,
-for more complex cases.  All approximations were checked 
+agreement with literature results in fairly simple "toy" cases.
+All approximations were checked 
 for convergence and to ensure that
 they were not ill-conditioned (the coefficients can give a 
 theoretically good solution, but the resulting rational function 
