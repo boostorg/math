@@ -154,6 +154,7 @@ void instantiate(RealType)
    boost::math::legendre_next(2, 2, v1, v2, v3);
    boost::math::laguerre(1, v1);
    boost::math::laguerre(2, 1, v1);
+   boost::math::laguerre(2u, 1u, v1);
    boost::math::laguerre_next(2, v1, v2, v3);
    boost::math::laguerre_next(2, 1, v1, v2, v3);
    boost::math::hermite(1, v1);

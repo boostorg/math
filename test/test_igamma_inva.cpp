@@ -249,7 +249,9 @@ int test_main(int, char* [])
 {
    expected_results();
 
+#ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
    test_gamma(0.1F, "float");
+#endif
    test_gamma(0.1, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_gamma(0.1L, "long double");

@@ -3,6 +3,7 @@
 
 #include <boost/cstdint.hpp> // for boost::uintmax_t
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <algorithm>  // for min and max
 #include <cmath>
 
@@ -10,6 +11,15 @@
 
 #if defined(__CYGWIN__) || defined(__FreeBSD__)
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#endif
+
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1400)
+//
+// Define if constants too large for a float cause "bad"
+// values to be stored in the data, rather than infinity
+// or a suitably large value.
+//
+#  define BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
 #endif
 //
 // Tune performance options for specific compilers:

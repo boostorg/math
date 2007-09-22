@@ -256,7 +256,9 @@ void test_spots(T, const char* t)
 
 int test_main(int, char* [])
 {
+#ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
    test_spots(0.0F, "float");
+#endif
    test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double");
@@ -265,7 +267,9 @@ int test_main(int, char* [])
 
    expected_results();
 
+#ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
    test_laguerre(0.1F, "float");
+#endif
    test_laguerre(0.1, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_laguerre(0.1L, "long double");
