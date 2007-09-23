@@ -8,8 +8,8 @@ question to ask is "How reliable is the calculated standard deviation?".
 For this situation the Chi Squared distribution can be used to calculate
 confidence intervals for the standard deviation.
 
-The full example code is in [@../../example/chi_square_std_dev_test.cpp 
-chi_square_std_deviation_test.cpp].
+The full example code & sample output is in
+[@../../example/chi_square_std_dev_test.cpp chi_square_std_deviation_test.cpp].
 
 We'll begin by defining the procedure that will calculate and print out the
 confidence intervals:
@@ -110,9 +110,11 @@ is between 0.00551 and 0.00729.
 Similarly, we can also list the confidence intervals for the standard deviation
 for the common confidence levels 95%, for increasing numbers of observations.
 
-(The standard deviation is here assumed unity,
-so we can simply multiply a particular standard deviation,
-0.0062789 in the example above, by these values to get the confidence limits).
+The standard deviation used to compute these values is unity,
+so the limits listed are *multipliers* for any particular standard deviation.
+For example, given a standard deviation of 0.0062789 as in the example 
+above; for 100 observations the multiplier is 0.8780
+giving the lower confidence limit of 0.8780 * 0.006728 = 0.00551.
 
 [pre'''
 ____________________________________________________
