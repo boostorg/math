@@ -47,59 +47,67 @@ appropriate result]]
    [link math_toolkit.policy.pol_tutorial.user_defined_error_policies user-supplied error handler].]]
 ]
 
-The following table shows all the permutations of errors and actions, 
+The following tables show all the permutations of errors and actions, 
 with the default action for each error shown in bold:
 
-[table Possible Error Conditions, and their Defaults
-[[Error Type]    [throw_on_error][errno_on_error][ignore_error][user_error]]
-[[Domain Error]  
-   [[*Throws `std::domain_error`]]
-      [Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::quiet_NaN()`]
-         [Returns `std::numeric_limits<T>::quiet_NaN()`]
-            [Returns the result of `boost::math::policies::user_domain_error`: 
+[table Possible Actions for Domain Errors
+[[Action]         [Behaviour]]
+[[throw_on_error][[*Throws `std::domain_error`]]]
+[[errno_on_error][Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::quiet_NaN()`]]
+[[ignore_error][Returns `std::numeric_limits<T>::quiet_NaN()`]]
+[[user_error][Returns the result of `boost::math::policies::user_domain_error`: 
             [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
-            this function must be defined by the user].]
-    ]
-[[Pole Error]
-   [[*Throws `std::domain_error`]]
-      [Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::quiet_NaN()`]
-         [Returns `std::numeric_limits<T>::quiet_NaN()`]
-            [Returns the result of `boost::math::policies::user_pole_error`: 
+            this function must be defined by the user].]]
+]
+    
+[table Possible Actions for Pole Errors
+[[Action]   [Behaviour]]
+[[throw_on_error]   [[*Throws `std::domain_error`]]]
+[[errno_on_error][Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::quiet_NaN()`]]
+[[ignore_error][Returns `std::numeric_limits<T>::quiet_NaN()`]]
+[[user_error][Returns the result of `boost::math::policies::user_pole_error`: 
             [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
-            this function must be defined by the user].]
-    ]
-[[Overflow Error]
-   [[*Throws `std::overflow_error`]]
-      [Sets `::errno` to `ERANGE` and returns `std::numeric_limits<T>::infinity()`]
-         [Returns `std::numeric_limits<T>::infinity()`]
-            [Returns the result of `boost::math::policies::user_overflow_error`: 
+            this function must be defined by the user].]]
+]
+
+[table Possible Actions for Overflow Errors
+[[Action]   [Behaviour]]
+[[throw_on_error][[*Throws `std::overflow_error`]]]
+[[errno_on_error][Sets `::errno` to `ERANGE` and returns `std::numeric_limits<T>::infinity()`]]
+[[ignore_error][Returns `std::numeric_limits<T>::infinity()`]]
+[[user_error][Returns the result of `boost::math::policies::user_overflow_error`: 
             [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
-            this function must be defined by the user].]
-    ]
-[[Underflow Error]
-   [Throws `std::underflow_error`]
-      [Sets `::errno` to `ERANGE` and returns 0.]
-         [[*Returns 0]]
-            [Returns the result of `boost::math::policies::user_underflow_error`: 
+            this function must be defined by the user].]]
+]
+
+[table Possible Actions for Underflow Errors
+[[Action]   [Behaviour]]
+[[throw_on_error][Throws `std::underflow_error`]]
+[[errno_on_error][Sets `::errno` to `ERANGE` and returns 0.]]
+[[ignore_error][[*Returns 0]]]
+[[user_error][Returns the result of `boost::math::policies::user_underflow_error`: 
             [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
-            this function must be defined by the user].]
-    ]
-[[Denorm Error]
-   [Throws `std::underflow_error`]
-      [Sets `::errno` to `ERANGE` and returns the denormalised value.]
-         [[*Returns the denormalised value.]]
-            [Returns the result of `boost::math::policies::user_denorm_error`: 
+            this function must be defined by the user].]]
+]
+
+[table Possible Actions for Denorm Errors
+[[Action]   [Behaviour]]
+[[throw_on_error][Throws `std::underflow_error`]]
+[[errno_on_error][Sets `::errno` to `ERANGE` and returns the denormalised value.]]
+[[ignore_error][[*Returns the denormalised value.]]]
+[[user_error][Returns the result of `boost::math::policies::user_denorm_error`: 
             [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
-            this function must be defined by the user].]
-    ]
-[[Evaluation Error]
-   [[*Throws `boost::math::evaluation_error`]]
-      [Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::infinity()`.]
-         [Returns `std::numeric_limits<T>::infinity()`.]
-            [Returns the result of `boost::math::policies::user_evaluation_error`: 
+            this function must be defined by the user].]]
+]
+
+[table Possible Actions for Internal Evaluation Errors
+[[Action]   [Behaviour]]
+[[throw_on_error][[*Throws `boost::math::evaluation_error`]]]
+[[errno_on_error][Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::infinity()`.]]
+[[ignore_error][Returns `std::numeric_limits<T>::infinity()`.]]
+[[user_error][Returns the result of `boost::math::policies::user_evaluation_error`: 
             [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
-            this function must be defined by the user].]
-    ]
+            this function must be defined by the user].]]
 ]
 
 [heading Rationale]
