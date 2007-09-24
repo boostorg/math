@@ -1,50 +1,5 @@
-[section:roadmap History and Roadmap]
-
-[h4 Milestone 1: Released March 31st 2006]
-
-* Implement gamma/beta/erf functions along with their incomplete counterparts.
-* Generate high quality test data, against which future improvements can be judged.
-* Provide tools for the evaluation of infinite series, continued fractions, and
-rational functions.
-* Provide tools for testing against tabulated test data, and collecting statistics
-on error rates.
-* Provide sufficient docs for people to be able to find their way around the library.
-
-[h4 Milestone 2: Released September 10th 2006]
-
-* Implement preview release of the statistical distributions.
-* Added statistical distributions tutorial.
-* Implemented root finding algorithms.
-* Implemented the inverses of the incomplete gamma and beta functions.
-* Rewrite erf/erfc as rational approximations (valid to 128-bit precision).
-* Integrated the statistical results generated from
-the test data with Boost.Test: uses a database of expected
-results, indexed by test, floating point type, platform, and compiler.
-* Improved lgamma near 1 and 2 (rational approximations).
-* Improved erf/erfc inverses (rational approximations).
-* Implemented Rational function generation (the Remez method).
-
-[h4 Milestone 3: First Review Candidate (31st Dec 2006)]
-
-* Implemented the main probability distribution and density functions.
-* Implemented digamma.
-* Added more factorial functions.
-* Implemented the Hermite, Legendre and Laguerre polynomials plus the 
-spherical harmonic functions from TR1.
-* Moved Xiaogang Zhang's elliptic integral code into the library,
-and brought them into line with the rest of the code.
-* Moved Hubert Holin's existing Boost.Math special functions
-into this library and brought them into line with the rest of the code.
-
-[h4 Milestone 4: Second Review Candidate (1st March 2007)]
-
-* Moved Xiaogang Zhang's Bessel Functions code into the library,
-and brought them into line with the rest of the code.
-* Added C# "Distribution Explorer" demo application.
-
-[h4 Milestone 5: Post Review First Official Release (in Progress)]
-
-['The documentation for this first release is still being worked upon.]
+[template history[]
+[h4 Milestone 5: Post Review First Official Release]
 
 * Added Policy based framework that allows fine grained control
 over function behaviour.
@@ -60,15 +15,49 @@ behaviour can be customised using __Policy's.
 faster than before.
 * Added performance test program.
 
-[h4 Future]
+[h4 Milestone 4: Second Review Candidate (1st March 2007)]
 
-* Some TR1 Special functions are still needed.
-* Higher level statistical tests, perhaps integrated with Eric Neiblers
-accumulator library.
+* Moved Xiaogang Zhang's Bessel Functions code into the library,
+and brought them into line with the rest of the code.
+* Added C# "Distribution Explorer" demo application.
 
+[h4 Milestone 3: First Review Candidate (31st Dec 2006)]
 
-[endsect][/section:roadmap Roadmap]
+* Implemented the main probability distribution and density functions.
+* Implemented digamma.
+* Added more factorial functions.
+* Implemented the Hermite, Legendre and Laguerre polynomials plus the 
+spherical harmonic functions from TR1.
+* Moved Xiaogang Zhang's elliptic integral code into the library,
+and brought them into line with the rest of the code.
+* Moved Hubert Holin's existing Boost.Math special functions
+into this library and brought them into line with the rest of the code.
 
+[h4 Milestone 2: Released September 10th 2006]
+
+* Implement preview release of the statistical distributions.
+* Added statistical distributions tutorial.
+* Implemented root finding algorithms.
+* Implemented the inverses of the incomplete gamma and beta functions.
+* Rewrite erf/erfc as rational approximations (valid to 128-bit precision).
+* Integrated the statistical results generated from
+the test data with Boost.Test: uses a database of expected
+results, indexed by test, floating point type, platform, and compiler.
+* Improved lgamma near 1 and 2 (rational approximations).
+* Improved erf/erfc inverses (rational approximations).
+* Implemented Rational function generation (the Remez method).
+
+[h4 Milestone 1: Released March 31st 2006]
+
+* Implement gamma/beta/erf functions along with their incomplete counterparts.
+* Generate high quality test data, against which future improvements can be judged.
+* Provide tools for the evaluation of infinite series, continued fractions, and
+rational functions.
+* Provide tools for testing against tabulated test data, and collecting statistics
+on error rates.
+* Provide sufficient docs for people to be able to find their way around the library.
+
+]
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.

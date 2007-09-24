@@ -15,6 +15,7 @@
 [include html4_symbols.qbk] [/ just for testing]
 [/include latin1_symbols.qbk] [/ just for testing]
 [include common_overviews.qbk][/ overviews that appear in more than one place!]
+[include roadmap.qbk]
 
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
@@ -271,6 +272,9 @@ for these distributions.
 [section:perf_over Performance]
 [performance_overview]
 [endsect]
+[section:history1 History and What's New]
+[history]
+[endsect]
 
 [endsect] [/section:main_overview Overview]
 
@@ -369,8 +373,10 @@ for these distributions.
 [include references.qbk]
 [endsect] [/section:backgrounds Backgrounders]
 
-[section:status Status and Roadmap]
-[include roadmap.qbk]
+[section:status Library Status]
+[section:history1 History and What's New]
+[history]
+[endsect]
 [include compilers.qbk]
 [include issues.qbk]
 [include credits.qbk]
