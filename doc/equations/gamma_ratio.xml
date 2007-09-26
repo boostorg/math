@@ -9,7 +9,7 @@
  	<body>
  	<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mtext>tgamma_ratio(a&#xFFB8;b)</mtext>
+    <mtext>tgamma_ratio(a,b)</mtext>
     <mspace width="1em"/>
     <mo>=</mo>
     <mspace width="1em"/>
@@ -35,7 +35,7 @@
 </math>
  	<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mtext>tgamma_delta_ratio(a&#xFFB8;delta)</mtext>
+    <mtext>tgamma_delta_ratio(a,delta)</mtext>
     <mspace width="1em"/>
     <mo>=</mo>
     <mspace width="1em"/>
@@ -67,4 +67,5 @@
 </math>
  	</body>
  	</html>
+
 
