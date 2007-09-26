@@ -16,7 +16,7 @@
       </mrow>
     </mfenced>
     <mo>=</mo>
-    <mi>&Gamma;</mi>
+    <mi>&#x0393;</mi>
     <mfenced>
       <mrow>
         <mi>z</mi>
@@ -24,24 +24,24 @@
     </mfenced>
     <mo>=</mo>
     <munderover>
-      <mo>&Integral;</mo>
+      <mo>&#x222B;</mo>
       <mrow>
         <mn>0</mn>
       </mrow>
-      <mi>&infin;</mi>
+      <mi>&#x221E;</mi>
     </munderover>
     <msup>
       <mi>t</mi>
       <mrow>
         <mi>z</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </msup>
     <msup>
       <mi>e</mi>
       <mrow>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>t</mi>
       </mrow>
     </msup>
@@ -51,7 +51,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>&Gamma;</mi>
+    <mi>&#x0393;</mi>
     <mfenced>
       <mrow>
         <mi>z</mi>
@@ -67,7 +67,7 @@
         <msup>
           <mi>e</mi>
           <mrow>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
             <mi>l</mi>
           </mrow>
         </msup>
@@ -76,11 +76,11 @@
     <mfenced>
       <mrow>
         <munderover>
-          <mo>&Sum;</mo>
+          <mo>&#x2211;</mo>
           <mrow>
             <mn>0</mn>
           </mrow>
-          <mi>&infin;</mi>
+          <mi>&#x221E;</mi>
         </munderover>
         <mrow>
           <mfrac>
@@ -93,7 +93,7 @@
               <mrow>
                 <mover>
                   <mi>n</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                 </mover>
               </mrow>
             </msup>
@@ -104,7 +104,7 @@
           <mn>1</mn>
           <mrow>
             <mi>a</mi>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
             <mfrac>
               <msub>
                 <mi>c</mi>
@@ -138,7 +138,7 @@
                           <mn>3</mn>
                         </msub>
                         <mo>+</mo>
-                        <mo>&hellip;</mo>
+                        <mo>&#x2026;</mo>
                       </mrow>
                     </mfrac>
                   </mrow>
@@ -155,17 +155,17 @@
       <mi>k</mi>
     </msub>
     <mo>=</mo>
-    <mo>&minus;</mo>
+    <mo>&#x2212;</mo>
     <mfenced>
       <mrow>
         <mi>a</mi>
         <mo>+</mo>
         <mi>k</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </mfenced>
-    <mo>&and;</mo>
+    <mo>&#x2227;</mo>
     <msub>
       <mi>d</mi>
       <mi>k</mi>
@@ -180,37 +180,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <msub>
-      <mi>c</mi>
-      <mi>k</mi>
-    </msub>
-    <mo>=</mo>
-    <mo>&minus;</mo>
-    <mfenced>
-      <mrow>
-        <mi>a</mi>
-        <mo>+</mo>
-        <mi>k</mi>
-        <mo>&minus;</mo>
-        <mn>1</mn>
-      </mrow>
-    </mfenced>
-    <mo>,</mo>
-    <msub>
-      <mi>d</mi>
-      <mi>k</mi>
-    </msub>
-    <mo>=</mo>
-    <mi>a</mi>
-    <mo>+</mo>
-    <mi>k</mi>
-    <mo>+</mo>
-    <mi>l</mi>
-  </mrow>
-</math>
-<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-  <mrow>
-    <mi>&Gamma;</mi>
+    <mi>&#x0393;</mi>
     <mfenced>
       <mrow>
         <mi>z</mi>
@@ -219,7 +189,7 @@
     <mo>=</mo>
     <mfrac>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>z</mi>
@@ -238,13 +208,13 @@
       <mi>lim</mi>
       <mrow>
         <mi>z</mi>
-        <mo>&RightArrow;</mo>
+        <mo>&#x2192;</mo>
         <mn>0</mn>
       </mrow>
     </munder>
     <mfenced>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>z</mi>
@@ -261,19 +231,19 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>&Gamma;</mi>
+    <mi>&#x0393;</mi>
     <mfenced>
       <mrow>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>z</mi>
       </mrow>
     </mfenced>
     <mo>=</mo>
-    <mo>&minus;</mo>
+    <mo>&#x2212;</mo>
     <mfrac>
-      <mi>&pi;</mi>
+      <mi>&#x03C0;</mi>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>z</mi>
@@ -282,7 +252,7 @@
         <mi>sin</mi>
         <mfenced>
           <mrow>
-            <mi>&pi;</mi>
+            <mi>&#x03C0;</mi>
             <mi>z</mi>
           </mrow>
         </mfenced>
@@ -291,5 +261,6 @@
     </mfrac>
   </mrow>
 </math>
+
 </body>
 </html>
