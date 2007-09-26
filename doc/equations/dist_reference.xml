@@ -38,7 +38,7 @@
       </mrow>
       <mrow>
         <mn>1</mn>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mtext>cdf</mtext>
         <mfenced>
           <mrow>
@@ -75,21 +75,21 @@
     <mo>=</mo>
     <mspace width="1em"/>
     <munderover>
-      <mo>&Integral;</mo>
+      <mo>&#x222B;</mo>
       <mrow>
-        <mo>&minus;</mo>
-        <mi>&infin;</mi>
+        <mo>&#x2212;</mo>
+        <mi>&#x221E;</mi>
       </mrow>
       <mi>x</mi>
     </munderover>
     <mi>h</mi>
     <mfenced>
       <mrow>
-        <mi>&mu;</mi>
+        <mi>&#x03BC;</mi>
       </mrow>
     </mfenced>
     <mi>d</mi>
-    <mi>&mu;</mi>
+    <mi>&#x03BC;</mi>
   </mrow>
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -100,8 +100,8 @@
     <mspace width="1em"/>
     <mfrac>
       <mrow>
-        <mi>&mu;</mi>
-        <mo>&minus;</mo>
+        <mi>&#x03BC;</mi>
+        <mo>&#x2212;</mo>
         <mi>M</mi>
       </mrow>
       <mrow>
@@ -151,13 +151,13 @@
             <mfenced>
               <mrow>
                 <mn>1</mn>
-                <mo>&minus;</mo>
+                <mo>&#x2212;</mo>
                 <mi>p</mi>
               </mrow>
             </mfenced>
             <mrow>
               <mi>n</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mi>k</mi>
             </mrow>
           </msup>
@@ -182,7 +182,7 @@
               <mfenced>
                 <mrow>
                   <mi>n</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>k</mi>
                 </mrow>
               </mfenced>
@@ -197,13 +197,13 @@
             <mfenced>
               <mrow>
                 <mn>1</mn>
-                <mo>&minus;</mo>
+                <mo>&#x2212;</mo>
                 <mi>p</mi>
               </mrow>
             </mfenced>
             <mrow>
               <mi>n</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mi>k</mi>
             </mrow>
           </msup>
@@ -219,7 +219,7 @@
         <mtd>
           <mfrac>
             <mrow>
-              <mi>&Gamma;</mi>
+              <mi>&#x0393;</mi>
               <mfenced>
                 <mrow>
                   <mi>n</mi>
@@ -229,7 +229,7 @@
               </mfenced>
             </mrow>
             <mrow>
-              <mi>&Gamma;</mi>
+              <mi>&#x0393;</mi>
               <mfenced>
                 <mrow>
                   <mi>k</mi>
@@ -237,11 +237,11 @@
                   <mn>1</mn>
                 </mrow>
               </mfenced>
-              <mi>&Gamma;</mi>
+              <mi>&#x0393;</mi>
               <mfenced>
                 <mrow>
                   <mi>n</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>k</mi>
                   <mo>+</mo>
                   <mn>1</mn>
@@ -257,13 +257,13 @@
             <mfenced>
               <mrow>
                 <mn>1</mn>
-                <mo>&minus;</mo>
+                <mo>&#x2212;</mo>
                 <mi>p</mi>
               </mrow>
             </mfenced>
             <mrow>
               <mi>n</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mi>k</mi>
             </mrow>
           </msup>
@@ -287,13 +287,13 @@
                 <mfenced>
                   <mrow>
                     <mn>1</mn>
-                    <mo>&minus;</mo>
+                    <mo>&#x2212;</mo>
                     <mi>p</mi>
                   </mrow>
                 </mfenced>
                 <mrow>
                   <mi>n</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>k</mi>
                 </mrow>
               </msup>
@@ -306,7 +306,7 @@
                   <mo>+</mo>
                   <mn>1,</mn>
                   <mi>n</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>k</mi>
                   <mo>+</mo>
                   <mn>1</mn>
@@ -362,13 +362,13 @@
             <mfenced>
               <mrow>
                 <mn>1</mn>
-                <mo>&minus;</mo>
+                <mo>&#x2212;</mo>
                 <mi>p</mi>
               </mrow>
             </mfenced>
             <mrow>
               <mi>n</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mi>k</mi>
             </mrow>
           </msup>
@@ -393,7 +393,7 @@
               <mfenced>
                 <mrow>
                   <mi>n</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>k</mi>
                 </mrow>
               </mfenced>
@@ -408,13 +408,13 @@
             <mfenced>
               <mrow>
                 <mn>1</mn>
-                <mo>&minus;</mo>
+                <mo>&#x2212;</mo>
                 <mi>p</mi>
               </mrow>
             </mfenced>
             <mrow>
               <mi>n</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mi>k</mi>
             </mrow>
           </msup>
@@ -434,7 +434,7 @@
           <mi>x</mi>
           <mn>0,</mn>
         </msub>
-        <mi>&gamma;</mi>
+        <mi>&#x03B3;</mi>
       </mrow>
     </mfenced>
     <mspace width="1em"/>
@@ -442,18 +442,18 @@
     <mspace width="1em"/>
     <mfrac>
       <mn>1</mn>
-      <mi>&pi;</mi>
+      <mi>&#x03C0;</mi>
     </mfrac>
     <mfenced>
       <mrow>
         <mfrac>
-          <mi>&gamma;</mi>
+          <mi>&#x03B3;</mi>
           <mrow>
             <msup>
               <mfenced>
                 <mrow>
                   <mi>x</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <msub>
                     <mi>x</mi>
                     <mn>0</mn>
@@ -464,7 +464,7 @@
             </msup>
             <mo>+</mo>
             <msup>
-              <mi>&gamma;</mi>
+              <mi>&#x03B3;</mi>
               <mn>2</mn>
             </msup>
           </mrow>
@@ -480,13 +480,13 @@
     <mo>=</mo>
     <mspace width="1em"/>
     <munderover>
-      <mo>&Sum;</mo>
+      <mo>&#x2211;</mo>
       <mrow>
         <mi>i</mi>
         <mo>=</mo>
         <mn>1</mn>
       </mrow>
-      <mi>&nu;</mi>
+      <mi>&#x03BD;</mi>
     </munderover>
     <msup>
       <mfenced>
@@ -494,18 +494,18 @@
           <mfrac>
             <mrow>
               <msub>
-                <mi>&chi;</mi>
+                <mi>&#x03C7;</mi>
                 <mi>i</mi>
               </msub>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <msub>
-                <mi>&nu;</mi>
+                <mi>&#x03BD;</mi>
                 <mi>i</mi>
               </msub>
             </mrow>
             <mrow>
               <msub>
-                <mi>&sigma;</mi>
+                <mi>&#x03C3;</mi>
                 <mi>i</mi>
               </msub>
             </mrow>
@@ -527,12 +527,12 @@
     <mspace width="1em"/>
     <mo>=</mo>
     <mspace width="1em"/>
-    <mi>&lambda;</mi>
+    <mi>&#x03BB;</mi>
     <msup>
       <mi>e</mi>
       <mrow>
-        <mo>&minus;</mo>
-        <mi>&lambda;</mi>
+        <mo>&#x2212;</mo>
+        <mi>&#x03BB;</mi>
         <mi>x</mi>
       </mrow>
     </msup>
@@ -557,7 +557,7 @@
         <msqrt>
           <mrow>
             <mn>2</mn>
-            <mi>&pi;</mi>
+            <mi>&#x03C0;</mi>
           </mrow>
         </msqrt>
       </mrow>
@@ -567,13 +567,13 @@
       <mrow>
         <mfrac>
           <mrow>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
             <msup>
               <mfenced>
                 <mrow>
                   <mi>ln</mi>
                   <mi>x</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>m</mi>
                 </mrow>
               </mfenced>
@@ -637,7 +637,7 @@
               <mi>n</mi>
               <mn>2</mn>
             </mfrac>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
             <mn>1</mn>
           </mrow>
         </msup>
@@ -689,9 +689,9 @@
       <mrow>
         <mi>x</mi>
         <mo>;</mo>
-        <mi>&mu;</mi>
+        <mi>&#x03BC;</mi>
         <mo>,</mo>
-        <mi>&sigma;</mi>
+        <mi>&#x03C3;</mi>
       </mrow>
     </mfenced>
     <mspace width="1em"/>
@@ -700,11 +700,11 @@
     <mfrac>
       <mn>1</mn>
       <mrow>
-        <mi>&sigma;</mi>
+        <mi>&#x03C3;</mi>
         <msqrt>
           <mrow>
             <mn>2</mn>
-            <mi>&pi;</mi>
+            <mi>&#x03C0;</mi>
           </mrow>
         </msqrt>
       </mrow>
@@ -712,15 +712,15 @@
     <msup>
       <mi>e</mi>
       <mrow>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mfrac>
           <mrow>
             <msup>
               <mfenced>
                 <mrow>
                   <mi>x</mi>
-                  <mo>&minus;</mo>
-                  <mi>&mu;</mi>
+                  <mo>&#x2212;</mo>
+                  <mi>&#x03BC;</mi>
                 </mrow>
               </mfenced>
               <mn>2</mn>
@@ -729,7 +729,7 @@
           <mrow>
             <mn>2</mn>
             <msup>
-              <mi>&sigma;</mi>
+              <mi>&#x03C3;</mi>
               <mn>2</mn>
             </msup>
           </mrow>
@@ -745,7 +745,7 @@
       <mrow>
         <mi>k</mi>
         <mo>;</mo>
-        <mi>&lambda;</mi>
+        <mi>&#x03BB;</mi>
       </mrow>
     </mfenced>
     <mspace width="1em"/>
@@ -756,12 +756,12 @@
         <msup>
           <mi>e</mi>
           <mrow>
-            <mo>&minus;</mo>
-            <mi>&lambda;</mi>
+            <mo>&#x2212;</mo>
+            <mi>&#x03BB;</mi>
           </mrow>
         </msup>
         <msup>
-          <mi>&lambda;</mi>
+          <mi>&#x03BB;</mi>
           <mi>k</mi>
         </msup>
       </mrow>
@@ -785,12 +785,12 @@
     <mspace width="1em"/>
     <mfrac>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mfrac>
               <mrow>
-                <mi>&nu;</mi>
+                <mi>&#x03BD;</mi>
                 <mo>+</mo>
                 <mn>1</mn>
               </mrow>
@@ -802,15 +802,15 @@
       <mrow>
         <msqrt>
           <mrow>
-            <mi>&nu;</mi>
-            <mi>&pi;</mi>
+            <mi>&#x03BD;</mi>
+            <mi>&#x03C0;</mi>
           </mrow>
         </msqrt>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mfrac>
-              <mi>&nu;</mi>
+              <mi>&#x03BD;</mi>
               <mn>2</mn>
             </mfrac>
           </mrow>
@@ -827,14 +827,14 @@
                     <mn>2</mn>
                   </msup>
                 </mrow>
-                <mi>&nu;</mi>
+                <mi>&#x03BD;</mi>
               </mfrac>
             </mrow>
           </mfenced>
           <mrow>
             <mfrac>
               <mrow>
-                <mi>&nu;</mi>
+                <mi>&#x03BD;</mi>
                 <mo>+</mo>
                 <mn>1</mn>
               </mrow>
@@ -855,7 +855,7 @@
         <mo>;</mo>
         <mi>k</mi>
         <mo>,</mo>
-        <mi>&theta;</mi>
+        <mi>&#x03B8;</mi>
       </mrow>
     </mfenced>
     <mspace width="1em"/>
@@ -865,7 +865,7 @@
       <mi>x</mi>
       <mrow>
         <mi>k</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </msup>
@@ -873,19 +873,19 @@
       <msup>
         <mi>e</mi>
         <mrow>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mfrac>
             <mi>x</mi>
-            <mi>&theta;</mi>
+            <mi>&#x03B8;</mi>
           </mfrac>
         </mrow>
       </msup>
       <mrow>
         <msup>
-          <mi>&theta;</mi>
+          <mi>&#x03B8;</mi>
           <mi>k</mi>
         </msup>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>k</mi>
@@ -902,9 +902,9 @@
       <mrow>
         <mi>x</mi>
         <mo>;</mo>
-        <mi>&alpha;</mi>
+        <mi>&#x03B1;</mi>
         <mo>,</mo>
-        <mi>&beta;</mi>
+        <mi>&#x03B2;</mi>
       </mrow>
     </mfenced>
     <mspace width="1em"/>
@@ -913,31 +913,31 @@
     <msup>
       <mi>x</mi>
       <mrow>
-        <mi>&alpha;</mi>
-        <mo>&minus;</mo>
+        <mi>&#x03B1;</mi>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </msup>
     <mfrac>
       <mrow>
         <msup>
-          <mi>&beta;</mi>
-          <mi>&alpha;</mi>
+          <mi>&#x03B2;</mi>
+          <mi>&#x03B1;</mi>
         </msup>
         <msup>
           <mi>e</mi>
           <mrow>
-            <mo>&minus;</mo>
-            <mi>&beta;</mi>
+            <mo>&#x2212;</mo>
+            <mi>&#x03B2;</mi>
             <mi>x</mi>
           </mrow>
         </msup>
       </mrow>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
-            <mi>&alpha;</mi>
+            <mi>&#x03B1;</mi>
           </mrow>
         </mfenced>
       </mrow>
@@ -961,7 +961,7 @@
     <mspace width="1em"/>
     <mfrac>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>r</mi>
@@ -973,7 +973,7 @@
       <mrow>
         <mi>k</mi>
         <mo>!</mo>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>r</mi>
@@ -989,7 +989,7 @@
       <mfenced>
         <mrow>
           <mn>1</mn>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mi>p</mi>
         </mrow>
       </mfenced>
@@ -1003,63 +1003,63 @@
     <mfrac>
       <mrow>
         <msup>
-          <mi>&alpha;</mi>
+          <mi>&#x03B1;</mi>
           <mn>3</mn>
         </msup>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <msup>
-          <mi>&alpha;</mi>
+          <mi>&#x03B1;</mi>
           <mn>2</mn>
         </msup>
         <mfenced>
           <mrow>
             <mn>2</mn>
-            <mi>&beta;</mi>
-            <mo>&minus;</mo>
+            <mi>&#x03B2;</mi>
+            <mo>&#x2212;</mo>
             <mn>1</mn>
           </mrow>
         </mfenced>
         <mo>+</mo>
         <msup>
-          <mi>&beta;</mi>
+          <mi>&#x03B2;</mi>
           <mn>2</mn>
         </msup>
         <mfenced>
           <mrow>
-            <mi>&beta;</mi>
-            <mo>&minus;</mo>
+            <mi>&#x03B2;</mi>
+            <mo>&#x2212;</mo>
             <mn>1</mn>
           </mrow>
         </mfenced>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>2</mn>
-        <mi>&alpha;</mi>
-        <mi>&beta;</mi>
+        <mi>&#x03B1;</mi>
+        <mi>&#x03B2;</mi>
         <mfenced>
           <mrow>
-            <mi>&beta;</mi>
+            <mi>&#x03B2;</mi>
             <mo>+</mo>
             <mn>2</mn>
           </mrow>
         </mfenced>
       </mrow>
       <mrow>
-        <mi>&alpha;</mi>
-        <mi>&beta;</mi>
+        <mi>&#x03B1;</mi>
+        <mi>&#x03B2;</mi>
         <mfenced>
           <mrow>
-            <mi>&alpha;</mi>
+            <mi>&#x03B1;</mi>
             <mo>+</mo>
-            <mi>&beta;</mi>
+            <mi>&#x03B2;</mi>
             <mo>+</mo>
             <mn>2</mn>
           </mrow>
         </mfenced>
         <mfenced>
           <mrow>
-            <mi>&alpha;</mi>
+            <mi>&#x03B1;</mi>
             <mo>+</mo>
-            <mi>&beta;</mi>
+            <mi>&#x03B2;</mi>
             <mo>+</mo>
             <mn>3</mn>
           </mrow>

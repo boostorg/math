@@ -23,7 +23,7 @@
                 <mi/>
                 <mn>1</mn>
               </msub>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <msub>
                 <mtext>Sm</mtext>
                 <mn>2</mn>
@@ -76,7 +76,7 @@
                         <mtext>Sn</mtext>
                         <mn>1</mn>
                       </msub>
-                      <mo>&minus;</mo>
+                      <mo>&#x2212;</mo>
                       <mn>1</mn>
                     </mrow>
                   </mfenced>
@@ -94,7 +94,7 @@
                         <mtext>Sn</mtext>
                         <mn>2</mn>
                       </msub>
-                      <mo>&minus;</mo>
+                      <mo>&#x2212;</mo>
                       <mn>1</mn>
                     </mrow>
                   </mfenced>
@@ -116,7 +116,7 @@
                     <mtext>Sn</mtext>
                     <mn>2</mn>
                   </msub>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mn>2</mn>
                 </mrow>
               </mfrac>
@@ -126,7 +126,7 @@
       </mtr>
       <mtr>
         <mtd>
-          <mi>&nu;</mi>
+          <mi>&#x03BD;</mi>
           <mspace width="1em"/>
           <mo>=</mo>
           <mspace width="1em"/>
@@ -139,7 +139,7 @@
             <mtext>Sn</mtext>
             <mn>2</mn>
           </msub>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mn>2</mn>
         </mtd>
       </mtr>
@@ -158,7 +158,7 @@
           <mtext>Sm</mtext>
           <mn>1</mn>
         </msub>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <msub>
           <mtext>Sm</mtext>
           <mn>2</mn>
@@ -202,7 +202,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>&nu;</mi>
+    <mi>&#x03BD;</mi>
     <mspace width="1em"/>
     <mo>=</mo>
     <mspace width="1em"/>
@@ -271,7 +271,7 @@
                 <mtext>Sn</mtext>
                 <mn>1</mn>
               </msub>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mn>1</mn>
             </mrow>
           </mfenced>
@@ -304,7 +304,7 @@
                 <mtext>Sn</mtext>
                 <mn>2</mn>
               </msub>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mn>1</mn>
             </mrow>
           </mfenced>
@@ -319,18 +319,18 @@
       <mi>Y</mi>
       <mi>s</mi>
     </msub>
-    <mo>&PlusMinus;</mo>
+    <mo>&#x00B1;</mo>
     <msub>
       <mi>t</mi>
       <mrow>
         <mfenced>
           <mrow>
             <mfrac>
-              <mi>&alpha;</mi>
+              <mi>&#x03B1;</mi>
               <mn>2,</mn>
             </mfrac>
             <mi>N</mi>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
             <mn>1</mn>
           </mrow>
         </mfenced>
