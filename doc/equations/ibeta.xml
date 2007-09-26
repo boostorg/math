@@ -37,7 +37,7 @@
     <mo>=</mo>
     <mspace width="1em"/>
     <msubsup>
-      <mo>&Integral;</mo>
+      <mo>&#x222B;</mo>
       <mrow>
         <mn>0</mn>
       </mrow>
@@ -47,7 +47,7 @@
       <mi>t</mi>
       <mrow>
         <mi>a</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </msup>
@@ -55,13 +55,13 @@
       <mfenced>
         <mrow>
           <mn>1</mn>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mi>t</mi>
         </mrow>
       </mfenced>
       <mrow>
         <mi>b</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </msup>
@@ -85,7 +85,7 @@
     <mo>=</mo>
     <mspace width="1em"/>
     <mn>1</mn>
-    <mo>&minus;</mo>
+    <mo>&#x2212;</mo>
     <msub>
       <mi>B</mi>
       <mi>x</mi>
@@ -104,7 +104,7 @@
       <mi>B</mi>
       <mrow>
         <mn>1</mn>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>x</mi>
       </mrow>
     </msub>
@@ -160,7 +160,7 @@
       </mrow>
     </mfrac>
     <msubsup>
-      <mo>&Integral;</mo>
+      <mo>&#x222B;</mo>
       <mrow>
         <mn>0</mn>
       </mrow>
@@ -170,7 +170,7 @@
       <mi>t</mi>
       <mrow>
         <mi>a</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </msup>
@@ -178,13 +178,13 @@
       <mfenced>
         <mrow>
           <mn>1</mn>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mi>t</mi>
         </mrow>
       </mfenced>
       <mrow>
         <mi>b</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </msup>
@@ -208,7 +208,7 @@
     <mo>=</mo>
     <mspace width="1em"/>
     <mn>1</mn>
-    <mo>&minus;</mo>
+    <mo>&#x2212;</mo>
     <msub>
       <mi>I</mi>
       <mi>x</mi>
@@ -227,7 +227,7 @@
       <mi>I</mi>
       <mrow>
         <mn>1</mn>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>x</mi>
       </mrow>
     </msub>
@@ -305,7 +305,7 @@
                         <mrow>
                           <mn>1</mn>
                           <mo>+</mo>
-                          <mo>&hellip;</mo>
+                          <mo>&#x2026;</mo>
                         </mrow>
                       </mfrac>
                     </mrow>
@@ -332,7 +332,7 @@
           <mo>=</mo>
           <mfrac>
             <mrow>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mfenced>
                 <mrow>
                   <mi>a</mi>
@@ -392,7 +392,7 @@
               <mfenced>
                 <mrow>
                   <mi>b</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>m</mi>
                 </mrow>
               </mfenced>
@@ -405,7 +405,7 @@
                   <mo>+</mo>
                   <mn>2</mn>
                   <mi>m</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mn>1</mn>
                 </mrow>
               </mfenced>
@@ -471,38 +471,38 @@
             <mrow>
               <mfrac>
                 <msub>
-                  <mi>&alpha;</mi>
+                  <mi>&#x03B1;</mi>
                   <mn>1</mn>
                 </msub>
                 <mrow>
                   <msub>
-                    <mi>&beta;</mi>
+                    <mi>&#x03B2;</mi>
                     <mn>1</mn>
                   </msub>
                   <mo>+</mo>
                   <mfrac>
                     <msub>
-                      <mi>&alpha;</mi>
+                      <mi>&#x03B1;</mi>
                       <mn>2</mn>
                     </msub>
                     <mrow>
                       <msub>
-                        <mi>&beta;</mi>
+                        <mi>&#x03B2;</mi>
                         <mn>2</mn>
                       </msub>
                       <mo>+</mo>
                       <mfrac>
                         <msub>
-                          <mi>&alpha;</mi>
+                          <mi>&#x03B1;</mi>
                           <mn>3</mn>
                         </msub>
                         <mrow>
                           <msub>
-                            <mi>&beta;</mi>
+                            <mi>&#x03B2;</mi>
                             <mn>3</mn>
                           </msub>
                           <mo>+</mo>
-                          <mo>&hellip;</mo>
+                          <mo>&#x2026;</mo>
                         </mrow>
                       </mfrac>
                     </mrow>
@@ -516,7 +516,7 @@
       <mtr>
         <mtd>
           <msub>
-            <mi>&alpha;</mi>
+            <mi>&#x03B1;</mi>
             <mn>1</mn>
           </msub>
           <mo>=</mo>
@@ -525,7 +525,7 @@
           <mo>,</mo>
           <mspace width="1em"/>
           <msub>
-            <mi>&alpha;</mi>
+            <mi>&#x03B1;</mi>
             <mrow>
               <mi>m</mi>
               <mo>+</mo>
@@ -540,7 +540,7 @@
                   <mi>a</mi>
                   <mo>+</mo>
                   <mi>m</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mn>1</mn>
                 </mrow>
               </mfenced>
@@ -551,7 +551,7 @@
                   <mi>b</mi>
                   <mo>+</mo>
                   <mi>m</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mn>1</mn>
                 </mrow>
               </mfenced>
@@ -559,7 +559,7 @@
               <mfenced>
                 <mrow>
                   <mi>b</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>m</mi>
                 </mrow>
               </mfenced>
@@ -576,7 +576,7 @@
                     <mo>+</mo>
                     <mn>2</mn>
                     <mi>m</mi>
-                    <mo>&minus;</mo>
+                    <mo>&#x2212;</mo>
                     <mn>1</mn>
                   </mrow>
                 </mfenced>
@@ -589,7 +589,7 @@
       <mtr>
         <mtd>
           <msub>
-            <mi>&beta;</mi>
+            <mi>&#x03B2;</mi>
             <mrow>
               <mi>m</mi>
               <mo>+</mo>
@@ -605,7 +605,7 @@
               <mfenced>
                 <mrow>
                   <mi>b</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>m</mi>
                 </mrow>
               </mfenced>
@@ -616,7 +616,7 @@
               <mo>+</mo>
               <mn>2</mn>
               <mi>m</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mn>1</mn>
             </mrow>
           </mfrac>
@@ -633,7 +633,7 @@
               <mfenced>
                 <mrow>
                   <mi>a</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mfenced>
                     <mrow>
                       <mi>a</mi>
@@ -649,7 +649,7 @@
                   <mfenced>
                     <mrow>
                       <mn>2</mn>
-                      <mo>&minus;</mo>
+                      <mo>&#x2212;</mo>
                       <mi>x</mi>
                     </mrow>
                   </mfenced>
@@ -705,13 +705,13 @@
       </mrow>
     </mfrac>
     <munderover>
-      <mo>&Sum;</mo>
+      <mo>&#x2211;</mo>
       <mrow>
         <mi>n</mi>
         <mo>=</mo>
         <mn>1</mn>
       </mrow>
-      <mi>&infin;</mi>
+      <mi>&#x221E;</mi>
     </munderover>
     <mfrac>
       <mrow>
@@ -719,14 +719,14 @@
           <mfenced>
             <mrow>
               <mn>1</mn>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mi>b</mi>
             </mrow>
           </mfenced>
           <mrow>
             <mover>
               <mi>n</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
             </mover>
           </mrow>
         </msup>
@@ -766,17 +766,17 @@
             </mrow>
           </mfenced>
           <mspace width="1em"/>
-          <mo>&TildeTilde;</mo>
+          <mo>&#x2248;</mo>
           <mspace width="1em"/>
           <mi>M</mi>
           <munderover>
-            <mo>&Sum;</mo>
+            <mo>&#x2211;</mo>
             <mrow>
               <mi>n</mi>
               <mo>=</mo>
               <mn>0</mn>
             </mrow>
-            <mi>&infin;</mi>
+            <mi>&#x221E;</mi>
           </munderover>
           <msub>
             <mi>p</mi>
@@ -815,7 +815,7 @@
                   <mi>u</mi>
                 </mrow>
               </mfenced>
-              <mi>&Gamma;</mi>
+              <mi>&#x0393;</mi>
               <mfenced>
                 <mrow>
                   <mi>a</mi>
@@ -825,7 +825,7 @@
               </mfenced>
             </mrow>
             <mrow>
-              <mi>&Gamma;</mi>
+              <mi>&#x0393;</mi>
               <mfenced>
                 <mrow>
                   <mi>a</mi>
@@ -855,7 +855,7 @@
               <msup>
                 <mi>e</mi>
                 <mrow>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>u</mi>
                 </mrow>
               </msup>
@@ -865,7 +865,7 @@
               </msup>
             </mrow>
             <mrow>
-              <mi>&Gamma;</mi>
+              <mi>&#x0393;</mi>
               <mfenced>
                 <mrow>
                   <mi>a</mi>
@@ -884,7 +884,7 @@
           <mfrac>
             <mrow>
               <mi>b</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mn>1</mn>
             </mrow>
             <mn>2</mn>
@@ -893,7 +893,7 @@
           <mspace width="1em"/>
           <mi>u</mi>
           <mo>=</mo>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mi>T</mi>
           <mi>ln</mi>
           <mfenced>
@@ -922,7 +922,7 @@
               <mfenced>
                 <mrow>
                   <mi>b</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mn>1</mn>
                 </mrow>
               </mfenced>
@@ -932,7 +932,7 @@
                 <mrow>
                   <mn>2</mn>
                   <mi>n</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mn>1</mn>
                 </mrow>
               </mfenced>
@@ -945,7 +945,7 @@
             <mi>n</mi>
           </mfrac>
           <munderover>
-            <mo>&Sum;</mo>
+            <mo>&#x2211;</mo>
             <mrow>
               <mi>m</mi>
               <mo>=</mo>
@@ -953,7 +953,7 @@
             </mrow>
             <mrow>
               <mi>n</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mn>1</mn>
             </mrow>
           </munderover>
@@ -962,7 +962,7 @@
               <mrow>
                 <mi>m</mi>
                 <mi>b</mi>
-                <mo>&minus;</mo>
+                <mo>&#x2212;</mo>
                 <mi>n</mi>
               </mrow>
             </mfenced>
@@ -982,7 +982,7 @@
             <mi>p</mi>
             <mrow>
               <mi>n</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mi>m</mi>
             </mrow>
           </msub>
@@ -1056,7 +1056,7 @@
         <mrow>
           <mfrac>
             <mrow>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mi>ln</mi>
               <mi>x</mi>
             </mrow>
@@ -1144,14 +1144,14 @@
             <mfenced>
               <mrow>
                 <mn>1</mn>
-                <mo>&minus;</mo>
+                <mo>&#x2212;</mo>
                 <mi>x</mi>
               </mrow>
             </mfenced>
             <mi>b</mi>
           </msup>
           <munderover>
-            <mo>&Sum;</mo>
+            <mo>&#x2211;</mo>
             <mrow>
               <mi>j</mi>
               <mo>=</mo>
@@ -1161,7 +1161,7 @@
           </munderover>
           <mfrac>
             <mrow>
-              <mi>&Gamma;</mi>
+              <mi>&#x0393;</mi>
               <mfenced>
                 <mrow>
                   <mi>a</mi>
@@ -1169,19 +1169,19 @@
                   <mi>b</mi>
                   <mo>+</mo>
                   <mi>j</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mn>1</mn>
                 </mrow>
               </mfenced>
             </mrow>
             <mrow>
-              <mi>&Gamma;</mi>
+              <mi>&#x0393;</mi>
               <mfenced>
                 <mrow>
                   <mi>b</mi>
                 </mrow>
               </mfenced>
-              <mi>&Gamma;</mi>
+              <mi>&#x0393;</mi>
               <mfenced>
                 <mrow>
                   <mi>a</mi>
@@ -1195,7 +1195,7 @@
             <mi>x</mi>
             <mrow>
               <mi>j</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mn>1</mn>
             </mrow>
           </msup>
@@ -1233,7 +1233,7 @@
                 <mfenced>
                   <mrow>
                     <mn>1</mn>
-                    <mo>&minus;</mo>
+                    <mo>&#x2212;</mo>
                     <mi>x</mi>
                   </mrow>
                 </mfenced>
@@ -1243,7 +1243,7 @@
             <mi>a</mi>
           </mfrac>
           <munderover>
-            <mo>&Sum;</mo>
+            <mo>&#x2211;</mo>
             <mrow>
               <mi>j</mi>
               <mo>=</mo>
@@ -1251,7 +1251,7 @@
             </mrow>
             <mrow>
               <mi>n</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mn>1</mn>
             </mrow>
           </munderover>
@@ -1268,7 +1268,7 @@
                 <mrow>
                   <mover>
                     <mi>j</mi>
-                    <mo>&minus;</mo>
+                    <mo>&#x2212;</mo>
                   </mover>
                 </mrow>
               </msup>
@@ -1285,7 +1285,7 @@
                 <mrow>
                   <mover>
                     <mi>j</mi>
-                    <mo>&minus;</mo>
+                    <mo>&#x2212;</mo>
                   </mover>
                 </mrow>
               </msup>
@@ -1329,7 +1329,7 @@
           <mrow>
             <mover>
               <mi>n</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
             </mover>
           </mrow>
         </msup>
@@ -1340,7 +1340,7 @@
           <mrow>
             <mover>
               <mi>n</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
             </mover>
           </mrow>
         </msup>
@@ -1370,7 +1370,7 @@
           <mfenced>
             <mrow>
               <mn>1</mn>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mi>x</mi>
             </mrow>
           </mfenced>
@@ -1380,7 +1380,7 @@
       <mi>a</mi>
     </mfrac>
     <munderover>
-      <mo>&Sum;</mo>
+      <mo>&#x2211;</mo>
       <mrow>
         <mi>j</mi>
         <mo>=</mo>
@@ -1388,7 +1388,7 @@
       </mrow>
       <mrow>
         <mi>n</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </munderover>
@@ -1405,7 +1405,7 @@
           <mrow>
             <mover>
               <mi>j</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
             </mover>
           </mrow>
         </msup>
@@ -1422,7 +1422,7 @@
           <mrow>
             <mover>
               <mi>j</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
             </mover>
           </mrow>
         </msup>
@@ -1451,7 +1451,7 @@
     <mo>=</mo>
     <mspace width="1em"/>
     <munderover>
-      <mo>&Sum;</mo>
+      <mo>&#x2211;</mo>
       <mrow>
         <mi>i</mi>
         <mo>=</mo>
@@ -1472,7 +1472,7 @@
         <mfenced>
           <mrow>
             <mi>N</mi>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
             <mi>i</mi>
           </mrow>
         </mfenced>
@@ -1488,7 +1488,7 @@
       <mfenced>
         <mrow>
           <mi>N</mi>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mi>i</mi>
         </mrow>
       </mfenced>
@@ -1499,14 +1499,14 @@
     <mi>k</mi>
     <mo>=</mo>
     <mi>a</mi>
-    <mo>&minus;</mo>
+    <mo>&#x2212;</mo>
     <mn>1,</mn>
     <mi>N</mi>
     <mo>=</mo>
     <mi>a</mi>
     <mo>+</mo>
     <mi>b</mi>
-    <mo>&minus;</mo>
+    <mo>&#x2212;</mo>
     <mn>1</mn>
   </mrow>
 </math>

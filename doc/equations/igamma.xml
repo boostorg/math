@@ -20,7 +20,7 @@
     <mspace width="1em"/>
     <mo>=</mo>
     <mspace width="1em"/>
-    <mi>&Gamma;</mi>
+    <mi>&#x0393;</mi>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -32,24 +32,24 @@
     <mo>=</mo>
     <mspace width="1em"/>
     <munderover>
-      <mo>&Integral;</mo>
+      <mo>&#x222B;</mo>
       <mrow>
         <mi>z</mi>
       </mrow>
-      <mi>&infin;</mi>
+      <mi>&#x221E;</mi>
     </munderover>
     <msup>
       <mi>t</mi>
       <mrow>
         <mi>a</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </msup>
     <msup>
       <mi>e</mi>
       <mrow>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>t</mi>
       </mrow>
     </msup>
@@ -70,7 +70,7 @@
     <mspace width="1em"/>
     <mo>=</mo>
     <mspace width="1em"/>
-    <mi>&gamma;</mi>
+    <mi>&#x03B3;</mi>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -82,7 +82,7 @@
     <mo>=</mo>
     <mspace width="1em"/>
     <munderover>
-      <mo>&Integral;</mo>
+      <mo>&#x222B;</mo>
       <mrow>
         <mn>0</mn>
       </mrow>
@@ -92,14 +92,14 @@
       <mi>t</mi>
       <mrow>
         <mi>a</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </msup>
     <msup>
       <mi>e</mi>
       <mrow>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>t</mi>
       </mrow>
     </msup>
@@ -133,7 +133,7 @@
     <mspace width="1em"/>
     <mfrac>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>a</mi>
@@ -143,7 +143,7 @@
         </mfenced>
       </mrow>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>a</mi>
@@ -157,7 +157,7 @@
     <mfrac>
       <mn>1</mn>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>a</mi>
@@ -166,24 +166,24 @@
       </mrow>
     </mfrac>
     <munderover>
-      <mo>&Integral;</mo>
+      <mo>&#x222B;</mo>
       <mrow>
         <mi>z</mi>
       </mrow>
-      <mi>&infin;</mi>
+      <mi>&#x221E;</mi>
     </munderover>
     <msup>
       <mi>t</mi>
       <mrow>
         <mi>a</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </msup>
     <msup>
       <mi>e</mi>
       <mrow>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>t</mi>
       </mrow>
     </msup>
@@ -217,7 +217,7 @@
     <mspace width="1em"/>
     <mfrac>
       <mrow>
-        <mi>&gamma;</mi>
+        <mi>&#x03B3;</mi>
         <mfenced>
           <mrow>
             <mi>a</mi>
@@ -227,7 +227,7 @@
         </mfenced>
       </mrow>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>a</mi>
@@ -241,7 +241,7 @@
     <mfrac>
       <mn>1</mn>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>a</mi>
@@ -250,7 +250,7 @@
       </mrow>
     </mfrac>
     <munderover>
-      <mo>&Integral;</mo>
+      <mo>&#x222B;</mo>
       <mrow>
         <mn>0</mn>
       </mrow>
@@ -260,14 +260,14 @@
       <mi>t</mi>
       <mrow>
         <mi>a</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </msup>
     <msup>
       <mi>e</mi>
       <mrow>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>t</mi>
       </mrow>
     </msup>
@@ -302,7 +302,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>&Gamma;</mi>
+    <mi>&#x0393;</mi>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -311,7 +311,7 @@
       </mrow>
     </mfenced>
     <mo>+</mo>
-    <mi>&gamma;</mi>
+    <mi>&#x03B3;</mi>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -322,7 +322,7 @@
     <mspace width="1em"/>
     <mo>=</mo>
     <mspace width="1em"/>
-    <mi>&Gamma;</mi>
+    <mi>&#x0393;</mi>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -345,7 +345,7 @@
     <mspace width="1em"/>
     <mfrac>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>a</mi>
@@ -355,7 +355,7 @@
         </mfenced>
       </mrow>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>a</mi>
@@ -379,7 +379,7 @@
     <mspace width="1em"/>
     <mfrac>
       <mrow>
-        <mi>&gamma;</mi>
+        <mi>&#x03B3;</mi>
         <mfenced>
           <mrow>
             <mi>a</mi>
@@ -389,7 +389,7 @@
         </mfenced>
       </mrow>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>a</mi>
@@ -401,7 +401,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>&gamma;</mi>
+    <mi>&#x03B3;</mi>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -419,23 +419,23 @@
     <msup>
       <mi>e</mi>
       <mrow>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>x</mi>
       </mrow>
     </msup>
     <munderover>
-      <mo>&Sum;</mo>
+      <mo>&#x2211;</mo>
       <mrow>
         <mi>k</mi>
         <mo>=</mo>
         <mn>0</mn>
       </mrow>
-      <mi>&infin;</mi>
+      <mi>&#x221E;</mi>
     </munderover>
     <mrow>
       <mfrac>
         <mrow>
-          <mi>&Gamma;</mi>
+          <mi>&#x0393;</mi>
           <mfenced>
             <mrow>
               <mi>a</mi>
@@ -443,7 +443,7 @@
           </mfenced>
         </mrow>
         <mrow>
-          <mi>&Gamma;</mi>
+          <mi>&#x0393;</mi>
           <mfenced>
             <mrow>
               <mi>a</mi>
@@ -470,18 +470,18 @@
     <msup>
       <mi>e</mi>
       <mrow>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>x</mi>
       </mrow>
     </msup>
     <munderover>
-      <mo>&Sum;</mo>
+      <mo>&#x2211;</mo>
       <mrow>
         <mi>k</mi>
         <mo>=</mo>
         <mn>0</mn>
       </mrow>
-      <mi>&infin;</mi>
+      <mi>&#x221E;</mi>
     </munderover>
     <mfrac>
       <mrow>
@@ -499,7 +499,7 @@
               <mo>+</mo>
               <mn>1</mn>
             </mrow>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
           </mover>
         </msup>
       </mrow>
@@ -508,7 +508,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>&Gamma;</mi>
+    <mi>&#x0393;</mi>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -528,14 +528,14 @@
         <msup>
           <mi>e</mi>
           <mrow>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
             <mi>x</mi>
           </mrow>
         </msup>
       </mrow>
       <mrow>
         <mi>x</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>a</mi>
         <mo>+</mo>
         <mn>1</mn>
@@ -574,7 +574,7 @@
                   </mrow>
                 </msub>
                 <mo>+</mo>
-                <mo>&hellip;</mo>
+                <mo>&#x2026;</mo>
               </mrow>
             </mfrac>
           </mrow>
@@ -606,7 +606,7 @@
     </msub>
     <mo>=</mo>
     <mi>x</mi>
-    <mo>&minus;</mo>
+    <mo>&#x2212;</mo>
     <mi>a</mi>
     <mo>+</mo>
     <mn>2</mn>
@@ -617,7 +617,7 @@
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>&gamma;</mi>
+    <mi>&#x03B3;</mi>
     <mfenced>
       <mrow>
         <mi>a</mi>
@@ -633,20 +633,20 @@
       <mi>a</mi>
     </msup>
     <munderover>
-      <mo>&Sum;</mo>
+      <mo>&#x2211;</mo>
       <mrow>
         <mi>k</mi>
         <mo>=</mo>
         <mn>0</mn>
       </mrow>
-      <mi>&infin;</mi>
+      <mi>&#x221E;</mi>
     </munderover>
     <mfrac>
       <mrow>
         <msup>
           <mfenced>
             <mrow>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mn>1</mn>
             </mrow>
           </mfenced>
@@ -676,7 +676,7 @@
     <mtable>
       <mtr>
         <mtd>
-          <mi>&Gamma;</mi>
+          <mi>&#x0393;</mi>
           <mfenced>
             <mrow>
               <mi>a</mi>
@@ -695,7 +695,7 @@
                   <mi>a</mi>
                 </mrow>
               </mfenced>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mtext>powm1</mtext>
               <mfenced>
                 <mrow>
@@ -713,20 +713,20 @@
             <mi>a</mi>
           </msup>
           <munderover>
-            <mo>&Sum;</mo>
+            <mo>&#x2211;</mo>
             <mrow>
               <mi>k</mi>
               <mo>=</mo>
               <mn>1</mn>
             </mrow>
-            <mi>&infin;</mi>
+            <mi>&#x221E;</mi>
           </munderover>
           <mfrac>
             <mrow>
               <msup>
                 <mfenced>
                   <mrow>
-                    <mo>&minus;</mo>
+                    <mo>&#x2212;</mo>
                     <mn>1</mn>
                   </mrow>
                 </mfenced>
@@ -760,7 +760,7 @@
             </mrow>
           </mfenced>
           <mo>=</mo>
-          <mi>&Gamma;</mi>
+          <mi>&#x0393;</mi>
           <mfenced>
             <mrow>
               <mi>a</mi>
@@ -768,7 +768,7 @@
               <mn>1</mn>
             </mrow>
           </mfenced>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mn>1</mn>
         </mtd>
       </mtr>
@@ -787,7 +787,7 @@
             <mi>x</mi>
             <mi>a</mi>
           </msup>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mn>1</mn>
         </mtd>
       </mtr>
@@ -805,13 +805,13 @@
         <msup>
           <mi>e</mi>
           <mrow>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
             <mi>x</mi>
           </mrow>
         </msup>
       </mrow>
       <mrow>
-        <mi>&Gamma;</mi>
+        <mi>&#x0393;</mi>
         <mfenced>
           <mrow>
             <mi>a</mi>
@@ -826,7 +826,7 @@
       <mi>e</mi>
       <mrow>
         <mi>x</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>a</mi>
       </mrow>
     </msup>
@@ -839,7 +839,7 @@
               <mi>a</mi>
               <mo>+</mo>
               <mi>g</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mn>0.5</mn>
             </mrow>
           </mfrac>
@@ -854,7 +854,7 @@
             <mi>a</mi>
             <mo>+</mo>
             <mi>g</mi>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
             <mn>0.5</mn>
           </mrow>
           <mi>e</mi>
@@ -880,7 +880,7 @@
       <mi>e</mi>
       <mrow>
         <mi>x</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>a</mi>
       </mrow>
     </msup>
@@ -893,7 +893,7 @@
               <mi>a</mi>
               <mo>+</mo>
               <mi>g</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mn>0.5</mn>
             </mrow>
           </mfrac>
@@ -915,9 +915,9 @@
               <mfrac>
                 <mrow>
                   <mi>x</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>a</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>g</mi>
                   <mo>+</mo>
                   <mn>0.5</mn>
@@ -926,7 +926,7 @@
                   <mi>a</mi>
                   <mo>+</mo>
                   <mi>g</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mn>0.5</mn>
                 </mrow>
               </mfrac>
@@ -939,7 +939,7 @@
               <mfenced>
                 <mrow>
                   <mn>0.5</mn>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mi>g</mi>
                 </mrow>
               </mfenced>
@@ -948,7 +948,7 @@
               <mi>a</mi>
               <mo>+</mo>
               <mi>g</mi>
-              <mo>&minus;</mo>
+              <mo>&#x2212;</mo>
               <mn>0.5</mn>
             </mrow>
           </mfrac>
@@ -973,7 +973,7 @@
         <mi>z</mi>
       </mrow>
     </mfenced>
-    <mo>&minus;</mo>
+    <mo>&#x2212;</mo>
     <mi>z</mi>
   </mrow>
 </math>
@@ -1015,7 +1015,7 @@
                   <mi>z</mi>
                   <mo>+</mo>
                   <mi>g</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mn>0.5</mn>
                 </mrow>
                 <mi>e</mi>
@@ -1024,7 +1024,7 @@
           </mfenced>
           <mi>z</mi>
         </msup>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
         <mo>]</mo>
         <mo>+</mo>
@@ -1035,7 +1035,7 @@
             <mi>z</mi>
           </mrow>
         </mfenced>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
         <mo>]</mo>
         <msup>
@@ -1046,7 +1046,7 @@
                   <mi>z</mi>
                   <mo>+</mo>
                   <mi>g</mi>
-                  <mo>&minus;</mo>
+                  <mo>&#x2212;</mo>
                   <mn>0.5</mn>
                 </mrow>
                 <mi>e</mi>
@@ -1075,65 +1075,9 @@
         </mrow>
       </mrow>
     </msqrt>
-    <mo>&minus;</mo>
+    <mo>&#x2212;</mo>
     <mn>1</mn>
     <mo>]</mo>
-  </mrow>
-</math>
-<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-  <mrow>
-    <mi>Q</mi>
-    <mfenced>
-      <mrow>
-        <mi>a</mi>
-        <mo>,</mo>
-        <mi>x</mi>
-      </mrow>
-    </mfenced>
-    <mspace width="1em"/>
-    <mo>=</mo>
-    <mspace width="1em"/>
-    <msup>
-      <mi>e</mi>
-      <mrow>
-        <mo>&minus;</mo>
-        <mi>x</mi>
-      </mrow>
-    </msup>
-    <munderover>
-      <mo>&Sum;</mo>
-      <mrow>
-        <mi>n</mi>
-        <mo>=</mo>
-        <mn>0</mn>
-      </mrow>
-      <mrow>
-        <mi>a</mi>
-        <mo>&minus;</mo>
-        <mn>1</mn>
-      </mrow>
-    </munderover>
-    <mfrac>
-      <mrow>
-        <msup>
-          <mi>x</mi>
-          <mi>n</mi>
-        </msup>
-      </mrow>
-      <mrow>
-        <mi>n</mi>
-        <mo>!</mo>
-      </mrow>
-    </mfrac>
-    <mspace width="1em"/>
-    <mo>;</mo>
-    <mspace width="1em"/>
-    <mi>a</mi>
-    <mo>&Element;</mo>
-    <msup>
-      <mi>&Nopf;</mi>
-      <mo>+</mo>
-    </msup>
   </mrow>
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -1162,19 +1106,19 @@
       <msup>
         <mi>e</mi>
         <mrow>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mi>x</mi>
         </mrow>
       </msup>
       <msqrt>
         <mrow>
-          <mi>&pi;</mi>
+          <mi>&#x03C0;</mi>
           <mi>x</mi>
         </mrow>
       </msqrt>
     </mfrac>
     <munderover>
-      <mo>&Sum;</mo>
+      <mo>&#x2211;</mo>
       <mrow>
         <mi>n</mi>
         <mo>=</mo>
@@ -1191,18 +1135,18 @@
         <mfenced>
           <mrow>
             <mn>1</mn>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
             <mfrac>
               <mn>1</mn>
               <mn>2</mn>
             </mfrac>
           </mrow>
         </mfenced>
-        <mo>&hellip;</mo>
+        <mo>&#x2026;</mo>
         <mfenced>
           <mrow>
             <mi>n</mi>
-            <mo>&minus;</mo>
+            <mo>&#x2212;</mo>
             <mfrac>
               <mn>1</mn>
               <mn>2</mn>
@@ -1226,9 +1170,9 @@
     <mo>;</mo>
     <mspace width="1em"/>
     <mi>i</mi>
-    <mo>&Element;</mo>
+    <mo>&#x2208;</mo>
     <msup>
-      <mi>&Nopf;</mi>
+      <mi>&#x2115;</mi>
       <mo>+</mo>
     </msup>
   </mrow>
@@ -1258,12 +1202,12 @@
         </msqrt>
       </mrow>
     </mfenced>
-    <mo>&minus;</mo>
+    <mo>&#x2212;</mo>
     <mfrac>
       <msup>
         <mi>e</mi>
         <mrow>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mi>y</mi>
         </mrow>
       </msup>
@@ -1271,7 +1215,7 @@
         <msqrt>
           <mrow>
             <mn>2</mn>
-            <mi>&pi;</mi>
+            <mi>&#x03C0;</mi>
             <mi>a</mi>
           </mrow>
         </msqrt>
@@ -1282,14 +1226,14 @@
       <mrow>
         <mi>a</mi>
         <mo>,</mo>
-        <mi>&lambda;</mi>
+        <mi>&#x03BB;</mi>
       </mrow>
     </mfenced>
     <mspace width="1em"/>
     <mo>;</mo>
     <mspace width="1em"/>
-    <mi>&lambda;</mi>
-    <mo>&le;</mo>
+    <mi>&#x03BB;</mi>
+    <mo>&#x2264;</mo>
     <mn>1</mn>
   </mrow>
 </math>
@@ -1323,7 +1267,7 @@
       <msup>
         <mi>e</mi>
         <mrow>
-          <mo>&minus;</mo>
+          <mo>&#x2212;</mo>
           <mi>y</mi>
         </mrow>
       </msup>
@@ -1331,7 +1275,7 @@
         <msqrt>
           <mrow>
             <mn>2</mn>
-            <mi>&pi;</mi>
+            <mi>&#x03C0;</mi>
             <mi>a</mi>
           </mrow>
         </msqrt>
@@ -1342,20 +1286,20 @@
       <mrow>
         <mi>a</mi>
         <mo>,</mo>
-        <mi>&lambda;</mi>
+        <mi>&#x03BB;</mi>
       </mrow>
     </mfenced>
     <mspace width="1em"/>
     <mo>;</mo>
     <mspace width="1em"/>
-    <mi>&lambda;</mi>
+    <mi>&#x03BB;</mi>
     <mo>></mo>
     <mn>1</mn>
   </mrow>
 </math>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mi>&lambda;</mi>
+    <mi>&#x03BB;</mi>
     <mo>=</mo>
     <mfrac>
       <mi>x</mi>
@@ -1369,16 +1313,16 @@
     <mi>a</mi>
     <mfenced>
       <mrow>
-        <mi>&lambda;</mi>
-        <mo>&minus;</mo>
+        <mi>&#x03BB;</mi>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>ln</mi>
-        <mi>&lambda;</mi>
+        <mi>&#x03BB;</mi>
       </mrow>
     </mfenced>
     <mo>=</mo>
-    <mo>&minus;</mo>
+    <mo>&#x2212;</mo>
     <mi>a</mi>
     <mfenced>
       <mrow>
@@ -1387,22 +1331,22 @@
           <mrow>
             <mn>1</mn>
             <mo>+</mo>
-            <mi>&sigma;</mi>
+            <mi>&#x03C3;</mi>
           </mrow>
         </mfenced>
-        <mo>&minus;</mo>
-        <mi>&sigma;</mi>
+        <mo>&#x2212;</mo>
+        <mi>&#x03C3;</mi>
       </mrow>
     </mfenced>
     <mspace width="1em"/>
     <mo>;</mo>
     <mspace width="1em"/>
-    <mi>&sigma;</mi>
+    <mi>&#x03C3;</mi>
     <mo>=</mo>
     <mfrac>
       <mrow>
         <mi>x</mi>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>a</mi>
       </mrow>
       <mi>a</mi>
@@ -1416,14 +1360,14 @@
       <mrow>
         <mi>a</mi>
         <mo>,</mo>
-        <mi>&lambda;</mi>
+        <mi>&#x03BB;</mi>
       </mrow>
     </mfenced>
     <mspace width="1em"/>
     <mo>=</mo>
     <mspace width="1em"/>
     <munderover>
-      <mo>&Sum;</mo>
+      <mo>&#x2211;</mo>
       <mrow>
         <mi>k</mi>
         <mo>=</mo>
@@ -1434,7 +1378,7 @@
     <mfenced>
       <mrow>
         <munderover>
-          <mo>&Sum;</mo>
+          <mo>&#x2211;</mo>
           <mrow>
             <mi>n</mi>
             <mo>=</mo>
@@ -1458,7 +1402,7 @@
     <msup>
       <mi>a</mi>
       <mrow>
-        <mo>&minus;</mo>
+        <mo>&#x2212;</mo>
         <mi>k</mi>
       </mrow>
     </msup>
@@ -1470,17 +1414,73 @@
     <mtext>sign</mtext>
     <mfenced>
       <mrow>
-        <mi>&lambda;</mi>
-        <mo>&minus;</mo>
+        <mi>&#x03BB;</mi>
+        <mo>&#x2212;</mo>
         <mn>1</mn>
       </mrow>
     </mfenced>
     <msqrt>
       <mrow>
         <mn>2</mn>
-        <mi>&sigma;</mi>
+        <mi>&#x03C3;</mi>
       </mrow>
     </msqrt>
+  </mrow>
+</math>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mi>Q</mi>
+    <mfenced>
+      <mrow>
+        <mi>a</mi>
+        <mo>,</mo>
+        <mi>x</mi>
+      </mrow>
+    </mfenced>
+    <mspace width="1em"/>
+    <mo>=</mo>
+    <mspace width="1em"/>
+    <msup>
+      <mi>e</mi>
+      <mrow>
+        <mo>&#x2212;</mo>
+        <mi>x</mi>
+      </mrow>
+    </msup>
+    <munderover>
+      <mo>&#x2211;</mo>
+      <mrow>
+        <mi>n</mi>
+        <mo>=</mo>
+        <mn>0</mn>
+      </mrow>
+      <mrow>
+        <mi>a</mi>
+        <mo>&#x2212;</mo>
+        <mn>1</mn>
+      </mrow>
+    </munderover>
+    <mfrac>
+      <mrow>
+        <msup>
+          <mi>x</mi>
+          <mi>n</mi>
+        </msup>
+      </mrow>
+      <mrow>
+        <mi>n</mi>
+        <mo>!</mo>
+      </mrow>
+    </mfrac>
+    <mspace width="1em"/>
+    <mo>;</mo>
+    <mspace width="1em"/>
+    <mi>a</mi>
+    <mo>&#x2208;</mo>
+    <msup>
+      <mi>&#x2115;</mi>
+      <mo>+</mo>
+    </msup>
   </mrow>
 </math>
 </body>
