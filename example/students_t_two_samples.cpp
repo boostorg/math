@@ -189,10 +189,10 @@ void two_samples_t_test_unequal_sd(
 int main()
 {
    //
-   // Run tests for Heat Flow Meter data
-   // see http://www.itl.nist.gov/div898/handbook/eda/section4/eda428.htm
-   // The data was collected while calibrating a heat flow meter
-   // against a known value.
+   // Run tests for Car Mileage sample data
+   // http://www.itl.nist.gov/div898/handbook/eda/section3/eda3531.htm
+   // from the NIST website http://www.itl.nist.gov.  The data compares
+   // miles per gallon of US cars with miles per gallon of Japanese cars.
    //
    two_samples_t_test_equal_sd(20.14458, 6.414700, 249, 30.48101, 6.107710, 79, 0.05);
    two_samples_t_test_unequal_sd(20.14458, 6.414700, 249, 30.48101, 6.107710, 79, 0.05);

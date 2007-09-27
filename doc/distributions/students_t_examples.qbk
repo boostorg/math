@@ -665,10 +665,11 @@ section 1.3.5.3] of the __handbook.
 So with a probability that the difference is due to chance of just
 5.273e-030, we can safely conclude that there is indeed a difference.
 
-The tests on the alternative hypothesis show that the Sample 1 Mean is
+The tests on the alternative hypothesis show that we must
+also reject the hypothesis that Sample 1 Mean is
 greater than that for Sample 2: in this case Sample 1 represents the 
-miles per gallon for US cars, and Sample 2 the miles per gallon for 
-Japanese cars, so we conclude that Japanese cars are on average more
+miles per gallon for Japanese cars, and Sample 2 the miles per gallon for 
+US cars, so we conclude that Japanese cars are on average more
 fuel efficient.
 
 Now that we have the simple case out of the way, let's look for a moment
