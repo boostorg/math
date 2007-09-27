@@ -266,7 +266,7 @@ The default version of this function returns /z/.
 But with another policy, like `throw_on_error` 
 throws an `std::underflow_error` C++ exception.
 
-[hreading [#evaluation_error]Evaluation Errors]
+[heading [#evaluation_error]Evaluation Errors]
 
 When a special function calculates a result that is known to be erroneous,
 or where the result is incalculable then it calls:
