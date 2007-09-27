@@ -266,19 +266,19 @@ can be summarised in the following table:
 
 `cdf(complement(dist, fabs(t))) < alpha / 2`]]
 
-[[The Alternative-hypothesis: there is
-*difference* in means]  
+[[The Alternative-hypothesis: there
+*is difference* in means]  
 [Reject if complement of CDF for |t| > significance level / 2:
 
 `cdf(complement(dist, fabs(t))) > alpha / 2`]]
 
-[[The Alternative-hypothesis: the sample mean is *less* than
+[[The Alternative-hypothesis: the sample mean *is less* than
 the true mean.]  
 [Reject if CDF of t > significance level:
 
 `cdf(dist, t) > alpha`]]
 
-[[The Alternative-hypothesis: the sample mean is *greater* than
+[[The Alternative-hypothesis: the sample mean *is greater* than
 the true mean.]  
 [Reject if complement of CDF of t > significance level:
 
@@ -289,7 +289,7 @@ the true mean.]
 Notice that the comparisons are against `alpha / 2` for a two-sided test
 and against `alpha` for a one-sided test]
 
-Now that we have all the parts in place let's take a look at some 
+Now that we have all the parts in place, let's take a look at some 
 sample output, first using the
 [@http://www.itl.nist.gov/div898/handbook/eda/section4/eda428.htm
 Heat flow data] from the NIST site.  The data set was collected 
@@ -597,8 +597,8 @@ complement of the probability:
 Here we've used the absolute value of the t-statistic, because we initially
 want to know simply whether there is a difference or not (a two-sided test).
 However, we can also test whether the mean of the second sample is greater
-or less than that of the first: all the possible tests are summed up
-in the following table:
+or is less (one-sided test) than that of the first:
+all the possible tests are summed up in the following table:
 
 [table
 [[Hypothesis][Test]]
@@ -634,7 +634,7 @@ For a two-sided test we must compare against alpha / 2 and not alpha.]
 Most of the rest of the sample program is pretty-printing, so we'll
 skip over that, and take a look at the sample output for alpha=0.05
 (a 95% probability level).  For comparison the dataplot output
-for te same data is in 
+for the same data is in 
 [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda353.htm
 section 1.3.5.3] of the __handbook.
 
