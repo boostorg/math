@@ -4,7 +4,7 @@ This library is divided into three interconnected parts:
 
 [h4 Statistical Distributions]
 
-Provide a reasonably comprehensive set of
+Provides a reasonably comprehensive set of
 [link math_toolkit.dist statistical distributions],
 upon which higher level statistical tests can be built.
 
