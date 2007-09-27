@@ -21,7 +21,7 @@
 Returns the digamma or psi function of /x/. Digamma is defined as the logarithmic
 derivative of the gamma function:
 
-[$../equations/digamma1.png]
+[equation digamma1]
 
 [$../graphs/digamma.png]
 
@@ -87,7 +87,7 @@ is used to shift the evaluation to the range [1,2].
 
 For arguments > BIG the asymptotic expansion:
 
-[$../equations/digamma2.png]
+[equation digamma2]
 
 can be used.  However, this expansion is divergent after a few terms: 
 exactly how many terms depends on the size of /x/.  Therefore the value
@@ -102,7 +102,7 @@ The rational approximation [jm_rationals] in the range [1,2] is derived as follo
 First a high precision approximation to digamma was constructed using a 60-term
 differentiated __lanczos, the form used is:
 
-[$../equations/digamma3.png]
+[equation digamma3]
 
 Where P(x) and Q(x) are the polynomials from the rational form of the Lanczos sum,
 and P'(x) and Q'(x) are their first derivatives.  The Lanzos part of this

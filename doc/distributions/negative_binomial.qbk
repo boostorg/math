@@ -67,7 +67,7 @@ the random variable is the number of successes, for a fixed number of trials.]
 
 It has the PDF:
 
-[$../equations/neg_binomial_ref.png]
+[equation neg_binomial_ref]
 
 The following graph illustrate how the PDF varies as the success fraction 
 /p/ changes:

@@ -12,14 +12,14 @@
 The [@http://mathworld.wolfram.com/SincFunction.html Sinus Cardinal family of functions]
 (indexed by the family of indices [^a > 0]) 
 is defined by 
-[$../equations/special_functions_blurb20.jpeg]; 
+[equation special_functions_blurb20]; 
 it sees heavy use in signal processing tasks.
 
 By analogy, the 
 [@http://mathworld.wolfram.com/SinhcFunction.htm Hyperbolic Sinus Cardinal]
 family of functions 
 (also indexed by the family of indices [^a > 0]) is defined by 
-[$../equations/special_functions_blurb22.jpeg].
+[equation special_functions_blurb22].
 
 These two families of functions are composed of entire functions.
 

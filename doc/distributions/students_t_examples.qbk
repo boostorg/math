@@ -13,7 +13,7 @@ different from this colloquialism.  More background information can be found on 
 
 The formula for the interval can be expressed as:
 
-[$../equations/dist_tutorial4.png]
+[equation dist_tutorial4]
 
 Where, ['Y[sub s]] is the sample mean, /s/ is the sample standard deviation, 
 /N/ is the sample size, /[alpha]/ is the desired significance level and 
@@ -570,7 +570,7 @@ variances:
 Our procedure will begin by calculating the t-statistic, assuming
 equal variances the needed formulae are:
 
-[$../equations/dist_tutorial1.png]
+[equation dist_tutorial1]
 
 where Sp is the "pooled" standard deviation of the two samples, 
 and /v/ is the number of degrees of freedom of the two combined
@@ -675,13 +675,13 @@ Now that we have the simple case out of the way, let's look for a moment
 at the more complex one: that the standard deviations of the two samples
 are not equal.  In this case the formula for the t-statistic becomes:
 
-[$../equations/dist_tutorial2.png]
+[equation dist_tutorial2]
 
 And for the combined degrees of freedom we use the 
 [@http://en.wikipedia.org/wiki/Welch-Satterthwaite_equation Welch-Satterthwaite]
 approximation:
 
-[$../equations/dist_tutorial3.png]
+[equation dist_tutorial3]
 
 Note that this is one of the rare situations where the degrees-of-freedom
 parameter to the Student's t distribution is a real number, and not an

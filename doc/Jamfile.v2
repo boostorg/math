@@ -34,6 +34,7 @@ boostbook standalone
         <xsl:param>toc.max.depth=4
         # How far down we go with TOC's
         <xsl:param>generate.section.toc.level=10
+        #<xsl:param>root.filename="sf_dist_and_tools"
         
         # PDF Options:
         # TOC Generation: this is needed for FOP-0.9 and later:
@@ -51,14 +52,16 @@ boostbook standalone
         <xsl:param>paper.type=A4
         # Yes, we want graphics for admonishments:
         <xsl:param>admon.graphics=1
+        # Hyphenation:
+        <xsl:param>hyphenate.verbatim=1
+        <xsl:param>hyphenate.verbatim.characters=" :."
         # Set this one for PDF generation *only*:
         # default pnd graphics are awful in PDF form,
         # better use SVG's instead:
         # <xsl:param>admon.graphics.extension=".svg"
+        # <xsl:param>use.role.for.mediaobject=1 
+        # <xsl:param>preferred.mediaobject.role=print
     ;
-
-
-
 
 
 

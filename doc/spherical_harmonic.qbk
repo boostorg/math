@@ -43,7 +43,7 @@ when T1 and T2 are different types.
    
 Returns the value of the Spherical Harmonic Y[sub n][super m](theta, phi):
 
-[$../equations/spherical_0.png]
+[equation spherical_0]
 
 The spherical harmonics Y[sub n][super m](theta, phi) are the angular 
 portion of the solution to Laplace's equation in spherical coordinates 
@@ -84,7 +84,7 @@ From MathWorld--A Wolfram Web Resource].  ]
    
 Returns the real part of Y[sub n][super m](theta, phi):
 
-[$../equations/spherical_1.png]
+[equation spherical_1]
 
    template <class T1, class T2>
    ``__sf_result`` spherical_harmonic_i(unsigned n, int m, T1 theta, T2 phi);
@@ -94,7 +94,7 @@ Returns the real part of Y[sub n][super m](theta, phi):
    
 Returns the imaginary part of Y[sub n][super m](theta, phi):
 
-[$../equations/spherical_2.png]
+[equation spherical_2]
 
 [h4 Accuracy]
 

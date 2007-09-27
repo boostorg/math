@@ -215,7 +215,7 @@ The initial guesses used for iteration are obtained as follows:
 
 Firstly recall that:
 
-[$../equations/ibeta_inv5.png]
+[equation ibeta_inv5]
 
 We may wish to start from either p or q, and to calculate either x or y.  
 In addition at
@@ -230,7 +230,7 @@ Journal of Computational and Applied Mathematics 41 (1992) 145-157.
 
 The nearly symmetrical case (section 2 of the paper) is used for
 
-[$../equations/ibeta_inv2.png]
+[equation ibeta_inv2]
 
 and involves solving the inverse error function first.  The method is accurate
 to at least 2 decimal digits when [^a = 5] rising to at least 8 digits when
@@ -238,7 +238,7 @@ to at least 2 decimal digits when [^a = 5] rising to at least 8 digits when
 
 The general error function case (section 3 of the paper) is used for
 
-[$../equations/ibeta_inv3.png]
+[equation ibeta_inv3]
 
 and again expresses the inverse incomplete beta in terms of the 
 inverse of the error function.  The method is accurate to at least 
@@ -247,7 +247,7 @@ However, when the result is expected to be very small, and when a+b is
 also small, then its accuracy tails off, in this case when p[super 1/a] < 0.0025
 then it is better to use the following as an initial estimate:
 
-[$../equations/ibeta_inv4.png]
+[equation ibeta_inv4]
 
 Finally the for all other cases where `a+b > 5` the method of section
 4 of the paper is used.  This expresses the inverse incomplete beta in terms
@@ -259,7 +259,7 @@ an exchange a for b, p for q and x for y when this is not the case.  In addition
 when p is close to 1 the method is inaccurate should we actually want y rather 
 than x as output.  Therefore when q is small ([^q[super 1/p] < 10[super -3]]) we use:
 
-[$../equations/ibeta_inv6.png]
+[equation ibeta_inv6]
 
 which is both cheaper to compute than the full method, and a more accurate 
 estimate on q.
@@ -276,7 +276,7 @@ the incomplete beta at point `xs = (1 - a) / (2 - a - b)`.  Therefore if
 look for a point x below the point of inflection `xs`, and on a convex curve.
 An initial estimate for x is made with:
 
-[$../equations/ibeta_inv7.png]
+[equation ibeta_inv7]
 
 which is provably below the true value for x:
 [@http://en.wikipedia.org/wiki/Newton%27s_method Newton iteration] will
@@ -289,11 +289,11 @@ if [^p > I[sub x](a,b)] we swap a for b, p for q and x for y, so that now we alw
 look for a point x below the point of inflection `xs`, and on a concave curve.
 An initial estimate for x is made with:
 
-[$../equations/ibeta_inv4.png]
+[equation ibeta_inv4]
 
 which can be improved somewhat to:
 
-[$../equations/ibeta_inv1.png]
+[equation ibeta_inv1]
 
 when b and x are both small (I've used b < a and x < 0.2).  This
 actually under-estimates x, which drops us on the wrong side of x for Newton
@@ -305,7 +305,7 @@ to 1, and the other greater that 1.  Here, if b < a we swap a for b, p for q
 and x for y.  Now the curve of the incomplete beta is convex with no points
 of inflection in [0,1].  For small p, x can be estimated using
 
-[$../equations/ibeta_inv4.png]
+[equation ibeta_inv4]
 
 which under-estimates x, and drops us on the right side of the true value
 for Newton iteration to converge monotonically.  However, when p is large
@@ -316,7 +316,7 @@ of order of magnitudes out, leading to very poor convergence during iteration.
 Things can be improved by considering the incomplete beta as a distorted
 quarter circle, and estimating y from:
 
-[$../equations/ibeta_inv8.png]
+[equation ibeta_inv8]
 
 This doesn't guarantee that we will drop in on the right side of x for
 monotonic convergence, but it does get us close enough that Halley iteration

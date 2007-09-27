@@ -74,7 +74,7 @@ summation in this way.
 
 Let's suppose we want to implement /log(1+x)/ via its infinite series,
 
-[$../equations/log1pseries.png]
+[equation log1pseries]
 
 We begin by writing a small function object to return successive terms
 of the series:

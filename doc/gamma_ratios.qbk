@@ -30,7 +30,7 @@
    
 Returns the ratio of gamma functions:
 
-[$../equations/gamma_ratio0.png]
+[equation gamma_ratio0]
 
 [optional_policy]
 
@@ -44,7 +44,7 @@ Internally this just calls `tgamma_delta_ratio(a, b-a)`.
    
 Returns the ratio of gamma functions:
 
-[$../equations/gamma_ratio1.png]
+[equation gamma_ratio1]
 
 [optional_policy]
 

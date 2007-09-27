@@ -12,6 +12,15 @@
     [/last-revision $Date$]
 ]
 
+[template equation[name]  '''<inlinemediaobject>
+<imageobject role="html">
+<imagedata fileref="../equations/'''[name]'''.png"></imagedata>
+</imageobject>
+<imageobject role="print">
+<imagedata fileref="../equations/'''[name]'''.svg"></imagedata>
+</imageobject>
+</inlinemediaobject>''']
+
 [include html4_symbols.qbk] [/ just for testing]
 [/include latin1_symbols.qbk] [/ just for testing]
 [include common_overviews.qbk][/ overviews that appear in more than one place!]

@@ -25,7 +25,7 @@ The [@http://en.wikipedia.org/wiki/Exponential_distribution exponential distribu
 is a [@http://en.wikipedia.org/wiki/Probability_distribution continuous probability distribution]
 with PDF:
 
-[$../equations/exponential_dist_ref1.png]
+[equation exponential_dist_ref1]
 
 It is often used to model the time between independent 
 events that happen at a constant average rate.

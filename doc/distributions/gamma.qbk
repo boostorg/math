@@ -44,13 +44,13 @@ a double precision gamma distribution you can use
 For shape parameter /k/ and scale parameter [theta][space] it is defined by the
 probability density function:
 
-[$../equations/gamma_dist_ref1.png]
+[equation gamma_dist_ref1]
 
 Sometimes an alternative formulation is used: given parameters
 [alpha][space]= k and [beta][space]= 1 / [theta], then the 
 distribution can be defined by the PDF:
 
-[$../equations/gamma_dist_ref2.png]
+[equation gamma_dist_ref2]
 
 In this form the inverse scale parameter is called a /rate parameter/.
 

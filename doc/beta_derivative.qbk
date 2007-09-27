@@ -22,7 +22,7 @@ This function finds some uses in statistical distributions: it
 computes the partial derivative with respect to /x/ of the incomplete
 beta function __ibeta.
 
-[$../equations/derivative2.png]
+[equation derivative2]
 
 The return type of this function is computed using the __arg_pomotion_rules
 when T1, T2 and T3 are different types.

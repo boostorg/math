@@ -27,7 +27,7 @@ It is a [@http://en.wikipedia.org/wiki/Probability_distribution continuous proba
 with [@http://en.wikipedia.org/wiki/Probability_distribution probability distribution function PDF]
 given by:
 
-[$../equations/cauchy_ref1.png]
+[equation cauchy_ref1]
 
 The location parameter x[sub 0][space] is the location of the 
 peak of the distribution (the mode of the distribution),

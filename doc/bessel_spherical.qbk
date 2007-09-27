@@ -26,7 +26,7 @@ sph_neumann(v, x) = y[sub v](x) = n[sub v](x)
 
 where:
 
-[$../equations/sbessel2.png]
+[equation sbessel2]
 
 The return type of these functions is computed using the __arg_pomotion_rules
 for the single argument type T.
@@ -64,7 +64,7 @@ __cyl_bessel_j and __cyl_neumann: refer to these functions for accuracy data.
 Other than error handling and a couple of special cases these functions
 are implemented directly in terms of their definitions:
 
-[$../equations/sbessel2.png]
+[equation sbessel2]
 
 The special cases occur for:
 
@@ -72,7 +72,7 @@ j[sub 0][space]= __sinc_pi(x) = sin(x) / x
 
 and for small ['x < 1], we can use the series:
 
-[$../equations/sbessel5.png]
+[equation sbessel5]
 
 which neatly avoids the problem of calculating 0/0 that can occur with the
 main definition as x [rarr] 0.

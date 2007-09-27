@@ -27,9 +27,9 @@ cyl_neumann(v, x) = Y[sub v](x) = N[sub v](x)
 
 where:
 
-[$../equations/bessel2.png]
+[equation bessel2]
 
-[$../equations/bessel3.png]
+[equation bessel3]
 
 The return type of these functions is computed using the __arg_pomotion_rules
 when T1 and T2 are different types.  The functions are also optimised for the
@@ -143,9 +143,9 @@ is odd for odd orders and even for even orders, so we reflect to /x > 0/.
 When the order /v/ is negative then the reflection formulae can be used to
 move to /v > 0/:
 
-[$../equations/bessel9.png]
+[equation bessel9]
 
-[$../equations/bessel10.png]
+[equation bessel10]
 
 Note that if the order is an integer, then these formulae reduce to:
 
@@ -183,7 +183,7 @@ these methods are not used when type T has more than 64 binary digits.
 
 When /x/ is small, J[sub x][space] is best computed directly from the series:
 
-[$../equations/bessel2.png]
+[equation bessel2]
 
 In the general case we compute J[sub v][space] and 
 Y[sub v][space] simultaneously.
@@ -198,11 +198,11 @@ and use them to obtain J[sub [nu]](x), Y[sub [nu]](x).
 The algorithm is called Steed's method, which needs two
 continued fractions as well as the Wronskian:
 
-[$../equations/bessel8.png]
+[equation bessel8]
 
-[$../equations/bessel11.png]
+[equation bessel11]
 
-[$../equations/bessel12.png]
+[equation bessel12]
 
 See: F.S. Acton, ['Numerical Methods that Work],
     The Mathematical Association of America, Washington, 1997.
@@ -221,11 +221,11 @@ When ['x] is large (['x] > 2), both continued fractions converge (CF1
 may be slow for really large ['x]). J[sub [mu]], J[sub [mu]+1],
 Y[sub [mu]], Y[sub [mu]+1] can be calculated by
 
-[$../equations/bessel13.png]
+[equation bessel13]
 
 where
 
-[$../equations/bessel14.png]
+[equation bessel14]
 
 J[sub [nu]] and Y[sub [mu]] are then calculated using backward
 (Miller's algorithm) and forward recurrence respectively.
@@ -233,11 +233,11 @@ J[sub [nu]] and Y[sub [mu]] are then calculated using backward
 When ['x] is small (['x] <= 2), CF2 convergence may fail (but CF1
 works very well). The solution here is Temme's series:
 
-[$../equations/bessel15.png]
+[equation bessel15]
 
 where
 
-[$../equations/bessel16.png]
+[equation bessel16]
 
 g[sub k][space] and h[sub k][space]
 are also computed by recursions (involving gamma functions), but the

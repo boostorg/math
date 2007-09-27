@@ -3,11 +3,11 @@
 Given an actual value /a/ and a found value /v/ the relative error can be
 calculated from:
 
-[$../equations/error2.png]
+[equation error2]
 
 However the test programs in the library use the symmetrical form:
 
-[$../equations/error1.png]
+[equation error1]
 
 which measures /relative difference/ and happens to be less error 
 prone in use since we don't have to worry which value is the "true"

@@ -90,7 +90,7 @@ as the arguments.
   
 Returns Carlson's Elliptic Integral R[sub F]:
 
-[$../equations/ellint9.png]
+[equation ellint9]
 
 Requires that all of the arguments are non-negative, and at most
 one may be zero.  Otherwise returns the result of __domain_error.
@@ -105,7 +105,7 @@ one may be zero.  Otherwise returns the result of __domain_error.
   
 Returns Carlson's elliptic integral R[sub D]:
 
-[$../equations/ellint10.png]
+[equation ellint10]
 
 Requires that x and y are non-negative, with at most one of them
 zero, and that z >= 0.  Otherwise returns the result of __domain_error.
@@ -120,7 +120,7 @@ zero, and that z >= 0.  Otherwise returns the result of __domain_error.
 
 Returns Carlson's elliptic integral R[sub J]:
   
-[$../equations/ellint11.png]
+[equation ellint11]
 
 Requires that x, y and z are non-negative, with at most one of them
 zero, and that ['p != 0].  Otherwise returns the result of __domain_error.
@@ -131,7 +131,7 @@ When ['p < 0] the function returns the
 [@http://en.wikipedia.org/wiki/Cauchy_principal_value Cauchy principal value]
 using the relation:
 
-[$../equations/ellint17.png]
+[equation ellint17]
 
   template <class T1, class T2>
   ``__sf_result`` ellint_rc(T1 x, T2 y)
@@ -141,7 +141,7 @@ using the relation:
 
 Returns Carlson's elliptic integral R[sub C]:
   
-[$../equations/ellint12.png]
+[equation ellint12]
 
 Requires that ['x > 0] and that ['y != 0].  
 Otherwise returns the result of __domain_error.
@@ -152,7 +152,7 @@ When ['y < 0] the function returns the
 [@http://mathworld.wolfram.com/CauchyPrincipalValue.html Cauchy principal value]
 using the relation:
 
-[$../equations/ellint18.png]
+[equation ellint18]
 
 [heading Testing]
 
@@ -190,12 +190,12 @@ are relative errors in units of epsilon.
 The key of Carlson's algorithm [[link ellint_ref_carlson79 Carlson79]] is the
 duplication theorem:
 
-[$../equations/ellint13.png]
+[equation ellint13]
 
 By applying it repeatedly, ['x], ['y], ['z] get
 closer and closer. When they are nearly equal, the special case equation
 
-[$../equations/ellint16.png]
+[equation ellint16]
 
 is used. More specifically, ['[R F]] is evaluated from a Taylor series
 expansion to the fifth order. The calculations of the other three integrals
@@ -206,8 +206,8 @@ the integrals are singular and their
 [@http://mathworld.wolfram.com/CauchyPrincipalValue.html Cauchy principal values]
 are returned via the relations:
 
-[$../equations/ellint17.png]
+[equation ellint17]
 
-[$../equations/ellint18.png]
+[equation ellint18]
 
 [endsect]

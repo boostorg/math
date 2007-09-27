@@ -38,7 +38,7 @@ the return type is `double` if T is an integer type, and T otherwise.
 Returns the [@http://en.wikipedia.org/wiki/Error_function error function]
 [@http://functions.wolfram.com/GammaBetaErf/Erf/ erf] of z:
 
-[$../equations/erf1.png]
+[equation erf1]
 
 [$../graphs/erf1.png]
 
@@ -50,7 +50,7 @@ Returns the [@http://en.wikipedia.org/wiki/Error_function error function]
    
 Returns the complement of the [@http://functions.wolfram.com/GammaBetaErf/Erfc/ error function] of z:
 
-[$../equations/erf2.png]
+[equation erf2]
 
 [$../graphs/erf2.png]
 

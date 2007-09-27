@@ -37,7 +37,7 @@ A statistical distribution published by William Gosset in 1908.
 His employer, Guinness Breweries, required him to publish under a 
 pseudonym, so he chose "Student". Given N independent measurements, let
 
-[$../equations/students_t_dist.png]
+[equation students_t_dist]
 
 where /M/ is the population mean,[' ''' &#x3BC; '''] is the sample mean, and /s/ is the 
 sample variance.
@@ -46,7 +46,7 @@ Student's t-distribution is defined as the distribution of the random
 variable t which is  - very loosely - the "best" that we can do not 
 knowing the true standard deviation of the sample.  It has the PDF:
 
-[$../equations/students_t_ref1.png]
+[equation students_t_ref1]
 
 The Student's t-distribution takes a single parameter: the number of
 degrees of freedom of the sample.  When the degrees of freedom is

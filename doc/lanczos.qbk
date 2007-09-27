@@ -59,17 +59,17 @@ functions divided by large powers into single (simpler) expressions.
 
 The Lanczos Approximation to the Gamma Function is given by:
 
-[$../equations/lanczos0.png]
+[equation lanczos0]
 
 Where S[sub g](z) is an infinite sum, that is convergent for all z > 0, 
 and /g/ is an arbitrary parameter that controls the "shape" of the
 terms in the sum which is given by:
 
-[$../equations/lanczos0a.png]
+[equation lanczos0a]
 
 With individual coefficients defined in closed form by:
 
-[$../equations/lanczos0b.png]
+[equation lanczos0b]
 
 However, evaluation of the sum in that form can lead to numerical instability
 in the computation of the ratios of rising and falling factorials (effectively
@@ -79,11 +79,11 @@ can accumulate quite rapidly).
 The Lanczos approximation is therefore often written in partial fraction form
 with the leading constants absorbed by the coefficients in the sum:
 
-[$../equations/lanczos1.png]
+[equation lanczos1]
 
 where:
 
-[$../equations/lanczos2.png]
+[equation lanczos2]
 
 Again parameter /g/ is an arbitrarily chosen constant, and /N/ is an arbitrarily chosen 
 number of terms to evaluate in the "Lanczos sum" part.  
@@ -107,19 +107,19 @@ P = B D C F
 
 where B is an NxN matrix:
 
-[$../equations/lanczos4.png]
+[equation lanczos4]
 
 D is an NxN matrix:
 
-[$../equations/lanczos3.png]
+[equation lanczos3]
 
 C is an NxN matrix:
 
-[$../equations/lanczos5.png]
+[equation lanczos5]
 
 and F is an N element column vector:
 
-[$../equations/lanczos6.png]
+[equation lanczos6]
 
 Note than the matrices B, D and C contain all integer terms and depend
 only on /N/, this product should be computed first, and then multiplied
@@ -216,7 +216,7 @@ Finally note that the Lanczos approximation can be written as follows
 by removing a factor of exp(g) from the denominator, and then dividing 
 all the coefficients by exp(g):
 
-[$../equations/lanczos7.png]
+[equation lanczos7]
 
 This form is more convenient for calculating lgamma, but for the gamma
 function the division by /e/ turns a possibly exact quality into an

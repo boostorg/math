@@ -35,7 +35,7 @@ is known as the ['Standard Normal Distribution].
 
 Given mean [mu][space] and standard deviation [sigma][space] it has the PDF:
 
-[$../equations/normal_ref1.png]
+[equation normal_ref1]
 
 The variation the PDF with its parameters is illustrated
 in the following graph:

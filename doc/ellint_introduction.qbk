@@ -27,7 +27,7 @@ All variables are real numbers unless otherwise noted.
 
 [h4 [#ellint_def]Definition]
 
-[$../equations/ellint1.png]
+[equation ellint1]
 
 is called elliptic integral if ['R(t, s)] is a rational function
 of ['t] and ['s], and ['s[super 2]] is a cubic or quartic polynomial
@@ -39,19 +39,19 @@ integrals can be reduced to the following three canonical forms:
 
 Elliptic Integral of the First Kind (Legendre form)
 
-[$../equations/ellint2.png]
+[equation ellint2]
 
 Elliptic Integral of the Second Kind (Legendre form)
 
-[$../equations/ellint3.png]
+[equation ellint3]
 
 Elliptic Integral of the Third Kind (Legendre form)
 
-[$../equations/ellint4.png]
+[equation ellint4]
 
 where
 
-[$../equations/ellint5.png]
+[equation ellint5]
 
 [note ['[phi]] is called the amplitude.
 
@@ -93,43 +93,43 @@ When ['[phi]] = ['[pi]] / 2, the elliptic integrals are called ['complete].
 
 Complete Elliptic Integral of the First Kind (Legendre form)
 
-[$../equations/ellint6.png]
+[equation ellint6]
 
 Complete Elliptic Integral of the Second Kind (Legendre form)
 
-[$../equations/ellint7.png]
+[equation ellint7]
 
 Complete Elliptic Integral of the Third Kind (Legendre form)
 
-[$../equations/ellint8.png]
+[equation ellint8]
 
 Carlson [[link ellint_ref_carlson77 Carlson77]] [[link ellint_ref_carlson78  Carlson78]] gives an alternative definition of
 elliptic integral's canonical forms:
 
 Carlson's Elliptic Integral of the First Kind
 
-[$../equations/ellint9.png]
+[equation ellint9]
 
 where ['x], ['y], ['z] are nonnegative and at most one of them
 may be zero.
 
 Carlson's Elliptic Integral of the Second Kind
 
-[$../equations/ellint10.png]
+[equation ellint10]
 
 where ['x], ['y] are nonnegative, at most one of them may be zero,
 and ['z] must be positive.
 
 Carlson's Elliptic Integral of the Third Kind
 
-[$../equations/ellint11.png]
+[equation ellint11]
 
 where ['x], ['y], ['z] are nonnegative, at most one of them may be
 zero, and ['p] must be nonzero.
 
 Carlson's Degenerate Elliptic Integral
 
-[$../equations/ellint12.png]
+[equation ellint12]
 
 where ['x] is nonnegative and ['y] is nonzero.
 
@@ -142,18 +142,18 @@ where ['x] is nonnegative and ['y] is nonzero.
 
 Carlson proved in [[link ellint_ref_carlson78  Carlson78]] that
 
-[$../equations/ellint13.png]
+[equation ellint13]
 
 [h4 [#ellint_formula]Carlson's Formulas]
 
 The Legendre form and Carlson form of elliptic integrals are related
 by equations:
 
-[$../equations/ellint14.png]
+[equation ellint14]
 
 In particular,
 
-[$../equations/ellint15.png]
+[equation ellint15]
 
 [h4 Numerical Algorithms]
 

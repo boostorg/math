@@ -33,7 +33,7 @@ of a large number of independent, identically-distributed variables.
 For location and scale parameters /m/ and /s/ it is defined by the
 probability density function:
 
-[$../equations/lognormal_ref.png]
+[equation lognormal_ref]
 
 The location and scale parameters are equivalent to the mean and 
 standard deviation of the logarithm of the random variable.

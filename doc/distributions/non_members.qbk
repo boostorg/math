@@ -115,7 +115,7 @@ Returns the __hazard of /x/ and distibution /dist/.
 This function may return a __domain_error if the random variable is outside
 the defined range for the distribution.
 
-[$../equations/hazard.png]
+[equation hazard]
 
 [caution
 Some authors refer to this as the conditional failure 
@@ -131,7 +131,7 @@ Returns the __chf of /x/ and distibution /dist/.
 This function may return a __domain_error if the random variable is outside
 the defined range for the distribution.
 
-[$../equations/chf.png]
+[equation chf]
 
 [caution 
 Some authors refer to this as simply the "Hazard Function".]

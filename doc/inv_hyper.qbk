@@ -25,7 +25,7 @@
 
 The exponential funtion is defined, for all objects for which this makes sense, 
 as the power series 
-[$../equations/special_functions_blurb1.jpeg], 
+[equation special_functions_blurb1], 
 with ['[^n! = 1x2x3x4x5...xn]] (and ['[^0! = 1]] by definition) being the factorial of ['[^n]]. 
 In particular, the exponential function is well defined for real numbers, 
 complex number, quaternions, octonions, and matrices of complex numbers, 
@@ -41,11 +41,11 @@ among others.
 The hyperbolic functions are defined as power series which 
 can be computed (for reals, complex, quaternions and octonions) as:
 
-Hyperbolic cosine: [$../equations/special_functions_blurb5.jpeg]
+Hyperbolic cosine: [equation special_functions_blurb5]
 
-Hyperbolic sine: [$../equations/special_functions_blurb6.jpeg]
+Hyperbolic sine: [equation special_functions_blurb6]
 
-Hyperbolic tangent: [$../equations/special_functions_blurb7.jpeg]
+Hyperbolic tangent: [equation special_functions_blurb7]
 
 [: ['[*Trigonometric functions on R (cos: purple; sin: red; tan: blue)]]]
 [: [$../graphs/trigonometric.png]]
@@ -61,13 +61,13 @@ onto __form3 (and from __form4 onto __form3); the inverse function we use
 here is defined on __form3 with range __form2.
 
 The inverse of the hyperbolic tangent is called the Argument hyperbolic tangent, 
-and can be computed as [$../equations/special_functions_blurb15.jpeg].
+and can be computed as [equation special_functions_blurb15].
 
 The inverse of the hyperbolic sine is called the Argument hyperbolic sine, 
-and can be computed (for __form5) as [$../equations/special_functions_blurb17.jpeg].
+and can be computed (for __form5) as [equation special_functions_blurb17].
 
 The inverse of the hyperbolic cosine is called the Argument hyperbolic cosine, 
-and can be computed as [$../equations/special_functions_blurb18.jpeg].
+and can be computed as [equation special_functions_blurb18].
 
 [endsect]
 

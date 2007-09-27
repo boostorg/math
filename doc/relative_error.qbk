@@ -19,7 +19,7 @@
 
 Returns the relative error between /a/ and /v/ using the usual formula:
 
-[$../equations/error1.png]
+[equation error1]
 
 In addition the value returned is zero if:
 

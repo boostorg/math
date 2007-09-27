@@ -20,7 +20,7 @@
 
 The beta function is defined by:
 
-[$../equations/beta1.png]
+[equation beta1]
 
 [$../graphs/beta.png]
 
@@ -83,14 +83,14 @@ for even very modest arguments, while the latter is prone to cancellation
 errors.  As an alternative, if we regard the gamma function as a white-box
 containing the __lanczos, then we can combine the power terms:
 
-[$../equations/beta2.png]
+[equation beta2]
 
 which is almost the ideal solution, however almost all of the error occurs
 in evaluating the power terms when /a/ or /b/ are large.  If we assume that /a > b/
 then the larger of the two power terms can be reduced by a factor of /b/, which
 immediately cuts the maximum error in half:
 
-[$../equations/beta3.png]
+[equation beta3]
 
 This may not be the final solution, but it is very competitive compared to
 other implementation methods.
@@ -100,7 +100,7 @@ implemented in a very similar way to the generic version of the gamma function.
 Again in order to avoid numerical overflow the power terms that prefix the series and
 continued fraction parts are collected together into:
 
-[$../equations/beta8.png]
+[equation beta8]
 
 where la, lb and lc are the integration limits used for a, b, and a+b.
 
@@ -108,15 +108,15 @@ There are a few special cases worth mentioning:
 
 When /a/ or /b/ are less than one, we can use the recurrence relations:
 
-[$../equations/beta4.png]
+[equation beta4]
 
-[$../equations/beta5.png]
+[equation beta5]
 
 to move to a more favorable region where they are both greater than 1.
 
 In addition:
 
-[$../equations/beta7.png]
+[equation beta7]
 
 [endsect][/section:beta_function The Beta Function]
 [/ 

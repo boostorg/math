@@ -94,7 +94,7 @@ be a big win.
 [h4 Newton Raphson Method]
 Given an initial guess x0 the subsequent values are computed using:
 
-[$../equations/roots1.png]
+[equation roots1]
 
 Out of bounds steps revert to bisection of the current bounds.
 
@@ -105,7 +105,7 @@ Under ideal conditions, the number of correct digits doubles with each iteration
 
 Given an initial guess x0 the subsequent values are computed using:
 
-[$../equations/roots2.png]
+[equation roots2]
 
 Over-compensation by the second derivative (one which would proceed
 in the wrong direction) causes the method to
@@ -120,7 +120,7 @@ Under ideal conditions, the number of correct digits trebles with each iteration
 
 Given an initial guess x0 the subsequent values are computed using:
 
-[$../equations/roots3.png]
+[equation roots3]
 
 Over-compensation by the second derivative (one which would proceed
 in the wrong direction) causes the method to
@@ -136,7 +136,7 @@ Under ideal conditions, the number of correct digits trebles with each iteration
 Lets suppose we want to find the cube root of a number, the equation we want to
 solve along with its derivatives are:
 
-[$../equations/roots4.png]
+[equation roots4]
 
 To begin with lets solve the problem using Newton Raphson iterations, we'll
 begin be defining a function object that returns the evaluation of the function

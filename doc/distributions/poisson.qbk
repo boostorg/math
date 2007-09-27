@@ -35,7 +35,7 @@ The distribution was discovered by Sim__eacute on-Denis Poisson (1781 to 1840).
 
 It has the Probability Mass Function:
 
-[$../equations/poisson_ref1.png]
+[equation poisson_ref1]
 
 for k events, with an expected number of events [lambda].
 

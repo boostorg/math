@@ -33,7 +33,7 @@ as that argument or `double` if the template argument is an integer type.
    
 Returns the value of the Hermite Polynomial of order /n/ at point /x/:
 
-[$../equations/hermite_0.png]
+[equation hermite_0]
 
 [optional_policy]
 
@@ -49,7 +49,7 @@ Implements the three term recurrence relation for the Hermite
 polynomials, this function can be used to create a sequence of
 values evaluated at the same /x/, and for rising /n/.
 
-[$../equations/hermite_1.png]
+[equation hermite_1]
 
 For example we could produce a vector of the first 10 polynomial
 values using:

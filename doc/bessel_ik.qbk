@@ -27,9 +27,9 @@ cyl_bessel_k(v, x) = K[sub v](x)
 
 where:
 
-[$../equations/mbessel2.png]
+[equation mbessel2]
 
-[$../equations/mbessel3.png]
+[equation mbessel3]
 
 The return type of these functions is computed using the __arg_pomotion_rules
 when T1 and T2 are different types.  The functions are also optimised for the
@@ -112,7 +112,7 @@ I[sub 0.5](x) = sqrt(2 / [pi]x) * sinh(x)
 For K[sub v][space] with /v/ an integer, the result is calculated using the
 recurrence relation:
 
-[$../equations/mbessel5.png]
+[equation mbessel5]
 
 starting from K[sub 0][space] and K[sub 1][space] which are calculated
 using rational the approximations above.  These rational approximations are
@@ -122,9 +122,9 @@ no more than 64 binary digits of precision.
 In the general case, we first normalize [nu][space] to \[[^0, [inf]])
 with the help of the reflection formulae:
 
-[$../equations/mbessel9.png]
+[equation mbessel9]
 
-[$../equations/mbessel10.png]
+[equation mbessel10]
 
 Let [mu][space] = [nu] - floor([nu] + 1/2), then [mu][space] is the fractional part of 
 [nu][space] such that |[mu]| <= 1/2 (we need this for convergence later). The idea is to
@@ -136,11 +136,11 @@ N.M. Temme, ['On the numerical evaluation of the modified bessel function
     of the third kind], Journal of Computational Physics, vol 19, 324 (1975), 
 which needs two continued fractions as well as the Wronskian:
 
-[$../equations/mbessel11.png]
+[equation mbessel11]
 
-[$../equations/mbessel12.png]
+[equation mbessel12]
 
-[$../equations/mbessel8.png]
+[equation mbessel8]
 
 The continued fractions are computed using the modified Lentz's method
 (W.J. Lentz, ['Generating Bessel functions in Mie scattering calculations
@@ -156,11 +156,11 @@ When ['x] is large (['x] > 2), both continued fractions converge (CF1
 may be slow for really large ['x]). K[sub [mu]][space] and K[sub [mu]+1][space]
 can be calculated by
 
-[$../equations/mbessel13.png]
+[equation mbessel13]
 
 where
 
-[$../equations/mbessel14.png]
+[equation mbessel14]
 
 ['S] is also a series that is summed along with CF2, see 
 I.J. Thompson and A.R. Barnett, ['Modified Bessel functions I_v and K_v
@@ -170,11 +170,11 @@ I.J. Thompson and A.R. Barnett, ['Modified Bessel functions I_v and K_v
 When ['x] is small (['x] <= 2), CF2 convergence may fail (but CF1
 works very well). The solution here is Temme's series:
 
-[$../equations/mbessel15.png]
+[equation mbessel15]
 
 where
 
-[$../equations/mbessel16.png]
+[equation mbessel16]
 
 f[sub k][space] and h[sub k][space]
 are also computed by recursions (involving gamma functions), but the

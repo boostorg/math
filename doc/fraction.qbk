@@ -32,11 +32,11 @@
 These functions all evaluate the continued fraction described by the /generator/
 type argument.  The functions with an "_a" suffix evaluate the fraction:
 
-[$../equations/fraction2.png]
+[equation fraction2]
 
 and those with a "_b" suffix evaluate the fraction:
 
-[$../equations/fraction1.png]
+[equation fraction1]
 
 This latter form is somewhat more natural in that it corresponds with the usual
 definition of a continued fraction, but note that the first /a/ value returned by
@@ -83,7 +83,7 @@ Lentz, W.J. 1976, Applied Optics, vol. 15, pp. 668-671.
 The [@http://en.wikipedia.org/wiki/Golden_ratio golden ratio phi = 1.618033989...]
 can be computed from the simplest continued fraction of all:
 
-[$../equations/fraction3.png]
+[equation fraction3]
 
 We begin by defining a generator function:
 
@@ -108,7 +108,7 @@ It's more usual though to have to define both the /a/'s and the /b/'s
 when evaluating special functions by continued fractions, for example
 the tan function is defined by:
 
-[$../equations/fraction4.png]
+[equation fraction4]
 
 So it's generator object would look like:
 

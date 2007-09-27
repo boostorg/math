@@ -224,7 +224,7 @@ calculated using NTL::RR at 1000-bit precision.
    template <class T1, class T2, class ``__Policy``>
    ``__sf_result`` hypot(T1 x, T2 y, const ``__Policy``&);
    
-__effects computes [$../equations/hypot.png]
+__effects computes [equation hypot]
 in such a way as to avoid undue underflow and overflow.
 
 The return type of this function is computed using the __arg_pomotion_rules
@@ -232,7 +232,7 @@ when T1 and T2 are of different types.
 
 [optional_policy]
 
-When calculating [$../equations/hypot.png] it's quite easy for the intermediate terms to either
+When calculating [equation hypot] it's quite easy for the intermediate terms to either
 overflow or underflow, even though the result is in fact perfectly representable.
 
 [h4 Implementation]
@@ -244,7 +244,7 @@ Then if ['x * [epsilon][space] >= y] we can simply return /x/.
 
 Otherwise the result is given by:
 
-[$../equations/hypot2.png]
+[equation hypot2]
 
 [endsect]
 

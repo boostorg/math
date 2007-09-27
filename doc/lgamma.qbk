@@ -26,7 +26,7 @@
 
 The [@http://en.wikipedia.org/wiki/Gamma_function lgamma function] is defined by:
 
-[$../equations/lgamm1.png]
+[equation lgamm1]
 
 The second form of the function takes a pointer to an integer,
 which if non-null is set on output to the sign of tgamma(z).
@@ -131,19 +131,19 @@ Random tests in key problem areas are also used.
 The generic version of this function is implemented by combining the series and 
 continued fraction representations for the incomplete gamma function:
 
-[$../equations/lgamm2.png]
+[equation lgamm2]
 
 where /l/ is an arbitrary integration limit: choosing [^l = max(10, a)] 
 seems to work fairly well.  For negative /z/ the logarithm version of the 
 reflection formula is used:
 
-[$../equations/lgamm3.png]
+[equation lgamm3]
 
 For types of known precision, the __lanczos is used, a traits class 
 `boost::math::lanczos::lanczos_traits` maps type T to an appropriate
 approximation.  The logarithmic version of the __lanczos is:
 
-[$../equations/lgamm4.png]
+[equation lgamm4]
 
 Where L[sub e,g][space] is the Lanczos sum, scaled by e[super g].
 
@@ -199,13 +199,13 @@ in terms of log1p.  Likewise if we subtract 1 from the Lanczos sum part
 a new summation that can be also be fed into log1p.  Crucially, all of the 
 terms tend to zero, as /z -> 1/:
 
-[$../equations/lgamm5.png]
+[equation lgamm5]
 
 The C[sub k][space] terms in the above are the same as in the __lanczos.
 
 A similar rearrangement can be performed at /z = 2/:
 
-[$../equations/lgamm6.png]
+[equation lgamm6]
 
 [endsect][/section:lgamma The Log Gamma Function]
 

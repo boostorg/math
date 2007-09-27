@@ -51,7 +51,7 @@ as that argument or `double` if the template argument is an integer type.
    
 Returns the Legendre Polynomial of the first kind:
 
-[$../equations/legendre_0.png]
+[equation legendre_0]
 
 Requires -1 <= x <= 1, otherwise returns the result of __domain_error.
 
@@ -72,13 +72,13 @@ Legendre Polynomials:
    
 Returns the associated Legendre polynomial of the first kind:
 
-[$../equations/legendre_1.png]
+[equation legendre_1]
 
 Requires -1 <= x <= 1, otherwise returns the result of __domain_error.
 
 Negative values of /l/ and /m/ are handled via the identity relations:
 
-[$../equations/legendre_3.png]
+[equation legendre_3]
 
 [caution The definition of the associated Legendre polynomial used here
 includes a leading Condon-Shortley phase term of (-1)[super m].  This
@@ -112,7 +112,7 @@ Mathematical Functions with Formulas, Graphs, and Mathematical Tables,
 Returns the value of the Legendre polynomial that is the second solution
 to the Legendre differential equation, for example:
 
-[$../equations/legendre_2.png]
+[equation legendre_2]
 
 Requires -1 <= x <= 1, otherwise __domain_error is called.
 
@@ -129,7 +129,7 @@ polynomials, this function can be used to create a sequence of
 values evaluated at the same /x/, and for rising /l/.  This recurrence
 relation holds for Legendre Polynomials of both the first and second kinds.
 
-[$../equations/legendre_4.png]
+[equation legendre_4]
 
 For example we could produce a vector of the first 10 polynomial
 values using:
@@ -156,7 +156,7 @@ Implements the three term recurrence relation for the Associated Legendre
 polynomials, this function can be used to create a sequence of
 values evaluated at the same /x/, and for rising /l/.
 
-[$../equations/legendre_5.png]
+[equation legendre_5]
 
 For example we could produce a vector of the first m+10 polynomial
 values using:

@@ -49,7 +49,7 @@ is the same type as the arguments.
   
 Returns the incomplete elliptic integral of the first kind ['F([phi], k)]:
 
-[$../equations/ellint2.png]
+[equation ellint2]
 
 Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
 
@@ -63,7 +63,7 @@ Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
   
 Returns the complete elliptic integral of the first kind ['K(k)]:
 
-[$../equations/ellint6.png]
+[equation ellint6]
 
 Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
 
@@ -97,11 +97,11 @@ NTL::RR at 1000-bit precision and this implementation.
 These functions are implemented in terms of Carlson's integrals
 using the relations:
 
-[$../equations/ellint19.png]
+[equation ellint19]
 
 and
 
-[$../equations/ellint20.png]
+[equation ellint20]
 
 
 [endsect]
@@ -149,7 +149,7 @@ is the same type as the arguments.
   
 Returns the incomplete elliptic integral of the second kind ['E([phi], k)]:
 
-[$../equations/ellint3.png]
+[equation ellint3]
 
 Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
 
@@ -163,7 +163,7 @@ Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
   
 Returns the complete elliptic integral of the first kind ['E(k)]:
 
-[$../equations/ellint7.png]
+[equation ellint7]
 
 Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
 
@@ -197,11 +197,11 @@ NTL::RR at 1000-bit precision and this implementation.
 These functions are implemented in terms of Carlson's integrals
 using the relations:
 
-[$../equations/ellint21.png]
+[equation ellint21]
 
 and
 
-[$../equations/ellint22.png]
+[equation ellint22]
 
 
 [endsect]
@@ -249,7 +249,7 @@ is the same type as the arguments.
   
 Returns the incomplete elliptic integral of the third kind ['[Pi](n, [phi], k)]:
 
-[$../equations/ellint4.png]
+[equation ellint4]
 
 Requires ['-1 <= k <= 1] and ['n < 1/sin[super 2]([phi])], otherwise 
 returns the result of __domain_error (outside this range the result 
@@ -270,7 +270,7 @@ of \[0, [pi]\/2\].]
   
 Returns the complete elliptic integral of the first kind ['[Pi](n, k)]:
 
-[$../equations/ellint8.png]
+[equation ellint8]
 
 Requires ['-1 <= k <= 1] and ['n < 1], otherwise returns the 
 result of __domain_error (outside this range the result would be complex).
@@ -310,11 +310,11 @@ The implementation for [Pi](n, [phi], k) first siphons off the special cases:
 
 and
 
-[$../equations/ellint23.png]
+[equation ellint23]
 
 Then if n < 0 the relations (A&S 17.7.15/16):
 
-[$../equations/ellint24.png]
+[equation ellint24]
 
 are used to shift /n/ to the range \[0, 1\].
 
@@ -329,11 +329,11 @@ are used to move [phi][space] to the range \[0, [pi]\/2\].
 The functions are then implemented in terms of Carlson's integrals
 using the relations:
 
-[$../equations/ellint25.png]
+[equation ellint25]
 
 and
 
-[$../equations/ellint26.png]
+[equation ellint26]
 
 The remaining problem area occurs when n > 1 and [phi][space] is outside
 the range \[0, [pi]\/2\].  In this range the reduction formula for

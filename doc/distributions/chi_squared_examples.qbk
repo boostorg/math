@@ -41,10 +41,10 @@ Chi Squared distribution, with N-1 degrees of freedom:
 
 For each value of alpha, the formula for the confidence interval is given by:
 
-[$../equations/chi_squ_tut1.png]
+[equation chi_squ_tut1]
 
-Where [$../equations/chi_squ_tut2.png] is the upper critical value, and 
-[$../equations/chi_squ_tut3.png] is the lower critical value of the
+Where [equation chi_squ_tut2] is the upper critical value, and 
+[equation chi_squ_tut3] is the lower critical value of the
 Chi Squared distribution.
 
 In code we begin by printing out a table header:

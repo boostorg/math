@@ -241,7 +241,7 @@ In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
 [[variance][`a * b / (a+b)^2 * (a + b + 1)`]]
 [[mode][`(a-1) / (a + b - 2)`]]
 [[skewness][`2 (b-a) sqrt(a+b+1)/(a+b+2) * sqrt(a * b)`]]
-[[kurtosis excess][ [$../equations/beta_dist_kurtosis.png]  ]]
+[[kurtosis excess][ [equation beta_dist_kurtosis]  ]]
 [[kurtosis][`kurtosis + 3`]]
 [[parameter estimation][ ]]
 [[alpha

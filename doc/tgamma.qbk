@@ -32,7 +32,7 @@
   
 Returns the "true gamma" (hence name tgamma) of value z:
 
-[$../equations/gamm1.png]
+[equation gamm1]
 
 [$../graphs/gamma.png]
 
@@ -155,7 +155,7 @@ to around 100 decimal digits.
 The generic version of the `tgamma` function is implemented by combining the series and 
 continued fraction representations for the incomplete gamma function:
 
-[$../equations/gamm2.png]
+[equation gamm2]
 
 where /l/ is an arbitrary integration limit: choosing [^l = max(10, a)] 
 seems to work fairly well.
@@ -166,15 +166,15 @@ approximation.
 
 For z in the range -20 < z < 1 then recursion is used to shift to z > 1 via:
 
-[$../equations/gamm3.png]
+[equation gamm3]
 
 For very small z, this helps to preserve the identity:
 
-[$../equations/gamm4.png]
+[equation gamm4]
 
 For z < -20 the reflection formula:
 
-[$../equations/gamm5.png]
+[equation gamm5]
 
 is used.  Particular care has to be taken to evaluate the `z * sin([pi][space] * z)` part: 
 a special routine is used to reduce z prior to multiplying by [pi][space] to ensure that the

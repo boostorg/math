@@ -40,7 +40,7 @@ independent, normally distributed
 random variables with means [mu][sub i][space] and variances [sigma][sub i][super 2], 
 then the random variable:
 
-[$../equations/chi_squ_ref1.png]
+[equation chi_squ_ref1]
 
 is distributed according to the Chi-Squared distribution.
 

@@ -70,7 +70,7 @@ the random variable is the number of trials, for a fixed number of successes.]
 
 The PDF for the binomial distribution is given by:
 
-[$../equations/binomial_ref2.png]
+[equation binomial_ref2]
 
 The following two graphs illustrate how the PDF changes depending
 upon the distributions parameters, first we'll keep the success
@@ -348,7 +348,7 @@ be successful (the success fraction), /n/ is the number of trials,
 [[pdf][Implementation is in terms of __ibeta_derivative: if [sub n]C[sub k ] is the binomial
        coefficient of a and b, then we have:
        
-[$../equations/binomial_ref1.png]
+[equation binomial_ref1]
 
 Which can be evaluated as `ibeta_derivative(k+1, n-k+1, p) / (n+1)`
 

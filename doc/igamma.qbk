@@ -60,7 +60,7 @@ when T1 and T2 are different types, otherwise the return type is simply T1.
    
 Returns the normalised lower incomplete gamma function of a and z:
 
-[$../equations/igamma4.png]
+[equation igamma4]
 
 This function changes rapidly from 0 to 1 around the point z == a:
 
@@ -74,7 +74,7 @@ This function changes rapidly from 0 to 1 around the point z == a:
 
 Returns the normalised upper incomplete gamma function of a and z:
 
-[$../equations/igamma3.png]
+[equation igamma3]
 
 This function changes rapidly from 1 to 0 around the point z == a:
 
@@ -88,7 +88,7 @@ This function changes rapidly from 1 to 0 around the point z == a:
 
 Returns the full (non-normalised) lower incomplete gamma function of a and z:
 
-[$../equations/igamma2.png]
+[equation igamma2]
 
    template <class T1, class T2>
    ``__sf_result`` tgamma(T1 a, T2 z);
@@ -98,7 +98,7 @@ Returns the full (non-normalised) lower incomplete gamma function of a and z:
 
 Returns the full (non-normalised) upper incomplete gamma function of a and z:
 
-[$../equations/igamma1.png]
+[equation igamma1]
 
 [h4 Accuracy]
 
@@ -240,22 +240,22 @@ naive implementation without special case handling since Legendre's continued fr
 These four functions share a common implementation since
 they are all related via:
 
-1) [$../equations/igamma5.png]
+1) [equation igamma5]
 
-2) [$../equations/igamma6.png]
+2) [equation igamma6]
 
-3) [$../equations/igamma7.png]
+3) [equation igamma7]
 
 The lower incomplete gamma is computed from its series representation:
 
-4) [$../equations/igamma8.png]
+4) [equation igamma8]
 
 Or by subtraction of the upper integral from either [Gamma](a) or 1
 when /x > a and x > 1.1/.
 
 The upper integral is computed from Legendre's continued fraction representation:
 
-5) [$../equations/igamma9.png]
+5) [equation igamma9]
 
 When /x > 1.1/ or by subtraction of the lower integral from either [Gamma](a) or 1
 when /x < a/.
@@ -264,12 +264,12 @@ For /x < 1.1/ computation of the upper integral is more complex as the continued
 fraction representation is unstable in this area.  However there is another 
 series representation for the lower integral:
 
-6) [$../equations/igamma10.png]
+6) [equation igamma10]
 
 That lends itself to calculation of the upper integral via rearrangement
 to:
 
-7) [$../equations/igamma11.png]
+7) [equation igamma11]
 
 Refer to the documentation for __powm1 and __tgamma1pm1 for details
 of their implementation.  Note however that the precision of __tgamma1pm1
@@ -292,12 +292,12 @@ the upper integral Q.
 If a is an integer in the range /1 <= a < 30/ then the following 
 finite sum is used:
 
-9) [$../equations/igamma1f.png]
+9) [equation igamma1f]
 
 While for half integers in the range /0.5 <= a < 30/ then the
 following finite sum is used:
 
-10) [$../equations/igamma2f.png]
+10) [equation igamma2f]
 
 These are both more stable and more efficient than the continued fraction
 alternative.
@@ -306,13 +306,13 @@ When the argument /a/ is large, and /x ~ a/ then the series (4) and continued
 fraction (5) above are very slow to converge.  In this area an expansion due to
 Temme is used:
 
-11) [$../equations/igamma16.png]
+11) [equation igamma16]
 
-12) [$../equations/igamma17.png]
+12) [equation igamma17]
 
-13) [$../equations/igamma18.png]
+13) [equation igamma18]
 
-14) [$../equations/igamma19.png]
+14) [equation igamma19]
 
 The double sum is truncated to a fixed number of terms - to give a specific
 target precision - and evaluated as a polynomial-of-polynomials.  There are 
@@ -343,7 +343,7 @@ leading power terms is central to the accuracy of the function.
 For smallish a and x combining
 the power terms with the __lanczos gives the greatest accuracy:
 
-15) [$../equations/igamma12.png]
+15) [equation igamma12]
 
 In the event that this causes underflow/overflow then the exponent can 
 be reduced by a factor of /a/ and brought inside the power term.
@@ -353,7 +353,7 @@ near one: this will not be computed accurately via the pow function,
 and taking logs simply leads to cancellation errors.  The worst of the
 errors can be avoided by using:
 
-16) [$../equations/igamma13.png]
+16) [equation igamma13]
 
 when /a-x/ is small and a and x are large.  There is still a subtraction
 and therefore some cancellation errors - but the terms are small so the absolute

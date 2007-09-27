@@ -36,7 +36,7 @@ F[sub n,m][space] = ([chi][super 2][sub n][space] / n) / ([chi][super 2][sub m][
 Is distributed over the range \[0, [infin]\] with an F distribution, and
 has the PDF:
 
-[$../equations/fisher_pdf.png]
+[equation fisher_pdf]
 
 The following graph illustrates how the PDF varies depending on the
 two degrees of freedom parameters.
@@ -91,7 +91,7 @@ degrees of freedom parameters of the distribution,
 [[Function][Implementation Notes]]
 [[pdf][The usual form of the PDF is given by:
 
-[$../equations/fisher_pdf.png]
+[equation fisher_pdf]
 
 However, that form is hard to evaluate directly without incurring problems with
 either accuracy or numeric overflow.

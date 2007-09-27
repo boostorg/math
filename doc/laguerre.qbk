@@ -45,7 +45,7 @@ as that argument or `double` if the template argument is an integer type.
    
 Returns the value of the Laguerre Polynomial of order /n/ at point /x/:
 
-[$../equations/laguerre_0.png]
+[equation laguerre_0]
 
 The following graph illustrates the behaviour of the first few 
 Laguerre Polynomials:
@@ -61,7 +61,7 @@ Laguerre Polynomials:
 Returns the Associated Laguerre polynomial of degree /n/ 
 and order /m/ at point /x/:
 
-[$../equations/laguerre_1.png]
+[equation laguerre_1]
    
    template <class T1, class T2, class T3>
    ``__sf_result`` laguerre_next(unsigned n, T1 x, T2 Ln, T3 Lnm1);
@@ -70,7 +70,7 @@ Implements the three term recurrence relation for the Laguerre
 polynomials, this function can be used to create a sequence of
 values evaluated at the same /x/, and for rising /n/.
 
-[$../equations/laguerre_2.png]
+[equation laguerre_2]
 
 For example we could produce a vector of the first 10 polynomial
 values using:
@@ -97,7 +97,7 @@ Implements the three term recurrence relation for the Associated Laguerre
 polynomials, this function can be used to create a sequence of
 values evaluated at the same /x/, and for rising degree /n/.
 
-[$../equations/laguerre_3.png]
+[equation laguerre_3]
 
 For example we could produce a vector of the first 10 polynomial
 values using:

@@ -22,7 +22,7 @@ This function find some uses in statistical distributions: it
 implements the partial derivative with respect to /x/ of the incomplete
 gamma function.
 
-[$../equations/derivative1.png]
+[equation derivative1]
 
 [optional_policy]
 
