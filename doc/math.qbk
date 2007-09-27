@@ -1,7 +1,7 @@
 [article Math Toolkit
     [quickbook 1.4]
     [copyright 2006-2007 John Maddock, Paul A. Bristow, Hubert Holin and Xiaogang Zhang]
-    [purpose Various Special Functions, Statistical Distributions, and Numerical Tools]
+    [purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
@@ -9,6 +9,7 @@
     ]
     [authors [Maddock, John], [Bristow, Paul A.], [Holin, Hubert], [Zhang, Xiaogang]]
     [category math]
+    [purpose mathematics]
     [/last-revision $Date$]
 ]
 
