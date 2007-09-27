@@ -165,13 +165,15 @@ MathWorld uses the word 'defined' for this range.
 Non-mathematicians might say it means the 'interesting' smallest range
 of random variate x that has the cdf going from zero to unity.
 Outside are uninteresting zones where the pdf is zero, and the cdf zero or unity.
-TODO: fix this sentence: Mathematically, the functions may make sense with an (+ or -) infinite value,
-but this implementation limits random variates to finite values from the `max` to `min` for the `RealType`.
+Mathematically, the functions may make sense with an (+ or -) infinite value,
+but except for a few special cases (in the Normal and Cauchy distributions)
+this implementation limits random variates to finite values from the `max` 
+to `min` for the `RealType`.
 (See [link math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity 
 Handling of Floating-Point Infinity] for rationale).
 
-The range of random variate values that is permitted and supported can be tested by using two functions
-`range` and `support`.
+The range of random variate values that is permitted and supported can be 
+tested by using two functions `range` and `support`.
 
 [note
 
