@@ -138,8 +138,10 @@ inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
 #ifdef BOOST_MATH_INSTRUMENT
 #define BOOST_MATH_INSTRUMENT_CODE(x) \
    std::cout << std::setprecision(35) << __FILE__ << ":" << __LINE__ << " " << x << std::endl;
+#define BOOST_MATH_INSTRUMENT_VARIABLE(name) BOOST_MATH_INSTRUMENT_CODE(BOOST_STRINGIZE(name) << " = " << name)
 #else
 #define BOOST_MATH_INSTRUMENT_CODE(x)
+#define BOOST_MATH_INSTRUMENT_VARIABLE(name)
 #endif
 
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP

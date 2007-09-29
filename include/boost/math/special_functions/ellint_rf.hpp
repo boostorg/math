@@ -55,12 +55,12 @@ T ellint_rf_imp(T x, T y, T z, const Policy& pol)
     if(policies::digits<T, Policy>() > 64)
     {
       tolerance = pow(tools::epsilon<T>(), T(1)/4.25f);
-      BOOST_MATH_INSTRUMENT_CODE(tolerance);
+      BOOST_MATH_INSTRUMENT_VARIABLE(tolerance);
     }
     else
     {
       tolerance = pow(4*tools::epsilon<T>(), T(1)/6);
-      BOOST_MATH_INSTRUMENT_CODE(tolerance);
+      BOOST_MATH_INSTRUMENT_VARIABLE(tolerance);
     }
 
     // duplication
@@ -89,13 +89,13 @@ T ellint_rf_imp(T x, T y, T z, const Policy& pol)
 
     // Check to see if we gave up too soon:
     policies::check_series_iterations(function, k, pol);
-    BOOST_MATH_INSTRUMENT_CODE(k);
+    BOOST_MATH_INSTRUMENT_VARIABLE(k);
 
     // Taylor series expansion to the 5th order
     E2 = X * Y - Z * Z;
     E3 = X * Y * Z;
     value = (1 + E2*(E2/24 - E3*T(3)/44 - T(0.1)) + E3/14) / sqrt(u);
-    BOOST_MATH_INSTRUMENT_CODE(value);
+    BOOST_MATH_INSTRUMENT_VARIABLE(value);
 
     return value;
 }

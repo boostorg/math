@@ -16,6 +16,9 @@
 
 #include <iostream>
 #include <iomanip>
+// These two are for LDBL_MAN_DIG:
+#include <limits.h>
+#include <math.h>
 
 namespace boost{ namespace math
 {
@@ -148,7 +151,7 @@ inline T epsilon(const mpl::true_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
    return std::numeric_limits<T>::epsilon();
 }
 
-#if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && (LDBL_MANT_DIG == 106)
+#if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
 template <>
 inline long double epsilon<long double>(const mpl::true_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(long double))
 {

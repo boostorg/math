@@ -47,7 +47,7 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
     bool invert = false;
     if(phi < 0)
     {
-       BOOST_MATH_INSTRUMENT_CODE(phi);
+       BOOST_MATH_INSTRUMENT_VARIABLE(phi);
        phi = fabs(phi);
        invert = true;
     }
@@ -58,14 +58,14 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
     {
        // Need to handle infinity as a special case:
        result = policies::raise_overflow_error<T>(function, 0, pol);
-       BOOST_MATH_INSTRUMENT_CODE(result);
+       BOOST_MATH_INSTRUMENT_VARIABLE(result);
     }
     else if(phi > 1 / tools::epsilon<T>())
     {
        // Phi is so large that phi%pi is necessarily zero (or garbage),
        // just return the second part of the duplication formula:
        result = 2 * phi * ellint_k_imp(k, pol) / constants::pi<T>();
-       BOOST_MATH_INSTRUMENT_CODE(result);
+       BOOST_MATH_INSTRUMENT_VARIABLE(result);
     }
     else
     {
@@ -77,25 +77,27 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
        // so rewritten to use fmod instead:
        //
        T rphi = fmod(phi, constants::pi<T>() / 2);
-       BOOST_MATH_INSTRUMENT_CODE(rphi);
+       BOOST_MATH_INSTRUMENT_VARIABLE(rphi);
        T m = 2 * (phi - rphi) / constants::pi<T>();
-       BOOST_MATH_INSTRUMENT_CODE(m);
+       BOOST_MATH_INSTRUMENT_VARIABLE(m);
        int s = 1;
        if(fmod(m, T(2)) > 0.5)
        {
           m += 1;
           s = -1;
           rphi = constants::pi<T>() / 2 - rphi;
-          BOOST_MATH_INSTRUMENT_CODE(rphi);
+          BOOST_MATH_INSTRUMENT_VARIABLE(rphi);
        }
        T sinp = sin(rphi);
        T cosp = cos(rphi);
+       BOOST_MATH_INSTRUMENT_VARIABLE(sinp);
+       BOOST_MATH_INSTRUMENT_VARIABLE(cosp);
        result = s * sinp * ellint_rf_imp(cosp * cosp, 1 - k * k * sinp * sinp, T(1), pol);
-       BOOST_MATH_INSTRUMENT_CODE(result);
+       BOOST_MATH_INSTRUMENT_VARIABLE(result);
        if(m != 0)
        {
           result += m * ellint_k_imp(k, pol);
-          BOOST_MATH_INSTRUMENT_CODE(result);
+          BOOST_MATH_INSTRUMENT_VARIABLE(result);
        }
     }
     return invert ? -result : result;
