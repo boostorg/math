@@ -22,11 +22,12 @@
 #  pragma warning(push) // Quiet warnings in boost/format.hpp
 #  pragma warning(disable: 4996) // _SCL_SECURE_NO_DEPRECATE
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
+// And warnings in error handling:
+#  pragma warning(disable: 4702) // unreachable code
+// Note that this only occurs when the compiler can deduce code is unreachable,
+// for example when policy macros are used to ignore errors rather than throw.
 #endif
 #include <boost/format.hpp>
-#ifdef BOOST_MSVC
-#  pragma warning(pop)
-#endif
 
 namespace boost{ namespace math{
 
@@ -497,6 +498,10 @@ inline void check_series_iterations(const char* function, boost::uintmax_t max_i
 }
 
 } //namespace policies
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 
 }} // namespaces boost/math
 
