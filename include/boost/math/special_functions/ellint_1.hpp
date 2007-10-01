@@ -37,6 +37,9 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
     using namespace boost::math::constants;
 
     static const char* function = "boost::math::ellint_f<%1%>(%1%,%1%)";
+    BOOST_MATH_INSTRUMENT_VARIABLE(phi);
+    BOOST_MATH_INSTRUMENT_VARIABLE(k);
+    BOOST_MATH_INSTRUMENT_VARIABLE(function);
 
     if (abs(k) > 1)
     {
@@ -76,6 +79,7 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
        // but that fails if T has more digits than a long long,
        // so rewritten to use fmod instead:
        //
+       BOOST_MATH_INSTRUMENT_CODE("pi/2 = " << constants::pi<T>() / 2);
        T rphi = fmod(phi, constants::pi<T>() / 2);
        BOOST_MATH_INSTRUMENT_VARIABLE(rphi);
        T m = 2 * (phi - rphi) / constants::pi<T>();
