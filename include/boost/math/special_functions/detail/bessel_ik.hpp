@@ -100,7 +100,9 @@ int CF1_ik(T v, T x, T* fv, const Policy& pol)
     // modified Lentz's method, see
     // Lentz, Applied Optics, vol 15, 668 (1976)
     tolerance = 2 * tools::epsilon<T>();
+    BOOST_MATH_INSTRUMENT_VARIABLE(tolerance);
     tiny = sqrt(tools::min_value<T>());
+    BOOST_MATH_INSTRUMENT_VARIABLE(tiny);
     C = f = tiny;                           // b0 = 0, replace with tiny
     D = 0;
     for (k = 1; k < policies::get_max_series_iterations<Policy>(); k++)
@@ -114,11 +116,13 @@ int CF1_ik(T v, T x, T* fv, const Policy& pol)
         D = 1 / D;
         delta = C * D;
         f *= delta;
-        if (abs(delta - 1) < tolerance) 
+        BOOST_MATH_INSTRUMENT_VARIABLE(delta-1);
+        if (abs(delta - 1) <= tolerance) 
         { 
            break; 
         }
     }
+    BOOST_MATH_INSTRUMENT_VARIABLE(k);
     policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
 
     *fv = f;
@@ -154,6 +158,11 @@ int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
     current = 1;                                  // q1
     Q = C = -a;                                   // Q1 = C1 because q1 = 1
     S = 1 + Q * delta;                            // S1
+    BOOST_MATH_INSTRUMENT_VARIABLE(tolerance);
+    BOOST_MATH_INSTRUMENT_VARIABLE(a);
+    BOOST_MATH_INSTRUMENT_VARIABLE(b);
+    BOOST_MATH_INSTRUMENT_VARIABLE(D);
+    BOOST_MATH_INSTRUMENT_VARIABLE(f);
     for (k = 2; k < policies::get_max_series_iterations<Policy>(); k++)     // starting from 2
     {
         // continued fraction f = z1 / z0
@@ -172,6 +181,8 @@ int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
         S += Q * delta;
 
         // S converges slower than f
+        BOOST_MATH_INSTRUMENT_VARIABLE(Q * delta);
+        BOOST_MATH_INSTRUMENT_VARIABLE(abs(S) * tolerance);
         if (abs(Q * delta) < abs(S) * tolerance) 
         { 
            break; 
@@ -181,6 +192,8 @@ int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
 
     *Kv = sqrt(pi<T>() / (2 * x)) * exp(-x) / S;
     *Kv1 = *Kv * (0.5f + v + x + (v * v - 0.25f) * f) / x;
+    BOOST_MATH_INSTRUMENT_VARIABLE(*Kv);
+    BOOST_MATH_INSTRUMENT_VARIABLE(*Kv1);
 
     return 0;
 }
@@ -201,6 +214,9 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
     T W, current, prev, next;
     bool reflect = false;
     unsigned n, k;
+    BOOST_MATH_INSTRUMENT_VARIABLE(v);
+    BOOST_MATH_INSTRUMENT_VARIABLE(x);
+    BOOST_MATH_INSTRUMENT_VARIABLE(kind);
 
     BOOST_MATH_STD_USING
     using namespace boost::math::tools;
@@ -216,6 +232,8 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
     }
     n = tools::real_cast<unsigned>(v + 0.5f);
     u = v - n;                              // -1/2 <= u < 1/2
+    BOOST_MATH_INSTRUMENT_VARIABLE(n);
+    BOOST_MATH_INSTRUMENT_VARIABLE(u);
 
     if (x < 0)
     {
@@ -303,7 +321,8 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
         *I = Iv;
         *K = Kv;
     }
-
+    BOOST_MATH_INSTRUMENT_VARIABLE(*I);
+    BOOST_MATH_INSTRUMENT_VARIABLE(*K);
     return 0;
 }
 

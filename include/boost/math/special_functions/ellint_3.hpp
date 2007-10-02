@@ -180,10 +180,10 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
     }
     else
     {
-       T rphi = fmod(fabs(phi), constants::pi<T>() / 2);
+       T rphi = boost::math::tools::fmod_workaround(fabs(phi), constants::pi<T>() / 2);
        T m = 2 * (fabs(phi) - rphi) / constants::pi<T>();
        int sign = 1;
-       if(fmod(m, T(2)) > 0.5)
+       if(boost::math::tools::fmod_workaround(m, T(2)) > 0.5)
        {
           m += 1;
           sign = -1;
