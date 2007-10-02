@@ -112,10 +112,32 @@ The following sections introduce these methods in more detail.
 The default policies used by the library are changed by the usual
 configuration macro method.
 
-For example passing `-DBOOST_MATH_DOMAIN_ERROR_POLICY=errno_on_error` to
+For example, passing `-DBOOST_MATH_DOMAIN_ERROR_POLICY=errno_on_error` to
 your compiler will cause domain errors to set `::errno` and return a NaN
 rather than the usual default behaviour of throwing a `std::domain_error`
-exception.  There is however a very important caveat to this:
+exception.
+
+[tip For Microsoft Visual Studio,you can add to the Project Property Page,
+C/C++, Preprocessor, Preprocessor definitions like:] [/MSVC tip]
+[pre
+\"BOOST_MATH_ASSERT_UNDEFINED_POLICY\=0\"
+\"BOOST_MATH_OVERFLOW_ERROR_POLICY\=\"errno_on_error\"\"
+]
+This may be helpful to avoid complications with pre-compiled headers
+that may mean that the equivalent definitions in source code:
+
+  #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+  #define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error
+  
+may be ignored.
+
+The compile command line shows:
+[pre
+/D \"BOOST_MATH_ASSERT_UNDEFINED_POLICY\=0\"
+/D \"BOOST_MATH_OVERFLOW_ERROR_POLICY\=\"errno_on_error\"\"
+]
+
+There is however a very important caveat to this:
 
 [important
 [*['Default policies changed by setting configuration macros must be changed
