@@ -1,5 +1,5 @@
 // students_t_example3.cpp
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2006, 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -26,11 +26,6 @@
 // but to his employer - the company insisted on the pseudonym
 // so that it could turn a blind eye to the breach of its rules.
 
-#ifdef _MSC_VER
-#  pragma warning(disable: 4702) // unreachable code
-#endif
-// 4996 4512 
-
 // The Students't distribution function is described at
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
 
@@ -38,11 +33,9 @@
 	using boost::math::students_t;  // Probability of students_t(df, t).
 
 #include <iostream>
-	using std::cout;
-	using std::endl;
+	using std::cout; 	using std::endl;
 #include <iomanip>
-	using std::setprecision;
-	using std::setw;
+	using std::setprecision; 	using std::setw;
 #include <cmath>
 	using std::sqrt;
 
@@ -55,6 +48,8 @@
 // for each of four test portions,
 // the concentration of each portion is significantly different,
 // the values may NOT be pooled.
+// (Called a 'paired test' by Miller and Miller
+// because each portion analysed has a different concentration.)
 
 // Portion  Wet oxidation Direct Extraction
 //   1           71            76
@@ -69,11 +64,7 @@ float diffs[portions];
 
 int main()
 {
-	cout << "Example3 using Student's t function. ";
-#if defined(__FILE__) && defined(__TIMESTAMP__)
-	cout << "  " << __FILE__ << ' ' << __TIMESTAMP__ << ' '<< _MSC_FULL_VER;
-#endif
-	cout << endl;
+	cout << "Example3 using Student's t function. " << endl;
 	float mean_diff = 0.f;
 	cout << "\n""Portion  wet_oxidation  Direct_extraction  difference" << endl;
 	for (int portion = 0; portion < portions; portion++)
@@ -92,44 +83,26 @@ int main()
 	}
 	int degrees_of_freedom = portions-1; // Use the n-1 formula.
 	sd_diffs /= degrees_of_freedom;
-   sd_diffs = sqrt(sd_diffs);
+  sd_diffs = sqrt(sd_diffs);
 	cout << "Standard deviation of differences = " << sd_diffs << endl; // 4.99166
-
+  // Standard deviation of differences = 4.99166
 	double t = mean_diff * sqrt(static_cast<double>(portions))/ sd_diffs; // -0.70117
-	cout << "Student's t = " << t << ", if " << degrees_of_freedom << " degrees of freedom." << endl; //
-
-	cout << "Probability of the means being different is " << 2.F * cdf(students_t(degrees_of_freedom), t) << "."<< endl; // 0.266846 * 2 =
+	cout << "Student's t = " << t << ", if " << degrees_of_freedom << " degrees of freedom." << endl;
+  // Student's t = -0.70117, if 3 degrees of freedom.
+	cout << "Probability of the means being different is "
+    << 2.F * cdf(students_t(degrees_of_freedom), t) << "."<< endl; // 0.266846 * 2 = 0.533692
 	// Double the probability because using a 'two-sided test' because
-	// mean for 'Wet Oxidation' could be either greater OR LESS than for 'Direct extraction'.
+	// mean for 'Wet oxidation' could be either
+  // greater OR LESS THAN for 'Direct extraction'.
 
 	return 0;
 }  // int main()
 
 /*
 
-Check using http://faculty.vassar.edu/lowry/VassarStats.html
-Output from avoid data using
-Independent samples is
-n = 4,
-sum 242 and 249 total 491
-sumsq 14862 15953  30815
-SS 221  452.75  679.875
-means 60.5  62.25  61.375
-
-Mean diff = -1.75, t = -0.23, df 6,
-independent samples: p 1-tailed 0.4128665, 2-tailed 0.825733
-
-correlated samples: p 1-tailed 0.261635, 2-tailed 0.534327
-(Called a paired test in Miller and Miller because each portion analysed has a different concentration.)
-
 Output is:
 
------- Build started: Project: students_t_example3, Configuration: Debug Win32 ------
-Compiling...
-students_t_example3.cpp
-Linking...
-Atuorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\students_t_example3.exe"
-Example3 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\math_functions\example\students_t_example3.cpp Sat Aug 12 16:57:50 2006 140050727
+Example3 using Student's t function. 
 Portion  wet_oxidation  Direct_extraction  difference
    0             71                 76        -5
    1             61                 68        -7
@@ -139,33 +112,6 @@ Mean difference = -1.75
 Standard deviation of differences = 4.99166
 Student's t = -0.70117, if 3 degrees of freedom.
 Probability of the means being different is 0.533692.
-Build Time 0:03
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_example3\Debug\BuildLog.htm"
-students_t_example3 - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
-
------- Build started: Project: students_t_example3, Configuration: Release Win32 ------
-Compiling...
-students_t_example3.cpp
-Linking...
-Generating code
-Finished generating code
-Autorun "i:\boost-06-05-03-1300\libs\math\test\math_test\release\students_t_example3.exe"
-Example3 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\math_functions\example\students_t_example3.cpp Sat Aug 12 17:01:52 2006 140050727
-Portion  wet_oxidation  Direct_extraction  difference
-   0             71                 76        -5
-   1             61                 68        -7
-   2             50                 48         2
-   3             60                 57         3
-Mean difference = -1.75
-Standard deviation of differences = 4.99166
-Student's t = -0.70117, if 3 degrees of freedom.
-Probability of the means being different is 0.533692.
-Build Time 0:04
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_example3\Release\BuildLog.htm"
-students_t_example3 - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
-
 
 */
 

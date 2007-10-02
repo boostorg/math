@@ -1,6 +1,6 @@
 // students_t_example1.cpp
 
-// Copyright Paul A. Bristow 2006.
+// Copyright Paul A. Bristow 2006, 2007.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -46,8 +46,7 @@ double value[values] = {38.9, 37.4, 37.1};
 	using boost::math::students_t;  // Probability of students_t(df, t).
 
 #include <iostream>
-	using std::cout;
-	using std::endl;
+	using std::cout; 	using std::endl;
 #include <iomanip>
 	using std::setprecision;
 #include <cmath>
@@ -55,18 +54,15 @@ double value[values] = {38.9, 37.4, 37.1};
 
 int main()
 {
-	cout << "Example 1 using Student's t function. ";
-#if defined(__FILE__) && defined(__TIMESTAMP__)
-	cout << "  " << __FILE__ << ' ' << __TIMESTAMP__ << ' '<< _MSC_FULL_VER;
-#endif
-	cout << endl;
+	cout << "Example 1 using Student's t function. " << endl;
 
-	// Example/test using tabulated value (deliberately coded as naively as possible).
+	// Example/test using tabulated value
+  // (deliberately coded as naively as possible).
 
-	// Null hypothesis is that there is no difference (greater or less) between measured and standard.
+	// Null hypothesis is that there is no difference (greater or less)
+  // between measured and standard.
 
 	double degrees_of_freedom = values-1; // 3-1 = 2
-
   cout << "Measurement 1 = " << value[0] << ", measurement 2 = " << value[1] << ", measurement 3 = " << value[2] << endl;
 	double mean = (value[0] + value[1] + value[2]) / static_cast<double>(values);
   cout << "Standard = " << standard << ", mean = " << mean << ", (mean - standard) = " << mean - standard  << endl;
@@ -80,10 +76,10 @@ int main()
 	}
 
 	double t = (mean - standard) * std::sqrt(static_cast<double>(values)) / sd;
-	// cout << "Student's t = " << t << endl;
-
-	cout.precision(5); // Useful accuracy is only a few decimal digits, but seems to give at least 5.
-	cout << "Probability of Student's t is " << cdf(students_t(degrees_of_freedom), std::abs(t)) << endl; //  0.90657, is 1 tailed.
+	cout << "Student's t = " << t << endl;
+	cout.precision(2); // Useful accuracy is only a few decimal digits.
+	cout << "Probability of Student's t is " << cdf(students_t(degrees_of_freedom), std::abs(t)) << endl;
+  //  0.91, is 1 tailed.
 	// So there is insufficient evidence of a difference to meet a 95% (1 in 20) criterion.
 
 	return 0;
@@ -93,21 +89,12 @@ int main()
 
 Output is:
 
------- Build started: Project: students_t_example1, Configuration: Debug Win32 ------
-Compiling...
-students_t_example1.cpp
-Linking...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\students_t_example1.exe"
-Example 1 using Student's t function.   ..\..\..\..\..\..\boost-sandbox\libs\math_functions\example\students_t_example1.cpp Sat Aug 12 16:54:41 2006 140050727
+Example 1 using Student's t function. 
 Measurement 1 = 38.9, measurement 2 = 37.4, measurement 3 = 37.1
 Standard = 38.9, mean = 37.8, (mean - standard) = -1.1
 Standard deviation = 0.964365
-Probability of Student's t is 0.90657
-Build Time 0:03
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_example1\Debug\BuildLog.htm"
-students_t_example1 - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
-
+Student's t = -1.97566
+Probability of Student's t is 0.91
 
 */
 
