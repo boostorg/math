@@ -88,7 +88,7 @@ int temme_jy(T v, T x, T* Y, T* Y1, const Policy& pol)
            break; 
         }
     }
-    policies::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k, pol);
+    policies::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%) in temme_jy", k, pol);
     *Y = -sum;
     *Y1 = -2 * sum1 / x;
 
@@ -130,7 +130,7 @@ int CF1_jy(T v, T x, T* fv, int* sign, const Policy& pol)
         if (abs(delta - 1.0L) < tolerance) 
         { break; }
     }
-    policies::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k / 100, pol);
+    policies::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%) in CF1_jy", k / 100, pol);
     *fv = -f;
     *sign = s;                              // sign of denominator
 
@@ -184,7 +184,7 @@ int CF2_jy(T v, T x, T* p, T* q, const Policy& pol)
         f *= delta;
         if (abs(delta - one) < tolerance) { break; }
     }
-    policies::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%)", k, pol);
+    policies::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%) in CF2_jy", k, pol);
     *p = real(f);
     *q = imag(f);
 

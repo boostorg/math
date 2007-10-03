@@ -478,7 +478,7 @@ T ibeta_series(T a, T b, T x, T s0, const L&, bool normalised, T* p_derivative, 
    ibeta_series_t<T> s(a, b, x, result);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    result = boost::math::tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter, s0);
-   policies::check_series_iterations("boost::math::ibeta<%1%>(%1%, %1%, %1%)", max_iter, pol);
+   policies::check_series_iterations("boost::math::ibeta<%1%>(%1%, %1%, %1%) in ibeta_series (with lanczos)", max_iter, pol);
    return result;
 }
 //
@@ -558,7 +558,7 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
    ibeta_series_t<T> s(a, b, x, result);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    result = boost::math::tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter, s0);
-   policies::check_series_iterations("boost::math::ibeta<%1%>(%1%, %1%, %1%)", max_iter, pol);
+   policies::check_series_iterations("boost::math::ibeta<%1%>(%1%, %1%, %1%) in ibeta_series (without lanczos)", max_iter, pol);
    return result;
 }
 

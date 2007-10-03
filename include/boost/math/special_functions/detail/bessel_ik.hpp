@@ -76,7 +76,7 @@ int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
            break; 
         }
     }
-    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
+    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%) in temme_ik", k, pol);
 
     *K = sum;
     *K1 = 2 * sum1 / x;
@@ -123,7 +123,7 @@ int CF1_ik(T v, T x, T* fv, const Policy& pol)
         }
     }
     BOOST_MATH_INSTRUMENT_VARIABLE(k);
-    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
+    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%) in CF1_ik", k, pol);
 
     *fv = f;
 
@@ -188,7 +188,7 @@ int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
            break; 
         }
     }
-    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%)", k, pol);
+    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%) in CF2_ik", k, pol);
 
     *Kv = sqrt(pi<T>() / (2 * x)) * exp(-x) / S;
     *Kv1 = *Kv * (0.5f + v + x + (v * v - 0.25f) * f) / x;
