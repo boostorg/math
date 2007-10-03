@@ -118,24 +118,24 @@ rather than the usual default behaviour of throwing a `std::domain_error`
 exception.
 
 [tip For Microsoft Visual Studio,you can add to the Project Property Page,
-C/C++, Preprocessor, Preprocessor definitions like:] [/MSVC tip]
-[pre
-\"BOOST_MATH_ASSERT_UNDEFINED_POLICY\=0\"
-\"BOOST_MATH_OVERFLOW_ERROR_POLICY\=\"errno_on_error\"\"
-]
+C/C++, Preprocessor, Preprocessor definitions like:
+
+``BOOST_MATH_ASSERT_UNDEFINED_POLICY=0
+BOOST_MATH_OVERFLOW_ERROR_POLICY=errno_on_error``
+
 This may be helpful to avoid complications with pre-compiled headers
 that may mean that the equivalent definitions in source code:
 
-  #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
-  #define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error
+``#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error``
   
 may be ignored.
 
-The compile command line shows:
-[pre
-/D \"BOOST_MATH_ASSERT_UNDEFINED_POLICY\=0\"
-/D \"BOOST_MATH_OVERFLOW_ERROR_POLICY\=\"errno_on_error\"\"
-]
+The compiler command line shows:
+
+``/D "BOOST_MATH_ASSERT_UNDEFINED_POLICY=0"
+/D "BOOST_MATH_OVERFLOW_ERROR_POLICY=errno_on_error"``
+] [/MSVC tip]
 
 There is however a very important caveat to this:
 
