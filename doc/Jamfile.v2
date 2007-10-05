@@ -5,6 +5,9 @@
 
 using quickbook ;
 
+path-constant boost-images : ../../../doc/src/images ;
+path-constant images_location : ../../../doc/html ;
+
 xml math : math.qbk ;
 boostbook standalone
     :
@@ -12,6 +15,28 @@ boostbook standalone
     :
         <xsl:param>nav.layout=none
         <xsl:param>navig.graphics=0
+        # PDF Options:
+        # TOC Generation: this is needed for FOP-0.9 and later:
+        #<xsl:param>fop1.extensions=1
+        # Or enable this if you're using XEP:
+        <xsl:param>xep.extensions=1
+        # TOC generation: this is needed for FOP 0.2, but must not be set to zero for FOP-0.9!
+        <xsl:param>fop.extensions=0
+        # No indent on body text:
+        <xsl:param>body.start.indent=0pt
+        # Margin size:
+        <xsl:param>page.margin.inner=0.5in
+        # Margin size:
+        <xsl:param>page.margin.outer=0.5in
+        # Yes, we want graphics for admonishments:
+        <xsl:param>admon.graphics=1
+        # Set this one for PDF generation *only*:
+        # default pnd graphics are awful in PDF form,
+        # better use SVG's instead:
+        <format>pdf:<xsl:param>admon.graphics.extension=".svg"
+        <format>pdf:<xsl:param>admon.graphics.path=$(boost-images)/
+        <format>pdf:<xsl:param>img.src.path=$(images_location)/
     ;
+
 
 
