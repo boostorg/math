@@ -5,6 +5,8 @@
 
 using quickbook ;
 
+path-constant images_location : html ;
+
 xml math : math.qbk ;
 boostbook standalone
     :
@@ -58,10 +60,13 @@ boostbook standalone
         # Set this one for PDF generation *only*:
         # default pnd graphics are awful in PDF form,
         # better use SVG's instead:
-        # <xsl:param>admon.graphics.extension=".svg"
-        # <xsl:param>use.role.for.mediaobject=1 
-        # <xsl:param>preferred.mediaobject.role=print
+        <format>pdf:<xsl:param>admon.graphics.extension=".svg"
+        <format>pdf:<xsl:param>use.role.for.mediaobject=1 
+        <format>pdf:<xsl:param>preferred.mediaobject.role=print
+        <format>pdf:<xsl:param>img.src.path=$(images_location)/
+        <format>pdf:<xsl:param>admon.graphics.path=$(images_location)/images/
     ;
+
 
 
 
