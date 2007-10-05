@@ -15,7 +15,7 @@
 #include <ostream>
 #include <istream>
 #include <cmath>
-#include <ntl/rr.h>
+#include <NTL/RR.h>
 
 #ifndef BOOST_MATH_NTL_RR_HPP
 #define BOOST_MATH_NTL_RR_HPP
@@ -24,6 +24,11 @@ namespace boost{ namespace math{
 
 namespace ntl
 {
+
+class RR;
+
+RR ldexp(RR r, int exp);
+RR frexp(RR r, int* exp);
 
 class RR
 {
