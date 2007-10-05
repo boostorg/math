@@ -1,6 +1,6 @@
 [section:navigation Navigation]
 
-Used in combination with the configured browser key (usually Alt), the
+Used in combination with the configured browser key, the
 following keys act as handy shortcuts for common navigation tasks.
 
 [h5 Shortcuts]
@@ -13,6 +13,23 @@ following keys act as handy shortcuts for common navigation tasks.
 
 [^[*u]] - Up
 ]
+
+The following table shows how to access these from common browsers:
+
+[table
+[[Browser][Access Method]]
+[[Internet Explorer]
+   [Alt+Key highlights the link only, so for example to move to the next topic
+   you would need "Alt+n" followed by "Enter".]]
+[[Firefox 2.0 and later][Alt+Shift+Key follows the link, so for example
+   "Alt+Shift+n" will take you to the next topic.]]
+[[Opera][Press Shift+Esc followed by the access key.]]
+[[Konqueror][Press and release the Ctrl key, followed by the access key]]
+]
+
+Some browsers also make these links available in their site-navigation
+toolbars: in Opera for example you can use Ctrl plus the left and right
+arrow keys to move between "next" and "previous" topics.
 
 [endsect]
 
