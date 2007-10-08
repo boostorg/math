@@ -1,4 +1,4 @@
-//  (C) Copyright John Maddock 2005.
+//  (C) Copyright John Maddock 2005-2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -6,88 +6,76 @@
 #ifndef BOOST_MATH_HYPOT_INCLUDED
 #define BOOST_MATH_HYPOT_INCLUDED
 
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/precision.hpp>
+#include <boost/math/policies/error_handling.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <cmath>
-#include <boost/limits.hpp>
-#include <algorithm> // swap
-
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-#  include <boost/static_assert.hpp>
-#else
-#  include <boost/assert.hpp>
-#endif
-
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x580))
-#include <boost/type_traits/remove_const.hpp>
-#define BOOST_RCT(T) typename remove_const<T>::type
-#else
-#define BOOST_RCT(T) T
-#endif
+#include <algorithm> // for swap
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std{ using ::sqrt; using ::fabs; }
 #endif
 
+namespace boost{ namespace math{ namespace detail{
 
-namespace boost{ namespace math{
-
-template <class T>
-T hypot(T x, T y)
+template <class T, class Policy>
+T hypot_imp(T x, T y, const Policy& pol)
 {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT(::std::numeric_limits<BOOST_RCT(T)>::is_specialized);
-#else
-   BOOST_ASSERT(std::numeric_limits<BOOST_RCT(T)>::is_specialized);
+   //
+   // Normalize x and y, so that both are positive and x >= y:
+   //
+   using std::fabs; using std::sqrt; // ADL of std names
+
+   x = fabs(x);
+   y = fabs(y);
+
+#ifdef BOOST_MSVC
+#pragma warning(push) 
+#pragma warning(disable: 4127)
+#endif
+   // special case, see C99 Annex F:
+   if(std::numeric_limits<T>::has_infinity
+      && ((x == std::numeric_limits<T>::infinity())
+      || (y == std::numeric_limits<T>::infinity())))
+      return policies::raise_overflow_error<T>("boost::math::hypot<%1%>(%1%,%1%)", 0, pol);
+#ifdef BOOST_MSVC
+#pragma warning(pop)
 #endif
 
-   //
-   // normalize x and y, so that both are positive and x >= y:
-   //
-   x = (std::fabs)(x);
-   y = (std::fabs)(y);
-
-   // special case, see C99 Annex F:
-   if(std::numeric_limits<BOOST_RCT(T)>::has_infinity
-      && ((x == std::numeric_limits<BOOST_RCT(T)>::infinity())
-      || (y == std::numeric_limits<BOOST_RCT(T)>::infinity())))
-      return std::numeric_limits<BOOST_RCT(T)>::infinity();
-
-   if(y > x) 
+   if(y > x)
       (std::swap)(x, y);
-   //
-   // figure out overflow and underflow limits:
-   //
-   T safe_upper = (std::sqrt)((std::numeric_limits<BOOST_RCT(T)>::max)()) / 2;
-   T safe_lower = (std::sqrt)((std::numeric_limits<BOOST_RCT(T)>::min)());
-   static const T one = 1;
-   //
-   // Now handle special cases:
-   //
-   if(x >= safe_upper)
-   {
-      if(y <= one)
-      {
-         // y is neligible:
-         return x;
-      }
-      return (std::sqrt)(x) * (std::sqrt)(y) * (std::sqrt)(x/y + y/x);
-   }
-   else if(y <= safe_lower)
-   {
-      if((x >= one) || (y == 0))
-      {
-         // y is negligible:
-         return x;
-      }
-      return (std::sqrt)(x) * (std::sqrt)(y) * (std::sqrt)(x/y + y/x);
-   }
-   //
-   // If we get here then x^2+y^2 will not overflow or underflow:
-   //
-   return (std::sqrt)(x*x + y*y);
+
+   if(x * tools::epsilon<T>() >= y)
+      return x;
+
+   T rat = y / x;
+   return x * sqrt(1 + rat*rat);
+} // template <class T> T hypot(T x, T y)
+
 }
 
-} } // namespaces
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   hypot(T1 x, T2 y)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   return detail::hypot_imp(
+      static_cast<result_type>(x), static_cast<result_type>(y), policies::policy<>());
+}
 
-#undef BOOST_RCT
+template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
+   hypot(T1 x, T2 y, const Policy& pol)
+{
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   return detail::hypot_imp(
+      static_cast<result_type>(x), static_cast<result_type>(y), pol);
+}
+
+} // namespace math
+} // namespace boost
 
 #endif // BOOST_MATH_HYPOT_INCLUDED
+
+
