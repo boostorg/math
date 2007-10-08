@@ -1,0 +1,9 @@
+[section:distribution_construction_eg Distribution Construction Example]
+
+See [@../../../example/distribution_construction.cpp distribution_construction.cpp] for full source code.
+
+[import ../../../example/distribution_construction.cpp]
+[distribution_construction1]
+[distribution_construction2]
+
+[endsect] [/section:distribution_construction_eg Distribution Construction Example]

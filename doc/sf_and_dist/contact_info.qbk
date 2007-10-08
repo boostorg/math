@@ -1,0 +1,17 @@
+
+[section:contact Contact Info and Support]
+
+The main support for this library is via the Boost mailing lists:
+
+* Use the 
+[@http://www.boost.org/more/mailing_lists.htm#users boost-user list] 
+for general support questions.
+* Use the 
+[@http://www.boost.org/more/mailing_lists.htm#main boost-developer list] 
+for discussion about implementation
+and or submission of extensions.
+
+You can also find JM at john - at - johnmaddock.co.uk and PAB at
+pbristow - at - hetp.u-net.com.
+
+[endsect]

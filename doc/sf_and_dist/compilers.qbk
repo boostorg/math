@@ -1,0 +1,34 @@
+[section:compilers Compilers]
+
+This section contains some information about how various compilers work with this library.
+It is not comprehensive and updated experiences are always welcome.
+Some effort has been made to suppress unhelpful warnings but it is difficult to achieve this on all systems.
+
+The code has been compiled and tested with:
+[table Compiler Notes
+[[Compiler][Platform][Notes]]
+[[Intel 9.1, 8.1][Win32 and Linux][The tests cases tend to generate a lot of
+      warnings relating to numeric underflow of the test data: these are 
+      harmless.  The headers all appear to be warning free.]]
+[[g++ ][Linux and HP-UX][The test suite doesn't compile with -pedantic 
+      (a problem with system headers included by Boost.Test not compiling 
+      with that option), otherwise our headers should be warning free.]]
+[[HP aCC][HP-UX][ Unfortunately this emits quite a few warnings from libraries 
+      upon which we depend (TR1, Array etc).]]
+[[Borland 5.8.2][Windows][Almost works: some effort has been put into porting to this compiler.
+      However, during testing a number of instances were encountered where this compiler
+      generated incorrect code: completely omitting a function call seemingly at random.
+      For this reason, [*we cannot recommend using this library with this compiler], as the
+      correct operation of the code cannot be guaranteed.]]
+[[MSVC 8.0][Windows][Warning free at level 4]]
+]
+
+[endsect][/section:compilers Compilers]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
