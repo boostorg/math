@@ -17,11 +17,18 @@
 #include <boost/mpl/push_back.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/size.hpp>
+#include <boost/mpl/comparison.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/assert.hpp>
 #include <boost/math/tools/config.hpp>
 #include <limits>
+// Sadly we do need the .h versions of these to be sure of getting
+// FLT_MANT_DIG etc.
+#include <limits.h>
+#include <stdlib.h>
+#include <stddef.h>
+#include <math.h>
 
 namespace boost{ namespace math{ 
 
@@ -674,22 +681,28 @@ struct evaluation<double, Policy>
    typedef typename mpl::if_<typename Policy::promote_double_type, long double, double>::type type;
 };
 
+#ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+
+template <class Real>
+struct basic_digits : public mpl::int_<0>{ };
+template <>
+struct basic_digits<float> : public mpl::int_<FLT_MANT_DIG>{ };
+template <>
+struct basic_digits<double> : public mpl::int_<DBL_MANT_DIG>{ };
+template <>
+struct basic_digits<long double> : public mpl::int_<LDBL_MANT_DIG>{ };
+
 template <class Real, class Policy>
 struct precision
 {
    typedef typename Policy::precision_type precision_type;
-   typedef typename mpl::if_c<
-      ((std::numeric_limits<Real>::is_specialized == 0) || (std::numeric_limits<Real>::digits == 0)),
+   typedef basic_digits<Real> digits_t;
+   typedef typename mpl::if_<
+      mpl::equal_to<digits_t, mpl::int_<0> >,
       // Possibly unknown precision:
       precision_type,
-      typename mpl::if_c<
-#ifndef __BORLANDC__
-         ((::std::numeric_limits<Real>::digits <= precision_type::value) 
-         || (Policy::precision_type::value <= 0)),
-#else
-         ((::std::numeric_limits<Real>::digits <= ::boost::math::policies::precision<Real, Policy>::precision_type::value)
-         || (::boost::math::policies::precision<Real, Policy>::precision_type::value <= 0)),
-#endif
+      typename mpl::if_<
+         mpl::or_<mpl::less_equal<digits_t, precision_type>, mpl::less_equal<precision_type, mpl::int_<0> > >,
          // Default case, full precision for RealType:
          digits2< ::std::numeric_limits<Real>::digits>,
          // User customised precision:
@@ -697,6 +710,63 @@ struct precision
       >::type
    >::type type;
 };
+
+template <class Policy>
+struct precision<float, Policy>
+{
+   typedef digits2<FLT_MANT_DIG> type;
+};
+template <class Policy>
+struct precision<double, Policy>
+{
+   typedef digits2<DBL_MANT_DIG> type;
+};
+template <class Policy>
+struct precision<long double, Policy>
+{
+   typedef digits2<LDBL_MANT_DIG> type;
+};
+
+#else
+
+template <class Real, class Policy>
+struct precision
+{
+#ifndef __BORLANDC__
+   typedef typename Policy::precision_type precision_type;
+   typedef typename mpl::if_c<
+      ((::std::numeric_limits<Real>::is_specialized == 0) || (::std::numeric_limits<Real>::digits == 0)),
+      // Possibly unknown precision:
+      precision_type,
+      typename mpl::if_c<
+         ((::std::numeric_limits<Real>::digits <= precision_type::value) 
+         || (Policy::precision_type::value <= 0)),
+         // Default case, full precision for RealType:
+         digits2< ::std::numeric_limits<Real>::digits>,
+         // User customised precision:
+         precision_type
+      >::type
+   >::type type;
+#else
+   typedef typename Policy::precision_type precision_type;
+   typedef mpl::int_< ::std::numeric_limits<Real>::digits> digits_t;
+   typedef mpl::bool_< ::std::numeric_limits<Real>::is_specialized> spec_t;
+   typedef typename mpl::if_<
+      mpl::or_<mpl::equal_to<spec_t, mpl::false_>, mpl::equal_to<digits_t, mpl::int_<0> > >,
+      // Possibly unknown precision:
+      precision_type,
+      typename mpl::if_<
+         mpl::or_<mpl::less_equal<digits_t, precision_type>, mpl::less_equal<precision_type, mpl::int_<0> > >,
+         // Default case, full precision for RealType:
+         digits2< ::std::numeric_limits<Real>::digits>,
+         // User customised precision:
+         precision_type
+      >::type
+   >::type type;
+#endif
+};
+
+#endif
 
 namespace detail{
 

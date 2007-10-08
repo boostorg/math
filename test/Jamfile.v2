@@ -25,6 +25,8 @@ project
       <toolset>msvc:<cxxflags>/wd4127 
       <toolset>msvc:<cxxflags>/wd4701 # needed for lexical cast - temporary.
       <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
+      <toolset>borland:<link>static
+      <toolset>borland:<runtime-link>static
       # <toolset>msvc:<cxxflags>/wd4506 has no effect?
       # suppress xstring(237) : warning C4506: no definition for inline function
       <include>../../..
@@ -188,6 +190,8 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_solve_inc_test.cpp ;
+
+
 
 
 
