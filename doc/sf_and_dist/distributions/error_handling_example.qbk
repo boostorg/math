@@ -12,7 +12,7 @@ an appropriate value returned, usually a NaN (domain errors
 pole errors or internal errors), or infinity (from overflow), 
 you need to change the policy.
 
-[import ../../example/error_handling_example.cpp]
+[import ../../../example/error_handling_example.cpp]
 
 [error_handling_example]
 

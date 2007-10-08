@@ -4,10 +4,10 @@
 
 [section:normal_misc Some Miscellaneous Examples of the Normal (Gaussian) Distribution]
 
-The sample program [@../../example/normal_misc_examples.cpp 
+The sample program [@../../../example/normal_misc_examples.cpp 
 normal_misc_examples.cpp] illustrates their use.
 
-[import ../../example/normal_misc_examples.cpp]
+[import ../../../example/normal_misc_examples.cpp]
 
 [h4 Traditional Tables]
 [normal_basic1]

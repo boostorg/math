@@ -20,10 +20,10 @@ and how many successes were observed.  The static member functions
 `negative_binomial_distribution<>::find_upper_bound_on_p`
 allow you to calculate the confidence intervals for your estimate of the success fraction.
 
-The sample program [@../../example/neg_binom_confidence_limits.cpp 
+The sample program [@../../../example/neg_binom_confidence_limits.cpp 
 neg_binom_confidence_limits.cpp] illustrates their use.
 
-[import ../../example/neg_binom_confidence_limits.cpp]
+[import ../../../example/neg_binom_confidence_limits.cpp]
 
 [neg_binomial_confidence_limits]
 Let's see some sample output for a 1 in 10
@@ -95,10 +95,10 @@ can be used to estimate the minimum number of trials required to be P% sure
 of observing the desired number of failures.
 
 The example program 
-[@../../example/neg_binomial_sample_sizes.cpp neg_binomial_sample_sizes.cpp]
+[@../../../example/neg_binomial_sample_sizes.cpp neg_binomial_sample_sizes.cpp]
 demonstrates its usage. 
 
-[import ../../example/neg_binomial_sample_sizes.cpp]
+[import ../../../example/neg_binomial_sample_sizes.cpp]
 [neg_binomial_sample_sizes]
 
 [note Since we're calculating the /minimum/ number of trials required,
@@ -165,10 +165,10 @@ So now 103 trials are required to observe at least 5 failures with
 [section:negative_binomial_example1 Negative Binomial Sales Quota Example.]
 
 This example program 
-[@../../example/negative_binomial_example1.cpp negative_binomial_example1.cpp (full source code)]
+[@../../../example/negative_binomial_example1.cpp negative_binomial_example1.cpp (full source code)]
 demonstrates a simple use to find the probability of meeting a sales quota.
 
-[import ../../example/negative_binomial_example1.cpp]
+[import ../../../example/negative_binomial_example1.cpp]
 [negative_binomial_eg1_1]
 [negative_binomial_eg1_2]
 
@@ -176,7 +176,7 @@ demonstrates a simple use to find the probability of meeting a sales quota.
 
 [section:negative_binomial_example2 Negative Binomial Table Printing Example.]
 Example program showing output of a table of values of cdf and pdf for various k failures.
-[import ../../example/negative_binomial_example2.cpp]
+[import ../../../example/negative_binomial_example2.cpp]
 [neg_binomial_example2]
 [neg_binomial_example2_1]
 [endsect] [/section:negative_binomial_example1 Negative Binomial example 2.]

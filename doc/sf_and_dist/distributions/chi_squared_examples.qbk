@@ -9,7 +9,7 @@ For this situation the Chi Squared distribution can be used to calculate
 confidence intervals for the standard deviation.
 
 The full example code & sample output is in
-[@../../example/chi_square_std_dev_test.cpp chi_square_std_deviation_test.cpp].
+[@../../../example/chi_square_std_dev_test.cpp chi_square_std_deviation_test.cpp].
 
 We'll begin by defining the procedure that will calculate and print out the
 confidence intervals:
@@ -178,7 +178,7 @@ situations where we wish to compare the standard deviation of a new
 process to an established one.
 
 The code for this example is contained in 
-[@../../chi_square_std_dev_test.cpp chi_square_std_dev_test.cpp], and
+[@../../../chi_square_std_dev_test.cpp chi_square_std_dev_test.cpp], and
 we'll begin by defining the procedure that will print out the test
 statistics:
 
@@ -372,7 +372,7 @@ some acceptable risk of type I failure /alpha/, type II failure
 note that the method used works on variance, and not standard deviation
 as is usual for the Chi Squared Test.
 
-The code for this example is located in [@../../chi_square_std_dev_test.cpp 
+The code for this example is located in [@../../../chi_square_std_dev_test.cpp 
 chi_square_std_dev_test.cpp].
 
 We begin by defining a procedure to print out the sample sizes required

@@ -1,6 +1,6 @@
 [section:error_handling Error Handling]
 
-[def __format [@../../libs/format/index.html Boost.Format]]
+[def __format [@../../../libs/format/index.html Boost.Format]]
 
 [heading Quick Reference]
 

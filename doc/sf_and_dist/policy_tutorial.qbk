@@ -148,7 +148,7 @@ Definition Rule (ODR)" and result in unpredictable program behaviour.]
 
 That means there are only two safe ways to use these macros:
 
-* Edit them in [@../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp],
+* Edit them in [@../../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp],
 so that the defaults are set on an installation-wide basis.
 Unfortunately this may not be convenient if
 you are using a pre-installed Boost distribution (on Linux for example).
@@ -194,7 +194,7 @@ of the binomial distribution at float precision, without internal
 promotion to double, and with the result rounded to the /nearest/
 integer, then here's how it can be done:
 
-[import ../example/policy_eg_3.cpp]
+[import ../../example/policy_eg_3.cpp]
 
 [policy_eg_3]
 
@@ -235,7 +235,7 @@ suppose we want `tgamma` to behave in a C-compatible
 fashion and set `::errno` when an error occurs, and never
 throw an exception:
 
-[import ../example/policy_eg_1.cpp]
+[import ../../example/policy_eg_1.cpp]
 
 [policy_eg_1]
 
@@ -253,7 +253,7 @@ helper function to create a policy for us: this usage is more
 verbose, so is probably only preferred when a policy is going
 to be used once only:
 
-[import ../example/policy_eg_2.cpp]
+[import ../../example/policy_eg_2.cpp]
 
 [policy_eg_2]
 
@@ -274,7 +274,7 @@ macro should be used either inside a unique namespace set aside for the
 purpose, or an unnamed namespace if you just want the functions
 visible in global scope for the current file only.  
 
-[import ../example/policy_eg_4.cpp]
+[import ../../example/policy_eg_4.cpp]
 
 [policy_eg_4]
 
@@ -282,7 +282,7 @@ The same mechanism works well at file scope as well, by using an unnamed
 namespace, we can ensure that these declarations don't conflict with any
 alternate policies present in other translation units:
 
-[import ../example/policy_eg_5.cpp]
+[import ../../example/policy_eg_5.cpp]
 
 [policy_eg_5]
 
@@ -299,7 +299,7 @@ Results a set of typedefs being defined like this:
 The name of each typedef is the same as the name of the distribution 
 class template, but without the "_distribution" suffix.
 
-[import ../example/policy_eg_6.cpp]
+[import ../../example/policy_eg_6.cpp]
 
 [policy_eg_6]
 
@@ -314,7 +314,7 @@ As before, the same mechanism works well at file scope as well: by using an unna
 namespace, we can ensure that these declarations don't conflict with any
 alternate policies present in other translation units:
 
-[import ../example/policy_eg_7.cpp]
+[import ../../example/policy_eg_7.cpp]
 
 [policy_eg_7]
 
@@ -322,11 +322,11 @@ alternate policies present in other translation units:
 
 [section:user_defined_error_policies Calling User Defined Error Handlers]
 
-[import ../example/policy_eg_8.cpp]
+[import ../../example/policy_eg_8.cpp]
 
 [policy_eg_8]
 
-[import ../example/policy_eg_9.cpp]
+[import ../../example/policy_eg_9.cpp]
 
 [policy_eg_9]
 
@@ -485,7 +485,7 @@ to know that other rounding options are available:
 
 ]
 
-[import ../example/policy_eg_10.cpp]
+[import ../../example/policy_eg_10.cpp]
 
 [policy_eg_10]
 

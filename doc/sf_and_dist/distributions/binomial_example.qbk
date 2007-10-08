@@ -4,10 +4,10 @@ See also the reference documentation for the __binomial_distrib.
 
 [section:binomial_coinflip_example Binomial Coin-Flipping Example]
 
-[import ../../example/binomial_coinflip_example.cpp]
+[import ../../../example/binomial_coinflip_example.cpp]
 [binomial_coinflip_example1]
 
-See [@../../example/binomial_coinflip_example.cpp binomial_coinflip_example.cpp]
+See [@../../../example/binomial_coinflip_example.cpp binomial_coinflip_example.cpp]
 for full source code, the program output looks like this:
 
 [binomial_coinflip_example_output]
@@ -16,12 +16,12 @@ for full source code, the program output looks like this:
 
 [section:binomial_quiz_example Binomial Quiz Example]
 
-[import ../../example/binomial_quiz_example.cpp]
+[import ../../../example/binomial_quiz_example.cpp]
 [binomial_quiz_example1]
 [binomial_quiz_example2]
 [discrete_quantile_real]
 
-See [@../../example/binomial_quiz_example.cpp binomial_quiz_example.cpp]
+See [@../../../example/binomial_quiz_example.cpp binomial_quiz_example.cpp]
 for full source code and output.
 
 [endsect] [/section:binomial_coinflip_quiz Binomial Coin-Flipping example]
@@ -39,7 +39,7 @@ were observed.  The static member functions
 `binomial_distribution<>::find_upper_bound_on_p` allow you to calculate
 the confidence intervals for your estimate of the occurrence frequency.
 
-The sample program [@../../example/binomial_confidence_limits.cpp 
+The sample program [@../../../example/binomial_confidence_limits.cpp 
 binomial_confidence_limits.cpp] illustrates their use.  It begins by defining
 a procedure that will print a table of confidence limits for various degrees
 of certainty:
@@ -222,7 +222,7 @@ can be used to estimate the maximum number of "uses" of that component for some
 acceptable risk level /alpha/.
 
 The example program 
-[@../../example/binomial_sample_sizes.cpp binomial_sample_sizes.cpp]
+[@../../../example/binomial_sample_sizes.cpp binomial_sample_sizes.cpp]
 demonstrates its usage.  It centres on a routine that prints out
 a table of maximum sample sizes for various probability thresholds:
 

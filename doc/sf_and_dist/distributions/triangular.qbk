@@ -134,12 +134,12 @@ x = c                     ; for p == p0
 
 x = b - sqrt((b-a)(b-c)q) ; for p > p0
 
-(See [@../../../../boost/math/distributions/triangular.hpp /boost/math/distributions/triangular.hpp] for details.)]]
-[[quantile from the complement][As quantile (See [@../../../../boost/math/distributions/triangular.hpp /boost/math/distributions/triangular.hpp] for details.)]]
+(See [@../../../../../boost/math/distributions/triangular.hpp /boost/math/distributions/triangular.hpp] for details.)]]
+[[quantile from the complement][As quantile (See [@../../../../../boost/math/distributions/triangular.hpp /boost/math/distributions/triangular.hpp] for details.)]]
 [[mean][(a + b + 3) \/ 3 ]]
 [[variance][(a[super 2]+b[super 2]+c[super 2] - ab - ac - bc)\/18]]
 [[mode][c]]
-[[skewness][(See [@../../../../boost/math/distributions/triangular.hpp /boost/math/distributions/triangular.hpp] for details). ]]
+[[skewness][(See [@../../../../../boost/math/distributions/triangular.hpp /boost/math/distributions/triangular.hpp] for details). ]]
 [[kurtosis][12\/5]]
 [[kurtosis excess][-3\/5]]
 ]

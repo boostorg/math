@@ -47,7 +47,7 @@ From the formula, it should be clear that:
 * The width increases as the ['significance level decreases] (0.5 towards 0.00000...01 - stronger).
 
 The following example code is taken from the example program
-[@../../example/students_t_single_sample.cpp students_t_single_sample.cpp].
+[@../../../example/students_t_single_sample.cpp students_t_single_sample.cpp].
 
 We'll begin by defining a procedure to calculate intervals for 
 various confidence levels; the procedure will print these out
@@ -202,7 +202,7 @@ Of course, the assignment of "true" to one mean may be quite arbitrary,
 often this is simply a "traditional" method of measurement.
 
 The following example code is taken from the example program
-[@../../example/students_t_single_sample.cpp students_t_single_sample.cpp].
+[@../../../example/students_t_single_sample.cpp students_t_single_sample.cpp].
 
 We'll begin by defining a procedure to determine which of the
 possible hypothesis are rejected or not-rejected
@@ -407,7 +407,7 @@ The parameter estimators of the students_t_distribution class
 can provide this information.
 
 This section is based on the example code in 
-[@../../example/students_t_single_sample.cpp students_t_single_sample.cpp]
+[@../../../example/students_t_single_sample.cpp students_t_single_sample.cpp]
 and we begin by defining a procedure that will print out a table of
 estimated sample sizes for various confidence levels:
 
@@ -536,7 +536,7 @@ Car Mileage sample data] from the
 miles per gallon of US cars with miles per gallon of Japanese cars.
 
 The sample code is in 
-[@../../example/students_t_two_samples.cpp students_t_two_samples.cpp].
+[@../../../example/students_t_two_samples.cpp students_t_two_samples.cpp].
 
 There are two ways in which this test can be conducted: we can assume
 that the true standard deviations of the two samples are equal or not.

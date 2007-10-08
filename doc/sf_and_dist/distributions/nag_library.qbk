@@ -47,7 +47,7 @@ and values can be output thus:
 
 `pdf(dist, k)` is equivalent to NAG library `peqk`, point probability of == k
 
-See [@../../example/binomial_example_nag.cpp binomial_example_nag.cpp] for details.
+See [@../../../example/binomial_example_nag.cpp binomial_example_nag.cpp] for details.
 
 [endsect] [/section:nag_library Comparison with C, R, FORTRAN-style Free Functions]
 

@@ -2,13 +2,13 @@
 
 The special functions and tools in this library can be used with
 [@http://shoup.net/ntl/doc/RR.txt NTL::RR (an arbitrary precision number type)],
-via the bindings in [@../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp].
+via the bindings in [@../../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp].
 [@http://shoup.net/ntl/ See also NTL: A Library for doing Number Theory by 
 Victor Shoup]
 
 Unfortunately `NTL::RR` doesn't quite satisfy our conceptual requirements,
 so there is a very thin wrapper class `boost::math::ntl::RR` defined in
-[@../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp] that you
+[@../../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp] that you
 should use in place of `NTL::RR`.  The class is intended to be a drop-in 
 replacement for the "real" NTL::RR that adds some syntactic sugar to keep
 this library happy, plus some of the standard library functions not implemented
@@ -116,7 +116,7 @@ synthesised from the others, and so no explicit specialisation is required.
 # The function `epsilon` can be synthesised from the others, so no
 explicit specialisation is required provided the precision
 of RealType does not vary at runtime (see the header 
-[@../../../../boost/math/tools/ntl.hpp boost/math/tools/ntl.hpp]
+[@../../../../../boost/math/tools/ntl.hpp boost/math/tools/ntl.hpp]
 for an example where the precision does vary at runtime).
 # The functions `digits`, `max_value` and `min_value`, all get synthesised
 automatically from `std::numeric_limits`.  However, if `numeric_limits`
@@ -124,7 +124,7 @@ is not specialised for type RealType, then you will get a compiler error
 when code tries to use these functions, /unless/ you explicitly specialise them.
 For example if the precision of RealType varies at runtime, then
 `numeric_limits` support may not be appropriate, see 
-[@../../../../boost/math/tools/ntl.hpp boost/math/tools/ntl.hpp] for examples.
+[@../../../../../boost/math/tools/ntl.hpp boost/math/tools/ntl.hpp] for examples.
 
 [warning
 If `std::numeric_limits<>` is *not specialized*
@@ -183,14 +183,14 @@ are not currently used, but may be if further special functions are added.
 
 In addition, for efficient and accurate results, a __lanczos is highly desirable.
 You may be able to adapt an existing approximation from 
-[@../../../../boost/math/special_functions/lanczos.hpp
+[@../../../../../boost/math/special_functions/lanczos.hpp
 boost/math/special_functions/lanczos.hpp] or
 [@../tools/ntl_rr_lanczos.hpp libs/math/tools/ntl_rr_lanczos.hpp]: 
 you will need change
 static_cast's to lexical_cast's, and the constants to /strings/ 
 (in order to ensure the coefficients aren't truncated to long double)
 and then specialise `lanczos_traits` for type T.  Otherwise you may have to hack 
-[@../../tools/lanczos_generator.cpp 
+[@../../../tools/lanczos_generator.cpp 
 libs/math/tools/lanczos_generator.cpp] to find a suitable
 approximation for your RealType.  The code will still compile if you don't do
 this, but both accuracy and efficiency will be greatly compromised in any
@@ -280,7 +280,7 @@ compile if the all the standard library functions used have
 been brought into the current scope with a using declaration.
 
 There is a test program 
-[@../../teststd_real_concept_check.cpp libs/math/test/std_real_concept_check.cpp]
+[@../../../teststd_real_concept_check.cpp libs/math/test/std_real_concept_check.cpp]
 that instantiates every template in this library with type
 `std_real_concept` to verify it's usage of standard library functions.
 
@@ -331,11 +331,11 @@ The class template `distribution_archetype` is a model of the
 [link math_toolkit.using_udt.dist_concept Distribution concept].
 
 The class template `DistributionConcept` is a 
-[@../../../../libs/concept_check/index.html concept checking class] 
+[@../../../../../libs/concept_check/index.html concept checking class] 
 for distribution types.
 
 The test program 
-[@../../test/distribution_concept_check.cpp distribution_concept_check.cpp]
+[@../../../test/distribution_concept_check.cpp distribution_concept_check.cpp]
 is responsible for using `DistributionConcept` to verify that all the
 distributions in this library conform to the 
 [link math_toolkit.using_udt.dist_concept Distribution concept].

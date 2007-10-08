@@ -187,14 +187,14 @@ Suppose we want a call to `tgamma` to behave in a C-compatible way and set globa
 `::errno` rather than throw an exception, we can achieve this at the call site
 using:
 
-[import ../example/policy_ref_snip1.cpp]
+[import ../../example/policy_ref_snip1.cpp]
 
 [policy_ref_snip1]
    
 Suppose we want a statistical distribution to return infinities,
 rather than throw exceptions, then we can use:
 
-[import ../example/policy_ref_snip2.cpp]
+[import ../../example/policy_ref_snip2.cpp]
 
 [policy_ref_snip2]
 
@@ -222,13 +222,13 @@ effect whether internal promotion takes place or not:
 Suppose we want `tgamma` to be evaluated without internal promotion to
 `long double`, then we could use:
 
-[import ../example/policy_ref_snip3.cpp]
+[import ../../example/policy_ref_snip3.cpp]
 [policy_ref_snip3]
    
 Alternatively, suppose we want a distribution to perform calculations
 without promoting `float` to `double`, then we could use:
 
-[import ../example/policy_ref_snip4.cpp]
+[import ../../example/policy_ref_snip4.cpp]
 [policy_ref_snip4]
    
 [endsect] [/section:internal_promotion Internal Promotion Policies]
@@ -307,7 +307,7 @@ The values that `discrete_quantile` can take have the following meanings:
 Ignores the discreteness of the distribution, and returns a real-valued 
 result.  For example:
 
-[import ../example/policy_ref_snip5.cpp]
+[import ../../example/policy_ref_snip5.cpp]
 [policy_ref_snip5]
    
 Results in `x = 27.3898` and `y = 68.1584`.
@@ -324,7 +324,7 @@ This is normally the safest rounding policy, since it ensures that both
 one and two sided intervals are guaranteed to have ['at least] 
 the requested coverage.  For example:
 
-[import ../example/policy_ref_snip6.cpp]
+[import ../../example/policy_ref_snip6.cpp]
 [policy_ref_snip6]
    
 Results in `x = 27` (rounded down from 27.3898) and `y = 69` (rounded up from 68.1584).
@@ -347,7 +347,7 @@ This is the opposite of ['integer_round_outwards]: an integer value is returned 
 
 For example:
 
-[import ../example/policy_ref_snip7.cpp]
+[import ../../example/policy_ref_snip7.cpp]
 
 [policy_ref_snip7]
    
@@ -381,7 +381,7 @@ For example:
 
 For example:
 
-[import ../example/policy_ref_snip8.cpp]
+[import ../../example/policy_ref_snip8.cpp]
 
 [policy_ref_snip8]
 
@@ -417,19 +417,19 @@ based on the precision requested and the numeric type being used.
 
 For example we could calculate `tgamma` to approximately 5 decimal digits using:
 
-[import ../example/policy_ref_snip9.cpp]
+[import ../../example/policy_ref_snip9.cpp]
 
 [policy_ref_snip9]
    
 Or again using ['make_policy]:
 
-[import ../example/policy_ref_snip10.cpp]
+[import ../../example/policy_ref_snip10.cpp]
 
 [policy_ref_snip10]
 
 And for a quantile of a distribution to approximately 25-bit precision:
 
-[import ../example/policy_ref_snip11.cpp]
+[import ../../example/policy_ref_snip11.cpp]
 
 [policy_ref_snip11]
 
@@ -474,7 +474,7 @@ This is probably not what you intend!]
 If you want to alter the defaults for any or all of 
 the policies for *all* functions and distributions, installation-wide,
 then you can do so by defining various macros in
-[@../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp].
+[@../../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp].
 
 [h5 BOOST_MATH_DOMAIN_ERROR_POLICY]
 
@@ -606,7 +606,7 @@ and:
 You can use either of these macros after including any special function
 or distribution header.  For example:
 
-[import ../example/policy_ref_snip12.cpp]
+[import ../../example/policy_ref_snip12.cpp]
 
 [policy_ref_snip12]
 
@@ -628,7 +628,7 @@ defined.
 We can do the same thing with the distributions, but this time we need to
 specify the floating-point type to use:
 
-[import ../example/policy_ref_snip13.cpp]
+[import ../../example/policy_ref_snip13.cpp]
 
 [policy_ref_snip13]
    

@@ -134,7 +134,7 @@ See [link math_toolkit.main_overview.error_handling error handling]
 for a detailed explanation of the mechanism, and
 [link math_toolkit.dist.stat_tut.weg.error_eg error_handling example]
 and 
-[@/../../example/error_handling_example.cpp error_handling_example.cpp]
+[@../../../example/error_handling_example.cpp error_handling_example.cpp]
 
 [caution If you enable throw but do NOT have try & catch block,
 then the program will terminate with an uncaught exception and probably abort.
