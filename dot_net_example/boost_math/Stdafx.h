@@ -1,6 +1,15 @@
 // stdafx.h : include file for standard system include files,
 // or project specific include files that are used frequently,
-// but are changed infrequently
+// but are changed infrequently.
+
+// Copyright John Maddock 2007.
+// Copyright Paul A. Bristow 2007.
+
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 
 #pragma once
 

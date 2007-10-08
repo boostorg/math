@@ -1,5 +1,20 @@
 // boost_math.h
 
+// Copyright John Maddock 2007.
+// Copyright Paul A. Bristow 2007.
+
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//#define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error
+//#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+// These are now defined in project properties
+// "BOOST_MATH_ASSERT_UNDEFINED_POLICY=0"
+// "BOOST_MATH_OVERFLOW_ERROR_POLICY=errno_on_error"
+// to avoid complications with pre-compiled headers.
+
 #pragma once
 
 using namespace System;
