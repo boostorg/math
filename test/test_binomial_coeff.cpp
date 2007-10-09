@@ -8,8 +8,10 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/tools/test.hpp>
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
+#endif
 #include <boost/array.hpp>
 
 #include "handle_test_result.hpp"
@@ -102,6 +104,7 @@ T binomial_wrapper(T n, T k)
 template <class T>
 void test_binomial(T, const char* type_name)
 {
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    using namespace boost::lambda;
    using namespace std;
 
@@ -133,6 +136,7 @@ void test_binomial(T, const char* type_name)
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
    handle_test_result(result, binomial_large_data[result.worst()], result.worst(), type_name, "binomial_coefficient", "Binomials: large arguments");
    std::cout << std::endl;
+#endif
 }
 
 template <class T>
