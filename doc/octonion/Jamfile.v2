@@ -7,10 +7,10 @@ using quickbook ;
 
 path-constant images_location : html ;
 
-xml math : math.qbk ;
+xml octonion : math-octonion.qbk ;
 boostbook standalone
     :
-        math
+        octonion
     :
         # Path for links to Boost:
         <xsl:param>boost.root=../../../../..
