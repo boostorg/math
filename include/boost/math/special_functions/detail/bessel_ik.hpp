@@ -37,8 +37,8 @@ int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
     BOOST_ASSERT(abs(x) <= 2);
     BOOST_ASSERT(abs(v) <= 0.5f);
 
-    T gp = tgamma1pm1(v, pol);
-    T gm = tgamma1pm1(-v, pol);
+    T gp = boost::math::tgamma1pm1(v, pol);
+    T gm = boost::math::tgamma1pm1(-v, pol);
 
     a = log(x / 2);
     b = exp(v * a);

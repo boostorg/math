@@ -527,7 +527,7 @@ namespace boost
           // since the probability of zero failures may be non-zero,
           return 0; // but zero is the best we can do:
        }
-       if (-Q <= powm1(dist.success_fraction(), dist.successes(), Policy()))
+       if (-Q <= boost::math::powm1(dist.success_fraction(), dist.successes(), Policy()))
        {  // q <= cdf(complement(dist, 0)) == pdf(dist, 0)
           return 0; //
        }

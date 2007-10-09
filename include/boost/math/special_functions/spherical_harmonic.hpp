@@ -34,7 +34,7 @@ inline T spherical_harmonic_prefix(unsigned n, unsigned m, T theta, const Policy
 
    T leg = detail::legendre_p_imp(n, m, x, pow(fabs(sin_theta), T(m)), pol);
    
-   T prefix = tgamma_delta_ratio(static_cast<T>(n - m + 1), static_cast<T>(2 * m), pol);
+   T prefix = boost::math::tgamma_delta_ratio(static_cast<T>(n - m + 1), static_cast<T>(2 * m), pol);
    prefix *= (2 * n + 1) / (4 * constants::pi<T>());
    prefix = sqrt(prefix);
    return prefix * leg;

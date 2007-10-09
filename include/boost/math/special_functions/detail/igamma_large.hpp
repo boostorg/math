@@ -66,7 +66,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<64> const *)
 {
    BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -log1pmx(sigma, pol);
+   T phi = -boost::math::log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)
@@ -271,7 +271,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<53> const *)
 {
    BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -log1pmx(sigma, pol);
+   T phi = -boost::math::log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)
@@ -413,7 +413,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<24> const *)
 {
    BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -log1pmx(sigma, pol);
+   T phi = -boost::math::log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)
@@ -469,7 +469,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<113> const *)
 {
    BOOST_MATH_STD_USING // ADL of std functions
    T sigma = (x - a) / a;
-   T phi = -log1pmx(sigma, pol);
+   T phi = -boost::math::log1pmx(sigma, pol);
    T y = a * phi;
    T z = sqrt(2 * phi);
    if(x < a)

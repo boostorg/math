@@ -41,8 +41,8 @@ int temme_jy(T v, T x, T* Y, T* Y1, const Policy& pol)
 
     BOOST_ASSERT(fabs(v) <= 0.5f);  // precondition for using this routine
 
-    T gp = tgamma1pm1(v, pol);
-    T gm = tgamma1pm1(-v, pol);
+    T gp = boost::math::tgamma1pm1(v, pol);
+    T gm = boost::math::tgamma1pm1(-v, pol);
     T spv = sin_pi(v, pol);
     T spv2 = sin_pi(v/2, pol);
     T xp = pow(x/2, v);

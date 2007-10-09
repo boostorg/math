@@ -212,7 +212,7 @@ namespace boost
       }
 
       // result = RealType(1) - pow((location / x), shape);
-      result = -powm1(location/x, shape, Policy()); // should be more accurate.
+      result = -boost::math::powm1(location/x, shape, Policy()); // should be more accurate.
       return result;
     } // cdf
 
