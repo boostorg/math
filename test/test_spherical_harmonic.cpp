@@ -9,8 +9,10 @@
 #include <boost/math/special_functions/spherical_harmonic.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/array.hpp>
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
+#endif
 
 #include "handle_test_result.hpp"
 
@@ -98,6 +100,7 @@ void expected_results()
 template <class T>
 void do_test_spherical_harmonic(const T& data, const char* type_name, const char* test_name)
 {
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -151,6 +154,7 @@ void do_test_spherical_harmonic(const T& data, const char* type_name, const char
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::spherical_harmonic_i", test_name);
 
    std::cout << std::endl;
+#endif
 }
 
 template <class T>

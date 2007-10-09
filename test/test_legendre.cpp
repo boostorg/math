@@ -9,8 +9,10 @@
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/array.hpp>
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
+#endif
 
 #include "handle_test_result.hpp"
 #include "test_legendre_hooks.hpp"
@@ -190,6 +192,7 @@ void expected_results()
 template <class T>
 void do_test_legendre_p(const T& data, const char* type_name, const char* test_name)
 {
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -267,11 +270,13 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
 
 
    std::cout << std::endl;
+#endif
 }
 
 template <class T>
 void do_test_assoc_legendre_p(const T& data, const char* type_name, const char* test_name)
 {
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -304,6 +309,7 @@ void do_test_assoc_legendre_p(const T& data, const char* type_name, const char* 
       boost::lambda::ret<value_type>(boost::lambda::_1[3]));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::legendre_p", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class T>
