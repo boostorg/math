@@ -22,7 +22,20 @@
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+//
+// Borland post 5.8.2 uses Dinkumware's std C lib which
+// doesn't have true long double precision.  Earlier
+// versions are problematic too:
+//
 #  define BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#endif
+#if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
+//
+// Darwin's rather strange "double double" is rather hard to
+// support, it should be possible given enough effort though...
+//
+#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1400)
