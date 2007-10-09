@@ -306,7 +306,7 @@ namespace boost
     } // RealType kurtosis
 
     template <class RealType, class Policy>
-    RealType pdf(const poisson_distribution<RealType, Policy>& dist, const RealType k)
+    RealType pdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
     { // Probability Density/Mass Function.
       // Probability that there are EXACTLY k occurrences (or arrivals).
       BOOST_FPU_EXCEPTION_GUARD
@@ -353,7 +353,7 @@ namespace boost
     } // pdf
 
     template <class RealType, class Policy>
-    RealType cdf(const poisson_distribution<RealType, Policy>& dist, const RealType k)
+    RealType cdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
     { // Cumulative Distribution Function Poisson.
       // The random variate k is the number of occurrences(or arrivals)
       // k argument may be integral, signed, or unsigned, or floating point.

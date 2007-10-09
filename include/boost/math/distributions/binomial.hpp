@@ -437,7 +437,7 @@ namespace boost
       } // variance
 
       template <class RealType, class Policy>
-      RealType pdf(const binomial_distribution<RealType, Policy>& dist, const RealType k)
+      RealType pdf(const binomial_distribution<RealType, Policy>& dist, const RealType& k)
       { // Probability Density/Mass Function.
         BOOST_FPU_EXCEPTION_GUARD
 
@@ -498,7 +498,7 @@ namespace boost
       } // pdf
 
       template <class RealType, class Policy>
-      inline RealType cdf(const binomial_distribution<RealType, Policy>& dist, const RealType k)
+      inline RealType cdf(const binomial_distribution<RealType, Policy>& dist, const RealType& k)
       { // Cumulative Distribution Function Binomial.
         // The random variate k is the number of successes in n trials.
         // k argument may be integral, signed, or unsigned, or floating point.
