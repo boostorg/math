@@ -195,7 +195,7 @@ inline boost::math::concepts::std_real_concept atan2(boost::math::concepts::std_
 inline boost::math::concepts::std_real_concept ceil(boost::math::concepts::std_real_concept a)
 { return std::ceil(a.value()); }
 inline boost::math::concepts::std_real_concept fmod(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
-{ return boost::math::tools::fmod_workaround(a.value(), b.value()); }
+{ return fmodl(a.value(), b.value()); }
 inline boost::math::concepts::std_real_concept cosh(boost::math::concepts::std_real_concept a)
 { return std::cosh(a.value()); }
 inline boost::math::concepts::std_real_concept exp(boost::math::concepts::std_real_concept a)

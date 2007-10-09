@@ -8,6 +8,7 @@
 #define BOOST_MATH_SPECIAL_SPHERICAL_HARMONIC_HPP
 
 #include <boost/math/special_functions/legendre.hpp>
+#include <boost/math/tools/workaround.hpp>
 #include <complex>
 
 namespace boost{

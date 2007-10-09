@@ -196,7 +196,7 @@ inline real_concept atan2(real_concept a, real_concept b)
 inline real_concept ceil(real_concept a)
 { return std::ceil(a.value()); }
 inline real_concept fmod(real_concept a, real_concept b)
-{ return boost::math::tools::fmod_workaround(a.value(), b.value()); }
+{ return fmodl(a.value(), b.value()); }
 inline real_concept cosh(real_concept a)
 { return std::cosh(a.value()); }
 inline real_concept exp(real_concept a)
