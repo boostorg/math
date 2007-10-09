@@ -1,0 +1,214 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>History and What's New</title>
+<link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<link rel="start" href="../../index.html" title="Math Toolkit">
+<link rel="up" href="../main_overview.html" title="Overview">
+<link rel="prev" href="perf_over.html" title="Performance">
+<link rel="next" href="contact.html" title="Contact Info and Support">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="perf_over.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../main_overview.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="contact.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="math_toolkit.main_overview.history1"></a><a href="history1.html" title="History and What's New"> History and What's
+      New</a>
+</h3></div></div></div>
+<p>
+        <a name="math_toolkit.main_overview.history1.milestone_5__post_review_first_official_release"></a>
+        </p>
+<h5>
+<a name="id495695"></a>
+          <a href="history1.html#math_toolkit.main_overview.history1.milestone_5__post_review_first_official_release">Milestone
+          5: Post Review First Official Release</a>
+        </h5>
+<p>
+        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            Added Policy based framework that allows fine grained control over function
+            behaviour.
+          </li>
+<li>
+<span class="bold"><strong>Breaking change:</strong></span> Changed default behaviour
+            for domain, pole and overflow errors to throw an exception (based on
+            review feedback), this behaviour can be customised using <a href="../policy.html" title="Policies">Policy</a>'s.
+          </li>
+<li>
+<span class="bold"><strong>Breaking change:</strong></span> Changed exception thrown
+            when an internal evaluation error occurs to boost::math::evaluation_error.
+          </li>
+<li>
+<span class="bold"><strong>Breaking change:</strong></span> Changed discrete quantiles
+            to return an integer result: this is anything up to 20 times faster than
+            finding the true root, this behaviour can be customised using <a href="../policy.html" title="Policies">Policy</a>'s.
+          </li>
+<li>
+            Polynomial/rational function evaluation is now customisable and hopefully
+            faster than before.
+          </li>
+<li>
+            Added performance test program.
+          </li>
+</ul></div>
+<p>
+        <a name="math_toolkit.main_overview.history1.milestone_4__second_review_candidate__1st_march_2007_"></a>
+        </p>
+<h5>
+<a name="id495800"></a>
+          <a href="history1.html#math_toolkit.main_overview.history1.milestone_4__second_review_candidate__1st_march_2007_">Milestone
+          4: Second Review Candidate (1st March 2007)</a>
+        </h5>
+<p>
+        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            Moved Xiaogang Zhang's Bessel Functions code into the library, and brought
+            them into line with the rest of the code.
+          </li>
+<li>
+            Added C# "Distribution Explorer" demo application.
+          </li>
+</ul></div>
+<p>
+        <a name="math_toolkit.main_overview.history1.milestone_3__first_review_candidate__31st_dec_2006_"></a>
+        </p>
+<h5>
+<a name="id495842"></a>
+          <a href="history1.html#math_toolkit.main_overview.history1.milestone_3__first_review_candidate__31st_dec_2006_">Milestone
+          3: First Review Candidate (31st Dec 2006)</a>
+        </h5>
+<p>
+        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            Implemented the main probability distribution and density functions.
+          </li>
+<li>
+            Implemented digamma.
+          </li>
+<li>
+            Added more factorial functions.
+          </li>
+<li>
+            Implemented the Hermite, Legendre and Laguerre polynomials plus the spherical
+            harmonic functions from TR1.
+          </li>
+<li>
+            Moved Xiaogang Zhang's elliptic integral code into the library, and brought
+            them into line with the rest of the code.
+          </li>
+<li>
+            Moved Hubert Holin's existing Boost.Math special functions into this
+            library and brought them into line with the rest of the code.
+          </li>
+</ul></div>
+<p>
+        <a name="math_toolkit.main_overview.history1.milestone_2__released_september_10th_2006"></a>
+        </p>
+<h5>
+<a name="id495906"></a>
+          <a href="history1.html#math_toolkit.main_overview.history1.milestone_2__released_september_10th_2006">Milestone
+          2: Released September 10th 2006</a>
+        </h5>
+<p>
+        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            Implement preview release of the statistical distributions.
+          </li>
+<li>
+            Added statistical distributions tutorial.
+          </li>
+<li>
+            Implemented root finding algorithms.
+          </li>
+<li>
+            Implemented the inverses of the incomplete gamma and beta functions.
+          </li>
+<li>
+            Rewrite erf/erfc as rational approximations (valid to 128-bit precision).
+          </li>
+<li>
+            Integrated the statistical results generated from the test data with
+            Boost.Test: uses a database of expected results, indexed by test, floating
+            point type, platform, and compiler.
+          </li>
+<li>
+            Improved lgamma near 1 and 2 (rational approximations).
+          </li>
+<li>
+            Improved erf/erfc inverses (rational approximations).
+          </li>
+<li>
+            Implemented Rational function generation (the Remez method).
+          </li>
+</ul></div>
+<p>
+        <a name="math_toolkit.main_overview.history1.milestone_1__released_march_31st_2006"></a>
+        </p>
+<h5>
+<a name="id495982"></a>
+          <a href="history1.html#math_toolkit.main_overview.history1.milestone_1__released_march_31st_2006">Milestone
+          1: Released March 31st 2006</a>
+        </h5>
+<p>
+        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            Implement gamma/beta/erf functions along with their incomplete counterparts.
+          </li>
+<li>
+            Generate high quality test data, against which future improvements can
+            be judged.
+          </li>
+<li>
+            Provide tools for the evaluation of infinite series, continued fractions,
+            and rational functions.
+          </li>
+<li>
+            Provide tools for testing against tabulated test data, and collecting
+            statistics on error rates.
+          </li>
+<li>
+            Provide sufficient docs for people to be able to find their way around
+            the library.
+          </li>
+</ul></div>
+<p>
+        </p>
+<p>
+          SVN Revisions:
+        </p>
+<p>
+        </p>
+<p>
+          Sandbox revision merged to trunk: 39833. Trunk revision: 39833.
+        </p>
+<p>
+      </p>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="perf_over.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../main_overview.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="contact.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

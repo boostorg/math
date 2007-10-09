@@ -1,4 +1,4 @@
-[section:distribution_construction_eg Distribution Construction Example]
+[section:dist_construct_eg Distribution Construction Example]
 
 See [@../../../example/distribution_construction.cpp distribution_construction.cpp] for full source code.
 
@@ -6,4 +6,4 @@ See [@../../../example/distribution_construction.cpp distribution_construction.c
 [distribution_construction1]
 [distribution_construction2]
 
-[endsect] [/section:distribution_construction_eg Distribution Construction Example]
+[endsect] [/section:dist_construct_eg Distribution Construction Example]

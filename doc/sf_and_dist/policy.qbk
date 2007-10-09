@@ -113,7 +113,7 @@ if there is a %1% specifier in the ['message] string then it
 should be replaced with the value of ['val].
 
 There is more information on user-defined error handlers in
-the [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
+the [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
 tutorial here].
 
 [h4 Kinds of Error Raised]                  
