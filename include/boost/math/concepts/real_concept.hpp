@@ -323,7 +323,11 @@ inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_EXPLIC
 template <>
 inline concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
+#ifdef __SUNPRO_CC
+   return std::numeric_limits<long double>::epsilon();
+#else
    return tools::epsilon<long double>();
+#endif
 }
 
 template <>
