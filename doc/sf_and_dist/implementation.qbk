@@ -388,7 +388,7 @@ the underlying special function is known to be difficult to implement.
 
 The primary source for the equations is now 
 [@http://www.w3.org/Math/ MathML]: see the 
-*.mml files in libs\/math\/doc\/equations\/.
+*.mml files in libs\/math\/doc\/sf_and_dist\/equations\/.
 
 These are most easily edited by a GUI editor such as 
 [@http://mathcast.sourceforge.net/home.html Mathcast],
@@ -416,7 +416,7 @@ If neccessary the XHTML wrapper can be removed with:
 
 [pre cat filename | tr -d "\\r\\n" \| sed -e 's\/.*\\(<math\[^>\]\*>.\*<\/math>\\).\*\/\\1\/' > newfile]
 
-Setting up fonts for SVGMath is currently rather tricky, on a windows system
+Setting up fonts for SVGMath is currently rather tricky, on a Windows system
 JM's font setup looks like this:
 
 [pre
@@ -523,7 +523,7 @@ JM's font setup looks like this:
 <\/config>
 ]
 
-Note that unlike the sample config file supplied with SVGMath this does not
+Note that unlike the sample config file supplied with SVGMath, this does not
 make use of the Mathematica 7 font as this lacks sufficient Unicode information
 for it to be used with either SVGMath or XEP "as is".
 
@@ -543,7 +543,7 @@ The PDF is generated using:
 
 Note that XEP will have to be configured to *use and embed* 
 whatever fonts are used by the SVG equations.  JM's XEP
-config file looks like:
+config file '\RenderX\XEP\xep.xml' looks like:
 
 [pre
 <?xml version="1.0" encoding="UTF-8"?>
@@ -757,10 +757,10 @@ template defined in math.qbk.  This outputs Docbook XML that looks like:
 MathML is not currently present in the Docbook output, or in the 
 generated HTML: this needs further investigation.
 
-[endsect][/section:implementation Implementation Notes]
+[endsect] [/section:implementation Implementation Notes]
 
 [/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2007 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
