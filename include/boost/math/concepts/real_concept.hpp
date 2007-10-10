@@ -246,7 +246,15 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
 template <class charT, class traits>
 inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>& is, real_concept& a)
 {
+#if defined(BOOST_MSVC) && defined(__SGI_STL_PORT)
+   //
+   // STLPort 5.1.4 has a problem reading long doubles from strings,
+   // see http://sourceforge.net/tracker/index.php?func=detail&aid=1811043&group_id=146814&atid=766244
+   //
+   double v;
+#else
    long double v;
+#endif
    is >> v;
    a = v;
    return is;
