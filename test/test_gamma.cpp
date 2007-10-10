@@ -110,7 +110,7 @@ void expected_results()
       "linux",                       // platform
       largest_type,                  // test type(s)
       "near (1|2|-10)",              // test data group
-      "boost::math::lgamma", 50, 30);  // test function
+      "boost::math::lgamma", 50, 50);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -131,7 +131,7 @@ void expected_results()
       "linux",                       // platform
       "real_concept",                // test type(s)
       "near (0|-55)",                // test data group
-      "boost::math::(t|l)gamma", 130, 60);  // test function
+      "boost::math::(t|l)gamma", 130, 80);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -176,7 +176,24 @@ void expected_results()
       "HP-UX",                          // platform
       "real_concept",                // test type(s)
       "tgamma1pm1.*",                // test data group
-      "boost::math::tgamma1pm1", 200, 60);  // test function
+      "boost::math::tgamma1pm1", 200, 80);  // test function
+   //
+   // Sun OS:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Sun.*",                       // platform
+      largest_type,                  // test type(s)
+      "factorials",                  // test data group
+      "boost::math::tgamma", 300, 50); // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Sun.*",                       // platform
+      "real_concept"               // test type(s)
+      "factorials",                  // test data group
+      "boost::math::tgamma", 300, 50); // test function
 
    //
    // Catch all cases come last:
@@ -244,7 +261,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       "near.*",                      // test data group
-      "boost::math::tgamma", 60, 30);  // test function
+      "boost::math::tgamma", 80, 60);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

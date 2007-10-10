@@ -167,6 +167,37 @@ void expected_results()
       "real_concept",                   // test type(s)
       "[^|]*medium[^|]*",               // test data group
       "[^|]*", 500, 100);                // test function
+   //
+   // Sun OS:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Sun.*",                          // platform
+      largest_real,                   // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 500, 100);                // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Sun.*",                          // platform
+      largest_real,                   // test type(s)
+      "[^|]*integer[^|]*",               // test data group
+      "[^|]*", 100, 30);                // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Sun.*",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 500, 100);                // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Sun.*",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*integer[^|]*",               // test data group
+      "[^|]*", 100, 30);                // test function
 
    //
    // Mac OS X:

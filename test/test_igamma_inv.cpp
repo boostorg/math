@@ -171,7 +171,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                     // test type(s)
       "[^|]*small[^|]*",                   // test data group
-      "[^|]*", 3500, 500);                  // test function
+      "[^|]*", 3700, 500);                  // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,

@@ -50,7 +50,7 @@ void expected_results()
       ".*",                          // platform
       ".*",                          // test type(s)
       ".*Negative.*",                    // test data group
-      ".*", 250, 40);                // test function
+      ".*", 300, 40);                // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

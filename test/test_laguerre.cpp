@@ -81,31 +81,31 @@ void expected_results()
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "linux.*|Mac OS",                          // platform
+      "linux.*|Mac OS|Sun.*",        // platform
       largest_type,                  // test type(s)
-      ".*",      // test data group
-      ".*", 40000, 1000);  // test function
+      ".*",                          // test data group
+      ".*", 40000, 1000);            // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "linux.*|Mac OS",                          // platform
-      "real_concept",                  // test type(s)
-      ".*",      // test data group
-      ".*", 40000, 1000);  // test function
+      "linux.*|Mac OS|Sun.*",        // platform
+      "real_concept",                // test type(s)
+      ".*",                          // test data group
+      ".*", 40000, 1000);            // test function
    add_expected_result(
-      ".*mingw.*",                          // compiler
+      ".*mingw.*",                   // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
-      ".*",      // test data group
-      ".*", 40000, 1000);  // test function
+      ".*",                          // test data group
+      ".*", 40000, 1000);            // test function
    add_expected_result(
-      ".*mingw.*",                          // compiler
+      ".*mingw.*",                   // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      "real_concept",                  // test type(s)
-      ".*",      // test data group
-      ".*", 40000, 1000);  // test function
+      "real_concept",                // test type(s)
+      ".*",                          // test data group
+      ".*", 40000, 1000);            // test function
 
    //
    // Catch all cases come last:

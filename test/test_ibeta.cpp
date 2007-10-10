@@ -102,7 +102,7 @@ void expected_results()
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
-      "linux|Mac OS",                          // platform
+      "linux|Mac OS|Sun.*",             // platform
       "double",                     // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 40, 20);                 // test function
@@ -135,7 +135,37 @@ void expected_results()
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 200000, 10000);                 // test function
-
+   //
+   // Sun OS:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Sun.*",                          // platform
+      largest_type,                     // test type(s)
+      "(?i).*large.*",                      // test data group
+      ".*", 80000, 10000);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Sun.*",                          // platform
+      largest_type,                     // test type(s)
+      "(?i).*small.*",                      // test data group
+      ".*", 130, 30);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Sun.*",                          // platform
+      "real_concept",                     // test type(s)
+      "(?i).*medium.*",                      // test data group
+      ".*", 200, 40);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Sun.*",                          // platform
+      "real_concept",                     // test type(s)
+      "(?i).*small.*",                      // test data group
+      ".*", 130, 30);                 // test function
    //
    // MinGW:
    //
@@ -204,7 +234,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "(?i).*medium.*",                     // test data group
-      ".*", 100, 50);  // test function
+      ".*", 200, 50);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

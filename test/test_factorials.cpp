@@ -132,7 +132,7 @@ void test_spots(T)
       static_cast<T>(1.28674092710208810281923019294164707555099052561945725535047e-26L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::rising_factorial(static_cast<T>(30.25), 21),
-      static_cast<T>(3.93286957998925490693364184100209193343633629069699964020401e33L), tolerance);
+      static_cast<T>(3.93286957998925490693364184100209193343633629069699964020401e33L), tolerance * 2);
    BOOST_CHECK_CLOSE(
       ::boost::math::rising_factorial(static_cast<T>(30.25), -21),
       static_cast<T>(3.35010902064291983728782493133164809108646650368560147505884e-27L), tolerance);

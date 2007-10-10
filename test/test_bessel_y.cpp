@@ -143,6 +143,24 @@ void expected_results()
          largest_type,                  // test type(s)
          ".*Yn.*",              // test data group
          ".*", 30000, 30000);         // test function
+   //
+   // Solaris version of long double has it's own error rates,
+   // again just a touch higher than msvc's 64-bit double:
+   //
+   add_expected_result(
+      "GNU.*",                          // compiler
+      ".*",                          // stdlib
+      "Sun.*",                          // platform
+      largest_type,                  // test type(s)
+      "Y[0N] Mathworld.*",              // test data group
+      ".*", 2000, 2000);         // test function
+   add_expected_result(
+      "GNU.*",                          // compiler
+      ".*",                          // stdlib
+      "Sun.*",                          // platform
+      largest_type,                  // test type(s)
+      "Y[0N].*",              // test data group
+      ".*", 200, 200);         // test function
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
