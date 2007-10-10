@@ -29,6 +29,9 @@ typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& 
 
 namespace detail{
 
+template <typename T, typename Policy>
+T ellint_k_imp(T k, const Policy& pol);
+
 // Elliptic integral (Legendre form) of the first kind
 template <typename T, typename Policy>
 T ellint_f_imp(T phi, T k, const Policy& pol)

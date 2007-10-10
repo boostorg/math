@@ -44,7 +44,30 @@ run test_bernoulli.cpp ;
 run test_constants.cpp ;
 run test_beta.cpp ;
 run test_beta_dist.cpp ;
-run test_binomial.cpp ;
+run test_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_binomial_float ;
+run test_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_binomial_double ;
+run test_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_binomial_long_double ;
+run test_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_binomial_real_concept ;
 run test_binomial_coeff.cpp ;
 run test_carlson.cpp ;
 run test_cauchy.cpp ;
@@ -67,21 +90,182 @@ run test_fisher_f.cpp ;
 run test_gamma.cpp ;
 run test_gamma_dist.cpp ;
 run test_hermite.cpp ;
-run test_ibeta.cpp ;
-run test_ibeta_inv.cpp ;
-run test_ibeta_inv_ab.cpp ;
+run test_ibeta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_ibeta_float ;
+run test_ibeta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_ibeta_double ;
+run test_ibeta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_ibeta_long_double ;
+run test_ibeta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_ibeta_real_concept ;
+run test_ibeta_inv.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_ibeta_inv_float ;
+run test_ibeta_inv.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_ibeta_inv_double ;
+run test_ibeta_inv.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_ibeta_inv_long_double ;
+run test_ibeta_inv.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_ibeta_inv_real_concept ;
+run test_ibeta_inv_ab.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_ibeta_inv_ab_float ;
+run test_ibeta_inv_ab.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_ibeta_inv_ab_double ;
+run test_ibeta_inv_ab.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_ibeta_inv_ab_long_double ;
+run test_ibeta_inv_ab.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_ibeta_inv_ab_real_concept ;
 run test_igamma.cpp ;
-run test_igamma_inv.cpp ;
-run test_igamma_inva.cpp ;
+run test_igamma_inv.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_igamma_inv_float ;
+run test_igamma_inv.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_igamma_inv_double ;
+run test_igamma_inv.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_igamma_inv_long_double ;
+run test_igamma_inv.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_igamma_inv_real_concept ;
+run test_igamma_inva.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_igamma_inva_float ;
+run test_igamma_inva.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_igamma_inva_double ;
+run test_igamma_inva.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_igamma_inva_long_double ;
+run test_igamma_inva.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_igamma_inva_real_concept ;
 run test_instantiate1.cpp test_instantiate2.cpp ;
 run test_laguerre.cpp ;
 run test_legendre.cpp ;
 run test_lognormal.cpp ;
 run test_minima.cpp ;
-run test_negative_binomial.cpp ;
+run test_negative_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_negative_binomial_float ;
+run test_negative_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_negative_binomial_double ;
+run test_negative_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_negative_binomial_long_double ;
+run test_negative_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_negative_binomial_real_concept ;
 run test_normal.cpp ;
 run test_pareto.cpp ;
-run test_poisson.cpp ;
+run test_poisson.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_poisson_float ;
+run test_poisson.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_poisson_double ;
+run test_poisson.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_poisson_long_double ;
+run test_poisson.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_poisson_real_concept ;
 run test_rayleigh.cpp ;
 
 run test_rationals.cpp 

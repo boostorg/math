@@ -55,7 +55,7 @@ public:
    real_concept(int c) : m_value(c){}
    real_concept(unsigned long c) : m_value(c){}
    real_concept(long c) : m_value(c){}
-#ifdef BOOST_HAS_LONG_LONG
+#if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX)
    real_concept(unsigned long long c) : m_value(static_cast<long double>(c)){}
    real_concept(long long c) : m_value(static_cast<long double>(c)){}
 #elif defined(BOOST_HAS_MS_INT64)

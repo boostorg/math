@@ -174,15 +174,15 @@ void expected_results()
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "Sun.*",                          // platform
-      largest_real,                   // test type(s)
+      largest_type,                     // test type(s)
       "[^|]*medium[^|]*",               // test data group
-      "[^|]*", 500, 100);                // test function
+      "[^|]*", 500, 100);               // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "Sun.*",                          // platform
-      largest_real,                   // test type(s)
-      "[^|]*integer[^|]*",               // test data group
+      largest_type,                     // test type(s)
+      "[^|]*integer[^|]*",              // test data group
       "[^|]*", 100, 30);                // test function
    add_expected_result(
       "[^|]*",                          // compiler

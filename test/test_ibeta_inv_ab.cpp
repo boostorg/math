@@ -24,6 +24,12 @@
 
 #include "handle_test_result.hpp"
 
+#if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
+#  define TEST_FLOAT
+#  define TEST_DOUBLE
+#  define TEST_LDOUBLE
+#  define TEST_REAL_CONCEPT
+#endif
 //
 // DESCRIPTION:
 // ~~~~~~~~~~~~
@@ -270,12 +276,20 @@ int test_main(int, char* [])
    gsl_set_error_handler_off();
 #endif
 
+#ifdef TEST_FLOAT
    test_beta(0.1F, "float");
+#endif
+#ifdef TEST_DOUBLE
    test_beta(0.1, "double");
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#ifdef TEST_LDOUBLE
    test_beta(0.1L, "long double");
+#endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#ifdef TEST_REAL_CONCEPT
    test_beta(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

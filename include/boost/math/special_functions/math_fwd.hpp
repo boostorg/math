@@ -347,10 +347,6 @@ namespace boost
    template <class RT, class Policy>
    typename tools::promote_args<RT>::type rising_factorial(RT x, int n, const Policy& pol);
 
-   // Fpclassify - classify floating-point as NaN or infinity...
-   template <class T>
-   int fpclassify (T);
-
    // Gamma functions.
    template <class RT>
    typename tools::promote_args<RT>::type tgamma(RT z);

@@ -12,6 +12,13 @@
 
 #define BOOST_MATH_DISCRETE_QUANTILE_POLICY real
 
+#if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
+#  define TEST_FLOAT
+#  define TEST_DOUBLE
+#  define TEST_LDOUBLE
+#  define TEST_REAL_CONCEPT
+#endif
+
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #endif
@@ -694,12 +701,20 @@ int test_main(int, char* [])
   // Basic sanity-check spot values.
 
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
+#ifdef TEST_FLOAT
   test_spots(0.0F); // Test float.
+#endif
+#ifdef TEST_DOUBLE
   test_spots(0.0); // Test double.
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#ifdef TEST_LDOUBLE
   test_spots(0.0L); // Test long double.
+#endif
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifdef TEST_REAL_CONCEPT
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+#endif
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

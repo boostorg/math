@@ -105,10 +105,11 @@ struct DistributionConcept
       check_result<value_type>(chf(dist, li));
    }
 private:
+   static Distribution* get_object_p();
    static Distribution& get_object()
    {
       // will never get called:
-      return * reinterpret_cast<Distribution*>(0);
+      return *get_object_p();
    }
 }; // struct DistributionConcept
 

@@ -19,6 +19,13 @@
 
 #include "handle_test_result.hpp"
 
+#if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
+#  define TEST_FLOAT
+#  define TEST_DOUBLE
+#  define TEST_LDOUBLE
+#  define TEST_REAL_CONCEPT
+#endif
+
 //
 // DESCRIPTION:
 // ~~~~~~~~~~~~
@@ -250,14 +257,22 @@ int test_main(int, char* [])
    expected_results();
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
+#ifdef TEST_FLOAT
    test_gamma(0.1F, "float");
 #endif
+#endif
+#ifdef TEST_DOUBLE
    test_gamma(0.1, "double");
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#ifdef TEST_LDOUBLE
    test_gamma(0.1L, "long double");
+#endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifdef TEST_REAL_CONCEPT
    test_gamma(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 #endif
 #else

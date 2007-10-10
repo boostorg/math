@@ -191,7 +191,7 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       "Sun.*",                       // platform
-      "real_concept"               // test type(s)
+      "real_concept",                // test type(s)
       "factorials",                  // test data group
       "boost::math::tgamma", 300, 50); // test function
 

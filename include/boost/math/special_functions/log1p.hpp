@@ -128,7 +128,7 @@ inline long double log1p(long double z)
 #ifdef BOOST_HAS_LOG1P
 #  if (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)) \
    || defined(linux) || defined(__linux) || defined(__linux__) \
-   || defined(__hpux)
+   || (defined(__hpux) && !defined(_PA_RISC1_1))
 template <class Policy>
 inline float log1p(float x, const Policy& pol)
 { 
