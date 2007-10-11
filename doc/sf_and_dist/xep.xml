@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+  <!-- ======================================================= -->
+  <!-- Formatter options                                       -->
+  <!-- ======================================================= -->
+  <options>
+    <option name="LICENSE" value="license.xml"/>
+    <option name="TMPDIR" value="none"/>
+    <option name="BROKENIMAGE" value="images/404.gif"/>
+    <option name="LOGO" value="images/logo-renderx.svg"/>
+    
+    <!-- Backend options -->
+    <generator-options format="PDF">
+      <!-- <option name="COMPRESS" value="false"/> -->
+      <!-- <option name="PDF_VERSION" value="1.3"/> -->
+    </generator-options>
+      
+    <generator-options format="PostScript">
+      <!-- <option name="LANGUAGE_LEVEL" value="2"/> -->
+      <!-- <option name="CLONE_EPS" value="true"/> -->
+    </generator-options>
+
+    <generator-options format="AFP">
+      <option name="AFPCodepageTxt" value="Cp500"/>
+      <option name="AFPCodepage" value="T1V10500"/>
+      <option name="AFPLogLevel" value="0"/>
+      <option name="USE_PTOCA_LEVEL" value="3"/>
+      <option name="USE_BCOCA_LEVEL" value="1"/>
+      <option name="USE_GOCA_LEVEL" value="1"/>
+      <option name="RESOLUTION" value="1440"/>
+      <!-- <option name="AFPGrayImage" value="yes"/> -->
+      <option name="USE_SHADING_PATTERNS" value="yes"/> 
+      <option name="USE_REPLICATE_AND_TRIM" value="yes"/> 
+      <option name="SHADING_PATTERN_RESOLUTION" value="0.25"/>
+      <option name="TRY_USING_TIFF_COMPRESSION" value="yes"/> 
+      <option name="AFPFont,Helvetica" value="C0H200.0, C0H300.0, C0H400.0, C0H500.0, C0H201.0, C0H301.0, C0H401.0, C0H501.0, 278"/>
+      <option name="AFPFont,Times" value="C0N200.0, C0N300.0, C0N400.0, C0N500.0, C0N201.0, C0N301.0, C0N401.0, C0N501.0, 250"/>
+      <option name="AFPFont,Courier" value="C04200.0, C04300.0, C04400.0, C04500.0, C04201.0, C04301.0, C04401.0, C04501.0, 600"/>
+      <option name="AFPFont,Arial" value="C0H200.0, C0H300.0, C0H400.0, C0H500.0, C0H201.0, C0H301.0, C0H401.0, C0H501.0, 278"/>
+      <option name="AFPFont,Times New Roman" value="C0N200.0, C0N300.0, C0N400.0, C0N500.0, C0N201.0, C0N301.0, C0N401.0, C0N501.0, 250"/>
+      <option name="AFPFont,Verdana" value="C0VE0.0,  C0VEI.0,  C0VEB.0,  C0VEZ.0,  C0H201.0, C0H301.0, C0H401.0, C0H501.0,278"/>
+      <option name="AFPFont,Interstate" value="C0IS0.0, C0ISB.0, C0IS0.0, C0ISB.0, C0H201.0, C0H301.0, C0H401.0, C0H501.0, 278"/>
+    </generator-options>
+  </options>
+
+  <!-- ======================================================= -->
+  <!-- Fonts                                                   -->
+  <!-- ======================================================= -->
+  
+  <fonts xml:base="fonts/" default-family="Helvetica">
+    
+    <!-- Base Adobe fonts. -->
+    <font-group label="Base 14" embed="false">
+      <font-family name="Courier">
+        <font><font-data afm="Courier.afm"/></font>
+        <font style="oblique"><font-data afm="Courier-Oblique.afm"/></font>
+        <font weight="bold"><font-data afm="Courier-Bold.afm"/></font>
+        <font weight="bold" style="oblique"><font-data afm="Courier-BoldOblique.afm"/></font>
+      </font-family>
+
+      <font-family name="Helvetica">
+        <font><font-data afm="Helvetica.afm"/></font>
+        <font style="oblique"><font-data afm="Helvetica-Oblique.afm"/></font>
+        <font weight="bold"><font-data afm="Helvetica-Bold.afm"/></font>
+        <font weight="bold" style="oblique"><font-data afm="Helvetica-BoldOblique.afm"/></font>
+      </font-family>
+
+      <font-family name="Times" ligatures="ﬁ ﬂ">
+        <font><font-data afm="Times-Roman.afm"/></font>
+        <font style="italic"><font-data afm="Times-Italic.afm"/></font>
+        <font weight="bold"><font-data afm="Times-Bold.afm"/></font>
+        <font weight="bold" style="italic"><font-data afm="Times-BoldItalic.afm"/></font>
+      </font-family>
+
+      <font-family name="Symbol">
+        <font><font-data afm="Symbol.afm"/></font>
+      </font-family>
+
+      <font-family name="ZapfDingbats"> 
+        <font><font-data afm="ZapfDingbats.afm"/></font>
+      </font-family>
+    </font-group>
+
+    <!-- Other Type1 fonts -->
+    <font-group label="Assorted Type 1" embed="true">
+      <font-family name="OmegaSerifIPA">
+        <font><font-data afm="IPA.afm" pfa="IPA.pfa" glyph-list="IPA.glyphs"/></font>
+      </font-family>   
+      <font-alias name="OmegaIPA" value="OmegaSerifIPA"/>
+      <font-alias name="Phonetic" value="OmegaSerifIPA"/>
+    </font-group>
+
+    <!-- Sample configuration for Windows TrueType fonts.  -->
+
+    <font-group xml:base="file:/C:/Windows/Fonts/" label="Windows TrueType" embed="true" subset="true"> 
+      <font-family name="Arial">
+        <font><font-data ttf="arial.ttf"/></font>
+        <font style="oblique"><font-data ttf="ariali.ttf"/></font>
+        <font weight="bold"><font-data ttf="arialbd.ttf"/></font>
+        <font weight="bold" style="oblique"><font-data ttf="arialbi.ttf"/></font>
+      </font-family>
+
+      <font-family name="Times New Roman" ligatures="&#xFB01; &#xFB02;">
+        <font><font-data ttf="times.ttf"/></font>
+        <font style="italic"><font-data ttf="timesi.ttf"/></font>
+        <font weight="bold"><font-data ttf="timesbd.ttf"/></font>
+        <font weight="bold" style="italic"><font-data ttf="timesbi.ttf"/></font>
+      </font-family>
+
+      <font-family name="Courier New">
+        <font><font-data ttf="cour.ttf"/></font>
+        <font style="oblique"><font-data ttf="couri.ttf"/></font>
+        <font weight="bold"><font-data ttf="courbd.ttf"/></font>
+        <font weight="bold" style="oblique"><font-data ttf="courbi.ttf"/></font>
+      </font-family>
+
+      <font-family name="Tahoma" embed="true">
+        <font><font-data ttf="tahoma.ttf"/></font>
+        <font weight="bold"><font-data ttf="tahomabd.ttf"/></font>
+      </font-family>
+
+      <font-family name="Verdana" embed="true">
+        <font><font-data ttf="verdana.ttf"/></font>
+        <font style="oblique"><font-data ttf="verdanai.ttf"/></font>
+        <font weight="bold"><font-data ttf="verdanab.ttf"/></font>
+        <font weight="bold" style="oblique"><font-data ttf="verdanaz.ttf"/></font>
+      </font-family>
+
+      <font-family name="Palatino" embed="true" ligatures="&#xFB00; &#xFB01; &#xFB02; &#xFB03; &#xFB04;">
+        <font><font-data ttf="pala.ttf"/></font>
+        <font style="italic"><font-data ttf="palai.ttf"/></font>
+        <font weight="bold"><font-data ttf="palab.ttf"/></font>
+        <font weight="bold" style="italic"><font-data ttf="palabi.ttf"/></font>
+      </font-family>
+      
+    <font-family name="Lucida Sans Unicode">
+         <font><font-data ttf="lsansuni.ttf"/></font>
+    </font-family>
+      
+    </font-group>
+    
+    <!-- Required aliases -->      
+    <font-alias name="monospace" value="Courier"/>
+    <font-alias name="sans-serif" value="Helvetica"/>
+    <font-alias name="serif" value="Times"/>    
+    <font-alias name="cursive" value="Times"/>
+    <font-alias name="fantasy" value="Times"/>
+  </fonts>
+
+  <!-- ======================================================= -->
+  <!-- Language-specific data: hyphenation, line breaking, etc -->
+  <!-- ======================================================= -->
+  <languages default-language="en-US" xml:base="hyphen/">
+  
+    <language name="English (US)" codes="none en-US eng-US">
+      <hyphenation pattern="hyphen.tex"/>
+    </language>
+
+    <language name="English (UK)" codes="en-GB eng-GB en eng">
+      <hyphenation pattern="ukhyphen.tex"/>
+    </language>
+
+    <language name="Russian" codes="ru rus">
+      <hyphenation pattern="ruhyphal.tex" encoding="koi8-r"/>
+    </language>
+
+    <language name="French" codes="fr fra fre">
+      <hyphenation pattern="frhyph_rx.tex"/>
+    </language>
+         
+    <language name="German" codes="de deu ger">
+      <hyphenation pattern="dehyph_rx.tex"/>
+    </language>
+
+    <language name="Spanish" codes="es esl spa">
+      <hyphenation pattern="eshyph_rx.tex"/>
+    </language>
+    
+    <language name="Polish" codes="pl pol">
+      <hyphenation pattern="plhyph_rx.tex"/>
+    </language>
+    
+  </languages>
+    
+</config>
+

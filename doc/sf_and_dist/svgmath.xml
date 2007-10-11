@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+
+<!-- MathML-to-SVG configuration file -->
+<config verbose="true">
+    <!-- Fallback font family -->
+    <fallback family="Lucida Sans Unicode"/>
+    
+    <!-- Default values for MathML properties. -->
+    <!-- Most of these are defined in the MathML Rec - change with care -->
+    <defaults displaystyle="false"
+              mathsize="12pt"
+              scriptminsize="8pt"
+              scriptsizemultiplier="0.71"
+              veryverythinmathspace="0.0555556em"
+              verythinmathspace="0.111111em"
+              thinmathspace="0.166667em"
+              mediummathspace="0.222222em"
+              thickmathspace="0.277778em"
+              verythickmathspace="0.333333em"
+              veryverythickmathspace="0.388889em"
+              rowspacing="1.0ex"
+              columnspacing="0.8em"
+              framespacing="0.4em 0.5ex"/>
+
+    <!-- Additional styling for individual operators -->
+    <!-- Make differentials italic -->
+    <operator-style operator="&#x2145;" fontstyle="italic"/>
+    <operator-style operator="&#x2146;" fontstyle="italic"/>
+    
+    <!-- Font families -->
+    <family name="Times New Roman">
+         <font ttf="C:\WINDOWS\Fonts\times.ttf"/>
+         <font weight="bold" ttf="C:\WINDOWS\Fonts\timesbd.ttf"/>
+         <font style="italic" ttf="C:\WINDOWS\Fonts\timesi.ttf"/>
+         <font weight="bold" style="italic" ttf="C:\WINDOWS\Fonts\timesbi.ttf"/>        
+    </family>
+
+    <family name="Arial">
+         <font ttf="C:\WINDOWS\Fonts\arial.ttf"/>
+         <font weight="bold" ttf="C:\WINDOWS\Fonts\arialbd.ttf"/>
+         <font style="italic" ttf="C:\WINDOWS\Fonts\ariali.ttf"/>
+         <font weight="bold" style="italic" ttf="C:\WINDOWS\Fonts\arialbi.ttf"/>        
+    </family>
+
+    <family name="Courier New">
+         <font ttf="C:\WINDOWS\Fonts\cour.ttf"/>
+         <font weight="bold" ttf="C:\WINDOWS\Fonts\courbd.ttf"/>
+         <font style="italic" ttf="C:\WINDOWS\Fonts\couri.ttf"/>
+         <font weight="bold" style="italic" ttf="C:\WINDOWS\Fonts\courbi.ttf"/>        
+    </family>
+
+    <family name="Euclid Fraktur">
+         <font ttf="C:\WINDOWS\Fonts\eufrak.ttf"/>
+         <font weight="bold" ttf="C:\WINDOWS\Fonts\eufrakb.ttf"/>
+    </family>
+
+    <family name="Monotype Corsiva">
+         <font ttf="C:\WINDOWS\Fonts\mtcorsva.ttf"/>
+    </family>
+
+    <family name="Lucida Sans Unicode">
+         <font ttf="C:\WINDOWS\Fonts\lsansuni.ttf"/>
+    </family>
+
+    <!-- Math variant definitions -->
+    <!-- Serif -->
+    <mathvariant name="normal"
+                 family="Times New Roman, Lucida Sans Unicode"/>                 
+    <mathvariant name="bold"
+                 family="Times New Roman, Lucida Sans Unicode" weight="bold"/>
+    <mathvariant name="italic"
+                 family="Times New Roman, Lucida Sans Unicode" style="italic"/>
+    <mathvariant name="bold-italic"
+                 family="Times New Roman, Lucida Sans Unicode" weight="bold" style="italic"/>
+
+    <!-- Sans-Serif -->
+    <mathvariant name="sans-serif"
+                 family="Arial, Lucida Sans Unicode"/>                 
+    <mathvariant name="bold-sans-serif"
+                 family="Arial, Lucida Sans Unicode" weight="bold"/>
+    <mathvariant name="sans-serif-italic"
+                 family="Arial, Lucida Sans Unicode" style="italic"/>
+    <mathvariant name="sans-serif-bold-italic"
+                 family="Arial, Lucida Sans Unicode" weight="bold" style="italic"/>
+
+    <!-- Fraktur -->
+    <mathvariant name="fraktur" 
+                 family="Euclid Fraktur, Lucida Sans Unicode"/>
+    <mathvariant name="bold-fraktur" 
+                 family="Euclid Fraktur, Lucida Sans Unicode" weight="bold"/>
+
+    <!-- Script -->
+    <mathvariant name="script" 
+                 family="Monotype Corsiva, Lucida Sans Unicode"/>
+    <mathvariant name="bold-script" 
+                 family="Monotype Corsiva, Lucida Sans Unicode" weight="bold"/>
+
+    <!-- Monospace -->
+    <mathvariant name="monospace" family="Courier New, Lucida Sans Unicode"/>
+
+    <!-- Double-struck -->
+    <mathvariant name="double-struck" family="Lucida Sans Unicode"/>
+</config>
+
