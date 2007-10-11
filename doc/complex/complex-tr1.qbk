@@ -1,5 +1,5 @@
 [article Complex Number TR1 Algorithms
-    [quickbook 1.3]
+    [quickbook 1.4]
     [copyright 2005 John Maddock]
     [purpose Complex number arithmetic]
     [license
@@ -18,12 +18,13 @@
 [def __exm1 '''<code>e<superscript>x</superscript> - 1</code>''']
 [def __ex '''<code>e<superscript>x</superscript></code>''']
 [def __te '''2&#x03B5;''']
+[template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
 
 [section:inverse_complex Complex Number Inverse Trigonometric Functions]
 
 The following complex number algorithms are the inverses of trigonometric functions currently
 present in the C++ standard.  Equivalents to these functions are part of the C99 standard, and
-will be part of the forthcoming Technical Report on C++ Standard Library Extensions.
+are part of the [tr1].
 
 [section:implementation Implementation and Accuracy]
 

@@ -1,5 +1,5 @@
 [article Boost.Math
-    [quickbook 1.3]
+    [quickbook 1.4]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
@@ -24,7 +24,7 @@
 [def __oct_complex_formula ['[^o = ('''&#x03B1; + &#x03B2;i) + (&#x03B3; + &#x03B4;i)j + (&#x03B5; + &#x03B6;i)e' + (&#x03B7; - &#x03B8;i)j' ''']]]
 [def __oct_quat_formula ['[^o = ('''&#x03B1; + &#x03B2;i + &#x03B3;j + &#x03B4;k) + (&#x03B5; + &#x03B6;i + &#x03B7;j - &#x03B8;j)e' ''']]]
 [def __oct_not_equal ['[^x(yz) '''&#x2260;''' (xy)z]]]
-
+[template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
 
 The following mathematical libraries are present in Boost:
 
@@ -35,7 +35,7 @@ The following mathematical libraries are present in Boost:
    [
 These complex number algorithms are the inverses of trigonometric functions currently
 present in the C++ standard.  Equivalents to these functions are part of the C99 standard, and
-will be part of the forthcoming Technical Report on C++ Standard Library Extensions.
+are part of the [tr1].
    ]]
    
    [[[@../gcd/html/index.html Greatest Common Divisor and Least Common Multiple]]
