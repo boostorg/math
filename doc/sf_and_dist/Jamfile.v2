@@ -13,11 +13,11 @@ boostbook standalone
         math
     :
         # Path for links to Boost:
-        <xsl:param>boost.root=$(boost-root)
+        <xsl:param>boost.root=../../../../../../../trunk
         # Path for libraries index:
         <xsl:param>boost.libraries=$(boost-root)/libs/libraries.htm
         # Use the main Boost stylesheet:
-        <xsl:param>html.stylesheet=../../../../../../trunk/doc/html/boostbook.css
+        #<xsl:param>html.stylesheet=$(boost-root)/doc/html/boostbook.css
         
         # Some general style settings:
         <xsl:param>table.footnote.number.format=1
@@ -63,6 +63,10 @@ boostbook standalone
         <format>pdf:<xsl:param>img.src.path=$(images_location)/
         <format>pdf:<xsl:param>admon.graphics.path=$(images_location)/images/
     ;
+
+
+
+
 
 
 
