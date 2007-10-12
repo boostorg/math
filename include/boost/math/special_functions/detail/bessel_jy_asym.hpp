@@ -233,10 +233,10 @@ template <class T, class Policy>
 void temme_asyptotic_y_small_x(T v, T x, T* Y, T* Y1, const Policy& pol)
 {
    T c = 1;
-   T p = (v / sin_pi(v, pol)) * pow(x / 2, -v) / tgamma(1 - v, pol);
-   T q = (v / sin_pi(v, pol)) * pow(x / 2, v) / tgamma(1 + v, pol);
+   T p = (v / boost::math::sin_pi(v, pol)) * pow(x / 2, -v) / boost::math::tgamma(1 - v, pol);
+   T q = (v / boost::math::sin_pi(v, pol)) * pow(x / 2, v) / boost::math::tgamma(1 + v, pol);
    T f = (p - q) / v;
-   T g_prefix = sin_pi(v / 2, pol);
+   T g_prefix = boost::math::sin_pi(v / 2, pol);
    g_prefix *= g_prefix * 2 / v;
    T g = f + g_prefix * q;
    T h = p;

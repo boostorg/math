@@ -457,6 +457,7 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
+   BOOST_MATH_CONTROL_FP;
    // Check that can generate beta distribution using one convenience methods:
    beta_distribution<> mybeta11(1., 1.); // Using default RealType double.
    // but that

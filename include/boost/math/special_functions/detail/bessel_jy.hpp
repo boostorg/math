@@ -43,8 +43,8 @@ int temme_jy(T v, T x, T* Y, T* Y1, const Policy& pol)
 
     T gp = boost::math::tgamma1pm1(v, pol);
     T gm = boost::math::tgamma1pm1(-v, pol);
-    T spv = sin_pi(v, pol);
-    T spv2 = sin_pi(v/2, pol);
+    T spv = boost::math::sin_pi(v, pol);
+    T spv2 = boost::math::sin_pi(v/2, pol);
     T xp = pow(x/2, v);
 
     a = log(x / 2);
@@ -342,8 +342,8 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
     if (reflect)
     {
         T z = (u + n % 2);
-        *J = cos_pi(z, pol) * Jv - sin_pi(z, pol) * Yv;     // reflection formula
-        *Y = sin_pi(z, pol) * Jv + cos_pi(z, pol) * Yv;
+        *J = boost::math::cos_pi(z, pol) * Jv - boost::math::sin_pi(z, pol) * Yv;     // reflection formula
+        *Y = boost::math::sin_pi(z, pol) * Jv + boost::math::cos_pi(z, pol) * Yv;
     }
     else
     {

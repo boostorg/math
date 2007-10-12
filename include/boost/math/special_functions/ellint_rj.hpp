@@ -87,10 +87,10 @@ T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
        BOOST_ASSERT(pmy >= 0);
 
        T p = pmy + y;
-       value = ellint_rj(x, y, z, p, pol);
+       value = boost::math::ellint_rj(x, y, z, p, pol);
        value *= pmy;
-       value -= 3 * ellint_rf(x, y, z, pol);
-       value += 3 * sqrt((x * y * z) / (x * z + p * q)) * ellint_rc(x * z + p * q, p * q, pol);
+       value -= 3 * boost::math::ellint_rf(x, y, z, pol);
+       value += 3 * sqrt((x * y * z) / (x * z + p * q)) * boost::math::ellint_rc(x * z + p * q, p * q, pol);
        value /= (y + q);
        return value;
     }
@@ -118,7 +118,7 @@ T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
         alpha = p * (sx + sy + sz) + sx * sy * sz;
         alpha *= alpha;
         beta = p * (p + lambda) * (p + lambda);
-        sigma += factor * ellint_rc(alpha, beta, pol);
+        sigma += factor * boost::math::ellint_rc(alpha, beta, pol);
         factor /= 4;
         x = (x + lambda) / 4;
         y = (y + lambda) / 4;

@@ -75,9 +75,9 @@ T relative_error(T a, T b)
    if((a != 0) && (b != 0))
    {
       // TODO: use isfinite:
-      if(b > max_val)
+      if(fabs(b) >= max_val)
       {
-         if(a > max_val)
+         if(fabs(a) >= max_val)
             return 0;  // one infinity is as good as another!
       }
       // If the result is denormalised, treat all denorms as equivalent:

@@ -9,9 +9,8 @@
 #include <boost/math/special_functions/sqrt1pm1.hpp>
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/tools/test.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
 #include <boost/array.hpp>
+#include "functor.hpp"
 
 #include "handle_test_result.hpp"
 
@@ -1613,7 +1612,6 @@ void test_powm1_sqrtp1m1(T, const char* type_name)
 #undef SC_
 
 
-   using namespace boost::lambda;
    using namespace std;
 
    typedef T (*func_t)(const T&);
@@ -1621,25 +1619,26 @@ void test_powm1_sqrtp1m1(T, const char* type_name)
 
    boost::math::tools::test_result<T> result = boost::math::tools::test(
       sqrtp1m1_data, 
-      bind(f, ret<T>(_1[0])), 
-      ret<T>(_1[1]));
+      bind_func(f, 0), 
+      extract_result(1));
 
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
       "Test results for type " << type_name << std::endl << std::endl;
    handle_test_result(result, sqrtp1m1_data[result.worst()], result.worst(), type_name, "boost::math::sqrt1pm1", "sqrt1pm1");
 
    typedef T (*func2_t)(T const, T const);
-   func2_t f2 = &boost::math::powm1<T>;
+   func2_t f2 = &boost::math::powm1<T,T>;
    result = boost::math::tools::test(
       powm1_data, 
-      bind(f2, ret<T>(_1[0]), ret<T>(_1[1])), 
-      ret<T>(_1[2]));
+      bind_func(f2, 0, 1), 
+      extract_result(2));
    handle_test_result(result, powm1_data[result.worst()], result.worst(), type_name, "boost::math::powm1", "powm1");
 }
 
 int test_main(int, char* [])
 {
    expected_results();
+   BOOST_MATH_CONTROL_FP;
    test_powm1_sqrtp1m1(1.0F, "float");
    test_powm1_sqrtp1m1(1.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

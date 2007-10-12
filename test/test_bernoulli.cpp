@@ -209,6 +209,7 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
+   BOOST_MATH_CONTROL_FP;
 	// Check that can generate bernoulli distribution using both convenience methods:
 	bernoulli_distribution<double> bn1(0.5); // Using default RealType double.
 	boost::math::bernoulli bn2(0.5); // Using typedef. 

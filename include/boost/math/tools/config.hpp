@@ -29,6 +29,8 @@
 //
 #  define BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#  define BOOST_MATH_CONTROL_FP _control87(MCW_EM,MCW_EM)
+#  include <float.h>
 #endif
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
 //
@@ -81,6 +83,12 @@
 //
 #ifndef BOOST_MATH_INT_TABLE_TYPE
 #  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
+#endif
+//
+// Helper macro for controlling the FP behaviour:
+//
+#ifndef BOOST_MATH_CONTROL_FP
+#  define BOOST_MATH_CONTROL_FP
 #endif
 //
 // Helper macro for using statements:

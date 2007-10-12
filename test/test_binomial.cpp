@@ -692,6 +692,7 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
+   BOOST_MATH_CONTROL_FP;
 	// Check that can generate binomial distribution using one convenience methods:
 	binomial_distribution<> mybn2(1., 0.5); // Using default RealType double.
   // but that

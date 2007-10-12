@@ -14,10 +14,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
-#endif
+#include "functor.hpp"
 
 #include "test_beta_hooks.hpp"
 #include "handle_test_result.hpp"
@@ -116,7 +113,6 @@ void expected_results()
 template <class T>
 void do_test_beta(const T& data, const char* type_name, const char* test_name)
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -133,25 +129,20 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
    //
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func(funcp, 0, 1), 
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::beta", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::beta;
       result = boost::math::tools::test(
          data, 
-         boost::lambda::bind(funcp, 
-            boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-            boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-         boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+         bind_func(funcp, 0, 1), 
+         extract_result(2));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::beta");
    }
 #endif
    std::cout << std::endl;
-#endif
 }
 template <class T>
 void test_beta(T, const char* name)
@@ -196,6 +187,7 @@ void test_spots(T)
 int test_main(int, char* [])
 {
    expected_results();
+   BOOST_MATH_CONTROL_FP;
    test_spots(0.0F);
    test_spots(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

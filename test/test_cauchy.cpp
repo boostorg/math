@@ -714,6 +714,7 @@ void test_spots(RealType T)
 
 int test_main(int, char* [])
 {
+    BOOST_MATH_CONTROL_FP;
 	// Check that can generate cauchy distribution using the two convenience methods:
 	boost::math::cauchy mycd1(1.); // Using typedef
 	cauchy_distribution<> mycd2(1.); // Using default RealType double.

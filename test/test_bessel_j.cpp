@@ -9,8 +9,7 @@
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
+#include "functor.hpp"
 
 #include "handle_test_result.hpp"
 #include "test_bessel_hooks.hpp"
@@ -255,10 +254,8 @@ void do_test_cyl_bessel_j(const T& data, const char* type_name, const char* test
    //
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func(funcp, 0, 1), 
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_j", test_name);
    std::cout << std::endl;
 
@@ -272,10 +269,8 @@ void do_test_cyl_bessel_j(const T& data, const char* type_name, const char* test
       //
       result = boost::math::tools::test(
          data, 
-         boost::lambda::bind(funcp, 
-            boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-            boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-         boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+         bind_func(funcp, 0, 1), 
+         extract_result(2));
       handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::cyl_bessel_j", test_name);
       std::cout << std::endl;
    }
@@ -308,10 +303,8 @@ void do_test_cyl_bessel_j_int(const T& data, const char* type_name, const char* 
    //
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func(funcp, 0, 1), 
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_j", test_name);
    std::cout << std::endl;
 }
@@ -326,7 +319,6 @@ void do_test_sph_bessel_j(const T& data, const char* type_name, const char* test
    pg funcp = boost::math::sph_bessel;
 
    typedef int (*cast_t)(value_type);
-   cast_t rc = &boost::math::tools::real_cast<int, value_type>;
 
    boost::math::tools::test_result<value_type> result;
 
@@ -338,13 +330,8 @@ void do_test_sph_bessel_j(const T& data, const char* type_name, const char* test
    //
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<int>(
-            boost::lambda::bind(
-            rc,
-            boost::lambda::ret<value_type>(boost::lambda::_1[0]))),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func_int1(funcp, 0, 1), 
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::sph_bessel", test_name);
    std::cout << std::endl;
 }
@@ -472,6 +459,7 @@ int test_main(int, char* [])
    gsl_set_error_handler_off();
 #endif
    expected_results();
+   BOOST_MATH_CONTROL_FP;
 
    test_bessel(0.1F, "float");
    test_bessel(0.1, "double");
