@@ -14,10 +14,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
-#endif
+#include "functor.hpp"
 
 #include "test_gamma_hooks.hpp"
 #include "handle_test_result.hpp"
@@ -310,14 +307,11 @@ void expected_results()
 template <class T>
 void do_test_gamma_2(const T& data, const char* type_name, const char* test_name)
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
    pg funcp = boost::math::tgamma;
-
-   using namespace boost::lambda;
 
    boost::math::tools::test_result<value_type> result;
 
@@ -331,8 +325,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    {
       result = boost::math::tools::test(
          data,
-         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
-         ret<value_type>(_1[2]));
+         bind_func(funcp, 0, 1),
+         extract_result(2));
       handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma", test_name);
       //
       // test tgamma_lower(T, T) against data:
@@ -340,8 +334,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       funcp = boost::math::tgamma_lower;
       result = boost::math::tools::test(
          data,
-         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
-         ret<value_type>(_1[4]));
+         bind_func(funcp, 0, 1),
+         extract_result(4));
       handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_lower", test_name);
    }
    //
@@ -350,8 +344,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    funcp = boost::math::gamma_q;
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
-      ret<value_type>(_1[3]));
+      bind_func(funcp, 0, 1),
+      extract_result(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_q", test_name);
 #if defined(TEST_CEPHES) || defined(TEST_GSL)
    //
@@ -362,8 +356,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       funcp = other::gamma_q;
       result = boost::math::tools::test(
          data,
-         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
-         ret<value_type>(_1[3]));
+         bind_func(funcp, 0, 1),
+         extract_result(3));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_q");
    }
 #endif
@@ -373,8 +367,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    funcp = boost::math::gamma_p;
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
-      ret<value_type>(_1[5]));
+      bind_func(funcp, 0, 1),
+      extract_result(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_p", test_name);
 #if defined(TEST_CEPHES) || defined(TEST_GSL)
    //
@@ -385,13 +379,12 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       funcp = other::gamma_p;
       result = boost::math::tools::test(
          data,
-         bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
-         ret<value_type>(_1[5]));
+         bind_func(funcp, 0, 1),
+         extract_result(5));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_p");
    }
 #endif
    std::cout << std::endl;
-#endif
 }
 
 template <class T>
@@ -472,6 +465,7 @@ void test_spots(T)
 int test_main(int, char* [])
 {
    expected_results();
+   BOOST_MATH_CONTROL_FP;
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
    test_spots(0.0F);

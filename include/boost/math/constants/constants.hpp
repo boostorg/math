@@ -7,7 +7,7 @@
 #ifndef BOOST_MATH_CONSTANTS_CONSTANTS_INCLUDED
 #define BOOST_MATH_CONSTANTS_CONSTANTS_INCLUDED
 
-#include <boost/config.hpp>
+#include <boost/math/tools/config.hpp>
 #ifdef BOOST_MSVC
 #pragma warning(push)
 #pragma warning(disable: 4127 4701)
@@ -37,16 +37,16 @@ namespace boost{ namespace math
 
 
   #define BOOST_DEFINE_MATH_CONSTANT(name, x, y, exp)\
-   template <class T> inline T name(BOOST_EXPLICIT_TEMPLATE_TYPE(T))\
+   template <class T> inline T name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))\
    {\
       static const T result = ::boost::lexical_cast<T>(BOOST_STRINGIZE(BOOST_JOIN(BOOST_JOIN(x, y), BOOST_JOIN(e, exp))));\
       return result;\
    }\
-   template <> inline float name<float>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(float))\
+   template <> inline float name<float>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(float))\
    { return BOOST_JOIN(BOOST_JOIN(x, BOOST_JOIN(e, exp)), F); }\
-   template <> inline double name<double>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(double))\
+   template <> inline double name<double>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(double))\
    { return BOOST_JOIN(x, BOOST_JOIN(e, exp)); }\
-   template <> inline long double name<long double>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(long double))\
+   template <> inline long double name<long double>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(long double))\
    { return BOOST_JOIN(BOOST_JOIN(x, BOOST_JOIN(e, exp)), L); }
 
   BOOST_DEFINE_MATH_CONSTANT(pi, 3.141592653589793238462643383279502884197169399375105820974944, 59230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196, 0)

@@ -12,10 +12,7 @@
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/array.hpp>
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
-#endif
+#include "functor.hpp"
 
 #include "handle_test_result.hpp"
 
@@ -114,10 +111,18 @@ void expected_results()
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
+struct negative_tgamma_ratio
+{
+   template <class Row>
+   typename Row::value_type operator()(const Row& row)
+   {
+      return boost::math::tgamma_delta_ratio(row[0], -row[1]);
+   }
+};
+
 template <class T>
 void do_test_tgamma_delta_ratio(const T& data, const char* type_name, const char* test_name)
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -134,19 +139,14 @@ void do_test_tgamma_delta_ratio(const T& data, const char* type_name, const char
    //
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func(funcp, 0, 1), 
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_delta_ratio(a, delta)", test_name);
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-         -boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[3]));
+      negative_tgamma_ratio(), 
+      extract_result(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_delta_ratio(a -delta)", test_name);
-#endif
 }
 
 template <class T>
@@ -168,10 +168,8 @@ void do_test_tgamma_ratio(const T& data, const char* type_name, const char* test
    //
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func(funcp, 0, 1), 
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_ratio(a, b)", test_name);
 }
 
@@ -201,6 +199,7 @@ void test_tgamma_ratio(T, const char* name)
 
 int test_main(int, char* [])
 {
+   BOOST_MATH_CONTROL_FP;
    expected_results();
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS

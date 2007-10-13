@@ -286,6 +286,7 @@ void test_spots(T)
 
 int test_main(int, char* [])
 {
+   BOOST_MATH_CONTROL_FP;
    test_spots(0.0F);
    test_spots(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

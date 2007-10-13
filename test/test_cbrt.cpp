@@ -58,6 +58,17 @@ void expected_results()
       ".*", 10, 6);                 // test function
 }
 
+struct negative_cbrt
+{
+   negative_cbrt(){}
+
+   template <class S>
+   typename S::value_type operator()(const S& row)
+   {
+      return boost::math::cbrt(-row[1]);
+   }
+};
+
 
 template <class T>
 void do_test_cbrt(const T& data, const char* type_name, const char* test_name)
@@ -82,7 +93,7 @@ void do_test_cbrt(const T& data, const char* type_name, const char* test_name)
       extract_result(0));
    result += boost::math::tools::test(
       data, 
-      negate(bind_func(funcp, 1)), 
+      negative_cbrt(), 
       negate(extract_result(0)));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cbrt", test_name);
    std::cout << std::endl;

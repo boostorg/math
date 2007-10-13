@@ -12,10 +12,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
-#endif
+#include "functor.hpp"
 
 #ifdef TEST_GSL
 #include <gsl/gsl_errno.h>
@@ -176,14 +173,11 @@ void test_inverses(const T& data)
 template <class T>
 void test_inverses2(const T& data, const char* type_name, const char* test_name)
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type, value_type);
    pg funcp = boost::math::ibeta_inva;
-
-   using namespace boost::lambda;
 
    boost::math::tools::test_result<value_type> result;
 
@@ -195,8 +189,8 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
    //
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
-      ret<value_type>(_1[3]));
+      bind_func(funcp, 0, 1, 2),
+      extract_result(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibeta_inva", test_name);
    //
    // test ibetac_inva(T, T, T) against data:
@@ -204,8 +198,8 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
    funcp = boost::math::ibetac_inva;
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
-      ret<value_type>(_1[4]));
+      bind_func(funcp, 0, 1, 2),
+      extract_result(4));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibetac_inva", test_name);
    //
    // test ibeta_invb(T, T, T) against data:
@@ -213,8 +207,8 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
    funcp = boost::math::ibeta_invb;
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
-      ret<value_type>(_1[5]));
+      bind_func(funcp, 0, 1, 2),
+      extract_result(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibeta_invb", test_name);
    //
    // test ibetac_invb(T, T, T) against data:
@@ -222,10 +216,9 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
    funcp = boost::math::ibetac_invb;
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
-      ret<value_type>(_1[6]));
+      bind_func(funcp, 0, 1, 2),
+      extract_result(6));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibetac_invb", test_name);
-#endif
 }
 
 template <class T>

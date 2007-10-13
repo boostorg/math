@@ -18,10 +18,7 @@
 #include <boost/math/special_functions/hermite.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/array.hpp>
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
-#endif
+#include "functor.hpp"
 
 #include "handle_test_result.hpp"
 #include "test_legendre_hooks.hpp"
@@ -98,7 +95,6 @@ void expected_results()
 template <class T>
 void do_test_hermite(const T& data, const char* type_name, const char* test_name)
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -106,7 +102,6 @@ void do_test_hermite(const T& data, const char* type_name, const char* test_name
    pg funcp = boost::math::hermite;
 
    typedef unsigned (*cast_t)(value_type);
-   cast_t rc = &boost::math::tools::real_cast<unsigned, value_type>;
 
    boost::math::tools::test_result<value_type> result;
 
@@ -118,17 +113,11 @@ void do_test_hermite(const T& data, const char* type_name, const char* test_name
    //
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<int>(
-            boost::lambda::bind(
-            rc,
-            boost::lambda::ret<value_type>(boost::lambda::_1[0]))),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func_int1(funcp, 0, 1), 
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::hermite", test_name);
 
    std::cout << std::endl;
-#endif
 }
 
 template <class T>
@@ -177,6 +166,10 @@ void test_spots(T, const char* t)
 
 int test_main(int, char* [])
 {
+   BOOST_MATH_CONTROL_FP;
+
+   boost::math::hermite(51, 915.0);
+
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
    test_spots(0.0F, "float");
 #endif

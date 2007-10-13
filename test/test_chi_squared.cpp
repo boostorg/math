@@ -523,6 +523,7 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
+   BOOST_MATH_CONTROL_FP;
  	// Check that can generate chi_squared distribution using the two convenience methods:
   chi_squared_distribution<> mychisqr(8);
   chi_squared mychisqr2(8);
@@ -532,9 +533,11 @@ int test_main(int, char* [])
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float.
   test_spots(0.0); // Test double.
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+#endif
 #endif
   return 0;
 } // int test_main(int, char* [])

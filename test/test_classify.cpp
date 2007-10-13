@@ -114,6 +114,7 @@ void test_classify(T t, const char* type)
 
 int test_main(int, char* [] )
 {
+   BOOST_MATH_CONTROL_FP;
    // start by printing some information:
 #ifdef isnan
    std::cout << "Platform has isnan macro." << std::endl;

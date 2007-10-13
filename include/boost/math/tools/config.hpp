@@ -40,6 +40,43 @@
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
 
+#if defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
+
+#  include "boost/type.hpp"
+#  include "boost/non_type.hpp"
+
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)         boost::type<t>* = 0
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(t)    boost::type<t>*
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE(t, v)  boost::non_type<t, v>* = 0
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)  boost::non_type<t, v>*
+
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(t)         \
+             , BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(t)    \
+             , BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(t)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(t, v)  \
+             , BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE(t, v)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)  \
+             , BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)
+
+#else
+
+// no workaround needed: expand to nothing
+
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(t)
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE(t, v)
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)
+
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(t)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(t)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(t, v)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)
+
+
+#endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+
+
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1400)
 //
 // Define if constants too large for a float cause "bad"

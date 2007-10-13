@@ -35,7 +35,7 @@ namespace boost{ namespace math{
 namespace tools{
 
 template <class T>
-int digits(BOOST_EXPLICIT_TEMPLATE_TYPE(T));
+int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T));
 
 }
 

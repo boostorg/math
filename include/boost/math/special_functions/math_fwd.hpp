@@ -329,7 +329,7 @@ namespace boost
    template <class RT, class Policy>
    RT factorial(unsigned int, const Policy& pol);
    template <class RT>
-   RT unchecked_factorial(unsigned int); 
+   RT unchecked_factorial(unsigned int BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(RT)); 
    template <class RT>
    RT double_factorial(unsigned i);
    template <class RT, class Policy>

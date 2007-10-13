@@ -131,6 +131,57 @@ inline row_binder2_i1<F> bind_func_int1(F f, unsigned i, unsigned j)
 }
 
 template <class F>
+struct row_binder3_i2
+{
+   row_binder3_i2(F _f, unsigned i, unsigned j, unsigned k) : f(_f), m_i(i), m_j(j), m_k(k) {}
+
+   template <class S>
+   typename S::value_type operator()(const S& row)
+   {
+      return f(
+         boost::math::tools::real_cast<int>(row[m_i]), 
+         boost::math::tools::real_cast<int>(row[m_j]),
+         row[m_k]);
+   }
+
+private:
+   F f;
+   unsigned m_i, m_j, m_k;
+};
+
+template<class F>
+inline row_binder3_i2<F> bind_func_int2(F f, unsigned i, unsigned j, unsigned k)
+{
+   return row_binder3_i2<F>(f, i, j, k);
+}
+
+template <class F>
+struct row_binder4_i2
+{
+   row_binder4_i2(F _f, unsigned i, unsigned j, unsigned k, unsigned l) : f(_f), m_i(i), m_j(j), m_k(k), m_l(l) {}
+
+   template <class S>
+   typename S::value_type operator()(const S& row)
+   {
+      return f(
+         boost::math::tools::real_cast<int>(row[m_i]), 
+         boost::math::tools::real_cast<int>(row[m_j]),
+         row[m_k],
+         row[m_l]);
+   }
+
+private:
+   F f;
+   unsigned m_i, m_j, m_k, m_l;
+};
+
+template<class F>
+inline row_binder4_i2<F> bind_func_int2(F f, unsigned i, unsigned j, unsigned k, unsigned l)
+{
+   return row_binder4_i2<F>(f, i, j, k, l);
+}
+
+template <class F>
 struct negate_type
 {
    negate_type(F f) : m_f(f){}

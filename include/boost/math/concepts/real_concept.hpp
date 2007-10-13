@@ -55,7 +55,7 @@ public:
    real_concept(int c) : m_value(c){}
    real_concept(unsigned long c) : m_value(c){}
    real_concept(long c) : m_value(c){}
-#if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX)
+#if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX) || defined(__SUNPRO_CC)
    real_concept(unsigned long long c) : m_value(static_cast<long double>(c)){}
    real_concept(long long c) : m_value(static_cast<long double>(c)){}
 #elif defined(BOOST_HAS_MS_INT64)
@@ -226,8 +226,13 @@ inline real_concept tan(real_concept a)
 { return std::tan(a.value()); }
 inline real_concept pow(real_concept a, real_concept b)
 { return std::pow(a.value(), b.value()); }
+#if !defined(__SUNPRO_CC)
 inline real_concept pow(real_concept a, int b)
 { return std::pow(a.value(), b); }
+#else
+inline real_concept pow(real_concept a, int b)
+{ return std::pow(a.value(), static_cast<long double>(b)); }
+#endif
 inline real_concept sin(real_concept a)
 { return std::sin(a.value()); }
 inline real_concept sinh(real_concept a)
@@ -305,31 +310,31 @@ inline long double real_cast<long double, concepts::real_concept>(concepts::real
 }
 
 template <>
-inline concepts::real_concept max_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return max_value<long double>();
 }
 
 template <>
-inline concepts::real_concept min_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return min_value<long double>();
 }
 
 template <>
-inline concepts::real_concept log_max_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept log_max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return log_max_value<long double>();
 }
 
 template <>
-inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return log_min_value<long double>();
 }
 
 template <>
-inline concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
 #ifdef __SUNPRO_CC
    return std::numeric_limits<long double>::epsilon();
@@ -339,7 +344,7 @@ inline concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts
 }
 
 template <>
-inline int digits<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 { 
    // Assume number of significand bits is same as long double,
    // unless std::numeric_limits<T>::is_specialized to provide digits.

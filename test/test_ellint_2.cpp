@@ -16,8 +16,7 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/ellint_2.hpp>
 #include <boost/array.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
+#include "functor.hpp"
 
 #include "handle_test_result.hpp"
 //
@@ -103,10 +102,8 @@ void do_test_ellint_e2(const T& data, const char* type_name, const char* test)
 
     result = boost::math::tools::test(
       data,
-      boost::lambda::bind(fp2,
-         boost::lambda::ret<value_type>(boost::lambda::_1[1]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[0])),
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func(fp2, 1, 0),
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "boost::math::ellint_2", test);
 
@@ -125,9 +122,8 @@ void do_test_ellint_e1(T& data, const char* type_name, const char* test)
    value_type (*fp1)(value_type) = boost::math::ellint_2;
    result = boost::math::tools::test(
       data,
-      boost::lambda::bind(fp1,
-         boost::lambda::ret<value_type>(boost::lambda::_1[0])),
-      boost::lambda::ret<value_type>(boost::lambda::_1[1]));
+      bind_func(fp1, 0),
+      extract_result(1));
    handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "boost::math::ellint_2", test);
 
@@ -187,6 +183,7 @@ void test_spots(T, const char* type_name)
 int test_main(int, char* [])
 {
     expected_results();
+    BOOST_MATH_CONTROL_FP;
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
     test_spots(0.0F, "float");
 #endif

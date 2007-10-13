@@ -300,37 +300,37 @@ inline long double real_cast<long double, concepts::std_real_concept>(concepts::
 }
 
 template <>
-inline concepts::std_real_concept max_value<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept max_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
    return max_value<long double>();
 }
 
 template <>
-inline concepts::std_real_concept min_value<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept min_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
    return min_value<long double>();
 }
 
 template <>
-inline concepts::std_real_concept log_max_value<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept log_max_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
    return log_max_value<long double>();
 }
 
 template <>
-inline concepts::std_real_concept log_min_value<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept log_min_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
    return log_min_value<long double>();
 }
 
 template <>
-inline concepts::std_real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
    return tools::epsilon<long double>();
 }
 
 template <>
-inline int digits<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline int digits<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 { // Assume number of significand bits is same as long double,
   // unless std::numeric_limits<T>::is_specialized to provide digits.
    return digits<long double>();

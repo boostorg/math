@@ -16,18 +16,17 @@
 #pragma warning(pop)
 #endif
 #include <cmath>
+#include <boost/math/special_functions/math_fwd.hpp>
 
 namespace boost { namespace math
 {
 // Forward declarations:
 template <class T>
-T unchecked_factorial(unsigned i);
-template <class T>
 struct max_factorial;
 
 // efinitions:
 template <>
-inline float unchecked_factorial<float>(unsigned i)
+inline float unchecked_factorial<float>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
 {
    static const boost::array<float, 35> factorials = {{
       1.0F,
@@ -78,7 +77,7 @@ struct max_factorial<float>
 
 
 template <>
-inline long double unchecked_factorial<long double>(unsigned i)
+inline long double unchecked_factorial<long double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(long double))
 {
    static const boost::array<long double, 171> factorials = {{
       1L,
@@ -264,9 +263,9 @@ struct max_factorial<long double>
 };
 
 template <>
-inline double unchecked_factorial(unsigned i)
+inline double unchecked_factorial(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
 {
-   return static_cast<double>(unchecked_factorial<long double>(i));
+   return static_cast<double>(boost::math::unchecked_factorial<long double>(i));
 }
 
 template <>
@@ -277,7 +276,7 @@ struct max_factorial<double>
 };
 
 template <class T>
-inline T unchecked_factorial(unsigned i)
+inline T unchecked_factorial(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))
 {
    static const boost::array<T, 101> factorials = {{
       boost::lexical_cast<T>("1"),
