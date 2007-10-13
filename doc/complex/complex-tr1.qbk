@@ -55,7 +55,7 @@ on the implementation methodology.
    
 __effects returns the inverse sine of the complex number z.
 
-__formula [$../../libs/math/doc/images/asin.png]
+__formula [$../../images/asin.png]
 
 [endsect]
 
@@ -72,7 +72,7 @@ __formula [$../../libs/math/doc/images/asin.png]
    
 __effects returns the inverse cosine of the complex number z.
 
-__formula [$../../libs/math/doc/images/acos.png]
+__formula [$../../images/acos.png]
 
 [endsect]
 
@@ -89,7 +89,7 @@ __formula [$../../libs/math/doc/images/acos.png]
    
 __effects returns the inverse tangent of the complex number z.
 
-__formula [$../../libs/math/doc/images/atan.png]
+__formula [$../../images/atan.png]
 
 [endsect]
 
@@ -106,7 +106,7 @@ __formula [$../../libs/math/doc/images/atan.png]
    
 __effects returns the inverse hyperbolic sine of the complex number z.
 
-__formula [$../../libs/math/doc/images/asinh.png]
+__formula [$../../images/asinh.png]
 
 [endsect]
 
@@ -123,7 +123,7 @@ __formula [$../../libs/math/doc/images/asinh.png]
    
 __effects returns the inverse hyperbolic cosine of the complex number z.
 
-__formula [$../../libs/math/doc/images/acosh.png]
+__formula [$../../images/acosh.png]
 
 [endsect]
 
@@ -140,7 +140,7 @@ __formula [$../../libs/math/doc/images/acosh.png]
    
 __effects returns the inverse hyperbolic tangent of the complex number z.
 
-__formula [$../../libs/math/doc/images/atanh.png]
+__formula [$../../images/atanh.png]
 
 [endsect]
 
@@ -153,5 +153,6 @@ __formula [$../../libs/math/doc/images/atanh.png]
 [endsect]
 
 [endsect]
+
 
 
