@@ -13,6 +13,11 @@
 //
 #include "test_compile_result.hpp"
 
+inline void check_result_imp(std::complex<float>, std::complex<float>){}
+inline void check_result_imp(std::complex<double>, std::complex<double>){}
+inline void check_result_imp(std::complex<long double>, std::complex<long double>){}
+
+
 void check()
 {
    check_result<std::complex<float> >(boost::math::spherical_harmonic<float>(u, i, f, f));

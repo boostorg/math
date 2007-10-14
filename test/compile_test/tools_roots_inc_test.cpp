@@ -13,6 +13,10 @@
 //
 #include "test_compile_result.hpp"
 
+inline void check_result_imp(std::pair<float, float>, std::pair<float, float>){}
+inline void check_result_imp(std::pair<double, double>, std::pair<double, double>){}
+inline void check_result_imp(std::pair<long double, long double>, std::pair<long double, long double>){}
+
 void check()
 {
    typedef double (*F)(double);

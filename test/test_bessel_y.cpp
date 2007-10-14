@@ -153,13 +153,6 @@ void expected_results()
       largest_type,                  // test type(s)
       "Y[0N] Mathworld.*",              // test data group
       ".*", 2000, 2000);         // test function
-   add_expected_result(
-      "GNU.*",                          // compiler
-      ".*",                          // stdlib
-      "Sun.*",                          // platform
-      largest_type,                  // test type(s)
-      "Y[0N].*",              // test data group
-      ".*", 200, 200);         // test function
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if((std::numeric_limits<double>::digits != std::numeric_limits<long double>::digits)
@@ -206,6 +199,19 @@ void expected_results()
       largest_type,                  // test type(s)
       ".*(Y[nv]|y).*Random.*",           // test data group
       ".*", 1500, 1000);               // test function
+   //
+   // Fallback for sun has to go after the general cases above:
+   //
+   add_expected_result(
+      "GNU.*",                          // compiler
+      ".*",                          // stdlib
+      "Sun.*",                          // platform
+      largest_type,                  // test type(s)
+      "Y[0N].*",              // test data group
+      ".*", 200, 200);         // test function
+   //
+   // General fallback:
+   //
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

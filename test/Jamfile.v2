@@ -33,6 +33,8 @@ project
       <include>../../..
       <source>../../regex/build//boost_regex
       <link>shared:<define>BOOST_REGEX_DYN_LINK=1
+      # Sunpro has problems building regex as a shared lib:
+      <toolset>sun:<link>static
       <define>BOOST_ALL_NO_LIB=1
     ;
 
@@ -314,7 +316,7 @@ compile  compile_test/dist_cauchy_incl_test.cpp ;
 compile  compile_test/dist_chi_squared_incl_test.cpp ;
 compile  compile_test/dist_complement_incl_test.cpp ;
 compile  compile_test/dist_exponential_incl_test.cpp ;
-compile  compile_test/dist_extreme_value_incl_test.cpp ;
+compile  compile_test/dist_extreme_val_incl_test.cpp ;
 compile  compile_test/dist_fisher_f_incl_test.cpp ;
 compile  compile_test/dist_gamma_incl_test.cpp ;
 compile  compile_test/dist_lognormal_incl_test.cpp ;
@@ -374,7 +376,7 @@ compile  compile_test/tools_solve_inc_test.cpp ;
 compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
-compile  compile_test/tools_toms748_solve_inc_test.cpp ;
+compile  compile_test/tools_toms748_inc_test.cpp ;
 
 run ../test/common_factor_test.cpp
     ../../test/build//boost_unit_test_framework/<link>static ;
@@ -391,6 +393,8 @@ run ../quaternion/quaternion_mult_incl_test.cpp
     ../../test/build//boost_unit_test_framework/<link>static ;
 
 run complex_test.cpp ;
+
+
 
 
 

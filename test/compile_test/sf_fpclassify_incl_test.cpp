@@ -13,6 +13,8 @@
 //
 #include "test_compile_result.hpp"
 
+inline void check_result_imp(bool, bool){}
+
 void check()
 {
    check_result<int>(boost::math::fpclassify<float>(f));
