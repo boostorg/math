@@ -432,14 +432,22 @@ and a command such as:
 
 [pre java -jar 'C:\download\open\batik-1.7\batik-rasterizer.jar' -dpi 120 *.svg]
 
-The PDF is generated using:
+The PDF is generated into \pdf\math.pdf
+using a command from a shell or command window with current directory
+\math_toolkit\libs\math\doc\sf_and_dist, typically:
 
-[pre $bjam -a pdf xsl:param=admon.graphics.extension=".svg" \
->xsl:param=use.role.for.mediaobject=1 xsl:param=preferred.mediaobject.role=print]
+[pre bjam -a pdf]
 
 Note that XEP will have to be configured to *use and embed* 
-whatever fonts are used by the SVG equations.  JM's XEP
-config file [@../xep.xml looks like this].
+whatever fonts are used by the SVG equations
+(if necessary editing the sample xep.xml provided by the XEP installation). 
+
+(html is generated at math_toolkit\libs\math\doc\sf_and_dist\html\index.html
+using just bjam -a).
+
+JM's XEP config file [@../xep.xml looks like this].
+PAB had to alter his because the Lucida Sans Unicode font had a different name.
+Changes are very likely to be required if you are not using Windows.
 
 XZ authored his equations using the venerable Latex, JM converted these to
 MathML using [@http://gentoo-wiki.com/HOWTO_Convert_LaTeX_to_HTML_with_MathML mxlatex].
@@ -463,6 +471,20 @@ template defined in math.qbk.  This outputs Docbook XML that looks like:
 
 MathML is not currently present in the Docbook output, or in the 
 generated HTML: this needs further investigation.
+
+[h4 Producing Graphs]
+
+Graphs were mostly produced by a very laborious process entailing output 
+of columns of values from C++ programs to a .csv file,
+use of [@http://www.rjsweb.fsnet.co.uk/graph/ RJS Graph] to arrange the display and axes,
+and output to a .ps file, followed by conversion to .png using Adobe Photoshop,
+or similar utility.  This rigmarole is *not* recommended!
+
+We plan to carry out this process in a single step using the 
+[@http://code.google.com/soc/2007/boost/about.html Google Summer of Code 2007]
+project of Jacob Voytko (whose work so far is at .\boost-sandbox\SOC\2007\visualization)
+that should, when completed, allow output of annotated graphs as
+Scalable Vector Graphic .svg files directly from C++ programs.
 
 [endsect] [/section:implementation Implementation Notes]
 
