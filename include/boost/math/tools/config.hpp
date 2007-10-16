@@ -76,6 +76,13 @@
 
 #endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
+// Sun's compiler emits a hard error if a constant underflows:
+#  define BOOST_MATH_SMALL_CONSTANT(x) 0
+#else
+#  define BOOST_MATH_SMALL_CONSTANT(x) x
+#endif
+
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1400)
 //

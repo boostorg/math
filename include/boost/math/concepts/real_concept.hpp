@@ -25,7 +25,6 @@
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
-
 #include <ostream>
 #include <istream>
 #include <cmath>
@@ -257,12 +256,22 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
    // see http://sourceforge.net/tracker/index.php?func=detail&aid=1811043&group_id=146814&atid=766244
    //
    double v;
-#else
-   long double v;
-#endif
    is >> v;
    a = v;
    return is;
+#elif defined(__SGI_STL_PORT)
+   std::string s;
+   long double d;
+   is >> s;
+   std::sscanf(s.c_str(), "%Lf", &d);
+   a = d;
+   return is;
+#else
+   long double v;
+   is >> v;
+   a = v;
+   return is;
+#endif
 }
 
 } // namespace concepts

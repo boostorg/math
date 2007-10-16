@@ -134,7 +134,11 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
       {
          if(i)
             std::cout << ", ";
+#if defined(__SGI_STL_PORT)
+         std::cout << boost::math::tools::real_cast<double>(worst[i]);
+#else
          std::cout << worst[i];
+#endif
       }
       std::cout << " }";
    }
