@@ -9,15 +9,15 @@
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/extreme_value.hpp>
-	 using boost::math::extreme_value_distribution;
+    using boost::math::extreme_value_distribution;
 
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <iostream>
-	using std::cout;
-	using std::endl;
-	using std::setprecision;
+   using std::cout;
+   using std::endl;
+   using std::setprecision;
 
 template <class RealType>
 void test_spot(RealType a, RealType b, RealType x, RealType p, RealType q, RealType tolerance)
@@ -27,13 +27,13 @@ void test_spot(RealType a, RealType b, RealType x, RealType p, RealType q, RealT
          extreme_value_distribution<RealType>(a, b),      
          x),
          p,
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(extreme_value_distribution<RealType>(a, b),      
          x)),
          q,
-			tolerance); // %
+         tolerance); // %
    if((p < 0.999) && (p > 0))
    {
       BOOST_CHECK_CLOSE(
@@ -41,7 +41,7 @@ void test_spot(RealType a, RealType b, RealType x, RealType p, RealType q, RealT
             extreme_value_distribution<RealType>(a, b),      
             p),
             x,
-			   tolerance); // %
+            tolerance); // %
    }
    if((q < 0.999) && (q > 0))
    {
@@ -50,7 +50,7 @@ void test_spot(RealType a, RealType b, RealType x, RealType p, RealType q, RealT
             complement(extreme_value_distribution<RealType>(a, b),      
             q)),
             x,
-			   tolerance); // %
+            tolerance); // %
    }
 }
 
@@ -65,7 +65,7 @@ void test_spots(RealType)
       boost::math::tools::epsilon<RealType>());
    tolerance *= 50 * 100;  
 
-	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
+   cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
    // Results calculated by punching numbers into a calculator,
    // and using the formula at http://mathworld.wolfram.com/ExtremeValueDistribution.html
@@ -103,56 +103,56 @@ void test_spots(RealType)
          extreme_value_distribution<RealType>(0.5, 2),      
          static_cast<RealType>(0.125)),              // x
          static_cast<RealType>(0.18052654830890205978204427757846L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          extreme_value_distribution<RealType>(1, 3),      
          static_cast<RealType>(5)),              // x
          static_cast<RealType>(0.0675057324099851209129017326286L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          extreme_value_distribution<RealType>(1, 3),      
          static_cast<RealType>(0)),              // x
          static_cast<RealType>(0.11522236828583456431277265757312L),                // probability.
-			tolerance); // %
+         tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::mean(
          extreme_value_distribution<RealType>(2, 3)),
          static_cast<RealType>(3.731646994704598581819536270246L),           
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::standard_deviation(
          extreme_value_distribution<RealType>(-1, 0.5)), 
          static_cast<RealType>(0.6412749150809320477720181798355L),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::mode(
          extreme_value_distribution<RealType>(2, 3)),
          static_cast<RealType>(2),           
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::median(
          extreme_value_distribution<RealType>(0, 1)),
          static_cast<RealType>(+0.36651292058166432701243915823266946945426344783710526305367771367056),           
-			tolerance); // %
+         tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::skewness(
          extreme_value_distribution<RealType>(2, 3)),
          static_cast<RealType>(1.1395470994046486574927930193898461120875997958366L),           
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::kurtosis(
          extreme_value_distribution<RealType>(2, 3)),
          static_cast<RealType>(5.4),           
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::kurtosis_excess(
          extreme_value_distribution<RealType>(2, 3)),
          static_cast<RealType>(2.4),           
-			tolerance); // %
+         tolerance); // %
 
    //
    // Things that are errors:
@@ -185,11 +185,11 @@ int test_main(int, char* [])
 {
 
   // Check that can generate extreme_value distribution using the two convenience methods:
-	boost::math::extreme_value mycev1(1.); // Using typedef
-	extreme_value_distribution<> myev2(1.); // Using default RealType double.
+   boost::math::extreme_value mycev1(1.); // Using typedef
+   extreme_value_distribution<> myev2(1.); // Using default RealType double.
 
-	 // Basic sanity-check spot values.
-	// (Parameter value, arbitrarily zero, only communicates the floating point type).
+    // Basic sanity-check spot values.
+   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

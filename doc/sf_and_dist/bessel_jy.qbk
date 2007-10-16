@@ -54,7 +54,7 @@ cyclic for large /x/, but tends to -[infin][space] for small /x/:
 [h4 Testing]
 
 There are two sets of test values: spot values calculated using
-[@http//:functions.wolfram.com functions.wolfram.com],
+[@http://functions.wolfram.com functions.wolfram.com],
 and a much larger set of tests computed using
 a simplified version of this implementation
 (with all the special case handling removed).
@@ -129,7 +129,7 @@ perform much better when the arguments become large, __cephes in particular prod
 some remarkably inaccurate results with some of the test data (no significant figures
 correct), and even GSL performs badly with some inputs to J[sub v].  Note that
 by way of double-checking these results, the worst performing __cephes and GSL cases
-were recomputed using [@http//:functions.wolfram.com functions.wolfram.com],
+were recomputed using [@http://functions.wolfram.com functions.wolfram.com],
 and the result checked against our test data: no errors in the test data were found.
 
 [h4 Implementation]
@@ -253,3 +253,9 @@ without backward recurrence.
 
 [endsect]
 
+[/ 
+  Copyright 2006 John Maddock, Paul A. Bristow and Xiaogang Zhang.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

@@ -1,5 +1,6 @@
 [article Boost.Math
     [quickbook 1.4]
+    [copyright 2007 Paul A. Bristow, Hubert Holin, John Maddock, Daryle Walker and Xiaogang Zhang]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
@@ -66,7 +67,7 @@ programming problems.
    
 [[[@../octonion/html/index.html Octonions]]
    [
-Octonions, like [@../../quaternions/html/index.html quaternions], are a relative of complex numbers.
+Octonions, like [@../quaternions/html/index.html quaternions], are a relative of complex numbers.
 
 Octonions see some use in theoretical physics.
 
@@ -160,8 +161,8 @@ quaternions ['[^x]] and ['[^y]] such that __not_equal). A good mnemotechnical wa
 things is by using the formula ['[^i*i = j*j = k*k = -1]].
 
 Quaternions (and their kin) are described in far more details in this 
-other [@../../../quaternion/TQE.pdf document] 
-(with [@../../../quaternion/TQE_EA.pdf errata and addenda]).
+other [@../../quaternion/TQE.pdf document] 
+(with [@../../quaternion/TQE_EA.pdf errata and addenda]).
 
 Some traditional constructs, such as the exponential, carry over without 
 too much change into the realms of quaternions, but other, such as taking 

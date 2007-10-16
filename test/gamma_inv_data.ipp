@@ -1,3 +1,8 @@
+//  (C) Copyright John Maddock 2006-7.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 4>, 200> gamma_inv_data = { {
       { SC_(9.754039764404296875), SC_(0.12698681652545928955078125), SC_(6.349849983781954486964960115093039567468747967664820851534065876063014180392060424555352423162443804), SC_(13.35954665556050630769710564071384909890705633863167415813992116806093647564994418684947673739937248) }, 

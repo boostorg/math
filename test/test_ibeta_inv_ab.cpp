@@ -263,8 +263,6 @@ void test_beta(T, const char* name)
 int test_main(int, char* [])
 {
    expected_results();
-   boost::math::ibetac_invb(15.3268413543701171875f, 0.3082362115383148193359375f, 0.913384497165679931640625f);
-   boost::math::ibetac(15.3268413543701171875f, 21.432123240471673235001418f, 0.3082362115383148193359375f);
 #ifdef TEST_GSL
    gsl_set_error_handler_off();
 #endif

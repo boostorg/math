@@ -13,7 +13,7 @@ The data for this case study were collected by Said Jahanmir of the
 NIST Ceramics Division in 1996 in connection with a NIST/industry 
 ceramics consortium for strength optimization of ceramic strength.
 
-The example program is [@../example/f_test.cpp f_test.cpp], 
+The example program is [@../../../example/f_test.cpp f_test.cpp], 
 program output has been deliberately made as similar as possible
 to the DATAPLOT output in the corresponding 
 [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda359.htm
@@ -210,3 +210,11 @@ hypothesis must be rejected.  We therefore conclude that there is a change
 for the better in our standard deviation.
 
 [endsect][/section:f_eg F Distribution]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+

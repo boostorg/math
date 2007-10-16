@@ -27,7 +27,7 @@
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/poisson.hpp>
-	 using boost::math::poisson_distribution;
+    using boost::math::poisson_distribution;
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/tools/test.hpp> // for real_concept
 
@@ -35,11 +35,11 @@
 //   using boost::math::qamma_Q;
 
 #include <iostream>
-	using std::cout;
-	using std::endl;
-	using std::setprecision;
-	using std::showpoint;
-	using std::ios;
+   using std::cout;
+   using std::endl;
+   using std::setprecision;
+   using std::showpoint;
+   using std::ios;
 #include <limits>
   using std::numeric_limits;
 
@@ -47,10 +47,10 @@ template <class RealType> // Any floating-point type RealType.
 void test_spots(RealType)
 {
   // Basic sanity checks, tolerance is about numeric_limits<RealType>::digits10 decimal places,
-	// guaranteed for type RealType, eg 6 for float, 15 for double,
-	// expressed as a percentage (so -2) for BOOST_CHECK_CLOSE,
+   // guaranteed for type RealType, eg 6 for float, 15 for double,
+   // expressed as a percentage (so -2) for BOOST_CHECK_CLOSE,
 
-	int decdigits = numeric_limits<RealType>::digits10;
+   int decdigits = numeric_limits<RealType>::digits10;
   // May eb >15 for 80 and 128-bit FP typtes.
   if (decdigits <= 0)
   { // decdigits is not defined, for example real concept,
@@ -62,21 +62,21 @@ void test_spots(RealType)
     decdigits = 15; // numeric_limits<double>::digits10;
   }
 
-	decdigits -= 1; // Perhaps allow some decimal digit(s) margin of numerical error.
-	RealType tolerance = static_cast<RealType>(std::pow(10., -(decdigits-2))); // 1e-6 (-2 so as %)
-	tolerance *= 2; // Allow some bit(s) small margin (2 means + or - 1 bit) of numerical error.
-	// Typically 2e-13% = 2e-15 as fraction for double.
+   decdigits -= 1; // Perhaps allow some decimal digit(s) margin of numerical error.
+   RealType tolerance = static_cast<RealType>(std::pow(10., -(decdigits-2))); // 1e-6 (-2 so as %)
+   tolerance *= 2; // Allow some bit(s) small margin (2 means + or - 1 bit) of numerical error.
+   // Typically 2e-13% = 2e-15 as fraction for double.
 
-	// Sources of spot test values:
+   // Sources of spot test values:
 
   // Many be some combinations for which the result is 'exact',
   // or at least is good to 40 decimal digits.
-	// 40 decimal digits includes 128-bit significand User Defined Floating-Point types,
-	
-	// Best source of accurate values is:
-	// Mathworld online calculator (40 decimal digits precision, suitable for up to 128-bit significands)
-	// http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=GammaRegularized
-	// GammaRegularized is same as gamma incomplete, gamma or gamma_q(a, x) or Q(a, z).
+   // 40 decimal digits includes 128-bit significand User Defined Floating-Point types,
+   
+   // Best source of accurate values is:
+   // Mathworld online calculator (40 decimal digits precision, suitable for up to 128-bit significands)
+   // http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=GammaRegularized
+   // GammaRegularized is same as gamma incomplete, gamma or gamma_q(a, x) or Q(a, z).
 
   // http://documents.wolfram.com/calculationcenter/v2/Functions/ListsMatrices/Statistics/PoissonDistribution.html
 
@@ -148,177 +148,177 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE( // mode
      mode(poisson_distribution<RealType>(static_cast<RealType>(4))), // mode = mean = 4.
       static_cast<RealType>(4), // mode.
-			tolerance);
+         tolerance);
 
   //BOOST_CHECK_CLOSE( // mode
   //   median(poisson_distribution<RealType>(static_cast<RealType>(4))), // mode = mean = 4.
   //    static_cast<RealType>(4), // mode.
-		//	tolerance);
+      //   tolerance);
   poisson_distribution<RealType> dist4(static_cast<RealType>(40));
 
   BOOST_CHECK_CLOSE( // median
      median(dist4), // mode = mean = 4. median = 40.328333333333333 
       quantile(dist4, static_cast<RealType>(0.5)), // 39.332839138842637
-			tolerance);
+         tolerance);
 
   // PDF
   BOOST_CHECK_CLOSE(
      pdf(poisson_distribution<RealType>(static_cast<RealType>(4)), // mean 4.
       static_cast<RealType>(0)),   
       static_cast<RealType>(1.831563888873410E-002), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      pdf(poisson_distribution<RealType>(static_cast<RealType>(4)), // mean 4.
       static_cast<RealType>(2)),   
       static_cast<RealType>(1.465251111098740E-001), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      pdf(poisson_distribution<RealType>(static_cast<RealType>(20)), // mean big.
       static_cast<RealType>(1)),   //  k small
       static_cast<RealType>(4.122307244877130E-008), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      pdf(poisson_distribution<RealType>(static_cast<RealType>(4)), // mean 4.
       static_cast<RealType>(20)),   //  K>> mean 
       static_cast<RealType>(8.277463646553730E-009), // probability.
-			tolerance);
+         tolerance);
   
   // CDF
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
       static_cast<RealType>(0)),  // zero k events. 
       static_cast<RealType>(3.678794411714420E-1), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
       static_cast<RealType>(1)),  // one k event. 
       static_cast<RealType>(7.357588823428830E-1), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
       static_cast<RealType>(2)),  // two k events. 
       static_cast<RealType>(9.196986029286060E-1), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
       static_cast<RealType>(10)),  // two k events. 
       static_cast<RealType>(9.999999899522340E-1), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
       static_cast<RealType>(15)),  // two k events. 
       static_cast<RealType>(9.999999999999810E-1), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
       static_cast<RealType>(16)),  // two k events. 
       static_cast<RealType>(9.999999999999990E-1), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
       static_cast<RealType>(17)),  // two k events. 
       static_cast<RealType>(1.), // probability unity for double.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
       static_cast<RealType>(33)),  // k events at limit for float unchecked_factorial table. 
       static_cast<RealType>(1.), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(100)), // mean 100.
       static_cast<RealType>(33)),  // k events at limit for float unchecked_factorial table. 
       static_cast<RealType>(6.328271240363390E-15), // probability is tiny.
-			tolerance * static_cast<RealType>(2e11)); // 6.3495253382825722e-015 MathCAD
+         tolerance * static_cast<RealType>(2e11)); // 6.3495253382825722e-015 MathCAD
       // Note that there two tiny probability are much more different.
 
    BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(100)), // mean 100.
       static_cast<RealType>(34)),  // k events at limit for float unchecked_factorial table. 
       static_cast<RealType>(1.898481372109020E-14), // probability is tiny.
-			tolerance*static_cast<RealType>(2e11)); //         1.8984813721090199e-014 MathCAD
+         tolerance*static_cast<RealType>(2e11)); //         1.8984813721090199e-014 MathCAD
 
 
  BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(33)), // mean = k
       static_cast<RealType>(33)),  // k events above limit for float unchecked_factorial table. 
       static_cast<RealType>(5.461191812386560E-1), // probability.
-			tolerance);
+         tolerance);
 
  BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(33)), // mean = k-1
       static_cast<RealType>(34)),  // k events above limit for float unchecked_factorial table. 
       static_cast<RealType>(6.133535681502950E-1), // probability.
-			tolerance);
+         tolerance);
 
  BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1)), // mean unity.
       static_cast<RealType>(34)),  // k events above limit for float unchecked_factorial table. 
       static_cast<RealType>(1.), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(5.)), // mean
       static_cast<RealType>(5)),  // k events. 
       static_cast<RealType>(0.615960654833065), // probability.
-			tolerance);
+         tolerance);
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(5.)), // mean
       static_cast<RealType>(1)),  // k events. 
       static_cast<RealType>(0.040427681994512805), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(5.)), // mean
       static_cast<RealType>(0)),  // k events (uses special case formula, not gamma). 
       static_cast<RealType>(0.006737946999085467), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(1.)), // mean
       static_cast<RealType>(0)),  // k events (uses special case formula, not gamma). 
       static_cast<RealType>(0.36787944117144233), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(10.)), // mean
       static_cast<RealType>(10)),  // k events. 
       static_cast<RealType>(0.5830397501929856), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(
      cdf(poisson_distribution<RealType>(static_cast<RealType>(4.)), // mean
       static_cast<RealType>(5)),  // k events. 
       static_cast<RealType>(0.785130387030406), // probability.
-			tolerance);
+         tolerance);
 
   // complement CDF
   BOOST_CHECK_CLOSE( // Complement CDF
      cdf(complement(poisson_distribution<RealType>(static_cast<RealType>(4.)), // mean
       static_cast<RealType>(5))),  // k events. 
       static_cast<RealType>(1 - 0.785130387030406), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE( // Complement CDF
      cdf(complement(poisson_distribution<RealType>(static_cast<RealType>(4.)), // mean
       static_cast<RealType>(0))),  // Zero k events (uses special case formula, not gamma).
       static_cast<RealType>(0.98168436111126578), // probability.
-			tolerance);
+         tolerance);
   BOOST_CHECK_CLOSE( // Complement CDF
      cdf(complement(poisson_distribution<RealType>(static_cast<RealType>(1.)), // mean
       static_cast<RealType>(0))),  // Zero k events (uses special case formula, not gamma).
       static_cast<RealType>(0.63212055882855767), // probability.
-			tolerance);
+         tolerance);
 
   // Example where k is bigger than max_factorial (>34 for float)
   // (therefore using log gamma so perhaps less accurate).
@@ -326,7 +326,7 @@ void test_spots(RealType)
      cdf(poisson_distribution<RealType>(static_cast<RealType>(40.)), // mean
       static_cast<RealType>(40)),  // k events. 
       static_cast<RealType>(0.5419181783625430), // probability.
-			tolerance);
+         tolerance);
 
    // Quantile & complement.
   BOOST_CHECK_CLOSE(
@@ -353,7 +353,7 @@ void test_spots(RealType)
      cdf(poisson_distribution<RealType>(static_cast<RealType>(10.)), // mean
       static_cast<RealType>(10)),  // k events. 
       static_cast<RealType>(0.5830397501929856), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(boost::math::quantile( // inverse of cdf above.
          poisson_distribution<RealType>(10.),  // mean.
@@ -366,7 +366,7 @@ void test_spots(RealType)
      cdf(poisson_distribution<RealType>(static_cast<RealType>(4.)), // mean
       static_cast<RealType>(5)),  // k events. 
       static_cast<RealType>(0.785130387030406), // probability.
-			tolerance);
+         tolerance);
 
   BOOST_CHECK_CLOSE(boost::math::quantile( // inverse of cdf above.
          poisson_distribution<RealType>(4.),  // mean.
@@ -494,9 +494,9 @@ int test_main(int, char* [])
   // Check that can construct normal distribution using the two convenience methods:
   using namespace boost::math;
   poisson myp1(2); // Using typedef
-	poisson_distribution<> myp2(2); // Using default RealType double.
+   poisson_distribution<> myp2(2); // Using default RealType double.
 
-	// Basic sanity-check spot values.
+   // Basic sanity-check spot values.
 
   // Some plain double examples & tests:
   cout.precision(17); // double max_digits10
@@ -523,12 +523,12 @@ int test_main(int, char* [])
   BOOST_CHECK_CLOSE(
   pdf(mypoisson, 2.),  // k events = 2. 
     1.465251111098740E-001, // probability.
-		5e-13);
+      5e-13);
 
   BOOST_CHECK_CLOSE(
   cdf(mypoisson, 2.),  // k events = 2. 
     0.238103305553545, // probability.
-		5e-13);
+      5e-13);
 
 
 #if 0
@@ -562,7 +562,7 @@ int test_main(int, char* [])
     BOOST_CHECK_CLOSE(
     cdf(mypoisson, static_cast<double>(i)),
       sum, // of pdfs.
-	   4e-14); // Fails at 2e-14
+      4e-14); // Fails at 2e-14
    // This call puts the precision etc back to default 6 !!!
    cout << setprecision(17) << showpoint;
 
@@ -584,7 +584,7 @@ int test_main(int, char* [])
    }
 #endif
 
-	// (Parameter value, arbitrarily zero, only communicates the floating-point type).
+   // (Parameter value, arbitrarily zero, only communicates the floating-point type).
 #ifdef TEST_POISSON
   test_spots(0.0F); // Test float.
 #endif
@@ -595,7 +595,7 @@ int test_main(int, char* [])
   if (numeric_limits<long double>::digits10 > numeric_limits<double>::digits10)
   { // long double is better than double (so not MSVC where they are same).
 #ifdef TEST_LDOUBLE
-	  test_spots(0.0L); // Test long double.
+     test_spots(0.0L); // Test long double.
 #endif
   }
 
@@ -605,7 +605,7 @@ int test_main(int, char* [])
 #endif
   #endif
 #endif
-	return 0;
+   return 0;
 } // int test_main(int, char* [])
 
 /*

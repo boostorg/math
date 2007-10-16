@@ -233,16 +233,16 @@ namespace boost
     template <class RealType, class Policy>
     inline const std::pair<RealType, RealType> range(const poisson_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable k.
-	    using boost::math::tools::max_value;
-	    return std::pair<RealType, RealType>(0, max_value<RealType>()); // Max integer?
+       using boost::math::tools::max_value;
+       return std::pair<RealType, RealType>(0, max_value<RealType>()); // Max integer?
     }
 
     template <class RealType, class Policy>
     inline const std::pair<RealType, RealType> support(const poisson_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable k.
-	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-	    using boost::math::tools::max_value;
-	    return std::pair<RealType, RealType>(0,  max_value<RealType>());
+       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+       using boost::math::tools::max_value;
+       return std::pair<RealType, RealType>(0,  max_value<RealType>());
     }
 
     template <class RealType, class Policy>
@@ -480,10 +480,10 @@ namespace boost
       BOOST_MATH_STD_USING // ADL of std functions.
       // if(p == 0) NOT necessarily zero!
       // Not necessarily any special value of k because is unlimited.
-			if (p <= exp(-dist.mean()))
-			{ // if p <= cdf for 0 events (== pdf for 0 events), then quantile must be zero.
-				return 0;
-			}
+      if (p <= exp(-dist.mean()))
+      { // if p <= cdf for 0 events (== pdf for 0 events), then quantile must be zero.
+         return 0;
+      }
       return gamma_q_inva(dist.mean(), p, Policy()) - 1;
       */
       typedef typename Policy::discrete_quantile_type discrete_type;
@@ -549,9 +549,9 @@ namespace boost
       }
       /*
       if (-q <= boost::math::expm1(-dist.mean()))
-			{ // if q <= cdf(complement for 0 events, then quantile must be zero.
-				return 0;
-			}
+      { // if q <= cdf(complement for 0 events, then quantile must be zero.
+         return 0;
+      }
       return gamma_p_inva(dist.mean(), q, Policy()) -1;
       */
       typedef typename Policy::discrete_quantile_type discrete_type;

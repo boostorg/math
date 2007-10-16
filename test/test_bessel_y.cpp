@@ -151,7 +151,7 @@ void expected_results()
       ".*",                          // stdlib
       "Sun.*",                          // platform
       largest_type,                  // test type(s)
-      "Y[0N] Mathworld.*",              // test data group
+      "Y[0N].*Mathworld.*",              // test data group
       ".*", 2000, 2000);         // test function
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

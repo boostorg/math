@@ -30,14 +30,14 @@
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
 
 #include <boost/math/distributions/students_t.hpp>
-	using boost::math::students_t;  // Probability of students_t(df, t).
+   using boost::math::students_t;  // Probability of students_t(df, t).
 
 #include <iostream>
-	using std::cout; 	using std::endl;
+   using std::cout;    using std::endl;
 #include <iomanip>
-	using std::setprecision; 	using std::setw;
+   using std::setprecision;    using std::setw;
 #include <cmath>
-	using std::sqrt;
+   using std::sqrt;
 
 // This example of a two-sided test is from:
 // B. M. Smith & M. B. Griffiths, Analyst, 1982, 107, 253,
@@ -64,38 +64,38 @@ float diffs[portions];
 
 int main()
 {
-	cout << "Example3 using Student's t function. " << endl;
-	float mean_diff = 0.f;
-	cout << "\n""Portion  wet_oxidation  Direct_extraction  difference" << endl;
-	for (int portion = 0; portion < portions; portion++)
-	{ // Echo data and differences.
-		diffs[portion] = data[portion][0] - data[portion][1];
-		mean_diff += diffs[portion];
-		cout << setw(4) << portion << ' ' << setw(14) << data[portion][0] << ' ' << setw(18)<< data[portion][1] << ' ' << setw(9) << diffs[portion] << endl;
-	}
-	mean_diff /= portions;
-	cout << "Mean difference = " << mean_diff << endl; // -1.75
+   cout << "Example3 using Student's t function. " << endl;
+   float mean_diff = 0.f;
+   cout << "\n""Portion  wet_oxidation  Direct_extraction  difference" << endl;
+   for (int portion = 0; portion < portions; portion++)
+   { // Echo data and differences.
+      diffs[portion] = data[portion][0] - data[portion][1];
+      mean_diff += diffs[portion];
+      cout << setw(4) << portion << ' ' << setw(14) << data[portion][0] << ' ' << setw(18)<< data[portion][1] << ' ' << setw(9) << diffs[portion] << endl;
+   }
+   mean_diff /= portions;
+   cout << "Mean difference = " << mean_diff << endl; // -1.75
 
-	float sd_diffs = 0.f;
-	for (int portion = 0; portion < portions; portion++)
-	{ // Calculate standard deviation of differences.
-		sd_diffs +=(diffs[portion] - mean_diff) * (diffs[portion] - mean_diff);
-	}
-	int degrees_of_freedom = portions-1; // Use the n-1 formula.
-	sd_diffs /= degrees_of_freedom;
-  sd_diffs = sqrt(sd_diffs);
-	cout << "Standard deviation of differences = " << sd_diffs << endl; // 4.99166
-  // Standard deviation of differences = 4.99166
-	double t = mean_diff * sqrt(static_cast<double>(portions))/ sd_diffs; // -0.70117
-	cout << "Student's t = " << t << ", if " << degrees_of_freedom << " degrees of freedom." << endl;
-  // Student's t = -0.70117, if 3 degrees of freedom.
-	cout << "Probability of the means being different is "
+   float sd_diffs = 0.f;
+   for (int portion = 0; portion < portions; portion++)
+   { // Calculate standard deviation of differences.
+      sd_diffs +=(diffs[portion] - mean_diff) * (diffs[portion] - mean_diff);
+   }
+   int degrees_of_freedom = portions-1; // Use the n-1 formula.
+   sd_diffs /= degrees_of_freedom;
+   sd_diffs = sqrt(sd_diffs);
+   cout << "Standard deviation of differences = " << sd_diffs << endl; // 4.99166
+   // Standard deviation of differences = 4.99166
+   double t = mean_diff * sqrt(static_cast<double>(portions))/ sd_diffs; // -0.70117
+   cout << "Student's t = " << t << ", if " << degrees_of_freedom << " degrees of freedom." << endl;
+   // Student's t = -0.70117, if 3 degrees of freedom.
+   cout << "Probability of the means being different is "
     << 2.F * cdf(students_t(degrees_of_freedom), t) << "."<< endl; // 0.266846 * 2 = 0.533692
-	// Double the probability because using a 'two-sided test' because
-	// mean for 'Wet oxidation' could be either
-  // greater OR LESS THAN for 'Direct extraction'.
+   // Double the probability because using a 'two-sided test' because
+   // mean for 'Wet oxidation' could be either
+   // greater OR LESS THAN for 'Direct extraction'.
 
-	return 0;
+   return 0;
 }  // int main()
 
 /*

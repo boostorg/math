@@ -426,7 +426,7 @@ Message from thrown exception was:
 */
 //] [/ negative_binomial_eg1_2]
   }
-	return 0;
+   return 0;
 }  // int main()
 
 

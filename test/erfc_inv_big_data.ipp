@@ -1,3 +1,8 @@
+//  (C) Copyright John Maddock 2006-7.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 2>, 200> erfc_inv_big_data = { {
       { SC_(0.5460825444184401149953083908674803067585e-4312), SC_(99.62016927389407649911084501709563799849) }, 

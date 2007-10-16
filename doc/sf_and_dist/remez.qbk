@@ -368,4 +368,10 @@ Russian Journal of Mathematical Physics, vol.1, No. 3, 1994.
 
 [endsect][/section:remez The Remez Method]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
 

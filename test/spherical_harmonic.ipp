@@ -1,3 +1,8 @@
+//  (C) Copyright John Maddock 2006-7.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 6>, 1000> spherical_harmonic = {
       SC_(0.2e1), SC_(0), SC_(-0.6223074436187744140625e1), SC_(-0.983176708221435546875e0), SC_(0.62736841735769885881246893757736785347239567286304e0), SC_(0), 

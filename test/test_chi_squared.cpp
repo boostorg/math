@@ -523,8 +523,8 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
-   BOOST_MATH_CONTROL_FP;
- 	// Check that can generate chi_squared distribution using the two convenience methods:
+  BOOST_MATH_CONTROL_FP;
+  // Check that can generate chi_squared distribution using the two convenience methods:
   chi_squared_distribution<> mychisqr(8);
   chi_squared mychisqr2(8);
 

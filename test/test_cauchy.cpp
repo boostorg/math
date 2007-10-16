@@ -21,21 +21,21 @@
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/cauchy.hpp>
-	 using boost::math::cauchy_distribution;
+    using boost::math::cauchy_distribution;
 
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <iostream>
-	using std::cout;
-	using std::endl;
+   using std::cout;
+   using std::endl;
 
 template <class RealType>
 void test_spots(RealType T)
 {
   // Check some bad parameters to the distribution,
-	BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, 0), std::domain_error); // zero sd
-	BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, -1), std::domain_error); // negative scale (shape)
+   BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, 0), std::domain_error); // zero sd
+   BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, -1), std::domain_error); // negative scale (shape)
   cauchy_distribution<RealType> C01;
 
   BOOST_CHECK_EQUAL(C01.location(), 0); // Check standard values.
@@ -51,8 +51,8 @@ void test_spots(RealType T)
     BOOST_CHECK_EQUAL(cdf(complement(C01, +std::numeric_limits<RealType>::infinity())), 0); // x = + infinity, cdf = 0
     BOOST_CHECK_EQUAL(cdf(complement(C01, -std::numeric_limits<RealType>::infinity())), 1); // x = - infinity, cdf = 1
     BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), std::domain_error); // +infinite mean
-	  BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(-std::numeric_limits<RealType>::infinity(),  static_cast<RealType>(1)), std::domain_error); // -infinite mean
-	  BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(static_cast<RealType>(0), std::numeric_limits<RealType>::infinity()), std::domain_error); // infinite sd
+     BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(-std::numeric_limits<RealType>::infinity(),  static_cast<RealType>(1)), std::domain_error); // -infinite mean
+     BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(static_cast<RealType>(0), std::numeric_limits<RealType>::infinity()), std::domain_error); // infinite sd
   }
 
   if (std::numeric_limits<RealType>::has_quiet_NaN)
@@ -85,61 +85,61 @@ void test_spots(RealType T)
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.125)),              // x
          static_cast<RealType>(0.53958342416056554201085167134004L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(-0.125)),              // x
          static_cast<RealType>(0.46041657583943445798914832865996L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.5)),              // x
          static_cast<RealType>(0.64758361765043327417540107622474L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(-0.5)),              // x
          static_cast<RealType>(0.35241638234956672582459892377526L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(1.0)),              // x
          static_cast<RealType>(0.75),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(-1.0)),              // x
          static_cast<RealType>(0.25),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(2.0)),              // x
          static_cast<RealType>(0.85241638234956672582459892377526L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(-2.0)),              // x
          static_cast<RealType>(0.14758361765043327417540107622474L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(10.0)),              // x
          static_cast<RealType>(0.9682744825694464304850228813987L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(-10.0)),              // x
          static_cast<RealType>(0.031725517430553569514977118601302L),                // probability.
-			tolerance); // %
+         tolerance); // %
 
    //
    // Complements:
@@ -149,61 +149,61 @@ void test_spots(RealType T)
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.125))),              // x
          static_cast<RealType>(0.46041657583943445798914832865996L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(-0.125))),              // x
          static_cast<RealType>(0.53958342416056554201085167134004L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.5))),              // x
          static_cast<RealType>(0.35241638234956672582459892377526L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(-0.5))),              // x
          static_cast<RealType>(0.64758361765043327417540107622474L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(1.0))),              // x
          static_cast<RealType>(0.25),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(-1.0))),              // x
          static_cast<RealType>(0.75),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(2.0))),              // x
          static_cast<RealType>(0.14758361765043327417540107622474L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(-2.0))),              // x
          static_cast<RealType>(0.85241638234956672582459892377526L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(10.0))),              // x
          static_cast<RealType>(0.031725517430553569514977118601302L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(-10.0))),              // x
          static_cast<RealType>(0.9682744825694464304850228813987L),                // probability.
-			tolerance); // %
+         tolerance); // %
 
    //
    // Quantiles:
@@ -213,61 +213,61 @@ void test_spots(RealType T)
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.53958342416056554201085167134004L)),
          static_cast<RealType>(0.125),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.46041657583943445798914832865996L)),
          static_cast<RealType>(-0.125),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.64758361765043327417540107622474L)),
          static_cast<RealType>(0.5),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.35241638234956672582459892377526)),
          static_cast<RealType>(-0.5),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.75)),
          static_cast<RealType>(1.0),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.25)),
          static_cast<RealType>(-1.0),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.85241638234956672582459892377526L)),
          static_cast<RealType>(2.0),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.14758361765043327417540107622474L)),
          static_cast<RealType>(-2.0),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.9682744825694464304850228813987L)),
          static_cast<RealType>(10.0),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.031725517430553569514977118601302L)),
          static_cast<RealType>(-10.0),
-			tolerance); // %
+         tolerance); // %
 
    //
    // Quantile from complement:
@@ -277,61 +277,61 @@ void test_spots(RealType T)
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.46041657583943445798914832865996L))),
          static_cast<RealType>(0.125),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.53958342416056554201085167134004L))),
          static_cast<RealType>(-0.125),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.35241638234956672582459892377526L))),
          static_cast<RealType>(0.5),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.64758361765043327417540107622474L))),
          static_cast<RealType>(-0.5),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.25))),
          static_cast<RealType>(1.0),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.75))),
          static_cast<RealType>(-1.0),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.14758361765043327417540107622474L))),
          static_cast<RealType>(2.0),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.85241638234956672582459892377526L))),
          static_cast<RealType>(-2.0),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.031725517430553569514977118601302L))),
          static_cast<RealType>(10.0),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(),
          static_cast<RealType>(0.9682744825694464304850228813987L))),
          static_cast<RealType>(-10.0),
-			tolerance); // %
+         tolerance); // %
 
    //
    // PDF
@@ -341,73 +341,73 @@ void test_spots(RealType T)
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.125)),              // x
          static_cast<RealType>(0.31341281101173235351410956479511L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(-0.125)),              // x
          static_cast<RealType>(0.31341281101173235351410956479511L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(0.5)),              // x
          static_cast<RealType>(0.25464790894703253723021402139602L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(-0.5)),              // x
          static_cast<RealType>(0.25464790894703253723021402139602L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(1.0)),              // x
          static_cast<RealType>(0.15915494309189533576888376337251L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(-1.0)),              // x
          static_cast<RealType>(0.15915494309189533576888376337251L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(2.0)),              // x
          static_cast<RealType>(0.063661977236758134307553505349006L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(-2.0)),              // x
          static_cast<RealType>(0.063661977236758134307553505349006L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(10.0)),              // x
          static_cast<RealType>(0.0031515830315226799162155200667825L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          cauchy_distribution<RealType>(),
          static_cast<RealType>(-10.0)),              // x
          static_cast<RealType>(0.0031515830315226799162155200667825L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          cauchy_distribution<RealType>(2, 5),
          static_cast<RealType>(1)),              // x
          static_cast<RealType>(0.061213439650728975295724524374044L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          cauchy_distribution<RealType>(-2, 0.25),
          static_cast<RealType>(1)),              // x
          static_cast<RealType>(0.0087809623774838805941453110826215L),                // probability.
-			tolerance); // %
+         tolerance); // %
 
    //
    // The following test values were calculated using MathCad,
@@ -419,250 +419,250 @@ void test_spots(RealType T)
          cauchy_distribution<RealType>(1, 1),
          static_cast<RealType>(0.125)),              // x
          static_cast<RealType>(0.271189304634946L),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(1, 1),
          static_cast<RealType>(0.125))),              // x
          static_cast<RealType>(1 - 0.271189304634946L),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(1, 1),
          static_cast<RealType>(0.271189304634946L)),              // x
          static_cast<RealType>(0.125),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(1, 1),
          static_cast<RealType>(1 - 0.271189304634946L))),              // x
          static_cast<RealType>(0.125),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(0.125)),              // x
          static_cast<RealType>(0.539583424160566L),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(0.5)),              // x
          static_cast<RealType>(0.647583617650433L),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(1)),              // x
          static_cast<RealType>(0.750000000000000),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(2)),              // x
          static_cast<RealType>(0.852416382349567),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(10)),              // x
          static_cast<RealType>(0.968274482569447),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(100)),              // x
          static_cast<RealType>(0.996817007235092),  // probability.
-			tolerance); // %
+         tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(-0.125)),              // x
          static_cast<RealType>(0.460416575839434),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(-0.5)),              // x
          static_cast<RealType>(0.352416382349567),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(-1)),              // x
          static_cast<RealType>(0.2500000000000000),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(-2)),              // x
          static_cast<RealType>(0.147583617650433),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(-10)),              // x
          static_cast<RealType>(0.031725517430554),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(0, 1),
          static_cast<RealType>(-100)),              // x
          static_cast<RealType>(3.18299276490824E-3),  // probability.
-			tolerance); // %
+         tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(1, 5),
          static_cast<RealType>(1.25)),              // x
          static_cast<RealType>(0.515902251256176),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(2, 2),
          static_cast<RealType>(1.25)),              // x
          static_cast<RealType>(0.385799748780092),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(4, 0.125),
          static_cast<RealType>(3)),              // x
          static_cast<RealType>(0.039583424160566),  // probability.
-			tolerance); // % 
+         tolerance); // % 
    BOOST_CHECK_CLOSE( 
       ::boost::math::cdf(
          cauchy_distribution<RealType>(-2, static_cast<RealType>(0.0001)),
          static_cast<RealType>(-3)),              // x
          static_cast<RealType>(3.1830988512275777e-5),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(4, 50),
          static_cast<RealType>(-3)),              // x
          static_cast<RealType>(0.455724386698215),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(-4, 50),
          static_cast<RealType>(-3)),              // x
          static_cast<RealType>(0.506365349100973),  // probability.
-			tolerance); // %
+         tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(1, 5),
          static_cast<RealType>(1.25))),              // x
          static_cast<RealType>(1-0.515902251256176),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(2, 2),
          static_cast<RealType>(1.25))),              // x
          static_cast<RealType>(1-0.385799748780092),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(4, 0.125),
          static_cast<RealType>(3))),              // x
          static_cast<RealType>(1-0.039583424160566),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          cauchy_distribution<RealType>(-2, static_cast<RealType>(0.001)),
          static_cast<RealType>(-3)),              // x
          static_cast<RealType>(0.000318309780080539),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(4, 50),
          static_cast<RealType>(-3))),              // x
          static_cast<RealType>(1-0.455724386698215),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(cauchy_distribution<RealType>(-4, 50),
          static_cast<RealType>(-3))),              // x
          static_cast<RealType>(1-0.506365349100973),  // probability.
-			tolerance); // %
+         tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(1, 5),
          static_cast<RealType>(0.515902251256176)),              // x
          static_cast<RealType>(1.25),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(2, 2),
          static_cast<RealType>(0.385799748780092)),              // x
          static_cast<RealType>(1.25),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(4, 0.125),
          static_cast<RealType>(0.039583424160566)),              // x
          static_cast<RealType>(3),  // probability.
-			tolerance); // %
+         tolerance); // %
    /*
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(-2, 0.0001),
          static_cast<RealType>(-3)),              // x
          static_cast<RealType>(0.000015915494296),  // probability.
-			tolerance); // %
+         tolerance); // %
          */
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(4, 50),
          static_cast<RealType>(0.455724386698215)),              // x
          static_cast<RealType>(-3),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(-4, 50),
          static_cast<RealType>(0.506365349100973)),              // x
          static_cast<RealType>(-3),  // probability.
-			tolerance); // %
+         tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(1, 5),
          static_cast<RealType>(1-0.515902251256176))),              // x
          static_cast<RealType>(1.25),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(2, 2),
          static_cast<RealType>(1-0.385799748780092))),              // x
          static_cast<RealType>(1.25),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(4, 0.125),
          static_cast<RealType>(1-0.039583424160566))),              // x
          static_cast<RealType>(3),  // probability.
-			tolerance); // %
+         tolerance); // %
    /*
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          cauchy_distribution<RealType>(-2, 0.0001),
          static_cast<RealType>(-3)),              // x
          static_cast<RealType>(0.000015915494296),  // probability.
-			tolerance); // %
+         tolerance); // %
          */
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(4, 50),
          static_cast<RealType>(1-0.455724386698215))),              // x
          static_cast<RealType>(-3),  // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(cauchy_distribution<RealType>(-4, 50),
          static_cast<RealType>(1-0.506365349100973))),              // x
          static_cast<RealType>(-3),  // probability.
-			tolerance); // %
+         tolerance); // %
 
    cauchy_distribution<RealType> dist; // default (0, 1)
    BOOST_CHECK_EQUAL(
@@ -715,15 +715,15 @@ void test_spots(RealType T)
 int test_main(int, char* [])
 {
     BOOST_MATH_CONTROL_FP;
-	// Check that can generate cauchy distribution using the two convenience methods:
-	boost::math::cauchy mycd1(1.); // Using typedef
-	cauchy_distribution<> mycd2(1.); // Using default RealType double.
-	cauchy_distribution<> C01; // Using default RealType double for Standard Cauchy.
+   // Check that can generate cauchy distribution using the two convenience methods:
+   boost::math::cauchy mycd1(1.); // Using typedef
+   cauchy_distribution<> mycd2(1.); // Using default RealType double.
+   cauchy_distribution<> C01; // Using default RealType double for Standard Cauchy.
   BOOST_CHECK_EQUAL(C01.location(), 0); // Check standard values.
   BOOST_CHECK_EQUAL(C01.scale(), 1);
 
-	 // Basic sanity-check spot values.
-	// (Parameter value, arbitrarily zero, only communicates the floating point type).
+    // Basic sanity-check spot values.
+   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

@@ -27,3 +27,10 @@ normal_misc_examples.cpp] illustrates their use.
 [endsect] [/section:normal_misc Some Miscellaneous Examples of the Normal Distribution]
 [endsect] [/section:normal_example Normal Distribution Examples]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+

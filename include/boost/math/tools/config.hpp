@@ -176,30 +176,30 @@ inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
 
 #ifdef __linux__
 
-	#include <fenv.h>
+   #include <fenv.h>
 
-	namespace boost{ namespace math{
-	namespace detail
-	{
-	struct fpu_guard
-	{
-		fpu_guard()
-		{
-			fegetexceptflag(&m_flags, FE_ALL_EXCEPT);
-			feclearexcept(FE_ALL_EXCEPT);
-		}
-		~fpu_guard()
-		{
-			fesetexceptflag(&m_flags, FE_ALL_EXCEPT);
-		}
-	private:
-		fexcept_t m_flags;
-	};
+   namespace boost{ namespace math{
+   namespace detail
+   {
+   struct fpu_guard
+   {
+      fpu_guard()
+      {
+         fegetexceptflag(&m_flags, FE_ALL_EXCEPT);
+         feclearexcept(FE_ALL_EXCEPT);
+      }
+      ~fpu_guard()
+      {
+         fesetexceptflag(&m_flags, FE_ALL_EXCEPT);
+      }
+   private:
+      fexcept_t m_flags;
+   };
 
-	} // namespace detail
-	}} // namespaces
+   } // namespace detail
+   }} // namespaces
 
-	#define BOOST_FPU_EXCEPTION_GUARD boost::math::detail::fpu_guard local_guard_object;
+   #define BOOST_FPU_EXCEPTION_GUARD boost::math::detail::fpu_guard local_guard_object;
 #else // All other platforms.
   #define BOOST_FPU_EXCEPTION_GUARD
 #endif

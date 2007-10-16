@@ -1,3 +1,8 @@
+//  (C) Copyright John Maddock 2006-7.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 4>, 344> tgamma_delta_ratio_int = { {
       { SC_(0.24302618503570556640625e1), SC_(0.1e1), SC_(0.4114782939349022594054088894256271572472e0), SC_(0.14302618503570556640625e1) }, 

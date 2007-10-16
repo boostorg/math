@@ -1,3 +1,8 @@
+//  (C) Copyright John Maddock 2006-7.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 4>, 435> igamma_inva_data = { {
       { SC_(0.11342023313045501708984375), SC_(0.097540400922298431396484375), SC_(1.035869900800721563193351335409353423054156223778352824799732510014114331303190861923913851617789576), SC_(0.05862165929221091309602935851268320728966552926925608108837955463403857541085640683871851098187935567) }, 

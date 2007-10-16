@@ -1,3 +1,8 @@
+//  (C) Copyright John Maddock 2006-7.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 5>, 1210> ibeta_inv_data = { {
       { SC_(0.104760829344741068780422210693359375e-4), SC_(39078.1875), SC_(0.913384497165679931640625), SC_(0.2135769916611873809373928693612157637794870746322109915739746618652569766882593624385400901395922558e-3760), SC_(0.6169146818683135737866366973021696361959736535710675458813428774517757535576031054239811928697394346e-101417) }, 

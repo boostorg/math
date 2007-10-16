@@ -13,13 +13,13 @@
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/weibull.hpp>
-	 using boost::math::weibull_distribution;
+    using boost::math::weibull_distribution;
 #include <boost/math/tools/test.hpp> 
 
 #include <iostream>
-	using std::cout;
-	using std::endl;
-	using std::setprecision;
+   using std::cout;
+   using std::endl;
+   using std::setprecision;
 #include <limits>
   using std::numeric_limits;
 
@@ -31,27 +31,27 @@ void check_weibull(RealType shape, RealType scale, RealType x, RealType p, RealT
          weibull_distribution<RealType>(shape, scale),       // distribution.
          x),                                            // random variable.
          p,                                             // probability.
-			tol);                                          // %tolerance.
+         tol);                                          // %tolerance.
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(
             weibull_distribution<RealType>(shape, scale),    // distribution.
             x)),                                        // random variable.
          q,                                             // probability complement.
-			tol);                                          // %tolerance.
+         tol);                                          // %tolerance.
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          weibull_distribution<RealType>(shape, scale),       // distribution.
          p),                                            // probability.
          x,                                             // random variable.
-			tol);                                          // %tolerance.
+         tol);                                          // %tolerance.
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          complement(
             weibull_distribution<RealType>(shape, scale),    // distribution.
             q)),                                        // probability complement.
          x,                                             // random variable.
-			tol);                                          // %tolerance.
+         tol);                                          // %tolerance.
 }
 
 template <class RealType>
@@ -65,8 +65,8 @@ void test_spots(RealType)
    //
    // Tolerance is just over 5 decimal digits expressed as a persentage:
    // that's the limit of the test data.
-	RealType tolerance = 2e-5f * 100;  
-	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
+   RealType tolerance = 2e-5f * 100;  
+   cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
    using std::exp;
 
@@ -251,7 +251,7 @@ void test_spots(RealType)
    tolerance = (std::max)(
       boost::math::tools::epsilon<RealType>(),
       static_cast<RealType>(boost::math::tools::epsilon<double>())) * 5 * 100; // 5 eps as a percentage
-	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
+   cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
    weibull_distribution<RealType> dist(2, 3);
    RealType x = static_cast<RealType>(0.125);
    using namespace std; // ADL of std names.
@@ -334,10 +334,10 @@ int test_main(int, char* [])
   // Check that can construct weibull distribution using the two convenience methods:
   using namespace boost::math;
   weibull myw1(2); // Using typedef
-	weibull_distribution<> myw2(2); // Using default RealType double.
+   weibull_distribution<> myw2(2); // Using default RealType double.
 
-	 // Basic sanity-check spot values.
-	// (Parameter value, arbitrarily zero, only communicates the floating point type).
+    // Basic sanity-check spot values.
+   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

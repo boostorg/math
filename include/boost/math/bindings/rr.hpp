@@ -566,15 +566,15 @@ namespace constants{
 
 template<> inline boost::math::ntl::RR pi<boost::math::ntl::RR>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
 {
-	 NTL::RR result;
-	 ComputePi(result);
-	 return result;
+    NTL::RR result;
+    ComputePi(result);
+    return result;
 }
 template<> inline boost::math::ntl::RR e<boost::math::ntl::RR>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
 {
-	 NTL::RR result;
+    NTL::RR result;
     result = 1;
-	 return exp(result);
+    return exp(result);
 }
 
 } // namespace constants

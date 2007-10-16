@@ -48,15 +48,15 @@ We'll begin our sample program with the needed includes:
 
 // Boost
 #include <boost/math/distributions/students_t.hpp>
-	using boost::math::students_t;  // Probability of students_t(df, t).
+   using boost::math::students_t;  // Probability of students_t(df, t).
 
 // std
 #include <iostream>
-	using std::cout;
-	using std::endl;
+   using std::cout;
+   using std::endl;
 
 #include <stdexcept>
-	using std::exception;
+   using std::exception;
 
 /*`
 

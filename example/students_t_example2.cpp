@@ -30,16 +30,16 @@
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
 
 #include <boost/math/distributions/students_t.hpp>
-	using boost::math::students_t;  // Probability of students_t(df, t).
+   using boost::math::students_t;  // Probability of students_t(df, t).
 
 #include <iostream>
-	using std::cout;
-	using std::endl;
+   using std::cout;
+   using std::endl;
 #include <iomanip>
-	using std::setprecision;
-	using std::setw;
+   using std::setprecision;
+   using std::setw;
 #include <cmath>
-	using std::sqrt;
+   using std::sqrt;
 
 // This example of a one-sided test is from:
 //
@@ -58,39 +58,39 @@ double data [values] = {25.06, 25.18, 24.87, 25.51, 25.34, 25.41};
 
 int main()
 {
-	cout << "Example2 using Student's t function. ";
+   cout << "Example2 using Student's t function. ";
 #if defined(__FILE__) && defined(__TIMESTAMP__)
-	cout << "  " << __FILE__ << ' ' << __TIMESTAMP__ << ' '<< _MSC_FULL_VER;
+   cout << "  " << __FILE__ << ' ' << __TIMESTAMP__ << ' '<< _MSC_FULL_VER;
 #endif
-	cout << endl;
+   cout << endl;
 
-	double sum = 0.;
-	for (int value = 0; value < values; value++)
-	{ // Echo data and calculate mean.
-		sum += data[value];
-		cout << setw(4) << value << ' ' << setw(14) << data[value] << endl;
-	}
-	double mean = sum /static_cast<double>(values);
-	cout << "Mean = " << mean << endl; // 25.2283
+   double sum = 0.;
+   for (int value = 0; value < values; value++)
+   { // Echo data and calculate mean.
+      sum += data[value];
+      cout << setw(4) << value << ' ' << setw(14) << data[value] << endl;
+   }
+   double mean = sum /static_cast<double>(values);
+   cout << "Mean = " << mean << endl; // 25.2283
 
-	double sd = 0.;
-	for (int value = 0; value < values; value++)
-	{ // Calculate standard deviation.
-		sd +=(data[value] - mean) * (data[value] - mean);
-	}
-	int degrees_of_freedom = values - 1; // Use the n-1 formula.
-	sd /= degrees_of_freedom; // == variance.
+   double sd = 0.;
+   for (int value = 0; value < values; value++)
+   { // Calculate standard deviation.
+      sd +=(data[value] - mean) * (data[value] - mean);
+   }
+   int degrees_of_freedom = values - 1; // Use the n-1 formula.
+   sd /= degrees_of_freedom; // == variance.
    sd= sqrt(sd);
-	cout << "Standard deviation = " << sd<< endl; // = 0.238279
+   cout << "Standard deviation = " << sd<< endl; // = 0.238279
 
-	double t = (mean - reference) * sqrt(static_cast<double>(values))/ sd; //
-	cout << "Student's t = " << t << ", with " << degrees_of_freedom << " degrees of freedom." << endl; // = 2.34725
+   double t = (mean - reference) * sqrt(static_cast<double>(values))/ sd; //
+   cout << "Student's t = " << t << ", with " << degrees_of_freedom << " degrees of freedom." << endl; // = 2.34725
 
-	cout << "Probability of positive bias is " << cdf(students_t(degrees_of_freedom), t) << "."<< endl; // =  0.967108.
-	// A 1-sided test because only testing for a positive bias.
-	// If > 0.95 then greater than 1 in 20 conventional (arbitrary) requirement.
+   cout << "Probability of positive bias is " << cdf(students_t(degrees_of_freedom), t) << "."<< endl; // =  0.967108.
+   // A 1-sided test because only testing for a positive bias.
+   // If > 0.95 then greater than 1 in 20 conventional (arbitrary) requirement.
 
-	return 0;
+   return 0;
 }  // int main()
 
 /*

@@ -24,13 +24,13 @@
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/pareto.hpp>
-	 using boost::math::pareto_distribution;
+    using boost::math::pareto_distribution;
 #include <boost/math/tools/test.hpp>
 
 #include <iostream>
-	using std::cout;
-	using std::endl;
-	using std::setprecision;
+   using std::cout;
+   using std::endl;
+   using std::setprecision;
 #include <limits>
   using std::numeric_limits;
 
@@ -233,11 +233,11 @@ void test_spots(RealType)
 int test_main(int, char* [])
 {
   // Check that can generate pareto distribution using the two convenience methods:
-	boost::math::pareto myp1(1., 1); // Using typedef
-	pareto_distribution<> myp2(1., 1); // Using default RealType double.
+   boost::math::pareto myp1(1., 1); // Using typedef
+   pareto_distribution<> myp2(1., 1); // Using default RealType double.
   boost::math::pareto pareto11; // Use default values (location = 1, shape = 1).
   // Note NOT pareto11() as the compiler will interpret as a function!
-	// Basic sanity-check spot values.
+   // Basic sanity-check spot values.
 
   BOOST_CHECK_EQUAL(pareto11.location(), 1); // Check defaults again.
   BOOST_CHECK_EQUAL(pareto11.shape(), 1);
@@ -254,10 +254,10 @@ int test_main(int, char* [])
   BOOST_CHECK_EQUAL(support(myp2).second, (numeric_limits<double>::max)());
 
   // Check some bad parameters to the distribution.
-	BOOST_CHECK_THROW(boost::math::pareto mypm1(-1, 1), std::domain_error); // Using typedef
-	BOOST_CHECK_THROW(boost::math::pareto myp0(0, 1), std::domain_error); // Using typedef
-	BOOST_CHECK_THROW(boost::math::pareto myp1m1(1, -1), std::domain_error); // Using typedef
-	BOOST_CHECK_THROW(boost::math::pareto myp10(1, 0), std::domain_error); // Using typedef
+   BOOST_CHECK_THROW(boost::math::pareto mypm1(-1, 1), std::domain_error); // Using typedef
+   BOOST_CHECK_THROW(boost::math::pareto myp0(0, 1), std::domain_error); // Using typedef
+   BOOST_CHECK_THROW(boost::math::pareto myp1m1(1, -1), std::domain_error); // Using typedef
+   BOOST_CHECK_THROW(boost::math::pareto myp10(1, 0), std::domain_error); // Using typedef
 
   // Check some moments that should fail because shape not big enough.
   BOOST_CHECK_THROW(variance(myp2), std::domain_error);
@@ -268,9 +268,9 @@ int test_main(int, char* [])
 
   // Test on extreme values of distribution parameters,
   // using just double because it has numeric_limit infinity etc.
-	BOOST_CHECK_THROW(boost::math::pareto mypinf1(+std::numeric_limits<double>::infinity(), 1), std::domain_error); // Using typedef
-	BOOST_CHECK_THROW(boost::math::pareto myp1inf(1, +std::numeric_limits<double>::infinity()), std::domain_error); // Using typedef
-	BOOST_CHECK_THROW(boost::math::pareto mypinf1(+std::numeric_limits<double>::infinity(), +std::numeric_limits<double>::infinity()), std::domain_error); // Using typedef
+   BOOST_CHECK_THROW(boost::math::pareto mypinf1(+std::numeric_limits<double>::infinity(), 1), std::domain_error); // Using typedef
+   BOOST_CHECK_THROW(boost::math::pareto myp1inf(1, +std::numeric_limits<double>::infinity()), std::domain_error); // Using typedef
+   BOOST_CHECK_THROW(boost::math::pareto mypinf1(+std::numeric_limits<double>::infinity(), +std::numeric_limits<double>::infinity()), std::domain_error); // Using typedef
 
   // Test on extreme values of random variate x, using just double because it has numeric_limit infinity etc..
   // No longer allow x to be + or - infinity, then these tests should throw.
@@ -296,7 +296,7 @@ int test_main(int, char* [])
   BOOST_CHECK_THROW(cdf(pareto11, -(std::numeric_limits<double>::min)()), std::domain_error); // x = - min,
   BOOST_CHECK_THROW(cdf(pareto11, -(std::numeric_limits<double>::max)()), std::domain_error); // x = - max,
  
-	// (Parameter value, arbitrarily zero, only communicates the floating point type).
+   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tol5eps = 0.0001 %
   test_spots(0.0); // Test double. OK at decdigits 7, tol5eps = 1e07 %
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

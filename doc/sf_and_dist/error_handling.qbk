@@ -1,6 +1,6 @@
 [section:error_handling Error Handling]
 
-[def __format [@../../../libs/format/index.html Boost.Format]]
+[def __format [@../../../../format/index.html Boost.Format]]
 
 [heading Quick Reference]
 
@@ -159,7 +159,7 @@ the error, or set global ::errno, then a NaN will be returned.
 This behaviour is chosen to assist compatibility with the behaviour of 
 ['ISO/IEC 9899:1999 Programming languages - C]
 and with the
-[@www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 6]:
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 6]:
 
 [:['"Each of the functions declared above shall return a NaN (Not a Number)
 if any argument value is a NaN, but it shall not report a domain error.

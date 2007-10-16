@@ -1,3 +1,8 @@
+//  (C) Copyright John Maddock 2006-7.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 4>, 619> poisson_quantile_data = {{
       { SC_(2.539736270904541015625), SC_(0.097540400922298431396484375), SC_(0.1236392659323415267286721455855935332272165776019), SC_(4.1794244675777288954971650240102219690023733491107) }, 

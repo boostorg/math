@@ -1,3 +1,8 @@
+//  (C) Copyright John Maddock 2006-7.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 5>, 792> negative_binomial_quantile_data = {{
       { SC_(4.285762786865234375), SC_(0.12698681652545928955078125), SC_(0.097540400922298431396484375), SC_(11.568381290037563253305975817351444024377036234904), SC_(49.67581419477884086070549390307050513757197652133) }, 

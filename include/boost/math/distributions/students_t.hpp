@@ -63,16 +63,16 @@ typedef students_t_distribution<double> students_t;
 template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const students_t_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
-	using boost::math::tools::max_value;
-	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
+   using boost::math::tools::max_value;
+   return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
 
 template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> support(const students_t_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
-	// This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-	using boost::math::tools::max_value;
-	return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
+   // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+   using boost::math::tools::max_value;
+   return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
 
 template <class RealType, class Policy>
@@ -146,7 +146,7 @@ inline RealType cdf(const students_t_distribution<RealType, Policy>& dist, const
       RealType z = degrees_of_freedom / (degrees_of_freedom + t2);
       probability = ibeta(degrees_of_freedom / 2, static_cast<RealType>(0.5), z, Policy()) / 2;
    }
-   return (t > 0 ? 1	- probability : probability);
+   return (t > 0 ? 1   - probability : probability);
 } // cdf
 
 template <class RealType, class Policy>

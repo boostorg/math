@@ -28,8 +28,8 @@
 
 namespace boost
 {
-	namespace math
-	{ // Math functions (in roughly alphabetic order).
+   namespace math
+   { // Math functions (in roughly alphabetic order).
 
    // Beta functions.
    template <class RT1, class RT2>
@@ -621,7 +621,7 @@ namespace boost
    template <class T>
    bool isnormal BOOST_NO_MACRO_EXPAND(T t);
 
- 	} // namespace math
+    } // namespace math
 } // namespace boost
 
 #define BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(Policy)\

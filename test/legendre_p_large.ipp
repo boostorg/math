@@ -1,3 +1,8 @@
+//  (C) Copyright John Maddock 2006-7.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 4>, 160> legendre_p_large = {
       SC_(29), SC_(-0.74602639675140380859375), SC_(0.050915219643735786802064817454102557266509665552523), SC_(-0.27118035040452065163236941090242943684321195237749), 

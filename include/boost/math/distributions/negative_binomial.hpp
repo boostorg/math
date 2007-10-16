@@ -259,16 +259,16 @@ namespace boost
     template <class RealType, class Policy>
     inline const std::pair<RealType, RealType> range(const negative_binomial_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable k.
-	    using boost::math::tools::max_value;
-	    return std::pair<RealType, RealType>(0, max_value<RealType>()); // max_integer?
+       using boost::math::tools::max_value;
+       return std::pair<RealType, RealType>(0, max_value<RealType>()); // max_integer?
     }
 
     template <class RealType, class Policy>
     inline const std::pair<RealType, RealType> support(const negative_binomial_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable k.
-	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-	    using boost::math::tools::max_value;
-	    return std::pair<RealType, RealType>(0,  max_value<RealType>()); // max_integer?
+       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+       using boost::math::tools::max_value;
+       return std::pair<RealType, RealType>(0,  max_value<RealType>()); // max_integer?
     }
 
     template <class RealType, class Policy>
@@ -458,7 +458,7 @@ namespace boost
       }
       if (P <= pow(dist.success_fraction(), dist.successes()))
       { // p <= pdf(dist, 0) == cdf(dist, 0)
-			   return 0;
+        return 0;
       }
       /*
       // Calculate quantile of negative_binomial using the inverse incomplete beta function.

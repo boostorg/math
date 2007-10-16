@@ -70,7 +70,23 @@ void expected_results()
       "float",                          // test type(s)
       "[^|]*",                          // test data group
       "boost::math::tgamma_ratio[^|]*", 35, 8);                 // test function
-
+   //
+   // Linux AMD x86em64 has slightly higher rates:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux.*",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*",               // test data group
+      "boost::math::tgamma_ratio[^|]*", 300, 100);                 // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux.*",                          // platform
+      "real_concept",                     // test type(s)
+      "[^|]*",               // test data group
+      "boost::math::tgamma_ratio[^|]*", 300, 100);                 // test function
    //
    // Catch all cases come last:
    //

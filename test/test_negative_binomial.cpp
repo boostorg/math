@@ -793,8 +793,8 @@ int test_main(int, char* [])
 {
   // Check that can generate negative_binomial distribution using the two convenience methods:
   using namespace boost::math;
-	negative_binomial mynb1(2., 0.5); // Using typedef - default type is double.
-	negative_binomial_distribution<> myf2(2., 0.5); // Using default RealType double.
+   negative_binomial mynb1(2., 0.5); // Using typedef - default type is double.
+   negative_binomial_distribution<> myf2(2., 0.5); // Using default RealType double.
 
   // Basic sanity-check spot values.
 

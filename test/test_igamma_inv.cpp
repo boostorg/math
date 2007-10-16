@@ -367,13 +367,21 @@ int test_main(int, char* [])
    BOOST_MATH_CONTROL_FP;
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
+#ifdef TEST_FLOAT
    test_spots(0.0F, "float");
 #endif
+#endif
+#ifdef TEST_DOUBLE
    test_spots(0.0, "double");
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#ifdef TEST_LDOUBLE
    test_spots(0.0L, "long double");
+#endif
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifdef TEST_REAL_CONCEPT
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 #endif
 

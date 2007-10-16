@@ -126,13 +126,13 @@ void test_error(T)
 
 int test_main(int, char* [])
 {
-	// Test error handling.
-	// (Parameter value, arbitrarily zero, only communicates the floating point type FPT).
-	test_error(0.0F); // Test float.
-	test_error(0.0); // Test double.
-	test_error(0.0L); // Test long double.
+   // Test error handling.
+   // (Parameter value, arbitrarily zero, only communicates the floating point type FPT).
+   test_error(0.0F); // Test float.
+   test_error(0.0); // Test double.
+   test_error(0.0L); // Test long double.
   test_error(boost::math::concepts::real_concept(0.0L)); // Test concepts.
-	return 0;
+   return 0;
 } // int test_main(int, char* [])
 
 /*

@@ -307,11 +307,19 @@ int test_main(int, char* [])
 #ifdef TEST_GSL
    gsl_set_error_handler_off();
 #endif
+#ifdef TEST_FLOAT
    test_spots(0.0F);
+#endif
+#ifdef TEST_DOUBLE
    test_spots(0.0);
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#ifdef TEST_LDOUBLE
    test_spots(0.0L);
+#endif
+#ifdef TEST_REAL_CONCEPT
    test_spots(boost::math::concepts::real_concept(0.1));
+#endif
 #endif
 
 #ifdef TEST_FLOAT

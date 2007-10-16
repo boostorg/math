@@ -6,8 +6,7 @@
 #ifndef BOOST_MATH_TOOLS_SIGN_HPP
 #define BOOST_MATH_TOOLS_SIGN_HPP
 
-#include <cmath>
-#include <cstdlib>
+#include <boost/math/tools/config.hpp>
 
 namespace boost{ namespace math{ 
 
@@ -26,6 +25,7 @@ inline int signbit(const T& z)
 template <class T>
 inline T copysign(const T& x, const T& y)
 {
+   BOOST_MATH_STD_USING
    return fabs(x) * boost::math::sign(y);
 }
 
