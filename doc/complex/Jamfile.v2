@@ -44,6 +44,7 @@ boostbook standalone
         <format>pdf:<xsl:param>xep.extensions=1
         # TOC generation: this is needed for FOP 0.2, but must not be set to zero for FOP-0.9!
         <format>pdf:<xsl:param>fop.extensions=0
+        <format>pdf:<xsl:param>fop1.extensions=0
         # No indent on body text:
         <format>pdf:<xsl:param>body.start.indent=0pt
         # Margin size:
@@ -64,6 +65,7 @@ boostbook standalone
         <format>pdf:<xsl:param>admon.graphics.path=$(images_location)/../../svg-admon/
         <format>pdf:<xsl:param>draft.mode="no"
     ;
+
 
 
 
