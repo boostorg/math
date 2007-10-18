@@ -28,7 +28,7 @@
         of the First and Second Kinds</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.bessel.bessel.synopsis"></a><h5>
-<a name="id669290"></a>
+<a name="id669284"></a>
           <a href="bessel.html#math_toolkit.special.bessel.bessel.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -45,7 +45,7 @@
 <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_neumann</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <a name="math_toolkit.special.bessel.bessel.description"></a><h5>
-<a name="id669800"></a>
+<a name="id669794"></a>
           <a href="bessel.html#math_toolkit.special.bessel.bessel.description">Description</a>
         </h5>
 <p>
@@ -111,16 +111,16 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/bessel_yv.png" alt="bessel_yv"></span>
         </p>
 <a name="math_toolkit.special.bessel.bessel.testing"></a><h5>
-<a name="id670172"></a>
+<a name="id670166"></a>
           <a href="bessel.html#math_toolkit.special.bessel.bessel.testing">Testing</a>
         </h5>
 <p>
-          There are two sets of test values: spot values calculated using <a href="http//:functions.wolfram.com" target="_top">functions.wolfram.com</a>, and a
+          There are two sets of test values: spot values calculated using <a href="http://functions.wolfram.com" target="_top">functions.wolfram.com</a>, and a
           much larger set of tests computed using a simplified version of this implementation
           (with all the special case handling removed).
         </p>
 <a name="math_toolkit.special.bessel.bessel.accuracy"></a><h5>
-<a name="id670211"></a>
+<a name="id670204"></a>
           <a href="bessel.html#math_toolkit.special.bessel.bessel.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -136,7 +136,7 @@
           zero error</a>. All values are relative errors in units of epsilon.
         </p>
 <div class="table">
-<a name="id670268"></a><p class="title"><b>Table 29. Errors Rates in cyl_bessel_j</b></p>
+<a name="id670261"></a><p class="title"><b>Table 29. Errors Rates in cyl_bessel_j</b></p>
 <div class="table-contents"><table class="table" summary="Errors Rates in cyl_bessel_j">
 <colgroup>
 <col>
@@ -305,7 +305,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id670572"></a><p class="title"><b>Table 30. Errors Rates in cyl_neumann</b></p>
+<a name="id670565"></a><p class="title"><b>Table 30. Errors Rates in cyl_neumann</b></p>
 <div class="table-contents"><table class="table" summary="Errors Rates in cyl_neumann">
 <colgroup>
 <col>
@@ -490,12 +490,12 @@
           the test data (no significant figures correct), and even GSL performs badly
           with some inputs to J<sub>v</sub>. Note that by way of double-checking these results,
           the worst performing <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>
-          and GSL cases were recomputed using <a href="http//:functions.wolfram.com" target="_top">functions.wolfram.com</a>,
+          and GSL cases were recomputed using <a href="http://functions.wolfram.com" target="_top">functions.wolfram.com</a>,
           and the result checked against our test data: no errors in the test data
           were found.
         </p>
 <a name="math_toolkit.special.bessel.bessel.implementation"></a><h5>
-<a name="id671001"></a>
+<a name="id670994"></a>
           <a href="bessel.html#math_toolkit.special.bessel.bessel.implementation">Implementation</a>
         </h5>
 <p>

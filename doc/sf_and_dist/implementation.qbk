@@ -388,7 +388,7 @@ the underlying special function is known to be difficult to implement.
 
 The primary source for the equations is now 
 [@http://www.w3.org/Math/ MathML]: see the 
-*.mml files in libs\/math\/doc\/equations\/.
+*.mml files in libs\/math\/doc\/sf_and_dist\/equations\/.
 
 These are most easily edited by a GUI editor such as 
 [@http://mathcast.sourceforge.net/home.html Mathcast],
@@ -416,114 +416,10 @@ If neccessary the XHTML wrapper can be removed with:
 
 [pre cat filename | tr -d "\\r\\n" \| sed -e 's\/.*\\(<math\[^>\]\*>.\*<\/math>\\).\*\/\\1\/' > newfile]
 
-Setting up fonts for SVGMath is currently rather tricky, on a windows system
-JM's font setup looks like this:
+Setting up fonts for SVGMath is currently rather tricky, on a Windows XP system
+JM's font setup [@../svgmath.xml looks like this].
 
-[pre
-<!-- MathML-to-SVG configuration file -->
-<config verbose="true">
-    <!-- Fallback font family -->
-    <fallback family="Lucida Sans Unicode"\/>
-    
-    <!-- Default values for MathML properties. -->
-    <!-- Most of these are defined in the MathML Rec - change with care -->
-    <defaults displaystyle="false"
-              mathsize="12pt"
-              scriptminsize="8pt"
-              scriptsizemultiplier="0.71"
-              veryverythinmathspace="0.0555556em"
-              verythinmathspace="0.111111em"
-              thinmathspace="0.166667em"
-              mediummathspace="0.222222em"
-              thickmathspace="0.277778em"
-              verythickmathspace="0.333333em"
-              veryverythickmathspace="0.388889em"
-              rowspacing="1.0ex"
-              columnspacing="0.8em"
-              framespacing="0.4em 0.5ex"\/>
-
-    <!-- Additional styling for individual operators -->
-    <!-- Make differentials italic -->
-    <operator-style operator="&#x2145;" fontstyle="italic"\/>
-    <operator-style operator="&#x2146;" fontstyle="italic"\/>
-    
-    <!-- Font families -->
-    <family name="Times New Roman">
-         <font ttf="C:\WINDOWS\Fonts\times.ttf"\/>
-         <font weight="bold" ttf="C:\WINDOWS\Fonts\timesbd.ttf"\/>
-         <font style="italic" ttf="C:\WINDOWS\Fonts\timesi.ttf"\/>
-         <font weight="bold" style="italic" ttf="C:\WINDOWS\Fonts\timesbi.ttf"\/>        
-    <\/family>
-
-    <family name="Arial">
-         <font ttf="C:\WINDOWS\Fonts\arial.ttf"\/>
-         <font weight="bold" ttf="C:\WINDOWS\Fonts\arialbd.ttf"\/>
-         <font style="italic" ttf="C:\WINDOWS\Fonts\ariali.ttf"\/>
-         <font weight="bold" style="italic" ttf="C:\WINDOWS\Fonts\arialbi.ttf"\/>        
-    <\/family>
-
-    <family name="Courier New">
-         <font ttf="C:\WINDOWS\Fonts\cour.ttf"\/>
-         <font weight="bold" ttf="C:\WINDOWS\Fonts\courbd.ttf"\/>
-         <font style="italic" ttf="C:\WINDOWS\Fonts\couri.ttf"\/>
-         <font weight="bold" style="italic" ttf="C:\WINDOWS\Fonts\courbi.ttf"\/>        
-    <\/family>
-
-    <family name="Euclid Fraktur">
-         <font ttf="C:\WINDOWS\Fonts\eufrak.ttf"\/>
-         <font weight="bold" ttf="C:\WINDOWS\Fonts\eufrakb.ttf"\/>
-    <\/family>
-
-    <family name="Monotype Corsiva">
-         <font ttf="C:\WINDOWS\Fonts\mtcorsva.ttf"\/>
-    <\/family>
-
-    <family name="Lucida Sans Unicode">
-         <font ttf="C:\WINDOWS\Fonts\lsansuni.ttf"\/>
-    <\/family>
-
-    <!-- Math variant definitions -->
-    <!-- Serif -->
-    <mathvariant name="normal"
-                 family="Times New Roman, Lucida Sans Unicode"\/>                 
-    <mathvariant name="bold"
-                 family="Times New Roman, Lucida Sans Unicode" weight="bold"\/>
-    <mathvariant name="italic"
-                 family="Times New Roman, Lucida Sans Unicode" style="italic"\/>
-    <mathvariant name="bold-italic"
-                 family="Times New Roman, Lucida Sans Unicode" weight="bold" style="italic"\/>
-
-    <!-- Sans-Serif -->
-    <mathvariant name="sans-serif"
-                 family="Arial, Lucida Sans Unicode"\/>                 
-    <mathvariant name="bold-sans-serif"
-                 family="Arial, Lucida Sans Unicode" weight="bold"\/>
-    <mathvariant name="sans-serif-italic"
-                 family="Arial, Lucida Sans Unicode" style="italic"\/>
-    <mathvariant name="sans-serif-bold-italic"
-                 family="Arial, Lucida Sans Unicode" weight="bold" style="italic"\/>
-
-    <!-- Fraktur -->
-    <mathvariant name="fraktur" 
-                 family="Euclid Fraktur, Lucida Sans Unicode"\/>
-    <mathvariant name="bold-fraktur" 
-                 family="Euclid Fraktur, Lucida Sans Unicode" weight="bold"\/>
-
-    <!-- Script -->
-    <mathvariant name="script" 
-                 family="Monotype Corsiva, Lucida Sans Unicode"\/>
-    <mathvariant name="bold-script" 
-                 family="Monotype Corsiva, Lucida Sans Unicode" weight="bold"\/>
-
-    <!-- Monospace -->
-    <mathvariant name="monospace" family="Courier New, Lucida Sans Unicode"\/>
-
-    <!-- Double-struck -->
-    <mathvariant name="double-struck" family="Lucida Sans Unicode"\/>
-<\/config>
-]
-
-Note that unlike the sample config file supplied with SVGMath this does not
+Note that unlike the sample config file supplied with SVGMath, this does not
 make use of the Mathematica 7 font as this lacks sufficient Unicode information
 for it to be used with either SVGMath or XEP "as is".
 
@@ -536,203 +432,22 @@ and a command such as:
 
 [pre java -jar 'C:\download\open\batik-1.7\batik-rasterizer.jar' -dpi 120 *.svg]
 
-The PDF is generated using:
+The PDF is generated into \pdf\math.pdf
+using a command from a shell or command window with current directory
+\math_toolkit\libs\math\doc\sf_and_dist, typically:
 
-[pre $bjam -a pdf xsl:param=admon.graphics.extension=".svg" \
->xsl:param=use.role.for.mediaobject=1 xsl:param=preferred.mediaobject.role=print]
+[pre bjam -a pdf]
 
 Note that XEP will have to be configured to *use and embed* 
-whatever fonts are used by the SVG equations.  JM's XEP
-config file looks like:
+whatever fonts are used by the SVG equations
+(if necessary editing the sample xep.xml provided by the XEP installation). 
 
-[pre
-<?xml version="1.0" encoding="UTF-8"?>
-<config>
+(html is generated at math_toolkit\libs\math\doc\sf_and_dist\html\index.html
+using just bjam -a).
 
-  <!-- ======================================================= -->
-  <!-- Formatter options                                       -->
-  <!-- ======================================================= -->
-  <options>
-    <option name="LICENSE" value="license.xml"\/>
-    <option name="TMPDIR" value="none"\/>
-    <option name="BROKENIMAGE" value="images\/404.gif"\/>
-    <option name="LOGO" value="images\/logo-renderx.svg"\/>
-    
-    <!-- Backend options -->
-    <generator-options format="PDF">
-      <!-- <option name="COMPRESS" value="false"\/> -->
-      <!-- <option name="PDF_VERSION" value="1.3"\/> -->
-    <\/generator-options>
-      
-    <generator-options format="PostScript">
-      <!-- <option name="LANGUAGE_LEVEL" value="2"\/> -->
-      <!-- <option name="CLONE_EPS" value="true"\/> -->
-    <\/generator-options>
-
-    <generator-options format="AFP">
-      <option name="AFPCodepageTxt" value="Cp500"\/>
-      <option name="AFPCodepage" value="T1V10500"\/>
-      <option name="AFPLogLevel" value="0"\/>
-      <option name="USE_PTOCA_LEVEL" value="3"\/>
-      <option name="USE_BCOCA_LEVEL" value="1"\/>
-      <option name="USE_GOCA_LEVEL" value="1"\/>
-      <option name="RESOLUTION" value="1440"\/>
-      <!-- <option name="AFPGrayImage" value="yes"\/> -->
-      <option name="USE_SHADING_PATTERNS" value="yes"\/> 
-      <option name="USE_REPLICATE_AND_TRIM" value="yes"\/> 
-      <option name="SHADING_PATTERN_RESOLUTION" value="0.25"\/>
-      <option name="TRY_USING_TIFF_COMPRESSION" value="yes"\/> 
-      <option name="AFPFont,Helvetica" value="C0H200.0, C0H300.0, C0H400.0, C0H500.0, C0H201.0, C0H301.0, C0H401.0, C0H501.0, 278"\/>
-      <option name="AFPFont,Times" value="C0N200.0, C0N300.0, C0N400.0, C0N500.0, C0N201.0, C0N301.0, C0N401.0, C0N501.0, 250"\/>
-      <option name="AFPFont,Courier" value="C04200.0, C04300.0, C04400.0, C04500.0, C04201.0, C04301.0, C04401.0, C04501.0, 600"\/>
-      <option name="AFPFont,Arial" value="C0H200.0, C0H300.0, C0H400.0, C0H500.0, C0H201.0, C0H301.0, C0H401.0, C0H501.0, 278"\/>
-      <option name="AFPFont,Times New Roman" value="C0N200.0, C0N300.0, C0N400.0, C0N500.0, C0N201.0, C0N301.0, C0N401.0, C0N501.0, 250"\/>
-      <option name="AFPFont,Verdana" value="C0VE0.0,  C0VEI.0,  C0VEB.0,  C0VEZ.0,  C0H201.0, C0H301.0, C0H401.0, C0H501.0,278"\/>
-      <option name="AFPFont,Interstate" value="C0IS0.0, C0ISB.0, C0IS0.0, C0ISB.0, C0H201.0, C0H301.0, C0H401.0, C0H501.0, 278"\/>
-    <\/generator-options>
-  <\/options>
-
-  <!-- ======================================================= -->
-  <!-- Fonts                                                   -->
-  <!-- ======================================================= -->
-  
-  <fonts xml:base="fonts\/" default-family="Helvetica">
-    
-    <!-- Base Adobe fonts. -->
-    <font-group label="Base 14" embed="false">
-      <font-family name="Courier">
-        <font><font-data afm="Courier.afm"\/><\/font>
-        <font style="oblique"><font-data afm="Courier-Oblique.afm"\/><\/font>
-        <font weight="bold"><font-data afm="Courier-Bold.afm"\/><\/font>
-        <font weight="bold" style="oblique"><font-data afm="Courier-BoldOblique.afm"\/><\/font>
-      <\/font-family>
-
-      <font-family name="Helvetica">
-        <font><font-data afm="Helvetica.afm"\/><\/font>
-        <font style="oblique"><font-data afm="Helvetica-Oblique.afm"\/><\/font>
-        <font weight="bold"><font-data afm="Helvetica-Bold.afm"\/><\/font>
-        <font weight="bold" style="oblique"><font-data afm="Helvetica-BoldOblique.afm"\/><\/font>
-      <\/font-family>
-
-      <font-family name="Times" ligatures="ﬁ ﬂ">
-        <font><font-data afm="Times-Roman.afm"\/><\/font>
-        <font style="italic"><font-data afm="Times-Italic.afm"\/><\/font>
-        <font weight="bold"><font-data afm="Times-Bold.afm"\/><\/font>
-        <font weight="bold" style="italic"><font-data afm="Times-BoldItalic.afm"\/><\/font>
-      <\/font-family>
-
-      <font-family name="Symbol">
-        <font><font-data afm="Symbol.afm"\/><\/font>
-      <\/font-family>
-
-      <font-family name="ZapfDingbats"> 
-        <font><font-data afm="ZapfDingbats.afm"\/><\/font>
-      <\/font-family>
-    <\/font-group>
-
-    <!-- Other Type1 fonts -->
-    <font-group label="Assorted Type 1" embed="true">
-      <font-family name="OmegaSerifIPA">
-        <font><font-data afm="IPA.afm" pfa="IPA.pfa" glyph-list="IPA.glyphs"\/><\/font>
-      <\/font-family>   
-      <font-alias name="OmegaIPA" value="OmegaSerifIPA"\/>
-      <font-alias name="Phonetic" value="OmegaSerifIPA"\/>
-    <\/font-group>
-
-    <!-- Sample configuration for Windows TrueType fonts.  -->
-
-    <font-group xml:base="file:\/C:\/Windows\/Fonts\/" label="Windows TrueType" embed="true" subset="true"> 
-      <font-family name="Arial">
-        <font><font-data ttf="arial.ttf"\/><\/font>
-        <font style="oblique"><font-data ttf="ariali.ttf"\/><\/font>
-        <font weight="bold"><font-data ttf="arialbd.ttf"\/><\/font>
-        <font weight="bold" style="oblique"><font-data ttf="arialbi.ttf"\/><\/font>
-      <\/font-family>
-
-      <font-family name="Times New Roman" ligatures="&#xFB01; &#xFB02;">
-        <font><font-data ttf="times.ttf"\/><\/font>
-        <font style="italic"><font-data ttf="timesi.ttf"\/><\/font>
-        <font weight="bold"><font-data ttf="timesbd.ttf"\/><\/font>
-        <font weight="bold" style="italic"><font-data ttf="timesbi.ttf"\/><\/font>
-      <\/font-family>
-
-      <font-family name="Courier New">
-        <font><font-data ttf="cour.ttf"\/><\/font>
-        <font style="oblique"><font-data ttf="couri.ttf"\/><\/font>
-        <font weight="bold"><font-data ttf="courbd.ttf"\/><\/font>
-        <font weight="bold" style="oblique"><font-data ttf="courbi.ttf"\/><\/font>
-      <\/font-family>
-
-      <font-family name="Tahoma" embed="true">
-        <font><font-data ttf="tahoma.ttf"\/><\/font>
-        <font weight="bold"><font-data ttf="tahomabd.ttf"\/><\/font>
-      <\/font-family>
-
-      <font-family name="Verdana" embed="true">
-        <font><font-data ttf="verdana.ttf"\/><\/font>
-        <font style="oblique"><font-data ttf="verdanai.ttf"\/><\/font>
-        <font weight="bold"><font-data ttf="verdanab.ttf"\/><\/font>
-        <font weight="bold" style="oblique"><font-data ttf="verdanaz.ttf"\/><\/font>
-      <\/font-family>
-
-      <font-family name="Palatino" embed="true" ligatures="&#xFB00; &#xFB01; &#xFB02; &#xFB03; &#xFB04;">
-        <font><font-data ttf="pala.ttf"\/><\/font>
-        <font style="italic"><font-data ttf="palai.ttf"\/><\/font>
-        <font weight="bold"><font-data ttf="palab.ttf"\/><\/font>
-        <font weight="bold" style="italic"><font-data ttf="palabi.ttf"\/><\/font>
-      <\/font-family>
-      
-    <font-family name="Lucida Sans Unicode">
-         <font><font-data ttf="lsansuni.ttf"\/><\/font>
-    <\/font-family>
-      
-    <\/font-group>
-    
-    <!-- Required aliases -->      
-    <font-alias name="monospace" value="Courier"\/>
-    <font-alias name="sans-serif" value="Helvetica"\/>
-    <font-alias name="serif" value="Times"\/>    
-    <font-alias name="cursive" value="Times"\/>
-    <font-alias name="fantasy" value="Times"\/>
-  <\/fonts>
-
-  <!-- ======================================================= -->
-  <!-- Language-specific data: hyphenation, line breaking, etc -->
-  <!-- ======================================================= -->
-  <languages default-language="en-US" xml:base="hyphen\/">
-  
-    <language name="English (US)" codes="none en-US eng-US">
-      <hyphenation pattern="hyphen.tex"\/>
-    <\/language>
-
-    <language name="English (UK)" codes="en-GB eng-GB en eng">
-      <hyphenation pattern="ukhyphen.tex"\/>
-    <\/language>
-
-    <language name="Russian" codes="ru rus">
-      <hyphenation pattern="ruhyphal.tex" encoding="koi8-r"\/>
-    <\/language>
-
-    <language name="French" codes="fr fra fre">
-      <hyphenation pattern="frhyph_rx.tex"\/>
-    <\/language>
-         
-    <language name="German" codes="de deu ger">
-      <hyphenation pattern="dehyph_rx.tex"\/>
-    <\/language>
-
-    <language name="Spanish" codes="es esl spa">
-      <hyphenation pattern="eshyph_rx.tex"\/>
-    <\/language>
-    
-    <language name="Polish" codes="pl pol">
-      <hyphenation pattern="plhyph_rx.tex"\/>
-    <\/language>
-    
-  <\/languages>
-    
-<\/config>
-]
+JM's XEP config file [@../xep.xml looks like this].
+PAB had to alter his because the Lucida Sans Unicode font had a different name.
+Changes are very likely to be required if you are not using Windows.
 
 XZ authored his equations using the venerable Latex, JM converted these to
 MathML using [@http://gentoo-wiki.com/HOWTO_Convert_LaTeX_to_HTML_with_MathML mxlatex].
@@ -757,11 +472,27 @@ template defined in math.qbk.  This outputs Docbook XML that looks like:
 MathML is not currently present in the Docbook output, or in the 
 generated HTML: this needs further investigation.
 
-[endsect][/section:implementation Implementation Notes]
+[h4 Producing Graphs]
+
+Graphs were mostly produced by a very laborious process entailing output 
+of columns of values from C++ programs to a .csv file,
+use of [@http://www.rjsweb.fsnet.co.uk/graph/ RJS Graph] to arrange the display and axes,
+and output to a .ps file, followed by conversion to .png using Adobe Photoshop,
+or similar utility.  This rigmarole is *not* recommended!
+
+We plan to carry out this process in a single step using the 
+[@http://code.google.com/soc/2007/boost/about.html Google Summer of Code 2007]
+project of Jacob Voytko (whose work so far is at .\boost-sandbox\SOC\2007\visualization)
+that should, when completed, allow output of annotated graphs as
+Scalable Vector Graphic .svg files directly from C++ programs.
+
+[endsect] [/section:implementation Implementation Notes]
 
 [/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2007 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
+

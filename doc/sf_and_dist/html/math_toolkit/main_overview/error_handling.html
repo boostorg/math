@@ -27,7 +27,7 @@
 <a name="math_toolkit.main_overview.error_handling"></a><a href="error_handling.html" title="Error Handling"> Error Handling</a>
 </h3></div></div></div>
 <a name="math_toolkit.main_overview.error_handling.quick_reference"></a><h5>
-<a name="id491012"></a>
+<a name="id491060"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.quick_reference">Quick
         Reference</a>
       </h5>
@@ -121,7 +121,7 @@
         the default action for each error shown in bold:
       </p>
 <div class="table">
-<a name="id491270"></a><p class="title"><b>Table 1. Possible Actions for Domain Errors</b></p>
+<a name="id491318"></a><p class="title"><b>Table 1. Possible Actions for Domain Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Domain Errors">
 <colgroup>
 <col>
@@ -196,7 +196,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id491586"></a><p class="title"><b>Table 2. Possible Actions for Pole Errors</b></p>
+<a name="id491634"></a><p class="title"><b>Table 2. Possible Actions for Pole Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Pole Errors">
 <colgroup>
 <col>
@@ -271,7 +271,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id491900"></a><p class="title"><b>Table 3. Possible Actions for Overflow Errors</b></p>
+<a name="id491948"></a><p class="title"><b>Table 3. Possible Actions for Overflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Overflow Errors">
 <colgroup>
 <col>
@@ -346,7 +346,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id492216"></a><p class="title"><b>Table 4. Possible Actions for Underflow Errors</b></p>
+<a name="id492264"></a><p class="title"><b>Table 4. Possible Actions for Underflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Underflow Errors">
 <colgroup>
 <col>
@@ -421,7 +421,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id492440"></a><p class="title"><b>Table 5. Possible Actions for Denorm Errors</b></p>
+<a name="id492488"></a><p class="title"><b>Table 5. Possible Actions for Denorm Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Denorm Errors">
 <colgroup>
 <col>
@@ -496,7 +496,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id492664"></a><p class="title"><b>Table 6. Possible Actions for Internal Evaluation
+<a name="id492712"></a><p class="title"><b>Table 6. Possible Actions for Internal Evaluation
       Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Internal Evaluation
       Errors">
@@ -573,7 +573,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.main_overview.error_handling.rationale"></a><h5>
-<a name="id493000"></a>
+<a name="id493047"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.rationale">Rationale</a>
       </h5>
 <p>
@@ -592,7 +592,7 @@
         </li>
 </ul></div>
 <a name="math_toolkit.main_overview.error_handling.finding_more_information"></a><h5>
-<a name="id493049"></a>
+<a name="id493097"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.finding_more_information">Finding
         More Information</a>
       </h5>
@@ -614,7 +614,7 @@
         The various kind of errors are described in more detail below.
       </p>
 <a name="domain_error"></a><a name="math_toolkit.main_overview.error_handling.domain_errors"></a><h5>
-<a name="id493143"></a>
+<a name="id493191"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.domain_errors">Domain
         Errors</a>
       </h5>
@@ -641,7 +641,7 @@
       </p>
 <p>
         This behaviour is chosen to assist compatibility with the behaviour of <span class="emphasis"><em>ISO/IEC
-        9899:1999 Programming languages - C</em></span> and with the <a href="../../www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf" target="_top">Draft
+        9899:1999 Programming languages - C</em></span> and with the <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf" target="_top">Draft
         Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph
         6</a>:
       </p>
@@ -695,7 +695,7 @@
 <p>
         Note that in order to support information-rich error messages when throwing
         exceptions, <code class="computeroutput"><span class="identifier">Message</span></code> must
-        contain a <a href="../../../../../libs/format/index.html" target="_top">Boost.Format</a>
+        contain a <a href="../../../../../../format/index.html" target="_top">Boost.Format</a>
         recognised format specifier: the argument <code class="computeroutput"><span class="identifier">Val</span></code>
         is inserted into the error message according to the specifier used.
       </p>
@@ -704,11 +704,11 @@
         a "%1%" then it is replaced by the value of <code class="computeroutput"><span class="identifier">Val</span></code>
         to the full precision of T, where as "%.3g" would contain the value
         of <code class="computeroutput"><span class="identifier">Val</span></code> to 3 digits. See the
-        <a href="../../../../../libs/format/index.html" target="_top">Boost.Format</a> documentation
+        <a href="../../../../../../format/index.html" target="_top">Boost.Format</a> documentation
         for more details.
       </p>
 <a name="pole_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_at_a_pole"></a><h5>
-<a name="id493528"></a>
+<a name="id493575"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_at_a_pole">Evaluation
         at a pole</a>
       </h5>
@@ -735,7 +735,7 @@
 <p>
         Note that in order to support information-rich error messages when throwing
         exceptions, <code class="computeroutput"><span class="identifier">Message</span></code> must
-        contain a <a href="../../../../../libs/format/index.html" target="_top">Boost.Format</a>
+        contain a <a href="../../../../../../format/index.html" target="_top">Boost.Format</a>
         recognised format specifier: the argument <code class="computeroutput"><span class="identifier">val</span></code>
         is inserted into the error message according to the specifier used.
       </p>
@@ -744,11 +744,11 @@
         a "%1%" then it is replaced by the value of <code class="computeroutput"><span class="identifier">val</span></code>
         to the full precision of T, where as "%.3g" would contain the value
         of <code class="computeroutput"><span class="identifier">val</span></code> to 3 digits. See the
-        <a href="../../../../../libs/format/index.html" target="_top">Boost.Format</a> documentation
+        <a href="../../../../../../format/index.html" target="_top">Boost.Format</a> documentation
         for more details.
       </p>
 <a name="overflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_overflow"></a><h5>
-<a name="id493851"></a>
+<a name="id493898"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_overflow">Numeric
         Overflow</a>
       </h5>
@@ -774,7 +774,7 @@
         doesn't support infinities, the maximum value for the type is returned.
       </p>
 <a name="underflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_underflow"></a><h5>
-<a name="id494133"></a>
+<a name="id494179"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_underflow">Numeric
         Underflow</a>
       </h5>
@@ -798,7 +798,7 @@
         an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="denorm_error"></a><a name="math_toolkit.main_overview.error_handling.denormalisation_errors"></a><h5>
-<a name="id494354"></a>
+<a name="id494402"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.denormalisation_errors">Denormalisation
         Errors</a>
       </h5>
@@ -822,7 +822,7 @@
         throws an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="evaluation_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_errors"></a><h5>
-<a name="id494593"></a>
+<a name="id494640"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_errors">Evaluation
         Errors</a>
       </h5>
@@ -847,7 +847,7 @@
 <p>
         Note that in order to support information rich error messages when throwing
         exceptions, <code class="computeroutput"><span class="identifier">Message</span></code> must
-        contain a <a href="../../../../../libs/format/index.html" target="_top">Boost.Format</a>
+        contain a <a href="../../../../../../format/index.html" target="_top">Boost.Format</a>
         recognised format specifier: the argument <code class="computeroutput"><span class="identifier">val</span></code>
         is inserted into the error message according to the specifier used.
       </p>
@@ -856,11 +856,11 @@
         a "%1%" then it is replaced by the value of <code class="computeroutput"><span class="identifier">val</span></code>
         to the full precision of T, where as "%.3g" would contain the value
         of <code class="computeroutput"><span class="identifier">val</span></code> to 3 digits. See the
-        <a href="../../../../../libs/format/index.html" target="_top">Boost.Format</a> documentation
+        <a href="../../../../../../format/index.html" target="_top">Boost.Format</a> documentation
         for more details.
       </p>
 <a name="checked_narrowing_cast"></a><a name="math_toolkit.main_overview.error_handling.errors_from_typecasts"></a><h5>
-<a name="id494922"></a>
+<a name="id494970"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.errors_from_typecasts">Errors
         from typecasts</a>
       </h5>

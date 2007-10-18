@@ -42,7 +42,7 @@
         behaves just like a built in floating point type.
       </p>
 <a name="math_toolkit.using_udt.concepts.basic_arithmetic_requirements"></a><h5>
-<a name="id733812"></a>
+<a name="id733797"></a>
         <a href="concepts.html#math_toolkit.using_udt.concepts.basic_arithmetic_requirements">Basic
         Arithmetic Requirements</a>
       </h5>
@@ -987,7 +987,7 @@
           The function <code class="computeroutput"><span class="identifier">epsilon</span></code> can
           be synthesised from the others, so no explicit specialisation is required
           provided the precision of RealType does not vary at runtime (see the header
-          <a href="../../../../../../../boost/math/tools/ntl.hpp" target="_top">boost/math/tools/ntl.hpp</a>
+          <a href="../../../../../../../boost/math/bindings/rr.hpp" target="_top">boost/math/bindings/rr.hpp</a>
           for an example where the precision does vary at runtime).
         </li>
 <li>
@@ -1034,7 +1034,7 @@
 </td></tr>
 </table></div>
 <a name="math_toolkit.using_udt.concepts.standard_library_support_requirements"></a><h5>
-<a name="id736880"></a>
+<a name="id736865"></a>
         <a href="concepts.html#math_toolkit.using_udt.concepts.standard_library_support_requirements">Standard
         Library Support Requirements</a>
       </h5>
@@ -1269,7 +1269,7 @@
         In addition, for efficient and accurate results, a <a href="../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
         approximation</a> is highly desirable. You may be able to adapt an existing
         approximation from <a href="../../../../../../../boost/math/special_functions/lanczos.hpp" target="_top">boost/math/special_functions/lanczos.hpp</a>
-        or <a href="../../../tools/ntl_rr_lanczos.hpp" target="_top">libs/math/tools/ntl_rr_lanczos.hpp</a>:
+        or <a href="../../../../../tools/ntl_rr_lanczos.hpp" target="_top">libs/math/tools/ntl_rr_lanczos.hpp</a>:
         you will need change static_cast's to lexical_cast's, and the constants to
         <span class="emphasis"><em>strings</em></span> (in order to ensure the coefficients aren't
         truncated to long double) and then specialise <code class="computeroutput"><span class="identifier">lanczos_traits</span></code>
