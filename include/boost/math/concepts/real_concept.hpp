@@ -28,6 +28,7 @@
 #include <ostream>
 #include <istream>
 #include <cmath>
+#include <math.h> // fmodl
 
 #ifndef BOOST_MATH_REAL_CONCEPT_HPP
 #define BOOST_MATH_REAL_CONCEPT_HPP
@@ -194,8 +195,10 @@ inline real_concept atan2(real_concept a, real_concept b)
 { return std::atan2(a.value(), b.value()); }
 inline real_concept ceil(real_concept a)
 { return std::ceil(a.value()); }
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline real_concept fmod(real_concept a, real_concept b)
 { return fmodl(a.value(), b.value()); }
+#endif
 inline real_concept cosh(real_concept a)
 { return std::cosh(a.value()); }
 inline real_concept exp(real_concept a)

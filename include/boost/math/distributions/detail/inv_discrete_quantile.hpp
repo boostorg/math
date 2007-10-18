@@ -200,7 +200,7 @@ typename Dist::value_type
    // If the root hasn't been bracketed yet, try again
    // using the multiplier this time:
    //
-   if(sign(fb) == sign(fa))
+   if((boost::math::sign)(fb) == (boost::math::sign)(fa))
    {
       if(fa < 0)
       {
@@ -208,7 +208,7 @@ typename Dist::value_type
          // Zero is to the right of x2, so walk upwards
          // until we find it:
          //
-         while(sign(fb) == sign(fa))
+         while((boost::math::sign)(fb) == (boost::math::sign)(fa))
          {
             if(count == 0)
                policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, policy_type());
@@ -228,7 +228,7 @@ typename Dist::value_type
          // Zero is to the left of a, so walk downwards
          // until we find it:
          //
-         while(sign(fb) == sign(fa))
+         while((boost::math::sign)(fb) == (boost::math::sign)(fa))
          {
             if(fabs(a) < tools::min_value<value_type>())
             {

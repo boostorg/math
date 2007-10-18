@@ -494,7 +494,7 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, T factor, bool risin
       // Zero is to the right of b, so walk upwards
       // until we find it:
       //
-      while(sign(fb) == sign(fa))
+      while((boost::math::sign)(fb) == (boost::math::sign)(fa))
       {
          if(count == 0)
             policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, pol);
@@ -521,7 +521,7 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, T factor, bool risin
       // Zero is to the left of a, so walk downwards
       // until we find it:
       //
-      while(sign(fb) == sign(fa))
+      while((boost::math::sign)(fb) == (boost::math::sign)(fa))
       {
          if(fabs(a) < tools::min_value<T>())
          {

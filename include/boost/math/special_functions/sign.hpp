@@ -7,23 +7,24 @@
 #define BOOST_MATH_TOOLS_SIGN_HPP
 
 #include <boost/math/tools/config.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 
 namespace boost{ namespace math{ 
 
 template <class T>
-inline int sign(const T& z)
+inline int sign BOOST_NO_MACRO_EXPAND(const T& z)
 {
    return (z == 0) ? 0 : (z < 0) ? -1 : 1;
 }
 
 template <class T>
-inline int signbit(const T& z)
+inline int signbit BOOST_NO_MACRO_EXPAND(const T& z)
 {
    return (z < 0) ? 1 : 0;
 }
 
 template <class T>
-inline T copysign(const T& x, const T& y)
+inline T copysign BOOST_NO_MACRO_EXPAND(const T& x, const T& y)
 {
    BOOST_MATH_STD_USING
    return fabs(x) * boost::math::sign(y);
