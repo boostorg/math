@@ -114,6 +114,7 @@ void test_classify(T t, const char* type)
 
 int test_main(int, char* [] )
 {
+   BOOST_MATH_CONTROL_FP;
    // start by printing some information:
 #ifdef isnan
    std::cout << "Platform has isnan macro." << std::endl;
@@ -133,8 +134,10 @@ int test_main(int, char* [] )
    // then run the tests:
    test_classify(float(0), "float");
    test_classify(double(0), "double");
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_classify((long double)(0), "long double");
    test_classify((boost::math::concepts::real_concept)(0), "real_concept");
+#endif
   return 0;
 }
 

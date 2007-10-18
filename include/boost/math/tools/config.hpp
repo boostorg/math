@@ -1,3 +1,8 @@
+//  Copyright (c) 2006-7 John Maddock
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef BOOST_MATH_TOOLS_CONFIG_HPP
 #define BOOST_MATH_TOOLS_CONFIG_HPP
 
@@ -13,12 +18,76 @@
 
 #include <boost/math/tools/user.hpp>
 
-#if defined(__CYGWIN__) || defined(__FreeBSD__)
+#if defined(__CYGWIN__) || defined(__FreeBSD__) || defined(_PA_RISC1_1)
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+//
+// Borland post 5.8.2 uses Dinkumware's std C lib which
+// doesn't have true long double precision.  Earlier
+// versions are problematic too:
+//
 #  define BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#  define BOOST_MATH_CONTROL_FP _control87(MCW_EM,MCW_EM)
+#  include <float.h>
 #endif
+#if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
+//
+// Darwin's rather strange "double double" is rather hard to
+// support, it should be possible given enough effort though...
+//
+#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#endif
+
+#ifdef BOOST_MSVC
+   // Better safe than sorry, our tests don't support hardware exceptions:
+#  define BOOST_MATH_CONTROL_FP _control87(MCW_EM,MCW_EM)
+#endif
+
+#if defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
+
+#  include "boost/type.hpp"
+#  include "boost/non_type.hpp"
+
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)         boost::type<t>* = 0
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(t)    boost::type<t>*
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE(t, v)  boost::non_type<t, v>* = 0
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)  boost::non_type<t, v>*
+
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(t)         \
+             , BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(t)    \
+             , BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(t)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(t, v)  \
+             , BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE(t, v)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)  \
+             , BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)
+
+#else
+
+// no workaround needed: expand to nothing
+
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(t)
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE(t, v)
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)
+
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(t)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(t)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(t, v)
+#  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)
+
+
+#endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
+// Sun's compiler emits a hard error if a constant underflows:
+#  define BOOST_MATH_SMALL_CONSTANT(x) 0
+#else
+#  define BOOST_MATH_SMALL_CONSTANT(x) x
+#endif
+
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1400)
 //
@@ -65,6 +134,12 @@
 #  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
 #endif
 //
+// Helper macro for controlling the FP behaviour:
+//
+#ifndef BOOST_MATH_CONTROL_FP
+#  define BOOST_MATH_CONTROL_FP
+#endif
+//
 // Helper macro for using statements:
 //
 #define BOOST_MATH_STD_USING \
@@ -108,53 +183,35 @@ inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
 {
    return (std::max)((std::max)(a, b), (std::max)(c, d));
 }
-//
-// We call this short forwarding function so that we can work around a bug
-// on Darwin that causes std::fmod to return a NaN.  The test case is:
-// std::fmod(1185.0L, 1.5L);
-//
-template <class T>
-inline T fmod_workaround(T a, T b)
-{
-   BOOST_MATH_STD_USING
-   return fmod(a, b);
-}
-#if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
-template <>
-inline long double fmod_workaround(long double a, long double b)
-{
-   return ::fmodl(a, b);
-}
-#endif
 } // namespace tools
 }} // namespace boost namespace math
 
 #ifdef __linux__
 
-	#include <fenv.h>
+   #include <fenv.h>
 
-	namespace boost{ namespace math{
-	namespace detail
-	{
-	struct fpu_guard
-	{
-		fpu_guard()
-		{
-			fegetexceptflag(&m_flags, FE_ALL_EXCEPT);
-			feclearexcept(FE_ALL_EXCEPT);
-		}
-		~fpu_guard()
-		{
-			fesetexceptflag(&m_flags, FE_ALL_EXCEPT);
-		}
-	private:
-		fexcept_t m_flags;
-	};
+   namespace boost{ namespace math{
+   namespace detail
+   {
+   struct fpu_guard
+   {
+      fpu_guard()
+      {
+         fegetexceptflag(&m_flags, FE_ALL_EXCEPT);
+         feclearexcept(FE_ALL_EXCEPT);
+      }
+      ~fpu_guard()
+      {
+         fesetexceptflag(&m_flags, FE_ALL_EXCEPT);
+      }
+   private:
+      fexcept_t m_flags;
+   };
 
-	} // namespace detail
-	}} // namespaces
+   } // namespace detail
+   }} // namespaces
 
-	#define BOOST_FPU_EXCEPTION_GUARD boost::math::detail::fpu_guard local_guard_object;
+   #define BOOST_FPU_EXCEPTION_GUARD boost::math::detail::fpu_guard local_guard_object;
 #else // All other platforms.
   #define BOOST_FPU_EXCEPTION_GUARD
 #endif
@@ -169,6 +226,7 @@ inline long double fmod_workaround(long double a, long double b)
 #endif
 
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP
+
 
 
 

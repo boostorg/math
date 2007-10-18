@@ -12,13 +12,17 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
-#endif
+#include "functor.hpp"
 
 #include "test_gamma_hooks.hpp"
 #include "handle_test_result.hpp"
+
+#if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
+#  define TEST_FLOAT
+#  define TEST_DOUBLE
+#  define TEST_LDOUBLE
+#  define TEST_REAL_CONCEPT
+#endif
 
 //
 // DESCRIPTION:
@@ -171,7 +175,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                     // test type(s)
       "[^|]*small[^|]*",                   // test data group
-      "[^|]*", 3500, 500);                  // test function
+      "[^|]*", 3700, 500);                  // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
@@ -256,14 +260,11 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
 template <class T>
 void do_test_gamma_inv(const T& data, const char* type_name, const char* test_name)
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
    pg funcp = boost::math::gamma_p_inv;
-
-   using namespace boost::lambda;
 
    boost::math::tools::test_result<value_type> result;
 
@@ -275,8 +276,8 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
    //
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
-      ret<value_type>(_1[2]));
+      bind_func(funcp, 0, 1),
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_p_inv", test_name);
    //
    // test gamma_q_inv(T, T) against data:
@@ -284,10 +285,9 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
    funcp = boost::math::gamma_q_inv;
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1])),
-      ret<value_type>(_1[3]));
+      bind_func(funcp, 0, 1),
+      extract_result(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_q_inv", test_name);
-#endif
 }
 
 template <class T>
@@ -364,27 +364,44 @@ void test_spots(T, const char* type_name)
 int test_main(int, char* [])
 {
    expected_results();
+   BOOST_MATH_CONTROL_FP;
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
+#ifdef TEST_FLOAT
    test_spots(0.0F, "float");
 #endif
+#endif
+#ifdef TEST_DOUBLE
    test_spots(0.0, "double");
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#ifdef TEST_LDOUBLE
    test_spots(0.0L, "long double");
+#endif
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifdef TEST_REAL_CONCEPT
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #endif
+#endif
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
+#ifdef TEST_FLOAT
    test_gamma(0.1F, "float");
 #endif
+#endif
+#ifdef TEST_DOUBLE
    test_gamma(0.1, "double");
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#ifdef TEST_LDOUBLE
    test_gamma(0.1L, "long double");
+#endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifdef TEST_REAL_CONCEPT
    test_gamma(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 #endif
 #else

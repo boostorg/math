@@ -18,13 +18,13 @@
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/uniform.hpp>
-	 using boost::math::uniform_distribution;
+    using boost::math::uniform_distribution;
 #include <boost/math/tools/test.hpp> 
 
 #include <iostream>
-	using std::cout;
-	using std::endl;
-	using std::setprecision;
+   using std::cout;
+   using std::endl;
+   using std::setprecision;
 #include <limits>
   using std::numeric_limits;
 
@@ -36,27 +36,27 @@ void check_uniform(RealType lower, RealType upper, RealType x, RealType p, RealT
          uniform_distribution<RealType>(lower, upper),   // distribution.
          x),  // random variable.
          p,    // probability.
-			tol);   // tolerance.
+         tol);   // tolerance.
    BOOST_CHECK_CLOSE_FRACTION(
       ::boost::math::cdf(
          complement(
             uniform_distribution<RealType>(lower, upper), // distribution.
             x)),    // random variable.
          q,    // probability complement.
-			tol);  // tolerance.
+         tol);  // tolerance.
    BOOST_CHECK_CLOSE_FRACTION(
       ::boost::math::quantile(
          uniform_distribution<RealType>(lower, upper),  // distribution.
          p),   // probability.
          x,  // random variable.
-			tol);  // tolerance.
+         tol);  // tolerance.
    BOOST_CHECK_CLOSE_FRACTION(
       ::boost::math::quantile(
          complement(
             uniform_distribution<RealType>(lower, upper),  // distribution.
             q)),     // probability complement.
          x,                                             // random variable.
-			tol);  // tolerance.
+         tol);  // tolerance.
 } // void check_uniform
 
 template <class RealType>
@@ -70,8 +70,8 @@ void test_spots(RealType)
    //
    // Tolerance is just over 5 decimal digits expressed as a fraction:
    // that's the limit of the test data.
-	RealType tolerance = 2e-5f;  
-	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << "." << endl;
+   RealType tolerance = 2e-5f;  
+   cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << "." << endl;
 
    using std::exp;
 
@@ -283,7 +283,7 @@ void test_spots(RealType)
    tolerance = (std::max)(
       boost::math::tools::epsilon<RealType>(),
       static_cast<RealType>(boost::math::tools::epsilon<double>())) * 5; // 5 eps as a fraction.
-	 cout << "Tolerance (as fraction) for type " << typeid(RealType).name()  << " is " << tolerance << "." << endl;
+    cout << "Tolerance (as fraction) for type " << typeid(RealType).name()  << " is " << tolerance << "." << endl;
    uniform_distribution<RealType> distu01(0, 1);
    RealType x = static_cast<RealType>(0.5);
    using namespace std; // ADL of std names.
@@ -375,7 +375,7 @@ int test_main(int, char* [])
   // == uniform_distribution<double> unistd;
   BOOST_CHECK_EQUAL(unistd.lower(), 0); // Check defaults.
   BOOST_CHECK_EQUAL(unistd.upper(), 1);
-	uniform_distribution<> myu01(0, 1); // Using default RealType double.
+   uniform_distribution<> myu01(0, 1); // Using default RealType double.
   BOOST_CHECK_EQUAL(myu01.lower(), 0); // Check defaults again.
   BOOST_CHECK_EQUAL(myu01.upper(), 1);
 
@@ -393,7 +393,7 @@ int test_main(int, char* [])
 
   BOOST_CHECK_THROW(uniform_distribution<> zinf(0, +std::numeric_limits<double>::infinity()), std::domain_error); // zero to infinity using default RealType double.
 
-	uniform_distribution<> zmax(0, +(std::numeric_limits<double>::max)()); // zero to max using default RealType double.
+   uniform_distribution<> zmax(0, +(std::numeric_limits<double>::max)()); // zero to max using default RealType double.
   BOOST_CHECK_EQUAL(zmax.lower(), 0); // Check defaults again.
   BOOST_CHECK_EQUAL(zmax.upper(), +(std::numeric_limits<double>::max)());
 
@@ -409,8 +409,8 @@ int test_main(int, char* [])
   BOOST_CHECK_THROW(uniform_distribution<> zNaN(0, std::numeric_limits<double>::quiet_NaN()), std::domain_error);
   BOOST_CHECK_THROW(pdf(unistd, std::numeric_limits<double>::quiet_NaN()), std::domain_error);
 
-	 // Basic sanity-check spot values.
-	// (Parameter value, arbitrarily zero, only communicates the floating point type).
+    // Basic sanity-check spot values.
+   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

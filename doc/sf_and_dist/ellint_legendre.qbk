@@ -188,7 +188,7 @@ are relative errors in units of epsilon.
 [heading Testing]
 
 The tests use a mixture of spot test values calculated using the online
-calculator at [@functions.wolfram.com
+calculator at [http://@functions.wolfram.com
 functions.wolfram.com], and random test data generated using
 NTL::RR at 1000-bit precision and this implementation.
 
@@ -296,7 +296,7 @@ are relative errors in units of epsilon.
 [heading Testing]
 
 The tests use a mixture of spot test values calculated using the online
-calculator at [@functions.wolfram.com
+calculator at [@http://functions.wolfram.com
 functions.wolfram.com], and random test data generated using
 NTL::RR at 1000-bit precision and this implementation.
 

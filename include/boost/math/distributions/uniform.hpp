@@ -140,16 +140,16 @@ namespace boost{ namespace math
   template <class RealType, class Policy>
   inline const std::pair<RealType, RealType> range(const uniform_distribution<RealType, Policy>& /* dist */)
   { // Range of permissible values for random variable x.
-	  using boost::math::tools::max_value;
-	  return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + infinity
+     using boost::math::tools::max_value;
+     return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + infinity
   }
 
   template <class RealType, class Policy>
   inline const std::pair<RealType, RealType> support(const uniform_distribution<RealType, Policy>& dist)
   { // Range of supported values for random variable x.
-	  // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-	  using boost::math::tools::max_value;
-	  return std::pair<RealType, RealType>(dist.lower(),  dist.upper());
+     // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+     using boost::math::tools::max_value;
+     return std::pair<RealType, RealType>(dist.lower(),  dist.upper());
   }
 
   template <class RealType, class Policy>

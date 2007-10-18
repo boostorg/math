@@ -57,6 +57,11 @@ rational functions.
 on error rates.
 * Provide sufficient docs for people to be able to find their way around the library.
 
+SVN Revisions:
+
+Sandbox revision merged to trunk: 39833.
+Trunk revision: 39833.
+
 ]
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

@@ -215,18 +215,18 @@ void test_spots(RealType)
      }
   }
 
-	// http://www.vias.org/simulations/simusoft_distcalc.html
-	// Distcalc version 1.2 Copyright 2002 H Lohninger, TU Wein
-	// H.Lohninger: Teach/Me Data Analysis, Springer-Verlag, Berlin-New York-Tokyo, 1999. ISBN 3-540-14743-8
-	// The Windows calculator is available zipped distcalc.exe for download at:
-	// http://www.vias.org/simulations/simu_stat.html
+   // http://www.vias.org/simulations/simusoft_distcalc.html
+   // Distcalc version 1.2 Copyright 2002 H Lohninger, TU Wein
+   // H.Lohninger: Teach/Me Data Analysis, Springer-Verlag, Berlin-New York-Tokyo, 1999. ISBN 3-540-14743-8
+   // The Windows calculator is available zipped distcalc.exe for download at:
+   // http://www.vias.org/simulations/simu_stat.html
 
-	// This interactive Windows program was used to find some combination for which the
-	// result appears to be exact.  No doubt this can be done analytically too,
-	// by mathematicians!
+   // This interactive Windows program was used to find some combination for which the
+   // result appears to be exact.  No doubt this can be done analytically too,
+   // by mathematicians!
 
-	// Some combinations for which the result is 'exact', or at least is to 40 decimal digits.
-	// 40 decimal digits includes 128-bit significand User Defined Floating-Point types.
+   // Some combinations for which the result is 'exact', or at least is to 40 decimal digits.
+   // 40 decimal digits includes 128-bit significand User Defined Floating-Point types.
    // These all pass tests at near epsilon accuracy for the floating-point type.
    tolerance = boost::math::tools::epsilon<RealType>() * 5 * 100;
    cout << "Tolerance = " << tolerance << "%." << endl;
@@ -236,7 +236,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(2.)/static_cast<RealType>(3.) ),  // F
       static_cast<RealType>(0.5), // probability.
-		tolerance);
+      tolerance);
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -244,7 +244,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(1.6L))),  // F
       static_cast<RealType>(0.333333333333333333333333333333333333L), // probability.
-		tolerance * 100); // needs higher tolerance at 128-bit precision - value not exact?
+      tolerance * 100); // needs higher tolerance at 128-bit precision - value not exact?
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -252,7 +252,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(6.5333333333333333333333333333333333L))),  // F
       static_cast<RealType>(0.125L), // probability.
-		tolerance);
+      tolerance);
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -260,7 +260,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(1.))),  // F
       static_cast<RealType>(0.5L), // probability.
-		tolerance);
+      tolerance);
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -268,7 +268,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(3.))),  // F
       static_cast<RealType>(0.25L), // probability.
-		tolerance);
+      tolerance);
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -276,7 +276,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(3.))),  // F
       static_cast<RealType>(0.25L), // probability.
-		tolerance);
+      tolerance);
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -284,7 +284,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(7.))),  // F
       static_cast<RealType>(0.125L), // probability.
-		tolerance);
+      tolerance);
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -292,7 +292,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(9.))),  // F
       static_cast<RealType>(0.1L), // probability.
-		tolerance);
+      tolerance);
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -300,7 +300,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(19.))),  // F
       static_cast<RealType>(0.05L), // probability.
-		tolerance);
+      tolerance);
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -308,7 +308,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(29.))),  // F
       static_cast<RealType>(0.03333333333333333333333333333333333333333L), // probability.
-		tolerance);
+      tolerance);
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -316,7 +316,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(99.))),  // F
       static_cast<RealType>(0.01L), // probability. 
-		tolerance);
+      tolerance);
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -324,7 +324,7 @@ void test_spots(RealType)
          static_cast<RealType>(4.)),  // df2
          static_cast<RealType>(9.))),  // F
       static_cast<RealType>(0.028L), // probability. 
-		tolerance*10);   // not quite exact???
+      tolerance*10);   // not quite exact???
 
    BOOST_CHECK_CLOSE(
       cdf(complement(fisher_f_distribution<RealType>(
@@ -332,7 +332,7 @@ void test_spots(RealType)
          static_cast<RealType>(8.)),  // df2
          static_cast<RealType>(1.))),  // F
       static_cast<RealType>(0.5L), // probability. 
-		tolerance);
+      tolerance);
 
 // Inverse tests
 
@@ -342,7 +342,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(0.03333333333333333333333333333333333333333L))),  // probability
       static_cast<RealType>(29.), // F expected.
-		tolerance*10);
+      tolerance*10);
 
       BOOST_CHECK_CLOSE(
       quantile(fisher_f_distribution<RealType>(
@@ -350,7 +350,7 @@ void test_spots(RealType)
          static_cast<RealType>(2.)),  // df2
          static_cast<RealType>(1.0L - 0.03333333333333333333333333333333333333333L)),  // probability
       static_cast<RealType>(29.), // F expected.
-		tolerance*10);
+      tolerance*10);
 
 
 // Also note limit cases for F(1, infinity) == normal distribution
@@ -505,8 +505,8 @@ int test_main(int, char* [])
 {
 
   // Check that can generate fisher distribution using the two convenience methods:
-	boost::math::fisher_f myf1(1., 2); // Using typedef
-	fisher_f_distribution<> myf2(1., 2); // Using default RealType double.
+   boost::math::fisher_f myf1(1., 2); // Using typedef
+   fisher_f_distribution<> myf2(1., 2); // Using default RealType double.
 
 
   // Basic sanity-check spot values.

@@ -149,7 +149,7 @@ namespace boost
     } // variance
 
     template <class RealType, class Policy>
-    RealType pdf(const bernoulli_distribution<RealType, Policy>& dist, const RealType k)
+    RealType pdf(const bernoulli_distribution<RealType, Policy>& dist, const RealType& k)
     { // Probability Density/Mass Function.
       BOOST_FPU_EXCEPTION_GUARD
       // Error check:
@@ -174,7 +174,7 @@ namespace boost
     } // pdf
 
     template <class RealType, class Policy>
-    inline RealType cdf(const bernoulli_distribution<RealType, Policy>& dist, const RealType k)
+    inline RealType cdf(const bernoulli_distribution<RealType, Policy>& dist, const RealType& k)
     { // Cumulative Distribution Function Bernoulli.
       RealType p = dist.success_fraction();
       // Error check:

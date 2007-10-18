@@ -21,6 +21,7 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#include <boost/math/tools/workaround.hpp>
 
 // Elliptic integrals (complete and incomplete) of the third kind
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)

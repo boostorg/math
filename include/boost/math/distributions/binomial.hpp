@@ -231,8 +231,8 @@ namespace boost
         }
         if (p <= pow(1 - success_fraction, trials))
         { // p <= pdf(dist, 0) == cdf(dist, 0)
-					return 0; // So the only reasonable result is zero.
-				} // And root finder would fail otherwise.
+          return 0; // So the only reasonable result is zero.
+        } // And root finder would fail otherwise.
 
         // Solve for quantile numerically:
         //
@@ -406,9 +406,9 @@ namespace boost
       }; // template <class RealType, class Policy> class binomial_distribution
 
       typedef binomial_distribution<> binomial;
-          // typedef binomial_distribution<double> binomial;
-			    // IS now included since no longer a name clash with function binomial.
-			    //typedef binomial_distribution<double> binomial; // Reserved name of type double.
+      // typedef binomial_distribution<double> binomial;
+      // IS now included since no longer a name clash with function binomial.
+      //typedef binomial_distribution<double> binomial; // Reserved name of type double.
 
       template <class RealType, class Policy>
       const std::pair<RealType, RealType> range(const binomial_distribution<RealType, Policy>& dist)
@@ -437,7 +437,7 @@ namespace boost
       } // variance
 
       template <class RealType, class Policy>
-      RealType pdf(const binomial_distribution<RealType, Policy>& dist, const RealType k)
+      RealType pdf(const binomial_distribution<RealType, Policy>& dist, const RealType& k)
       { // Probability Density/Mass Function.
         BOOST_FPU_EXCEPTION_GUARD
 
@@ -498,7 +498,7 @@ namespace boost
       } // pdf
 
       template <class RealType, class Policy>
-      inline RealType cdf(const binomial_distribution<RealType, Policy>& dist, const RealType k)
+      inline RealType cdf(const binomial_distribution<RealType, Policy>& dist, const RealType& k)
       { // Cumulative Distribution Function Binomial.
         // The random variate k is the number of successes in n trials.
         // k argument may be integral, signed, or unsigned, or floating point.
@@ -676,8 +676,8 @@ namespace boost
         // 1993, vol. 40, no3-4, pp. 185-189 (4 ref.)
 
         // Bounds for median and 50 percetage point of binomial and negative binomial distribution
-        // Metrika, ISSN	0026-1335 (Print) 1435-926X (Online)
-        // Volume 41, Number 1 / December, 1994, DOI	10.1007/BF01895303
+        // Metrika, ISSN   0026-1335 (Print) 1435-926X (Online)
+        // Volume 41, Number 1 / December, 1994, DOI   10.1007/BF01895303
          BOOST_MATH_STD_USING // ADL of std functions.
          RealType p = dist.success_fraction();
          RealType n = dist.trials();

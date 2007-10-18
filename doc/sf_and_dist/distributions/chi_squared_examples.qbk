@@ -178,7 +178,7 @@ situations where we wish to compare the standard deviation of a new
 process to an established one.
 
 The code for this example is contained in 
-[@../../../chi_square_std_dev_test.cpp chi_square_std_dev_test.cpp], and
+[@../../../example/chi_square_std_dev_test.cpp chi_square_std_dev_test.cpp], and
 we'll begin by defining the procedure that will print out the test
 statistics:
 
@@ -372,7 +372,7 @@ some acceptable risk of type I failure /alpha/, type II failure
 note that the method used works on variance, and not standard deviation
 as is usual for the Chi Squared Test.
 
-The code for this example is located in [@../../../chi_square_std_dev_test.cpp 
+The code for this example is located in [@../../../example/chi_square_std_dev_test.cpp 
 chi_square_std_dev_test.cpp].
 
 We begin by defining a procedure to print out the sample sizes required
@@ -490,3 +490,11 @@ risk of failing to reject the null-hypothesis is also 0.05
 [endsect][/section:chi_sq_size Estimating the Required Sample Sizes for a Chi-Square Test for the Standard Deviation]
 
 [endsect][/section:cs_eg Chi Squared Distribution]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+

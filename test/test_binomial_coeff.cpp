@@ -8,8 +8,7 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/tools/test.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
+#include "functor.hpp"
 #include <boost/array.hpp>
 
 #include "handle_test_result.hpp"
@@ -60,7 +59,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*large.*",                   // test data group
-      ".*", 70, 20);                 // test function
+      ".*", 100, 20);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -102,18 +101,17 @@ T binomial_wrapper(T n, T k)
 template <class T>
 void test_binomial(T, const char* type_name)
 {
-   using namespace boost::lambda;
    using namespace std;
 
    typedef T (*func_t)(T, T);
-   func_t f = &binomial_wrapper<T>;
+   func_t f = &binomial_wrapper;
 
 #include "binomial_data.ipp"
 
    boost::math::tools::test_result<T> result = boost::math::tools::test(
       binomial_data, 
-      bind(f, ret<T>(_1[0]), ret<T>(_1[1])), 
-      ret<T>(_1[2]));
+      bind_func(f, 0, 1), 
+      extract_result(2));
 
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
       "Test results for small arguments and type " << type_name << std::endl << std::endl;
@@ -125,8 +123,8 @@ void test_binomial(T, const char* type_name)
 
    result = boost::math::tools::test(
       binomial_large_data, 
-      bind(f, ret<T>(_1[0]), ret<T>(_1[1])), 
-      ret<T>(_1[2]));
+      bind_func(f, 0, 1), 
+      extract_result(2));
 
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
       "Test results for large arguments and type " << type_name << std::endl << std::endl;
@@ -166,6 +164,7 @@ void test_spots(T, const char* name)
 int test_main(int, char* [])
 {
    expected_results();
+   BOOST_MATH_CONTROL_FP;
 
    test_spots(1.0F, "float");
    test_spots(1.0, "double");

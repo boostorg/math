@@ -623,7 +623,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const L& l)
    else if((fabs(d*d*a) <= 100) && (a > 150))
    {
       // special case for large a and a ~ z.
-      prefix = a * log1pmx(d, pol) + z * static_cast<T>(0.5 - L::g()) / agh;
+      prefix = a * boost::math::log1pmx(d, pol) + z * static_cast<T>(0.5 - L::g()) / agh;
       prefix = exp(prefix);
    }
    else
@@ -726,7 +726,8 @@ inline T tgamma_small_upper_part(T a, T x, const Policy& pol)
    //
    // Compute the full upper fraction (Q) when a is very small:
    //
-   T result = tgamma1pm1(a, pol) - powm1(x, a, pol);
+   T result;
+   result = boost::math::tgamma1pm1(a, pol) - boost::math::powm1(x, a, pol);
    result /= a;
    detail::small_gamma2_series<T> s(a, x);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();

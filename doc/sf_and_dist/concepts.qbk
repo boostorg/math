@@ -16,7 +16,7 @@ in NTL.
 
 Finally there is a high precision __lanczos suitable for use with `boost::math::ntl::RR`,
 used at 1000-bit precision in 
-[@../tools/ntl_rr_lanczos.hpp libs/math/tools/ntl_rr_lanczos.hpp].  
+[@../../../tools/ntl_rr_lanczos.hpp libs/math/tools/ntl_rr_lanczos.hpp].  
 The approximation has a theoretical precision of > 90 decimal digits, 
 and an experimental precision of > 100 decimal digits.  To use that 
 approximation, just include that header before any of the special 
@@ -116,7 +116,7 @@ synthesised from the others, and so no explicit specialisation is required.
 # The function `epsilon` can be synthesised from the others, so no
 explicit specialisation is required provided the precision
 of RealType does not vary at runtime (see the header 
-[@../../../../../boost/math/tools/ntl.hpp boost/math/tools/ntl.hpp]
+[@../../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp]
 for an example where the precision does vary at runtime).
 # The functions `digits`, `max_value` and `min_value`, all get synthesised
 automatically from `std::numeric_limits`.  However, if `numeric_limits`
@@ -185,7 +185,7 @@ In addition, for efficient and accurate results, a __lanczos is highly desirable
 You may be able to adapt an existing approximation from 
 [@../../../../../boost/math/special_functions/lanczos.hpp
 boost/math/special_functions/lanczos.hpp] or
-[@../tools/ntl_rr_lanczos.hpp libs/math/tools/ntl_rr_lanczos.hpp]: 
+[@../../../tools/ntl_rr_lanczos.hpp libs/math/tools/ntl_rr_lanczos.hpp]: 
 you will need change
 static_cast's to lexical_cast's, and the constants to /strings/ 
 (in order to ensure the coefficients aren't truncated to long double)
@@ -280,7 +280,7 @@ compile if the all the standard library functions used have
 been brought into the current scope with a using declaration.
 
 There is a test program 
-[@../../../teststd_real_concept_check.cpp libs/math/test/std_real_concept_check.cpp]
+[@../../../test/std_real_concept_check.cpp libs/math/test/std_real_concept_check.cpp]
 that instantiates every template in this library with type
 `std_real_concept` to verify it's usage of standard library functions.
 
@@ -335,7 +335,7 @@ The class template `DistributionConcept` is a
 for distribution types.
 
 The test program 
-[@../../../test/distribution_concept_check.cpp distribution_concept_check.cpp]
+[@../../../test/compile_test/distribution_concept_check.cpp distribution_concept_check.cpp]
 is responsible for using `DistributionConcept` to verify that all the
 distributions in this library conform to the 
 [link math_toolkit.using_udt.dist_concept Distribution concept].

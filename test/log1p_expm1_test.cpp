@@ -11,10 +11,7 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/array.hpp>
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
-#endif
+#include "functor.hpp"
 
 #include "handle_test_result.hpp"
 
@@ -69,12 +66,11 @@ void expected_results()
 template <class T>
 void do_test(const T& data, const char* type_name, const char* test_name)
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type);
-   pg funcp = boost::math::log1p;
+   pg funcp = &boost::math::log1p;
 
    boost::math::tools::test_result<value_type> result;
    std::cout << "Testing " << test_name << " with type " << type_name
@@ -82,12 +78,11 @@ void do_test(const T& data, const char* type_name, const char* test_name)
    //
    // test log1p against data:
    //
-   funcp = boost::math::log1p;
+   funcp = &boost::math::log1p;
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[1]));
+         bind_func(funcp, 0), 
+         extract_result(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::log1p", "log1p and expm1");
    std::cout << std::endl;
    //
@@ -96,12 +91,10 @@ void do_test(const T& data, const char* type_name, const char* test_name)
    funcp = boost::math::expm1;
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[0])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func(funcp, 0), 
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::expm1", "log1p and expm1");
    std::cout << std::endl;
-#endif
 }
 
 template <class T>
@@ -130,6 +123,7 @@ void test(T, const char* type_name)
 int test_main(int, char* [])
 {
    expected_results();
+   BOOST_MATH_CONTROL_FP;
    test(float(0), "float");
    test(double(0), "double");
    //
@@ -137,7 +131,7 @@ int test_main(int, char* [])
    // due to poor std lib support (not enough digits returned from 
    // std::log and std::exp):
    //
-#if !defined(__CYGWIN__) && !defined(__FreeBSD__) && !(defined(__GNUC__) && defined(__sun))
+#if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
    test((long double)(0), "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test((boost::math::concepts::real_concept)(0), "real_concept");

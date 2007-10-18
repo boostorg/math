@@ -12,6 +12,13 @@
 
 #define BOOST_MATH_DISCRETE_QUANTILE_POLICY real
 
+#if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
+#  define TEST_FLOAT
+#  define TEST_DOUBLE
+#  define TEST_LDOUBLE
+#  define TEST_REAL_CONCEPT
+#endif
+
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #endif
@@ -347,27 +354,27 @@ void test_spots(RealType)
   // so useful for testing 64-bit double accuracy.
   // P = 0.25, n = 20, k = 0 to 20
 
-  //0	C(20,0) * 0.25^0 * 0.75^20	0.00317121193893399322405457496643
-  //1	C(20,1) * 0.25^1 * 0.75^19	0.02114141292622662149369716644287
-  //2	C(20,2) * 0.25^2 * 0.75^18	0.06694780759971763473004102706909
-  //3	C(20,3) * 0.25^3 * 0.75^17	0.13389561519943526946008205413818
-  //4	C(20,4) * 0.25^4 * 0.75^16	0.18968545486586663173511624336242
-  //5	C(20,5) * 0.25^5 * 0.75^15	0.20233115185692440718412399291992
-  //6	C(20,6) * 0.25^6 * 0.75^14	0.16860929321410367265343666076660
-  //7	C(20,7) * 0.25^7 * 0.75^13	0.11240619547606911510229110717773
-  //8	C(20,8) * 0.25^8 * 0.75^12	0.06088668921620410401374101638793
-  //9	C(20,9) * 0.25^9 * 0.75^11	0.02706075076275737956166267395019
-  //10	C(20,10) * 0.25^10 * 0.75^10	0.00992227527967770583927631378173
-  //11	C(20,11) * 0.25^11 * 0.75^9	0.00300675008475081995129585266113
-  //12	C(20,12) * 0.25^12 * 0.75^8	0.00075168752118770498782396316528
-  //13	C(20,13) * 0.25^13 * 0.75^7	0.00015419231203850358724594116210
-  //14	C(20,14) * 0.25^14 * 0.75^6	0.00002569871867308393120765686035
-  //15	C(20,15) * 0.25^15 * 0.75^5	0.00000342649582307785749435424804
-  //16	C(20,16) * 0.25^16 * 0.75^4	0.00000035692664823727682232856750
-  //17	C(20,17) * 0.25^17 * 0.75^3	0.00000002799424692057073116302490
-  //18	C(20,18) * 0.25^18 * 0.75^2	0.00000000155523594003170728683471
-  //19	C(20,19) * 0.25^19 * 0.75^1	0.00000000005456968210637569427490
-  //20	C(20,20) * 0.25^20 * 0.75^0	0.00000000000090949470177292823791
+  //0   C(20,0) * 0.25^0 * 0.75^20   0.00317121193893399322405457496643
+  //1   C(20,1) * 0.25^1 * 0.75^19   0.02114141292622662149369716644287
+  //2   C(20,2) * 0.25^2 * 0.75^18   0.06694780759971763473004102706909
+  //3   C(20,3) * 0.25^3 * 0.75^17   0.13389561519943526946008205413818
+  //4   C(20,4) * 0.25^4 * 0.75^16   0.18968545486586663173511624336242
+  //5   C(20,5) * 0.25^5 * 0.75^15   0.20233115185692440718412399291992
+  //6   C(20,6) * 0.25^6 * 0.75^14   0.16860929321410367265343666076660
+  //7   C(20,7) * 0.25^7 * 0.75^13   0.11240619547606911510229110717773
+  //8   C(20,8) * 0.25^8 * 0.75^12   0.06088668921620410401374101638793
+  //9   C(20,9) * 0.25^9 * 0.75^11   0.02706075076275737956166267395019
+  //10   C(20,10) * 0.25^10 * 0.75^10   0.00992227527967770583927631378173
+  //11   C(20,11) * 0.25^11 * 0.75^9   0.00300675008475081995129585266113
+  //12   C(20,12) * 0.25^12 * 0.75^8   0.00075168752118770498782396316528
+  //13   C(20,13) * 0.25^13 * 0.75^7   0.00015419231203850358724594116210
+  //14   C(20,14) * 0.25^14 * 0.75^6   0.00002569871867308393120765686035
+  //15   C(20,15) * 0.25^15 * 0.75^5   0.00000342649582307785749435424804
+  //16   C(20,16) * 0.25^16 * 0.75^4   0.00000035692664823727682232856750
+  //17   C(20,17) * 0.25^17 * 0.75^3   0.00000002799424692057073116302490
+  //18   C(20,18) * 0.25^18 * 0.75^2   0.00000000155523594003170728683471
+  //19   C(20,19) * 0.25^19 * 0.75^1   0.00000000005456968210637569427490
+  //20   C(20,20) * 0.25^20 * 0.75^0   0.00000000000090949470177292823791
 
 
     BOOST_CHECK_CLOSE(
@@ -476,7 +483,7 @@ void test_spots(RealType)
        kurtosis_excess(dist)
        , static_cast<RealType>(-0.08333333333333333333333333333333333333L), tol2);
     // Check kurtosis_excess == kurtosis -3;
-		BOOST_CHECK_EQUAL(kurtosis(dist), static_cast<RealType>(3) + kurtosis_excess(dist));
+      BOOST_CHECK_EQUAL(kurtosis(dist), static_cast<RealType>(3) + kurtosis_excess(dist));
 
     // special cases for PDF:
     BOOST_CHECK_EQUAL(
@@ -685,21 +692,30 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
-	// Check that can generate binomial distribution using one convenience methods:
-	binomial_distribution<> mybn2(1., 0.5); // Using default RealType double.
+   BOOST_MATH_CONTROL_FP;
+   // Check that can generate binomial distribution using one convenience methods:
+   binomial_distribution<> mybn2(1., 0.5); // Using default RealType double.
   // but that
-	// boost::math::binomial mybn1(1., 0.5); // Using typedef fails
+   // boost::math::binomial mybn1(1., 0.5); // Using typedef fails
   // error C2039: 'binomial' : is not a member of 'boost::math'
 
   // Basic sanity-check spot values.
 
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
+#ifdef TEST_FLOAT
   test_spots(0.0F); // Test float.
+#endif
+#ifdef TEST_DOUBLE
   test_spots(0.0); // Test double.
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#ifdef TEST_LDOUBLE
   test_spots(0.0L); // Test long double.
+#endif
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifdef TEST_REAL_CONCEPT
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+#endif
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

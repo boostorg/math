@@ -364,7 +364,7 @@ namespace boost
     } // kurtosis
 
     template <class RealType, class Policy>
-    inline RealType pdf(const beta_distribution<RealType, Policy>& dist, const RealType x)
+    inline RealType pdf(const beta_distribution<RealType, Policy>& dist, const RealType& x)
     { // Probability Density/Mass Function.
       BOOST_FPU_EXCEPTION_GUARD
 
@@ -389,7 +389,7 @@ namespace boost
     } // pdf
 
     template <class RealType, class Policy>
-    inline RealType cdf(const beta_distribution<RealType, Policy>& dist, const RealType x)
+    inline RealType cdf(const beta_distribution<RealType, Policy>& dist, const RealType& x)
     { // Cumulative Distribution Function beta.
       BOOST_MATH_STD_USING // for ADL of std functions
 

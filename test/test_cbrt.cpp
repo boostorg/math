@@ -10,9 +10,8 @@
 #include <boost/math/tools/test.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
 #include <boost/math/special_functions/cbrt.hpp>
+#include "functor.hpp"
 
 #include "handle_test_result.hpp"
 
@@ -49,7 +48,26 @@ void expected_results()
    //
    std::cout << "Tests run with " << BOOST_COMPILER << ", " 
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
+
+   add_expected_result(
+      "Borland.*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "long double",                  // test type(s)
+      ".*",                   // test data group
+      ".*", 10, 6);                 // test function
 }
+
+struct negative_cbrt
+{
+   negative_cbrt(){}
+
+   template <class S>
+   typename S::value_type operator()(const S& row)
+   {
+      return boost::math::cbrt(-row[1]);
+   }
+};
 
 
 template <class T>
@@ -71,14 +89,12 @@ void do_test_cbrt(const T& data, const char* type_name, const char* test_name)
    //
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[0]));
+      bind_func(funcp, 1), 
+      extract_result(0));
    result += boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         -boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      -boost::lambda::ret<value_type>(boost::lambda::_1[0]));
+      negative_cbrt(), 
+      negate(extract_result(0)));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cbrt", test_name);
    std::cout << std::endl;
 }
@@ -99,6 +115,8 @@ void test_cbrt(T, const char* name)
 
 int test_main(int, char* [])
 {
+   expected_results();
+   BOOST_MATH_CONTROL_FP;
    test_cbrt(0.1F, "float");
    test_cbrt(0.1, "double");
    test_cbrt(0.1L, "long double");

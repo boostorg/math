@@ -62,9 +62,9 @@ template <class E, class T>
 void raise_error(const char* function, const char* message)
 {
   if(function == 0)
-	    function = "Unknown function";
+       function = "Unknown function";
   if(message == 0)
-	    message = "Cause unknown";
+       message = "Cause unknown";
 
   std::string msg("Error in function ");
   msg += (boost::format(function) % typeid(T).name()).str();
@@ -79,9 +79,9 @@ template <class E, class T>
 void raise_error(const char* function, const char* message, const T& val)
 {
   if(function == 0)
-	    function = "Unknown function";
+       function = "Unknown function";
   if(message == 0)
-	    message = "Cause unknown";
+       message = "Cause unknown";
 
   std::string msg("Error in function ");
   msg += (boost::format(function) % typeid(T).name()).str();

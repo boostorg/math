@@ -37,14 +37,14 @@ int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
     BOOST_ASSERT(abs(x) <= 2);
     BOOST_ASSERT(abs(v) <= 0.5f);
 
-    T gp = tgamma1pm1(v, pol);
-    T gm = tgamma1pm1(-v, pol);
+    T gp = boost::math::tgamma1pm1(v, pol);
+    T gm = boost::math::tgamma1pm1(-v, pol);
 
     a = log(x / 2);
     b = exp(v * a);
     sigma = -a * v;
     c = abs(v) < tools::epsilon<T>() ?
-        1 : sin_pi(v) / (v * pi<T>());
+       1 : boost::math::sin_pi(v) / (v * pi<T>());
     d = abs(sigma) < tools::epsilon<T>() ?
         1 : sinh(sigma) / sigma;
     gamma1 = abs(v) < tools::epsilon<T>() ?
@@ -256,7 +256,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
        if(reflect && (kind & need_i))
        {
            T z = (u + n % 2);
-           Iv = sin_pi(z, pol) == 0 ? 
+           Iv = boost::math::sin_pi(z, pol) == 0 ? 
                Iv : 
                policies::raise_overflow_error<T>(function, 0, pol);   // reflection formula
        }
@@ -313,7 +313,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
     if (reflect)
     {
         T z = (u + n % 2);
-        *I = Iv + (2 / pi<T>()) * sin_pi(z) * Kv;   // reflection formula
+        *I = Iv + (2 / pi<T>()) * boost::math::sin_pi(z) * Kv;   // reflection formula
         *K = Kv;
     }
     else

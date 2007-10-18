@@ -43,46 +43,46 @@ double value[values] = {38.9, 37.4, 37.1};
 // The Students't distribution function is described at
 // http://en.wikipedia.org/wiki/Student%27s_t_distribution
 #include <boost/math/distributions/students_t.hpp>
-	using boost::math::students_t;  // Probability of students_t(df, t).
+   using boost::math::students_t;  // Probability of students_t(df, t).
 
 #include <iostream>
-	using std::cout; 	using std::endl;
+   using std::cout;    using std::endl;
 #include <iomanip>
-	using std::setprecision;
+   using std::setprecision;
 #include <cmath>
-	using std::sqrt;
+   using std::sqrt;
 
 int main()
 {
-	cout << "Example 1 using Student's t function. " << endl;
+  cout << "Example 1 using Student's t function. " << endl;
 
-	// Example/test using tabulated value
+  // Example/test using tabulated value
   // (deliberately coded as naively as possible).
 
-	// Null hypothesis is that there is no difference (greater or less)
+  // Null hypothesis is that there is no difference (greater or less)
   // between measured and standard.
 
-	double degrees_of_freedom = values-1; // 3-1 = 2
+  double degrees_of_freedom = values-1; // 3-1 = 2
   cout << "Measurement 1 = " << value[0] << ", measurement 2 = " << value[1] << ", measurement 3 = " << value[2] << endl;
-	double mean = (value[0] + value[1] + value[2]) / static_cast<double>(values);
+  double mean = (value[0] + value[1] + value[2]) / static_cast<double>(values);
   cout << "Standard = " << standard << ", mean = " << mean << ", (mean - standard) = " << mean - standard  << endl;
-	double sd = sqrt(((value[0] - mean) * (value[0] - mean) + (value[1] - mean) * (value[1] - mean) + (value[2] - mean) * (value[2] - mean))/ static_cast<double>(values-1));
-	cout << "Standard deviation = " << sd << endl;
-	if (sd == 0.)
-	{
-		cout << "Measured mean is identical to SRM value," << endl;
-		cout << "so probability of no difference between measured and standard (the 'null hypothesis') is unity." << endl;
-		return 0;
-	}
+  double sd = sqrt(((value[0] - mean) * (value[0] - mean) + (value[1] - mean) * (value[1] - mean) + (value[2] - mean) * (value[2] - mean))/ static_cast<double>(values-1));
+  cout << "Standard deviation = " << sd << endl;
+  if (sd == 0.)
+  {
+      cout << "Measured mean is identical to SRM value," << endl;
+      cout << "so probability of no difference between measured and standard (the 'null hypothesis') is unity." << endl;
+      return 0;
+  }
 
-	double t = (mean - standard) * std::sqrt(static_cast<double>(values)) / sd;
-	cout << "Student's t = " << t << endl;
-	cout.precision(2); // Useful accuracy is only a few decimal digits.
-	cout << "Probability of Student's t is " << cdf(students_t(degrees_of_freedom), std::abs(t)) << endl;
+  double t = (mean - standard) * std::sqrt(static_cast<double>(values)) / sd;
+  cout << "Student's t = " << t << endl;
+  cout.precision(2); // Useful accuracy is only a few decimal digits.
+  cout << "Probability of Student's t is " << cdf(students_t(degrees_of_freedom), std::abs(t)) << endl;
   //  0.91, is 1 tailed.
-	// So there is insufficient evidence of a difference to meet a 95% (1 in 20) criterion.
+  // So there is insufficient evidence of a difference to meet a 95% (1 in 20) criterion.
 
-	return 0;
+  return 0;
 }  // int main()
 
 /*

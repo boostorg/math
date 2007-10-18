@@ -724,7 +724,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
       return s0;
    if(normalised)
    {
-      prefix = h / tgamma_delta_ratio(a, b, pol);
+      prefix = h / boost::math::tgamma_delta_ratio(a, b, pol);
       prefix /= pow(t, b);
    }
    else
@@ -741,7 +741,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
    //
    // Now an initial value for J, see 9.6:
    //
-   T j = gamma_q(b, u, pol) / h;
+   T j = boost::math::gamma_q(b, u, pol) / h;
    //
    // Now we can start to pull things together and evaluate the sum in Eq 9:
    //
@@ -777,11 +777,11 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
       for(unsigned m = 1; m < n; ++m)
       {
          mbn = m * b - n;
-         p[n] += mbn * p[n-m] / unchecked_factorial<T>(tmp1);
+         p[n] += mbn * p[n-m] / boost::math::unchecked_factorial<T>(tmp1);
          tmp1 += 2;
       }
       p[n] /= n;
-      p[n] += bm1 / unchecked_factorial<T>(tnp1);
+      p[n] += bm1 / boost::math::unchecked_factorial<T>(tnp1);
       //
       // Now we want Jn from Jn-1 using Eq 9.6:
       //

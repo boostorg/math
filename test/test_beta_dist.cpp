@@ -21,7 +21,7 @@
 // provided 40 decimal digits accuracy incomplete beta aka beta regularized == cdf
 
 // http://www.ausvet.com.au/pprev/content.php?page=PPscript
-// mode 0.75 	5/95% 0.9 	alpha 7.39 	beta 3.13
+// mode 0.75    5/95% 0.9    alpha 7.39    beta 3.13
 // http://www.epi.ucdavis.edu/diagnostictests/betabuster.html
 // Beta Buster also calculates alpha and beta from mode & percentile estimates.
 // This is NOT (yet) implemented.
@@ -457,6 +457,7 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
+   BOOST_MATH_CONTROL_FP;
    // Check that can generate beta distribution using one convenience methods:
    beta_distribution<> mybeta11(1., 1.); // Using default RealType double.
    // but that

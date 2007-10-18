@@ -16,8 +16,7 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/ellint_3.hpp>
 #include <boost/array.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
+#include "functor.hpp"
 
 #include "handle_test_result.hpp"
 //
@@ -116,11 +115,8 @@ void do_test_ellint_pi3(T& data, const char* type_name, const char* test)
 
     result = boost::math::tools::test(
       data,
-      boost::lambda::bind(fp2,
-         boost::lambda::ret<value_type>(boost::lambda::_1[2]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[0]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])),
-      boost::lambda::ret<value_type>(boost::lambda::_1[3]));
+      bind_func(fp2, 2, 0, 1),
+      extract_result(3));
    handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "boost::math::ellint_3", test);
 
@@ -141,10 +137,8 @@ void do_test_ellint_pi2(T& data, const char* type_name, const char* test)
 
     result = boost::math::tools::test(
       data,
-      boost::lambda::bind(fp2,
-         boost::lambda::ret<value_type>(boost::lambda::_1[1]),
-         boost::lambda::ret<value_type>(boost::lambda::_1[0])),
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func(fp2, 1, 0),
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "boost::math::ellint_3", test);
 
@@ -226,6 +220,7 @@ void test_spots(T, const char* type_name)
 int test_main(int, char* [])
 {
     expected_results();
+    BOOST_MATH_CONTROL_FP;
     test_spots(0.0F, "float");
     test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

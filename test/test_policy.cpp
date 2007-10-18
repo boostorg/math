@@ -35,7 +35,7 @@ int test_main(int, char* [])
 
    BOOST_CHECK((is_same<policy<>::domain_error_type, domain_error<BOOST_MATH_DOMAIN_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<>::evaluation_error_type, evaluation_error<BOOST_MATH_EVALUATION_ERROR_POLICY> >::value));
-	
+   
    BOOST_CHECK((is_same<policy<domain_error<ignore_error> >::domain_error_type, domain_error<ignore_error> >::value));
    BOOST_CHECK((is_same<policy<domain_error<ignore_error> >::pole_error_type, pole_error<BOOST_MATH_POLE_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<domain_error<ignore_error> >::overflow_error_type, overflow_error<BOOST_MATH_OVERFLOW_ERROR_POLICY> >::value));

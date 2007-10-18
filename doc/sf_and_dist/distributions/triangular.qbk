@@ -154,9 +154,15 @@ Some 'known good' test values were obtained from
 * Evans, M.; Hastings, N.; and Peacock, B. "Triangular Distribution." Ch. 40 in Statistical Distributions, 3rd ed. New York: Wiley, pp. 187-188, 2000, ISBN - 0471371246]
 * [@http://www.brighton-webs.co.uk/distributions/triangular.asp Brighton Webs Ltd. BW D-Calc 1.0 Distribution Calculator]
 * [@http://www.worldscibooks.com/mathematics/etextbook/5720/5720_chap1.pdf The Triangular Distribution including its history.]
-* [@www.measurement.sk/2002/S1/Wimmer2.pdf Gejza Wimmer, Viktor Witkovsky and Tomas Duby,
+* [@http://www.measurement.sk/2002/S1/Wimmer2.pdf Gejza Wimmer, Viktor Witkovsky and Tomas Duby,
 Measurement Science Review, Volume 2, Section 1, 2002, Proper Rounding Of The Measurement Results Under The Assumption Of Triangular Distribution.]
 
 [endsect][/section:triangular_dist triangular]
 
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
 

@@ -15,8 +15,13 @@ static const long double l = 0;
 static const unsigned u = 0;
 static const int i = 0;
 
-template <class T>
-inline void check_result_imp(T, T){}
+//template <class T>
+//inline void check_result_imp(T, T){}
+
+inline void check_result_imp(float, float){}
+inline void check_result_imp(double, double){}
+inline void check_result_imp(long double, long double){}
+inline void check_result_imp(int, int){}
 
 template <class T1, class T2>
 inline void check_result_imp(T1, T2)
@@ -105,10 +110,11 @@ struct DistributionConcept
       check_result<value_type>(chf(dist, li));
    }
 private:
+   static Distribution* get_object_p();
    static Distribution& get_object()
    {
       // will never get called:
-      return * reinterpret_cast<Distribution*>(0);
+      return *get_object_p();
    }
 }; // struct DistributionConcept
 

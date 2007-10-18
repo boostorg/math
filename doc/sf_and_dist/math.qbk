@@ -206,7 +206,7 @@ and use the function's name as the link text]
 [def __math_discrete [link math_toolkit.policy.pol_ref.discrete_quant_ref discrete functions]]
 [def __error_policy [link math_toolkit.policy.pol_ref.error_handling_policies error handling policies]]
 [def __changing_policy_defaults [link math_toolkit.policy.pol_ref.policy_defaults changing policies defaults]]
-[def __user_error_handling [link math_toolkit.policy.pol_tutorial.user_defined_error_policies user error handling]]
+[def __user_error_handling [link math_toolkit.policy.pol_tutorial.user_def_err_pol user error handling]]
 
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard, 
    __chf, __mean, __median, __mode, __variance, __sd, __skewness, 

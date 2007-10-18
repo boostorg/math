@@ -10,15 +10,15 @@
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/exponential.hpp>
-	 using boost::math::exponential_distribution;
+    using boost::math::exponential_distribution;
 
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <iostream>
-	using std::cout;
-	using std::endl;
-	using std::setprecision;
+   using std::cout;
+   using std::endl;
+   using std::setprecision;
 
 template <class RealType>
 void test_spot(RealType l, RealType x, RealType p, RealType q, RealType tolerance)
@@ -28,13 +28,13 @@ void test_spot(RealType l, RealType x, RealType p, RealType q, RealType toleranc
          exponential_distribution<RealType>(l),      
          x),
          p,
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(exponential_distribution<RealType>(l),      
          x)),
          q,
-			tolerance); // %
+         tolerance); // %
    if(p < 0.999)
    {
       BOOST_CHECK_CLOSE(
@@ -42,7 +42,7 @@ void test_spot(RealType l, RealType x, RealType p, RealType q, RealType toleranc
             exponential_distribution<RealType>(l),      
             p),
             x,
-			   tolerance); // %
+            tolerance); // %
    }
    if(q < 0.999)
    {
@@ -51,7 +51,7 @@ void test_spot(RealType l, RealType x, RealType p, RealType q, RealType toleranc
             complement(exponential_distribution<RealType>(l),      
             q)),
             x,
-			   tolerance); // %
+            tolerance); // %
    }
 }
 
@@ -72,7 +72,7 @@ void test_spots(RealType T)
    {
      cout << "Expect parameter T == 0!" << endl;
    }
-	 cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
+    cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
 
    test_spot(
       static_cast<RealType>(0.5), // lambda
@@ -166,63 +166,63 @@ void test_spots(RealType T)
          exponential_distribution<RealType>(0.5),      
          static_cast<RealType>(0.125)),              // x
          static_cast<RealType>(0.46970653140673789305985541231115L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          exponential_distribution<RealType>(0.5),      
          static_cast<RealType>(5)),              // x
          static_cast<RealType>(0.04104249931194939758476433723358L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          exponential_distribution<RealType>(2),      
          static_cast<RealType>(0.125)),              // x
          static_cast<RealType>(1.5576015661428097364903405339566L),                // probability.
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
          exponential_distribution<RealType>(2),      
          static_cast<RealType>(5)),              // x
          static_cast<RealType>(9.0799859524969703071183031121101e-5L),                // probability.
-			tolerance); // %
+         tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::mean(
          exponential_distribution<RealType>(2)),
          static_cast<RealType>(0.5),           
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::standard_deviation(
          exponential_distribution<RealType>(2)), 
          static_cast<RealType>(0.5),
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::mode(
          exponential_distribution<RealType>(2)),
          static_cast<RealType>(0),           
-			tolerance); // %
+         tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::median(
          exponential_distribution<RealType>(4)),
          static_cast<RealType>(0.693147180559945309417232121458176568075500134360255254) / 4,           
-			tolerance); // %
+         tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::skewness(
          exponential_distribution<RealType>(2)),
          static_cast<RealType>(2),           
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::kurtosis(
          exponential_distribution<RealType>(2)),
          static_cast<RealType>(9),           
-			tolerance); // %
+         tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::kurtosis_excess(
          exponential_distribution<RealType>(2)),
          static_cast<RealType>(6),           
-			tolerance); // %
+         tolerance); // %
 
    //
    // Things that are errors:
@@ -255,11 +255,11 @@ void test_spots(RealType T)
 int test_main(int, char* [])
 {
   // Check that can generate exponential distribution using the two convenience methods:
-	boost::math::exponential mycexp1(1.); // Using typedef
-	exponential_distribution<> myexp2(1.); // Using default RealType double.
+   boost::math::exponential mycexp1(1.); // Using typedef
+   exponential_distribution<> myexp2(1.); // Using default RealType double.
 
-	 // Basic sanity-check spot values.
-	// (Parameter value, arbitrarily zero, only communicates the floating point type).
+    // Basic sanity-check spot values.
+   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

@@ -12,8 +12,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
+#include "functor.hpp"
 
 #ifdef TEST_GSL
 #include <gsl/gsl_errno.h>
@@ -22,6 +21,12 @@
 
 #include "handle_test_result.hpp"
 
+#if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
+#  define TEST_FLOAT
+#  define TEST_DOUBLE
+#  define TEST_LDOUBLE
+#  define TEST_REAL_CONCEPT
+#endif
 //
 // DESCRIPTION:
 // ~~~~~~~~~~~~
@@ -174,8 +179,6 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
    typedef value_type (*pg)(value_type, value_type, value_type);
    pg funcp = boost::math::ibeta_inva;
 
-   using namespace boost::lambda;
-
    boost::math::tools::test_result<value_type> result;
 
    std::cout << "Testing " << test_name << " with type " << type_name
@@ -186,8 +189,8 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
    //
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
-      ret<value_type>(_1[3]));
+      bind_func(funcp, 0, 1, 2),
+      extract_result(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibeta_inva", test_name);
    //
    // test ibetac_inva(T, T, T) against data:
@@ -195,8 +198,8 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
    funcp = boost::math::ibetac_inva;
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
-      ret<value_type>(_1[4]));
+      bind_func(funcp, 0, 1, 2),
+      extract_result(4));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibetac_inva", test_name);
    //
    // test ibeta_invb(T, T, T) against data:
@@ -204,8 +207,8 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
    funcp = boost::math::ibeta_invb;
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
-      ret<value_type>(_1[5]));
+      bind_func(funcp, 0, 1, 2),
+      extract_result(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibeta_invb", test_name);
    //
    // test ibetac_invb(T, T, T) against data:
@@ -213,8 +216,8 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
    funcp = boost::math::ibetac_invb;
    result = boost::math::tools::test(
       data,
-      bind(funcp, ret<value_type>(_1[0]), ret<value_type>(_1[1]), ret<value_type>(_1[2])),
-      ret<value_type>(_1[6]));
+      bind_func(funcp, 0, 1, 2),
+      extract_result(6));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibetac_invb", test_name);
 }
 
@@ -260,18 +263,24 @@ void test_beta(T, const char* name)
 int test_main(int, char* [])
 {
    expected_results();
-   boost::math::ibetac_invb(15.3268413543701171875f, 0.3082362115383148193359375f, 0.913384497165679931640625f);
-   boost::math::ibetac(15.3268413543701171875f, 21.432123240471673235001418f, 0.3082362115383148193359375f);
 #ifdef TEST_GSL
    gsl_set_error_handler_off();
 #endif
 
+#ifdef TEST_FLOAT
    test_beta(0.1F, "float");
+#endif
+#ifdef TEST_DOUBLE
    test_beta(0.1, "double");
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#ifdef TEST_LDOUBLE
    test_beta(0.1L, "long double");
+#endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#ifdef TEST_REAL_CONCEPT
    test_beta(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

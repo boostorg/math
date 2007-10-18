@@ -17,6 +17,7 @@
 #include <boost/math/special_functions/ellint_rf.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#include <boost/math/tools/workaround.hpp>
 
 // Elliptic integrals (complete and incomplete) of the first kind
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
@@ -27,6 +28,9 @@ template <class T1, class T2, class Policy>
 typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol);
 
 namespace detail{
+
+template <typename T, typename Policy>
+T ellint_k_imp(T k, const Policy& pol);
 
 // Elliptic integral (Legendre form) of the first kind
 template <typename T, typename Policy>

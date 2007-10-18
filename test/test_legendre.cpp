@@ -9,8 +9,7 @@
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/array.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
+#include "functor.hpp"
 
 #include "handle_test_result.hpp"
 #include "test_legendre_hooks.hpp"
@@ -196,9 +195,6 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
    typedef value_type (*pg)(int, value_type);
    pg funcp = boost::math::legendre_p;
 
-   typedef int (*cast_t)(value_type);
-   cast_t rc = &boost::math::tools::real_cast<int, value_type>;
-
    boost::math::tools::test_result<value_type> result;
 
    std::cout << "Testing " << test_name << " with type " << type_name
@@ -209,26 +205,16 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
    //
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<int>(
-            boost::lambda::bind(
-            rc,
-            boost::lambda::ret<value_type>(boost::lambda::_1[0]))),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func_int1(funcp, 0, 1), 
+      extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::legendre_p", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::legendre_p;
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<int>(
-            boost::lambda::bind(
-            rc,
-            boost::lambda::ret<value_type>(boost::lambda::_1[0]))),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[2]));
+      bind_func_int1(funcp, 0, 1), 
+      extract_result(2));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::legendre_p");
    }
 #endif
@@ -241,26 +227,16 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
    //
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp2, 
-         boost::lambda::ret<int>(
-            boost::lambda::bind(
-            rc,
-            boost::lambda::ret<value_type>(boost::lambda::_1[0]))),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[3]));
+      bind_func_int1(funcp2, 0, 1), 
+      extract_result(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::legendre_q", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::legendre_q;
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp2, 
-         boost::lambda::ret<int>(
-            boost::lambda::bind(
-            rc,
-            boost::lambda::ret<value_type>(boost::lambda::_1[0]))),
-         boost::lambda::ret<value_type>(boost::lambda::_1[1])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[3]));
+      bind_func_int1(funcp2, 0, 1), 
+      extract_result(3));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::legendre_q");
    }
 #endif
@@ -278,9 +254,6 @@ void do_test_assoc_legendre_p(const T& data, const char* type_name, const char* 
    typedef value_type (*pg)(int, int, value_type);
    pg funcp = boost::math::legendre_p;
 
-   typedef int (*cast_t)(value_type);
-   cast_t rc = &boost::math::tools::real_cast<int, value_type>;
-
    boost::math::tools::test_result<value_type> result;
 
    std::cout << "Testing " << test_name << " with type " << type_name
@@ -291,17 +264,8 @@ void do_test_assoc_legendre_p(const T& data, const char* type_name, const char* 
    //
    result = boost::math::tools::test(
       data, 
-      boost::lambda::bind(funcp, 
-         boost::lambda::ret<int>(
-            boost::lambda::bind(
-            rc,
-            boost::lambda::ret<value_type>(boost::lambda::_1[0]))),
-         boost::lambda::ret<int>(
-            boost::lambda::bind(
-            rc,
-            boost::lambda::ret<value_type>(boost::lambda::_1[1]))),
-         boost::lambda::ret<value_type>(boost::lambda::_1[2])), 
-      boost::lambda::ret<value_type>(boost::lambda::_1[3]));
+      bind_func_int2(funcp, 0, 1, 2), 
+      extract_result(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::legendre_p", test_name);
    std::cout << std::endl;
 }
@@ -379,6 +343,7 @@ void test_spots(T, const char* t)
 
 int test_main(int, char* [])
 {
+   BOOST_MATH_CONTROL_FP;
    test_spots(0.0F, "float");
    test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

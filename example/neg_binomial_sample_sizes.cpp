@@ -90,12 +90,12 @@ void find_number_of_trials(double failures, double p)
 
 int main()
 {
-	 find_number_of_trials(5, 0.5);
-	 find_number_of_trials(50, 0.5);
-	 find_number_of_trials(500, 0.5);
-	 find_number_of_trials(50, 0.1);
-	 find_number_of_trials(500, 0.1);
-	 find_number_of_trials(5, 0.9);
+    find_number_of_trials(5, 0.5);
+    find_number_of_trials(50, 0.5);
+    find_number_of_trials(500, 0.5);
+    find_number_of_trials(50, 0.1);
+    find_number_of_trials(500, 0.1);
+    find_number_of_trials(5, 0.9);
 
     return 0;
 } // int main()

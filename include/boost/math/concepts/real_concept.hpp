@@ -25,10 +25,10 @@
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
-
 #include <ostream>
 #include <istream>
 #include <cmath>
+#include <math.h> // fmodl
 
 #ifndef BOOST_MATH_REAL_CONCEPT_HPP
 #define BOOST_MATH_REAL_CONCEPT_HPP
@@ -55,7 +55,7 @@ public:
    real_concept(int c) : m_value(c){}
    real_concept(unsigned long c) : m_value(c){}
    real_concept(long c) : m_value(c){}
-#ifdef BOOST_HAS_LONG_LONG
+#if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX) || defined(__SUNPRO_CC)
    real_concept(unsigned long long c) : m_value(static_cast<long double>(c)){}
    real_concept(long long c) : m_value(static_cast<long double>(c)){}
 #elif defined(BOOST_HAS_MS_INT64)
@@ -195,8 +195,10 @@ inline real_concept atan2(real_concept a, real_concept b)
 { return std::atan2(a.value(), b.value()); }
 inline real_concept ceil(real_concept a)
 { return std::ceil(a.value()); }
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline real_concept fmod(real_concept a, real_concept b)
-{ return boost::math::tools::fmod_workaround(a.value(), b.value()); }
+{ return fmodl(a.value(), b.value()); }
+#endif
 inline real_concept cosh(real_concept a)
 { return std::cosh(a.value()); }
 inline real_concept exp(real_concept a)
@@ -226,8 +228,13 @@ inline real_concept tan(real_concept a)
 { return std::tan(a.value()); }
 inline real_concept pow(real_concept a, real_concept b)
 { return std::pow(a.value(), b.value()); }
+#if !defined(__SUNPRO_CC)
 inline real_concept pow(real_concept a, int b)
 { return std::pow(a.value(), b); }
+#else
+inline real_concept pow(real_concept a, int b)
+{ return std::pow(a.value(), static_cast<long double>(b)); }
+#endif
 inline real_concept sin(real_concept a)
 { return std::sin(a.value()); }
 inline real_concept sinh(real_concept a)
@@ -246,10 +253,28 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
 template <class charT, class traits>
 inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>& is, real_concept& a)
 {
+#if defined(BOOST_MSVC) && defined(__SGI_STL_PORT)
+   //
+   // STLPort 5.1.4 has a problem reading long doubles from strings,
+   // see http://sourceforge.net/tracker/index.php?func=detail&aid=1811043&group_id=146814&atid=766244
+   //
+   double v;
+   is >> v;
+   a = v;
+   return is;
+#elif defined(__SGI_STL_PORT)
+   std::string s;
+   long double d;
+   is >> s;
+   std::sscanf(s.c_str(), "%Lf", &d);
+   a = d;
+   return is;
+#else
    long double v;
    is >> v;
    a = v;
    return is;
+#endif
 }
 
 } // namespace concepts
@@ -297,37 +322,41 @@ inline long double real_cast<long double, concepts::real_concept>(concepts::real
 }
 
 template <>
-inline concepts::real_concept max_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return max_value<long double>();
 }
 
 template <>
-inline concepts::real_concept min_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return min_value<long double>();
 }
 
 template <>
-inline concepts::real_concept log_max_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept log_max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return log_max_value<long double>();
 }
 
 template <>
-inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return log_min_value<long double>();
 }
 
 template <>
-inline concepts::real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
+#ifdef __SUNPRO_CC
+   return std::numeric_limits<long double>::epsilon();
+#else
    return tools::epsilon<long double>();
+#endif
 }
 
 template <>
-inline int digits<concepts::real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 { 
    // Assume number of significand bits is same as long double,
    // unless std::numeric_limits<T>::is_specialized to provide digits.

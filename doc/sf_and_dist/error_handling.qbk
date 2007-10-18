@@ -1,6 +1,6 @@
 [section:error_handling Error Handling]
 
-[def __format [@../../../libs/format/index.html Boost.Format]]
+[def __format [@../../../../format/index.html Boost.Format]]
 
 [heading Quick Reference]
 
@@ -44,7 +44,7 @@ The available actions are:
 appropriate result]]
 [[ignore_error][Ignores the error and simply the returns the most appropriate result.]]
 [[user_error][Calls a 
-   [link math_toolkit.policy.pol_tutorial.user_defined_error_policies user-supplied error handler].]]
+   [link math_toolkit.policy.pol_tutorial.user_def_err_pol user-supplied error handler].]]
 ]
 
 The following tables show all the permutations of errors and actions, 
@@ -56,7 +56,7 @@ with the default action for each error shown in bold:
 [[errno_on_error][Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::quiet_NaN()`]]
 [[ignore_error][Returns `std::numeric_limits<T>::quiet_NaN()`]]
 [[user_error][Returns the result of `boost::math::policies::user_domain_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
+            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
     
@@ -66,7 +66,7 @@ with the default action for each error shown in bold:
 [[errno_on_error][Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::quiet_NaN()`]]
 [[ignore_error][Returns `std::numeric_limits<T>::quiet_NaN()`]]
 [[user_error][Returns the result of `boost::math::policies::user_pole_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
+            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -76,7 +76,7 @@ with the default action for each error shown in bold:
 [[errno_on_error][Sets `::errno` to `ERANGE` and returns `std::numeric_limits<T>::infinity()`]]
 [[ignore_error][Returns `std::numeric_limits<T>::infinity()`]]
 [[user_error][Returns the result of `boost::math::policies::user_overflow_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
+            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -86,7 +86,7 @@ with the default action for each error shown in bold:
 [[errno_on_error][Sets `::errno` to `ERANGE` and returns 0.]]
 [[ignore_error][[*Returns 0]]]
 [[user_error][Returns the result of `boost::math::policies::user_underflow_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
+            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -96,7 +96,7 @@ with the default action for each error shown in bold:
 [[errno_on_error][Sets `::errno` to `ERANGE` and returns the denormalised value.]]
 [[ignore_error][[*Returns the denormalised value.]]]
 [[user_error][Returns the result of `boost::math::policies::user_denorm_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
+            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -106,7 +106,7 @@ with the default action for each error shown in bold:
 [[errno_on_error][Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::infinity()`.]]
 [[ignore_error][Returns `std::numeric_limits<T>::infinity()`.]]
 [[user_error][Returns the result of `boost::math::policies::user_evaluation_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_defined_error_policies 
+            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -159,7 +159,7 @@ the error, or set global ::errno, then a NaN will be returned.
 This behaviour is chosen to assist compatibility with the behaviour of 
 ['ISO/IEC 9899:1999 Programming languages - C]
 and with the
-[@www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 6]:
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 6]:
 
 [:['"Each of the functions declared above shall return a NaN (Not a Number)
 if any argument value is a NaN, but it shall not report a domain error.

@@ -12,8 +12,8 @@
   using boost::math::normal_distribution;
 
 #include <boost/math/distributions/students_t.hpp>
-	using boost::math::students_t;  // Probability of students_t(df, t).
-	using boost::math::students_t_distribution;
+   using boost::math::students_t;  // Probability of students_t(df, t).
+   using boost::math::students_t_distribution;
 
 //  using namespace boost::math;
 //.\error_policy_normal.cpp(30) : error C2872: 'policy' : ambiguous symbol
@@ -26,8 +26,8 @@
 
 // std
 #include <iostream>
-	using std::cout;
-	using std::endl;
+   using std::cout;
+   using std::endl;
 
 using boost::math::policies::policy;
 // Possible errors

@@ -425,7 +425,7 @@ namespace tools
 {
 
 template<>
-inline int digits<boost::math::ntl::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
+inline int digits<boost::math::ntl::RR>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
 {
    return ::NTL::RR::precision();
 }
@@ -493,7 +493,7 @@ inline int real_cast<int, boost::math::ntl::RR>(boost::math::ntl::RR t)
 }
 
 template <>
-inline boost::math::ntl::RR max_value<boost::math::ntl::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
+inline boost::math::ntl::RR max_value<boost::math::ntl::RR>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
 {
    static bool has_init = false;
    static NTL::RR val;
@@ -507,7 +507,7 @@ inline boost::math::ntl::RR max_value<boost::math::ntl::RR>(BOOST_EXPLICIT_TEMPL
 }
 
 template <>
-inline boost::math::ntl::RR min_value<boost::math::ntl::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
+inline boost::math::ntl::RR min_value<boost::math::ntl::RR>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
 {
    static bool has_init = false;
    static NTL::RR val;
@@ -521,7 +521,7 @@ inline boost::math::ntl::RR min_value<boost::math::ntl::RR>(BOOST_EXPLICIT_TEMPL
 }
 
 template <>
-inline boost::math::ntl::RR log_max_value<boost::math::ntl::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
+inline boost::math::ntl::RR log_max_value<boost::math::ntl::RR>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
 {
    static bool has_init = false;
    static NTL::RR val;
@@ -536,7 +536,7 @@ inline boost::math::ntl::RR log_max_value<boost::math::ntl::RR>(BOOST_EXPLICIT_T
 }
 
 template <>
-inline boost::math::ntl::RR log_min_value<boost::math::ntl::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
+inline boost::math::ntl::RR log_min_value<boost::math::ntl::RR>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
 {
    static bool has_init = false;
    static NTL::RR val;
@@ -551,7 +551,7 @@ inline boost::math::ntl::RR log_min_value<boost::math::ntl::RR>(BOOST_EXPLICIT_T
 }
 
 template <>
-inline boost::math::ntl::RR epsilon<boost::math::ntl::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
+inline boost::math::ntl::RR epsilon<boost::math::ntl::RR>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
 {
    return ldexp(boost::math::ntl::RR(1), 1-boost::math::policies::digits<boost::math::ntl::RR, boost::math::policies::policy<> >());
 }
@@ -564,17 +564,17 @@ inline boost::math::ntl::RR epsilon<boost::math::ntl::RR>(BOOST_EXPLICIT_TEMPLAT
 //
 namespace constants{
 
-template<> inline boost::math::ntl::RR pi<boost::math::ntl::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
+template<> inline boost::math::ntl::RR pi<boost::math::ntl::RR>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
 {
-	 NTL::RR result;
-	 ComputePi(result);
-	 return result;
+    NTL::RR result;
+    ComputePi(result);
+    return result;
 }
-template<> inline boost::math::ntl::RR e<boost::math::ntl::RR>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
+template<> inline boost::math::ntl::RR e<boost::math::ntl::RR>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(boost::math::ntl::RR))
 {
-	 NTL::RR result;
+    NTL::RR result;
     result = 1;
-	 return exp(result);
+    return exp(result);
 }
 
 } // namespace constants

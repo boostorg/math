@@ -64,7 +64,7 @@ void test_spots(RealType)
   BOOST_CHECK_EQUAL(n.location(), 0); // aka mean.
   BOOST_CHECK_EQUAL(n.scale(), 1); // aka standard_deviation.
 
-	// Check for 'bad' arguments.
+   // Check for 'bad' arguments.
   BOOST_CHECK_THROW(find_scale<normal>(0., -1., 0.), std::domain_error); // p below 0 to 1.
   BOOST_CHECK_THROW(find_scale<normal>(0., 2., 0.), std::domain_error); // p above 0 to 1.
   BOOST_CHECK_THROW(find_scale<normal>(numeric_limits<double>::infinity(), 0.5, 0.),

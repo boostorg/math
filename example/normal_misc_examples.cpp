@@ -74,7 +74,7 @@ int main()
 
 /*`And all this you can do with a nanoscopic amount of work compared to
 the team of *human computers* toiling with Milton Abramovitz and Irene Stegen
-at the US National Bureau of Standards (now [@www.nist.gov NIST]). 
+at the US National Bureau of Standards (now [@http://www.nist.gov NIST]). 
 Starting in 1938, their "Handbook of Mathematical Functions with Formulas, Graphs and Mathematical Tables",
 was eventually published in 1964, and has been reprinted numerous times since.
 (A major replacement is planned at [@http://dlmf.nist.gov Digital Library of Mathematical Functions]).

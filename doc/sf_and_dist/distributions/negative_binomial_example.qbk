@@ -182,3 +182,11 @@ Example program showing output of a table of values of cdf and pdf for various k
 [endsect] [/section:negative_binomial_example1 Negative Binomial example 2.]
 
 [endsect] [/section:neg_binom_eg Negative Binomial Distribution Examples]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+

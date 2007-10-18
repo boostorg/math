@@ -10,15 +10,15 @@
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/normal.hpp>
-	 using boost::math::normal_distribution;
+    using boost::math::normal_distribution;
 
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <iostream>
-	using std::cout;
-	using std::endl;
-	using std::setprecision;
+   using std::cout;
+   using std::endl;
+   using std::setprecision;
 
 template <class RealType>
 void test_spots(RealType)
@@ -27,7 +27,7 @@ void test_spots(RealType)
    // 2 eps as a percentage:
    RealType tolerance = boost::math::tools::epsilon<RealType>() * 2 * 100;
 
-	cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
+   cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
    for(int i = -4; i <= 4; ++i)
    {
@@ -67,8 +67,8 @@ void test_spots(RealType)
 
 int test_main(int, char* [])
 {
-	 // Basic sanity-check spot values.
-	// (Parameter value, arbitrarily zero, only communicates the floating point type).
+    // Basic sanity-check spot values.
+   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

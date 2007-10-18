@@ -1,3 +1,8 @@
+//  (C) Copyright John Maddock 2006-7.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 3>, 80> log1p_expm1_data = { {
       { SC_(-0.69330310821533203125e0), SC_(-0.1181895342296499380302723361817935835636e1), SC_(-0.5000779577496508480606742934033661111325e0) }, 

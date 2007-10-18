@@ -1,4 +1,7 @@
-
+//  (C) Copyright John Maddock 2006-7.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MATH_HANDLE_TEST_RESULT
 #define BOOST_MATH_HANDLE_TEST_RESULT
@@ -131,7 +134,11 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
       {
          if(i)
             std::cout << ", ";
+#if defined(__SGI_STL_PORT)
+         std::cout << boost::math::tools::real_cast<double>(worst[i]);
+#else
          std::cout << worst[i];
+#endif
       }
       std::cout << " }";
    }

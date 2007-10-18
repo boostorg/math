@@ -20,10 +20,10 @@ void test_spots(RealType)
 {
    // Basic sanity checks for constants.
 
-	RealType tolerance = static_cast<RealType>(2e-15);  // double
-	//cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
+   RealType tolerance = static_cast<RealType>(2e-15);  // double
+   //cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << "." << endl;
 
-	using namespace boost::math::constants;
+   using namespace boost::math::constants;
    using namespace std; // Help ADL of std exp, log...
    using std::exp;
 

@@ -913,14 +913,16 @@ template <class RT1, class RT2, class RT3>
 inline typename tools::promote_args<RT1, RT2, RT3>::type 
    ibetac_inv(RT1 a, RT2 b, RT3 q)
 {
-   return ibetac_inv(a, b, q, static_cast<RT1*>(0), policies::policy<>());
+   typedef typename remove_cv<RT1>::type dummy;
+   return ibetac_inv(a, b, q, static_cast<dummy*>(0), policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibetac_inv(RT1 a, RT2 b, RT3 q, const Policy& pol)
 {
-   return ibetac_inv(a, b, q, static_cast<RT1*>(0), pol);
+   typedef typename remove_cv<RT1>::type dummy;
+   return ibetac_inv(a, b, q, static_cast<dummy*>(0), pol);
 }
 
 } // namespace math

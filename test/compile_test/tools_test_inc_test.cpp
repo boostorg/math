@@ -14,6 +14,9 @@
 //
 #include "test_compile_result.hpp"
 
+inline void check_result_imp(boost::math::tools::test_result<double>, boost::math::tools::test_result<double>){}
+
+
 void check()
 {
    check_result<float>(boost::math::tools::relative_error<float>(f, f));

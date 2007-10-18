@@ -259,16 +259,16 @@ namespace boost
     template <class RealType, class Policy>
     inline const std::pair<RealType, RealType> range(const negative_binomial_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable k.
-	    using boost::math::tools::max_value;
-	    return std::pair<RealType, RealType>(0, max_value<RealType>()); // max_integer?
+       using boost::math::tools::max_value;
+       return std::pair<RealType, RealType>(0, max_value<RealType>()); // max_integer?
     }
 
     template <class RealType, class Policy>
     inline const std::pair<RealType, RealType> support(const negative_binomial_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable k.
-	    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-	    using boost::math::tools::max_value;
-	    return std::pair<RealType, RealType>(0,  max_value<RealType>()); // max_integer?
+       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+       using boost::math::tools::max_value;
+       return std::pair<RealType, RealType>(0,  max_value<RealType>()); // max_integer?
     }
 
     template <class RealType, class Policy>
@@ -335,7 +335,7 @@ namespace boost
     // chf of Negative Binomial distribution provided by derived accessors.
 
     template <class RealType, class Policy>
-    inline RealType pdf(const negative_binomial_distribution<RealType, Policy>& dist, const RealType k)
+    inline RealType pdf(const negative_binomial_distribution<RealType, Policy>& dist, const RealType& k)
     { // Probability Density/Mass Function.
       BOOST_FPU_EXCEPTION_GUARD
 
@@ -361,7 +361,7 @@ namespace boost
     } // negative_binomial_pdf
 
     template <class RealType, class Policy>
-    inline RealType cdf(const negative_binomial_distribution<RealType, Policy>& dist, const RealType k)
+    inline RealType cdf(const negative_binomial_distribution<RealType, Policy>& dist, const RealType& k)
     { // Cumulative Distribution Function of Negative Binomial.
       static const char* function = "boost::math::cdf(const negative_binomial_distribution<%1%>&, %1%)";
       using boost::math::ibeta; // Regularized incomplete beta function.
@@ -458,7 +458,7 @@ namespace boost
       }
       if (P <= pow(dist.success_fraction(), dist.successes()))
       { // p <= pdf(dist, 0) == cdf(dist, 0)
-			   return 0;
+        return 0;
       }
       /*
       // Calculate quantile of negative_binomial using the inverse incomplete beta function.
@@ -527,7 +527,7 @@ namespace boost
           // since the probability of zero failures may be non-zero,
           return 0; // but zero is the best we can do:
        }
-       if (-Q <= powm1(dist.success_fraction(), dist.successes(), Policy()))
+       if (-Q <= boost::math::powm1(dist.success_fraction(), dist.successes(), Policy()))
        {  // q <= cdf(complement(dist, 0)) == pdf(dist, 0)
           return 0; //
        }

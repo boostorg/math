@@ -37,7 +37,7 @@ namespace tools
 // See  Conceptual Requirements for Real Number Types.
 
 template <class T>
-inline int digits(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
+inline int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -48,7 +48,7 @@ inline int digits(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 }
 
 template <class T>
-inline T max_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
+inline T max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -60,7 +60,7 @@ inline T max_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 // -max_value<double> = -1.79769e+308, max_value<double> = 1.79769e+308.
 
 template <class T>
-inline T min_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
+inline T min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -80,13 +80,13 @@ namespace detail{
 // For type float first:
 //
 template <class T>
-inline T log_max_value(const mpl::int_<128>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_max_value(const mpl::int_<128>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    return 88.0f;
 }
 
 template <class T>
-inline T log_min_value(const mpl::int_<128>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_min_value(const mpl::int_<128>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    return -87.0f;
 }
@@ -94,13 +94,13 @@ inline T log_min_value(const mpl::int_<128>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE
 // Now double:
 //
 template <class T>
-inline T log_max_value(const mpl::int_<1024>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_max_value(const mpl::int_<1024>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    return 709.0;
 }
 
 template <class T>
-inline T log_min_value(const mpl::int_<1024>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_min_value(const mpl::int_<1024>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    return -708.0;
 }
@@ -108,19 +108,19 @@ inline T log_min_value(const mpl::int_<1024>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYP
 // 80 and 128-bit long doubles:
 //
 template <class T>
-inline T log_max_value(const mpl::int_<16384>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_max_value(const mpl::int_<16384>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    return 11356.0L;
 }
 
 template <class T>
-inline T log_min_value(const mpl::int_<16384>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_min_value(const mpl::int_<16384>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    return -11355.0L;
 }
 
 template <class T>
-inline T log_max_value(const mpl::int_<0>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_max_value(const mpl::int_<0>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -133,7 +133,7 @@ inline T log_max_value(const mpl::int_<0>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T
 }
 
 template <class T>
-inline T log_min_value(const mpl::int_<0>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_min_value(const mpl::int_<0>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -146,14 +146,14 @@ inline T log_min_value(const mpl::int_<0>& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T
 }
 
 template <class T>
-inline T epsilon(const mpl::true_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T epsilon(const mpl::true_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    return std::numeric_limits<T>::epsilon();
 }
 
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
 template <>
-inline long double epsilon<long double>(const mpl::true_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(long double))
+inline long double epsilon<long double>(const mpl::true_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(long double))
 {
    // numeric_limits on Darwin tells lies here.
    // This static assert fails for some unknown reason, so
@@ -164,7 +164,7 @@ inline long double epsilon<long double>(const mpl::true_& BOOST_APPEND_EXPLICIT_
 #endif
 
 template <class T>
-inline T epsilon(const mpl::false_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T epsilon(const mpl::false_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
    BOOST_MATH_STD_USING  // for ADL of std names
    static const T eps = ldexp(static_cast<T>(1), 1-policies::digits<T, policies::policy<> >());
@@ -174,7 +174,7 @@ inline T epsilon(const mpl::false_& BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 } // namespace detail
 
 template <class T>
-inline T log_max_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    typedef typename mpl::if_c<
@@ -195,7 +195,7 @@ inline T log_max_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 }
 
 template <class T>
-inline T log_min_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
+inline T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    typedef typename mpl::if_c<
@@ -217,7 +217,7 @@ inline T log_min_value(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
 }
 
 template <class T>
-inline T epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE(T))
+inline T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::epsilon<T>(mpl::bool_< ::std::numeric_limits<T>::is_specialized>());

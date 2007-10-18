@@ -28,8 +28,8 @@
 
 namespace boost
 {
-	namespace math
-	{ // Math functions (in roughly alphabetic order).
+   namespace math
+   { // Math functions (in roughly alphabetic order).
 
    // Beta functions.
    template <class RT1, class RT2>
@@ -329,7 +329,7 @@ namespace boost
    template <class RT, class Policy>
    RT factorial(unsigned int, const Policy& pol);
    template <class RT>
-   RT unchecked_factorial(unsigned int); 
+   RT unchecked_factorial(unsigned int BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(RT)); 
    template <class RT>
    RT double_factorial(unsigned i);
    template <class RT, class Policy>
@@ -346,10 +346,6 @@ namespace boost
 
    template <class RT, class Policy>
    typename tools::promote_args<RT>::type rising_factorial(RT x, int n, const Policy& pol);
-
-   // Fpclassify - classify floating-point as NaN or infinity...
-   template <class T>
-   int fpclassify (T);
 
    // Gamma functions.
    template <class RT>
@@ -625,7 +621,7 @@ namespace boost
    template <class T>
    bool isnormal BOOST_NO_MACRO_EXPAND(T t);
 
- 	} // namespace math
+    } // namespace math
 } // namespace boost
 
 #define BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(Policy)\

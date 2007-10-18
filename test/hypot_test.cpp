@@ -116,6 +116,7 @@ void test_spots()
 
 int test_main(int, char* [])
 {
+   BOOST_MATH_CONTROL_FP;
    test_boundaries();
    test_spots();
    return 0;

@@ -25,6 +25,7 @@
 #include <ostream>
 #include <istream>
 #include <cmath>
+#include <math.h> // fmodl
 
 #ifndef BOOST_MATH_STD_REAL_CONCEPT_HPP
 #define BOOST_MATH_STD_REAL_CONCEPT_HPP
@@ -194,8 +195,13 @@ inline boost::math::concepts::std_real_concept atan2(boost::math::concepts::std_
 { return std::atan2(a.value(), b.value()); }
 inline boost::math::concepts::std_real_concept ceil(boost::math::concepts::std_real_concept a)
 { return std::ceil(a.value()); }
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline boost::math::concepts::std_real_concept fmod(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
-{ return boost::math::tools::fmod_workaround(a.value(), b.value()); }
+{ return fmodl(a.value(), b.value()); }
+#else
+inline boost::math::concepts::std_real_concept fmod(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
+{ return std::fmod(a.value(), b.value()); }
+#endif
 inline boost::math::concepts::std_real_concept cosh(boost::math::concepts::std_real_concept a)
 { return std::cosh(a.value()); }
 inline boost::math::concepts::std_real_concept exp(boost::math::concepts::std_real_concept a)
@@ -300,37 +306,37 @@ inline long double real_cast<long double, concepts::std_real_concept>(concepts::
 }
 
 template <>
-inline concepts::std_real_concept max_value<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept max_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
    return max_value<long double>();
 }
 
 template <>
-inline concepts::std_real_concept min_value<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept min_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
    return min_value<long double>();
 }
 
 template <>
-inline concepts::std_real_concept log_max_value<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept log_max_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
    return log_max_value<long double>();
 }
 
 template <>
-inline concepts::std_real_concept log_min_value<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept log_min_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
    return log_min_value<long double>();
 }
 
 template <>
-inline concepts::std_real_concept epsilon(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
    return tools::epsilon<long double>();
 }
 
 template <>
-inline int digits<concepts::std_real_concept>(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline int digits<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 { // Assume number of significand bits is same as long double,
   // unless std::numeric_limits<T>::is_specialized to provide digits.
    return digits<long double>();

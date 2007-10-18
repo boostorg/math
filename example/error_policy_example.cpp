@@ -23,11 +23,11 @@ using boost::math::students_t;  // Probability of students_t(df, t) convenience 
 
 // std
 #include <iostream>
-	using std::cout;
-	using std::endl;
+   using std::cout;
+   using std::endl;
 
 #include <stdexcept>
-	using std::exception;
+   using std::exception;
 
 using boost::math::policies::policy;
 using boost::math::policies::domain_error;
@@ -43,7 +43,7 @@ typedef students_t_distribution<double, my_policy> my_students_t;
 
 int main()
 {  // Example of error handling of bad argument(s) to a distribution.
-	cout << "Example error handling using Student's t function. " << endl;
+  cout << "Example error handling using Student's t function. " << endl;
 
   double degrees_of_freedom = -1; double t = -1.; // Two 'bad' arguments!
 
@@ -71,7 +71,7 @@ int main()
       "\n""Message from thrown exception was:\n   " << e.what() << std::endl;
   }
 
-	return 0;
+  return 0;
 } // int main()
 
 /*

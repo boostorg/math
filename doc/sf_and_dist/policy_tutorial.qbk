@@ -320,7 +320,7 @@ alternate policies present in other translation units:
 
 [endsect][/section:namespace_policies Setting Policies at Namespace or Translation Unit Scope]
 
-[section:user_defined_error_policies Calling User Defined Error Handlers]
+[section:user_def_err_pol Calling User Defined Error Handlers]
 
 [import ../../example/policy_eg_8.cpp]
 
@@ -330,7 +330,7 @@ alternate policies present in other translation units:
 
 [policy_eg_9]
 
-[endsect][/section:user_defined_error_policies Calling User Defined Error Handlers]
+[endsect][/section:user_def_err_pol Calling User Defined Error Handlers]
 
 [section:understand_dis_quant Understanding Quantiles of Discrete Distributions]
 

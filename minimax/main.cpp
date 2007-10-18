@@ -89,7 +89,8 @@ void step_some(unsigned count)
          //
          started = true;
       }
-      for(unsigned i = 0; i < count; ++i)
+      unsigned i;
+      for(i = 0; i < count; ++i)
       {
          std::cout << "Stepping..." << std::endl;
          p_remez->set_brake(brake);
@@ -125,7 +126,8 @@ void show(const char*, const char*)
       boost::numeric::ublas::vector<boost::math::ntl::RR> v = p_remez->zero_points();
       
       std::cout << "  Zeros = {\n";
-      for(unsigned i = 0; i < v.size(); ++i)
+      unsigned i;
+      for(i = 0; i < v.size(); ++i)
       {
          std::cout << "    " << v[i] << std::endl;
       }
@@ -133,7 +135,7 @@ void show(const char*, const char*)
 
       v = p_remez->chebyshev_points();
       std::cout << "  Chebeshev Control Points = {\n";
-      for(unsigned i = 0; i < v.size(); ++i)
+      for(i = 0; i < v.size(); ++i)
       {
          std::cout << "    " << v[i] << std::endl;
       }
@@ -143,14 +145,14 @@ void show(const char*, const char*)
       std::cout << "Y offset: " << y_offset << std::endl;
 
       std::cout << "P = {";
-      for(unsigned i = 0; i < n.size(); ++i)
+      for(i = 0; i < n.size(); ++i)
       {
          std::cout << "    " << n[i] << std::endl;
       }
       std::cout << "  }\n";
 
       std::cout << "Q = {";
-      for(unsigned i = 0; i < d.size(); ++i)
+      for(i = 0; i < d.size(); ++i)
       {
          std::cout << "    " << d[i] << std::endl;
       }
@@ -216,7 +218,8 @@ void do_test(T, const char* name)
       //
       std::cout << "Starting tests at " << name << " precision...\n";
       std::cout << "Absissa        Error\n";
-      for(unsigned i = 0; i < zeros.size(); ++i)
+      unsigned i;
+      for(i = 0; i < zeros.size(); ++i)
       {
          boost::math::ntl::RR true_result = the_function(zeros[i]);
          T absissa = boost::math::tools::real_cast<T>(zeros[i]);
@@ -238,7 +241,7 @@ void do_test(T, const char* name)
       //
       // Do the tests at the Chebeshev control points:
       //
-      for(unsigned i = 0; i < cheb.size(); ++i)
+      for(i = 0; i < cheb.size(); ++i)
       {
          boost::math::ntl::RR true_result = the_function(cheb[i]);
          T absissa = boost::math::tools::real_cast<T>(cheb[i]);
@@ -381,6 +384,38 @@ void rescale(const char*, const char*)
    }
 }
 
+void graph_poly(const char*, const char*)
+{
+   int i = 50;
+   boost::math::ntl::RR::SetPrecision(working_precision);
+   if(started)
+   {
+      //
+      // We want to test the approximation at fixed precision:
+      // either float, double or long double.  Begin by getting the
+      // polynomials:
+      //
+      boost::math::tools::polynomial<boost::math::ntl::RR> n, d;
+      n = p_remez->numerator();
+      d = p_remez->denominator();
+
+      boost::math::ntl::RR max_error(0);
+      boost::math::ntl::RR step = (b - a) / i;
+
+      std::cout << "Evaluating Numerator...\n";
+      boost::math::ntl::RR val;
+      for(val = a; val <= b; val += step)
+         std::cout << n.evaluate(val) << std::endl;
+      std::cout << "Evaluating Denominator...\n";
+      for(val = a; val <= b; val += step)
+         std::cout << d.evaluate(val) << std::endl;
+   }
+   else
+   {
+      std::cout << "Nothing to test: try converging an approximation first!!!" << std::endl;
+   }
+}
+
 int test_main(int, char* [])
 {
    std::string line;
@@ -424,6 +459,8 @@ int test_main(int, char* [])
             str_p("step") && int_p[&step_some]
       ||
             str_p("step")[&step]
+      ||
+            str_p("poly")[&graph_poly]
       ||
             str_p("info")[&show]
       ||

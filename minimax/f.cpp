@@ -8,12 +8,7 @@
 #include "../tools/ntl_rr_digamma.hpp"
 #include <boost/math/bindings/rr.hpp>
 #include <boost/math/tools/polynomial.hpp>
-#include <boost/math/special_functions/log1p.hpp>
-#include <boost/math/special_functions/expm1.hpp>
-#include <boost/math/special_functions/gamma.hpp>
-#include <boost/math/special_functions/erf.hpp>
-#include <boost/math/special_functions/ellint_1.hpp>
-#include <boost/math/special_functions/ellint_2.hpp>
+#include <boost/math/special_functions.hpp>
 
 #include <cmath>
 
@@ -210,7 +205,7 @@ boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant)
          boost::math::ntl::RR k = sqrt(1 - mp);
          static const boost::math::ntl::RR l4 = log(boost::math::ntl::RR(4));
          boost::math::ntl::RR p2 = boost::math::constants::pi<boost::math::ntl::RR>() / 2;
-         return boost::math::ellint_1(k) / (l4 - log(mp));
+         return (boost::math::ellint_1(k) + 1) / (1 + l4 - log(mp));
       }
    case 15:
       // E(k)
@@ -218,6 +213,17 @@ boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant)
          // x = 1-k^2
          boost::math::ntl::RR z = 1 - x * log(x);
          return boost::math::ellint_2(sqrt(1-x)) / z;
+      }
+   case 16:
+      // Bessel I0(x) over [0,16]:
+      {
+         return boost::math::cyl_bessel_i(0, sqrt(x));
+      }
+   case 17:
+      // Bessel I0(x) over [16,INF]
+      {
+         boost::math::ntl::RR z = 1 / (boost::math::ntl::RR(1)/16 - x);
+         return boost::math::cyl_bessel_i(0, z) * sqrt(z) / exp(z);
       }
    }
    return 0;
