@@ -40,7 +40,7 @@
 #     undef BOOST_HAS_FPCLASSIFY
 #     define BOOST_FPCLASSIFY_PREFIX
 #  endif
-#elif (defined(__HP_aCC) && !defined(__hppa)
+#elif (defined(__HP_aCC) && !defined(__hppa))
 // aCC 6 appears to do "#define fpclassify fpclassify" which messes us up a bit!
 #  define BOOST_FPCLASSIFY_PREFIX ::
 #else
