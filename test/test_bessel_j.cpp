@@ -64,13 +64,6 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       "HP-UX",                          // platform
-      "double",                      // test type(s)
-      ".*Tricky.*",              // test data group
-      ".*", 100000, 100000);         // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      "HP-UX",                          // platform
       largest_type,                      // test type(s)
       ".*J0.*Tricky.*",              // test data group
       ".*", 80000000000LL, 80000000000LL);         // test function
@@ -81,6 +74,13 @@ void expected_results()
       largest_type,                      // test type(s)
       ".*J1.*Tricky.*",              // test data group
       ".*", 3000000, 2000000);         // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "HP-UX",                          // platform
+      "double",                      // test type(s)
+      ".*Tricky.*",              // test data group
+      ".*", 100000, 100000);         // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
