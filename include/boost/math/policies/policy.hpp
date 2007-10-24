@@ -6,17 +6,7 @@
 #ifndef BOOST_MATH_POLICY_HPP
 #define BOOST_MATH_POLICY_HPP
 
-#if defined (BOOST_MSVC)
-#  pragma warning (push)
-#  pragma warning (disable: 4005) // 'BOOST_PARAMETER_MAX_ARITY' : macro redefinition
-#endif
-
-// #define BOOST_PARAMETER_MAX_ARITY 15
-// Not now needed at all.
-
-#if defined (BOOST_MSVC)
-#  pragma warning (pop)
-#endif
+//#define BOOST_PARAMETER_MAX_ARITY 15
 
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/contains.hpp>
@@ -45,7 +35,7 @@ namespace boost{ namespace math{
 namespace tools{
 
 template <class T>
-int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T));
+int digits(BOOST_EXPLICIT_TEMPLATE_TYPE(T));
 
 }
 
