@@ -11,11 +11,12 @@
 // Note this header includes no other headers, this is
 // important if this test is to be meaningful:
 //
-#include "test_compile_result.hpp"
-
 inline void check_result_imp(std::complex<float>, std::complex<float>){}
 inline void check_result_imp(std::complex<double>, std::complex<double>){}
 inline void check_result_imp(std::complex<long double>, std::complex<long double>){}
+
+#include "test_compile_result.hpp"
+
 
 
 void check()

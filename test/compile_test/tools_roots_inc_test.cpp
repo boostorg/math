@@ -11,11 +11,11 @@
 // Note this header includes no other headers, this is
 // important if this test is to be meaningful:
 //
-#include "test_compile_result.hpp"
-
 inline void check_result_imp(std::pair<float, float>, std::pair<float, float>){}
 inline void check_result_imp(std::pair<double, double>, std::pair<double, double>){}
 inline void check_result_imp(std::pair<long double, long double>, std::pair<long double, long double>){}
+
+#include "test_compile_result.hpp"
 
 void check()
 {
