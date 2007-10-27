@@ -191,7 +191,8 @@ private:
    static Distribution& get_object()
    {
       // will never get called:
-      return * reinterpret_cast<Distribution*>(0);
+      static char buf[sizeof(Distribution)];
+      return * reinterpret_cast<Distribution*>(buf);
    }
 }; // struct DistributionConcept
 
