@@ -175,6 +175,16 @@ void expected_results()
       "tgamma1pm1.*",                // test data group
       "boost::math::tgamma1pm1", 200, 80);  // test function
    //
+   // Tru64:
+   //
+   add_expected_result(
+      ".*Tru64.*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "real_concept",                // test type(s)
+      "factorials",                  // test data group
+      "boost::math::lgamma", 50, 20);  // test function
+   //
    // Sun OS:
    //
    add_expected_result(

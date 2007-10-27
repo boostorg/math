@@ -88,7 +88,23 @@ void expected_results()
       largest_type,                      // test type(s)
       ".*J.*Tricky.*",              // test data group
       ".*", 3000, 500);         // test function
-
+   //
+   // HP Tru64:
+   //
+   add_expected_result(
+      ".*Tru64.*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "double",                      // test type(s)
+      ".*Tricky.*",              // test data group
+      ".*", 100000, 100000);         // test function
+   add_expected_result(
+      ".*Tru64.*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                      // test type(s)
+      ".*Tricky large.*",              // test data group
+      ".*", 3000, 1000);         // test function
    //
    // Mac OS X:
    //

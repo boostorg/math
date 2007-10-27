@@ -75,6 +75,23 @@ void expected_results()
       largest_type,                  // test type(s)
       ".*Y[01Nv].*",           // test data group
       ".*", 400, 200);               // test function
+   //
+   // Tru64:
+   //
+   add_expected_result(
+      ".*Tru64.*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                // test type(s)
+      ".*(Y[nv]|y).*Random.*",           // test data group
+      ".*", 30000, 30000);             // test function
+   add_expected_result(
+      ".*Tru64.*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                      // test type(s)
+      ".*Y[01Nv].*",           // test data group
+      ".*", 400, 200);               // test function
 
    //
    // Mac OS X rates are very slightly higher:

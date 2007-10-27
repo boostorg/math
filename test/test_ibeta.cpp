@@ -140,6 +140,16 @@ void expected_results()
       "(?i).*large.*",                      // test data group
       ".*", 200000, 10000);                 // test function
    //
+   // Tru64:
+   //
+   add_expected_result(
+      ".*Tru64.*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                     // test type(s)
+      "(?i).*large.*",                      // test data group
+      ".*", 100000, 10000);                 // test function
+   //
    // Sun OS:
    //
    add_expected_result(

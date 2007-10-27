@@ -137,7 +137,7 @@ void test_inverses(const T& data)
          BOOST_CHECK_EQUAL(boost::math::ibeta_inva(data[i][1], data[i][2], data[i][5]), boost::math::tools::max_value<value_type>());
          BOOST_CHECK_EQUAL(boost::math::ibeta_invb(data[i][0], data[i][2], data[i][5]), boost::math::tools::min_value<value_type>());
       }
-      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()))
+      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()) && (fabs(data[i][5]) >= boost::math::tools::min_value<double>()))
       {
          value_type inv = boost::math::ibeta_inva(data[i][1], data[i][2], data[i][5]);
          BOOST_CHECK_CLOSE(data[i][0], inv, precision);
@@ -155,7 +155,7 @@ void test_inverses(const T& data)
          BOOST_CHECK_EQUAL(boost::math::ibetac_inva(data[i][1], data[i][2], data[i][6]), boost::math::tools::min_value<value_type>());
          BOOST_CHECK_EQUAL(boost::math::ibetac_invb(data[i][0], data[i][2], data[i][6]), boost::math::tools::max_value<value_type>());
       }
-      else if((1 - data[i][6] > 0.001) && (fabs(data[i][6]) >= boost::math::tools::min_value<value_type>()))
+      else if((1 - data[i][6] > 0.001) && (fabs(data[i][6]) >= boost::math::tools::min_value<value_type>()) && (fabs(data[i][6]) >= boost::math::tools::min_value<double>()))
       {
          value_type inv = boost::math::ibetac_inva(data[i][1], data[i][2], data[i][6]);
          BOOST_CHECK_CLOSE(data[i][0], inv, precision);

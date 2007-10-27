@@ -165,7 +165,7 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
 
       if(data[i][3] == 0)
          BOOST_CHECK_EQUAL(boost::math::gamma_q_inva(data[i][1], data[i][3]), boost::math::tools::min_value<value_type>());
-      else if((1 - data[i][3] > 0.001) && (fabs(data[i][3]) >= boost::math::tools::min_value<value_type>()))
+      else if((1 - data[i][3] > 0.001) && (fabs(data[i][3]) >= boost::math::tools::min_value<value_type>()) && (fabs(data[i][3]) >= boost::math::tools::min_value<double>()))
       {
          value_type inv = boost::math::gamma_q_inva(data[i][1], data[i][3]);
          BOOST_CHECK_CLOSE(data[i][0], inv, precision);

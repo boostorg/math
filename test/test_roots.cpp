@@ -244,7 +244,7 @@ void test_inverses(const T& data)
          BOOST_CHECK_EQUAL(inverse_ibeta_newton(data[i][0], data[i][1], data[i][5]), value_type(0));
          BOOST_CHECK_EQUAL(inverse_ibeta_bisect(data[i][0], data[i][1], data[i][5]), value_type(0));
       }
-      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()))
+      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()) && (fabs(data[i][5]) >= boost::math::tools::min_value<double>()))
       {
          value_type inv = inverse_ibeta_halley(data[i][0], data[i][1], data[i][5]);
          BOOST_CHECK_CLOSE(data[i][2], inv, precision);
