@@ -302,6 +302,7 @@ run test_triangular.cpp ;
 run test_uniform.cpp ;
 run test_weibull.cpp ;
 run test_policy.cpp ;
+run test_policy_2.cpp ;
 run test_policy_sf.cpp ;
 
 run test_bessel_j.cpp ;
