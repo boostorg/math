@@ -5,9 +5,21 @@
 
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/results_collector.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/array.hpp>
+
+#define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
+   {\
+      unsigned int failures = boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed;\
+      BOOST_CHECK_CLOSE(a, b, prec); \
+      if(failures != boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed)\
+      {\
+         std::cerr << "Failure was at row " << i << std::endl;\
+      }\
+   }
+
 
 //
 // Implement various versions of inverse of the incomplete beta
@@ -244,16 +256,18 @@ void test_inverses(const T& data)
          BOOST_CHECK_EQUAL(inverse_ibeta_newton(data[i][0], data[i][1], data[i][5]), value_type(0));
          BOOST_CHECK_EQUAL(inverse_ibeta_bisect(data[i][0], data[i][1], data[i][5]), value_type(0));
       }
-      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()) && (fabs(data[i][5]) >= boost::math::tools::min_value<double>()))
+      else if((1 - data[i][5] > 0.001) 
+         && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()) 
+         && (fabs(data[i][5]) >= boost::math::tools::min_value<double>()))
       {
          value_type inv = inverse_ibeta_halley(data[i][0], data[i][1], data[i][5]);
-         BOOST_CHECK_CLOSE(data[i][2], inv, precision);
+         BOOST_CHECK_CLOSE_EX(data[i][2], inv, precision, i);
          inv = inverse_ibeta_schroeder(data[i][0], data[i][1], data[i][5]);
-         BOOST_CHECK_CLOSE(data[i][2], inv, precision);
+         BOOST_CHECK_CLOSE_EX(data[i][2], inv, precision, i);
          inv = inverse_ibeta_newton(data[i][0], data[i][1], data[i][5]);
-         BOOST_CHECK_CLOSE(data[i][2], inv, precision);
+         BOOST_CHECK_CLOSE_EX(data[i][2], inv, precision, i);
          inv = inverse_ibeta_bisect(data[i][0], data[i][1], data[i][5]);
-         BOOST_CHECK_CLOSE(data[i][2], inv, precision);
+         BOOST_CHECK_CLOSE_EX(data[i][2], inv, precision, i);
       }
       else if(1 == data[i][5])
       {
