@@ -17,6 +17,9 @@
       if(failures != boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed)\
       {\
          std::cerr << "Failure was at row " << i << std::endl;\
+         std::cerr << std::setprecision(35); \
+         std::cerr << "{ " << data[i][0] << " , " << data[i][1] << " , " << data[i][2];\
+         std::cerr << " , " << data[i][3] << " , " << data[i][4] << " , " << data[i][5] << " } " << std::endl;\
       }\
    }
 
@@ -257,8 +260,8 @@ void test_inverses(const T& data)
          BOOST_CHECK_EQUAL(inverse_ibeta_bisect(data[i][0], data[i][1], data[i][5]), value_type(0));
       }
       else if((1 - data[i][5] > 0.001) 
-         && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()) 
-         && (fabs(data[i][5]) >= boost::math::tools::min_value<double>()))
+         && (fabs(data[i][5]) > 2 * boost::math::tools::min_value<value_type>()) 
+         && (fabs(data[i][5]) > 2 * boost::math::tools::min_value<double>()))
       {
          value_type inv = inverse_ibeta_halley(data[i][0], data[i][1], data[i][5]);
          BOOST_CHECK_CLOSE_EX(data[i][2], inv, precision, i);
