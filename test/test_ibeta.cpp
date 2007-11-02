@@ -103,6 +103,7 @@ void expected_results()
    // *very* extreme due to the increased exponent range
    // of 80-bit long doubles.  Also effect Mac OS.
    //
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -110,6 +111,7 @@ void expected_results()
       "double",                     // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 40, 20);                 // test function
+#endif
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

@@ -112,6 +112,20 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       "Mac OS",                          // platform
+      largest_type,                  // test type(s)
+      ".*J0.*Tricky.*",              // test data group
+      ".*", 400000000, 400000000);   // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                          // platform
+      largest_type,                  // test type(s)
+      ".*J1.*Tricky.*",              // test data group
+      ".*", 900000, 800000);       // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                          // platform
       largest_type,                      // test type(s)
       "Bessel JN.*",              // test data group
       ".*", 40000, 20000);         // test function
@@ -123,15 +137,6 @@ void expected_results()
       "Bessel J:.*",              // test data group
       ".*", 50000, 20000);         // test function
 
-   // This shouldn't be required, could be limited test data precision
-   // i.e. not enough bits in double input to get double result.
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      "Mac OS",                      // platform
-      "double",                      // test type(s)
-      ".*Tricky.*",                  // test data group
-      ".*", 200000, 200000);         // test function
 
 
    //
