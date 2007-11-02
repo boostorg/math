@@ -6,7 +6,7 @@
 #ifndef BOOST_MATH_TOOLS_TEST_DATA_HPP
 #define BOOST_MATH_TOOLS_TEST_DATA_HPP
 
-#include <boost/config.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/assert.hpp>
 #ifdef BOOST_MSVC
 #  pragma warning(push)
@@ -41,7 +41,7 @@ enum parameter_type
    random_in_range = 0,
    periodic_in_range = 1,
    power_series = 2,
-   dummy_param = 0x80,
+   dummy_param = 0x80
 };
 
 parameter_type operator | (parameter_type a, parameter_type b)
@@ -333,6 +333,7 @@ float test_data<T>::extern_val = 0;
 template <class T>
 void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<T>& arg1)
 {
+   BOOST_MATH_STD_USING
    //
    // Generate a set of test points as requested, try and generate points
    // at only float precision: otherwise when testing float versions of functions
