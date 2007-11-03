@@ -160,7 +160,7 @@ void expected_results()
       "Sun.*",                          // platform
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
-      ".*", 110000, 10000);                 // test function
+      ".*", 130000, 10000);                 // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

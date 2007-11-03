@@ -128,17 +128,17 @@ void expected_results()
       ".*", 300000, 20000);         // test function
 
    //
-   // HP-UX
+   // HP-UX and Solaris:
    // Extended exponent range of long double
    // causes more extreme test cases to be executed:
    //
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "HP-UX",                       // platform
-      "long double",                      // test type(s)
+      "HP-UX|Sun Solaris",           // platform
+      "long double",                 // test type(s)
       ".*",                          // test data group
-      ".*", 200000, 100000);            // test function
+      ".*", 200000, 100000);         // test function
 
    //
    // Catch all cases come last:

@@ -261,7 +261,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       "factorials",                  // test data group
-      "boost::math::lgamma", 30, 4);  // test function
+      "boost::math::lgamma", 40, 4);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

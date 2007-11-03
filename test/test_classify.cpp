@@ -41,7 +41,7 @@ void test_classify(T t, const char* type)
          BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_SUBNORMAL);
       }
       t = std::numeric_limits<T>::denorm_min();
-      if(t != 0)
+      if((t != 0) && (t < (std::numeric_limits<T>::min)()))
       {
          BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_SUBNORMAL);
          BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_SUBNORMAL);
