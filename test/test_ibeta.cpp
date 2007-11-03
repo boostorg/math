@@ -150,7 +150,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
-      ".*", 100000, 10000);                 // test function
+      ".*", 130000, 10000);                 // test function
    //
    // Sun OS:
    //
