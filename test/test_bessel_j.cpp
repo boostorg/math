@@ -150,7 +150,7 @@ void expected_results()
       "Mac OS",                          // platform
       largest_type,                  // test type(s)
       ".*J1.*Tricky.*",              // test data group
-      ".*", 900000, 800000);       // test function
+      ".*", 3000000, 800000);       // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
