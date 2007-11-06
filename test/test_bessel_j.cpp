@@ -114,26 +114,26 @@ void expected_results()
    // the approximations use, which bracket rather than preserve the root.
    //
    add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
+      ".*",                              // compiler
+      ".*",                              // stdlib
       "Sun Solaris",                     // platform
       largest_type,                      // test type(s)
       "Bessel J: Random Data.*Tricky.*", // test data group
-      ".*", 3000, 500);         // test function
+      ".*", 3000, 500);                  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "Sun Solaris",                          // platform
+      "Sun Solaris",                 // platform
       "double",                      // test type(s)
-      ".*Tricky.*",              // test data group
+      ".*Tricky.*",                  // test data group
       ".*", 100000, 100000);         // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "Sun Solaris",                          // platform
-      largest_type,                      // test type(s)
-      ".*J.*tricky.*",              // test data group
-      ".*", 100, 50);         // test function
+      "Sun Solaris",                 // platform
+      largest_type,                  // test type(s)
+      ".*J.*tricky.*",               // test data group
+      ".*", 50000000, 50000000);     // test function
    //
    // Mac OS X:
    //
