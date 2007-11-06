@@ -74,7 +74,7 @@ void expected_results()
       "HP-UX|Sun Solaris",                          // platform
       largest_type,                  // test type(s)
       ".*Y[01Nv].*",           // test data group
-      ".*", 400, 200);               // test function
+      ".*", 1300, 500);               // test function
    //
    // Tru64:
    //

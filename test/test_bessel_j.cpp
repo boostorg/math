@@ -126,14 +126,14 @@ void expected_results()
       "Sun Solaris",                 // platform
       "double",                      // test type(s)
       ".*Tricky.*",                  // test data group
-      ".*", 100000, 100000);         // test function
+      ".*", 200000, 100000);         // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       "Sun Solaris",                 // platform
       largest_type,                  // test type(s)
       ".*J.*tricky.*",               // test data group
-      ".*", 50000000, 50000000);     // test function
+      ".*", 400000000, 50000000);    // test function
    //
    // Mac OS X:
    //
