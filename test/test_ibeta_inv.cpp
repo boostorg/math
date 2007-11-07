@@ -78,6 +78,8 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
+
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    //
    // Linux etc,
    // Extended exponent range of long double
@@ -107,6 +109,7 @@ void expected_results()
          ".*",                          // test data group
          ".*", 5000000L, 500000);         // test function
    }
+#endif
    //
    // MinGW,
    // Extended exponent range of long double
