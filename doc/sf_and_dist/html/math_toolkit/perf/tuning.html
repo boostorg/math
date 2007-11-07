@@ -1,13 +1,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Performance Tuning Macros</title>
+<title> Performance Tuning Macros</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../perf.html" title="Performance">
-<link rel="prev" href="comp_compilers.html" title="Comparing Compilers">
-<link rel="next" href="comparisons.html" title="Comparisons to Other Open Source Libraries">
+<link rel="up" href="../perf.html" title=" Performance">
+<link rel="prev" href="comp_compilers.html" title=" Comparing Compilers">
+<link rel="next" href="comparisons.html" title=" Comparisons to Other
+      Open Source Libraries">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,8 +25,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.perf.tuning"></a><a href="tuning.html" title="Performance Tuning Macros"> Performance Tuning Macros</a>
-</h3></div></div></div>
+<a name="math_toolkit.perf.tuning"></a><a href="tuning.html" title=" Performance Tuning Macros"> Performance Tuning Macros</a></h3></div></div></div>
 <p>
         There are a small number of performance tuning options that are determined
         by configuration macros. These should be set in boost/math/tools/user.hpp;
@@ -75,7 +75,7 @@
               <p>
                 Determines how symmetrical rational functions are evaluated: mostly
                 this only effects how the Lanczos approximation is evaluated, and
-                how the <code class="computeroutput"><span class="identifier">evaluate_rational</span></code>
+                how the <tt class="computeroutput"><span class="identifier">evaluate_rational</span></tt>
                 function behaves. Define to one of the values 0, 1, 2 or 3: see below
                 for the meaning of these values.
               </p>
@@ -127,8 +127,8 @@
 </tbody>
 </table></div>
 <p>
-        The values to which <code class="computeroutput"><span class="identifier">BOOST_MATH_POLY_METHOD</span></code>
-        and <code class="computeroutput"><span class="identifier">BOOST_MATH_RATIONAL_METHOD</span></code>
+        The values to which <tt class="computeroutput"><span class="identifier">BOOST_MATH_POLY_METHOD</span></tt>
+        and <tt class="computeroutput"><span class="identifier">BOOST_MATH_RATIONAL_METHOD</span></tt>
         may be set are as follows:
       </p>
 <div class="informaltable"><table class="table">
@@ -162,8 +162,8 @@
               </p>
               <p>
                 Note that if the order of the polynomial or rational function is
-                a runtime parameter, or the order is greater than the value of <code class="computeroutput"><span class="identifier">BOOST_MATH_MAX_POLY_ORDER</span></code>, then
-                this method is always used, irrespective of the value of <code class="computeroutput"><span class="identifier">BOOST_MATH_POLY_METHOD</span></code> or <code class="computeroutput"><span class="identifier">BOOST_MATH_RATIONAL_METHOD</span></code>.
+                a runtime parameter, or the order is greater than the value of <tt class="computeroutput"><span class="identifier">BOOST_MATH_MAX_POLY_ORDER</span></tt>, then
+                this method is always used, irrespective of the value of <tt class="computeroutput"><span class="identifier">BOOST_MATH_POLY_METHOD</span></tt> or <tt class="computeroutput"><span class="identifier">BOOST_MATH_RATIONAL_METHOD</span></tt>.
               </p>
               </td>
 </tr>
@@ -178,7 +178,7 @@
                 The polynomial or rational function is evaluated without the use
                 of a loop, and using Horner's method. This only occurs if the order
                 of the polynomial is known at compile time and is less than or equal
-                to <code class="computeroutput"><span class="identifier">BOOST_MATH_MAX_POLY_ORDER</span></code>.
+                to <tt class="computeroutput"><span class="identifier">BOOST_MATH_MAX_POLY_ORDER</span></tt>.
               </p>
               </td>
 </tr>
@@ -195,7 +195,7 @@
                 permits two operations to occur in parallel for polynomials, and
                 four in parallel for rational functions. This only occurs if the
                 order of the polynomial is known at compile time and is less than
-                or equal to <code class="computeroutput"><span class="identifier">BOOST_MATH_MAX_POLY_ORDER</span></code>.
+                or equal to <tt class="computeroutput"><span class="identifier">BOOST_MATH_MAX_POLY_ORDER</span></tt>.
               </p>
               </td>
 </tr>
@@ -215,7 +215,7 @@
                 more obvious to the compiler: rather than relying on the compiler's
                 optimiser to spot the parallelisation opportunities. This only occurs
                 if the order of the polynomial is known at compile time and is less
-                than or equal to <code class="computeroutput"><span class="identifier">BOOST_MATH_MAX_POLY_ORDER</span></code>.
+                than or equal to <tt class="computeroutput"><span class="identifier">BOOST_MATH_MAX_POLY_ORDER</span></tt>.
               </p>
               </td>
 </tr>
@@ -234,8 +234,8 @@
         highly vectorisable processors in the future.
       </p>
 <div class="table">
-<a name="id777904"></a><p class="title"><b>Table 39. A Comparison of Polynomial Evaluation Methods</b></p>
-<div class="table-contents"><table class="table" summary="A Comparison of Polynomial Evaluation Methods">
+<a name="id740705"></a><p class="title"><b>Table 39. A Comparison of Polynomial Evaluation Methods</b></p>
+<table class="table" summary="A Comparison of Polynomial Evaluation Methods">
 <colgroup>
 <col>
 <col>
@@ -307,7 +307,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(8.678e-008s)</p>
 <p>
@@ -323,7 +323,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(1.443e-007s)</p>
 <p>
@@ -384,7 +384,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(7.446e-008s)</p>
 <p>
@@ -409,7 +409,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(1.245e-007s)</p>
 <p>
@@ -418,7 +418,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(1.245e-007s)</p>
 <p>
@@ -479,7 +479,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(7.566e-008s)</p>
 <p>
@@ -513,7 +513,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(1.318e-007s)</p>
 <p>
@@ -556,7 +556,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(7.934e-008s)</p>
 <p>
@@ -565,7 +565,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(7.934e-008s)</p>
 <p>
@@ -581,7 +581,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(1.245e-007s)</p>
 <p>
@@ -590,7 +590,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(1.245e-007s)</p>
 <p>
@@ -616,27 +616,29 @@
             </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><p>
+<p>
         There is one final performance tuning option that is available as a compile
-        time <a href="../policy.html" title="Policies">policy</a>. Normally when evaluating
-        functions at <code class="computeroutput"><span class="keyword">double</span></code> precision,
-        these are actually evaluated at <code class="computeroutput"><span class="keyword">long</span>
-        <span class="keyword">double</span></code> precision internally: this
-        helps to ensure that as close to full <code class="computeroutput"><span class="keyword">double</span></code>
+        time <a href="../policy.html" title=" Policies">policy</a>. Normally when evaluating
+        functions at <tt class="computeroutput"><span class="keyword">double</span></tt> precision,
+        these are actually evaluated at <tt class="computeroutput"><span class="keyword">long</span>
+        <span class="keyword">double</span></tt> precision internally: this
+        helps to ensure that as close to full <tt class="computeroutput"><span class="keyword">double</span></tt>
         precision as possible is achieved, but may slow down execution in some environments.
-        The defaults for this policy can be changed by <a href="../policy/pol_ref/policy_defaults.html" title="Using macros to Change the Policy Defaults">defining
-        the macro <code class="computeroutput"><span class="identifier">BOOST_MATH_PROMOTE_DOUBLE_POLICY</span></code></a>
-        to <code class="computeroutput"><span class="keyword">false</span></code>, or <a href="../policy/pol_ref/internal_promotion.html" title="Internal Promotion Policies">by
+        The defaults for this policy can be changed by <a href="../policy/pol_ref/policy_defaults.html" title=" Using
+        macros to Change the Policy Defaults">defining
+        the macro <tt class="computeroutput"><span class="identifier">BOOST_MATH_PROMOTE_DOUBLE_POLICY</span></tt></a>
+        to <tt class="computeroutput"><span class="keyword">false</span></tt>, or <a href="../policy/pol_ref/internal_promotion.html" title=" Internal
+        Promotion Policies">by
         specifying a specific policy</a> when calling the special functions or
-        distributions. See also the <a href="../policy/pol_tutorial.html" title="Policy Tutorial">policy
+        distributions. See also the <a href="../policy/pol_tutorial.html" title=" Policy Tutorial">policy
         tutorial</a>.
       </p>
 <div class="table">
-<a name="id778659"></a><p class="title"><b>Table 40. Performance Comparison with and Without Internal
+<a name="id741460"></a><p class="title"><b>Table 40. Performance Comparison with and Without Internal
       Promotion to long double</b></p>
-<div class="table-contents"><table class="table" summary="Performance Comparison with and Without Internal
+<table class="table" summary="Performance Comparison with and Without Internal
       Promotion to long double">
 <colgroup>
 <col>
@@ -670,7 +672,8 @@
 <tr>
 <td>
             <p>
-              <a href="../special/sf_erf/error_function.html" title="Error Functions">erf</a>
+              <a href="../special/sf_erf/error_function.html" title=" Error
+        Functions">erf</a>
             </p>
             </td>
 <td>
@@ -685,7 +688,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(9.377e-008s)</p>
 <p>
@@ -695,7 +698,8 @@
 <tr>
 <td>
             <p>
-              <a href="../special/sf_erf/error_inv.html" title="Error Function Inverses">erf_inv</a>
+              <a href="../special/sf_erf/error_inv.html" title=" Error Function
+        Inverses">erf_inv</a>
             </p>
             </td>
 <td>
@@ -710,7 +714,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(3.598e-007s)</p>
 <p>
@@ -720,8 +724,10 @@
 <tr>
 <td>
             <p>
-              <a href="../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
-              and <a href="../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>
+              <a href="../special/sf_beta/ibeta_function.html" title=" Incomplete
+        Beta Functions">ibeta</a>
+              and <a href="../special/sf_beta/ibeta_function.html" title=" Incomplete
+        Beta Functions">ibetac</a>
             </p>
             </td>
 <td>
@@ -736,7 +742,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(4.137e-006s)</p>
 <p>
@@ -746,8 +752,10 @@
 <tr>
 <td>
             <p>
-              <a href="../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>
-              and <a href="../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>
+              <a href="../special/sf_beta/ibeta_inv_function.html" title=" The
+        Incomplete Beta Function Inverses">ibeta_inv</a>
+              and <a href="../special/sf_beta/ibeta_inv_function.html" title=" The
+        Incomplete Beta Function Inverses">ibetac_inv</a>
             </p>
             </td>
 <td>
@@ -762,7 +770,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(1.538e-005s)</p>
 <p>
@@ -772,10 +780,14 @@
 <tr>
 <td>
             <p>
-              <a href="../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inva</a>,
-              <a href="../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inva</a>,
-              <a href="../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_invb</a>
-              and <a href="../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_invb</a>
+              <a href="../special/sf_beta/ibeta_inv_function.html" title=" The
+        Incomplete Beta Function Inverses">ibeta_inva</a>,
+              <a href="../special/sf_beta/ibeta_inv_function.html" title=" The
+        Incomplete Beta Function Inverses">ibetac_inva</a>,
+              <a href="../special/sf_beta/ibeta_inv_function.html" title=" The
+        Incomplete Beta Function Inverses">ibeta_invb</a>
+              and <a href="../special/sf_beta/ibeta_inv_function.html" title=" The
+        Incomplete Beta Function Inverses">ibetac_invb</a>
             </p>
             </td>
 <td>
@@ -790,7 +802,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(5.607e-005s)</p>
 <p>
@@ -800,8 +812,10 @@
 <tr>
 <td>
             <p>
-              <a href="../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>
-              and <a href="../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>
+              <a href="../special/sf_gamma/igamma.html" title=" Incomplete Gamma
+        Functions">gamma_p</a>
+              and <a href="../special/sf_gamma/igamma.html" title=" Incomplete Gamma
+        Functions">gamma_q</a>
             </p>
             </td>
 <td>
@@ -816,7 +830,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(2.464e-006s)</p>
 <p>
@@ -826,8 +840,10 @@
 <tr>
 <td>
             <p>
-              <a href="../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>
-              and <a href="../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>
+              <a href="../special/sf_gamma/igamma_inv.html" title=" Incomplete
+        Gamma Function Inverses">gamma_p_inv</a>
+              and <a href="../special/sf_gamma/igamma_inv.html" title=" Incomplete
+        Gamma Function Inverses">gamma_q_inv</a>
             </p>
             </td>
 <td>
@@ -842,7 +858,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(9.291e-006s)</p>
 <p>
@@ -852,8 +868,10 @@
 <tr>
 <td>
             <p>
-              <a href="../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inva</a>
-              and <a href="../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inva</a>
+              <a href="../special/sf_gamma/igamma_inv.html" title=" Incomplete
+        Gamma Function Inverses">gamma_p_inva</a>
+              and <a href="../special/sf_gamma/igamma_inv.html" title=" Incomplete
+        Gamma Function Inverses">gamma_q_inva</a>
             </p>
             </td>
 <td>
@@ -868,7 +886,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><strong>1.00</strong></span></p>
+<p><span class="bold"><b>1.00</b></span></p>
 <p> </p>
 <p>(2.311e-005s)</p>
 <p>
@@ -876,14 +894,16 @@
             </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break">
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

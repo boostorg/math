@@ -1,13 +1,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Extreme Value Distribution</title>
+<title> Extreme
+          Value Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../dists.html" title="Distributions">
-<link rel="prev" href="exp_dist.html" title="Exponential Distribution">
-<link rel="next" href="f_dist.html" title="F Distribution">
+<link rel="up" href="../dists.html" title=" Distributions">
+<link rel="prev" href="exp_dist.html" title=" Exponential
+          Distribution">
+<link rel="next" href="f_dist.html" title=" F Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +26,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.extreme_dist"></a><a href="extreme_dist.html" title="Extreme Value Distribution"> Extreme
-          Value Distribution</a>
-</h5></div></div></div>
+<a name="math_toolkit.dist.dist_ref.dists.extreme_dist"></a><a href="extreme_dist.html" title=" Extreme
+          Value Distribution"> Extreme
+          Value Distribution</a></h5></div></div></div>
 <p>
             
 </p>
@@ -36,12 +38,13 @@
           </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title=" Policy Class
+        Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">extreme_value_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">extreme_value_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">extreme_value</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">extreme_value_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -95,11 +98,11 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/extreme_val_dist2.png" alt="extreme_val_dist2"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.extreme_dist.member_functions"></a><h5>
-<a name="id591950"></a>
+<a name="math_toolkit.dist.dist_ref.dists.extreme_dist.member_functions"></a><h4>
+<a name="id558442"></a>
             <a href="extreme_dist.html#math_toolkit.dist.dist_ref.dists.extreme_dist.member_functions">Member
             Functions</a>
-          </h5>
+          </h4>
 <pre class="programlisting">
 <span class="identifier">extreme_value_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
@@ -108,8 +111,8 @@
             and scale parameters.
           </p>
 <p>
-            Requires <code class="computeroutput"><span class="identifier">scale</span> <span class="special">&gt;</span>
-            <span class="number">0</span></code>, otherwise calls <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
+            Requires <tt class="computeroutput"><span class="identifier">scale</span> <span class="special">&gt;</span>
+            <span class="number">0</span></tt>, otherwise calls <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
           </p>
 <pre class="programlisting">
 <span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
@@ -123,13 +126,13 @@
 <p>
             Returns the scale parameter of the distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.extreme_dist.non_member_accessors"></a><h5>
-<a name="id592178"></a>
+<a name="math_toolkit.dist.dist_ref.dists.extreme_dist.non_member_accessors"></a><h4>
+<a name="id558673"></a>
             <a href="extreme_dist.html#math_toolkit.dist.dist_ref.dists.extreme_dist.non_member_accessors">Non-member
             Accessors</a>
-          </h5>
+          </h4>
 <p>
-            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
+            All the <a href="../nmp.html" title=" Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
             <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
             <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
@@ -143,19 +146,19 @@
 <p>
             The domain of the random parameter is [-&#8734;, +&#8734;].
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.extreme_dist.accuracy"></a><h5>
-<a name="id592348"></a>
+<a name="math_toolkit.dist.dist_ref.dists.extreme_dist.accuracy"></a><h4>
+<a name="id558844"></a>
             <a href="extreme_dist.html#math_toolkit.dist.dist_ref.dists.extreme_dist.accuracy">Accuracy</a>
-          </h5>
+          </h4>
 <p>
             The extreme value distribution is implemented in terms of the standard
-            library <code class="computeroutput"><span class="identifier">exp</span></code> and <code class="computeroutput"><span class="identifier">log</span></code> functions and as such should have
+            library <tt class="computeroutput"><span class="identifier">exp</span></tt> and <tt class="computeroutput"><span class="identifier">log</span></tt> functions and as such should have
             very low error rates.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.extreme_dist.implementation"></a><h5>
-<a name="id592402"></a>
+<a name="math_toolkit.dist.dist_ref.dists.extreme_dist.implementation"></a><h4>
+<a name="id558900"></a>
             <a href="extreme_dist.html#math_toolkit.dist.dist_ref.dists.extreme_dist.implementation">Implementation</a>
-          </h5>
+          </h4>
 <p>
             In the following table: <span class="emphasis"><em>a</em></span> is the location parameter,
             <span class="emphasis"><em>b</em></span> is the scale parameter, <span class="emphasis"><em>x</em></span>
@@ -319,8 +322,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

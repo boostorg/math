@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Known Issues, and Todo List</title>
+<title> Known Issues, and Todo List</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../status.html" title="Library Status">
-<link rel="prev" href="compilers.html" title="Compilers">
-<link rel="next" href="credits.html" title="Credits and Acknowledgements">
+<link rel="up" href="../status.html" title=" Library Status">
+<link rel="prev" href="compilers.html" title=" Compilers">
+<link rel="next" href="credits.html" title=" Credits and Acknowledgements">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.status.issues"></a><a href="issues.html" title="Known Issues, and Todo List"> Known Issues, and Todo List</a>
-</h3></div></div></div>
+<a name="math_toolkit.status.issues"></a><a href="issues.html" title=" Known Issues, and Todo List"> Known Issues, and Todo List</a></h3></div></div></div>
 <p>
         This section lists those issues that are known about.
       </p>
@@ -42,44 +41,44 @@
         If you don't see a component listed here, then we don't have any known issues
         with it.
       </p>
-<a name="math_toolkit.status.issues.tgamma"></a><h5>
-<a name="id789868"></a>
+<a name="math_toolkit.status.issues.tgamma"></a><h4>
+<a name="id752746"></a>
         <a href="issues.html#math_toolkit.status.issues.tgamma">tgamma</a>
-      </h5>
+      </h4>
 <div class="itemizedlist"><ul type="disc"><li>
-          Can the <a href="../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos approximation</a>
+          Can the <a href="../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos approximation</a>
           be optimized any further? (low priority)
         </li></ul></div>
-<a name="math_toolkit.status.issues.incomplete_beta"></a><h5>
-<a name="id789909"></a>
+<a name="math_toolkit.status.issues.incomplete_beta"></a><h4>
+<a name="id752789"></a>
         <a href="issues.html#math_toolkit.status.issues.incomplete_beta">Incomplete Beta</a>
-      </h5>
+      </h4>
 <div class="itemizedlist"><ul type="disc"><li>
           Investigate Didonato and Morris' asymptotic expansion for large a and b
           (medium priority).
         </li></ul></div>
-<a name="math_toolkit.status.issues.inverse_gamma"></a><h5>
-<a name="id789942"></a>
+<a name="math_toolkit.status.issues.inverse_gamma"></a><h4>
+<a name="id752823"></a>
         <a href="issues.html#math_toolkit.status.issues.inverse_gamma">Inverse Gamma</a>
-      </h5>
+      </h4>
 <div class="itemizedlist"><ul type="disc"><li>
           Investigate whether we can skip iteration altogether if the first approximation
           is good enough (Medium Priority).
         </li></ul></div>
-<a name="math_toolkit.status.issues.polynomials"></a><h5>
-<a name="id789975"></a>
+<a name="math_toolkit.status.issues.polynomials"></a><h4>
+<a name="id752857"></a>
         <a href="issues.html#math_toolkit.status.issues.polynomials">Polynomials</a>
-      </h5>
+      </h4>
 <div class="itemizedlist"><ul type="disc"><li>
           The Legendre and Laguerre Polynomials have surprisingly different error
           rates on different platforms, considering they are evaluated with only
           basic arithmetic operations. Maybe this is telling us something, or maybe
           not (Low Priority).
         </li></ul></div>
-<a name="math_toolkit.status.issues.elliptic_integrals"></a><h5>
-<a name="id790012"></a>
+<a name="math_toolkit.status.issues.elliptic_integrals"></a><h4>
+<a name="id752895"></a>
         <a href="issues.html#math_toolkit.status.issues.elliptic_integrals">Elliptic Integrals</a>
-      </h5>
+      </h4>
 <div class="itemizedlist"><ul type="disc">
 <li>
           Carlson's algorithms are essentially unchanged from Xiaogang Zhang's Google
@@ -119,28 +118,29 @@
           Priority).
         </li>
 <li>
-          There is a sub-domain of <a href="../special/ellint/ellint_3.html" title="Elliptic Integrals of the Third Kind - Legendre Form">ellint_3</a>
+          There is a sub-domain of <a href="../special/ellint/ellint_3.html" title=" Elliptic Integrals
+        of the Third Kind - Legendre Form">ellint_3</a>
           that is unimplemented (see the docs for details), currently it's not clear
           how to solve this issue, or if it's ever likely to be an real problem in
           practice - especially as most other implementations don't support this
           domain either (Medium Priority).
         </li>
 </ul></div>
-<a name="math_toolkit.status.issues.inverse_hyperbolic_functions"></a><h5>
-<a name="id790170"></a>
+<a name="math_toolkit.status.issues.inverse_hyperbolic_functions"></a><h4>
+<a name="id753054"></a>
         <a href="issues.html#math_toolkit.status.issues.inverse_hyperbolic_functions">Inverse
         Hyperbolic Functions</a>
-      </h5>
+      </h4>
 <div class="itemizedlist"><ul type="disc"><li>
-          These functions are inherited from previous Boost versions, before <a href="../special/powers/log1p.html" title="log1p">log1p</a> became widely
+          These functions are inherited from previous Boost versions, before <a href="../special/powers/log1p.html" title=" log1p">log1p</a> became widely
           available. Would they be better expressed in terms of this function? This
           is probably only an issue for very high precision types (Low Priority).
         </li></ul></div>
-<a name="math_toolkit.status.issues.statistical_distributions"></a><h5>
-<a name="id790215"></a>
+<a name="math_toolkit.status.issues.statistical_distributions"></a><h4>
+<a name="id753102"></a>
         <a href="issues.html#math_toolkit.status.issues.statistical_distributions">Statistical
         distributions</a>
-      </h5>
+      </h4>
 <div class="itemizedlist"><ul type="disc"><li>
           Student's t Perhaps switch to normal distribution as a better approximation
           for very large degrees of freedom?
@@ -148,8 +148,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

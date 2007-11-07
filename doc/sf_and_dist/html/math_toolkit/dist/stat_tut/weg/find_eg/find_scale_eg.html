@@ -1,13 +1,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Find Scale (Standard Deviation) Example</title>
+<title>
+            Find Scale (Standard Deviation) Example</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../find_eg.html" title="Find Location and Scale Examples">
-<link rel="prev" href="find_location_eg.html" title="Find Location (Mean) Example">
-<link rel="next" href="find_mean_and_sd_eg.html" title="Find mean and standard deviation example">
+<link rel="up" href="../find_eg.html" title=" Find Location
+          and Scale Examples">
+<link rel="prev" href="find_location_eg.html" title="
+            Find Location (Mean) Example">
+<link rel="next" href="find_mean_and_sd_eg.html" title="
+            Find mean and standard deviation example">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,13 +28,14 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.find_eg.find_scale_eg"></a><a href="find_scale_eg.html" title="Find Scale (Standard Deviation) Example">
-            Find Scale (Standard Deviation) Example</a>
-</h6></div></div></div>
+<a name="math_toolkit.dist.stat_tut.weg.find_eg.find_scale_eg"></a><a href="find_scale_eg.html" title="
+            Find Scale (Standard Deviation) Example">
+            Find Scale (Standard Deviation) Example</a></h6></div></div></div>
 <p>
               </p>
 <p>
-                First we need some includes to access the <a href="../../../dist_ref/dists/normal_dist.html" title="Normal (Gaussian) Distribution">Normal
+                First we need some includes to access the <a href="../../../dist_ref/dists/normal_dist.html" title=" Normal
+          (Gaussian) Distribution">Normal
                 Distribution</a>, the algorithms to find scale (and some std output
                 of course).
               </p>
@@ -59,14 +64,8 @@
 <p>
               </p>
 <p>
-                </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
-              </p>
-<p>
-              </p>
-<p>
-                For this example, we will use the standard <a href="../../../dist_ref/dists/normal_dist.html" title="Normal (Gaussian) Distribution">Normal
+                For this example, we will use the standard <a href="../../../dist_ref/dists/normal_dist.html" title=" Normal
+          (Gaussian) Distribution">Normal
                 Distribution</a>, with location (mean) zero and standard deviation
                 (scale) unity. Conveniently, this is also the default for this implementation's
                 constructor.
@@ -117,7 +116,7 @@ Normal distribution with mean = 0 has fraction &gt; -2, p = 0.97725
               </p>
 <p>
                 Noting that p = 0.02 instead of our target of 0.001, we can now use
-                <code class="computeroutput"><span class="identifier">find_scale</span></code> to give
+                <tt class="computeroutput"><span class="identifier">find_scale</span></tt> to give
                 a new standard deviation.
               </p>
 <p>
@@ -191,11 +190,11 @@ Normal distribution with mean = 0 has fraction &gt; -2, p = 0.999
 <p>
               <a name="math_toolkit.dist.stat_tut.weg.find_eg.find_scale_eg.controlling_how_errors_from_find_scale_are_handled"></a>
               </p>
-<h5>
-<a name="id561892"></a>
+<h4>
+<a name="id528188"></a>
                 <a href="find_scale_eg.html#math_toolkit.dist.stat_tut.weg.find_eg.find_scale_eg.controlling_how_errors_from_find_scale_are_handled">Controlling
                 how Errors from find_scale are handled</a>
-              </h5>
+              </h4>
 <p>
               </p>
 <p>
@@ -247,9 +246,9 @@ Normal distribution with mean = 0 has fraction &gt; -2, p = 0.999
               </p>
 <p>
                 If we want to express a probability, say 0.999, that is a complement,
-                <code class="computeroutput"><span class="number">1</span> <span class="special">-</span>
-                <span class="identifier">p</span></code> we should not even think
-                of writing <code class="computeroutput"><span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="number">1</span> <span class="special">-</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">l</span><span class="special">)</span></code>, but <a href="../../overview.html#why_complements">instead</a>,
+                <tt class="computeroutput"><span class="number">1</span> <span class="special">-</span>
+                <span class="identifier">p</span></tt> we should not even think
+                of writing <tt class="computeroutput"><span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="number">1</span> <span class="special">-</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">l</span><span class="special">)</span></tt>, but <a href="../../overview.html#why_complements">instead</a>,
                 use the <a href="../../overview.html#complements">complements</a> version.
               </p>
 <p>
@@ -287,9 +286,7 @@ Normal distribution with mean = 0 has fraction &gt; -2, p = 0.999
 <p>
                 The default error handling policy is to throw an exception with this
                 message, but if you chose a policy to ignore the error, the (impossible)
-                negative scale is quietly returned. </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
+                negative scale is quietly returned.
               </p>
 <p>
               See <a href="../../../../../../../../example/find_scale_example.cpp" target="_top">find_scale_example.cpp</a>
@@ -305,19 +302,15 @@ Normal distribution with mean = 0.946339 has fraction &lt;= -2 = 0.001
 Normal distribution with mean = 0.946339 has fraction &gt; -2 = 0.999
 </pre>
 <p>
-              </p>
-<p>
-                </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
-              </p>
-<p>
             </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

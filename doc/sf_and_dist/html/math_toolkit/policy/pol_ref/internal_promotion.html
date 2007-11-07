@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Internal Promotion Policies</title>
+<title> Internal
+        Promotion Policies</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../pol_ref.html" title="Policy Reference">
-<link rel="prev" href="error_handling_policies.html" title="Error Handling Policies">
-<link rel="next" href="assert_undefined.html" title="Mathematically Undefined Function Policies">
+<link rel="up" href="../pol_ref.html" title=" Policy Reference">
+<link rel="prev" href="error_handling_policies.html" title="
+        Error Handling Policies">
+<link rel="next" href="assert_undefined.html" title=" Mathematically
+        Undefined Function Policies">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,13 +27,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_ref.internal_promotion"></a><a href="internal_promotion.html" title="Internal Promotion Policies"> Internal
-        Promotion Policies</a>
-</h4></div></div></div>
+<a name="math_toolkit.policy.pol_ref.internal_promotion"></a><a href="internal_promotion.html" title=" Internal
+        Promotion Policies"> Internal
+        Promotion Policies</a></h4></div></div></div>
 <p>
-          Normally when evaluating a function at say <code class="computeroutput"><span class="keyword">float</span></code>
+          Normally when evaluating a function at say <tt class="computeroutput"><span class="keyword">float</span></tt>
           precision, maximal accuracy is assured by conducting the calculation at
-          <code class="computeroutput"><span class="keyword">double</span></code> precision internally,
+          <tt class="computeroutput"><span class="keyword">double</span></tt> precision internally,
           and then rounding the result. There are two policies that effect whether
           internal promotion takes place or not:
         </p>
@@ -55,42 +58,42 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>
+                  <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Indicates whether <code class="computeroutput"><span class="keyword">float</span></code>
-                  arguments should be promoted to <code class="computeroutput"><span class="keyword">double</span></code>
-                  precision internally: defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="keyword">true</span><span class="special">&gt;</span></code>
+                  Indicates whether <tt class="computeroutput"><span class="keyword">float</span></tt>
+                  arguments should be promoted to <tt class="computeroutput"><span class="keyword">double</span></tt>
+                  precision internally: defaults to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="keyword">true</span><span class="special">&gt;</span></tt>
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_double</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>
+                  <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_double</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Indicates whether <code class="computeroutput"><span class="keyword">double</span></code>
-                  arguments should be promoted to <code class="computeroutput"><span class="keyword">long</span>
-                  <span class="keyword">double</span></code> precision internally:
-                  defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">true</span><span class="special">&gt;</span></code>
+                  Indicates whether <tt class="computeroutput"><span class="keyword">double</span></tt>
+                  arguments should be promoted to <tt class="computeroutput"><span class="keyword">long</span>
+                  <span class="keyword">double</span></tt> precision internally:
+                  defaults to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">true</span><span class="special">&gt;</span></tt>
                 </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.policy.pol_ref.internal_promotion.examples"></a><h5>
-<a name="id764941"></a>
+<a name="math_toolkit.policy.pol_ref.internal_promotion.examples"></a><h4>
+<a name="id727727"></a>
           <a href="internal_promotion.html#math_toolkit.policy.pol_ref.internal_promotion.examples">Examples</a>
-        </h5>
+        </h4>
 <p>
-          Suppose we want <code class="computeroutput"><span class="identifier">tgamma</span></code>
-          to be evaluated without internal promotion to <code class="computeroutput"><span class="keyword">long</span>
-          <span class="keyword">double</span></code>, then we could use:
+          Suppose we want <tt class="computeroutput"><span class="identifier">tgamma</span></tt>
+          to be evaluated without internal promotion to <tt class="computeroutput"><span class="keyword">long</span>
+          <span class="keyword">double</span></tt>, then we could use:
         </p>
 <p>
           </p>
@@ -118,17 +121,10 @@
 <p>
           </p>
 <p>
-          </p>
-<p>
-            </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
-          </p>
-<p>
         </p>
 <p>
           Alternatively, suppose we want a distribution to perform calculations without
-          promoting <code class="computeroutput"><span class="keyword">float</span></code> to <code class="computeroutput"><span class="keyword">double</span></code>, then we could use:
+          promoting <tt class="computeroutput"><span class="keyword">float</span></tt> to <tt class="computeroutput"><span class="keyword">double</span></tt>, then we could use:
         </p>
 <p>
           </p>
@@ -156,19 +152,15 @@
 <p>
           </p>
 <p>
-          </p>
-<p>
-            </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
-          </p>
-<p>
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

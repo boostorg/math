@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Error Handling Example</title>
+<title> Error Handling
+          Example</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../weg.html" title="Worked Examples">
-<link rel="prev" href="normal_example/normal_misc.html" title="Some Miscellaneous Examples of the Normal (Gaussian) Distribution">
-<link rel="next" href="find_eg.html" title="Find Location and Scale Examples">
+<link rel="up" href="../weg.html" title=" Worked Examples">
+<link rel="prev" href="normal_example/normal_misc.html" title="
+            Some Miscellaneous Examples of the Normal (Gaussian) Distribution">
+<link rel="next" href="find_eg.html" title=" Find Location
+          and Scale Examples">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,18 +27,18 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.error_eg"></a><a href="error_eg.html" title="Error Handling Example"> Error Handling
-          Example</a>
-</h5></div></div></div>
+<a name="math_toolkit.dist.stat_tut.weg.error_eg"></a><a href="error_eg.html" title=" Error Handling
+          Example"> Error Handling
+          Example</a></h5></div></div></div>
 <p>
-            See <a href="../../../main_overview/error_handling.html" title="Error Handling">error handling
+            See <a href="../../../main_overview/error_handling.html" title=" Error Handling">error handling
             documentation</a> for a detailed explanation of the mechanism of handling
             errors, including the common "bad" arguments to distributions
-            and functions, and how to use <a href="../../../policy.html" title="Policies">Policies</a>
+            and functions, and how to use <a href="../../../policy.html" title=" Policies">Policies</a>
             to control it.
           </p>
 <p>
-            But, by default, <span class="bold"><strong>exceptions will be raised</strong></span>,
+            But, by default, <span class="bold"><b>exceptions will be raised</b></span>,
             for domain errors, pole errors, numeric overflow, and internal evaluation
             errors. To avoid the exceptions from getting thrown and instead get an
             appropriate value returned, usually a NaN (domain errors pole errors
@@ -77,7 +80,7 @@
 <p>
             </p>
 <p>
-              To ensure the <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+              To ensure the <tt class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></tt>
               is set when a domain error occurs as well as returning a NaN.
             </p>
 <p>
@@ -233,26 +236,19 @@ cdf returned a NaN!
 errno is set to: 33
 </pre>
 <p>
-            </p>
-<p>
-              </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
-            </p>
-<p>
           </p>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../../../doc/html/images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
-<tr><td align="left" valign="top">
+<tr><td colspan="2" align="left" valign="top">
 <p>
-              If throwing of exceptions is enabled (the default) but you do <span class="bold"><strong>not</strong></span> have try &amp; catch block, then the program
+              If throwing of exceptions is enabled (the default) but you do <span class="bold"><b>not</b></span> have try &amp; catch block, then the program
               will terminate with an uncaught exception and probably abort.
             </p>
 <p>
-              Therefore to get the benefit of helpful error messages, enabling <span class="bold"><strong>all exceptions and using try &amp; catch</strong></span> is
+              Therefore to get the benefit of helpful error messages, enabling <span class="bold"><b>all exceptions and using try &amp; catch</b></span> is
               recommended for most applications.
             </p>
 <p>
@@ -263,8 +259,11 @@ errno is set to: 33
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

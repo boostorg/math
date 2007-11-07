@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Relative Error and Testing</title>
+<title> Relative
+        Error and Testing</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../internals2.html" title="Testing and Development">
-<link rel="prev" href="minimax.html" title="Minimax Approximations and the Remez Algorithm">
-<link rel="next" href="test_data.html" title="Graphing, Profiling, and Generating Test Data for Special Functions">
+<link rel="up" href="../internals2.html" title=" Testing and Development">
+<link rel="prev" href="minimax.html" title=" Minimax Approximations
+        and the Remez Algorithm">
+<link rel="next" href="test_data.html" title=" Graphing,
+        Profiling, and Generating Test Data for Special Functions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,13 +27,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.toolkit.internals2.error_test"></a><a href="error_test.html" title="Relative Error and Testing"> Relative
-        Error and Testing</a>
-</h4></div></div></div>
-<a name="math_toolkit.toolkit.internals2.error_test.synopsis"></a><h5>
-<a name="id722101"></a>
+<a name="math_toolkit.toolkit.internals2.error_test"></a><a href="error_test.html" title=" Relative
+        Error and Testing"> Relative
+        Error and Testing</a></h4></div></div></div>
+<a name="math_toolkit.toolkit.internals2.error_test.synopsis"></a><h4>
+<a name="id684898"></a>
           <a href="error_test.html#math_toolkit.toolkit.internals2.error_test.synopsis">Synopsis</a>
-        </h5>
+        </h4>
 <p>
           
 </p>
@@ -46,10 +49,10 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">A</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">F1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">F2</span><span class="special">&gt;</span>
 <span class="identifier">test_result</span><span class="special">&lt;</span><span class="identifier">see</span><span class="special">-</span><span class="identifier">below</span><span class="special">&gt;</span> <span class="identifier">test</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">A</span><span class="special">&amp;</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">F1</span> <span class="identifier">test_func</span><span class="special">,</span> <span class="identifier">F2</span> <span class="identifier">expect_func</span><span class="special">);</span>
 </pre>
-<a name="math_toolkit.toolkit.internals2.error_test.description"></a><h5>
-<a name="id722455"></a>
+<a name="math_toolkit.toolkit.internals2.error_test.description"></a><h4>
+<a name="id685254"></a>
           <a href="error_test.html#math_toolkit.toolkit.internals2.error_test.description">Description</a>
-        </h5>
+        </h4>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">relative_error</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">v</span><span class="special">);</span>
@@ -93,48 +96,48 @@
 <div class="variablelist">
 <p class="title"><b></b></p>
 <dl>
-<dt><span class="term"><code class="computeroutput"><span class="keyword">unsigned</span>
-          <span class="identifier">worst</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="keyword">unsigned</span>
+          <span class="identifier">worst</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></tt></span></dt>
 <dd><p>
               Returns the row at which the worst error occurred.
             </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">T</span>
-          <span class="identifier">min</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">T</span>
+          <span class="identifier">min</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></tt></span></dt>
 <dd><p>
               Returns the smallest relative error found.
             </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">T</span>
-          <span class="identifier">max</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">T</span>
+          <span class="identifier">max</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></tt></span></dt>
 <dd><p>
               Returns the largest relative error found.
             </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">T</span>
-          <span class="identifier">mean</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">T</span>
+          <span class="identifier">mean</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></tt></span></dt>
 <dd><p>
               Returns the mean error found.
             </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span>
-          <span class="identifier">count</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span>
+          <span class="identifier">count</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></tt></span></dt>
 <dd><p>
               Returns the number of test cases.
             </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">T</span>
-          <span class="identifier">variance</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">T</span>
+          <span class="identifier">variance</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></tt></span></dt>
 <dd><p>
               Returns the variance of the errors found.
             </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">T</span>
-          <span class="identifier">variance1</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">T</span>
+          <span class="identifier">variance1</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></tt></span></dt>
 <dd><p>
               Returns the unbiased variance of the errors found.
             </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">T</span>
-          <span class="identifier">rms</span><span class="special">()</span><span class="keyword">const</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">T</span>
+          <span class="identifier">rms</span><span class="special">()</span><span class="keyword">const</span></tt></span></dt>
 <dd><p>
               Returns the Root Mean Square, or quadratic mean of the errors.
             </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">test_result</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">+=(</span><span class="keyword">const</span> <span class="identifier">test_result</span><span class="special">&amp;</span>
-          <span class="identifier">t</span><span class="special">)</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">test_result</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">+=(</span><span class="keyword">const</span> <span class="identifier">test_result</span><span class="special">&amp;</span>
+          <span class="identifier">t</span><span class="special">)</span></tt></span></dt>
 <dd><p>
               Combines two test_result's into a single result.
             </p></dd>
@@ -143,12 +146,12 @@
 <p>
           The template parameter of test_result, is the same type as the values in
           the two dimensional array passed to function <span class="emphasis"><em>test</em></span>,
-          roughly that's <code class="computeroutput"><span class="identifier">A</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">::</span><span class="identifier">value_type</span></code>.
+          roughly that's <tt class="computeroutput"><span class="identifier">A</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">::</span><span class="identifier">value_type</span></tt>.
         </p>
 <p>
           Parameter <span class="emphasis"><em>a</em></span> is a matrix of test data: and must be
           a standard library Sequence type, that contains another Sequence type:
-          typically it will be a two dimensional instance of <code class="literal">boost::array</code>.
+          typically it will be a two dimensional instance of <tt class="literal">boost::array</tt>.
           Each row of <span class="emphasis"><em>a</em></span> should contain all the parameters that
           are passed to the function under test as well as the expected result.
         </p>
@@ -164,14 +167,14 @@
         </p>
 <p>
           If the function under test returns a non-finite value when a finite result
-          is expected, or if a gross error is found, then a message is sent to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cerr</span></code>, and a call to BOOST_ERROR() made
+          is expected, or if a gross error is found, then a message is sent to <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cerr</span></tt>, and a call to BOOST_ERROR() made
           (which means that including this header requires you use Boost.Test). This
           is mainly a debugging/development aid (and a good place for a breakpoint).
         </p>
-<a name="math_toolkit.toolkit.internals2.error_test.example"></a><h5>
-<a name="id723409"></a>
+<a name="math_toolkit.toolkit.internals2.error_test.example"></a><h4>
+<a name="id686210"></a>
           <a href="error_test.html#math_toolkit.toolkit.internals2.error_test.example">Example</a>
-        </h5>
+        </h4>
 <p>
           Suppose we want to test the tgamma and lgamma functions, we can create
           a two dimensional matrix of test data, each row is one test case, and contains
@@ -226,8 +229,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

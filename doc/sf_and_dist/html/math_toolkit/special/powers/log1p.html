@@ -1,13 +1,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>log1p</title>
+<title> log1p</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../powers.html" title="Logs, Powers, Roots and Exponentials">
-<link rel="prev" href="../powers.html" title="Logs, Powers, Roots and Exponentials">
-<link rel="next" href="expm1.html" title="expm1">
+<link rel="up" href="../powers.html" title=" Logs, Powers, Roots and
+      Exponentials">
+<link rel="prev" href="../powers.html" title=" Logs, Powers, Roots and
+      Exponentials">
+<link rel="next" href="expm1.html" title=" expm1">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,8 +26,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.powers.log1p"></a><a href="log1p.html" title="log1p"> log1p</a>
-</h4></div></div></div>
+<a name="math_toolkit.special.powers.log1p"></a><a href="log1p.html" title=" log1p"> log1p</a></h4></div></div></div>
 <p>
           
 </p>
@@ -38,39 +39,42 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log1p</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log1p</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log1p</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log1p</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
-          Returns the natural logarithm of <code class="computeroutput"><span class="identifier">x</span><span class="special">+</span><span class="number">1</span></code>.
+          Returns the natural logarithm of <tt class="computeroutput"><span class="identifier">x</span><span class="special">+</span><span class="number">1</span></tt>.
         </p>
 <p>
-          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
-          type calculation rules</em></span></a>: the return is <code class="computeroutput"><span class="keyword">double</span></code>
+          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>result
+          type calculation rules</em></span></a>: the return is <tt class="computeroutput"><span class="keyword">double</span></tt>
           when <span class="emphasis"><em>x</em></span> is an integer type and T otherwise.
         </p>
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title="Policies">Policy</a> argument
+            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <p>
-          There are many situations where it is desirable to compute <code class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span></code>. However, for small <code class="computeroutput"><span class="identifier">x</span></code>
-          then <code class="computeroutput"><span class="identifier">x</span><span class="special">+</span><span class="number">1</span></code> suffers from catastrophic cancellation
-          errors so that <code class="computeroutput"><span class="identifier">x</span><span class="special">+</span><span class="number">1</span> <span class="special">==</span> <span class="number">1</span></code>
-          and <code class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="number">0</span></code>,
-          when in fact for very small x, the best approximation to <code class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span></code> would be <code class="computeroutput"><span class="identifier">x</span></code>.
-          <code class="computeroutput"><span class="identifier">log1p</span></code> calculates the best
-          approximation to <code class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="identifier">x</span><span class="special">)</span></code> using a Taylor series expansion for accuracy
+          There are many situations where it is desirable to compute <tt class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span></tt>. However, for small <tt class="computeroutput"><span class="identifier">x</span></tt>
+          then <tt class="computeroutput"><span class="identifier">x</span><span class="special">+</span><span class="number">1</span></tt> suffers from catastrophic cancellation
+          errors so that <tt class="computeroutput"><span class="identifier">x</span><span class="special">+</span><span class="number">1</span> <span class="special">==</span> <span class="number">1</span></tt>
+          and <tt class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="number">0</span></tt>,
+          when in fact for very small x, the best approximation to <tt class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span></tt> would be <tt class="computeroutput"><span class="identifier">x</span></tt>.
+          <tt class="computeroutput"><span class="identifier">log1p</span></tt> calculates the best
+          approximation to <tt class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="identifier">x</span><span class="special">)</span></tt> using a Taylor series expansion for accuracy
           (less than 2&#603;). Alternatively note that there are faster methods available,
           for example using the equivalence:
         </p>
@@ -85,22 +89,22 @@
           errors.
         </p>
 <p>
-          Finally when BOOST_HAS_LOG1P is defined then the <code class="computeroutput"><span class="keyword">float</span><span class="special">/</span><span class="keyword">double</span><span class="special">/</span><span class="keyword">long</span> <span class="keyword">double</span></code>
+          Finally when BOOST_HAS_LOG1P is defined then the <tt class="computeroutput"><span class="keyword">float</span><span class="special">/</span><span class="keyword">double</span><span class="special">/</span><span class="keyword">long</span> <span class="keyword">double</span></tt>
           specializations of this template simply forward to the platform's native
           (POSIX) implementation of this function.
         </p>
-<a name="math_toolkit.special.powers.log1p.accuracy"></a><h5>
-<a name="id690544"></a>
+<a name="math_toolkit.special.powers.log1p.accuracy"></a><h4>
+<a name="id653259"></a>
           <a href="log1p.html#math_toolkit.special.powers.log1p.accuracy">Accuracy</a>
-        </h5>
+        </h4>
 <p>
-          For built in floating point types <code class="computeroutput"><span class="identifier">log1p</span></code>
+          For built in floating point types <tt class="computeroutput"><span class="identifier">log1p</span></tt>
           should have approximately 1 epsilon accuracy.
         </p>
-<a name="math_toolkit.special.powers.log1p.testing"></a><h5>
-<a name="id690585"></a>
+<a name="math_toolkit.special.powers.log1p.testing"></a><h4>
+<a name="id653301"></a>
           <a href="log1p.html#math_toolkit.special.powers.log1p.testing">Testing</a>
-        </h5>
+        </h4>
 <p>
           A mixture of spot test sanity checks, and random high precision test values
           calculated using NTL::RR at 1000-bit precision.
@@ -108,8 +112,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

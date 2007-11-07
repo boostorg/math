@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Double Factorial</title>
+<title>
+        Double Factorial</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../factorials.html" title="Factorials and Binomial Coefficients">
-<link rel="prev" href="sf_factorial.html" title="Factorial">
-<link rel="next" href="sf_rising_factorial.html" title="Rising Factorial">
+<link rel="up" href="../factorials.html" title=" Factorials and Binomial
+      Coefficients">
+<link rel="prev" href="sf_factorial.html" title=" Factorial">
+<link rel="next" href="sf_rising_factorial.html" title="
+        Rising Factorial">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +27,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.factorials.sf_double_factorial"></a><a href="sf_double_factorial.html" title="Double Factorial">
-        Double Factorial</a>
-</h4></div></div></div>
+<a name="math_toolkit.special.factorials.sf_double_factorial"></a><a href="sf_double_factorial.html" title="
+        Double Factorial">
+        Double Factorial</a></h4></div></div></div>
 <p>
           
 </p>
@@ -41,21 +44,21 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">double_factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">double_factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">double_factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
-          Returns <code class="literal">i!!</code>.
+          Returns <tt class="literal">i!!</tt>.
         </p>
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title="Policies">Policy</a> argument
+            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
@@ -65,25 +68,25 @@
           designed to be optimised for small <span class="emphasis"><em>i</em></span> where table lookup
           of i! is possible.
         </p>
-<a name="math_toolkit.special.factorials.sf_double_factorial.accuracy"></a><h5>
-<a name="id635406"></a>
+<a name="math_toolkit.special.factorials.sf_double_factorial.accuracy"></a><h4>
+<a name="id602148"></a>
           <a href="sf_double_factorial.html#math_toolkit.special.factorials.sf_double_factorial.accuracy">Accuracy</a>
-        </h5>
+        </h4>
 <p>
           The implementation uses a trivial adaptation of the factorial function,
           so error rates should be no more than a couple of epsilon higher.
         </p>
-<a name="math_toolkit.special.factorials.sf_double_factorial.testing"></a><h5>
-<a name="id635437"></a>
+<a name="math_toolkit.special.factorials.sf_double_factorial.testing"></a><h4>
+<a name="id602181"></a>
           <a href="sf_double_factorial.html#math_toolkit.special.factorials.sf_double_factorial.testing">Testing</a>
-        </h5>
+        </h4>
 <p>
           The spot tests for the double factorial use data generated by functions.wolfram.com.
         </p>
-<a name="math_toolkit.special.factorials.sf_double_factorial.implementation"></a><h5>
-<a name="id635469"></a>
+<a name="math_toolkit.special.factorials.sf_double_factorial.implementation"></a><h4>
+<a name="id602215"></a>
           <a href="sf_double_factorial.html#math_toolkit.special.factorials.sf_double_factorial.implementation">Implementation</a>
-        </h5>
+        </h4>
 <p>
           The double factorial is implemented in terms of the factorial and gamma
           functions using the relations:
@@ -103,8 +106,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

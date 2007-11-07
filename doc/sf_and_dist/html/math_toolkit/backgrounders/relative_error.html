@@ -1,13 +1,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Relative Error</title>
+<title> Relative
+      Error</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../backgrounders.html" title="Backgrounders">
-<link rel="prev" href="implementation.html" title="Additional Implementation Notes">
-<link rel="next" href="lanczos.html" title="The Lanczos Approximation">
+<link rel="up" href="../backgrounders.html" title=" Backgrounders">
+<link rel="prev" href="implementation.html" title=" Additional
+      Implementation Notes">
+<link rel="next" href="lanczos.html" title=" The Lanczos Approximation">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +26,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.backgrounders.relative_error"></a><a href="relative_error.html" title="Relative Error"> Relative
-      Error</a>
-</h3></div></div></div>
+<a name="math_toolkit.backgrounders.relative_error"></a><a href="relative_error.html" title=" Relative
+      Error"> Relative
+      Error</a></h3></div></div></div>
 <p>
         Given an actual value <span class="emphasis"><em>a</em></span> and a found value <span class="emphasis"><em>v</em></span>
         the relative error can be calculated from:
@@ -53,7 +55,7 @@
         to the relative error in this special case. In the test cases for the special
         functions in this library, everything below a threshold is regarded as "effectively
         zero", otherwise the relative error is assigned the value of 1 if only
-        one of the terms is zero. The threshold is currently set at <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;::</span><span class="identifier">min</span><span class="special">()</span></code>: in other words all denormalised numbers
+        one of the terms is zero. The threshold is currently set at <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;::</span><span class="identifier">min</span><span class="special">()</span></tt>: in other words all denormalised numbers
         are regarded as a zero.
       </p>
 <p>
@@ -80,11 +82,11 @@
       </p>
 <a name="zero_error"></a><p>
       </p>
-<a name="math_toolkit.backgrounders.relative_error.the_impossibility_of_zero_error"></a><h5>
-<a name="id785798"></a>
+<a name="math_toolkit.backgrounders.relative_error.the_impossibility_of_zero_error"></a><h4>
+<a name="id748657"></a>
         <a href="relative_error.html#math_toolkit.backgrounders.relative_error.the_impossibility_of_zero_error">The
         Impossibility of Zero Error</a>
-      </h5>
+      </h4>
 <p>
         For many of the functions in this library, it is assumed that the error is
         "effectively zero" if the computation can be done with a number
@@ -109,8 +111,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

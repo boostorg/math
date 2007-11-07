@@ -1,13 +1,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Binomial Quiz Example</title>
+<title>
+            Binomial Quiz Example</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../binom_eg.html" title="Binomial Distribution Examples">
-<link rel="prev" href="binomial_coinflip_example.html" title="Binomial Coin-Flipping Example">
-<link rel="next" href="binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">
+<link rel="up" href="../binom_eg.html" title=" Binomial
+          Distribution Examples">
+<link rel="prev" href="binomial_coinflip_example.html" title="
+            Binomial Coin-Flipping Example">
+<link rel="next" href="binom_conf.html" title="
+            Calculating Confidence Limits on the Frequency of Occurrence for a Binomial
+            Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +29,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.binom_eg.binomial_quiz_example"></a><a href="binomial_quiz_example.html" title="Binomial Quiz Example">
-            Binomial Quiz Example</a>
-</h6></div></div></div>
+<a name="math_toolkit.dist.stat_tut.weg.binom_eg.binomial_quiz_example"></a><a href="binomial_quiz_example.html" title="
+            Binomial Quiz Example">
+            Binomial Quiz Example</a></h6></div></div></div>
 <p>
               </p>
 <p>
@@ -62,13 +67,6 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iomanip</span><span class="special">&gt;</span>
   <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">setw</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">setprecision</span><span class="special">;</span>
 </pre>
-<p>
-              </p>
-<p>
-              </p>
-<p>
-                </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
 <p>
               </p>
 <p>
@@ -437,7 +435,7 @@ Guessed OK   Probability
 <p>
               </p>
 <p>
-                We now consider the probabilities of <span class="bold"><strong>ranges</strong></span>
+                We now consider the probabilities of <span class="bold"><b>ranges</b></span>
                 of correct guesses.
               </p>
 <p>
@@ -522,11 +520,11 @@ Probability of getting between 4 and 4 answers right by guessing is 0.2252
 <p>
               <a name="math_toolkit.dist.stat_tut.weg.binom_eg.binomial_quiz_example.using_binomial_distribution_moments"></a>
               </p>
-<h5>
-<a name="id527246"></a>
+<h4>
+<a name="id493543"></a>
                 <a href="binomial_quiz_example.html#math_toolkit.dist.stat_tut.weg.binom_eg.binomial_quiz_example.using_binomial_distribution_moments">Using
                 Binomial distribution moments</a>
-              </h5>
+              </h4>
 <p>
               </p>
 <p>
@@ -560,10 +558,10 @@ Skewness is 0.2887
 <p>
               <a name="math_toolkit.dist.stat_tut.weg.binom_eg.binomial_quiz_example.quantiles"></a>
               </p>
-<h5>
-<a name="id527763"></a>
+<h4>
+<a name="id494065"></a>
                 <a href="binomial_quiz_example.html#math_toolkit.dist.stat_tut.weg.binom_eg.binomial_quiz_example.quantiles">Quantiles</a>
-              </h5>
+              </h4>
 <p>
               </p>
 <p>
@@ -597,7 +595,7 @@ Skewness is 0.2887
               </p>
 <p>
                 Notice that these output integral values because the default policy
-                is <code class="computeroutput"><span class="identifier">integer_round_outwards</span></code>.
+                is <tt class="computeroutput"><span class="identifier">integer_round_outwards</span></tt>.
               </p>
 <p>
               
@@ -612,15 +610,9 @@ Deciles 1 to 6
 <p>
               </p>
 <p>
-                </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
-              </p>
-<p>
-              </p>
-<p>
-                Quantiles values are controlled by the <a href="../../../../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">discrete
-                quantile policy</a> chosen. The default is <code class="computeroutput"><span class="identifier">integer_round_outwards</span></code>,
+                Quantiles values are controlled by the <a href="../../../../policy/pol_ref/discrete_quant_ref.html" title=" Discrete
+        Quantile Policies">discrete
+                quantile policy</a> chosen. The default is <tt class="computeroutput"><span class="identifier">integer_round_outwards</span></tt>,
                 so the lower quantile is rounded down, and the upper quantile is
                 rounded up.
               </p>
@@ -628,13 +620,14 @@ Deciles 1 to 6
               </p>
 <p>
                 But we might believe that the real values tell us a little more -
-                see <a href="../../../../policy/pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
+                see <a href="../../../../policy/pol_tutorial/understand_dis_quant.html" title="
+        Understanding Quantiles of Discrete Distributions">Understanding
                 Discrete Quantile Policy</a>.
               </p>
 <p>
               </p>
 <p>
-                We could control the policy for <span class="bold"><strong>all</strong></span>
+                We could control the policy for <span class="bold"><b>all</b></span>
                 distributions by
               </p>
 <p>
@@ -660,7 +653,7 @@ Deciles 1 to 6
               </p>
 <p>
                 at the head of the program would make this policy apply to this
-                <span class="bold"><strong>one, and only</strong></span>, translation unit.
+                <span class="bold"><b>one, and only</b></span>, translation unit.
               </p>
 <p>
               </p>
@@ -761,13 +754,6 @@ Deciles 1.349 to 5.758
 If guessing then percentiles 1 to 99% will get 0 to 7.788 right.
 </pre>
 <p>
-              </p>
-<p>
-                </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
-              </p>
-<p>
             </p>
 <p>
               See <a href="../../../../../../../../example/binomial_quiz_example.cpp" target="_top">binomial_quiz_example.cpp</a>
@@ -776,8 +762,11 @@ If guessing then percentiles 1 to 99% will get 0 to 7.788 right.
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

@@ -1,13 +1,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Additional Implementation Notes</title>
+<title> Additional
+      Implementation Notes</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../backgrounders.html" title="Backgrounders">
-<link rel="prev" href="../backgrounders.html" title="Backgrounders">
-<link rel="next" href="relative_error.html" title="Relative Error">
+<link rel="up" href="../backgrounders.html" title=" Backgrounders">
+<link rel="prev" href="../backgrounders.html" title=" Backgrounders">
+<link rel="next" href="relative_error.html" title=" Relative
+      Error">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,19 +26,19 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.backgrounders.implementation"></a><a href="implementation.html" title="Additional Implementation Notes"> Additional
-      Implementation Notes</a>
-</h3></div></div></div>
+<a name="math_toolkit.backgrounders.implementation"></a><a href="implementation.html" title=" Additional
+      Implementation Notes"> Additional
+      Implementation Notes</a></h3></div></div></div>
 <p>
         The majority of the implementation notes are included with the documentation
         of each function or distribution. The notes here are of a more general nature,
         and reflect more the general implementation philosophy used.
       </p>
-<a name="math_toolkit.backgrounders.implementation.implemention_philosophy"></a><h5>
-<a name="id782848"></a>
+<a name="math_toolkit.backgrounders.implementation.implemention_philosophy"></a><h4>
+<a name="id745662"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.implemention_philosophy">Implemention
         philosophy</a>
-      </h5>
+      </h4>
 <p>
         "First be right, then be fast."
       </p>
@@ -56,7 +58,7 @@
 <p>
         (It also required much CPU effort - there was some danger of molten plastic
         dripping from the bottom of JM's laptop, so instead, PAB's Dual-core desktop
-        was kept 50% busy for <span class="bold"><strong>days</strong></span> calculating some
+        was kept 50% busy for <span class="bold"><b>days</b></span> calculating some
         tables of test values!)
       </p>
 <p>
@@ -71,7 +73,7 @@
       </p>
 <p>
         For example, there are approximations dating back from times when computation
-        was a <span class="bold"><strong>lot</strong></span> more expensive:
+        was a <span class="bold"><b>lot</b></span> more expensive:
       </p>
 <p>
         H Goldberg and H Levine, Approximate formulas for percentage points and normalisation
@@ -84,11 +86,11 @@
 <p>
         These could still provide sufficient accuracy for some speed-critical applications.
       </p>
-<a name="math_toolkit.backgrounders.implementation.accuracy_and_representation_of_test_values"></a><h5>
-<a name="id782959"></a>
+<a name="math_toolkit.backgrounders.implementation.accuracy_and_representation_of_test_values"></a><h4>
+<a name="id745775"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.accuracy_and_representation_of_test_values">Accuracy
         and Representation of Test Values</a>
-      </h5>
+      </h4>
 <p>
         In order to be accurate enough for as many as possible real types, constant
         values are given to 50 decimal digits if available (though many sources proved
@@ -104,20 +106,20 @@
         as
       </p>
 <p>
-        <code class="computeroutput"><span class="keyword">static_cast</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(-</span><span class="number">3</span><span class="special">)</span> <span class="special">/</span>
-        <span class="number">5</span><span class="special">;</span></code>
+        <tt class="computeroutput"><span class="keyword">static_cast</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(-</span><span class="number">3</span><span class="special">)</span> <span class="special">/</span>
+        <span class="number">5</span><span class="special">;</span></tt>
       </p>
 <p>
         to provide the most accurate value that the compiler can compute for the
         real type. (The denominator is an integer and so will be promoted exactly).
       </p>
 <p>
-        So tests for one third, <span class="bold"><strong>not</strong></span> exactly representable
+        So tests for one third, <span class="bold"><b>not</b></span> exactly representable
         with radix two floating-point, (should) use, for example:
       </p>
 <p>
-        <code class="computeroutput"><span class="keyword">static_cast</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="number">1</span><span class="special">)</span> <span class="special">/</span>
-        <span class="number">3</span><span class="special">;</span></code>
+        <tt class="computeroutput"><span class="keyword">static_cast</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="number">1</span><span class="special">)</span> <span class="special">/</span>
+        <span class="number">3</span><span class="special">;</span></tt>
       </p>
 <p>
         If a function is very sensitive to changes in input, specifying an inexact
@@ -125,15 +127,15 @@
         0.1f is "wrong" by ~1e-7 for example (because 0.1 has no exact
         binary representation). That is why exact binary values - halves, quarters,
         and eighths etc - are used in test code along with the occasional fraction
-        <code class="computeroutput"><span class="identifier">a</span><span class="special">/</span><span class="identifier">b</span></code> with <code class="computeroutput"><span class="identifier">b</span></code>
+        <tt class="computeroutput"><span class="identifier">a</span><span class="special">/</span><span class="identifier">b</span></tt> with <tt class="computeroutput"><span class="identifier">b</span></tt>
         a power of two (in order to ensure that the result is an exactly representable
         binary value).
       </p>
-<a name="math_toolkit.backgrounders.implementation.tolerance_of_tests"></a><h5>
-<a name="id783191"></a>
+<a name="math_toolkit.backgrounders.implementation.tolerance_of_tests"></a><h4>
+<a name="id746020"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.tolerance_of_tests">Tolerance
         of Tests</a>
-      </h5>
+      </h4>
 <p>
         The tolerances need to be set to the maximum of:
       </p>
@@ -155,11 +157,11 @@
         fail on other systems where long double is more accurate than double. Check
         first that the suffix L is present, and then that the tolerance is big enough.
       </p>
-<a name="math_toolkit.backgrounders.implementation.handling_unsuitable_arguments"></a><h5>
-<a name="id783250"></a>
+<a name="math_toolkit.backgrounders.implementation.handling_unsuitable_arguments"></a><h4>
+<a name="id746080"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.handling_unsuitable_arguments">Handling
         Unsuitable Arguments</a>
-      </h5>
+      </h4>
 <p>
         In <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1665.pdf" target="_top">Errors
         in Mathematical Special Functions</a>, J. Marraffino &amp; M. Paterno
@@ -214,17 +216,18 @@
         with <span class="emphasis"><em>ISO/IEC 9899:1999 Programming languages - C</em></span> and
         with the <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf" target="_top">Draft
         Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph
-        5</a>. <a href="../main_overview/error_handling.html" title="Error Handling">See
+        5</a>. <a href="../main_overview/error_handling.html" title=" Error Handling">See
         also domain_error</a>.
       </p>
 <p>
-        See <a href="../policy/pol_ref.html" title="Policy Reference">policy reference</a> for
+        See <a href="../policy/pol_ref.html" title=" Policy Reference">policy reference</a> for
         details of the error handling policies that should allow a user to comply
         with any of these recommendations, as well as other behaviour.
       </p>
 <p>
-        See <a href="../main_overview/error_handling.html" title="Error Handling">error handling</a>
-        for a detailed explanation of the mechanism, and <a href="../dist/stat_tut/weg/error_eg.html" title="Error Handling Example">error_handling
+        See <a href="../main_overview/error_handling.html" title=" Error Handling">error handling</a>
+        for a detailed explanation of the mechanism, and <a href="../dist/stat_tut/weg/error_eg.html" title=" Error Handling
+          Example">error_handling
         example</a> and <a href="../../../../../example/error_handling_example.cpp" target="_top">error_handling_example.cpp</a>
       </p>
 <div class="caution"><table border="0" summary="Caution">
@@ -232,23 +235,24 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../doc/html/images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td colspan="2" align="left" valign="top"><p>
           If you enable throw but do NOT have try &amp; catch block, then the program
           will terminate with an uncaught exception and probably abort. Therefore
-          to get the benefit of helpful error messages, enabling <span class="bold"><strong>all</strong></span>
-          exceptions <span class="bold"><strong>and</strong></span> using try&amp;catch is
+          to get the benefit of helpful error messages, enabling <span class="bold"><b>all</b></span>
+          exceptions <span class="bold"><b>and</b></span> using try&amp;catch is
           recommended for all applications. However, for simplicity, this is not
           done for most examples.
         </p></td></tr>
 </table></div>
-<a name="math_toolkit.backgrounders.implementation.handling_of_functions_that_are_not_mathematically_defined"></a><h5>
-<a name="id783475"></a>
+<a name="math_toolkit.backgrounders.implementation.handling_of_functions_that_are_not_mathematically_defined"></a><h4>
+<a name="id746308"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.handling_of_functions_that_are_not_mathematically_defined">Handling
         of Functions that are Not Mathematically defined</a>
-      </h5>
+      </h4>
 <p>
         Functions that are not mathematically defined, like the Cauchy mean, fail
-        to compile by default. <a href="../policy/pol_ref/assert_undefined.html" title="Mathematically Undefined Function Policies">A
+        to compile by default. <a href="../policy/pol_ref/assert_undefined.html" title=" Mathematically
+        Undefined Function Policies">A
         policy</a> allows control of this.
       </p>
 <p>
@@ -257,8 +261,8 @@
         and to return NaN instead. For example,
       </p>
 <p>
-        <code class="computeroutput"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span>
-        <span class="identifier">ignore_error</span></code>
+        <tt class="computeroutput"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span>
+        <span class="identifier">ignore_error</span></tt>
       </p>
 <p>
         appears before the first Boost include, then if the un-implemented function
@@ -269,28 +273,28 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../../../../../../doc/html/images/warning.png"></td>
 <th align="left">Warning</th>
 </tr>
-<tr><td align="left" valign="top"><p>
-          If <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">has_quiet_NaN</span></code> is false (for example T
+<tr><td colspan="2" align="left" valign="top"><p>
+          If <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">has_quiet_NaN</span></tt> is false (for example T
           is a User-defined type), then an exception will always be thrown when a
           domain error occurs. Catching exceptions is therefore strongly recommended.
         </p></td></tr>
 </table></div>
-<a name="math_toolkit.backgrounders.implementation.median_of_distributions"></a><h5>
-<a name="id783616"></a>
+<a name="math_toolkit.backgrounders.implementation.median_of_distributions"></a><h4>
+<a name="id746451"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.median_of_distributions">Median
         of distributions</a>
-      </h5>
+      </h4>
 <p>
         There are many distributions for which we have been unable to find an analytic
         formula, and this has deterred us from implementing <a href="http://en.wikipedia.org/wiki/Median" target="_top">median
         functions</a>, the mid-point in a list of values.
       </p>
 <p>
-        However a useful median approximation for distribution <code class="computeroutput"><span class="identifier">dist</span></code>
+        However a useful median approximation for distribution <tt class="computeroutput"><span class="identifier">dist</span></tt>
         may be available from
       </p>
 <p>
-        <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="number">0.5</span><span class="special">)</span></code>.
+        <tt class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="number">0.5</span><span class="special">)</span></tt>.
       </p>
 <p>
         <a href="http://www.amstat.org/publications/jse/v13n2/vonhippel.html" target="_top">Mean,
@@ -308,11 +312,11 @@
         <a href="http://documents.wolfram.com/v5/TheMathematicaBook/AdvancedMathematicsInMathematica/NumericalOperationsOnData/3.8.1.html" target="_top">Mathematica
         Basic Statistics.</a> give more detail, in particular for discrete distributions.
       </p>
-<a name="math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity"></a><h5>
-<a name="id783760"></a>
+<a name="math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity"></a><h4>
+<a name="id746599"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity">Handling
         of Floating-Point Infinity</a>
-      </h5>
+      </h4>
 <p>
         Some functions and distributions are well defined with + or - infinity as
         argument(s), but after some experiments with handling infinite arguments
@@ -322,7 +326,7 @@
 <p>
         Handling infinity as special cases is additionally complicated because, unlike
         built-in types on most - but not all - platforms, not all User-Defined Types
-        are specialized to provide <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">()</span></code> and would return zero rather than any representation
+        are specialized to provide <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">()</span></tt> and would return zero rather than any representation
         of infinity.
       </p>
 <p>
@@ -337,20 +341,22 @@
         for the realType on that implementation.
       </p>
 <p>
-        Overflow, underflow, denorm can be handled using <a href="../policy/pol_ref/error_handling_policies.html" title="Error Handling Policies">error
+        Overflow, underflow, denorm can be handled using <a href="../policy/pol_ref/error_handling_policies.html" title="
+        Error Handling Policies">error
         handling policies</a>.
       </p>
 <p>
         We have also tried to catch boundary cases where the mathematical specification
         would result in divide by zero or overflow and signalling these similarly.
-        What happens at (and near), poles can be controlled through <a href="../policy/pol_ref/error_handling_policies.html" title="Error Handling Policies">error
+        What happens at (and near), poles can be controlled through <a href="../policy/pol_ref/error_handling_policies.html" title="
+        Error Handling Policies">error
         handling policies</a>.
       </p>
-<a name="math_toolkit.backgrounders.implementation.scale__shape_and_location"></a><h5>
-<a name="id783909"></a>
+<a name="math_toolkit.backgrounders.implementation.scale__shape_and_location"></a><h4>
+<a name="id746749"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.scale__shape_and_location">Scale,
         Shape and Location</a>
-      </h5>
+      </h4>
 <p>
         We considered adding location and scale to the list of functions, for example:
       </p>
@@ -374,11 +380,11 @@
         for too many distributions to be generally applicable. Because they are non-member
         functions, they can be added if required.
       </p>
-<a name="math_toolkit.backgrounders.implementation.notes_on_implementation_of_specific_functions__amp__distributions"></a><h5>
-<a name="id784375"></a>
+<a name="math_toolkit.backgrounders.implementation.notes_on_implementation_of_specific_functions__amp__distributions"></a><h4>
+<a name="id747218"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.notes_on_implementation_of_specific_functions__amp__distributions">Notes
         on Implementation of Specific Functions &amp; Distributions</a>
-      </h5>
+      </h4>
 <div class="itemizedlist"><ul type="disc"><li>
           Default parameters for the Triangular Distribution. We are uncertain about
           the best default parameters. Some sources suggest that the Standard Triangular
@@ -386,15 +392,16 @@
           for the normal distribution, the most common usage, lower = -1, mode =
           0 and upper = 1 would be more suitable.
         </li></ul></div>
-<a name="math_toolkit.backgrounders.implementation.rational_approximations_used"></a><h5>
-<a name="id784416"></a>
+<a name="math_toolkit.backgrounders.implementation.rational_approximations_used"></a><h4>
+<a name="id747262"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.rational_approximations_used">Rational
         Approximations Used</a>
-      </h5>
+      </h4>
 <p>
         Some of the special functions in this library are implemented via rational
         approximations. These are either taken from the literature, or devised by
-        John Maddock using <a href="../toolkit/internals2/minimax.html" title="Minimax Approximations and the Remez Algorithm">our
+        John Maddock using <a href="../toolkit/internals2/minimax.html" title=" Minimax Approximations
+        and the Remez Algorithm">our
         Remez code</a>.
       </p>
 <p>
@@ -417,7 +424,7 @@
         coefficients: the problem is well known to be ill conditioned in general,
         and our Remez implementation often found a broad and ill-defined minima for
         many of these approximations (of course for simple "toy" examples
-        like approximating <code class="computeroutput"><span class="identifier">exp</span></code> the
+        like approximating <tt class="computeroutput"><span class="identifier">exp</span></tt> the
         minima is well defined, and the coeffiecents should agree no matter whose
         Remez implementation is used). This should not in general effect the validity
         of the approximations: there's good literature supporting the idea that coefficients
@@ -429,11 +436,11 @@
         still need to be accurately calculated, even if they can be in error compared
         to the "true" minimax solution.
       </p>
-<a name="math_toolkit.backgrounders.implementation.representation_of_mathematical_constants"></a><h5>
-<a name="id784512"></a>
+<a name="math_toolkit.backgrounders.implementation.representation_of_mathematical_constants"></a><h4>
+<a name="id747359"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.representation_of_mathematical_constants">Representation
         of Mathematical Constants</a>
-      </h5>
+      </h4>
 <p>
         A macro BOOST_DEFINE_MATH_CONSTANT in constants.hpp is used to provide high
         accuracy constants to mathematical functions and distributions, since it
@@ -494,24 +501,24 @@
 <span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">;</span> <span class="comment">// Context does not allow for disambiguation of overloaded function     
 </span><span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">();</span> <span class="comment">// Context does not allow for disambiguation of overloaded function     
 </span></pre>
-<a name="math_toolkit.backgrounders.implementation.thread_safety"></a><h5>
-<a name="id785058"></a>
+<a name="math_toolkit.backgrounders.implementation.thread_safety"></a><h4>
+<a name="id747908"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.thread_safety">Thread
         safety</a>
-      </h5>
+      </h4>
 <p>
         Reporting of error by setting errno should be thread safe already (otherwise
         none of the std lib math functions would be thread safe?). If you turn on
         reporting of errors via exceptions, errno gets left unused anyway.
       </p>
 <p>
-        Other than that, the code is intended to be thread safe <span class="bold"><strong>for
-        built in real-number types</strong></span> : so float, double and long double
+        Other than that, the code is intended to be thread safe <span class="bold"><b>for
+        built in real-number types</b></span> : so float, double and long double
         are all thread safe.
       </p>
 <p>
         For non-built-in types - NTL::RR for example - initialisation of the various
-        constants used in the implementation is potentially <span class="bold"><strong>not</strong></span>
+        constants used in the implementation is potentially <span class="bold"><b>not</b></span>
         thread safe. This most undesiable, but it would be a signficant challenge
         to fix it. Some compilers may offer the option of having static-constants
         initialised in a thread safe manner (Commeau, and maybe others?), if that's
@@ -519,11 +526,11 @@
         next C++ std revision, so hopefully all compilers will be required to do
         the right thing here at some point.
       </p>
-<a name="math_toolkit.backgrounders.implementation.sources_of_test_data"></a><h5>
-<a name="id785123"></a>
+<a name="math_toolkit.backgrounders.implementation.sources_of_test_data"></a><h4>
+<a name="id747974"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.sources_of_test_data">Sources
         of Test Data</a>
-      </h5>
+      </h4>
 <p>
         We found a large number of sources of test data. We have assumed that these
         are <span class="emphasis"><em>"known good"</em></span> if they agree with the results
@@ -563,11 +570,11 @@
         unfortunately it appears to suffer from very poor accuracy in areas where
         the underlying special function is known to be difficult to implement.
       </p>
-<a name="math_toolkit.backgrounders.implementation.creating_and_managing_the_equations"></a><h5>
-<a name="id785234"></a>
+<a name="math_toolkit.backgrounders.implementation.creating_and_managing_the_equations"></a><h4>
+<a name="id748086"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.creating_and_managing_the_equations">Creating
         and Managing the Equations</a>
-      </h5>
+      </h4>
 <p>
         The primary source for the equations is now <a href="http://www.w3.org/Math/" target="_top">MathML</a>:
         see the *.mml files in libs/math/doc/sf_and_dist/equations/.
@@ -587,7 +594,7 @@
 &gt;done
 </pre>
 <p>
-        Note that SVGMath requires that the mml files are <span class="bold"><strong>not</strong></span>
+        Note that SVGMath requires that the mml files are <span class="bold"><b>not</b></span>
         wrapped in an XHTML XML wrapper - this is added by Mathcast by default -
         one workaround is to copy an existing mml file and then edit it with Mathcast:
         the existing format should then be preserved. This is a bug in the XML parser
@@ -621,8 +628,8 @@
       </p>
 <pre class="programlisting">bjam -a pdf</pre>
 <p>
-        Note that XEP will have to be configured to <span class="bold"><strong>use and
-        embed</strong></span> whatever fonts are used by the SVG equations (if necessary
+        Note that XEP will have to be configured to <span class="bold"><b>use and
+        embed</b></span> whatever fonts are used by the SVG equations (if necessary
         editing the sample xep.xml provided by the XEP installation).
       </p>
 <p>
@@ -646,11 +653,11 @@
         template defined in math.qbk. This outputs Docbook XML that looks like:
       </p>
 <pre class="programlisting">&lt;inlinemediaobject&gt;
-&lt;imageobject role<code class="literal">"html"&gt;
-&lt;imagedata fileref</code>"../equations/myfile.png"&gt;&lt;/imagedata&gt;
+&lt;imageobject role<tt class="literal">"html"&gt;
+&lt;imagedata fileref</tt>"../equations/myfile.png"&gt;&lt;/imagedata&gt;
 &lt;/imageobject&gt;
-&lt;imageobject role<code class="literal">"print"&gt;
-&lt;imagedata fileref</code>"../equations/myfile.svg"&gt;&lt;/imagedata&gt;
+&lt;imageobject role<tt class="literal">"print"&gt;
+&lt;imagedata fileref</tt>"../equations/myfile.svg"&gt;&lt;/imagedata&gt;
 &lt;/imageobject&gt;
 &lt;/inlinemediaobject&gt;
 </pre>
@@ -658,17 +665,17 @@
         MathML is not currently present in the Docbook output, or in the generated
         HTML: this needs further investigation.
       </p>
-<a name="math_toolkit.backgrounders.implementation.producing_graphs"></a><h5>
-<a name="id785497"></a>
+<a name="math_toolkit.backgrounders.implementation.producing_graphs"></a><h4>
+<a name="id748353"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.producing_graphs">Producing
         Graphs</a>
-      </h5>
+      </h4>
 <p>
         Graphs were mostly produced by a very laborious process entailing output
         of columns of values from C++ programs to a .csv file, use of <a href="http://www.rjsweb.fsnet.co.uk/graph/" target="_top">RJS
         Graph</a> to arrange the display and axes, and output to a .ps file,
         followed by conversion to .png using Adobe Photoshop, or similar utility.
-        This rigmarole is <span class="bold"><strong>not</strong></span> recommended!
+        This rigmarole is <span class="bold"><b>not</b></span> recommended!
       </p>
 <p>
         We plan to carry out this process in a single step using the <a href="http://code.google.com/soc/2007/boost/about.html" target="_top">Google
@@ -680,8 +687,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

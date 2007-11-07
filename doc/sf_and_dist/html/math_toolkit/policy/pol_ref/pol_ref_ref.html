@@ -1,13 +1,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Policy Class Reference</title>
+<title> Policy Class
+        Reference</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../pol_ref.html" title="Policy Reference">
-<link rel="prev" href="namespace_pol.html" title="Setting Polices at Namespace Scope">
-<link rel="next" href="../../perf.html" title="Performance">
+<link rel="up" href="../pol_ref.html" title=" Policy Reference">
+<link rel="prev" href="namespace_pol.html" title=" Setting
+        Polices at Namespace Scope">
+<link rel="next" href="../../perf.html" title=" Performance">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,11 +26,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_ref.pol_ref_ref"></a><a href="pol_ref_ref.html" title="Policy Class Reference"> Policy Class
-        Reference</a>
-</h4></div></div></div>
+<a name="math_toolkit.policy.pol_ref.pol_ref_ref"></a><a href="pol_ref_ref.html" title=" Policy Class
+        Reference"> Policy Class
+        Reference</a></h4></div></div></div>
 <p>
-          There's very little to say here, the <code class="computeroutput"><span class="identifier">policy</span></code>
+          There's very little to say here, the <tt class="computeroutput"><span class="identifier">policy</span></tt>
           class is just a rag-bag compile-time container for a collection of policies:
         </p>
 <p>
@@ -91,7 +93,7 @@
 <span class="special">};</span>
 </pre>
 <p>
-          The member typedefs of class <code class="computeroutput"><span class="identifier">policy</span></code>
+          The member typedefs of class <tt class="computeroutput"><span class="identifier">policy</span></tt>
           are intended for internal use but are documented briefly here for the sake
           of completeness.
         </p>
@@ -99,54 +101,54 @@
 <span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">domain_error_type</span>
 </pre>
 <p>
-          Specifies how domain errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">&lt;&gt;</span></code>
-          with the template argument to <code class="computeroutput"><span class="identifier">domain_error</span></code>
-          one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
+          Specifies how domain errors are handled, will be an instance of <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">&lt;&gt;</span></tt>
+          with the template argument to <tt class="computeroutput"><span class="identifier">domain_error</span></tt>
+          one of the <tt class="computeroutput"><span class="identifier">error_policy_type</span></tt>
           enumerated values.
         </p>
 <pre class="programlisting">
 <span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">pole_error_type</span>
 </pre>
 <p>
-          Specifies how pole-errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">pole_error</span><span class="special">&lt;&gt;</span></code>
-          with the template argument to <code class="computeroutput"><span class="identifier">pole_error</span></code>
-          one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
+          Specifies how pole-errors are handled, will be an instance of <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">pole_error</span><span class="special">&lt;&gt;</span></tt>
+          with the template argument to <tt class="computeroutput"><span class="identifier">pole_error</span></tt>
+          one of the <tt class="computeroutput"><span class="identifier">error_policy_type</span></tt>
           enumerated values.
         </p>
 <pre class="programlisting">
 <span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">overflow_error_type</span>
 </pre>
 <p>
-          Specifies how overflow errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">overflow_error</span><span class="special">&lt;&gt;</span></code>
-          with the template argument to <code class="computeroutput"><span class="identifier">overflow_error</span></code>
-          one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
+          Specifies how overflow errors are handled, will be an instance of <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">overflow_error</span><span class="special">&lt;&gt;</span></tt>
+          with the template argument to <tt class="computeroutput"><span class="identifier">overflow_error</span></tt>
+          one of the <tt class="computeroutput"><span class="identifier">error_policy_type</span></tt>
           enumerated values.
         </p>
 <pre class="programlisting">
 <span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">underflow_error_type</span>
 </pre>
 <p>
-          Specifies how underflow errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">underflow_error</span><span class="special">&lt;&gt;</span></code>
-          with the template argument to <code class="computeroutput"><span class="identifier">underflow_error</span></code>
-          one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
+          Specifies how underflow errors are handled, will be an instance of <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">underflow_error</span><span class="special">&lt;&gt;</span></tt>
+          with the template argument to <tt class="computeroutput"><span class="identifier">underflow_error</span></tt>
+          one of the <tt class="computeroutput"><span class="identifier">error_policy_type</span></tt>
           enumerated values.
         </p>
 <pre class="programlisting">
 <span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">denorm_error_type</span>
 </pre>
 <p>
-          Specifies how denorm errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">denorm_error</span><span class="special">&lt;&gt;</span></code>
-          with the template argument to <code class="computeroutput"><span class="identifier">denorm_error</span></code>
-          one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
+          Specifies how denorm errors are handled, will be an instance of <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">denorm_error</span><span class="special">&lt;&gt;</span></tt>
+          with the template argument to <tt class="computeroutput"><span class="identifier">denorm_error</span></tt>
+          one of the <tt class="computeroutput"><span class="identifier">error_policy_type</span></tt>
           enumerated values.
         </p>
 <pre class="programlisting">
 <span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">evaluation_error_type</span>
 </pre>
 <p>
-          Specifies how evaluation errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">&lt;&gt;</span></code>
-          with the template argument to <code class="computeroutput"><span class="identifier">evaluation_error</span></code>
-          one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
+          Specifies how evaluation errors are handled, will be an instance of <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">&lt;&gt;</span></tt>
+          with the template argument to <tt class="computeroutput"><span class="identifier">evaluation_error</span></tt>
+          one of the <tt class="computeroutput"><span class="identifier">error_policy_type</span></tt>
           enumerated values.
         </p>
 <pre class="programlisting">
@@ -154,32 +156,32 @@
 </pre>
 <p>
           Specifies the internal precision to use in binary digits (uses zero to
-          represent whatever the default precision is). Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">digits2</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span></code>
-          which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">int_</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span></code>.
+          represent whatever the default precision is). Will be an instance of <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">digits2</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span></tt>
+          which in turn inherits from <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">int_</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span></tt>.
         </p>
 <pre class="programlisting">
 <span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">promote_float_type</span>
 </pre>
 <p>
-          Specifies whether or not to promote <code class="computeroutput"><span class="keyword">float</span></code>
-          arguments to <code class="computeroutput"><span class="keyword">double</span></code> precision
-          internally. Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code> which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>.
+          Specifies whether or not to promote <tt class="computeroutput"><span class="keyword">float</span></tt>
+          arguments to <tt class="computeroutput"><span class="keyword">double</span></tt> precision
+          internally. Will be an instance of <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></tt> which in turn inherits from <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></tt>.
         </p>
 <pre class="programlisting">
 <span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">promote_double_type</span>
 </pre>
 <p>
-          Specifies whether or not to promote <code class="computeroutput"><span class="keyword">double</span></code>
-          arguments to <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>
-          precision internally. Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code> which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>.
+          Specifies whether or not to promote <tt class="computeroutput"><span class="keyword">double</span></tt>
+          arguments to <tt class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></tt>
+          precision internally. Will be an instance of <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></tt> which in turn inherits from <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></tt>.
         </p>
 <pre class="programlisting">
 <span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">discrete_quantile_type</span>
 </pre>
 <p>
           Specifies how discrete quantiles are evaluated, will be an instance of
-          <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">discrete_quantile</span><span class="special">&lt;&gt;</span></code>
-          instantiated with one of the <code class="computeroutput"><span class="identifier">discrete_quantile_policy_type</span></code>
+          <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">discrete_quantile</span><span class="special">&lt;&gt;</span></tt>
+          instantiated with one of the <tt class="computeroutput"><span class="identifier">discrete_quantile_policy_type</span></tt>
           enumerated type.
         </p>
 <pre class="programlisting">
@@ -187,16 +189,16 @@
 </pre>
 <p>
           Specifies whether mathematically-undefined properties are asserted as compile-time
-          errors, or treated as runtime errors instead. Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">assert_undefined</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>
-          which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>.
+          errors, or treated as runtime errors instead. Will be an instance of <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">assert_undefined</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></tt>
+          which in turn inherits from <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></tt>.
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;...</span><span class="identifier">argument</span> <span class="identifier">list</span><span class="special">...&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">normalise</span><span class="special">&lt;</span><span class="identifier">policy</span><span class="special">&lt;&gt;,</span> <span class="identifier">A1</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">make_policy</span><span class="special">(...</span><span class="identifier">argument</span> <span class="identifier">list</span><span class="special">..);</span>
 </pre>
 <p>
-          <code class="computeroutput"><span class="identifier">make_policy</span></code> is a helper
-          function that converts a list of policies into a normalised <code class="computeroutput"><span class="identifier">policy</span></code> class.
+          <tt class="computeroutput"><span class="identifier">make_policy</span></tt> is a helper
+          function that converts a list of policies into a normalised <tt class="computeroutput"><span class="identifier">policy</span></tt> class.
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">,</span> 
@@ -217,15 +219,15 @@
 <span class="special">};</span>
 </pre>
 <p>
-          The <code class="computeroutput"><span class="identifier">normalise</span></code> class template
-          converts one instantiation of the <code class="computeroutput"><span class="identifier">policy</span></code>
+          The <tt class="computeroutput"><span class="identifier">normalise</span></tt> class template
+          converts one instantiation of the <tt class="computeroutput"><span class="identifier">policy</span></tt>
           class into a normalised form. This is used internally to reduce code bloat:
-          so that instantiating a special function on <code class="computeroutput"><span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">&gt;</span></code>
-          or <code class="computeroutput"><span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">A</span><span class="special">&gt;</span></code> actually both generate the same code
+          so that instantiating a special function on <tt class="computeroutput"><span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">A</span><span class="special">,</span><span class="identifier">B</span><span class="special">&gt;</span></tt>
+          or <tt class="computeroutput"><span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">,</span><span class="identifier">A</span><span class="special">&gt;</span></tt> actually both generate the same code
           internally.
         </p>
 <p>
-          Further more, <code class="computeroutput"><span class="identifier">normalise</span></code>
+          Further more, <tt class="computeroutput"><span class="identifier">normalise</span></tt>
           can be used to combine a policy with one or more policies: for example
           many of the special functions will use this to set policies which they
           don't make use of to their default values, before forwarding to the actual
@@ -235,8 +237,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

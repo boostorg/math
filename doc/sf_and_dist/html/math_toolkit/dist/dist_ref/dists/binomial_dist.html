@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Binomial Distribution</title>
+<title>
+          Binomial Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../dists.html" title="Distributions">
-<link rel="prev" href="beta_dist.html" title="Beta Distribution">
-<link rel="next" href="cauchy_dist.html" title="Cauchy-Lorentz Distribution">
+<link rel="up" href="../dists.html" title=" Distributions">
+<link rel="prev" href="beta_dist.html" title=" Beta
+          Distribution">
+<link rel="next" href="cauchy_dist.html" title=" Cauchy-Lorentz
+          Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +27,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist"></a><a href="binomial_dist.html" title="Binomial Distribution">
-          Binomial Distribution</a>
-</h5></div></div></div>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist"></a><a href="binomial_dist.html" title="
+          Binomial Distribution">
+          Binomial Distribution</a></h5></div></div></div>
 <p>
             
 </p>
@@ -38,12 +41,13 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title=" Policy Class
+        Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">binomial_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">binomial_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">binomial</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">binomial_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -87,7 +91,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
-            The class type <code class="computeroutput"><span class="identifier">binomial_distribution</span></code>
+            The class type <tt class="computeroutput"><span class="identifier">binomial_distribution</span></tt>
             represents a <a href="http://mathworld.wolfram.com/BinomialDistribution.html" target="_top">binomial
             distribution</a>: it is used when there are exactly two mutually
             exclusive outcomes of a trial. These outcomes are labelled "success"
@@ -101,7 +105,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td colspan="2" align="left" valign="top"><p>
               The random variable for the binomial distribution is the number of
               successes, (the number of trials is a fixed property of the distribution)
               whereas for the negative binomial, the random variable is the number
@@ -136,11 +140,11 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../../../doc/html/images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
-<tr><td align="left" valign="top">
+<tr><td colspan="2" align="left" valign="top">
 <p>
                 The Binomial distribution is a discrete distribution: internally
-                functions like the <code class="computeroutput"><span class="identifier">cdf</span></code>
-                and <code class="computeroutput"><span class="identifier">pdf</span></code> are treated
+                functions like the <tt class="computeroutput"><span class="identifier">cdf</span></tt>
+                and <tt class="computeroutput"><span class="identifier">pdf</span></tt> are treated
                 "as if" they are continuous functions, but in reality the
                 results returned from these functions only have meaning if an integer
                 value is provided for the random variate argument.
@@ -157,10 +161,12 @@
               </p>
 <p>
                 This behaviour can be changed so that the quantile functions are
-                rounded differently, or even return a real-valued result using <a href="../../../policy/pol_overview.html" title="Policy Overview">Policies</a>. It is
-                strongly recommended that you read the tutorial <a href="../../../policy/pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
+                rounded differently, or even return a real-valued result using <a href="../../../policy/pol_overview.html" title=" Policy Overview">Policies</a>. It is
+                strongly recommended that you read the tutorial <a href="../../../policy/pol_tutorial/understand_dis_quant.html" title="
+        Understanding Quantiles of Discrete Distributions">Understanding
                 Quantiles of Discrete Distributions</a> before using the quantile
-                function on the Binomial distribution. The <a href="../../../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
+                function on the Binomial distribution. The <a href="../../../policy/pol_ref/discrete_quant_ref.html" title=" Discrete
+        Quantile Policies">reference
                 docs</a> describe how to change the rounding policy for these
                 distributions.
               </p>
@@ -168,15 +174,15 @@
 </table></div>
 <p>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions"></a><h5>
-<a name="id582546"></a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions"></a><h4>
+<a name="id548959"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions">Member
             Functions</a>
-          </h5>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.construct"></a><h6>
-<a name="id582571"></a>
+          </h4>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.construct"></a><h5>
+<a name="id548985"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.construct">Construct</a>
-          </h6>
+          </h5>
 <pre class="programlisting">
 <span class="identifier">binomial_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
@@ -185,16 +191,16 @@
             is the probability of success of a single trial.
           </p>
 <p>
-            Requires <code class="computeroutput"><span class="number">0</span> <span class="special">&lt;=</span>
+            Requires <tt class="computeroutput"><span class="number">0</span> <span class="special">&lt;=</span>
             <span class="identifier">p</span> <span class="special">&lt;=</span>
-            <span class="number">1</span></code>, and <code class="computeroutput"><span class="identifier">n</span>
-            <span class="special">&gt;=</span> <span class="number">0</span></code>,
+            <span class="number">1</span></tt>, and <tt class="computeroutput"><span class="identifier">n</span>
+            <span class="special">&gt;=</span> <span class="number">0</span></tt>,
             otherwise calls <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accessors"></a><h6>
-<a name="id582733"></a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accessors"></a><h5>
+<a name="id549150"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accessors">Accessors</a>
-          </h6>
+          </h5>
 <pre class="programlisting">
 <span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
@@ -209,11 +215,11 @@
             Returns the parameter <span class="emphasis"><em>n</em></span> from which this distribution
             was constructed.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction"></a><h6>
-<a name="id582852"></a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction"></a><h5>
+<a name="id549270"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction">Lower
             Bound on the Success Fraction</a>
-          </h6>
+          </h5>
 <pre class="programlisting">
 <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
    <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span> 
@@ -238,7 +244,7 @@
 <dt><span class="term">alpha</span></dt>
 <dd><p>
                 The largest acceptable probability that the true value of the success
-                fraction is <span class="bold"><strong>less than</strong></span> the value
+                fraction is <span class="bold"><b>less than</b></span> the value
                 returned.
               </p></dd>
 <dt><span class="term">method</span></dt>
@@ -251,22 +257,24 @@
 <p>
             For example, if you observe <span class="emphasis"><em>k</em></span> successes from <span class="emphasis"><em>n</em></span>
             trials the best estimate for the success fraction is simply <span class="emphasis"><em>k/n</em></span>,
-            but if you want to be 95% sure that the true value is <span class="bold"><strong>greater
-            than</strong></span> some value, <span class="emphasis"><em>p<sub>min</sub></em></span>, then:
+            but if you want to be 95% sure that the true value is <span class="bold"><b>greater
+            than</b></span> some value, <span class="emphasis"><em>p<sub>min</sub></em></span>, then:
           </p>
 <pre class="programlisting">
 <span class="identifier">p</span><sub>min</sub> <span class="special">=</span> <span class="identifier">binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
                     <span class="identifier">n</span><span class="special">,</span> <span class="identifier">k</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
 </pre>
 <p>
-            <a href="../../stat_tut/weg/binom_eg/binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">See
+            <a href="../../stat_tut/weg/binom_eg/binom_conf.html" title="
+            Calculating Confidence Limits on the Frequency of Occurrence for a Binomial
+            Distribution">See
             worked example.</a>
           </p>
 <p>
             There are currently two possible values available for the <span class="emphasis"><em>method</em></span>
             optional parameter: <span class="emphasis"><em>clopper_pearson_exact_interval</em></span>
             or <span class="emphasis"><em>jeffreys_prior_interval</em></span>. These constants are
-            both members of class template <code class="computeroutput"><span class="identifier">binomial_distribution</span></code>,
+            both members of class template <tt class="computeroutput"><span class="identifier">binomial_distribution</span></tt>,
             so usage is for example:
           </p>
 <pre class="programlisting">
@@ -276,13 +284,13 @@
 <p>
             The default method if this parameter is not specified is the Clopper
             Pearson "exact" interval. This produces an interval that guarantees
-            at least <code class="computeroutput"><span class="number">100</span><span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">alpha</span><span class="special">)%</span></code> coverage, but which is known to be
+            at least <tt class="computeroutput"><span class="number">100</span><span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">alpha</span><span class="special">)%</span></tt> coverage, but which is known to be
             overly conservative, sometimes producing intervals with much greater
             than the requested coverage.
           </p>
 <p>
             The alternative calculation method produces a non-informative Jeffreys
-            Prior interval. It produces <code class="computeroutput"><span class="number">100</span><span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">alpha</span><span class="special">)%</span></code>
+            Prior interval. It produces <tt class="computeroutput"><span class="number">100</span><span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">alpha</span><span class="special">)%</span></tt>
             coverage only <span class="emphasis"><em>in the average case</em></span>, though is typically
             very close to the requested coverage level. It is one of the main methods
             of calculation recommended in the review by Brown, Cai and DasGupta.
@@ -318,11 +326,11 @@
             Clopper, C. J. and Pearson, E. S. (1934). The use of confidence or fiducial
             limits illustrated in the case of the binomial. Biometrika 26 404-413.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction"></a><h6>
-<a name="id583486"></a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction"></a><h5>
+<a name="id549920"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction">Upper
             Bound on the Success Fraction</a>
-          </h6>
+          </h5>
 <pre class="programlisting">
 <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
    <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span> 
@@ -347,13 +355,13 @@
 <dt><span class="term">alpha</span></dt>
 <dd><p>
                 The largest acceptable probability that the true value of the success
-                fraction is <span class="bold"><strong>greater than</strong></span> the value
+                fraction is <span class="bold"><b>greater than</b></span> the value
                 returned.
               </p></dd>
 <dt><span class="term">method</span></dt>
 <dd><p>
                 An optional parameter that specifies the method to be used to compute
-                the interval. Refer to the documentation for <code class="computeroutput"><span class="identifier">find_upper_bound_on_p</span></code>
+                the interval. Refer to the documentation for <tt class="computeroutput"><span class="identifier">find_upper_bound_on_p</span></tt>
                 above for the meaning of the method options.
               </p></dd>
 </dl>
@@ -361,15 +369,17 @@
 <p>
             For example, if you observe <span class="emphasis"><em>k</em></span> successes from <span class="emphasis"><em>n</em></span>
             trials the best estimate for the success fraction is simply <span class="emphasis"><em>k/n</em></span>,
-            but if you want to be 95% sure that the true value is <span class="bold"><strong>less
-            than</strong></span> some value, <span class="emphasis"><em>p<sub>max</sub></em></span>, then:
+            but if you want to be 95% sure that the true value is <span class="bold"><b>less
+            than</b></span> some value, <span class="emphasis"><em>p<sub>max</sub></em></span>, then:
           </p>
 <pre class="programlisting">
 <span class="identifier">p</span><sub>max</sub> <span class="special">=</span> <span class="identifier">binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
                     <span class="identifier">n</span><span class="special">,</span> <span class="identifier">k</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
 </pre>
 <p>
-            <a href="../../stat_tut/weg/binom_eg/binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">See
+            <a href="../../stat_tut/weg/binom_eg/binom_conf.html" title="
+            Calculating Confidence Limits on the Frequency of Occurrence for a Binomial
+            Distribution">See
             worked example.</a>
           </p>
 <div class="note"><table border="0" summary="Note">
@@ -377,11 +387,11 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td align="left" valign="top">
+<tr><td colspan="2" align="left" valign="top">
 <p>
               In order to obtain a two sided bound on the success fraction, you call
-              both <code class="computeroutput"><span class="identifier">find_lower_bound_on_p</span></code>
-              <span class="bold"><strong>and</strong></span> <code class="computeroutput"><span class="identifier">find_upper_bound_on_p</span></code>
+              both <tt class="computeroutput"><span class="identifier">find_lower_bound_on_p</span></tt>
+              <span class="bold"><b>and</b></span> <tt class="computeroutput"><span class="identifier">find_upper_bound_on_p</span></tt>
               each with the same arguments.
             </p>
 <p>
@@ -393,16 +403,18 @@
               by passing &#945; = 0.025 to each of the functions.
             </p>
 <p>
-              <a href="../../stat_tut/weg/binom_eg/binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">See
+              <a href="../../stat_tut/weg/binom_eg/binom_conf.html" title="
+            Calculating Confidence Limits on the Frequency of Occurrence for a Binomial
+            Distribution">See
               worked example.</a>
             </p>
 </td></tr>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes"></a><h6>
-<a name="id583929"></a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes"></a><h5>
+<a name="id550362"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes">Estimating
             the Number of Trials Required for a Certain Number of Successes</a>
-          </h6>
+          </h5>
 <pre class="programlisting">
 <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span>
    <span class="identifier">RealType</span> <span class="identifier">k</span><span class="special">,</span>     <span class="comment">// number of events
@@ -442,12 +454,12 @@
             Returns the smallest number of trials we must conduct to be 95% sure
             of seeing 10 events that occur with frequency one half.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes"></a><h6>
-<a name="id584204"></a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes"></a><h5>
+<a name="id550642"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes">Estimating
             the Maximum Number of Trials to Ensure no more than a Certain Number
             of Successes</a>
-          </h6>
+          </h5>
 <pre class="programlisting">
 <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_maximum_number_of_trials</span><span class="special">(</span>
    <span class="identifier">RealType</span> <span class="identifier">k</span><span class="special">,</span>     <span class="comment">// number of events
@@ -489,16 +501,17 @@
             frequency. This is typically used in failure analysis.
           </p>
 <p>
-            <a href="../../stat_tut/weg/binom_eg/binom_size_eg.html" title="Estimating Sample Sizes for a Binomial Distribution.">See
+            <a href="../../stat_tut/weg/binom_eg/binom_size_eg.html" title="
+            Estimating Sample Sizes for a Binomial Distribution.">See
             Worked Example.</a>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors"></a><h5>
-<a name="id584499"></a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors"></a><h4>
+<a name="id550940"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors">Non-member
             Accessors</a>
-          </h5>
+          </h4>
 <p>
-            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
+            All the <a href="../nmp.html" title=" Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
             <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
             <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
@@ -510,7 +523,7 @@
             <a href="../nmp.html#math.dist.range">range</a> and <a href="../nmp.html#math.dist.support">support</a>.
           </p>
 <p>
-            The domain for the random variable <span class="emphasis"><em>k</em></span> is <code class="computeroutput"><span class="number">0</span> <span class="special">&lt;=</span> <span class="identifier">k</span> <span class="special">&lt;=</span> <span class="identifier">N</span></code>, otherwise a <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
+            The domain for the random variable <span class="emphasis"><em>k</em></span> is <tt class="computeroutput"><span class="number">0</span> <span class="special">&lt;=</span> <span class="identifier">k</span> <span class="special">&lt;=</span> <span class="identifier">N</span></tt>, otherwise a <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
             is returned.
           </p>
 <p>
@@ -518,8 +531,8 @@
             in the context of this distribution:
           </p>
 <div class="table">
-<a name="id584712"></a><p class="title"><b>Table 7. Meaning of the non-member accessors</b></p>
-<div class="table-contents"><table class="table" summary="Meaning of the non-member accessors">
+<a name="id551154"></a><p class="title"><b>Table 7. Meaning of the non-member accessors</b></p>
+<table class="table" summary="Meaning of the non-member accessors">
 <colgroup>
 <col>
 <col>
@@ -545,13 +558,13 @@
                 </td>
 <td>
                 <p>
-                  The probability of obtaining <span class="bold"><strong>exactly k successes</strong></span>
+                  The probability of obtaining <span class="bold"><b>exactly k successes</b></span>
                   from n trials with success fraction p. For example:
                 </p>
                 <p>
-                  <code class="computeroutput"><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
+                  <tt class="computeroutput"><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
                   <span class="identifier">p</span><span class="special">),</span>
-                  <span class="identifier">k</span><span class="special">)</span></code>
+                  <span class="identifier">k</span><span class="special">)</span></tt>
                 </p>
                 </td>
 </tr>
@@ -563,14 +576,14 @@
                 </td>
 <td>
                 <p>
-                  The probability of obtaining <span class="bold"><strong>k successes
-                  or fewer</strong></span> from n trials with success fraction p. For
+                  The probability of obtaining <span class="bold"><b>k successes
+                  or fewer</b></span> from n trials with success fraction p. For
                   example:
                 </p>
                 <p>
-                  <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
+                  <tt class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
                   <span class="identifier">p</span><span class="special">),</span>
-                  <span class="identifier">k</span><span class="special">)</span></code>
+                  <span class="identifier">k</span><span class="special">)</span></tt>
                 </p>
                 </td>
 </tr>
@@ -583,14 +596,14 @@
                 </td>
 <td>
                 <p>
-                  The probability of obtaining <span class="bold"><strong>more than k
-                  successes</strong></span> from n trials with success fraction p. For
+                  The probability of obtaining <span class="bold"><b>more than k
+                  successes</b></span> from n trials with success fraction p. For
                   example:
                 </p>
                 <p>
-                  <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
+                  <tt class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
                   <span class="identifier">p</span><span class="special">),</span>
-                  <span class="identifier">k</span><span class="special">))</span></code>
+                  <span class="identifier">k</span><span class="special">))</span></tt>
                 </p>
                 </td>
 </tr>
@@ -602,16 +615,16 @@
                 </td>
 <td>
                 <p>
-                  The <span class="bold"><strong>greatest</strong></span> number of successes
+                  The <span class="bold"><b>greatest</b></span> number of successes
                   that may be observed from n trials with success fraction p, at
                   probability P. Note that the value returned is a real-number, and
                   not an integer. Depending on the use case you may want to take
                   either the floor or ceiling of the result. For example:
                 </p>
                 <p>
-                  <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
+                  <tt class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
                   <span class="identifier">p</span><span class="special">),</span>
-                  <span class="identifier">P</span><span class="special">)</span></code>
+                  <span class="identifier">P</span><span class="special">)</span></tt>
                 </p>
                 </td>
 </tr>
@@ -624,44 +637,47 @@
                 </td>
 <td>
                 <p>
-                  The <span class="bold"><strong>smallest</strong></span> number of successes
+                  The <span class="bold"><b>smallest</b></span> number of successes
                   that may be observed from n trials with success fraction p, at
                   probability P. Note that the value returned is a real-number, and
                   not an integer. Depending on the use case you may want to take
                   either the floor or ceiling of the result. For example:
                 </p>
                 <p>
-                  <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
+                  <tt class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
                   <span class="identifier">p</span><span class="special">),</span>
-                  <span class="identifier">P</span><span class="special">))</span></code>`
+                  <span class="identifier">P</span><span class="special">))</span></tt>`
                 </p>
                 </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.examples"></a><h5>
-<a name="id585272"></a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.examples"></a><h4>
+<a name="id551716"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.examples">Examples</a>
-          </h5>
+          </h4>
 <p>
-            Various <a href="../../stat_tut/weg/binom_eg.html" title="Binomial Distribution Examples">worked
+            Various <a href="../../stat_tut/weg/binom_eg.html" title=" Binomial
+          Distribution Examples">worked
             examples</a> are available illustrating the use of the binomial distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy"></a><h5>
-<a name="id585312"></a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy"></a><h4>
+<a name="id551757"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy">Accuracy</a>
-          </h5>
+          </h4>
 <p>
             This distribution is implemented using the incomplete beta functions
-            <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
-            and <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>,
+            <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
+        Beta Functions">ibeta</a>
+            and <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
+        Beta Functions">ibetac</a>,
             please refer to these functions for information on accuracy.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.implementation"></a><h5>
-<a name="id585362"></a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.implementation"></a><h4>
+<a name="id551808"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.implementation">Implementation</a>
-          </h5>
+          </h4>
 <p>
             In the following table <span class="emphasis"><em>p</em></span> is the probability that
             one trial will be successful (the success fraction), <span class="emphasis"><em>n</em></span>
@@ -694,18 +710,20 @@
                   </td>
 <td>
                   <p>
-                    Implementation is in terms of <a href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>:
+                    Implementation is in terms of <a href="../../../special/sf_beta/beta_derivative.html" title=" Derivative
+        of the Incomplete Beta Function">ibeta_derivative</a>:
                     if <sub>n</sub>C<sub>k </sub> is the binomial coefficient of a and b, then we have:
                   </p>
                   <p>
                     <span class="inlinemediaobject"><img src="../../../../../equations/binomial_ref1.png"></span>
                   </p>
                   <p>
-                    Which can be evaluated as <code class="computeroutput"><span class="identifier">ibeta_derivative</span><span class="special">(</span><span class="identifier">k</span><span class="special">+</span><span class="number">1</span><span class="special">,</span> <span class="identifier">n</span><span class="special">-</span><span class="identifier">k</span><span class="special">+</span><span class="number">1</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span> <span class="special">/</span>
-                    <span class="special">(</span><span class="identifier">n</span><span class="special">+</span><span class="number">1</span><span class="special">)</span></code>
+                    Which can be evaluated as <tt class="computeroutput"><span class="identifier">ibeta_derivative</span><span class="special">(</span><span class="identifier">k</span><span class="special">+</span><span class="number">1</span><span class="special">,</span> <span class="identifier">n</span><span class="special">-</span><span class="identifier">k</span><span class="special">+</span><span class="number">1</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span> <span class="special">/</span>
+                    <span class="special">(</span><span class="identifier">n</span><span class="special">+</span><span class="number">1</span><span class="special">)</span></tt>
                   </p>
                   <p>
-                    The function <a href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>
+                    The function <a href="../../../special/sf_beta/beta_derivative.html" title=" Derivative
+        of the Incomplete Beta Function">ibeta_derivative</a>
                     is used here, since it has already been optimised for the lowest
                     possible error - indeed this is really just a thin wrapper around
                     part of the internals of the incomplete beta function.
@@ -731,7 +749,8 @@
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
 <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">I</span><span class="special">[</span><span class="identifier">sub</span> <span class="number">1</span><span class="special">-</span><span class="identifier">p</span><span class="special">](</span><span class="identifier">n</span> <span class="special">-</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">k</span> <span class="special">+</span> <span class="number">1</span><span class="special">)</span>
   <span class="special">=</span> <span class="number">1</span> <span class="special">-</span> <span class="identifier">I</span><span class="special">[</span><span class="identifier">sub</span> <span class="identifier">p</span><span class="special">](</span><span class="identifier">k</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">n</span> <span class="special">-</span> <span class="identifier">k</span><span class="special">)</span>
-  <span class="special">=</span> <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a><span class="special">(</span><span class="identifier">k</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">n</span> <span class="special">-</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span></pre>
+  <span class="special">=</span> <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
+        Beta Functions">ibetac</a><span class="special">(</span><span class="identifier">k</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">n</span> <span class="special">-</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span></pre>
 <p>
                   </p>
                   <p>
@@ -747,7 +766,8 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: q = <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(k
+                    Using the relation: q = <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
+        Beta Functions">ibeta</a>(k
                     + 1, n - k, p)
                   </p>
                   <p>
@@ -766,7 +786,8 @@
                     Since the cdf is non-linear in variate <span class="emphasis"><em>k</em></span>
                     none of the inverse incomplete beta functions can be used here.
                     Instead the quantile is found numerically using a derivative
-                    free method (<a href="../../../toolkit/internals1/roots2.html" title="Root Finding Without Derivatives">TOMS
+                    free method (<a href="../../../toolkit/internals1/roots2.html" title=" Root Finding
+        Without Derivatives">TOMS
                     Algorithm 748</a>).
                   </p>
                   </td>
@@ -791,8 +812,8 @@
                   </td>
 <td>
                   <p>
-                    <code class="computeroutput"><span class="identifier">p</span> <span class="special">*</span>
-                    <span class="identifier">n</span></code>
+                    <tt class="computeroutput"><span class="identifier">p</span> <span class="special">*</span>
+                    <span class="identifier">n</span></tt>
                   </p>
                   </td>
 </tr>
@@ -804,9 +825,9 @@
                   </td>
 <td>
                   <p>
-                    <code class="computeroutput"><span class="identifier">p</span> <span class="special">*</span>
+                    <tt class="computeroutput"><span class="identifier">p</span> <span class="special">*</span>
                     <span class="identifier">n</span> <span class="special">*</span>
-                    <span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">p</span><span class="special">)</span></code>
+                    <span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">p</span><span class="special">)</span></tt>
                   </p>
                   </td>
 </tr>
@@ -818,9 +839,9 @@
                   </td>
 <td>
                   <p>
-                    <code class="computeroutput"><span class="identifier">floor</span><span class="special">(</span><span class="identifier">p</span> <span class="special">*</span>
+                    <tt class="computeroutput"><span class="identifier">floor</span><span class="special">(</span><span class="identifier">p</span> <span class="special">*</span>
                     <span class="special">(</span><span class="identifier">n</span>
-                    <span class="special">+</span> <span class="number">1</span><span class="special">))</span></code>
+                    <span class="special">+</span> <span class="number">1</span><span class="special">))</span></tt>
                   </p>
                   </td>
 </tr>
@@ -832,13 +853,13 @@
                   </td>
 <td>
                   <p>
-                    <code class="computeroutput"><span class="special">(</span><span class="number">1</span>
+                    <tt class="computeroutput"><span class="special">(</span><span class="number">1</span>
                     <span class="special">-</span> <span class="number">2</span>
                     <span class="special">*</span> <span class="identifier">p</span><span class="special">)</span> <span class="special">/</span>
                     <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">n</span> <span class="special">*</span>
                     <span class="identifier">p</span> <span class="special">*</span>
                     <span class="special">(</span><span class="number">1</span>
-                    <span class="special">-</span> <span class="identifier">p</span><span class="special">))</span></code>
+                    <span class="special">-</span> <span class="identifier">p</span><span class="special">))</span></tt>
                   </p>
                   </td>
 </tr>
@@ -850,14 +871,14 @@
                   </td>
 <td>
                   <p>
-                    <code class="computeroutput"><span class="number">3</span> <span class="special">-</span>
+                    <tt class="computeroutput"><span class="number">3</span> <span class="special">-</span>
                     <span class="special">(</span><span class="number">6</span>
                     <span class="special">/</span> <span class="identifier">n</span><span class="special">)</span> <span class="special">+</span>
                     <span class="special">(</span><span class="number">1</span>
                     <span class="special">/</span> <span class="special">(</span><span class="identifier">n</span> <span class="special">*</span>
                     <span class="identifier">p</span> <span class="special">*</span>
                     <span class="special">(</span><span class="number">1</span>
-                    <span class="special">-</span> <span class="identifier">p</span><span class="special">)))</span></code>
+                    <span class="special">-</span> <span class="identifier">p</span><span class="special">)))</span></tt>
                   </p>
                   </td>
 </tr>
@@ -869,13 +890,13 @@
                   </td>
 <td>
                   <p>
-                    <code class="computeroutput"><span class="special">(</span><span class="number">1</span>
+                    <tt class="computeroutput"><span class="special">(</span><span class="number">1</span>
                     <span class="special">-</span> <span class="number">6</span>
                     <span class="special">*</span> <span class="identifier">p</span>
                     <span class="special">*</span> <span class="identifier">q</span><span class="special">)</span> <span class="special">/</span>
                     <span class="special">(</span><span class="identifier">n</span>
                     <span class="special">*</span> <span class="identifier">p</span>
-                    <span class="special">*</span> <span class="identifier">q</span><span class="special">)</span></code>
+                    <span class="special">*</span> <span class="identifier">q</span><span class="special">)</span></tt>
                   </p>
                   </td>
 </tr>
@@ -887,23 +908,26 @@
                   </td>
 <td>
                   <p>
-                    The member functions <code class="computeroutput"><span class="identifier">find_upper_bound_on_p</span></code>
-                    <code class="computeroutput"><span class="identifier">find_lower_bound_on_p</span></code>
-                    and <code class="computeroutput"><span class="identifier">find_number_of_trials</span></code>
+                    The member functions <tt class="computeroutput"><span class="identifier">find_upper_bound_on_p</span></tt>
+                    <tt class="computeroutput"><span class="identifier">find_lower_bound_on_p</span></tt>
+                    and <tt class="computeroutput"><span class="identifier">find_number_of_trials</span></tt>
                     are implemented in terms of the inverse incomplete beta functions
-                    <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>,
-                    <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>,
-                    and <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_invb</a>
+                    <a href="../../../special/sf_beta/ibeta_inv_function.html" title=" The
+        Incomplete Beta Function Inverses">ibetac_inv</a>,
+                    <a href="../../../special/sf_beta/ibeta_inv_function.html" title=" The
+        Incomplete Beta Function Inverses">ibeta_inv</a>,
+                    and <a href="../../../special/sf_beta/ibeta_inv_function.html" title=" The
+        Incomplete Beta Function Inverses">ibetac_invb</a>
                     respectively
                   </p>
                   </td>
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.references"></a><h5>
-<a name="id586702"></a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.references"></a><h4>
+<a name="id553151"></a>
             <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.references">References</a>
-          </h5>
+          </h4>
 <div class="itemizedlist"><ul type="disc">
 <li>
 <a href="http://mathworld.wolfram.com/BinomialDistribution.html" target="_top">Weisstein,
@@ -922,8 +946,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

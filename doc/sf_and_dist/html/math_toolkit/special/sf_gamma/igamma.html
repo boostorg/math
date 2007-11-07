@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Incomplete Gamma Functions</title>
+<title> Incomplete Gamma
+        Functions</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../sf_gamma.html" title="Gamma Functions">
-<link rel="prev" href="gamma_ratios.html" title="Ratios of Gamma Functions">
-<link rel="next" href="igamma_inv.html" title="Incomplete Gamma Function Inverses">
+<link rel="up" href="../sf_gamma.html" title=" Gamma Functions">
+<link rel="prev" href="gamma_ratios.html" title=" Ratios
+        of Gamma Functions">
+<link rel="next" href="igamma_inv.html" title=" Incomplete
+        Gamma Function Inverses">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,13 +27,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.sf_gamma.igamma"></a><a href="igamma.html" title="Incomplete Gamma Functions"> Incomplete Gamma
-        Functions</a>
-</h4></div></div></div>
-<a name="math_toolkit.special.sf_gamma.igamma.synopsis"></a><h5>
-<a name="id625808"></a>
+<a name="math_toolkit.special.sf_gamma.igamma"></a><a href="igamma.html" title=" Incomplete Gamma
+        Functions"> Incomplete Gamma
+        Functions</a></h4></div></div></div>
+<a name="math_toolkit.special.sf_gamma.igamma.synopsis"></a><h4>
+<a name="id592516"></a>
           <a href="igamma.html#math_toolkit.special.sf_gamma.igamma.synopsis">Synopsis</a>
-        </h5>
+        </h4>
 <p>
           
 </p>
@@ -43,35 +46,43 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
-
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
-
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
-<a name="math_toolkit.special.sf_gamma.igamma.description"></a><h5>
-<a name="id626917"></a>
+<a name="math_toolkit.special.sf_gamma.igamma.description"></a><h4>
+<a name="id593626"></a>
           <a href="igamma.html#math_toolkit.special.sf_gamma.igamma.description">Description</a>
-        </h5>
+        </h4>
 <p>
           There are four <a href="http://mathworld.wolfram.com/IncompleteGammaFunction.html" target="_top">incomplete
           gamma functions</a>: two are normalised versions (also known as <span class="emphasis"><em>regularized</em></span>
@@ -87,24 +98,27 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title="Policies">Policy</a> argument
+            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <p>
-          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
+          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a> when T1 and T2 are different types,
           otherwise the return type is simply T1.
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the normalised lower incomplete gamma function of a and z:
@@ -120,10 +134,12 @@
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the normalised upper incomplete gamma function of a and z:
@@ -139,10 +155,12 @@
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the full (non-normalised) lower incomplete gamma function of a
@@ -153,10 +171,12 @@
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title=" Calculation
+      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the full (non-normalised) upper incomplete gamma function of a
@@ -165,10 +185,10 @@
 <p>
           <span class="inlinemediaobject"><img src="../../../../equations/igamma1.png"></span>
         </p>
-<a name="math_toolkit.special.sf_gamma.igamma.accuracy"></a><h5>
-<a name="id628217"></a>
+<a name="math_toolkit.special.sf_gamma.igamma.accuracy"></a><h4>
+<a name="id594925"></a>
           <a href="igamma.html#math_toolkit.special.sf_gamma.igamma.accuracy">Accuracy</a>
-        </h5>
+        </h4>
 <p>
           The following tables give peak and mean relative errors in over various
           domains of a and z, along with comparisons to the <a href="http://www.gnu.org/software/gsl/" target="_top">GSL-1.9</a>
@@ -191,8 +211,8 @@
           All values are in units of epsilon.
         </p>
 <div class="table">
-<a name="id628286"></a><p class="title"><b>Table 11. Errors In the Function gamma_p(a,z)</b></p>
-<div class="table-contents"><table class="table" summary="Errors In the Function gamma_p(a,z)">
+<a name="id594995"></a><p class="title"><b>Table 11. Errors In the Function gamma_p(a,z)</b></p>
+<table class="table" summary="Errors In the Function gamma_p(a,z)">
 <colgroup>
 <col>
 <col>
@@ -375,11 +395,11 @@
               </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><div class="table">
-<a name="id628605"></a><p class="title"><b>Table 12. Errors In the Function gamma_q(a,z)</b></p>
-<div class="table-contents"><table class="table" summary="Errors In the Function gamma_q(a,z)">
+<div class="table">
+<a name="id595314"></a><p class="title"><b>Table 12. Errors In the Function gamma_q(a,z)</b></p>
+<table class="table" summary="Errors In the Function gamma_q(a,z)">
 <colgroup>
 <col>
 <col>
@@ -561,11 +581,11 @@
               </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><div class="table">
-<a name="id628943"></a><p class="title"><b>Table 13. Errors In the Function tgamma_lower(a,z)</b></p>
-<div class="table-contents"><table class="table" summary="Errors In the Function tgamma_lower(a,z)">
+<div class="table">
+<a name="id595652"></a><p class="title"><b>Table 13. Errors In the Function tgamma_lower(a,z)</b></p>
+<table class="table" summary="Errors In the Function tgamma_lower(a,z)">
 <colgroup>
 <col>
 <col>
@@ -696,11 +716,11 @@
               </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><div class="table">
-<a name="id629156"></a><p class="title"><b>Table 14. Errors In the Function tgamma(a,z)</b></p>
-<div class="table-contents"><table class="table" summary="Errors In the Function tgamma(a,z)">
+<div class="table">
+<a name="id595865"></a><p class="title"><b>Table 14. Errors In the Function tgamma(a,z)</b></p>
+<table class="table" summary="Errors In the Function tgamma(a,z)">
 <colgroup>
 <col>
 <col>
@@ -831,28 +851,28 @@
               </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="math_toolkit.special.sf_gamma.igamma.testing"></a><h5>
-<a name="id629377"></a>
+<a name="math_toolkit.special.sf_gamma.igamma.testing"></a><h4>
+<a name="id596087"></a>
           <a href="igamma.html#math_toolkit.special.sf_gamma.igamma.testing">Testing</a>
-        </h5>
+        </h4>
 <p>
           There are two sets of tests: spot tests compare values taken from <a href="http://functions.wolfram.com/GammaBetaErf/" target="_top">Mathworld's online evaluator</a>
           with this implementation to perform a basic "sanity check". Accuracy
           tests use data generated at very high precision (using NTL's RR class set
           at 1000-bit precision) using this implementation with a very high precision
-          60-term <a href="../../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos approximation</a>,
+          60-term <a href="../../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos approximation</a>,
           and some but not all of the special case handling disabled. This is less
           than satisfactory: an independent method should really be used, but apparently
           a complete lack of such methods are available. We can't even use a deliberately
           naive implementation without special case handling since Legendre's continued
           fraction (see below) is unstable for small a and z.
         </p>
-<a name="math_toolkit.special.sf_gamma.igamma.implementation"></a><h5>
-<a name="id629435"></a>
+<a name="math_toolkit.special.sf_gamma.igamma.implementation"></a><h4>
+<a name="id596146"></a>
           <a href="igamma.html#math_toolkit.special.sf_gamma.igamma.implementation">Implementation</a>
-        </h5>
+        </h4>
 <p>
           These four functions share a common implementation since they are all related
           via:
@@ -902,11 +922,11 @@
           7) <span class="inlinemediaobject"><img src="../../../../equations/igamma11.png"></span>
         </p>
 <p>
-          Refer to the documentation for <a href="../powers/powm1.html" title="powm1">powm1</a>
-          and <a href="tgamma.html" title="Gamma">tgamma1pm1</a>
+          Refer to the documentation for <a href="../powers/powm1.html" title=" powm1">powm1</a>
+          and <a href="tgamma.html" title=" Gamma">tgamma1pm1</a>
           for details of their implementation. Note however that the precision of
-          <a href="tgamma.html" title="Gamma">tgamma1pm1</a>
-          is capped to either around 35 digits, or to that of the <a href="../../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
+          <a href="tgamma.html" title=" Gamma">tgamma1pm1</a>
+          is capped to either around 35 digits, or to that of the <a href="../../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos
           approximation</a> associated with type T - if there is one - whichever
           of the two is the greater. That therefore imposes a similar limit on the
           precision of this function in this region.
@@ -981,8 +1001,8 @@
           is used only for types up to 80-bit long doubles. These domains are narrower
           than the ones recommended by either Temme or Didonato and Morris. However,
           using a wider range results in large and inexact (i.e. computed) values
-          being passed to the <code class="computeroutput"><span class="identifier">exp</span></code>
-          and <code class="computeroutput"><span class="identifier">erfc</span></code> functions resulting
+          being passed to the <tt class="computeroutput"><span class="identifier">exp</span></tt>
+          and <tt class="computeroutput"><span class="identifier">erfc</span></tt> functions resulting
           in significantly larger error rates. In other words there is a fine trade
           off here between efficiency and error. The current limits should keep the
           number of terms required by (4) and (5) to no more than ~20 at double precision.
@@ -990,7 +1010,7 @@
 <p>
           For the normalised incomplete gamma functions, calculation of the leading
           power terms is central to the accuracy of the function. For smallish a
-          and x combining the power terms with the <a href="../../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
+          and x combining the power terms with the <a href="../../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos
           approximation</a> gives the greatest accuracy:
         </p>
 <p>
@@ -1020,10 +1040,10 @@
           than other methods. Use of <span class="emphasis"><em>log(1+x)-x</em></span> here is inspired
           by Temme (see references below).
         </p>
-<a name="math_toolkit.special.sf_gamma.igamma.references"></a><h5>
-<a name="id630467"></a>
+<a name="math_toolkit.special.sf_gamma.igamma.references"></a><h4>
+<a name="id597176"></a>
           <a href="igamma.html#math_toolkit.special.sf_gamma.igamma.references">References</a>
-        </h5>
+        </h4>
 <div class="itemizedlist"><ul type="disc">
 <li>
             N. M. Temme, A Set of Algorithms for the Incomplete Gamma Functions,
@@ -1047,8 +1067,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

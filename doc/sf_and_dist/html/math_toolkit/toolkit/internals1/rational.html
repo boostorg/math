@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Polynomial and Rational Function Evaluation</title>
+<title> Polynomial
+        and Rational Function Evaluation</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../internals1.html" title="Reused Utilities">
-<link rel="prev" href="cf.html" title="Continued Fraction Evaluation">
-<link rel="next" href="roots.html" title="Root Finding With Derivatives">
+<link rel="up" href="../internals1.html" title=" Reused Utilities">
+<link rel="prev" href="cf.html" title=" Continued Fraction
+        Evaluation">
+<link rel="next" href="roots.html" title=" Root Finding
+        With Derivatives">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,13 +27,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.toolkit.internals1.rational"></a><a href="rational.html" title="Polynomial and Rational Function Evaluation"> Polynomial
-        and Rational Function Evaluation</a>
-</h4></div></div></div>
-<a name="math_toolkit.toolkit.internals1.rational.synopsis"></a><h5>
-<a name="id701825"></a>
+<a name="math_toolkit.toolkit.internals1.rational"></a><a href="rational.html" title=" Polynomial
+        and Rational Function Evaluation"> Polynomial
+        and Rational Function Evaluation</a></h4></div></div></div>
+<a name="math_toolkit.toolkit.internals1.rational.synopsis"></a><h4>
+<a name="id664594"></a>
           <a href="rational.html#math_toolkit.toolkit.internals1.rational.synopsis">synopsis</a>
-        </h5>
+        </h4>
 <p>
           
 </p>
@@ -80,10 +83,10 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">V</span><span class="special">&gt;</span>
 <span class="identifier">V</span> <span class="identifier">evaluate_rational</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">*</span> <span class="identifier">num</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">U</span><span class="special">*</span> <span class="identifier">denom</span><span class="special">,</span> <span class="identifier">V</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">count</span><span class="special">);</span>
 </pre>
-<a name="math_toolkit.toolkit.internals1.rational.description"></a><h5>
-<a name="id703951"></a>
+<a name="math_toolkit.toolkit.internals1.rational.description"></a><h4>
+<a name="id666723"></a>
           <a href="rational.html#math_toolkit.toolkit.internals1.rational.description">Description</a>
-        </h5>
+        </h4>
 <p>
           Each of the functions come in three variants: a pair of overloaded functions
           where the order of the polynomial or rational function is evaluated at
@@ -136,7 +139,7 @@
 </pre>
 <p>
           As above, but evaluates an even polynomial: one where all the powers of
-          <span class="emphasis"><em>z</em></span> are even numbers. Equivalent to calling <code class="computeroutput"><span class="identifier">evaluate_polynomial</span><span class="special">(</span><span class="identifier">poly</span><span class="special">,</span> <span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">count</span><span class="special">)</span></code>.
+          <span class="emphasis"><em>z</em></span> are even numbers. Equivalent to calling <tt class="computeroutput"><span class="identifier">evaluate_polynomial</span><span class="special">(</span><span class="identifier">poly</span><span class="special">,</span> <span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">count</span><span class="special">)</span></tt>.
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">V</span><span class="special">&gt;</span>
@@ -150,10 +153,10 @@
 </pre>
 <p>
           As above but evaluates a polynomial where all the powers are odd numbers.
-          Equivalent to <code class="computeroutput"><span class="identifier">evaluate_polynomial</span><span class="special">(</span><span class="identifier">poly</span><span class="special">+</span><span class="number">1</span><span class="special">,</span>
+          Equivalent to <tt class="computeroutput"><span class="identifier">evaluate_polynomial</span><span class="special">(</span><span class="identifier">poly</span><span class="special">+</span><span class="number">1</span><span class="special">,</span>
           <span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">count</span><span class="special">-</span><span class="number">1</span><span class="special">)</span>
           <span class="special">*</span> <span class="identifier">z</span>
-          <span class="special">+</span> <span class="identifier">poly</span><span class="special">[</span><span class="number">0</span><span class="special">]</span></code>.
+          <span class="special">+</span> <span class="identifier">poly</span><span class="special">[</span><span class="number">0</span><span class="special">]</span></tt>.
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">V</span><span class="special">&gt;</span>
@@ -198,10 +201,10 @@
           if you can be sure that numerical overflow will not occur then polynomial
           evaluation with compile-time array sizes may offer slightly better performance.
         </p>
-<a name="math_toolkit.toolkit.internals1.rational.implementation"></a><h5>
-<a name="id706420"></a>
+<a name="math_toolkit.toolkit.internals1.rational.implementation"></a><h4>
+<a name="id669193"></a>
           <a href="rational.html#math_toolkit.toolkit.internals1.rational.implementation">Implementation</a>
-        </h5>
+        </h4>
 <p>
           Polynomials are evaluated by <a href="http://en.wikipedia.org/wiki/Horner_algorithm" target="_top">Horners
           method</a>. If the array size is known at compile time then the functions
@@ -219,17 +222,21 @@
           Both the polynomial and rational function evaluation algorithms can be
           tuned using various configuration macros to provide optimal performance
           for a particular combination of compiler and platform. This includes support
-          for second-order Horner's methods. The various options are <a href="../../perf/tuning.html" title="Performance Tuning Macros">documented
+          for second-order Horner's methods. The various options are <a href="../../perf/tuning.html" title=" Performance Tuning Macros">documented
           here</a>. However, the performance benefits to be gained from these
           are marginal on most current hardware, consequently it's best to run the
-          <a href="../../perf/perf_test_app.html" title="The Performance Test Application">performance test application</a>
+          <a href="../../perf/perf_test_app.html" title=" The Performance Test
+      Application">performance test application</a>
           before changing the default settings.
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

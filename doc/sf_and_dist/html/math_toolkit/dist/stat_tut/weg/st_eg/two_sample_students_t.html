@@ -1,13 +1,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Comparing the means of two samples with the Students-t test</title>
+<title>
+            Comparing the means of two samples with the Students-t test</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../st_eg.html" title="Student's t Distribution Examples">
-<link rel="prev" href="tut_mean_size.html" title="Estimating how large a sample size would have to become in order to give a significant Students-t test result with a single sample test">
-<link rel="next" href="paired_st.html" title="Comparing two paired samples with the Student's t distribution">
+<link rel="up" href="../st_eg.html" title=" Student's
+          t Distribution Examples">
+<link rel="prev" href="tut_mean_size.html" title="
+            Estimating how large a sample size would have to become in order to give
+            a significant Students-t test result with a single sample test">
+<link rel="next" href="paired_st.html" title="
+            Comparing two paired samples with the Student's t distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +29,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.st_eg.two_sample_students_t"></a><a href="two_sample_students_t.html" title="Comparing the means of two samples with the Students-t test">
-            Comparing the means of two samples with the Students-t test</a>
-</h6></div></div></div>
+<a name="math_toolkit.dist.stat_tut.weg.st_eg.two_sample_students_t"></a><a href="two_sample_students_t.html" title="
+            Comparing the means of two samples with the Students-t test">
+            Comparing the means of two samples with the Students-t test</a></h6></div></div></div>
 <p>
               Imagine that we have two samples, and we wish to determine whether
               their means are different or not. This situation often arises when
@@ -134,7 +139,7 @@
 <tr>
 <td>
                     <p>
-                      The Null-hypothesis: there is <span class="bold"><strong>no difference</strong></span>
+                      The Null-hypothesis: there is <span class="bold"><b>no difference</b></span>
                       in means
                     </p>
                     </td>
@@ -144,17 +149,17 @@
                       / 2:
                     </p>
                     <p>
-                      <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
+                      <tt class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
                       <span class="identifier">fabs</span><span class="special">(</span><span class="identifier">t</span><span class="special">)))</span>
                       <span class="special">&lt;</span> <span class="identifier">alpha</span>
-                      <span class="special">/</span> <span class="number">2</span></code>
+                      <span class="special">/</span> <span class="number">2</span></tt>
                     </p>
                     </td>
 </tr>
 <tr>
 <td>
                     <p>
-                      The Alternative-hypothesis: there is a <span class="bold"><strong>difference</strong></span>
+                      The Alternative-hypothesis: there is a <span class="bold"><b>difference</b></span>
                       in means
                     </p>
                     </td>
@@ -164,17 +169,17 @@
                       / 2:
                     </p>
                     <p>
-                      <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
+                      <tt class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
                       <span class="identifier">fabs</span><span class="special">(</span><span class="identifier">t</span><span class="special">)))</span>
                       <span class="special">&lt;</span> <span class="identifier">alpha</span>
-                      <span class="special">/</span> <span class="number">2</span></code>
+                      <span class="special">/</span> <span class="number">2</span></tt>
                     </p>
                     </td>
 </tr>
 <tr>
 <td>
                     <p>
-                      The Alternative-hypothesis: Sample 1 Mean is <span class="bold"><strong>less</strong></span>
+                      The Alternative-hypothesis: Sample 1 Mean is <span class="bold"><b>less</b></span>
                       than Sample 2 Mean.
                     </p>
                     </td>
@@ -183,16 +188,16 @@
                       Reject if CDF of t &gt; significance level:
                     </p>
                     <p>
-                      <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
+                      <tt class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
                       <span class="identifier">t</span><span class="special">)</span>
-                      <span class="special">&gt;</span> <span class="identifier">alpha</span></code>
+                      <span class="special">&gt;</span> <span class="identifier">alpha</span></tt>
                     </p>
                     </td>
 </tr>
 <tr>
 <td>
                     <p>
-                      The Alternative-hypothesis: Sample 1 Mean is <span class="bold"><strong>greater</strong></span>
+                      The Alternative-hypothesis: Sample 1 Mean is <span class="bold"><b>greater</b></span>
                       than Sample 2 Mean.
                     </p>
                     </td>
@@ -201,9 +206,9 @@
                       Reject if complement of CDF of t &gt; significance level:
                     </p>
                     <p>
-                      <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
+                      <tt class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
                       <span class="identifier">t</span><span class="special">))</span>
-                      <span class="special">&gt;</span> <span class="identifier">alpha</span></code>
+                      <span class="special">&gt;</span> <span class="identifier">alpha</span></tt>
                     </p>
                     </td>
 </tr>
@@ -214,7 +219,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td colspan="2" align="left" valign="top"><p>
                 For a two-sided test we must compare against alpha / 2 and not alpha.
               </p></td></tr>
 </table></div>
@@ -284,7 +289,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td colspan="2" align="left" valign="top"><p>
                 Some statistical packages truncate the effective degrees of freedom
                 to an integer value: this may be necessary if you are relying on
                 lookup tables, but since our code fully supports non-integer degrees
@@ -347,8 +352,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

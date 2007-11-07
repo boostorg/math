@@ -1,13 +1,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>F Distribution Examples</title>
+<title> F Distribution
+          Examples</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../weg.html" title="Worked Examples">
-<link rel="prev" href="cs_eg/chi_sq_size.html" title="Estimating the Required Sample Sizes for a Chi-Square Test for the Standard Deviation">
-<link rel="next" href="binom_eg.html" title="Binomial Distribution Examples">
+<link rel="up" href="../weg.html" title=" Worked Examples">
+<link rel="prev" href="cs_eg/chi_sq_size.html" title="
+            Estimating the Required Sample Sizes for a Chi-Square Test for the Standard
+            Deviation">
+<link rel="next" href="binom_eg.html" title=" Binomial
+          Distribution Examples">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +28,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.f_eg"></a><a href="f_eg.html" title="F Distribution Examples"> F Distribution
-          Examples</a>
-</h5></div></div></div>
+<a name="math_toolkit.dist.stat_tut.weg.f_eg"></a><a href="f_eg.html" title=" F Distribution
+          Examples"> F Distribution
+          Examples</a></h5></div></div></div>
 <p>
             Imagine that you want to compare the standard deviations of two sample
             to determine if they differ in any significant way, in this situation
@@ -185,12 +189,12 @@ is the standard
             function:
           </p>
 <p>
-            F<sub>(1-alpha; N1-1, N2-1)</sub> = <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">fisher_f</span><span class="special">(</span><span class="identifier">N1</span><span class="special">-</span><span class="number">1</span><span class="special">,</span>
-            <span class="identifier">N2</span><span class="special">-</span><span class="number">1</span><span class="special">),</span> <span class="identifier">alpha</span><span class="special">)</span></code>
+            F<sub>(1-alpha; N1-1, N2-1)</sub> = <tt class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">fisher_f</span><span class="special">(</span><span class="identifier">N1</span><span class="special">-</span><span class="number">1</span><span class="special">,</span>
+            <span class="identifier">N2</span><span class="special">-</span><span class="number">1</span><span class="special">),</span> <span class="identifier">alpha</span><span class="special">)</span></tt>
           </p>
 <p>
-            F<sub>(alpha; N1-1, N2-1)</sub> = <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">fisher_f</span><span class="special">(</span><span class="identifier">N1</span><span class="special">-</span><span class="number">1</span><span class="special">,</span>
-            <span class="identifier">N2</span><span class="special">-</span><span class="number">1</span><span class="special">),</span> <span class="identifier">alpha</span><span class="special">))</span></code>
+            F<sub>(alpha; N1-1, N2-1)</sub> = <tt class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">fisher_f</span><span class="special">(</span><span class="identifier">N1</span><span class="special">-</span><span class="number">1</span><span class="special">,</span>
+            <span class="identifier">N2</span><span class="special">-</span><span class="number">1</span><span class="special">),</span> <span class="identifier">alpha</span><span class="special">))</span></tt>
           </p>
 <p>
             In our example program we need both upper and lower critical values for
@@ -320,8 +324,11 @@ Standard deviation 1 is greater than standard deviation 2 ACCEPTED
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

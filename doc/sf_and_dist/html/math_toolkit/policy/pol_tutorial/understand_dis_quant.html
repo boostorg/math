@@ -1,13 +1,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Understanding Quantiles of Discrete Distributions</title>
+<title>
+        Understanding Quantiles of Discrete Distributions</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
-<link rel="prev" href="user_def_err_pol.html" title="Calling User Defined Error Handlers">
-<link rel="next" href="../pol_ref.html" title="Policy Reference">
+<link rel="up" href="../pol_tutorial.html" title=" Policy Tutorial">
+<link rel="prev" href="user_def_err_pol.html" title="
+        Calling User Defined Error Handlers">
+<link rel="next" href="../pol_ref.html" title=" Policy Reference">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +26,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_tutorial.understand_dis_quant"></a><a href="understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">
-        Understanding Quantiles of Discrete Distributions</a>
-</h4></div></div></div>
+<a name="math_toolkit.policy.pol_tutorial.understand_dis_quant"></a><a href="understand_dis_quant.html" title="
+        Understanding Quantiles of Discrete Distributions">
+        Understanding Quantiles of Discrete Distributions</a></h4></div></div></div>
 <p>
           Discrete distributions present us with a problem when calculating the quantile:
           we are starting from a continuous real-valued variable - the probability
@@ -92,9 +94,9 @@
           So there is a genuine benefit to calculating an integer result as well
           as it being "the right thing to do" from a philosophical point
           of view. What's more if someone asks for a quantile at 0.05, then we can
-          normally assume that they are asking for <span class="emphasis"><em><span class="bold"><strong>at
-          least</strong></span> 95% of the probability to the right of the value chosen,
-          and <span class="bold"><strong>no more than</strong></span> 5% of the probability
+          normally assume that they are asking for <span class="emphasis"><em><span class="bold"><b>at
+          least</b></span> 95% of the probability to the right of the value chosen,
+          and <span class="bold"><b>no more than</b></span> 5% of the probability
           to the left of the value chosen.</em></span>
         </p>
 <p>
@@ -103,8 +105,8 @@
         </p>
 <p>
           The converse applies to upper-quantiles: If the probability is greater
-          than 0.5 we would want to round the quantile up, <span class="emphasis"><em>so that <span class="bold"><strong>at least</strong></span> the requested probability is to the left
-          of the value returned, and <span class="bold"><strong>no more than</strong></span>
+          than 0.5 we would want to round the quantile up, <span class="emphasis"><em>so that <span class="bold"><b>at least</b></span> the requested probability is to the left
+          of the value returned, and <span class="bold"><b>no more than</b></span>
           1 - the requested probability is to the right of the value returned.</em></span>
         </p>
 <p>
@@ -182,11 +184,11 @@
           when dealing with a discrete distribution</em></span>, and if in doubt,
           <span class="emphasis"><em>base your comparisons on CDF's instead</em></span>.
         </p>
-<a name="math_toolkit.policy.pol_tutorial.understand_dis_quant.other_rounding_policies_are_available"></a><h6>
-<a name="id757501"></a>
+<a name="math_toolkit.policy.pol_tutorial.understand_dis_quant.other_rounding_policies_are_available"></a><h5>
+<a name="id720296"></a>
           <a href="understand_dis_quant.html#math_toolkit.policy.pol_tutorial.understand_dis_quant.other_rounding_policies_are_available">Other
           Rounding Policies are Available</a>
-        </h6>
+        </h5>
 <p>
           As you would expect from a section on policies, you won't be surprised
           to know that other rounding options are available:
@@ -423,19 +425,15 @@ Upper quantiles at p = 0.95.
                      real            18.701            30.299
 </pre>
 <p>
-          </p>
-<p>
-            </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
-          </p>
-<p>
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

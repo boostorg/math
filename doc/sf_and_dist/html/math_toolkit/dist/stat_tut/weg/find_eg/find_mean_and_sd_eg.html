@@ -1,13 +1,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Find mean and standard deviation example</title>
+<title>
+            Find mean and standard deviation example</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../find_eg.html" title="Find Location and Scale Examples">
-<link rel="prev" href="find_scale_eg.html" title="Find Scale (Standard Deviation) Example">
-<link rel="next" href="../nag_library.html" title="Comparison with C, R, FORTRAN-style Free Functions">
+<link rel="up" href="../find_eg.html" title=" Find Location
+          and Scale Examples">
+<link rel="prev" href="find_scale_eg.html" title="
+            Find Scale (Standard Deviation) Example">
+<link rel="next" href="../nag_library.html" title=" Comparison
+          with C, R, FORTRAN-style Free Functions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +28,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg"></a><a href="find_mean_and_sd_eg.html" title="Find mean and standard deviation example">
-            Find mean and standard deviation example</a>
-</h6></div></div></div>
+<a name="math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg"></a><a href="find_mean_and_sd_eg.html" title="
+            Find mean and standard deviation example">
+            Find mean and standard deviation example</a></h6></div></div></div>
 <p>
               </p>
 <p>
@@ -60,20 +64,13 @@
 <p>
               </p>
 <p>
-              </p>
-<p>
-                </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
-              </p>
-<p>
               <a name="math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.using_find_location_and_find_scale_to_meet_dispensing_and_measurement_specifications"></a>
               </p>
-<h5>
-<a name="id564065"></a>
+<h4>
+<a name="id530353"></a>
                 <a href="find_mean_and_sd_eg.html#math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.using_find_location_and_find_scale_to_meet_dispensing_and_measurement_specifications">Using
                 find_location and find_scale to meet dispensing and measurement specifications</a>
-              </h5>
+              </h4>
 <p>
               </p>
 <p>
@@ -208,7 +205,8 @@
 <p>
               </p>
 <p>
-                This calculation is generalized as the free function called <a href="../../../dist_ref/dist_algorithms.html" title="Distribution Algorithms">find_location</a>.
+                This calculation is generalized as the free function called <a href="../../../dist_ref/dist_algorithms.html" title=" Distribution
+        Algorithms">find_location</a>.
               </p>
 <p>
               </p>
@@ -261,18 +259,19 @@
 <p>
               <a name="math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.using_cauchy_lorentz_instead_of_normal_distribution"></a>
               </p>
-<h5>
-<a name="id565718"></a>
+<h4>
+<a name="id532015"></a>
                 <a href="find_mean_and_sd_eg.html#math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.using_cauchy_lorentz_instead_of_normal_distribution">Using
                 Cauchy-Lorentz instead of normal distribution</a>
-              </h5>
+              </h4>
 <p>
               </p>
 <p>
                 After examining the weight distribution of a large number of packs,
                 we might decide that, after all, the assumption of a normal distribution
                 is not really justified. We might find that the fit is better to
-                a <a href="../../../dist_ref/dists/cauchy_dist.html" title="Cauchy-Lorentz Distribution">Cauchy
+                a <a href="../../../dist_ref/dists/cauchy_dist.html" title=" Cauchy-Lorentz
+          Distribution">Cauchy
                 Distribution</a>. This distribution has wider 'wings', so that
                 whereas most of the values are closer to the mean than the normal,
                 there are also more values than 'normal' that lie further from the
@@ -287,7 +286,8 @@
 <p>
               </p>
 <p>
-                We first create a <a href="../../../dist_ref/dists/cauchy_dist.html" title="Cauchy-Lorentz Distribution">Cauchy
+                We first create a <a href="../../../dist_ref/dists/cauchy_dist.html" title=" Cauchy-Lorentz
+          Distribution">Cauchy
                 Distribution</a> with the original mean and standard deviation,
                 and estimate the fraction that lie below our minimum weight specification.
               </p>
@@ -385,8 +385,10 @@
                 The only caveat is that the calculation assumes that the standard
                 deviation (scale) is known with a reasonably low uncertainty, something
                 that is not so easy to ensure in practice. And that the distribution
-                is well defined, <a href="../../../dist_ref/dists/normal_dist.html" title="Normal (Gaussian) Distribution">Normal
-                Distribution</a> or <a href="../../../dist_ref/dists/cauchy_dist.html" title="Cauchy-Lorentz Distribution">Cauchy
+                is well defined, <a href="../../../dist_ref/dists/normal_dist.html" title=" Normal
+          (Gaussian) Distribution">Normal
+                Distribution</a> or <a href="../../../dist_ref/dists/cauchy_dist.html" title=" Cauchy-Lorentz
+          Distribution">Cauchy
                 Distribution</a>, or some other.
               </p>
 <p>
@@ -408,7 +410,8 @@
 <p>
               </p>
 <p>
-                See <a href="../cs_eg/chi_sq_intervals.html" title="Confidence Intervals on the Standard Deviation">Confidence
+                See <a href="../cs_eg/chi_sq_intervals.html" title="
+            Confidence Intervals on the Standard Deviation">Confidence
                 Intervals on the standard deviation</a> for a worked example
                 <a href="../../../../../../../example/chi_square_std_dev_test.cpp" target="_top">chi_square_std_dev_test.cpp</a>
                 of estimating these intervals.
@@ -416,11 +419,11 @@
 <p>
               <a name="math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.changing_the_scale_or_standard_deviation"></a>
               </p>
-<h5>
-<a name="id566675"></a>
+<h4>
+<a name="id532971"></a>
                 <a href="find_mean_and_sd_eg.html#math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.changing_the_scale_or_standard_deviation">Changing
                 the scale or standard deviation</a>
-              </h5>
+              </h4>
 <p>
               </p>
 <p>
@@ -517,7 +520,8 @@
 <p>
                 Now we are getting really close, but to do the job properly, we might
                 need to use root finding method, for example the tools provided,
-                and used elsewhere, in the Math Toolkit, see <a href="../../../../toolkit/internals1/roots2.html" title="Root Finding Without Derivatives">Root
+                and used elsewhere, in the Math Toolkit, see <a href="../../../../toolkit/internals1/roots2.html" title=" Root Finding
+        Without Derivatives">Root
                 Finding Without Derivatives</a>.
               </p>
 <p>
@@ -640,7 +644,7 @@
 <p>
               </p>
 <p>
-                But this would return a <span class="bold"><strong>negative</strong></span>
+                But this would return a <span class="bold"><b>negative</b></span>
                 standard deviation - obviously impossible. The probability should
                 be 1 - over_fraction, not over_fraction, thus:
               </p>
@@ -734,9 +738,6 @@
               </p>
 <p>
                 The scale can be variation in dispensing or uncertainty in measurement.
-                </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
               </p>
 <p>
               See <a href="../../../../../../../../example/find_mean_and_sd_normal.cpp" target="_top">find_mean_and_sd_normal.cpp</a>
@@ -745,8 +746,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

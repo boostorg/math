@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Poisson Distribution</title>
+<title> Poisson
+          Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../dists.html" title="Distributions">
-<link rel="prev" href="pareto.html" title="Pareto Distribution">
-<link rel="next" href="rayleigh.html" title="Rayleigh Distribution">
+<link rel="up" href="../dists.html" title=" Distributions">
+<link rel="prev" href="pareto.html" title=" Pareto
+          Distribution">
+<link rel="next" href="rayleigh.html" title=" Rayleigh
+          Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +27,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.poisson_dist"></a><a href="poisson_dist.html" title="Poisson Distribution"> Poisson
-          Distribution</a>
-</h5></div></div></div>
+<a name="math_toolkit.dist.dist_ref.dists.poisson_dist"></a><a href="poisson_dist.html" title=" Poisson
+          Distribution"> Poisson
+          Distribution</a></h5></div></div></div>
 <p>
             
 </p>
@@ -38,12 +41,13 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title=" Policy Class
+        Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">poisson_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">poisson_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">poisson</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">poisson_distribution</span>
 <span class="special">{</span> 
 <span class="keyword">public</span><span class="special">:</span>
@@ -91,11 +95,11 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../../../doc/html/images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
-<tr><td align="left" valign="top">
+<tr><td colspan="2" align="left" valign="top">
 <p>
                 The Poisson distribution is a discrete distribution: internally functions
-                like the <code class="computeroutput"><span class="identifier">cdf</span></code> and
-                <code class="computeroutput"><span class="identifier">pdf</span></code> are treated "as
+                like the <tt class="computeroutput"><span class="identifier">cdf</span></tt> and
+                <tt class="computeroutput"><span class="identifier">pdf</span></tt> are treated "as
                 if" they are continuous functions, but in reality the results
                 returned from these functions only have meaning if an integer value
                 is provided for the random variate argument.
@@ -112,10 +116,12 @@
               </p>
 <p>
                 This behaviour can be changed so that the quantile functions are
-                rounded differently, or even return a real-valued result using <a href="../../../policy/pol_overview.html" title="Policy Overview">Policies</a>. It is
-                strongly recommended that you read the tutorial <a href="../../../policy/pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
+                rounded differently, or even return a real-valued result using <a href="../../../policy/pol_overview.html" title=" Policy Overview">Policies</a>. It is
+                strongly recommended that you read the tutorial <a href="../../../policy/pol_tutorial/understand_dis_quant.html" title="
+        Understanding Quantiles of Discrete Distributions">Understanding
                 Quantiles of Discrete Distributions</a> before using the quantile
-                function on the Poisson distribution. The <a href="../../../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
+                function on the Poisson distribution. The <a href="../../../policy/pol_ref/discrete_quant_ref.html" title=" Discrete
+        Quantile Policies">reference
                 docs</a> describe how to change the rounding policy for these
                 distributions.
               </p>
@@ -123,11 +129,11 @@
 </table></div>
 <p>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.poisson_dist.member_functions"></a><h5>
-<a name="id605968"></a>
+<a name="math_toolkit.dist.dist_ref.dists.poisson_dist.member_functions"></a><h4>
+<a name="id572545"></a>
             <a href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.member_functions">Member
             Functions</a>
-          </h5>
+          </h4>
 <pre class="programlisting">
 <span class="identifier">poisson_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
@@ -140,13 +146,13 @@
 <p>
             Returns the <span class="emphasis"><em>mean</em></span> of this distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.poisson_dist.non_member_accessors"></a><h5>
-<a name="id606095"></a>
+<a name="math_toolkit.dist.dist_ref.dists.poisson_dist.non_member_accessors"></a><h4>
+<a name="id572673"></a>
             <a href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.non_member_accessors">Non-member
             Accessors</a>
-          </h5>
+          </h4>
 <p>
-            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
+            All the <a href="../nmp.html" title=" Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
             <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
             <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
@@ -160,24 +166,26 @@
 <p>
             The domain of the random variable is [0, &#8734;].
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.poisson_dist.accuracy"></a><h5>
-<a name="id606264"></a>
+<a name="math_toolkit.dist.dist_ref.dists.poisson_dist.accuracy"></a><h4>
+<a name="id572844"></a>
             <a href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.accuracy">Accuracy</a>
-          </h5>
+          </h4>
 <p>
             The Poisson distribution is implemented in terms of the incomplete gamma
-            functions <a href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>
-            and <a href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>
+            functions <a href="../../../special/sf_gamma/igamma.html" title=" Incomplete Gamma
+        Functions">gamma_p</a>
+            and <a href="../../../special/sf_gamma/igamma.html" title=" Incomplete Gamma
+        Functions">gamma_q</a>
             and as such should have low error rates: but refer to the documentation
             of those functions for more information. The quantile and its complement
             use the inverse gamma functions and are therefore probably slightly less
             accurate: this is because the inverse gamma functions are implemented
             using an iterative method with a lower tolerance to avoid excessive computation.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.poisson_dist.implementation"></a><h5>
-<a name="id606312"></a>
+<a name="math_toolkit.dist.dist_ref.dists.poisson_dist.implementation"></a><h4>
+<a name="id572894"></a>
             <a href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.implementation">Implementation</a>
-          </h5>
+          </h4>
 <p>
             In the following table &#955; is the mean of the distribution, <span class="emphasis"><em>k</em></span>
             is the random variable, <span class="emphasis"><em>p</em></span> is the probability and
@@ -221,7 +229,8 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: p = &#915;(k+1, &#955;) / k! = <a href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(k+1,
+                    Using the relation: p = &#915;(k+1, &#955;) / k! = <a href="../../../special/sf_gamma/igamma.html" title=" Incomplete Gamma
+        Functions">gamma_q</a>(k+1,
                     &#955;)
                   </p>
                   </td>
@@ -234,7 +243,8 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: q = <a href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(k+1,
+                    Using the relation: q = <a href="../../../special/sf_gamma/igamma.html" title=" Incomplete Gamma
+        Functions">gamma_p</a>(k+1,
                     &#955;)
                   </p>
                   </td>
@@ -247,7 +257,8 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: k = <a href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inva</a>(&#955;,
+                    Using the relation: k = <a href="../../../special/sf_gamma/igamma_inv.html" title=" Incomplete
+        Gamma Function Inverses">gamma_q_inva</a>(&#955;,
                     p) - 1
                   </p>
                   </td>
@@ -260,7 +271,8 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: k = <a href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inva</a>(&#955;,
+                    Using the relation: k = <a href="../../../special/sf_gamma/igamma_inv.html" title=" Incomplete
+        Gamma Function Inverses">gamma_p_inva</a>(&#955;,
                     q) - 1
                   </p>
                   </td>
@@ -330,8 +342,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

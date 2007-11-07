@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Octonion Member Functions</title>
+<title>Octonion
+      Member Functions</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Boost.Octonions">
 <link rel="up" href="../octonions.html" title="Octonions">
-<link rel="prev" href="octonion_member_typedefs.html" title="Octonion Member Typedefs">
-<link rel="next" href="non_mem.html" title="Octonion Non-Member Operators">
+<link rel="prev" href="octonion_member_typedefs.html" title="Octonion
+      Member Typedefs">
+<link rel="next" href="non_mem.html" title=" Octonion Non-Member
+      Operators">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,13 +27,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_octonions.octonions.octonion_member_functions"></a><a href="octonion_member_functions.html" title="Octonion Member Functions">Octonion
-      Member Functions</a>
-</h3></div></div></div>
-<a name="boost_octonions.octonions.octonion_member_functions.constructors"></a><h4>
-<a name="id515499"></a>
+<a name="boost_octonions.octonions.octonion_member_functions"></a><a href="octonion_member_functions.html" title="Octonion
+      Member Functions">Octonion
+      Member Functions</a></h3></div></div></div>
+<a name="boost_octonions.octonions.octonion_member_functions.constructors"></a><h3>
+<a name="id481780"></a>
         <a href="octonion_member_functions.html#boost_octonions.octonions.octonion_member_functions.constructors">Constructors</a>
-      </h4>
+      </h3>
 <p>
         Template version:
       </p>
@@ -88,16 +91,16 @@
         by the compiler. Converting copy constructors make use of a templated helper
         function in a "detail" subnamespace.
       </p>
-<a name="boost_octonions.octonions.octonion_member_functions.other_member_functions"></a><h4>
-<a name="id519857"></a>
+<a name="boost_octonions.octonions.octonion_member_functions.other_member_functions"></a><h3>
+<a name="id486122"></a>
         <a href="octonion_member_functions.html#boost_octonions.octonions.octonion_member_functions.other_member_functions">Other
         member functions</a>
-      </h4>
-<a name="boost_octonions.octonions.octonion_member_functions.real_and_unreal_parts"></a><h5>
-<a name="id519882"></a>
+      </h3>
+<a name="boost_octonions.octonions.octonion_member_functions.real_and_unreal_parts"></a><h4>
+<a name="id486150"></a>
         <a href="octonion_member_functions.html#boost_octonions.octonions.octonion_member_functions.real_and_unreal_parts">Real
         and Unreal Parts</a>
-      </h5>
+      </h4>
 <pre class="programlisting">
 <span class="identifier">T</span>            <span class="identifier">real</span><span class="special">()</span>   <span class="keyword">const</span><span class="special">;</span>
 <span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>  <span class="identifier">unreal</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
@@ -109,11 +112,11 @@
         octonion, and usually nothing simpler (as opposed to the complex number case).
         These are returned by the first two functions.
       </p>
-<a name="boost_octonions.octonions.octonion_member_functions.individual_real_components"></a><h5>
-<a name="id519990"></a>
+<a name="boost_octonions.octonions.octonion_member_functions.individual_real_components"></a><h4>
+<a name="id486265"></a>
         <a href="octonion_member_functions.html#boost_octonions.octonions.octonion_member_functions.individual_real_components">Individual
         Real Components</a>
-      </h5>
+      </h4>
 <pre class="programlisting">
 <span class="identifier">T</span>   <span class="identifier">R_component_1</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="identifier">T</span>   <span class="identifier">R_component_2</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
@@ -128,11 +131,11 @@
         A octonion having eight real components, these are returned by these eight
         functions. Hence real and R_component_1 return the same value.
       </p>
-<a name="boost_octonions.octonions.octonion_member_functions.individual_complex_components"></a><h5>
-<a name="id520256"></a>
+<a name="boost_octonions.octonions.octonion_member_functions.individual_complex_components"></a><h4>
+<a name="id486534"></a>
         <a href="octonion_member_functions.html#boost_octonions.octonions.octonion_member_functions.individual_complex_components">Individual
         Complex Components</a>
-      </h5>
+      </h4>
 <pre class="programlisting">
 <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">C_component_1</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">C_component_2</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
@@ -142,39 +145,39 @@
 <p>
         A octonion likewise has four complex components. Actually, octonions are
         indeed a (left) vector field over the complexes, but beware, as for any octonion
-        <span class="emphasis"><em><code class="literal">o = &#945; + &#946;i + &#947;j + &#948;k + &#949;e' + &#950;i' + &#951;j' + &#952;k'</code></em></span> we also have <span class="emphasis"><em><code class="literal">o
-        = (&#945; + &#946;i) + (&#947; + &#948;i)j + (&#949; + &#950;i)e' + (&#951; - &#952;i)j'</code></em></span> (note the <span class="bold"><strong>minus</strong></span>
+        <span class="emphasis"><em><tt class="literal">o = &#945; + &#946;i + &#947;j + &#948;k + &#949;e' + &#950;i' + &#951;j' + &#952;k'</tt></em></span> we also have <span class="emphasis"><em><tt class="literal">o
+        = (&#945; + &#946;i) + (&#947; + &#948;i)j + (&#949; + &#950;i)e' + (&#951; - &#952;i)j'</tt></em></span> (note the <span class="bold"><b>minus</b></span>
         sign in the last factor). What the C_component_n functions return, however,
         are the complexes which could be used to build the octonion using the constructor,
-        and <span class="bold"><strong>not</strong></span> the components of the octonion on
-        the basis <span class="emphasis"><em><code class="literal">(1, j, e', j')</code></em></span>.
+        and <span class="bold"><b>not</b></span> the components of the octonion on
+        the basis <span class="emphasis"><em><tt class="literal">(1, j, e', j')</tt></em></span>.
       </p>
-<a name="boost_octonions.octonions.octonion_member_functions.individual_quaternion_components"></a><h5>
-<a name="id520567"></a>
+<a name="boost_octonions.octonions.octonion_member_functions.individual_quaternion_components"></a><h4>
+<a name="id486851"></a>
         <a href="octonion_member_functions.html#boost_octonions.octonions.octonion_member_functions.individual_quaternion_components">Individual
         Quaternion Components</a>
-      </h5>
+      </h4>
 <pre class="programlisting">
 <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">H_component_1</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">H_component_2</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        Likewise, for any octonion <span class="emphasis"><em><code class="literal">o = &#945; + &#946;i + &#947;j + &#948;k + &#949;e' + &#950;i' + &#951;j' + &#952;k'</code></em></span> we
-        also have <span class="emphasis"><em><code class="literal">o = (&#945; + &#946;i + &#947;j + &#948;k) + (&#949; + &#950;i + &#951;j - &#952;j)e'</code></em></span>, though there is
+        Likewise, for any octonion <span class="emphasis"><em><tt class="literal">o = &#945; + &#946;i + &#947;j + &#948;k + &#949;e' + &#950;i' + &#951;j' + &#952;k'</tt></em></span> we
+        also have <span class="emphasis"><em><tt class="literal">o = (&#945; + &#946;i + &#947;j + &#948;k) + (&#949; + &#950;i + &#951;j - &#952;j)e'</tt></em></span>, though there is
         no meaningful vector-space-like structure based on the quaternions. What
         the H_component_n functions return are the quaternions which could be used
         to build the octonion using the constructor.
       </p>
-<a name="boost_octonions.octonions.octonion_member_functions.octonion_member_operators"></a><h4>
-<a name="id520761"></a>
+<a name="boost_octonions.octonions.octonion_member_functions.octonion_member_operators"></a><h3>
+<a name="id487048"></a>
         <a href="octonion_member_functions.html#boost_octonions.octonions.octonion_member_functions.octonion_member_operators">Octonion
         Member Operators</a>
-      </h4>
-<a name="boost_octonions.octonions.octonion_member_functions.assignment_operators"></a><h5>
-<a name="id520786"></a>
+      </h3>
+<a name="boost_octonions.octonions.octonion_member_functions.assignment_operators"></a><h4>
+<a name="id487076"></a>
         <a href="octonion_member_functions.html#boost_octonions.octonions.octonion_member_functions.assignment_operators">Assignment
         Operators</a>
-      </h5>
+      </h4>
 <pre class="programlisting">
 <span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span> <span class="keyword">operator</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a_affecter</span><span class="special">);</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">X</span><span class="special">&gt;</span> 
@@ -189,11 +192,11 @@
         value, and all other components to zero). For the unspecialized form, the
         base type's assignment operators must not throw.
       </p>
-<a name="boost_octonions.octonions.octonion_member_functions.other_member_operators"></a><h5>
-<a name="id521317"></a>
+<a name="boost_octonions.octonions.octonion_member_functions.other_member_operators"></a><h4>
+<a name="id487613"></a>
         <a href="octonion_member_functions.html#boost_octonions.octonions.octonion_member_functions.other_member_operators">Other
         Member Operators</a>
-      </h5>
+      </h4>
 <pre class="programlisting">
 <span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span> <span class="keyword">operator</span> <span class="special">+=</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">)</span>
 <span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span> <span class="keyword">operator</span> <span class="special">+=</span> <span class="special">(::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
@@ -202,8 +205,8 @@
 <span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span> <span class="keyword">operator</span> <span class="special">+=</span> <span class="special">(</span><span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        These perform the mathematical operation <code class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)+</span><span class="identifier">rhs</span></code>
-        and store the result in <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>.
+        These perform the mathematical operation <tt class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)+</span><span class="identifier">rhs</span></tt>
+        and store the result in <tt class="computeroutput"><span class="special">*</span><span class="keyword">this</span></tt>.
         The unspecialized form has exception guards, which the specialized forms
         do not, so as to insure exception safety. For the unspecialized form, the
         base type's assignment operators must not throw.
@@ -216,8 +219,8 @@
 <span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span> <span class="keyword">operator</span> <span class="special">-=</span> <span class="special">(</span><span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        These perform the mathematical operation <code class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)-</span><span class="identifier">rhs</span></code>
-        and store the result in <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>.
+        These perform the mathematical operation <tt class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)-</span><span class="identifier">rhs</span></tt>
+        and store the result in <tt class="computeroutput"><span class="special">*</span><span class="keyword">this</span></tt>.
         The unspecialized form has exception guards, which the specialized forms
         do not, so as to insure exception safety. For the unspecialized form, the
         base type's assignment operators must not throw.
@@ -230,9 +233,9 @@
 <span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span> <span class="keyword">operator</span> <span class="special">*=</span> <span class="special">(</span><span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        These perform the mathematical operation <code class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)*</span><span class="identifier">rhs</span></code>
+        These perform the mathematical operation <tt class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)*</span><span class="identifier">rhs</span></tt>
         in this order (order is important as multiplication is not commutative for
-        octonions) and store the result in <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>. The unspecialized form has exception
+        octonions) and store the result in <tt class="computeroutput"><span class="special">*</span><span class="keyword">this</span></tt>. The unspecialized form has exception
         guards, which the specialized forms do not, so as to insure exception safety.
         For the unspecialized form, the base type's assignment operators must not
         throw. Also, for clarity's sake, you should always group the factors in a
@@ -248,9 +251,9 @@
 <span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span> <span class="keyword">operator</span> <span class="special">/=</span> <span class="special">(</span><span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        These perform the mathematical operation <code class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)*</span><span class="identifier">inverse_of</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span></code>
+        These perform the mathematical operation <tt class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)*</span><span class="identifier">inverse_of</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span></tt>
         in this order (order is important as multiplication is not commutative for
-        octonions) and store the result in <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>. The unspecialized form has exception
+        octonions) and store the result in <tt class="computeroutput"><span class="special">*</span><span class="keyword">this</span></tt>. The unspecialized form has exception
         guards, which the specialized forms do not, so as to insure exception safety.
         For the unspecialized form, the base type's assignment operators must not
         throw. As for the multiplication, remember to group any two factors using
@@ -259,7 +262,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001 -2003 Hubert Holin</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2001 -2003 Hubert Holin<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

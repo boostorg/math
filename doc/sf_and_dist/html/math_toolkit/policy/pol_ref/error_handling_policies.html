@@ -1,13 +1,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Error Handling Policies</title>
+<title>
+        Error Handling Policies</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../pol_ref.html" title="Policy Reference">
-<link rel="prev" href="../pol_ref.html" title="Policy Reference">
-<link rel="next" href="internal_promotion.html" title="Internal Promotion Policies">
+<link rel="up" href="../pol_ref.html" title=" Policy Reference">
+<link rel="prev" href="../pol_ref.html" title=" Policy Reference">
+<link rel="next" href="internal_promotion.html" title=" Internal
+        Promotion Policies">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +26,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_ref.error_handling_policies"></a><a href="error_handling_policies.html" title="Error Handling Policies">
-        Error Handling Policies</a>
-</h4></div></div></div>
+<a name="math_toolkit.policy.pol_ref.error_handling_policies"></a><a href="error_handling_policies.html" title="
+        Error Handling Policies">
+        Error Handling Policies</a></h4></div></div></div>
 <p>
           There are two orthogonal aspects to error handling:
         </p>
@@ -38,11 +40,11 @@
             What kind of error is being raised.
           </li>
 </ul></div>
-<a name="math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised"></a><h5>
-<a name="id760995"></a>
+<a name="math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised"></a><h4>
+<a name="id723776"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised">Available
           Actions When an Error is Raised</a>
-        </h5>
+        </h4>
 <p>
           What to do with the error is encapsulated by an enumerated type:
         </p>
@@ -62,10 +64,10 @@
 <p>
           The various enumerated values have the following meanings:
         </p>
-<a name="math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error"></a><h6>
-<a name="id761249"></a>
+<a name="math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error"></a><h5>
+<a name="id724032"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error">throw_on_error</a>
-        </h6>
+        </h5>
 <p>
           Will throw one of the following exceptions, depending upon the type of
           the error:
@@ -162,12 +164,12 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error"></a><h6>
-<a name="id761432"></a>
+<a name="math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error"></a><h5>
+<a name="id724217"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error">errno_on_error</a>
-        </h6>
+        </h5>
 <p>
-          Will set global <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+          Will set global <tt class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></tt>
           to one of the following values depending upon the error type, and then
           return the same value as if the error had been ignored:
         </p>
@@ -263,12 +265,12 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.policy.pol_ref.error_handling_policies.ignore_error"></a><h6>
-<a name="id761631"></a>
+<a name="math_toolkit.policy.pol_ref.error_handling_policies.ignore_error"></a><h5>
+<a name="id724420"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.ignore_error">ignore_error</a>
-        </h6>
+        </h5>
 <p>
-          Will return a one of the values below depending on the error type (<code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+          Will return a one of the values below depending on the error type (<tt class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></tt>
           is NOT changed)::
         </p>
 <div class="informaltable"><table class="table">
@@ -364,10 +366,10 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.policy.pol_ref.error_handling_policies.user_error"></a><h6>
-<a name="id761831"></a>
+<a name="math_toolkit.policy.pol_ref.error_handling_policies.user_error"></a><h5>
+<a name="id724622"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.user_error">user_error</a>
-        </h6>
+        </h5>
 <p>
           Will call a user defined error handler: these are forward declared in boost/math/policies/error_handling.hpp,
           but the actual definitions must be provided by the user:
@@ -405,14 +407,15 @@
           it should be replaced with the value of <span class="emphasis"><em>val</em></span>.
         </p>
 <p>
-          There is more information on user-defined error handlers in the <a href="../pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">tutorial
+          There is more information on user-defined error handlers in the <a href="../pol_tutorial/user_def_err_pol.html" title="
+        Calling User Defined Error Handlers">tutorial
           here</a>.
         </p>
-<a name="math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised"></a><h5>
-<a name="id762771"></a>
+<a name="math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised"></a><h4>
+<a name="id725563"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised">Kinds
           of Error Raised</a>
-        </h5>
+        </h4>
 <p>
           There are five kinds of error reported by this library, which are summarised
           in the following table:
@@ -458,11 +461,11 @@
                   of the function.
                 </p>
                 <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
+                  Defaults to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></tt>
                 </p>
                 <p>
                   When the action is set to <span class="emphasis"><em>throw_on_error</em></span> then
-                  throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
+                  throws <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></tt>
                 </p>
                 </td>
 </tr>
@@ -483,11 +486,11 @@
                   be evaluated at a pole.
                 </p>
                 <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">pole_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
+                  Defaults to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">pole_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></tt>
                 </p>
                 <p>
                   When the action is <span class="emphasis"><em>throw_on_error</em></span> then throw
-                  a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
+                  a <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></tt>
                 </p>
                 </td>
 </tr>
@@ -508,11 +511,11 @@
                   range of the floating point type used.
                 </p>
                 <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>.
+                  Defaults to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></tt>.
                 </p>
                 <p>
                   When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
-                  a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">overflow_error</span></code>.
+                  a <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">overflow_error</span></tt>.
                 </p>
                 </td>
 </tr>
@@ -533,11 +536,11 @@
                   in the floating point type used.
                 </p>
                 <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">underflow_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span></code>
+                  Defaults to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">underflow_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span></tt>
                 </p>
                 <p>
                   When the specified action is <span class="emphasis"><em>throw_on_error</em></span>
-                  then throws a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code>
+                  then throws a <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></tt>
                 </p>
                 </td>
 </tr>
@@ -557,11 +560,11 @@
                   Raised when the result of the function is a denormalised value.
                 </p>
                 <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">denorm_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span></code>
+                  Defaults to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">denorm_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span></tt>
                 </p>
                 <p>
                   When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
-                  a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code>
+                  a <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></tt>
                 </p>
                 </td>
 </tr>
@@ -584,23 +587,23 @@
                   should never be raised: feel free to report it as a bug if it is!
                 </p>
                 <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
+                  Defaults to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></tt>
                 </p>
                 <p>
                   When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
-                  <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">evaluation_error</span></code>
+                  <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">evaluation_error</span></tt>
                 </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.policy.pol_ref.error_handling_policies.examples"></a><h5>
-<a name="id763612"></a>
+<a name="math_toolkit.policy.pol_ref.error_handling_policies.examples"></a><h4>
+<a name="id726408"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.examples">Examples</a>
-        </h5>
+        </h4>
 <p>
-          Suppose we want a call to <code class="computeroutput"><span class="identifier">tgamma</span></code>
-          to behave in a C-compatible way and set global <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code> rather than throw an exception,
+          Suppose we want a call to <tt class="computeroutput"><span class="identifier">tgamma</span></tt>
+          to behave in a C-compatible way and set global <tt class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></tt> rather than throw an exception,
           we can achieve this at the call site using:
         </p>
 <p>
@@ -637,13 +640,6 @@
 <p>
           </p>
 <p>
-          </p>
-<p>
-            </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
-          </p>
-<p>
         </p>
 <p>
           Suppose we want a statistical distribution to return infinities, rather
@@ -675,19 +671,15 @@
 <p>
           </p>
 <p>
-          </p>
-<p>
-            </p>
-<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
-<p>
-          </p>
-<p>
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

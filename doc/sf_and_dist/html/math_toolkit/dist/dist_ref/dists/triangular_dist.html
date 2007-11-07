@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Triangular Distribution</title>
+<title>
+          Triangular Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../dists.html" title="Distributions">
-<link rel="prev" href="students_t_dist.html" title="Students t Distribution">
-<link rel="next" href="weibull.html" title="Weibull Distribution">
+<link rel="up" href="../dists.html" title=" Distributions">
+<link rel="prev" href="students_t_dist.html" title="
+          Students t Distribution">
+<link rel="next" href="weibull.html" title=" Weibull
+          Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +27,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.triangular_dist"></a><a href="triangular_dist.html" title="Triangular Distribution">
-          Triangular Distribution</a>
-</h5></div></div></div>
+<a name="math_toolkit.dist.dist_ref.dists.triangular_dist"></a><a href="triangular_dist.html" title="
+          Triangular Distribution">
+          Triangular Distribution</a></h5></div></div></div>
 <p>
             
 </p>
@@ -37,12 +40,13 @@
 <pre class="programlisting">
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-           <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+           <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title=" Policy Class
+        Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
  <span class="keyword">class</span> <span class="identifier">triangular_distribution</span><span class="special">;</span>
    
  <span class="keyword">typedef</span> <span class="identifier">triangular_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">triangular</span><span class="special">;</span>
 
- <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+ <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
  <span class="keyword">class</span> <span class="identifier">triangular_distribution</span>
  <span class="special">{</span>
  <span class="keyword">public</span><span class="special">:</span>
@@ -129,11 +133,11 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/triangular_cdf.png" alt="triangular_cdf"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.triangular_dist.member_functions"></a><h5>
-<a name="id610821"></a>
+<a name="math_toolkit.dist.dist_ref.dists.triangular_dist.member_functions"></a><h4>
+<a name="id577433"></a>
             <a href="triangular_dist.html#math_toolkit.dist.dist_ref.dists.triangular_dist.member_functions">Member
             Functions</a>
-          </h5>
+          </h4>
 <pre class="programlisting">
 <span class="identifier">triangular_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">lower</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">mode</span> <span class="special">=</span> <span class="number">0</span> <span class="identifier">RealType</span> <span class="identifier">upper</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
@@ -168,13 +172,13 @@
             Returns the <span class="emphasis"><em>upper</em></span> parameter of this distribution
             (default+1).
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.triangular_dist.non_member_accessors"></a><h5>
-<a name="id611130"></a>
+<a name="math_toolkit.dist.dist_ref.dists.triangular_dist.non_member_accessors"></a><h4>
+<a name="id577745"></a>
             <a href="triangular_dist.html#math_toolkit.dist.dist_ref.dists.triangular_dist.non_member_accessors">Non-member
             Accessors</a>
-          </h5>
+          </h4>
 <p>
-            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
+            All the <a href="../nmp.html" title=" Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
             <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
             <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
@@ -189,19 +193,19 @@
             The domain of the random variable is \lowerto \upper, and the supported
             range is lower &lt;= x &lt;= upper.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.triangular_dist.accuracy"></a><h5>
-<a name="id611301"></a>
+<a name="math_toolkit.dist.dist_ref.dists.triangular_dist.accuracy"></a><h4>
+<a name="id577920"></a>
             <a href="triangular_dist.html#math_toolkit.dist.dist_ref.dists.triangular_dist.accuracy">Accuracy</a>
-          </h5>
+          </h4>
 <p>
             The triangular distribution is implemented with simple arithmetic operators
             and so should have errors within an epsilon or two, except quantiles
             with arguments nearing the extremes of zero and unity.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.triangular_dist.implementation"></a><h5>
-<a name="id611333"></a>
+<a name="math_toolkit.dist.dist_ref.dists.triangular_dist.implementation"></a><h4>
+<a name="id577954"></a>
             <a href="triangular_dist.html#math_toolkit.dist.dist_ref.dists.triangular_dist.implementation">Implementation</a>
-          </h5>
+          </h4>
 <p>
             In the following table, a is the <span class="emphasis"><em>lower</em></span> parameter
             of the distribution, c is the <span class="emphasis"><em>mode</em></span> parameter, b
@@ -383,10 +387,10 @@
             Some 'known good' test values were obtained from <a href="http://espse.ed.psu.edu/edpsych/faculty/rhale/hale/507Mat/statlets/free/pdist.htm" target="_top">Statlet:
             Calculate and plot probability distributions</a>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.triangular_dist.references"></a><h5>
-<a name="id611723"></a>
+<a name="math_toolkit.dist.dist_ref.dists.triangular_dist.references"></a><h4>
+<a name="id578346"></a>
             <a href="triangular_dist.html#math_toolkit.dist.dist_ref.dists.triangular_dist.references">References</a>
-          </h5>
+          </h4>
 <div class="itemizedlist"><ul type="disc">
 <li><a href="http://en.wikipedia.org/wiki/Triangular_distribution" target="_top">Wikpedia
               triangular distribution</a></li>
@@ -410,8 +414,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

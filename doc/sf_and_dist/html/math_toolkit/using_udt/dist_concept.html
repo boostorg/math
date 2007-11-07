@@ -1,13 +1,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Conceptual Requirements for Distribution Types</title>
+<title> Conceptual Requirements
+      for Distribution Types</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../using_udt.html" title="Use with User Defined Floating-Point Types">
-<link rel="prev" href="concepts.html" title="Conceptual Requirements for Real Number Types">
-<link rel="next" href="archetypes.html" title="Conceptual Archetypes and Testing">
+<link rel="up" href="../using_udt.html" title=" Use with User Defined Floating-Point
+    Types">
+<link rel="prev" href="concepts.html" title=" Conceptual Requirements
+      for Real Number Types">
+<link rel="next" href="archetypes.html" title=" Conceptual Archetypes
+      and Testing">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,23 +28,25 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.using_udt.dist_concept"></a><a href="dist_concept.html" title="Conceptual Requirements for Distribution Types"> Conceptual Requirements
-      for Distribution Types</a>
-</h3></div></div></div>
+<a name="math_toolkit.using_udt.dist_concept"></a><a href="dist_concept.html" title=" Conceptual Requirements
+      for Distribution Types"> Conceptual Requirements
+      for Distribution Types</a></h3></div></div></div>
 <p>
         A <span class="emphasis"><em>DistributionType</em></span> is a type that implements the following
         conceptual requirements, and encapsulates a statistical distribution.
       </p>
 <p>
         Please note that this documentation should not be used as a substitute for
-        the <a href="../dist/dist_ref.html" title="Statistical Distributions Reference">reference documentation</a>,
-        and <a href="../dist/stat_tut.html" title="Statistical Distributions Tutorial">tutorial</a> of the statistical
+        the <a href="../dist/dist_ref.html" title=" Statistical Distributions
+      Reference">reference documentation</a>,
+        and <a href="../dist/stat_tut.html" title=" Statistical Distributions
+      Tutorial">tutorial</a> of the statistical
         distributions.
       </p>
 <p>
-        In the following table, <span class="emphasis"><em>d</em></span> is an object of type <code class="computeroutput"><span class="identifier">DistributionType</span></code>, <span class="emphasis"><em>cd</em></span>
-        is an object of type <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">DistributionType</span></code> and <span class="emphasis"><em>cr</em></span>
-        is an object of a type convertible to <code class="computeroutput"><span class="identifier">RealType</span></code>.
+        In the following table, <span class="emphasis"><em>d</em></span> is an object of type <tt class="computeroutput"><span class="identifier">DistributionType</span></tt>, <span class="emphasis"><em>cd</em></span>
+        is an object of type <tt class="computeroutput"><span class="keyword">const</span> <span class="identifier">DistributionType</span></tt> and <span class="emphasis"><em>cr</em></span>
+        is an object of a type convertible to <tt class="computeroutput"><span class="identifier">RealType</span></tt>.
       </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -97,7 +103,7 @@
               </td>
 <td>
               <p>
-                The <a href="../policy.html" title="Policies">Policy</a> to use when
+                The <a href="../policy.html" title=" Policies">Policy</a> to use when
                 evaluating functions that depend on this distribution.
               </p>
               </td>
@@ -184,7 +190,7 @@
 <td>
               <p>
                 Returns the complement of the CDF of the distribution, the same as:
-                <code class="computeroutput"><span class="number">1</span><span class="special">-</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">cd</span><span class="special">,</span> <span class="identifier">cr</span><span class="special">)</span></code>
+                <tt class="computeroutput"><span class="number">1</span><span class="special">-</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">cd</span><span class="special">,</span> <span class="identifier">cr</span><span class="special">)</span></tt>
               </p>
               </td>
 </tr>
@@ -219,7 +225,7 @@
 <td>
               <p>
                 Returns the quantile of the distribution, starting from the complement
-                of the probability, the same as: <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">cd</span><span class="special">,</span> <span class="number">1</span><span class="special">-</span><span class="identifier">cr</span><span class="special">)</span></code>
+                of the probability, the same as: <tt class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">cd</span><span class="special">,</span> <span class="number">1</span><span class="special">-</span><span class="identifier">cr</span><span class="special">)</span></tt>
               </p>
               </td>
 </tr>
@@ -381,8 +387,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

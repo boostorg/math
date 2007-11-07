@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Root Finding With Derivatives</title>
+<title> Root Finding
+        With Derivatives</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../internals1.html" title="Reused Utilities">
-<link rel="prev" href="rational.html" title="Polynomial and Rational Function Evaluation">
-<link rel="next" href="roots2.html" title="Root Finding Without Derivatives">
+<link rel="up" href="../internals1.html" title=" Reused Utilities">
+<link rel="prev" href="rational.html" title=" Polynomial
+        and Rational Function Evaluation">
+<link rel="next" href="roots2.html" title=" Root Finding
+        Without Derivatives">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,13 +27,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.toolkit.internals1.roots"></a><a href="roots.html" title="Root Finding With Derivatives"> Root Finding
-        With Derivatives</a>
-</h4></div></div></div>
-<a name="math_toolkit.toolkit.internals1.roots.synopsis"></a><h5>
-<a name="id706538"></a>
+<a name="math_toolkit.toolkit.internals1.roots"></a><a href="roots.html" title=" Root Finding
+        With Derivatives"> Root Finding
+        With Derivatives</a></h4></div></div></div>
+<a name="math_toolkit.toolkit.internals1.roots.synopsis"></a><h4>
+<a name="id669314"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.synopsis">Synopsis</a>
-        </h5>
+        </h4>
 <p>
           
 </p>
@@ -62,15 +65,15 @@
 
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
-<a name="math_toolkit.toolkit.internals1.roots.description"></a><h5>
-<a name="id707696"></a>
+<a name="math_toolkit.toolkit.internals1.roots.description"></a><h4>
+<a name="id670474"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.description">Description</a>
-        </h5>
+        </h4>
 <p>
-          These functions all perform iterative root finding: <code class="computeroutput"><span class="identifier">newton_raphson_iterate</span></code>
+          These functions all perform iterative root finding: <tt class="computeroutput"><span class="identifier">newton_raphson_iterate</span></tt>
           performs second order <a href="roots.html#newton">Newton Raphson iteration</a>,
-          while <code class="computeroutput"><span class="identifier">halley_iterate</span></code> and
-          <code class="computeroutput"><span class="identifier">schroeder_iterate</span></code> perform
+          while <tt class="computeroutput"><span class="identifier">halley_iterate</span></tt> and
+          <tt class="computeroutput"><span class="identifier">schroeder_iterate</span></tt> perform
           third order <a href="roots.html#halley">Halley</a> and <a href="roots.html#schroeder">Schroeder</a>
           iteration respectively.
         </p>
@@ -177,11 +180,11 @@
 </ul></div>
 <a name="newton"></a><p>
         </p>
-<a name="math_toolkit.toolkit.internals1.roots.newton_raphson_method"></a><h5>
-<a name="id708016"></a>
+<a name="math_toolkit.toolkit.internals1.roots.newton_raphson_method"></a><h4>
+<a name="id670797"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.newton_raphson_method">Newton
           Raphson Method</a>
-        </h5>
+        </h4>
 <p>
           Given an initial guess x0 the subsequent values are computed using:
         </p>
@@ -197,11 +200,11 @@
         </p>
 <a name="halley"></a><p>
         </p>
-<a name="math_toolkit.toolkit.internals1.roots.halley_s_method"></a><h5>
-<a name="id708098"></a>
+<a name="math_toolkit.toolkit.internals1.roots.halley_s_method"></a><h4>
+<a name="id670880"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.halley_s_method">Halley's
           Method</a>
-        </h5>
+        </h4>
 <p>
           Given an initial guess x0 the subsequent values are computed using:
         </p>
@@ -221,11 +224,11 @@
         </p>
 <a name="schroeder"></a><p>
         </p>
-<a name="math_toolkit.toolkit.internals1.roots.schroeder_s_method"></a><h5>
-<a name="id708185"></a>
+<a name="math_toolkit.toolkit.internals1.roots.schroeder_s_method"></a><h4>
+<a name="id670970"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.schroeder_s_method">Schroeder's
           Method</a>
-        </h5>
+        </h4>
 <p>
           Given an initial guess x0 the subsequent values are computed using:
         </p>
@@ -245,10 +248,10 @@
           Under ideal conditions, the number of correct digits trebles with each
           iteration.
         </p>
-<a name="math_toolkit.toolkit.internals1.roots.example"></a><h5>
-<a name="id708265"></a>
+<a name="math_toolkit.toolkit.internals1.roots.example"></a><h4>
+<a name="id671051"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.example">Example</a>
-        </h5>
+        </h4>
 <p>
           Lets suppose we want to find the cube root of a number, the equation we
           want to solve along with its derivatives are:
@@ -301,8 +304,8 @@
           in this example, exactly what was warned against earlier on in these docs!
           In this particular case its possible to compute f(x) exactly and without
           undue cancellation error, so a high limit is not too much of an issue.
-          However, reducing the limit to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span>
-          <span class="special">*</span> <span class="number">2</span> <span class="special">/</span> <span class="number">3</span></code> gave
+          However, reducing the limit to <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span>
+          <span class="special">*</span> <span class="number">2</span> <span class="special">/</span> <span class="number">3</span></tt> gave
           full precision in all but one of the test cases (and that one was out by
           just one bit). The maximum number of iterations remained 6, but in most
           cases was reduced by one.
@@ -331,7 +334,7 @@
 <span class="special">};</span>
 </pre>
 <p>
-          And then adapt the <code class="computeroutput"><span class="identifier">cbrt</span></code>
+          And then adapt the <tt class="computeroutput"><span class="identifier">cbrt</span></tt>
           function to use Halley iterations:
         </p>
 <pre class="programlisting">
@@ -354,7 +357,7 @@
           more, the maximum number of iterations was now just 4.
         </p>
 <p>
-          Just to complete the picture, we could have called <code class="computeroutput"><span class="identifier">schroeder_iterate</span></code>
+          Just to complete the picture, we could have called <tt class="computeroutput"><span class="identifier">schroeder_iterate</span></tt>
           in the last example: and in fact it makes no difference to the accuracy
           or number of iterations in this particular case. However, the relative
           performance of these two methods may vary depending upon the nature of
@@ -375,8 +378,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

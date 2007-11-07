@@ -1,13 +1,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Calculation of the Type of the Result</title>
+<title> Calculation
+      of the Type of the Result</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../main_overview.html" title="Overview">
-<link rel="prev" href="namespaces.html" title="Namespaces">
-<link rel="next" href="error_handling.html" title="Error Handling">
+<link rel="up" href="../main_overview.html" title=" Overview">
+<link rel="prev" href="namespaces.html" title=" Namespaces">
+<link rel="next" href="error_handling.html" title=" Error Handling">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +25,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.main_overview.result_type"></a><a href="result_type.html" title="Calculation of the Type of the Result"> Calculation
-      of the Type of the Result</a>
-</h3></div></div></div>
+<a name="math_toolkit.main_overview.result_type"></a><a href="result_type.html" title=" Calculation
+      of the Type of the Result"> Calculation
+      of the Type of the Result</a></h3></div></div></div>
 <p>
         The functions in this library are all overloaded to accept mixed floating
         point (or mixed integer and floating point type) arguments. So for example:
@@ -40,16 +41,13 @@
         etc, are all valid calls, as long as "foo" is a function taking
         two floating-point arguments. But that leaves the question:
       </p>
-<div class="sidebar">
-<p class="title"><b></b></p>
-<p>
+<div class="sidebar"><p>
         <span class="emphasis"><em>"Given a special function with N arguments of types T1, T2,
         T3 ... TN, then what type is the result?"</em></span>
-      </p>
-</div>
+      </p></div>
 <p>
-        <span class="bold"><strong>If all the arguments are of the same (floating point)
-        type then the result is the same type as the arguments.</strong></span>
+        <span class="bold"><b>If all the arguments are of the same (floating point)
+        type then the result is the same type as the arguments.</b></span>
       </p>
 <p>
         Otherwise, the type of the result is computed using the following logic:
@@ -70,16 +68,16 @@
           argument types.
         </li>
 <li>
-          If any of the arguments is of type <code class="computeroutput"><span class="keyword">long</span>
-          <span class="keyword">double</span></code>, then the result is of type
-          <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>.
+          If any of the arguments is of type <tt class="computeroutput"><span class="keyword">long</span>
+          <span class="keyword">double</span></tt>, then the result is of type
+          <tt class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></tt>.
         </li>
 <li>
-          If any of the arguments is of type <code class="computeroutput"><span class="keyword">double</span></code>,
-          then the result is of type <code class="computeroutput"><span class="keyword">double</span></code>.
+          If any of the arguments is of type <tt class="computeroutput"><span class="keyword">double</span></tt>,
+          then the result is of type <tt class="computeroutput"><span class="keyword">double</span></tt>.
         </li>
 <li>
-          Otherwise the result is of type <code class="computeroutput"><span class="keyword">float</span></code>.
+          Otherwise the result is of type <tt class="computeroutput"><span class="keyword">float</span></tt>.
         </li>
 </ol></div>
 <p>
@@ -89,14 +87,14 @@
 <span class="identifier">cyl_bessel</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">3.0</span><span class="special">);</span>
 </pre>
 <p>
-        Returns a <code class="computeroutput"><span class="keyword">double</span></code> result, as
+        Returns a <tt class="computeroutput"><span class="keyword">double</span></tt> result, as
         does:
       </p>
 <pre class="programlisting">
 <span class="identifier">cyl_bessel</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">3.0f</span><span class="special">);</span>
 </pre>
 <p>
-        as in this case the integer first argument is treated as a <code class="computeroutput"><span class="keyword">double</span></code> and takes precedence over the <code class="computeroutput"><span class="keyword">float</span></code> second argument. To get a <code class="computeroutput"><span class="keyword">float</span></code> result we would need all the arguments
+        as in this case the integer first argument is treated as a <tt class="computeroutput"><span class="keyword">double</span></tt> and takes precedence over the <tt class="computeroutput"><span class="keyword">float</span></tt> second argument. To get a <tt class="computeroutput"><span class="keyword">float</span></tt> result we would need all the arguments
         to be of type float:
       </p>
 <pre class="programlisting">
@@ -110,10 +108,10 @@
 <span class="identifier">sph_bessel</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">3.0f</span><span class="special">);</span>
 </pre>
 <p>
-        returns a <code class="computeroutput"><span class="keyword">float</span></code>, since the first
+        returns a <tt class="computeroutput"><span class="keyword">float</span></tt>, since the first
         argument is not a template argument and so doesn't effect the result: without
         this rule functions that take explicitly integer arguments could never return
-        <code class="computeroutput"><span class="keyword">float</span></code>.
+        <tt class="computeroutput"><span class="keyword">float</span></tt>.
       </p>
 <p>
         And for user defined types, all of the following return an NTL::RR result:
@@ -128,7 +126,8 @@
 <p>
         In the last case, quad_float is convertible to RR, but not vice-versa, so
         the result will be an NTL::RR. Note that this assumes that you are using
-        a <a href="../using_udt/use_ntl.html" title="Using With NTL - a High-Precision Floating-Point Library">patched NTL library</a>.
+        a <a href="../using_udt/use_ntl.html" title=" Using With NTL - a High-Precision
+      Floating-Point Library">patched NTL library</a>.
       </p>
 <p>
         These rules are chosen to be compatible with the behaviour of <span class="emphasis"><em>ISO/IEC
@@ -139,8 +138,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
+      and Xiaogang Zhang<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
