@@ -47,9 +47,9 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(asinh_test, T)
     BOOST_MESSAGE("Testing asinh in the real domain for "
         << string_type_name<T>::_() << ".");
     
-    for    (int i = 0; i <= 200; i++)
+    for    (int i = 0; i <= 80; i++)
     {
-        T    x = static_cast<T>(i-80)/static_cast<T>(4);
+        T    x = static_cast<T>(i-40)/static_cast<T>(4);
         
         BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
             (asinh_error_evaluator(x))
@@ -63,12 +63,12 @@ void    asinh_manual_check()
     BOOST_MESSAGE(" ");
     BOOST_MESSAGE("asinh");
     
-    for    (int i = 0; i <= 100; i++)
+    for    (int i = 0; i <= 80; i++)
     {
-        float        xf = static_cast<float>(i-50)/static_cast<float>(5);
-        double       xd = static_cast<double>(i-50)/static_cast<double>(5);
+        float        xf = static_cast<float>(i-40)/static_cast<float>(4);
+        double       xd = static_cast<double>(i-40)/static_cast<double>(4);
         long double  xl =
-                static_cast<long double>(i-50)/static_cast<long double>(5);
+                static_cast<long double>(i-40)/static_cast<long double>(4);
         
         BOOST_MESSAGE(  ::std::setw(15)
                      << asinh_error_evaluator(xf)
