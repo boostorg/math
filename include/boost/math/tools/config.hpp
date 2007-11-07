@@ -39,7 +39,7 @@
 //
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
-#if defined(unix) && (__INTEL_COMPILER <= 1000)
+#if defined(unix) && defined(__INTEL_COMPILER) && (__INTEL_COMPILER <= 1000)
 //
 // Intel compiler prior to version 10 has sporadic problems
 // calling the long double overloads of the std lib math functions:
