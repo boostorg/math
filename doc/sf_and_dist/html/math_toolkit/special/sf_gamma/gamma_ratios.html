@@ -1,15 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Ratios
-        of Gamma Functions</title>
+<title>Ratios of Gamma Functions</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../sf_gamma.html" title=" Gamma Functions">
-<link rel="prev" href="digamma.html" title=" Digamma">
-<link rel="next" href="igamma.html" title=" Incomplete Gamma
-        Functions">
+<link rel="up" href="../sf_gamma.html" title="Gamma Functions">
+<link rel="prev" href="digamma.html" title="Digamma">
+<link rel="next" href="igamma.html" title="Incomplete Gamma Functions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -26,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.sf_gamma.gamma_ratios"></a><a href="gamma_ratios.html" title=" Ratios
-        of Gamma Functions"> Ratios
-        of Gamma Functions</a></h4></div></div></div>
+<a name="math_toolkit.special.sf_gamma.gamma_ratios"></a><a href="gamma_ratios.html" title="Ratios of Gamma Functions"> Ratios
+        of Gamma Functions</a>
+</h4></div></div></div>
 <p>
           
 </p>
@@ -41,35 +39,29 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">delta</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">delta</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">delta</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">delta</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
-<a name="math_toolkit.special.sf_gamma.gamma_ratios.description"></a><h4>
-<a name="id591301"></a>
+<a name="math_toolkit.special.sf_gamma.gamma_ratios.description"></a><h5>
+<a name="id624500"></a>
           <a href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.description">Description</a>
-        </h4>
+        </h5>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span> 
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span> 
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span> 
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the ratio of gamma functions:
@@ -80,25 +72,23 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <p>
-          Internally this just calls <tt class="computeroutput"><span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span>
-          <span class="identifier">b</span><span class="special">-</span><span class="identifier">a</span><span class="special">)</span></tt>.
+          Internally this just calls <code class="computeroutput"><span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span>
+          <span class="identifier">b</span><span class="special">-</span><span class="identifier">a</span><span class="special">)</span></code>.
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">delta</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">delta</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">delta</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">delta</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the ratio of gamma functions:
@@ -109,10 +99,10 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
@@ -123,15 +113,14 @@
           is large and <span class="emphasis"><em>delta</em></span> is very small.
         </p>
 <p>
-          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>result
+          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a> when T1 and T2 are different types,
           otherwise the result type is simple T1.
         </p>
-<a name="math_toolkit.special.sf_gamma.gamma_ratios.accuracy"></a><h4>
-<a name="id592041"></a>
+<a name="math_toolkit.special.sf_gamma.gamma_ratios.accuracy"></a><h5>
+<a name="id625238"></a>
           <a href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.accuracy">Accuracy</a>
-        </h4>
+        </h5>
 <p>
           The following table shows the peak errors (in units of epsilon) found on
           various platforms with various floating point types. Unless otherwise specified
@@ -139,8 +128,8 @@
           <a href="../../backgrounders/relative_error.html#zero_error">effectively zero error</a>.
         </p>
 <div class="table">
-<a name="id592076"></a><p class="title"><b>Table 9. Errors In the Function tgamma_delta_ratio(a, delta)</b></p>
-<table class="table" summary="Errors In the Function tgamma_delta_ratio(a, delta)">
+<a name="id625271"></a><p class="title"><b>Table 9. Errors In the Function tgamma_delta_ratio(a, delta)</b></p>
+<div class="table-contents"><table class="table" summary="Errors In the Function tgamma_delta_ratio(a, delta)">
 <colgroup>
 <col>
 <col>
@@ -239,12 +228,12 @@
               </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<div class="table">
-<a name="id592236"></a><p class="title"><b>Table 10. Errors In the Function tgamma_ratio(a,
+<br class="table-break"><div class="table">
+<a name="id625431"></a><p class="title"><b>Table 10. Errors In the Function tgamma_ratio(a,
         b)</b></p>
-<table class="table" summary="Errors In the Function tgamma_ratio(a,
+<div class="table-contents"><table class="table" summary="Errors In the Function tgamma_ratio(a,
         b)">
 <colgroup>
 <col>
@@ -338,23 +327,23 @@
               </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<a name="math_toolkit.special.sf_gamma.gamma_ratios.testing"></a><h4>
-<a name="id592399"></a>
+<br class="table-break"><a name="math_toolkit.special.sf_gamma.gamma_ratios.testing"></a><h5>
+<a name="id625593"></a>
           <a href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.testing">Testing</a>
-        </h4>
+        </h5>
 <p>
           Accuracy tests use data generated at very high precision (with <a href="http://shoup.net/ntl/doc/RR.txt" target="_top">NTL
           RR class</a> set at 1000-bit precision: about 300 decimal digits) and
           a deliberately naive calculation of &#915;(x)/&#915;(y).
         </p>
-<a name="math_toolkit.special.sf_gamma.gamma_ratios.implementation"></a><h4>
-<a name="id592440"></a>
+<a name="math_toolkit.special.sf_gamma.gamma_ratios.implementation"></a><h5>
+<a name="id625634"></a>
           <a href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.implementation">Implementation</a>
-        </h4>
+        </h5>
 <p>
-          The implementation of these functions is very similar to that of <a href="../sf_beta/beta_function.html" title=" Beta">beta</a>, and is
+          The implementation of these functions is very similar to that of <a href="../sf_beta/beta_function.html" title="Beta">beta</a>, and is
           based on combining similar power terms to improve accuracy and avoid spurious
           overflow/underflow.
         </p>

@@ -1,15 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Laguerre (and
-        Associated) Polynomials</title>
+<title>Laguerre (and Associated) Polynomials</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../sf_poly.html" title=" Polynomials">
-<link rel="prev" href="legendre.html" title=" Legendre (and
-        Associated) Polynomials">
-<link rel="next" href="hermite.html" title=" Hermite Polynomials">
+<link rel="up" href="../sf_poly.html" title="Polynomials">
+<link rel="prev" href="legendre.html" title="Legendre (and Associated) Polynomials">
+<link rel="next" href="hermite.html" title="Hermite Polynomials">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -26,13 +24,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.sf_poly.laguerre"></a><a href="laguerre.html" title=" Laguerre (and
-        Associated) Polynomials"> Laguerre (and
-        Associated) Polynomials</a></h4></div></div></div>
-<a name="math_toolkit.special.sf_poly.laguerre.synopsis"></a><h4>
-<a name="id627158"></a>
+<a name="math_toolkit.special.sf_poly.laguerre"></a><a href="laguerre.html" title="Laguerre (and Associated) Polynomials"> Laguerre (and
+        Associated) Polynomials</a>
+</h4></div></div></div>
+<a name="math_toolkit.special.sf_poly.laguerre.synopsis"></a><h5>
+<a name="id660216"></a>
           <a href="laguerre.html#math_toolkit.special.sf_poly.laguerre.synopsis">Synopsis</a>
-        </h4>
+        </h5>
 <p>
           
 </p>
@@ -45,61 +43,52 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Ln</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Lnm1</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Ln</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Lnm1</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Ln</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Lnm1</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Ln</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Lnm1</span><span class="special">);</span>
 
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
-<a name="math_toolkit.special.sf_poly.laguerre.description"></a><h4>
-<a name="id628080"></a>
+<a name="math_toolkit.special.sf_poly.laguerre.description"></a><h5>
+<a name="id661136"></a>
           <a href="laguerre.html#math_toolkit.special.sf_poly.laguerre.description">Description</a>
-        </h4>
+        </h5>
 <p>
-          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>result
+          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a>: note than when there is a single
-          template argument the result is the same type as that argument or <tt class="computeroutput"><span class="keyword">double</span></tt> if the template argument is an integer
+          template argument the result is the same type as that argument or <code class="computeroutput"><span class="keyword">double</span></code> if the template argument is an integer
           type.
         </p>
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the value of the Laguerre Polynomial of order <span class="emphasis"><em>n</em></span>
@@ -117,12 +106,10 @@
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the Associated Laguerre polynomial of degree <span class="emphasis"><em>n</em></span>
@@ -133,8 +120,7 @@
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Ln</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Lnm1</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Ln</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Lnm1</span><span class="special">);</span>
 </pre>
 <p>
           Implements the three term recurrence relation for the Laguerre polynomials,
@@ -181,8 +167,7 @@
 </div>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Ln</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Lnm1</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Ln</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Lnm1</span><span class="special">);</span>
 </pre>
 <p>
           Implements the three term recurrence relation for the Associated Laguerre
@@ -232,10 +217,10 @@
             </p></dd>
 </dl>
 </div>
-<a name="math_toolkit.special.sf_poly.laguerre.accuracy"></a><h4>
-<a name="id630112"></a>
+<a name="math_toolkit.special.sf_poly.laguerre.accuracy"></a><h5>
+<a name="id663166"></a>
           <a href="laguerre.html#math_toolkit.special.sf_poly.laguerre.accuracy">Accuracy</a>
-        </h4>
+        </h5>
 <p>
           The following table shows peak errors (in units of epsilon) for various
           domains of input arguments. Note that only results for the widest floating
@@ -243,8 +228,8 @@
           zero error</a>.
         </p>
 <div class="table">
-<a name="id630144"></a><p class="title"><b>Table 25. Peak Errors In the Laguerre Polynomial</b></p>
-<table class="table" summary="Peak Errors In the Laguerre Polynomial">
+<a name="id663197"></a><p class="title"><b>Table 25. Peak Errors In the Laguerre Polynomial</b></p>
+<div class="table-contents"><table class="table" summary="Peak Errors In the Laguerre Polynomial">
 <colgroup>
 <col>
 <col>
@@ -340,12 +325,12 @@
               </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<div class="table">
-<a name="id630310"></a><p class="title"><b>Table 26. Peak Errors In the Associated Laguerre
+<br class="table-break"><div class="table">
+<a name="id663363"></a><p class="title"><b>Table 26. Peak Errors In the Associated Laguerre
         Polynomial</b></p>
-<table class="table" summary="Peak Errors In the Associated Laguerre
+<div class="table-contents"><table class="table" summary="Peak Errors In the Associated Laguerre
         Polynomial">
 <colgroup>
 <col>
@@ -442,29 +427,29 @@
               </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<p>
+<br class="table-break"><p>
           Note that the worst errors occur when the degree increases, values greater
           than ~120 are very unlikely to produce sensible results, especially in
           the associated polynomial case when the order is also large. Further the
           relative errors are likely to grow arbitrarily large when the function
           is very close to a root.
         </p>
-<a name="math_toolkit.special.sf_poly.laguerre.testing"></a><h4>
-<a name="id630487"></a>
+<a name="math_toolkit.special.sf_poly.laguerre.testing"></a><h5>
+<a name="id663540"></a>
           <a href="laguerre.html#math_toolkit.special.sf_poly.laguerre.testing">Testing</a>
-        </h4>
+        </h5>
 <p>
           A mixture of spot tests of values calculated using functions.wolfram.com,
           and randomly generated test data are used: the test data was computed using
           <a href="http://shoup.net/ntl/doc/RR.txt" target="_top">NTL::RR</a> at 1000-bit
           precision.
         </p>
-<a name="math_toolkit.special.sf_poly.laguerre.implementation"></a><h4>
-<a name="id630528"></a>
+<a name="math_toolkit.special.sf_poly.laguerre.implementation"></a><h5>
+<a name="id663579"></a>
           <a href="laguerre.html#math_toolkit.special.sf_poly.laguerre.implementation">Implementation</a>
-        </h4>
+        </h5>
 <p>
           These functions are implemented using the stable three term recurrence
           relations. These relations guarentee low absolute error but cannot guarentee

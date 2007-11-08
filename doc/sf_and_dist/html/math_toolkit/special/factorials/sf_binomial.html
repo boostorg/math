@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Binomial
-        Coefficients</title>
+<title>Binomial Coefficients</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../factorials.html" title=" Factorials and Binomial
-      Coefficients">
-<link rel="prev" href="sf_falling_factorial.html" title="
-        Falling Factorial">
-<link rel="next" href="../sf_beta.html" title=" Beta Functions">
+<link rel="up" href="../factorials.html" title="Factorials and Binomial Coefficients">
+<link rel="prev" href="sf_falling_factorial.html" title="Falling Factorial">
+<link rel="next" href="../sf_beta.html" title="Beta Functions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.factorials.sf_binomial"></a><a href="sf_binomial.html" title=" Binomial
-        Coefficients"> Binomial
-        Coefficients</a></h4></div></div></div>
+<a name="math_toolkit.special.factorials.sf_binomial"></a><a href="sf_binomial.html" title="Binomial Coefficients"> Binomial
+        Coefficients</a>
+</h4></div></div></div>
 <p>
           
 </p>
@@ -44,8 +41,8 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">binomial_coefficient</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">k</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">binomial_coefficient</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">k</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">binomial_coefficient</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">k</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
@@ -58,10 +55,10 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
@@ -69,26 +66,26 @@
           May return the result of <a href="../../main_overview/error_handling.html#overflow_error">overflow_error</a>
           if the result is too large to represent in type T.
         </p>
-<a name="math_toolkit.special.factorials.sf_binomial.accuracy"></a><h4>
-<a name="id603855"></a>
+<a name="math_toolkit.special.factorials.sf_binomial.accuracy"></a><h5>
+<a name="id636989"></a>
           <a href="sf_binomial.html#math_toolkit.special.factorials.sf_binomial.accuracy">Accuracy</a>
-        </h4>
+        </h5>
 <p>
           The accuracy will be the same as for the factorials for small arguments
-          (i.e. no more than one or two epsilon), and the <a href="../sf_beta/beta_function.html" title=" Beta">beta</a>
+          (i.e. no more than one or two epsilon), and the <a href="../sf_beta/beta_function.html" title="Beta">beta</a>
           function for larger arguments.
         </p>
-<a name="math_toolkit.special.factorials.sf_binomial.testing"></a><h4>
-<a name="id603897"></a>
+<a name="math_toolkit.special.factorials.sf_binomial.testing"></a><h5>
+<a name="id637029"></a>
           <a href="sf_binomial.html#math_toolkit.special.factorials.sf_binomial.testing">Testing</a>
-        </h4>
+        </h5>
 <p>
           The spot tests for the binomial coefficients use data generated by functions.wolfram.com.
         </p>
-<a name="math_toolkit.special.factorials.sf_binomial.implementation"></a><h4>
-<a name="id603929"></a>
+<a name="math_toolkit.special.factorials.sf_binomial.implementation"></a><h5>
+<a name="id637059"></a>
           <a href="sf_binomial.html#math_toolkit.special.factorials.sf_binomial.implementation">Implementation</a>
-        </h4>
+        </h5>
 <p>
           Binomial coefficients are calculated using table lookup of factorials where
           possible using:
@@ -100,14 +97,14 @@
           Otherwise it is implemented in terms of the beta function using the relations:
         </p>
 <p>
-          <sub>n</sub>C<sub>k</sub> = 1 / (k * <a href="../sf_beta/beta_function.html" title=" Beta">beta</a>(k,
+          <sub>n</sub>C<sub>k</sub> = 1 / (k * <a href="../sf_beta/beta_function.html" title="Beta">beta</a>(k,
           n-k+1))
         </p>
 <p>
           and
         </p>
 <p>
-          <sub>n</sub>C<sub>k</sub> = 1 / ((n-k) * <a href="../sf_beta/beta_function.html" title=" Beta">beta</a>(k+1,
+          <sub>n</sub>C<sub>k</sub> = 1 / ((n-k) * <a href="../sf_beta/beta_function.html" title="Beta">beta</a>(k+1,
           n-k))
         </p>
 </div>

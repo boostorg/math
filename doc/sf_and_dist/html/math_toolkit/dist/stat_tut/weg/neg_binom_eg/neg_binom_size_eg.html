@@ -1,18 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-            Estimating Sample Sizes for the Negative Binomial.</title>
+<title>Estimating Sample Sizes for the Negative Binomial.</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../neg_binom_eg.html" title=" Negative
-          Binomial Distribution Examples">
-<link rel="prev" href="neg_binom_conf.html" title="
-            Calculating Confidence Limits on the Frequency of Occurrence for the
-            Negative Binomial Distribution">
-<link rel="next" href="negative_binomial_example1.html" title="
-            Negative Binomial Sales Quota Example.">
+<link rel="up" href="../neg_binom_eg.html" title="Negative Binomial Distribution Examples">
+<link rel="prev" href="neg_binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for the Negative Binomial Distribution">
+<link rel="next" href="negative_binomial_example1.html" title="Negative Binomial Sales Quota Example.">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -29,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_size_eg"></a><a href="neg_binom_size_eg.html" title="
-            Estimating Sample Sizes for the Negative Binomial.">
-            Estimating Sample Sizes for the Negative Binomial.</a></h6></div></div></div>
+<a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_size_eg"></a><a href="neg_binom_size_eg.html" title="Estimating Sample Sizes for the Negative Binomial.">
+            Estimating Sample Sizes for the Negative Binomial.</a>
+</h6></div></div></div>
 <p>
               Imagine you have an event (let's call it a "failure" - though
               we could equally well call it a success if we felt it was a 'good'
@@ -39,7 +34,7 @@
               how many trials you need to conduct to be P% sure of observing at least
               k such failures. If the failure events follow a negative binomial distribution
               (each trial either succeeds or fails) then the static member function
-              <tt class="computeroutput"><span class="identifier">negative_binomial_distibution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_minimum_number_of_trials</span></tt>
+              <code class="computeroutput"><span class="identifier">negative_binomial_distibution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_minimum_number_of_trials</span></code>
               can be used to estimate the minimum number of trials required to be
               P% sure of observing the desired number of failures.
             </p>
@@ -174,14 +169,14 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
                 Since we're calculating the <span class="emphasis"><em>minimum</em></span> number of
                 trials required, we'll err on the safe side and take the ceiling
                 of the result. Had we been calculating the <span class="emphasis"><em>maximum</em></span>
                 number of trials permitted to observe less than a certain number
                 of <span class="emphasis"><em>failures</em></span> then we would have taken the floor
-                instead. We would also have called <tt class="computeroutput"><span class="identifier">find_minimum_number_of_trials</span></tt>
+                instead. We would also have called <code class="computeroutput"><span class="identifier">find_minimum_number_of_trials</span></code>
                 like this: 
 </p>
 <pre class="programlisting">

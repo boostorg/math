@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Cauchy-Lorentz
-          Distribution</title>
+<title>Cauchy-Lorentz Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../dists.html" title=" Distributions">
-<link rel="prev" href="binomial_dist.html" title="
-          Binomial Distribution">
-<link rel="next" href="chi_squared_dist.html" title="
-          Chi Squared Distribution">
+<link rel="up" href="../dists.html" title="Distributions">
+<link rel="prev" href="binomial_dist.html" title="Binomial Distribution">
+<link rel="next" href="chi_squared_dist.html" title="Chi Squared Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist"></a><a href="cauchy_dist.html" title=" Cauchy-Lorentz
-          Distribution"> Cauchy-Lorentz
-          Distribution</a></h5></div></div></div>
+<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist"></a><a href="cauchy_dist.html" title="Cauchy-Lorentz Distribution"> Cauchy-Lorentz
+          Distribution</a>
+</h5></div></div></div>
 <p>
             
 </p>
@@ -39,13 +36,12 @@
           </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title=" Policy Class
-        Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">cauchy_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">cauchy_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">cauchy</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">cauchy_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -93,11 +89,11 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/cauchy2.png" alt="cauchy2"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.member_functions"></a><h4>
-<a name="id553839"></a>
+<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.member_functions"></a><h5>
+<a name="id587280"></a>
             <a href="cauchy_dist.html#math_toolkit.dist.dist_ref.dists.cauchy_dist.member_functions">Member
             Functions</a>
-          </h4>
+          </h5>
 <pre class="programlisting">
 <span class="identifier">cauchy_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
@@ -122,13 +118,13 @@
 <p>
             Returns the scale parameter of the distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.non_member_accessors"></a><h4>
-<a name="id554057"></a>
+<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.non_member_accessors"></a><h5>
+<a name="id587494"></a>
             <a href="cauchy_dist.html#math_toolkit.dist.dist_ref.dists.cauchy_dist.non_member_accessors">Non-member
             Accessors</a>
-          </h4>
+          </h5>
 <p>
-            All the <a href="../nmp.html" title=" Non-Member Properties">usual non-member
+            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
             <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
             <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
@@ -141,8 +137,7 @@
           </p>
 <p>
             Note however that the Cauchy distribution does not have a mean, standard
-            deviation, etc. See <a href="../../../policy/pol_ref/assert_undefined.html" title=" Mathematically
-        Undefined Function Policies">mathematically
+            deviation, etc. See <a href="../../../policy/pol_ref/assert_undefined.html" title="Mathematically Undefined Function Policies">mathematically
             undefined function</a>
           </p>
 <p>
@@ -160,19 +155,19 @@
 <p>
             The domain of the random variable is [-[max_value], +[min_value]].
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.accuracy"></a><h4>
-<a name="id554312"></a>
+<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.accuracy"></a><h5>
+<a name="id587748"></a>
             <a href="cauchy_dist.html#math_toolkit.dist.dist_ref.dists.cauchy_dist.accuracy">Accuracy</a>
-          </h4>
+          </h5>
 <p>
             The Cauchy distribution is implemented in terms of the standard library
-            <tt class="computeroutput"><span class="identifier">tan</span></tt> and <tt class="computeroutput"><span class="identifier">atan</span></tt> functions, and as such should
+            <code class="computeroutput"><span class="identifier">tan</span></code> and <code class="computeroutput"><span class="identifier">atan</span></code> functions, and as such should
             have very low error rates.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.implementation"></a><h4>
-<a name="id554371"></a>
+<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.implementation"></a><h5>
+<a name="id587804"></a>
             <a href="cauchy_dist.html#math_toolkit.dist.dist_ref.dists.cauchy_dist.implementation">Implementation</a>
-          </h4>
+          </h5>
 <p>
             In the following table x<sub>0 </sub> is the location parameter of the distribution,
             &#947; is its scale parameter, <span class="emphasis"><em>x</em></span> is the random variate,
@@ -223,8 +218,8 @@
                   </p>
                   <p>
                     But that suffers from cancellation error as x -&gt; -&#8734;. So recall
-                    that for <tt class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;</span>
-                    <span class="number">0</span></tt>:
+                    that for <code class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;</span>
+                    <span class="number">0</span></code>:
                   </p>
                   <p>
                     atan(x) = -&#960;/2 - atan(1/x)
@@ -285,10 +280,10 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.references"></a><h4>
-<a name="id554660"></a>
+<a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.references"></a><h5>
+<a name="id588093"></a>
             <a href="cauchy_dist.html#math_toolkit.dist.dist_ref.dists.cauchy_dist.references">References</a>
-          </h4>
+          </h5>
 <div class="itemizedlist"><ul type="disc">
 <li><a href="http://en.wikipedia.org/wiki/Cauchy_distribution" target="_top">Cauchy-Lorentz
               distribution</a></li>

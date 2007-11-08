@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Thread Safety</title>
+<title>Thread Safety</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../main_overview.html" title=" Overview">
-<link rel="prev" href="pol_overview.html" title=" Configuration
-      and Policies">
-<link rel="next" href="perf_over.html" title=" Performance">
+<link rel="up" href="../main_overview.html" title="Overview">
+<link rel="prev" href="pol_overview.html" title="Configuration and Policies">
+<link rel="next" href="perf_over.html" title="Performance">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,16 +24,17 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.main_overview.threads"></a><a href="threads.html" title=" Thread Safety"> Thread Safety</a></h3></div></div></div>
+<a name="math_toolkit.main_overview.threads"></a><a href="threads.html" title="Thread Safety"> Thread Safety</a>
+</h3></div></div></div>
 <p>
         The library is fully thread safe and re-entrant provided the function and
         class templates in the library are instantiated with built-in floating point
-        types: i.e. the types <tt class="computeroutput"><span class="keyword">float</span></tt>,
-        <tt class="computeroutput"><span class="keyword">double</span></tt> and <tt class="computeroutput"><span class="keyword">long</span>
-        <span class="keyword">double</span></tt>.
+        types: i.e. the types <code class="computeroutput"><span class="keyword">float</span></code>,
+        <code class="computeroutput"><span class="keyword">double</span></code> and <code class="computeroutput"><span class="keyword">long</span>
+        <span class="keyword">double</span></code>.
       </p>
 <p>
-        However, the library <span class="bold"><b>is not thread safe</b></span>
+        However, the library <span class="bold"><strong>is not thread safe</strong></span>
         when used with user-defined (i.e. class type) numeric types.
       </p>
 <p>

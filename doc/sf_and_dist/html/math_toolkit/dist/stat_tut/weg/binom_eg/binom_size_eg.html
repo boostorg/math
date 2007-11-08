@@ -1,18 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-            Estimating Sample Sizes for a Binomial Distribution.</title>
+<title>Estimating Sample Sizes for a Binomial Distribution.</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../binom_eg.html" title=" Binomial
-          Distribution Examples">
-<link rel="prev" href="binom_conf.html" title="
-            Calculating Confidence Limits on the Frequency of Occurrence for a Binomial
-            Distribution">
-<link rel="next" href="../neg_binom_eg.html" title=" Negative
-          Binomial Distribution Examples">
+<link rel="up" href="../binom_eg.html" title="Binomial Distribution Examples">
+<link rel="prev" href="binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">
+<link rel="next" href="../neg_binom_eg.html" title="Negative Binomial Distribution Examples">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -29,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.binom_eg.binom_size_eg"></a><a href="binom_size_eg.html" title="
-            Estimating Sample Sizes for a Binomial Distribution.">
-            Estimating Sample Sizes for a Binomial Distribution.</a></h6></div></div></div>
+<a name="math_toolkit.dist.stat_tut.weg.binom_eg.binom_size_eg"></a><a href="binom_size_eg.html" title="Estimating Sample Sizes for a Binomial Distribution.">
+            Estimating Sample Sizes for a Binomial Distribution.</a>
+</h6></div></div></div>
 <p>
               Imagine you have a critical component that you know will fail in 1
               in N "uses" (for some suitable definition of "use").
@@ -39,7 +34,7 @@
               its chance of failure between routine replacements is less than P%.
               If the failures follow a binomial distribution (each time the component
               is "used" it either fails or does not) then the static member
-              function <tt class="computeroutput"><span class="identifier">binomial_distibution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_maximum_number_of_trials</span></tt>
+              function <code class="computeroutput"><span class="identifier">binomial_distibution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_maximum_number_of_trials</span></code>
               can be used to estimate the maximum number of "uses" of that
               component for some acceptable risk level <span class="emphasis"><em>alpha</em></span>.
             </p>
@@ -87,7 +82,7 @@
               we'll err on the safe side and take the floor of the result. Had we
               been calculating the <span class="emphasis"><em>minimum</em></span> number of trials
               required to observe a certain number of <span class="emphasis"><em>successes</em></span>
-              using <tt class="computeroutput"><span class="identifier">find_minimum_number_of_trials</span></tt>
+              using <code class="computeroutput"><span class="identifier">find_minimum_number_of_trials</span></code>
               we would have taken the ceiling instead.
             </p>
 <p>

@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Graphing,
-        Profiling, and Generating Test Data for Special Functions</title>
+<title>Graphing, Profiling, and Generating Test Data for Special Functions</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../internals2.html" title=" Testing and Development">
-<link rel="prev" href="error_test.html" title=" Relative
-        Error and Testing">
-<link rel="next" href="../../using_udt.html" title=" Use with User Defined Floating-Point
-    Types">
+<link rel="up" href="../internals2.html" title="Testing and Development">
+<link rel="prev" href="error_test.html" title="Relative Error and Testing">
+<link rel="next" href="../../using_udt.html" title="Use with User Defined Floating-Point Types">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.toolkit.internals2.test_data"></a><a href="test_data.html" title=" Graphing,
-        Profiling, and Generating Test Data for Special Functions"> Graphing,
-        Profiling, and Generating Test Data for Special Functions</a></h4></div></div></div>
+<a name="math_toolkit.toolkit.internals2.test_data"></a><a href="test_data.html" title="Graphing, Profiling, and Generating Test Data for Special Functions"> Graphing,
+        Profiling, and Generating Test Data for Special Functions</a>
+</h4></div></div></div>
 <p>
-          The class <tt class="computeroutput"><span class="identifier">test_data</span></tt> and
+          The class <code class="computeroutput"><span class="identifier">test_data</span></code> and
           associated helper functions are designed so that in just a few lines of
           code you should be able to:
         </p>
@@ -48,10 +45,10 @@
             Generate high precision test data.
           </li>
 </ul></div>
-<a name="math_toolkit.toolkit.internals2.test_data.synopsis"></a><h4>
-<a name="id687310"></a>
+<a name="math_toolkit.toolkit.internals2.test_data.synopsis"></a><h5>
+<a name="id724405"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.synopsis">Synopsis</a>
-        </h4>
+        </h5>
 <pre class="programlisting">
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
 
@@ -150,10 +147,10 @@
                          
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
-<a name="math_toolkit.toolkit.internals2.test_data.description"></a><h4>
-<a name="id690239"></a>
+<a name="math_toolkit.toolkit.internals2.test_data.description"></a><h5>
+<a name="id727330"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.description">Description</a>
-        </h4>
+        </h5>
 <p>
           This tool is best illustrated with the following series of examples.
         </p>
@@ -180,11 +177,11 @@
             in either csv format, or as C++ source code (as a table using Boost.Array).
           </li>
 </ul></div>
-<a name="math_toolkit.toolkit.internals2.test_data.example_1__output_data_for_graph_plotting"></a><h5>
-<a name="id690314"></a>
+<a name="math_toolkit.toolkit.internals2.test_data.example_1__output_data_for_graph_plotting"></a><h6>
+<a name="id727404"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.example_1__output_data_for_graph_plotting">Example
           1: Output Data for Graph Plotting</a>
-        </h5>
+        </h6>
 <p>
           For example, lets say we want to graph the lgamma function between -3 and
           100, one could do this like so:
@@ -215,11 +212,11 @@
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/lgamma.png" alt="lgamma"></span>
         </p>
-<a name="math_toolkit.toolkit.internals2.test_data.example_2__creating_test_data"></a><h5>
-<a name="id690860"></a>
+<a name="math_toolkit.toolkit.internals2.test_data.example_2__creating_test_data"></a><h6>
+<a name="id727948"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.example_2__creating_test_data">Example
           2: Creating Test Data</a>
-        </h5>
+        </h6>
 <p>
           As a second example, let's suppose we want to create highly accurate test
           data for a special function. Since many special functions have two or more
@@ -278,7 +275,7 @@
 </pre>
 <p>
           To create the data, we'll need to input the domains for a and b for which
-          the function will be tested: the function <tt class="computeroutput"><span class="identifier">get_user_parameter_info</span></tt>
+          the function will be tested: the function <code class="computeroutput"><span class="identifier">get_user_parameter_info</span></code>
           is designed for just that purpose. The start of main will look something
           like:
         </p>
@@ -317,7 +314,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../../doc/html/images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
             At this point one potential stumbling block should be mentioned: test_data&lt;&gt;::insert
             will create a matrix of test data when there are two or more parameters,
             so if we have two parameters and we're asked for a thousand points on
@@ -364,30 +361,30 @@
         </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-            It reduces the file sizes considerably: all those <tt class="computeroutput"><span class="keyword">static_cast</span></tt>'s
+            It reduces the file sizes considerably: all those <code class="computeroutput"><span class="keyword">static_cast</span></code>'s
             add up to a lot of bytes otherwise (they are needed to suppress compiler
-            warnings when <tt class="computeroutput"><span class="identifier">T</span></tt> is narrower
-            than a <tt class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></tt>).
+            warnings when <code class="computeroutput"><span class="identifier">T</span></code> is narrower
+            than a <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>).
           </li>
 <li>
             It provides a useful customisation point: for example if we were testing
-            a user-defined type that has more precision than a <tt class="computeroutput"><span class="keyword">long</span>
-            <span class="keyword">double</span></tt> we could change it to:
+            a user-defined type that has more precision than a <code class="computeroutput"><span class="keyword">long</span>
+            <span class="keyword">double</span></code> we could change it to:
           </li>
 </ul></div>
 <p>
-          <tt class="literal">#define SC_(x) lexical_cast&lt;T&gt;(BOOST_STRINGIZE(x))</tt>
+          <code class="literal">#define SC_(x) lexical_cast&lt;T&gt;(BOOST_STRINGIZE(x))</code>
         </p>
 <p>
           in order to ensure that no truncation of the values occurs prior to conversion
-          to <tt class="computeroutput"><span class="identifier">T</span></tt>. Note that this isn't
+          to <code class="computeroutput"><span class="identifier">T</span></code>. Note that this isn't
           used by default as it's rather hard on the compiler when the table is large.
         </p>
-<a name="math_toolkit.toolkit.internals2.test_data.example_3__profiling_a_continued_fraction_for_convergence_and_accuracy"></a><h5>
-<a name="id693356"></a>
+<a name="math_toolkit.toolkit.internals2.test_data.example_3__profiling_a_continued_fraction_for_convergence_and_accuracy"></a><h6>
+<a name="id730449"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.example_3__profiling_a_continued_fraction_for_convergence_and_accuracy">Example
           3: Profiling a Continued Fraction for Convergence and Accuracy</a>
-        </h5>
+        </h6>
 <p>
           Alternatively, lets say we want to profile a continued fraction for convergence
           and error. As an example, we'll use the continued fraction for the upper
@@ -460,7 +457,7 @@
 </pre>
 <p>
           Feeding that functor into test_data allows rapid output of csv data, for
-          whatever type <tt class="computeroutput"><span class="identifier">T</span></tt> we may
+          whatever type <code class="computeroutput"><span class="identifier">T</span></code> we may
           be interested in:
         </p>
 <pre class="programlisting">
@@ -493,10 +490,10 @@
           So it's pretty clear that this fraction shouldn't be used for small values
           of a and z.
         </p>
-<a name="math_toolkit.toolkit.internals2.test_data.reference"></a><h4>
-<a name="id695602"></a>
+<a name="math_toolkit.toolkit.internals2.test_data.reference"></a><h5>
+<a name="id732693"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.reference">reference</a>
-        </h4>
+        </h5>
 <a name="test_data_reference"></a><p>
         </p>
 <p>

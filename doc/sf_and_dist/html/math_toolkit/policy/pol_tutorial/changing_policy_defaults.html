@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-        Changing the Policy Defaults</title>
+<title>Changing the Policy Defaults</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../pol_tutorial.html" title=" Policy Tutorial">
-<link rel="prev" href="policy_usage.html" title=" So
-        How are Policies Used Anyway?">
-<link rel="next" href="ad_hoc_dist_policies.html" title="
-        Setting Policies for Distributions on an Ad Hoc Basis">
+<link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
+<link rel="prev" href="policy_usage.html" title="So How are Policies Used Anyway?">
+<link rel="next" href="ad_hoc_dist_policies.html" title="Setting Policies for Distributions on an Ad Hoc Basis">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,17 +24,17 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_tutorial.changing_policy_defaults"></a><a href="changing_policy_defaults.html" title="
-        Changing the Policy Defaults">
-        Changing the Policy Defaults</a></h4></div></div></div>
+<a name="math_toolkit.policy.pol_tutorial.changing_policy_defaults"></a><a href="changing_policy_defaults.html" title="Changing the Policy Defaults">
+        Changing the Policy Defaults</a>
+</h4></div></div></div>
 <p>
           The default policies used by the library are changed by the usual configuration
           macro method.
         </p>
 <p>
-          For example, passing <tt class="computeroutput"><span class="special">-</span><span class="identifier">DBOOST_MATH_DOMAIN_ERROR_POLICY</span><span class="special">=</span><span class="identifier">errno_on_error</span></tt>
-          to your compiler will cause domain errors to set <tt class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></tt> and return a NaN rather than the
-          usual default behaviour of throwing a <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></tt>
+          For example, passing <code class="computeroutput"><span class="special">-</span><span class="identifier">DBOOST_MATH_DOMAIN_ERROR_POLICY</span><span class="special">=</span><span class="identifier">errno_on_error</span></code>
+          to your compiler will cause domain errors to set <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code> and return a NaN rather than the
+          usual default behaviour of throwing a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
           exception.
         </p>
 <div class="tip"><table border="0" summary="Tip">
@@ -45,7 +42,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../../../../doc/html/images/tip.png"></td>
 <th align="left">Tip</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
             For Microsoft Visual Studio,you can add to the Project Property Page,
             C/C++, Preprocessor, Preprocessor definitions like:
@@ -94,10 +91,10 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../../../../../../../doc/html/images/important.png"></td>
 <th align="left">Important</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
-            <span class="bold"><b><span class="emphasis"><em>Default policies changed by setting configuration
-            macros must be changed uniformly in every translation unit in the program.</em></span></b></span>
+            <span class="bold"><strong><span class="emphasis"><em>Default policies changed by setting configuration
+            macros must be changed uniformly in every translation unit in the program.</em></span></strong></span>
           </p>
 <p>
             Failure to follow this rule may result in violations of the "One
@@ -121,10 +118,10 @@
           </li>
 </ul></div>
 <p>
-          What you should <span class="bold"><b>not</b></span> do is:
+          What you should <span class="bold"><strong>not</strong></span> do is:
         </p>
 <div class="itemizedlist"><ul type="disc"><li>
-            Set the defines in the source file using <tt class="computeroutput"><span class="preprocessor">#define</span></tt>
+            Set the defines in the source file using <code class="computeroutput"><span class="preprocessor">#define</span></code>
             as doing so almost certainly will break your program, unless you're absolutely
             certain that the program is restricted to a single translation unit.
           </li></ul></div>
@@ -168,7 +165,7 @@
 <p>
           </p>
 <p>
-            To ensure the <tt class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></tt>
+            To ensure the <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
             is set when a domain error occurs as well as returning a NaN.
           </p>
 <p>

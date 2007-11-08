@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Exponential
-          Distribution</title>
+<title>Exponential Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../dists.html" title=" Distributions">
-<link rel="prev" href="chi_squared_dist.html" title="
-          Chi Squared Distribution">
-<link rel="next" href="extreme_dist.html" title=" Extreme
-          Value Distribution">
+<link rel="up" href="../dists.html" title="Distributions">
+<link rel="prev" href="chi_squared_dist.html" title="Chi Squared Distribution">
+<link rel="next" href="extreme_dist.html" title="Extreme Value Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.exp_dist"></a><a href="exp_dist.html" title=" Exponential
-          Distribution"> Exponential
-          Distribution</a></h5></div></div></div>
+<a name="math_toolkit.dist.dist_ref.dists.exp_dist"></a><a href="exp_dist.html" title="Exponential Distribution"> Exponential
+          Distribution</a>
+</h5></div></div></div>
 <p>
             
 </p>
@@ -39,13 +36,12 @@
           </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title=" Policy Class
-        Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">exponential_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">exponential_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">exponential</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">exponential_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -76,11 +72,11 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/exponential_dist.png" alt="exponential_dist"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.exp_dist.member_functions"></a><h4>
-<a name="id557060"></a>
+<a name="math_toolkit.dist.dist_ref.dists.exp_dist.member_functions"></a><h5>
+<a name="id590472"></a>
             <a href="exp_dist.html#math_toolkit.dist.dist_ref.dists.exp_dist.member_functions">Member
             Functions</a>
-          </h4>
+          </h5>
 <pre class="programlisting">
 <span class="identifier">exponential_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">lambda</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
@@ -98,13 +94,13 @@
 <p>
             Accessor function returns the lambda parameter of the distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.exp_dist.non_member_accessors"></a><h4>
-<a name="id557207"></a>
+<a name="math_toolkit.dist.dist_ref.dists.exp_dist.non_member_accessors"></a><h5>
+<a name="id590616"></a>
             <a href="exp_dist.html#math_toolkit.dist.dist_ref.dists.exp_dist.non_member_accessors">Non-member
             Accessors</a>
-          </h4>
+          </h5>
 <p>
-            All the <a href="../nmp.html" title=" Non-Member Properties">usual non-member
+            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
             <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
             <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
@@ -118,21 +114,21 @@
 <p>
             The domain of the random variable is [0, +&#8734;].
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.exp_dist.accuracy"></a><h4>
-<a name="id557379"></a>
+<a name="math_toolkit.dist.dist_ref.dists.exp_dist.accuracy"></a><h5>
+<a name="id590788"></a>
             <a href="exp_dist.html#math_toolkit.dist.dist_ref.dists.exp_dist.accuracy">Accuracy</a>
-          </h4>
+          </h5>
 <p>
             The exponential distribution is implemented in terms of the standard
-            library functions <tt class="computeroutput"><span class="identifier">exp</span></tt>,
-            <tt class="computeroutput"><span class="identifier">log</span></tt>, <tt class="computeroutput"><span class="identifier">log1p</span></tt>
-            and <tt class="computeroutput"><span class="identifier">expm1</span></tt> and as such
+            library functions <code class="computeroutput"><span class="identifier">exp</span></code>,
+            <code class="computeroutput"><span class="identifier">log</span></code>, <code class="computeroutput"><span class="identifier">log1p</span></code>
+            and <code class="computeroutput"><span class="identifier">expm1</span></code> and as such
             should have very low error rates.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.exp_dist.implementation"></a><h4>
-<a name="id557459"></a>
+<a name="math_toolkit.dist.dist_ref.dists.exp_dist.implementation"></a><h5>
+<a name="id590865"></a>
             <a href="exp_dist.html#math_toolkit.dist.dist_ref.dists.exp_dist.implementation">Implementation</a>
-          </h4>
+          </h5>
 <p>
             In the following table &#955; is the parameter lambda of the distribution,
             <span class="emphasis"><em>x</em></span> is the random variate, <span class="emphasis"><em>p</em></span>
@@ -290,10 +286,10 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.exp_dist.references"></a><h4>
-<a name="id557757"></a>
+<a name="math_toolkit.dist.dist_ref.dists.exp_dist.references"></a><h5>
+<a name="id591167"></a>
             <a href="exp_dist.html#math_toolkit.dist.dist_ref.dists.exp_dist.references">references</a>
-          </h4>
+          </h5>
 <div class="itemizedlist"><ul type="disc">
 <li><a href="http://mathworld.wolfram.com/ExponentialDistribution.html" target="_top">Weisstein,
               Eric W. "Exponential Distribution." From MathWorld--A Wolfram

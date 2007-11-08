@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Elliptic Integrals
-        of the First Kind - Legendre Form</title>
+<title>Elliptic Integrals of the First Kind - Legendre Form</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../ellint.html" title=" Elliptic Integrals">
-<link rel="prev" href="ellint_carlson.html" title=" Elliptic
-        Integrals - Carlson Form">
-<link rel="next" href="ellint_2.html" title=" Elliptic Integrals
-        of the Second Kind - Legendre Form">
+<link rel="up" href="../ellint.html" title="Elliptic Integrals">
+<link rel="prev" href="ellint_carlson.html" title="Elliptic Integrals - Carlson Form">
+<link rel="next" href="ellint_2.html" title="Elliptic Integrals of the Second Kind - Legendre Form">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,13 +24,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.ellint.ellint_1"></a><a href="ellint_1.html" title=" Elliptic Integrals
-        of the First Kind - Legendre Form"> Elliptic Integrals
-        of the First Kind - Legendre Form</a></h4></div></div></div>
-<a name="math_toolkit.special.ellint.ellint_1.synopsis"></a><h5>
-<a name="id647228"></a>
+<a name="math_toolkit.special.ellint.ellint_1"></a><a href="ellint_1.html" title="Elliptic Integrals of the First Kind - Legendre Form"> Elliptic Integrals
+        of the First Kind - Legendre Form</a>
+</h4></div></div></div>
+<a name="math_toolkit.special.ellint.ellint_1.synopsis"></a><h6>
+<a name="id680181"></a>
           <a href="ellint_1.html#math_toolkit.special.ellint.ellint_1.synopsis">Synopsis</a>
-        </h5>
+        </h6>
 <p>
           
 </p>
@@ -46,27 +43,23 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
-<a name="math_toolkit.special.ellint.ellint_1.description"></a><h5>
-<a name="id647795"></a>
+<a name="math_toolkit.special.ellint.ellint_1.description"></a><h6>
+<a name="id680746"></a>
           <a href="ellint_1.html#math_toolkit.special.ellint.ellint_1.description">Description</a>
-        </h5>
+        </h6>
 <p>
           These two functions evaluate the incomplete elliptic integral of the first
           kind <span class="emphasis"><em>F(&#966;, k)</em></span> and its complete counterpart <span class="emphasis"><em>K(k)
@@ -76,19 +69,16 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/ellint_1.png" alt="ellint_1"></span>
         </p>
 <p>
-          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>result
+          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a> when T1 and T2 are different types:
           when they are the same type then the result is the same type as the arguments.
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the incomplete elliptic integral of the first kind <span class="emphasis"><em>F(&#966;,
@@ -103,21 +93,19 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the complete elliptic integral of the first kind <span class="emphasis"><em>K(k)</em></span>:
@@ -131,17 +119,17 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
-<a name="math_toolkit.special.ellint.ellint_1.accuracy"></a><h5>
-<a name="id648444"></a>
+<a name="math_toolkit.special.ellint.ellint_1.accuracy"></a><h6>
+<a name="id681394"></a>
           <a href="ellint_1.html#math_toolkit.special.ellint.ellint_1.accuracy">Accuracy</a>
-        </h5>
+        </h6>
 <p>
           These functions are computed using only basic arithmetic operations, so
           there isn't much variation in accuracy over differing platforms. Note that
@@ -150,9 +138,9 @@
           All values are relative errors in units of epsilon.
         </p>
 <div class="table">
-<a name="id648479"></a><p class="title"><b>Table 34. Errors Rates in the Elliptic Integrals of the
+<a name="id681427"></a><p class="title"><b>Table 34. Errors Rates in the Elliptic Integrals of the
         First Kind</b></p>
-<table class="table" summary="Errors Rates in the Elliptic Integrals of the
+<div class="table-contents"><table class="table" summary="Errors Rates in the Elliptic Integrals of the
         First Kind">
 <colgroup>
 <col>
@@ -250,22 +238,22 @@
               </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<a name="math_toolkit.special.ellint.ellint_1.testing"></a><h5>
-<a name="id648642"></a>
+<br class="table-break"><a name="math_toolkit.special.ellint.ellint_1.testing"></a><h6>
+<a name="id681590"></a>
           <a href="ellint_1.html#math_toolkit.special.ellint.ellint_1.testing">Testing</a>
-        </h5>
+        </h6>
 <p>
           The tests use a mixture of spot test values calculated using the online
           calculator at <a href="http://functions.wolfram.com/" target="_top">functions.wolfram.com</a>,
           and random test data generated using NTL::RR at 1000-bit precision and
           this implementation.
         </p>
-<a name="math_toolkit.special.ellint.ellint_1.implementation"></a><h5>
-<a name="id648682"></a>
+<a name="math_toolkit.special.ellint.ellint_1.implementation"></a><h6>
+<a name="id681629"></a>
           <a href="ellint_1.html#math_toolkit.special.ellint.ellint_1.implementation">Implementation</a>
-        </h5>
+        </h6>
 <p>
           These functions are implemented in terms of Carlson's integrals using the
           relations:

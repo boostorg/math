@@ -1,15 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Comparisons to Other
-      Open Source Libraries</title>
+<title>Comparisons to Other Open Source Libraries</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../perf.html" title=" Performance">
-<link rel="prev" href="tuning.html" title=" Performance Tuning Macros">
-<link rel="next" href="perf_test_app.html" title=" The Performance Test
-      Application">
+<link rel="up" href="../perf.html" title="Performance">
+<link rel="prev" href="tuning.html" title="Performance Tuning Macros">
+<link rel="next" href="perf_test_app.html" title="The Performance Test Application">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -26,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.perf.comparisons"></a><a href="comparisons.html" title=" Comparisons to Other
-      Open Source Libraries"> Comparisons to Other
-      Open Source Libraries</a></h3></div></div></div>
+<a name="math_toolkit.perf.comparisons"></a><a href="comparisons.html" title="Comparisons to Other Open Source Libraries"> Comparisons to Other
+      Open Source Libraries</a>
+</h3></div></div></div>
 <p>
         We've run our performance tests both for our own code, and against other
         open source implementations of the same functions. The results are presented
@@ -39,7 +37,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../doc/html/images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
           You should exercise extreme caution when interpreting these results, relative
           performance may vary by platform, the tests use data that gives good code
           coverage of <span class="emphasis"><em>our</em></span> code, but which may skew the results
@@ -47,16 +45,16 @@
           different choices with regard to performance verses numerical stability.
         </p></td></tr>
 </table></div>
-<a name="math_toolkit.perf.comparisons.comparison_to_gsl_1_9_and_cephes"></a><h4>
-<a name="id742057"></a>
+<a name="math_toolkit.perf.comparisons.comparison_to_gsl_1_9_and_cephes"></a><h5>
+<a name="id779044"></a>
         <a href="comparisons.html#math_toolkit.perf.comparisons.comparison_to_gsl_1_9_and_cephes">Comparison
         to GSL-1.9 and Cephes</a>
-      </h4>
+      </h5>
 <p>
         All the results were measured on a 2.8GHz Intel Pentium 4, 2Gb RAM, Windows
         XP machine, with all the libraries compiled with Microsoft Visual C++ 2005
-        using the <tt class="computeroutput"><span class="special">/</span><span class="identifier">Ox</span>
-        <span class="special">/</span><span class="identifier">arch</span><span class="special">:</span><span class="identifier">SSE2</span></tt> options.
+        using the <code class="computeroutput"><span class="special">/</span><span class="identifier">Ox</span>
+        <span class="special">/</span><span class="identifier">arch</span><span class="special">:</span><span class="identifier">SSE2</span></code> options.
       </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -91,7 +89,7 @@
 <tr>
 <td>
               <p>
-                <a href="../special/sf_gamma/tgamma.html" title=" Gamma">tgamma</a>
+                <a href="../special/sf_gamma/tgamma.html" title="Gamma">tgamma</a>
               </p>
               </td>
 <td>
@@ -115,7 +113,7 @@
 <td>
               <p>
                 </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.709e-007s)</p>
 <p>
@@ -125,7 +123,7 @@
 <tr>
 <td>
               <p>
-                <a href="../special/sf_gamma/lgamma.html" title=" Log Gamma">lgamma</a>
+                <a href="../special/sf_gamma/lgamma.html" title="Log Gamma">lgamma</a>
               </p>
               </td>
 <td>
@@ -149,7 +147,7 @@
 <td>
               <p>
                 </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.556e-007s)</p>
 <p>
@@ -159,16 +157,14 @@
 <tr>
 <td>
               <p>
-                <a href="../special/sf_gamma/igamma.html" title=" Incomplete Gamma
-        Functions">gamma_p</a>
-                and <a href="../special/sf_gamma/igamma.html" title=" Incomplete Gamma
-        Functions">gamma_q</a>
+                <a href="../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>
+                and <a href="../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>
               </p>
               </td>
 <td>
               <p>
                 </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(9.504e-007s)</p>
 <p>
@@ -196,16 +192,14 @@
 <tr>
 <td>
               <p>
-                <a href="../special/sf_gamma/igamma_inv.html" title=" Incomplete
-        Gamma Function Inverses">gamma_p_inv</a>
-                and <a href="../special/sf_gamma/igamma_inv.html" title=" Incomplete
-        Gamma Function Inverses">gamma_q_inv</a>
+                <a href="../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>
+                and <a href="../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>
               </p>
               </td>
 <td>
               <p>
                 </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(3.631e-006s)</p>
 <p>
@@ -219,23 +213,21 @@
 <td>
               <p>
                 +INF
-                <sup>[<a name="id742426" href="#ftn.id742426">1</a>]</sup>
+                <sup>[<a name="id779411" href="#ftn.id779411">1</a>]</sup>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <a href="../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">ibeta</a>
-                and <a href="../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">ibetac</a>
+                <a href="../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
+                and <a href="../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>
               </p>
               </td>
 <td>
               <p>
                 </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.852e-006s)</p>
 <p>
@@ -263,16 +255,14 @@
 <tr>
 <td>
               <p>
-                <a href="../special/sf_beta/ibeta_inv_function.html" title=" The
-        Incomplete Beta Function Inverses">ibeta_inv</a>
-                and <a href="../special/sf_beta/ibeta_inv_function.html" title=" The
-        Incomplete Beta Function Inverses">ibetac_inv</a>
+                <a href="../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>
+                and <a href="../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>
               </p>
               </td>
 <td>
               <p>
                 </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(7.311e-006s)</p>
 <p>
@@ -294,16 +284,16 @@
               </td>
 </tr>
 </tbody>
-<tbody class="footnotes"><tr><td colspan="4"><div class="footnote"><p><sup>[<a name="ftn.id742426" href="#id742426">1</a>] </sup>
+<tbody class="footnotes"><tr><td colspan="4"><div class="footnote"><p><sup>[<a name="ftn.id779411" href="#id779411">1</a>] </sup>
                     Cephes gets stuck in an infinite loop while trying to execute
                     our test cases.
                   </p></div></td></tr></tbody>
 </table></div>
-<a name="math_toolkit.perf.comparisons.comparison_to_the_r_statistical_library_on_windows"></a><h4>
-<a name="id742596"></a>
+<a name="math_toolkit.perf.comparisons.comparison_to_the_r_statistical_library_on_windows"></a><h5>
+<a name="id779581"></a>
         <a href="comparisons.html#math_toolkit.perf.comparisons.comparison_to_the_r_statistical_library_on_windows">Comparison
         to the R Statistical Library on Windows</a>
-      </h4>
+      </h5>
 <p>
         All the results were measured on a 2.8GHz Intel Pentium 4, 2Gb RAM, Windows
         XP machine, with the test program compiled with Microsoft Visual C++ 2005,
@@ -311,9 +301,9 @@
         appears not to be buildable with Visual C++).
       </p>
 <div class="table">
-<a name="id742625"></a><p class="title"><b>Table 41. A Comparison to the R Statistical Library on Windows
+<a name="id779608"></a><p class="title"><b>Table 41. A Comparison to the R Statistical Library on Windows
       XP</b></p>
-<table class="table" summary="A Comparison to the R Statistical Library on Windows
+<div class="table-contents"><table class="table" summary="A Comparison to the R Statistical Library on Windows
       XP">
 <colgroup>
 <col>
@@ -341,8 +331,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/beta_dist.html" title=" Beta
-          Distribution">Beta Distribution</a>
+              <a href="../dist/dist_ref/dists/beta_dist.html" title="Beta Distribution">Beta Distribution</a>
               CDF
             </p>
             </td>
@@ -358,7 +347,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.597e-006s)</p>
 <p>
@@ -368,15 +357,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/beta_dist.html" title=" Beta
-          Distribution">Beta Distribution</a>
+              <a href="../dist/dist_ref/dists/beta_dist.html" title="Beta Distribution">Beta Distribution</a>
               Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(6.570e-006s)</p>
 <p>
@@ -386,7 +374,7 @@
             <p>
               </p>
 <p>74.66
-              <sup>[<a name="id742765" href="#ftn.id742765">1</a>]</sup>
+              <sup>[<a name="id779748" href="#ftn.id779748">1</a>]</sup>
               </p>
 <p> </p>
 <p>(4.905e-004s)</p>
@@ -397,15 +385,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/binomial_dist.html" title="
-          Binomial Distribution">Binomial
+              <a href="../dist/dist_ref/dists/binomial_dist.html" title="Binomial Distribution">Binomial
               Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(5.276e-007s)</p>
 <p>
@@ -424,15 +411,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/binomial_dist.html" title="
-          Binomial Distribution">Binomial
+              <a href="../dist/dist_ref/dists/binomial_dist.html" title="Binomial Distribution">Binomial
               Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(4.013e-006s)</p>
 <p>
@@ -451,15 +437,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/cauchy_dist.html" title=" Cauchy-Lorentz
-          Distribution">Cauchy
+              <a href="../dist/dist_ref/dists/cauchy_dist.html" title="Cauchy-Lorentz Distribution">Cauchy
               Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.231e-007s)</p>
 <p>
@@ -478,15 +463,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/cauchy_dist.html" title=" Cauchy-Lorentz
-          Distribution">Cauchy
+              <a href="../dist/dist_ref/dists/cauchy_dist.html" title="Cauchy-Lorentz Distribution">Cauchy
               Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.498e-007s)</p>
 <p>
@@ -495,7 +479,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.498e-007s)</p>
 <p>
@@ -505,15 +489,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/chi_squared_dist.html" title="
-          Chi Squared Distribution">Chi
+              <a href="../dist/dist_ref/dists/chi_squared_dist.html" title="Chi Squared Distribution">Chi
               Squared Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(7.889e-007s)</p>
 <p>
@@ -532,15 +515,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/chi_squared_dist.html" title="
-          Chi Squared Distribution">Chi
+              <a href="../dist/dist_ref/dists/chi_squared_dist.html" title="Chi Squared Distribution">Chi
               Squared Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(4.303e-006s)</p>
 <p>
@@ -559,15 +541,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/exp_dist.html" title=" Exponential
-          Distribution">Exponential
+              <a href="../dist/dist_ref/dists/exp_dist.html" title="Exponential Distribution">Exponential
               Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.955e-007s)</p>
 <p>
@@ -586,8 +567,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/exp_dist.html" title=" Exponential
-          Distribution">Exponential
+              <a href="../dist/dist_ref/dists/exp_dist.html" title="Exponential Distribution">Exponential
               Distribution</a> Quantile
             </p>
             </td>
@@ -603,7 +583,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.126e-007s)</p>
 <p>
@@ -613,14 +593,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/f_dist.html" title=" F Distribution">Fisher F Distribution</a>
+              <a href="../dist/dist_ref/dists/f_dist.html" title="F Distribution">Fisher F Distribution</a>
               CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.309e-006s)</p>
 <p>
@@ -639,14 +619,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/f_dist.html" title=" F Distribution">Fisher F Distribution</a>
+              <a href="../dist/dist_ref/dists/f_dist.html" title="F Distribution">Fisher F Distribution</a>
               Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(7.204e-006s)</p>
 <p>
@@ -665,15 +645,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/gamma_dist.html" title=" Gamma
-          (and Erlang) Distribution">Gamma Distribution</a>
+              <a href="../dist/dist_ref/dists/gamma_dist.html" title="Gamma (and Erlang) Distribution">Gamma Distribution</a>
               CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.076e-006s)</p>
 <p>
@@ -692,15 +671,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/gamma_dist.html" title=" Gamma
-          (and Erlang) Distribution">Gamma Distribution</a>
+              <a href="../dist/dist_ref/dists/gamma_dist.html" title="Gamma (and Erlang) Distribution">Gamma Distribution</a>
               Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(5.189e-006s)</p>
 <p>
@@ -719,15 +697,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/lognormal_dist.html" title="
-          Log Normal Distribution">Log-normal
+              <a href="../dist/dist_ref/dists/lognormal_dist.html" title="Log Normal Distribution">Log-normal
               Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(2.078e-007s)</p>
 <p>
@@ -746,15 +723,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/lognormal_dist.html" title="
-          Log Normal Distribution">Log-normal
+              <a href="../dist/dist_ref/dists/lognormal_dist.html" title="Log Normal Distribution">Log-normal
               Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(6.692e-007s)</p>
 <p>
@@ -773,15 +749,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/negative_binomial_dist.html" title="
-          Negative Binomial Distribution">Negative
+              <a href="../dist/dist_ref/dists/negative_binomial_dist.html" title="Negative Binomial Distribution">Negative
               Binomial Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(9.005e-007s)</p>
 <p>
@@ -800,15 +775,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/negative_binomial_dist.html" title="
-          Negative Binomial Distribution">Negative
+              <a href="../dist/dist_ref/dists/negative_binomial_dist.html" title="Negative Binomial Distribution">Negative
               Binomial Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(9.601e-006s)</p>
 <p>
@@ -818,7 +792,7 @@
             <p>
               </p>
 <p>53.59
-              <sup>[<a name="id743614" href="#ftn.id743614">2</a>]</sup>
+              <sup>[<a name="id780597" href="#ftn.id780597">2</a>]</sup>
               </p>
 <p> </p>
 <p>(5.145e-004s)</p>
@@ -829,15 +803,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/normal_dist.html" title=" Normal
-          (Gaussian) Distribution">Normal
+              <a href="../dist/dist_ref/dists/normal_dist.html" title="Normal (Gaussian) Distribution">Normal
               Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(5.926e-008s)</p>
 <p>
@@ -856,15 +829,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/normal_dist.html" title=" Normal
-          (Gaussian) Distribution">Normal
+              <a href="../dist/dist_ref/dists/normal_dist.html" title="Normal (Gaussian) Distribution">Normal
               Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.248e-007s)</p>
 <p>
@@ -883,15 +855,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/poisson_dist.html" title=" Poisson
-          Distribution">Poisson
+              <a href="../dist/dist_ref/dists/poisson_dist.html" title="Poisson Distribution">Poisson
               Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(8.999e-007s)</p>
 <p>
@@ -910,15 +881,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/poisson_dist.html" title=" Poisson
-          Distribution">Poisson
+              <a href="../dist/dist_ref/dists/poisson_dist.html" title="Poisson Distribution">Poisson
               Distribution</a>
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.853e-006s)</p>
 <p>
@@ -937,15 +907,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/students_t_dist.html" title="
-          Students t Distribution">Students
+              <a href="../dist/dist_ref/dists/students_t_dist.html" title="Students t Distribution">Students
               t Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.223e-006s)</p>
 <p>
@@ -964,15 +933,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/students_t_dist.html" title="
-          Students t Distribution">Students
+              <a href="../dist/dist_ref/dists/students_t_dist.html" title="Students t Distribution">Students
               t Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(2.570e-006s)</p>
 <p>
@@ -991,15 +959,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/weibull.html" title=" Weibull
-          Distribution">Weibull Distribution</a>
+              <a href="../dist/dist_ref/dists/weibull.html" title="Weibull Distribution">Weibull Distribution</a>
               CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(4.741e-007s)</p>
 <p>
@@ -1018,15 +985,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/weibull.html" title=" Weibull
-          Distribution">Weibull Distribution</a>
+              <a href="../dist/dist_ref/dists/weibull.html" title="Weibull Distribution">Weibull Distribution</a>
               Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(7.926e-007s)</p>
 <p>
@@ -1044,31 +1010,31 @@
 </tr>
 </tbody>
 <tbody class="footnotes"><tr><td colspan="3">
-<div class="footnote"><p><sup>[<a name="ftn.id742765" href="#id742765">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id779748" href="#id779748">1</a>] </sup>
                   There are a small number of our test cases where the R library
                   fails to converge on a result: these tend to dominate the performance
                   result.
                 </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id743614" href="#id743614">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id780597" href="#id780597">2</a>] </sup>
                   The R library appears to use a linear-search strategy, that can
                   perform very badly in a small number of pathological cases, but
                   may or may not be more efficient in "typical" cases
                 </p></div>
 </td></tr></tbody>
-</table>
+</table></div>
 </div>
-<a name="math_toolkit.perf.comparisons.comparison_to_the_r_statistical_library_on_linux"></a><h4>
-<a name="id744066"></a>
+<br class="table-break"><a name="math_toolkit.perf.comparisons.comparison_to_the_r_statistical_library_on_linux"></a><h5>
+<a name="id781047"></a>
         <a href="comparisons.html#math_toolkit.perf.comparisons.comparison_to_the_r_statistical_library_on_linux">Comparison
         to the R Statistical Library on Linux</a>
-      </h4>
+      </h5>
 <p>
         All the results were measured on a 2.8GHz Intel Pentium 4, 2Gb RAM, Mandriva
         Linux machine, with the test program and R-2.5.0 compiled with GNU G++ 4.2.0.
       </p>
 <div class="table">
-<a name="id744092"></a><p class="title"><b>Table 42. A Comparison to the R Statistical Library on Linux</b></p>
-<table class="table" summary="A Comparison to the R Statistical Library on Linux">
+<a name="id781072"></a><p class="title"><b>Table 42. A Comparison to the R Statistical Library on Linux</b></p>
+<div class="table-contents"><table class="table" summary="A Comparison to the R Statistical Library on Linux">
 <colgroup>
 <col>
 <col>
@@ -1095,8 +1061,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/beta_dist.html" title=" Beta
-          Distribution">Beta Distribution</a>
+              <a href="../dist/dist_ref/dists/beta_dist.html" title="Beta Distribution">Beta Distribution</a>
               CDF
             </p>
             </td>
@@ -1112,7 +1077,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(2.050e-006s)</p>
 <p>
@@ -1122,15 +1087,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/beta_dist.html" title=" Beta
-          Distribution">Beta Distribution</a>
+              <a href="../dist/dist_ref/dists/beta_dist.html" title="Beta Distribution">Beta Distribution</a>
               Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.294e-005s)</p>
 <p>
@@ -1140,7 +1104,7 @@
             <p>
               </p>
 <p>44.06
-              <sup>[<a name="id744232" href="#ftn.id744232">1</a>]</sup>
+              <sup>[<a name="id781212" href="#ftn.id781212">1</a>]</sup>
               </p>
 <p> </p>
 <p>(5.701e-004s)</p>
@@ -1151,8 +1115,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/binomial_dist.html" title="
-          Binomial Distribution">Binomial
+              <a href="../dist/dist_ref/dists/binomial_dist.html" title="Binomial Distribution">Binomial
               Distribution</a> CDF
             </p>
             </td>
@@ -1168,7 +1131,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.104e-006s)</p>
 <p>
@@ -1178,8 +1141,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/binomial_dist.html" title="
-          Binomial Distribution">Binomial
+              <a href="../dist/dist_ref/dists/binomial_dist.html" title="Binomial Distribution">Binomial
               Distribution</a> Quantile
             </p>
             </td>
@@ -1195,7 +1157,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(5.194e-006s)</p>
 <p>
@@ -1205,15 +1167,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/cauchy_dist.html" title=" Cauchy-Lorentz
-          Distribution">Cauchy
+              <a href="../dist/dist_ref/dists/cauchy_dist.html" title="Cauchy-Lorentz Distribution">Cauchy
               Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.372e-007s)</p>
 <p>
@@ -1232,15 +1193,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/cauchy_dist.html" title=" Cauchy-Lorentz
-          Distribution">Cauchy
+              <a href="../dist/dist_ref/dists/cauchy_dist.html" title="Cauchy-Lorentz Distribution">Cauchy
               Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.542e-007s)</p>
 <p>
@@ -1259,8 +1219,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/chi_squared_dist.html" title="
-          Chi Squared Distribution">Chi
+              <a href="../dist/dist_ref/dists/chi_squared_dist.html" title="Chi Squared Distribution">Chi
               Squared Distribution</a> CDF
             </p>
             </td>
@@ -1276,7 +1235,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.753e-006s)</p>
 <p>
@@ -1286,8 +1245,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/chi_squared_dist.html" title="
-          Chi Squared Distribution">Chi
+              <a href="../dist/dist_ref/dists/chi_squared_dist.html" title="Chi Squared Distribution">Chi
               Squared Distribution</a> Quantile
             </p>
             </td>
@@ -1303,7 +1261,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(6.728e-006s)</p>
 <p>
@@ -1313,15 +1271,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/exp_dist.html" title=" Exponential
-          Distribution">Exponential
+              <a href="../dist/dist_ref/dists/exp_dist.html" title="Exponential Distribution">Exponential
               Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(2.195e-007s)</p>
 <p>
@@ -1340,15 +1297,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/exp_dist.html" title=" Exponential
-          Distribution">Exponential
+              <a href="../dist/dist_ref/dists/exp_dist.html" title="Exponential Distribution">Exponential
               Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.123e-007s)</p>
 <p>
@@ -1367,14 +1323,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/f_dist.html" title=" F Distribution">Fisher F Distribution</a>
+              <a href="../dist/dist_ref/dists/f_dist.html" title="F Distribution">Fisher F Distribution</a>
               CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(2.744e-006s)</p>
 <p>
@@ -1393,7 +1349,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/f_dist.html" title=" F Distribution">Fisher F Distribution</a>
+              <a href="../dist/dist_ref/dists/f_dist.html" title="F Distribution">Fisher F Distribution</a>
               Quantile
             </p>
             </td>
@@ -1409,7 +1365,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.359e-005s)</p>
 <p>
@@ -1419,8 +1375,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/gamma_dist.html" title=" Gamma
-          (and Erlang) Distribution">Gamma Distribution</a>
+              <a href="../dist/dist_ref/dists/gamma_dist.html" title="Gamma (and Erlang) Distribution">Gamma Distribution</a>
               CDF
             </p>
             </td>
@@ -1436,7 +1391,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.992e-006s)</p>
 <p>
@@ -1446,8 +1401,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/gamma_dist.html" title=" Gamma
-          (and Erlang) Distribution">Gamma Distribution</a>
+              <a href="../dist/dist_ref/dists/gamma_dist.html" title="Gamma (and Erlang) Distribution">Gamma Distribution</a>
               Quantile
             </p>
             </td>
@@ -1463,7 +1417,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(5.757e-006s)</p>
 <p>
@@ -1473,15 +1427,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/lognormal_dist.html" title="
-          Log Normal Distribution">Log-normal
+              <a href="../dist/dist_ref/dists/lognormal_dist.html" title="Log Normal Distribution">Log-normal
               Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.782e-007s)</p>
 <p>
@@ -1500,15 +1453,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/lognormal_dist.html" title="
-          Log Normal Distribution">Log-normal
+              <a href="../dist/dist_ref/dists/lognormal_dist.html" title="Log Normal Distribution">Log-normal
               Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(7.093e-007s)</p>
 <p>
@@ -1527,8 +1479,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/negative_binomial_dist.html" title="
-          Negative Binomial Distribution">Negative
+              <a href="../dist/dist_ref/dists/negative_binomial_dist.html" title="Negative Binomial Distribution">Negative
               Binomial Distribution</a> CDF
             </p>
             </td>
@@ -1544,7 +1495,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(2.141e-006s)</p>
 <p>
@@ -1554,15 +1505,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/negative_binomial_dist.html" title="
-          Negative Binomial Distribution">Negative
+              <a href="../dist/dist_ref/dists/negative_binomial_dist.html" title="Negative Binomial Distribution">Negative
               Binomial Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.826e-005s)</p>
 <p>
@@ -1572,7 +1522,7 @@
             <p>
               </p>
 <p>30.07
-              <sup>[<a name="id745076" href="#ftn.id745076">2</a>]</sup>
+              <sup>[<a name="id782056" href="#ftn.id782056">2</a>]</sup>
               </p>
 <p> </p>
 <p>(5.490e-004s)</p>
@@ -1583,15 +1533,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/normal_dist.html" title=" Normal
-          (Gaussian) Distribution">Normal
+              <a href="../dist/dist_ref/dists/normal_dist.html" title="Normal (Gaussian) Distribution">Normal
               Distribution</a> CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(8.542e-008s)</p>
 <p>
@@ -1610,15 +1559,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/normal_dist.html" title=" Normal
-          (Gaussian) Distribution">Normal
+              <a href="../dist/dist_ref/dists/normal_dist.html" title="Normal (Gaussian) Distribution">Normal
               Distribution</a> Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.362e-007s)</p>
 <p>
@@ -1637,8 +1585,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/poisson_dist.html" title=" Poisson
-          Distribution">Poisson
+              <a href="../dist/dist_ref/dists/poisson_dist.html" title="Poisson Distribution">Poisson
               Distribution</a> CDF
             </p>
             </td>
@@ -1654,7 +1601,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.775e-006s)</p>
 <p>
@@ -1664,8 +1611,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/poisson_dist.html" title=" Poisson
-          Distribution">Poisson
+              <a href="../dist/dist_ref/dists/poisson_dist.html" title="Poisson Distribution">Poisson
               Distribution</a>
             </p>
             </td>
@@ -1681,7 +1627,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(3.752e-006s)</p>
 <p>
@@ -1691,8 +1637,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/students_t_dist.html" title="
-          Students t Distribution">Students
+              <a href="../dist/dist_ref/dists/students_t_dist.html" title="Students t Distribution">Students
               t Distribution</a> CDF
             </p>
             </td>
@@ -1708,7 +1653,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(1.576e-006s)</p>
 <p>
@@ -1718,8 +1663,7 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/students_t_dist.html" title="
-          Students t Distribution">Students
+              <a href="../dist/dist_ref/dists/students_t_dist.html" title="Students t Distribution">Students
               t Distribution</a> Quantile
             </p>
             </td>
@@ -1735,7 +1679,7 @@
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(2.990e-006s)</p>
 <p>
@@ -1745,15 +1689,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/weibull.html" title=" Weibull
-          Distribution">Weibull Distribution</a>
+              <a href="../dist/dist_ref/dists/weibull.html" title="Weibull Distribution">Weibull Distribution</a>
               CDF
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(6.640e-007s)</p>
 <p>
@@ -1772,15 +1715,14 @@
 <tr>
 <td>
             <p>
-              <a href="../dist/dist_ref/dists/weibull.html" title=" Weibull
-          Distribution">Weibull Distribution</a>
+              <a href="../dist/dist_ref/dists/weibull.html" title="Weibull Distribution">Weibull Distribution</a>
               Quantile
             </p>
             </td>
 <td>
             <p>
               </p>
-<p><span class="bold"><b>1.00</b></span></p>
+<p><span class="bold"><strong>1.00</strong></span></p>
 <p> </p>
 <p>(7.504e-007s)</p>
 <p>
@@ -1798,19 +1740,20 @@
 </tr>
 </tbody>
 <tbody class="footnotes"><tr><td colspan="3">
-<div class="footnote"><p><sup>[<a name="ftn.id744232" href="#id744232">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id781212" href="#id781212">1</a>] </sup>
                   There are a small number of our test cases where the R library
                   fails to converge on a result: these tend to dominate the performance
                   result.
                 </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id745076" href="#id745076">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id782056" href="#id782056">2</a>] </sup>
                   The R library appears to use a linear-search strategy, that can
                   perform very badly in a small number of pathological cases, but
                   may or may not be more efficient in "typical" cases
                 </p></div>
 </td></tr></tbody>
-</table>
+</table></div>
 </div>
+<br class="table-break">
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

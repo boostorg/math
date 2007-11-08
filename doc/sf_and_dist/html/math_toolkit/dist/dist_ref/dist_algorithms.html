@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Distribution
-        Algorithms</title>
+<title>Distribution Algorithms</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../dist_ref.html" title=" Statistical Distributions
-      Reference">
-<link rel="prev" href="dists/uniform_dist.html" title=" Uniform
-          Distribution">
-<link rel="next" href="../future.html" title=" Extras/Future Directions">
+<link rel="up" href="../dist_ref.html" title="Statistical Distributions Reference">
+<link rel="prev" href="dists/uniform_dist.html" title="Uniform Distribution">
+<link rel="next" href="../future.html" title="Extras/Future Directions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,14 +24,14 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.dist.dist_ref.dist_algorithms"></a><a href="dist_algorithms.html" title=" Distribution
-        Algorithms"> Distribution
-        Algorithms</a></h4></div></div></div>
-<a name="math_toolkit.dist.dist_ref.dist_algorithms.finding_the_location_and_scale_for_normal_and_similar_distributions"></a><h4>
-<a name="id581713"></a>
+<a name="math_toolkit.dist.dist_ref.dist_algorithms"></a><a href="dist_algorithms.html" title="Distribution Algorithms"> Distribution
+        Algorithms</a>
+</h4></div></div></div>
+<a name="math_toolkit.dist.dist_ref.dist_algorithms.finding_the_location_and_scale_for_normal_and_similar_distributions"></a><h5>
+<a name="id614966"></a>
           <a href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.finding_the_location_and_scale_for_normal_and_similar_distributions">Finding
           the Location and Scale for Normal and similar distributions</a>
-        </h4>
+        </h5>
 <p>
           Two functions aid finding location and scale of random variable z to give
           probability p (given a scale or location). Only applies to distributions
@@ -53,11 +50,11 @@
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">;</span> <span class="comment">// May be needed by users defining their own policies.
 </span><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">;</span> <span class="comment">// Will be needed by users who want to use complements.
 </span></pre>
-<a name="math_toolkit.dist.dist_ref.dist_algorithms.find_location_function"></a><h4>
-<a name="id581870"></a>
+<a name="math_toolkit.dist.dist_ref.dist_algorithms.find_location_function"></a><h5>
+<a name="id615122"></a>
           <a href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.find_location_function">find_location
           function</a>
-        </h4>
+        </h5>
 <p>
           
 </p>
@@ -68,13 +65,13 @@
 <pre class="programlisting">
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span> <span class="comment">// explicit error handling policy
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span> <span class="comment">// explicit error handling policy
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">find_location</span><span class="special">(</span> <span class="comment">// For example, normal mean.
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">z</span><span class="special">,</span> <span class="comment">// location of random variable z to give probability, P(X &gt; z) == p.
 </span>  <span class="comment">// For example, a nominal minimum acceptable z, so that p * 100 % are &gt; z
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">p</span><span class="special">,</span> <span class="comment">// probability value desired at x, say 0.95 for 95% &gt; z.
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">scale</span><span class="special">,</span> <span class="comment">// scale parameter, for example, normal standard deviation.
-</span>  <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
+</span>  <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">&gt;</span>  <span class="comment">// with default policy.
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">find_location</span><span class="special">(</span> <span class="comment">// For example, normal mean.
@@ -85,11 +82,11 @@
 </span>
   <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
-<a name="math_toolkit.dist.dist_ref.dist_algorithms.find_scale_function"></a><h4>
-<a name="id582494"></a>
+<a name="math_toolkit.dist.dist_ref.dist_algorithms.find_scale_function"></a><h5>
+<a name="id615745"></a>
           <a href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.find_scale_function">find_scale
           function</a>
-        </h4>
+        </h5>
 <p>
           
 </p>
@@ -100,13 +97,13 @@
 <pre class="programlisting">
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
   <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">find_scale</span><span class="special">(</span> <span class="comment">// For example, normal mean.
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">z</span><span class="special">,</span> <span class="comment">// location of random variable z to give probability, P(X &gt; z) == p.
 </span>  <span class="comment">// For example, a nominal minimum acceptable weight z, so that p * 100 % are &gt; z
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">p</span><span class="special">,</span> <span class="comment">// probability value desired at x, say 0.95 for 95% &gt; z.
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">location</span><span class="special">,</span> <span class="comment">// location parameter, for example, normal distribution mean.
-</span>  <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
+</span>  <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
 
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">&gt;</span> <span class="comment">// with default policy.
 </span>   <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">find_scale</span><span class="special">(</span> <span class="comment">// For example, normal mean.
@@ -130,8 +127,7 @@
           value of scale is returned.
         </p>
 <p>
-          <a href="../stat_tut/weg/find_eg.html" title=" Find Location
-          and Scale Examples">Find Mean and standard
+          <a href="../stat_tut/weg/find_eg.html" title="Find Location and Scale Examples">Find Mean and standard
           deviation examples</a> gives simple examples of use of both find_scale
           and find_location, and a longer example finding means and standard deviations
           of normally distributed weights to meet a specification.

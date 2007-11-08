@@ -1,17 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Random Variates
-        and Distribution Parameters</title>
+<title>Random Variates and Distribution Parameters</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../stat_tut.html" title=" Statistical Distributions
-      Tutorial">
-<link rel="prev" href="weg/nag_library.html" title=" Comparison
-          with C, R, FORTRAN-style Free Functions">
-<link rel="next" href="dist_params.html" title=" Discrete Probability
-        Distributions">
+<link rel="up" href="../stat_tut.html" title="Statistical Distributions Tutorial">
+<link rel="prev" href="weg/nag_library.html" title="Comparison with C, R, FORTRAN-style Free Functions">
+<link rel="next" href="dist_params.html" title="Discrete Probability Distributions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -28,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.dist.stat_tut.variates"></a><a href="variates.html" title=" Random Variates
-        and Distribution Parameters"> Random Variates
-        and Distribution Parameters</a></h4></div></div></div>
+<a name="math_toolkit.dist.stat_tut.variates"></a><a href="variates.html" title="Random Variates and Distribution Parameters"> Random Variates
+        and Distribution Parameters</a>
+</h4></div></div></div>
 <p>
           <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">Random variates</a>
           and <a href="http://en.wikipedia.org/wiki/Parameter" target="_top">distribution parameters</a>
@@ -47,14 +43,14 @@
           n, p)</em></span>.
         </p>
 <p>
-          Translating this into code the <tt class="computeroutput"><span class="identifier">binomial_distribution</span></tt>
+          Translating this into code the <code class="computeroutput"><span class="identifier">binomial_distribution</span></code>
           constructor therefore has two parameters:
         </p>
 <pre class="programlisting">
 <span class="identifier">binomial_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
 <p>
-          While the function <tt class="computeroutput"><span class="identifier">pdf</span></tt>
+          While the function <code class="computeroutput"><span class="identifier">pdf</span></code>
           has one argument specifying the distribution type (which includes it's
           parameters, if any), and a second argument for the random variate. So taking
           our binomial distribution example, we would write:

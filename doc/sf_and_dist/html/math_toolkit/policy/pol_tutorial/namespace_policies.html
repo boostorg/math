@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-        Setting Policies at Namespace or Translation Unit Scope</title>
+<title>Setting Policies at Namespace or Translation Unit Scope</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../pol_tutorial.html" title=" Policy Tutorial">
-<link rel="prev" href="ad_hoc_sf_policies.html" title="
-        Changing the Policy on an Ad Hoc Basis for the Special Functions">
-<link rel="next" href="user_def_err_pol.html" title="
-        Calling User Defined Error Handlers">
+<link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
+<link rel="prev" href="ad_hoc_sf_policies.html" title="Changing the Policy on an Ad Hoc Basis for the Special Functions">
+<link rel="next" href="user_def_err_pol.html" title="Calling User Defined Error Handlers">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_tutorial.namespace_policies"></a><a href="namespace_policies.html" title="
-        Setting Policies at Namespace or Translation Unit Scope">
-        Setting Policies at Namespace or Translation Unit Scope</a></h4></div></div></div>
+<a name="math_toolkit.policy.pol_tutorial.namespace_policies"></a><a href="namespace_policies.html" title="Setting Policies at Namespace or Translation Unit Scope">
+        Setting Policies at Namespace or Translation Unit Scope</a>
+</h4></div></div></div>
 <p>
           Sometimes what you want to do is just change a set of policies within the
           current scope: the one thing you should not do in this situation is use
@@ -47,8 +44,8 @@
 <p>
           </p>
 <p>
-            Suppose we want <tt class="computeroutput"><span class="identifier">C</span><span class="special">::</span><span class="identifier">foo</span><span class="special">()</span></tt>
-            to behave in a C-compatible way and set <tt class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></tt> on error rather than throwing
+            Suppose we want <code class="computeroutput"><span class="identifier">C</span><span class="special">::</span><span class="identifier">foo</span><span class="special">()</span></code>
+            to behave in a C-compatible way and set <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code> on error rather than throwing
             any exceptions.
           </p>
 <p>
@@ -132,7 +129,7 @@
 <p>
           </p>
 <p>
-            So that when we call <tt class="computeroutput"><span class="identifier">C</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></tt> we really end up calling <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">C</span><span class="special">::</span><span class="identifier">c_policy</span><span class="special">())</span></tt>:
+            So that when we call <code class="computeroutput"><span class="identifier">C</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code> we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">C</span><span class="special">::</span><span class="identifier">c_policy</span><span class="special">())</span></code>:
           </p>
 <p>
           </p>
@@ -334,7 +331,7 @@ errno = 33
 <p>
           </p>
 <p>
-            So that when we use my_namespace::normal we really end up using <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span></tt>:
+            So that when we use my_namespace::normal we really end up using <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span></code>:
           </p>
 <p>
           </p>
@@ -396,7 +393,7 @@ Result of quantile(complement(binom, 0.05)) is: 8
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
             There is an important limitation to note: you can not use the macros
             BOOST_MATH_DECLARE_DISTRIBUTIONS and BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS
             <span class="emphasis"><em>in the same namespace</em></span>, as doing so creates ambiguities

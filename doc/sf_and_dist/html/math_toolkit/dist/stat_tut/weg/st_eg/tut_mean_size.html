@@ -1,18 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-            Estimating how large a sample size would have to become in order to give
-            a significant Students-t test result with a single sample test</title>
+<title>Estimating how large a sample size would have to become in order to give a significant Students-t test result with a single sample test</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../st_eg.html" title=" Student's
-          t Distribution Examples">
-<link rel="prev" href="tut_mean_test.html" title='
-            Testing a sample mean for difference from a "true" mean'>
-<link rel="next" href="two_sample_students_t.html" title="
-            Comparing the means of two samples with the Students-t test">
+<link rel="up" href="../st_eg.html" title="Student's t Distribution Examples">
+<link rel="prev" href="tut_mean_test.html" title='Testing a sample mean for difference from a "true" mean'>
+<link rel="next" href="two_sample_students_t.html" title="Comparing the means of two samples with the Students-t test">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -29,11 +24,10 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.st_eg.tut_mean_size"></a><a href="tut_mean_size.html" title="
+<a name="math_toolkit.dist.stat_tut.weg.st_eg.tut_mean_size"></a><a href="tut_mean_size.html" title="Estimating how large a sample size would have to become in order to give a significant Students-t test result with a single sample test">
             Estimating how large a sample size would have to become in order to give
-            a significant Students-t test result with a single sample test">
-            Estimating how large a sample size would have to become in order to give
-            a significant Students-t test result with a single sample test</a></h6></div></div></div>
+            a significant Students-t test result with a single sample test</a>
+</h6></div></div></div>
 <p>
               Imagine you have conducted a Students-t test on a single sample in
               order to check for systematic errors in your measurements. Imagine
@@ -81,8 +75,8 @@
         <span class="string">"_______________________________________________________________\n"</span><span class="special">;</span>
 </pre>
 <p>
-              And now the important part: the sample sizes required. Class <tt class="computeroutput"><span class="identifier">students_t_distribution</span></tt> has a static
-              member function <tt class="computeroutput"><span class="identifier">find_degrees_of_freedom</span></tt>
+              And now the important part: the sample sizes required. Class <code class="computeroutput"><span class="identifier">students_t_distribution</span></code> has a static
+              member function <code class="computeroutput"><span class="identifier">find_degrees_of_freedom</span></code>
               that will calculate how large a sample size needs to be in order to
               give a definitive result.
             </p>
@@ -104,7 +98,7 @@
             </p>
 <p>
               In this example, we assume that alpha and beta are the same, and call
-              <tt class="computeroutput"><span class="identifier">find_degrees_of_freedom</span></tt>
+              <code class="computeroutput"><span class="identifier">find_degrees_of_freedom</span></code>
               twice: once with alpha for a one-sided test, and once with alpha/2
               for a two-sided test.
             </p>

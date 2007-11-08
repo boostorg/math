@@ -1,15 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Gamma
-          (and Erlang) Distribution</title>
+<title>Gamma (and Erlang) Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../dists.html" title=" Distributions">
-<link rel="prev" href="f_dist.html" title=" F Distribution">
-<link rel="next" href="lognormal_dist.html" title="
-          Log Normal Distribution">
+<link rel="up" href="../dists.html" title="Distributions">
+<link rel="prev" href="f_dist.html" title="F Distribution">
+<link rel="next" href="lognormal_dist.html" title="Log Normal Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -26,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.gamma_dist"></a><a href="gamma_dist.html" title=" Gamma
-          (and Erlang) Distribution"> Gamma
-          (and Erlang) Distribution</a></h5></div></div></div>
+<a name="math_toolkit.dist.dist_ref.dists.gamma_dist"></a><a href="gamma_dist.html" title="Gamma (and Erlang) Distribution"> Gamma
+          (and Erlang) Distribution</a>
+</h5></div></div></div>
 <p>
             
 </p>
@@ -40,8 +38,7 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
    
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title=" Policy Class
-        Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">gamma_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -73,7 +70,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
               To avoid potential confusion with the gamma functions, this distribution
               does not provide the typedef:
@@ -131,7 +128,7 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/gamma_dist2.png" alt="gamma_dist2"></span>
           </p>
 <p>
-            The <span class="bold"><b>Erlang Distribution</b></span> is the same
+            The <span class="bold"><strong>Erlang Distribution</strong></span> is the same
             as the Gamma, but with the shape parameter an integer. It is often expressed
             using a <span class="emphasis"><em>rate</em></span> rather than a <span class="emphasis"><em>scale</em></span>
             as the second parameter (remember that the rate is the reciprocal of
@@ -143,11 +140,11 @@
             be no great loss of performance from using a Gamma Distribution rather
             than a dedicated Erlang Distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.gamma_dist.member_functions"></a><h4>
-<a name="id561738"></a>
+<a name="math_toolkit.dist.dist_ref.dists.gamma_dist.member_functions"></a><h5>
+<a name="id595122"></a>
             <a href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.member_functions">Member
             Functions</a>
-          </h4>
+          </h5>
 <pre class="programlisting">
 <span class="identifier">gamma_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">shape</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
@@ -171,13 +168,13 @@
 <p>
             Returns the <span class="emphasis"><em>scale</em></span> parameter of this distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.gamma_dist.non_member_accessors"></a><h4>
-<a name="id561948"></a>
+<a name="math_toolkit.dist.dist_ref.dists.gamma_dist.non_member_accessors"></a><h5>
+<a name="id595329"></a>
             <a href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.non_member_accessors">Non-member
             Accessors</a>
-          </h4>
+          </h5>
 <p>
-            All the <a href="../nmp.html" title=" Non-Member Properties">usual non-member
+            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
             <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
             <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
@@ -191,26 +188,22 @@
 <p>
             The domain of the random variable is [0,+&#8734;].
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.gamma_dist.accuracy"></a><h4>
-<a name="id562120"></a>
+<a name="math_toolkit.dist.dist_ref.dists.gamma_dist.accuracy"></a><h5>
+<a name="id595500"></a>
             <a href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.accuracy">Accuracy</a>
-          </h4>
+          </h5>
 <p>
             The lognormal distribution is implemented in terms of the incomplete
-            gamma functions <a href="../../../special/sf_gamma/igamma.html" title=" Incomplete Gamma
-        Functions">gamma_p</a>
-            and <a href="../../../special/sf_gamma/igamma.html" title=" Incomplete Gamma
-        Functions">gamma_q</a>
-            and their inverses <a href="../../../special/sf_gamma/igamma_inv.html" title=" Incomplete
-        Gamma Function Inverses">gamma_p_inv</a>
-            and <a href="../../../special/sf_gamma/igamma_inv.html" title=" Incomplete
-        Gamma Function Inverses">gamma_q_inv</a>:
+            gamma functions <a href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>
+            and <a href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>
+            and their inverses <a href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>
+            and <a href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>:
             refer to the accuracy data for those functions for more information.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.gamma_dist.implementation"></a><h4>
-<a name="id562190"></a>
+<a name="math_toolkit.dist.dist_ref.dists.gamma_dist.implementation"></a><h5>
+<a name="id595568"></a>
             <a href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.implementation">Implementation</a>
-          </h4>
+          </h5>
 <p>
             In the following table <span class="emphasis"><em>k</em></span> is the shape parameter
             of the distribution, &#952; is it's scale parameter, <span class="emphasis"><em>x</em></span>
@@ -243,8 +236,7 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: pdf = <a href="../../../special/sf_gamma/gamma_derivatives.html" title=" Derivative
-        of the Incomplete Gamma Function">gamma_p_derivative</a>(k,
+                    Using the relation: pdf = <a href="../../../special/sf_gamma/gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function">gamma_p_derivative</a>(k,
                     x / &#952;) / &#952;
                   </p>
                   </td>
@@ -257,8 +249,7 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: p = <a href="../../../special/sf_gamma/igamma.html" title=" Incomplete Gamma
-        Functions">gamma_p</a>(k,
+                    Using the relation: p = <a href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(k,
                     x / &#952;)
                   </p>
                   </td>
@@ -271,8 +262,7 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: q = <a href="../../../special/sf_gamma/igamma.html" title=" Incomplete Gamma
-        Functions">gamma_q</a>(k,
+                    Using the relation: q = <a href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(k,
                     x / &#952;)
                   </p>
                   </td>
@@ -285,8 +275,7 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: x = &#952;* <a href="../../../special/sf_gamma/igamma_inv.html" title=" Incomplete
-        Gamma Function Inverses">gamma_p_inv</a>(k,
+                    Using the relation: x = &#952;* <a href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(k,
                     p)
                   </p>
                   </td>
@@ -299,8 +288,7 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: x = &#952;* <a href="../../../special/sf_gamma/igamma_inv.html" title=" Incomplete
-        Gamma Function Inverses">gamma_q_inv</a>(k,
+                    Using the relation: x = &#952;* <a href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(k,
                     p)
                   </p>
                   </td>

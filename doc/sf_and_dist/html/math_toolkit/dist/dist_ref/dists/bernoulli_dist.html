@@ -1,15 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-          Bernoulli Distribution</title>
+<title>Bernoulli Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../dists.html" title=" Distributions">
-<link rel="prev" href="../dists.html" title=" Distributions">
-<link rel="next" href="beta_dist.html" title=" Beta
-          Distribution">
+<link rel="up" href="../dists.html" title="Distributions">
+<link rel="prev" href="../dists.html" title="Distributions">
+<link rel="next" href="beta_dist.html" title="Beta Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -26,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist"></a><a href="bernoulli_dist.html" title="
-          Bernoulli Distribution">
-          Bernoulli Distribution</a></h5></div></div></div>
+<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist"></a><a href="bernoulli_dist.html" title="Bernoulli Distribution">
+          Bernoulli Distribution</a>
+</h5></div></div></div>
 <p>
             
 </p>
@@ -39,13 +37,12 @@
 <pre class="programlisting">
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-           <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title=" Policy Class
-        Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+           <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
  <span class="keyword">class</span> <span class="identifier">bernoulli_distribution</span><span class="special">;</span>
    
  <span class="keyword">typedef</span> <span class="identifier">bernoulli_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">bernoulli</span><span class="special">;</span>
 
- <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+ <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
  <span class="keyword">class</span> <span class="identifier">bernoulli_distribution</span>
  <span class="special">{</span>
  <span class="keyword">public</span><span class="special">:</span>
@@ -91,11 +88,11 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/bernoulli_cdf.png" alt="bernoulli_cdf"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist.member_functions"></a><h4>
-<a name="id542973"></a>
+<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist.member_functions"></a><h5>
+<a name="id576494"></a>
             <a href="bernoulli_dist.html#math_toolkit.dist.dist_ref.dists.bernoulli_dist.member_functions">Member
             Functions</a>
-          </h4>
+          </h5>
 <pre class="programlisting">
 <span class="identifier">bernoulli_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
@@ -109,13 +106,13 @@
 <p>
             Returns the <span class="emphasis"><em>success_fraction</em></span> parameter of this distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist.non_member_accessors"></a><h4>
-<a name="id543094"></a>
+<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist.non_member_accessors"></a><h5>
+<a name="id576612"></a>
             <a href="bernoulli_dist.html#math_toolkit.dist.dist_ref.dists.bernoulli_dist.non_member_accessors">Non-member
             Accessors</a>
-          </h4>
+          </h5>
 <p>
-            All the <a href="../nmp.html" title=" Non-Member Properties">usual non-member
+            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
             <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
             <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
@@ -134,18 +131,18 @@
             Outside this range, functions are undefined, or may throw domain_error
             exception and make an error message available.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist.accuracy"></a><h4>
-<a name="id543270"></a>
+<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist.accuracy"></a><h5>
+<a name="id576787"></a>
             <a href="bernoulli_dist.html#math_toolkit.dist.dist_ref.dists.bernoulli_dist.accuracy">Accuracy</a>
-          </h4>
+          </h5>
 <p>
             The Bernoulli distribution is implemented with simple arithmetic operators
             and so should have errors within an epsilon or two.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist.implementation"></a><h4>
-<a name="id543303"></a>
+<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist.implementation"></a><h5>
+<a name="id576818"></a>
             <a href="bernoulli_dist.html#math_toolkit.dist.dist_ref.dists.bernoulli_dist.implementation">Implementation</a>
-          </h4>
+          </h5>
 <p>
             In the following table <span class="emphasis"><em>p</em></span> is the probability of success
             and <span class="emphasis"><em>q = 1-p</em></span>. <span class="emphasis"><em>k</em></span> is the random
@@ -156,7 +153,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
               The Bernoulli distribution is implemented here as a <span class="emphasis"><em>strict
               discrete</em></span> distribution. If a generalised version, allowing
@@ -164,8 +161,8 @@
               single trial should be used, for example:
             </p>
 <p>
-              <tt class="computeroutput"><span class="identifier">binomial_distribution</span><span class="special">(</span><span class="number">1</span><span class="special">,</span>
-              <span class="number">0.25</span><span class="special">)</span></tt>
+              <code class="computeroutput"><span class="identifier">binomial_distribution</span><span class="special">(</span><span class="number">1</span><span class="special">,</span>
+              <span class="number">0.25</span><span class="special">)</span></code>
             </p>
 </td></tr>
 </table></div>
@@ -333,10 +330,10 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist.references"></a><h4>
-<a name="id543677"></a>
+<a name="math_toolkit.dist.dist_ref.dists.bernoulli_dist.references"></a><h5>
+<a name="id577189"></a>
             <a href="bernoulli_dist.html#math_toolkit.dist.dist_ref.dists.bernoulli_dist.references">References</a>
-          </h4>
+          </h5>
 <div class="itemizedlist"><ul type="disc">
 <li><a href="http://en.wikipedia.org/wiki/Bernoulli_distribution" target="_top">Wikpedia
               Bernoulli distribution</a></li>

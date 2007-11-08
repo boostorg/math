@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Modified Bessel
-        Functions of the First and Second Kinds</title>
+<title>Modified Bessel Functions of the First and Second Kinds</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../bessel.html" title=" Bessel Functions">
-<link rel="prev" href="bessel.html" title=" Bessel Functions
-        of the First and Second Kinds">
-<link rel="next" href="sph_bessel.html" title=" Spherical
-        Bessel Functions of the First and Second Kinds">
+<link rel="up" href="../bessel.html" title="Bessel Functions">
+<link rel="prev" href="bessel.html" title="Bessel Functions of the First and Second Kinds">
+<link rel="next" href="sph_bessel.html" title="Spherical Bessel Functions of the First and Second Kinds">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,39 +24,33 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.bessel.mbessel"></a><a href="mbessel.html" title=" Modified Bessel
-        Functions of the First and Second Kinds"> Modified Bessel
-        Functions of the First and Second Kinds</a></h4></div></div></div>
-<a name="math_toolkit.special.bessel.mbessel.synopsis"></a><h4>
-<a name="id638691"></a>
+<a name="math_toolkit.special.bessel.mbessel"></a><a href="mbessel.html" title="Modified Bessel Functions of the First and Second Kinds"> Modified Bessel
+        Functions of the First and Second Kinds</a>
+</h4></div></div></div>
+<a name="math_toolkit.special.bessel.mbessel.synopsis"></a><h5>
+<a name="id671688"></a>
           <a href="mbessel.html#math_toolkit.special.bessel.mbessel.synopsis">Synopsis</a>
-        </h4>
+        </h5>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_i</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_i</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_i</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_i</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_k</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_k</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_k</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_k</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
-<a name="math_toolkit.special.bessel.mbessel.description"></a><h4>
-<a name="id639202"></a>
+<a name="math_toolkit.special.bessel.mbessel.description"></a><h5>
+<a name="id672198"></a>
           <a href="mbessel.html#math_toolkit.special.bessel.mbessel.description">Description</a>
-        </h4>
+        </h5>
 <p>
-          The functions <a href="mbessel.html" title=" Modified Bessel
-        Functions of the First and Second Kinds">cyl_bessel_i</a>
-          and <a href="mbessel.html" title=" Modified Bessel
-        Functions of the First and Second Kinds">cyl_bessel_k</a>
+          The functions <a href="mbessel.html" title="Modified Bessel Functions of the First and Second Kinds">cyl_bessel_i</a>
+          and <a href="mbessel.html" title="Modified Bessel Functions of the First and Second Kinds">cyl_bessel_k</a>
           return the result of the modified Bessel functions of the first and second
           kind respectively:
         </p>
@@ -79,8 +70,7 @@
           <span class="inlinemediaobject"><img src="../../../../equations/mbessel3.png"></span>
         </p>
 <p>
-          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>result
+          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a> when T1 and T2 are different types.
           The functions are also optimised for the relatively common case that T1
           is an integer.
@@ -88,26 +78,24 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <p>
           The functions return the result of <a href="../../main_overview/error_handling.html#domain_error">domain_error</a>
-          whenever the result is undefined or complex. For <a href="bessel.html" title=" Bessel Functions
-        of the First and Second Kinds">cyl_bessel_j</a>
-          this occurs when <tt class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;</span>
-          <span class="number">0</span></tt> and v is not an integer, or when
-          <tt class="computeroutput"><span class="identifier">x</span> <span class="special">==</span>
-          <span class="number">0</span></tt> and <tt class="computeroutput"><span class="identifier">v</span>
-          <span class="special">!=</span> <span class="number">0</span></tt>.
-          For <a href="bessel.html" title=" Bessel Functions
-        of the First and Second Kinds">cyl_neumann</a>
-          this occurs when <tt class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;=</span>
-          <span class="number">0</span></tt>.
+          whenever the result is undefined or complex. For <a href="bessel.html" title="Bessel Functions of the First and Second Kinds">cyl_bessel_j</a>
+          this occurs when <code class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;</span>
+          <span class="number">0</span></code> and v is not an integer, or when
+          <code class="computeroutput"><span class="identifier">x</span> <span class="special">==</span>
+          <span class="number">0</span></code> and <code class="computeroutput"><span class="identifier">v</span>
+          <span class="special">!=</span> <span class="number">0</span></code>.
+          For <a href="bessel.html" title="Bessel Functions of the First and Second Kinds">cyl_neumann</a>
+          this occurs when <code class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;=</span>
+          <span class="number">0</span></code>.
         </p>
 <p>
           The following graph illustrates the exponential behaviour of I<sub>v</sub>.
@@ -121,19 +109,19 @@
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/bessel_k.png" alt="bessel_k"></span>
         </p>
-<a name="math_toolkit.special.bessel.mbessel.testing"></a><h4>
-<a name="id639564"></a>
+<a name="math_toolkit.special.bessel.mbessel.testing"></a><h5>
+<a name="id672558"></a>
           <a href="mbessel.html#math_toolkit.special.bessel.mbessel.testing">Testing</a>
-        </h4>
+        </h5>
 <p>
           There are two sets of test values: spot values calculated using <a href="http://functions.wolfram.com" target="_top">functions.wolfram.com</a>, and a
           much larger set of tests computed using a simplified version of this implementation
           (with all the special case handling removed).
         </p>
-<a name="math_toolkit.special.bessel.mbessel.accuracy"></a><h4>
-<a name="id639604"></a>
+<a name="math_toolkit.special.bessel.mbessel.accuracy"></a><h5>
+<a name="id672597"></a>
           <a href="mbessel.html#math_toolkit.special.bessel.mbessel.accuracy">Accuracy</a>
-        </h4>
+        </h5>
 <p>
           The following tables show how the accuracy of these functions varies on
           various platforms, along with a comparison to the <a href="http://www.gnu.org/software/gsl/" target="_top">GSL-1.9</a>
@@ -142,8 +130,8 @@
           zero error</a>. All values are relative errors in units of epsilon.
         </p>
 <div class="table">
-<a name="id639645"></a><p class="title"><b>Table 31. Errors Rates in cyl_bessel_i</b></p>
-<table class="table" summary="Errors Rates in cyl_bessel_i">
+<a name="id672637"></a><p class="title"><b>Table 31. Errors Rates in cyl_bessel_i</b></p>
+<div class="table-contents"><table class="table" summary="Errors Rates in cyl_bessel_i">
 <colgroup>
 <col>
 <col>
@@ -236,11 +224,11 @@
               </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<div class="table">
-<a name="id639799"></a><p class="title"><b>Table 32. Errors Rates in cyl_bessel_k</b></p>
-<table class="table" summary="Errors Rates in cyl_bessel_k">
+<br class="table-break"><div class="table">
+<a name="id672792"></a><p class="title"><b>Table 32. Errors Rates in cyl_bessel_k</b></p>
+<div class="table-contents"><table class="table" summary="Errors Rates in cyl_bessel_k">
 <colgroup>
 <col>
 <col>
@@ -336,12 +324,12 @@
               </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<a name="math_toolkit.special.bessel.mbessel.implementation"></a><h4>
-<a name="id639968"></a>
+<br class="table-break"><a name="math_toolkit.special.bessel.mbessel.implementation"></a><h5>
+<a name="id672960"></a>
           <a href="mbessel.html#math_toolkit.special.bessel.mbessel.implementation">Implementation</a>
-        </h4>
+        </h5>
 <p>
           The following are handled as special cases first:
         </p>
@@ -388,7 +376,7 @@
           precision.
         </p>
 <p>
-          In the general case, we first normalize &#957; to [<tt class="literal">0, [inf</tt>])
+          In the general case, we first normalize &#957; to [<code class="literal">0, [inf</code>])
           with the help of the reflection formulae:
         </p>
 <p>
@@ -430,7 +418,7 @@
         </p>
 <p>
           <span class="emphasis"><em>x &lt;= v</em></span>, CF1 converges rapidly, CF2 fails to converge
-          when <span class="emphasis"><em>x</em></span> <tt class="literal">-&gt;</tt> 0.
+          when <span class="emphasis"><em>x</em></span> <code class="literal">-&gt;</code> 0.
         </p>
 <p>
           When <span class="emphasis"><em>x</em></span> is large (<span class="emphasis"><em>x</em></span> &gt; 2), both

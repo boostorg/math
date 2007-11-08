@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Discrete
-        Quantile Policies</title>
+<title>Discrete Quantile Policies</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../pol_ref.html" title=" Policy Reference">
-<link rel="prev" href="assert_undefined.html" title=" Mathematically
-        Undefined Function Policies">
-<link rel="next" href="precision_pol.html" title=" Precision
-        Policies">
+<link rel="up" href="../pol_ref.html" title="Policy Reference">
+<link rel="prev" href="assert_undefined.html" title="Mathematically Undefined Function Policies">
+<link rel="next" href="precision_pol.html" title="Precision Policies">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref"></a><a href="discrete_quant_ref.html" title=" Discrete
-        Quantile Policies"> Discrete
-        Quantile Policies</a></h4></div></div></div>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref"></a><a href="discrete_quant_ref.html" title="Discrete Quantile Policies"> Discrete
+        Quantile Policies</a>
+</h4></div></div></div>
 <p>
           If a statistical distribution is <span class="emphasis"><em>discrete</em></span> then the
           random variable can only have integer values - this leaves us with a problem
@@ -37,7 +34,7 @@
           distribution and return a real value, or we can round to an integer. As
           it happens, computing integer values can be substantially faster than calculating
           a real value, so there are definite advantages to returning an integer,
-          but we do then need to decide how best to round the result. The <tt class="computeroutput"><span class="identifier">discrete_quantile</span></tt> policy defines how
+          but we do then need to decide how best to round the result. The <code class="computeroutput"><span class="identifier">discrete_quantile</span></code> policy defines how
           discrete quantiles work, and how integer results are rounded:
         </p>
 <pre class="programlisting">
@@ -55,13 +52,13 @@
 <span class="keyword">struct</span> <span class="identifier">discrete_quantile</span><span class="special">;</span>
 </pre>
 <p>
-          The values that <tt class="computeroutput"><span class="identifier">discrete_quantile</span></tt>
+          The values that <code class="computeroutput"><span class="identifier">discrete_quantile</span></code>
           can take have the following meanings:
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.real"></a><h5>
-<a name="id729238"></a>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.real"></a><h6>
+<a name="id766274"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.real">real</a>
-        </h5>
+        </h6>
 <p>
           Ignores the discreteness of the distribution, and returns a real-valued
           result. For example:
@@ -93,14 +90,14 @@
 <p>
         </p>
 <p>
-          Results in <tt class="computeroutput"><span class="identifier">x</span> <span class="special">=</span>
-          <span class="number">27.3898</span></tt> and <tt class="computeroutput"><span class="identifier">y</span>
-          <span class="special">=</span> <span class="number">68.1584</span></tt>.
+          Results in <code class="computeroutput"><span class="identifier">x</span> <span class="special">=</span>
+          <span class="number">27.3898</span></code> and <code class="computeroutput"><span class="identifier">y</span>
+          <span class="special">=</span> <span class="number">68.1584</span></code>.
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards"></a><h5>
-<a name="id729728"></a>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards"></a><h6>
+<a name="id766762"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards">integer_round_outwards</a>
-        </h5>
+        </h6>
 <p>
           This is the default policy: an integer value is returned so that:
         </p>
@@ -140,10 +137,10 @@
 <p>
         </p>
 <p>
-          Results in <tt class="computeroutput"><span class="identifier">x</span> <span class="special">=</span>
-          <span class="number">27</span></tt> (rounded down from 27.3898) and
-          <tt class="computeroutput"><span class="identifier">y</span> <span class="special">=</span>
-          <span class="number">69</span></tt> (rounded up from 68.1584).
+          Results in <code class="computeroutput"><span class="identifier">x</span> <span class="special">=</span>
+          <span class="number">27</span></code> (rounded down from 27.3898) and
+          <code class="computeroutput"><span class="identifier">y</span> <span class="special">=</span>
+          <span class="number">69</span></code> (rounded up from 68.1584).
         </p>
 <p>
           The variables x and y are now defined so that:
@@ -157,10 +154,10 @@
           region overall</em></span>, and also <span class="emphasis"><em>no more than 5% coverage
           in each tail</em></span>.
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards"></a><h5>
-<a name="id730250"></a>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards"></a><h6>
+<a name="id767283"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards">integer_round_inwards</a>
-        </h5>
+        </h6>
 <p>
           This is the opposite of <span class="emphasis"><em>integer_round_outwards</em></span>: an
           integer value is returned so that:
@@ -205,10 +202,10 @@
 <p>
         </p>
 <p>
-          Results in <tt class="computeroutput"><span class="identifier">x</span> <span class="special">=</span>
-          <span class="number">28</span></tt> (rounded up from 27.3898) and
-          <tt class="computeroutput"><span class="identifier">y</span> <span class="special">=</span>
-          <span class="number">68</span></tt> (rounded down from 68.1584).
+          Results in <code class="computeroutput"><span class="identifier">x</span> <span class="special">=</span>
+          <span class="number">28</span></code> (rounded up from 27.3898) and
+          <code class="computeroutput"><span class="identifier">y</span> <span class="special">=</span>
+          <span class="number">68</span></code> (rounded down from 68.1584).
         </p>
 <p>
           The variables x and y are now defined so that:
@@ -222,26 +219,26 @@
           central region overall</em></span>, and also <span class="emphasis"><em>at least 5% coverage
           in each tail</em></span>.
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down"></a><h5>
-<a name="id730909"></a>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down"></a><h6>
+<a name="id767939"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down">integer_round_down</a>
-        </h5>
+        </h6>
 <p>
           Always rounds down to an integer value, no matter whether it's an upper
           or a lower quantile.
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up"></a><h5>
-<a name="id730942"></a>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up"></a><h6>
+<a name="id767971"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up">integer_round_up</a>
-        </h5>
+        </h6>
 <p>
           Always rounds up to an integer value, no matter whether it's an upper or
           a lower quantile.
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest"></a><h5>
-<a name="id730976"></a>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest"></a><h6>
+<a name="id768002"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest">integer_round_nearest</a>
-        </h5>
+        </h6>
 <p>
           Always rounds to the nearest integer value, no matter whether it's an upper
           or a lower quantile. This will produce the requested coverage <span class="emphasis"><em>in
@@ -279,8 +276,8 @@
 <p>
         </p>
 <p>
-          Results in <tt class="computeroutput"><span class="identifier">x</span> <span class="special">=</span>
-          <span class="number">27</span></tt> (rounded from 27.3898) and <tt class="computeroutput"><span class="identifier">y</span> <span class="special">=</span> <span class="number">68</span></tt> (rounded from 68.1584).
+          Results in <code class="computeroutput"><span class="identifier">x</span> <span class="special">=</span>
+          <span class="number">27</span></code> (rounded from 27.3898) and <code class="computeroutput"><span class="identifier">y</span> <span class="special">=</span> <span class="number">68</span></code> (rounded from 68.1584).
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

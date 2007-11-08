@@ -1,17 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Conceptual Requirements
-      for Real Number Types</title>
+<title>Conceptual Requirements for Real Number Types</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../using_udt.html" title=" Use with User Defined Floating-Point
-    Types">
-<link rel="prev" href="use_ntl.html" title=" Using With NTL - a High-Precision
-      Floating-Point Library">
-<link rel="next" href="dist_concept.html" title=" Conceptual Requirements
-      for Distribution Types">
+<link rel="up" href="../using_udt.html" title="Use with User Defined Floating-Point Types">
+<link rel="prev" href="use_ntl.html" title="Using With NTL - a High-Precision Floating-Point Library">
+<link rel="next" href="dist_concept.html" title="Conceptual Requirements for Distribution Types">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -28,16 +24,15 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.using_udt.concepts"></a><a href="concepts.html" title=" Conceptual Requirements
-      for Real Number Types"> Conceptual Requirements
-      for Real Number Types</a></h3></div></div></div>
+<a name="math_toolkit.using_udt.concepts"></a><a href="concepts.html" title="Conceptual Requirements for Real Number Types"> Conceptual Requirements
+      for Real Number Types</a>
+</h3></div></div></div>
 <p>
         The functions, and statistical distributions in this library can be used
         with any type <span class="emphasis"><em>RealType</em></span> that meets the conceptual requirements
         given below. All the built in floating point types will meet these requirements.
         User defined types that meet the requirements can also be used. For example,
-        with <a href="use_ntl.html" title=" Using With NTL - a High-Precision
-      Floating-Point Library">a thin wrapper class</a>
+        with <a href="use_ntl.html" title="Using With NTL - a High-Precision Floating-Point Library">a thin wrapper class</a>
         one of the types provided with <a href="http://shoup.net/ntl/" target="_top">NTL (RR)</a>
         can be used. Submissions of binding to other extended precision types would
         also be most welcome!
@@ -46,19 +41,19 @@
         The guiding principal behind these requirements, is that a <span class="emphasis"><em>RealType</em></span>
         behaves just like a built in floating point type.
       </p>
-<a name="math_toolkit.using_udt.concepts.basic_arithmetic_requirements"></a><h4>
-<a name="id696615"></a>
+<a name="math_toolkit.using_udt.concepts.basic_arithmetic_requirements"></a><h5>
+<a name="id733702"></a>
         <a href="concepts.html#math_toolkit.using_udt.concepts.basic_arithmetic_requirements">Basic
         Arithmetic Requirements</a>
-      </h4>
+      </h5>
 <p>
         These requirements are common to all of the functions in this library.
       </p>
 <p>
-        In the following table <span class="emphasis"><em>r</em></span> is an object of type <tt class="computeroutput"><span class="identifier">RealType</span></tt>, <span class="emphasis"><em>cr</em></span> and
-        <span class="emphasis"><em>cr2</em></span> are objects of type <tt class="computeroutput"><span class="keyword">const</span>
-        <span class="identifier">RealType</span></tt>, and <span class="emphasis"><em>ca</em></span>
-        is an object of type <tt class="computeroutput"><span class="keyword">const</span> <span class="identifier">arithmetic</span><span class="special">-</span><span class="identifier">type</span></tt> (arithmetic types include all the
+        In the following table <span class="emphasis"><em>r</em></span> is an object of type <code class="computeroutput"><span class="identifier">RealType</span></code>, <span class="emphasis"><em>cr</em></span> and
+        <span class="emphasis"><em>cr2</em></span> are objects of type <code class="computeroutput"><span class="keyword">const</span>
+        <span class="identifier">RealType</span></code>, and <span class="emphasis"><em>ca</em></span>
+        is an object of type <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">arithmetic</span><span class="special">-</span><span class="identifier">type</span></code> (arithmetic types include all the
         built in integers and floating point types).
       </p>
 <div class="informaltable"><table class="table">
@@ -88,7 +83,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">RealType</span><span class="special">(</span><span class="identifier">cr</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">RealType</span><span class="special">(</span><span class="identifier">cr</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -105,7 +100,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">RealType</span><span class="special">(</span><span class="identifier">ca</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">RealType</span><span class="special">(</span><span class="identifier">ca</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -122,8 +117,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">r</span> <span class="special">=</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">r</span> <span class="special">=</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -140,8 +135,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">r</span> <span class="special">=</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">r</span> <span class="special">=</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -158,8 +153,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">r</span> <span class="special">+=</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">r</span> <span class="special">+=</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -176,8 +171,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">r</span> <span class="special">+=</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">r</span> <span class="special">+=</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -194,8 +189,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">r</span> <span class="special">-=</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">r</span> <span class="special">-=</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -212,8 +207,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">r</span> <span class="special">-=</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">r</span> <span class="special">-=</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -230,8 +225,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">r</span> <span class="special">*=</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">r</span> <span class="special">*=</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -248,8 +243,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">r</span> <span class="special">*=</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">r</span> <span class="special">*=</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -266,8 +261,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">r</span> <span class="special">/=</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">r</span> <span class="special">/=</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -284,8 +279,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">r</span> <span class="special">/=</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">r</span> <span class="special">/=</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -302,7 +297,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">-</span><span class="identifier">r</span></tt>
+                <code class="computeroutput"><span class="special">-</span><span class="identifier">r</span></code>
               </p>
               </td>
 <td>
@@ -319,7 +314,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">+</span><span class="identifier">r</span></tt>
+                <code class="computeroutput"><span class="special">+</span><span class="identifier">r</span></code>
               </p>
               </td>
 <td>
@@ -336,8 +331,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">+</span>
-                <span class="identifier">cr2</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">+</span>
+                <span class="identifier">cr2</span></code>
               </p>
               </td>
 <td>
@@ -354,8 +349,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">+</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">+</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -372,8 +367,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ca</span> <span class="special">+</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">ca</span> <span class="special">+</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -390,8 +385,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">-</span>
-                <span class="identifier">cr2</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">-</span>
+                <span class="identifier">cr2</span></code>
               </p>
               </td>
 <td>
@@ -408,8 +403,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">-</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">-</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -426,8 +421,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ca</span> <span class="special">-</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">ca</span> <span class="special">-</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -444,8 +439,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">*</span>
-                <span class="identifier">cr2</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">*</span>
+                <span class="identifier">cr2</span></code>
               </p>
               </td>
 <td>
@@ -462,8 +457,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">*</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">*</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -480,8 +475,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ca</span> <span class="special">*</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">ca</span> <span class="special">*</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -498,8 +493,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">/</span>
-                <span class="identifier">cr2</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">/</span>
+                <span class="identifier">cr2</span></code>
               </p>
               </td>
 <td>
@@ -516,8 +511,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">/</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">/</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -534,8 +529,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ca</span> <span class="special">/</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">ca</span> <span class="special">/</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -552,8 +547,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">==</span>
-                <span class="identifier">cr2</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">==</span>
+                <span class="identifier">cr2</span></code>
               </p>
               </td>
 <td>
@@ -570,8 +565,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">==</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">==</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -588,8 +583,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ca</span> <span class="special">==</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">ca</span> <span class="special">==</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -606,8 +601,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">!=</span>
-                <span class="identifier">cr2</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">!=</span>
+                <span class="identifier">cr2</span></code>
               </p>
               </td>
 <td>
@@ -624,8 +619,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">!=</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">!=</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -642,8 +637,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ca</span> <span class="special">!=</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">ca</span> <span class="special">!=</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -660,8 +655,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">&lt;=</span>
-                <span class="identifier">cr2</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">&lt;=</span>
+                <span class="identifier">cr2</span></code>
               </p>
               </td>
 <td>
@@ -678,8 +673,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">&lt;=</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">&lt;=</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -696,8 +691,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ca</span> <span class="special">&lt;=</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">ca</span> <span class="special">&lt;=</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -714,8 +709,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">&gt;=</span>
-                <span class="identifier">cr2</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">&gt;=</span>
+                <span class="identifier">cr2</span></code>
               </p>
               </td>
 <td>
@@ -732,8 +727,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">&gt;=</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">&gt;=</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -750,8 +745,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ca</span> <span class="special">&gt;=</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">ca</span> <span class="special">&gt;=</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -768,8 +763,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">&lt;</span>
-                <span class="identifier">cr2</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">&lt;</span>
+                <span class="identifier">cr2</span></code>
               </p>
               </td>
 <td>
@@ -786,8 +781,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">&lt;</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">&lt;</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -804,8 +799,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ca</span> <span class="special">&lt;</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">ca</span> <span class="special">&lt;</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -822,8 +817,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">&gt;</span>
-                <span class="identifier">cr2</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">&gt;</span>
+                <span class="identifier">cr2</span></code>
               </p>
               </td>
 <td>
@@ -840,8 +835,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cr</span> <span class="special">&gt;</span>
-                <span class="identifier">ca</span></tt>
+                <code class="computeroutput"><span class="identifier">cr</span> <span class="special">&gt;</span>
+                <span class="identifier">ca</span></code>
               </p>
               </td>
 <td>
@@ -858,8 +853,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ca</span> <span class="special">&gt;</span>
-                <span class="identifier">cr</span></tt>
+                <code class="computeroutput"><span class="identifier">ca</span> <span class="special">&gt;</span>
+                <span class="identifier">cr</span></code>
               </p>
               </td>
 <td>
@@ -876,7 +871,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">digits</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></tt>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">digits</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></code>
               </p>
               </td>
 <td>
@@ -893,7 +888,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">max_value</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></tt>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">max_value</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></code>
               </p>
               </td>
 <td>
@@ -910,7 +905,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">min_value</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></tt>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">min_value</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></code>
               </p>
               </td>
 <td>
@@ -927,7 +922,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">log_max_value</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></tt>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">log_max_value</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></code>
               </p>
               </td>
 <td>
@@ -945,7 +940,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">log_min_value</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></tt>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">log_min_value</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></code>
               </p>
               </td>
 <td>
@@ -963,7 +958,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">epsilon</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></tt>
+                <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">epsilon</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;()</span></code>
               </p>
               </td>
 <td>
@@ -984,25 +979,25 @@
       </p>
 <div class="orderedlist"><ol type="1">
 <li>
-          The functions <tt class="computeroutput"><span class="identifier">log_max_value</span></tt>
-          and <tt class="computeroutput"><span class="identifier">log_min_value</span></tt> can be
+          The functions <code class="computeroutput"><span class="identifier">log_max_value</span></code>
+          and <code class="computeroutput"><span class="identifier">log_min_value</span></code> can be
           synthesised from the others, and so no explicit specialisation is required.
         </li>
 <li>
-          The function <tt class="computeroutput"><span class="identifier">epsilon</span></tt> can
+          The function <code class="computeroutput"><span class="identifier">epsilon</span></code> can
           be synthesised from the others, so no explicit specialisation is required
           provided the precision of RealType does not vary at runtime (see the header
           <a href="../../../../../../../boost/math/bindings/rr.hpp" target="_top">boost/math/bindings/rr.hpp</a>
           for an example where the precision does vary at runtime).
         </li>
 <li>
-          The functions <tt class="computeroutput"><span class="identifier">digits</span></tt>,
-          <tt class="computeroutput"><span class="identifier">max_value</span></tt> and <tt class="computeroutput"><span class="identifier">min_value</span></tt>, all get synthesised automatically
-          from <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span></tt>. However, if <tt class="computeroutput"><span class="identifier">numeric_limits</span></tt> is not specialised for
+          The functions <code class="computeroutput"><span class="identifier">digits</span></code>,
+          <code class="computeroutput"><span class="identifier">max_value</span></code> and <code class="computeroutput"><span class="identifier">min_value</span></code>, all get synthesised automatically
+          from <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span></code>. However, if <code class="computeroutput"><span class="identifier">numeric_limits</span></code> is not specialised for
           type RealType, then you will get a compiler error when code tries to use
           these functions, <span class="emphasis"><em>unless</em></span> you explicitly specialise
           them. For example if the precision of RealType varies at runtime, then
-          <tt class="computeroutput"><span class="identifier">numeric_limits</span></tt> support
+          <code class="computeroutput"><span class="identifier">numeric_limits</span></code> support
           may not be appropriate, see <a href="../../../../../../../boost/math/tools/ntl.hpp" target="_top">boost/math/tools/ntl.hpp</a>
           for examples.
         </li>
@@ -1012,10 +1007,10 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../../../../../../doc/html/images/warning.png"></td>
 <th align="left">Warning</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
-          If <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;</span></tt>
-          is <span class="bold"><b>not specialized</b></span> for type <span class="emphasis"><em>RealType</em></span>
+          If <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;</span></code>
+          is <span class="bold"><strong>not specialized</strong></span> for type <span class="emphasis"><em>RealType</em></span>
           then the default float precision of 6 decimal digits will be used by other
           Boost programs including:
         </p>
@@ -1030,19 +1025,19 @@
           a string, causing potentially serious loss of accuracy on output.
         </p>
 <p>
-          Although it might seem obvious that RealType should require <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span></tt> to be specialized, this
-          is not sensible for <tt class="computeroutput"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span></tt>
+          Although it might seem obvious that RealType should require <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span></code> to be specialized, this
+          is not sensible for <code class="computeroutput"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span></code>
           and similar classes where the number of digits is a runtime parameter (where
-          as for <tt class="computeroutput"><span class="identifier">numeric_limits</span></tt> it
+          as for <code class="computeroutput"><span class="identifier">numeric_limits</span></code> it
           has to be fixed at compile time).
         </p>
 </td></tr>
 </table></div>
-<a name="math_toolkit.using_udt.concepts.standard_library_support_requirements"></a><h4>
-<a name="id699686"></a>
+<a name="math_toolkit.using_udt.concepts.standard_library_support_requirements"></a><h5>
+<a name="id736770"></a>
         <a href="concepts.html#math_toolkit.using_udt.concepts.standard_library_support_requirements">Standard
         Library Support Requirements</a>
-      </h4>
+      </h5>
 <p>
         Many (though not all) of the functions in this library make calls to standard
         library functions, the following table summarises the requirements. Note
@@ -1052,10 +1047,10 @@
         it and see!
       </p>
 <p>
-        In the following table <span class="emphasis"><em>r</em></span> is an object of type <tt class="computeroutput"><span class="identifier">RealType</span></tt>, <span class="emphasis"><em>cr1</em></span> and
-        <span class="emphasis"><em>cr2</em></span> are objects of type <tt class="computeroutput"><span class="keyword">const</span>
-        <span class="identifier">RealType</span></tt>, and <span class="emphasis"><em>i</em></span>
-        is an object of type <tt class="computeroutput"><span class="keyword">int</span></tt>.
+        In the following table <span class="emphasis"><em>r</em></span> is an object of type <code class="computeroutput"><span class="identifier">RealType</span></code>, <span class="emphasis"><em>cr1</em></span> and
+        <span class="emphasis"><em>cr2</em></span> are objects of type <code class="computeroutput"><span class="keyword">const</span>
+        <span class="identifier">RealType</span></code>, and <span class="emphasis"><em>i</em></span>
+        is an object of type <code class="computeroutput"><span class="keyword">int</span></code>.
       </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -1078,7 +1073,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">fabs</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">fabs</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1090,7 +1085,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">abs</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">abs</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1102,7 +1097,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ceil</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">ceil</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1114,7 +1109,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">floor</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">floor</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1126,7 +1121,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">exp</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">exp</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1138,8 +1133,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">pow</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">,</span>
-                <span class="identifier">cr2</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">pow</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">,</span>
+                <span class="identifier">cr2</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1151,7 +1146,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1163,7 +1158,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1175,8 +1170,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">frexp</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">,</span>
-                <span class="special">&amp;</span><span class="identifier">i</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">frexp</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">,</span>
+                <span class="special">&amp;</span><span class="identifier">i</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1188,8 +1183,8 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">ldexp</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">,</span>
-                <span class="identifier">i</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">ldexp</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">,</span>
+                <span class="identifier">i</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1201,7 +1196,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">cos</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">cos</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1213,7 +1208,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">sin</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">sin</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1225,7 +1220,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">asin</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">asin</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1237,7 +1232,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">tan</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">tan</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1249,7 +1244,7 @@
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="identifier">atan</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></tt>
+                <code class="computeroutput"><span class="identifier">atan</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
               </p>
               </td>
 <td>
@@ -1263,21 +1258,21 @@
 <p>
         Note that the table above lists only those standard library functions known
         to be used (or likely to be used in the near future) by this library. The
-        following functions: <tt class="computeroutput"><span class="identifier">acos</span></tt>,
-        <tt class="computeroutput"><span class="identifier">atan2</span></tt>, <tt class="computeroutput"><span class="identifier">fmod</span></tt>,
-        <tt class="computeroutput"><span class="identifier">cosh</span></tt>, <tt class="computeroutput"><span class="identifier">sinh</span></tt>,
-        <tt class="computeroutput"><span class="identifier">tanh</span></tt>, <tt class="computeroutput"><span class="identifier">modf</span></tt>
-        and <tt class="computeroutput"><span class="identifier">log10</span></tt> are not currently
+        following functions: <code class="computeroutput"><span class="identifier">acos</span></code>,
+        <code class="computeroutput"><span class="identifier">atan2</span></code>, <code class="computeroutput"><span class="identifier">fmod</span></code>,
+        <code class="computeroutput"><span class="identifier">cosh</span></code>, <code class="computeroutput"><span class="identifier">sinh</span></code>,
+        <code class="computeroutput"><span class="identifier">tanh</span></code>, <code class="computeroutput"><span class="identifier">modf</span></code>
+        and <code class="computeroutput"><span class="identifier">log10</span></code> are not currently
         used, but may be if further special functions are added.
       </p>
 <p>
-        In addition, for efficient and accurate results, a <a href="../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos
+        In addition, for efficient and accurate results, a <a href="../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
         approximation</a> is highly desirable. You may be able to adapt an existing
         approximation from <a href="../../../../../../../boost/math/special_functions/lanczos.hpp" target="_top">boost/math/special_functions/lanczos.hpp</a>
         or <a href="../../../../../tools/ntl_rr_lanczos.hpp" target="_top">libs/math/tools/ntl_rr_lanczos.hpp</a>:
         you will need change static_cast's to lexical_cast's, and the constants to
         <span class="emphasis"><em>strings</em></span> (in order to ensure the coefficients aren't
-        truncated to long double) and then specialise <tt class="computeroutput"><span class="identifier">lanczos_traits</span></tt>
+        truncated to long double) and then specialise <code class="computeroutput"><span class="identifier">lanczos_traits</span></code>
         for type T. Otherwise you may have to hack <a href="../../../../../tools/lanczos_generator.cpp" target="_top">libs/math/tools/lanczos_generator.cpp</a>
         to find a suitable approximation for your RealType. The code will still compile
         if you don't do this, but both accuracy and efficiency will be greatly compromised

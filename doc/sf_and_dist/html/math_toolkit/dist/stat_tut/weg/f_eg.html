@@ -1,17 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> F Distribution
-          Examples</title>
+<title>F Distribution Examples</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../weg.html" title=" Worked Examples">
-<link rel="prev" href="cs_eg/chi_sq_size.html" title="
-            Estimating the Required Sample Sizes for a Chi-Square Test for the Standard
-            Deviation">
-<link rel="next" href="binom_eg.html" title=" Binomial
-          Distribution Examples">
+<link rel="up" href="../weg.html" title="Worked Examples">
+<link rel="prev" href="cs_eg/chi_sq_size.html" title="Estimating the Required Sample Sizes for a Chi-Square Test for the Standard Deviation">
+<link rel="next" href="binom_eg.html" title="Binomial Distribution Examples">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -28,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.f_eg"></a><a href="f_eg.html" title=" F Distribution
-          Examples"> F Distribution
-          Examples</a></h5></div></div></div>
+<a name="math_toolkit.dist.stat_tut.weg.f_eg"></a><a href="f_eg.html" title="F Distribution Examples"> F Distribution
+          Examples</a>
+</h5></div></div></div>
 <p>
             Imagine that you want to compare the standard deviations of two sample
             to determine if they differ in any significant way, in this situation
@@ -189,12 +185,12 @@ is the standard
             function:
           </p>
 <p>
-            F<sub>(1-alpha; N1-1, N2-1)</sub> = <tt class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">fisher_f</span><span class="special">(</span><span class="identifier">N1</span><span class="special">-</span><span class="number">1</span><span class="special">,</span>
-            <span class="identifier">N2</span><span class="special">-</span><span class="number">1</span><span class="special">),</span> <span class="identifier">alpha</span><span class="special">)</span></tt>
+            F<sub>(1-alpha; N1-1, N2-1)</sub> = <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">fisher_f</span><span class="special">(</span><span class="identifier">N1</span><span class="special">-</span><span class="number">1</span><span class="special">,</span>
+            <span class="identifier">N2</span><span class="special">-</span><span class="number">1</span><span class="special">),</span> <span class="identifier">alpha</span><span class="special">)</span></code>
           </p>
 <p>
-            F<sub>(alpha; N1-1, N2-1)</sub> = <tt class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">fisher_f</span><span class="special">(</span><span class="identifier">N1</span><span class="special">-</span><span class="number">1</span><span class="special">,</span>
-            <span class="identifier">N2</span><span class="special">-</span><span class="number">1</span><span class="special">),</span> <span class="identifier">alpha</span><span class="special">))</span></tt>
+            F<sub>(alpha; N1-1, N2-1)</sub> = <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">fisher_f</span><span class="special">(</span><span class="identifier">N1</span><span class="special">-</span><span class="number">1</span><span class="special">,</span>
+            <span class="identifier">N2</span><span class="special">-</span><span class="number">1</span><span class="special">),</span> <span class="identifier">alpha</span><span class="special">))</span></code>
           </p>
 <p>
             In our example program we need both upper and lower critical values for

@@ -1,18 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-            Calculating Confidence Limits on the Frequency of Occurrence for a Binomial
-            Distribution</title>
+<title>Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../binom_eg.html" title=" Binomial
-          Distribution Examples">
-<link rel="prev" href="binomial_quiz_example.html" title="
-            Binomial Quiz Example">
-<link rel="next" href="binom_size_eg.html" title="
-            Estimating Sample Sizes for a Binomial Distribution.">
+<link rel="up" href="../binom_eg.html" title="Binomial Distribution Examples">
+<link rel="prev" href="binomial_quiz_example.html" title="Binomial Quiz Example">
+<link rel="next" href="binom_size_eg.html" title="Estimating Sample Sizes for a Binomial Distribution.">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -29,11 +24,10 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf"></a><a href="binom_conf.html" title="
+<a name="math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf"></a><a href="binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">
             Calculating Confidence Limits on the Frequency of Occurrence for a Binomial
-            Distribution">
-            Calculating Confidence Limits on the Frequency of Occurrence for a Binomial
-            Distribution</a></h6></div></div></div>
+            Distribution</a>
+</h6></div></div></div>
 <p>
               Imagine you have a process that follows a binomial distribution: for
               each trial conducted, an event either occurs or does it does not, referred
@@ -43,8 +37,8 @@
               for <span class="emphasis"><em>k</em></span> successes out of <span class="emphasis"><em>N</em></span>
               trials. However our confidence in that estimate will be shaped by how
               many trials were conducted, and how many successes were observed. The
-              static member functions <tt class="computeroutput"><span class="identifier">binomial_distribution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_lower_bound_on_p</span></tt>
-              and <tt class="computeroutput"><span class="identifier">binomial_distribution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_upper_bound_on_p</span></tt>
+              static member functions <code class="computeroutput"><span class="identifier">binomial_distribution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_lower_bound_on_p</span></code>
+              and <code class="computeroutput"><span class="identifier">binomial_distribution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_upper_bound_on_p</span></code>
               allow you to calculate the confidence intervals for your estimate of
               the occurrence frequency.
             </p>
@@ -101,8 +95,8 @@
 </pre>
 <p>
               And now for the important part - the intervals themselves - for each
-              value of <span class="emphasis"><em>alpha</em></span>, we call <tt class="computeroutput"><span class="identifier">find_lower_bound_on_p</span></tt>
-              and <tt class="computeroutput"><span class="identifier">find_lower_upper_on_p</span></tt>
+              value of <span class="emphasis"><em>alpha</em></span>, we call <code class="computeroutput"><span class="identifier">find_lower_bound_on_p</span></code>
+              and <code class="computeroutput"><span class="identifier">find_lower_upper_on_p</span></code>
               to obtain lower and upper bounds respectively. Note that since we are
               calculating a two-sided interval, we must divide the value of alpha
               in two.
@@ -123,8 +117,8 @@
                 The risk that it is greater than the upper bound is also &#945;.
               </li></ul></div>
 <p>
-              So the risk it is outside <span class="bold"><b>upper or lower bound</b></span>,
-              is <span class="bold"><b>twice</b></span> alpha, and the probability
+              So the risk it is outside <span class="bold"><strong>upper or lower bound</strong></span>,
+              is <span class="bold"><strong>twice</strong></span> alpha, and the probability
               that it is inside the bounds is therefore not nearly as high as one
               might have thought. This is why &#945;/2 must be used in the calculations
               below.
@@ -133,11 +127,11 @@
               In contrast, had we been calculating a single-sided interval, for example:
               <span class="emphasis"><em>"Calculate a lower bound so that we are P% sure that
               the true occurrence frequency is greater than some value"</em></span>
-              then we would <span class="bold"><b>not</b></span> have divided by
+              then we would <span class="bold"><strong>not</strong></span> have divided by
               two.
             </p>
 <p>
-              Finally note that <tt class="computeroutput"><span class="identifier">binomial_distribution</span></tt>
+              Finally note that <code class="computeroutput"><span class="identifier">binomial_distribution</span></code>
               provides a choice of two methods for the calculation, we print out
               the results from both methods in this example:
             </p>

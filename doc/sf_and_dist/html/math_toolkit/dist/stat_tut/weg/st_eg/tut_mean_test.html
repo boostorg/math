@@ -1,18 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-            Testing a sample mean for difference from a "true" mean</title>
+<title>Testing a sample mean for difference from a "true" mean</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../st_eg.html" title=" Student's
-          t Distribution Examples">
-<link rel="prev" href="tut_mean_intervals.html" title="
-            Calculating confidence intervals on the mean with the Students-t distribution">
-<link rel="next" href="tut_mean_size.html" title="
-            Estimating how large a sample size would have to become in order to give
-            a significant Students-t test result with a single sample test">
+<link rel="up" href="../st_eg.html" title="Student's t Distribution Examples">
+<link rel="prev" href="tut_mean_intervals.html" title="Calculating confidence intervals on the mean with the Students-t distribution">
+<link rel="next" href="tut_mean_size.html" title="Estimating how large a sample size would have to become in order to give a significant Students-t test result with a single sample test">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -29,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.st_eg.tut_mean_test"></a><a href="tut_mean_test.html" title='
-            Testing a sample mean for difference from a "true" mean'>
-            Testing a sample mean for difference from a "true" mean</a></h6></div></div></div>
+<a name="math_toolkit.dist.stat_tut.weg.st_eg.tut_mean_test"></a><a href="tut_mean_test.html" title='Testing a sample mean for difference from a "true" mean'>
+            Testing a sample mean for difference from a "true" mean</a>
+</h6></div></div></div>
 <p>
               When calibrating or comparing a scientific instrument or measurement
               method of some kind, we want to be answer the question "Does an
@@ -58,11 +53,11 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
                 Non-statisticians might say 'not-rejected' means 'accepted', (often
-                of the null-hypothesis) implying, wrongly, that there really <span class="bold"><b>IS</b></span> no difference, but statisticans eschew
+                of the null-hypothesis) implying, wrongly, that there really <span class="bold"><strong>IS</strong></span> no difference, but statisticans eschew
                 this to avoid implying that there is positive evidence of 'no difference'.
-                'Not-rejected' here means there is <span class="bold"><b>no evidence</b></span>
+                'Not-rejected' here means there is <span class="bold"><strong>no evidence</strong></span>
                 of difference, but there still might well be a difference. For example,
                 see <a href="http://en.wikipedia.org/wiki/Argument_from_ignorance" target="_top">argument
                 from ignorance</a> and <a href="http://www.bmj.com/cgi/content/full/311/7003/485" target="_top">Absence
@@ -134,7 +129,7 @@
 <tr>
 <td>
                     <p>
-                      The Null-hypothesis: there is <span class="bold"><b>no difference</b></span>
+                      The Null-hypothesis: there is <span class="bold"><strong>no difference</strong></span>
                       in means
                     </p>
                     </td>
@@ -144,18 +139,18 @@
                       / 2:
                     </p>
                     <p>
-                      <tt class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
+                      <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
                       <span class="identifier">fabs</span><span class="special">(</span><span class="identifier">t</span><span class="special">)))</span>
                       <span class="special">&lt;</span> <span class="identifier">alpha</span>
-                      <span class="special">/</span> <span class="number">2</span></tt>
+                      <span class="special">/</span> <span class="number">2</span></code>
                     </p>
                     </td>
 </tr>
 <tr>
 <td>
                     <p>
-                      The Alternative-hypothesis: there <span class="bold"><b>is
-                      difference</b></span> in means
+                      The Alternative-hypothesis: there <span class="bold"><strong>is
+                      difference</strong></span> in means
                     </p>
                     </td>
 <td>
@@ -164,18 +159,18 @@
                       / 2:
                     </p>
                     <p>
-                      <tt class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
+                      <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
                       <span class="identifier">fabs</span><span class="special">(</span><span class="identifier">t</span><span class="special">)))</span>
                       <span class="special">&gt;</span> <span class="identifier">alpha</span>
-                      <span class="special">/</span> <span class="number">2</span></tt>
+                      <span class="special">/</span> <span class="number">2</span></code>
                     </p>
                     </td>
 </tr>
 <tr>
 <td>
                     <p>
-                      The Alternative-hypothesis: the sample mean <span class="bold"><b>is
-                      less</b></span> than the true mean.
+                      The Alternative-hypothesis: the sample mean <span class="bold"><strong>is
+                      less</strong></span> than the true mean.
                     </p>
                     </td>
 <td>
@@ -183,17 +178,17 @@
                       Reject if CDF of t &gt; significance level:
                     </p>
                     <p>
-                      <tt class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
+                      <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
                       <span class="identifier">t</span><span class="special">)</span>
-                      <span class="special">&gt;</span> <span class="identifier">alpha</span></tt>
+                      <span class="special">&gt;</span> <span class="identifier">alpha</span></code>
                     </p>
                     </td>
 </tr>
 <tr>
 <td>
                     <p>
-                      The Alternative-hypothesis: the sample mean <span class="bold"><b>is
-                      greater</b></span> than the true mean.
+                      The Alternative-hypothesis: the sample mean <span class="bold"><strong>is
+                      greater</strong></span> than the true mean.
                     </p>
                     </td>
 <td>
@@ -201,9 +196,9 @@
                       Reject if complement of CDF of t &gt; significance level:
                     </p>
                     <p>
-                      <tt class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
+                      <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span>
                       <span class="identifier">t</span><span class="special">))</span>
-                      <span class="special">&gt;</span> <span class="identifier">alpha</span></tt>
+                      <span class="special">&gt;</span> <span class="identifier">alpha</span></code>
                     </p>
                     </td>
 </tr>
@@ -214,10 +209,10 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
-                Notice that the comparisons are against <tt class="computeroutput"><span class="identifier">alpha</span>
-                <span class="special">/</span> <span class="number">2</span></tt>
-                for a two-sided test and against <tt class="computeroutput"><span class="identifier">alpha</span></tt>
+<tr><td align="left" valign="top"><p>
+                Notice that the comparisons are against <code class="computeroutput"><span class="identifier">alpha</span>
+                <span class="special">/</span> <span class="number">2</span></code>
+                for a two-sided test and against <code class="computeroutput"><span class="identifier">alpha</span></code>
                 for a one-sided test
               </p></td></tr>
 </table></div>

@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-        Policies Have Sensible Defaults</title>
+<title>Policies Have Sensible Defaults</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../pol_tutorial.html" title=" Policy Tutorial">
-<link rel="prev" href="what_is_a_policy.html" title="
-        So Just What is a Policy Anyway?">
-<link rel="next" href="policy_usage.html" title=" So
-        How are Policies Used Anyway?">
+<link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
+<link rel="prev" href="what_is_a_policy.html" title="So Just What is a Policy Anyway?">
+<link rel="next" href="policy_usage.html" title="So How are Policies Used Anyway?">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_tutorial.policy_tut_defaults"></a><a href="policy_tut_defaults.html" title="
-        Policies Have Sensible Defaults">
-        Policies Have Sensible Defaults</a></h4></div></div></div>
+<a name="math_toolkit.policy.pol_tutorial.policy_tut_defaults"></a><a href="policy_tut_defaults.html" title="Policies Have Sensible Defaults">
+        Policies Have Sensible Defaults</a>
+</h4></div></div></div>
 <p>
           Most of the time you can just ignore the policy framework, the defaults
           for the various policies are as follows, if these work OK for you then
@@ -40,15 +37,15 @@
 <dl>
 <dt><span class="term">Domain Error</span></dt>
 <dd><p>
-              Throws a <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></tt> exception.
+              Throws a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code> exception.
             </p></dd>
 <dt><span class="term">Pole Error</span></dt>
 <dd><p>
-              Occurs when a function is evaluated at a pole: throws a <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></tt> exception.
+              Occurs when a function is evaluated at a pole: throws a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code> exception.
             </p></dd>
 <dt><span class="term">Overflow Error</span></dt>
 <dd><p>
-              Throws a <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">overflow_error</span></tt> exception.
+              Throws a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">overflow_error</span></code> exception.
             </p></dd>
 <dt><span class="term">Underflow</span></dt>
 <dd><p>
@@ -60,7 +57,7 @@
             </p></dd>
 <dt><span class="term">Internal Evaluation Error</span></dt>
 <dd><p>
-              Throws a <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">evaluation_error</span></tt> exception.
+              Throws a <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">evaluation_error</span></code> exception.
             </p></dd>
 <dt><span class="term">Promotion of float to double</span></dt>
 <dd><p>
@@ -89,12 +86,10 @@
             </p>
 <p>
               This behaviour can be changed so that the quantile functions are rounded
-              differently, or even return a real-valued result using <a href="../pol_overview.html" title=" Policy Overview">Policies</a>.
-              It is strongly recommended that you read the tutorial <a href="understand_dis_quant.html" title="
-        Understanding Quantiles of Discrete Distributions">Understanding
+              differently, or even return a real-valued result using <a href="../pol_overview.html" title="Policy Overview">Policies</a>.
+              It is strongly recommended that you read the tutorial <a href="understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
               Quantiles of Discrete Distributions</a> before using the quantile
-              function on a discrete distribution. The <a href="../pol_ref/discrete_quant_ref.html" title=" Discrete
-        Quantile Policies">reference
+              function on a discrete distribution. The <a href="../pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
               docs</a> describe how to change the rounding policy for these distributions.
             </p>
 </dd>
@@ -113,8 +108,8 @@
 </span><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span> <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">mypolicy</span><span class="special">;</span>
 </pre>
 <p>
-          then <tt class="computeroutput"><span class="identifier">mypolicy</span></tt> defines a
-          policy where only the overflow error handling and <tt class="computeroutput"><span class="keyword">double</span></tt>-promotion
+          then <code class="computeroutput"><span class="identifier">mypolicy</span></code> defines a
+          policy where only the overflow error handling and <code class="computeroutput"><span class="keyword">double</span></code>-promotion
           policies differ from the defaults.
         </p>
 </div>

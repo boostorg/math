@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Derivative
-        of the Incomplete Gamma Function</title>
+<title>Derivative of the Incomplete Gamma Function</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../sf_gamma.html" title=" Gamma Functions">
-<link rel="prev" href="igamma_inv.html" title=" Incomplete
-        Gamma Function Inverses">
-<link rel="next" href="../factorials.html" title=" Factorials and Binomial
-      Coefficients">
+<link rel="up" href="../sf_gamma.html" title="Gamma Functions">
+<link rel="prev" href="igamma_inv.html" title="Incomplete Gamma Function Inverses">
+<link rel="next" href="../factorials.html" title="Factorials and Binomial Coefficients">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,13 +24,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.sf_gamma.gamma_derivatives"></a><a href="gamma_derivatives.html" title=" Derivative
-        of the Incomplete Gamma Function"> Derivative
-        of the Incomplete Gamma Function</a></h4></div></div></div>
-<a name="math_toolkit.special.sf_gamma.gamma_derivatives.synopsis"></a><h4>
-<a name="id600021"></a>
+<a name="math_toolkit.special.sf_gamma.gamma_derivatives"></a><a href="gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function"> Derivative
+        of the Incomplete Gamma Function</a>
+</h4></div></div></div>
+<a name="math_toolkit.special.sf_gamma.gamma_derivatives.synopsis"></a><h5>
+<a name="id633199"></a>
           <a href="gamma_derivatives.html#math_toolkit.special.sf_gamma.gamma_derivatives.synopsis">Synopsis</a>
-        </h4>
+        </h5>
 <p>
           
 </p>
@@ -46,19 +43,17 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p_derivative</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p_derivative</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p_derivative</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p_derivative</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
-<a name="math_toolkit.special.sf_gamma.gamma_derivatives.description"></a><h4>
-<a name="id600417"></a>
+<a name="math_toolkit.special.sf_gamma.gamma_derivatives.description"></a><h5>
+<a name="id633592"></a>
           <a href="gamma_derivatives.html#math_toolkit.special.sf_gamma.gamma_derivatives.description">Description</a>
-        </h4>
+        </h5>
 <p>
           This function find some uses in statistical distributions: it implements
           the partial derivative with respect to <span class="emphasis"><em>x</em></span> of the incomplete
@@ -70,41 +65,37 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <p>
-          Note that the derivative of the function <a href="igamma.html" title=" Incomplete Gamma
-        Functions">gamma_q</a>
+          Note that the derivative of the function <a href="igamma.html" title="Incomplete Gamma Functions">gamma_q</a>
           can be obtained by negating the result of this function.
         </p>
 <p>
-          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>result
+          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a> when T1 and T2 are different types,
           otherwise the return type is simply T1.
         </p>
-<a name="math_toolkit.special.sf_gamma.gamma_derivatives.accuracy"></a><h4>
-<a name="id600543"></a>
+<a name="math_toolkit.special.sf_gamma.gamma_derivatives.accuracy"></a><h5>
+<a name="id633716"></a>
           <a href="gamma_derivatives.html#math_toolkit.special.sf_gamma.gamma_derivatives.accuracy">Accuracy</a>
-        </h4>
+        </h5>
 <p>
-          Almost identical to the incomplete gamma function <a href="igamma.html" title=" Incomplete Gamma
-        Functions">gamma_p</a>:
+          Almost identical to the incomplete gamma function <a href="igamma.html" title="Incomplete Gamma Functions">gamma_p</a>:
           refer to the documentation for that function for more information.
         </p>
-<a name="math_toolkit.special.sf_gamma.gamma_derivatives.implementation"></a><h4>
-<a name="id600586"></a>
+<a name="math_toolkit.special.sf_gamma.gamma_derivatives.implementation"></a><h5>
+<a name="id633757"></a>
           <a href="gamma_derivatives.html#math_toolkit.special.sf_gamma.gamma_derivatives.implementation">Implementation</a>
-        </h4>
+        </h5>
 <p>
           This function just expose some of the internals of the incomplete gamma
-          function <a href="igamma.html" title=" Incomplete Gamma
-        Functions">gamma_p</a>:
+          function <a href="igamma.html" title="Incomplete Gamma Functions">gamma_p</a>:
           refer to the documentation for that function for more information.
         </p>
 </div>

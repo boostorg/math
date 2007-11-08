@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Extras/Future Directions</title>
+<title>Extras/Future Directions</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../dist.html" title=" Statistical Distributions and Functions">
-<link rel="prev" href="dist_ref/dist_algorithms.html" title=" Distribution
-        Algorithms">
-<link rel="next" href="../special.html" title=" Special Functions">
+<link rel="up" href="../dist.html" title="Statistical Distributions and Functions">
+<link rel="prev" href="dist_ref/dist_algorithms.html" title="Distribution Algorithms">
+<link rel="next" href="../special.html" title="Special Functions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,12 +24,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.dist.future"></a><a href="future.html" title=" Extras/Future Directions"> Extras/Future Directions</a></h3></div></div></div>
-<a name="math_toolkit.dist.future.adding_additional_location_and_scale_parameters"></a><h4>
-<a name="id583194"></a>
+<a name="math_toolkit.dist.future"></a><a href="future.html" title="Extras/Future Directions"> Extras/Future Directions</a>
+</h3></div></div></div>
+<a name="math_toolkit.dist.future.adding_additional_location_and_scale_parameters"></a><h5>
+<a name="id616442"></a>
         <a href="future.html#math_toolkit.dist.future.adding_additional_location_and_scale_parameters">Adding
         Additional Location and Scale Parameters</a>
-      </h4>
+      </h5>
 <p>
         In some modelling applications we require a distribution with a specific
         location and scale: often this equates to a specific mean and standard deviation,
@@ -55,11 +55,11 @@
         Which would then have its own set of overloads for the non-member accessor
         functions.
       </p>
-<a name="math_toolkit.dist.future.an__quot_any_distribution_quot__class"></a><h4>
-<a name="id583426"></a>
+<a name="math_toolkit.dist.future.an__quot_any_distribution_quot__class"></a><h5>
+<a name="id616670"></a>
         <a href="future.html#math_toolkit.dist.future.an__quot_any_distribution_quot__class">An
         "any_distribution" class</a>
-      </h4>
+      </h5>
 <p>
         It would be fairly trivial to add a distribution object that virtualises
         the actual type of the distribution, and can therefore hold "any"
@@ -85,11 +85,11 @@
         use case though. Possibly tests for goodness of fit might provide such a
         use case: this needs more investigation.
       </p>
-<a name="math_toolkit.dist.future.higher_level_hypothesis_tests"></a><h4>
-<a name="id583726"></a>
+<a name="math_toolkit.dist.future.higher_level_hypothesis_tests"></a><h5>
+<a name="id616968"></a>
         <a href="future.html#math_toolkit.dist.future.higher_level_hypothesis_tests">Higher
         Level Hypothesis Tests</a>
-      </h4>
+      </h5>
 <p>
         Higher-level tests roughly corresponding to the <a href="http://documents.wolfram.com/mathematica/Add-onsLinks/StandardPackages/Statistics/HypothesisTests.html" target="_top">Mathematica
         Hypothesis Tests</a> package could be added reasonably easily, for example:
@@ -106,11 +106,11 @@
         Returns the probability that the data in the sequence [a,b) has the mean
         <span class="emphasis"><em>expected_mean</em></span>.
       </p>
-<a name="math_toolkit.dist.future.integration_with_statistical_accumulators"></a><h4>
-<a name="id583960"></a>
+<a name="math_toolkit.dist.future.integration_with_statistical_accumulators"></a><h5>
+<a name="id617201"></a>
         <a href="future.html#math_toolkit.dist.future.integration_with_statistical_accumulators">Integration
         With Statistical Accumulators</a>
-      </h4>
+      </h5>
 <p>
         <a href="http://boost-sandbox.sourceforge.net/libs/accumulators/doc/html/index.html" target="_top">Eric
         Niebler's accumulator framework</a> - also work in progress - provides

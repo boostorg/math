@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-        Changing the Policy on an Ad Hoc Basis for the Special Functions</title>
+<title>Changing the Policy on an Ad Hoc Basis for the Special Functions</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../pol_tutorial.html" title=" Policy Tutorial">
-<link rel="prev" href="ad_hoc_dist_policies.html" title="
-        Setting Policies for Distributions on an Ad Hoc Basis">
-<link rel="next" href="namespace_policies.html" title="
-        Setting Policies at Namespace or Translation Unit Scope">
+<link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
+<link rel="prev" href="ad_hoc_dist_policies.html" title="Setting Policies for Distributions on an Ad Hoc Basis">
+<link rel="next" href="namespace_policies.html" title="Setting Policies at Namespace or Translation Unit Scope">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_tutorial.ad_hoc_sf_policies"></a><a href="ad_hoc_sf_policies.html" title="
-        Changing the Policy on an Ad Hoc Basis for the Special Functions">
-        Changing the Policy on an Ad Hoc Basis for the Special Functions</a></h4></div></div></div>
+<a name="math_toolkit.policy.pol_tutorial.ad_hoc_sf_policies"></a><a href="ad_hoc_sf_policies.html" title="Changing the Policy on an Ad Hoc Basis for the Special Functions">
+        Changing the Policy on an Ad Hoc Basis for the Special Functions</a>
+</h4></div></div></div>
 <p>
           All of the special functions in this library come in two overloaded forms,
           one with a final "policy" parameter, and one without. For example:
@@ -59,8 +56,8 @@
 <p>
           So calling a special function with a specific policy is just a matter of
           defining the policy type to use and passing it as the final parameter.
-          For example, suppose we want <tt class="computeroutput"><span class="identifier">tgamma</span></tt>
-          to behave in a C-compatible fashion and set <tt class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></tt> when an error occurs, and never
+          For example, suppose we want <code class="computeroutput"><span class="identifier">tgamma</span></code>
+          to behave in a C-compatible fashion and set <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code> when an error occurs, and never
           throw an exception:
         </p>
 <p>
@@ -108,7 +105,7 @@ Result of tgamma(-10) is: 1.#QNAN
 errno = 33
 </pre>
 <p>
-          Alternatively, for ad hoc use, we can use the <tt class="computeroutput"><span class="identifier">make_policy</span></tt>
+          Alternatively, for ad hoc use, we can use the <code class="computeroutput"><span class="identifier">make_policy</span></code>
           helper function to create a policy for us: this usage is more verbose,
           so is probably only preferred when a policy is going to be used once only:
         </p>

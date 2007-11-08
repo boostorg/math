@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> sqrt1pm1</title>
+<title>sqrt1pm1</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../powers.html" title=" Logs, Powers, Roots and
-      Exponentials">
-<link rel="prev" href="cbrt.html" title=" cbrt">
-<link rel="next" href="powm1.html" title=" powm1">
+<link rel="up" href="../powers.html" title="Logs, Powers, Roots and Exponentials">
+<link rel="prev" href="cbrt.html" title="cbrt">
+<link rel="next" href="powm1.html" title="powm1">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,7 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.powers.sqrt1pm1"></a><a href="sqrt1pm1.html" title=" sqrt1pm1"> sqrt1pm1</a></h4></div></div></div>
+<a name="math_toolkit.special.powers.sqrt1pm1"></a><a href="sqrt1pm1.html" title="sqrt1pm1"> sqrt1pm1</a>
+</h4></div></div></div>
 <p>
           
 </p>
@@ -38,31 +38,28 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sqrt1pm1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sqrt1pm1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sqrt1pm1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sqrt1pm1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
-          Returns <tt class="computeroutput"><span class="identifier">sqrt</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="identifier">x</span><span class="special">)</span> <span class="special">-</span> <span class="number">1</span></tt>.
+          Returns <code class="computeroutput"><span class="identifier">sqrt</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="identifier">x</span><span class="special">)</span> <span class="special">-</span> <span class="number">1</span></code>.
         </p>
 <p>
-          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>result
-          type calculation rules</em></span></a>: the return is <tt class="computeroutput"><span class="keyword">double</span></tt>
+          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
+          type calculation rules</em></span></a>: the return is <code class="computeroutput"><span class="keyword">double</span></code>
           when <span class="emphasis"><em>x</em></span> is an integer type and T otherwise.
         </p>
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
@@ -71,21 +68,21 @@
           1, when x is itself close to 1.
         </p>
 <p>
-          Implemented in terms of <tt class="computeroutput"><span class="identifier">log1p</span></tt>
-          and <tt class="computeroutput"><span class="identifier">expm1</span></tt>.
+          Implemented in terms of <code class="computeroutput"><span class="identifier">log1p</span></code>
+          and <code class="computeroutput"><span class="identifier">expm1</span></code>.
         </p>
-<a name="math_toolkit.special.powers.sqrt1pm1.accuracy"></a><h4>
-<a name="id654830"></a>
+<a name="math_toolkit.special.powers.sqrt1pm1.accuracy"></a><h5>
+<a name="id692010"></a>
           <a href="sqrt1pm1.html#math_toolkit.special.powers.sqrt1pm1.accuracy">Accuracy</a>
-        </h4>
+        </h5>
 <p>
-          For built in floating-point types <tt class="computeroutput"><span class="identifier">sqrt1pm1</span></tt>
+          For built in floating-point types <code class="computeroutput"><span class="identifier">sqrt1pm1</span></code>
           should have approximately 3 epsilon accuracy.
         </p>
-<a name="math_toolkit.special.powers.sqrt1pm1.testing"></a><h4>
-<a name="id654873"></a>
+<a name="math_toolkit.special.powers.sqrt1pm1.testing"></a><h5>
+<a name="id692051"></a>
           <a href="sqrt1pm1.html#math_toolkit.special.powers.sqrt1pm1.testing">Testing</a>
-        </h4>
+        </h5>
 <p>
           A selection of random high precision test values calculated using NTL::RR
           at 1000-bit precision.

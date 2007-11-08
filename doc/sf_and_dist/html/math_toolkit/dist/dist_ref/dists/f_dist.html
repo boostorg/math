@@ -1,15 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> F Distribution</title>
+<title>F Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../dists.html" title=" Distributions">
-<link rel="prev" href="extreme_dist.html" title=" Extreme
-          Value Distribution">
-<link rel="next" href="gamma_dist.html" title=" Gamma
-          (and Erlang) Distribution">
+<link rel="up" href="../dists.html" title="Distributions">
+<link rel="prev" href="extreme_dist.html" title="Extreme Value Distribution">
+<link rel="next" href="gamma_dist.html" title="Gamma (and Erlang) Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -26,7 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.f_dist"></a><a href="f_dist.html" title=" F Distribution"> F Distribution</a></h5></div></div></div>
+<a name="math_toolkit.dist.dist_ref.dists.f_dist"></a><a href="f_dist.html" title="F Distribution"> F Distribution</a>
+</h5></div></div></div>
 <p>
             
 </p>
@@ -38,13 +37,12 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
    
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title=" Policy Class
-        Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">fisher_f_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">fisher_f_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">fisher_f</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">fisher_f_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -83,11 +81,11 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/fisher_f.png" alt="fisher_f"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.member_functions"></a><h4>
-<a name="id559851"></a>
+<a name="math_toolkit.dist.dist_ref.dists.f_dist.member_functions"></a><h5>
+<a name="id593248"></a>
             <a href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.member_functions">Member
             Functions</a>
-          </h4>
+          </h5>
 <pre class="programlisting">
 <span class="identifier">fisher_f_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">df1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">df2</span><span class="special">);</span>
 </pre>
@@ -112,13 +110,13 @@
 <p>
             Returns the denominator degrees of freedom parameter of the distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.non_member_accessors"></a><h4>
-<a name="id560070"></a>
+<a name="math_toolkit.dist.dist_ref.dists.f_dist.non_member_accessors"></a><h5>
+<a name="id593465"></a>
             <a href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.non_member_accessors">Non-member
             Accessors</a>
-          </h4>
+          </h5>
 <p>
-            All the <a href="../nmp.html" title=" Non-Member Properties">usual non-member
+            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
             <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
             <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
@@ -132,30 +130,27 @@
 <p>
             The domain of the random variable is [0, +&#8734;].
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.examples"></a><h4>
-<a name="id560242"></a>
+<a name="math_toolkit.dist.dist_ref.dists.f_dist.examples"></a><h5>
+<a name="id593636"></a>
             <a href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.examples">Examples</a>
-          </h4>
+          </h5>
 <p>
-            Various <a href="../../stat_tut/weg/f_eg.html" title=" F Distribution
-          Examples">worked examples</a>
+            Various <a href="../../stat_tut/weg/f_eg.html" title="F Distribution Examples">worked examples</a>
             are available illustrating the use of the F Distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.accuracy"></a><h4>
-<a name="id560284"></a>
+<a name="math_toolkit.dist.dist_ref.dists.f_dist.accuracy"></a><h5>
+<a name="id593676"></a>
             <a href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.accuracy">Accuracy</a>
-          </h4>
+          </h5>
 <p>
-            The normal distribution is implemented in terms of the <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">incomplete
-            beta function</a> and it's <a href="../../../special/sf_beta/ibeta_inv_function.html" title=" The
-        Incomplete Beta Function Inverses">inverses</a>,
+            The normal distribution is implemented in terms of the <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">incomplete
+            beta function</a> and it's <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">inverses</a>,
             refer to those functions for accuracy data.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.implementation"></a><h4>
-<a name="id560334"></a>
+<a name="math_toolkit.dist.dist_ref.dists.f_dist.implementation"></a><h5>
+<a name="id593725"></a>
             <a href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.implementation">Implementation</a>
-          </h4>
+          </h5>
 <p>
             In the following table <span class="emphasis"><em>v1</em></span> and <span class="emphasis"><em>v2</em></span>
             are the first and second degrees of freedom parameters of the distribution,
@@ -205,8 +200,7 @@
                     led to the following two formulas:
                   </p>
                   <p>
-                    f<sub>v1,v2</sub>(x) = y * <a href="../../../special/sf_beta/beta_derivative.html" title=" Derivative
-        of the Incomplete Beta Function">ibeta_derivative</a>(v2
+                    f<sub>v1,v2</sub>(x) = y * <a href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(v2
                     / 2, v1 / 2, v2 / (v2 + v1 * x))
                   </p>
                   <p>
@@ -216,8 +210,7 @@
                     and
                   </p>
                   <p>
-                    f<sub>v1,v2</sub>(x) = y * <a href="../../../special/sf_beta/beta_derivative.html" title=" Derivative
-        of the Incomplete Beta Function">ibeta_derivative</a>(v1
+                    f<sub>v1,v2</sub>(x) = y * <a href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(v1
                     / 2, v2 / 2, v1 * x / (v2 + v1 * x))
                   </p>
                   <p>
@@ -231,8 +224,7 @@
                     second is used.
                   </p>
                   <p>
-                    The aim is to keep the <span class="emphasis"><em>x</em></span> argument to <a href="../../../special/sf_beta/beta_derivative.html" title=" Derivative
-        of the Incomplete Beta Function">ibeta_derivative</a>
+                    The aim is to keep the <span class="emphasis"><em>x</em></span> argument to <a href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>
                     away from 1 to avoid rounding error.
                   </p>
                   </td>
@@ -248,16 +240,14 @@
                     Using the relations:
                   </p>
                   <p>
-                    p = <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">ibeta</a>(v1
+                    p = <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(v1
                     / 2, v2 / 2, v1 * x / (v2 + v1 * x))
                   </p>
                   <p>
                     and
                   </p>
                   <p>
-                    p = <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">ibetac</a>(v2
+                    p = <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(v2
                     / 2, v1 / 2, v2 / (v2 + v1 * x))
                   </p>
                   <p>
@@ -265,8 +255,7 @@
                     used.
                   </p>
                   <p>
-                    The aim is to keep the <span class="emphasis"><em>x</em></span> argument to <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">ibeta</a>
+                    The aim is to keep the <span class="emphasis"><em>x</em></span> argument to <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
                     well away from 1 to avoid rounding error.
                   </p>
                   </td>
@@ -282,16 +271,14 @@
                     Using the relations:
                   </p>
                   <p>
-                    p = <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">ibetac</a>(v1
+                    p = <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(v1
                     / 2, v2 / 2, v1 * x / (v2 + v1 * x))
                   </p>
                   <p>
                     and
                   </p>
                   <p>
-                    p = <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">ibeta</a>(v2
+                    p = <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(v2
                     / 2, v1 / 2, v2 / (v2 + v1 * x))
                   </p>
                   <p>
@@ -299,8 +286,7 @@
                     used.
                   </p>
                   <p>
-                    The aim is to keep the <span class="emphasis"><em>x</em></span> argument to <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">ibeta</a>
+                    The aim is to keep the <span class="emphasis"><em>x</em></span> argument to <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
                     well away from 1 to avoid rounding error.
                   </p>
                   </td>
@@ -322,8 +308,7 @@
                     where:
                   </p>
                   <p>
-                    a = <a href="../../../special/sf_beta/ibeta_inv_function.html" title=" The
-        Incomplete Beta Function Inverses">ibeta_inv</a>(v1
+                    a = <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>(v1
                     / 2, v2 / 2, p)
                   </p>
                   <p>
@@ -334,8 +319,7 @@
                   </p>
                   <p>
                     Quantities <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
-                    are both computed by <a href="../../../special/sf_beta/ibeta_inv_function.html" title=" The
-        Incomplete Beta Function Inverses">ibeta_inv</a>
+                    are both computed by <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>
                     without the subtraction implied above.
                   </p>
                   </td>
@@ -360,8 +344,7 @@
                     where
                   </p>
                   <p>
-                    a = <a href="../../../special/sf_beta/ibeta_inv_function.html" title=" The
-        Incomplete Beta Function Inverses">ibetac_inv</a>(v1
+                    a = <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>(v1
                     / 2, v2 / 2, p)
                   </p>
                   <p>
@@ -372,8 +355,7 @@
                   </p>
                   <p>
                     Quantities <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
-                    are both computed by <a href="../../../special/sf_beta/ibeta_inv_function.html" title=" The
-        Incomplete Beta Function Inverses">ibetac_inv</a>
+                    are both computed by <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>
                     without the subtraction implied above.
                   </p>
                   </td>

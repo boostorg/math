@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Digamma</title>
+<title>Digamma</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../sf_gamma.html" title=" Gamma Functions">
-<link rel="prev" href="lgamma.html" title=" Log Gamma">
-<link rel="next" href="gamma_ratios.html" title=" Ratios
-        of Gamma Functions">
+<link rel="up" href="../sf_gamma.html" title="Gamma Functions">
+<link rel="prev" href="lgamma.html" title="Log Gamma">
+<link rel="next" href="gamma_ratios.html" title="Ratios of Gamma Functions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,11 +24,12 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.sf_gamma.digamma"></a><a href="digamma.html" title=" Digamma"> Digamma</a></h4></div></div></div>
-<a name="math_toolkit.special.sf_gamma.digamma.synopsis"></a><h4>
-<a name="id589094"></a>
+<a name="math_toolkit.special.sf_gamma.digamma"></a><a href="digamma.html" title="Digamma"> Digamma</a>
+</h4></div></div></div>
+<a name="math_toolkit.special.sf_gamma.digamma.synopsis"></a><h5>
+<a name="id622306"></a>
           <a href="digamma.html#math_toolkit.special.sf_gamma.digamma.synopsis">Synopsis</a>
-        </h4>
+        </h5>
 <p>
           
 </p>
@@ -42,19 +42,17 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
-<a name="math_toolkit.special.sf_gamma.digamma.description"></a><h4>
-<a name="id589419"></a>
+<a name="math_toolkit.special.sf_gamma.digamma.description"></a><h5>
+<a name="id622629"></a>
           <a href="digamma.html#math_toolkit.special.sf_gamma.digamma.description">Description</a>
-        </h4>
+        </h5>
 <p>
           Returns the digamma or psi function of <span class="emphasis"><em>x</em></span>. Digamma
           is defined as the logarithmic derivative of the gamma function:
@@ -68,10 +66,10 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
@@ -81,15 +79,14 @@
           34-digits of precision.
         </p>
 <p>
-          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>result
-          type calculation rules</em></span></a>: the result is of type <tt class="computeroutput"><span class="keyword">double</span></tt> when T is an integer type, and type
+          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
+          type calculation rules</em></span></a>: the result is of type <code class="computeroutput"><span class="keyword">double</span></code> when T is an integer type, and type
           T otherwise.
         </p>
-<a name="math_toolkit.special.sf_gamma.digamma.accuracy"></a><h4>
-<a name="id589567"></a>
+<a name="math_toolkit.special.sf_gamma.digamma.accuracy"></a><h5>
+<a name="id622775"></a>
           <a href="digamma.html#math_toolkit.special.sf_gamma.digamma.accuracy">Accuracy</a>
-        </h4>
+        </h5>
 <p>
           The following table shows the peak errors (in units of epsilon) found on
           various platforms with various floating point types. Unless otherwise specified
@@ -274,20 +271,20 @@
           relative errors very close to these can be arbitrarily large, although
           absolute error will remain very low.
         </p>
-<a name="math_toolkit.special.sf_gamma.digamma.testing"></a><h4>
-<a name="id589871"></a>
+<a name="math_toolkit.special.sf_gamma.digamma.testing"></a><h5>
+<a name="id623078"></a>
           <a href="digamma.html#math_toolkit.special.sf_gamma.digamma.testing">Testing</a>
-        </h4>
+        </h5>
 <p>
           There are two sets of tests: spot values are computed using the online
           calculator at functions.wolfram.com, while random test values are generated
-          using the high-precision reference implementation (a differentiated <a href="../../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos approximation</a>
+          using the high-precision reference implementation (a differentiated <a href="../../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos approximation</a>
           see below).
         </p>
-<a name="math_toolkit.special.sf_gamma.digamma.implementation"></a><h4>
-<a name="id589916"></a>
+<a name="math_toolkit.special.sf_gamma.digamma.implementation"></a><h5>
+<a name="id623121"></a>
           <a href="digamma.html#math_toolkit.special.sf_gamma.digamma.implementation">Implementation</a>
-        </h4>
+        </h5>
 <p>
           The implementation is divided up into the following domains:
         </p>
@@ -336,7 +333,7 @@
           result when evaluated at <span class="emphasis"><em>BIG</em></span>. Choosing BIG=10 for
           up to 80-bit reals, and BIG=20 for 128-bit reals allows the series to truncated
           after a suitably small number of terms and evaluated as a polynomial in
-          <tt class="computeroutput"><span class="number">1</span><span class="special">/(</span><span class="identifier">x</span><span class="special">*</span><span class="identifier">x</span><span class="special">)</span></tt>.
+          <code class="computeroutput"><span class="number">1</span><span class="special">/(</span><span class="identifier">x</span><span class="special">*</span><span class="identifier">x</span><span class="special">)</span></code>.
         </p>
 <p>
           The rational approximation <a href="../../backgrounders/implementation.html#math_toolkit.backgrounders.implementation.rational_approximations_used">devised
@@ -344,7 +341,7 @@
         </p>
 <p>
           First a high precision approximation to digamma was constructed using a
-          60-term differentiated <a href="../../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos
+          60-term differentiated <a href="../../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
           approximation</a>, the form used is:
         </p>
 <p>
@@ -354,7 +351,7 @@
           Where P(x) and Q(x) are the polynomials from the rational form of the Lanczos
           sum, and P'(x) and Q'(x) are their first derivatives. The Lanzos part of
           this approximation has a theoretical precision of ~100 decimal digits.
-          However, cancellation in the above sum will reduce that to around <tt class="computeroutput"><span class="number">99</span><span class="special">-(</span><span class="number">1</span><span class="special">/</span><span class="identifier">y</span><span class="special">)</span></tt>
+          However, cancellation in the above sum will reduce that to around <code class="computeroutput"><span class="number">99</span><span class="special">-(</span><span class="number">1</span><span class="special">/</span><span class="identifier">y</span><span class="special">)</span></code>
           digits if <span class="emphasis"><em>y</em></span> is the result. This approximation was
           used to calculate the positive root of digamma, and was found to agree
           with the value used by Cody to 25 digits (See Math. Comp. 27, 123-127 (1973)
@@ -383,7 +380,7 @@
           during the subtraction (this assumes that <span class="emphasis"><em>x</em></span> is an
           exact value, if it's not then all bets are off). That means that even when
           x is the value of the root rounded to the nearest representable value,
-          the result of digamma(x) <span class="emphasis"><em><span class="bold"><b>will not be zero</b></span></em></span>.
+          the result of digamma(x) <span class="emphasis"><em><span class="bold"><strong>will not be zero</strong></span></em></span>.
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

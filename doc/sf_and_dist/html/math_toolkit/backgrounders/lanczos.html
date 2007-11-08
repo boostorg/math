@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> The Lanczos Approximation</title>
+<title>The Lanczos Approximation</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../backgrounders.html" title=" Backgrounders">
-<link rel="prev" href="relative_error.html" title=" Relative
-      Error">
-<link rel="next" href="remez.html" title=" The Remez Method">
+<link rel="up" href="../backgrounders.html" title="Backgrounders">
+<link rel="prev" href="relative_error.html" title="Relative Error">
+<link rel="next" href="remez.html" title="The Remez Method">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,11 +24,12 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.backgrounders.lanczos"></a><a href="lanczos.html" title=" The Lanczos Approximation"> The Lanczos Approximation</a></h3></div></div></div>
-<a name="math_toolkit.backgrounders.lanczos.motivation"></a><h4>
-<a name="id748749"></a>
+<a name="math_toolkit.backgrounders.lanczos"></a><a href="lanczos.html" title="The Lanczos Approximation"> The Lanczos Approximation</a>
+</h3></div></div></div>
+<a name="math_toolkit.backgrounders.lanczos.motivation"></a><h5>
+<a name="id785802"></a>
         <a href="lanczos.html#math_toolkit.backgrounders.lanczos.motivation">Motivation</a>
-      </h4>
+      </h5>
 <p>
         <span class="emphasis"><em>Why base gamma and gamma-like functions on the Lanczos approximation?</em></span>
       </p>
@@ -93,19 +93,17 @@
         Of course, computing large powers is itself a notoriously hard problem, but
         even so, analytic combinations of Lanczos approximations can make the difference
         between obtaining a valid result, or simply garbage. Refer to the implementation
-        notes for the <a href="../special/sf_beta/beta_function.html" title=" Beta">beta</a>
-        function for an example of this method in practice. The incomplete <a href="../special/sf_gamma/igamma.html" title=" Incomplete Gamma
-        Functions">gamma_p gamma</a> and
-        <a href="../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">beta</a> functions
+        notes for the <a href="../special/sf_beta/beta_function.html" title="Beta">beta</a>
+        function for an example of this method in practice. The incomplete <a href="../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p gamma</a> and
+        <a href="../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">beta</a> functions
         use similar analytic combinations of power terms, to combine gamma and beta
         functions divided by large powers into single (simpler) expressions.
       </p>
-<a name="math_toolkit.backgrounders.lanczos.the_approximation"></a><h4>
-<a name="id749131"></a>
+<a name="math_toolkit.backgrounders.lanczos.the_approximation"></a><h5>
+<a name="id786182"></a>
         <a href="lanczos.html#math_toolkit.backgrounders.lanczos.the_approximation">The
         Approximation</a>
-      </h4>
+      </h5>
 <p>
         The Lanczos Approximation to the Gamma Function is given by:
       </p>
@@ -155,7 +153,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
           Some authors choose to define the sum from k=1 to N, and hence end up with
           N+1 coefficients. This happens to confuse both the following discussion
           and the code (since C++ deals with half open array ranges, rather than
@@ -163,11 +161,11 @@
           so take care when referring to the literature in this field.
         </p></td></tr>
 </table></div>
-<a name="math_toolkit.backgrounders.lanczos.computing_the_coefficients"></a><h4>
-<a name="id749395"></a>
+<a name="math_toolkit.backgrounders.lanczos.computing_the_coefficients"></a><h5>
+<a name="id786445"></a>
         <a href="lanczos.html#math_toolkit.backgrounders.lanczos.computing_the_coefficients">Computing
         the Coefficients</a>
-      </h4>
+      </h5>
 <p>
         The coefficients C0..CN-1 need to be computed from <span class="emphasis"><em>N</em></span>
         and <span class="emphasis"><em>g</em></span> at high precision, and then stored as part of
@@ -207,11 +205,11 @@
         on <span class="emphasis"><em>N</em></span>, this product should be computed first, and then
         multiplied by <span class="emphasis"><em>F</em></span> as the last step.
       </p>
-<a name="math_toolkit.backgrounders.lanczos.choosing_the_right_parameters"></a><h4>
-<a name="id749603"></a>
+<a name="math_toolkit.backgrounders.lanczos.choosing_the_right_parameters"></a><h5>
+<a name="id786650"></a>
         <a href="lanczos.html#math_toolkit.backgrounders.lanczos.choosing_the_right_parameters">Choosing
         the Right Parameters</a>
-      </h4>
+      </h5>
 <p>
         The trick is to choose <span class="emphasis"><em>N</em></span> and <span class="emphasis"><em>g</em></span>
         to give the desired level of accuracy: choosing a small value for <span class="emphasis"><em>g</em></span>
@@ -232,9 +230,9 @@
         computing to float precision with double precision arithmetic.
       </p>
 <div class="table">
-<a name="id749688"></a><p class="title"><b>Table 43. Optimal choices for N and g when computing with
+<a name="id786733"></a><p class="title"><b>Table 43. Optimal choices for N and g when computing with
       guard digits (source: Pugh)</b></p>
-<table class="table" summary="Optimal choices for N and g when computing with
+<div class="table-contents"><table class="table" summary="Optimal choices for N and g when computing with
       guard digits (source: Pugh)">
 <colgroup>
 <col>
@@ -310,9 +308,9 @@
             </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<p>
+<br class="table-break"><p>
         The alternative described by <a href="lanczos.html#godfrey">Godfrey</a> is to
         perform an exhaustive search of the <span class="emphasis"><em>N</em></span> and <span class="emphasis"><em>g</em></span>
         parameter space to determine the optimal combination for a given <span class="emphasis"><em>p</em></span>
@@ -375,9 +373,9 @@
         exactly matches the machine epsilon for the type in question.
       </p>
 <div class="table">
-<a name="id750010"></a><p class="title"><b>Table 44. Optimum value for N and g when computing at fixed
+<a name="id787065"></a><p class="title"><b>Table 44. Optimum value for N and g when computing at fixed
       precision</b></p>
-<table class="table" summary="Optimum value for N and g when computing at fixed
+<div class="table-contents"><table class="table" summary="Optimum value for N and g when computing at fixed
       precision">
 <colgroup>
 <col>
@@ -523,9 +521,9 @@
             </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<p>
+<br class="table-break"><p>
         Finally note that the Lanczos approximation can be written as follows by
         removing a factor of exp(g) from the denominator, and then dividing all the
         coefficients by exp(g):
@@ -539,10 +537,10 @@
         an inexact value: this reduces accuracy in the common case that the input
         is exact, and so isn't used for the gamma function.
       </p>
-<a name="math_toolkit.backgrounders.lanczos.references"></a><h4>
-<a name="id750288"></a>
+<a name="math_toolkit.backgrounders.lanczos.references"></a><h5>
+<a name="id787343"></a>
         <a href="lanczos.html#math_toolkit.backgrounders.lanczos.references">References</a>
-      </h4>
+      </h5>
 <a name="godfrey"></a><a name="pugh"></a><div class="orderedlist"><ol type="1">
 <li>
           Paul Godfrey, <a href="http://my.fit.edu/~gabdo/gamma.txt" target="_top">"A note

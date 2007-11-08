@@ -1,17 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Using With NTL - a High-Precision
-      Floating-Point Library</title>
+<title>Using With NTL - a High-Precision Floating-Point Library</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../using_udt.html" title=" Use with User Defined Floating-Point
-    Types">
-<link rel="prev" href="../using_udt.html" title=" Use with User Defined Floating-Point
-    Types">
-<link rel="next" href="concepts.html" title=" Conceptual Requirements
-      for Real Number Types">
+<link rel="up" href="../using_udt.html" title="Use with User Defined Floating-Point Types">
+<link rel="prev" href="../using_udt.html" title="Use with User Defined Floating-Point Types">
+<link rel="next" href="concepts.html" title="Conceptual Requirements for Real Number Types">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -28,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.using_udt.use_ntl"></a><a href="use_ntl.html" title=" Using With NTL - a High-Precision
-      Floating-Point Library"> Using With NTL - a High-Precision
-      Floating-Point Library</a></h3></div></div></div>
+<a name="math_toolkit.using_udt.use_ntl"></a><a href="use_ntl.html" title="Using With NTL - a High-Precision Floating-Point Library"> Using With NTL - a High-Precision
+      Floating-Point Library</a>
+</h3></div></div></div>
 <p>
         The special functions and tools in this library can be used with <a href="http://shoup.net/ntl/doc/RR.txt" target="_top">NTL::RR
         (an arbitrary precision number type)</a>, via the bindings in <a href="../../../../../../../boost/math/bindings/rr.hpp" target="_top">boost/math/bindings/rr.hpp</a>.
@@ -38,16 +34,16 @@
         Theory by Victor Shoup</a>
       </p>
 <p>
-        Unfortunately <tt class="computeroutput"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span></tt> doesn't quite satisfy our conceptual
-        requirements, so there is a very thin wrapper class <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">ntl</span><span class="special">::</span><span class="identifier">RR</span></tt> defined in <a href="../../../../../../../boost/math/bindings/rr.hpp" target="_top">boost/math/bindings/rr.hpp</a>
-        that you should use in place of <tt class="computeroutput"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span></tt>. The
+        Unfortunately <code class="computeroutput"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span></code> doesn't quite satisfy our conceptual
+        requirements, so there is a very thin wrapper class <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">ntl</span><span class="special">::</span><span class="identifier">RR</span></code> defined in <a href="../../../../../../../boost/math/bindings/rr.hpp" target="_top">boost/math/bindings/rr.hpp</a>
+        that you should use in place of <code class="computeroutput"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span></code>. The
         class is intended to be a drop-in replacement for the "real" NTL::RR
         that adds some syntactic sugar to keep this library happy, plus some of the
         standard library functions not implemented in NTL.
       </p>
 <p>
-        Finally there is a high precision <a href="../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos
-        approximation</a> suitable for use with <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">ntl</span><span class="special">::</span><span class="identifier">RR</span></tt>, used at 1000-bit precision in <a href="../../../../../tools/ntl_rr_lanczos.hpp" target="_top">libs/math/tools/ntl_rr_lanczos.hpp</a>.
+        Finally there is a high precision <a href="../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
+        approximation</a> suitable for use with <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">ntl</span><span class="special">::</span><span class="identifier">RR</span></code>, used at 1000-bit precision in <a href="../../../../../tools/ntl_rr_lanczos.hpp" target="_top">libs/math/tools/ntl_rr_lanczos.hpp</a>.
         The approximation has a theoretical precision of &gt; 90 decimal digits,
         and an experimental precision of &gt; 100 decimal digits. To use that approximation,
         just include that header before any of the special function headers (if you

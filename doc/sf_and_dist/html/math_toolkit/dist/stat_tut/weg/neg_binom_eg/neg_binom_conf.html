@@ -1,18 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-            Calculating Confidence Limits on the Frequency of Occurrence for the
-            Negative Binomial Distribution</title>
+<title>Calculating Confidence Limits on the Frequency of Occurrence for the Negative Binomial Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../neg_binom_eg.html" title=" Negative
-          Binomial Distribution Examples">
-<link rel="prev" href="../neg_binom_eg.html" title=" Negative
-          Binomial Distribution Examples">
-<link rel="next" href="neg_binom_size_eg.html" title="
-            Estimating Sample Sizes for the Negative Binomial.">
+<link rel="up" href="../neg_binom_eg.html" title="Negative Binomial Distribution Examples">
+<link rel="prev" href="../neg_binom_eg.html" title="Negative Binomial Distribution Examples">
+<link rel="next" href="neg_binom_size_eg.html" title="Estimating Sample Sizes for the Negative Binomial.">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -29,11 +24,10 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf"></a><a href="neg_binom_conf.html" title="
+<a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf"></a><a href="neg_binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for the Negative Binomial Distribution">
             Calculating Confidence Limits on the Frequency of Occurrence for the
-            Negative Binomial Distribution">
-            Calculating Confidence Limits on the Frequency of Occurrence for the
-            Negative Binomial Distribution</a></h6></div></div></div>
+            Negative Binomial Distribution</a>
+</h6></div></div></div>
 <p>
               Imagine you have a process that follows a negative binomial distribution:
               for each trial conducted, an event either occurs or does it does not,
@@ -51,8 +45,8 @@
 <p>
               However our confidence in that estimate will be shaped by how many
               trials were conducted, and how many successes were observed. The static
-              member functions <tt class="computeroutput"><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_lower_bound_on_p</span></tt>
-              and <tt class="computeroutput"><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_upper_bound_on_p</span></tt>
+              member functions <code class="computeroutput"><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_lower_bound_on_p</span></code>
+              and <code class="computeroutput"><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;&gt;::</span><span class="identifier">find_upper_bound_on_p</span></code>
               allow you to calculate the confidence intervals for your estimate of
               the success fraction.
             </p>
@@ -101,7 +95,7 @@
               </p>
 <p>
                 Confidence value as % is (1 - alpha) * 100, so alpha 0.05 == 95%
-                confidence that the true occurence frequency lies <span class="bold"><b>inside</b></span>
+                confidence that the true occurence frequency lies <span class="bold"><strong>inside</strong></span>
                 the calculated interval.
               </p>
 <p>
@@ -146,14 +140,14 @@
               </p>
 <p>
                 And now for the important part - the bounds themselves. For each
-                value of <span class="emphasis"><em>alpha</em></span>, we call <tt class="computeroutput"><span class="identifier">find_lower_bound_on_p</span></tt>
-                and <tt class="computeroutput"><span class="identifier">find_upper_bound_on_p</span></tt>
+                value of <span class="emphasis"><em>alpha</em></span>, we call <code class="computeroutput"><span class="identifier">find_lower_bound_on_p</span></code>
+                and <code class="computeroutput"><span class="identifier">find_upper_bound_on_p</span></code>
                 to obtain lower and upper bounds respectively. Note that since we
                 are calculating a two-sided interval, we must divide the value of
                 alpha in two. Had we been calculating a single-sided interval, for
                 example: <span class="emphasis"><em>"Calculate a lower bound so that we are P%
                 sure that the true occurrence frequency is greater than some value"</em></span>
-                then we would <span class="bold"><b>not</b></span> have divided by
+                then we would <span class="bold"><strong>not</strong></span> have divided by
                 two.
               </p>
 <p>

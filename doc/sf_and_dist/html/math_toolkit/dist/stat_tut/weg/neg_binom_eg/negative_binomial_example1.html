@@ -1,17 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-            Negative Binomial Sales Quota Example.</title>
+<title>Negative Binomial Sales Quota Example.</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../neg_binom_eg.html" title=" Negative
-          Binomial Distribution Examples">
-<link rel="prev" href="neg_binom_size_eg.html" title="
-            Estimating Sample Sizes for the Negative Binomial.">
-<link rel="next" href="negative_binomial_example2.html" title="
-            Negative Binomial Table Printing Example.">
+<link rel="up" href="../neg_binom_eg.html" title="Negative Binomial Distribution Examples">
+<link rel="prev" href="neg_binom_size_eg.html" title="Estimating Sample Sizes for the Negative Binomial.">
+<link rel="next" href="negative_binomial_example2.html" title="Negative Binomial Table Printing Example.">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -28,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.negative_binomial_example1"></a><a href="negative_binomial_example1.html" title="
-            Negative Binomial Sales Quota Example.">
-            Negative Binomial Sales Quota Example.</a></h6></div></div></div>
+<a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.negative_binomial_example1"></a><a href="negative_binomial_example1.html" title="Negative Binomial Sales Quota Example.">
+            Negative Binomial Sales Quota Example.</a>
+</h6></div></div></div>
 <p>
               This example program <a href="../../../../../../../../example/negative_binomial_example1.cpp" target="_top">negative_binomial_example1.cpp
               (full source code)</a> demonstrates a simple use to find the probability
@@ -110,8 +106,8 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../../../../doc/html/images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
-                  It is vital to #include distributions etc <span class="bold"><b>after</b></span>
+<tr><td align="left" valign="top"><p>
+                  It is vital to #include distributions etc <span class="bold"><strong>after</strong></span>
                   the above #defines
                 </p></td></tr>
 </table></div>
@@ -290,7 +286,7 @@ to need to visit about 12 houses in order to sell all 5 bars.
               </p>
 <p>
                 To finish on or before the 8th house, Pat must finish at the 5th,
-                6th, 7th or 8th house. The probability that he will finish on <span class="bold"><b>exactly</b></span> ( == ) on any house is the Probability
+                6th, 7th or 8th house. The probability that he will finish on <span class="bold"><strong>exactly</strong></span> ( == ) on any house is the Probability
                 Density Function (pdf).
               </p>
 <p>
@@ -344,7 +340,7 @@ Probability that Pat finishes on the 8th house is 0.077414
 <p>
               </p>
 <p>
-                Or, usually better, by using the negative binomial <span class="bold"><b>cumulative</b></span>
+                Or, usually better, by using the negative binomial <span class="bold"><strong>cumulative</strong></span>
                 distribution function.
               </p>
 <p>
@@ -461,7 +457,7 @@ on or before the 12th house is 0.56182
               </p>
 <p>
                 What is the probability that Pat exhausts all 30 houses in the neighborhood,
-                and <span class="bold"><b>still</b></span> doesn't sell the required
+                and <span class="bold"><strong>still</strong></span> doesn't sell the required
                 5 candy bars?
               </p>
 <p>
@@ -484,16 +480,16 @@ on or before the 30th house is 0.99849
 <p>
               </p>
 <p>
-                /*<tt class="computeroutput"><span class="identifier">So</span> <span class="identifier">the</span>
+                /*<code class="computeroutput"><span class="identifier">So</span> <span class="identifier">the</span>
                 <span class="identifier">risk</span> <span class="identifier">of</span>
                 <span class="identifier">failing</span> <span class="identifier">even</span>
                 <span class="identifier">after</span> <span class="identifier">visiting</span>
                 <span class="identifier">all</span> <span class="identifier">the</span>
                 <span class="identifier">houses</span> <span class="identifier">is</span>
                 <span class="number">1</span> <span class="special">-</span>
-                <span class="keyword">this</span> <span class="identifier">probability</span><span class="special">,</span> </tt><tt class="computeroutput"><span class="number">1</span>
+                <span class="keyword">this</span> <span class="identifier">probability</span><span class="special">,</span> </code><code class="computeroutput"><span class="number">1</span>
                 <span class="special">-</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="identifier">all_houses</span>
-                <span class="special">-</span> <span class="identifier">sales_quota</span></tt><tt class="computeroutput">
+                <span class="special">-</span> <span class="identifier">sales_quota</span></code><code class="computeroutput">
                 <span class="identifier">But</span> <span class="keyword">using</span>
                 <span class="keyword">this</span> <span class="identifier">expression</span>
                 <span class="identifier">may</span> <span class="identifier">cause</span>
@@ -510,9 +506,9 @@ on or before the 30th house is 0.99849
                 <span class="identifier">the</span> <span class="number">31</span><span class="identifier">th</span> <span class="special">(</span><span class="identifier">non</span><span class="special">-</span><span class="identifier">existent</span><span class="special">)</span>
                 <span class="identifier">houses</span> <span class="identifier">is</span>
                 <span class="number">1</span> <span class="special">-</span>
-                <span class="keyword">this</span> <span class="identifier">probability</span><span class="special">,</span> </tt><tt class="computeroutput"><span class="number">1</span>
+                <span class="keyword">this</span> <span class="identifier">probability</span><span class="special">,</span> </code><code class="computeroutput"><span class="number">1</span>
                 <span class="special">-</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="identifier">all_houses</span>
-                <span class="special">-</span> <span class="identifier">sales_quota</span><span class="special">)</span></tt>` But using this expression may cause
+                <span class="special">-</span> <span class="identifier">sales_quota</span><span class="special">)</span></code>` But using this expression may cause
                 serious inaccuracy. So it would be much better to use the complement
                 of the cdf. <a href="../../overview.html#why_complements">Why complements?</a>
               </p>
@@ -576,7 +572,7 @@ even after visiting all 30 houses is 0.0015101
 <p>
                 Demanding absolute certainty that all 5 will be sold, implies an
                 infinite number of trials. (Of course, there are only 30 houses on
-                the estate, so he can't ever be <span class="bold"><b>certain</b></span>
+                the estate, so he can't ever be <span class="bold"><strong>certain</strong></span>
                 of selling his quota).
               </p>
 <p>

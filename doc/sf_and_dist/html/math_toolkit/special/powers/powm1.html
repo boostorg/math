@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> powm1</title>
+<title>powm1</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../powers.html" title=" Logs, Powers, Roots and
-      Exponentials">
-<link rel="prev" href="sqrt1pm1.html" title=" sqrt1pm1">
-<link rel="next" href="hypot.html" title=" hypot">
+<link rel="up" href="../powers.html" title="Logs, Powers, Roots and Exponentials">
+<link rel="prev" href="sqrt1pm1.html" title="sqrt1pm1">
+<link rel="next" href="hypot.html" title="hypot">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,7 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.powers.powm1"></a><a href="powm1.html" title=" powm1"> powm1</a></h4></div></div></div>
+<a name="math_toolkit.special.powers.powm1"></a><a href="powm1.html" title="powm1"> powm1</a>
+</h4></div></div></div>
 <p>
           
 </p>
@@ -38,12 +38,10 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">powm1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">y</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">powm1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">y</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">powm1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">y</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">powm1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">y</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
@@ -51,17 +49,16 @@
           Returns x<sup>y </sup> - 1.
         </p>
 <p>
-          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>result
+          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a> when T1 and T2 are dufferent types.
         </p>
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
@@ -70,19 +67,19 @@
           x is close to 1.
         </p>
 <p>
-          Implemented in terms of <tt class="computeroutput"><span class="identifier">expm1</span></tt>.
+          Implemented in terms of <code class="computeroutput"><span class="identifier">expm1</span></code>.
         </p>
-<a name="math_toolkit.special.powers.powm1.accuracy"></a><h4>
-<a name="id655366"></a>
+<a name="math_toolkit.special.powers.powm1.accuracy"></a><h5>
+<a name="id692541"></a>
           <a href="powm1.html#math_toolkit.special.powers.powm1.accuracy">Accuracy</a>
-        </h4>
+        </h5>
 <p>
           Should have approximately 2-3 epsilon accuracy.
         </p>
-<a name="math_toolkit.special.powers.powm1.testing"></a><h4>
-<a name="id655396"></a>
+<a name="math_toolkit.special.powers.powm1.testing"></a><h5>
+<a name="id692570"></a>
           <a href="powm1.html#math_toolkit.special.powers.powm1.testing">Testing</a>
-        </h4>
+        </h5>
 <p>
           A selection of random high precision test values calculated using NTL::RR
           at 1000-bit precision.

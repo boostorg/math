@@ -1,15 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Namespaces</title>
+<title>Namespaces</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../main_overview.html" title=" Overview">
-<link rel="prev" href="directories.html" title=" Directory and
-      File Structure">
-<link rel="next" href="result_type.html" title=" Calculation
-      of the Type of the Result">
+<link rel="up" href="../main_overview.html" title="Overview">
+<link rel="prev" href="directories.html" title="Directory and File Structure">
+<link rel="next" href="result_type.html" title="Calculation of the Type of the Result">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -26,21 +24,22 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.main_overview.namespaces"></a><a href="namespaces.html" title=" Namespaces"> Namespaces</a></h3></div></div></div>
+<a name="math_toolkit.main_overview.namespaces"></a><a href="namespaces.html" title="Namespaces"> Namespaces</a>
+</h3></div></div></div>
 <p>
-        All math functions and distributions are in <tt class="computeroutput"><span class="keyword">namespace</span>
-        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></tt>
+        All math functions and distributions are in <code class="computeroutput"><span class="keyword">namespace</span>
+        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></code>
       </p>
 <p>
-        So, for example, the Students-t distribution template in <tt class="computeroutput"><span class="keyword">namespace</span>
-        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></tt> is
+        So, for example, the Students-t distribution template in <code class="computeroutput"><span class="keyword">namespace</span>
+        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></code> is
       </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">&gt;</span> <span class="keyword">class</span> <span class="identifier">students_t_distribution</span>
 </pre>
 <p>
-        and can be instantiated with the help of the reserved name <tt class="computeroutput"><span class="identifier">students_t</span></tt>(for <tt class="computeroutput"><span class="identifier">RealType</span>
-        <span class="keyword">double</span></tt>)
+        and can be instantiated with the help of the reserved name <code class="computeroutput"><span class="identifier">students_t</span></code>(for <code class="computeroutput"><span class="identifier">RealType</span>
+        <span class="keyword">double</span></code>)
       </p>
 <pre class="programlisting">
 <span class="keyword">typedef</span> <span class="identifier">students_t_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">students_t</span><span class="special">;</span>
@@ -48,16 +47,16 @@
 <span class="identifier">student_t</span> <span class="identifier">mydist</span><span class="special">(</span><span class="number">10</span><span class="special">);</span>
 </pre>
 <p>
-        Functions not intended for use by applications are in <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">detail</span></tt>.
+        Functions not intended for use by applications are in <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">detail</span></code>.
       </p>
 <p>
-        Functions that may have more general use, like <tt class="computeroutput"><span class="identifier">digits</span></tt>
-        (significand), <tt class="computeroutput"><span class="identifier">max_value</span></tt>,
-        <tt class="computeroutput"><span class="identifier">min_value</span></tt> and <tt class="computeroutput"><span class="identifier">epsilon</span></tt> are in <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span></tt>.
+        Functions that may have more general use, like <code class="computeroutput"><span class="identifier">digits</span></code>
+        (significand), <code class="computeroutput"><span class="identifier">max_value</span></code>,
+        <code class="computeroutput"><span class="identifier">min_value</span></code> and <code class="computeroutput"><span class="identifier">epsilon</span></code> are in <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span></code>.
       </p>
 <p>
-        <a href="../policy.html" title=" Policies">Policy</a> and configuration information
-        is in namespace <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span></tt>.
+        <a href="../policy.html" title="Policies">Policy</a> and configuration information
+        is in namespace <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span></code>.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

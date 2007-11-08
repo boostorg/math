@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> The Remez Method</title>
+<title>The Remez Method</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../backgrounders.html" title=" Backgrounders">
-<link rel="prev" href="lanczos.html" title=" The Lanczos Approximation">
-<link rel="next" href="refs.html" title=" References">
+<link rel="up" href="../backgrounders.html" title="Backgrounders">
+<link rel="prev" href="lanczos.html" title="The Lanczos Approximation">
+<link rel="next" href="refs.html" title="References">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,7 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.backgrounders.remez"></a><a href="remez.html" title=" The Remez Method"> The Remez Method</a></h3></div></div></div>
+<a name="math_toolkit.backgrounders.remez"></a><a href="remez.html" title="The Remez Method"> The Remez Method</a>
+</h3></div></div></div>
 <p>
         The <a href="http://en.wikipedia.org/wiki/Remez_algorithm" target="_top">Remez algorithm</a>
         is a methodology for locating the minimax rational approximation to a function.
@@ -92,11 +93,11 @@
         <span class="emphasis"><em>Unfortunately we don't know where the extrema of the error function
         are located!</em></span>
       </p>
-<a name="math_toolkit.backgrounders.remez.the_remez_method"></a><h4>
-<a name="id750542"></a>
+<a name="math_toolkit.backgrounders.remez.the_remez_method"></a><h5>
+<a name="id787594"></a>
         <a href="remez.html#math_toolkit.backgrounders.remez.the_remez_method">The Remez
         Method</a>
-      </h4>
+      </h5>
 <p>
         The Remez method is an iterative technique which, given a broad range of
         assumptions, will converge on the extrema of the error function, and therefore
@@ -152,7 +153,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
           In the simple case of a polynomial approximation, by interpolating through
           the roots of a Chebyshev polynomial we have in fact created a <span class="emphasis"><em>Chebyshev
@@ -172,11 +173,11 @@
         </p>
 </td></tr>
 </table></div>
-<a name="math_toolkit.backgrounders.remez.remez_step_1"></a><h4>
-<a name="id750764"></a>
+<a name="math_toolkit.backgrounders.remez.remez_step_1"></a><h5>
+<a name="id787824"></a>
         <a href="remez.html#math_toolkit.backgrounders.remez.remez_step_1">Remez Step
         1</a>
-      </h4>
+      </h5>
 <p>
         The first step in the Remez method, given our current set of N+2 Chebyshev
         control points x<sub>i</sub>, is to solve the N+2 simultaneous equations:
@@ -203,11 +204,11 @@
         not located at the extrema, but the maximum relative error has now dropped
         to 5.6x10<sup>-4</sup>.
       </p>
-<a name="math_toolkit.backgrounders.remez.remez_step_2"></a><h4>
-<a name="id750871"></a>
+<a name="math_toolkit.backgrounders.remez.remez_step_2"></a><h5>
+<a name="id787930"></a>
         <a href="remez.html#math_toolkit.backgrounders.remez.remez_step_2">Remez Step
         2</a>
-      </h4>
+      </h5>
 <p>
         The second step is to locate the extrema of the new approximation, which
         we do in two stages: first, since the error function changes sign at each
@@ -232,10 +233,10 @@
 <p>
         In our example we perform multi-point exchange.
       </p>
-<a name="math_toolkit.backgrounders.remez.iteration"></a><h4>
-<a name="id750933"></a>
+<a name="math_toolkit.backgrounders.remez.iteration"></a><h5>
+<a name="id788000"></a>
         <a href="remez.html#math_toolkit.backgrounders.remez.iteration">Iteration</a>
-      </h4>
+      </h5>
 <p>
         The Remez method then performs steps 1 and 2 above iteratively until the
         control points are located at the extrema of the error function: this is
@@ -248,11 +249,11 @@
 <p>
         <span class="inlinemediaobject"><img src="../../../graphs/remez-4.png" alt="remez-4"></span>
       </p>
-<a name="math_toolkit.backgrounders.remez.rational_approximations"></a><h4>
-<a name="id750996"></a>
+<a name="math_toolkit.backgrounders.remez.rational_approximations"></a><h5>
+<a name="id788062"></a>
         <a href="remez.html#math_toolkit.backgrounders.remez.rational_approximations">Rational
         Approximations</a>
-      </h4>
+      </h5>
 <p>
         If we wish to extend the Remez method to a rational approximation of the
         form
@@ -297,11 +298,11 @@
         error drops to 8.7x10<sup>-5</sup>. That's a 5 fold increase in accuracy, for the same
         number of terms overall.
       </p>
-<a name="math_toolkit.backgrounders.remez.practical_considerations"></a><h4>
-<a name="id751120"></a>
+<a name="math_toolkit.backgrounders.remez.practical_considerations"></a><h5>
+<a name="id788184"></a>
         <a href="remez.html#math_toolkit.backgrounders.remez.practical_considerations">Practical
         Considerations</a>
-      </h4>
+      </h5>
 <p>
         Most treatises on approximation theory stop at this point. However, from
         a practical point of view, most of the work involves finding the right approximating
@@ -346,8 +347,7 @@
 <p>
         The difficult part is obviously finding the right g(x) to extract from your
         function: often the asymptotic behaviour of the function will give a clue,
-        so for example the function <a href="../special/sf_erf/error_function.html" title=" Error
-        Functions">erfc</a>
+        so for example the function <a href="../special/sf_erf/error_function.html" title="Error Functions">erfc</a>
         becomes proportional to e<sup>-x<sup>2</sup></sup>/x as x becomes large. Therefore using:
       </p>
 <p>
@@ -406,11 +406,11 @@
         It's clearly still not ideal, but it is only a few percent away from our
         desired minimax solution (5x10<sup>-4</sup>).
       </p>
-<a name="math_toolkit.backgrounders.remez.remez_method_checklist"></a><h4>
-<a name="id751398"></a>
+<a name="math_toolkit.backgrounders.remez.remez_method_checklist"></a><h5>
+<a name="id788478"></a>
         <a href="remez.html#math_toolkit.backgrounders.remez.remez_method_checklist">Remez
         Method Checklist</a>
-      </h4>
+      </h5>
 <p>
         The following lists some of the things to check if the Remez method goes
         wrong, it is by no means an exhaustive list, but is provided in the hopes
@@ -460,10 +460,10 @@
           over, say [0, b], for some smallish value <span class="emphasis"><em>b</em></span>.
         </li>
 </ul></div>
-<a name="math_toolkit.backgrounders.remez.references"></a><h4>
-<a name="id751502"></a>
+<a name="math_toolkit.backgrounders.remez.references"></a><h5>
+<a name="id788589"></a>
         <a href="remez.html#math_toolkit.backgrounders.remez.references">References</a>
-      </h4>
+      </h5>
 <p>
         The original references for the Remez Method and it's extension to rational
         functions are unfortunately in Russian:

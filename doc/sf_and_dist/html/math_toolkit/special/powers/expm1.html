@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> expm1</title>
+<title>expm1</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../powers.html" title=" Logs, Powers, Roots and
-      Exponentials">
-<link rel="prev" href="log1p.html" title=" log1p">
-<link rel="next" href="cbrt.html" title=" cbrt">
+<link rel="up" href="../powers.html" title="Logs, Powers, Roots and Exponentials">
+<link rel="prev" href="log1p.html" title="log1p">
+<link rel="next" href="cbrt.html" title="cbrt">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,7 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.powers.expm1"></a><a href="expm1.html" title=" expm1"> expm1</a></h4></div></div></div>
+<a name="math_toolkit.special.powers.expm1"></a><a href="expm1.html" title="expm1"> expm1</a>
+</h4></div></div></div>
 <p>
           
 </p>
@@ -38,12 +38,10 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expm1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expm1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expm1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expm1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
@@ -51,45 +49,44 @@
           Returns e<sup>x</sup> - 1.
         </p>
 <p>
-          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>result
-          type calculation rules</em></span></a>: the return is <tt class="computeroutput"><span class="keyword">double</span></tt>
+          The return type of this function is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
+          type calculation rules</em></span></a>: the return is <code class="computeroutput"><span class="keyword">double</span></code>
           when <span class="emphasis"><em>x</em></span> is an integer type and T otherwise.
         </p>
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <p>
-          For small x, then <tt class="computeroutput">e<sup>x</sup></tt> is very close to 1, as a result calculating <tt class="computeroutput">e<sup>x</sup> - 1</tt> results in
-          catastrophic cancellation errors when x is small. <tt class="computeroutput"><span class="identifier">expm1</span></tt>
-          calculates <tt class="computeroutput">e<sup>x</sup> - 1</tt> using rational approximations (for up to 128-bit long doubles),
+          For small x, then <code class="computeroutput">e<sup>x</sup></code> is very close to 1, as a result calculating <code class="computeroutput">e<sup>x</sup> - 1</code> results in
+          catastrophic cancellation errors when x is small. <code class="computeroutput"><span class="identifier">expm1</span></code>
+          calculates <code class="computeroutput">e<sup>x</sup> - 1</code> using rational approximations (for up to 128-bit long doubles),
           otherwise via a series expansion when x is small (giving an accuracy of
           less than 2&#603;).
         </p>
 <p>
-          Finally when BOOST_HAS_EXPM1 is defined then the <tt class="computeroutput"><span class="keyword">float</span><span class="special">/</span><span class="keyword">double</span><span class="special">/</span><span class="keyword">long</span> <span class="keyword">double</span></tt>
+          Finally when BOOST_HAS_EXPM1 is defined then the <code class="computeroutput"><span class="keyword">float</span><span class="special">/</span><span class="keyword">double</span><span class="special">/</span><span class="keyword">long</span> <span class="keyword">double</span></code>
           specializations of this template simply forward to the platform's native
           (POSIX) implementation of this function.
         </p>
-<a name="math_toolkit.special.powers.expm1.accuracy"></a><h4>
-<a name="id653821"></a>
+<a name="math_toolkit.special.powers.expm1.accuracy"></a><h5>
+<a name="id691009"></a>
           <a href="expm1.html#math_toolkit.special.powers.expm1.accuracy">Accuracy</a>
-        </h4>
+        </h5>
 <p>
-          For built in floating point types <tt class="computeroutput"><span class="identifier">expm1</span></tt>
+          For built in floating point types <code class="computeroutput"><span class="identifier">expm1</span></code>
           should have approximately 1 epsilon accuracy.
         </p>
-<a name="math_toolkit.special.powers.expm1.testing"></a><h4>
-<a name="id653864"></a>
+<a name="math_toolkit.special.powers.expm1.testing"></a><h5>
+<a name="id691050"></a>
           <a href="expm1.html#math_toolkit.special.powers.expm1.testing">Testing</a>
-        </h4>
+        </h5>
 <p>
           A mixture of spot test sanity checks, and random high precision test values
           calculated using NTL::RR at 1000-bit precision.

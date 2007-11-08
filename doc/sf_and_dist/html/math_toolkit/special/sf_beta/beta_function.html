@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Beta</title>
+<title>Beta</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../sf_beta.html" title=" Beta Functions">
-<link rel="prev" href="../sf_beta.html" title=" Beta Functions">
-<link rel="next" href="ibeta_function.html" title=" Incomplete
-        Beta Functions">
+<link rel="up" href="../sf_beta.html" title="Beta Functions">
+<link rel="prev" href="../sf_beta.html" title="Beta Functions">
+<link rel="next" href="ibeta_function.html" title="Incomplete Beta Functions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,11 +24,12 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.sf_beta.beta_function"></a><a href="beta_function.html" title=" Beta"> Beta</a></h4></div></div></div>
-<a name="math_toolkit.special.sf_beta.beta_function.synopsis"></a><h4>
-<a name="id604065"></a>
+<a name="math_toolkit.special.sf_beta.beta_function"></a><a href="beta_function.html" title="Beta"> Beta</a>
+</h4></div></div></div>
+<a name="math_toolkit.special.sf_beta.beta_function.synopsis"></a><h5>
+<a name="id637192"></a>
           <a href="beta_function.html#math_toolkit.special.sf_beta.beta_function.synopsis">Synopsis</a>
-        </h4>
+        </h5>
 <p>
           
 </p>
@@ -42,19 +42,17 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">beta</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">);</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">beta</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">beta</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title=" Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">beta</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
-<a name="math_toolkit.special.sf_beta.beta_function.description"></a><h4>
-<a name="id604459"></a>
+<a name="math_toolkit.special.sf_beta.beta_function.description"></a><h5>
+<a name="id637584"></a>
           <a href="beta_function.html#math_toolkit.special.sf_beta.beta_function.description">Description</a>
-        </h4>
+        </h5>
 <p>
           The beta function is defined by:
         </p>
@@ -67,10 +65,10 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title=" Policies">Policy</a> argument
+            The final <a href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title=" Policies">policy documentation for more details</a>.
+            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
@@ -78,22 +76,21 @@
           There are effectively two versions of this function internally: a fully
           generic version that is slow, but reasonably accurate, and a much more
           efficient approximation that is used where the number of digits in the
-          significand of T correspond to a certain <a href="../../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos
+          significand of T correspond to a certain <a href="../../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
           approximation</a>. In practice any built-in floating-point type you
-          will encounter has an appropriate <a href="../../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos
+          will encounter has an appropriate <a href="../../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
           approximation</a> defined for it. It is also possible, given enough
-          machine time, to generate further <a href="../../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos
+          machine time, to generate further <a href="../../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
           approximation</a>'s using the program libs/math/tools/lanczos_generator.cpp.
         </p>
 <p>
-          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title=" Calculation
-      of the Type of the Result"><span class="emphasis"><em>result
+          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a> when T1 and T2 are different types.
         </p>
-<a name="math_toolkit.special.sf_beta.beta_function.accuracy"></a><h4>
-<a name="id604623"></a>
+<a name="math_toolkit.special.sf_beta.beta_function.accuracy"></a><h5>
+<a name="id637746"></a>
           <a href="beta_function.html#math_toolkit.special.sf_beta.beta_function.accuracy">Accuracy</a>
-        </h4>
+        </h5>
 <p>
           The following table shows peak errors for various domains of input arguments,
           along with comparisons to the <a href="http://www.gnu.org/software/gsl/" target="_top">GSL-1.9</a>
@@ -103,8 +100,8 @@
           zero error</a>.
         </p>
 <div class="table">
-<a name="id604671"></a><p class="title"><b>Table 15. Peak Errors In the Beta Function</b></p>
-<table class="table" summary="Peak Errors In the Beta Function">
+<a name="id637793"></a><p class="title"><b>Table 15. Peak Errors In the Beta Function</b></p>
+<div class="table-contents"><table class="table" summary="Peak Errors In the Beta Function">
 <colgroup>
 <col>
 <col>
@@ -241,32 +238,32 @@
               </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<p>
+<br class="table-break"><p>
           Note that the worst errors occur when a or b are large, and that when this
           is the case the result is very close to zero, so absolute errors will be
           very small.
         </p>
-<a name="math_toolkit.special.sf_beta.beta_function.testing"></a><h4>
-<a name="id604917"></a>
+<a name="math_toolkit.special.sf_beta.beta_function.testing"></a><h5>
+<a name="id638039"></a>
           <a href="beta_function.html#math_toolkit.special.sf_beta.beta_function.testing">Testing</a>
-        </h4>
+        </h5>
 <p>
           A mixture of spot tests of exact values, and randomly generated test data
           are used: the test data was computed using <a href="http://shoup.net/ntl/doc/RR.txt" target="_top">NTL::RR</a>
           at 1000-bit precision.
         </p>
-<a name="math_toolkit.special.sf_beta.beta_function.implementation"></a><h4>
-<a name="id604957"></a>
+<a name="math_toolkit.special.sf_beta.beta_function.implementation"></a><h5>
+<a name="id638077"></a>
           <a href="beta_function.html#math_toolkit.special.sf_beta.beta_function.implementation">Implementation</a>
-        </h4>
+        </h5>
 <p>
           Traditional methods of evaluating the beta function either involve evaluating
           the gamma functions directly, or taking logarithms and then exponentiating
           the result. However, the former is prone to overflows for even very modest
           arguments, while the latter is prone to cancellation errors. As an alternative,
-          if we regard the gamma function as a white-box containing the <a href="../../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos
+          if we regard the gamma function as a white-box containing the <a href="../../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
           approximation</a>, then we can combine the power terms:
         </p>
 <p>
@@ -287,7 +284,7 @@
           to other implementation methods.
         </p>
 <p>
-          The generic implementation - where no <a href="../../backgrounders/lanczos.html" title=" The Lanczos Approximation">Lanczos
+          The generic implementation - where no <a href="../../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
           approximation</a> approximation is available - is implemented in a very
           similar way to the generic version of the gamma function. Again in order
           to avoid numerical overflow the power terms that prefix the series and

@@ -1,15 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-        So Just What is a Policy Anyway?</title>
+<title>So Just What is a Policy Anyway?</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../pol_tutorial.html" title=" Policy Tutorial">
-<link rel="prev" href="../pol_tutorial.html" title=" Policy Tutorial">
-<link rel="next" href="policy_tut_defaults.html" title="
-        Policies Have Sensible Defaults">
+<link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
+<link rel="prev" href="../pol_tutorial.html" title="Policy Tutorial">
+<link rel="next" href="policy_tut_defaults.html" title="Policies Have Sensible Defaults">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -26,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_tutorial.what_is_a_policy"></a><a href="what_is_a_policy.html" title="
-        So Just What is a Policy Anyway?">
-        So Just What is a Policy Anyway?</a></h4></div></div></div>
+<a name="math_toolkit.policy.pol_tutorial.what_is_a_policy"></a><a href="what_is_a_policy.html" title="So Just What is a Policy Anyway?">
+        So Just What is a Policy Anyway?</a>
+</h4></div></div></div>
 <p>
           A policy is a compile-time mechanism for customising the behaviour of a
           special function, or a statistical distribution. With Policies you can
@@ -46,9 +44,9 @@
             What happens when you ask for a quantile of a discrete distribution.
           </li>
 <li>
-            Whether the library is allowed to internally promote <tt class="computeroutput"><span class="keyword">float</span></tt>
-            to <tt class="computeroutput"><span class="keyword">double</span></tt> and <tt class="computeroutput"><span class="keyword">double</span></tt> to <tt class="computeroutput"><span class="keyword">long</span>
-            <span class="keyword">double</span></tt> in order to improve precision.
+            Whether the library is allowed to internally promote <code class="computeroutput"><span class="keyword">float</span></code>
+            to <code class="computeroutput"><span class="keyword">double</span></code> and <code class="computeroutput"><span class="keyword">double</span></code> to <code class="computeroutput"><span class="keyword">long</span>
+            <span class="keyword">double</span></code> in order to improve precision.
           </li>
 <li>
             What precision to use when calculating the result.
@@ -61,7 +59,7 @@
         </p>
 <p>
           For this reason a Policy is a <span class="emphasis"><em>type</em></span>: in fact it's an
-          instance of the class template <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span></tt>. This class is just a compile-time-container
+          instance of the class template <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span></code>. This class is just a compile-time-container
           of user-selected policies (sometimes called a type-list):
         </p>
 <pre class="programlisting">

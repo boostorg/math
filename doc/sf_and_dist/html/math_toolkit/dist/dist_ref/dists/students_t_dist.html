@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-          Students t Distribution</title>
+<title>Students t Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Math Toolkit">
-<link rel="up" href="../dists.html" title=" Distributions">
-<link rel="prev" href="rayleigh.html" title=" Rayleigh
-          Distribution">
-<link rel="next" href="triangular_dist.html" title="
-          Triangular Distribution">
+<link rel="up" href="../dists.html" title="Distributions">
+<link rel="prev" href="rayleigh.html" title="Rayleigh Distribution">
+<link rel="next" href="triangular_dist.html" title="Triangular Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.students_t_dist"></a><a href="students_t_dist.html" title="
-          Students t Distribution">
-          Students t Distribution</a></h5></div></div></div>
+<a name="math_toolkit.dist.dist_ref.dists.students_t_dist"></a><a href="students_t_dist.html" title="Students t Distribution">
+          Students t Distribution</a>
+</h5></div></div></div>
 <p>
             
 </p>
@@ -41,13 +38,12 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
    
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title=" Policy Class
-        Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">students_t_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">students_t_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">students_t</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title=" Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">students_t_distribution</span>
 <span class="special">{</span>
    <span class="keyword">typedef</span> <span class="identifier">RealType</span> <span class="identifier">value_type</span><span class="special">;</span>
@@ -102,11 +98,11 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/students_t.png" alt="students_t"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.students_t_dist.member_functions"></a><h4>
-<a name="id575452"></a>
+<a name="math_toolkit.dist.dist_ref.dists.students_t_dist.member_functions"></a><h5>
+<a name="id608757"></a>
             <a href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.member_functions">Member
             Functions</a>
-          </h4>
+          </h5>
 <pre class="programlisting">
 <span class="identifier">students_t_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
 </pre>
@@ -173,7 +169,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
               Remember that for a two-sided test, you must divide alpha by two before
               calling this function.
             </p></td></tr>
@@ -182,13 +178,13 @@
             For more information on this function see the <a href="http://www.itl.nist.gov/div898/handbook/prc/section2/prc222.htm" target="_top">NIST
             Engineering Statistics Handbook</a>.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.students_t_dist.non_member_accessors"></a><h4>
-<a name="id575844"></a>
+<a name="math_toolkit.dist.dist_ref.dists.students_t_dist.non_member_accessors"></a><h5>
+<a name="id609146"></a>
             <a href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.non_member_accessors">Non-member
             Accessors</a>
-          </h4>
+          </h5>
 <p>
-            All the <a href="../nmp.html" title=" Non-Member Properties">usual non-member
+            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
             <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
             <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
@@ -202,30 +198,27 @@
 <p>
             The domain of the random variable is [-&#8734;, +&#8734;].
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.students_t_dist.examples"></a><h4>
-<a name="id576014"></a>
+<a name="math_toolkit.dist.dist_ref.dists.students_t_dist.examples"></a><h5>
+<a name="id609316"></a>
             <a href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.examples">Examples</a>
-          </h4>
+          </h5>
 <p>
-            Various <a href="../../stat_tut/weg/st_eg.html" title=" Student's
-          t Distribution Examples">worked examples</a>
+            Various <a href="../../stat_tut/weg/st_eg.html" title="Student's t Distribution Examples">worked examples</a>
             are available illustrating the use of the Student's t distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.students_t_dist.accuracy"></a><h4>
-<a name="id576056"></a>
+<a name="math_toolkit.dist.dist_ref.dists.students_t_dist.accuracy"></a><h5>
+<a name="id609355"></a>
             <a href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.accuracy">Accuracy</a>
-          </h4>
+          </h5>
 <p>
-            The normal distribution is implemented in terms of the <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">incomplete
-            beta function</a> and <a href="../../../special/sf_beta/ibeta_inv_function.html" title=" The
-        Incomplete Beta Function Inverses">it's
+            The normal distribution is implemented in terms of the <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">incomplete
+            beta function</a> and <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">it's
             inverses</a>, refer to accuracy data on those functions for more information.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.students_t_dist.implementation"></a><h4>
-<a name="id576107"></a>
+<a name="math_toolkit.dist.dist_ref.dists.students_t_dist.implementation"></a><h5>
+<a name="id609404"></a>
             <a href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.implementation">Implementation</a>
-          </h4>
+          </h5>
 <p>
             In the following table <span class="emphasis"><em>v</em></span> is the degrees of freedom
             of the distribution, <span class="emphasis"><em>t</em></span> is the random variate, <span class="emphasis"><em>p</em></span>
@@ -258,7 +251,7 @@
 <td>
                   <p>
                     Using the relation: pdf = (v / (v + t<sup>2</sup>))<sup>(1+v)/2 </sup> / (sqrt(v) *
-                    <a href="../../../special/sf_beta/beta_function.html" title=" Beta">beta</a>(v/2,
+                    <a href="../../../special/sf_beta/beta_function.html" title="Beta">beta</a>(v/2,
                     0.5))
                   </p>
                   </td>
@@ -283,13 +276,11 @@
                     where z is given by:
                   </p>
                   <p>
-                    <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">ibeta</a>(v
+                    <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(v
                     / 2, 0.5, v / (v + t<sup>2</sup>)) / 2 <span class="emphasis"><em>iff v &lt; 2t<sup>2</sup></em></span>
                   </p>
                   <p>
-                    <a href="../../../special/sf_beta/ibeta_function.html" title=" Incomplete
-        Beta Functions">ibetac</a>(0.5,
+                    <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(0.5,
                     v / 2, t<sup>2 </sup> / (v + t<sup>2</sup>) / 2 <span class="emphasis"><em>otherwise</em></span>
                   </p>
                   </td>
@@ -320,8 +311,7 @@
                     where:
                   </p>
                   <p>
-                    x = <a href="../../../special/sf_beta/ibeta_inv_function.html" title=" The
-        Incomplete Beta Function Inverses">ibeta_inv</a>(v
+                    x = <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>(v
                     / 2, 0.5, 2 * min(p, q))
                   </p>
                   <p>
@@ -329,8 +319,7 @@
                   </p>
                   <p>
                     The quantities <span class="emphasis"><em>x</em></span> and <span class="emphasis"><em>y</em></span>
-                    are both returned by <a href="../../../special/sf_beta/ibeta_inv_function.html" title=" The
-        Incomplete Beta Function Inverses">ibeta_inv</a>
+                    are both returned by <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>
                     without the subtraction implied above.
                   </p>
                   </td>

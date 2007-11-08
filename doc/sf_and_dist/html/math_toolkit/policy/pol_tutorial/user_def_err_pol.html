@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-        Calling User Defined Error Handlers</title>
+<title>Calling User Defined Error Handlers</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../pol_tutorial.html" title=" Policy Tutorial">
-<link rel="prev" href="namespace_policies.html" title="
-        Setting Policies at Namespace or Translation Unit Scope">
-<link rel="next" href="understand_dis_quant.html" title="
-        Understanding Quantiles of Discrete Distributions">
+<link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
+<link rel="prev" href="namespace_policies.html" title="Setting Policies at Namespace or Translation Unit Scope">
+<link rel="next" href="understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,15 +24,15 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_tutorial.user_def_err_pol"></a><a href="user_def_err_pol.html" title="
-        Calling User Defined Error Handlers">
-        Calling User Defined Error Handlers</a></h4></div></div></div>
+<a name="math_toolkit.policy.pol_tutorial.user_def_err_pol"></a><a href="user_def_err_pol.html" title="Calling User Defined Error Handlers">
+        Calling User Defined Error Handlers</a>
+</h4></div></div></div>
 <p>
           </p>
 <p>
             Suppose we want our own user-defined error handlers rather than the any
             of the default ones supplied by the library to be used. If we set the
-            policy for a specific type of error to <tt class="computeroutput"><span class="identifier">user_error</span></tt>
+            policy for a specific type of error to <code class="computeroutput"><span class="identifier">user_error</span></code>
             then the library will call a user-supplied error handler. These are forward
             declared, but not defined in boost/math/policies/error_handling.hpp like
             this:
@@ -146,7 +143,7 @@
 <p>
           </p>
 <p>
-            So that when we call <tt class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></tt> we really end up calling <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">user_error_policy</span><span class="special">())</span></tt>,
+            So that when we call <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code> we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">user_error_policy</span><span class="special">())</span></code>,
             and any errors will get directed to our own error handlers:
           </p>
 <p>
@@ -561,7 +558,7 @@ Result of tgamma(-10) is: 1.#QNAN
 <p>
           </p>
 <p>
-            So that when we call <tt class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></tt> we really end up calling <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">user_error_policy</span><span class="special">())</span></tt>,
+            So that when we call <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code> we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">user_error_policy</span><span class="special">())</span></code>,
             and any errors will get directed to our own error handlers:
           </p>
 <p>
@@ -625,9 +622,9 @@ Result of tgamma(-190.5) is: 0
             more than once, or for more than one handler to be called: this is an
             artefact of the fact that many functions are implemented in terms of
             one or more sub-routines each of which may have it's own error handling.
-            For example <tt class="computeroutput"><span class="identifier">tgamma</span><span class="special">(-</span><span class="number">190.5</span><span class="special">)</span></tt>
-            is implemented in terms of <tt class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="number">190.5</span><span class="special">)</span></tt> - which overflows - the reflection formula
-            for <tt class="computeroutput"><span class="identifier">tgamma</span></tt> then notices
+            For example <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(-</span><span class="number">190.5</span><span class="special">)</span></code>
+            is implemented in terms of <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="number">190.5</span><span class="special">)</span></code> - which overflows - the reflection formula
+            for <code class="computeroutput"><span class="identifier">tgamma</span></code> then notices
             that it's dividing by infinity and underflows.
           </p>
 <p>
