@@ -108,7 +108,7 @@ void expected_results()
       ".*Tricky large.*",              // test data group
       ".*", 3000, 1000);         // test function
    //
-   // HP-UX specific rates:
+   // Solaris specific rates:
    //
    // Error rate for double precision are limited by the accuracy of
    // the approximations use, which bracket rather than preserve the root.
@@ -133,7 +133,7 @@ void expected_results()
       "Sun Solaris",                 // platform
       largest_type,                  // test type(s)
       ".*J.*tricky.*",               // test data group
-      ".*", 400000000, 50000000);    // test function
+      ".*", 400000000, 200000000);    // test function
    //
    // Mac OS X:
    //
