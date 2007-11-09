@@ -486,7 +486,7 @@ void test_spots(RealType)
     triangular_distribution<RealType, inf_policy> tridef_inf(-1, 0., 1); 
     // But can't use BOOST_CHECK_EQUAL(?, quiet_NaN) 
     using boost::math::isnan;
-    BOOST_CHECK(isnan(pdf(tridef_inf, std::numeric_limits<RealType>::infinity())));
+    BOOST_CHECK((isnan)(pdf(tridef_inf, std::numeric_limits<RealType>::infinity())));
   } // test for infinity using std::numeric_limits<>::infinity()
   else
   { // real_concept case, does has_infinfity == false, so can't check it throws.
