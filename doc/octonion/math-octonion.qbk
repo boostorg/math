@@ -50,7 +50,7 @@ are distinct objects which play essentially the same kind of role as ['[^i]] (or
 Addition and a multiplication is defined on the set of octonions, 
 which generalize their quaternionic counterparts. The main novelty this time 
 is that [*the multiplication is not only not commutative, is now not even 
-associative] (i.e. there are quaternions ['[^x]], ['[^y]] and ['[^z]] such that __oct_not_equal). 
+associative] (i.e. there are octonions ['[^x]], ['[^y]] and ['[^z]] such that __oct_not_equal). 
 A way of remembering things is by using the following multiplication table:
 
 [$../../../octonion/graphics/octonion_blurb17.jpeg]
