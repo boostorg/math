@@ -144,6 +144,19 @@ void expected_results()
       ".*", 200000, 100000);         // test function
 
    //
+   // HP Tru64:
+   // Extended exponent range of long double
+   // causes more extreme test cases to be executed:
+   //
+   add_expected_result(
+      "HP Tru64.*",                  // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "long double",                 // test type(s)
+      ".*",                          // test data group
+      ".*", 200000, 100000);         // test function
+
+   //
    // Catch all cases come last:
    //
    add_expected_result(

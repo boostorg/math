@@ -185,6 +185,19 @@ void expected_results()
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
+#define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
+   {\
+      unsigned int failures = boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed;\
+      BOOST_CHECK_CLOSE(a, b, prec); \
+      if(failures != boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed)\
+      {\
+         std::cerr << "Failure was at row " << i << std::endl;\
+         std::cerr << std::setprecision(35); \
+         std::cerr << "{ " << data[i][0] << " , " << data[i][1] << " , " << data[i][2];\
+         std::cerr << " , " << data[i][3] << " , " << data[i][4] << " , " << data[i][5] << " } " << std::endl;\
+      }\
+   }
+
 template <class T>
 void do_test_gamma_2(const T& data, const char* type_name, const char* test_name)
 {
@@ -227,7 +240,7 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
          && (fabs(data[i][5]) > 2 * boost::math::tools::min_value<double>()))
       {
          value_type inv = boost::math::gamma_p_inv(data[i][0], data[i][5]);
-         BOOST_CHECK_CLOSE(data[i][1], inv, precision);
+         BOOST_CHECK_CLOSE_EX(data[i][1], inv, precision, i);
       }
       else if(1 == data[i][5])
          BOOST_CHECK_EQUAL(boost::math::gamma_p_inv(data[i][0], data[i][5]), boost::math::tools::max_value<value_type>());
@@ -236,24 +249,24 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
          // not enough bits in our input to get back to x, but we should be in
          // the same ball park:
          value_type inv = boost::math::gamma_p_inv(data[i][0], data[i][5]);
-         BOOST_CHECK_CLOSE(data[i][1], inv, 100000);
+         BOOST_CHECK_CLOSE_EX(data[i][1], inv, 100000, i);
       }
 
       if(data[i][3] == 0)
          BOOST_CHECK_EQUAL(boost::math::gamma_q_inv(data[i][0], data[i][3]), boost::math::tools::max_value<value_type>());
-      else if((1 - data[i][3] > 0.001) && (fabs(data[i][3]) >= boost::math::tools::min_value<value_type>()))
+      else if((1 - data[i][3] > 0.001) && (fabs(data[i][3]) > 2 * boost::math::tools::min_value<value_type>()))
       {
          value_type inv = boost::math::gamma_q_inv(data[i][0], data[i][3]);
-         BOOST_CHECK_CLOSE(data[i][1], inv, precision);
+         BOOST_CHECK_CLOSE_EX(data[i][1], inv, precision, i);
       }
       else if(1 == data[i][3])
          BOOST_CHECK_EQUAL(boost::math::gamma_q_inv(data[i][0], data[i][3]), value_type(0));
-      else
+      else if(fabs(data[i][3]) > 2 * boost::math::tools::min_value<value_type>())
       {
          // not enough bits in our input to get back to x, but we should be in
          // the same ball park:
          value_type inv = boost::math::gamma_q_inv(data[i][0], data[i][3]);
-         BOOST_CHECK_CLOSE(data[i][1], inv, 100);
+         BOOST_CHECK_CLOSE_EX(data[i][1], inv, 100, i);
       }
    }
    std::cout << std::endl;
