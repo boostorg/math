@@ -17,17 +17,25 @@ void check()
 {
    check_result<float>(boost::math::erf<float>(f));
    check_result<double>(boost::math::erf<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::erf<long double>(l));
+#endif
 
    check_result<float>(boost::math::erfc<float>(f));
    check_result<double>(boost::math::erfc<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::erfc<long double>(l));
+#endif
 
    check_result<float>(boost::math::erf_inv<float>(f));
    check_result<double>(boost::math::erf_inv<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::erf_inv<long double>(l));
+#endif
 
    check_result<float>(boost::math::erfc_inv<float>(f));
    check_result<double>(boost::math::erfc_inv<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::erfc_inv<long double>(l));
+#endif
 }

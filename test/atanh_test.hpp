@@ -116,12 +116,19 @@ void    atanh_manual_check()
                 std::numeric_limits<long double>::has_infinity
             )
         {
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
             BOOST_MESSAGE( ::std::setw(15)
                         << atanh_error_evaluator(xf)
                         << ::std::setw(15)
                         << atanh_error_evaluator(xd)
                         << ::std::setw(15)
                         << atanh_error_evaluator(xl));
+#else
+            BOOST_MESSAGE( ::std::setw(15)
+                        << atanh_error_evaluator(xf)
+                        << ::std::setw(15)
+                        << atanh_error_evaluator(xd));
+#endif
         }
         else
         {
@@ -144,12 +151,19 @@ void    atanh_manual_check()
             }
             else
             {
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
                 BOOST_MESSAGE( ::std::setw(15)
                             << atanh_error_evaluator(xf)
                             << ::std::setw(15)
                             << atanh_error_evaluator(xd)
                             << ::std::setw(15)
                             << atanh_error_evaluator(xl));
+#else
+                BOOST_MESSAGE( ::std::setw(15)
+                            << atanh_error_evaluator(xf)
+                            << ::std::setw(15)
+                            << atanh_error_evaluator(xd));
+#endif
             }
         }
     }

@@ -17,5 +17,7 @@ void check()
 {
    check_result<float>(boost::math::digamma<float>(f));
    check_result<double>(boost::math::digamma<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::digamma<long double>(l));
+#endif
 }

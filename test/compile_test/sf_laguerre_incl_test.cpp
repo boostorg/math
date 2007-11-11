@@ -17,12 +17,16 @@ void check()
 {
    check_result<float>(boost::math::laguerre<float>(u, f));
    check_result<double>(boost::math::laguerre<double>(u, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::laguerre<long double>(u, l));
+#endif
 
    typedef boost::math::policies::policy<> def_pol;
    def_pol p;
 
    check_result<float>(boost::math::laguerre<float, def_pol>(u, u, f, p));
    check_result<double>(boost::math::laguerre<double, def_pol>(u, u, d, p));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::laguerre<long double, def_pol>(u, u, l, p));
+#endif
 }

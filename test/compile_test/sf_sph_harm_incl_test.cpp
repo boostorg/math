@@ -23,15 +23,21 @@ void check()
 {
    check_result<std::complex<float> >(boost::math::spherical_harmonic<float>(u, i, f, f));
    check_result<std::complex<double> >(boost::math::spherical_harmonic<double>(u, i, d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<std::complex<long double> >(boost::math::spherical_harmonic<long double>(u, i, l, l));
+#endif
 
    check_result<float>(boost::math::spherical_harmonic_r<float>(u, i, f, f));
    check_result<double>(boost::math::spherical_harmonic_r<double>(u, i, d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::spherical_harmonic_r<long double>(u, i, l, l));
+#endif
 
    check_result<float>(boost::math::spherical_harmonic_i<float>(u, i, f, f));
    check_result<double>(boost::math::spherical_harmonic_i<double>(u, i, d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::spherical_harmonic_i<long double>(u, i, l, l));
+#endif
 }
 
 

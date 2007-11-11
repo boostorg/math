@@ -70,12 +70,19 @@ void    acosh_manual_check()
         long double  xl = 
                 static_cast<long double>(i-50)/static_cast<long double>(5);
         
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
         BOOST_MESSAGE(  ::std::setw(15)
                      << acosh_error_evaluator(xf)
                      << ::std::setw(15)
                      << acosh_error_evaluator(xd)
                      << ::std::setw(15)
                      << acosh_error_evaluator(xl));
+#else
+        BOOST_MESSAGE(  ::std::setw(15)
+                     << acosh_error_evaluator(xf)
+                     << ::std::setw(15)
+                     << acosh_error_evaluator(xd));
+#endif
     }
     
     BOOST_MESSAGE(" ");

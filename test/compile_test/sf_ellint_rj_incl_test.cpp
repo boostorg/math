@@ -17,5 +17,7 @@ void check()
 {
    check_result<float>(boost::math::ellint_rj<float>(f, f, f, f));
    check_result<double>(boost::math::ellint_rj<double>(d, d, d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::ellint_rj<long double>(l, l, l, l));
+#endif
 }

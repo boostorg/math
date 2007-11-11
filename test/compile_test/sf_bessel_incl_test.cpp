@@ -17,25 +17,37 @@ void check()
 {
    check_result<float>(boost::math::cyl_bessel_j<float>(f, f));
    check_result<double>(boost::math::cyl_bessel_j<double>(d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::cyl_bessel_j<long double>(l, l));
+#endif
 
    check_result<float>(boost::math::cyl_neumann<float>(f, f));
    check_result<double>(boost::math::cyl_neumann<double>(d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::cyl_neumann<long double>(l, l));
+#endif
 
    check_result<float>(boost::math::cyl_bessel_i<float>(f, f));
    check_result<double>(boost::math::cyl_bessel_i<double>(d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::cyl_bessel_i<long double>(l, l));
+#endif
 
    check_result<float>(boost::math::cyl_bessel_k<float>(f, f));
    check_result<double>(boost::math::cyl_bessel_k<double>(d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::cyl_bessel_k<long double>(l, l));
+#endif
 
    check_result<float>(boost::math::sph_bessel<float>(u, f));
    check_result<double>(boost::math::sph_bessel<double>(u, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::sph_bessel<long double>(u, l));
+#endif
 
    check_result<float>(boost::math::sph_neumann<float>(u, f));
    check_result<double>(boost::math::sph_neumann<double>(u, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::sph_neumann<long double>(u, l));
+#endif
 }

@@ -853,9 +853,11 @@ int test_main(int, char*[])
    check_spots(float(0));
    std::cout << "Running complex trig spot checks for type double." << std::endl;
    check_spots(double(0));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    std::cout << "Running complex trig spot checks for type long double." << std::endl;
    check_spots((long double)(0));
-   
+#endif
+
    std::cout << "Running complex trig boundary and accuracy tests." << std::endl;
    test_boundaries();
    return 0;

@@ -17,18 +17,26 @@ void check()
 {
    check_result<float>(boost::math::factorial<float>(u));
    check_result<double>(boost::math::factorial<double>(u));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::factorial<long double>(u));
+#endif
 
    check_result<float>(boost::math::double_factorial<float>(u));
    check_result<double>(boost::math::double_factorial<double>(u));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::double_factorial<long double>(u));
+#endif
 
    check_result<float>(boost::math::rising_factorial<float>(f, i));
    check_result<double>(boost::math::rising_factorial<double>(d, i));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::rising_factorial<long double>(l, i));
+#endif
 
    check_result<float>(boost::math::falling_factorial<float>(f, u));
    check_result<double>(boost::math::falling_factorial<double>(d, u));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::falling_factorial<long double>(l, u));
+#endif
 }
 

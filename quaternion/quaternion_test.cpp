@@ -35,12 +35,16 @@ DEFINE_TYPE_NAME(double);
 DEFINE_TYPE_NAME(long double);
 
 
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 typedef boost::mpl::list<float,double,long double>  test_types;
+#else
+typedef boost::mpl::list<float,double>  test_types;
+#endif
 
 // Apple GCC 4.0 uses the "double double" format for its long double,
 // which means that epsilon is VERY small but useless for
 // comparisons. So, don't do those comparisons.
-#if defined(__APPLE_CC__) && defined(__GNUC__) && __GNUC__ == 4
+#if (defined(__APPLE_CC__) && defined(__GNUC__) && __GNUC__ == 4) || defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 typedef boost::mpl::list<float,double>  near_eps_test_types;
 #else
 typedef boost::mpl::list<float,double,long double>  near_eps_test_types;

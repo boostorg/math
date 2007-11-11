@@ -17,5 +17,7 @@ void check()
 {
    check_result<float>(boost::math::hermite<float>(u, f));
    check_result<double>(boost::math::hermite<double>(u, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::hermite<long double>(u, l));
+#endif
 }

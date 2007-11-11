@@ -119,8 +119,13 @@ private:
    }
 }; // struct DistributionConcept
 
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #define TEST_DIST_FUNC(dist)\
    DistributionConcept< boost::math::dist##_distribution<float> >::constraints();\
    DistributionConcept< boost::math::dist##_distribution<double> >::constraints();\
    DistributionConcept< boost::math::dist##_distribution<long double> >::constraints();
-
+#else
+#define TEST_DIST_FUNC(dist)\
+   DistributionConcept< boost::math::dist##_distribution<float> >::constraints();\
+   DistributionConcept< boost::math::dist##_distribution<double> >::constraints();
+#endif

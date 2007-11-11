@@ -20,4 +20,6 @@ void check()
 
 template class boost::math::fisher_f_distribution<float, boost::math::policies::policy<> >;
 template class boost::math::fisher_f_distribution<double, boost::math::policies::policy<> >;
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 template class boost::math::fisher_f_distribution<long double, boost::math::policies::policy<> >;
+#endif
