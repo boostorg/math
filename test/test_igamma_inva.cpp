@@ -161,14 +161,14 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       //
       if(data[i][5] == 0)
          BOOST_CHECK_EQUAL(boost::math::gamma_p_inva(data[i][1], data[i][5]), boost::math::tools::max_value<value_type>());
-      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) >= boost::math::tools::min_value<value_type>()))
+      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) > 2 * boost::math::tools::min_value<value_type>()))
       {
          value_type inv = boost::math::gamma_p_inva(data[i][1], data[i][5]);
          BOOST_CHECK_CLOSE_EX(data[i][0], inv, precision, i);
       }
       else if(1 == data[i][5])
          BOOST_CHECK_EQUAL(boost::math::gamma_p_inva(data[i][1], data[i][5]), boost::math::tools::min_value<value_type>());
-      else
+      else if(data[i][3] > 2 * boost::math::tools::min_value<value_type>())
       {
          // not enough bits in our input to get back to x, but we should be in
          // the same ball park:
