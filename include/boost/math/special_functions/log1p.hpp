@@ -112,10 +112,12 @@ inline double log1p(double z)
 {
    return log1p<double>(z);
 }
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline long double log1p(long double z)
 {
    return log1p<long double>(z);
 }
+#endif
 #endif
 
 #ifdef log1p
