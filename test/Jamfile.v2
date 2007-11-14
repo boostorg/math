@@ -302,12 +302,14 @@ run test_triangular.cpp ;
 run test_uniform.cpp ;
 run test_weibull.cpp ;
 run test_policy.cpp ;
+run test_policy_2.cpp ;
 run test_policy_sf.cpp ;
 
 run test_bessel_j.cpp ;
 run test_bessel_y.cpp ;
 run test_bessel_i.cpp ;
 run test_bessel_k.cpp ;
+run test_zeta.cpp ;
 
 compile  compile_test/dist_bernoulli_incl_test.cpp ;
 compile  compile_test/dist_beta_incl_test.cpp ;

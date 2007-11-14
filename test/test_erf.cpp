@@ -46,6 +46,42 @@ void expected_results()
    // Define the max and mean errors expected for
    // various compilers and platforms.
    //
+   const char* largest_type;
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
+   {
+      largest_type = "(long\\s+)?double|real_concept";
+   }
+   else
+   {
+      largest_type = "long double|real_concept";
+   }
+#else
+   largest_type = "(long\\s+)?double";
+#endif
+   //
+   // On MacOS X erfc has much higher error levels than
+   // expected: given that the implementation is basically
+   // just a rational function evaluation combined with
+   // exponentiation, we conclude that exp and pow are less
+   // accurate on this platform, especially when the result 
+   // is outside the range of a double.
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                      // platform
+      largest_type,                  // test type(s)
+      "Erf Function:.*Large.*",      // test data group
+      "boost::math::erfc", 4300, 1300);  // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                      // platform
+      largest_type,                  // test type(s)
+      "Erf Function:.*",             // test data group
+      "boost::math::erfc", 40, 10);  // test function
+
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

@@ -13,25 +13,31 @@
 //
 #include "test_compile_result.hpp"
 
-inline void check_result_imp(bool, bool){}
-
 void check()
 {
-   check_result<int>(boost::math::fpclassify<float>(f));
-   check_result<int>(boost::math::fpclassify<double>(d));
-   check_result<int>(boost::math::fpclassify<long double>(l));
+   check_result<int>(boost::math::fpclassify BOOST_NO_MACRO_EXPAND<float>(f));
+   check_result<int>(boost::math::fpclassify BOOST_NO_MACRO_EXPAND<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   check_result<int>(boost::math::fpclassify BOOST_NO_MACRO_EXPAND<long double>(l));
+#endif
 
-   check_result<bool>(boost::math::isfinite<float>(f));
-   check_result<bool>(boost::math::isfinite<double>(d));
-   check_result<bool>(boost::math::isfinite<long double>(l));
+   check_result<bool>(boost::math::isfinite BOOST_NO_MACRO_EXPAND<float>(f));
+   check_result<bool>(boost::math::isfinite BOOST_NO_MACRO_EXPAND<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   check_result<bool>(boost::math::isfinite BOOST_NO_MACRO_EXPAND<long double>(l));
+#endif
 
-   check_result<bool>(boost::math::isinf<float>(f));
-   check_result<bool>(boost::math::isinf<double>(d));
-   check_result<bool>(boost::math::isinf<long double>(l));
+   check_result<bool>(boost::math::isinf BOOST_NO_MACRO_EXPAND<float>(f));
+   check_result<bool>(boost::math::isinf BOOST_NO_MACRO_EXPAND<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   check_result<bool>(boost::math::isinf BOOST_NO_MACRO_EXPAND<long double>(l));
+#endif
 
-   check_result<bool>(boost::math::isnormal<float>(f));
-   check_result<bool>(boost::math::isnormal<double>(d));
-   check_result<bool>(boost::math::isnormal<long double>(l));
+   check_result<bool>(boost::math::isnormal BOOST_NO_MACRO_EXPAND<float>(f));
+   check_result<bool>(boost::math::isnormal BOOST_NO_MACRO_EXPAND<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   check_result<bool>(boost::math::isnormal BOOST_NO_MACRO_EXPAND<long double>(l));
+#endif
 }
 
 

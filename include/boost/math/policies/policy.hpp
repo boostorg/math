@@ -6,8 +6,6 @@
 #ifndef BOOST_MATH_POLICY_HPP
 #define BOOST_MATH_POLICY_HPP
 
-//#define BOOST_PARAMETER_MAX_ARITY 15
-
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/contains.hpp>
 #include <boost/mpl/if.hpp>
@@ -841,5 +839,6 @@ struct is_policy : public mpl::bool_< ::boost::math::policies::detail::is_policy
 }}} // namespaces
 
 #endif // BOOST_MATH_POLICY_HPP
+
 
 

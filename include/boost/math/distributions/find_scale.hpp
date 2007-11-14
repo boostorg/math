@@ -37,8 +37,10 @@ namespace boost
       const Policy& pol 
       )
     {
+#if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
       BOOST_STATIC_ASSERT(::boost::math::tools::is_distribution<Dist>::value); 
       BOOST_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value); 
+#endif
       static const char* function = "boost::math::find_scale<Dist, Policy>(%1%, %1%, %1%, Policy)";
 
       if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
@@ -107,8 +109,10 @@ namespace boost
       //  << quantile(Dist(), c.param1) //q
       //  << endl;
 
+#if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
       BOOST_STATIC_ASSERT(::boost::math::tools::is_distribution<Dist>::value); 
       BOOST_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value); 
+#endif
       static const char* function = "boost::math::find_scale<Dist, Policy>(complement(%1%, %1%, %1%, Policy))";
 
       // Checks on arguments, as not complemented version,
@@ -159,8 +163,10 @@ namespace boost
       //  << quantile(Dist(), c.param1) //q
       //  << endl;
 
+#if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
       BOOST_STATIC_ASSERT(::boost::math::tools::is_distribution<Dist>::value); 
       BOOST_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value); 
+#endif
       static const char* function = "boost::math::find_scale<Dist, Policy>(complement(%1%, %1%, %1%, Policy))";
 
       // Checks on arguments, as not complemented version,

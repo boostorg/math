@@ -213,7 +213,7 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
          std::cout << std::endl;
       }
 #endif
-      if(!boost::math::isfinite(point) && boost::math::isfinite(expected))
+      if(!(boost::math::isfinite)(point) && (boost::math::isfinite)(expected))
       {
          std::cout << "CAUTION: Found non-finite result, when a finite value was expected at entry " << i << "\n";
          std::cout << "Found: " << point << " Expected " << expected << " Error: " << err << std::endl;

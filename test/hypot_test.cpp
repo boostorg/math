@@ -41,8 +41,13 @@ const float boundaries[] = {
 void do_test_boundaries(float x, float y)
 {
    float expected = static_cast<float>((boost::math::hypot)(
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
       static_cast<long double>(x), 
       static_cast<long double>(y)));
+#else
+      static_cast<double>(x), 
+      static_cast<double>(y)));
+#endif
    float found = (boost::math::hypot)(x, y);
    BOOST_CHECK_CLOSE(expected, found, tolerance);
 }

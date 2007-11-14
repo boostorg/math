@@ -12,9 +12,9 @@
 // Note this header includes no other headers, this is
 // important if this test is to be meaningful:
 //
-#include "test_compile_result.hpp"
-
 inline void check_result_imp(boost::math::tools::test_result<double>, boost::math::tools::test_result<double>){}
+
+#include "test_compile_result.hpp"
 
 
 void check()

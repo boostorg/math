@@ -5,8 +5,12 @@
 
 #define BOOST_UBLAS_TYPE_CHECK_EPSILON (type_traits<real_type>::type_sqrt (boost::math::tools::epsilon <real_type>()))
 #define BOOST_UBLAS_TYPE_CHECK_MIN (type_traits<real_type>::type_sqrt ( boost::math::tools::min_value<real_type>()))
+#define BOOST_UBLAS_NDEBUG
 
 #include <boost/math/bindings/rr.hpp>
+namespace std{
+using boost::math::ntl::pow;
+} // workaround for spirit parser.
 #include <boost/math/tools/remez.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/spirit/core.hpp>
@@ -32,8 +36,8 @@ bool rel_error(true);
 bool pin(false);
 int orderN(3);
 int orderD(1);
-int target_precision(53);
-int working_precision(250);
+int target_precision = boost::math::tools::digits<long double>();
+int working_precision = target_precision * 2;
 bool started(false);
 int variant(0);
 int skew(0);
@@ -147,14 +151,14 @@ void show(const char*, const char*)
       std::cout << "P = {";
       for(i = 0; i < n.size(); ++i)
       {
-         std::cout << "    " << n[i] << std::endl;
+         std::cout << "    " << n[i] << "L," << std::endl;
       }
       std::cout << "  }\n";
 
       std::cout << "Q = {";
       for(i = 0; i < d.size(); ++i)
       {
-         std::cout << "    " << d[i] << std::endl;
+         std::cout << "    " << d[i] << "L," << std::endl;
       }
       std::cout << "  }\n";
 
@@ -260,7 +264,11 @@ void do_test(T, const char* name)
          std::cout << std::setprecision(6) << std::setw(15) << std::left << absissa
             << boost::math::tools::real_cast<T>(err) << std::endl;
       }
-      std::cout << "Max error found: " << std::setprecision(6) << boost::math::tools::real_cast<T>(max_error) << std::endl;
+      std::string msg = "Max Error found at ";
+      msg += name;
+      msg += " precision = ";
+      msg.append(62 - 17 - msg.size(), ' ');
+      std::cout << msg << std::setprecision(6) << boost::math::tools::real_cast<T>(max_error) << std::endl;
    }
    else
    {
@@ -419,6 +427,7 @@ void graph_poly(const char*, const char*)
 int test_main(int, char* [])
 {
    std::string line;
+   real_parser<long double/*boost::math::ntl::RR*/ > const rr_p;
    while(std::getline(std::cin, line))
    {
       if(parse(line.c_str(), str_p("quit"), space_p).full)
@@ -426,7 +435,7 @@ int test_main(int, char* [])
       if(false == parse(line.c_str(), 
          (
 
-            str_p("range")[assign_a(started, false)] && real_p[assign_a(a)] && real_p[assign_a(b)]
+            str_p("range")[assign_a(started, false)] && rr_p[assign_a(a)] && rr_p[assign_a(b)]
       ||
             str_p("relative")[assign_a(started, false)][assign_a(rel_error, true)]
       ||

@@ -9,6 +9,7 @@
 #include <boost/math/bindings/rr.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/special_functions.hpp>
+#include <boost/math/special_functions/zeta.hpp>
 
 #include <cmath>
 
@@ -145,7 +146,8 @@ boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant)
          //
          static boost::math::tools::eps_tolerance<boost::math::ntl::RR> tol(1000);
          static boost::uintmax_t max_iter = 1000;
-         static const boost::math::ntl::RR root = boost::math::tools::bracket_and_solve_root(&boost::math::digamma, boost::math::ntl::RR(1.4), boost::math::ntl::RR(1.5), true, tol, max_iter).first;
+         boost::math::ntl::RR (*pdg)(boost::math::ntl::RR) = &boost::math::digamma;
+         static const boost::math::ntl::RR root = boost::math::tools::bracket_and_solve_root(pdg, boost::math::ntl::RR(1.4), boost::math::ntl::RR(1.5), true, tol, max_iter).first;
 
          boost::math::ntl::RR x2 = x;
          double lim = 1e-65;
@@ -224,6 +226,21 @@ boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant)
       {
          boost::math::ntl::RR z = 1 / (boost::math::ntl::RR(1)/16 - x);
          return boost::math::cyl_bessel_i(0, z) * sqrt(z) / exp(z);
+      }
+   case 18:
+      // Zeta over [0, 1]
+      {
+         return boost::math::zeta(1 - x) * x - x;
+      }
+   case 19:
+      // Zeta over [1, n]
+      {
+         return boost::math::zeta(x) - 1 / (x - 1);
+      }
+   case 20:
+      // Zeta over [a, b] : a >> 1
+      {
+         return log(boost::math::zeta(x) - 1);
       }
    }
    return 0;

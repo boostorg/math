@@ -193,6 +193,8 @@ struct numeric_limits<boost::math::concepts::std_real_concept>
 
 int main()
 {
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    instantiate(boost::math::concepts::std_real_concept(0));
+#endif
 }
 

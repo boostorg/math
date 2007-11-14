@@ -18,7 +18,7 @@
 
 #include <boost/math/tools/user.hpp>
 
-#if defined(__CYGWIN__) || defined(__FreeBSD__) || defined(_PA_RISC1_1)
+#if defined(__CYGWIN__) || defined(__FreeBSD__) || defined(__hppa)
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
@@ -36,6 +36,21 @@
 //
 // Darwin's rather strange "double double" is rather hard to
 // support, it should be possible given enough effort though...
+//
+#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#endif
+#if defined(unix) && defined(__INTEL_COMPILER) && (__INTEL_COMPILER <= 1000)
+//
+// Intel compiler prior to version 10 has sporadic problems
+// calling the long double overloads of the std lib math functions:
+// calling ::powl is OK, but std::pow(long double, long double) 
+// may segfault depending upon the value of the arguments passed 
+// and the specific Linux distribution.
+//
+// We'll be conservative and disable long double support for this compiler.
+//
+// Comment out this #define and try building the tests to determine whether
+// your Intel compiler version has this issue or not.
 //
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif

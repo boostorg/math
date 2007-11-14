@@ -106,17 +106,19 @@ void expected_results()
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
-      "linux|Mac OS|Sun.*",             // platform
-      "double",                     // test type(s)
-      "(?i).*large.*",                      // test data group
-      ".*", 40, 20);                 // test function
-   add_expected_result(
-      "[^|]*",                          // compiler
-      "[^|]*",                          // stdlib
       "linux|Mac OS",                          // platform
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 200000, 10000);                 // test function
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "linux|Mac OS|Sun.*",             // platform
+      "double",                     // test type(s)
+      "(?i).*large.*",                      // test data group
+      ".*", 40, 20);                 // test function
+#endif
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -140,6 +142,16 @@ void expected_results()
       "(?i).*large.*",                      // test data group
       ".*", 200000, 10000);                 // test function
    //
+   // Tru64:
+   //
+   add_expected_result(
+      ".*Tru64.*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                     // test type(s)
+      "(?i).*large.*",                      // test data group
+      ".*", 130000, 10000);                 // test function
+   //
    // Sun OS:
    //
    add_expected_result(
@@ -148,7 +160,7 @@ void expected_results()
       "Sun.*",                          // platform
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
-      ".*", 110000, 10000);                 // test function
+      ".*", 130000, 10000);                 // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

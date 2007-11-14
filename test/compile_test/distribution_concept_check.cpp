@@ -42,6 +42,8 @@ int main()
 {
    instantiate(float(0));
    instantiate(double(0));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    instantiate((long double)(0));
+#endif
 }
 

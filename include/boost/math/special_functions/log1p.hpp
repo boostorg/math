@@ -112,10 +112,12 @@ inline double log1p(double z)
 {
    return log1p<double>(z);
 }
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline long double log1p(long double z)
 {
    return log1p<long double>(z);
 }
+#endif
 #endif
 
 #ifdef log1p
@@ -128,7 +130,7 @@ inline long double log1p(long double z)
 #ifdef BOOST_HAS_LOG1P
 #  if (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)) \
    || ((defined(linux) || defined(__linux) || defined(__linux__)) && !defined(__SUNPRO_CC)) \
-   || (defined(__hpux) && !defined(_PA_RISC1_1))
+   || (defined(__hpux) && !defined(__hppa))
 template <class Policy>
 inline float log1p(float x, const Policy& pol)
 { 

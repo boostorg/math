@@ -17,13 +17,19 @@ void check()
 {
    check_result<float>(boost::math::legendre_p<float>(i, f));
    check_result<double>(boost::math::legendre_p<double>(i, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::legendre_p<long double>(i, l));
+#endif
 
    check_result<float>(boost::math::legendre_p<float>(i, i, f));
    check_result<double>(boost::math::legendre_p<double>(i, i, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::legendre_p<long double>(i, i, l));
+#endif
 
    check_result<float>(boost::math::legendre_q<float>(u, f));
    check_result<double>(boost::math::legendre_q<double>(u, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::legendre_q<long double>(u, l));
+#endif
 }

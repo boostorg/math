@@ -17,5 +17,7 @@ void check()
 {
    check_result<float>(boost::math::sqrt1pm1<float>(f));
    check_result<double>(boost::math::sqrt1pm1<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::sqrt1pm1<long double>(l));
+#endif
 }

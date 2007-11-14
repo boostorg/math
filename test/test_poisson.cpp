@@ -63,7 +63,7 @@ void test_spots(RealType)
   }
 
    decdigits -= 1; // Perhaps allow some decimal digit(s) margin of numerical error.
-   RealType tolerance = static_cast<RealType>(std::pow(10., -(decdigits-2))); // 1e-6 (-2 so as %)
+   RealType tolerance = static_cast<RealType>(std::pow(10., static_cast<double>(2-decdigits))); // 1e-6 (-2 so as %)
    tolerance *= 2; // Allow some bit(s) small margin (2 means + or - 1 bit) of numerical error.
    // Typically 2e-13% = 2e-15 as fraction for double.
 

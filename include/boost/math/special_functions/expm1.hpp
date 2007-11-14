@@ -253,10 +253,12 @@ inline double expm1(double z)
 {
    return expm1<double>(z);
 }
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline long double expm1(long double z)
 {
    return expm1<long double>(z);
 }
+#endif
 #endif
 
 } // namespace math

@@ -17,5 +17,7 @@ void check()
 {
    check_result<float>(boost::math::log1p<float>(f));
    check_result<double>(boost::math::log1p<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::log1p<long double>(l));
+#endif
 }

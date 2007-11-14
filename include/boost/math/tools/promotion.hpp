@@ -19,6 +19,7 @@
 #define BOOST_MATH_PROMOTION_HPP
 
 // Boost type traits:
+#include <boost/math/tools/config.hpp>
 #include <boost/type_traits/is_floating_point.hpp> // for boost::is_floating_point;
 #include <boost/type_traits/is_integral.hpp> // for boost::is_integral
 #include <boost/type_traits/is_convertible.hpp> // for boost::is_convertible
@@ -28,6 +29,10 @@
 #include <boost/mpl/if.hpp> // for boost::mpl::if_c.
 #include <boost/mpl/and.hpp> // for boost::mpl::if_c.
 #include <boost/mpl/or.hpp> // for boost::mpl::if_c.
+
+#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#include <boost/static_assert.hpp>
+#endif
 
 namespace boost
 {
@@ -99,6 +104,13 @@ namespace boost
                >::type
             >::type
          >::type type;
+
+#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+         //
+         // Guard against use of long double if it's not supported:
+         //
+         BOOST_STATIC_ASSERT((0 == ::boost::is_same<type, long double>::value));
+#endif
       };
 
     } // namespace tools

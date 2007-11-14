@@ -17,5 +17,7 @@ void check()
 {
    check_result<float>(boost::math::sinc_pi<float>(f));
    check_result<double>(boost::math::sinc_pi<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::sinc_pi<long double>(l));
+#endif
 }

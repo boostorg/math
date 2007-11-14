@@ -17,9 +17,13 @@ void check()
 {
    check_result<float>(boost::math::ellint_1<float>(f, f));
    check_result<double>(boost::math::ellint_1<double>(d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::ellint_1<long double>(l, l));
+#endif
 
    check_result<float>(boost::math::ellint_1<float>(f));
    check_result<double>(boost::math::ellint_1<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::ellint_1<long double>(l));
+#endif
 }

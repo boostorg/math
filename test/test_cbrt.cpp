@@ -119,9 +119,11 @@ int test_main(int, char* [])
    BOOST_MATH_CONTROL_FP;
    test_cbrt(0.1F, "float");
    test_cbrt(0.1, "double");
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_cbrt(0.1L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_cbrt(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
    return 0;
 }

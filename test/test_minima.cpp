@@ -42,7 +42,9 @@ int test_main(int, char* [])
 {
    test_minima(0.1f, "float");
    test_minima(0.1, "double");
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_minima(0.1L, "long double");
+#endif
    return 0;
 }
 

@@ -417,7 +417,20 @@ If neccessary the XHTML wrapper can be removed with:
 [pre cat filename | tr -d "\\r\\n" \| sed -e 's\/.*\\(<math\[^>\]\*>.\*<\/math>\\).\*\/\\1\/' > newfile]
 
 Setting up fonts for SVGMath is currently rather tricky, on a Windows XP system
-JM's font setup [@../svgmath.xml looks like this].
+JM's font setup is the same as the sample config file provided with SVGMath
+but with:
+
+[pre
+    <!\-\- Double\-struck \-\->
+    <mathvariant name\="double\-struck" family\="Mathematica7, Lucida Sans Unicode"\/>
+]
+
+changed to:
+
+[pre
+    <!\-\- Double\-struck \-\->
+    <mathvariant name\="double\-struck" family\="Lucida Sans Unicode"\/>
+]
 
 Note that unlike the sample config file supplied with SVGMath, this does not
 make use of the Mathematica 7 font as this lacks sufficient Unicode information
@@ -445,7 +458,55 @@ whatever fonts are used by the SVG equations
 (html is generated at math_toolkit\libs\math\doc\sf_and_dist\html\index.html
 using just bjam -a).
 
-JM's XEP config file [@../xep.xml looks like this].
+JM's XEP config file has the following font configuration section added:
+
+[pre
+    <font\-group xml:base\="file:\/C:\/Windows\/Fonts\/" label\="Windows TrueType" embed\="true" subset\="true"> 
+      <font\-family name\="Arial">
+        <font><font\-data ttf\="arial.ttf"\/><\/font>
+        <font style\="oblique"><font\-data ttf\="ariali.ttf"\/><\/font>
+        <font weight\="bold"><font\-data ttf\="arialbd.ttf"\/><\/font>
+        <font weight\="bold" style\="oblique"><font\-data ttf\="arialbi.ttf"\/><\/font>
+      <\/font\-family>
+
+      <font\-family name\="Times New Roman" ligatures\="&#xFB01; &#xFB02;">
+        <font><font\-data ttf\="times.ttf"\/><\/font>
+        <font style\="italic"><font\-data ttf\="timesi.ttf"\/><\/font>
+        <font weight\="bold"><font\-data ttf\="timesbd.ttf"\/><\/font>
+        <font weight\="bold" style\="italic"><font\-data ttf\="timesbi.ttf"\/><\/font>
+      <\/font\-family>
+
+      <font\-family name\="Courier New">
+        <font><font\-data ttf\="cour.ttf"\/><\/font>
+        <font style\="oblique"><font\-data ttf\="couri.ttf"\/><\/font>
+        <font weight\="bold"><font\-data ttf\="courbd.ttf"\/><\/font>
+        <font weight\="bold" style\="oblique"><font\-data ttf\="courbi.ttf"\/><\/font>
+      <\/font\-family>
+
+      <font\-family name\="Tahoma" embed\="true">
+        <font><font\-data ttf\="tahoma.ttf"\/><\/font>
+        <font weight\="bold"><font\-data ttf\="tahomabd.ttf"\/><\/font>
+      <\/font\-family>
+
+      <font\-family name\="Verdana" embed\="true">
+        <font><font\-data ttf\="verdana.ttf"\/><\/font>
+        <font style\="oblique"><font\-data ttf\="verdanai.ttf"\/><\/font>
+        <font weight\="bold"><font\-data ttf\="verdanab.ttf"\/><\/font>
+        <font weight\="bold" style\="oblique"><font\-data ttf\="verdanaz.ttf"\/><\/font>
+      <\/font\-family>
+
+      <font\-family name\="Palatino" embed\="true" ligatures\="&#xFB00; &#xFB01; &#xFB02; &#xFB03; &#xFB04;">
+        <font><font\-data ttf\="pala.ttf"\/><\/font>
+        <font style\="italic"><font\-data ttf\="palai.ttf"\/><\/font>
+        <font weight\="bold"><font\-data ttf\="palab.ttf"\/><\/font>
+        <font weight\="bold" style\="italic"><font\-data ttf\="palabi.ttf"\/><\/font>
+      <\/font\-family>
+      
+    <font\-family name\="Lucida Sans Unicode">
+         <font><font\-data ttf\="lsansuni.ttf"\/><\/font>
+    <\/font\-family>
+]
+
 PAB had to alter his because the Lucida Sans Unicode font had a different name.
 Changes are very likely to be required if you are not using Windows.
 

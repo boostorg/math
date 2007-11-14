@@ -17,13 +17,19 @@ void check()
 {
    check_result<int>(boost::math::sign<float>(f));
    check_result<int>(boost::math::sign<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<int>(boost::math::sign<long double>(l));
+#endif
 
    check_result<int>(boost::math::signbit<float>(f));
    check_result<int>(boost::math::signbit<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<int>(boost::math::signbit<long double>(l));
+#endif
 
    check_result<float>(boost::math::copysign<float>(f, f));
    check_result<double>(boost::math::copysign<double>(d, d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::copysign<long double>(l, l));
+#endif
 }

@@ -17,5 +17,7 @@ void check()
 {
    check_result<float>(boost::math::cbrt<float>(f));
    check_result<double>(boost::math::cbrt<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::cbrt<long double>(l));
+#endif
 }
