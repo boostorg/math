@@ -196,8 +196,18 @@ inline real_concept atan2(real_concept a, real_concept b)
 inline real_concept ceil(real_concept a)
 { return std::ceil(a.value()); }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#ifdef _WIN32_WCE
+//
+// Ugly workaround for macro fmodl:
+//
+inline long double call_fmodl(long double a, long double b)
+{  return fmodl(a, b); }
+inline real_concept fmod(real_concept a, real_concept b)
+{ return call_fmodl(a.value(), b.value()); }
+#else
 inline real_concept fmod(real_concept a, real_concept b)
 { return fmodl(a.value(), b.value()); }
+#endif
 #endif
 inline real_concept cosh(real_concept a)
 { return std::cosh(a.value()); }
