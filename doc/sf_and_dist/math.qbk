@@ -25,7 +25,7 @@
 [include html4_symbols.qbk] [/ just for testing]
 [/include latin1_symbols.qbk] [/ just for testing]
 [include common_overviews.qbk][/ overviews that appear in more than one place!]
-[include roadmap.qbk]
+[include roadmap.qbk] [/ for history]
 
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]

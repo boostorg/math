@@ -1,6 +1,7 @@
 [/ Symbols and Greek letters (about 120) from HTML4 ]
 [/ File HTML4_symbols.qbk]
 [/ See http://www.htmlhelp.com/reference/html40/entities/symbols.html]
+[/ http://www.alanwood.net/demos/ent4_frame.html]
 [/ All (except 2 angle brackets) show OK on Firefox 2.0]
 
 [/ See also Latin-1 aka Western (ISO-8859-1) in latin1_symbols.qbk]

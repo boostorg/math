@@ -488,7 +488,7 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, T factor, bool risin
    //
    boost::uintmax_t count = max_iter - 1;
 
-   if((fa < 0) == rising)
+   if((fa < 0) == (guess < 0 ? !rising : rising))
    {
       //
       // Zero is to the right of b, so walk upwards
@@ -551,7 +551,15 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, T factor, bool risin
    }
    max_iter -= count;
    max_iter += 1;
-   std::pair<T, T> r = toms748_solve(f, a, b, fa, fb, tol, count, pol);
+   std::pair<T, T> r = toms748_solve(
+      f, 
+      (a < 0 ? b : a), 
+      (a < 0 ? a : b), 
+      (a < 0 ? fb : fa), 
+      (a < 0 ? fa : fb), 
+      tol, 
+      count, 
+      pol);
    max_iter += count;
    BOOST_MATH_INSTRUMENT_CODE("max_iter = " << max_iter << " count = " << count);
    return r;
