@@ -32,6 +32,10 @@ namespace boost{ namespace math{ namespace tools{
 
 namespace detail{
 
+template <class Tuple, class T>
+inline void unpack_0(const Tuple& t, T& val)
+{ val = std::tr1::get<0>(t); }
+
 template <class F, class T>
 void handle_zero_derivative(F f,
                             T& last_f0,
@@ -54,7 +58,8 @@ void handle_zero_derivative(F f,
       {
          guess = min;
       }
-      last_f0 = std::tr1::get<0>(f(guess));
+      unpack_0(f(guess), last_f0);
+      //last_f0 = std::tr1::get<0>(f(guess));
       delta = guess - result;
    }
    if(sign(last_f0) * sign(f0) < 0)

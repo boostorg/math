@@ -34,7 +34,7 @@
 #define BOOST_HAS_FPCLASSIFY
 
 #ifndef fpclassify
-#  if (defined(__GLIBCPP__) || defined(__GLIBCXX__)) && defined(_GLIBCXX_USE_C99_MATH) && (!_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC)
+#  if (defined(__GLIBCPP__) || defined(__GLIBCXX__)) && defined(_GLIBCXX_USE_C99_MATH) && !(defined(_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC) && (_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC != 0))
 #     define BOOST_FPCLASSIFY_PREFIX ::std::
 #  else
 #     undef BOOST_HAS_FPCLASSIFY
