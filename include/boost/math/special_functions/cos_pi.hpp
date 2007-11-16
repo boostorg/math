@@ -9,12 +9,13 @@
 #include <cmath>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/real_cast.hpp>
+#include <boost/math/tools/promotion.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace boost{ namespace math{
+namespace boost{ namespace math{ namespace detail{
 
 template <class T>
-T cos_pi(T x)
+T cos_pi_imp(T x)
 {
    BOOST_MATH_STD_USING // ADL of std names
    // cos of pi*x:
@@ -42,10 +43,20 @@ T cos_pi(T x)
    return invert ? -rem : rem;
 }
 
+}
+
 template <class T, class Policy>
-inline T cos_pi(T x, const Policy&)
+inline typename tools::promote_args<T>::type cos_pi(T x, const Policy&)
 {
-   return cos_pi(x);
+   typedef typename tools::promote_args<T>::type result_type;
+   return boost::math::detail::cos_pi_imp<result_type>(x);
+}
+
+template <class T>
+inline typename tools::promote_args<T>::type cos_pi(T x)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   return boost::math::detail::cos_pi_imp<result_type>(x);
 }
 
 } // namespace math

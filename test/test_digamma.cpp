@@ -70,7 +70,11 @@ void do_test_digamma(const T& data, const char* type_name, const char* test_name
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::digamma<value_type>;
+#else
    pg funcp = boost::math::digamma;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 

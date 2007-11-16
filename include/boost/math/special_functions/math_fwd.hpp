@@ -595,16 +595,16 @@ namespace boost
    typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann(unsigned v, T x);
 
    template <class T, class Policy>
-   T sin_pi(T x, const Policy&);
+   typename tools::promote_args<T>::type sin_pi(T x, const Policy&);
 
    template <class T>
-   T sin_pi(T x);
+   typename tools::promote_args<T>::type sin_pi(T x);
 
    template <class T, class Policy>
-   T cos_pi(T x, const Policy&);
+   typename tools::promote_args<T>::type cos_pi(T x, const Policy&);
 
    template <class T>
-   T cos_pi(T x);
+   typename tools::promote_args<T>::type cos_pi(T x);
 
    template <class T>
    int fpclassify BOOST_NO_MACRO_EXPAND(T t);
@@ -898,10 +898,10 @@ namespace boost
    sph_neumann(unsigned v, T x){ return boost::math::sph_neumann(v, x, Policy()); }\
 \
    template <class T>\
-   inline T sin_pi(T x){ return boost::math::sin_pi(x); }\
+   inline typename boost::math::tools::promote_args<T>::type sin_pi(T x){ return boost::math::sin_pi(x); }\
 \
    template <class T>\
-   inline T cos_pi(T x){ return boost::math::cos_pi(x); }\
+   inline typename boost::math::tools::promote_args<T>::type cos_pi(T x){ return boost::math::cos_pi(x); }\
 \
    using boost::math::fpclassify;\
    using boost::math::isfinite;\

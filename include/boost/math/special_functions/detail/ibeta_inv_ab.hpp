@@ -155,52 +155,160 @@ T ibeta_inv_ab_imp(const T& b, const T& z, const T& p, const T& q, bool swap_ab,
 
 } // namespace detail
 
-template <class T, class Policy>
-inline T ibeta_inva(T b, T x, T p, const Policy& pol)
+template <class RT1, class RT2, class RT3, class Policy>
+typename tools::promote_args<RT1, RT2, RT3>::type 
+      ibeta_inva(RT1 b, RT2 x, RT3 p, const Policy& pol)
 {
-   return detail::ibeta_inv_ab_imp(b, x, p, 1 - p, false, pol);
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   if(p == 0)
+   {
+      return tools::max_value<result_type>();
+   }
+   if(p == 1)
+   {
+      return tools::min_value<result_type>();
+   }
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::ibeta_inv_ab_imp(
+         static_cast<value_type>(b), 
+         static_cast<value_type>(x), 
+         static_cast<value_type>(p), 
+         1 - static_cast<value_type>(p), 
+         false, pol), 
+      "boost::math::ibeta_inva<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T, class Policy>
-inline T ibetac_inva(T b, T x, T q, const Policy& pol)
+template <class RT1, class RT2, class RT3, class Policy>
+typename tools::promote_args<RT1, RT2, RT3>::type 
+      ibetac_inva(RT1 b, RT2 x, RT3 q, const Policy& pol)
 {
-   return detail::ibeta_inv_ab_imp(b, x, 1 - q, q, false, pol);
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   if(q == 1)
+   {
+      return tools::max_value<result_type>();
+   }
+   if(q == 0)
+   {
+      return tools::min_value<result_type>();
+   }
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::ibeta_inv_ab_imp(
+         static_cast<value_type>(b), 
+         static_cast<value_type>(x), 
+         1 - static_cast<value_type>(q), 
+         static_cast<value_type>(q), 
+         false, pol),
+      "boost::math::ibetac_inva<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T, class Policy>
-inline T ibeta_invb(T b, T x, T p, const Policy& pol)
+template <class RT1, class RT2, class RT3, class Policy>
+typename tools::promote_args<RT1, RT2, RT3>::type 
+      ibeta_invb(RT1 a, RT2 x, RT3 p, const Policy& pol)
 {
-   return detail::ibeta_inv_ab_imp(b, x, p, 1 - p, true, pol);
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   if(p == 0)
+   {
+      return tools::min_value<result_type>();
+   }
+   if(p == 1)
+   {
+      return tools::max_value<result_type>();
+   }
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::ibeta_inv_ab_imp(
+         static_cast<value_type>(a), 
+         static_cast<value_type>(x), 
+         static_cast<value_type>(p), 
+         1 - static_cast<value_type>(p), 
+         true, pol),
+      "boost::math::ibeta_invb<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T, class Policy>
-inline T ibetac_invb(T b, T x, T q, const Policy& pol)
+template <class RT1, class RT2, class RT3, class Policy>
+typename tools::promote_args<RT1, RT2, RT3>::type 
+      ibetac_invb(RT1 a, RT2 x, RT3 q, const Policy& pol)
 {
-   return detail::ibeta_inv_ab_imp(b, x, 1 - q, q, true, pol);
+   typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   if(q == 1)
+   {
+      return tools::min_value<result_type>();
+   }
+   if(q == 0)
+   {
+      return tools::max_value<result_type>();
+   }
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::ibeta_inv_ab_imp(
+         static_cast<value_type>(a), 
+         static_cast<value_type>(x), 
+         1 - static_cast<value_type>(q), 
+         static_cast<value_type>(q), 
+         true, pol),
+         "boost::math::ibetac_invb<%1%>(%1%,%1%,%1%)");
 }
 
-template <class T>
-inline T ibeta_inva(T b, T x, T p)
+template <class RT1, class RT2, class RT3>
+inline typename tools::promote_args<RT1, RT2, RT3>::type 
+         ibeta_inva(RT1 b, RT2 x, RT3 p)
 {
-   return detail::ibeta_inv_ab_imp(b, x, p, 1 - p, false, policies::policy<>());
+   return boost::math::ibeta_inva(b, x, p, policies::policy<>());
 }
 
-template <class T>
-inline T ibetac_inva(T b, T x, T q)
+template <class RT1, class RT2, class RT3>
+inline typename tools::promote_args<RT1, RT2, RT3>::type 
+         ibetac_inva(RT1 b, RT2 x, RT3 q)
 {
-   return detail::ibeta_inv_ab_imp(b, x, 1 - q, q, false, policies::policy<>());
+   return boost::math::ibetac_inva(b, x, q, policies::policy<>());
 }
 
-template <class T>
-inline T ibeta_invb(T b, T x, T p)
+template <class RT1, class RT2, class RT3>
+inline typename tools::promote_args<RT1, RT2, RT3>::type 
+         ibeta_invb(RT1 a, RT2 x, RT3 p)
 {
-   return detail::ibeta_inv_ab_imp(b, x, p, 1 - p, true, policies::policy<>());
+   return boost::math::ibeta_invb(a, x, p, policies::policy<>());
 }
 
-template <class T>
-inline T ibetac_invb(T b, T x, T q)
+template <class RT1, class RT2, class RT3>
+inline typename tools::promote_args<RT1, RT2, RT3>::type 
+         ibetac_invb(RT1 a, RT2 x, RT3 q)
 {
-   return detail::ibeta_inv_ab_imp(b, x, 1 - q, q, true, policies::policy<>());
+   return boost::math::ibetac_invb(a, x, q, policies::policy<>());
 }
 
 } // namespace math

@@ -47,7 +47,7 @@ namespace boost
         template<typename T>
         inline T    sinhc_pi_imp(const T x)
         {
-#ifdef    BOOST_NO_STDC_NAMESPACE
+#if defined(BOOST_NO_STDC_NAMESPACE) && !defined(__SUNPRO_CC)
             using    ::abs;
             using    ::sinh;
             using    ::sqrt;

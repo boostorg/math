@@ -311,7 +311,11 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::tgamma<value_type, value_type>;
+#else
    pg funcp = boost::math::tgamma;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 
@@ -331,7 +335,11 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       //
       // test tgamma_lower(T, T) against data:
       //
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+      funcp = boost::math::tgamma_lower<value_type, value_type>;
+#else
       funcp = boost::math::tgamma_lower;
+#endif
       result = boost::math::tools::test(
          data,
          bind_func(funcp, 0, 1),
@@ -341,7 +349,11 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    //
    // test gamma_q(T, T) against data:
    //
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::gamma_q<value_type, value_type>;
+#else
    funcp = boost::math::gamma_q;
+#endif
    result = boost::math::tools::test(
       data,
       bind_func(funcp, 0, 1),
@@ -364,7 +376,11 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    //
    // test gamma_p(T, T) against data:
    //
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::gamma_p<value_type, value_type>;
+#else
    funcp = boost::math::gamma_p;
+#endif
    result = boost::math::tools::test(
       data,
       bind_func(funcp, 0, 1),

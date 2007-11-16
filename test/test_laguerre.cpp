@@ -137,7 +137,11 @@ void do_test_laguerre2(const T& data, const char* type_name, const char* test_na
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(unsigned, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::laguerre<value_type>;
+#else
    pg funcp = boost::math::laguerre;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 
@@ -163,7 +167,11 @@ void do_test_laguerre3(const T& data, const char* type_name, const char* test_na
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(unsigned, unsigned, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::laguerre<unsigned, value_type>;
+#else
    pg funcp = boost::math::laguerre;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 

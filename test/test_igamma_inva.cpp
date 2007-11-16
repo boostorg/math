@@ -3,6 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
@@ -205,7 +207,11 @@ void do_test_gamma_inva(const T& data, const char* type_name, const char* test_n
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::gamma_p_inva<value_type, value_type>;
+#else
    pg funcp = boost::math::gamma_p_inva;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 
@@ -223,7 +229,11 @@ void do_test_gamma_inva(const T& data, const char* type_name, const char* test_n
    //
    // test gamma_q_inva(T, T) against data:
    //
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::gamma_q_inva<value_type, value_type>;
+#else
    funcp = boost::math::gamma_q_inva;
+#endif
    result = boost::math::tools::test(
       data,
       bind_func(funcp, 0, 1),

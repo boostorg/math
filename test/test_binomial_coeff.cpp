@@ -104,7 +104,11 @@ void test_binomial(T, const char* type_name)
    using namespace std;
 
    typedef T (*func_t)(T, T);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   func_t f = &binomial_wrapper<T>;
+#else
    func_t f = &binomial_wrapper;
+#endif
 
 #include "binomial_data.ipp"
 

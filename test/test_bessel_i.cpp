@@ -113,7 +113,11 @@ void do_test_cyl_bessel_i(const T& data, const char* type_name, const char* test
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::cyl_bessel_i<value_type, value_type>;
+#else
    pg funcp = boost::math::cyl_bessel_i;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 
@@ -157,7 +161,11 @@ void do_test_cyl_bessel_i_int(const T& data, const char* type_name, const char* 
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = cyl_bessel_i_int_wrapper<value_type>;
+#else
    pg funcp = cyl_bessel_i_int_wrapper;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 

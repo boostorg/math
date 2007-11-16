@@ -29,11 +29,19 @@ void test_minima(T, const char* /* name */)
    BOOST_CHECK_CLOSE(m.second, T(4), T(0.001));
 
    T (*fp)(T);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   fp = boost::math::lgamma<T>;
+#else
    fp = boost::math::lgamma;
+#endif
 
    m = boost::math::tools::brent_find_minima(fp, T(0.5), T(10), 50);
    BOOST_CHECK_CLOSE(m.first, T(1.461632), T(0.1));
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   fp = boost::math::tgamma<T>;
+#else
    fp = boost::math::tgamma;
+#endif
    m = boost::math::tools::brent_find_minima(fp, T(0.5), T(10), 50);
    BOOST_CHECK_CLOSE(m.first, T(1.461632), T(0.1));
 }

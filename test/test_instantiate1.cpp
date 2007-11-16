@@ -12,6 +12,7 @@ int main(int argc, char* [])
    if(argc > 10000)
    {
       instantiate(double(0));
+      instantiate_mixed(double(0));
       other_test();
    }
 }

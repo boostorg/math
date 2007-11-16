@@ -251,7 +251,11 @@ void do_test_cyl_neumann_y(const T& data, const char* type_name, const char* tes
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::cyl_neumann<value_type, value_type>;
+#else
    pg funcp = boost::math::cyl_neumann;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 
@@ -299,7 +303,11 @@ void do_test_cyl_neumann_y_int(const T& data, const char* type_name, const char*
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = cyl_neumann_int_wrapper<value_type>;
+#else
    pg funcp = cyl_neumann_int_wrapper;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 
@@ -324,7 +332,11 @@ void do_test_sph_neumann_y(const T& data, const char* type_name, const char* tes
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(unsigned, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::sph_neumann<value_type>;
+#else
    pg funcp = boost::math::sph_neumann;
+#endif
 
    typedef int (*cast_t)(value_type);
 

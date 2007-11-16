@@ -146,28 +146,78 @@ T gamma_inva_imp(const T& z, const T& p, const T& q, const Policy& pol)
 
 } // namespace detail
 
-template <class T, class Policy>
-inline T gamma_p_inva(T x, T p, const Policy& pol)
+template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
+   gamma_p_inva(T1 x, T2 p, const Policy& pol)
 {
-   return detail::gamma_inva_imp(x, p, 1 - p, pol);
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   if(p == 0)
+   {
+      return tools::max_value<result_type>();
+   }
+   if(p == 1)
+   {
+      return tools::min_value<result_type>();
+   }
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::gamma_inva_imp(
+         static_cast<value_type>(x), 
+         static_cast<value_type>(p), 
+         1 - static_cast<value_type>(p), 
+         pol), "boost::math::gamma_p_inva<%1%>(%1%, %1%)");
 }
 
-template <class T, class Policy>
-inline T gamma_q_inva(T x, T q, const Policy& pol)
+template <class T1, class T2, class Policy>
+inline typename tools::promote_args<T1, T2>::type 
+   gamma_q_inva(T1 x, T2 q, const Policy& pol)
 {
-   return detail::gamma_inva_imp(x, 1 - q, q, pol);
+   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   if(q == 1)
+   {
+      return tools::max_value<result_type>();
+   }
+   if(q == 0)
+   {
+      return tools::min_value<result_type>();
+   }
+
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+      detail::gamma_inva_imp(
+         static_cast<value_type>(x), 
+         1 - static_cast<value_type>(q), 
+         static_cast<value_type>(q), 
+         pol), "boost::math::gamma_q_inva<%1%>(%1%, %1%)");
 }
 
-template <class T>
-inline T gamma_p_inva(T x, T p)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type 
+   gamma_p_inva(T1 x, T2 p)
 {
-   return detail::gamma_inva_imp(x, p, 1 - p, policies::policy<>());
+   return boost::math::gamma_p_inva(x, p, policies::policy<>());
 }
 
-template <class T>
-inline T gamma_q_inva(T x, T q)
+template <class T1, class T2>
+inline typename tools::promote_args<T1, T2>::type
+   gamma_q_inva(T1 x, T2 q)
 {
-   return detail::gamma_inva_imp(x, 1 - q, q, policies::policy<>());
+   return boost::math::gamma_q_inva(x, q, policies::policy<>());
 }
 
 } // namespace math

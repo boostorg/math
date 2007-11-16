@@ -78,7 +78,11 @@ void do_test(const T& data, const char* type_name, const char* test_name)
    //
    // test log1p against data:
    //
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::log1p<value_type>;
+#else
    funcp = &boost::math::log1p;
+#endif
    result = boost::math::tools::test(
       data, 
          bind_func(funcp, 0), 
@@ -88,7 +92,11 @@ void do_test(const T& data, const char* type_name, const char* test_name)
    //
    // test expm1 against data:
    //
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::expm1<value_type>;
+#else
    funcp = boost::math::expm1;
+#endif
    result = boost::math::tools::test(
       data, 
       bind_func(funcp, 0), 

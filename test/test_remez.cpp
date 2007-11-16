@@ -18,7 +18,11 @@
 
 void test_polynomial()
 {
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   double (*f)(double) = boost::math::expm1<double>;
+#else
    double (*f)(double) = boost::math::expm1;
+#endif
    std::cout << "Testing expm1 approximation, pinned to origin, abolute error, 6 term polynomial\n";
    boost::math::tools::remez_minimax<double> approx1(f, 6, 0, -1, 1, true, false);
    std::cout << "Interpolation Error: " << approx1.max_error() << std::endl;
@@ -98,7 +102,11 @@ void test_polynomial()
 
 void test_rational()
 {
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   double (*f)(double) = boost::math::expm1<double>;
+#else
    double (*f)(double) = boost::math::expm1;
+#endif
    std::cout << "Testing expm1 approximation, pinned to origin, abolute error, 3+3 term rational\n";
    boost::math::tools::remez_minimax<double> approx1(f, 3, 3, -1, 1, true, false);
    std::cout << "Interpolation Error: " << approx1.max_error() << std::endl;

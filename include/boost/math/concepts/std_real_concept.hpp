@@ -231,8 +231,13 @@ inline boost::math::concepts::std_real_concept tan(boost::math::concepts::std_re
 { return std::tan(a.value()); }
 inline boost::math::concepts::std_real_concept pow(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
 { return std::pow(a.value(), b.value()); }
+#if !defined(__SUNPRO_CC)
 inline boost::math::concepts::std_real_concept pow(boost::math::concepts::std_real_concept a, int b)
 { return std::pow(a.value(), b); }
+#else
+inline boost::math::concepts::std_real_concept pow(boost::math::concepts::std_real_concept a, int b)
+{ return std::pow(a.value(), static_cast<long double>(b)); }
+#endif
 inline boost::math::concepts::std_real_concept sin(boost::math::concepts::std_real_concept a)
 { return std::sin(a.value()); }
 inline boost::math::concepts::std_real_concept sinh(boost::math::concepts::std_real_concept a)
