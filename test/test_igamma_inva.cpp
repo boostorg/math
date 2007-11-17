@@ -170,7 +170,7 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       }
       else if(1 == data[i][5])
          BOOST_CHECK_EQUAL(boost::math::gamma_p_inva(data[i][1], data[i][5]), boost::math::tools::min_value<value_type>());
-      else if(data[i][3] > 2 * boost::math::tools::min_value<value_type>())
+      else if(data[i][5] > 2 * boost::math::tools::min_value<value_type>())
       {
          // not enough bits in our input to get back to x, but we should be in
          // the same ball park:
