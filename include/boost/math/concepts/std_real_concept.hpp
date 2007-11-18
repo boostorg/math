@@ -335,7 +335,7 @@ inline concepts::std_real_concept log_min_value<concepts::std_real_concept>(BOOS
 }
 
 template <>
-inline concepts::std_real_concept epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept epsilon<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
    return tools::epsilon<long double>();
 }
