@@ -103,6 +103,20 @@ void expected_results()
       "real_concept",                // test type(s)
       ".*",                          // test data group
       ".*", 40000, 1000);            // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "IBM Aix",                     // platform
+      largest_type,                  // test type(s)
+      ".*",                          // test data group
+      ".*", 5000, 500);            // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "IBM Aix",                     // platform
+      "real_concept",                // test type(s)
+      ".*",                          // test data group
+      ".*", 5000, 500);            // test function
 
    //
    // Catch all cases come last:

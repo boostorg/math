@@ -200,7 +200,6 @@ void do_test_erf_inv(const T& data, const char* type_name, const char* test_name
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type);
-   pg funcp = boost::math::erf;
 
    boost::math::tools::test_result<value_type> result;
    std::cout << "Testing " << test_name << " with type " << type_name
@@ -209,9 +208,9 @@ void do_test_erf_inv(const T& data, const char* type_name, const char* test_name
    // test erf_inv against data:
    //
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   funcp = boost::math::erf_inv<value_type>;
+   pg funcp = boost::math::erf_inv<value_type>;
 #else
-   funcp = boost::math::erf_inv;
+   pg funcp = boost::math::erf_inv;
 #endif
    result = boost::math::tools::test(
       data,
@@ -228,7 +227,11 @@ void do_test_erfc_inv(const T& data, const char* type_name, const char* test_nam
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::erf<value_type>;
+#else
    pg funcp = boost::math::erf;
+#endif
 
    boost::math::tools::test_result<value_type> result;
    std::cout << "Testing " << test_name << " with type " << type_name
