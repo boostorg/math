@@ -393,7 +393,11 @@ void instantiate_mixed(RealType)
    short s = 1;
    float fr = 0.5F;
    double dr = 0.5;
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    long double lr = 0.5L;
+#else
+   double lr = 0.5L;
+#endif
 
    boost::math::tgamma(i);
    boost::math::tgamma1pm1(i);
