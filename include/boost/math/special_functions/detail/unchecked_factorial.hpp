@@ -263,7 +263,7 @@ struct max_factorial<long double>
 };
 
 template <>
-inline double unchecked_factorial(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
+inline double unchecked_factorial<double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
 {
    return static_cast<double>(boost::math::unchecked_factorial<long double>(i));
 }
