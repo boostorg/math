@@ -3,6 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/hypot.hpp>
@@ -40,8 +41,13 @@ const float boundaries[] = {
 void do_test_boundaries(float x, float y)
 {
    float expected = static_cast<float>((boost::math::hypot)(
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
       static_cast<long double>(x), 
       static_cast<long double>(y)));
+#else
+      static_cast<double>(x), 
+      static_cast<double>(y)));
+#endif
    float found = (boost::math::hypot)(x, y);
    BOOST_CHECK_CLOSE(expected, found, tolerance);
 }
@@ -115,6 +121,7 @@ void test_spots()
 
 int test_main(int, char* [])
 {
+   BOOST_MATH_CONTROL_FP;
    test_boundaries();
    test_spots();
    return 0;
