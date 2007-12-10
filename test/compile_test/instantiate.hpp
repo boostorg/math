@@ -191,6 +191,12 @@ void instantiate(RealType)
    boost::math::sph_bessel(i, 1);
    boost::math::sph_neumann(i, v2);
    boost::math::sph_neumann(i, i);
+   boost::math::expint(v1);
+   boost::math::expint(i);
+   boost::math::expint(i, v2);
+   boost::math::expint(i, i);
+   boost::math::zeta(v1);
+   boost::math::zeta(i);
    //
    // All over again, with a policy this time:
    //
@@ -286,6 +292,12 @@ void instantiate(RealType)
    boost::math::sph_bessel(i, 1, pol);
    boost::math::sph_neumann(i, v2, pol);
    boost::math::sph_neumann(i, i, pol);
+   boost::math::expint(v1, pol);
+   boost::math::expint(i, pol);
+   boost::math::expint(i, v2, pol);
+   boost::math::expint(i, i, pol);
+   boost::math::zeta(v1, pol);
+   boost::math::zeta(i, pol);
    //
    // All over again with the versions in test::
    //
@@ -380,6 +392,12 @@ void instantiate(RealType)
    test::sph_bessel(i, 1);
    test::sph_neumann(i, v2);
    test::sph_neumann(i, i);
+   test::expint(v1);
+   test::expint(i);
+   test::expint(i, v2);
+   test::expint(i, i);
+   test::zeta(v1);
+   test::zeta(i);
 }
 
 

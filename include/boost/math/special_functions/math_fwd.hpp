@@ -621,6 +621,37 @@ namespace boost
    template <class T>
    bool isnormal BOOST_NO_MACRO_EXPAND(T t);
 
+   // Exponential integrals:
+   namespace detail{
+
+   template <class T, class U>
+   struct expint_result
+   {
+      typedef typename mpl::if_<
+         policies::is_policy<U>,
+         typename tools::promote_args<T>::type,
+         typename tools::promote_args<U>::type
+      >::type type;
+   };
+
+   } // namespace detail
+
+   template <class T, class Policy>
+   typename tools::promote_args<T>::type expint(unsigned n, T z, const Policy&);
+
+   template <class T, class U>
+   typename detail::expint_result<T, U>::type expint(T const& z, U const& u);
+
+   template <class T>
+   typename tools::promote_args<T>::type expint(T z);
+
+   // Zeta:
+   template <class T, class Policy>
+   typename tools::promote_args<T>::type zeta(T s, const Policy&);
+
+   template <class T>
+   typename tools::promote_args<T>::type zeta(T s);
+
     } // namespace math
 } // namespace boost
 
@@ -907,6 +938,17 @@ namespace boost
    using boost::math::isfinite;\
    using boost::math::isinf;\
    using boost::math::isnan;\
-   using boost::math::isnormal;
+   using boost::math::isnormal;\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T,U>::type expint(T const& z, U const& u)\
+   { return boost::math::expint(z, u, Policy()); }\
+   \
+   template <class T>\
+   inline typename boost::math::tools::promote_args<T>::type expint(T z){ return boost::math::expint(z, Policy()); }\
+   \
+   template <class T>\
+   inline typename boost::math::tools::promote_args<T>::type zeta(T s){ return boost::math::zeta(s, Policy()); }
+
 
 #endif // BOOST_MATH_SPECIAL_MATH_FWD_HPP

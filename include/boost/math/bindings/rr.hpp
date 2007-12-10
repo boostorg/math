@@ -413,7 +413,7 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
 template <class charT, class traits>
 inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>& is, RR& a)
 {
-   long double v;
+   ::NTL::RR v;
    is >> v;
    a = v;
    return is;

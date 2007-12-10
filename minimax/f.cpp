@@ -10,6 +10,7 @@
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/special_functions.hpp>
 #include <boost/math/special_functions/zeta.hpp>
+#include <boost/math/special_functions/expint.hpp>
 
 #include <cmath>
 
@@ -200,14 +201,29 @@ boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant)
    case 14:
       // K(k)
       {
+         static double P[] =
+         {
+            1.38629436111989062502E0,
+            9.65735902811690126535E-2,
+            3.08851465246711995998E-2,
+            1.49380448916805252718E-2,
+            8.79078273952743772254E-3,
+            6.18901033637687613229E-3,
+            6.87489687449949877925E-3,
+            9.85821379021226008714E-3,
+            7.97404013220415179367E-3,
+            2.28025724005875567385E-3,
+            1.37982864606273237150E-4
+         };
+
          // x = 1 - k^2
          boost::math::ntl::RR mp = x;
          if(mp < 1e-20)
             mp = 1e-20;
+         if(mp == 1)
+            mp -= 1e-20;
          boost::math::ntl::RR k = sqrt(1 - mp);
-         static const boost::math::ntl::RR l4 = log(boost::math::ntl::RR(4));
-         boost::math::ntl::RR p2 = boost::math::constants::pi<boost::math::ntl::RR>() / 2;
-         return (boost::math::ellint_1(k) + 1) / (1 + l4 - log(mp));
+         return (boost::math::ellint_1(k) - mp/*boost::math::tools::evaluate_polynomial(P, mp)*/) / -log(mp);
       }
    case 15:
       // E(k)
@@ -241,6 +257,42 @@ boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant)
       // Zeta over [a, b] : a >> 1
       {
          return log(boost::math::zeta(x) - 1);
+      }
+   case 21:
+      // expint[1] over [0,1]:
+      {
+         boost::math::ntl::RR tiny = boost::lexical_cast<boost::math::ntl::RR>("1e-5000");
+         boost::math::ntl::RR z = (x <= tiny) ? tiny : x;
+         return boost::math::expint(1, z) - z + log(z);
+      }
+   case 22:
+      // expint[1] over [1,N],
+      // Note that x varies from [0,1]:
+      {
+         boost::math::ntl::RR z = 1 / x;
+         return boost::math::expint(1, z) * exp(z) * z;
+      }
+   case 23:
+      // expin Ei over [0,R]
+      {
+         static const boost::math::ntl::RR root = 
+            boost::lexical_cast<boost::math::ntl::RR>("0.372507410781366634461991866580119133535689497771654051555657435242200120636201854384926049951548942392");
+         boost::math::ntl::RR z = x < (std::numeric_limits<long double>::min)() ? (std::numeric_limits<long double>::min)() : x;
+         return (boost::math::expint(z) - log(z / root)) / (z - root);
+      }
+   case 24:
+      // Expint Ei for large x:
+      {
+         static const boost::math::ntl::RR root = 
+            boost::lexical_cast<boost::math::ntl::RR>("0.372507410781366634461991866580119133535689497771654051555657435242200120636201854384926049951548942392");
+         boost::math::ntl::RR z = x < (std::numeric_limits<long double>::min)() ? (std::numeric_limits<long double>::max)() : 1 / x;
+         return (boost::math::expint(z) - z) * z * exp(-z);
+         //return (boost::math::expint(z) - log(z)) * z * exp(-z);
+      }
+   case 25:
+      // Expint Ei for large x:
+      {
+         return (boost::math::expint(x) - x) * x * exp(-x);
       }
    }
    return 0;
