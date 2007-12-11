@@ -29,8 +29,8 @@ namespace boost{ namespace math{ namespace tools{
 
 namespace detail{
 
-BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_value_type, value_type, true);
-BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_policy_type, policy_type, true);
+BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_value_type, value_type, true)
+BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_policy_type, policy_type, true)
 
 template<class D>
 char cdf(const D& ...);
