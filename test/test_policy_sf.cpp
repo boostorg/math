@@ -21,7 +21,7 @@ namespace test{
 
    typedef boost::math::policies::policy<> policy;
 
-   BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(policy);
+   BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(policy)
 
 }
 
