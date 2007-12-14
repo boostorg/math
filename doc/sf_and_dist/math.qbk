@@ -343,6 +343,10 @@ for these distributions.
 [include ellint_legendre.qbk]
 [endsect] [/section:ellint Elliptic Integrals]
 
+[section:zetas Zeta Functions]
+[include zeta.qbk]
+[endsect]
+
 [include powers.qbk]
 [include sinc.qbk]
 [include inv_hyper.qbk]
