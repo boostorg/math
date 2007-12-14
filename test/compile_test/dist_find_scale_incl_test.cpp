@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-// Basic sanity check that header <boost/math/distributions/bernoulli.hpp>
+// Basic sanity check that header <boost/math/distributions/find_scale.hpp>
 // #includes all the files that it needs to.
 //
 #include <boost/math/distributions/find_scale.hpp>
