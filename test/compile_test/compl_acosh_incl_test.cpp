@@ -20,7 +20,9 @@ void check()
 {
    check_result<std::complex<float> >(boost::math::acosh(std::complex<float>()));
    check_result<std::complex<double> >(boost::math::acosh(std::complex<double>()));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<std::complex<long double> >(boost::math::acosh(std::complex<long double>()));
+#endif
 }
 
 

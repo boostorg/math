@@ -20,6 +20,9 @@ void check()
 {
    check_result<std::complex<float> >(boost::math::asin(std::complex<float>()));
    check_result<std::complex<double> >(boost::math::asin(std::complex<double>()));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   check_result<std::complex<long double> >(boost::math::asin(std::complex<long double>()));
+#endif
 }
 
 
