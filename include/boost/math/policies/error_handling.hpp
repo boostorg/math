@@ -71,7 +71,7 @@ template <class E, class T>
 void raise_error(const char* function, const char* message)
 {
   if(function == 0)
-       function = "Unknown function";
+       function = "Unknown function operating on type %1%";
   if(message == 0)
        message = "Cause unknown";
 
@@ -88,9 +88,9 @@ template <class E, class T>
 void raise_error(const char* function, const char* message, const T& val)
 {
   if(function == 0)
-       function = "Unknown function";
+     function = "Unknown function operating on type %1%";
   if(message == 0)
-       message = "Cause unknown";
+     message = "Cause unknown: error caused by bad argument with value %1%";
 
   std::string msg("Error in function ");
   msg += (boost::format(function) % typeid(T).name()).str();
