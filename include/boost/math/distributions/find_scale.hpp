@@ -14,6 +14,8 @@
 // using boost::math::policies::policy;
 #include <boost/math/tools/traits.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/policies/error_handling.hpp>
 // using boost::math::complement; // will be needed by users who want complement,
 // but NOT placed here to avoid putting it in global scope.
 

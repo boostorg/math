@@ -310,6 +310,13 @@ run test_bessel_y.cpp ;
 run test_bessel_i.cpp ;
 run test_bessel_k.cpp ;
 
+compile  compile_test/compl_abs_incl_test.cpp ;
+compile  compile_test/compl_acos_incl_test.cpp ;
+compile  compile_test/compl_acosh_incl_test.cpp ;
+compile  compile_test/compl_asin_incl_test.cpp ;
+compile  compile_test/compl_asinh_incl_test.cpp ;
+compile  compile_test/compl_atan_incl_test.cpp ;
+compile  compile_test/compl_atanh_incl_test.cpp ;
 compile  compile_test/dist_bernoulli_incl_test.cpp ;
 compile  compile_test/dist_beta_incl_test.cpp ;
 compile  compile_test/dist_binomial_incl_test.cpp ;
@@ -318,6 +325,8 @@ compile  compile_test/dist_chi_squared_incl_test.cpp ;
 compile  compile_test/dist_complement_incl_test.cpp ;
 compile  compile_test/dist_exponential_incl_test.cpp ;
 compile  compile_test/dist_extreme_val_incl_test.cpp ;
+compile  compile_test/dist_find_location_incl_test.cpp ;
+compile  compile_test/dist_find_scale_incl_test.cpp ;
 compile  compile_test/dist_fisher_f_incl_test.cpp ;
 compile  compile_test/dist_gamma_incl_test.cpp ;
 compile  compile_test/dist_lognormal_incl_test.cpp ;
@@ -394,6 +403,7 @@ run ../quaternion/quaternion_mult_incl_test.cpp
     ../../test/build//boost_unit_test_framework/<link>static ;
 
 run complex_test.cpp ;
+
 
 
 

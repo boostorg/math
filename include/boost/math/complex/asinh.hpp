@@ -9,8 +9,8 @@
 #ifndef BOOST_MATH_COMPLEX_DETAILS_INCLUDED
 #  include <boost/math/complex/details.hpp>
 #endif
-#ifndef BOOST_MATH_COMPLEX_ASINH_INCLUDED
-#  include <boost/math/complex/asinh.hpp>
+#ifndef BOOST_MATH_COMPLEX_ASIN_INCLUDED
+#  include <boost/math/complex/asin.hpp>
 #endif
 
 namespace boost{ namespace math{
