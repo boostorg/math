@@ -58,6 +58,11 @@ When [alpha][space] = 3, the
 [@http://en.wikipedia.org/wiki/Normal_distribution normal distribution].
 When [alpha][space] = 1, the Weibull distribution reduces to the
 [@http://en.wikipedia.org/wiki/Exponential_distribution exponential distribution].
+The relationship of the types of extreme value distributions, of which the Weibull is but one, is
+discussed by
+[@http://www.worldscibooks.com/mathematics/p191.html Extreme Value Distributions, Theory and Applications
+Samuel Kotz & Saralees Nadarajah].
+
    
 [h4 Member Functions]
 

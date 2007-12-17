@@ -89,6 +89,10 @@ In the following table [lambda] is the parameter lambda of the distribution,
 * [@http://documents.wolfram.com/calccenter/Functions/ListsMatrices/Statistics/ExponentialDistribution.html Wolfram Mathematica calculator]
 * [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda3667.htm NIST Exploratory Data Analysis]
 * [@http://en.wikipedia.org/wiki/Exponential_distribution Wikipedia Exponential distribution]
+* 
+[@http://www.worldscibooks.com/mathematics/p191.html Extreme Value Distributions, Theory and Applications
+Samuel Kotz & Saralees Nadarajah]
+discuss the relationship of the types of extreme value distributions, of which this is but one.
 
 [endsect][/section:exp_dist Exponential]
 

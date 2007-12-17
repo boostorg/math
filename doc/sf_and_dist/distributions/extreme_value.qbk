@@ -36,6 +36,11 @@ More information can be found on the
 and [@http://en.wikipedia.org/wiki/Extreme_value_theory Extreme value theory]
 websites.
 
+The relationship of the types of extreme value distributions, of which this is but one, is
+discussed by
+[@http://www.worldscibooks.com/mathematics/p191.html Extreme Value Distributions, Theory and Applications
+Samuel Kotz & Saralees Nadarajah].
+
 The distribution has a PDF given by:
 
 f(x) = (1/scale) e[super -(x-location)/scale] e[super -e[super -(x-location)/scale]]
