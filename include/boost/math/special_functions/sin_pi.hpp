@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SIN_PI_HPP
 #define BOOST_MATH_SIN_PI_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <cmath>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/real_cast.hpp>
@@ -53,3 +57,4 @@ inline T sin_pi(T x, const Policy&)
 } // namespace math
 } // namespace boost
 #endif
+

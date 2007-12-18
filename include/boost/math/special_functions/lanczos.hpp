@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_LANCZOS
 #define BOOST_MATH_SPECIAL_FUNCTIONS_LANCZOS
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/config.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/limits.hpp>
@@ -1226,6 +1230,7 @@ struct lanczos
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_LANCZOS
+
 
 
 

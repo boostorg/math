@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_COS_PI_HPP
 #define BOOST_MATH_COS_PI_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <cmath>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/real_cast.hpp>
@@ -51,3 +55,4 @@ inline T cos_pi(T x, const Policy&)
 } // namespace math
 } // namespace boost
 #endif
+

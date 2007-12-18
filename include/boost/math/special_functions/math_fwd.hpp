@@ -19,6 +19,10 @@
 #ifndef BOOST_MATH_SPECIAL_MATH_FWD_HPP
 #define BOOST_MATH_SPECIAL_MATH_FWD_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
 #include <boost/math/policies/policy.hpp>
 #include <boost/mpl/comparison.hpp>
@@ -640,7 +644,7 @@ namespace boost
    typename tools::promote_args<T>::type expint(unsigned n, T z, const Policy&);
 
    template <class T, class U>
-   typename detail::expint_result<T, U>::type expint(T const& z, U const& u);
+   typename detail::expint_result<T, U>::type expint(T const z, U const u);
 
    template <class T>
    typename tools::promote_args<T>::type expint(T z);
@@ -952,3 +956,4 @@ namespace boost
 
 
 #endif // BOOST_MATH_SPECIAL_MATH_FWD_HPP
+

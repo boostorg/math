@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SF_ERF_INV_HPP
 #define BOOST_MATH_SF_ERF_INV_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 namespace boost{ namespace math{ 
 
 namespace detail{
@@ -462,3 +466,4 @@ inline typename tools::promote_args<T>::type erf_inv(T z)
 } // namespace boost
 
 #endif // BOOST_MATH_SF_ERF_INV_HPP
+

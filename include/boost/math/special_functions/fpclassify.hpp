@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_FPCLASSIFY_HPP
 #define BOOST_MATH_FPCLASSIFY_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <math.h>
 #include <cmath>
 #include <boost/limits.hpp>
@@ -235,6 +239,7 @@ inline bool isnormal BOOST_NO_MACRO_EXPAND(T t)
 } // namespace boost
 
 #endif // BOOST_MATH_FPCLASSIFY_HPP
+
 
 
 

@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SPECIAL_BETA_HPP
 #define BOOST_MATH_SPECIAL_BETA_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/gamma.hpp>
@@ -1344,6 +1348,7 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
 #include <boost/math/special_functions/detail/ibeta_inv_ab.hpp>
 
 #endif // BOOST_MATH_SPECIAL_BETA_HPP
+
 
 
 

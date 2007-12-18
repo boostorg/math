@@ -10,6 +10,10 @@
 #ifndef BOOST_ATANH_HPP
 #define BOOST_ATANH_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 
 #include <cmath>
 #include <boost/config.hpp>
@@ -118,5 +122,6 @@ namespace boost
 }
 
 #endif /* BOOST_ATANH_HPP */
+
 
 

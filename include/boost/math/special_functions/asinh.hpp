@@ -10,6 +10,10 @@
 #ifndef BOOST_ASINH_HPP
 #define BOOST_ASINH_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 
 #include <cmath>
 #include <boost/config.hpp>
@@ -110,3 +114,4 @@ namespace boost
 }
 
 #endif /* BOOST_ASINH_HPP */
+

@@ -9,6 +9,10 @@
 #ifndef BOOST_MATH_TOOLS_USER_HPP
 #define BOOST_MATH_TOOLS_USER_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 // This file can be modified by the user to change the default policies.
 // See "Changing the Policy Defaults" in documentation.
 
@@ -89,4 +93,5 @@
 // define BOOST_MATH_MAX_ROOT_ITERATION_POLICY 200
 
 #endif // BOOST_MATH_TOOLS_USER_HPP
+
 

@@ -7,6 +7,10 @@
 #ifndef BOOST_MATH_SPECIAL_SPHERICAL_HARMONIC_HPP
 #define BOOST_MATH_SPECIAL_SPHERICAL_HARMONIC_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/tools/workaround.hpp>
 #include <complex>
@@ -195,5 +199,6 @@ inline typename tools::promote_args<T1, T2>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_SPHERICAL_HARMONIC_HPP
+
 
 

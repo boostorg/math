@@ -15,6 +15,7 @@
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
+#include "test_expint_hooks.hpp"
 
 //
 // DESCRIPTION:
@@ -72,6 +73,16 @@ void expected_results()
       "float|double|long double",    // test type(s)
       ".*Ei.*",                      // test data group
       ".*", 6, 3);                   // test function
+   if(std::numeric_limits<long double>::digits > 100)
+   {
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "real_concept",                // test type(s)
+         ".*Ei.*",                      // test data group
+         ".*", 150, 50);                // test function
+   }
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -85,7 +96,7 @@ void expected_results()
       ".*",                          // platform
       ".*",                          // test type(s)
       ".*",                          // test data group
-      ".*", 20, 5);                   // test function
+      ".*", 25, 5);                   // test function
 
    std::cout << "Tests run with " << BOOST_COMPILER << ", " 
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
@@ -98,6 +109,14 @@ T expint_wrapper(T n, T z)
       boost::math::tools::real_cast<unsigned>(n), z);
 }
 
+#ifdef TEST_OTHER
+template <class T>
+T other_expint_wrapper(T n, T z)
+{
+   return other::expint(
+      boost::math::tools::real_cast<unsigned>(n), z);
+}
+#endif
 template <class T>
 void do_test_expint(const T& data, const char* type_name, const char* test_name)
 {
@@ -122,7 +141,20 @@ void do_test_expint(const T& data, const char* type_name, const char* test_name)
       bind_func(funcp, 0, 1),
       extract_result(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::expint", test_name);
-
+#ifdef TEST_OTHER
+   if(boost::is_floating_point<value_type>::value && other::expint(2u, 2.0))
+   {
+      funcp = other_expint_wrapper;
+      //
+      // test expint against data:
+      //
+      result = boost::math::tools::test(
+         data,
+         bind_func(funcp, 0, 1),
+         extract_result(2));
+      handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::expint", test_name);
+   }
+#endif
    std::cout << std::endl;
 }
 
@@ -150,6 +182,20 @@ void do_test_expint_Ei(const T& data, const char* type_name, const char* test_na
       bind_func(funcp, 0),
       extract_result(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::expint", test_name);
+#ifdef TEST_OTHER
+   if(boost::is_floating_point<value_type>::value && other::expint(2.0))
+   {
+      funcp = other::expint;
+      //
+      // test expint against data:
+      //
+      result = boost::math::tools::test(
+         data,
+         bind_func(funcp, 0),
+         extract_result(1));
+      handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::expint", test_name);
+   }
+#endif
 }
 
 template <class T>

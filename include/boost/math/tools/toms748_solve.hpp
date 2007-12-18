@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_SOLVE_ROOT_HPP
 #define BOOST_MATH_TOOLS_SOLVE_ROOT_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/config.hpp>
@@ -577,3 +581,4 @@ inline std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& fact
 
 
 #endif // BOOST_MATH_TOOLS_SOLVE_ROOT_HPP
+

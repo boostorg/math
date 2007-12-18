@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_BESSEL_YN_HPP
 #define BOOST_MATH_BESSEL_YN_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/detail/bessel_y0.hpp>
 #include <boost/math/special_functions/detail/bessel_y1.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -77,3 +81,4 @@ T bessel_yn(int n, T x, const Policy& pol)
 }}} // namespaces
 
 #endif // BOOST_MATH_BESSEL_YN_HPP
+

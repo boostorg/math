@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_CONFIG_HPP
 #define BOOST_MATH_TOOLS_CONFIG_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/cstdint.hpp> // for boost::uintmax_t
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
@@ -241,6 +245,7 @@ inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
 #endif
 
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP
+
 
 
 

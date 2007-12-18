@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_POLYNOMIAL_HPP
 #define BOOST_MATH_TOOLS_POLYNOMIAL_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/assert.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
@@ -311,5 +315,6 @@ inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT,
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_POLYNOMIAL_HPP
+
 
 

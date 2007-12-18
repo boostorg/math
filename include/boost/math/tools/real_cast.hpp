@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_REAL_CAST_HPP
 #define BOOST_MATH_TOOLS_REAL_CAST_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 namespace boost{ namespace math
 {
   namespace tools
@@ -20,5 +24,6 @@ namespace boost{ namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_REAL_CAST_HPP
+
 
 

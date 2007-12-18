@@ -10,6 +10,10 @@
 #ifndef BOOST_MATH_BESSEL_HPP
 #define BOOST_MATH_BESSEL_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/detail/bessel_jy.hpp>
 #include <boost/math/special_functions/detail/bessel_jn.hpp>
 #include <boost/math/special_functions/detail/bessel_yn.hpp>
@@ -482,3 +486,4 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sp
 } // namespace boost
 
 #endif // BOOST_MATH_BESSEL_HPP
+

@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SP_FACTORIALS_HPP
 #define BOOST_MATH_SP_FACTORIALS_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/unchecked_factorial.hpp>
@@ -222,3 +226,4 @@ inline typename tools::promote_args<RT>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SP_FACTORIALS_HPP
+

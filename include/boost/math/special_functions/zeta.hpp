@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_ZETA_HPP
 #define BOOST_MATH_ZETA_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -894,5 +898,6 @@ inline typename tools::promote_args<T>::type zeta(T s)
 }} // namespaces
 
 #endif // BOOST_MATH_ZETA_HPP
+
 
 

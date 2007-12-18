@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SF_BINOMIAL_HPP
 #define BOOST_MATH_SF_BINOMIAL_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -71,5 +75,6 @@ inline T binomial_coefficient(unsigned n, unsigned k)
 
 
 #endif // BOOST_MATH_SF_BINOMIAL_HPP
+
 
 

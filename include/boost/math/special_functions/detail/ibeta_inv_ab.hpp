@@ -13,6 +13,10 @@
 #ifndef BOOST_MATH_SP_DETAIL_BETA_INV_AB
 #define BOOST_MATH_SP_DETAIL_BETA_INV_AB
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/cstdint.hpp>
 
@@ -207,5 +211,6 @@ inline T ibetac_invb(T b, T x, T q)
 } // namespace boost
 
 #endif // BOOST_MATH_SP_DETAIL_BETA_INV_AB
+
 
 

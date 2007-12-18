@@ -163,6 +163,15 @@ and use the function's name as the link text]
 [def __powm1 [link math_toolkit.special.powers.powm1 powm1]]
 [def __hypot [link math_toolkit.special.powers.hypot hypot]]
 
+[/zeta]
+[def __zeta [link math_toolkit.special.zetas.zeta zeta]]
+
+[/expint]
+[def __expint_i [link math_toolkit.special.expint.expint_i zeta]]
+[def __expint_n [link math_toolkit.special.expint.expint_n zeta]]
+
+
+
 [/ distribution non-members]
 [def __cdf [link math.dist.cdf Cumulative Distribution Function]]
 [def __pdf [link math.dist.pdf Probability Density Function]]
@@ -346,6 +355,8 @@ for these distributions.
 [section:zetas Zeta Functions]
 [include zeta.qbk]
 [endsect]
+
+[include expint.qbk]
 
 [include powers.qbk]
 [include sinc.qbk]

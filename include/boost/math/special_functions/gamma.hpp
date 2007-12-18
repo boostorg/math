@@ -8,6 +8,10 @@
 #ifndef BOOST_MATH_SF_GAMMA_HPP
 #define BOOST_MATH_SF_GAMMA_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/config.hpp>
 #ifdef BOOST_MSVC
 # pragma warning(push)
@@ -1466,6 +1470,7 @@ inline typename tools::promote_args<T1, T2>::type
 #include <boost/math/special_functions/erf.hpp>
 
 #endif // BOOST_MATH_SF_GAMMA_HPP
+
 
 
 

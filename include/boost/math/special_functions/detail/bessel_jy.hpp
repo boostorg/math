@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_BESSEL_JY_HPP
 #define BOOST_MATH_BESSEL_JY_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sign.hpp>
@@ -359,3 +363,4 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
 }} // namespaces
 
 #endif // BOOST_MATH_BESSEL_JY_HPP
+

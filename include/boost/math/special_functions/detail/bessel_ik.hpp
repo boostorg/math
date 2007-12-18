@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_BESSEL_IK_HPP
 #define BOOST_MATH_BESSEL_IK_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -329,3 +333,4 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
 }}} // namespaces
 
 #endif // BOOST_MATH_BESSEL_IK_HPP
+

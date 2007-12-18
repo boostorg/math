@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_EXPINT_HPP
 #define BOOST_MATH_EXPINT_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/tools/fraction.hpp>
@@ -432,7 +436,7 @@ T expint_imp(unsigned n, T z, const Policy& pol, const Tag& tag)
    if(z < 0)
       return policies::raise_domain_error<T>(function, "Function requires z >= 0 but got %1%.", z, pol);
    if(z == 0)
-      return n == 1 ? policies::raise_overflow_error<T>(function, 0, pol) : 1 / (n - 1);
+      return n == 1 ? policies::raise_overflow_error<T>(function, 0, pol) : 1 / (static_cast<T>(n - 1));
 
    T result;
 
@@ -1489,7 +1493,7 @@ inline typename tools::promote_args<T>::type
 
 template <class T, class U>
 inline typename detail::expint_result<T, U>::type
-   expint(T const& z, U const& u)
+   expint(T const z, U const u)
 {
    typedef typename policies::is_policy<U>::type tag_type;
    return detail::expint_forwarder(z, u, tag_type());
@@ -1505,4 +1509,5 @@ inline typename tools::promote_args<T>::type
 }} // namespaces
 
 #endif // BOOST_MATH_EXPINT_HPP
+
 

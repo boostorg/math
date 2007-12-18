@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SPECIAL_ERF_HPP
 #define BOOST_MATH_SPECIAL_ERF_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/gamma.hpp>
@@ -853,6 +857,7 @@ inline typename tools::promote_args<T>::type erfc(T z)
 #include <boost/math/special_functions/detail/erf_inv.hpp>
 
 #endif // BOOST_MATH_SPECIAL_ERF_HPP
+
 
 
 

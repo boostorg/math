@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_REMEZ_HPP
 #define BOOST_MATH_TOOLS_REMEZ_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/solve.hpp>
 #include <boost/math/tools/minima.hpp>
 #include <boost/math/tools/roots.hpp>
@@ -658,5 +662,6 @@ polynomial<T> remez_minimax<T>::denominator()const
 }}} // namespaces
 
 #endif // BOOST_MATH_TOOLS_REMEZ_HPP
+
 
 

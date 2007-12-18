@@ -7,6 +7,10 @@
 #ifndef BOOST_MATH_SPECIAL_LAGUERRE_HPP
 #define BOOST_MATH_SPECIAL_LAGUERRE_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -130,5 +134,6 @@ inline typename laguerre_result<T1, T2>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_LAGUERRE_HPP
+
 
 

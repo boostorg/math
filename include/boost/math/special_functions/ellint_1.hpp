@@ -14,6 +14,10 @@
 #ifndef BOOST_MATH_ELLINT_1_HPP
 #define BOOST_MATH_ELLINT_1_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/ellint_rf.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -180,3 +184,4 @@ inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi)
 }} // namespaces
 
 #endif // BOOST_MATH_ELLINT_1_HPP
+

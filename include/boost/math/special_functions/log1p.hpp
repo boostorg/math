@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_LOG1P_INCLUDED
 #define BOOST_MATH_LOG1P_INCLUDED
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <cmath>
 #include <math.h> // platform's ::log1p
 #include <boost/limits.hpp>
@@ -273,5 +277,6 @@ inline T log1pmx(T x)
 } // namespace boost
 
 #endif // BOOST_MATH_LOG1P_INCLUDED
+
 
 
