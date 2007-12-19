@@ -139,7 +139,7 @@ of z:
 
 The following table shows the peak errors (in units of epsilon) 
 found on various platforms with various floating point types, 
-along with comparisons to the __gsl library.
+along with comparisons to Cody's SPECFUN implementation and the __gsl library.
 Unless otherwise specified any floating point type that is narrower
 than the one shown will have __zero_error.
 
@@ -148,11 +148,20 @@ than the one shown will have __zero_error.
 [[53] [Win32, Visual C++ 8] [Peak=2.4 Mean=0.6
 
 GSL Peak=8.9 Mean=0.7 
+
+SPECFUN (Cody) Peak=2.5 Mean=0.6
 ]]
 [[64] [RedHat Linux IA_EM64, gcc-4.1] [Peak=5.1 Mean=0.8]]
 [[64] [Redhat Linux IA64, gcc-4.1] [Peak=5.0 Mean=0.8]  ]
 [[113] [HPUX IA64, aCC A.06.06] [Peak=1.9 Mean=0.63]]
 ]
+
+It should be noted that all three libraries tested above 
+offer sub-epsilon precision over most of their range.
+
+GSL has the greatest difficulty near the positive root of En, while
+Cody's SPECFUN along with this implementation increase their
+error rates very slightly over the range \[4,6\].
 
 [h4 Testing]
 

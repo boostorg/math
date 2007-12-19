@@ -50,6 +50,37 @@ inline T expint(unsigned, T){ return 0; }
 #define TEST_OTHER
 #endif
 
+#ifdef TEST_SPECFUN
+namespace other{
+extern "C" int calcei_(double *arg, double *result, int*);
+inline float expint(float a)
+{ 
+   double r, a_(a);
+   int v = 1;
+   calcei_(&a_, &r, &v); 
+   return (float)r;
+}
+inline double expint(double a)
+{ 
+   double r, a_(a);
+   int v = 1;
+   calcei_(&a_, &r, &v); 
+   return r;
+}
+inline long double expint(long double a)
+{ 
+   double r, a_(a);
+   int v = 1;
+   calcei_(&a_, &r, &v); 
+   return r;
+}
+// En is not supported:
+template <class T>
+inline T expint(unsigned, T){ return 0; }
+}
+#define TEST_OTHER
+#endif
+
 #ifdef TEST_OTHER
 namespace other{
    boost::math::concepts::real_concept expint(unsigned, boost::math::concepts::real_concept){ return 0; }
