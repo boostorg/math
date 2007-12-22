@@ -299,6 +299,7 @@ test_rational_instances/test_rational_real_concept5.cpp
 
 run test_remez.cpp ;
 run test_roots.cpp ;
+run test_round.cpp ;
 run test_spherical_harmonic.cpp ;
 run test_students_t.cpp ;
 run test_tgamma_ratio.cpp ;
