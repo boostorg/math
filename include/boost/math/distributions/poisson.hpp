@@ -334,22 +334,7 @@ namespace boost
       { // mean ^ k = 1, and k! = 1, so can simplify.
         return exp(-mean);
       }
-      using boost::math::unchecked_factorial;
-      RealType floork = floor(k);
-      if ((floork == k) // integral
-        && k < max_factorial<RealType>::value)
-      { // k is small enough (for float 34, double 170 ...) to use factorial(k).
-        return exp(-mean) * pow(mean, k) /
-          unchecked_factorial<RealType>(tools::real_cast<unsigned int>(floork));
-      }
-      else
-      { // Need to use log(factorial(k)) = lgamma(k+1)
-        // (e ^ -mean * mean ^ k) / k!
-        // == exp(log(e ^ -mean) + log (mean ^ k) - lgamma(k+1))
-        // exp( -mean + log(mean) * k - lgamma(k+1))
-        return exp(-mean + log(mean) * k - boost::math::lgamma(k+1, Policy()));
-        // return gamma_p_derivative(k+1, mean); // equivalent & also passes tests.
-      }
+      return boost::math::gamma_p_derivative(k+1, mean, Policy());
     } // pdf
 
     template <class RealType, class Policy>
