@@ -361,6 +361,7 @@ for these distributions.
 [include powers.qbk]
 [include sinc.qbk]
 [include inv_hyper.qbk]
+[include rounding_func.qbk]
 [include fpclassify.qbk]
 [endsect] [/section:special Special Functions]
 

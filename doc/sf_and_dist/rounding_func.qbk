@@ -1,0 +1,74 @@
+
+[section:rounding Rounding Truncation and Integer Conversion]
+
+[section:round Rounding Functions]
+
+   template <class T>
+   T round(const T& v);
+   
+   template <class T>
+   int iround(const T& v);
+
+   template <class T>
+   long lround(const T& v);
+
+   template <class T>
+   long long llround(const T& v);
+
+These functions return the closest integer to the argument /v/.
+
+Halfway cases are rounded away from zero, regardless of the current rounding
+direction.
+
+[endsect]
+
+[section:trunc Truncation Functions]
+
+   template <class T>
+   T trunc(const T& v);
+
+   template <class T>
+   int itrunc(const T& v);
+
+   template <class T>
+   long ltrunc(const T& v);
+
+   template <class T>
+   long long lltrunc(const T& v);
+
+The trunc functions round their argument to the integer value,
+nearest to but no larger in magnitude than the argument.
+
+For example `itrunc(3.7)` would return `3` and `ltrunc(-4.6)` 
+would return `-4`.
+
+[endsect]
+
+[section:modf Integer and Fractional Part Splitting (modf)]
+
+   template <class T>
+   T modf(const T& v, T* ipart);
+
+   template <class T>
+   T modf(const T& v, int* ipart);
+
+   template <class T>
+   T modf(const T& v, long* ipart);
+
+   template <class T>
+   T modf(const T& v, long long* ipart);
+
+The `modf` functions store the integer part of /v/ in `*ipart` 
+and return the fractional part of /v/.
+
+[endsect]
+
+
+[endsect] [/section:rounding Rounding Truncation and Integer Conversion]
+
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
