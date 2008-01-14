@@ -18,9 +18,11 @@
 
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
-#include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
+#include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/special_functions/modf.hpp>
 
 #include <ostream>
 #include <istream>
@@ -34,6 +36,12 @@ namespace boost{ namespace math{
 
 namespace concepts
 {
+
+#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   typedef double std_real_concept_base_type;
+#else
+   typedef long double std_real_concept_base_type;
+#endif
 
 class std_real_concept
 {
@@ -53,8 +61,8 @@ public:
    std_real_concept(unsigned long c) : m_value(c){}
    std_real_concept(long c) : m_value(c){}
 #if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX) || defined(__SUNPRO_CC)
-   std_real_concept(unsigned long long c) : m_value(static_cast<long double>(c)){}
-   std_real_concept(long long c) : m_value(static_cast<long double>(c)){}
+   std_real_concept(unsigned long long c) : m_value(static_cast<std_real_concept_base_type>(c)){}
+   std_real_concept(long long c) : m_value(static_cast<std_real_concept_base_type>(c)){}
 #endif
    std_real_concept(float c) : m_value(c){}
    std_real_concept(double c) : m_value(c){}
@@ -74,15 +82,15 @@ public:
    std_real_concept& operator=(long c) { m_value = c; return *this; }
    std_real_concept& operator=(unsigned long c) { m_value = c; return *this; }
 #if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX) || defined(__SUNPRO_CC)
-   std_real_concept& operator=(long long c) { m_value = static_cast<long double>(c); return *this; }
-   std_real_concept& operator=(unsigned long long c) { m_value = static_cast<long double>(c); return *this; }
+   std_real_concept& operator=(long long c) { m_value = static_cast<std_real_concept_base_type>(c); return *this; }
+   std_real_concept& operator=(unsigned long long c) { m_value = static_cast<std_real_concept_base_type>(c); return *this; }
 #endif
    std_real_concept& operator=(float c) { m_value = c; return *this; }
    std_real_concept& operator=(double c) { m_value = c; return *this; }
    std_real_concept& operator=(long double c) { m_value = c; return *this; }
 
    // Access:
-   long double value()const{ return m_value; }
+   std_real_concept_base_type value()const{ return m_value; }
 
    // Member arithmetic:
    std_real_concept& operator+=(const std_real_concept& other)
@@ -99,7 +107,7 @@ public:
    { return *this; }
 
 private:
-   long double m_value;
+   std_real_concept_base_type m_value;
 };
 
 // Non-member arithmetic:
@@ -142,40 +150,6 @@ inline bool operator > (const std_real_concept& a, const std_real_concept& b)
 inline bool operator >= (const std_real_concept& a, const std_real_concept& b)
 { return a.value() >= b.value(); }
 
-#if 0
-// Non-member mixed compare:
-template <class T>
-inline bool operator == (const T& a, const std_real_concept& b)
-{
-   return a == b.value();
-}
-template <class T>
-inline bool operator != (const T& a, const std_real_concept& b)
-{
-   return a != b.value();
-}
-template <class T>
-inline bool operator < (const T& a, const std_real_concept& b)
-{
-   return a < b.value();
-}
-template <class T>
-inline bool operator > (const T& a, const std_real_concept& b)
-{
-   return a > b.value();
-}
-template <class T>
-inline bool operator <= (const T& a, const std_real_concept& b)
-{
-   return a <= b.value();
-}
-template <class T>
-inline bool operator >= (const T& a, const std_real_concept& b)
-{
-   return a >= b.value();
-}
-#endif  // Non-member mixed compare:
-
 } // namespace concepts
 } // namespace math
 } // namespace boost
@@ -214,8 +188,8 @@ inline boost::math::concepts::std_real_concept floor(boost::math::concepts::std_
 { return std::floor(a.value()); }
 inline boost::math::concepts::std_real_concept modf(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept* ipart)
 {
-   long double ip;
-   long double result = std::modf(a.value(), &ip);
+   boost::math::concepts::std_real_concept_base_type ip;
+   boost::math::concepts::std_real_concept_base_type result = std::modf(a.value(), &ip);
    *ipart = ip;
    return result;
 }
@@ -255,7 +229,7 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
 template <class charT, class traits>
 inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>& is, std_real_concept& a)
 {
-   long double v;
+   std_real_concept_base_type v;
    is >> v;
    a = v;
    return is;
@@ -265,84 +239,93 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
 
 namespace tools
 {
-// real_cast converts from T to integer and narrower floating-point types.
-
-// Convert from T to integer types.
-
-template <>
-inline unsigned int real_cast<unsigned int, concepts::std_real_concept>(concepts::std_real_concept r)
-{
-   return static_cast<unsigned int>(r.value());
-}
-
-template <>
-inline int real_cast<int, concepts::std_real_concept>(concepts::std_real_concept r)
-{
-   return static_cast<int>(r.value());
-}
-
-template <>
-inline long real_cast<long, concepts::std_real_concept>(concepts::std_real_concept r)
-{
-   return static_cast<long>(r.value());
-}
-
-// Converts from T to narrower floating-point types, float, double & long double.
-
-template <>
-inline float real_cast<float, concepts::std_real_concept>(concepts::std_real_concept r)
-{
-   return static_cast<float>(r.value());
-}
-template <>
-inline double real_cast<double, concepts::std_real_concept>(concepts::std_real_concept r)
-{
-   return static_cast<double>(r.value());
-}
-template <>
-inline long double real_cast<long double, concepts::std_real_concept>(concepts::std_real_concept r)
-{
-   return r.value();
-}
 
 template <>
 inline concepts::std_real_concept max_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
-   return max_value<long double>();
+   return max_value<concepts::std_real_concept_base_type>();
 }
 
 template <>
 inline concepts::std_real_concept min_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
-   return min_value<long double>();
+   return min_value<concepts::std_real_concept_base_type>();
 }
 
 template <>
 inline concepts::std_real_concept log_max_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
-   return log_max_value<long double>();
+   return log_max_value<concepts::std_real_concept_base_type>();
 }
 
 template <>
 inline concepts::std_real_concept log_min_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
-   return log_min_value<long double>();
+   return log_min_value<concepts::std_real_concept_base_type>();
 }
 
 template <>
 inline concepts::std_real_concept epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
 {
-   return tools::epsilon<long double>();
+   return tools::epsilon<concepts::std_real_concept_base_type>();
 }
 
 template <>
 inline int digits<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
-{ // Assume number of significand bits is same as long double,
+{ // Assume number of significand bits is same as std_real_concept_base_type,
   // unless std::numeric_limits<T>::is_specialized to provide digits.
-   return digits<long double>();
+   return digits<concepts::std_real_concept_base_type>();
 }
 
 } // namespace tools
+
+//
+// Conversion and truncation routines:
+//
+template <>
+inline int iround<concepts::std_real_concept>(const concepts::std_real_concept& v)
+{
+   return iround(v.value());
+}
+
+template <>
+inline long lround<concepts::std_real_concept>(const concepts::std_real_concept& v)
+{
+   return lround(v.value());
+}
+
+#ifdef BOOST_HAS_LONG_LONG
+
+template <>
+inline long long llround<concepts::std_real_concept>(const concepts::std_real_concept& v)
+{
+   return llround(v.value());
+}
+
+#endif
+
+template <>
+inline int itrunc<concepts::std_real_concept>(const concepts::std_real_concept& v)
+{
+   return itrunc(v.value());
+}
+
+template <>
+inline long ltrunc<concepts::std_real_concept>(const concepts::std_real_concept& v)
+{
+   return ltrunc(v.value());
+}
+
+#ifdef BOOST_HAS_LONG_LONG
+
+template <>
+inline long long lltrunc<concepts::std_real_concept>(const concepts::std_real_concept& v)
+{
+   return lltrunc(v.value());
+}
+
+#endif
+
 } // namespace math
 } // namespace boost
 

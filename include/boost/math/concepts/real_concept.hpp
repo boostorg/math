@@ -22,7 +22,9 @@
 
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
-#include <boost/math/tools/real_cast.hpp>
+#include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/special_functions/modf.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <ostream>
@@ -37,6 +39,12 @@ namespace boost{ namespace math{
 
 namespace concepts
 {
+
+#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   typedef double real_concept_base_type;
+#else
+   typedef long double real_concept_base_type;
+#endif
 
 class real_concept
 {
@@ -56,11 +64,11 @@ public:
    real_concept(unsigned long c) : m_value(c){}
    real_concept(long c) : m_value(c){}
 #if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX) || defined(__SUNPRO_CC)
-   real_concept(unsigned long long c) : m_value(static_cast<long double>(c)){}
-   real_concept(long long c) : m_value(static_cast<long double>(c)){}
+   real_concept(unsigned long long c) : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(long long c) : m_value(static_cast<real_concept_base_type>(c)){}
 #elif defined(BOOST_HAS_MS_INT64)
-   real_concept(unsigned __int64 c) : m_value(static_cast<long double>(c)){}
-   real_concept(__int64 c) : m_value(static_cast<long double>(c)){}
+   real_concept(unsigned __int64 c) : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(__int64 c) : m_value(static_cast<real_concept_base_type>(c)){}
 #endif
    real_concept(float c) : m_value(c){}
    real_concept(double c) : m_value(c){}
@@ -80,15 +88,15 @@ public:
    real_concept& operator=(long c) { m_value = c; return *this; }
    real_concept& operator=(unsigned long c) { m_value = c; return *this; }
 #ifdef BOOST_HAS_LONG_LONG
-   real_concept& operator=(long long c) { m_value = static_cast<long double>(c); return *this; }
-   real_concept& operator=(unsigned long long c) { m_value = static_cast<long double>(c); return *this; }
+   real_concept& operator=(long long c) { m_value = static_cast<real_concept_base_type>(c); return *this; }
+   real_concept& operator=(unsigned long long c) { m_value = static_cast<real_concept_base_type>(c); return *this; }
 #endif
    real_concept& operator=(float c) { m_value = c; return *this; }
    real_concept& operator=(double c) { m_value = c; return *this; }
    real_concept& operator=(long double c) { m_value = c; return *this; }
 
    // Access:
-   long double value()const{ return m_value; }
+   real_concept_base_type value()const{ return m_value; }
 
    // Member arithmetic:
    real_concept& operator+=(const real_concept& other)
@@ -105,7 +113,7 @@ public:
    { return *this; }
 
 private:
-   long double m_value;
+   real_concept_base_type m_value;
 };
 
 // Non-member arithmetic:
@@ -148,40 +156,6 @@ inline bool operator > (const real_concept& a, const real_concept& b)
 inline bool operator >= (const real_concept& a, const real_concept& b)
 { return a.value() >= b.value(); }
 
-#if 0
-// Non-member mixed compare:
-template <class T>
-inline bool operator == (const T& a, const real_concept& b)
-{
-   return a == b.value();
-}
-template <class T>
-inline bool operator != (const T& a, const real_concept& b)
-{
-   return a != b.value();
-}
-template <class T>
-inline bool operator < (const T& a, const real_concept& b)
-{
-   return a < b.value();
-}
-template <class T>
-inline bool operator > (const T& a, const real_concept& b)
-{
-   return a > b.value();
-}
-template <class T>
-inline bool operator <= (const T& a, const real_concept& b)
-{
-   return a <= b.value();
-}
-template <class T>
-inline bool operator >= (const T& a, const real_concept& b)
-{
-   return a >= b.value();
-}
-#endif  // Non-member mixed compare:
-
 // Non-member functions:
 inline real_concept acos(real_concept a)
 { return std::acos(a.value()); }
@@ -196,8 +170,13 @@ inline real_concept atan2(real_concept a, real_concept b)
 inline real_concept ceil(real_concept a)
 { return std::ceil(a.value()); }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+// I've seen std::fmod(long double) crash on some platforms
+// so use fmodl instead:
 inline real_concept fmod(real_concept a, real_concept b)
 { return fmodl(a.value(), b.value()); }
+#else
+inline real_concept fmod(real_concept a, real_concept b)
+{ return std::fmod(a.value(), b.value()); }
 #endif
 inline real_concept cosh(real_concept a)
 { return std::cosh(a.value()); }
@@ -211,8 +190,8 @@ inline real_concept floor(real_concept a)
 { return std::floor(a.value()); }
 inline real_concept modf(real_concept a, real_concept* ipart)
 {
-   long double ip;
-   long double result = std::modf(a.value(), &ip);
+   real_concept_base_type ip;
+   real_concept_base_type result = std::modf(a.value(), &ip);
    *ipart = ip;
    return result;
 }
@@ -233,7 +212,7 @@ inline real_concept pow(real_concept a, int b)
 { return std::pow(a.value(), b); }
 #else
 inline real_concept pow(real_concept a, int b)
-{ return std::pow(a.value(), static_cast<long double>(b)); }
+{ return std::pow(a.value(), static_cast<real_concept_base_type>(b)); }
 #endif
 inline real_concept sin(real_concept a)
 { return std::sin(a.value()); }
@@ -264,13 +243,13 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
    return is;
 #elif defined(__SGI_STL_PORT)
    std::string s;
-   long double d;
+   real_concept_base_type d;
    is >> s;
    std::sscanf(s.c_str(), "%Lf", &d);
    a = d;
    return is;
 #else
-   long double v;
+   real_concept_base_type v;
    is >> v;
    a = v;
    return is;
@@ -281,86 +260,47 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
 
 namespace tools
 {
-// real_cast converts from T to integer and narrower floating-point types.
-
-// Convert from T to integer types.
-
-template <>
-inline unsigned int real_cast<unsigned int, concepts::real_concept>(concepts::real_concept r)
-{
-   return static_cast<unsigned int>(r.value());
-}
-
-template <>
-inline int real_cast<int, concepts::real_concept>(concepts::real_concept r)
-{
-   return static_cast<int>(r.value());
-}
-
-template <>
-inline long real_cast<long, concepts::real_concept>(concepts::real_concept r)
-{
-   return static_cast<long>(r.value());
-}
-
-// Converts from T to narrower floating-point types, float, double & long double.
-
-template <>
-inline float real_cast<float, concepts::real_concept>(concepts::real_concept r)
-{
-   return static_cast<float>(r.value());
-}
-template <>
-inline double real_cast<double, concepts::real_concept>(concepts::real_concept r)
-{
-   return static_cast<double>(r.value());
-}
-template <>
-inline long double real_cast<long double, concepts::real_concept>(concepts::real_concept r)
-{
-   return r.value();
-}
 
 template <>
 inline concepts::real_concept max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
-   return max_value<long double>();
+   return max_value<concepts::real_concept_base_type>();
 }
 
 template <>
 inline concepts::real_concept min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
-   return min_value<long double>();
+   return min_value<concepts::real_concept_base_type>();
 }
 
 template <>
 inline concepts::real_concept log_max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
-   return log_max_value<long double>();
+   return log_max_value<concepts::real_concept_base_type>();
 }
 
 template <>
 inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
-   return log_min_value<long double>();
+   return log_min_value<concepts::real_concept_base_type>();
 }
 
 template <>
 inline concepts::real_concept epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
 #ifdef __SUNPRO_CC
-   return std::numeric_limits<long double>::epsilon();
+   return std::numeric_limits<concepts::real_concept_base_type>::epsilon();
 #else
-   return tools::epsilon<long double>();
+   return tools::epsilon<concepts::real_concept_base_type>();
 #endif
 }
 
 template <>
 inline int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 { 
-   // Assume number of significand bits is same as long double,
+   // Assume number of significand bits is same as real_concept_base_type,
    // unless std::numeric_limits<T>::is_specialized to provide digits.
-   return tools::digits<long double>();
+   return tools::digits<concepts::real_concept_base_type>();
    // Note that if numeric_limits real concept is NOT specialized to provide digits10
    // (or max_digits10) then the default precision of 6 decimal digits will be used
    // by Boost test (giving misleading error messages like
@@ -369,6 +309,53 @@ inline int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC
 }
 
 } // namespace tools
+
+//
+// Conversion and truncation routines:
+//
+template <>
+inline int iround<concepts::real_concept>(const concepts::real_concept& v)
+{
+   return iround(v.value());
+}
+
+template <>
+inline long lround<concepts::real_concept>(const concepts::real_concept& v)
+{
+   return lround(v.value());
+}
+
+#ifdef BOOST_HAS_LONG_LONG
+
+template <>
+inline long long llround<concepts::real_concept>(const concepts::real_concept& v)
+{
+   return llround(v.value());
+}
+
+#endif
+
+template <>
+inline int itrunc<concepts::real_concept>(const concepts::real_concept& v)
+{
+   return itrunc(v.value());
+}
+
+template <>
+inline long ltrunc<concepts::real_concept>(const concepts::real_concept& v)
+{
+   return ltrunc(v.value());
+}
+
+#ifdef BOOST_HAS_LONG_LONG
+
+template <>
+inline long long lltrunc<concepts::real_concept>(const concepts::real_concept& v)
+{
+   return lltrunc(v.value());
+}
+
+#endif
 
 } // namespace math
 } // namespace boost

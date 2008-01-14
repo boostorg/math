@@ -12,7 +12,7 @@
 
 #include <cmath>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/real_cast.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/constants/constants.hpp>
 
 namespace boost{ namespace math{
@@ -36,7 +36,7 @@ T sin_pi(T x)
       invert = false;
 
    T rem = floor(x);
-   if(tools::real_cast<int>(rem) & 1)
+   if(itrunc(rem) & 1)
       invert = !invert;
    rem = x - rem;
    if(rem > 0.5f)

@@ -96,6 +96,23 @@ inline bool check_x(
    // leaving this test to catch any NaNs.  see Normal and cauchy for example.
 }
 
+template <class RealType, class Policy>
+inline bool check_non_centrality(
+      const char* function,
+      RealType ncp,
+      RealType* result,
+      const Policy& pol)
+{
+   if((ncp < 0) || !(boost::math::isfinite)(ncp))
+   { // Assume scale == 0 is NOT valid for any distribution.
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Non centrality parameter is %1%, but must be > 0 !", ncp, pol);
+      return false;
+   }
+   return true;
+}
+
 } // namespace detail
 } // namespace math
 } // namespace boost

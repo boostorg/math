@@ -7,19 +7,7 @@
 
 #include "performance_measure.hpp"
 
-#include <boost/math/distributions/beta.hpp>
-#include <boost/math/distributions/binomial.hpp>
-#include <boost/math/distributions/cauchy.hpp>
-#include <boost/math/distributions/chi_squared.hpp>
-#include <boost/math/distributions/exponential.hpp>
-#include <boost/math/distributions/fisher_f.hpp>
-#include <boost/math/distributions/gamma.hpp>
-#include <boost/math/distributions/lognormal.hpp>
-#include <boost/math/distributions/negative_binomial.hpp>
-#include <boost/math/distributions/normal.hpp>
-#include <boost/math/distributions/poisson.hpp>
-#include <boost/math/distributions/students_t.hpp>
-#include <boost/math/distributions/weibull.hpp>
+#include <boost/math/distributions.hpp>
 
 double probabilities[] = {
    1e-5,
@@ -201,6 +189,7 @@ BOOST_MATH_DISTRIBUTION2_TEST(normal, real_values, real_values, real_values, pro
 BOOST_MATH_DISTRIBUTION1_TEST(poisson, real_values, int_values, probabilities)
 BOOST_MATH_DISTRIBUTION1_TEST(students_t, int_values, real_values, probabilities)
 BOOST_MATH_DISTRIBUTION2_TEST(weibull, real_values, real_values, real_values, probabilities)
+BOOST_MATH_DISTRIBUTION2_TEST(non_central_chi_squared, int_values, int_values, real_values, probabilities)
 
 #ifdef TEST_R
 
@@ -341,6 +330,7 @@ BOOST_MATH_R_DISTRIBUTION2_TEST(norm, real_values, real_values, real_values, pro
 BOOST_MATH_R_DISTRIBUTION1_TEST(pois, real_values, int_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION1_TEST(t, int_values, real_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(weibull, real_values, real_values, real_values, probabilities)
+BOOST_MATH_R_DISTRIBUTION2_TEST(nchisq, int_values, int_values, real_values, probabilities)
 
 #endif
 

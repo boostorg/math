@@ -3,6 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/math/special_functions/trunc.hpp>
+
 
 #ifndef BOOST_MATH_TEST_FUNCTOR_HPP
 #define BOOST_MATH_TEST_FUNCTOR_HPP
@@ -121,7 +123,7 @@ struct row_binder2_i1
    template <class S>
    typename S::value_type operator()(const S& row)
    {
-      return f(boost::math::tools::real_cast<int>(row[m_i]), row[m_j]);
+      return f(boost::math::itrunc(row[m_i]), row[m_j]);
    }
 
 private:
@@ -144,8 +146,8 @@ struct row_binder3_i2
    typename S::value_type operator()(const S& row)
    {
       return f(
-         boost::math::tools::real_cast<int>(row[m_i]), 
-         boost::math::tools::real_cast<int>(row[m_j]),
+         boost::math::itrunc(row[m_i]), 
+         boost::math::itrunc(row[m_j]),
          row[m_k]);
    }
 
@@ -169,8 +171,8 @@ struct row_binder4_i2
    typename S::value_type operator()(const S& row)
    {
       return f(
-         boost::math::tools::real_cast<int>(row[m_i]), 
-         boost::math::tools::real_cast<int>(row[m_j]),
+         boost::math::itrunc(row[m_i]), 
+         boost::math::itrunc(row[m_j]),
          row[m_k],
          row[m_l]);
    }

@@ -17,6 +17,7 @@
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/static_assert.hpp>
 #include <cmath>
@@ -821,7 +822,7 @@ inline T binomial_ccdf(T n, T k, T x, T y)
    BOOST_MATH_STD_USING // ADL of std names
    T result = pow(x, n);
    T term = result;
-   for(unsigned i = tools::real_cast<unsigned>(n - 1); i > k; --i)
+   for(unsigned i = itrunc(n - 1); i > k; --i)
    {
       term *= ((i + 1) * y) / ((n - i) * x) ;
       result += term;
@@ -1059,7 +1060,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
          else if(a > 15)
          {
             // sidestep so we can use the series representation:
-            int n = static_cast<int>(boost::math::tools::real_cast<long double>(floor(b)));
+            int n = itrunc(floor(b));
             if(n == b)
                --n;
             T bbar = b - n;
@@ -1081,7 +1082,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             // the formula here for the non-normalised case is tricky to figure
             // out (for me!!), and requires two pochhammer calculations rather
             // than one, so leave it for now....
-            int n = static_cast<int>(boost::math::tools::real_cast<long double>(floor(b)));
+            int n = itrunc(floor(b));
             T bbar = b - n;
             if(bbar <= 0)
             {

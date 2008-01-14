@@ -13,6 +13,7 @@
 #include <boost/assert.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
+#include <boost/math/special_functions/binomial.hpp>
 
 #include <vector>
 
@@ -46,8 +47,8 @@ template <class Seq>
 Seq polynomial_to_chebyshev(const Seq& s)
 {
    // Converts a Polynomial into Chebyshev form:
-   typedef Seq::value_type value_type;
-   typedef Seq::difference_type difference_type;
+   typedef typename Seq::value_type value_type;
+   typedef typename Seq::difference_type difference_type;
    Seq result(s);
    difference_type order = s.size() - 1;
    difference_type even_order = order & 1 ? order - 1 : order;

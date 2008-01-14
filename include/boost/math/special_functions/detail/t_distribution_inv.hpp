@@ -12,6 +12,7 @@
 #endif
 
 #include <boost/math/special_functions/cbrt.hpp>
+#include <boost/math/special_functions/round.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -204,7 +205,7 @@ T inverse_students_t(T df, T u, T v, const Policy& pol, bool* pexact = 0)
       //
       T tolerance = ldexp(1.0f, (2 * policies::digits<T, Policy>()) / 3);
 
-      switch(boost::math::tools::real_cast<int>(df))
+      switch(itrunc(df))
       {
       case 1:
          {
@@ -368,7 +369,7 @@ calculate_real:
          // where we use Shaw's tail series.
          // The crossover point is roughly exponential in -df:
          //
-         T crossover = ldexp(1.0f, tools::real_cast<int>(df / -0.654f));
+         T crossover = ldexp(1.0f, iround(df / -0.654f));
          if(u > crossover)
          {
             result = boost::math::detail::inverse_students_t_hill(df, u, pol);

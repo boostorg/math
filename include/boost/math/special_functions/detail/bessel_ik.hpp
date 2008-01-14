@@ -234,7 +234,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
         v = -v;                             // v is non-negative from here
         kind |= need_k;
     }
-    n = tools::real_cast<unsigned>(v + 0.5f);
+    n = iround(v);
     u = v - n;                              // -1/2 <= u < 1/2
     BOOST_MATH_INSTRUMENT_VARIABLE(n);
     BOOST_MATH_INSTRUMENT_VARIABLE(u);

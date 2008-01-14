@@ -24,6 +24,8 @@
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/special_functions/cos_pi.hpp>
 #include <boost/math/special_functions/sinc.hpp>
+#include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/special_functions/round.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/promotion.hpp>
 
@@ -127,7 +129,7 @@ T cyl_bessel_j_imp(T v, T x, const bessel_no_int_tag& t, const Policy& pol)
       if(floor(v) == v)
       {
          T r = cyl_bessel_j_imp(v, -x, t, pol);
-         if(tools::real_cast<int>(v) & 1)
+         if(iround(v) & 1)
             r = -r;
          return r;
       }
@@ -163,7 +165,7 @@ inline T cyl_bessel_j_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& p
       if(fabs(x) > asymptotic_bessel_j_limit<T>(v, tag_type()))
          return asymptotic_bessel_j_large_x_2(v, x);
       else
-         return bessel_jn(tools::real_cast<int>(v), x, pol);
+         return bessel_jn(iround(v), x, pol);
    }
    return cyl_bessel_j_imp(v, x, bessel_no_int_tag(), pol);
 }
@@ -226,7 +228,7 @@ T cyl_bessel_i_imp(T v, T x, const Policy& pol)
       if(floor(v) == v)
       {
          T r = cyl_bessel_i_imp(v, -x, pol);
-         if(tools::real_cast<int>(v) & 1)
+         if(iround(v) & 1)
             r = -r;
          return r;
       }
@@ -290,7 +292,7 @@ inline T cyl_bessel_k_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& p
    BOOST_MATH_STD_USING
    if((floor(v) == v))
    {
-      return bessel_kn(tools::real_cast<int>(v), x, pol);
+      return bessel_kn(itrunc(v), x, pol);
    }
    return cyl_bessel_k_imp(v, x, bessel_no_int_tag(), pol);
 }
@@ -335,12 +337,12 @@ inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& po
       if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
       {
          T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);
-         if((v < 0) && (tools::real_cast<int>(v) & 1))
+         if((v < 0) && (itrunc(v) & 1))
             r = -r;
          return r;
       }
       else
-         return bessel_yn(tools::real_cast<int>(v), x, pol);
+         return bessel_yn(itrunc(v), x, pol);
    }
    return cyl_neumann_imp<T>(v, x, bessel_no_int_tag(), pol);
 }
@@ -358,7 +360,7 @@ inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
       return r;
    }
    else
-      return bessel_yn(tools::real_cast<int>(v), x, pol);
+      return bessel_yn(v, x, pol);
 }
 
 template <class T, class Policy>

@@ -38,6 +38,7 @@
 
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/gamma.hpp> // for incomplete gamma. gamma_q
+#include <boost/math/special_functions/trunc.hpp> // for incomplete gamma. gamma_q
 #include <boost/math/distributions/complement.hpp> // complements
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
@@ -340,7 +341,7 @@ namespace boost
         && k < max_factorial<RealType>::value)
       { // k is small enough (for float 34, double 170 ...) to use factorial(k).
         return exp(-mean) * pow(mean, k) /
-          unchecked_factorial<RealType>(tools::real_cast<unsigned int>(floork));
+          unchecked_factorial<RealType>(itrunc(floork));
       }
       else
       { // Need to use log(factorial(k)) = lgamma(k+1)

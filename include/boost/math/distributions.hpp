@@ -24,6 +24,7 @@
 #include <boost/math/distributions/gamma.hpp>
 #include <boost/math/distributions/lognormal.hpp>
 #include <boost/math/distributions/negative_binomial.hpp>
+#include <boost/math/distributions/non_central_chi_squared.hpp>
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/distributions/pareto.hpp>
 #include <boost/math/distributions/poisson.hpp>

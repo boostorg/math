@@ -100,7 +100,7 @@ T cyl_bessel_k_int_wrapper(T v, T x)
 {
    return static_cast<T>(
       boost::math::cyl_bessel_k(
-      boost::math::tools::real_cast<int>(v), x));
+      boost::math::itrunc(v), x));
 }
 
 template <class T>

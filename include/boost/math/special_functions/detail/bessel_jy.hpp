@@ -225,7 +225,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
         v = -v;                             // v is non-negative from here
         kind = need_j|need_y;               // need both for reflection formula
     }
-    n = real_cast<unsigned>(v + 0.5L);
+    n = iround(v);
     u = v - n;                              // -1/2 <= u < 1/2
 
     if (x == 0)
