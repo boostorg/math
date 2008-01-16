@@ -97,6 +97,26 @@ inline bool check_x(
 }
 
 template <class RealType, class Policy>
+inline bool check_positive_x(
+      const char* function,
+      RealType x,
+      RealType* result,
+      const Policy& pol)
+{
+   if(!(boost::math::isfinite)(x) || (x < 0))
+   {
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Random variate x is %1%, but must be finite and >= 0!", x, pol);
+      return false;
+   }
+   return true;
+   // Note that this test catches both infinity and NaN.
+   // Some special cases permit x to be infinite, so these must be tested 1st,
+   // leaving this test to catch any NaNs.  see Normal and cauchy for example.
+}
+
+template <class RealType, class Policy>
 inline bool check_non_centrality(
       const char* function,
       RealType ncp,

@@ -19,6 +19,7 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
+#include <boost/math/tools/minima.hpp> // function minimization for mode
 
 namespace boost
 {
@@ -394,6 +395,231 @@ namespace boost
                function);
          }
 
+         template <class RealType, class Policy>
+         RealType nccs_pdf(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& x)
+         {
+            static const char* function = "pdf(non_central_chi_squared_distribution<%1%>, %1%)";
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+
+            value_type k = dist.degrees_of_freedom();
+            value_type l = dist.non_centrality();
+            value_type r;
+            if(!detail::check_df(
+               function,
+               k, &r, Policy())
+               ||
+            !detail::check_non_centrality(
+               function,
+               l,
+               &r,
+               Policy())
+               ||
+            !detail::check_positive_x(
+               function,
+               (value_type)x,
+               &r,
+               Policy()))
+                  return (RealType)r;
+
+         if(l == 0)
+            return pdf(boost::math::chi_squared_distribution<RealType, forwarding_policy>(dist.degrees_of_freedom()), x);
+
+         r = log(x / l) * (k / 4 - 0.5f) - (x + l) / 2;
+         if(r >= tools::log_max_value<RealType>())
+            return policies::raise_overflow_error<RealType>(function, 0, forwarding_policy());
+         if(r <= -tools::log_max_value<RealType>())
+            return policies::raise_underflow_error<RealType>(function, 0, forwarding_policy());
+
+         r = exp(r);
+         r = 0.5f * r
+            * boost::math::cyl_bessel_i(k/2 - 1, sqrt(l * x), forwarding_policy());
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               r, 
+               function);
+         }
+
+         template <class RealType, class Policy>
+         struct pdf_minimizer
+         {
+            pdf_minimizer(const non_central_chi_squared_distribution<RealType, Policy>& d)
+               : dist(d) {}
+
+            RealType operator()(const RealType& x)
+            {
+               return -pdf(dist, x);
+            }
+         private:
+            non_central_chi_squared_distribution<RealType, Policy> dist;
+         };
+
+         template <class RealType, class Policy>
+         RealType nccs_mode(const non_central_chi_squared_distribution<RealType, Policy>& dist)
+         {
+            static const char* function = "mode(non_central_chi_squared_distribution<%1%> const&)";
+
+            RealType k = dist.degrees_of_freedom();
+            RealType l = dist.non_centrality();
+            RealType r;
+            if(!detail::check_df(
+               function,
+               k, &r, Policy())
+               ||
+            !detail::check_non_centrality(
+               function,
+               l,
+               &r,
+               Policy()))
+                  return (RealType)r;
+            //
+            // Need to begin by bracketing the maxima of the PDF:
+            //
+            RealType maxval;
+            RealType upper_bound = l + k;
+            RealType lower_bound;
+            RealType v = pdf(dist, l + k);
+            do
+            {
+               maxval = v;
+               upper_bound *= 2;
+               v = pdf(dist, upper_bound);
+            }while(maxval < v);
+
+            lower_bound = upper_bound;
+            do
+            {
+               maxval = v;
+               lower_bound /= 2;
+               v = pdf(dist, lower_bound);
+            }while(maxval < v);
+
+            boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+
+            return tools::brent_find_minima(
+                     pdf_minimizer<RealType, Policy>(dist), 
+                     lower_bound, 
+                     upper_bound, 
+                     policies::digits<RealType, Policy>(), 
+                     max_iter).first;
+         }
+
+         template <class RealType, class Policy>
+         struct degrees_of_freedom_finder
+         {
+            degrees_of_freedom_finder(
+               RealType lam_, RealType x_, RealType p_, bool c)
+               : lam(lam_), x(x_), p(p_), comp(c) {}
+
+            RealType operator()(const RealType& v)
+            {
+               non_central_chi_squared_distribution<RealType, Policy> d(v, lam);
+               return comp ?
+                  p - cdf(complement(d, x))
+                  : cdf(d, x) - p;
+            }
+         private:
+            RealType lam;
+            RealType x;
+            RealType p;
+            bool comp;
+         };
+
+         template <class RealType, class Policy>
+         inline RealType find_degrees_of_freedom(
+            RealType lam, RealType x, RealType p, RealType q, const Policy& pol)
+         {
+            const char* function = "non_central_chi_squared<%1%>::find_degrees_of_freedom";
+            if((p == 0) || (q == 0))
+            {
+               //
+               // Can't a thing if one of p and q is zero:
+               //
+               return policies::raise_evaluation_error<RealType>(function, 
+                  "Can't find degrees of freedom when the probability is 0 or 1, only possible answer is %1%", 
+                  RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
+            }
+            degrees_of_freedom_finder<RealType, Policy> f(lam, x, p < q ? p : q, p < q ? false : true);
+            tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
+            boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+            //
+            // Pick an initial guess that we know will give us a probability
+            // right around 0.5.
+            //
+            RealType guess = x - lam;
+            if(guess < 1)
+               guess = 1;
+            std::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
+               f, guess, RealType(2), false, tol, max_iter, pol);
+            RealType result = ir.first + (ir.second - ir.first) / 2;
+            if(max_iter == policies::get_max_root_iterations<Policy>())
+            {
+               policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
+                  " or there is no answer to problem.  Current best guess is %1%", result, Policy());
+            }
+            return result;
+         }
+
+         template <class RealType, class Policy>
+         struct non_centrality_finder
+         {
+            non_centrality_finder(
+               RealType v_, RealType x_, RealType p_, bool c)
+               : v(v_), x(x_), p(p_), comp(c) {}
+
+            RealType operator()(const RealType& lam)
+            {
+               non_central_chi_squared_distribution<RealType, Policy> d(v, lam);
+               return comp ?
+                  p - cdf(complement(d, x))
+                  : cdf(d, x) - p;
+            }
+         private:
+            RealType v;
+            RealType x;
+            RealType p;
+            bool comp;
+         };
+
+         template <class RealType, class Policy>
+         inline RealType find_non_centrality(
+            RealType v, RealType x, RealType p, RealType q, const Policy& pol)
+         {
+            const char* function = "non_central_chi_squared<%1%>::find_non_centrality";
+            if((p == 0) || (q == 0))
+            {
+               //
+               // Can't do a thing if one of p and q is zero:
+               //
+               return policies::raise_evaluation_error<RealType>(function, 
+                  "Can't find degrees of freedom when the probability is 0 or 1, only possible answer is %1%", 
+                  RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
+            }
+            non_centrality_finder<RealType, Policy> f(v, x, p < q ? p : q, p < q ? false : true);
+            tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
+            boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+            //
+            // Pick an initial guess that we know will give us a probability
+            // right around 0.5.
+            //
+            RealType guess = x - v;
+            if(guess < 1)
+               guess = 1;
+            std::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
+               f, guess, RealType(2), false, tol, max_iter, pol);
+            RealType result = ir.first + (ir.second - ir.first) / 2;
+            if(max_iter == policies::get_max_root_iterations<Policy>())
+            {
+               policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
+                  " or there is no answer to problem.  Current best guess is %1%", result, Policy());
+            }
+            return result;
+         }
+
       }
 
       template <class RealType = double, class Policy = policies::policy<> >
@@ -424,6 +650,88 @@ namespace boost
          RealType non_centrality() const
          { // Private data getter function.
             return ncp;
+         }
+         static RealType find_degrees_of_freedom(RealType lam, RealType x, RealType p)
+         {
+            const char* function = "non_central_chi_squared<%1%>::find_degrees_of_freedom";
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+            value_type result = detail::find_degrees_of_freedom(
+               static_cast<value_type>(lam), 
+               static_cast<value_type>(x), 
+               static_cast<value_type>(p), 
+               static_cast<value_type>(1-p), 
+               forwarding_policy());
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result, 
+               function);
+         }
+         template <class A, class B, class C>
+         static RealType find_degrees_of_freedom(const complemented3_type<A,B,C>& c)
+         {
+            const char* function = "non_central_chi_squared<%1%>::find_degrees_of_freedom";
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+            value_type result = detail::find_degrees_of_freedom(
+               static_cast<value_type>(c.dist), 
+               static_cast<value_type>(c.param1), 
+               static_cast<value_type>(1-c.param2), 
+               static_cast<value_type>(c.param2), 
+               forwarding_policy());
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result, 
+               function);
+         }
+         static RealType find_non_centrality(RealType v, RealType x, RealType p)
+         {
+            const char* function = "non_central_chi_squared<%1%>::find_non_centrality";
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+            value_type result = detail::find_non_centrality(
+               static_cast<value_type>(v), 
+               static_cast<value_type>(x), 
+               static_cast<value_type>(p), 
+               static_cast<value_type>(1-p), 
+               forwarding_policy());
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result, 
+               function);
+         }
+         template <class A, class B, class C>
+         static RealType find_non_centrality(const complemented3_type<A,B,C>& c)
+         {
+            const char* function = "non_central_chi_squared<%1%>::find_non_centrality";
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+            value_type result = detail::find_non_centrality(
+               static_cast<value_type>(c.dist), 
+               static_cast<value_type>(c.param1), 
+               static_cast<value_type>(1-c.param2), 
+               static_cast<value_type>(c.param2), 
+               forwarding_policy());
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result, 
+               function);
          }
       private:
          // Data member, initialized by constructor.
@@ -473,8 +781,7 @@ namespace boost
       template <class RealType, class Policy>
       inline RealType mode(const non_central_chi_squared_distribution<RealType, Policy>& dist)
       { // mode.
-         // TODO!
-         return 0;
+         return detail::nccs_mode(dist);
       }
 
       template <class RealType, class Policy>
@@ -548,30 +855,9 @@ namespace boost
       }
 
       template <class RealType, class Policy>
-      RealType pdf(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& x)
+      inline RealType pdf(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& x)
       { // Probability Density/Mass Function.
-         const char* function = "boost::math::non_central_chi_squared_distribution<%1%>::pdf(%1%)";
-         RealType k = dist.degrees_of_freedom();
-         RealType l = dist.non_centrality();
-         RealType r;
-         if(!detail::check_df(
-            function,
-            k, &r, Policy())
-            ||
-         !detail::check_non_centrality(
-            function,
-            l,
-            &r,
-            Policy()))
-               return r;
-
-         if(l == 0)
-            return pdf(boost::math::chi_squared_distribution<RealType, Policy>(k), x);
-
-         r = -(x + l) / 2 + log(x / l) * (k / 4 - 0.5f);
-
-         return 0.5f * exp(r)
-            * boost::math::cyl_bessel_i(k/2 - 1, sqrt(l * x), Policy());
+         return detail::nccs_pdf(dist, x);
       } // pdf
 
       template <class RealType, class Policy>
@@ -588,6 +874,12 @@ namespace boost
          !detail::check_non_centrality(
             function,
             l,
+            &r,
+            Policy())
+            ||
+         !detail::check_positive_x(
+            function,
+            x,
             &r,
             Policy()))
                return r;
@@ -611,6 +903,12 @@ namespace boost
          !detail::check_non_centrality(
             function,
             l,
+            &r,
+            Policy())
+            ||
+         !detail::check_positive_x(
+            function,
+            x,
             &r,
             Policy()))
                return r;
