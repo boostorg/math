@@ -99,6 +99,18 @@ void expected_results()
       "[^|]*", 10000, 3000);                  // test function
 
    //
+   // Allow some long double error to creep into
+   // the double results:
+   //
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
+      "double",                         // test type(s)
+      "[^|]*",                   // test data group
+      "[^|]*", 3, 2);                  // test function
+
+   //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
    //

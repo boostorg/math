@@ -50,7 +50,10 @@ namespace boost
             // Computational Statistics & Data Analysis 43 (2003) 249 – 267
             //
             BOOST_MATH_STD_USING
-            using namespace boost::math;
+
+            // Special case:
+            if(x == 0)
+               return 1;
 
             //
             // Initialize the variables we'll be using:
@@ -84,7 +87,7 @@ namespace boost
             // stable direction for the gamma function
             // recurrences:
             //
-            for(int i = k; i < max_iter; ++i)
+            for(int i = k; static_cast<boost::uintmax_t>(i) < max_iter; ++i)
             {
                T term = poisf * gamf;
                sum += term;
@@ -136,7 +139,9 @@ namespace boost
             //   before we reach the first *significant* term.
             //
             BOOST_MATH_STD_USING
-            using namespace boost::math;
+            // Special case:
+            if(x == 0)
+               return 0;
             T tk = boost::math::gamma_p_derivative(f/2 + 1, x/2, pol);
             T lambda = theta / 2;
             T vk = exp(-lambda);
@@ -148,7 +153,7 @@ namespace boost
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
 
-            for(int i = 1; i < max_iter; ++i)
+            for(int i = 1; static_cast<boost::uintmax_t>(i) < max_iter; ++i)
             {
                tk = tk * x / (f + 2 * i);
                uk = uk * lambda / i;
@@ -178,8 +183,10 @@ namespace boost
             // We're summing a Poisson weighting term multiplied by
             // a central chi squared distribution.
             //
-            using namespace boost::math;
             BOOST_MATH_STD_USING
+            // Special case:
+            if(x == 0)
+               return 0;
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
             T errorf, errorb;
@@ -247,7 +254,7 @@ namespace boost
                errorf = poiskf * gamkf;
                sum += errorf;
                ++i;
-            }while((errorf / sum > errtol) && (i < max_iter));
+            }while((errorf / sum > errtol) && (static_cast<boost::uintmax_t>(i) < max_iter));
 
             return sum;
          }
@@ -263,6 +270,7 @@ namespace boost
                policies::discrete_quantile<>,
                policies::assert_undefined<> >::type forwarding_policy;
 
+            BOOST_MATH_STD_USING
             value_type result;
             if(l == 0)
                result = cdf(boost::math::chi_squared_distribution<RealType, Policy>(k), x);
@@ -398,6 +406,7 @@ namespace boost
          template <class RealType, class Policy>
          RealType nccs_pdf(const non_central_chi_squared_distribution<RealType, Policy>& dist, const RealType& x)
          {
+            BOOST_MATH_STD_USING
             static const char* function = "pdf(non_central_chi_squared_distribution<%1%>, %1%)";
             typedef typename policies::evaluation<RealType, Policy>::type value_type;
             typedef typename policies::normalise<
@@ -427,9 +436,13 @@ namespace boost
                Policy()))
                   return (RealType)r;
 
+         BOOST_MATH_STD_USING
          if(l == 0)
             return pdf(boost::math::chi_squared_distribution<RealType, forwarding_policy>(dist.degrees_of_freedom()), x);
 
+         // Special case:
+         if(x == 0)
+            return 0;
          r = log(x / l) * (k / 4 - 0.5f) - (x + l) / 2;
          if(r >= tools::log_max_value<RealType>())
             return policies::raise_overflow_error<RealType>(function, 0, forwarding_policy());

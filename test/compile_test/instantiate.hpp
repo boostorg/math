@@ -67,6 +67,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<fisher_f_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<gamma_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<lognormal_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<non_central_chi_squared_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<negative_binomial_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<normal_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<rayleigh_distribution<RealType, test_policy> > >();
