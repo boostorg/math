@@ -116,6 +116,12 @@ that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable is \[0, +[infin]\].
 
+[h4 Examples]
+
+There is a 
+[link math_toolkit.dist.stat_tut.weg.nccs_eg worked example] 
+for the Non central Chi Squared distribution.
+
 [h4 Accuracy]
 
 The following table shows the peak errors (in units of epsilon) 
