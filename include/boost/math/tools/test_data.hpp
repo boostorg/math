@@ -27,6 +27,7 @@
 
 #include <set>
 #include <vector>
+#include <iostream>
 
 #ifdef BOOST_MSVC
 #  pragma warning(push)
