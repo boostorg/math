@@ -229,12 +229,12 @@ int main()
 
    distribution_plotter<boost::math::non_central_chi_squared> 
       nc_cs_plotter;
-   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 0), "v=20, l=0");
-   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 1), "v=20, l=1");
-   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 5), "v=20, l=5");
-   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 10), "v=20, l=10");
-   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 20), "v=20, l=20");
-   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 100), "v=20, l=100");
+   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 0), "v=20, &#x3BB;=0");
+   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 1), "v=20, &#x3BB;=1");
+   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 5), "v=20, &#x3BB;=5");
+   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 10), "v=20, &#x3BB;=10");
+   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 20), "v=20, &#x3BB;=20");
+   nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 100), "v=20, &#x3BB;=100");
    nc_cs_plotter.plot("Non Central Chi Squared PDF", "nccs_pdf.svg");
 
    distribution_plotter<boost::math::beta_distribution<> > 

@@ -34,6 +34,10 @@ of z:
 
 [equation zeta1]
 
+[$../graphs/zeta1.png]
+
+[$../graphs/zeta2.png]
+
 [h4 Accuracy]
 
 The following table shows the peak errors (in units of epsilon) 

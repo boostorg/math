@@ -63,9 +63,9 @@ where ['f(x;k)] is the central chi squared distribution PDF, and
 ['I[sub v](x)] is a modified Bessel function of the first kind.
 
 The following graph illustrates how the distribution changes
-for different values of [nu]:
+for different values of [lambda]:
 
-[$../graphs/nc_chi_square.png]
+[$../graphs/nccs_pdf.png]
 
 [h4 Member Functions]
 
