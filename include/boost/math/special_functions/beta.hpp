@@ -1060,7 +1060,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
          else if(a > 15)
          {
             // sidestep so we can use the series representation:
-            int n = itrunc(floor(b));
+            int n = itrunc(floor(b), pol);
             if(n == b)
                --n;
             T bbar = b - n;
@@ -1082,7 +1082,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             // the formula here for the non-normalised case is tricky to figure
             // out (for me!!), and requires two pochhammer calculations rather
             // than one, so leave it for now....
-            int n = itrunc(floor(b));
+            int n = itrunc(floor(b), pol);
             T bbar = b - n;
             if(bbar <= 0)
             {

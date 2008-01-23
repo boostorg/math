@@ -17,8 +17,8 @@
 
 namespace boost{ namespace math{
 
-template <class T>
-T cos_pi(T x)
+template <class T, class Policy>
+T cos_pi(T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
    // cos of pi*x:
@@ -31,7 +31,7 @@ T cos_pi(T x)
    }
 
    T rem = floor(x);
-   if(itrunc(rem) & 1)
+   if(itrunc(rem, pol) & 1)
       invert = !invert;
    rem = x - rem;
    if(rem > 0.5f)
@@ -46,10 +46,10 @@ T cos_pi(T x)
    return invert ? -rem : rem;
 }
 
-template <class T, class Policy>
-inline T cos_pi(T x, const Policy&)
+template <class T>
+inline T cos_pi(T x)
 {
-   return cos_pi(x);
+   return cos_pi(x, policies::policy<>());
 }
 
 } // namespace math

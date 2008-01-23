@@ -70,7 +70,7 @@ namespace boost
             // k is chosen as the peek of the Poisson weights, which
             // will occur *before* the largest term.
             //
-            int k = iround(lambda);
+            int k = iround(lambda, pol);
             // Forwards and backwards Poisson weights:
             T poisf = boost::math::gamma_p_derivative(1 + k, lambda, pol);
             T poisb = poisf * k / lambda;
@@ -87,7 +87,8 @@ namespace boost
             // stable direction for the gamma function
             // recurrences:
             //
-            for(int i = k; static_cast<boost::uintmax_t>(i) < max_iter; ++i)
+            int i;
+            for(i = k; static_cast<boost::uintmax_t>(i-k) < max_iter; ++i)
             {
                T term = poisf * gamf;
                sum += term;
@@ -97,6 +98,11 @@ namespace boost
                if((sum == 0) || (term / sum < errtol))
                   break;
             }
+            //Error check:
+            if(static_cast<boost::uintmax_t>(i-k) >= max_iter)
+               policies::raise_evaluation_error(
+                  "cdf(non_central_chi_squared_distribution<%1%>, %1%)", 
+                  "Series did not converge, closest value was %1%", sum, pol);
             //
             // Now backwards iteration: the gamma
             // function recurrences are unstable in this
@@ -153,7 +159,8 @@ namespace boost
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
 
-            for(int i = 1; static_cast<boost::uintmax_t>(i) < max_iter; ++i)
+            int i;
+            for(i = 1; static_cast<boost::uintmax_t>(i) < max_iter; ++i)
             {
                tk = tk * x / (f + 2 * i);
                uk = uk * lambda / i;
@@ -163,6 +170,11 @@ namespace boost
                if(term / sum < errtol)
                   break;
             }
+            //Error check:
+            if(static_cast<boost::uintmax_t>(i) >= max_iter)
+               policies::raise_evaluation_error(
+                  "cdf(non_central_chi_squared_distribution<%1%>, %1%)", 
+                  "Series did not converge, closest value was %1%", sum, pol);
             return sum;
          }
 
@@ -185,7 +197,7 @@ namespace boost
             //
             BOOST_MATH_STD_USING
             // Special case:
-            if(x == 0)
+            if(y == 0)
                return 0;
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
@@ -200,7 +212,7 @@ namespace boost
             // function, which ocurrs *after* the largest term in the
             // sum.
             //
-            int k = iround(del);
+            int k = iround(del, pol);
             T a = n / 2 + k;
             // Central chi squared term for forward iteration:
             T gamkf = boost::math::gamma_p(a, x, pol);
@@ -255,6 +267,12 @@ namespace boost
                sum += errorf;
                ++i;
             }while((errorf / sum > errtol) && (static_cast<boost::uintmax_t>(i) < max_iter));
+
+            //Error check:
+            if(static_cast<boost::uintmax_t>(i) >= max_iter)
+               policies::raise_evaluation_error(
+                  "cdf(non_central_chi_squared_distribution<%1%>, %1%)", 
+                  "Series did not converge, closest value was %1%", sum, pol);
 
             return sum;
          }
@@ -511,14 +529,21 @@ namespace boost
                v = pdf(dist, lower_bound);
             }while(maxval < v);
 
-            boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+            boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
 
-            return tools::brent_find_minima(
+            RealType result = tools::brent_find_minima(
                      pdf_minimizer<RealType, Policy>(dist), 
                      lower_bound, 
                      upper_bound, 
                      policies::digits<RealType, Policy>(), 
                      max_iter).first;
+            if(max_iter == policies::get_max_root_iterations<Policy>())
+            {
+               return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
+                  " either there is no answer to the mode of the non central chi squared distribution"
+                  " or the answer is infinite.  Current best guess is %1%", result, Policy());
+            }
+            return result;
          }
 
          template <class RealType, class Policy>

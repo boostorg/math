@@ -349,6 +349,7 @@ compile  compile_test/dist_fisher_f_incl_test.cpp ;
 compile  compile_test/dist_gamma_incl_test.cpp ;
 compile  compile_test/dist_lognormal_incl_test.cpp ;
 compile  compile_test/dist_neg_binom_incl_test.cpp ;
+compile  compile_test/dist_nc_chi_squ_incl_test.cpp ;
 compile  compile_test/dist_normal_incl_test.cpp ;
 compile  compile_test/dist_poisson_incl_test.cpp ;
 compile  compile_test/dist_students_t_incl_test.cpp ;

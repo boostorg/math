@@ -205,7 +205,7 @@ T inverse_students_t(T df, T u, T v, const Policy& pol, bool* pexact = 0)
       //
       T tolerance = ldexp(1.0f, (2 * policies::digits<T, Policy>()) / 3);
 
-      switch(itrunc(df))
+      switch(itrunc(df, Policy()))
       {
       case 1:
          {
@@ -369,7 +369,7 @@ calculate_real:
          // where we use Shaw's tail series.
          // The crossover point is roughly exponential in -df:
          //
-         T crossover = ldexp(1.0f, iround(df / -0.654f));
+         T crossover = ldexp(1.0f, iround(df / -0.654f, pol));
          if(u > crossover)
          {
             result = boost::math::detail::inverse_students_t_hill(df, u, pol);

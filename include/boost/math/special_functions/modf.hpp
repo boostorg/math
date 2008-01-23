@@ -15,33 +15,53 @@
 
 namespace boost{ namespace math{
 
+template <class T, class Policy>
+inline T modf(const T& v, T* ipart, const Policy& pol)
+{
+   *ipart = trunc(v, pol);
+   return v - *ipart;
+}
 template <class T>
 inline T modf(const T& v, T* ipart)
 {
-   *ipart = trunc(v);
-   return v - *ipart;
+   return modf(v, ipart, policies::policy<>());
 }
 
+template <class T, class Policy>
+inline T modf(const T& v, int* ipart, const Policy& pol)
+{
+   *ipart = itrunc(v, pol);
+   return v - *ipart;
+}
 template <class T>
 inline T modf(const T& v, int* ipart)
 {
-   *ipart = itrunc(v);
-   return v - *ipart;
+   return modf(v, ipart, policies::policy<>());
 }
 
+template <class T, class Policy>
+inline T modf(const T& v, long* ipart, const Policy& pol)
+{
+   *ipart = ltrunc(v, pol);
+   return v - *ipart;
+}
 template <class T>
 inline T modf(const T& v, long* ipart)
 {
-   *ipart = ltrunc(v);
-   return v - *ipart;
+   return modf(v, ipart, policies::policy<>());
 }
 
 #ifdef BOOST_HAS_LONG_LONG
+template <class T, class Policy>
+inline T modf(const T& v, long long* ipart, const Policy& pol)
+{
+   *ipart = lltrunc(v, pol);
+   return v - *ipart;
+}
 template <class T>
 inline T modf(const T& v, long long* ipart)
 {
-   *ipart = lltrunc(v);
-   return v - *ipart;
+   return modf(v, ipart, policies::policy<>());
 }
 #endif
 

@@ -341,7 +341,7 @@ namespace boost
         && k < max_factorial<RealType>::value)
       { // k is small enough (for float 34, double 170 ...) to use factorial(k).
         return exp(-mean) * pow(mean, k) /
-          unchecked_factorial<RealType>(itrunc(floork));
+          unchecked_factorial<RealType>(itrunc(floork, Policy()));
       }
       else
       { // Need to use log(factorial(k)) = lgamma(k+1)

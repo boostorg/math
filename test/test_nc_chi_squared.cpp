@@ -438,30 +438,30 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          value_type pt = data[i][2];
          BOOST_CHECK_CLOSE_EX(pt, p, precision, i);
       }
-      //
-      // Sanity check mode as well, note this may well overflow
-      // since we don't know how to compute PDF's (and hence the mode) 
-      // for large values of the parameters, in addition accuracy of
-      // the mode is at *best* the square root of the accuracy of the PDF:
-      //
-      try
-      {
-         value_type m = mode(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]));
-         value_type p = pdf(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]), m);
-         BOOST_CHECK_EX(pdf(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]), m * (1 + sqrt(precision))) <= p, i);
-         BOOST_CHECK_EX(pdf(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]), m * (1 - sqrt(precision))) <= p, i);
-      }
-      catch(const std::overflow_error&)
-      {
-      }
-      //
-      // Sanity check degrees-of-freedom finder, don't bother at float
-      // precision though as there's not enough data in the probability
-      // values to get back to the correct degrees of freedom or 
-      // non-cenrality parameter:
-      //
       if(boost::math::tools::digits<value_type>() > 50)
       {
+         //
+         // Sanity check mode, note this may well overflow
+         // since we don't know how to compute PDF's (and hence the mode) 
+         // for large values of the parameters, in addition accuracy of
+         // the mode is at *best* the square root of the accuracy of the PDF:
+         //
+         try
+         {
+            value_type m = mode(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]));
+            value_type p = pdf(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]), m);
+            BOOST_CHECK_EX(pdf(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]), m * (1 + sqrt(precision) * 10)) <= p, i);
+            BOOST_CHECK_EX(pdf(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]), m * (1 - sqrt(precision)) * 10) <= p, i);
+         }
+         catch(const std::overflow_error&)
+         {
+         }
+         //
+         // Sanity check degrees-of-freedom finder, don't bother at float
+         // precision though as there's not enough data in the probability
+         // values to get back to the correct degrees of freedom or 
+         // non-cenrality parameter:
+         //
          try{
             if((data[i][3] < 0.99) && (data[i][3] != 0))
             {
