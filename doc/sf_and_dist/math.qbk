@@ -65,6 +65,7 @@
 [def __underflow_error [link underflow_error underflow_error]]
 [def __denorm_error [link denorm_error denorm_error]]
 [def __evaluation_error [link evaluation_error evaluation_error]]
+[def __rounding_error [link rounding_error rounding_error]]
 [def __checked_narrowing_cast [link checked_narrowing_cast checked_narrowing_cast]]
 
 [def __arg_pomotion_rules [link math_toolkit.main_overview.result_type ['result type calculation rules]]]
@@ -169,6 +170,12 @@ and use the function's name as the link text]
 [/expint]
 [def __expint_i [link math_toolkit.special.expint.expint_i zeta]]
 [def __expint_n [link math_toolkit.special.expint.expint_n zeta]]
+
+[/rounding]
+[def __round [link math_toolkit.special.rounding.round round]]
+[def __trunc [link math_toolkit.special.rounding.trunc trunc]]
+[def __modf [link math_toolkit.special.rounding.modf modf]]
+
 
 
 
