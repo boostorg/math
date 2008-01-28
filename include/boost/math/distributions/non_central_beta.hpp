@@ -1,0 +1,684 @@
+// boost\math\distributions\non_central_beta.hpp
+
+// Copyright John Maddock 2008.
+
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#ifndef BOOST_MATH_SPECIAL_NON_CENTRAL_BETA_HPP
+#define BOOST_MATH_SPECIAL_NON_CENTRAL_BETA_HPP
+
+#include <boost/math/distributions/fwd.hpp>
+#include <boost/math/special_functions/beta.hpp> // for incomplete gamma. gamma_q
+#include <boost/math/distributions/complement.hpp> // complements
+#include <boost/math/distributions/beta.hpp> // central distribution
+#include <boost/math/distributions/normal.hpp> // central distribution
+#include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
+#include <boost/math/special_functions/fpclassify.hpp> // isnan.
+#include <boost/math/tools/roots.hpp> // for root finding.
+#include <boost/math/tools/minima.hpp> // function minimization for mode
+
+namespace boost
+{
+   namespace math
+   {
+
+      template <class RealType, class Policy>
+      class non_central_beta_distribution;
+
+      namespace detail{
+
+         template <class T, class Policy>
+         T non_central_beta_p(T a, T b, T lam, T x, const Policy& pol, T init_val = 0)
+         {
+            BOOST_MATH_STD_USING
+               using namespace boost::math;
+            //
+            // Variables come first:
+            //
+            boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+            T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
+            T l2 = lam / 2;
+            //
+            // k is the starting point for iteration, and is the
+            // maximum of the poisson weighting term:
+            //
+            int k = itrunc(l2);
+            // Starting Poisson weight:
+            T pois = gamma_p_derivative(k+1, l2, pol);
+            // Starting beta term:
+            T beta = ibeta(a + k, b, x, pol);
+            // recurance term:
+            T xterm = ibeta_derivative(a + k, b, x, pol) * (1 - x) / (a + b + k - 1);
+            T poisf(pois), betaf(beta), xtermf(xterm);
+            T sum = init_val;
+
+            //
+            // Backwards recursion first, this is the stable
+            // direction for recursion:
+            //
+            T last_term = 0;
+            for(int i = k; i >= 0; --i)
+            {
+               T term = beta * pois;
+               sum += term;
+               if((fabs(term/sum) < errtol) && (last_term > term))
+               {
+                  break;
+               }
+               pois *= i / l2;
+               beta += xterm;
+               xterm *= (a + i - 1) / (x * (a + b + i - 2));
+               last_term = term;
+            }
+            for(int i = k + 1; i - k < max_iter; ++i)
+            {
+               poisf *= l2 / i;
+               xtermf *= (x * (a + b + i - 2)) / (a + i - 1);
+               betaf -= xtermf;
+
+               T term = poisf * betaf;
+               sum += term;
+               if(fabs(term/sum) < errtol)
+               {
+                  break;
+               }
+            }
+            return sum;
+         }
+
+         template <class T, class Policy>
+         T non_central_beta_q(T a, T b, T lam, T x, const Policy& pol, T init_val = 0)
+         {
+            BOOST_MATH_STD_USING
+               using namespace boost::math;
+            //
+            // Variables come first:
+            //
+            boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+            T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
+            T l2 = lam / 2;
+            //
+            // k is the starting point for iteration, and is the
+            // maximum of the poisson weighting term:
+            //
+            int k = itrunc(l2);
+            // Starting Poisson weight:
+            T pois = gamma_p_derivative(k+1, l2, pol);
+            // Starting beta term:
+            T beta = ibetac(a + k, b, x, pol);
+            // recurance term:
+            T xterm = ibeta_derivative(a + k, b, x, pol) * (1 - x) / (a + b + k - 1);
+            T poisf(pois), betaf(beta), xtermf(xterm);
+            T sum = init_val;
+
+            //
+            // Backwards recursion first, this is the unstable
+            // direction for recursion:
+            //
+            for(int i = k; i >= 0; --i)
+            {
+               T term = beta * pois;
+               sum += term;
+               if(fabs(term/sum) < errtol)
+               {
+                  break;
+               }
+               pois *= i / l2;
+               beta -= xterm;
+               xterm *= (a + i - 1) / (x * (a + b + i - 2));
+            }
+            T last_term = 0;
+            for(int i = k + 1; i - k < max_iter; ++i)
+            {
+               poisf *= l2 / i;
+               xtermf *= (x * (a + b + i - 2)) / (a + i - 1);
+               betaf += xtermf;
+
+               T term = poisf * betaf;
+               sum += term;
+               if((fabs(term/sum) < errtol) && (last_term > term))
+               {
+                  break;
+               }
+               last_term = term;
+            }
+            return sum;
+         }
+
+         template <class RealType, class Policy>
+         inline RealType non_central_beta_cdf(RealType x, RealType a, RealType b, RealType l, bool invert, const Policy&)
+         {
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+
+            BOOST_MATH_STD_USING
+
+            if(x == 0)
+               return invert ? 1 : 0;
+            if(x == 1)
+               return invert ? 0 : 1;
+            value_type result;
+            value_type c = a + b + l / 2;
+            value_type cross = 1 - (b / c) * (1 + l / (2 * c * c));
+            if(l == 0)
+               result = cdf(boost::math::beta_distribution<RealType, Policy>(a, b), x);
+            else if(x > cross)
+            {
+               // Complement is the smaller of the two:
+               result = detail::non_central_beta_q(
+                  static_cast<value_type>(a), 
+                  static_cast<value_type>(b), 
+                  static_cast<value_type>(l), 
+                  static_cast<value_type>(x), 
+                  forwarding_policy(), 
+                  static_cast<value_type>(invert ? 0 : -1));
+               invert = !invert;
+            }
+            else
+            {
+               result = detail::non_central_beta_p(
+                  static_cast<value_type>(a), 
+                  static_cast<value_type>(b), 
+                  static_cast<value_type>(l), 
+                  static_cast<value_type>(x), 
+                  forwarding_policy(),
+                  static_cast<value_type>(invert ? -1 : 0));
+            }
+            if(invert)
+               result = -result;
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result, 
+               "boost::math::non_central_beta_cdf<%1%>(%1%, %1%, %1%)");
+         }
+
+         template <class T, class Policy>
+         struct nc_beta_quantile_functor
+         {
+            nc_beta_quantile_functor(const non_central_beta_distribution<T,Policy>& d, T t, bool c)
+               : dist(d), target(t), comp(c) {}
+
+            T operator()(const T& x)
+            {
+               return comp ?
+                  target - cdf(complement(dist, x))
+                  : cdf(dist, x) - target;
+            }
+
+         private:
+            non_central_beta_distribution<T,Policy> dist;
+            T target;
+            bool comp;
+         };
+
+         template <class F, class T, class Tol, class Policy>
+         std::pair<T, T> bracket_and_solve_root_01(F f, const T& guess, T factor, bool rising, Tol tol, boost::uintmax_t& max_iter, const Policy& pol)
+         {
+            BOOST_MATH_STD_USING
+               static const char* function = "boost::math::tools::bracket_and_solve_root_01<%1%>";
+            //
+            // Set up inital brackets:
+            //
+            T a = guess;
+            T b = a;
+            T fa = f(a);
+            T fb = fa;
+            //
+            // Set up invocation count:
+            //
+            boost::uintmax_t count = max_iter - 1;
+
+            if((fa < 0) == (guess < 0 ? !rising : rising))
+            {
+               //
+               // Zero is to the right of b, so walk upwards
+               // until we find it:
+               //
+               while((boost::math::sign)(fb) == (boost::math::sign)(fa))
+               {
+                  if(count == 0)
+                     policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, pol);
+                  //
+                  // Heuristic: every 20 iterations we double the growth factor in case the
+                  // initial guess was *really* bad !
+                  //
+                  if((max_iter - count) % 20 == 0)
+                     factor *= 2;
+                  //
+                  // Now go ahead and move are guess by "factor":
+                  //
+                  a = b;
+                  fa = fb;
+                  b = 1 - ((1 - b) / factor);
+                  fb = f(b);
+                  --count;
+                  BOOST_MATH_INSTRUMENT_CODE("a = " << a << " b = " << b << " fa = " << fa << " fb = " << fb << " count = " << count);
+               }
+            }
+            else
+            {
+               //
+               // Zero is to the left of a, so walk downwards
+               // until we find it:
+               //
+               while((boost::math::sign)(fb) == (boost::math::sign)(fa))
+               {
+                  if(fabs(a) < tools::min_value<T>())
+                  {
+                     // Escape route just in case the answer is zero!
+                     max_iter -= count;
+                     max_iter += 1;
+                     return a > 0 ? std::make_pair(T(0), T(a)) : std::make_pair(T(a), T(0)); 
+                  }
+                  if(count == 0)
+                     policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, pol);
+                  //
+                  // Heuristic: every 20 iterations we double the growth factor in case the
+                  // initial guess was *really* bad !
+                  //
+                  if((max_iter - count) % 20 == 0)
+                     factor *= 2;
+                  //
+                  // Now go ahead and move are guess by "factor":
+                  //
+                  b = a;
+                  fb = fa;
+                  a /= factor;
+                  fa = f(a);
+                  --count;
+                  BOOST_MATH_INSTRUMENT_CODE("a = " << a << " b = " << b << " fa = " << fa << " fb = " << fb << " count = " << count);
+               }
+            }
+            max_iter -= count;
+            max_iter += 1;
+            std::pair<T, T> r = toms748_solve(
+               f, 
+               (a < 0 ? b : a), 
+               (a < 0 ? a : b), 
+               (a < 0 ? fb : fa), 
+               (a < 0 ? fa : fb), 
+               tol, 
+               count, 
+               pol);
+            max_iter += count;
+            BOOST_MATH_INSTRUMENT_CODE("max_iter = " << max_iter << " count = " << count);
+            return r;
+         }
+
+         template <class RealType, class Policy>
+         RealType nc_beta_quantile(const non_central_beta_distribution<RealType, Policy>& dist, const RealType& p, bool comp)
+         {
+            static const char* function = "quantile(non_central_beta_distribution<%1%>, %1%)";
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+
+            value_type a = dist.alpha();
+            value_type b = dist.beta();
+            value_type l = dist.non_centrality();
+            value_type r;
+            if(!beta_detail::check_alpha(
+               function,
+               a, &r, Policy())
+               ||
+            !beta_detail::check_beta(
+               function,
+               a, &r, Policy())
+               ||            
+            !detail::check_non_centrality(
+               function,
+               l,
+               &r,
+               Policy())
+               ||
+            !detail::check_probability(
+               function,
+               static_cast<value_type>(p),
+               &r,
+               Policy()))
+                  return (RealType)r;
+            //
+            // Special cases first:
+            //
+            if(p == 0)
+               return comp
+               ? 1
+               : 0;
+            if(p == 1)
+               return !comp
+               ? 1
+               : 0;
+
+            value_type c = a + b + l / 2;
+            value_type mean = 1 - (b / c) * (1 + l / (2 * c * c));
+            /*
+            //
+            // Calculate a normal approximation to the quantile, 
+            // uses mean and variance approximations from:
+            // Algorithm AS 310: 
+            // Computing the Non-Central Beta Distribution Function
+            // R. Chattamvelli; R. Shanmugam
+            // Applied Statistics, Vol. 46, No. 1. (1997), pp. 146-156.
+            //
+            // Unfortunately, when this is wrong it tends to be *very*
+            // wrong, so it's disabled for now, even though it often
+            // gets the initial guess quite close.  Probably we could
+            // do much better by factoring in the skewness if only
+            // we could calculate it....
+            //
+            value_type delta = l / 2;
+            value_type delta2 = delta * delta;
+            value_type delta3 = delta * delta2;
+            value_type delta4 = delta2 * delta2;
+            value_type G = c * (c + 1) + delta;
+            value_type alpha = a + b;
+            value_type alpha2 = alpha * alpha;
+            value_type eta = (2 * alpha + 1) * (2 * alpha + 1) + 1;
+            value_type H = 3 * alpha2 + 5 * alpha + 2;
+            value_type F = alpha2 * (alpha + 1) + H * delta 
+               + (2 * alpha + 4) * delta2 + delta3;
+            value_type P = (3 * alpha + 1) * (9 * alpha + 17)
+               + 2 * alpha * (3 * alpha + 2) * (3 * alpha + 4) + 15;
+            value_type Q = 54 * alpha2 + 162 * alpha + 130;
+            value_type R = 6 * (6 * alpha + 11);
+            value_type D = delta 
+               * (H * H + 2 * P * delta + Q * delta2 + R * delta3 + 9 * delta4);
+            value_type variance = (b / G)
+               * (1 + delta * (l * l + 3 * l + eta) / (G * G))
+               - (b * b / F) * (1 + D / (F * F));
+            value_type sd = sqrt(variance);
+
+            value_type guess = comp 
+               ? quantile(complement(normal_distribution<RealType, Policy>(static_cast<RealType>(mean), static_cast<RealType>(sd)), p))
+               : quantile(normal_distribution<RealType, Policy>(static_cast<RealType>(mean), static_cast<RealType>(sd)), p);
+
+            if(guess >= 1)
+               guess = mean;
+            if(guess <= tools::min_value<value_type>())
+               guess = mean;
+            */
+            value_type guess = mean;
+            detail::nc_beta_quantile_functor<value_type, Policy>
+               f(non_central_beta_distribution<value_type, Policy>(a, b, l), p, comp);
+            tools::eps_tolerance<value_type> tol(policies::digits<RealType, Policy>());
+            boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+
+            std::pair<value_type, value_type> ir 
+               = bracket_and_solve_root_01(
+                  f, guess, value_type(2.5), true, tol, 
+                  max_iter, Policy());
+            value_type result = ir.first + (ir.second - ir.first) / 2;
+
+            if(max_iter == policies::get_max_root_iterations<Policy>())
+            {
+               policies::raise_evaluation_error<value_type>(function, "Unable to locate solution in a reasonable time:"
+                  " either there is no answer to quantile of the non central beta distribution"
+                  " or the answer is infinite.  Current best guess is %1%", result, Policy());
+            }
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result, 
+               function);
+         }
+
+         template <class RealType, class Policy>
+         RealType nc_beta_pdf(const non_central_beta_distribution<RealType, Policy>& dist, const RealType& x)
+         {
+            BOOST_MATH_STD_USING
+            static const char* function = "pdf(non_central_beta_distribution<%1%>, %1%)";
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+
+            value_type a = dist.alpha();
+            value_type b = dist.beta();
+            value_type l = dist.non_centrality();
+            value_type r;
+            if(!beta_detail::check_alpha(
+               function,
+               a, &r, Policy())
+               ||
+            !beta_detail::check_beta(
+               function,
+               a, &r, Policy())
+               ||            
+            !detail::check_non_centrality(
+               function,
+               l,
+               &r,
+               Policy())
+               ||
+            !detail::check_probability(
+               function,
+               static_cast<value_type>(p),
+               &r,
+               Policy()))
+                  return (RealType)r;
+
+         BOOST_MATH_STD_USING
+         if(l == 0)
+            return pdf(boost::math::beta_distribution<RealType, forwarding_policy>(dist.degrees_of_freedom()), x);
+
+         }
+
+      }
+
+      template <class RealType = double, class Policy = policies::policy<> >
+      class non_central_beta_distribution
+      {
+      public:
+         typedef RealType value_type;
+         typedef Policy policy_type;
+
+         non_central_beta_distribution(RealType a_, RealType b_, RealType lambda) : a(a_), b(b_), ncp(lambda)
+         { 
+            const char* function = "boost::math::non_central_beta_distribution<%1%>::non_central_beta_distribution(%1%,%1%)";
+            RealType r;
+            beta_detail::check_alpha(
+               function,
+               a, &r, Policy());
+            beta_detail::check_beta(
+               function,
+               a, &r, Policy());
+            detail::check_non_centrality(
+               function,
+               lambda,
+               &r,
+               Policy());
+         } // non_central_beta_distribution constructor.
+
+         RealType alpha() const
+         { // Private data getter function.
+            return a;
+         }
+         RealType beta() const
+         { // Private data getter function.
+            return b;
+         }
+         RealType non_centrality() const
+         { // Private data getter function.
+            return ncp;
+         }
+      private:
+         // Data member, initialized by constructor.
+         RealType a;   // alpha.
+         RealType b;   // beta.
+         RealType ncp; // non-centrality parameter
+      }; // template <class RealType, class Policy> class non_central_beta_distribution
+
+      typedef non_central_beta_distribution<double> non_central_beta; // Reserved name of type double.
+
+      // Non-member functions to give properties of the distribution.
+
+      template <class RealType, class Policy>
+      inline const std::pair<RealType, RealType> range(const non_central_beta_distribution<RealType, Policy>& /* dist */)
+      { // Range of permissible values for random variable k.
+         using boost::math::tools::max_value;
+         return std::pair<RealType, RealType>(0, 1);
+      }
+
+      template <class RealType, class Policy>
+      inline const std::pair<RealType, RealType> support(const non_central_beta_distribution<RealType, Policy>& /* dist */)
+      { // Range of supported values for random variable k.
+         // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
+         using boost::math::tools::max_value;
+         return std::pair<RealType, RealType>(0, 1);
+      }
+
+      template <class RealType, class Policy>
+      inline RealType mean(const non_central_beta_distribution<RealType, Policy>& dist)
+      { 
+         // TODO
+         return 0;
+      } // mean
+
+      template <class RealType, class Policy>
+      inline RealType mode(const non_central_beta_distribution<RealType, Policy>& dist)
+      { // mode.
+         // TODO
+         return 0;
+      }
+
+      template <class RealType, class Policy>
+      inline RealType variance(const non_central_beta_distribution<RealType, Policy>& dist)
+      { // variance.
+         const char* function = "boost::math::non_central_beta_distribution<%1%>::variance()";
+         // TODO
+         return 0;
+      }
+
+      // RealType standard_deviation(const non_central_beta_distribution<RealType, Policy>& dist)
+      // standard_deviation provided by derived accessors.
+
+      template <class RealType, class Policy>
+      inline RealType skewness(const non_central_beta_distribution<RealType, Policy>& dist)
+      { // skewness = sqrt(l).
+         const char* function = "boost::math::non_central_beta_distribution<%1%>::skewness()";
+         // TODO
+         return 0;
+      }
+
+      template <class RealType, class Policy>
+      inline RealType kurtosis_excess(const non_central_beta_distribution<RealType, Policy>& dist)
+      { 
+         const char* function = "boost::math::non_central_beta_distribution<%1%>::kurtosis_excess()";
+         // TODO
+         return 0;
+      } // kurtosis_excess
+
+      template <class RealType, class Policy>
+      inline RealType kurtosis(const non_central_beta_distribution<RealType, Policy>& dist)
+      {
+         return kurtosis_excess(dist) + 3;
+      }
+
+      template <class RealType, class Policy>
+      inline RealType pdf(const non_central_beta_distribution<RealType, Policy>& dist, const RealType& x)
+      { // Probability Density/Mass Function.
+         return detail::nc_beta_pdf(dist, x);
+      } // pdf
+
+      template <class RealType, class Policy>
+      RealType cdf(const non_central_beta_distribution<RealType, Policy>& dist, const RealType& x)
+      { 
+         const char* function = "boost::math::non_central_beta_distribution<%1%>::cdf(%1%)";
+            RealType a = dist.alpha();
+            RealType b = dist.beta();
+            RealType l = dist.non_centrality();
+            RealType r;
+            if(!beta_detail::check_alpha(
+               function,
+               a, &r, Policy())
+               ||
+            !beta_detail::check_beta(
+               function,
+               a, &r, Policy())
+               ||            
+            !detail::check_non_centrality(
+               function,
+               l,
+               &r,
+               Policy())
+               ||
+            !beta_detail::check_x(
+               function,
+               x,
+               &r,
+               Policy()))
+                  return (RealType)r;
+
+         return detail::non_central_beta_cdf(x, a, b, l, false, Policy());
+      } // cdf
+
+      template <class RealType, class Policy>
+      RealType cdf(const complemented2_type<non_central_beta_distribution<RealType, Policy>, RealType>& c)
+      { // Complemented Cumulative Distribution Function
+         const char* function = "boost::math::non_central_beta_distribution<%1%>::cdf(%1%)";
+         non_central_beta_distribution<RealType, Policy> const& dist = c.dist;
+            RealType a = dist.alpha();
+            RealType b = dist.beta();
+            RealType l = dist.non_centrality();
+            RealType x = c.param;
+            RealType r;
+            if(!beta_detail::check_alpha(
+               function,
+               a, &r, Policy())
+               ||
+            !beta_detail::check_beta(
+               function,
+               a, &r, Policy())
+               ||            
+            !detail::check_non_centrality(
+               function,
+               l,
+               &r,
+               Policy())
+               ||
+            !beta_detail::check_x(
+               function,
+               x,
+               &r,
+               Policy()))
+                  return (RealType)r;
+
+         return detail::non_central_beta_cdf(x, a, b, l, true, Policy());
+      } // ccdf
+
+      template <class RealType, class Policy>
+      inline RealType quantile(const non_central_beta_distribution<RealType, Policy>& dist, const RealType& p)
+      { // Quantile (or Percent Point) function.
+         return detail::nc_beta_quantile(dist, p, false);
+      } // quantile
+
+      template <class RealType, class Policy>
+      inline RealType quantile(const complemented2_type<non_central_beta_distribution<RealType, Policy>, RealType>& c)
+      { // Quantile (or Percent Point) function.
+         return detail::nc_beta_quantile(c.dist, c.param, true);
+      } // quantile complement.
+
+   } // namespace math
+} // namespace boost
+
+// This include must be at the end, *after* the accessors
+// for this distribution have been defined, in order to
+// keep compilers that support two-phase lookup happy.
+#include <boost/math/distributions/detail/derived_accessors.hpp>
+
+#endif // BOOST_MATH_SPECIAL_NON_CENTRAL_BETA_HPP
+
+
+
