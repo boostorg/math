@@ -32,7 +32,7 @@ namespace boost
       namespace detail{
 
          template <class T, class Policy>
-         T non_central_chi_square_q(T x, T f, T theta, const Policy& pol)
+         T non_central_chi_square_q(T x, T f, T theta, const Policy& pol, T init_sum = 0)
          {
             //
             // Computes the complement of the Non-Central Chi-Square
@@ -63,7 +63,7 @@ namespace boost
             T y = x / 2;
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
-            T sum = 0;
+            T sum = init_sum;
             //
             // k is the starting location for iteration, we'll
             // move both forwards and backwards from this point.
@@ -95,7 +95,7 @@ namespace boost
                poisf *= lambda / (i + 1);
                gamf += xtermf;
                xtermf *= y / (del + i + 1);
-               if((sum == 0) || (term / sum < errtol))
+               if(((sum == 0) || (fabs(term / sum) < errtol)) && (term >= poisf * gamf))
                   break;
             }
             //Error check:
@@ -119,7 +119,7 @@ namespace boost
                poisb *= i / lambda;
                xtermb *= (del + i) / y;
                gamb -= xtermb;
-               if((sum == 0) || (term / sum < errtol))
+               if((sum == 0) || (fabs(term / sum) < errtol))
                   break;
             }
 
@@ -127,7 +127,7 @@ namespace boost
          }
 
          template <class T, class Policy>
-         T non_central_chi_square_p_ding(T x, T f, T theta, const Policy& pol)
+         T non_central_chi_square_p_ding(T x, T f, T theta, const Policy& pol, T init_sum = 0)
          {
             //
             // This is an implementation of:
@@ -152,7 +152,7 @@ namespace boost
             T lambda = theta / 2;
             T vk = exp(-lambda);
             T uk = vk;
-            T sum = tk * vk;
+            T sum = init_sum + tk * vk;
             if(sum == 0)
                return sum;
 
@@ -160,14 +160,16 @@ namespace boost
             T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
 
             int i;
+            T lterm(0), term(0);
             for(i = 1; static_cast<boost::uintmax_t>(i) < max_iter; ++i)
             {
                tk = tk * x / (f + 2 * i);
                uk = uk * lambda / i;
                vk = vk + uk;
-               T term = vk * tk;
+               lterm = term;
+               term = vk * tk;
                sum += term;
-               if(term / sum < errtol)
+               if((fabs(term / sum) < errtol) && (term <= lterm))
                   break;
             }
             //Error check:
@@ -180,7 +182,7 @@ namespace boost
 
 
          template <class T, class Policy>
-         T non_central_chi_square_p(T y, T n, T lambda, const Policy& pol)
+         T non_central_chi_square_p(T y, T n, T lambda, const Policy& pol, T init_sum)
          {
             //
             // This is taken more or less directly from:
@@ -201,7 +203,7 @@ namespace boost
                return 0;
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
             T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
-            T errorf, errorb;
+            T errorf(0), errorb(0);
 
             T x = y / 2;
             T del = lambda / 2;
@@ -229,7 +231,7 @@ namespace boost
             T xtermf = boost::math::gamma_p_derivative(a, x, pol);
             // Backwards gamma function recursion term:
             T xtermb = xtermf * x / a;
-            T sum = poiskf * gamkf;
+            T sum = init_sum + poiskf * gamkf;
             if(sum == 0)
                return sum;
             int i = 1;
@@ -242,9 +244,10 @@ namespace boost
                xtermb *= (a - i + 1) / x;
                gamkb += xtermb;
                poiskb = poiskb * (k - i + 1) / del;
+               errorf = errorb;
                errorb = gamkb * poiskb;
                sum += errorb;
-               if(errorb / sum < errtol)
+               if((fabs(errorb / sum) < errtol) && (errorb <= errorf))
                   break;
                ++i;
             }
@@ -266,7 +269,7 @@ namespace boost
                errorf = poiskf * gamkf;
                sum += errorf;
                ++i;
-            }while((errorf / sum > errtol) && (static_cast<boost::uintmax_t>(i) < max_iter));
+            }while((fabs(errorf / sum) > errtol) && (static_cast<boost::uintmax_t>(i) < max_iter));
 
             //Error check:
             if(static_cast<boost::uintmax_t>(i) >= max_iter)
@@ -298,7 +301,9 @@ namespace boost
                result = detail::non_central_chi_square_q(
                   static_cast<value_type>(x), 
                   static_cast<value_type>(k), 
-                  static_cast<value_type>(l), forwarding_policy());
+                  static_cast<value_type>(l), 
+                  forwarding_policy(), 
+                  static_cast<value_type>(invert ? 0 : -1));
                invert = !invert;
             }
             else if(l < 200)
@@ -308,7 +313,9 @@ namespace boost
                result = detail::non_central_chi_square_p_ding(
                   static_cast<value_type>(x), 
                   static_cast<value_type>(k), 
-                  static_cast<value_type>(l), forwarding_policy());
+                  static_cast<value_type>(l), 
+                  forwarding_policy(),
+                  static_cast<value_type>(invert ? -1 : 0));
             }
             else
             {
@@ -320,10 +327,12 @@ namespace boost
                result = detail::non_central_chi_square_p(
                   static_cast<value_type>(x), 
                   static_cast<value_type>(k), 
-                  static_cast<value_type>(l), forwarding_policy());
+                  static_cast<value_type>(l), 
+                  forwarding_policy(),
+                  static_cast<value_type>(invert ? -1 : 0));
             }
             if(invert)
-               result = 1 - result;
+               result = -result;
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result, 
                "boost::math::non_central_chi_squared_cdf<%1%>(%1%, %1%, %1%)");
