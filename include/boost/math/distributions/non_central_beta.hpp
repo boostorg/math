@@ -14,11 +14,11 @@
 #include <boost/math/special_functions/beta.hpp> // for incomplete gamma. gamma_q
 #include <boost/math/distributions/complement.hpp> // complements
 #include <boost/math/distributions/beta.hpp> // central distribution
-#include <boost/math/distributions/normal.hpp> // central distribution
+//#include <boost/math/distributions/normal.hpp> // central distribution
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
-#include <boost/math/tools/minima.hpp> // function minimization for mode
+//#include <boost/math/tools/minima.hpp> // function minimization for mode
 
 namespace boost
 {
@@ -73,7 +73,7 @@ namespace boost
                xterm *= (a + i - 1) / (x * (a + b + i - 2));
                last_term = term;
             }
-            for(int i = k + 1; i - k < max_iter; ++i)
+            for(int i = k + 1; static_cast<boost::uintmax_t>(i - k) < max_iter; ++i)
             {
                poisf *= l2 / i;
                xtermf *= (x * (a + b + i - 2)) / (a + i - 1);
@@ -113,25 +113,13 @@ namespace boost
             T xterm = ibeta_derivative(a + k, b, x, pol) * (1 - x) / (a + b + k - 1);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
-
             //
-            // Backwards recursion first, this is the unstable
-            // direction for recursion:
+            // Forwards recursion first, this is the stable
+            // direction for recursion, and the location
+            // of the bulk of the sum:
             //
-            for(int i = k; i >= 0; --i)
-            {
-               T term = beta * pois;
-               sum += term;
-               if(fabs(term/sum) < errtol)
-               {
-                  break;
-               }
-               pois *= i / l2;
-               beta -= xterm;
-               xterm *= (a + i - 1) / (x * (a + b + i - 2));
-            }
             T last_term = 0;
-            for(int i = k + 1; i - k < max_iter; ++i)
+            for(int i = k + 1; static_cast<boost::uintmax_t>(i - k) < max_iter; ++i)
             {
                poisf *= l2 / i;
                xtermf *= (x * (a + b + i - 2)) / (a + i - 1);
@@ -144,6 +132,18 @@ namespace boost
                   break;
                }
                last_term = term;
+            }
+            for(int i = k; i >= 0; --i)
+            {
+               T term = beta * pois;
+               sum += term;
+               if(fabs(term/sum) < errtol)
+               {
+                  break;
+               }
+               pois *= i / l2;
+               beta -= xterm;
+               xterm *= (a + i - 1) / (x * (a + b + i - 2));
             }
             return sum;
          }
@@ -162,9 +162,9 @@ namespace boost
             BOOST_MATH_STD_USING
 
             if(x == 0)
-               return invert ? 1 : 0;
+               return invert ? 1.0f : 0.0f;
             if(x == 1)
-               return invert ? 0 : 1;
+               return invert ? 0.0f : 1.0f;
             value_type result;
             value_type c = a + b + l / 2;
             value_type cross = 1 - (b / c) * (1 + l / (2 * c * c));
@@ -218,6 +218,11 @@ namespace boost
             bool comp;
          };
 
+         //
+         // This is more or less a copy of bracket_and_solve_root, but
+         // modified to search only the interval [0,1] using similar
+         // heuristics.
+         //
          template <class F, class T, class Tol, class Policy>
          std::pair<T, T> bracket_and_solve_root_01(F f, const T& guess, T factor, bool rising, Tol tol, boost::uintmax_t& max_iter, const Policy& pol)
          {
@@ -252,7 +257,8 @@ namespace boost
                   if((max_iter - count) % 20 == 0)
                      factor *= 2;
                   //
-                  // Now go ahead and move are guess by "factor":
+                  // Now go ahead and move are guess by "factor",
+                  // we do this by reducing 1-guess by factor:
                   //
                   a = b;
                   fa = fb;
@@ -353,12 +359,12 @@ namespace boost
             //
             if(p == 0)
                return comp
-               ? 1
-               : 0;
+               ? 1.0f
+               : 0.0f;
             if(p == 1)
                return !comp
-               ? 1
-               : 0;
+               ? 1.0f
+               : 0.0f;
 
             value_type c = a + b + l / 2;
             value_type mean = 1 - (b / c) * (1 + l / (2 * c * c));
@@ -431,6 +437,59 @@ namespace boost
                function);
          }
 
+         template <class T, class Policy>
+         T non_central_beta_pdf(T a, T b, T lam, T x, const Policy& pol)
+         {
+            BOOST_MATH_STD_USING
+               using namespace boost::math;
+            //
+            // Variables come first:
+            //
+            boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+            T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
+            T l2 = lam / 2;
+            //
+            // k is the starting point for iteration, and is the
+            // maximum of the poisson weighting term:
+            //
+            int k = itrunc(l2);
+            // Starting Poisson weight:
+            T pois = gamma_p_derivative(k+1, l2, pol);
+            // Starting beta term:
+            T beta = ibeta_derivative(a + k, b, x, pol);
+            T sum = 0;
+            T poisf(pois);
+            T betaf(beta);
+
+            //
+            // Stable backwards recursion first:
+            //
+            for(int i = k; i >= 0; --i)
+            {
+               T term = beta * pois;
+               sum += term;
+               if(fabs(term/sum) < errtol)
+               {
+                  break;
+               }
+               pois *= i / l2;
+               beta *= (a + i - 1) / (x * (a + i + b - 1));
+            }
+            for(int i = k + 1; static_cast<boost::uintmax_t>(i - k) < max_iter; ++i)
+            {
+               poisf *= l2 / i;
+               betaf *= x * (a + b + i - 1) / (a + i - 1);
+
+               T term = poisf * betaf;
+               sum += term;
+               if(fabs(term/sum) < errtol)
+               {
+                  break;
+               }
+            }
+            return sum;
+         }
+
          template <class RealType, class Policy>
          RealType nc_beta_pdf(const non_central_beta_distribution<RealType, Policy>& dist, const RealType& x)
          {
@@ -462,20 +521,22 @@ namespace boost
                &r,
                Policy())
                ||
-            !detail::check_probability(
+            !beta_detail::check_x(
                function,
-               static_cast<value_type>(p),
+               static_cast<value_type>(x),
                &r,
                Policy()))
                   return (RealType)r;
 
-         BOOST_MATH_STD_USING
-         if(l == 0)
-            return pdf(boost::math::beta_distribution<RealType, forwarding_policy>(dist.degrees_of_freedom()), x);
-
+            BOOST_MATH_STD_USING
+            if(l == 0)
+               return pdf(boost::math::beta_distribution<RealType, Policy>(dist.alpha(), dist.beta()), x);
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               non_central_beta_pdf(a, b, l, static_cast<value_type>(x), forwarding_policy()),
+               "function");
          }
 
-      }
+      } // namespace detail
 
       template <class RealType = double, class Policy = policies::policy<> >
       class non_central_beta_distribution
@@ -539,6 +600,13 @@ namespace boost
          return std::pair<RealType, RealType>(0, 1);
       }
 
+#if 0
+      //
+      // We don't have the necessary information to implement
+      // these at present.  These are just disabled for now,
+      // prototypes retained so we can fill in the blanks
+      // later:
+      //
       template <class RealType, class Policy>
       inline RealType mean(const non_central_beta_distribution<RealType, Policy>& dist)
       { 
@@ -585,7 +653,7 @@ namespace boost
       {
          return kurtosis_excess(dist) + 3;
       }
-
+#endif
       template <class RealType, class Policy>
       inline RealType pdf(const non_central_beta_distribution<RealType, Policy>& dist, const RealType& x)
       { // Probability Density/Mass Function.

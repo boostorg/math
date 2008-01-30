@@ -271,6 +271,30 @@ run test_nc_chi_squared.cpp
         : # requirements
 	      <define>TEST_REAL_CONCEPT
         : test_nc_chi_squared_real_concept ;
+run test_nc_beta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_nc_beta_float ;
+run test_nc_beta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_nc_beta_double ;
+run test_nc_beta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_nc_beta_long_double ;
+run test_nc_beta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_nc_beta_real_concept ;
 run test_normal.cpp ;
 run test_pareto.cpp ;
 run test_poisson.cpp  
@@ -408,6 +432,7 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_inc_test.cpp ;
+
 
 
 

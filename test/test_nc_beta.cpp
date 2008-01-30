@@ -20,6 +20,7 @@
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/non_central_beta.hpp> // for chi_squared_distribution
+#include <boost/math/distributions/poisson.hpp> // for chi_squared_distribution
 #include <boost/test/included/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
 
@@ -78,6 +79,20 @@ void expected_results()
    largest_type = "(long\\s+)?double|real_concept";
 #endif
 
+   if(boost::math::tools::digits<long double>() == 64)
+   {
+      //
+      // Allow a small amount of error leakage from long double to double:
+      //
+      add_expected_result(
+         "[^|]*",                          // compiler
+         "[^|]*",                          // stdlib
+         "[^|]*",                          // platform
+         "double",                         // test type(s)
+         "[^|]*large[^|]*",                // test data group
+         "[^|]*", 5, 5);                   // test function
+   }
+
    //
    // Catch all cases come last:
    //
@@ -88,6 +103,13 @@ void expected_results()
       largest_type,                     // test type(s)
       "[^|]*medium[^|]*",               // test data group
       "[^|]*", 700, 500);               // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*large[^|]*",                // test data group
+      "[^|]*", 20000, 4000);             // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -104,10 +126,23 @@ void expected_results()
 }
 
 template <class RealType>
-RealType naive_pdf(RealType v, RealType lam, RealType x)
+RealType naive_pdf(RealType a, RealType b, RealType lam, RealType x)
 {
-   // TODO!
-   return 0;
+   using namespace boost::math;
+
+   RealType term = pdf(poisson_distribution<RealType>(lam/2), 0)
+      * ibeta_derivative(a, b, x);
+   RealType sum = term;
+
+   int i = 1;
+   while(term / sum > tools::epsilon<RealType>())
+   {
+      term = pdf(poisson_distribution<RealType>(lam/2), i)
+      * ibeta_derivative(a + i, b, x);
+      ++i;
+      sum += term;
+   }
+   return sum;
 }
 
 template <class RealType>
@@ -118,17 +153,24 @@ void test_spot(
      RealType cs,    // Chi Square statistic
      RealType P,     // CDF
      RealType Q,     // Complement of CDF
+     RealType D,     // PDF
      RealType tol)   // Test tolerance
 {
    boost::math::non_central_beta_distribution<RealType> dist(a, b, ncp);
    BOOST_CHECK_CLOSE(
       cdf(dist, cs), P, tol);
-   try{/*
+   //
+   // Sanity checking using the naive PDF calculation above fails at
+   // float precision:
+   //
+   if(!boost::is_same<float, RealType>::value)
+   {
       BOOST_CHECK_CLOSE(
-         pdf(dist, cs), naive_pdf(dist.degrees_of_freedom(), ncp, cs), tol * 50);*/
+         pdf(dist, cs), naive_pdf(dist.alpha(), dist.beta(), ncp, cs), tol);
    }
-   catch(const std::overflow_error&)
-   {}
+   BOOST_CHECK_CLOSE(
+      pdf(dist, cs), D, tol);
+
    if((P < 0.99) && (Q < 0.99))
    {
       //
@@ -148,19 +190,51 @@ template <class RealType> // Any floating-point type RealType.
 void test_spots(RealType)
 {
    RealType tolerance = (std::max)(
-      boost::math::tools::epsilon<RealType>(),
-      (RealType)boost::math::tools::epsilon<double>() * 5) * 100;
-   //
-   // At float precision we need to up the tolerance, since 
-   // the input values are rounded off to inexact quantities
-   // the results get thrown off by a noticeable amount.
-   //
-   if(boost::math::tools::digits<RealType>() < 50)
-      tolerance *= 50;
-   if(boost::is_floating_point<RealType>::value != 1)
-      tolerance *= 20; // real_concept special functions are less accurate
+      boost::math::tools::epsilon<RealType>() * 100,
+      (RealType)1e-6) * 100;
 
    cout << "Tolerance = " << tolerance << "%." << endl;
+
+   //
+   // Spot tests use values computed by the R statistical
+   // package and the pbeta and dbeta functions:
+   //
+   test_spot(
+     RealType(2),                   // alpha
+     RealType(5),                   // beta
+     RealType(1),                   // non-centrality param
+     RealType(0.25),                // Chi Square statistic
+     RealType(0.3658349),           // CDF
+     RealType(1-0.3658349),         // Complement of CDF
+     RealType(2.184465),            // PDF
+     RealType(tolerance));
+   test_spot(
+     RealType(20),                  // alpha
+     RealType(15),                  // beta
+     RealType(35),                  // non-centrality param
+     RealType(0.75),                // Chi Square statistic
+     RealType(0.6994175),           // CDF
+     RealType(1-0.6994175),         // Complement of CDF
+     RealType(5.576146),            // PDF
+     RealType(tolerance));
+   test_spot(
+     RealType(100),                 // alpha
+     RealType(3),                   // beta
+     RealType(63),                  // non-centrality param
+     RealType(0.95),                // Chi Square statistic
+     RealType(0.03529306),          // CDF
+     RealType(1-0.03529306),        // Complement of CDF
+     RealType(3.637894),            // PDF
+     RealType(tolerance));
+   test_spot(
+     RealType(0.25),                // alpha
+     RealType(0.75),                // beta
+     RealType(150),                 // non-centrality param
+     RealType(0.975),               // Chi Square statistic
+     RealType(0.09752216),          // CDF
+     RealType(1-0.09752216),        // Complement of CDF
+     RealType(8.020935),            // PDF
+     RealType(tolerance));
 
 } // template <class RealType>void test_spots(RealType)
 
@@ -238,6 +312,13 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
 
    for(unsigned i = 0; i < data.size(); ++i)
    {
+      //
+      // Test case 493 fails at float precision: not enough bits to get
+      // us back where we started:
+      //
+      if((i == 493) && boost::is_same<float, value_type>::value)
+         continue;
+
       if(data[i][4] == 0)
       {
          BOOST_CHECK(0 == quantile(boost::math::non_central_beta_distribution<value_type>(data[i][0], data[i][1], data[i][2]), data[i][4]));
@@ -258,57 +339,6 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          value_type pt = data[i][3];
          BOOST_CHECK_CLOSE_EX(pt, p, precision, i);
       }
-      /*
-      if(boost::math::tools::digits<value_type>() > 50)
-      {
-         //
-         // Sanity check mode, note this may well overflow
-         // since we don't know how to compute PDF's (and hence the mode) 
-         // for large values of the parameters, in addition accuracy of
-         // the mode is at *best* the square root of the accuracy of the PDF:
-         //
-         try
-         {
-            value_type m = mode(boost::math::non_central_beta_distribution<value_type>(data[i][0], data[i][1]));
-            value_type p = pdf(boost::math::non_central_beta_distribution<value_type>(data[i][0], data[i][1]), m);
-            BOOST_CHECK_EX(pdf(boost::math::non_central_beta_distribution<value_type>(data[i][0], data[i][1]), m * (1 + sqrt(precision) * 10)) <= p, i);
-            BOOST_CHECK_EX(pdf(boost::math::non_central_beta_distribution<value_type>(data[i][0], data[i][1]), m * (1 - sqrt(precision)) * 10) <= p, i);
-         }
-         catch(const std::overflow_error&)
-         {
-         }
-         //
-         // Sanity check degrees-of-freedom finder, don't bother at float
-         // precision though as there's not enough data in the probability
-         // values to get back to the correct degrees of freedom or 
-         // non-cenrality parameter:
-         //
-         try{
-            if((data[i][3] < 0.99) && (data[i][3] != 0))
-            {
-               BOOST_CHECK_CLOSE_EX(
-                  boost::math::non_central_beta_distribution<value_type>::find_degrees_of_freedom(data[i][1], data[i][2], data[i][3]),
-                  data[i][0], precision, i);
-               BOOST_CHECK_CLOSE_EX(
-                  boost::math::non_central_beta_distribution<value_type>::find_non_centrality(data[i][0], data[i][2], data[i][3]),
-                  data[i][1], precision, i);
-            }
-            if((data[i][4] < 0.99) && (data[i][4] != 0))
-            {
-               BOOST_CHECK_CLOSE_EX(
-                  boost::math::non_central_beta_distribution<value_type>::find_degrees_of_freedom(boost::math::complement(data[i][1], data[i][2], data[i][4])),
-                  data[i][0], precision, i);
-               BOOST_CHECK_CLOSE_EX(
-                  boost::math::non_central_beta_distribution<value_type>::find_non_centrality(boost::math::complement(data[i][0], data[i][2], data[i][4])),
-                  data[i][1], precision, i);
-            }
-         }
-         catch(const std::exception& e)
-         {
-            BOOST_ERROR(e.what());
-         }
-      }
-      */
    }
 }
 
@@ -321,6 +351,7 @@ void test_accuracy(T, const char* type_name)
 
 #include "ncbeta_big.ipp"
     do_test_nc_chi_squared(ncbeta_big, type_name, "Non Central Beta, large parameters");
+    // Takes too long to run:
     // quantile_sanity_check(ncbeta_big, type_name, "Non Central Beta, large parameters");
 }
 
