@@ -26,6 +26,7 @@
 
 #include "functor.hpp"
 #include "handle_test_result.hpp"
+#include "test_ncbeta_hooks.hpp"
 
 #include <iostream>
 using std::cout;
@@ -93,6 +94,20 @@ void expected_results()
          "[^|]*", 5, 5);                   // test function
    }
 
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*linux[^|]*",                // platform
+      largest_type,                     // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 900, 500);               // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*linux[^|]*",                // platform
+      largest_type,                     // test type(s)
+      "[^|]*large[^|]*",                // test data group
+      "[^|]*", 40000, 5500);               // test function
    //
    // Catch all cases come last:
    //
@@ -109,14 +124,14 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "[^|]*", 20000, 4000);             // test function
+      "[^|]*", 30000, 4000);             // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "[^|]*", 9000, 2000);             // test function
+      "[^|]*", 10000, 2000);             // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
@@ -276,6 +291,15 @@ void do_test_nc_chi_squared(T& data, const char* type_name, const char* test)
    handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "CCDF", test);
 
+#ifdef TEST_OTHER
+   fp1 = other::ncbeta_cdf;
+   result = boost::math::tools::test(
+      data,
+      bind_func(fp1, 0, 1, 2, 3),
+      extract_result(4));
+   handle_test_result(result, data[result.worst()], result.worst(),
+      type_name, "Other::CDF", test);
+#endif
    std::cout << std::endl;
 
 }

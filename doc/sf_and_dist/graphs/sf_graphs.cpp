@@ -110,7 +110,7 @@ public:
       plot.image_size(600, 400);
       plot.copyright_holder("John Maddock").copyright_date("2008").boost_license_on(true);
       plot.coord_precision(4); // Ciould be 3 for smaller plots.
-      plot.title(title).legend_title_font_size(15).title_on(true);
+      plot.title(title).title_font_size(20).title_on(true);
       plot.legend_on(m_has_legend);
 
       double x_delta = (m_max_x - m_min_x) / 50;
