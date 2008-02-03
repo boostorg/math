@@ -19,7 +19,7 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
-#include <boost/math/tools/minima.hpp> // function minimization for mode
+#include <boost/math/distributions/detail/generic_mode.hpp>
 
 namespace boost
 {
@@ -485,77 +485,6 @@ namespace boost
          }
 
          template <class RealType, class Policy>
-         struct pdf_minimizer
-         {
-            pdf_minimizer(const non_central_chi_squared_distribution<RealType, Policy>& d)
-               : dist(d) {}
-
-            RealType operator()(const RealType& x)
-            {
-               return -pdf(dist, x);
-            }
-         private:
-            non_central_chi_squared_distribution<RealType, Policy> dist;
-         };
-
-         template <class RealType, class Policy>
-         RealType nccs_mode(const non_central_chi_squared_distribution<RealType, Policy>& dist)
-         {
-            static const char* function = "mode(non_central_chi_squared_distribution<%1%> const&)";
-
-            RealType k = dist.degrees_of_freedom();
-            RealType l = dist.non_centrality();
-            RealType r;
-            if(!detail::check_df(
-               function,
-               k, &r, Policy())
-               ||
-            !detail::check_non_centrality(
-               function,
-               l,
-               &r,
-               Policy()))
-                  return (RealType)r;
-            //
-            // Need to begin by bracketing the maxima of the PDF:
-            //
-            RealType maxval;
-            RealType upper_bound = l + k;
-            RealType lower_bound;
-            RealType v = pdf(dist, l + k);
-            do
-            {
-               maxval = v;
-               upper_bound *= 2;
-               v = pdf(dist, upper_bound);
-            }while(maxval < v);
-
-            lower_bound = upper_bound;
-            do
-            {
-               maxval = v;
-               lower_bound /= 2;
-               v = pdf(dist, lower_bound);
-            }while(maxval < v);
-
-            boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
-
-            RealType result = tools::brent_find_minima(
-                     pdf_minimizer<RealType, Policy>(dist), 
-                     lower_bound, 
-                     upper_bound, 
-                     policies::digits<RealType, Policy>(), 
-                     max_iter).first;
-            if(max_iter == policies::get_max_root_iterations<Policy>())
-            {
-               return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
-                  " either there is no answer to the mode of the non central chi squared distribution"
-                  " or the answer is infinite.  Current best guess is %1%", result, Policy());
-            }
-            return result;
-         }
-
-         template <class RealType, class Policy>
          struct degrees_of_freedom_finder
          {
             degrees_of_freedom_finder(
@@ -828,7 +757,22 @@ namespace boost
       template <class RealType, class Policy>
       inline RealType mode(const non_central_chi_squared_distribution<RealType, Policy>& dist)
       { // mode.
-         return detail::nccs_mode(dist);
+         static const char* function = "mode(non_central_chi_squared_distribution<%1%> const&)";
+
+         RealType k = dist.degrees_of_freedom();
+         RealType l = dist.non_centrality();
+         RealType r;
+         if(!detail::check_df(
+            function,
+            k, &r, Policy())
+            ||
+         !detail::check_non_centrality(
+            function,
+            l,
+            &r,
+            Policy()))
+               return (RealType)r;
+         return detail::generic_find_mode(dist, 1 + k, function);
       }
 
       template <class RealType, class Policy>

@@ -697,6 +697,18 @@ namespace ntl{
       return x - factor * y;
    }
 
+   template <class Policy>
+   inline int iround(RR const& x, const Policy& pol)
+   {
+      return tools::real_cast<int>(round(x, pol));
+   }
+
+   template <class Policy>
+   inline int itrunc(RR const& x, const Policy& pol)
+   {
+      return tools::real_cast<int>(trunc(x, pol));
+   }
+
 } // namespace ntl
 
 } // namespace math

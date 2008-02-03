@@ -94,20 +94,23 @@ void expected_results()
          "[^|]*", 5, 5);                   // test function
    }
 
-   add_expected_result(
-      "[^|]*",                          // compiler
-      "[^|]*",                          // stdlib
-      "[^|]*linux[^|]*",                // platform
-      largest_type,                     // test type(s)
-      "[^|]*medium[^|]*",               // test data group
-      "[^|]*", 900, 500);               // test function
-   add_expected_result(
-      "[^|]*",                          // compiler
-      "[^|]*",                          // stdlib
-      "[^|]*linux[^|]*",                // platform
-      largest_type,                     // test type(s)
-      "[^|]*large[^|]*",                // test data group
-      "[^|]*", 40000, 5500);               // test function
+   if(boost::math::tools::digits<long double>() == 64)
+   {
+      add_expected_result(
+         "[^|]*",                          // compiler
+         "[^|]*",                          // stdlib
+         "[^|]*",                          // platform
+         largest_type,                     // test type(s)
+         "[^|]*medium[^|]*",               // test data group
+         "[^|]*", 900, 500);               // test function
+      add_expected_result(
+         "[^|]*",                          // compiler
+         "[^|]*",                          // stdlib
+         "[^|]*",                          // platform
+         largest_type,                     // test type(s)
+         "[^|]*large[^|]*",                // test data group
+         "[^|]*", 40000, 5500);            // test function
+   }
    //
    // Catch all cases come last:
    //
@@ -362,6 +365,25 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          value_type p = quantile(complement(boost::math::non_central_beta_distribution<value_type>(data[i][0], data[i][1], data[i][2]), data[i][5]));
          value_type pt = data[i][3];
          BOOST_CHECK_CLOSE_EX(pt, p, precision, i);
+      }
+      if(boost::math::tools::digits<value_type>() > 50)
+      {
+         //
+         // Sanity check mode, accuracy of
+         // the mode is at *best* the square root of the accuracy of the PDF:
+         //
+         value_type m = mode(boost::math::non_central_beta_distribution<value_type>(data[i][0], data[i][1], data[i][2]));
+         if((m == 1) || (m == 0))
+            break;
+         value_type p = pdf(boost::math::non_central_beta_distribution<value_type>(data[i][0], data[i][1], data[i][2]), m);
+         if(m * (1 + sqrt(precision) * 10) < 1)
+         {
+            BOOST_CHECK_EX(pdf(boost::math::non_central_beta_distribution<value_type>(data[i][0], data[i][1], data[i][2]), m * (1 + sqrt(precision) * 10)) <= p, i);
+         }
+         if(m * (1 - sqrt(precision)) * 10 > boost::math::tools::min_value<value_type>())
+         {
+            BOOST_CHECK_EX(pdf(boost::math::non_central_beta_distribution<value_type>(data[i][0], data[i][1], data[i][2]), m * (1 - sqrt(precision)) * 10) <= p, i);
+         }
       }
    }
 }

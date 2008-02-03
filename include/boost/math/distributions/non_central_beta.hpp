@@ -14,11 +14,10 @@
 #include <boost/math/special_functions/beta.hpp> // for incomplete gamma. gamma_q
 #include <boost/math/distributions/complement.hpp> // complements
 #include <boost/math/distributions/beta.hpp> // central distribution
-//#include <boost/math/distributions/normal.hpp> // central distribution
+#include <boost/math/distributions/detail/generic_mode.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
-//#include <boost/math/tools/minima.hpp> // function minimization for mode
 
 namespace boost
 {
@@ -340,7 +339,7 @@ namespace boost
                ||
             !beta_detail::check_beta(
                function,
-               a, &r, Policy())
+               b, &r, Policy())
                ||            
             !detail::check_non_centrality(
                function,
@@ -513,7 +512,7 @@ namespace boost
                ||
             !beta_detail::check_beta(
                function,
-               a, &r, Policy())
+               b, &r, Policy())
                ||            
             !detail::check_non_centrality(
                function,
@@ -554,7 +553,7 @@ namespace boost
                a, &r, Policy());
             beta_detail::check_beta(
                function,
-               a, &r, Policy());
+               b, &r, Policy());
             detail::check_non_centrality(
                function,
                lambda,
@@ -600,6 +599,37 @@ namespace boost
          return std::pair<RealType, RealType>(0, 1);
       }
 
+      template <class RealType, class Policy>
+      inline RealType mode(const non_central_beta_distribution<RealType, Policy>& dist)
+      { // mode.
+         static const char* function = "mode(non_central_beta_distribution<%1%> const&)";
+
+         RealType a = dist.alpha();
+         RealType b = dist.beta();
+         RealType l = dist.non_centrality();
+         RealType r;
+         if(!beta_detail::check_alpha(
+               function,
+               a, &r, Policy())
+               ||
+            !beta_detail::check_beta(
+               function,
+               b, &r, Policy())
+               ||            
+            !detail::check_non_centrality(
+               function,
+               l,
+               &r,
+               Policy()))
+                  return (RealType)r;
+         RealType c = a + b + l / 2;
+         RealType mean = 1 - (b / c) * (1 + l / (2 * c * c));
+         return detail::generic_find_mode_01(
+            dist, 
+            mean, 
+            function);
+      }
+
 #if 0
       //
       // We don't have the necessary information to implement
@@ -613,13 +643,6 @@ namespace boost
          // TODO
          return 0;
       } // mean
-
-      template <class RealType, class Policy>
-      inline RealType mode(const non_central_beta_distribution<RealType, Policy>& dist)
-      { // mode.
-         // TODO
-         return 0;
-      }
 
       template <class RealType, class Policy>
       inline RealType variance(const non_central_beta_distribution<RealType, Policy>& dist)
@@ -674,7 +697,7 @@ namespace boost
                ||
             !beta_detail::check_beta(
                function,
-               a, &r, Policy())
+               b, &r, Policy())
                ||            
             !detail::check_non_centrality(
                function,
@@ -708,7 +731,7 @@ namespace boost
                ||
             !beta_detail::check_beta(
                function,
-               a, &r, Policy())
+               b, &r, Policy())
                ||            
             !detail::check_non_centrality(
                function,

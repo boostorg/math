@@ -295,6 +295,7 @@ run test_nc_beta.cpp
         : # requirements
 	      <define>TEST_REAL_CONCEPT
         : test_nc_beta_real_concept ;
+run test_nc_f.cpp ;
 run test_normal.cpp ;
 run test_pareto.cpp ;
 run test_poisson.cpp  
