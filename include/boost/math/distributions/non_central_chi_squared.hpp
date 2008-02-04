@@ -280,6 +280,45 @@ namespace boost
             return sum;
          }
 
+         template <class T, class Policy>
+         T non_central_chi_square_pdf(T x, T n, T lambda, const Policy& pol)
+         {
+            //
+            // As above but for the PDF:
+            //
+            BOOST_MATH_STD_USING
+            boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+            T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
+            T x2 = x / 2;
+            T n2 = n / 2;
+            T l2 = lambda / 2;
+            T sum = 0;
+            int k = itrunc(l2);
+            T pois = gamma_p_derivative(k + 1, l2, pol) * gamma_p_derivative(n2 + k, x2);
+            if(pois == 0)
+               return 0;
+            T poisb = pois;
+            for(int i = k; ; ++i)
+            {
+               sum += pois;
+               if(pois / sum < errtol)
+                  break;
+               if(static_cast<boost::uintmax_t>(i - k) >= max_iter)
+                  return policies::raise_evaluation_error(
+                     "pdf(non_central_chi_squared_distribution<%1%>, %1%)", 
+                     "Series did not converge, closest value was %1%", sum, pol);
+               pois *= l2 * x2 / ((i + 1) * (n2 + i));
+            }
+            for(int i = k - 1; i >= 0; --i)
+            {
+               poisb *= (i + 1) * (n2 + i) / (l2 * x2);
+               sum += poisb;
+               if(poisb / sum < errtol)
+                  break;
+            }
+            return sum / 2;
+         }
+
          template <class RealType, class Policy>
          inline RealType non_central_chi_squared_cdf(RealType x, RealType k, RealType l, bool invert, const Policy&)
          {
@@ -470,16 +509,25 @@ namespace boost
          // Special case:
          if(x == 0)
             return 0;
-         r = log(x / l) * (k / 4 - 0.5f) - (x + l) / 2;
-         if(r >= tools::log_max_value<RealType>())
-            return policies::raise_overflow_error<RealType>(function, 0, forwarding_policy());
-         if(r <= -tools::log_max_value<RealType>())
-            return policies::raise_underflow_error<RealType>(function, 0, forwarding_policy());
-
-         r = exp(r);
-         r = 0.5f * r
-            * boost::math::cyl_bessel_i(k/2 - 1, sqrt(l * x), forwarding_policy());
-            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+         if(l > 50)
+         {
+            r = non_central_chi_square_pdf(static_cast<value_type>(x), k, l, forwarding_policy());
+         }
+         else
+         {
+            r = log(x / l) * (k / 4 - 0.5f) - (x + l) / 2;
+            if(fabs(r) >= tools::log_max_value<RealType>() / 4)
+            {
+               r = non_central_chi_square_pdf(static_cast<value_type>(x), k, l, forwarding_policy());
+            }
+            else
+            {
+               r = exp(r);
+               r = 0.5f * r
+                  * boost::math::cyl_bessel_i(k/2 - 1, sqrt(l * x), forwarding_policy());
+            }
+         }
+         return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                r, 
                function);
          }
