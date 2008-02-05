@@ -4,7 +4,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Caution: this file contains quickbook markup as well as code
+// Caution: this file contains Quickbook markup as well as code
 // and comments, don't change any of the special comment markups!
 
 //[nccs_eg
@@ -15,10 +15,10 @@ This example computes a table of the power of the [chi][super 2]
 test at the 5% significance level, for various degrees of freedom
 and non-centrality parameters.  The table is deliberately the same
 as Table 6 from "The Non-Central [chi][super 2] and F-Distributions and
-their applications.", P. B. Patnaik, Biometrika, Vol. 36, No. 1/2 (June 1949), 
+their applications.", P. B. Patnaik, Biometrika, Vol. 36, No. 1/2 (June 1949),
 202-232.
 
-First we need some includes to access the non central chi squared distribution
+First we need some includes to access the non-central chi squared distribution
 (and some basic std output of course).
 
 */
@@ -40,6 +40,8 @@ int main()
    std::cout << "]\n";
 
    /*`
+   (Note: the enclosing [] brackets are to format as a table in Boost.Quickbook).
+
    Enumerate the rows and columns and print the power of the test
    for each table cell:
    */
@@ -69,7 +71,7 @@ int main()
 }
 
 /*`
-The output from this program is a table in quickbook format as shown below.
+The output from this program is a table in Boost.Quickbook format as shown below.
 
 We can interpret this as follows - for example if [nu]=10 and [lambda]=10
 then the power of the test is 0.542 - so we have only a 54% chance of
@@ -99,6 +101,8 @@ it is in fact false):
 [[19][0.0976][0.161][0.238][0.323][0.412][0.5][0.584][0.66][0.728][0.786]]
 [[20][0.0961][0.158][0.232][0.315][0.402][0.489][0.572][0.648][0.716][0.775]]
 ]
+
+See [@../../../example/nc_chi_sq_example.cpp nc_chi_sq_example.cpp] for the full C++ source code.
 
 */
 
