@@ -14,7 +14,7 @@ for mmlfile in $*; do
 	pngfile=$(basename $svgfile .svg).png
 	tempfile=temp.mml
 	# strip html wrappers put in by MathCast:
-	cat $svgfile | tr -d "\r\n" | sed -e 's/.*\(<math[^>]*>.*<\/math>\).*/\1/' > $tempfile
+	cat $mmlfile | tr -d "\r\n" | sed -e 's/.*\(<math[^>]*>.*<\/math>\).*/\1/' > $tempfile
 	
 	echo Generating $svgfile
 	$python $math2svg $tempfile > $svgfile
@@ -22,5 +22,6 @@ for mmlfile in $*; do
 	$inkscape -d $dpi -e $(cygpath -a -w $pngfile) $(cygpath -a -w $svgfile)
 	rm $tempfile
 done
+
 
 

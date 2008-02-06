@@ -17,6 +17,7 @@
 [include distributions/negative_binomial.qbk]
 [include distributions/nc_beta.qbk]
 [include distributions/nc_chi_squared.qbk]
+[include distributions/nc_f.qbk]
 [include distributions/normal.qbk]
 [include distributions/pareto.qbk]
 [include distributions/poisson.qbk]

@@ -80,10 +80,10 @@ Returns the parameter /lambda/ from which this object was constructed.
 
 Most of the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 are supported: __cdf, __pdf, __quantile, 
-__hazard, __chf, __range and __support.
+__median, __mode, __hazard, __chf, __range and __support.
 
 However, the following are not currently implemented: 
-__mean, __median, __mode, __variance, __sd, __skewness, 
+__mean, __variance, __sd, __skewness, 
    __kurtosis and __kurtosis_excess.
 
 The domain of the random variable is \[0, 1\].
