@@ -129,6 +129,7 @@ typedef ::boost::mpl::list<unsigned char, unsigned short, unsigned,
 
 }  // namespace
 
+#define BOOST_NO_MACRO_EXPAND /**/
 
 // Specialize numeric_limits for _some_ of our types
 namespace std
@@ -143,8 +144,8 @@ class numeric_limits< MyInt1 >
 public:
     BOOST_STATIC_CONSTANT(bool, is_specialized = limits_type::is_specialized);
 
-    static MyInt1 min() throw()  { return limits_type::min(); }
-    static MyInt1 max() throw()  { return limits_type::max(); }
+    static MyInt1 min BOOST_NO_MACRO_EXPAND() throw()  { return (limits_type::min)(); }
+    static MyInt1 max BOOST_NO_MACRO_EXPAND() throw()  { return (limits_type::max)(); }
 
     BOOST_STATIC_CONSTANT(int, digits      = limits_type::digits);
     BOOST_STATIC_CONSTANT(int, digits10    = limits_type::digits10);
@@ -190,8 +191,8 @@ class numeric_limits< MyUnsigned1 >
 public:
     BOOST_STATIC_CONSTANT(bool, is_specialized = limits_type::is_specialized);
 
-    static MyUnsigned1 min() throw()  { return limits_type::min(); }
-    static MyUnsigned1 max() throw()  { return limits_type::max(); }
+    static MyUnsigned1 min BOOST_NO_MACRO_EXPAND() throw()  { return (limits_type::min)(); }
+    static MyUnsigned1 max BOOST_NO_MACRO_EXPAND() throw()  { return (limits_type::max)(); }
 
     BOOST_STATIC_CONSTANT(int, digits      = limits_type::digits);
     BOOST_STATIC_CONSTANT(int, digits10    = limits_type::digits10);
