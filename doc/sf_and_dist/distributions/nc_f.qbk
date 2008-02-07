@@ -1,4 +1,4 @@
-[section:nc_f_dist Non Central F Distribution]
+[section:nc_f_dist Noncentral F Distribution]
 
 ``#include <boost/math/distributions/non_central_f.hpp>``
 
@@ -20,24 +20,23 @@
       // Constructor:
       non_central_f_distribution(RealType v1, RealType v2, RealType lambda);
 
-      // Accessor to parameters:
+      // Accessor to degrees_of_freedom parameters v1 & v2:
       RealType degrees_of_freedom1()const;
       RealType degrees_of_freedom2()const;
 
-      // Accessor to non centrality parameter:
+      // Accessor to non-centrality parameter lambda:
       RealType non_centrality()const;
    };
    
    }} // namespaces
    
-The non-central F distribution is a generalization of the 
-[link math_toolkit.dist.dist_ref.dists.f_dist Fisher F distribution].  
+The noncentral F distribution is a generalization of the __F_distrib.
 It is defined as the ratio 
 
    F = (X/v1) / (Y/v2)
    
-where X is a non-central [chi][super 2]
-random variable with /v1/ degrees of freedom and non centrality parameter [lambda], 
+where X is a noncentral [chi][super 2]
+random variable with /v1/ degrees of freedom and non-centrality parameter [lambda], 
 and Y is a central [chi][super 2] random variable with /v2/ degrees of freedom.
 
 This gives the following PDF:
@@ -45,7 +44,7 @@ This gives the following PDF:
 [equation nc_f_ref1]
 
 where L[sub a][super b](c) is a generalised Laguerre polynomial and B(a,b) is the 
-beta function, or
+__beta function, or
 
 [equation nc_f_ref2]
 
@@ -73,7 +72,7 @@ Returns the parameter /v2/ from which this object was constructed.
 
       RealType non_centrality()const;
       
-Returns the parameter /lambda/ from which this object was constructed.
+Returns the non-centrality parameter /lambda/ from which this object was constructed.
 
 [h4 Non-member Accessors]
 
@@ -84,15 +83,17 @@ The domain of the random variable is \[0, +[infin]\].
 
 [h4 Accuracy]
 
-This distribution is implemented in terms of the 
-[link math_toolkit.dist.dist_ref.dists.nc_beta_dist non-central beta distribution]:
-refer to that distribution for accuracy data.
+This distribution is implemented in terms of the
+__non_central_beta_distrib
+ [link math_toolkit.dist.dist_ref.dists.nc_beta_dist noncentral beta distribution]
+:refer to that distribution for accuracy data.
 
 [h4 Tests]
 
 Since this distribution is implemented by adapting another distribution, 
-the tests consist of basic sanity checks computed by the R statistical
-package and the pbeta and dbeta functions.
+the tests consist of basic sanity checks computed by the
+[@http://www.r-project.org/ R-2.5.1 Math library statistical
+package] and its pbeta and dbeta functions.
 
 [h4 Implementation]
 
@@ -115,7 +116,7 @@ y = x * v1 \/ v2
 
 p = B[sub y](v1\/2, v2\/2; [lambda])
 
-where B[sub x](a, b; [lambda]) is the non-central beta distribution CDF and
+where B[sub x](a, b; [lambda]) is the noncentral beta distribution CDF and
 
 y = x * v1 \/ v2
 
@@ -126,7 +127,7 @@ y = x * v1 \/ v2
 q = 1 - B[sub y](v1\/2, v2\/2; [lambda])
 
 where 1 - B[sub x](a, b; [lambda]) is the complement of the 
-non-central beta distribution CDF and
+noncentral beta distribution CDF and
 
 y = x * v1 \/ v2
 
@@ -143,7 +144,7 @@ and
 
 Q[sub p][super -1](v1\/2, v2\/2; [lambda])
 
-is the non-central beta quantile.
+is the noncentral beta quantile.
 
 ]]
 [[quantile
@@ -161,7 +162,7 @@ and
 
 QC[sub q][super -1](v1\/2, v2\/2; [lambda])
 
-is the non-central beta quantile from the complement.]]
+is the noncentral beta quantile from the complement.]]
 [[mean][v2 * (v1 + l) \/ (v1 * (v2 - 2))]]
 [[mode][By numeric maximalisation of the PDF.]]
 [[variance][Refer to, [@http://mathworld.wolfram.com/NoncentralF-Distribution.html
@@ -177,10 +178,10 @@ is the non-central beta quantile from the complement.]]
     Mathematica documentation]  ]]
 ]
 
-[endsect][/section:nc_beta_dist]
+[endsect] [/section:nc_f_dist]
 
-[/ nc_beta.qbk
-  Copyright 2006 John Maddock and Paul A. Bristow.
+[/ nc_f.qbk
+  Copyright 2008 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
