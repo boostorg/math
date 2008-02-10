@@ -50,7 +50,7 @@ Methods and programs for mathematical functions, Stephen L B Moshier, Ellis Horw
 
 [@http://www.csit.fsu.edu/~burkardt/cpp_src/dcdflib/dcdflib.html C++ version].
 
-[@lib.stat.cmu.edu/general/cdflib  CDFLIB Library of Fortran Routines for Cumulative Distribution functions.]
+[@http://lib.stat.cmu.edu/general/cdflib  CDFLIB Library of Fortran Routines for Cumulative Distribution functions.]
 
 [@http://www.csit.fsu.edu/~burkardt/f_src/dcdflib/dcdflib.html DCDFLIB C++ version]
 DCDFLIB is a library of C++ routines, using double precision arithmetic, for evaluating cumulative probability density functions.
