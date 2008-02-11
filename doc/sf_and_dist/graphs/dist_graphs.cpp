@@ -237,6 +237,26 @@ int main()
    nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 100), "v=20, &#x3BB;=100");
    nc_cs_plotter.plot("Non Central Chi Squared PDF", "nccs_pdf.svg");
 
+   distribution_plotter<boost::math::non_central_beta> 
+      nc_beta_plotter;
+   nc_beta_plotter.add(boost::math::non_central_beta(10, 15, 0), "&#x3B1;=10, &#x3B2;=15, &#x3B4;=0");
+   nc_beta_plotter.add(boost::math::non_central_beta(10, 15, 1), "&#x3B1;=10, &#x3B2;=15, &#x3B4;=1");
+   nc_beta_plotter.add(boost::math::non_central_beta(10, 15, 5), "&#x3B1;=10, &#x3B2;=15, &#x3B4;=5");
+   nc_beta_plotter.add(boost::math::non_central_beta(10, 15, 10), "&#x3B1;=10, &#x3B2;=15, &#x3B4;=10");
+   nc_beta_plotter.add(boost::math::non_central_beta(10, 15, 40), "&#x3B1;=10, &#x3B2;=15, &#x3B4;=40");
+   nc_beta_plotter.add(boost::math::non_central_beta(10, 15, 100), "&#x3B1;=10, &#x3B2;=15, &#x3B4;=100");
+   nc_beta_plotter.plot("Non Central Beta PDF", "nc_beta_pdf.svg");
+
+   distribution_plotter<boost::math::non_central_f> 
+      nc_f_plotter;
+   nc_f_plotter.add(boost::math::non_central_f(10, 20, 0), "v1=10, v2=20, &#x3BB;=0");
+   nc_f_plotter.add(boost::math::non_central_f(10, 20, 1), "v1=10, v2=20, &#x3BB;=1");
+   nc_f_plotter.add(boost::math::non_central_f(10, 20, 5), "v1=10, v2=20, &#x3BB;=5");
+   nc_f_plotter.add(boost::math::non_central_f(10, 20, 10), "v1=10, v2=20, &#x3BB;=10");
+   nc_f_plotter.add(boost::math::non_central_f(10, 20, 40), "v1=10, v2=20, &#x3BB;=40");
+   nc_f_plotter.add(boost::math::non_central_f(10, 20, 100), "v1=10, v2=20, &#x3BB;=100");
+   nc_f_plotter.plot("Non Central F PDF", "nc_f_pdf.svg");
+
    distribution_plotter<boost::math::beta_distribution<> > 
       beta_plotter;
    beta_plotter.add(boost::math::beta_distribution<>(0.5, 0.5), "alpha=0.5, beta=0.5");

@@ -287,24 +287,83 @@ namespace boost
       template <class RealType, class Policy>
       RealType cdf(const non_central_f_distribution<RealType, Policy>& dist, const RealType& x)
       { 
+         const char* function = "cdf(const non_central_f_distribution<%1%>&, %1%)";
+         RealType r;
+         if(!detail::check_df(
+            function,
+            dist.degrees_of_freedom1(), &r, Policy())
+               ||
+            !detail::check_df(
+               function,
+               dist.degrees_of_freedom2(), &r, Policy())
+               ||
+            !detail::check_non_centrality(
+               function,
+               dist.non_centrality(),
+               &r,
+               Policy()))
+               return r;
+         
+         if((x < 0) || !(boost::math::isfinite)(x))
+         {
+            return policies::raise_domain_error<RealType>(
+               function, "Random Variable parameter was %1%, but must be > 0 !", x, Policy());
+         }
+
          RealType alpha = dist.degrees_of_freedom1() / 2;
          RealType beta = dist.degrees_of_freedom2() / 2;
          RealType y = x * alpha / beta;
-         RealType r;
          RealType c = y / (1 + y);
-         //RealType cp = 1 / (1 + y);
-         r = cdf(boost::math::non_central_beta_distribution<RealType, Policy>(alpha, beta, dist.non_centrality()), c);
-         //RealType r2 = cdf(complement(boost::math::non_central_beta_distribution<RealType, Policy>(beta, alpha, dist.non_centrality()), cp));
+         RealType cp = 1 / (1 + y);
+         //
+         // To ensure accuracy, we pass both x and 1-x to the
+         // non-central beta cdf routine, this ensures accuracy
+         // even when we compute x to be ~ 1:
+         //
+         r = detail::non_central_beta_cdf(c, cp, alpha, beta, 
+            dist.non_centrality(), false, Policy());
          return r;
       } // cdf
 
       template <class RealType, class Policy>
       RealType cdf(const complemented2_type<non_central_f_distribution<RealType, Policy>, RealType>& c)
       { // Complemented Cumulative Distribution Function
+         const char* function = "cdf(complement(const non_central_f_distribution<%1%>&, %1%))";
+         RealType r;
+         if(!detail::check_df(
+            function,
+            c.dist.degrees_of_freedom1(), &r, Policy())
+               ||
+            !detail::check_df(
+               function,
+               c.dist.degrees_of_freedom2(), &r, Policy())
+               ||
+            !detail::check_non_centrality(
+               function,
+               c.dist.non_centrality(),
+               &r,
+               Policy()))
+               return r;
+         
+         if((c.param < 0) || !(boost::math::isfinite)(c.param))
+         {
+            return policies::raise_domain_error<RealType>(
+               function, "Random Variable parameter was %1%, but must be > 0 !", c.param, Policy());
+         }
+
          RealType alpha = c.dist.degrees_of_freedom1() / 2;
          RealType beta = c.dist.degrees_of_freedom2() / 2;
          RealType y = c.param * alpha / beta;
-         return cdf(complement(boost::math::non_central_beta_distribution<RealType, Policy>(alpha, beta, c.dist.non_centrality()), y / (1 + y)));
+         RealType x = y / (1 + y);
+         RealType cx = 1 / (1 + y);
+         //
+         // To ensure accuracy, we pass both x and 1-x to the
+         // non-central beta cdf routine, this ensures accuracy
+         // even when we compute x to be ~ 1:
+         //
+         r = detail::non_central_beta_cdf(x, cx, alpha, beta, 
+            c.dist.non_centrality(), true, Policy());
+         return r;
       } // ccdf
 
       template <class RealType, class Policy>
@@ -313,6 +372,11 @@ namespace boost
          RealType alpha = dist.degrees_of_freedom1() / 2;
          RealType beta = dist.degrees_of_freedom2() / 2;
          RealType x = quantile(boost::math::non_central_beta_distribution<RealType, Policy>(alpha, beta, dist.non_centrality()), p);
+         if(x == 1)
+            return policies::raise_overflow_error<RealType>(
+               "quantile(const non_central_f_distribution<%1%>&, %1%)", 
+               "Result of non central F quantile is too large to represent.", 
+               Policy());
          return (x / (1 - x)) * (dist.degrees_of_freedom2() / dist.degrees_of_freedom1());
       } // quantile
 
@@ -322,6 +386,11 @@ namespace boost
          RealType alpha = c.dist.degrees_of_freedom1() / 2;
          RealType beta = c.dist.degrees_of_freedom2() / 2;
          RealType x = quantile(complement(boost::math::non_central_beta_distribution<RealType, Policy>(alpha, beta, c.dist.non_centrality()), c.param));
+         if(x == 1)
+            return policies::raise_overflow_error<RealType>(
+               "quantile(complement(const non_central_f_distribution<%1%>&, %1%))", 
+               "Result of non central F quantile is too large to represent.", 
+               Policy());
          return (x / (1 - x)) * (c.dist.degrees_of_freedom2() / c.dist.degrees_of_freedom1());
       } // quantile complement.
 

@@ -30,7 +30,7 @@ namespace boost
       namespace detail{
 
          template <class T, class Policy>
-         T non_central_beta_p(T a, T b, T lam, T x, const Policy& pol, T init_val = 0)
+         T non_central_beta_p(T a, T b, T lam, T x, T y, const Policy& pol, T init_val = 0)
          {
             BOOST_MATH_STD_USING
                using namespace boost::math;
@@ -48,9 +48,14 @@ namespace boost
             // Starting Poisson weight:
             T pois = gamma_p_derivative(k+1, l2, pol);
             // Starting beta term:
-            T beta = ibeta(a + k, b, x, pol);
+            T beta = x < y 
+               ? ibeta(a + k, b, x, pol)
+               : ibetac(b, a + k, y, pol);
             // recurance term:
-            T xterm = ibeta_derivative(a + k, b, x, pol) * (1 - x) / (a + b + k - 1);
+            T xterm = x < y
+               ? ibeta_derivative(a + k, b, x, pol)
+               : ibeta_derivative(b, a + k, y, pol);
+            xterm *= (1 - x) / (a + b + k - 1);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
 
@@ -89,7 +94,7 @@ namespace boost
          }
 
          template <class T, class Policy>
-         T non_central_beta_q(T a, T b, T lam, T x, const Policy& pol, T init_val = 0)
+         T non_central_beta_q(T a, T b, T lam, T x, T y, const Policy& pol, T init_val = 0)
          {
             BOOST_MATH_STD_USING
                using namespace boost::math;
@@ -107,9 +112,14 @@ namespace boost
             // Starting Poisson weight:
             T pois = gamma_p_derivative(k+1, l2, pol);
             // Starting beta term:
-            T beta = ibetac(a + k, b, x, pol);
+            T beta = x < y
+               ? ibetac(a + k, b, x, pol)
+               : ibeta(b, a + k, y, pol);
             // recurance term:
-            T xterm = ibeta_derivative(a + k, b, x, pol) * (1 - x) / (a + b + k - 1);
+            T xterm = x < y 
+               ? ibeta_derivative(a + k, b, x, pol)
+               : ibeta_derivative(b, a + k, y, pol);
+            xterm *= (1 - x) / (a + b + k - 1);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
             //
@@ -148,7 +158,7 @@ namespace boost
          }
 
          template <class RealType, class Policy>
-         inline RealType non_central_beta_cdf(RealType x, RealType a, RealType b, RealType l, bool invert, const Policy&)
+         inline RealType non_central_beta_cdf(RealType x, RealType y, RealType a, RealType b, RealType l, bool invert, const Policy&)
          {
             typedef typename policies::evaluation<RealType, Policy>::type value_type;
             typedef typename policies::normalise<
@@ -162,7 +172,7 @@ namespace boost
 
             if(x == 0)
                return invert ? 1.0f : 0.0f;
-            if(x == 1)
+            if(y == 0)
                return invert ? 0.0f : 1.0f;
             value_type result;
             value_type c = a + b + l / 2;
@@ -177,6 +187,7 @@ namespace boost
                   static_cast<value_type>(b), 
                   static_cast<value_type>(l), 
                   static_cast<value_type>(x), 
+                  static_cast<value_type>(y), 
                   forwarding_policy(), 
                   static_cast<value_type>(invert ? 0 : -1));
                invert = !invert;
@@ -188,6 +199,7 @@ namespace boost
                   static_cast<value_type>(b), 
                   static_cast<value_type>(l), 
                   static_cast<value_type>(x), 
+                  static_cast<value_type>(y), 
                   forwarding_policy(),
                   static_cast<value_type>(invert ? -1 : 0));
             }
@@ -712,7 +724,7 @@ namespace boost
                Policy()))
                   return (RealType)r;
 
-         return detail::non_central_beta_cdf(x, a, b, l, false, Policy());
+         return detail::non_central_beta_cdf(x, 1 - x, a, b, l, false, Policy());
       } // cdf
 
       template <class RealType, class Policy>
@@ -746,7 +758,7 @@ namespace boost
                Policy()))
                   return (RealType)r;
 
-         return detail::non_central_beta_cdf(x, a, b, l, true, Policy());
+         return detail::non_central_beta_cdf(x, 1 - x, a, b, l, true, Policy());
       } // ccdf
 
       template <class RealType, class Policy>
@@ -770,6 +782,4 @@ namespace boost
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_MATH_SPECIAL_NON_CENTRAL_BETA_HPP
-
-
 
