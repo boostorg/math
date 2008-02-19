@@ -10,7 +10,7 @@
 
    typedef non_central_chi_squared_distribution<> non_central_chi_squared;
 
-   template <class RealType, class ``__Policy``>bja
+   template <class RealType, class ``__Policy``>
    class non_central_chi_squared_distribution
    {
    public:
@@ -219,7 +219,7 @@ Where P[sub a](x) is the incomplete gamma function.
 
 The method starts at the [lambda]th term, which is where the Poisson weighting
 function achieves its maximum value, although this is not necessarily
-the largest overall term.  Subsequent terms are calculates via the normal
+the largest overall term.  Subsequent terms are calculated via the normal
 recurrence relations for the incomplete gamma function, and iteration proceeds
 both forwards and backwards until sufficient precision has been achieved.  It
 should be noted that recurrence in the forwards direction of P[sub a](x) is
@@ -242,9 +242,14 @@ The PDF is computed directly using the relation:
 
 [equation nc_chi_squ_ref3]
 
-Note that this formula fails for large values of the non-centrality
-parameter: unfortunately there appears to be no other alternative at
-this time.
+Where ['f(x; v)] is the PDF of the central __chi_squared_distrib and 
+['I[sub v](x)] is a modified Bessel function, see __cyl_bessel_i.  
+For small values of the
+non-centrality parameter the relation in terms of __cyl_bessel_i
+is used.  However, this method fails for large values of the
+non-centrality parameter, so in that case the infinite sum is 
+evaluated using the method of Benton and Krishnamoorthy, and 
+the usual recurrence relations for successive terms.
 
 The quantile functions are computed by numeric inversion of the CDF.
 

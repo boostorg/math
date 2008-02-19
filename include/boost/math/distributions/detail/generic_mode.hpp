@@ -74,7 +74,7 @@ typename Dist::value_type generic_find_mode(const Dist& dist, typename Dist::val
       upper_bound, 
       policies::digits<value_type, policy_type>(), 
       max_iter).first;
-   if(max_iter == policies::get_max_root_iterations<policy_type>())
+   if(max_iter >= policies::get_max_root_iterations<policy_type>())
    {
       return policies::raise_evaluation_error<value_type>(
          function, 
@@ -127,7 +127,7 @@ typename Dist::value_type generic_find_mode_01(const Dist& dist, typename Dist::
       upper_bound, 
       policies::digits<value_type, policy_type>(), 
       max_iter).first;
-   if(max_iter == policies::get_max_root_iterations<policy_type>())
+   if(max_iter >= policies::get_max_root_iterations<policy_type>())
    {
       return policies::raise_evaluation_error<value_type>(
          function, 

@@ -38,7 +38,7 @@ namespace boost
             // Variables come first:
             //
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-            T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
+            T errtol = ldexp(1.0f, -boost::math::policies::digits<T, Policy>());
             T l2 = lam / 2;
             //
             // k is the starting point for iteration, and is the
@@ -46,7 +46,7 @@ namespace boost
             //
             int k = itrunc(l2);
             // Starting Poisson weight:
-            T pois = gamma_p_derivative(k+1, l2, pol);
+            T pois = gamma_p_derivative(T(k+1), l2, pol);
             // Starting beta term:
             T beta = x < y 
                ? ibeta(a + k, b, x, pol)
@@ -55,7 +55,7 @@ namespace boost
             T xterm = x < y
                ? ibeta_derivative(a + k, b, x, pol)
                : ibeta_derivative(b, a + k, y, pol);
-            xterm *= (1 - x) / (a + b + k - 1);
+            xterm *= y / (a + b + k - 1);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
 
@@ -102,7 +102,7 @@ namespace boost
             // Variables come first:
             //
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-            T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
+            T errtol = ldexp(1.0f, -boost::math::policies::digits<T, Policy>());
             T l2 = lam / 2;
             //
             // k is the starting point for iteration, and is the
@@ -110,7 +110,7 @@ namespace boost
             //
             int k = itrunc(l2);
             // Starting Poisson weight:
-            T pois = gamma_p_derivative(k+1, l2, pol);
+            T pois = gamma_p_derivative(T(k+1), l2, pol);
             // Starting beta term:
             T beta = x < y
                ? ibetac(a + k, b, x, pol)
@@ -119,7 +119,7 @@ namespace boost
             T xterm = x < y 
                ? ibeta_derivative(a + k, b, x, pol)
                : ibeta_derivative(b, a + k, y, pol);
-            xterm *= (1 - x) / (a + b + k - 1);
+            xterm *= y / (a + b + k - 1);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
             //
@@ -437,7 +437,7 @@ namespace boost
                   max_iter, Policy());
             value_type result = ir.first + (ir.second - ir.first) / 2;
 
-            if(max_iter == policies::get_max_root_iterations<Policy>())
+            if(max_iter >= policies::get_max_root_iterations<Policy>())
             {
                policies::raise_evaluation_error<value_type>(function, "Unable to locate solution in a reasonable time:"
                   " either there is no answer to quantile of the non central beta distribution"
@@ -457,7 +457,7 @@ namespace boost
             // Variables come first:
             //
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-            T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
+            T errtol = ldexp(1.0f, -boost::math::policies::digits<T, Policy>());
             T l2 = lam / 2;
             //
             // k is the starting point for iteration, and is the
@@ -465,7 +465,7 @@ namespace boost
             //
             int k = itrunc(l2);
             // Starting Poisson weight:
-            T pois = gamma_p_derivative(k+1, l2, pol);
+            T pois = gamma_p_derivative(T(k+1), l2, pol);
             // Starting beta term:
             T beta = ibeta_derivative(a + k, b, x, pol);
             T sum = 0;

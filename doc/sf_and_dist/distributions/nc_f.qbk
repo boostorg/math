@@ -84,9 +84,7 @@ The domain of the random variable is \[0, +[infin]\].
 [h4 Accuracy]
 
 This distribution is implemented in terms of the
-__non_central_beta_distrib
- [link math_toolkit.dist.dist_ref.dists.nc_beta_dist noncentral beta distribution]
-:refer to that distribution for accuracy data.
+__non_central_beta_distrib: refer to that distribution for accuracy data.
 
 [h4 Tests]
 

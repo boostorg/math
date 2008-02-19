@@ -133,6 +133,23 @@ inline bool check_non_centrality(
    return true;
 }
 
+template <class RealType, class Policy>
+inline bool check_finite(
+      const char* function,
+      RealType x,
+      RealType* result,
+      const Policy& pol)
+{
+   if(!(boost::math::isfinite)(x))
+   { // Assume scale == 0 is NOT valid for any distribution.
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Parameter is %1%, but must be finite !", x, pol);
+      return false;
+   }
+   return true;
+}
+
 } // namespace detail
 } // namespace math
 } // namespace boost

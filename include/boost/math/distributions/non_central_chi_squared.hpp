@@ -20,6 +20,7 @@
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
 #include <boost/math/tools/roots.hpp> // for root finding.
 #include <boost/math/distributions/detail/generic_mode.hpp>
+#include <boost/math/distributions/detail/generic_quantile.hpp>
 
 namespace boost
 {
@@ -427,17 +428,6 @@ namespace boost
                &r,
                Policy()))
                   return (RealType)r;
-            //
-            // Special cases first:
-            //
-            if(p == 0)
-               return comp
-               ? policies::raise_overflow_error<RealType>(function, 0, Policy())
-               : 0;
-            if(p == 1)
-               return !comp
-               ? policies::raise_overflow_error<RealType>(function, 0, Policy())
-               : 0;
 
             value_type b = (l * l) / (k + 3 * l);
             value_type c = (k + 3 * l) / (k + 2 * l);
@@ -451,19 +441,12 @@ namespace boost
             if(guess < 0)
                guess = tools::min_value<value_type>();
 
-            detail::nccs_quantile_functor<value_type, Policy>
-               f(non_central_chi_squared_distribution<value_type, Policy>(k, l), p, comp);
-            tools::eps_tolerance<value_type> tol(policies::digits<RealType, Policy>());
-            boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
-            std::pair<value_type, value_type> ir = tools::bracket_and_solve_root(
-               f, guess, value_type(2), true, tol, max_iter, Policy());
-            value_type result = ir.first + (ir.second - ir.first) / 2;
-            if(max_iter == policies::get_max_root_iterations<Policy>())
-            {
-               policies::raise_evaluation_error<value_type>(function, "Unable to locate solution in a reasonable time:"
-                  " either there is no answer to quantile of the non central chi squared distribution"
-                  " or the answer is infinite.  Current best guess is %1%", result, Policy());
-            }
+            value_type result = detail::generic_quantile(
+               non_central_chi_squared_distribution<value_type, forwarding_policy>(k, l), 
+               p, 
+               guess, 
+               comp, 
+               function);
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result, 
                function);
@@ -580,7 +563,7 @@ namespace boost
             std::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
                f, guess, RealType(2), false, tol, max_iter, pol);
             RealType result = ir.first + (ir.second - ir.first) / 2;
-            if(max_iter == policies::get_max_root_iterations<Policy>())
+            if(max_iter >= policies::get_max_root_iterations<Policy>())
             {
                policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
                   " or there is no answer to problem.  Current best guess is %1%", result, Policy());
@@ -636,7 +619,7 @@ namespace boost
             std::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
                f, guess, RealType(2), false, tol, max_iter, pol);
             RealType result = ir.first + (ir.second - ir.first) / 2;
-            if(max_iter == policies::get_max_root_iterations<Policy>())
+            if(max_iter >= policies::get_max_root_iterations<Policy>())
             {
                policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
                   " or there is no answer to problem.  Current best guess is %1%", result, Policy());
