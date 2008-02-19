@@ -1,7 +1,22 @@
+//  (C) Copyright John Maddock 2008.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#ifdef _MSC_VER
+//#  pragma warning (disable : 4800) // forcing value to bool 'true' or 'false' (performance warning)
+#  pragma warning (disable : 4180) // qualifier applied to function type has no meaning; ignored
+#  pragma warning (disable : 4503) // decorated name length exceeded, name was truncated
+#  pragma warning (disable : 4512) // assignment operator could not be generated
+//#  pragma warning (disable : 4172) // returning address of local variable or temporary TODO find cause of these.
+#  pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'function_ptr' was previously defined as a type
+#endif
+
 #include <boost/math/special_functions.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+
 #include <list>
 #include <map>
 #include <string>
@@ -109,7 +124,7 @@ public:
       svg_2d_plot plot;
       plot.image_size(600, 400);
       plot.copyright_holder("John Maddock").copyright_date("2008").boost_license_on(true);
-      plot.coord_precision(4); // Ciould be 3 for smaller plots.
+      plot.coord_precision(4); // Could be 3 for smaller plots?
       plot.title(title).title_font_size(20).title_on(true);
       plot.legend_on(m_has_legend);
 
@@ -146,7 +161,7 @@ public:
          plot.plot(i->second, i->first)
             .line_on(true)
             .line_color(colors[color_index])
-            .line_width(0.5)
+            .line_width(1.)
             .shape(none);
          if(i->first.size())
             ++color_index;

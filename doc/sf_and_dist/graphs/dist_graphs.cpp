@@ -3,14 +3,25 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifdef _MSC_VER
+//#  pragma warning (disable : 4800) // forcing value to bool 'true' or 'false' (performance warning)
+#  pragma warning (disable : 4180) // qualifier applied to function type has no meaning; ignored
+#  pragma warning (disable : 4503) // decorated name length exceeded, name was truncated
+#  pragma warning (disable : 4512) // assignment operator could not be generated
+//#  pragma warning (disable : 4172) // returning address of local variable or temporary TODO find cause of these.
+#  pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'function_ptr' was previously defined as a type
+#endif
+
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
 #include <boost/math/distributions.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/svg_plot/svg_2d_plot.hpp>
+
 #include <list>
 #include <map>
 #include <string>
+
 
 template <class Dist>
 struct value_finder
@@ -147,6 +158,7 @@ public:
 
       svg_2d_plot plot;
       plot.image_size(750, 400);
+      plot.coord_precision(4); // Avoids any visible steps.
       plot.title_font_size(20);
       plot.legend_title_font_size(15);
       plot.title(title);
@@ -155,10 +167,13 @@ public:
       double x_delta = (m_max_x - m_min_x) / 10;
       double y_delta = (m_max_y - m_min_y) / 10;
       plot.x_range(m_min_x, m_max_x)
-         .y_range(m_min_y, m_max_y + y_delta);
+          .y_range(m_min_y, m_max_y + y_delta);
       plot.x_label_on(true).x_label("Random Variable");
       plot.y_label_on(true).y_label("Probability");
-      plot.plot_border_color(lightslategray).legend_border_color(lightslategray).background_border_color(lightslategray);
+      plot.plot_border_color(lightslategray)
+          .background_border_color(lightslategray)
+          .legend_border_color(lightslategray)
+          .legend_background_color(white);
       //
       // Work out axis tick intervals:
       //
@@ -179,7 +194,7 @@ public:
          i != m_distributions.end(); ++i)
       {
          double x = m_min_x;
-         double interval = (m_max_x - m_min_x) / 1000;
+         double interval = (m_max_x - m_min_x) / 200;
          std::map<double, double> data;
          while(x <= m_max_x)
          {
@@ -189,7 +204,8 @@ public:
          plot.plot(data, i->first)
             .line_on(true)
             .line_color(colors[color_index])
-            .line_width(0.5)
+            .line_width(1.)
+            //.bezier_on(true) // Can't cope with badly behaved like uniform & triangular.
             .shape(none);
          ++color_index;
          color_index = color_index % (sizeof(colors)/sizeof(colors[0]));
