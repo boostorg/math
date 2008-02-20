@@ -29,7 +29,7 @@ private:
 };
 
 template <class Dist>
-typename Dist::value_type generic_find_mode(const Dist& dist, typename Dist::value_type guess, const char* function)
+typename Dist::value_type generic_find_mode(const Dist& dist, typename Dist::value_type guess, const char* function, typename Dist::value_type step = 0)
 {
    BOOST_MATH_STD_USING
    typedef typename Dist::value_type value_type;
@@ -54,7 +54,10 @@ typename Dist::value_type generic_find_mode(const Dist& dist, typename Dist::val
    do
    {
       maxval = v;
-      upper_bound *= 2;
+      if(step != 0)
+         upper_bound += step;
+      else
+         upper_bound *= 2;
       v = pdf(dist, upper_bound);
    }while(maxval < v);
 
@@ -62,7 +65,10 @@ typename Dist::value_type generic_find_mode(const Dist& dist, typename Dist::val
    do
    {
       maxval = v;
-      lower_bound /= 2;
+      if(step != 0)
+         lower_bound -= step;
+      else
+         lower_bound /= 2;
       v = pdf(dist, lower_bound);
    }while(maxval < v);
 

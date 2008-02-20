@@ -509,7 +509,7 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, T factor, bool risin
          if((max_iter - count) % 20 == 0)
             factor *= 2;
          //
-         // Now go ahead and move are guess by "factor":
+         // Now go ahead and move our guess by "factor":
          //
          a = b;
          fa = fb;

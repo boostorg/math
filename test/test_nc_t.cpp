@@ -87,7 +87,7 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*",                          // test data group
-      "[^|]*", 3, 2);                   // test function
+      "[^|]*", 150, 50);                // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
@@ -189,9 +189,9 @@ void test_spot(
       BOOST_CHECK_CLOSE(
          skewness(dist), naive_skewness(df, ncp), tol * 10);
       BOOST_CHECK_CLOSE(
-         kurtosis_excess(dist), naive_kurtosis_excess(df, ncp), tol * 10);
+         kurtosis_excess(dist), naive_kurtosis_excess(df, ncp), tol * 50);
       BOOST_CHECK_CLOSE(
-         kurtosis(dist), 3 + naive_kurtosis_excess(df, ncp), tol * 10);
+         kurtosis(dist), 3 + naive_kurtosis_excess(df, ncp), tol * 50);
    }
    catch(const std::domain_error&)
    {
@@ -317,6 +317,7 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE(pdf(dist, 12), static_cast<RealType>(1.235329715425894935157684607751972713457e-1L), tolerance);
    BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(126, -2), -4), static_cast<RealType>(5.797932289365814702402873546466798025787e-2L), tolerance);
    BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(126, 2), 4), static_cast<RealType>(5.797932289365814702402873546466798025787e-2L), tolerance);
+   BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(126, 2), 0), static_cast<RealType>(5.388394890639957139696546086044839573749e-2L), tolerance);
 } // template <class RealType>void test_spots(RealType)
 
 template <class T>
@@ -422,8 +423,8 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          try{
             value_type m = mode(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]));
             value_type p = pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m);
-            BOOST_CHECK_EX(pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m * (1 + sqrt(precision) * 50)) <= p, i);
-            BOOST_CHECK_EX(pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m * (1 - sqrt(precision)) * 50) <= p, i);
+            BOOST_CHECK_EX(pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m * (1 + sqrt(precision) * 100)) <= p, i);
+            BOOST_CHECK_EX(pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m * (1 - sqrt(precision)) * 100) <= p, i);
          }
          catch(const boost::math::evaluation_error& ) {}
 #if 0
@@ -467,7 +468,7 @@ void test_accuracy(T, const char* type_name)
 {
 #include "nct.ipp"
     do_test_nc_t(nct, type_name, "Non Central T");
-    // quantile_sanity_check(nct, type_name, "Non Central T");
+    quantile_sanity_check(nct, type_name, "Non Central T");
 }
 
 int test_main(int, char* [])

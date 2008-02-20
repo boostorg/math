@@ -449,7 +449,7 @@ namespace boost
          }
 
          template <class T, class Policy>
-         T non_central_beta_pdf(T a, T b, T lam, T x, const Policy& pol)
+         T non_central_beta_pdf(T a, T b, T lam, T x, T y, const Policy& pol)
          {
             BOOST_MATH_STD_USING
                using namespace boost::math;
@@ -467,7 +467,9 @@ namespace boost
             // Starting Poisson weight:
             T pois = gamma_p_derivative(T(k+1), l2, pol);
             // Starting beta term:
-            T beta = ibeta_derivative(a + k, b, x, pol);
+            T beta = x < y ? 
+               ibeta_derivative(a + k, b, x, pol)
+               : ibeta_derivative(b, a + k, y, pol);
             T sum = 0;
             T poisf(pois);
             T betaf(beta);
@@ -479,7 +481,7 @@ namespace boost
             {
                T term = beta * pois;
                sum += term;
-               if(fabs(term/sum) < errtol)
+               if((fabs(term/sum) < errtol) || (term == 0))
                {
                   break;
                }
@@ -493,7 +495,7 @@ namespace boost
 
                T term = poisf * betaf;
                sum += term;
-               if(fabs(term/sum) < errtol)
+               if((fabs(term/sum) < errtol) || (term == 0))
                {
                   break;
                }
@@ -543,7 +545,7 @@ namespace boost
             if(l == 0)
                return pdf(boost::math::beta_distribution<RealType, Policy>(dist.alpha(), dist.beta()), x);
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
-               non_central_beta_pdf(a, b, l, static_cast<value_type>(x), forwarding_policy()),
+               non_central_beta_pdf(a, b, l, static_cast<value_type>(x), 1 - static_cast<value_type>(x), forwarding_policy()),
                "function");
          }
 

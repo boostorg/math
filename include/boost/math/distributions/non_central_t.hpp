@@ -184,9 +184,14 @@ namespace boost
                //
                // Calculate p:
                //
-               result = non_central_beta_p(a, b, d2, x, y, pol);
-               result = non_central_t2_p(n, delta, x, y, pol, result);
-               result /= 2;
+               if(x != 0)
+               {
+                  result = non_central_beta_p(a, b, d2, x, y, pol);
+                  result = non_central_t2_p(n, delta, x, y, pol, result);
+                  result /= 2;
+               }
+               else
+                  result = 0;
                result += cdf(boost::math::normal_distribution<T, Policy>(), -delta);
             }
             else
@@ -195,9 +200,14 @@ namespace boost
                // Calculate q:
                //
                invert = !invert;
-               result = non_central_beta_q(a, b, d2, x, y, pol);
-               result = non_central_t2_q(n, delta, x, y, pol, result);
-               result /= 2;
+               if(x != 0)
+               {
+                  result = non_central_beta_q(a, b, d2, x, y, pol);
+                  result = non_central_t2_q(n, delta, x, y, pol, result);
+                  result /= 2;
+               }
+               else
+                  result = cdf(complement(boost::math::normal_distribution<T, Policy>(), -delta));
             }
             if(invert)
                result = 1 - result;
@@ -234,13 +244,36 @@ namespace boost
                   Policy()))
                      return r;
 
-            value_type mean = delta * sqrt(v / 2) * tgamma_delta_ratio((v - 1) * 0.5f, T(0.5f));
-            value_type var = ((delta * delta + 1) * v) / (v - 2) - mean * mean;
-            value_type guess;
+            value_type guess = 0;
+            if(v > 3)
+            {
+               value_type mean = delta * sqrt(v / 2) * tgamma_delta_ratio((v - 1) * 0.5f, T(0.5f));
+               value_type var = ((delta * delta + 1) * v) / (v - 2) - mean * mean;
+               if(p < q)
+                  guess = quantile(normal_distribution<value_type, forwarding_policy>(mean, var), p);
+               else
+                  guess = quantile(complement(normal_distribution<value_type, forwarding_policy>(mean, var), q));
+            }
+            //
+            // We *must* get the sign of the initial guess correct, 
+            // or our root-finder will fail, so double check it now:
+            //
+            value_type pzero = non_central_t_cdf(
+               static_cast<value_type>(v), 
+               static_cast<value_type>(delta), 
+               static_cast<value_type>(0), 
+               !(p < q), 
+               forwarding_policy());
+            int s;
             if(p < q)
-               guess = quantile(normal_distribution<value_type, forwarding_policy>(mean, var), p);
+               s = boost::math::sign(p - pzero);
             else
-               guess = quantile(complement(normal_distribution<value_type, forwarding_policy>(mean, var), q));
+               s = boost::math::sign(pzero - q);
+            if(s != boost::math::sign(guess))
+            {
+               guess = s;
+            }
+
             value_type result = detail::generic_quantile(
                non_central_t_distribution<value_type, forwarding_policy>(v, delta), 
                (p < q ? p : q), 
@@ -287,7 +320,7 @@ namespace boost
             {
                T term = xterm * pois;
                sum += term;
-               if(fabs(term/sum) < errtol)
+               if((fabs(term/sum) < errtol) || (term == 0))
                   break;
                pois *= (i + 0.5f) / d2;
                xterm *= (i) / (x * (n / 2 + i));
@@ -299,7 +332,7 @@ namespace boost
                xtermf *= (x * (n / 2 + i)) / (i);
                T term = poisf * xtermf;
                sum += term;
-               if(fabs(term/sum) < errtol)
+               if((fabs(term/sum) < errtol) || (term == 0))
                   break;
                ++count;
             }
@@ -310,12 +343,28 @@ namespace boost
          T non_central_t_pdf(T n, T delta, T t, const Policy& pol)
          {
             //
-            // For t < 0 we have to use reflect:
+            // For t < 0 we have to use the reflection formula:
             //
             if(t < 0)
             {
                t = -t;
                delta = -delta;
+            }
+            if(t == 0)
+            {
+               //
+               // Handle this as a special case, using the formula
+               // from Weisstein, Eric W. 
+               // "Noncentral Student's t-Distribution." 
+               // From MathWorld--A Wolfram Web Resource. 
+               // http://mathworld.wolfram.com/NoncentralStudentst-Distribution.html 
+               // 
+               // The formula is simplified thanks to the relation
+               // 1F1(a,b,0) = 1.
+               //
+               return tgamma_delta_ratio(n / 2 + 0.5f, T(0.5f))
+                  * sqrt(n / constants::pi<T>()) 
+                  * exp(-delta * delta / 2) / 2;
             }
             //
             // x and y are the corresponding random
@@ -331,8 +380,11 @@ namespace boost
             // Calculate pdf:
             //
             T dt = 2 * n * t / (n * n + 2 * n * t * t + t * t * t * t);
-            T result = non_central_beta_pdf(a, b, d2, x, pol);
+            T result = non_central_beta_pdf(a, b, d2, x, y, pol);
+            T tol = tools::epsilon<T>() * result * 10;
             result = non_central_t2_pdf(n, delta, x, y, pol, result);
+            if(result <= tol)
+               result = 0;
             result *= dt / 2;
             return result;
          }
@@ -452,10 +504,15 @@ namespace boost
             &r,
             Policy()))
                return (RealType)r;
+
+         RealType m = v < 3 ? 0 : detail::mean(v, l, Policy());
+         RealType var = v < 4 ? 1 : detail::variance(v, l, Policy());
+
          return detail::generic_find_mode(
             dist, 
-            detail::mean(v, l, Policy()), 
-            function);
+            m,
+            function,
+            var);
       }
 
       template <class RealType, class Policy>
