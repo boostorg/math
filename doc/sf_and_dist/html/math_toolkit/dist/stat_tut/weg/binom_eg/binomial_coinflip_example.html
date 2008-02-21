@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -67,8 +67,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
   <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">binomial</span><span class="special">;</span>
 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
@@ -100,8 +99,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">success_fraction</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span> <span class="comment">// = 50% = 1/2 for a 'fair' coin.
+<pre class="programlisting"><span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">success_fraction</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span> <span class="comment">// = 50% = 1/2 for a 'fair' coin.
 </span><span class="keyword">int</span> <span class="identifier">flips</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
 <span class="identifier">binomial</span> <span class="identifier">flip</span><span class="special">(</span><span class="identifier">flips</span><span class="special">,</span> <span class="identifier">success_fraction</span><span class="special">);</span>
 
@@ -118,8 +116,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"From "</span> <span class="special">&lt;&lt;</span> <span class="identifier">flips</span> <span class="special">&lt;&lt;</span> <span class="string">" one can expect to get on average "</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"From "</span> <span class="special">&lt;&lt;</span> <span class="identifier">flips</span> <span class="special">&lt;&lt;</span> <span class="string">" one can expect to get on average "</span>
   <span class="special">&lt;&lt;</span> <span class="identifier">mean</span><span class="special">(</span><span class="identifier">flip</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">" heads (or tails)."</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Mode is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">mode</span><span class="special">(</span><span class="identifier">flip</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Standard deviation is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">standard_deviation</span><span class="special">(</span><span class="identifier">flip</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -144,8 +141,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"For "</span> <span class="special">&lt;&lt;</span> <span class="identifier">flip</span><span class="special">.</span><span class="identifier">trials</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">" coin flips: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"For "</span> <span class="special">&lt;&lt;</span> <span class="identifier">flip</span><span class="special">.</span><span class="identifier">trials</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">" coin flips: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting no heads is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting at least one head is "</span> <span class="special">&lt;&lt;</span> <span class="number">1.</span> <span class="special">-</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
@@ -161,8 +157,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting 0 or 1 heads is "</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting 0 or 1 heads is "</span>
   <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// sum of exactly == probabilities</span></pre>
 <p>
               </p>
@@ -176,8 +171,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting 0 or 1 (&lt;= 1) heads is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting 0 or 1 (&lt;= 1) heads is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting 9 or 10 heads is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">9</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
               </p>
@@ -191,8 +185,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting 9 or 10 heads is "</span> <span class="special">&lt;&lt;</span> <span class="number">1.</span> <span class="special">-</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">8</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting 9 or 10 heads is "</span> <span class="special">&lt;&lt;</span> <span class="number">1.</span> <span class="special">-</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">8</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
               </p>
 <p>
@@ -205,8 +198,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting 9 or 10 heads is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">8</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting 9 or 10 heads is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">8</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
               </p>
 <p>
@@ -227,8 +219,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of between 4 and 6 heads (4 or 5 or 6) is "</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of between 4 and 6 heads (4 or 5 or 6) is "</span>
   <span class="comment">//  P(X == 4) + P(X == 5) + P(X == 6)
 </span>  <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">4</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">5</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">6</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
@@ -243,8 +234,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of between 4 and 6 heads (4 or 5 or 6) is "</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of between 4 and 6 heads (4 or 5 or 6) is "</span>
   <span class="comment">// P(X &lt;= 6) - P(X &lt;= 3) == P(X &lt; 4)
 </span>  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">6</span><span class="special">)</span> <span class="special">-</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">3</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
@@ -259,8 +249,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of between 3 and 7 heads (3, 4, 5, 6 or 7) is "</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of between 3 and 7 heads (3, 4, 5, 6 or 7) is "</span>
   <span class="comment">// P(X &lt;= 7) - P(X &lt;= 2) == P(X &lt; 3)
 </span>  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">7</span><span class="special">)</span> <span class="special">-</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">flip</span><span class="special">,</span> <span class="number">2</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
@@ -277,8 +266,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="comment">// Print a table of probability for the exactly a number of heads.
+<pre class="programlisting"><span class="comment">// Print a table of probability for the exactly a number of heads.
 </span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting exactly (==) heads"</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="keyword">for</span> <span class="special">(</span><span class="keyword">int</span> <span class="identifier">successes</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">successes</span> <span class="special">&lt;=</span> <span class="identifier">flips</span><span class="special">;</span> <span class="identifier">successes</span><span class="special">++)</span>
 <span class="special">{</span> <span class="comment">// Say success means getting a head (or equally success means getting a tail).
@@ -311,8 +299,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="special">}</span>
+<pre class="programlisting"><span class="special">}</span>
 <span class="keyword">catch</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exception</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span>
 <span class="special">{</span>
   <span class="comment">//</span></pre>
@@ -338,8 +325,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span>
+<pre class="programlisting">  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span>
     <span class="string">"\n"</span><span class="string">"Message from thrown exception was:\n   "</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">what</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 <span class="special">}</span>
 </pre>

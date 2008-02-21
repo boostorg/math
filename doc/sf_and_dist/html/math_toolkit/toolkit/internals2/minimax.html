@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -68,8 +68,7 @@
           to approximate. The tools supports multiple function approximations within
           the same compiled program: each as a separate variant:
         </p>
-<pre class="programlisting">
-<span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span> <span class="identifier">f</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">variant</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span> <span class="identifier">f</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">variant</span><span class="special">);</span>
 </pre>
 <p>
           Returns the value of the function <span class="emphasis"><em>variant</em></span> at point
@@ -84,8 +83,7 @@
           part of the approximation: for example if you are approximating a function
           <span class="emphasis"><em>f(x)</em></span> then it is quite common to use:
         </p>
-<pre class="programlisting">
-<span class="identifier">f</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">g</span><span class="special">(</span><span class="identifier">x</span><span class="special">)(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">x</span><span class="special">))</span>
+<pre class="programlisting"><span class="identifier">f</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">g</span><span class="special">(</span><span class="identifier">x</span><span class="special">)(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">x</span><span class="special">))</span>
 </pre>
 <p>
           where <span class="emphasis"><em>g(x)</em></span> is the dominant part of <span class="emphasis"><em>f(x)</em></span>,

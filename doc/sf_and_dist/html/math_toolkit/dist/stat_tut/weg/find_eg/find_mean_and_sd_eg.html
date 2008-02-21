@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -38,8 +38,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for normal_distribution
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for normal_distribution
 </span>  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.
 </span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">cauchy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for cauchy_distribution
 </span>  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cauchy</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.
@@ -63,7 +62,7 @@
               <a name="math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.using_find_location_and_find_scale_to_meet_dispensing_and_measurement_specifications"></a>
               </p>
 <h5>
-<a name="id564939"></a>
+<a name="id564633"></a>
                 <a href="find_mean_and_sd_eg.html#math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.using_find_location_and_find_scale_to_meet_dispensing_and_measurement_specifications">Using
                 find_location and find_scale to meet dispensing and measurement specifications</a>
               </h5>
@@ -92,8 +91,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">3.</span><span class="special">;</span> <span class="comment">// kg
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">3.</span><span class="special">;</span> <span class="comment">// kg
 </span><span class="keyword">double</span> <span class="identifier">standard_deviation</span> <span class="special">=</span> <span class="number">0.1</span><span class="special">;</span> <span class="comment">// kg
 </span><span class="identifier">normal</span> <span class="identifier">packs</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span></pre>
 <p>
@@ -109,8 +107,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">max_weight</span> <span class="special">=</span> <span class="number">3.1</span><span class="special">;</span> <span class="comment">// kg
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">max_weight</span> <span class="special">=</span> <span class="number">3.1</span><span class="special">;</span> <span class="comment">// kg
 </span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Percentage of packs &gt; "</span> <span class="special">&lt;&lt;</span> <span class="identifier">max_weight</span> <span class="special">&lt;&lt;</span> <span class="string">" is "</span>
 <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">packs</span><span class="special">,</span> <span class="identifier">max_weight</span><span class="special">))</span> <span class="special">*</span> <span class="number">100.</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// P(X &gt; 3.1)</span></pre>
 <p>
@@ -133,8 +130,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">minimum_weight</span> <span class="special">=</span> <span class="number">2.9</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">minimum_weight</span> <span class="special">=</span> <span class="number">2.9</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span><span class="string">"Fraction of packs &lt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">minimum_weight</span> <span class="special">&lt;&lt;</span> <span class="string">" with a mean of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">mean</span>
   <span class="special">&lt;&lt;</span> <span class="string">" is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">packs</span><span class="special">,</span> <span class="identifier">minimum_weight</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="comment">// fraction of packs &lt;= 2.9 with a mean of 3 is 0.841345</span></pre>
@@ -164,8 +160,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">over_mean</span> <span class="special">=</span> <span class="number">3.06449</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">over_mean</span> <span class="special">=</span> <span class="number">3.06449</span><span class="special">;</span>
 <span class="identifier">normal</span> <span class="identifier">xpacks</span><span class="special">(</span><span class="identifier">over_mean</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Fraction of packs &gt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">minimum_weight</span>
 <span class="special">&lt;&lt;</span> <span class="string">" with a mean of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">xpacks</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span>
@@ -184,8 +179,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">under_fraction</span> <span class="special">=</span> <span class="number">0.05</span><span class="special">;</span>  <span class="comment">// so 95% are above the minimum weight mean - sd = 2.9
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">under_fraction</span> <span class="special">=</span> <span class="number">0.05</span><span class="special">;</span>  <span class="comment">// so 95% are above the minimum weight mean - sd = 2.9
 </span><span class="keyword">double</span> <span class="identifier">low_limit</span> <span class="special">=</span> <span class="identifier">standard_deviation</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">offset</span> <span class="special">=</span> <span class="identifier">mean</span> <span class="special">-</span> <span class="identifier">low_limit</span> <span class="special">-</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">packs</span><span class="special">,</span> <span class="identifier">under_fraction</span><span class="special">);</span>
 <span class="keyword">double</span> <span class="identifier">nominal_mean</span> <span class="special">=</span> <span class="identifier">mean</span> <span class="special">+</span> <span class="identifier">offset</span><span class="special">;</span>
@@ -213,8 +207,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">find_location</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">find_location</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
   <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">find_location</span><span class="special">;</span></pre>
 <p>
               </p>
@@ -229,8 +222,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">safe_mean</span> <span class="special">=</span> <span class="identifier">find_location</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="identifier">under_fraction</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">safe_mean</span> <span class="special">=</span> <span class="identifier">find_location</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="identifier">under_fraction</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
 <span class="identifier">normal</span> <span class="identifier">good_packs</span><span class="special">(</span><span class="identifier">safe_mean</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span></pre>
 <p>
               </p>
@@ -244,8 +236,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Setting the packer to "</span> <span class="special">&lt;&lt;</span> <span class="identifier">nominal_mean</span> <span class="special">&lt;&lt;</span> <span class="string">" will mean that "</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Setting the packer to "</span> <span class="special">&lt;&lt;</span> <span class="identifier">nominal_mean</span> <span class="special">&lt;&lt;</span> <span class="string">" will mean that "</span>
   <span class="special">&lt;&lt;</span> <span class="string">"fraction of packs &gt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">minimum_weight</span>
   <span class="special">&lt;&lt;</span> <span class="string">" is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">good_packs</span><span class="special">,</span> <span class="identifier">minimum_weight</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="comment">// Setting the packer to 3.06449 will mean that fraction of packs &gt;= 2.9 is 0.95</span></pre>
@@ -255,7 +246,7 @@
               <a name="math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.using_cauchy_lorentz_instead_of_normal_distribution"></a>
               </p>
 <h5>
-<a name="id566596"></a>
+<a name="id566280"></a>
                 <a href="find_mean_and_sd_eg.html#math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.using_cauchy_lorentz_instead_of_normal_distribution">Using
                 Cauchy-Lorentz instead of normal distribution</a>
               </h5>
@@ -289,8 +280,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cauchy</span> <span class="identifier">cpacks</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">cauchy</span> <span class="identifier">cpacks</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Cauchy Setting the packer to "</span> <span class="special">&lt;&lt;</span> <span class="identifier">mean</span> <span class="special">&lt;&lt;</span> <span class="string">" will mean that "</span>
   <span class="special">&lt;&lt;</span> <span class="string">"fraction of packs &gt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">minimum_weight</span>
   <span class="special">&lt;&lt;</span> <span class="string">" is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">cpacks</span><span class="special">,</span> <span class="identifier">minimum_weight</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -309,8 +299,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">lc</span> <span class="special">=</span> <span class="identifier">find_location</span><span class="special">&lt;</span><span class="identifier">cauchy</span><span class="special">&gt;(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="identifier">under_fraction</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">lc</span> <span class="special">=</span> <span class="identifier">find_location</span><span class="special">&lt;</span><span class="identifier">cauchy</span><span class="special">&gt;(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="identifier">under_fraction</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"find_location&lt;cauchy&gt;(minimum_weight, over fraction, standard_deviation); "</span> <span class="special">&lt;&lt;</span> <span class="identifier">lc</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="comment">// find_location&lt;cauchy&gt;(minimum_weight, over fraction, packs.standard_deviation()); 3.53138</span></pre>
 <p>
@@ -331,8 +320,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cauchy</span> <span class="identifier">goodcpacks</span><span class="special">(</span><span class="identifier">lc</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">cauchy</span> <span class="identifier">goodcpacks</span><span class="special">(</span><span class="identifier">lc</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Cauchy Setting the packer to "</span> <span class="special">&lt;&lt;</span> <span class="identifier">lc</span> <span class="special">&lt;&lt;</span> <span class="string">" will mean that "</span>
   <span class="special">&lt;&lt;</span> <span class="string">"fraction of packs &gt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">minimum_weight</span>
   <span class="special">&lt;&lt;</span> <span class="string">" is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">goodcpacks</span><span class="special">,</span> <span class="identifier">minimum_weight</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -350,8 +338,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Cauchy Setting the packer to "</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Cauchy Setting the packer to "</span>
   <span class="special">&lt;&lt;</span> <span class="identifier">find_location</span><span class="special">&lt;</span><span class="identifier">cauchy</span><span class="special">&gt;(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="number">0.99</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">)</span>
   <span class="special">&lt;&lt;</span> <span class="string">" will mean that "</span>
   <span class="special">&lt;&lt;</span> <span class="string">"fraction of packs &gt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">minimum_weight</span>
@@ -410,7 +397,7 @@
               <a name="math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.changing_the_scale_or_standard_deviation"></a>
               </p>
 <h5>
-<a name="id567549"></a>
+<a name="id567233"></a>
                 <a href="find_mean_and_sd_eg.html#math_toolkit.dist.stat_tut.weg.find_eg.find_mean_and_sd_eg.changing_the_scale_or_standard_deviation">Changing
                 the scale or standard deviation</a>
               </h5>
@@ -438,8 +425,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="number">0.05</span><span class="special">;</span> <span class="comment">// wanted p th quantile.
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="number">0.05</span><span class="special">;</span> <span class="comment">// wanted p th quantile.
 </span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Quantile of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">p</span> <span class="special">&lt;&lt;</span> <span class="string">" = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">packs</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span>
   <span class="special">&lt;&lt;</span> <span class="string">", mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">", sd = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
@@ -467,8 +453,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">normal</span> <span class="identifier">pack05</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">pack05</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Quantile of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">p</span> <span class="special">&lt;&lt;</span> <span class="string">" = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">pack05</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span>
   <span class="special">&lt;&lt;</span> <span class="string">", mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pack05</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">", sd = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pack05</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="comment">// Quantile of 0.05 = 2.91776, mean = 3, sd = 0.05
@@ -493,8 +478,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">normal</span> <span class="identifier">pack06</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="number">0.06</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">pack06</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="number">0.06</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Quantile of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">p</span> <span class="special">&lt;&lt;</span> <span class="string">" = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">pack06</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span>
   <span class="special">&lt;&lt;</span> <span class="string">", mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pack06</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">", sd = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pack06</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="comment">// Quantile of 0.05 = 2.90131, mean = 3, sd = 0.06
@@ -545,8 +529,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">normal</span> <span class="identifier">N01</span><span class="special">;</span> <span class="comment">// standard normal distribution with meamn zero and unit standard deviation.
+<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">N01</span><span class="special">;</span> <span class="comment">// standard normal distribution with meamn zero and unit standard deviation.
 </span><span class="identifier">p</span> <span class="special">=</span> <span class="number">0.05</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">qp</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">N01</span><span class="special">,</span> <span class="identifier">p</span><span class="special">);</span>
 <span class="keyword">double</span> <span class="identifier">sd95</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">minimum_weight</span> <span class="special">-</span> <span class="identifier">mean</span><span class="special">)</span> <span class="special">/</span> <span class="identifier">qp</span><span class="special">;</span>
@@ -567,8 +550,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">normal</span> <span class="identifier">pack95</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">sd95</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">pack95</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">sd95</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span><span class="string">"Fraction of packs &gt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">minimum_weight</span> <span class="special">&lt;&lt;</span> <span class="string">" with a mean of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">mean</span>
   <span class="special">&lt;&lt;</span> <span class="string">" and standard deviation of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pack95</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span>
   <span class="special">&lt;&lt;</span> <span class="string">" is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">pack95</span><span class="special">,</span> <span class="identifier">minimum_weight</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -586,8 +568,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">ss</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="identifier">under_fraction</span><span class="special">,</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">mean</span><span class="special">());</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">ss</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="identifier">under_fraction</span><span class="special">,</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">mean</span><span class="special">());</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"find_scale&lt;normal&gt;(minimum_weight, under_fraction, packs.mean()); "</span> <span class="special">&lt;&lt;</span> <span class="identifier">ss</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="comment">// find_scale&lt;normal&gt;(minimum_weight, under_fraction, packs.mean()); 0.0607957</span></pre>
 <p>
@@ -603,8 +584,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">over_fraction</span> <span class="special">=</span> <span class="number">0.95</span><span class="special">;</span></pre>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">over_fraction</span> <span class="special">=</span> <span class="number">0.95</span><span class="special">;</span></pre>
 <p>
               </p>
 <p>
@@ -615,8 +595,7 @@
 <p>
               
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">sso</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="identifier">over_fraction</span><span class="special">,</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">mean</span><span class="special">());</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">sso</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="identifier">over_fraction</span><span class="special">,</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">mean</span><span class="special">());</span>
 </pre>
 <p>
               </p>
@@ -642,8 +621,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">ss1o</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="number">1</span> <span class="special">-</span> <span class="identifier">over_fraction</span><span class="special">,</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">mean</span><span class="special">());</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">ss1o</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="number">1</span> <span class="special">-</span> <span class="identifier">over_fraction</span><span class="special">,</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">mean</span><span class="special">());</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"find_scale&lt;normal&gt;(minimum_weight, under_fraction, packs.mean()); "</span> <span class="special">&lt;&lt;</span> <span class="identifier">ss1o</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="comment">// find_scale&lt;normal&gt;(minimum_weight, under_fraction, packs.mean()); 0.0607957</span></pre>
 <p>
@@ -661,8 +639,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">ssc</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="identifier">over_fraction</span><span class="special">,</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()));</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">ssc</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="identifier">over_fraction</span><span class="special">,</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()));</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"find_scale&lt;normal&gt;(complement(minimum_weight, over_fraction, packs.mean())); "</span> <span class="special">&lt;&lt;</span> <span class="identifier">ssc</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="comment">// find_scale&lt;normal&gt;(complement(minimum_weight, over_fraction, packs.mean())); 0.0607957</span></pre>
 <p>
@@ -682,8 +659,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="identifier">normal</span> <span class="identifier">pack95c</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">ssc</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">pack95c</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">ssc</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span><span class="string">"Fraction of packs &gt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">minimum_weight</span> <span class="special">&lt;&lt;</span> <span class="string">" with a mean of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">mean</span>
   <span class="special">&lt;&lt;</span> <span class="string">" and standard deviation of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pack95c</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span>
   <span class="special">&lt;&lt;</span> <span class="string">" is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">pack95c</span><span class="special">,</span> <span class="identifier">minimum_weight</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>

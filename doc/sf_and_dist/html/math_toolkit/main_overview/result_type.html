@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -31,8 +31,7 @@
         The functions in this library are all overloaded to accept mixed floating
         point (or mixed integer and floating point type) arguments. So for example:
       </p>
-<pre class="programlisting">
-<span class="identifier">foo</span><span class="special">(</span><span class="number">1.0</span><span class="special">,</span> <span class="number">2.0</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">foo</span><span class="special">(</span><span class="number">1.0</span><span class="special">,</span> <span class="number">2.0</span><span class="special">);</span>
 <span class="identifier">foo</span><span class="special">(</span><span class="number">1.0f</span><span class="special">,</span> <span class="number">2</span><span class="special">);</span>
 <span class="identifier">foo</span><span class="special">(</span><span class="number">1.0</span><span class="special">,</span> <span class="number">2L</span><span class="special">);</span>
 </pre>
@@ -85,29 +84,25 @@
 <p>
         For example:
       </p>
-<pre class="programlisting">
-<span class="identifier">cyl_bessel</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">3.0</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">cyl_bessel</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">3.0</span><span class="special">);</span>
 </pre>
 <p>
         Returns a <code class="computeroutput"><span class="keyword">double</span></code> result, as
         does:
       </p>
-<pre class="programlisting">
-<span class="identifier">cyl_bessel</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">3.0f</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">cyl_bessel</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">3.0f</span><span class="special">);</span>
 </pre>
 <p>
         as in this case the integer first argument is treated as a <code class="computeroutput"><span class="keyword">double</span></code> and takes precedence over the <code class="computeroutput"><span class="keyword">float</span></code> second argument. To get a <code class="computeroutput"><span class="keyword">float</span></code> result we would need all the arguments
         to be of type float:
       </p>
-<pre class="programlisting">
-<span class="identifier">cyl_bessel_j</span><span class="special">(</span><span class="number">2.0f</span><span class="special">,</span> <span class="number">3.0f</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">cyl_bessel_j</span><span class="special">(</span><span class="number">2.0f</span><span class="special">,</span> <span class="number">3.0f</span><span class="special">);</span>
 </pre>
 <p>
         When one or more of the arguments is not a template argument then it doesn't
         effect the return type at all, for example:
       </p>
-<pre class="programlisting">
-<span class="identifier">sph_bessel</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">3.0f</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">sph_bessel</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">3.0f</span><span class="special">);</span>
 </pre>
 <p>
         returns a <code class="computeroutput"><span class="keyword">float</span></code>, since the first
@@ -118,8 +113,7 @@
 <p>
         And for user defined types, all of the following return an NTL::RR result:
       </p>
-<pre class="programlisting">
-<span class="identifier">cyl_bessel_j</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span><span class="special">(</span><span class="number">2</span><span class="special">));</span>
+<pre class="programlisting"><span class="identifier">cyl_bessel_j</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span><span class="special">(</span><span class="number">2</span><span class="special">));</span>
 
 <span class="identifier">cyl_bessel_j</span><span class="special">(</span><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span><span class="special">(</span><span class="number">2</span><span class="special">),</span> <span class="number">3</span><span class="special">);</span>
 

@@ -25,7 +25,7 @@ then the library will call a user-supplied error handler.
 These are forward declared, but not defined in
 boost/math/policies/error_handling.hpp like this:
 
-   namespace boost{ namespace math{ namespace policy{
+   namespace boost{ namespace math{ namespace policies{
 
    template <class T>
    T user_domain_error(const char* function, const char* message, const T& val);

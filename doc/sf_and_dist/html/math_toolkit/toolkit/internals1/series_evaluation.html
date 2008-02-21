@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -28,19 +28,17 @@
         Series Evaluation</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.series_evaluation.synopsis"></a><h5>
-<a name="id698850"></a>
+<a name="id698113"></a>
           <a href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.synopsis">Synopsis</a>
         </h5>
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">series</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">series</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Functor</span><span class="special">&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">Functor</span><span class="special">::</span><span class="identifier">result_type</span> <span class="identifier">sum_series</span><span class="special">(</span><span class="identifier">Functor</span><span class="special">&amp;</span> <span class="identifier">func</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">bits</span><span class="special">);</span>
@@ -63,7 +61,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals1.series_evaluation.description"></a><h5>
-<a name="id699802"></a>
+<a name="id699063"></a>
           <a href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.description">Description</a>
         </h5>
 <p>
@@ -119,7 +117,7 @@
           summation in this way.
         </p>
 <a name="math_toolkit.toolkit.internals1.series_evaluation.example"></a><h5>
-<a name="id699949"></a>
+<a name="id699210"></a>
           <a href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.example">Example</a>
         </h5>
 <p>
@@ -133,8 +131,7 @@
           We begin by writing a small function object to return successive terms
           of the series:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">log1p_series</span>
 <span class="special">{</span>
    <span class="comment">// we must define a result_type typedef:
@@ -162,8 +159,7 @@
 <p>
           Implementing log(1+x) is now fairly trivial:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">log1p</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="comment">// We really should add some error checking on x here!

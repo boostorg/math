@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -30,12 +30,10 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
           <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
@@ -125,7 +123,7 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/neg_binomial_pdf2.png" alt="neg_binomial_pdf2"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.related_distributions"></a><h5>
-<a name="id599484"></a>
+<a name="id599022"></a>
             <a href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.related_distributions">Related
             Distributions</a>
           </h5>
@@ -202,16 +200,15 @@
 <p>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.member_functions"></a><h5>
-<a name="id599688"></a>
+<a name="id599226"></a>
             <a href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.member_functions">Member
             Functions</a>
           </h5>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.construct"></a><h6>
-<a name="id599715"></a>
+<a name="id599253"></a>
             <a href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.construct">Construct</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">negative_binomial_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">r</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">negative_binomial_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">r</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
 <p>
             Constructor: <span class="emphasis"><em>r</em></span> is the total number of successes,
@@ -224,30 +221,27 @@
             <span class="special">&lt;=</span> <span class="number">1</span></code>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.accessors"></a><h6>
-<a name="id599871"></a>
+<a name="id599408"></a>
             <a href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.accessors">Accessors</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> <span class="comment">// successes / trials (0 &lt;= p &lt;= 1)
+<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> <span class="comment">// successes / trials (0 &lt;= p &lt;= 1)
 </span></pre>
 <p>
             Returns the parameter <span class="emphasis"><em>p</em></span> from which this distribution
             was constructed.
           </p>
-<pre class="programlisting">
-<span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> <span class="comment">// required successes (r &gt; 0)
+<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> <span class="comment">// required successes (r &gt; 0)
 </span></pre>
 <p>
             Returns the parameter <span class="emphasis"><em>r</em></span> from which this distribution
             was constructed.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.lower_bound_on_parameter_p"></a><h6>
-<a name="id599999"></a>
+<a name="id599534"></a>
             <a href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.lower_bound_on_parameter_p">Lower
             Bound on Parameter p</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
   <span class="identifier">RealType</span> <span class="identifier">failures</span><span class="special">,</span> 
   <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
   <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">)</span> <span class="comment">// (0 &lt;= alpha &lt;= 1), 0.05 equivalent to 95% confidence.
@@ -282,8 +276,7 @@
             want to be 95% sure that the true value is <span class="bold"><strong>greater
             than</strong></span> some value, <span class="emphasis"><em>p<sub>min</sub></em></span>, then:
           </p>
-<pre class="programlisting">
-<span class="identifier">p</span><sub>min</sub> <span class="special">=</span> <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
+<pre class="programlisting"><span class="identifier">p</span><sub>min</sub> <span class="special">=</span> <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
                     <span class="identifier">failures</span><span class="special">,</span> <span class="identifier">successes</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
 </pre>
 <p>
@@ -305,12 +298,11 @@
             vol. 48, no3, 605-621</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.upper_bound_on_parameter_p"></a><h6>
-<a name="id600365"></a>
+<a name="id599897"></a>
             <a href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.upper_bound_on_parameter_p">Upper
             Bound on Parameter p</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
    <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span> 
    <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
    <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">);</span> <span class="comment">// (0 &lt;= alpha &lt;= 1), 0.05 equivalent to 95% confidence.
@@ -344,8 +336,7 @@
             but if you want to be 95% sure that the true value is <span class="bold"><strong>less
             than</strong></span> some value, <span class="emphasis"><em>p<sub>max</sub></em></span>, then:
           </p>
-<pre class="programlisting">
-<span class="identifier">p</span><sub>max</sub> <span class="special">=</span> <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
+<pre class="programlisting"><span class="identifier">p</span><sub>max</sub> <span class="special">=</span> <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
                     <span class="identifier">r</span><span class="special">,</span> <span class="identifier">k</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
 </pre>
 <p>
@@ -367,12 +358,11 @@
             vol. 48, no3, 605-621</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.estimating_number_of_trials_to_ensure_at_least_a_certain_number_of_failures"></a><h6>
-<a name="id600730"></a>
+<a name="id600259"></a>
             <a href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.estimating_number_of_trials_to_ensure_at_least_a_certain_number_of_failures">Estimating
             Number of Trials to Ensure at Least a Certain Number of Failures</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span>
    <span class="identifier">RealType</span> <span class="identifier">k</span><span class="special">,</span>     <span class="comment">// number of failures.
 </span>   <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">,</span>     <span class="comment">// success fraction.
 </span>   <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">);</span> <span class="comment">// probability threshold (0.05 equivalent to 95%).
@@ -402,8 +392,7 @@
 <p>
             For example:
           </p>
-<pre class="programlisting">
-<span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span><span class="number">10</span><span class="special">,</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span><span class="number">10</span><span class="special">,</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
 </pre>
 <p>
             Returns the smallest number of trials we must conduct to be 95% sure
@@ -420,12 +409,11 @@
             probability of observing k failures or fewer.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.estimating_number_of_trials_to_ensure_a_maximum_number_of_failures_or_less"></a><h6>
-<a name="id601039"></a>
+<a name="id600567"></a>
             <a href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.estimating_number_of_trials_to_ensure_a_maximum_number_of_failures_or_less">Estimating
             Number of Trials to Ensure a Maximum Number of Failures or Less</a>
           </h6>
-<pre class="programlisting">
-<span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_maximum_number_of_trials</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_maximum_number_of_trials</span><span class="special">(</span>
    <span class="identifier">RealType</span> <span class="identifier">k</span><span class="special">,</span>     <span class="comment">// number of failures.
 </span>   <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">,</span>     <span class="comment">// success fraction.
 </span>   <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">);</span> <span class="comment">// probability threshold (0.05 equivalent to 95%).
@@ -456,8 +444,7 @@
 <p>
             For example:
           </p>
-<pre class="programlisting">
-<span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">find_maximum_number_of_trials</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="number">1.0</span><span class="special">-</span><span class="number">1.0</span><span class="special">/</span><span class="number">1000000</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">find_maximum_number_of_trials</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="number">1.0</span><span class="special">-</span><span class="number">1.0</span><span class="special">/</span><span class="number">1000000</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
 </pre>
 <p>
             Returns the largest number of trials we can conduct and still be 95%
@@ -470,7 +457,7 @@
             probability of observing more than k failures.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.non_member_accessors"></a><h5>
-<a name="id601359"></a>
+<a name="id600883"></a>
             <a href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -491,7 +478,7 @@
             in the context of this distribution:
           </p>
 <div class="table">
-<a name="id601522"></a><p class="title"><b>Table 10. Meaning of the non-member accessors.</b></p>
+<a name="id601047"></a><p class="title"><b>Table 10. Meaning of the non-member accessors.</b></p>
 <div class="table-contents"><table class="table" summary="Meaning of the non-member accessors.">
 <colgroup>
 <col>
@@ -524,8 +511,7 @@
                 <p>
                   
 </p>
-<pre class="programlisting">
-<span class="identifier">pdf</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="identifier">r</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">)</span></pre>
+<pre class="programlisting"><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="identifier">r</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">)</span></pre>
 <p>
                 </p>
                 </td>
@@ -545,8 +531,7 @@
                 <p>
                   
 </p>
-<pre class="programlisting">
-<span class="identifier">cdf</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="identifier">r</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">)</span></pre>
+<pre class="programlisting"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="identifier">r</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">)</span></pre>
 <p>
                 </p>
                 </td>
@@ -567,8 +552,7 @@
                 <p>
                   
 </p>
-<pre class="programlisting">
-<span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="identifier">r</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">))</span></pre>
+<pre class="programlisting"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="identifier">r</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">))</span></pre>
 <p>
                 </p>
                 </td>
@@ -590,8 +574,7 @@
                 <p>
                   
 </p>
-<pre class="programlisting">
-<span class="identifier">quantile</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="identifier">r</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">P</span><span class="special">)</span></pre>
+<pre class="programlisting"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="identifier">r</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">P</span><span class="special">)</span></pre>
 <p>
                 </p>
                 </td>
@@ -611,8 +594,7 @@
                   and not an integer. Depending on the use case you may want to take
                   either the floor or ceiling of the real result. For example: 
 </p>
-<pre class="programlisting">
-<span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="identifier">r</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">P</span><span class="special">))</span></pre>
+<pre class="programlisting"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="identifier">r</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">P</span><span class="special">))</span></pre>
 <p>
                 </p>
                 </td>
@@ -621,7 +603,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.accuracy"></a><h5>
-<a name="id602086"></a>
+<a name="id601611"></a>
             <a href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -631,7 +613,7 @@
             please refer to these functions for information on accuracy.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.implementation"></a><h5>
-<a name="id602136"></a>
+<a name="id601661"></a>
             <a href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.implementation">Implementation</a>
           </h5>
 <p>

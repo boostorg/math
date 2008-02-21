@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -46,11 +46,10 @@
           </li>
 </ul></div>
 <a name="math_toolkit.toolkit.internals2.test_data.synopsis"></a><h5>
-<a name="id725424"></a>
+<a name="id724620"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.synopsis">Synopsis</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
 
 <span class="keyword">enum</span> <span class="identifier">parameter_type</span>
 <span class="special">{</span>
@@ -148,7 +147,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals2.test_data.description"></a><h5>
-<a name="id728349"></a>
+<a name="id727544"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.description">Description</a>
         </h5>
 <p>
@@ -178,7 +177,7 @@
           </li>
 </ul></div>
 <a name="math_toolkit.toolkit.internals2.test_data.example_1__output_data_for_graph_plotting"></a><h6>
-<a name="id728423"></a>
+<a name="id727617"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.example_1__output_data_for_graph_plotting">Example
           1: Output Data for Graph Plotting</a>
         </h6>
@@ -186,8 +185,7 @@
           For example, lets say we want to graph the lgamma function between -3 and
           100, one could do this like so:
         </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">test_data</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">test_data</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
@@ -213,7 +211,7 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/lgamma.png" alt="lgamma"></span>
         </p>
 <a name="math_toolkit.toolkit.internals2.test_data.example_2__creating_test_data"></a><h6>
-<a name="id728967"></a>
+<a name="id728160"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.example_2__creating_test_data">Example
           2: Creating Test Data</a>
         </h6>
@@ -237,8 +235,7 @@
 <p>
           To start with then, here's the function object that creates the test data:
         </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">ntl</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">ntl</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">test_data</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">fstream</span><span class="special">&gt;</span>
@@ -279,8 +276,7 @@
           is designed for just that purpose. The start of main will look something
           like:
         </p>
-<pre class="programlisting">
-<span class="comment">// Set the precision on RR:
+<pre class="programlisting"><span class="comment">// Set the precision on RR:
 </span><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span><span class="special">::</span><span class="identifier">SetPrecision</span><span class="special">(</span><span class="number">1000</span><span class="special">);</span> <span class="comment">// bits.
 </span><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span><span class="special">::</span><span class="identifier">SetOutputPrecision</span><span class="special">(</span><span class="number">40</span><span class="special">);</span> <span class="comment">// decimal digits.
 </span>
@@ -325,8 +321,7 @@
 <p>
           There's just one final step now, and that's to write the test data to file:
         </p>
-<pre class="programlisting">
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Enter name of test data file [default=beta_data.ipp]"</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Enter name of test data file [default=beta_data.ipp]"</span><span class="special">;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">getline</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cin</span><span class="special">,</span> <span class="identifier">line</span><span class="special">);</span>
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">algorithm</span><span class="special">::</span><span class="identifier">trim</span><span class="special">(</span><span class="identifier">line</span><span class="special">);</span>
 <span class="keyword">if</span><span class="special">(</span><span class="identifier">line</span> <span class="special">==</span> <span class="string">""</span><span class="special">)</span>
@@ -337,8 +332,7 @@
 <p>
           The format of the test data looks something like:
         </p>
-<pre class="programlisting">
-<span class="preprocessor">#define</span> <span class="identifier">SC_</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="keyword">static_cast</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">BOOST_JOIN</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">L</span><span class="special">))</span>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">SC_</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="keyword">static_cast</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">BOOST_JOIN</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">L</span><span class="special">))</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;,</span> <span class="number">1830</span><span class="special">&gt;</span>
    <span class="identifier">beta_med_data</span> <span class="special">=</span> <span class="special">{</span>
       <span class="identifier">SC_</span><span class="special">(</span><span class="number">0.4883005917072296142578125</span><span class="special">),</span>
@@ -381,7 +375,7 @@
           used by default as it's rather hard on the compiler when the table is large.
         </p>
 <a name="math_toolkit.toolkit.internals2.test_data.example_3__profiling_a_continued_fraction_for_convergence_and_accuracy"></a><h6>
-<a name="id731459"></a>
+<a name="id730654"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.example_3__profiling_a_continued_fraction_for_convergence_and_accuracy">Example
           3: Profiling a Continued Fraction for Convergence and Accuracy</a>
         </h6>
@@ -391,8 +385,7 @@
           incomplete gamma function, the following function object returns the next
           a<sub>N </sub> and b<sub>N </sub> of the continued fraction each time it's invoked:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">upper_incomplete_gamma_fract</span>
 <span class="special">{</span>
 <span class="keyword">private</span><span class="special">:</span>
@@ -420,8 +413,7 @@
           class test_data will unpack the tuple for us, and create one column of
           data for each element in the tuple (in addition to the input parameters):
         </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">test_data</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">test_data</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">ntl</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -460,8 +452,7 @@
           whatever type <code class="computeroutput"><span class="identifier">T</span></code> we may
           be interested in:
         </p>
-<pre class="programlisting">
-<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
    <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">;</span>
    <span class="comment">// create an object to hold the data:
@@ -476,8 +467,7 @@
 <p>
           This time there's no need to plot a graph, the first few rows are:
         </p>
-<pre class="programlisting">
-<span class="identifier">a</span> <span class="keyword">and</span> <span class="identifier">z</span><span class="special">,</span>  <span class="identifier">Error</span><span class="special">/</span><span class="identifier">epsilon</span><span class="special">,</span>  <span class="identifier">Iterations</span> <span class="identifier">required</span>
+<pre class="programlisting"><span class="identifier">a</span> <span class="keyword">and</span> <span class="identifier">z</span><span class="special">,</span>  <span class="identifier">Error</span><span class="special">/</span><span class="identifier">epsilon</span><span class="special">,</span>  <span class="identifier">Iterations</span> <span class="identifier">required</span>
 
 <span class="number">0.01</span><span class="special">,</span>     <span class="number">9723.14</span><span class="special">,</span>        <span class="number">4726</span>
 <span class="number">1.0099</span><span class="special">,</span>   <span class="number">9.54818</span><span class="special">,</span>        <span class="number">87</span>
@@ -491,7 +481,7 @@
           of a and z.
         </p>
 <a name="math_toolkit.toolkit.internals2.test_data.reference"></a><h5>
-<a name="id733702"></a>
+<a name="id732892"></a>
           <a href="test_data.html#math_toolkit.toolkit.internals2.test_data.reference">reference</a>
         </h5>
 <a name="test_data_reference"></a><p>
@@ -500,24 +490,21 @@
           Most of this tool has been described already in the examples above, we'll
           just add the following notes on the non-member functions:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">parameter_info</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">make_random_param</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">start_range</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">end_range</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">n_points</span><span class="special">);</span>
 </pre>
 <p>
           Tells class test_data to test <span class="emphasis"><em>n_points</em></span> random values
           in the range [start_range,end_range].
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">parameter_info</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">make_periodic_param</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">start_range</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">end_range</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">n_points</span><span class="special">);</span>
 </pre>
 <p>
           Tells class test_data to test <span class="emphasis"><em>n_points</em></span> evenly spaced
           values in the range [start_range,end_range].
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">parameter_info</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">make_power_param</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">basis</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">start_exponent</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">end_exponent</span><span class="special">);</span>
 </pre>
 <p>
@@ -525,8 +512,7 @@
           2<sup>expon</sup></em></span> for each <span class="emphasis"><em>expon</em></span> in the range [start_exponent,
           end_exponent], and <span class="emphasis"><em>R</em></span> a random number in [0.5, 1].
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="identifier">get_user_parameter_info</span><span class="special">(</span><span class="identifier">parameter_info</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">info</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">param_name</span><span class="special">);</span>
 </pre>
 <p>
@@ -536,8 +522,7 @@
           Finally, if we don't want the parameter to be included in the output, we
           can tell test_data by setting it a "dummy parameter":
         </p>
-<pre class="programlisting">
-<span class="identifier">parameter_info</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">make_random_param</span><span class="special">(</span><span class="number">2.0</span><span class="special">,</span> <span class="number">5.0</span><span class="special">,</span> <span class="number">10</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">parameter_info</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">make_random_param</span><span class="special">(</span><span class="number">2.0</span><span class="special">,</span> <span class="number">5.0</span><span class="special">,</span> <span class="number">10</span><span class="special">);</span>
 <span class="identifier">p</span><span class="special">.</span><span class="identifier">type</span> <span class="special">|=</span> <span class="identifier">dummy_param</span><span class="special">;</span>
 </pre>
 <p>

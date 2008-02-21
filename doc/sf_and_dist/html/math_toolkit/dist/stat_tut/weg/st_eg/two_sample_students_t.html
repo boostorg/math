@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -54,8 +54,7 @@
               We begin by defining a procedure that will conduct our test assuming
               equal variances:
             </p>
-<pre class="programlisting">
-<span class="comment">// Needed headers:
+<pre class="programlisting"><span class="comment">// Needed headers:
 </span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iomanip</span><span class="special">&gt;</span>
@@ -85,8 +84,7 @@
               and <span class="emphasis"><em>v</em></span> is the number of degrees of freedom of the
               two combined samples. We can now write the code to calculate the t-statistic:
             </p>
-<pre class="programlisting">
-<span class="comment">// Degrees of freedom:
+<pre class="programlisting"><span class="comment">// Degrees of freedom:
 </span><span class="keyword">double</span> <span class="identifier">v</span> <span class="special">=</span> <span class="identifier">Sn1</span> <span class="special">+</span> <span class="identifier">Sn2</span> <span class="special">-</span> <span class="number">2</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">55</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">left</span> <span class="special">&lt;&lt;</span> <span class="string">"Degrees of Freedom"</span> <span class="special">&lt;&lt;</span> <span class="string">"=  "</span> <span class="special">&lt;&lt;</span> <span class="identifier">v</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
 <span class="comment">// Pooled variance:
@@ -100,8 +98,7 @@
               The next step is to define our distribution object, and calculate the
               complement of the probability:
             </p>
-<pre class="programlisting">
-<span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="keyword">double</span> <span class="identifier">q</span> <span class="special">=</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">fabs</span><span class="special">(</span><span class="identifier">t_stat</span><span class="special">)));</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">55</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">left</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability that difference is due to chance"</span> <span class="special">&lt;&lt;</span> <span class="string">"=  "</span> 
    <span class="special">&lt;&lt;</span> <span class="identifier">setprecision</span><span class="special">(</span><span class="number">3</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">scientific</span> <span class="special">&lt;&lt;</span> <span class="number">2</span> <span class="special">*</span> <span class="identifier">q</span> <span class="special">&lt;&lt;</span> <span class="string">"\n\n"</span><span class="special">;</span>
@@ -296,8 +293,7 @@
 <p>
               Putting these formulae into code we get:
             </p>
-<pre class="programlisting">
-<span class="comment">// Degrees of freedom:
+<pre class="programlisting"><span class="comment">// Degrees of freedom:
 </span><span class="keyword">double</span> <span class="identifier">v</span> <span class="special">=</span> <span class="identifier">Sd1</span> <span class="special">*</span> <span class="identifier">Sd1</span> <span class="special">/</span> <span class="identifier">Sn1</span> <span class="special">+</span> <span class="identifier">Sd2</span> <span class="special">*</span> <span class="identifier">Sd2</span> <span class="special">/</span> <span class="identifier">Sn2</span><span class="special">;</span>
 <span class="identifier">v</span> <span class="special">*=</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">t1</span> <span class="special">=</span> <span class="identifier">Sd1</span> <span class="special">*</span> <span class="identifier">Sd1</span> <span class="special">/</span> <span class="identifier">Sn1</span><span class="special">;</span>

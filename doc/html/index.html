@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Boost.Math</title>
 <link rel="stylesheet" href="../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="index.html" title="Boost.Math">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -11,8 +11,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
 <td align="center"><a href="../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -25,7 +25,7 @@
 <div><p class="copyright">Copyright © 2007 Paul A. Bristow, Hubert Holin, John Maddock, Daryle
       Walker and Xiaogang Zhang</p></div>
 <div><div class="legalnotice">
-<a name="id385767"></a><p>
+<a name="id437673"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -34,7 +34,7 @@
 <hr>
 </div>
 <p>
-    The following mathematical libraries are present in Boost:
+    The following libraries are present in Boost.Math:
   </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -57,8 +57,14 @@
 <tr>
 <td>
           <p>
-            <a href="../complex/html/index.html" target="_top">Complex Number Inverse Trigonometric
-            Functions</a>
+            Complex Number Inverse Trigonometric Functions
+          </p>
+          <p>
+            <a href="../complex/html/index.html" target="_top">HTML Docs</a>
+          </p>
+          <p>
+            <a href="http:svn.boost.org/svn/boost/sandbox/pdf/math/release/complex-tr1.pdf" target="_top">PDF
+            Docs</a>
           </p>
           </td>
 <td>
@@ -73,8 +79,14 @@
 <tr>
 <td>
           <p>
-            <a href="../gcd/html/index.html" target="_top">Greatest Common Divisor and Least
-            Common Multiple</a>
+            Greatest Common Divisor and Least Common Multiple
+          </p>
+          <p>
+            <a href="../gcd/html/index.html" target="_top">HTML Docs</a>
+          </p>
+          <p>
+            <a href="http:svn.boost.org/svn/boost/sandbox/pdf/math/release/math-gcd.pdf" target="_top">PDF
+            Docs</a>
           </p>
           </td>
 <td>
@@ -86,6 +98,219 @@
           </p>
           </td>
 </tr>
+<tr>
+<td>
+          <p>
+            Octonions
+          </p>
+          <p>
+            <a href="../octonion/html/index.html" target="_top">HTML Docs</a>
+          </p>
+          <p>
+            <a href="http:svn.boost.org/svn/boost/sandbox/pdf/math/release/octonion.pdf" target="_top">PDF
+            Docs</a>
+          </p>
+          </td>
+<td>
+          <p>
+            Octonions, like <a href="../quaternion/html/index.html" target="_top">quaternions</a>,
+            are a relative of complex numbers.
+          </p>
+          <p>
+            Octonions see some use in theoretical physics.
+          </p>
+          <p>
+            In practical terms, an octonion is simply an octuple of real numbers
+            (&#945;,&#946;,&#947;,&#948;,&#949;,&#950;,&#951;,&#952;), which we can write in the form <span class="emphasis"><em><code class="literal">o = &#945; + &#946;i + &#947;j + &#948;k + &#949;e' + &#950;i' + &#951;j' + &#952;k'</code></em></span>,
+            where <span class="emphasis"><em><code class="literal">i</code></em></span>, <span class="emphasis"><em><code class="literal">j</code></em></span>
+            and <span class="emphasis"><em><code class="literal">k</code></em></span> are the same objects as
+            for quaternions, and <span class="emphasis"><em><code class="literal">e'</code></em></span>, <span class="emphasis"><em><code class="literal">i'</code></em></span>,
+            <span class="emphasis"><em><code class="literal">j'</code></em></span> and <span class="emphasis"><em><code class="literal">k'</code></em></span>
+            are distinct objects which play essentially the same kind of role as
+            <span class="emphasis"><em><code class="literal">i</code></em></span> (or <span class="emphasis"><em><code class="literal">j</code></em></span>
+            or <span class="emphasis"><em><code class="literal">k</code></em></span>).
+          </p>
+          <p>
+            Addition and a multiplication is defined on the set of octonions, which
+            generalize their quaternionic counterparts. The main novelty this time
+            is that <span class="bold"><strong>the multiplication is not only not commutative,
+            is now not even associative</strong></span> (i.e. there are quaternions <span class="emphasis"><em><code class="literal">x</code></em></span>,
+            <span class="emphasis"><em><code class="literal">y</code></em></span> and <span class="emphasis"><em><code class="literal">z</code></em></span>
+            such that <span class="emphasis"><em><code class="literal">x(yz) &#8800; (xy)z</code></em></span>). A way
+            of remembering things is by using the following multiplication table:
+          </p>
+          <p>
+            <span class="inlinemediaobject"><img src="../../octonion/graphics/octonion_blurb17.jpeg" alt="octonion_blurb17"></span>
+          </p>
+          <p>
+            Octonions (and their kin) are described in far more details in this other
+            <a href="../../quaternion/TQE.pdf" target="_top">document</a> (with <a href="../../quaternion/TQE_EA.pdf" target="_top">errata
+            and addenda</a>).
+          </p>
+          <p>
+            Some traditional constructs, such as the exponential, carry over without
+            too much change into the realms of octonions, but other, such as taking
+            a square root, do not (the fact that the exponential has a closed form
+            is a result of the author, but the fact that the exponential exists at
+            all for octonions is known since quite a long time ago).
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            Special Functions
+          </p>
+          <p>
+            <a href="../sf_and_dist/html/index.html" target="_top">HTML Docs</a>
+          </p>
+          <p>
+            <a href="http:svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf" target="_top">PDF
+            Docs</a>
+          </p>
+          </td>
+<td>
+          <p>
+            Provides a number of high quality special functions, initially these
+            were concentrated on functions used in statistical applications along
+            with those in the Technical Report on C++ Library Extensions.
+          </p>
+          <p>
+            The function families currently implemented are the gamma, beta &amp;
+            erf functions along with the incomplete gamma and beta functions (four
+            variants of each) and all the possible inverses of these, plus digamma,
+            various factorial functions, Bessel functions, elliptic integrals, sinus
+            cardinals (along with their hyperbolic variants), inverse hyperbolic
+            functions, Legrendre/Laguerre/Hermite polynomials and various special
+            power and logarithmic functions.
+          </p>
+          <p>
+            All the implementations are fully generic and support the use of arbitrary
+            "real-number" types, although they are optimised for use with
+            types with known-about significand (or mantissa) sizes: typically float,
+            double or long double.
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            Statistical Distributions
+          </p>
+          <p>
+            <a href="../sf_and_dist/html/index.html" target="_top">HTML Docs</a>
+          </p>
+          <p>
+            <a href="http:svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf" target="_top">PDF
+            Docs</a>
+          </p>
+          </td>
+<td>
+          <p>
+            Provides a reasonably comprehensive set of statistical distributions,
+            upon which higher level statistical tests can be built.
+          </p>
+          <p>
+            The initial focus is on the central univariate distributions. Both continuous
+            (like normal &amp; Fisher) and discrete (like binomial &amp; Poisson)
+            distributions are provided.
+          </p>
+          <p>
+            A comprehensive tutorial is provided, along with a series of worked examples
+            illustrating how the library is used to conduct statistical tests.
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            Quaternions
+          </p>
+          <p>
+            <a href="../quaternion/html/index.html" target="_top">HTML Docs</a>
+          </p>
+          <p>
+            <a href="http:svn.boost.org/svn/boost/sandbox/pdf/math/release/quaternion.pdf" target="_top">PDF
+            Docs</a>
+          </p>
+          </td>
+<td>
+          <p>
+            Quaternions are a relative of complex numbers.
+          </p>
+          <p>
+            Quaternions are in fact part of a small hierarchy of structures built
+            upon the real numbers, which comprise only the set of real numbers (traditionally
+            named <span class="emphasis"><em><span class="bold"><strong>R</strong></span></em></span>), the set
+            of complex numbers (traditionally named <span class="emphasis"><em><span class="bold"><strong>C</strong></span></em></span>),
+            the set of quaternions (traditionally named <span class="emphasis"><em><span class="bold"><strong>H</strong></span></em></span>)
+            and the set of octonions (traditionally named <span class="emphasis"><em><span class="bold"><strong>O</strong></span></em></span>),
+            which possess interesting mathematical properties (chief among which
+            is the fact that they are <span class="emphasis"><em>division algebras</em></span>, <span class="emphasis"><em>i.e.</em></span>
+            where the following property is true: if <span class="emphasis"><em><code class="literal">y</code></em></span>
+            is an element of that algebra and is <span class="bold"><strong>not equal
+            to zero</strong></span>, then <span class="emphasis"><em><code class="literal">yx = yx'</code></em></span>,
+            where <span class="emphasis"><em><code class="literal">x</code></em></span> and <span class="emphasis"><em><code class="literal">x'</code></em></span>
+            denote elements of that algebra, implies that <span class="emphasis"><em><code class="literal">x =
+            x'</code></em></span>). Each member of the hierarchy is a super-set
+            of the former.
+          </p>
+          <p>
+            One of the most important aspects of quaternions is that they provide
+            an efficient way to parameterize rotations in <span class="emphasis"><em><span class="bold"><strong>R<sup>3</sup></strong></span></em></span>
+            (the usual three-dimensional space) and <span class="emphasis"><em><span class="bold"><strong>R<sup>4</sup></strong></span></em></span>.
+          </p>
+          <p>
+            In practical terms, a quaternion is simply a quadruple of real numbers
+            (&#945;,&#946;,&#947;,&#948;), which we can write in the form <span class="emphasis"><em><code class="literal">q = &#945; + &#946;i + &#947;j + &#948;k</code></em></span>,
+            where <span class="emphasis"><em><code class="literal">i</code></em></span> is the same object as
+            for complex numbers, and <span class="emphasis"><em><code class="literal">j</code></em></span> and
+            <span class="emphasis"><em><code class="literal">k</code></em></span> are distinct objects which
+            play essentially the same kind of role as <span class="emphasis"><em><code class="literal">i</code></em></span>.
+          </p>
+          <p>
+            An addition and a multiplication is defined on the set of quaternions,
+            which generalize their real and complex counterparts. The main novelty
+            here is that <span class="bold"><strong>the multiplication is not commutative</strong></span>
+            (i.e. there are quaternions <span class="emphasis"><em><code class="literal">x</code></em></span>
+            and <span class="emphasis"><em><code class="literal">y</code></em></span> such that <span class="emphasis"><em><code class="literal">xy
+            &#8800; yx</code></em></span>). A good mnemotechnical way of remembering things
+            is by using the formula <span class="emphasis"><em><code class="literal">i*i = j*j = k*k = -1</code></em></span>.
+          </p>
+          <p>
+            Quaternions (and their kin) are described in far more details in this
+            other <a href="../../quaternion/TQE.pdf" target="_top">document</a> (with <a href="../../quaternion/TQE_EA.pdf" target="_top">errata and addenda</a>).
+          </p>
+          <p>
+            Some traditional constructs, such as the exponential, carry over without
+            too much change into the realms of quaternions, but other, such as taking
+            a square root, do not.
+          </p>
+          </td>
+</tr>
+</tbody>
+</table></div>
+<p>
+    The following Boost libraries are also mathematically oriented:
+  </p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+          <p>
+            Library
+          </p>
+          </th>
+<th>
+          <p>
+            Description
+          </p>
+          </th>
+</tr></thead>
+<tbody>
 <tr>
 <td>
           <p>
@@ -128,64 +353,13 @@
 <tr>
 <td>
           <p>
-            <a href="../../../numeric/conversion/doc/index.html" target="_top">Numeric.Conversion</a>
+            <a href="../../../numeric/conversion/index.html" target="_top">Numeric.Conversion</a>
           </p>
           </td>
 <td>
           <p>
             The Boost Numeric Conversion library is a collection of tools to describe
             and perform conversions between values of different numeric types.
-          </p>
-          </td>
-</tr>
-<tr>
-<td>
-          <p>
-            <a href="../octonion/html/index.html" target="_top">Octonions</a>
-          </p>
-          </td>
-<td>
-          <p>
-            Octonions, like <a href="../quaternions/html/index.html" target="_top">quaternions</a>,
-            are a relative of complex numbers.
-          </p>
-          <p>
-            Octonions see some use in theoretical physics.
-          </p>
-          <p>
-            In practical terms, an octonion is simply an octuple of real numbers
-            (&#945;,&#946;,&#947;,&#948;,&#949;,&#950;,&#951;,&#952;), which we can write in the form <span class="emphasis"><em><tt class="literal">o = &#945; + &#946;i + &#947;j + &#948;k + &#949;e' + &#950;i' + &#951;j' + &#952;k'</tt></em></span>,
-            where <span class="emphasis"><em><tt class="literal">i</tt></em></span>, <span class="emphasis"><em><tt class="literal">j</tt></em></span>
-            and <span class="emphasis"><em><tt class="literal">k</tt></em></span> are the same objects as
-            for quaternions, and <span class="emphasis"><em><tt class="literal">e'</tt></em></span>, <span class="emphasis"><em><tt class="literal">i'</tt></em></span>,
-            <span class="emphasis"><em><tt class="literal">j'</tt></em></span> and <span class="emphasis"><em><tt class="literal">k'</tt></em></span>
-            are distinct objects which play essentially the same kind of role as
-            <span class="emphasis"><em><tt class="literal">i</tt></em></span> (or <span class="emphasis"><em><tt class="literal">j</tt></em></span>
-            or <span class="emphasis"><em><tt class="literal">k</tt></em></span>).
-          </p>
-          <p>
-            Addition and a multiplication is defined on the set of octonions, which
-            generalize their quaternionic counterparts. The main novelty this time
-            is that <span class="bold"><b>the multiplication is not only not commutative,
-            is now not even associative</b></span> (i.e. there are quaternions <span class="emphasis"><em><tt class="literal">x</tt></em></span>,
-            <span class="emphasis"><em><tt class="literal">y</tt></em></span> and <span class="emphasis"><em><tt class="literal">z</tt></em></span>
-            such that <span class="emphasis"><em><tt class="literal">x(yz) &#8800; (xy)z</tt></em></span>). A way
-            of remembering things is by using the following multiplication table:
-          </p>
-          <p>
-            <span class="inlinemediaobject"><img src="../../octonion/graphics/octonion_blurb17.jpeg" alt="octonion_blurb17"></span>
-          </p>
-          <p>
-            Octonions (and their kin) are described in far more details in this other
-            <a href="../../quaternion/TQE.pdf" target="_top">document</a> (with <a href="../../quaternion/TQE_EA.pdf" target="_top">errata
-            and addenda</a>).
-          </p>
-          <p>
-            Some traditional constructs, such as the exponential, carry over without
-            too much change into the realms of octonions, but other, such as taking
-            a square root, do not (the fact that the exponential has a closed form
-            is a result of the author, but the fact that the exponential exists at
-            all for octonions is known since quite a long time ago).
           </p>
           </td>
 </tr>
@@ -201,117 +375,6 @@
             templates (in namespace boost). These templates define operators at namespace
             scope in terms of a minimal number of fundamental operators provided
             by the class.
-          </p>
-          </td>
-</tr>
-<tr>
-<td>
-          <p>
-            <a href="../sf_and_dist/html/index.html" target="_top">Special Functions</a>
-          </p>
-          </td>
-<td>
-          <p>
-            Provides a number of high quality special functions, initially these
-            were concentrated on functions used in statistical applications along
-            with those in the Technical Report on C++ Library Extensions.
-          </p>
-          <p>
-            The function families currently implemented are the gamma, beta &amp;
-            erf functions along with the incomplete gamma and beta functions (four
-            variants of each) and all the possible inverses of these, plus digamma,
-            various factorial functions, Bessel functions, elliptic integrals, sinus
-            cardinals (along with their hyperbolic variants), inverse hyperbolic
-            functions, Legrendre/Laguerre/Hermite polynomials and various special
-            power and logarithmic functions.
-          </p>
-          <p>
-            All the implementations are fully generic and support the use of arbitrary
-            "real-number" types, although they are optimised for use with
-            types with known-about significand (or mantissa) sizes: typically float,
-            double or long double.
-          </p>
-          </td>
-</tr>
-<tr>
-<td>
-          <p>
-            <a href="../sf_and_dist/html/index.html" target="_top">Statistical Distributions</a>
-          </p>
-          </td>
-<td>
-          <p>
-            Provides a reasonably comprehensive set of statistical distributions,
-            upon which higher level statistical tests can be built.
-          </p>
-          <p>
-            The initial focus is on the central univariate distributions. Both continuous
-            (like normal &amp; Fisher) and discrete (like binomial &amp; Poisson)
-            distributions are provided.
-          </p>
-          <p>
-            A comprehensive tutorial is provided, along with a series of worked examples
-            illustrating how the library is used to conduct statistical tests.
-          </p>
-          </td>
-</tr>
-<tr>
-<td>
-          <p>
-            <a href="../quaternion/html/index.html" target="_top">Quaternions</a>
-          </p>
-          </td>
-<td>
-          <p>
-            Quaternions are a relative of complex numbers.
-          </p>
-          <p>
-            Quaternions are in fact part of a small hierarchy of structures built
-            upon the real numbers, which comprise only the set of real numbers (traditionally
-            named <span class="emphasis"><em><span class="bold"><b>R</b></span></em></span>), the set
-            of complex numbers (traditionally named <span class="emphasis"><em><span class="bold"><b>C</b></span></em></span>),
-            the set of quaternions (traditionally named <span class="emphasis"><em><span class="bold"><b>H</b></span></em></span>)
-            and the set of octonions (traditionally named <span class="emphasis"><em><span class="bold"><b>O</b></span></em></span>),
-            which possess interesting mathematical properties (chief among which
-            is the fact that they are <span class="emphasis"><em>division algebras</em></span>, <span class="emphasis"><em>i.e.</em></span>
-            where the following property is true: if <span class="emphasis"><em><tt class="literal">y</tt></em></span>
-            is an element of that algebra and is <span class="bold"><b>not equal
-            to zero</b></span>, then <span class="emphasis"><em><tt class="literal">yx = yx'</tt></em></span>,
-            where <span class="emphasis"><em><tt class="literal">x</tt></em></span> and <span class="emphasis"><em><tt class="literal">x'</tt></em></span>
-            denote elements of that algebra, implies that <span class="emphasis"><em><tt class="literal">x =
-            x'</tt></em></span>). Each member of the hierarchy is a super-set
-            of the former.
-          </p>
-          <p>
-            One of the most important aspects of quaternions is that they provide
-            an efficient way to parameterize rotations in <span class="emphasis"><em><span class="bold"><b>R<sup>3</sup></b></span></em></span>
-            (the usual three-dimensional space) and <span class="emphasis"><em><span class="bold"><b>R<sup>4</sup></b></span></em></span>.
-          </p>
-          <p>
-            In practical terms, a quaternion is simply a quadruple of real numbers
-            (&#945;,&#946;,&#947;,&#948;), which we can write in the form <span class="emphasis"><em><tt class="literal">q = &#945; + &#946;i + &#947;j + &#948;k</tt></em></span>,
-            where <span class="emphasis"><em><tt class="literal">i</tt></em></span> is the same object as
-            for complex numbers, and <span class="emphasis"><em><tt class="literal">j</tt></em></span> and
-            <span class="emphasis"><em><tt class="literal">k</tt></em></span> are distinct objects which
-            play essentially the same kind of role as <span class="emphasis"><em><tt class="literal">i</tt></em></span>.
-          </p>
-          <p>
-            An addition and a multiplication is defined on the set of quaternions,
-            which generalize their real and complex counterparts. The main novelty
-            here is that <span class="bold"><b>the multiplication is not commutative</b></span>
-            (i.e. there are quaternions <span class="emphasis"><em><tt class="literal">x</tt></em></span>
-            and <span class="emphasis"><em><tt class="literal">y</tt></em></span> such that <span class="emphasis"><em><tt class="literal">xy
-            &#8800; yx</tt></em></span>). A good mnemotechnical way of remembering things
-            is by using the formula <span class="emphasis"><em><tt class="literal">i*i = j*j = k*k = -1</tt></em></span>.
-          </p>
-          <p>
-            Quaternions (and their kin) are described in far more details in this
-            other <a href="../../quaternion/TQE.pdf" target="_top">document</a> (with <a href="../../quaternion/TQE_EA.pdf" target="_top">errata and addenda</a>).
-          </p>
-          <p>
-            Some traditional constructs, such as the exponential, carry over without
-            too much change into the realms of quaternions, but other, such as taking
-            a square root, do not.
           </p>
           </td>
 </tr>
@@ -363,8 +426,8 @@
 </table></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: October 16, 2007 at 17:32:28 +0800</small></p></td>
-<td align="right"><div class="copyright-footer"><small></small></div></td>
+<td align="left"><p><small>Last revised: February 10, 2008 at 09:55:03 +0000</small></p></td>
+<td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav"></div>

@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -39,15 +39,14 @@
           </li>
 </ul></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised"></a><h5>
-<a name="id761851"></a>
+<a name="id760957"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised">Available
           Actions When an Error is Raised</a>
         </h5>
 <p>
           What to do with the error is encapsulated by an enumerated type:
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">policies</span> <span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">policies</span> <span class="special">{</span>
 
 <span class="keyword">enum</span> <span class="identifier">error_policy_type</span>
 <span class="special">{</span>
@@ -63,7 +62,7 @@
           The various enumerated values have the following meanings:
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error"></a><h6>
-<a name="id762105"></a>
+<a name="id761209"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error">throw_on_error</a>
         </h6>
 <p>
@@ -163,7 +162,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error"></a><h6>
-<a name="id762288"></a>
+<a name="id761392"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error">errno_on_error</a>
         </h6>
 <p>
@@ -264,7 +263,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.ignore_error"></a><h6>
-<a name="id762487"></a>
+<a name="id761591"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.ignore_error">ignore_error</a>
         </h6>
 <p>
@@ -365,15 +364,14 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.user_error"></a><h6>
-<a name="id762687"></a>
+<a name="id761792"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.user_error">user_error</a>
         </h6>
 <p>
           Will call a user defined error handler: these are forward declared in boost/math/policies/error_handling.hpp,
           but the actual definitions must be provided by the user:
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">policies</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">policies</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">user_domain_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">);</span>
@@ -409,7 +407,7 @@
           here</a>.
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised"></a><h5>
-<a name="id763626"></a>
+<a name="id762730"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised">Kinds
           of Error Raised</a>
         </h5>
@@ -595,7 +593,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.examples"></a><h5>
-<a name="id764468"></a>
+<a name="id763571"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.examples">Examples</a>
         </h5>
 <p>
@@ -608,8 +606,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
@@ -647,8 +644,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>

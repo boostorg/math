@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,7 +27,7 @@
 <a name="math_toolkit.backgrounders.lanczos"></a><a href="lanczos.html" title="The Lanczos Approximation"> The Lanczos Approximation</a>
 </h3></div></div></div>
 <a name="math_toolkit.backgrounders.lanczos.motivation"></a><h5>
-<a name="id786766"></a>
+<a name="id785839"></a>
         <a href="lanczos.html#math_toolkit.backgrounders.lanczos.motivation">Motivation</a>
       </h5>
 <p>
@@ -69,15 +69,13 @@
         As the simplest example, consider the ratio of two gamma functions: one could
         compute the result via lgamma:
       </p>
-<pre class="programlisting">
-<span class="identifier">exp</span><span class="special">(</span><span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">a</span><span class="special">)</span> <span class="special">-</span> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">b</span><span class="special">));</span>
+<pre class="programlisting"><span class="identifier">exp</span><span class="special">(</span><span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">a</span><span class="special">)</span> <span class="special">-</span> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">b</span><span class="special">));</span>
 </pre>
 <p>
         However, even if lgamma is uniformly accurate to 0.5ulp, the worst case relative
         error in the above can easily be shown to be:
       </p>
-<pre class="programlisting">
-<span class="identifier">Erel</span> <span class="special">&gt;</span> <span class="identifier">a</span> <span class="special">*</span> <span class="identifier">log</span><span class="special">(</span><span class="identifier">a</span><span class="special">)/</span><span class="number">2</span> <span class="special">+</span> <span class="identifier">b</span> <span class="special">*</span> <span class="identifier">log</span><span class="special">(</span><span class="identifier">b</span><span class="special">)/</span><span class="number">2</span>
+<pre class="programlisting"><span class="identifier">Erel</span> <span class="special">&gt;</span> <span class="identifier">a</span> <span class="special">*</span> <span class="identifier">log</span><span class="special">(</span><span class="identifier">a</span><span class="special">)/</span><span class="number">2</span> <span class="special">+</span> <span class="identifier">b</span> <span class="special">*</span> <span class="identifier">log</span><span class="special">(</span><span class="identifier">b</span><span class="special">)/</span><span class="number">2</span>
 </pre>
 <p>
         For small <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span> that's not a
@@ -100,7 +98,7 @@
         functions divided by large powers into single (simpler) expressions.
       </p>
 <a name="math_toolkit.backgrounders.lanczos.the_approximation"></a><h5>
-<a name="id787146"></a>
+<a name="id786217"></a>
         <a href="lanczos.html#math_toolkit.backgrounders.lanczos.the_approximation">The
         Approximation</a>
       </h5>
@@ -162,7 +160,7 @@
         </p></td></tr>
 </table></div>
 <a name="math_toolkit.backgrounders.lanczos.computing_the_coefficients"></a><h5>
-<a name="id787409"></a>
+<a name="id786480"></a>
         <a href="lanczos.html#math_toolkit.backgrounders.lanczos.computing_the_coefficients">Computing
         the Coefficients</a>
       </h5>
@@ -206,7 +204,7 @@
         multiplied by <span class="emphasis"><em>F</em></span> as the last step.
       </p>
 <a name="math_toolkit.backgrounders.lanczos.choosing_the_right_parameters"></a><h5>
-<a name="id787615"></a>
+<a name="id786685"></a>
         <a href="lanczos.html#math_toolkit.backgrounders.lanczos.choosing_the_right_parameters">Choosing
         the Right Parameters</a>
       </h5>
@@ -230,7 +228,7 @@
         computing to float precision with double precision arithmetic.
       </p>
 <div class="table">
-<a name="id787698"></a><p class="title"><b>Table 45. Optimal choices for N and g when computing with
+<a name="id786768"></a><p class="title"><b>Table 45. Optimal choices for N and g when computing with
       guard digits (source: Pugh)</b></p>
 <div class="table-contents"><table class="table" summary="Optimal choices for N and g when computing with
       guard digits (source: Pugh)">
@@ -373,7 +371,7 @@
         exactly matches the machine epsilon for the type in question.
       </p>
 <div class="table">
-<a name="id788031"></a><p class="title"><b>Table 46. Optimum value for N and g when computing at fixed
+<a name="id787090"></a><p class="title"><b>Table 46. Optimum value for N and g when computing at fixed
       precision</b></p>
 <div class="table-contents"><table class="table" summary="Optimum value for N and g when computing at fixed
       precision">
@@ -538,7 +536,7 @@
         is exact, and so isn't used for the gamma function.
       </p>
 <a name="math_toolkit.backgrounders.lanczos.references"></a><h5>
-<a name="id788309"></a>
+<a name="id787368"></a>
         <a href="lanczos.html#math_toolkit.backgrounders.lanczos.references">References</a>
       </h5>
 <a name="godfrey"></a><a name="pugh"></a><div class="orderedlist"><ol type="1">

@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -50,8 +50,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="identifier">BOOST_MATH_ASSERT_UNDEFINED_POLICY</span><span class="special">=</span><span class="number">0</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_ASSERT_UNDEFINED_POLICY</span><span class="special">=</span><span class="number">0</span>
 <span class="identifier">BOOST_MATH_OVERFLOW_ERROR_POLICY</span><span class="special">=</span><span class="identifier">errno_on_error</span></pre>
 <p>
           </p>
@@ -62,8 +61,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_ASSERT_UNDEFINED_POLICY</span> <span class="keyword">false</span>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_ASSERT_UNDEFINED_POLICY</span> <span class="keyword">false</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_OVERFLOW_ERROR_POLICY</span> <span class="identifier">errno_on_error</span></pre>
 <p>
           </p>
@@ -76,8 +74,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="special">/</span><span class="identifier">D</span> <span class="string">"BOOST_MATH_ASSERT_UNDEFINED_POLICY=0"</span>
+<pre class="programlisting"><span class="special">/</span><span class="identifier">D</span> <span class="string">"BOOST_MATH_ASSERT_UNDEFINED_POLICY=0"</span>
 <span class="special">/</span><span class="identifier">D</span> <span class="string">"BOOST_MATH_OVERFLOW_ERROR_POLICY=errno_on_error"</span></pre>
 <p>
           </p>
@@ -146,8 +143,7 @@
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">ignore_error</span>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">ignore_error</span>
 </pre>
 <p>
           </p>
@@ -159,8 +155,7 @@
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">errno_on_error</span>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">errno_on_error</span>
 </pre>
 <p>
           </p>
@@ -196,8 +191,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="comment">// Boost
+<pre class="programlisting"><span class="comment">// Boost
 </span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
    <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">students_t</span><span class="special">;</span>  <span class="comment">// Probability of students_t(df, t).
 </span>
@@ -222,8 +216,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Example error handling using Student's t function. "</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"BOOST_MATH_DOMAIN_ERROR_POLICY is set to: "</span>
@@ -280,8 +273,7 @@ Message from thrown exception was:
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">ignore_error</span>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">ignore_error</span>
 </pre>
 <p>
           </p>
@@ -304,8 +296,7 @@ errno is set to: 0
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">errno_on_error</span>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">errno_on_error</span>
 </pre>
 <p>
           </p>

@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -30,12 +30,10 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
    
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
           <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
@@ -99,12 +97,11 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/students_t.png" alt="students_t"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.students_t_dist.member_functions"></a><h5>
-<a name="id609757"></a>
+<a name="id609258"></a>
             <a href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.member_functions">Member
             Functions</a>
           </h5>
-<pre class="programlisting">
-<span class="identifier">students_t_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">students_t_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
 </pre>
 <p>
             Constructs a Student's t-distribution with <span class="emphasis"><em>v</em></span> degrees
@@ -115,14 +112,12 @@
             Note that non-integral degrees of freedom are supported, and meaningful
             under certain circumstances.
           </p>
-<pre class="programlisting">
-<span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
             Returns the number of degrees of freedom of this distribution.
           </p>
-<pre class="programlisting">
-<span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_degrees_of_freedom</span><span class="special">(</span>
    <span class="identifier">RealType</span> <span class="identifier">difference_from_mean</span><span class="special">,</span>
    <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span>
    <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">,</span>
@@ -179,7 +174,7 @@
             Engineering Statistics Handbook</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.students_t_dist.non_member_accessors"></a><h5>
-<a name="id610146"></a>
+<a name="id609644"></a>
             <a href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -199,7 +194,7 @@
             The domain of the random variable is [-&#8734;, +&#8734;].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.students_t_dist.examples"></a><h5>
-<a name="id610315"></a>
+<a name="id609814"></a>
             <a href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.examples">Examples</a>
           </h5>
 <p>
@@ -207,7 +202,7 @@
             are available illustrating the use of the Student's t distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.students_t_dist.accuracy"></a><h5>
-<a name="id610356"></a>
+<a name="id609854"></a>
             <a href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -216,7 +211,7 @@
             inverses</a>, refer to accuracy data on those functions for more information.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.students_t_dist.implementation"></a><h5>
-<a name="id610405"></a>
+<a name="id609903"></a>
             <a href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.implementation">Implementation</a>
           </h5>
 <p>

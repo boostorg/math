@@ -11,6 +11,10 @@
     [last-revision $Date: 2006-12-29 11:08:32 +0000 (Fri, 29 Dec 2006) $]
 ]
 
+This manual is also available in 
+[@http:svn.boost.org/svn/boost/sandbox/pdf/math/release/math-gcd.pdf 
+printer friendly PDF format].
+
 
 [section:gcd_lcm Greatest Common Divisor and Least Common Multiple]
 

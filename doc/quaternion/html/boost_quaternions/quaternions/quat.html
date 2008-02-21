@@ -1,21 +1,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Template Class quaternion</title>
+<title>Template Class quaternion</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Boost.Quaternions">
 <link rel="up" href="../quaternions.html" title="Quaternions">
 <link rel="prev" href="synopsis.html" title="Synopsis">
-<link rel="next" href="spec.html" title=" Quaternion Specializations">
+<link rel="next" href="spec.html" title="Quaternion Specializations">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,17 +24,16 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_quaternions.quaternions.quat"></a><a href="quat.html" title=" Template Class quaternion"> Template Class quaternion</a></h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+<a name="boost_quaternions.quaternions.quat"></a><a href="quat.html" title="Template Class quaternion"> Template Class quaternion</a>
+</h3></div></div></div>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">quaternion</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
 
-   <span class="keyword">typedef</span> <span class="identifier">T</span> <a href="mem_typedef.html" title=" Quaternion
-      Member Typedefs">value_type</a><span class="special">;</span>
+   <span class="keyword">typedef</span> <span class="identifier">T</span> <a href="mem_typedef.html" title="Quaternion Member Typedefs">value_type</a><span class="special">;</span>
 
    <span class="keyword">explicit</span> <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.constructors">quaternion</a><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_a</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">(),</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_b</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">(),</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_c</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">(),</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_d</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">());</span>
    <span class="keyword">explicit</span> <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.constructors">quaternion</a><span class="special">(::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z0</span><span class="special">,</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z1</span> <span class="special">=</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;());</span>
@@ -83,10 +82,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2001 -2003 Hubert Holin<p>
+<td align="right"><div class="copyright-footer">Copyright © 2001 -2003 Hubert Holin<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

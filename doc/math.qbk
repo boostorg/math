@@ -27,19 +27,29 @@
 [def __oct_not_equal ['[^x(yz) '''&#x2260;''' (xy)z]]]
 [template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
 
-The following mathematical libraries are present in Boost:
+The following libraries are present in Boost.Math:
 
 [table
 [[Library][Description]]
 
-   [[[@../complex/html/index.html Complex Number Inverse Trigonometric Functions]]
+   [[Complex Number Inverse Trigonometric Functions
+   
+   [@../complex/html/index.html HTML Docs]
+   
+   [@http:svn.boost.org/svn/boost/sandbox/pdf/math/release/complex-tr1.pdf 
+   PDF Docs]]
    [
 These complex number algorithms are the inverses of trigonometric functions currently
 present in the C++ standard.  Equivalents to these functions are part of the C99 standard, and
 are part of the [tr1].
    ]]
    
-   [[[@../gcd/html/index.html Greatest Common Divisor and Least Common Multiple]]
+   [[Greatest Common Divisor and Least Common Multiple
+   
+   [@../gcd/html/index.html HTML Docs]
+   
+   [@http:svn.boost.org/svn/boost/sandbox/pdf/math/release/math-gcd.pdf 
+   PDF Docs]]
    [
 The class and function templates in <boost/math/common_factor.hpp> 
 provide run-time and compile-time evaluation of the greatest common divisor 
@@ -48,24 +58,12 @@ These facilities are useful for many numeric-oriented generic
 programming problems.
    ]]
 
-   [[[@../../../integer/index.html Integer]]
-   [Headers to ease dealing with integral types.]]
+[[Octonions
 
-   [[[@../../../numeric/interval/doc/interval.htm Interval]]
-   [As implied by its name, this library is intended to help manipulating 
-   mathematical intervals. It consists of a single header 
-   <boost/numeric/interval.hpp> and principally a type which can be 
-   used as interval<T>. ]]
-   
-   [[[@../../../multi_array/doc/index.html Multi Array]]
-   [Boost.MultiArray provides a generic N-dimensional array concept 
-   definition and common implementations of that interface.]]
+[@../octonion/html/index.html HTML Docs]
 
-   [[[@../../../numeric/conversion/doc/index.html Numeric.Conversion]]
-   [The Boost Numeric Conversion library is a collection of tools to 
-   describe and perform conversions between values of different numeric types.]]
-   
-[[[@../octonion/html/index.html Octonions]]
+[@http:svn.boost.org/svn/boost/sandbox/pdf/math/release/octonion.pdf 
+PDF Docs]]
    [
 Octonions, like [@../quaternion/html/index.html quaternions], are a relative of complex numbers.
 
@@ -95,13 +93,13 @@ author, but the fact that the exponential exists at all for octonions is known
 since quite a long time ago).
    ]]
    
-   [[[@../../../utility/operators.htm Operators]]
-   [The header <boost/operators.hpp> supplies several sets of class 
-   templates (in namespace boost). These templates define operators at 
-   namespace scope in terms of a minimal number of fundamental 
-   operators provided by the class.]]
+[[Special Functions
 
-[[[@../sf_and_dist/html/index.html Special Functions]]
+[@../sf_and_dist/html/index.html HTML Docs]
+
+[@http:svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf 
+PDF Docs]]
+
    [ Provides a number of high quality special functions, initially 
    these were concentrated on functions used in statistical applications 
    along with those in the Technical Report on C++ Library Extensions.
@@ -120,7 +118,13 @@ since quite a long time ago).
    use with types with known-about significand (or mantissa) 
    sizes: typically float, double or long double.  ]]
 
-[[[@../sf_and_dist/html/index.html Statistical Distributions]]
+[[Statistical Distributions
+
+[@../sf_and_dist/html/index.html HTML Docs]
+
+[@http:svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf 
+PDF Docs]]
+
    [Provides a reasonably comprehensive set of statistical distributions, 
    upon which higher level statistical tests can be built.
 
@@ -131,7 +135,13 @@ since quite a long time ago).
    A comprehensive tutorial is provided, along with a series of worked 
    examples illustrating how the library is used to conduct statistical tests. ]]
 
-[[[@../quaternion/html/index.html Quaternions]]
+[[Quaternions
+
+[@../quaternion/html/index.html HTML Docs]
+
+[@http:svn.boost.org/svn/boost/sandbox/pdf/math/release/quaternion.pdf 
+PDF Docs]]
+
    [
 Quaternions are a relative of complex numbers.
 
@@ -169,6 +179,36 @@ too much change into the realms of quaternions, but other, such as taking
 a square root, do not.
     ]]
     
+]
+
+The following Boost libraries are also mathematically oriented:
+
+[table
+[[Library][Description]]
+
+   [[[@../../../integer/index.html Integer]]
+   [Headers to ease dealing with integral types.]]
+
+   [[[@../../../numeric/interval/doc/interval.htm Interval]]
+   [As implied by its name, this library is intended to help manipulating 
+   mathematical intervals. It consists of a single header 
+   <boost/numeric/interval.hpp> and principally a type which can be 
+   used as interval<T>. ]]
+   
+   [[[@../../../multi_array/doc/index.html Multi Array]]
+   [Boost.MultiArray provides a generic N-dimensional array concept 
+   definition and common implementations of that interface.]]
+
+   [[[@../../../numeric/conversion/index.html Numeric.Conversion]]
+   [The Boost Numeric Conversion library is a collection of tools to 
+   describe and perform conversions between values of different numeric types.]]
+   
+   [[[@../../../utility/operators.htm Operators]]
+   [The header <boost/operators.hpp> supplies several sets of class 
+   templates (in namespace boost). These templates define operators at 
+   namespace scope in terms of a minimal number of fundamental 
+   operators provided by the class.]]
+
    [[[@../../../random/index.html Random]]
    [Random numbers are useful in a variety of applications. The Boost 
    Random Number Library (Boost.Random for short) provides a vast variety 

@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -41,8 +41,7 @@
               and we begin by defining a procedure that will print out a table of
               estimated sample sizes for various confidence levels:
             </p>
-<pre class="programlisting">
-<span class="comment">// Needed includes:
+<pre class="programlisting"><span class="comment">// Needed includes:
 </span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iomanip</span><span class="special">&gt;</span>
@@ -59,15 +58,13 @@
 <p>
               Next we define a table of significance levels:
             </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span>
 </pre>
 <p>
               Printing out the table of sample sizes required for various confidence
               levels begins with the table header:
             </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\n\n"</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\n\n"</span>
         <span class="string">"_______________________________________________________________\n"</span>
         <span class="string">"Confidence       Estimated          Estimated\n"</span>
         <span class="string">" Value (%)      Sample Size        Sample Size\n"</span>
@@ -102,8 +99,7 @@
               twice: once with alpha for a one-sided test, and once with alpha/2
               for a two-sided test.
             </p>
-<pre class="programlisting">
-   <span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
+<pre class="programlisting">   <span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
    <span class="special">{</span>
       <span class="comment">// Confidence value:
 </span>      <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">fixed</span> <span class="special">&lt;&lt;</span> <span class="identifier">setprecision</span><span class="special">(</span><span class="number">3</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span> <span class="special">&lt;&lt;</span> <span class="number">100</span> <span class="special">*</span> <span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]);</span>

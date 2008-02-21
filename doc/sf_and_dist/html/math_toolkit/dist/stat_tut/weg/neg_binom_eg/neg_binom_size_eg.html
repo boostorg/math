@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -53,8 +53,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">void</span> <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">failures</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">);</span></pre>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">failures</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">);</span></pre>
 <p>
               </p>
 <p>
@@ -69,8 +68,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span></pre>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span></pre>
 <p>
               </p>
 <p>
@@ -89,8 +87,7 @@
 <p>
               
 </p>
-<pre class="programlisting">
-<span class="special">(</span><span class="keyword">int</span><span class="special">)</span><span class="identifier">ceil</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">::</span><span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span><span class="identifier">failures</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]);</span>
+<pre class="programlisting"><span class="special">(</span><span class="keyword">int</span><span class="special">)</span><span class="identifier">ceil</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">::</span><span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span><span class="identifier">failures</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]);</span>
 </pre>
 <p>
               </p>
@@ -103,8 +100,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-  
+<pre class="programlisting">  
 <span class="keyword">void</span> <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">failures</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="comment">// trials = number of trials
@@ -146,8 +142,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="number">5</span><span class="special">,</span> <span class="number">0.5</span><span class="special">);</span>
     <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">);</span>
@@ -179,8 +174,7 @@
                 instead. We would also have called <code class="computeroutput"><span class="identifier">find_minimum_number_of_trials</span></code>
                 like this: 
 </p>
-<pre class="programlisting">
-<span class="identifier">floor</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">::</span><span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span><span class="identifier">failures</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]))</span>
+<pre class="programlisting"><span class="identifier">floor</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">::</span><span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span><span class="identifier">failures</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]))</span>
 </pre>
 <p>
                 which would give us the largest number of trials we could conduct

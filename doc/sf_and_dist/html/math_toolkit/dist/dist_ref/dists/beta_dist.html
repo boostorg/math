@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -30,12 +30,10 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">beta</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">beta</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
 
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
            <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
@@ -135,16 +133,15 @@
             from the centre (where x = half).
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.member_functions"></a><h5>
-<a name="id579306"></a>
+<a name="id578930"></a>
             <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.member_functions">Member
             Functions</a>
           </h5>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.constructor"></a><h6>
-<a name="id579332"></a>
+<a name="id578957"></a>
             <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.constructor">Constructor</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">beta_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">beta_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">);</span>
 </pre>
 <p>
             Constructs a beta distribution with shape parameters <span class="emphasis"><em>alpha</em></span>
@@ -161,27 +158,24 @@
 <p>
             For example:
           </p>
-<pre class="programlisting">
-<span class="identifier">beta_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">mybeta</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">5</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">beta_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">mybeta</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">5</span><span class="special">);</span>
 </pre>
 <p>
             Constructs a the beta distribution with alpha=2 and beta=5 (shown in
             yellow in the graph above).
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors"></a><h6>
-<a name="id579515"></a>
+<a name="id579137"></a>
             <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors">Parameter
             Accessors</a>
           </h6>
-<pre class="programlisting">
-<span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
             Returns the parameter <span class="emphasis"><em>alpha</em></span> from which this distribution
             was constructed.
           </p>
-<pre class="programlisting">
-<span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
             Returns the parameter <span class="emphasis"><em>beta</em></span> from which this distribution
@@ -190,13 +184,12 @@
 <p>
             So for example:
           </p>
-<pre class="programlisting">
-<span class="identifier">beta_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">mybeta</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">5</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">beta_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">mybeta</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">5</span><span class="special">);</span>
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">mybeta</span><span class="special">.</span><span class="identifier">alpha</span><span class="special">()</span> <span class="special">==</span> <span class="number">2.</span><span class="special">);</span>  <span class="comment">// mybeta.alpha() returns 2
 </span><span class="identifier">assert</span><span class="special">(</span><span class="identifier">mybeta</span><span class="special">.</span><span class="identifier">beta</span><span class="special">()</span> <span class="special">==</span> <span class="number">5.</span><span class="special">);</span>   <span class="comment">// mybeta.beta()  returns 5
 </span></pre>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators"></a><h5>
-<a name="id579794"></a>
+<a name="id579413"></a>
             <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators">Parameter
             Estimators</a>
           </h5>
@@ -216,8 +209,7 @@ from presumed-known mean and variance.
             Prevalence Calculator</a> and <a href="http://www.epi.ucdavis.edu/diagnostictests/betabuster.html" target="_top">Beta
             Buster</a> but this is not yet implemented here.
           </p>
-<pre class="programlisting">
-<span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_alpha</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_alpha</span><span class="special">(</span>
   <span class="identifier">RealType</span> <span class="identifier">mean</span><span class="special">,</span> <span class="comment">// Expected value of mean.
 </span>  <span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">);</span> <span class="comment">// Expected value of variance.
 </span></pre>
@@ -225,8 +217,7 @@ from presumed-known mean and variance.
             Returns the unique value of &#945; that corresponds to a beta distribution with
             mean <span class="emphasis"><em>mean</em></span> and variance <span class="emphasis"><em>variance</em></span>.
           </p>
-<pre class="programlisting">
-<span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
   <span class="identifier">RealType</span> <span class="identifier">mean</span><span class="special">,</span> <span class="comment">// Expected value of mean.
 </span>  <span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">);</span> <span class="comment">// Expected value of variance.
 </span></pre>
@@ -234,8 +225,7 @@ from presumed-known mean and variance.
             Returns the unique value of &#946; that corresponds to a beta distribution with
             mean <span class="emphasis"><em>mean</em></span> and variance <span class="emphasis"><em>variance</em></span>.
           </p>
-<pre class="programlisting">
-<span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_alpha</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_alpha</span><span class="special">(</span>
   <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">,</span> <span class="comment">// from beta.
 </span>  <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="comment">//  x.
 </span>  <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// probability cdf
@@ -243,8 +233,7 @@ from presumed-known mean and variance.
 <p>
             Returns the value of &#945; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
           </p>
-<pre class="programlisting">
-<span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
   <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="comment">// alpha.
 </span>  <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="comment">// probability x.
 </span>  <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// probability cdf.
@@ -253,7 +242,7 @@ from presumed-known mean and variance.
             Returns the value of &#946; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions"></a><h5>
-<a name="id580434"></a>
+<a name="id580048"></a>
             <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions">Non-member
             Accessor Functions</a>
           </h5>
@@ -275,7 +264,7 @@ from presumed-known mean and variance.
             Mathworld</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.applications"></a><h5>
-<a name="id580612"></a>
+<a name="id580226"></a>
             <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.applications">Applications</a>
           </h5>
 <p>
@@ -288,7 +277,7 @@ from presumed-known mean and variance.
             statistical inference</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions"></a><h5>
-<a name="id580657"></a>
+<a name="id580271"></a>
             <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions">Related
             distributions</a>
           </h5>
@@ -314,7 +303,7 @@ from presumed-known mean and variance.
             Distribution</a> with its p parameter set to x.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.accuracy"></a><h5>
-<a name="id580746"></a>
+<a name="id580348"></a>
             <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -326,7 +315,7 @@ from presumed-known mean and variance.
             please refer to these functions for information on accuracy.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.implementation"></a><h5>
-<a name="id580824"></a>
+<a name="id580427"></a>
             <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -608,7 +597,7 @@ from presumed-known mean and variance.
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.references"></a><h5>
-<a name="id582121"></a>
+<a name="id581724"></a>
             <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.references">References</a>
           </h5>
 <p>

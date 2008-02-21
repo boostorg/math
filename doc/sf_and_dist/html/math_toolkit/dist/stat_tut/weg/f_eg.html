@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -49,8 +49,7 @@
 <p>
             We'll begin by defining the procedure to conduct the test:
           </p>
-<pre class="programlisting">
-<span class="keyword">void</span> <span class="identifier">f_test</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">f_test</span><span class="special">(</span>
     <span class="keyword">double</span> <span class="identifier">sd1</span><span class="special">,</span>     <span class="comment">// Sample 1 std deviation
 </span>    <span class="keyword">double</span> <span class="identifier">sd2</span><span class="special">,</span>     <span class="comment">// Sample 2 std deviation
 </span>    <span class="keyword">double</span> <span class="identifier">N1</span><span class="special">,</span>      <span class="comment">// Sample 1 size
@@ -61,8 +60,7 @@
 <p>
             The procedure begins by printing out a summary of our input data:
           </p>
-<pre class="programlisting">
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">std</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">std</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 
 <span class="comment">// Print header:
@@ -90,8 +88,7 @@
 is the standard
             deviation of the second sample. Or in code:
           </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">F</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">sd1</span> <span class="special">/</span> <span class="identifier">sd2</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">F</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">sd1</span> <span class="special">/</span> <span class="identifier">sd2</span><span class="special">);</span>
 <span class="identifier">F</span> <span class="special">*=</span> <span class="identifier">F</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">55</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">left</span> <span class="special">&lt;&lt;</span> <span class="string">"Test Statistic"</span> <span class="special">&lt;&lt;</span> <span class="string">"=  "</span> <span class="special">&lt;&lt;</span> <span class="identifier">F</span> <span class="special">&lt;&lt;</span> <span class="string">"\n\n"</span><span class="special">;</span>
 </pre>
@@ -196,8 +193,7 @@ is the standard
             In our example program we need both upper and lower critical values for
             alpha and for alpha/2:
           </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">ucv</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">));</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">ucv</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">));</span>
 <span class="keyword">double</span> <span class="identifier">ucv2</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">alpha</span> <span class="special">/</span> <span class="number">2</span><span class="special">));</span>
 <span class="keyword">double</span> <span class="identifier">lcv</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">);</span>
 <span class="keyword">double</span> <span class="identifier">lcv2</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">alpha</span> <span class="special">/</span> <span class="number">2</span><span class="special">);</span>
@@ -214,8 +210,7 @@ is the standard
             The final step is to perform the comparisons given above, and print out
             whether the hypothesis is rejected or not:
           </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">55</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">left</span> <span class="special">&lt;&lt;</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">55</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">left</span> <span class="special">&lt;&lt;</span>
    <span class="string">"Results for Alternative Hypothesis and alpha"</span> <span class="special">&lt;&lt;</span> <span class="string">"=  "</span>
    <span class="special">&lt;&lt;</span> <span class="identifier">setprecision</span><span class="special">(</span><span class="number">4</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">fixed</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha</span> <span class="special">&lt;&lt;</span> <span class="string">"\n\n"</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Alternative Hypothesis                                    Conclusion\n"</span><span class="special">;</span>

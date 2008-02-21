@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -33,14 +33,12 @@
           specific policy to use with them. There are two macros defined to assist
           with that:
         </p>
-<pre class="programlisting">
-<span class="identifier">BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS</span><span class="special">(</span><span class="identifier">Policy</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS</span><span class="special">(</span><span class="identifier">Policy</span><span class="special">)</span>
 </pre>
 <p>
           and:
         </p>
-<pre class="programlisting">
-<span class="identifier">BOOST_MATH_DECLARE_DISTRIBUTIONS</span><span class="special">(</span><span class="identifier">Type</span><span class="special">,</span> <span class="identifier">Policy</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_DECLARE_DISTRIBUTIONS</span><span class="special">(</span><span class="identifier">Type</span><span class="special">,</span> <span class="identifier">Policy</span><span class="special">)</span>
 </pre>
 <p>
           You can use either of these macros after including any special function
@@ -51,8 +49,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">namespace</span> <span class="identifier">myspace</span><span class="special">{</span>
 
@@ -81,8 +78,7 @@
           In this example, using BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS results in
           a set of thin inline forwarding functions being defined:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="identifier">T</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">a</span><span class="special">){</span> <span class="keyword">return</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">mypolicy</span><span class="special">());</span> <span class="special">}</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -104,8 +100,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">cauchy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">cauchy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">namespace</span> <span class="identifier">myspace</span><span class="special">{</span>
 
@@ -146,8 +141,7 @@
           In this example the result of BOOST_MATH_DECLARE_DISTRIBUTIONS is to declare
           a typedef for each distribution like this:
         </p>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cauchy_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">cauchy</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cauchy_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">cauchy</span><span class="special">;</span>
 <span class="identifier">tyepdef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">gamma_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">gamma</span><span class="special">;</span>
 </pre>
 <p>

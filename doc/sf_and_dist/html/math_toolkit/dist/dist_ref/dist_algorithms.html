@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -28,7 +28,7 @@
         Algorithms</a>
 </h4></div></div></div>
 <a name="math_toolkit.dist.dist_ref.dist_algorithms.finding_the_location_and_scale_for_normal_and_similar_distributions"></a><h5>
-<a name="id615967"></a>
+<a name="id615446"></a>
           <a href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.finding_the_location_and_scale_for_normal_and_similar_distributions">Finding
           the Location and Scale for Normal and similar distributions</a>
         </h5>
@@ -46,24 +46,21 @@
           Complement versions are also provided, both with explicit and implicit
           (default) policy.
         </p>
-<pre class="programlisting">
-<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">;</span> <span class="comment">// May be needed by users defining their own policies.
+<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">;</span> <span class="comment">// May be needed by users defining their own policies.
 </span><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">;</span> <span class="comment">// Will be needed by users who want to use complements.
 </span></pre>
 <a name="math_toolkit.dist.dist_ref.dist_algorithms.find_location_function"></a><h5>
-<a name="id616123"></a>
+<a name="id615600"></a>
           <a href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.find_location_function">find_location
           function</a>
         </h5>
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">find_location</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">find_location</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span> <span class="comment">// explicit error handling policy
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">find_location</span><span class="special">(</span> <span class="comment">// For example, normal mean.
@@ -83,19 +80,17 @@
   <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.dist.dist_ref.dist_algorithms.find_scale_function"></a><h5>
-<a name="id616746"></a>
+<a name="id616221"></a>
           <a href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.find_scale_function">find_scale
           function</a>
         </h5>
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">find_scale</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">find_scale</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
   <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">find_scale</span><span class="special">(</span> <span class="comment">// For example, normal mean.

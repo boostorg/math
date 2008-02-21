@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -65,8 +65,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial</span><span class="special">;</span>
 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
@@ -87,8 +86,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span></pre>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span></pre>
 <p>
               </p>
 <p>
@@ -110,8 +108,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">void</span> <span class="identifier">confidence_limits_on_frequency</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">trials</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">successes</span><span class="special">)</span>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">confidence_limits_on_frequency</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">trials</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">successes</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="comment">// trials = Total number of trials.
 </span>   <span class="comment">// successes = Total number of observed successes.
@@ -155,8 +152,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-   <span class="comment">// Now print out the upper and lower limits for the alpha table values.
+<pre class="programlisting">   <span class="comment">// Now print out the upper and lower limits for the alpha table values.
 </span>   <span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
    <span class="special">{</span>
       <span class="comment">// Confidence value:
@@ -183,8 +179,7 @@
 <p>
                 
 </p>
-<pre class="programlisting">
-<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
   <span class="identifier">confidence_limits_on_frequency</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">2</span><span class="special">);</span> <span class="comment">// 20 trials, 2 successes, 2 in 20, = 1 in 10 = 0.1 success fraction.
 </span>  <span class="identifier">confidence_limits_on_frequency</span><span class="special">(</span><span class="number">200</span><span class="special">,</span> <span class="number">20</span><span class="special">);</span> <span class="comment">// More trials, but same 0.1 success fraction.

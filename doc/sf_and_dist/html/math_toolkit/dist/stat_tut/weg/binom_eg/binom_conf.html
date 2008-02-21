@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -47,8 +47,7 @@
               illustrates their use. It begins by defining a procedure that will
               print a table of confidence limits for various degrees of certainty:
             </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iomanip</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
@@ -80,14 +79,12 @@
               the probabilities that the true occurrence frequency lies outside the
               calculated interval:
             </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span>
 </pre>
 <p>
               Some pretty printing of the table header follows:
             </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\n\n"</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\n\n"</span>
         <span class="string">"_______________________________________________________________________\n"</span>
         <span class="string">"Confidence        Lower CP       Upper CP       Lower JP       Upper JP\n"</span>
         <span class="string">" Value (%)        Limit          Limit          Limit          Limit\n"</span>
@@ -135,8 +132,7 @@
               provides a choice of two methods for the calculation, we print out
               the results from both methods in this example:
             </p>
-<pre class="programlisting">
-   <span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
+<pre class="programlisting">   <span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
    <span class="special">{</span>
       <span class="comment">// Confidence value:
 </span>      <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">fixed</span> <span class="special">&lt;&lt;</span> <span class="identifier">setprecision</span><span class="special">(</span><span class="number">3</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span> <span class="special">&lt;&lt;</span> <span class="number">100</span> <span class="special">*</span> <span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]);</span>

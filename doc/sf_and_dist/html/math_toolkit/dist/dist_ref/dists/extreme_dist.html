@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -30,12 +30,10 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">extreme</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">extreme</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
           <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">extreme_value_distribution</span><span class="special">;</span>
 
@@ -96,12 +94,11 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/extreme_val_dist2.png" alt="extreme_val_dist2"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.extreme_dist.member_functions"></a><h5>
-<a name="id592850"></a>
+<a name="id592421"></a>
             <a href="extreme_dist.html#math_toolkit.dist.dist_ref.dists.extreme_dist.member_functions">Member
             Functions</a>
           </h5>
-<pre class="programlisting">
-<span class="identifier">extreme_value_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">extreme_value_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
 <p>
             Constructs an Extreme Value distribution with the specified location
@@ -111,20 +108,18 @@
             Requires <code class="computeroutput"><span class="identifier">scale</span> <span class="special">&gt;</span>
             <span class="number">0</span></code>, otherwise calls <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
           </p>
-<pre class="programlisting">
-<span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
             Returns the location parameter of the distribution.
           </p>
-<pre class="programlisting">
-<span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
             Returns the scale parameter of the distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.extreme_dist.non_member_accessors"></a><h5>
-<a name="id593078"></a>
+<a name="id592645"></a>
             <a href="extreme_dist.html#math_toolkit.dist.dist_ref.dists.extreme_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -144,7 +139,7 @@
             The domain of the random parameter is [-&#8734;, +&#8734;].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.extreme_dist.accuracy"></a><h5>
-<a name="id593248"></a>
+<a name="id592815"></a>
             <a href="extreme_dist.html#math_toolkit.dist.dist_ref.dists.extreme_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -153,7 +148,7 @@
             very low error rates.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.extreme_dist.implementation"></a><h5>
-<a name="id593302"></a>
+<a name="id592869"></a>
             <a href="extreme_dist.html#math_toolkit.dist.dist_ref.dists.extreme_dist.implementation">Implementation</a>
           </h5>
 <p>

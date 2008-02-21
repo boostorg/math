@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -34,12 +34,10 @@
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">policies</span><span class="special">/</span><span class="identifier">policy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">policies</span><span class="special">/</span><span class="identifier">policy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span>
 <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 <span class="keyword">namespace</span> <span class="identifier">policies</span>
 
@@ -95,8 +93,7 @@
           are intended for internal use but are documented briefly here for the sake
           of completeness.
         </p>
-<pre class="programlisting">
-<span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">domain_error_type</span>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">domain_error_type</span>
 </pre>
 <p>
           Specifies how domain errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">&lt;&gt;</span></code>
@@ -104,8 +101,7 @@
           one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
           enumerated values.
         </p>
-<pre class="programlisting">
-<span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">pole_error_type</span>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">pole_error_type</span>
 </pre>
 <p>
           Specifies how pole-errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">pole_error</span><span class="special">&lt;&gt;</span></code>
@@ -113,8 +109,7 @@
           one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
           enumerated values.
         </p>
-<pre class="programlisting">
-<span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">overflow_error_type</span>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">overflow_error_type</span>
 </pre>
 <p>
           Specifies how overflow errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">overflow_error</span><span class="special">&lt;&gt;</span></code>
@@ -122,8 +117,7 @@
           one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
           enumerated values.
         </p>
-<pre class="programlisting">
-<span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">underflow_error_type</span>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">underflow_error_type</span>
 </pre>
 <p>
           Specifies how underflow errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">underflow_error</span><span class="special">&lt;&gt;</span></code>
@@ -131,8 +125,7 @@
           one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
           enumerated values.
         </p>
-<pre class="programlisting">
-<span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">denorm_error_type</span>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">denorm_error_type</span>
 </pre>
 <p>
           Specifies how denorm errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">denorm_error</span><span class="special">&lt;&gt;</span></code>
@@ -140,8 +133,7 @@
           one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
           enumerated values.
         </p>
-<pre class="programlisting">
-<span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">evaluation_error_type</span>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">evaluation_error_type</span>
 </pre>
 <p>
           Specifies how evaluation errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">&lt;&gt;</span></code>
@@ -149,32 +141,28 @@
           one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
           enumerated values.
         </p>
-<pre class="programlisting">
-<span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">precision_type</span>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">precision_type</span>
 </pre>
 <p>
           Specifies the internal precision to use in binary digits (uses zero to
           represent whatever the default precision is). Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">digits2</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span></code>
           which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">int_</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span></code>.
         </p>
-<pre class="programlisting">
-<span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">promote_float_type</span>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">promote_float_type</span>
 </pre>
 <p>
           Specifies whether or not to promote <code class="computeroutput"><span class="keyword">float</span></code>
           arguments to <code class="computeroutput"><span class="keyword">double</span></code> precision
           internally. Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code> which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>.
         </p>
-<pre class="programlisting">
-<span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">promote_double_type</span>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">promote_double_type</span>
 </pre>
 <p>
           Specifies whether or not to promote <code class="computeroutput"><span class="keyword">double</span></code>
           arguments to <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>
           precision internally. Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code> which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>.
         </p>
-<pre class="programlisting">
-<span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">discrete_quantile_type</span>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">discrete_quantile_type</span>
 </pre>
 <p>
           Specifies how discrete quantiles are evaluated, will be an instance of
@@ -182,24 +170,21 @@
           instantiated with one of the <code class="computeroutput"><span class="identifier">discrete_quantile_policy_type</span></code>
           enumerated type.
         </p>
-<pre class="programlisting">
-<span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">assert_undefined_type</span>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">assert_undefined_type</span>
 </pre>
 <p>
           Specifies whether mathematically-undefined properties are asserted as compile-time
           errors, or treated as runtime errors instead. Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">assert_undefined</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>
           which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;...</span><span class="identifier">argument</span> <span class="identifier">list</span><span class="special">...&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;...</span><span class="identifier">argument</span> <span class="identifier">list</span><span class="special">...&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">normalise</span><span class="special">&lt;</span><span class="identifier">policy</span><span class="special">&lt;&gt;,</span> <span class="identifier">A1</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">make_policy</span><span class="special">(...</span><span class="identifier">argument</span> <span class="identifier">list</span><span class="special">..);</span>
 </pre>
 <p>
           <code class="computeroutput"><span class="identifier">make_policy</span></code> is a helper
           function that converts a list of policies into a normalised <code class="computeroutput"><span class="identifier">policy</span></code> class.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">,</span> 
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">,</span> 
           <span class="keyword">class</span> <span class="identifier">A1</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span> 
           <span class="keyword">class</span> <span class="identifier">A2</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span> 
           <span class="keyword">class</span> <span class="identifier">A3</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>

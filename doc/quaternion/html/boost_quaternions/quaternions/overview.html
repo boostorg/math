@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Overview</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Boost.Quaternions">
 <link rel="up" href="../quaternions.html" title="Quaternions">
 <link rel="prev" href="../quaternions.html" title="Quaternions">
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,46 +24,47 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_quaternions.quaternions.overview"></a><a href="overview.html" title="Overview">Overview</a></h3></div></div></div>
+<a name="boost_quaternions.quaternions.overview"></a><a href="overview.html" title="Overview">Overview</a>
+</h3></div></div></div>
 <p>
         Quaternions are a relative of complex numbers.
       </p>
 <p>
         Quaternions are in fact part of a small hierarchy of structures built upon
         the real numbers, which comprise only the set of real numbers (traditionally
-        named <span class="emphasis"><em><span class="bold"><b>R</b></span></em></span>), the set of
-        complex numbers (traditionally named <span class="emphasis"><em><span class="bold"><b>C</b></span></em></span>),
-        the set of quaternions (traditionally named <span class="emphasis"><em><span class="bold"><b>H</b></span></em></span>)
-        and the set of octonions (traditionally named <span class="emphasis"><em><span class="bold"><b>O</b></span></em></span>),
+        named <span class="emphasis"><em><span class="bold"><strong>R</strong></span></em></span>), the set of
+        complex numbers (traditionally named <span class="emphasis"><em><span class="bold"><strong>C</strong></span></em></span>),
+        the set of quaternions (traditionally named <span class="emphasis"><em><span class="bold"><strong>H</strong></span></em></span>)
+        and the set of octonions (traditionally named <span class="emphasis"><em><span class="bold"><strong>O</strong></span></em></span>),
         which possess interesting mathematical properties (chief among which is the
         fact that they are <span class="emphasis"><em>division algebras</em></span>, <span class="emphasis"><em>i.e.</em></span>
-        where the following property is true: if <span class="emphasis"><em><tt class="literal">y</tt></em></span>
-        is an element of that algebra and is <span class="bold"><b>not equal to zero</b></span>,
-        then <span class="emphasis"><em><tt class="literal">yx = yx'</tt></em></span>, where <span class="emphasis"><em><tt class="literal">x</tt></em></span>
-        and <span class="emphasis"><em><tt class="literal">x'</tt></em></span> denote elements of that algebra,
-        implies that <span class="emphasis"><em><tt class="literal">x = x'</tt></em></span>). Each member
+        where the following property is true: if <span class="emphasis"><em><code class="literal">y</code></em></span>
+        is an element of that algebra and is <span class="bold"><strong>not equal to zero</strong></span>,
+        then <span class="emphasis"><em><code class="literal">yx = yx'</code></em></span>, where <span class="emphasis"><em><code class="literal">x</code></em></span>
+        and <span class="emphasis"><em><code class="literal">x'</code></em></span> denote elements of that algebra,
+        implies that <span class="emphasis"><em><code class="literal">x = x'</code></em></span>). Each member
         of the hierarchy is a super-set of the former.
       </p>
 <p>
         One of the most important aspects of quaternions is that they provide an
-        efficient way to parameterize rotations in <span class="emphasis"><em><span class="bold"><b>R<sup>3</sup></b></span></em></span>
-        (the usual three-dimensional space) and <span class="emphasis"><em><span class="bold"><b>R<sup>4</sup></b></span></em></span>.
+        efficient way to parameterize rotations in <span class="emphasis"><em><span class="bold"><strong>R<sup>3</sup></strong></span></em></span>
+        (the usual three-dimensional space) and <span class="emphasis"><em><span class="bold"><strong>R<sup>4</sup></strong></span></em></span>.
       </p>
 <p>
         In practical terms, a quaternion is simply a quadruple of real numbers (&#945;,&#946;,&#947;,&#948;),
-        which we can write in the form <span class="emphasis"><em><tt class="literal">q = &#945; + &#946;i + &#947;j + &#948;k</tt></em></span>,
-        where <span class="emphasis"><em><tt class="literal">i</tt></em></span> is the same object as for
-        complex numbers, and <span class="emphasis"><em><tt class="literal">j</tt></em></span> and <span class="emphasis"><em><tt class="literal">k</tt></em></span>
-        are distinct objects which play essentially the same kind of role as <span class="emphasis"><em><tt class="literal">i</tt></em></span>.
+        which we can write in the form <span class="emphasis"><em><code class="literal">q = &#945; + &#946;i + &#947;j + &#948;k</code></em></span>,
+        where <span class="emphasis"><em><code class="literal">i</code></em></span> is the same object as for
+        complex numbers, and <span class="emphasis"><em><code class="literal">j</code></em></span> and <span class="emphasis"><em><code class="literal">k</code></em></span>
+        are distinct objects which play essentially the same kind of role as <span class="emphasis"><em><code class="literal">i</code></em></span>.
       </p>
 <p>
         An addition and a multiplication is defined on the set of quaternions, which
         generalize their real and complex counterparts. The main novelty here is
-        that <span class="bold"><b>the multiplication is not commutative</b></span>
-        (i.e. there are quaternions <span class="emphasis"><em><tt class="literal">x</tt></em></span> and
-        <span class="emphasis"><em><tt class="literal">y</tt></em></span> such that <span class="emphasis"><em><tt class="literal">xy
-        &#8800; yx</tt></em></span>). A good mnemotechnical way of remembering things
-        is by using the formula <span class="emphasis"><em><tt class="literal">i*i = j*j = k*k = -1</tt></em></span>.
+        that <span class="bold"><strong>the multiplication is not commutative</strong></span>
+        (i.e. there are quaternions <span class="emphasis"><em><code class="literal">x</code></em></span> and
+        <span class="emphasis"><em><code class="literal">y</code></em></span> such that <span class="emphasis"><em><code class="literal">xy
+        &#8800; yx</code></em></span>). A good mnemotechnical way of remembering things
+        is by using the formula <span class="emphasis"><em><code class="literal">i*i = j*j = k*k = -1</code></em></span>.
       </p>
 <p>
         Quaternions (and their kin) are described in far more details in this other
@@ -78,10 +79,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2001 -2003 Hubert Holin<p>
+<td align="right"><div class="copyright-footer">Copyright © 2001 -2003 Hubert Holin<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

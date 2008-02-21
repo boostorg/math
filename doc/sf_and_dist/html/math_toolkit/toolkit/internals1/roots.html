@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -28,19 +28,17 @@
         With Derivatives</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.roots.synopsis"></a><h5>
-<a name="id707447"></a>
+<a name="id706690"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.synopsis">Synopsis</a>
         </h5>
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">roots</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">roots</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">newton_raphson_iterate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">guess</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">digits</span><span class="special">);</span>
@@ -63,7 +61,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals1.roots.description"></a><h5>
-<a name="id708605"></a>
+<a name="id707845"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.description">Description</a>
         </h5>
 <p>
@@ -178,7 +176,7 @@
 <a name="newton"></a><p>
         </p>
 <a name="math_toolkit.toolkit.internals1.roots.newton_raphson_method"></a><h5>
-<a name="id708926"></a>
+<a name="id708166"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.newton_raphson_method">Newton
           Raphson Method</a>
         </h5>
@@ -198,7 +196,7 @@
 <a name="halley"></a><p>
         </p>
 <a name="math_toolkit.toolkit.internals1.roots.halley_s_method"></a><h5>
-<a name="id709007"></a>
+<a name="id708247"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.halley_s_method">Halley's
           Method</a>
         </h5>
@@ -222,7 +220,7 @@
 <a name="schroeder"></a><p>
         </p>
 <a name="math_toolkit.toolkit.internals1.roots.schroeder_s_method"></a><h5>
-<a name="id709094"></a>
+<a name="id708334"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.schroeder_s_method">Schroeder's
           Method</a>
         </h5>
@@ -246,7 +244,7 @@
           iteration.
         </p>
 <a name="math_toolkit.toolkit.internals1.roots.example"></a><h5>
-<a name="id709174"></a>
+<a name="id708414"></a>
           <a href="roots.html#math_toolkit.toolkit.internals1.roots.example">Example</a>
         </h5>
 <p>
@@ -261,8 +259,7 @@
           begin be defining a function object that returns the evaluation of the
           function to solve, along with its first derivative:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">cbrt_functor</span>
 <span class="special">{</span>
    <span class="identifier">cbrt_functor</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">target</span><span class="special">)</span> <span class="special">:</span> <span class="identifier">a</span><span class="special">(</span><span class="identifier">target</span><span class="special">){}</span>
@@ -280,8 +277,7 @@
           a good approximation to begin with: in this case we'll just divide the
           exponent by three:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">cbrt</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">std</span><span class="special">;</span>
@@ -316,8 +312,7 @@
           Now lets adapt the functor slightly to return the second derivative as
           well:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">cbrt_functor</span>
 <span class="special">{</span>
    <span class="identifier">cbrt_functor</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">target</span><span class="special">)</span> <span class="special">:</span> <span class="identifier">a</span><span class="special">(</span><span class="identifier">target</span><span class="special">){}</span>
@@ -334,8 +329,7 @@
           And then adapt the <code class="computeroutput"><span class="identifier">cbrt</span></code>
           function to use Halley iterations:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">cbrt</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">std</span><span class="special">;</span>
