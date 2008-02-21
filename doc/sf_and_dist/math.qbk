@@ -265,6 +265,10 @@ for these distributions.
 ] [/ caution]
 ] [/ template discrete_quantile_warning]
 
+This manual is also available in 
+[@http:svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf 
+printer friendly PDF format].
+
 [section:main_overview Overview]
 
 [include overview.qbk]

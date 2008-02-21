@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,19 +27,17 @@
 <a name="math_toolkit.special.sf_poly.hermite"></a><a href="hermite.html" title="Hermite Polynomials"> Hermite Polynomials</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.sf_poly.hermite.synopsis"></a><h5>
-<a name="id664623"></a>
+<a name="id663978"></a>
           <a href="hermite.html#math_toolkit.special.sf_poly.hermite.synopsis">Synopsis</a>
         </h5>
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">hermite</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">hermite</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hermite</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
@@ -53,7 +51,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.sf_poly.hermite.description"></a><h5>
-<a name="id665132"></a>
+<a name="id664484"></a>
           <a href="hermite.html#math_toolkit.special.sf_poly.hermite.description">Description</a>
         </h5>
 <p>
@@ -62,8 +60,7 @@
           template argument the result is the same type as that argument or <code class="computeroutput"><span class="keyword">double</span></code> if the template argument is an integer
           type.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hermite</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -93,8 +90,7 @@
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/hermite.png" alt="hermite"></span>
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
 <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hermite_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Hn</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Hnm1</span><span class="special">);</span>
 </pre>
 <p>
@@ -109,8 +105,7 @@
           For example we could produce a vector of the first 10 polynomial values
           using:
         </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>  <span class="comment">// Abscissa value
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>  <span class="comment">// Abscissa value
 </span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">hermite</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="identifier">x</span><span class="special">)).</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">hermite</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="identifier">x</span><span class="special">));</span>
 <span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span> <span class="identifier">l</span> <span class="special">&lt;</span> <span class="number">10</span><span class="special">;</span> <span class="special">++</span><span class="identifier">l</span><span class="special">)</span>
@@ -141,7 +136,7 @@
 </dl>
 </div>
 <a name="math_toolkit.special.sf_poly.hermite.accuracy"></a><h5>
-<a name="id666133"></a>
+<a name="id665482"></a>
           <a href="hermite.html#math_toolkit.special.sf_poly.hermite.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -151,7 +146,7 @@
           zero error</a>.
         </p>
 <div class="table">
-<a name="id666164"></a><p class="title"><b>Table 29. Peak Errors In the Hermite Polynomial</b></p>
+<a name="id665513"></a><p class="title"><b>Table 29. Peak Errors In the Hermite Polynomial</b></p>
 <div class="table-contents"><table class="table" summary="Peak Errors In the Hermite Polynomial">
 <colgroup>
 <col>
@@ -258,7 +253,7 @@
           is very close to a root.
         </p>
 <a name="math_toolkit.special.sf_poly.hermite.testing"></a><h5>
-<a name="id666340"></a>
+<a name="id665690"></a>
           <a href="hermite.html#math_toolkit.special.sf_poly.hermite.testing">Testing</a>
         </h5>
 <p>
@@ -268,7 +263,7 @@
           precision.
         </p>
 <a name="math_toolkit.special.sf_poly.hermite.implementation"></a><h5>
-<a name="id666379"></a>
+<a name="id665728"></a>
           <a href="hermite.html#math_toolkit.special.sf_poly.hermite.implementation">Implementation</a>
         </h5>
 <p>

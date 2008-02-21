@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -40,8 +40,7 @@
               We'll begin by defining the procedure that will calculate and print
               out the confidence intervals:
             </p>
-<pre class="programlisting">
-<span class="keyword">void</span> <span class="identifier">confidence_limits_on_std_deviation</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">confidence_limits_on_std_deviation</span><span class="special">(</span>
      <span class="keyword">double</span> <span class="identifier">Sd</span><span class="special">,</span>    <span class="comment">// Sample Standard Deviation
 </span>     <span class="keyword">unsigned</span> <span class="identifier">N</span><span class="special">)</span>   <span class="comment">// Sample size
 </span><span class="special">{</span>
@@ -49,8 +48,7 @@
 <p>
               We'll begin by printing out some general information:
             </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span>
    <span class="string">"________________________________________________\n"</span>
    <span class="string">"2-Sided Confidence Limits For Standard Deviation\n"</span>
    <span class="string">"________________________________________________\n\n"</span><span class="special">;</span>
@@ -62,15 +60,13 @@
               and then define a table of significance levels for which we'll calculate
               intervals:
             </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span>
 </pre>
 <p>
               The distribution we'll need to calculate the confidence intervals is
               a Chi Squared distribution, with N-1 degrees of freedom:
             </p>
-<pre class="programlisting">
-<span class="identifier">chi_squared</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">N</span> <span class="special">-</span> <span class="number">1</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">chi_squared</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">N</span> <span class="special">-</span> <span class="number">1</span><span class="special">);</span>
 </pre>
 <p>
               For each value of alpha, the formula for the confidence interval is
@@ -86,8 +82,7 @@
 <p>
               In code we begin by printing out a table header:
             </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\n\n"</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\n\n"</span>
         <span class="string">"_____________________________________________\n"</span>
         <span class="string">"Confidence          Lower          Upper\n"</span>
         <span class="string">" Value (%)          Limit          Limit\n"</span>
@@ -99,8 +94,7 @@
               quantile, and the upper critical value is the same as the quantile
               from the complement of the probability:
             </p>
-<pre class="programlisting">
-<span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
+<pre class="programlisting"><span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="comment">// Confidence value:
 </span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">fixed</span> <span class="special">&lt;&lt;</span> <span class="identifier">setprecision</span><span class="special">(</span><span class="number">3</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span> <span class="special">&lt;&lt;</span> <span class="number">100</span> <span class="special">*</span> <span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]);</span>
@@ -145,7 +139,7 @@ _____________________________________________
               is between 0.00551 and 0.00729.
             </p>
 <a name="math_toolkit.dist.stat_tut.weg.cs_eg.chi_sq_intervals.confidence_intervals_as_a_function_of_the_number_of_observations"></a><h5>
-<a name="id511792"></a>
+<a name="id511661"></a>
               <a href="chi_sq_intervals.html#math_toolkit.dist.stat_tut.weg.cs_eg.chi_sq_intervals.confidence_intervals_as_a_function_of_the_number_of_observations">Confidence
               intervals as a function of the number of observations</a>
             </h5>

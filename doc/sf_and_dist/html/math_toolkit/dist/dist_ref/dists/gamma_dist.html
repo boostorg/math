@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -30,12 +30,10 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
    
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
           <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
@@ -78,8 +76,7 @@
 <p>
               
 </p>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <span class="identifier">gamma_distibution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">gamma</span><span class="special">;</span></pre>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">gamma_distibution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">gamma</span><span class="special">;</span></pre>
 <p>
             </p>
 <p>
@@ -88,8 +85,7 @@
 <p>
               
 </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">gamma_distribution</span><span class="special">&lt;&gt;</span></pre>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">gamma_distribution</span><span class="special">&lt;&gt;</span></pre>
 <p>
             </p>
 </td></tr>
@@ -141,12 +137,11 @@
             than a dedicated Erlang Distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.gamma_dist.member_functions"></a><h5>
-<a name="id596123"></a>
+<a name="id595679"></a>
             <a href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.member_functions">Member
             Functions</a>
           </h5>
-<pre class="programlisting">
-<span class="identifier">gamma_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">shape</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">gamma_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">shape</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
 <p>
             Constructs a gamma distribution with shape <span class="emphasis"><em>shape</em></span>
@@ -156,20 +151,18 @@
             Requires that the shape and scale parameters are greater than zero, otherwise
             calls <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
           </p>
-<pre class="programlisting">
-<span class="identifier">RealType</span> <span class="identifier">shape</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">shape</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
             Returns the <span class="emphasis"><em>shape</em></span> parameter of this distribution.
           </p>
-<pre class="programlisting">
-<span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
             Returns the <span class="emphasis"><em>scale</em></span> parameter of this distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.gamma_dist.non_member_accessors"></a><h5>
-<a name="id596331"></a>
+<a name="id595884"></a>
             <a href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -189,7 +182,7 @@
             The domain of the random variable is [0,+&#8734;].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.gamma_dist.accuracy"></a><h5>
-<a name="id596501"></a>
+<a name="id596054"></a>
             <a href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -201,7 +194,7 @@
             refer to the accuracy data for those functions for more information.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.gamma_dist.implementation"></a><h5>
-<a name="id596570"></a>
+<a name="id596123"></a>
             <a href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.implementation">Implementation</a>
           </h5>
 <p>

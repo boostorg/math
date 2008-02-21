@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -30,13 +30,11 @@
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">);</span>
@@ -53,11 +51,10 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.sf_gamma.gamma_ratios.description"></a><h5>
-<a name="id625511"></a>
+<a name="id624950"></a>
           <a href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.description">Description</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span> 
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span> 
 <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span> 
@@ -83,8 +80,7 @@
           Internally this just calls <code class="computeroutput"><span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span>
           <span class="identifier">b</span><span class="special">-</span><span class="identifier">a</span><span class="special">)</span></code>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_delta_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">delta</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -118,7 +114,7 @@
           otherwise the result type is simple T1.
         </p>
 <a name="math_toolkit.special.sf_gamma.gamma_ratios.accuracy"></a><h5>
-<a name="id626249"></a>
+<a name="id625685"></a>
           <a href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -128,7 +124,7 @@
           <a href="../../backgrounders/relative_error.html#zero_error">effectively zero error</a>.
         </p>
 <div class="table">
-<a name="id626282"></a><p class="title"><b>Table 11. Errors In the Function tgamma_delta_ratio(a, delta)</b></p>
+<a name="id625719"></a><p class="title"><b>Table 11. Errors In the Function tgamma_delta_ratio(a, delta)</b></p>
 <div class="table-contents"><table class="table" summary="Errors In the Function tgamma_delta_ratio(a, delta)">
 <colgroup>
 <col>
@@ -231,7 +227,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id626442"></a><p class="title"><b>Table 12. Errors In the Function tgamma_ratio(a,
+<a name="id625879"></a><p class="title"><b>Table 12. Errors In the Function tgamma_ratio(a,
         b)</b></p>
 <div class="table-contents"><table class="table" summary="Errors In the Function tgamma_ratio(a,
         b)">
@@ -330,7 +326,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.special.sf_gamma.gamma_ratios.testing"></a><h5>
-<a name="id626604"></a>
+<a name="id626041"></a>
           <a href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.testing">Testing</a>
         </h5>
 <p>
@@ -339,7 +335,7 @@
           a deliberately naive calculation of &#915;(x)/&#915;(y).
         </p>
 <a name="math_toolkit.special.sf_gamma.gamma_ratios.implementation"></a><h5>
-<a name="id626644"></a>
+<a name="id626081"></a>
           <a href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.implementation">Implementation</a>
         </h5>
 <p>

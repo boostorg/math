@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -28,19 +28,17 @@
         Inverses</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.sf_erf.error_inv.synopsis"></a><h5>
-<a name="id655190"></a>
+<a name="id654576"></a>
           <a href="error_inv.html#math_toolkit.special.sf_erf.error_inv.synopsis">Synopsis</a>
         </h5>
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">erf</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">erf</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erf_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">p</span><span class="special">);</span>
@@ -71,11 +69,10 @@
 <p>
         </p>
 <a name="math_toolkit.special.sf_erf.error_inv.description"></a><h5>
-<a name="id655739"></a>
+<a name="id655124"></a>
           <a href="error_inv.html#math_toolkit.special.sf_erf.error_inv.description">Description</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erf_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -85,14 +82,12 @@
           Returns the <a href="http://functions.wolfram.com/GammaBetaErf/InverseErf/" target="_top">inverse
           error function</a> of z, that is a value x such that:
         </p>
-<pre class="programlisting">
-<span class="identifier">p</span> <span class="special">=</span> <span class="identifier">erf</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">p</span> <span class="special">=</span> <span class="identifier">erf</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/erf_inv.png" alt="erf_inv"></span>
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erfc_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -102,14 +97,13 @@
           Returns the inverse of the complement of the error function of z, that
           is a value x such that:
         </p>
-<pre class="programlisting">
-<span class="identifier">p</span> <span class="special">=</span> <span class="identifier">erfc</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">p</span> <span class="special">=</span> <span class="identifier">erfc</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/erfc_inv.png" alt="erfc_inv"></span>
         </p>
 <a name="math_toolkit.special.sf_erf.error_inv.accuracy"></a><h5>
-<a name="id656260"></a>
+<a name="id655640"></a>
           <a href="error_inv.html#math_toolkit.special.sf_erf.error_inv.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -119,7 +113,7 @@
           error functions</a>.
         </p>
 <a name="math_toolkit.special.sf_erf.error_inv.testing"></a><h5>
-<a name="id656300"></a>
+<a name="id655680"></a>
           <a href="error_inv.html#math_toolkit.special.sf_erf.error_inv.testing">Testing</a>
         </h5>
 <p>
@@ -141,7 +135,7 @@
           </li>
 </ul></div>
 <a name="math_toolkit.special.sf_erf.error_inv.implementation"></a><h5>
-<a name="id656368"></a>
+<a name="id655748"></a>
           <a href="error_inv.html#math_toolkit.special.sf_erf.error_inv.implementation">Implementation</a>
         </h5>
 <p>
@@ -166,8 +160,7 @@
           For <span class="emphasis"><em>p &lt; 0.5</em></span> the inverse erf function is reasonably
           smooth and the approximation:
         </p>
-<pre class="programlisting">
-<span class="identifier">x</span> <span class="special">=</span> <span class="identifier">p</span><span class="special">(</span><span class="identifier">p</span> <span class="special">+</span> <span class="number">10</span><span class="special">)(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">p</span><span class="special">))</span>
+<pre class="programlisting"><span class="identifier">x</span> <span class="special">=</span> <span class="identifier">p</span><span class="special">(</span><span class="identifier">p</span> <span class="special">+</span> <span class="number">10</span><span class="special">)(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">p</span><span class="special">))</span>
 </pre>
 <p>
           Gives a good result for a constant Y, and R(p) optimised for low absolute
@@ -177,20 +170,17 @@
           For q &lt; 0.5 things get trickier, over the interval <span class="emphasis"><em>0.5 &gt;
           q &gt; 0.25</em></span> the following approximation works well:
         </p>
-<pre class="programlisting">
-<span class="identifier">x</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(-</span><span class="number">2l</span><span class="identifier">og</span><span class="special">(</span><span class="identifier">q</span><span class="special">))</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">q</span><span class="special">))</span>
+<pre class="programlisting"><span class="identifier">x</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(-</span><span class="number">2l</span><span class="identifier">og</span><span class="special">(</span><span class="identifier">q</span><span class="special">))</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">q</span><span class="special">))</span>
 </pre>
 <p>
           While for q &lt; 0.25, let
         </p>
-<pre class="programlisting">
-<span class="identifier">z</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(-</span><span class="identifier">log</span><span class="special">(</span><span class="identifier">q</span><span class="special">))</span>
+<pre class="programlisting"><span class="identifier">z</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(-</span><span class="identifier">log</span><span class="special">(</span><span class="identifier">q</span><span class="special">))</span>
 </pre>
 <p>
           Then the result is given by:
         </p>
-<pre class="programlisting">
-<span class="identifier">x</span> <span class="special">=</span> <span class="identifier">z</span><span class="special">(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">z</span> <span class="special">-</span> <span class="identifier">B</span><span class="special">))</span>
+<pre class="programlisting"><span class="identifier">x</span> <span class="special">=</span> <span class="identifier">z</span><span class="special">(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">z</span> <span class="special">-</span> <span class="identifier">B</span><span class="special">))</span>
 </pre>
 <p>
           As before Y is a constant and the rational function R is optimised for

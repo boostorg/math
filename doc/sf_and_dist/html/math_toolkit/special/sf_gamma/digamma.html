@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,19 +27,17 @@
 <a name="math_toolkit.special.sf_gamma.digamma"></a><a href="digamma.html" title="Digamma"> Digamma</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.sf_gamma.digamma.synopsis"></a><h5>
-<a name="id623307"></a>
+<a name="id622762"></a>
           <a href="digamma.html#math_toolkit.special.sf_gamma.digamma.synopsis">Synopsis</a>
         </h5>
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">digamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">digamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
@@ -50,7 +48,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.sf_gamma.digamma.description"></a><h5>
-<a name="id623630"></a>
+<a name="id623082"></a>
           <a href="digamma.html#math_toolkit.special.sf_gamma.digamma.description">Description</a>
         </h5>
 <p>
@@ -84,7 +82,7 @@
           T otherwise.
         </p>
 <a name="math_toolkit.special.sf_gamma.digamma.accuracy"></a><h5>
-<a name="id623776"></a>
+<a name="id623228"></a>
           <a href="digamma.html#math_toolkit.special.sf_gamma.digamma.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -272,7 +270,7 @@
           absolute error will remain very low.
         </p>
 <a name="math_toolkit.special.sf_gamma.digamma.testing"></a><h5>
-<a name="id624080"></a>
+<a name="id623532"></a>
           <a href="digamma.html#math_toolkit.special.sf_gamma.digamma.testing">Testing</a>
         </h5>
 <p>
@@ -282,7 +280,7 @@
           see below).
         </p>
 <a name="math_toolkit.special.sf_gamma.digamma.implementation"></a><h5>
-<a name="id624122"></a>
+<a name="id623575"></a>
           <a href="digamma.html#math_toolkit.special.sf_gamma.digamma.implementation">Implementation</a>
         </h5>
 <p>
@@ -291,8 +289,7 @@
 <p>
           For Negative arguments the reflection formula:
         </p>
-<pre class="programlisting">
-<span class="identifier">digamma</span><span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">x</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">pi</span><span class="special">/</span><span class="identifier">tan</span><span class="special">(</span><span class="identifier">pi</span><span class="special">*</span><span class="identifier">x</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">digamma</span><span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">x</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">pi</span><span class="special">/</span><span class="identifier">tan</span><span class="special">(</span><span class="identifier">pi</span><span class="special">*</span><span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
           is used to make <span class="emphasis"><em>x</em></span> positive.
@@ -300,8 +297,7 @@
 <p>
           For arguments in the range [0,1] the recurrence relation:
         </p>
-<pre class="programlisting">
-<span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span> <span class="special">-</span> <span class="number">1</span><span class="special">/</span><span class="identifier">x</span>
+<pre class="programlisting"><span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span> <span class="special">-</span> <span class="number">1</span><span class="special">/</span><span class="identifier">x</span>
 </pre>
 <p>
           is used to shift the evaluation to [1,2].
@@ -313,8 +309,7 @@
 <p>
           For arguments in the range [2,BIG] the recurrence relation:
         </p>
-<pre class="programlisting">
-<span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">+</span> <span class="number">1</span><span class="special">/</span><span class="identifier">x</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">+</span> <span class="number">1</span><span class="special">/</span><span class="identifier">x</span><span class="special">;</span>
 </pre>
 <p>
           is used to shift the evaluation to the range [1,2].
@@ -370,8 +365,7 @@
           The rational approximation <a href="../../backgrounders/implementation.html#math_toolkit.backgrounders.implementation.rational_approximations_used">devised
           by JM</a> was optimised for absolute error using the form:
         </p>
-<pre class="programlisting">
-<span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">-</span> <span class="identifier">X0</span><span class="special">)(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">x</span> <span class="special">-</span> <span class="number">1</span><span class="special">));</span>
+<pre class="programlisting"><span class="identifier">digamma</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">-</span> <span class="identifier">X0</span><span class="special">)(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">x</span> <span class="special">-</span> <span class="number">1</span><span class="special">));</span>
 </pre>
 <p>
           Where X0 is the positive root of digamma, Y is a constant, and R(x - 1)

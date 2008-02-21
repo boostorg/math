@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -53,28 +53,24 @@
             The <a href="http://www.nag.co.uk/numeric/cl/manual/pdf/G01/g01bjc.pdf" target="_top">NAG
             function specification</a> is
           </p>
-<pre class="programlisting">
-<span class="keyword">void</span> <span class="identifier">nag_binomial_dist</span><span class="special">(</span><span class="identifier">Integer</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">Integer</span> <span class="identifier">k</span><span class="special">,</span>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">nag_binomial_dist</span><span class="special">(</span><span class="identifier">Integer</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">Integer</span> <span class="identifier">k</span><span class="special">,</span>
 <span class="keyword">double</span> <span class="special">*</span><span class="identifier">plek</span><span class="special">,</span> <span class="keyword">double</span> <span class="special">*</span><span class="identifier">pgtk</span><span class="special">,</span> <span class="keyword">double</span> <span class="special">*</span><span class="identifier">peqk</span><span class="special">,</span> <span class="identifier">NagError</span> <span class="special">*</span><span class="identifier">fail</span><span class="special">)</span>
 </pre>
 <p>
             and is called
           </p>
-<pre class="programlisting">
-<span class="identifier">g01bjc</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">k</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">plek</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">pgtk</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">peqk</span><span class="special">,</span> <span class="identifier">NAGERR_DEFAULT</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">g01bjc</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">k</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">plek</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">pgtk</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">peqk</span><span class="special">,</span> <span class="identifier">NAGERR_DEFAULT</span><span class="special">);</span>
 </pre>
 <p>
             The equivalent using this Boost C++ library is:
           </p>
-<pre class="programlisting">
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>  <span class="comment">// Using declaration avoids very long names.
+<pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>  <span class="comment">// Using declaration avoids very long names.
 </span><span class="identifier">binomial</span> <span class="identifier">my_dist</span><span class="special">(</span><span class="number">4</span><span class="special">,</span> <span class="number">0.5</span><span class="special">);</span> <span class="comment">// c.f. NAG n = 4, p = 0.5
 </span></pre>
 <p>
             and values can be output thus:
           </p>
-<pre class="programlisting">
-<span class="identifier">cout</span>
+<pre class="programlisting"><span class="identifier">cout</span>
   <span class="special">&lt;&lt;</span> <span class="identifier">my_dist</span><span class="special">.</span><span class="identifier">trials</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">" "</span>             <span class="comment">// Echo the NAG input n = 4 trials.
 </span>  <span class="special">&lt;&lt;</span> <span class="identifier">my_dist</span><span class="special">.</span><span class="identifier">success_fraction</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">" "</span>   <span class="comment">// Echo the NAG input p = 0.5
 </span>  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">my_dist</span><span class="special">,</span> <span class="number">2</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">"  "</span>             <span class="comment">// NAG plek with k = 2

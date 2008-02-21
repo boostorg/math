@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -37,8 +37,7 @@
           but we do then need to decide how best to round the result. The <code class="computeroutput"><span class="identifier">discrete_quantile</span></code> policy defines how
           discrete quantiles work, and how integer results are rounded:
         </p>
-<pre class="programlisting">
-<span class="keyword">enum</span> <span class="identifier">discrete_quantile_policy_type</span>
+<pre class="programlisting"><span class="keyword">enum</span> <span class="identifier">discrete_quantile_policy_type</span>
 <span class="special">{</span>
    <span class="identifier">real</span><span class="special">,</span>
    <span class="identifier">integer_round_outwards</span><span class="special">,</span> <span class="comment">// default
@@ -56,7 +55,7 @@
           can take have the following meanings:
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.real"></a><h6>
-<a name="id767291"></a>
+<a name="id766385"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.real">real</a>
         </h6>
 <p>
@@ -68,8 +67,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
@@ -95,7 +93,7 @@
           <span class="special">=</span> <span class="number">68.1584</span></code>.
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards"></a><h6>
-<a name="id767779"></a>
+<a name="id766872"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards">integer_round_outwards</a>
         </h6>
 <p>
@@ -121,8 +119,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 
@@ -145,8 +142,7 @@
 <p>
           The variables x and y are now defined so that:
         </p>
-<pre class="programlisting">
-<span class="identifier">cdf</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0.05</span>
+<pre class="programlisting"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0.05</span>
 <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">),</span> <span class="identifier">y</span><span class="special">)</span> <span class="special">&gt;=</span> <span class="number">0.95</span>
 </pre>
 <p>
@@ -155,7 +151,7 @@
           in each tail</em></span>.
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards"></a><h6>
-<a name="id768300"></a>
+<a name="id767391"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards">integer_round_inwards</a>
         </h6>
 <p>
@@ -180,8 +176,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
@@ -210,8 +205,7 @@
 <p>
           The variables x and y are now defined so that:
         </p>
-<pre class="programlisting">
-<span class="identifier">cdf</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">&gt;=</span> <span class="number">0.05</span>
+<pre class="programlisting"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">&gt;=</span> <span class="number">0.05</span>
 <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">),</span> <span class="identifier">y</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0.95</span>
 </pre>
 <p>
@@ -220,7 +214,7 @@
           in each tail</em></span>.
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down"></a><h6>
-<a name="id768957"></a>
+<a name="id768044"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down">integer_round_down</a>
         </h6>
 <p>
@@ -228,7 +222,7 @@
           or a lower quantile.
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up"></a><h6>
-<a name="id768988"></a>
+<a name="id768076"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up">integer_round_up</a>
         </h6>
 <p>
@@ -236,7 +230,7 @@
           a lower quantile.
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest"></a><h6>
-<a name="id769020"></a>
+<a name="id768107"></a>
           <a href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest">integer_round_nearest</a>
         </h6>
 <p>
@@ -254,8 +248,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>

@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,7 +27,7 @@
 <a name="math_toolkit.dist.stat_tut.overview"></a><a href="overview.html" title="Overview"> Overview</a>
 </h4></div></div></div>
 <a name="math_toolkit.dist.stat_tut.overview.headers_and_namespaces"></a><h5>
-<a name="id497237"></a>
+<a name="id497190"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.headers_and_namespaces">Headers
           and Namespaces</a>
         </h5>
@@ -44,7 +44,7 @@
           or &lt;boost/math/distributions.hpp&gt;
         </p>
 <a name="math_toolkit.dist.stat_tut.overview.distributions_are_objects"></a><h5>
-<a name="id497290"></a>
+<a name="id497242"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.distributions_are_objects">Distributions
           are Objects</a>
         </h5>
@@ -94,8 +94,7 @@
           <span class="keyword">double</span></code> - is nearly as convenient).
           Probably 95% of uses are covered by these typedefs:
         </p>
-<pre class="programlisting">
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 
 <span class="comment">// Construct a students_t distribution with 4 degrees of freedom:
 </span><span class="identifier">students_t</span> <span class="identifier">d1</span><span class="special">(</span><span class="number">4</span><span class="special">);</span>
@@ -111,8 +110,7 @@
           t Distribution</a> or <a href="../dist_ref/dists/binomial_dist.html" title="Binomial Distribution">Binomial
           Distribution</a>:
         </p>
-<pre class="programlisting">
-<span class="comment">// Construct a students_t distribution, of float type,
+<pre class="programlisting"><span class="comment">// Construct a students_t distribution, of float type,
 </span><span class="comment">// with 4 degrees of freedom:
 </span><span class="identifier">students_t_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">d3</span><span class="special">(</span><span class="number">4</span><span class="special">);</span>
 
@@ -125,8 +123,7 @@
           The parameters passed to the distributions can be accessed via getter member
           functions:
         </p>
-<pre class="programlisting">
-<span class="identifier">d1</span><span class="special">.</span><span class="identifier">degrees_of_freedom</span><span class="special">();</span>  <span class="comment">// returns 4.0 
+<pre class="programlisting"><span class="identifier">d1</span><span class="special">.</span><span class="identifier">degrees_of_freedom</span><span class="special">();</span>  <span class="comment">// returns 4.0 
 </span></pre>
 <p>
           This is all well and good, but not very useful so far. What we often want
@@ -134,7 +131,7 @@
           and <span class="emphasis"><em>quantiles</em></span> etc for these distributions.
         </p>
 <a name="math_toolkit.dist.stat_tut.overview.generic_operations_common_to_all_distributions_are_non_member_functions"></a><h5>
-<a name="id497826"></a>
+<a name="id497775"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.generic_operations_common_to_all_distributions_are_non_member_functions">Generic
           operations common to all distributions are non-member functions</a>
         </h5>
@@ -142,21 +139,18 @@
           Want to calculate the PDF (Probability Density Function) of a distribution?
           No problem, just use:
         </p>
-<pre class="programlisting">
-<span class="identifier">pdf</span><span class="special">(</span><span class="identifier">my_dist</span><span class="special">,</span> <span class="identifier">x</span><span class="special">);</span>  <span class="comment">// Returns PDF (density) at point x of distribution my_dist.
+<pre class="programlisting"><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">my_dist</span><span class="special">,</span> <span class="identifier">x</span><span class="special">);</span>  <span class="comment">// Returns PDF (density) at point x of distribution my_dist.
 </span></pre>
 <p>
           Or how about the CDF (Cumulative Distribution Function):
         </p>
-<pre class="programlisting">
-<span class="identifier">cdf</span><span class="special">(</span><span class="identifier">my_dist</span><span class="special">,</span> <span class="identifier">x</span><span class="special">);</span>  <span class="comment">// Returns CDF (integral from -infinity to point x)
+<pre class="programlisting"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">my_dist</span><span class="special">,</span> <span class="identifier">x</span><span class="special">);</span>  <span class="comment">// Returns CDF (integral from -infinity to point x)
 </span>                  <span class="comment">// of distribution my_dist.
 </span></pre>
 <p>
           And quantiles are just the same:
         </p>
-<pre class="programlisting">
-<span class="identifier">quantile</span><span class="special">(</span><span class="identifier">my_dist</span><span class="special">,</span> <span class="identifier">p</span><span class="special">);</span>  <span class="comment">// Returns the value of the random variable x
+<pre class="programlisting"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">my_dist</span><span class="special">,</span> <span class="identifier">p</span><span class="special">);</span>  <span class="comment">// Returns the value of the random variable x
 </span>                       <span class="comment">// such that cdf(my_dist, x) == p.
 </span></pre>
 <p>
@@ -313,7 +307,7 @@
 <a name="complements"></a><p>
         </p>
 <a name="math_toolkit.dist.stat_tut.overview.complements_are_supported_too"></a><h5>
-<a name="id498582"></a>
+<a name="id498509"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.complements_are_supported_too">Complements
           are supported too</a>
         </h5>
@@ -333,8 +327,7 @@
           In this library, whenever you want to receive a complement, just wrap all
           the function arguments in a call to <code class="computeroutput"><span class="identifier">complement</span><span class="special">(...)</span></code>, for example:
         </p>
-<pre class="programlisting">
-<span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="number">5</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="number">5</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"CDF at t = 1 is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="number">1.0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Complement of CDF at t = 1 is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="number">1.0</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 </pre>
@@ -344,8 +337,7 @@
           a complement by wrapping all of its arguments in a call to <code class="computeroutput"><span class="identifier">complement</span><span class="special">(...)</span></code>,
           for example:
         </p>
-<pre class="programlisting">
-<span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="number">5</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="number">5</span><span class="special">);</span>
 
 <span class="keyword">for</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="number">1e10</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">*=</span> <span class="number">10</span><span class="special">)</span>
 <span class="special">{</span>
@@ -450,7 +442,7 @@
 </td></tr>
 </table></div>
 <a name="math_toolkit.dist.stat_tut.overview.parameters_can_be_calculated"></a><h5>
-<a name="id499764"></a>
+<a name="id499688"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.parameters_can_be_calculated">Parameters
           can be calculated</a>
         </h5>
@@ -465,8 +457,7 @@
           like this, and are necessarily different for each distribution. They are
           implemented as static member functions of the distributions, for example:
         </p>
-<pre class="programlisting">
-<span class="identifier">students_t</span><span class="special">::</span><span class="identifier">find_degrees_of_freedom</span><span class="special">(</span>
+<pre class="programlisting"><span class="identifier">students_t</span><span class="special">::</span><span class="identifier">find_degrees_of_freedom</span><span class="special">(</span>
    <span class="number">1.3</span><span class="special">,</span>        <span class="comment">// difference from true mean to detect
 </span>   <span class="number">0.05</span><span class="special">,</span>       <span class="comment">// maximum risk of falsely rejecting the null-hypothesis.
 </span>   <span class="number">0.1</span><span class="special">,</span>        <span class="comment">// maximum risk of falsely failing to reject the null-hypothesis.
@@ -482,7 +473,7 @@
           sample size.
         </p>
 <a name="math_toolkit.dist.stat_tut.overview.summary"></a><h5>
-<a name="id499917"></a>
+<a name="id499840"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.summary">Summary</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">

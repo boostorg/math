@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -28,19 +28,17 @@
         Evaluation</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.cf.synopsis"></a><h5>
-<a name="id700710"></a>
+<a name="id699969"></a>
           <a href="cf.html#math_toolkit.toolkit.internals1.cf.synopsis">Synopsis</a>
         </h5>
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">fraction</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">fraction</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Gen</span><span class="special">&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">fraction_traits</span><span class="special">&lt;</span><span class="identifier">Gen</span><span class="special">&gt;::</span><span class="identifier">result_type</span> 
@@ -61,7 +59,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals1.cf.description"></a><h5>
-<a name="id701434"></a>
+<a name="id700690"></a>
           <a href="cf.html#math_toolkit.toolkit.internals1.cf.description">Description</a>
         </h5>
 <p>
@@ -159,7 +157,7 @@
           a continued fraction for convergence.
         </p>
 <a name="math_toolkit.toolkit.internals1.cf.implementation"></a><h5>
-<a name="id701712"></a>
+<a name="id700967"></a>
           <a href="cf.html#math_toolkit.toolkit.internals1.cf.implementation">Implementation</a>
         </h5>
 <p>
@@ -169,7 +167,7 @@
           Lentz, W.J. 1976, Applied Optics, vol. 15, pp. 668-671.
         </p>
 <a name="math_toolkit.toolkit.internals1.cf.examples"></a><h5>
-<a name="id701746"></a>
+<a name="id701001"></a>
           <a href="cf.html#math_toolkit.toolkit.internals1.cf.examples">Examples</a>
         </h5>
 <p>
@@ -183,8 +181,7 @@
 <p>
           We begin by defining a generator function:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">golden_ratio_fraction</span>
 <span class="special">{</span>
    <span class="keyword">typedef</span> <span class="identifier">T</span> <span class="identifier">result_type</span><span class="special">;</span>
@@ -198,8 +195,7 @@
 <p>
           The golden ratio can then be computed to double precision using:
         </p>
-<pre class="programlisting">
-<span class="identifier">continued_fraction_a</span><span class="special">(</span>
+<pre class="programlisting"><span class="identifier">continued_fraction_a</span><span class="special">(</span>
    <span class="identifier">golden_ratio_fraction</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;(),</span>
    <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">digits</span><span class="special">);</span>
 </pre>
@@ -214,8 +210,7 @@
 <p>
           So it's generator object would look like:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">tan_fraction</span>
 <span class="special">{</span>
 <span class="keyword">private</span><span class="special">:</span>
@@ -240,8 +235,7 @@
           by the generator will be negative. The tangent function can now be evaluated
           using:
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">tan</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">a</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="identifier">tan_fraction</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">fract</span><span class="special">(</span><span class="identifier">a</span><span class="special">);</span>

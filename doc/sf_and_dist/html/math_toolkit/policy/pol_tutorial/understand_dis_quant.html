@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -126,27 +126,23 @@
 <p>
           So far so good, but there is in fact a trap waiting for the unwary here:
         </p>
-<pre class="programlisting">
-<span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span>
 </pre>
 <p>
           returns 18 as the result, which is what we would expect from the graph
           above, and indeed there is no x greater than 18 for which:
         </p>
-<pre class="programlisting">
-<span class="identifier">cdf</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0.05</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0.05</span><span class="special">;</span>
 </pre>
 <p>
           However:
         </p>
-<pre class="programlisting">
-<span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">);</span>
 </pre>
 <p>
           returns 31, and indeed while there is no x less than 31 for which:
         </p>
-<pre class="programlisting">
-<span class="identifier">cdf</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">&gt;=</span> <span class="number">0.95</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">&gt;=</span> <span class="number">0.95</span><span class="special">;</span>
 </pre>
 <p>
           We might naively expect that for this symmetrical distribution the result
@@ -168,14 +164,12 @@
           a random variable X is in the tail area - where we would reject the null
           hypothesis if:
         </p>
-<pre class="programlisting">
-<span class="identifier">X</span> <span class="special">&lt;=</span> <span class="identifier">L</span> <span class="special">||</span> <span class="identifier">X</span> <span class="special">&gt;</span> <span class="identifier">U</span>
+<pre class="programlisting"><span class="identifier">X</span> <span class="special">&lt;=</span> <span class="identifier">L</span> <span class="special">||</span> <span class="identifier">X</span> <span class="special">&gt;</span> <span class="identifier">U</span>
 </pre>
 <p>
           And the a variable X is inside the central region if:
         </p>
-<pre class="programlisting">
-<span class="identifier">L</span> <span class="special">&lt;</span> <span class="identifier">X</span> <span class="special">&lt;=</span> <span class="identifier">U</span>
+<pre class="programlisting"><span class="identifier">L</span> <span class="special">&lt;</span> <span class="identifier">X</span> <span class="special">&lt;=</span> <span class="identifier">U</span>
 </pre>
 <p>
           The moral here is to <span class="emphasis"><em>always be very careful with your comparisons
@@ -183,7 +177,7 @@
           <span class="emphasis"><em>base your comparisons on CDF's instead</em></span>.
         </p>
 <a name="math_toolkit.policy.pol_tutorial.understand_dis_quant.other_rounding_policies_are_available"></a><h6>
-<a name="id758363"></a>
+<a name="id757472"></a>
           <a href="understand_dis_quant.html#math_toolkit.policy.pol_tutorial.understand_dis_quant.other_rounding_policies_are_available">Other
           Rounding Policies are Available</a>
         </h6>
@@ -261,8 +255,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
@@ -277,8 +270,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">binomial_distribution</span><span class="special">&lt;</span>
@@ -322,8 +314,7 @@
 <p>
             
 </p>
-<pre class="programlisting">
-<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> 
       <span class="string">"Testing rounding policies for a 50 sample binomial distribution,\n"</span>

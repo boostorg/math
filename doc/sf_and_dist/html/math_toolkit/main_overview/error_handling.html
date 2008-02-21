@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,7 +27,7 @@
 <a name="math_toolkit.main_overview.error_handling"></a><a href="error_handling.html" title="Error Handling"> Error Handling</a>
 </h3></div></div></div>
 <a name="math_toolkit.main_overview.error_handling.quick_reference"></a><h5>
-<a name="id491141"></a>
+<a name="id491104"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.quick_reference">Quick
         Reference</a>
       </h5>
@@ -121,7 +121,7 @@
         the default action for each error shown in bold:
       </p>
 <div class="table">
-<a name="id491399"></a><p class="title"><b>Table 1. Possible Actions for Domain Errors</b></p>
+<a name="id491361"></a><p class="title"><b>Table 1. Possible Actions for Domain Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Domain Errors">
 <colgroup>
 <col>
@@ -196,7 +196,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id491715"></a><p class="title"><b>Table 2. Possible Actions for Pole Errors</b></p>
+<a name="id491678"></a><p class="title"><b>Table 2. Possible Actions for Pole Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Pole Errors">
 <colgroup>
 <col>
@@ -271,7 +271,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id492029"></a><p class="title"><b>Table 3. Possible Actions for Overflow Errors</b></p>
+<a name="id491992"></a><p class="title"><b>Table 3. Possible Actions for Overflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Overflow Errors">
 <colgroup>
 <col>
@@ -346,7 +346,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id492345"></a><p class="title"><b>Table 4. Possible Actions for Underflow Errors</b></p>
+<a name="id492308"></a><p class="title"><b>Table 4. Possible Actions for Underflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Underflow Errors">
 <colgroup>
 <col>
@@ -421,7 +421,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id492568"></a><p class="title"><b>Table 5. Possible Actions for Denorm Errors</b></p>
+<a name="id492531"></a><p class="title"><b>Table 5. Possible Actions for Denorm Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Denorm Errors">
 <colgroup>
 <col>
@@ -496,7 +496,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id492793"></a><p class="title"><b>Table 6. Possible Actions for Internal Evaluation
+<a name="id492756"></a><p class="title"><b>Table 6. Possible Actions for Internal Evaluation
       Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Internal Evaluation
       Errors">
@@ -573,7 +573,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.main_overview.error_handling.rationale"></a><h5>
-<a name="id493128"></a>
+<a name="id493091"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.rationale">Rationale</a>
       </h5>
 <p>
@@ -592,7 +592,7 @@
         </li>
 </ul></div>
 <a name="math_toolkit.main_overview.error_handling.finding_more_information"></a><h5>
-<a name="id493178"></a>
+<a name="id493140"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.finding_more_information">Finding
         More Information</a>
       </h5>
@@ -614,7 +614,7 @@
         The various kind of errors are described in more detail below.
       </p>
 <a name="domain_error"></a><a name="math_toolkit.main_overview.error_handling.domain_errors"></a><h5>
-<a name="id493272"></a>
+<a name="id493235"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.domain_errors">Domain
         Errors</a>
       </h5>
@@ -623,8 +623,7 @@
         values for which that function is defined, then the function returns the
         result of:
       </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_domain_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_domain_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating-point
@@ -708,7 +707,7 @@
         for more details.
       </p>
 <a name="pole_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_at_a_pole"></a><h5>
-<a name="id493656"></a>
+<a name="id493617"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_at_a_pole">Evaluation
         at a pole</a>
       </h5>
@@ -716,8 +715,7 @@
         When a special function is passed an argument that is at a pole without a
         well defined residual value, then the function returns the result of:
       </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_pole_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_pole_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating point
@@ -748,7 +746,7 @@
         for more details.
       </p>
 <a name="overflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_overflow"></a><h5>
-<a name="id493979"></a>
+<a name="id493939"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_overflow">Numeric
         Overflow</a>
       </h5>
@@ -756,8 +754,7 @@
         When the result of a special function is too large to fit in the argument
         floating-point type, then the function returns the result of:
       </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_overflow_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_overflow_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating-point
@@ -774,7 +771,7 @@
         doesn't support infinities, the maximum value for the type is returned.
       </p>
 <a name="underflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_underflow"></a><h5>
-<a name="id494260"></a>
+<a name="id494220"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_underflow">Numeric
         Underflow</a>
       </h5>
@@ -782,8 +779,7 @@
         If the result of a special function is known to be non-zero, but the calculated
         result underflows to zero, then the function returns the result of:
       </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_underflow_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_underflow_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating point
@@ -798,7 +794,7 @@
         an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="denorm_error"></a><a name="math_toolkit.main_overview.error_handling.denormalisation_errors"></a><h5>
-<a name="id494483"></a>
+<a name="id494441"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.denormalisation_errors">Denormalisation
         Errors</a>
       </h5>
@@ -806,8 +802,7 @@
         If the result of a special function is a denormalised value <span class="emphasis"><em>z</em></span>
         then the function returns the result of:
       </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_denorm_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_denorm_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating point
@@ -822,7 +817,7 @@
         throws an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="evaluation_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_errors"></a><h5>
-<a name="id494722"></a>
+<a name="id494679"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_errors">Evaluation
         Errors</a>
       </h5>
@@ -830,8 +825,7 @@
         When a special function calculates a result that is known to be erroneous,
         or where the result is incalculable then it calls:
       </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_evaluation_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_evaluation_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating point
@@ -860,7 +854,7 @@
         for more details.
       </p>
 <a name="checked_narrowing_cast"></a><a name="math_toolkit.main_overview.error_handling.errors_from_typecasts"></a><h5>
-<a name="id495051"></a>
+<a name="id495007"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.errors_from_typecasts">Errors
         from typecasts</a>
       </h5>
@@ -872,8 +866,7 @@
         occur not during evaluation, but when converting the result to the narrower
         result type. The function:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">checked_narrowing_cast</span><span class="special">(</span><span class="identifier">U</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">);</span>
 </pre>
 <p>

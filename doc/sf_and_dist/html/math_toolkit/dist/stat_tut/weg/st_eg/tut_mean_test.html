@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -64,8 +64,7 @@
                 of evidence does not constitute evidence of absence.</a>
               </p></td></tr>
 </table></div>
-<pre class="programlisting">
-<span class="comment">// Needed includes:
+<pre class="programlisting"><span class="comment">// Needed includes:
 </span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iomanip</span><span class="special">&gt;</span>
@@ -86,8 +85,7 @@
               Most of the procedure is pretty-printing, so let's just focus on the
               calculation, we begin by calculating the t-statistic:
             </p>
-<pre class="programlisting">
-<span class="comment">// Difference in means:
+<pre class="programlisting"><span class="comment">// Difference in means:
 </span><span class="keyword">double</span> <span class="identifier">diff</span> <span class="special">=</span> <span class="identifier">Sm</span> <span class="special">-</span> <span class="identifier">M</span><span class="special">;</span>
 <span class="comment">// Degrees of freedom:
 </span><span class="keyword">unsigned</span> <span class="identifier">v</span> <span class="special">=</span> <span class="identifier">Sn</span> <span class="special">-</span> <span class="number">1</span><span class="special">;</span>
@@ -100,8 +98,7 @@
               not, we don't care about the sign of the t-statistic, and we take the
               complement of the probability for comparison to the significance level:
             </p>
-<pre class="programlisting">
-<span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="keyword">double</span> <span class="identifier">q</span> <span class="special">=</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">fabs</span><span class="special">(</span><span class="identifier">t_stat</span><span class="special">)));</span>
 </pre>
 <p>

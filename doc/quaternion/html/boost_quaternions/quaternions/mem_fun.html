@@ -1,24 +1,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Quaternion Member
-      Functions</title>
+<title>Quaternion Member Functions</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Boost.Quaternions">
 <link rel="up" href="../quaternions.html" title="Quaternions">
-<link rel="prev" href="mem_typedef.html" title=" Quaternion
-      Member Typedefs">
-<link rel="next" href="non_mem.html" title=" Quaternion Non-Member
-      Operators">
+<link rel="prev" href="mem_typedef.html" title="Quaternion Member Typedefs">
+<link rel="next" href="non_mem.html" title="Quaternion Non-Member Operators">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,18 +24,17 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_quaternions.quaternions.mem_fun"></a><a href="mem_fun.html" title=" Quaternion Member
-      Functions"> Quaternion Member
-      Functions</a></h3></div></div></div>
-<a name="boost_quaternions.quaternions.mem_fun.constructors"></a><h3>
-<a name="id473048"></a>
+<a name="boost_quaternions.quaternions.mem_fun"></a><a href="mem_fun.html" title="Quaternion Member Functions"> Quaternion Member
+      Functions</a>
+</h3></div></div></div>
+<a name="boost_quaternions.quaternions.mem_fun.constructors"></a><h4>
+<a name="id506842"></a>
         <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.constructors">Constructors</a>
-      </h3>
+      </h4>
 <p>
         Template version:
       </p>
-<pre class="programlisting">
-<span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_a</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">(),</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_b</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">(),</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_c</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">(),</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_d</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">());</span>
+<pre class="programlisting"><span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_a</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">(),</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_b</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">(),</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_c</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">(),</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_d</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">());</span>
 <span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z0</span><span class="special">,</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z1</span> <span class="special">=</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;());</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">X</span><span class="special">&gt;</span>
 <span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a_recopier</span><span class="special">);</span>
@@ -46,8 +42,7 @@
 <p>
         Float specialization version:
       </p>
-<pre class="programlisting">
-<span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="keyword">float</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_a</span> <span class="special">=</span> <span class="number">0.0f</span><span class="special">,</span> <span class="keyword">float</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_b</span> <span class="special">=</span> <span class="number">0.0f</span><span class="special">,</span> <span class="keyword">float</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_c</span> <span class="special">=</span> <span class="number">0.0f</span><span class="special">,</span> <span class="keyword">float</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_d</span> <span class="special">=</span> <span class="number">0.0f</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="keyword">float</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_a</span> <span class="special">=</span> <span class="number">0.0f</span><span class="special">,</span> <span class="keyword">float</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_b</span> <span class="special">=</span> <span class="number">0.0f</span><span class="special">,</span> <span class="keyword">float</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_c</span> <span class="special">=</span> <span class="number">0.0f</span><span class="special">,</span> <span class="keyword">float</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_d</span> <span class="special">=</span> <span class="number">0.0f</span><span class="special">);</span>
 <span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z0</span><span class="special">,::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z1</span> <span class="special">=</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;());</span>
 <span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a_recopier</span><span class="special">);</span> 
 <span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a_recopier</span><span class="special">);</span>
@@ -55,8 +50,7 @@
 <p>
         Double specialization version:
       </p>
-<pre class="programlisting">
-<span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_a</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">,</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_b</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">,</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_c</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">,</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_d</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_a</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">,</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_b</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">,</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_c</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">,</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_d</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">);</span>
 <span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z0</span><span class="special">,</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z1</span> <span class="special">=</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;());</span>
 <span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a_recopier</span><span class="special">);</span>
 <span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a_recopier</span><span class="special">);</span>
@@ -64,8 +58,7 @@
 <p>
         Long double specialization version:
       </p>
-<pre class="programlisting">
-<span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_a</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_b</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_c</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_d</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_a</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_b</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_c</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_d</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">);</span>
 <span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span>	<span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z0</span><span class="special">,</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z1</span> <span class="special">=</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">double</span><span class="special">&gt;());</span>
 <span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a_recopier</span><span class="special">);</span>
 <span class="keyword">explicit</span> <span class="identifier">quaternion</span><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a_recopier</span><span class="special">);</span>
@@ -86,18 +79,17 @@
         by the compiler. Converting copy constructors make use of a templated helper
         function in a "detail" subnamespace.
       </p>
-<a name="boost_quaternions.quaternions.mem_fun.other_member_functions"></a><h3>
-<a name="id475076"></a>
+<a name="boost_quaternions.quaternions.mem_fun.other_member_functions"></a><h4>
+<a name="id508866"></a>
         <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.other_member_functions">Other
         member functions</a>
-      </h3>
-<a name="boost_quaternions.quaternions.mem_fun.real_and_unreal_parts"></a><h4>
-<a name="id475102"></a>
+      </h4>
+<a name="boost_quaternions.quaternions.mem_fun.real_and_unreal_parts"></a><h5>
+<a name="id508890"></a>
         <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.real_and_unreal_parts">Real
         and Unreal Parts</a>
-      </h4>
-<pre class="programlisting">
-<span class="identifier">T</span>             <span class="identifier">real</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+      </h5>
+<pre class="programlisting"><span class="identifier">T</span>             <span class="identifier">real</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">unreal</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
@@ -107,13 +99,12 @@
         quaternion, and usually nothing simpler (as opposed to the complex number
         case). These are returned by the first two functions.
       </p>
-<a name="boost_quaternions.quaternions.mem_fun.individual_real_components"></a><h4>
-<a name="id475210"></a>
+<a name="boost_quaternions.quaternions.mem_fun.individual_real_components"></a><h5>
+<a name="id508997"></a>
         <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.individual_real_components">Individual
         Real Components</a>
-      </h4>
-<pre class="programlisting">
-<span class="identifier">T</span> <span class="identifier">R_component_1</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+      </h5>
+<pre class="programlisting"><span class="identifier">T</span> <span class="identifier">R_component_1</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="identifier">T</span> <span class="identifier">R_component_2</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="identifier">T</span> <span class="identifier">R_component_3</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="identifier">T</span> <span class="identifier">R_component_4</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
@@ -122,34 +113,32 @@
         A quaternion having four real components, these are returned by these four
         functions. Hence real and R_component_1 return the same value.
       </p>
-<a name="boost_quaternions.quaternions.mem_fun.individual_complex__components"></a><h4>
-<a name="id475363"></a>
+<a name="boost_quaternions.quaternions.mem_fun.individual_complex__components"></a><h5>
+<a name="id509145"></a>
         <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.individual_complex__components">Individual
         Complex Components</a>
-      </h4>
-<pre class="programlisting">
-<span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>	<span class="identifier">C_component_1</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+      </h5>
+<pre class="programlisting"><span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>	<span class="identifier">C_component_1</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>	<span class="identifier">C_component_2</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
         A quaternion likewise has two complex components, and as we have seen above,
-        for any quaternion <span class="emphasis"><em><tt class="literal">q = &#945; + &#946;i + &#947;j + &#948;k</tt></em></span> we also have
-        <span class="emphasis"><em><tt class="literal">q = (&#945; + &#946;i) + (&#947; + &#948;i)j </tt></em></span>. These functions return them.
-        The real part of <tt class="computeroutput"><span class="identifier">q</span><span class="special">.</span><span class="identifier">C_component_1</span><span class="special">()</span></tt>
-        is the same as <tt class="computeroutput"><span class="identifier">q</span><span class="special">.</span><span class="identifier">real</span><span class="special">()</span></tt>.
+        for any quaternion <span class="emphasis"><em><code class="literal">q = &#945; + &#946;i + &#947;j + &#948;k</code></em></span> we also have
+        <span class="emphasis"><em><code class="literal">q = (&#945; + &#946;i) + (&#947; + &#948;i)j </code></em></span>. These functions return them.
+        The real part of <code class="computeroutput"><span class="identifier">q</span><span class="special">.</span><span class="identifier">C_component_1</span><span class="special">()</span></code>
+        is the same as <code class="computeroutput"><span class="identifier">q</span><span class="special">.</span><span class="identifier">real</span><span class="special">()</span></code>.
       </p>
-<a name="boost_quaternions.quaternions.mem_fun.quaternion_member_operators"></a><h3>
-<a name="id475585"></a>
+<a name="boost_quaternions.quaternions.mem_fun.quaternion_member_operators"></a><h4>
+<a name="id509368"></a>
         <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.quaternion_member_operators">Quaternion
         Member Operators</a>
-      </h3>
-<a name="boost_quaternions.quaternions.mem_fun.assignment_operators"></a><h4>
-<a name="id475611"></a>
+      </h4>
+<a name="boost_quaternions.quaternions.mem_fun.assignment_operators"></a><h5>
+<a name="id509393"></a>
         <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.assignment_operators">Assignment
         Operators</a>
-      </h4>
-<pre class="programlisting">
-<span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a_affecter</span><span class="special">);</span>
+      </h5>
+<pre class="programlisting"><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a_affecter</span><span class="special">);</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">X</span><span class="special">&gt;</span> 
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">a_affecter</span><span class="special">);</span>
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">a_affecter</span><span class="special">);</span>
@@ -161,76 +150,72 @@
         value, and all other components to zero). For the unspecialized form, the
         base type's assignment operators must not throw.
       </p>
-<a name="boost_quaternions.quaternions.mem_fun.addition_operators"></a><h4>
-<a name="id476007"></a>
+<a name="boost_quaternions.quaternions.mem_fun.addition_operators"></a><h5>
+<a name="id509782"></a>
         <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.addition_operators">Addition
         Operators</a>
-      </h4>
-<pre class="programlisting">
-<span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">+=</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">)</span>
+      </h5>
+<pre class="programlisting"><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">+=</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">)</span>
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">+=</span> <span class="special">(::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">X</span><span class="special">&gt;</span>	
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">+=</span> <span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        These perform the mathematical operation <tt class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)+</span><span class="identifier">rhs</span></tt>
-        and store the result in <tt class="computeroutput"><span class="special">*</span><span class="keyword">this</span></tt>.
+        These perform the mathematical operation <code class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)+</span><span class="identifier">rhs</span></code>
+        and store the result in <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>.
         The unspecialized form has exception guards, which the specialized forms
         do not, so as to insure exception safety. For the unspecialized form, the
         base type's assignment operators must not throw.
       </p>
-<a name="boost_quaternions.quaternions.mem_fun.subtraction_operators"></a><h4>
-<a name="id476362"></a>
+<a name="boost_quaternions.quaternions.mem_fun.subtraction_operators"></a><h5>
+<a name="id510137"></a>
         <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.subtraction_operators">Subtraction
         Operators</a>
-      </h4>
-<pre class="programlisting">
-<span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">-=</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">)</span>
+      </h5>
+<pre class="programlisting"><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">-=</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">)</span>
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">-=</span> <span class="special">(::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">X</span><span class="special">&gt;</span>	
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">-=</span> <span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        These perform the mathematical operation <tt class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)-</span><span class="identifier">rhs</span></tt>
-        and store the result in <tt class="computeroutput"><span class="special">*</span><span class="keyword">this</span></tt>.
+        These perform the mathematical operation <code class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)-</span><span class="identifier">rhs</span></code>
+        and store the result in <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>.
         The unspecialized form has exception guards, which the specialized forms
         do not, so as to insure exception safety. For the unspecialized form, the
         base type's assignment operators must not throw.
       </p>
-<a name="boost_quaternions.quaternions.mem_fun.multiplication_operators"></a><h4>
-<a name="id476717"></a>
+<a name="boost_quaternions.quaternions.mem_fun.multiplication_operators"></a><h5>
+<a name="id510492"></a>
         <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.multiplication_operators">Multiplication
         Operators</a>
-      </h4>
-<pre class="programlisting">
-<span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">*=</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">)</span>
+      </h5>
+<pre class="programlisting"><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">*=</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">)</span>
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">*=</span> <span class="special">(::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">X</span><span class="special">&gt;</span>	
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">*=</span> <span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        These perform the mathematical operation <tt class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)*</span><span class="identifier">rhs</span></tt>
-        <span class="bold"><b>in this order</b></span> (order is important as multiplication
-        is not commutative for quaternions) and store the result in <tt class="computeroutput"><span class="special">*</span><span class="keyword">this</span></tt>. The
+        These perform the mathematical operation <code class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)*</span><span class="identifier">rhs</span></code>
+        <span class="bold"><strong>in this order</strong></span> (order is important as multiplication
+        is not commutative for quaternions) and store the result in <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>. The
         unspecialized form has exception guards, which the specialized forms do not,
         so as to insure exception safety. For the unspecialized form, the base type's
         assignment operators must not throw.
       </p>
-<a name="boost_quaternions.quaternions.mem_fun.division_operators"></a><h4>
-<a name="id477080"></a>
+<a name="boost_quaternions.quaternions.mem_fun.division_operators"></a><h5>
+<a name="id510853"></a>
         <a href="mem_fun.html#boost_quaternions.quaternions.mem_fun.division_operators">Division
         Operators</a>
-      </h4>
-<pre class="programlisting">
-<span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">/=</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">)</span>
+      </h5>
+<pre class="programlisting"><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">/=</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">)</span>
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">/=</span> <span class="special">(::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">X</span><span class="special">&gt;</span>	
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">/=</span> <span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        These perform the mathematical operation <tt class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)*</span><span class="identifier">inverse_of</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span></tt>
-        <span class="bold"><b>in this order</b></span> (order is important as multiplication
-        is not commutative for quaternions) and store the result in <tt class="computeroutput"><span class="special">*</span><span class="keyword">this</span></tt>. The
+        These perform the mathematical operation <code class="computeroutput"><span class="special">(*</span><span class="keyword">this</span><span class="special">)*</span><span class="identifier">inverse_of</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span></code>
+        <span class="bold"><strong>in this order</strong></span> (order is important as multiplication
+        is not commutative for quaternions) and store the result in <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>. The
         unspecialized form has exception guards, which the specialized forms do not,
         so as to insure exception safety. For the unspecialized form, the base type's
         assignment operators must not throw.
@@ -238,10 +223,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2001 -2003 Hubert Holin<p>
+<td align="right"><div class="copyright-footer">Copyright © 2001 -2003 Hubert Holin<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

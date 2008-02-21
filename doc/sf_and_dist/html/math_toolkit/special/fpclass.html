@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -28,11 +28,10 @@
       Infinities and NaN's</a>
 </h3></div></div></div>
 <a name="math_toolkit.special.fpclass.synopsis"></a><h5>
-<a name="id697468"></a>
+<a name="id696739"></a>
         <a href="fpclass.html#math_toolkit.special.fpclass.synopsis">Synopsis</a>
       </h5>
-<pre class="programlisting">
-<span class="preprocessor">#define</span> <span class="identifier">FP_ZERO</span>        <span class="comment">/* implementation specific value */</span>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">FP_ZERO</span>        <span class="comment">/* implementation specific value */</span>
 <span class="preprocessor">#define</span> <span class="identifier">FP_NORMAL</span>      <span class="comment">/* implementation specific value */</span>
 <span class="preprocessor">#define</span> <span class="identifier">FP_INFINITE</span>    <span class="comment">/* implementation specific value */</span>
 <span class="preprocessor">#define</span> <span class="identifier">FP_NAN</span>         <span class="comment">/* implementation specific value */</span>
@@ -54,7 +53,7 @@
 <span class="keyword">bool</span> <span class="identifier">isnormal</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
 <a name="math_toolkit.special.fpclass.description"></a><h5>
-<a name="id697908"></a>
+<a name="id697179"></a>
         <a href="fpclass.html#math_toolkit.special.fpclass.description">Description</a>
       </h5>
 <p>
@@ -69,8 +68,7 @@
         that already provide these as macros. That mean that the following have differing
         meanings:
       </p>
-<pre class="programlisting">
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 
 <span class="comment">// This might call a global macro if defined,
 </span><span class="comment">// but might not work if the type of z is unsupported 
@@ -92,8 +90,7 @@
 <p>
         Detailed descriptions for each of these functions follows:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">int</span> <span class="identifier">fpclassify</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
 <p>
@@ -180,29 +177,25 @@
 </tr>
 </tbody>
 </table></div>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="identifier">isfinite</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 </pre>
 <p>
         Returns true only if <span class="emphasis"><em>z</em></span> is not an infinity or a NaN.
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="identifier">isinf</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
 <p>
         Returns true only if <span class="emphasis"><em>z</em></span> is plus or minus infinity.
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="identifier">isnan</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
 <p>
         Returns true only if <span class="emphasis"><em>z</em></span> is a NaN.
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="identifier">isnormal</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
 <p>

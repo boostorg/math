@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -108,8 +108,7 @@
               We'll begin by defining a procedure to calculate intervals for various
               confidence levels; the procedure will print these out as a table:
             </p>
-<pre class="programlisting">
-<span class="comment">// Needed includes:
+<pre class="programlisting"><span class="comment">// Needed includes:
 </span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iomanip</span><span class="special">&gt;</span>
@@ -139,8 +138,7 @@
               We'll define a table of significance/risk levels for which we'll compute
               intervals:
             </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span>
 </pre>
 <p>
               Note that these are the complements of the confidence/probability levels:
@@ -151,8 +149,7 @@
               <span class="emphasis"><em>degrees of freedom</em></span> parameter is the sample size
               less one:
             </p>
-<pre class="programlisting">
-<span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">Sn</span> <span class="special">-</span> <span class="number">1</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">Sn</span> <span class="special">-</span> <span class="number">1</span><span class="special">);</span>
 </pre>
 <p>
               Most of what follows in the program is pretty printing, so let's focus
@@ -161,8 +158,7 @@
               level. Note that since the significance levels are the complement of
               the probability, we have to wrap the arguments in a call to <span class="emphasis"><em>complement(...)</em></span>:
             </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">T</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">/</span> <span class="number">2</span><span class="special">));</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">T</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">/</span> <span class="number">2</span><span class="special">));</span>
 </pre>
 <p>
               Note that alpha was divided by two, since we'll be calculating both
@@ -174,8 +170,7 @@
               interval from the t-statistic by multiplying by the standard deviation,
               and dividing by the square root of the sample size:
             </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">w</span> <span class="special">=</span> <span class="identifier">T</span> <span class="special">*</span> <span class="identifier">Sd</span> <span class="special">/</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="keyword">double</span><span class="special">(</span><span class="identifier">Sn</span><span class="special">));</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">w</span> <span class="special">=</span> <span class="identifier">T</span> <span class="special">*</span> <span class="identifier">Sd</span> <span class="special">/</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="keyword">double</span><span class="special">(</span><span class="identifier">Sn</span><span class="special">));</span>
 </pre>
 <p>
               The two-sided interval is then the sample mean plus and minus this

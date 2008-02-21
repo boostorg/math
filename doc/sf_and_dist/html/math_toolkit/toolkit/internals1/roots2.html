@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -28,19 +28,17 @@
         Without Derivatives</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.roots2.synopsis"></a><h5>
-<a name="id711288"></a>
+<a name="id710523"></a>
           <a href="roots2.html#math_toolkit.toolkit.internals1.roots2.synopsis">Synopsis</a>
         </h5>
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">roots</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">roots</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> 
@@ -143,7 +141,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals1.roots2.description"></a><h5>
-<a name="id713932"></a>
+<a name="id713165"></a>
           <a href="roots2.html#math_toolkit.toolkit.internals1.roots2.description">Description</a>
         </h5>
 <p>
@@ -176,8 +174,7 @@
           to be an integer. Other user-defined termination conditions are likely
           to be used only rarely, but may be useful in some specific circumstances.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> 
    <span class="identifier">bisect</span><span class="special">(</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> 
@@ -253,20 +250,17 @@
           Returns: a pair of values <span class="emphasis"><em>r</em></span> that bracket the root
           so that:
         </p>
-<pre class="programlisting">
-<span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0</span>
+<pre class="programlisting"><span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0</span>
 </pre>
 <p>
           and either
         </p>
-<pre class="programlisting">
-<span class="identifier">tol</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span>
+<pre class="programlisting"><span class="identifier">tol</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span>
 </pre>
 <p>
           or
         </p>
-<pre class="programlisting">
-<span class="identifier">max_iter</span> <span class="special">&gt;=</span> <span class="identifier">m</span>
+<pre class="programlisting"><span class="identifier">max_iter</span> <span class="special">&gt;=</span> <span class="identifier">m</span>
 </pre>
 <p>
           where <span class="emphasis"><em>m</em></span> is the initial value of <span class="emphasis"><em>max_iter</em></span>
@@ -279,8 +273,7 @@
           the function returns), rather than because the termination condition <span class="emphasis"><em>tol</em></span>
           was satisfied.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> 
    <span class="identifier">bracket_and_solve_root</span><span class="special">(</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> 
@@ -364,20 +357,17 @@
           Returns: a pair of values <span class="emphasis"><em>r</em></span> that bracket the root
           so that:
         </p>
-<pre class="programlisting">
-<span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0</span>
+<pre class="programlisting"><span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0</span>
 </pre>
 <p>
           and either
         </p>
-<pre class="programlisting">
-<span class="identifier">tol</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span>
+<pre class="programlisting"><span class="identifier">tol</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span>
 </pre>
 <p>
           or
         </p>
-<pre class="programlisting">
-<span class="identifier">max_iter</span> <span class="special">&gt;=</span> <span class="identifier">m</span>
+<pre class="programlisting"><span class="identifier">max_iter</span> <span class="special">&gt;=</span> <span class="identifier">m</span>
 </pre>
 <p>
           where <span class="emphasis"><em>m</em></span> is the initial value of <span class="emphasis"><em>max_iter</em></span>
@@ -390,8 +380,7 @@
           the function returns), rather than because the termination condition <span class="emphasis"><em>tol</em></span>
           was satisfied.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> 
    <span class="identifier">toms748_solve</span><span class="special">(</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> 
@@ -497,20 +486,17 @@
           Returns: a pair of values <span class="emphasis"><em>r</em></span> that bracket the root
           so that:
         </p>
-<pre class="programlisting">
-<span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0</span>
+<pre class="programlisting"><span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0</span>
 </pre>
 <p>
           and either
         </p>
-<pre class="programlisting">
-<span class="identifier">tol</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span>
+<pre class="programlisting"><span class="identifier">tol</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span>
 </pre>
 <p>
           or
         </p>
-<pre class="programlisting">
-<span class="identifier">max_iter</span> <span class="special">&gt;=</span> <span class="identifier">m</span>
+<pre class="programlisting"><span class="identifier">max_iter</span> <span class="special">&gt;=</span> <span class="identifier">m</span>
 </pre>
 <p>
           where <span class="emphasis"><em>m</em></span> is the initial value of <span class="emphasis"><em>max_iter</em></span>
@@ -522,8 +508,7 @@
           (easily done by checking the value of <span class="emphasis"><em>max_iter</em></span>), rather
           than because the termination condition <span class="emphasis"><em>tol</em></span> was satisfied.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">eps_tolerance</span>
 <span class="special">{</span>
    <span class="identifier">eps_tolerance</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">bits</span><span class="special">);</span>
@@ -540,8 +525,7 @@
           we get back a bracketing interval: since this must clearly be at least
           1 epsilon in size.
         </p>
-<pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">equal_floor</span>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">equal_floor</span>
 <span class="special">{</span>
    <span class="identifier">equal_floor</span><span class="special">();</span>
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">()(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">a</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">b</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
@@ -552,8 +536,7 @@
           that is the <span class="emphasis"><em>floor</em></span> of the true root. It will terminate
           as soon as both ends of the interval have the same <span class="emphasis"><em>floor</em></span>.
         </p>
-<pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">equal_ceil</span>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">equal_ceil</span>
 <span class="special">{</span>
    <span class="identifier">equal_ceil</span><span class="special">();</span>
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">()(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">a</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">b</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
@@ -564,8 +547,7 @@
           that is the <span class="emphasis"><em>ceil</em></span> of the true root. It will terminate
           as soon as both ends of the interval have the same <span class="emphasis"><em>ceil</em></span>.
         </p>
-<pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">equal_nearest_integer</span>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">equal_nearest_integer</span>
 <span class="special">{</span>
    <span class="identifier">equal_nearest_integer</span><span class="special">();</span>
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">()(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">a</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">b</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
@@ -577,7 +559,7 @@
           as soon as both ends of the interval round to the same nearest integer.
         </p>
 <a name="math_toolkit.toolkit.internals1.roots2.implementation"></a><h5>
-<a name="id718396"></a>
+<a name="id717611"></a>
           <a href="roots2.html#math_toolkit.toolkit.internals1.roots2.implementation">Implementation</a>
         </h5>
 <p>

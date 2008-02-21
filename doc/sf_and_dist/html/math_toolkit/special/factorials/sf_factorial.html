@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,19 +27,17 @@
 <a name="math_toolkit.special.factorials.sf_factorial"></a><a href="sf_factorial.html" title="Factorial"> Factorial</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.factorials.sf_factorial.synopsis"></a><h5>
-<a name="id634848"></a>
+<a name="id634271"></a>
           <a href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.synopsis">Synopsis</a>
         </h5>
 <p>
           
 </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">factorials</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">factorials</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
         </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">);</span>
@@ -56,11 +54,10 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.factorials.sf_factorial.description"></a><h5>
-<a name="id635273"></a>
+<a name="id634694"></a>
           <a href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.description">Description</a>
         </h5>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -88,8 +85,7 @@
           If <code class="literal">i</code> is so large that the result can not be represented
           in type T, then calls <a href="../../main_overview/error_handling.html#overflow_error">overflow_error</a>.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">unchecked_factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">);</span>
 </pre>
 <p>
@@ -103,8 +99,7 @@
           lookup of factorials, but requires care to ensure that argument <code class="literal">i</code>
           never grows too large.
         </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">max_factorial</span>
 <span class="special">{</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="identifier">value</span> <span class="special">=</span> <span class="identifier">X</span><span class="special">;</span>
@@ -117,7 +112,7 @@
           the size of further tables that depend on the factorials.
         </p>
 <a name="math_toolkit.special.factorials.sf_factorial.accuracy"></a><h5>
-<a name="id635790"></a>
+<a name="id635208"></a>
           <a href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -126,7 +121,7 @@
           will be the same as for <a href="../sf_gamma/tgamma.html" title="Gamma">tgamma</a>.
         </p>
 <a name="math_toolkit.special.factorials.sf_factorial.testing"></a><h5>
-<a name="id635862"></a>
+<a name="id635280"></a>
           <a href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.testing">Testing</a>
         </h5>
 <p>
@@ -135,7 +130,7 @@
           function handle those cases already.
         </p>
 <a name="math_toolkit.special.factorials.sf_factorial.implementation"></a><h5>
-<a name="id635900"></a>
+<a name="id635321"></a>
           <a href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.implementation">Implementation</a>
         </h5>
 <p>

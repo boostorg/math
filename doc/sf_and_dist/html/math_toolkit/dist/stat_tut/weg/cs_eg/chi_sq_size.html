@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -49,8 +49,7 @@
               We begin by defining a procedure to print out the sample sizes required
               for various risk levels:
             </p>
-<pre class="programlisting">
-<span class="keyword">void</span> <span class="identifier">chi_squared_sample_sized</span><span class="special">(</span>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">chi_squared_sample_sized</span><span class="special">(</span>
      <span class="keyword">double</span> <span class="identifier">diff</span><span class="special">,</span>      <span class="comment">// difference from variance to detect
 </span>     <span class="keyword">double</span> <span class="identifier">variance</span><span class="special">)</span>  <span class="comment">// true variance
 </span><span class="special">{</span>
@@ -58,8 +57,7 @@
 <p>
               The procedure begins by printing out the input data:
             </p>
-<pre class="programlisting">
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">std</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">std</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 
 <span class="comment">// Print out general info:
@@ -75,8 +73,7 @@
               And defines a table of significance levels for which we'll calculate
               sample sizes:
             </p>
-<pre class="programlisting">
-<span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span>
 </pre>
 <p>
               For each value of alpha we can calculate two sample sizes: one where
@@ -89,8 +86,7 @@
               Finally in this example we'll simply things, and let risk level <span class="emphasis"><em>beta</em></span>
               be the same as <span class="emphasis"><em>alpha</em></span>:
             </p>
-<pre class="programlisting">
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\n\n"</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\n\n"</span>
         <span class="string">"_______________________________________________________________\n"</span>
         <span class="string">"Confidence       Estimated          Estimated\n"</span>
         <span class="string">" Value (%)      Sample Size        Sample Size\n"</span>

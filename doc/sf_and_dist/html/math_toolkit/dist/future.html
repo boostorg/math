@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,7 +27,7 @@
 <a name="math_toolkit.dist.future"></a><a href="future.html" title="Extras/Future Directions"> Extras/Future Directions</a>
 </h3></div></div></div>
 <a name="math_toolkit.dist.future.adding_additional_location_and_scale_parameters"></a><h5>
-<a name="id617443"></a>
+<a name="id616913"></a>
         <a href="future.html#math_toolkit.dist.future.adding_additional_location_and_scale_parameters">Adding
         Additional Location and Scale Parameters</a>
       </h5>
@@ -41,8 +41,7 @@
 <p>
         The obvious way to handle this is via an adapter template:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">scaled_distribution</span>
 <span class="special">{</span>
    <span class="identifier">scaled_distribution</span><span class="special">(</span>
@@ -56,7 +55,7 @@
         functions.
       </p>
 <a name="math_toolkit.dist.future.an__quot_any_distribution_quot__class"></a><h5>
-<a name="id617672"></a>
+<a name="id617143"></a>
         <a href="future.html#math_toolkit.dist.future.an__quot_any_distribution_quot__class">An
         "any_distribution" class</a>
       </h5>
@@ -65,8 +64,7 @@
         the actual type of the distribution, and can therefore hold "any"
         object that conforms to the conceptual requirements of a distribution:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">any_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -86,7 +84,7 @@
         use case: this needs more investigation.
       </p>
 <a name="math_toolkit.dist.future.higher_level_hypothesis_tests"></a><h5>
-<a name="id617970"></a>
+<a name="id617440"></a>
         <a href="future.html#math_toolkit.dist.future.higher_level_hypothesis_tests">Higher
         Level Hypothesis Tests</a>
       </h5>
@@ -94,8 +92,7 @@
         Higher-level tests roughly corresponding to the <a href="http://documents.wolfram.com/mathematica/Add-onsLinks/StandardPackages/Statistics/HypothesisTests.html" target="_top">Mathematica
         Hypothesis Tests</a> package could be added reasonably easily, for example:
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">InputIterator</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">InputIterator</span><span class="special">&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">InputIterator</span><span class="special">&gt;::</span><span class="identifier">value_type</span>
    <span class="identifier">test_equal_mean</span><span class="special">(</span>
      <span class="identifier">InputIterator</span> <span class="identifier">a</span><span class="special">,</span>
@@ -107,7 +104,7 @@
         <span class="emphasis"><em>expected_mean</em></span>.
       </p>
 <a name="math_toolkit.dist.future.integration_with_statistical_accumulators"></a><h5>
-<a name="id618202"></a>
+<a name="id617671"></a>
         <a href="future.html#math_toolkit.dist.future.integration_with_statistical_accumulators">Integration
         With Statistical Accumulators</a>
       </h5>
@@ -118,8 +115,7 @@
         There is an opportunity to integrate the statistical tests with this framework
         at some later date:
       </p>
-<pre class="programlisting">
-<span class="comment">// Define an accumulator, all required statistics to calculate the test
+<pre class="programlisting"><span class="comment">// Define an accumulator, all required statistics to calculate the test
 </span><span class="comment">// are calculated automatically:
 </span><span class="identifier">accumulator_set</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">features</span><span class="special">&lt;</span><span class="identifier">tag</span><span class="special">::</span><span class="identifier">test_expected_mean</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">acc</span><span class="special">(</span><span class="identifier">expected_mean</span><span class="special">=</span><span class="number">4</span><span class="special">);</span>
 <span class="comment">// Pass our data to the accumulator:
