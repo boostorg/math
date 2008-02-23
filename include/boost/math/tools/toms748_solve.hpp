@@ -96,11 +96,11 @@ void bracket(F f, T& a, T& b, T c, T& fa, T& fb, T& d, T& fd)
    }
    else if(c <= a + fabs(a) * tol)
    {
-      c = a * (1 + tol);
+      c = a + fabs(a) * tol;
    }
    else if(c >= b - fabs(b) * tol)
    {
-      c = b * (1 - tol);
+      c = b - fabs(a) * tol;
    }
    //
    // OK, lets invoke f(c):
