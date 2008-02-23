@@ -47,6 +47,8 @@ namespace boost
             int k = itrunc(l2);
             // Starting Poisson weight:
             T pois = gamma_p_derivative(T(k+1), l2, pol);
+            if(pois == 0)
+               return init_val;
             // Starting beta term:
             T beta = x < y 
                ? ibeta(a + k, b, x, pol)
@@ -59,17 +61,22 @@ namespace boost
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
 
+            if((beta == 0) && (xterm == 0))
+               return init_val;
+
             //
             // Backwards recursion first, this is the stable
             // direction for recursion:
             //
             T last_term = 0;
+            boost::uintmax_t count = k;
             for(int i = k; i >= 0; --i)
             {
                T term = beta * pois;
                sum += term;
-               if((fabs(term/sum) < errtol) && (last_term > term))
+               if((fabs(term/sum) < errtol) && (last_term >= term))
                {
+                  count = k - i;
                   break;
                }
                pois *= i / l2;
@@ -77,7 +84,7 @@ namespace boost
                xterm *= (a + i - 1) / (x * (a + b + i - 2));
                last_term = term;
             }
-            for(int i = k + 1; static_cast<boost::uintmax_t>(i - k) < max_iter; ++i)
+            for(int i = k + 1; ; ++i)
             {
                poisf *= l2 / i;
                xtermf *= (x * (a + b + i - 2)) / (a + i - 1);
@@ -88,6 +95,12 @@ namespace boost
                if(fabs(term/sum) < errtol)
                {
                   break;
+               }
+               if(static_cast<boost::uintmax_t>(count + i - k) > max_iter)
+               {
+                  return policies::raise_evaluation_error(
+                     "cdf(non_central_beta_distribution<%1%>, %1%)", 
+                     "Series did not converge, closest value was %1%", sum, pol);
                }
             }
             return sum;
@@ -111,6 +124,8 @@ namespace boost
             int k = itrunc(l2);
             // Starting Poisson weight:
             T pois = gamma_p_derivative(T(k+1), l2, pol);
+            if(pois == 0)
+               return init_val;
             // Starting beta term:
             T beta = x < y
                ? ibetac(a + k, b, x, pol)
@@ -122,13 +137,16 @@ namespace boost
             xterm *= y / (a + b + k - 1);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
+            if((beta == 0) && (xterm == 0))
+               return init_val;
             //
             // Forwards recursion first, this is the stable
             // direction for recursion, and the location
             // of the bulk of the sum:
             //
             T last_term = 0;
-            for(int i = k + 1; static_cast<boost::uintmax_t>(i - k) < max_iter; ++i)
+            boost::uintmax_t count = 0;
+            for(int i = k + 1; ; ++i)
             {
                poisf *= l2 / i;
                xtermf *= (x * (a + b + i - 2)) / (a + i - 1);
@@ -138,7 +156,14 @@ namespace boost
                sum += term;
                if((fabs(term/sum) < errtol) && (last_term > term))
                {
+                  count = i - k;
                   break;
+               }
+               if(static_cast<boost::uintmax_t>(i - k) > max_iter)
+               {
+                  return policies::raise_evaluation_error(
+                     "cdf(non_central_beta_distribution<%1%>, %1%)", 
+                     "Series did not converge, closest value was %1%", sum, pol);
                }
                last_term = term;
             }
@@ -149,6 +174,12 @@ namespace boost
                if(fabs(term/sum) < errtol)
                {
                   break;
+               }
+               if(static_cast<boost::uintmax_t>(count + k - i) > max_iter)
+               {
+                  return policies::raise_evaluation_error(
+                     "cdf(non_central_beta_distribution<%1%>, %1%)", 
+                     "Series did not converge, closest value was %1%", sum, pol);
                }
                pois *= i / l2;
                beta -= xterm;
@@ -260,7 +291,10 @@ namespace boost
                while((boost::math::sign)(fb) == (boost::math::sign)(fa))
                {
                   if(count == 0)
-                     policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, pol);
+                  {
+                     b = policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, pol);
+                     return std::make_pair(a, b);
+                  }
                   //
                   // Heuristic: every 20 iterations we double the growth factor in case the
                   // initial guess was *really* bad !
@@ -295,7 +329,10 @@ namespace boost
                      return a > 0 ? std::make_pair(T(0), T(a)) : std::make_pair(T(a), T(0)); 
                   }
                   if(count == 0)
-                     policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, pol);
+                  {
+                     a = policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, pol);
+                     return std::make_pair(a, b);
+                  }
                   //
                   // Heuristic: every 20 iterations we double the growth factor in case the
                   // initial guess was *really* bad !
@@ -439,9 +476,12 @@ namespace boost
 
             if(max_iter >= policies::get_max_root_iterations<Policy>())
             {
-               policies::raise_evaluation_error<value_type>(function, "Unable to locate solution in a reasonable time:"
+               return policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
                   " either there is no answer to quantile of the non central beta distribution"
-                  " or the answer is infinite.  Current best guess is %1%", result, Policy());
+                  " or the answer is infinite.  Current best guess is %1%", 
+                  policies::checked_narrowing_cast<RealType, forwarding_policy>(
+                     result, 
+                     function), Policy());
             }
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result, 
@@ -477,18 +517,20 @@ namespace boost
             //
             // Stable backwards recursion first:
             //
+            boost::uintmax_t count = k;
             for(int i = k; i >= 0; --i)
             {
                T term = beta * pois;
                sum += term;
                if((fabs(term/sum) < errtol) || (term == 0))
                {
+                  count = k - i;
                   break;
                }
                pois *= i / l2;
                beta *= (a + i - 1) / (x * (a + i + b - 1));
             }
-            for(int i = k + 1; static_cast<boost::uintmax_t>(i - k) < max_iter; ++i)
+            for(int i = k + 1; ; ++i)
             {
                poisf *= l2 / i;
                betaf *= x * (a + b + i - 1) / (a + i - 1);
@@ -498,6 +540,12 @@ namespace boost
                if((fabs(term/sum) < errtol) || (term == 0))
                {
                   break;
+               }
+               if(static_cast<boost::uintmax_t>(count + i - k) > max_iter)
+               {
+                  return policies::raise_evaluation_error(
+                     "pdf(non_central_beta_distribution<%1%>, %1%)", 
+                     "Series did not converge, closest value was %1%", sum, pol);
                }
             }
             return sum;

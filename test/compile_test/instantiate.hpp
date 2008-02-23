@@ -30,6 +30,25 @@ BOOST_MATH_DECLARE_DISTRIBUTIONS(double, test_policy)
 
 }
 
+namespace boost{ namespace math{
+//
+// The non central beta doesn't define some properties,
+// define some stub methods here so that we can concept
+// check everything else:
+//
+template <class T, class Policy>
+inline T mean(const non_central_beta_distribution<T, Policy>&){ return 0; }
+template <class T, class Policy>
+inline T variance(const non_central_beta_distribution<T, Policy>&){ return 0; }
+template <class T, class Policy>
+inline T skewness(const non_central_beta_distribution<T, Policy>&){ return 0; }
+template <class T, class Policy>
+inline T kurtosis_excess(const non_central_beta_distribution<T, Policy>&){ return 0; }
+template <class T, class Policy>
+inline T kurtosis(const non_central_beta_distribution<T, Policy>&){ return 0; }
+
+}} // namespaces
+
 template <class RealType>
 void instantiate(RealType)
 {
@@ -56,6 +75,10 @@ void instantiate(RealType)
    function_requires<DistributionConcept<triangular_distribution<RealType> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType> > >();
+   function_requires<DistributionConcept<non_central_chi_squared_distribution<RealType> > >();
+   function_requires<DistributionConcept<non_central_beta_distribution<RealType> > >();
+   function_requires<DistributionConcept<non_central_f_distribution<RealType> > >();
+   function_requires<DistributionConcept<non_central_t_distribution<RealType> > >();
 
    function_requires<DistributionConcept<bernoulli_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<beta_distribution<RealType, test_policy> > >();
@@ -77,6 +100,10 @@ void instantiate(RealType)
    function_requires<DistributionConcept<triangular_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<non_central_chi_squared_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<non_central_beta_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<non_central_f_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<non_central_t_distribution<RealType, test_policy> > >();
 
    function_requires<DistributionConcept<dist_test::bernoulli > >();
    function_requires<DistributionConcept<dist_test::beta > >();
@@ -97,6 +124,10 @@ void instantiate(RealType)
    function_requires<DistributionConcept<dist_test::triangular > >();
    function_requires<DistributionConcept<dist_test::uniform > >();
    function_requires<DistributionConcept<dist_test::weibull > >();
+   function_requires<DistributionConcept<dist_test::non_central_chi_squared > >();
+   function_requires<DistributionConcept<dist_test::non_central_beta > >();
+   function_requires<DistributionConcept<dist_test::non_central_f > >();
+   function_requires<DistributionConcept<dist_test::non_central_t > >();
 
    int i;
    RealType v1(0.5), v2(0.5), v3(0.5);

@@ -44,6 +44,8 @@ namespace boost
             T pois = gamma_p_derivative(T(k+1), d2, pol) 
                * tgamma_delta_ratio(T(k + 1), T(0.5f))
                * delta / constants::root_two<T>();
+            if(pois == 0)
+               return init_val;
             // Starting beta term:
             T beta = x < y
                ? ibeta(T(k + 1), n / 2, x, pol)
@@ -55,12 +57,14 @@ namespace boost
             xterm *= y / (n / 2 + k);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
+            if((xterm == 0) && (beta == 0))
+               return init_val;
 
             //
             // Backwards recursion first, this is the stable
             // direction for recursion:
             //
-            int count = 0;
+            boost::uintmax_t count = 0;
             for(int i = k; i >= 0; --i)
             {
                T term = beta * pois;
@@ -72,7 +76,7 @@ namespace boost
                xterm *= (i) / (x * (n / 2 + i - 1));
                ++count;
             }
-            for(int i = k + 1; i - k < max_iter; ++i)
+            for(int i = k + 1; ; ++i)
             {
                poisf *= d2 / (i + 0.5f);
                xtermf *= (x * (n / 2 + i - 1)) / (i);
@@ -82,6 +86,12 @@ namespace boost
                if(fabs(term/sum) < errtol)
                   break;
                ++count;
+               if(count > max_iter)
+               {
+                  return policies::raise_evaluation_error(
+                     "cdf(non_central_t_distribution<%1%>, %1%)", 
+                     "Series did not converge, closest value was %1%", sum, pol);
+               }
             }
             return sum;
          }
@@ -105,6 +115,8 @@ namespace boost
             T pois = gamma_p_derivative(T(k+1), d2, pol) 
                * tgamma_delta_ratio(T(k + 1), T(0.5f))
                * delta / constants::root_two<T>();
+            if(pois == 0)
+               return init_val;
             // Starting beta term:
             T beta = x < y 
                ? ibetac(T(k + 1), n / 2, x, pol)
@@ -116,12 +128,14 @@ namespace boost
             xterm *= y / (n / 2 + k);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
+            if((xterm == 0) && (beta == 0))
+               return init_val;
 
             //
             // Forward recursion first, this is the stable direction:
             //
-            int count = 0;
-            for(int i = k + 1; i - k < max_iter; ++i)
+            boost::uintmax_t count = 0;
+            for(int i = k + 1; ; ++i)
             {
                poisf *= d2 / (i + 0.5f);
                xtermf *= (x * (n / 2 + i - 1)) / (i);
@@ -131,6 +145,12 @@ namespace boost
                sum += term;
                if(fabs(term/sum) < errtol)
                   break;
+               if(count > max_iter)
+               {
+                  return policies::raise_evaluation_error(
+                     "cdf(non_central_t_distribution<%1%>, %1%)", 
+                     "Series did not converge, closest value was %1%", sum, pol);
+               }
                ++count;
             }
             //
@@ -146,6 +166,12 @@ namespace boost
                beta -= xterm;
                xterm *= (i) / (x * (n / 2 + i - 1));
                ++count;
+               if(count > max_iter)
+               {
+                  return policies::raise_evaluation_error(
+                     "cdf(non_central_t_distribution<%1%>, %1%)", 
+                     "Series did not converge, closest value was %1%", sum, pol);
+               }
             }
             return sum;
          }
@@ -217,6 +243,7 @@ namespace boost
          template <class T, class Policy>
          T non_central_t_quantile(T v, T delta, T p, T q, const Policy&)
          {
+            BOOST_MATH_STD_USING
             static const char* function = "quantile(non_central_t_distribution<%1%>, %1%)";
             typedef typename policies::evaluation<T, Policy>::type value_type;
             typedef typename policies::normalise<
@@ -310,12 +337,14 @@ namespace boost
                : ibeta_derivative(n / 2, T(k + 1), y, pol);
             T poisf(pois), xtermf(xterm);
             T sum = init_val;
+            if((pois == 0) || (xterm == 0))
+               return init_val;
 
             //
             // Backwards recursion first, this is the stable
             // direction for recursion:
             //
-            int count = 0;
+            boost::uintmax_t count = 0;
             for(int i = k; i >= 0; --i)
             {
                T term = xterm * pois;
@@ -325,8 +354,14 @@ namespace boost
                pois *= (i + 0.5f) / d2;
                xterm *= (i) / (x * (n / 2 + i));
                ++count;
+               if(count > max_iter)
+               {
+                  return policies::raise_evaluation_error(
+                     "pdf(non_central_t_distribution<%1%>, %1%)", 
+                     "Series did not converge, closest value was %1%", sum, pol);
+               }
             }
-            for(int i = k + 1; i - k < max_iter; ++i)
+            for(int i = k + 1; ; ++i)
             {
                poisf *= d2 / (i + 0.5f);
                xtermf *= (x * (n / 2 + i)) / (i);
@@ -335,6 +370,12 @@ namespace boost
                if((fabs(term/sum) < errtol) || (term == 0))
                   break;
                ++count;
+               if(count > max_iter)
+               {
+                  return policies::raise_evaluation_error(
+                     "pdf(non_central_t_distribution<%1%>, %1%)", 
+                     "Series did not converge, closest value was %1%", sum, pol);
+               }
             }
             return sum;
          }
@@ -342,6 +383,7 @@ namespace boost
          template <class T, class Policy>
          T non_central_t_pdf(T n, T delta, T t, const Policy& pol)
          {
+            BOOST_MATH_STD_USING
             //
             // For t < 0 we have to use the reflection formula:
             //
@@ -379,19 +421,20 @@ namespace boost
             //
             // Calculate pdf:
             //
-            T dt = 2 * n * t / (n * n + 2 * n * t * t + t * t * t * t);
+            T dt = n * t / (n * n + 2 * n * t * t + t * t * t * t);
             T result = non_central_beta_pdf(a, b, d2, x, y, pol);
-            T tol = tools::epsilon<T>() * result * 10;
+            T tol = tools::epsilon<T>() * result * 500;
             result = non_central_t2_pdf(n, delta, x, y, pol, result);
             if(result <= tol)
                result = 0;
-            result *= dt / 2;
+            result *= dt;
             return result;
          }
 
          template <class T, class Policy>
          T mean(T v, T delta, const Policy& pol)
          {
+            BOOST_MATH_STD_USING
             return delta * sqrt(v / 2) * tgamma_delta_ratio((v - 1) * 0.5f, T(0.5f), pol);
          }
 
@@ -407,6 +450,7 @@ namespace boost
          template <class T, class Policy>
          T skewness(T v, T delta, const Policy& pol)
          {
+            BOOST_MATH_STD_USING
             T mean = boost::math::detail::mean(v, delta, pol);
             T l2 = delta * delta;
             T var = ((l2 + 1) * v) / (v - 2) - mean * mean;
@@ -420,6 +464,7 @@ namespace boost
          template <class T, class Policy>
          T kurtosis_excess(T v, T delta, const Policy& pol)
          {
+            BOOST_MATH_STD_USING
             T mean = boost::math::detail::mean(v, delta, pol);
             T l2 = delta * delta;
             T var = ((l2 + 1) * v) / (v - 2) - mean * mean;
@@ -505,6 +550,8 @@ namespace boost
             Policy()))
                return (RealType)r;
 
+         BOOST_MATH_STD_USING
+
          RealType m = v < 3 ? 0 : detail::mean(v, l, Policy());
          RealType var = v < 4 ? 1 : detail::variance(v, l, Policy());
 
@@ -512,7 +559,7 @@ namespace boost
             dist, 
             m,
             function,
-            var);
+            sqrt(var));
       }
 
       template <class RealType, class Policy>

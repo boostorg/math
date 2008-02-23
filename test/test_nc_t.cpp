@@ -85,9 +85,16 @@ void expected_results()
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*",                          // test data group
+      "[^|]*", 300000, 100000);                // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*",                          // test data group
-      "[^|]*", 150, 50);                // test function
+      "[^|]*", 250, 50);                // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
