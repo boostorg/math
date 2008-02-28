@@ -33,7 +33,7 @@ events that happen at a constant average rate.
 The following graph shows how the distribution changes for different
 values of the rate parameter lambda:
 
-[$../graphs/exponential_dist.png]
+[graph exponential_pdf]
 
 [h4 Member Functions]
 

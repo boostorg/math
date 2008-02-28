@@ -54,7 +54,7 @@ as:
 The following graph illustrates how the distribution changes
 for different values of [lambda]:
 
-[$../graphs/nc_beta_pdf.png]
+[graph nc_beta_pdf]
 
 [h4 Member Functions]
 

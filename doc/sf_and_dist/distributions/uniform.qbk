@@ -61,11 +61,11 @@ The following graph illustrates how the
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function PDF]
 varies with the shape parameter:
 
-[$../graphs/uniform_pdf.png]
+[graph uniform_pdf]
 
 Likewise for the CDF:
 
-[$../graphs/uniform_cdf.png]
+[graph uniform_cdf]
 
 [h4 Member Functions]
 

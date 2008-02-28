@@ -72,11 +72,11 @@ The following graph illustrates how the
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function PDF]
 varies with the various parameters:
 
-[$../graphs/triangular_pdf.png]
+[graph triangular_pdf]
 
 and cumulative distribution function
 
-[$../graphs/triangular_cdf.png]
+[graph triangular_cdf]
 
 [h4 Member Functions]
 

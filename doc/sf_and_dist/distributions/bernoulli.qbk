@@ -42,11 +42,11 @@ The following graph illustrates how the
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function pdf]
 varies with the outcome of the single trial:
 
-[$../graphs/bernoulli_pdf.png]
+[graph bernoulli_pdf]
 
 and the [@http://en.wikipedia.org/wiki/Cumulative_Distribution_Function Cumulative distribution function]
 
-[$../graphs/bernoulli_cdf.png]
+[graph bernoulli_cdf]
 
 [h4 Member Functions]
 

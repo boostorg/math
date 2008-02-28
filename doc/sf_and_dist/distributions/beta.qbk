@@ -84,7 +84,7 @@ of the shape parameters.  Note the [alpha] = [beta] = 2 (blue line)
 is dome-shaped, and might be approximated by a symmetrical triangular 
 distribution.
 
-[$../graphs/beta_dist.png]
+[graph beta_pdf]
 
 If [alpha] = [beta] = 1, then it is a __space
 [@http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29 uniform distribution],

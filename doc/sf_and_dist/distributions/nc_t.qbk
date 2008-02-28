@@ -47,7 +47,7 @@ where [sub 1]F[sub 1](a;b;x) is a confluent hypergeometric function.
 The following graph illustrates how the distribution changes
 for different values of [delta]:
 
-[$../graphs/nc_t_pdf.png]
+[graph nc_t_pdf]
 
 [h4 Member Functions]
 

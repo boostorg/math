@@ -45,11 +45,11 @@ If the failure rate is:
 
 The following graph illustrates how the PDF varies with the shape parameter [alpha]:
 
-[$../graphs/weibull.png]
+[graph weibull_pdf1]
 
 While this graph illustrates how the PDF varies with the scale parameter [beta]:
 
-[$../graphs/weibull2.png]
+[graph weibull_pdf2]
 
 [h4 Related distributions]
 

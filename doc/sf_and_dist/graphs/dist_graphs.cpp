@@ -10,6 +10,7 @@
 #  pragma warning (disable : 4512) // assignment operator could not be generated
 //#  pragma warning (disable : 4172) // returning address of local variable or temporary TODO find cause of these.
 #  pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'function_ptr' was previously defined as a type
+#  pragma warning (disable : 4127) // conditional expression is constant
 #endif
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
@@ -21,6 +22,23 @@
 #include <list>
 #include <map>
 #include <string>
+
+template <class Dist>
+struct is_discrete_distribution 
+   : public boost::mpl::false_{};
+
+template<class T, class P>
+struct is_discrete_distribution<boost::math::bernoulli_distribution<T,P> > 
+   : public boost::mpl::true_{};
+template<class T, class P>
+struct is_discrete_distribution<boost::math::binomial_distribution<T,P> > 
+   : public boost::mpl::true_{};
+template<class T, class P>
+struct is_discrete_distribution<boost::math::negative_binomial_distribution<T,P> > 
+   : public boost::mpl::true_{};
+template<class T, class P>
+struct is_discrete_distribution<boost::math::poisson_distribution<T,P> > 
+   : public boost::mpl::true_{};
 
 
 template <class Dist>
@@ -43,7 +61,8 @@ template <class Dist>
 class distribution_plotter
 {
 public:
-   distribution_plotter() : m_min_x(0), m_max_x(0), m_min_y(0), m_max_y(0) {}
+   distribution_plotter() : m_pdf(true), m_min_x(0), m_max_x(0), m_min_y(0), m_max_y(0) {}
+   distribution_plotter(bool pdf) : m_pdf(pdf), m_min_x(0), m_max_x(0), m_min_y(0), m_max_y(0) {}
 
    void add(const Dist& d, const std::string& name)
    {
@@ -68,9 +87,9 @@ public:
       {
          mod = a;
       }
-      if(mod <= a)
+      if((mod <= a) && !is_discrete_distribution<Dist>::value)
       {
-         if(a)
+         if((a != 0) && (fabs(a) > 1e-2))
             mod = a * (1 + 1e-2);
          else
             mod = 1e-2;
@@ -115,15 +134,18 @@ public:
       // it's not too close to one end of the graph: 
       // otherwise we may be shooting off to infinity.
       //
-      if(mod <= a + (b-a)/50)
+      if(!is_discrete_distribution<Dist>::value)
       {
-         mod = a + (b-a)/50;
+         if(mod <= a + (b-a)/50)
+         {
+            mod = a + (b-a)/50;
+         }
+         if(mod >= b - (b-a)/50)
+         {
+            mod = b - (b-a)/50;
+         }
+         peek_y = pdf(d, mod);
       }
-      if(mod >= b - (b-a)/50)
-      {
-         mod = b - (b-a)/50;
-      }
-      peek_y = pdf(d, mod);
       //
       // Now set our limits:
       //
@@ -156,18 +178,32 @@ public:
          chartreuse
       };
 
+      if(m_pdf == false)
+      {
+         m_min_y = 0;
+         m_max_y = 1;
+      }
+
       svg_2d_plot plot;
       plot.image_size(750, 400);
       plot.coord_precision(4); // Avoids any visible steps.
       plot.title_font_size(20);
       plot.legend_title_font_size(15);
       plot.title(title);
-      plot.legend_on(true).title_on(true);
+      if((m_distributions.size() == 1) && (m_distributions.begin()->first == ""))
+         plot.legend_on(false);
+      else
+         plot.legend_on(true);
+      plot.title_on(true);
       //plot.x_major_labels_on(true).y_major_labels_on(true);
-      double x_delta = (m_max_x - m_min_x) / 10;
+      //double x_delta = (m_max_x - m_min_x) / 10;
       double y_delta = (m_max_y - m_min_y) / 10;
-      plot.x_range(m_min_x, m_max_x)
-          .y_range(m_min_y, m_max_y + y_delta);
+      if(is_discrete_distribution<Dist>::value)
+         plot.x_range(m_min_x - 0.5, m_max_x + 0.5)
+             .y_range(m_min_y, m_max_y + y_delta);
+      else
+         plot.x_range(m_min_x, m_max_x)
+             .y_range(m_min_y, m_max_y + y_delta);
       plot.x_label_on(true).x_label("Random Variable");
       plot.y_label_on(true).y_label("Probability");
       plot.plot_border_color(lightslategray)
@@ -181,6 +217,11 @@ public:
       double interval = std::pow(10.0, (int)l);
       if(((m_max_x - m_min_x) / interval) > 10)
          interval *= 5;
+      if(is_discrete_distribution<Dist>::value)
+      {
+         interval = interval > 1 ? std::floor(interval) : 1;
+         plot.x_num_minor_ticks(0);
+      }
       plot.x_major_interval(interval);
       l = std::floor(std::log10((m_max_y - m_min_y) / 10) + 0.5);
       interval = std::pow(10.0, (int)l);
@@ -190,30 +231,78 @@ public:
 
       int color_index = 0;
 
-      for(std::list<std::pair<std::string, Dist> >::const_iterator i = m_distributions.begin();
-         i != m_distributions.end(); ++i)
+      if(!is_discrete_distribution<Dist>::value)
       {
-         double x = m_min_x;
-         double interval = (m_max_x - m_min_x) / 200;
-         std::map<double, double> data;
-         while(x <= m_max_x)
+         //
+         // Continuous distribution:
+         //
+         for(std::list<std::pair<std::string, Dist> >::const_iterator i = m_distributions.begin();
+            i != m_distributions.end(); ++i)
          {
-            data[x] = pdf(i->second, x);
-            x += interval;
+            double x = m_min_x;
+            double interval = (m_max_x - m_min_x) / 200;
+            std::map<double, double> data;
+            while(x <= m_max_x)
+            {
+               data[x] = m_pdf ? pdf(i->second, x) : cdf(i->second, x);
+               x += interval;
+            }
+            plot.plot(data, i->first)
+               .line_on(true)
+               .line_color(colors[color_index])
+               .line_width(1.)
+               //.bezier_on(true) // Can't cope with badly behaved like uniform & triangular.
+               .shape(none);
+            ++color_index;
+            color_index = color_index % (sizeof(colors)/sizeof(colors[0]));
          }
-         plot.plot(data, i->first)
-            .line_on(true)
-            .line_color(colors[color_index])
-            .line_width(1.)
-            //.bezier_on(true) // Can't cope with badly behaved like uniform & triangular.
-            .shape(none);
-         ++color_index;
-         color_index = color_index % (sizeof(colors)/sizeof(colors[0]));
+      }
+      else
+      {
+         //
+         // Discrete distribution:
+         //
+         double x_width = 0.75 / m_distributions.size();
+         double x_off = -0.5 * 0.75;
+         for(std::list<std::pair<std::string, Dist> >::const_iterator i = m_distributions.begin();
+            i != m_distributions.end(); ++i)
+         {
+            double x = ceil(m_min_x);
+            double interval = 1;
+            std::map<double, double> data;
+            while(x <= m_max_x)
+            {
+               double p;
+               try{
+                  p = m_pdf ? pdf(i->second, x) : cdf(i->second, x);
+               }
+               catch(const std::domain_error&)
+               {
+                  p = 0;
+               }
+               data[x + x_off] = 0;
+               data[x + x_off + 0.00001] = p;
+               data[x + x_off + x_width] = p;
+               data[x + x_off + x_width + 0.00001] = 0;
+               x += interval;
+            }
+            x_off += x_width;
+            svg_2d_plot_series& s = plot.plot(data, i->first);
+            s.line_on(true)
+               .line_color(colors[color_index])
+               .line_width(1.)
+               //.bezier_on(true) // Can't cope with badly behaved like uniform & triangular.
+               .shape(none);
+            s.line_style_.area_fill(colors[color_index]);
+            ++color_index;
+            color_index = color_index % (sizeof(colors)/sizeof(colors[0]));
+         }
       }
       plot.write(file);
    }
 
 private:
+   bool m_pdf;
    std::list<std::pair<std::string, Dist> > m_distributions;
    double m_min_x, m_max_x, m_min_y, m_max_y;
 };
@@ -273,6 +362,15 @@ int main()
    nc_f_plotter.add(boost::math::non_central_f(10, 20, 100), "v1=10, v2=20, &#x3BB;=100");
    nc_f_plotter.plot("Non Central F PDF", "nc_f_pdf.svg");
 
+   distribution_plotter<boost::math::non_central_t> 
+      nc_t_plotter;
+   nc_t_plotter.add(boost::math::non_central_t(10, -10), "v=10, &#x3B4;=-10");
+   nc_t_plotter.add(boost::math::non_central_t(10, -5), "v=10, &#x3B4;=-5");
+   nc_t_plotter.add(boost::math::non_central_t(10, 0), "v=10, &#x3B4;=0");
+   nc_t_plotter.add(boost::math::non_central_t(10, 5), "v=10, &#x3B4;=5");
+   nc_t_plotter.add(boost::math::non_central_t(10, 10), "v=10, &#x3B4;=10");
+   nc_t_plotter.plot("Non Central T PDF", "nc_t_pdf.svg");
+
    distribution_plotter<boost::math::beta_distribution<> > 
       beta_plotter;
    beta_plotter.add(boost::math::beta_distribution<>(0.5, 0.5), "alpha=0.5, beta=0.5");
@@ -298,9 +396,10 @@ int main()
 
    distribution_plotter<boost::math::chi_squared_distribution<> > 
       chi_squared_plotter;
-   chi_squared_plotter.add(boost::math::chi_squared_distribution<>(1), "v=1");
+   //chi_squared_plotter.add(boost::math::chi_squared_distribution<>(1), "v=1");
    chi_squared_plotter.add(boost::math::chi_squared_distribution<>(2), "v=2");
    chi_squared_plotter.add(boost::math::chi_squared_distribution<>(5), "v=5");
+   chi_squared_plotter.add(boost::math::chi_squared_distribution<>(10), "v=10");
    chi_squared_plotter.plot("Chi Squared Distribution PDF", "chi_squared_pdf.svg");
 
    distribution_plotter<boost::math::exponential_distribution<> > 
@@ -369,6 +468,15 @@ int main()
    rayleigh_plotter.add(boost::math::rayleigh_distribution<>(10), "&#x3C3;=10");
    rayleigh_plotter.plot("Rayleigh Distribution PDF", "rayleigh_pdf.svg");
 
+   distribution_plotter<boost::math::rayleigh_distribution<> > 
+      rayleigh_cdf_plotter(false);
+   rayleigh_cdf_plotter.add(boost::math::rayleigh_distribution<>(0.5), "&#x3C3;=0.5");
+   rayleigh_cdf_plotter.add(boost::math::rayleigh_distribution<>(1), "&#x3C3;=1");
+   rayleigh_cdf_plotter.add(boost::math::rayleigh_distribution<>(2), "&#x3C3;=2");
+   rayleigh_cdf_plotter.add(boost::math::rayleigh_distribution<>(4), "&#x3C3;=4");
+   rayleigh_cdf_plotter.add(boost::math::rayleigh_distribution<>(10), "&#x3C3;=10");
+   rayleigh_cdf_plotter.plot("Rayleigh Distribution CDF", "rayleigh_cdf.svg");
+
    distribution_plotter<boost::math::triangular_distribution<> > 
       triangular_plotter;
    triangular_plotter.add(boost::math::triangular_distribution<>(-1,0,1), "{-1,0,1}");
@@ -377,6 +485,15 @@ int main()
    triangular_plotter.add(boost::math::triangular_distribution<>(0,0.5,1), "{0,0.5,1}");
    triangular_plotter.add(boost::math::triangular_distribution<>(-2,0,3), "{-2,0,3}");
    triangular_plotter.plot("Triangular Distribution PDF", "triangular_pdf.svg");
+
+   distribution_plotter<boost::math::triangular_distribution<> > 
+      triangular_cdf_plotter(false);
+   triangular_cdf_plotter.add(boost::math::triangular_distribution<>(-1,0,1), "{-1,0,1}");
+   triangular_cdf_plotter.add(boost::math::triangular_distribution<>(0,1,1), "{0,1,1}");
+   triangular_cdf_plotter.add(boost::math::triangular_distribution<>(0,1,3), "{0,1,3}");
+   triangular_cdf_plotter.add(boost::math::triangular_distribution<>(0,0.5,1), "{0,0.5,1}");
+   triangular_cdf_plotter.add(boost::math::triangular_distribution<>(-2,0,3), "{-2,0,3}");
+   triangular_cdf_plotter.plot("Triangular Distribution CDF", "triangular_cdf.svg");
 
    distribution_plotter<boost::math::students_t_distribution<> > 
       students_t_plotter;
@@ -387,9 +504,10 @@ int main()
 
    distribution_plotter<boost::math::weibull_distribution<> > 
       weibull_plotter;
-   weibull_plotter.add(boost::math::weibull_distribution<>(0.2), "shape=0.2");
+   weibull_plotter.add(boost::math::weibull_distribution<>(0.75), "shape=0.75");
    weibull_plotter.add(boost::math::weibull_distribution<>(1), "shape=1");
    weibull_plotter.add(boost::math::weibull_distribution<>(5), "shape=5");
+   weibull_plotter.add(boost::math::weibull_distribution<>(10), "shape=10");
    weibull_plotter.plot("Weibull Distribution PDF (scale=1)", "weibull_pdf1.svg");
 
    distribution_plotter<boost::math::weibull_distribution<> > 
@@ -397,7 +515,7 @@ int main()
    weibull_plotter2.add(boost::math::weibull_distribution<>(3, 0.5), "scale=0.5");
    weibull_plotter2.add(boost::math::weibull_distribution<>(3, 1), "scale=1");
    weibull_plotter2.add(boost::math::weibull_distribution<>(3, 2), "scale=2");
-   weibull_plotter2.plot("weibull Distribution PDF (shape=3)", "weibull_pdf2.svg");
+   weibull_plotter2.plot("Weibull Distribution PDF (shape=3)", "weibull_pdf2.svg");
 
    distribution_plotter<boost::math::uniform_distribution<> > 
       uniform_plotter;
@@ -406,5 +524,62 @@ int main()
    uniform_plotter.add(boost::math::uniform_distribution<>(-2, 3), "{-2,3}");
    uniform_plotter.add(boost::math::uniform_distribution<>(-1, 1), "{-1,1}");
    uniform_plotter.plot("Uniform Distribution PDF", "uniform_pdf.svg");
+
+   distribution_plotter<boost::math::uniform_distribution<> > 
+      uniform_cdf_plotter(false);
+   uniform_cdf_plotter.add(boost::math::uniform_distribution<>(0, 1), "{0,1}");
+   uniform_cdf_plotter.add(boost::math::uniform_distribution<>(0, 3), "{0,3}");
+   uniform_cdf_plotter.add(boost::math::uniform_distribution<>(-2, 3), "{-2,3}");
+   uniform_cdf_plotter.add(boost::math::uniform_distribution<>(-1, 1), "{-1,1}");
+   uniform_cdf_plotter.plot("Uniform Distribution CDF", "uniform_cdf.svg");
+
+   distribution_plotter<boost::math::bernoulli_distribution<> > 
+      bernoulli_plotter;
+   bernoulli_plotter.add(boost::math::bernoulli_distribution<>(0.25), "p=0.25");
+   bernoulli_plotter.add(boost::math::bernoulli_distribution<>(0.5), "p=0.5");
+   bernoulli_plotter.add(boost::math::bernoulli_distribution<>(0.75), "p=0.75");
+   bernoulli_plotter.plot("Bernoulli Distribution PDF", "bernoulli_pdf.svg");
+
+   distribution_plotter<boost::math::bernoulli_distribution<> > 
+      bernoulli_cdf_plotter(false);
+   bernoulli_cdf_plotter.add(boost::math::bernoulli_distribution<>(0.25), "p=0.25");
+   bernoulli_cdf_plotter.add(boost::math::bernoulli_distribution<>(0.5), "p=0.5");
+   bernoulli_cdf_plotter.add(boost::math::bernoulli_distribution<>(0.75), "p=0.75");
+   bernoulli_cdf_plotter.plot("Bernoulli Distribution CDF", "bernoulli_cdf.svg");
+
+   distribution_plotter<boost::math::binomial_distribution<> > 
+      binomial_plotter;
+   binomial_plotter.add(boost::math::binomial_distribution<>(5, 0.5), "n=5 p=0.5");
+   binomial_plotter.add(boost::math::binomial_distribution<>(20, 0.5), "n=20 p=0.5");
+   binomial_plotter.add(boost::math::binomial_distribution<>(50, 0.5), "n=50 p=0.5");
+   binomial_plotter.plot("Binomial Distribution PDF", "binomial_pdf_1.svg");
+
+   distribution_plotter<boost::math::binomial_distribution<> > 
+      binomial_plotter2;
+   binomial_plotter2.add(boost::math::binomial_distribution<>(20, 0.1), "n=20 p=0.1");
+   binomial_plotter2.add(boost::math::binomial_distribution<>(20, 0.5), "n=20 p=0.5");
+   binomial_plotter2.add(boost::math::binomial_distribution<>(20, 0.9), "n=20 p=0.9");
+   binomial_plotter2.plot("Binomial Distribution PDF", "binomial_pdf_2.svg");
+   
+   distribution_plotter<boost::math::negative_binomial_distribution<> > 
+      negative_binomial_plotter;
+   negative_binomial_plotter.add(boost::math::negative_binomial_distribution<>(20, 0.25), "n=20 p=0.25");
+   negative_binomial_plotter.add(boost::math::negative_binomial_distribution<>(20, 0.5), "n=20 p=0.5");
+   negative_binomial_plotter.add(boost::math::negative_binomial_distribution<>(20, 0.75), "n=20 p=0.75");
+   negative_binomial_plotter.plot("Negative Binomial Distribution PDF", "negative_binomial_pdf_1.svg");
+
+   distribution_plotter<boost::math::negative_binomial_distribution<> > 
+      negative_binomial_plotter2;
+   negative_binomial_plotter2.add(boost::math::negative_binomial_distribution<>(10, 0.5), "n=10 p=0.5");
+   negative_binomial_plotter2.add(boost::math::negative_binomial_distribution<>(20, 0.5), "n=40 p=0.5");
+   negative_binomial_plotter2.add(boost::math::negative_binomial_distribution<>(70, 0.5), "n=70 p=0.5");
+   negative_binomial_plotter2.plot("Negative Binomial Distribution PDF", "negative_binomial_pdf_2.svg");
+
+   distribution_plotter<boost::math::poisson_distribution<> > 
+      poisson_plotter;
+   poisson_plotter.add(boost::math::poisson_distribution<>(5), "&#x3BB;=1");
+   poisson_plotter.add(boost::math::poisson_distribution<>(10), "&#x3BB;=10");
+   poisson_plotter.add(boost::math::poisson_distribution<>(20), "&#x3BB;=50");
+   poisson_plotter.plot("Poisson Distribution PDF", "poisson_pdf_1.svg");
 
 }

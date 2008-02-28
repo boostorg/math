@@ -37,11 +37,14 @@ The [@http://mathworld.wolfram.com/paretoDistribution.html Pareto distribution]
 often describes the larger compared to the smaller.
 A classic example is that 80% of the wealth is owned by 20% of the population.
 
-The following graph illustrates how the PDF varies with the shape parameter [alpha]:
+The following graph illustrates how the PDF varies with the location parameter [beta]:
 
-[/$../graphs/paretoShape.png]
-[/ TODO produce a graph as png or svg]
-[@http://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Pareto_distributionPDF.png/325px-Pareto_distributionPDF.png Pareto pdf]
+[graph pareto_pdf1]
+
+And this graph illustrates how the PDF varies with the shape parameter [alpha]:
+
+[graph pareto_pdf2]
+
 
 [h4 Related distributions]
 

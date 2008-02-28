@@ -66,7 +66,7 @@ where ['f(x;k)] is the central chi-squared distribution PDF, and
 The following graph illustrates how the distribution changes
 for different values of [lambda]:
 
-[$../graphs/nccs_pdf.png]
+[graph nccs_pdf]
 
 [h4 Member Functions]
 

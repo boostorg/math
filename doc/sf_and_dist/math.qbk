@@ -22,6 +22,15 @@
 </imageobject>
 </inlinemediaobject>''']
 
+[template graph[name]  '''<inlinemediaobject>
+<imageobject role="html">
+<imagedata align="center" fileref="../graphs/'''[name]'''.png"></imagedata>
+</imageobject>
+<imageobject role="print">
+<imagedata align="center" fileref="../graphs/'''[name]'''.svg"></imagedata>
+</imageobject>
+</inlinemediaobject>''']
+
 [include html4_symbols.qbk] [/ just for testing]
 [/include latin1_symbols.qbk] [/ just for testing]
 [include common_overviews.qbk] [/ overviews that appear in more than one place!]

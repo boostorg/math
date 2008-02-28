@@ -49,7 +49,7 @@ and has a single parameter [nu][space] that specifies the number of degrees of
 freedom.  The following graph illustrates how the distribution changes
 for different values of [nu]:
 
-[$../graphs/chi_square.png]
+[graph chi_squared_pdf]
 
 [h4 Member Functions]
 

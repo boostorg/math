@@ -286,6 +286,8 @@ inline RealType mode(const weibull_distribution<RealType, Policy>& dist)
    {
       return result;
    }
+   if(shape <= 1)
+      return 0;
    result = scale * pow((shape - 1) / shape, 1 / shape);
    return result;
 }

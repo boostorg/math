@@ -51,7 +51,7 @@ __beta function, or
 The following graph illustrates how the distribution changes
 for different values of [lambda]:
 
-[$../graphs/nc_f_pdf.png]
+[graph nc_f_pdf]
 
 [h4 Member Functions]
 
