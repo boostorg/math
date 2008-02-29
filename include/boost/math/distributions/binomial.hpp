@@ -25,7 +25,7 @@
 // The number of light bulbs that burn out in a certain amount of time.
 // The number of roadkill found per unit length of road
 
-// http:/en.wikipedia.org/wiki/binomial_distribution
+// http://en.wikipedia.org/wiki/binomial_distribution
 
 // Given a sample of N measured values k[i],
 // we wish to estimate the value of the parameter x (mean)
