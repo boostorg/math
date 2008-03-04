@@ -35,7 +35,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 These two functions evaluate the incomplete elliptic integral of the first kind
 ['F([phi], k)] and its complete counterpart ['K(k) = F([pi]/2, k)].
 
-[$../graphs/ellint_1.png]
+[graph ellint_1]
 
 The return type of these functions is computed using the __arg_pomotion_rules
 when T1 and T2 are different types: when they are the same type then the result
@@ -135,7 +135,7 @@ and
 These two functions evaluate the incomplete elliptic integral of the second kind
 ['E([phi], k)] and its complete counterpart ['E(k) = E([pi]/2, k)].
 
-[$../graphs/ellint_2.png]
+[graph ellint_2]
 
 The return type of these functions is computed using the __arg_pomotion_rules
 when T1 and T2 are different types: when they are the same type then the result
@@ -235,7 +235,7 @@ and
 These two functions evaluate the incomplete elliptic integral of the third kind
 ['[Pi](n, [phi], k)] and its complete counterpart ['[Pi](n, k) = E(n, [pi]/2, k)].
 
-[$../graphs/ellint_3.png]
+[graph ellint_3]
 
 The return type of these functions is computed using the __arg_pomotion_rules
 when the arguments are of different types: when they are the same type then the result

@@ -12,14 +12,17 @@
 The [@http://mathworld.wolfram.com/SincFunction.html Sinus Cardinal family of functions]
 (indexed by the family of indices [^a > 0]) 
 is defined by 
-[equation special_functions_blurb20]; 
+
+[equation special_functions_blurb20]
+
 it sees heavy use in signal processing tasks.
 
 By analogy, the 
 [@http://mathworld.wolfram.com/SinhcFunction.htm Hyperbolic Sinus Cardinal]
 family of functions 
 (also indexed by the family of indices [^a > 0]) is defined by 
-[equation special_functions_blurb22].
+
+[equation special_functions_blurb22]
 
 These two families of functions are composed of entire functions.
 
@@ -61,6 +64,8 @@ The second form is for complex numbers,
 quaternions, octonions etc. Taylor series are used at the origin 
 to ensure accuracy.
 
+[graph sinc_pi]
+
 [optional_policy]
 
 [endsect]
@@ -97,6 +102,8 @@ The return type of the first form is computed using the __arg_pomotion_rules
 when T is an integer type.
 
 [optional_policy]
+
+[graph sinhc_pi]
 
 [endsect]
 

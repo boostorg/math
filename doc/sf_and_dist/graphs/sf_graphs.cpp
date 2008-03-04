@@ -150,7 +150,10 @@ public:
          interval *= 5;
       plot.y_major_interval(interval);
       plot.plot_window_on(true);
-      plot.plot_border_color(lightslategray).legend_border_color(lightslategray).background_border_color(lightslategray);
+      plot.plot_border_color(lightslategray)
+          .background_border_color(lightslategray)
+          .legend_border_color(lightslategray)
+          .legend_background_color(white);
 
       int color_index = 0;
 
@@ -243,6 +246,7 @@ int main()
    double (*f2u)(unsigned, double);
    double (*f2i)(int, double);
    double (*f3)(double, double, double);
+   double (*f4)(double, double, double, double);
    
    f = boost::math::zeta;
    plot.add(f, 1 + find_end_point(f, 0.1, 40.0, false, 1.0), 10, "");
@@ -321,6 +325,16 @@ int main()
    plot.clear();
    plot.add(f, -1 + find_end_point(f, 0.1, -10, true, -1), 5, "");
    plot.plot("sqrt1pm1", "sqrt1pm1.svg", "z", "sqrt1pm1(z)");
+
+   f2 = boost::math::powm1;
+   plot.clear();
+   plot.add(boost::bind(f2, 0.0001, _1), find_end_point(boost::bind(f2, 0.0001, _1), -1, 10, false), 5, "a=0.0001");
+   plot.add(boost::bind(f2, 0.001, _1), find_end_point(boost::bind(f2, 0.001, _1), -1, 10, false), 5, "a=0.001");
+   plot.add(boost::bind(f2, 0.01, _1), find_end_point(boost::bind(f2, 0.01, _1), -1, 10, false), 5, "a=0.01");
+   plot.add(boost::bind(f2, 0.1, _1), find_end_point(boost::bind(f2, 0.1, _1), -1, 10, false), 5, "a=0.1");
+   plot.add(boost::bind(f2, 0.75, _1), -5, 5, "a=0.75");
+   plot.add(boost::bind(f2, 1.25, _1), -5, 5, "a=1.25");
+   plot.plot("powm1", "powm1.svg", "z", "powm1(a, z)");
 
    f = boost::math::sinc_pi;
    plot.clear();
@@ -424,6 +438,134 @@ int main()
    plot.add(boost::bind(f2u, 4, _1), -0.95, 0.95, "l = 4");
    plot.add(boost::bind(f2u, 5, _1), -0.95, 0.95, "l = 5");
    plot.plot("Legendre Polynomials of the Second Kind", "legendre_q.svg", "x", "legendre_q(l, x)");
+
+   f2u = boost::math::laguerre;
+   plot.clear();
+   plot.add(boost::bind(f2u, 0, _1), -5, 10, "n = 0");
+   plot.add(boost::bind(f2u, 1, _1), -5, 10, "n = 1");
+   plot.add(boost::bind(f2u, 2, _1), 
+      find_end_point(boost::bind(f2u, 2, _1), -2, 20, false), 
+      find_end_point(boost::bind(f2u, 2, _1), 4, 20, true), 
+      "n = 2");
+   plot.add(boost::bind(f2u, 3, _1), 
+      find_end_point(boost::bind(f2u, 3, _1), -2, 20, false), 
+      8 + find_end_point(boost::bind(f2u, 3, _1), 1, 20, false, 8), 
+      "n = 3");
+   plot.add(boost::bind(f2u, 4, _1), 
+      find_end_point(boost::bind(f2u, 4, _1), -2, 20, false), 
+      8 + find_end_point(boost::bind(f2u, 4, _1), 1, 20, true, 8), 
+      "n = 4");
+   plot.add(boost::bind(f2u, 5, _1), 
+      find_end_point(boost::bind(f2u, 5, _1), -2, 20, false), 
+      8 + find_end_point(boost::bind(f2u, 5, _1), 1, 20, true, 8), 
+      "n = 5");
+   plot.plot("Laguerre Polynomials", "laguerre.svg", "x", "laguerre(n, x)");
+
+   f2u = boost::math::hermite;
+   plot.clear();
+   plot.add(boost::bind(f2u, 0, _1), -1.8, 1.8, "n = 0");
+   plot.add(boost::bind(f2u, 1, _1), -1.8, 1.8, "n = 1");
+   plot.add(boost::bind(f2u, 2, _1), -1.8, 1.8, "n = 2");
+   plot.add(boost::bind(f2u, 3, _1), -1.8, 1.8, "n = 3");
+   plot.add(boost::bind(f2u, 4, _1), -1.8, 1.8, "n = 4");
+   plot.plot("Hermite Polynomials", "hermite.svg", "x", "hermite(n, x)");
+
+   f2 = boost::math::cyl_bessel_j;
+   plot.clear();
+   plot.add(boost::bind(f2, 0, _1), -20, 20, "v = 0");
+   plot.add(boost::bind(f2, 1, _1), -20, 20, "v = 1");
+   plot.add(boost::bind(f2, 2, _1), -20, 20, "v = 2");
+   plot.add(boost::bind(f2, 3, _1), -20, 20, "v = 3");
+   plot.add(boost::bind(f2, 4, _1), -20, 20, "v = 4");
+   plot.plot("Bessel J", "cyl_bessel_j.svg", "x", "cyl_bessel_j(v, x)");
+
+   f2 = boost::math::cyl_neumann;
+   plot.clear();
+   plot.add(boost::bind(f2, 0, _1), find_end_point(boost::bind(f2, 0, _1), 0.1, -5, true), 20, "v = 0");
+   plot.add(boost::bind(f2, 1, _1), find_end_point(boost::bind(f2, 1, _1), 0.1, -5, true), 20, "v = 1");
+   plot.add(boost::bind(f2, 2, _1), find_end_point(boost::bind(f2, 2, _1), 0.1, -5, true), 20, "v = 2");
+   plot.add(boost::bind(f2, 3, _1), find_end_point(boost::bind(f2, 3, _1), 0.1, -5, true), 20, "v = 3");
+   plot.add(boost::bind(f2, 4, _1), find_end_point(boost::bind(f2, 4, _1), 0.1, -5, true), 20, "v = 4");
+   plot.plot("Bessel Y", "cyl_neumann.svg", "x", "cyl_neumann(v, x)");
+
+   f2 = boost::math::cyl_bessel_i;
+   plot.clear();
+   plot.add(boost::bind(f2, 0, _1), find_end_point(boost::bind(f2, 0, _1), -0.1, 20, false), find_end_point(boost::bind(f2, 0, _1), 0.1, 20, true), "v = 0");
+   plot.add(boost::bind(f2, 2, _1), find_end_point(boost::bind(f2, 2, _1), -0.1, 20, false), find_end_point(boost::bind(f2, 2, _1), 0.1, 20, true), "v = 2");
+   plot.add(boost::bind(f2, 5, _1), find_end_point(boost::bind(f2, 5, _1), -0.1, -20, true), find_end_point(boost::bind(f2, 5, _1), 0.1, 20, true), "v = 5");
+   plot.add(boost::bind(f2, 7, _1), find_end_point(boost::bind(f2, 7, _1), -0.1, -20, true), find_end_point(boost::bind(f2, 7, _1), 0.1, 20, true), "v = 7");
+   plot.add(boost::bind(f2, 10, _1), find_end_point(boost::bind(f2, 10, _1), -0.1, 20, false), find_end_point(boost::bind(f2, 10, _1), 0.1, 20, true), "v = 10");
+   plot.plot("Bessel I", "cyl_bessel_i.svg", "x", "cyl_bessel_i(v, x)");
+
+   f2 = boost::math::cyl_bessel_k;
+   plot.clear();
+   plot.add(boost::bind(f2, 0, _1), find_end_point(boost::bind(f2, 0, _1), 0.1, 10, false), 10, "v = 0");
+   plot.add(boost::bind(f2, 2, _1), find_end_point(boost::bind(f2, 2, _1), 0.1, 10, false), 10, "v = 2");
+   plot.add(boost::bind(f2, 5, _1), find_end_point(boost::bind(f2, 5, _1), 0.1, 10, false), 10, "v = 5");
+   plot.add(boost::bind(f2, 7, _1), find_end_point(boost::bind(f2, 7, _1), 0.1, 10, false), 10, "v = 7");
+   plot.add(boost::bind(f2, 10, _1), find_end_point(boost::bind(f2, 10, _1), 0.1, 10, false), 10, "v = 10");
+   plot.plot("Bessel K", "cyl_bessel_k.svg", "x", "cyl_bessel_k(v, x)");
+
+   f2u = boost::math::sph_bessel;
+   plot.clear();
+   plot.add(boost::bind(f2u, 0, _1), 0, 20, "v = 0");
+   plot.add(boost::bind(f2u, 2, _1), 0, 20, "v = 2");
+   plot.add(boost::bind(f2u, 5, _1), 0, 20, "v = 5");
+   plot.add(boost::bind(f2u, 7, _1), 0, 20, "v = 7");
+   plot.add(boost::bind(f2u, 10, _1), 0, 20, "v = 10");
+   plot.plot("Bessel j", "sph_bessel.svg", "x", "sph_bessel(v, x)");
+
+   f2u = boost::math::sph_neumann;
+   plot.clear();
+   plot.add(boost::bind(f2u, 0, _1), find_end_point(boost::bind(f2u, 0, _1), 0.1, -5, true), 20, "v = 0");
+   plot.add(boost::bind(f2u, 2, _1), find_end_point(boost::bind(f2u, 2, _1), 0.1, -5, true), 20, "v = 2");
+   plot.add(boost::bind(f2u, 5, _1), find_end_point(boost::bind(f2u, 5, _1), 0.1, -5, true), 20, "v = 5");
+   plot.add(boost::bind(f2u, 7, _1), find_end_point(boost::bind(f2u, 7, _1), 0.1, -5, true), 20, "v = 7");
+   plot.add(boost::bind(f2u, 10, _1), find_end_point(boost::bind(f2u, 10, _1), 0.1, -5, true), 20, "v = 10");
+   plot.plot("Bessel y", "sph_neumann.svg", "x", "sph_neumann(v, x)");
+
+   f4 = boost::math::ellint_rj;
+   plot.clear();
+   plot.add(boost::bind(f4, _1, _1, _1, _1), find_end_point(boost::bind(f4, _1, _1, _1, _1), 0.1, 10, false), 4, "RJ");
+   f3 = boost::math::ellint_rf;
+   plot.add(boost::bind(f3, _1, _1, _1), find_end_point(boost::bind(f3, _1, _1, _1), 0.1, 10, false), 4, "RF");
+   plot.plot("Elliptic Integrals", "ellint_carlson.svg", "x", "");
+
+   f2 = boost::math::ellint_1;
+   plot.clear();
+   plot.add(boost::bind(f2, _1, 0.5), -0.9, 0.9, "&#x3C6;=0.5");
+   plot.add(boost::bind(f2, _1, 0.75), -0.9, 0.9, "&#x3C6;=0.75");
+   plot.add(boost::bind(f2, _1, 1.25), -0.9, 0.9, "&#x3C6;=1.25");
+   plot.add(boost::bind(f2, _1, boost::math::constants::pi<double>() / 2), -0.9, 0.9, "&#x3C6;=&#x3C0;/2");
+   plot.plot("Elliptic Of the First Kind", "ellint_1.svg", "k", "ellint_1(k, phi)");
+
+   f2 = boost::math::ellint_2;
+   plot.clear();
+   plot.add(boost::bind(f2, _1, 0.5), -1, 1, "&#x3C6;=0.5");
+   plot.add(boost::bind(f2, _1, 0.75), -1, 1, "&#x3C6;=0.75");
+   plot.add(boost::bind(f2, _1, 1.25), -1, 1, "&#x3C6;=1.25");
+   plot.add(boost::bind(f2, _1, boost::math::constants::pi<double>() / 2), -1, 1, "&#x3C6;=&#x3C0;/2");
+   plot.plot("Elliptic Of the Second Kind", "ellint_2.svg", "k", "ellint_2(k, phi)");
+
+   f3 = boost::math::ellint_3;
+   plot.clear();
+   plot.add(boost::bind(f3, _1, 0, 1.25), -1, 1, "n=0 &#x3C6;=1.25");
+   plot.add(boost::bind(f3, _1, 0.5, 1.25), -1, 1, "n=0.5 &#x3C6;=1.25");
+   plot.add(boost::bind(f3, _1, 0.25, boost::math::constants::pi<double>() / 2), 
+      find_end_point(
+         boost::bind(f3, _1, 0.25, boost::math::constants::pi<double>() / 2), 
+         0.5, 4, false, -1) - 1, 
+      find_end_point(
+         boost::bind(f3, _1, 0.25, boost::math::constants::pi<double>() / 2), 
+         -0.5, 4, true, 1) + 1, "n=0.25 &#x3C6;=&#x3C0;/2");
+   plot.add(boost::bind(f3, _1, 0.75, boost::math::constants::pi<double>() / 2), 
+      find_end_point(
+         boost::bind(f3, _1, 0.75, boost::math::constants::pi<double>() / 2), 
+         0.5, 4, false, -1) - 1, 
+      find_end_point(
+         boost::bind(f3, _1, 0.75, boost::math::constants::pi<double>() / 2), 
+         -0.5, 4, true, 1) + 1, "n=0.75 &#x3C6;=&#x3C0;/2");
+   plot.plot("Elliptic Of the Third Kind", "ellint_3.svg", "k", "ellint_3(k, n, phi)");
 
    return 0;
 }

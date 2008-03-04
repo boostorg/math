@@ -44,11 +44,11 @@ when `x <= 0`.
 
 The following graph illustrates the exponential behaviour of I[sub v].
 
-[$../graphs/bessel_i.png]
+[graph cyl_bessel_i]
 
 The following graph illustrates the exponential decay of K[sub v].
 
-[$../graphs/bessel_k.png]
+[graph cyl_bessel_k]
 
 [h4 Testing]
 

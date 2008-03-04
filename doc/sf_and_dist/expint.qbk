@@ -36,7 +36,7 @@ of z:
 
 [equation expint_n_1]
 
-[$../graphs/expint2.png]
+[graph expint2]
 
 [h4 Accuracy]
 
@@ -137,7 +137,7 @@ of z:
 
 [equation expint_i_1]
 
-[$../graphs/expint_i.png]
+[graph expint_i]
 
 [h4 Accuracy]
 

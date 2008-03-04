@@ -34,7 +34,7 @@ Returns the "true gamma" (hence name tgamma) of value z:
 
 [equation gamm1]
 
-[$../graphs/gamma.png]
+[graph tgamma]
 
 [optional_policy]
 

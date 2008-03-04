@@ -64,7 +64,7 @@ Returns the normalised lower incomplete gamma function of a and z:
 
 This function changes rapidly from 0 to 1 around the point z == a:
 
-[$../graphs/gamma_p.png]
+[graph gamma_p]
 
    template <class T1, class T2>
    ``__sf_result`` gamma_q(T1 a, T2 z);
@@ -78,7 +78,7 @@ Returns the normalised upper incomplete gamma function of a and z:
 
 This function changes rapidly from 1 to 0 around the point z == a:
 
-[$../graphs/gamma_q.png]
+[graph gamma_q]
 
    template <class T1, class T2>
    ``__sf_result`` tgamma_lower(T1 a, T2 z);

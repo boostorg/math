@@ -40,7 +40,7 @@ Returns the [@http://en.wikipedia.org/wiki/Error_function error function]
 
 [equation erf1]
 
-[$../graphs/erf1.png]
+[graph erf]
 
    template <class T>
    ``__sf_result`` erfc(T z);
@@ -52,7 +52,7 @@ Returns the complement of the [@http://functions.wolfram.com/GammaBetaErf/Erfc/ 
 
 [equation erf2]
 
-[$../graphs/erf2.png]
+[graph erfc]
 
 [h4 Accuracy]
 
