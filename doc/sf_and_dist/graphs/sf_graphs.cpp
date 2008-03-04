@@ -4,11 +4,10 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifdef _MSC_VER
-//#  pragma warning (disable : 4800) // forcing value to bool 'true' or 'false' (performance warning)
+#  pragma warning (disable : 4127) // conditional expression is constant
 #  pragma warning (disable : 4180) // qualifier applied to function type has no meaning; ignored
 #  pragma warning (disable : 4503) // decorated name length exceeded, name was truncated
 #  pragma warning (disable : 4512) // assignment operator could not be generated
-//#  pragma warning (disable : 4172) // returning address of local variable or temporary TODO find cause of these.
 #  pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'function_ptr' was previously defined as a type
 #endif
 

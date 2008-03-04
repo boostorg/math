@@ -1,14 +1,13 @@
 //  (C) Copyright John Maddock 2008.
+//  Copyright Paul A. Bristow 2008
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifdef _MSC_VER
-//#  pragma warning (disable : 4800) // forcing value to bool 'true' or 'false' (performance warning)
 #  pragma warning (disable : 4180) // qualifier applied to function type has no meaning; ignored
 #  pragma warning (disable : 4503) // decorated name length exceeded, name was truncated
 #  pragma warning (disable : 4512) // assignment operator could not be generated
-//#  pragma warning (disable : 4172) // returning address of local variable or temporary TODO find cause of these.
 #  pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'function_ptr' was previously defined as a type
 #  pragma warning (disable : 4127) // conditional expression is constant
 #endif
@@ -251,8 +250,8 @@ public:
                .line_on(true)
                .line_color(colors[color_index])
                .line_width(1.)
-               //.bezier_on(true) // Can't cope with badly behaved like uniform & triangular.
                .shape(none);
+               //.bezier_on(true) // Bezier can't cope with badly behaved like uniform & triangular.
             ++color_index;
             color_index = color_index % (sizeof(colors)/sizeof(colors[0]));
          }
@@ -291,11 +290,11 @@ public:
             s.line_on(true)
                .line_color(colors[color_index])
                .line_width(1.)
-               //.bezier_on(true) // Can't cope with badly behaved like uniform & triangular.
-               .shape(none);
-            s.line_style_.area_fill(colors[color_index]);
+               .shape(none)
+               .area_fill(colors[color_index]); 
             ++color_index;
             color_index = color_index % (sizeof(colors)/sizeof(colors[0]));
+            std::cout << s.line_style() << std::endl;  // operator << might be helpful!
          }
       }
       plot.write(file);
