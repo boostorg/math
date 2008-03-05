@@ -294,7 +294,6 @@ public:
                .area_fill(colors[color_index]); 
             ++color_index;
             color_index = color_index % (sizeof(colors)/sizeof(colors[0]));
-            std::cout << s.line_style() << std::endl;  // operator << might be helpful!
          }
       }
       plot.write(file);
