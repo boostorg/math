@@ -41,6 +41,7 @@ inline T trunc(const T& v)
 template <class T, class Policy>
 inline int itrunc(const T& v, const Policy& pol)
 {
+   BOOST_MATH_STD_USING
    T r = boost::math::trunc(v, pol);
    if(fabs(r) > (std::numeric_limits<int>::max)())
       return static_cast<int>(policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", 0, v, pol));
@@ -55,6 +56,7 @@ inline int itrunc(const T& v)
 template <class T, class Policy>
 inline long ltrunc(const T& v, const Policy& pol)
 {
+   BOOST_MATH_STD_USING
    T r = boost::math::trunc(v, pol);
    if(fabs(r) > (std::numeric_limits<long>::max)())
       return static_cast<long>(policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", 0, v, pol));
@@ -71,6 +73,7 @@ inline long ltrunc(const T& v)
 template <class T, class Policy>
 inline long long lltrunc(const T& v, const Policy& pol)
 {
+   BOOST_MATH_STD_USING
    T r = boost::math::trunc(v, pol);
    if(fabs(r) > (std::numeric_limits<long long>::max)())
       return static_cast<long long>(policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", 0, v, pol));

@@ -399,6 +399,9 @@ compile  compile_test/dist_gamma_incl_test.cpp ;
 compile  compile_test/dist_lognormal_incl_test.cpp ;
 compile  compile_test/dist_neg_binom_incl_test.cpp ;
 compile  compile_test/dist_nc_chi_squ_incl_test.cpp ;
+compile  compile_test/dist_nc_beta_incl_test.cpp ;
+compile  compile_test/dist_nc_f_incl_test.cpp ;
+compile  compile_test/dist_nc_t_incl_test.cpp ;
 compile  compile_test/dist_normal_incl_test.cpp ;
 compile  compile_test/dist_poisson_incl_test.cpp ;
 compile  compile_test/dist_students_t_incl_test.cpp ;
@@ -432,13 +435,16 @@ compile  compile_test/sf_lanczos_incl_test.cpp ;
 compile  compile_test/sf_legendre_incl_test.cpp ;
 compile  compile_test/sf_log1p_incl_test.cpp ;
 compile  compile_test/sf_math_fwd_incl_test.cpp ;
+compile  compile_test/sf_modf_incl_test.cpp ;
 compile  compile_test/sf_powm1_incl_test.cpp ;
+compile  compile_test/sf_round_incl_test.cpp ;
 compile  compile_test/sf_sign_incl_test.cpp ;
 compile  compile_test/sf_sin_pi_incl_test.cpp ;
 compile  compile_test/sf_sinc_incl_test.cpp ;
 compile  compile_test/sf_sinhc_incl_test.cpp ;
 compile  compile_test/sf_sph_harm_incl_test.cpp ;
 compile  compile_test/sf_sqrt1pm1_incl_test.cpp ;
+compile  compile_test/sf_trunc_incl_test.cpp ;
 compile  compile_test/sf_zeta_incl_test.cpp ;
 compile  compile_test/std_real_concept_check.cpp ;
 compile  compile_test/test_traits.cpp ;
@@ -457,6 +463,7 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_inc_test.cpp ;
+
 
 
 

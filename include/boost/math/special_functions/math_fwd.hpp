@@ -659,7 +659,26 @@ namespace boost
     } // namespace math
 } // namespace boost
 
+#ifdef BOOST_HAS_LONG_LONG
+#define BOOST_MATH_DETAIL_LL_FUNC(Policy)\
+   \
+   template <class T>\
+   inline T modf(const T& v, long long* ipart){ return boost::math::modf(v, ipart, Policy()); }\
+   \
+   template <class T>\
+   inline long long lltrunc(const T& v){ return boost::math::lltrunc(v, Policy()); }\
+   \
+   template <class T>\
+   inline long long llround(const T& v){ return boost::math::llround(v, Policy()); }\
+
+#else
+#define BOOST_MATH_DETAIL_LL_FUNC(Policy)
+#endif
+
 #define BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(Policy)\
+   \
+   BOOST_MATH_DETAIL_LL_FUNC(Policy)\
+   \
    template <class RT1, class RT2>\
    inline typename boost::math::tools::promote_args<RT1, RT2>::type \
    beta(RT1 a, RT2 b) { return ::boost::math::beta(a, b, Policy()); }\
@@ -952,8 +971,34 @@ namespace boost
    inline typename boost::math::tools::promote_args<T>::type expint(T z){ return boost::math::expint(z, Policy()); }\
    \
    template <class T>\
-   inline typename boost::math::tools::promote_args<T>::type zeta(T s){ return boost::math::zeta(s, Policy()); }
-
+   inline typename boost::math::tools::promote_args<T>::type zeta(T s){ return boost::math::zeta(s, Policy()); }\
+   \
+   template <class T>\
+   inline T round(const T& v){ return boost::math::round(v, Policy()); }\
+   \
+   template <class T>\
+   inline int iround(const T& v){ return boost::math::iround(v, Policy()); }\
+   \
+   template <class T>\
+   inline long lround(const T& v){ return boost::math::lround(v, Policy()); }\
+   \
+   template <class T>\
+   inline T trunc(const T& v){ return boost::math::trunc(v, Policy()); }\
+   \
+   template <class T>\
+   inline int itrunc(const T& v){ return boost::math::itrunc(v, Policy()); }\
+   \
+   template <class T>\
+   inline long ltrunc(const T& v){ return boost::math::ltrunc(v, Policy()); }\
+   \
+   template <class T>\
+   inline T modf(const T& v, T* ipart){ return boost::math::modf(v, ipart, Policy()); }\
+   \
+   template <class T>\
+   inline T modf(const T& v, int* ipart){ return boost::math::modf(v, ipart, Policy()); }\
+   \
+   template <class T>\
+   inline T modf(const T& v, long* ipart){ return boost::math::modf(v, ipart, Policy()); }\
 
 #endif // BOOST_MATH_SPECIAL_MATH_FWD_HPP
 

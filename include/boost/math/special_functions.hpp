@@ -49,5 +49,8 @@
 #include <boost/math/special_functions/spherical_harmonic.hpp>
 #include <boost/math/special_functions/sqrt1pm1.hpp>
 #include <boost/math/special_functions/zeta.hpp>
+#include <boost/math/special_functions/modf.hpp>
+#include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_HPP

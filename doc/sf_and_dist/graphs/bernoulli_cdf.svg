@@ -43,9 +43,9 @@
 <text x="30.2" y="200.1" text-anchor="middle" transform = "rotate(-90 30.2 200.1 )" font-size="14" font-family="Verdana">Probability</text></g>
 <g id="xLabel">
 <text x="341.6" y="384" text-anchor="middle" font-size="14" font-family="Verdana">Random Variable</text></g>
-<g id="plotLines" stroke-width="2"><g clip-path="url(#plot_window)" stroke="rgb(0,0,139)" fill="rgb(0,0,139)" stroke-width="1"><path d="M104.1,338.2 L104.1,338.2 L104.1,149.9 M104.1,149.9 L172,149.9 M172,149.9 L172,338.2 M172,338.2 L375.5,338.2 M375.5,338.2 L375.5,87.11 M375.5,87.11 L443.3,87.11 M443.3,87.11 L443.4,338.2 M443.4,338.2 L443.4,338.2 Z" fill="rgb(0,0,139)"/></g>
-<g clip-path="url(#plot_window)" stroke="rgb(139,0,0)" fill="rgb(139,0,0)" stroke-width="1"><path d="M172,338.2 L172,338.2 L172,212.7 M172,212.7 L239.8,212.7 M239.8,212.7 L239.8,338.2 M239.8,338.2 L443.3,338.2 M443.3,338.2 L443.4,87.11 M443.4,87.11 L511.2,87.11 M511.2,87.11 L511.2,338.2 M511.2,338.2 L511.2,338.2 Z" fill="rgb(139,0,0)"/></g>
-<g clip-path="url(#plot_window)" stroke="rgb(0,100,0)" fill="rgb(0,100,0)" stroke-width="1"><path d="M239.8,338.2 L239.8,338.2 L239.8,275.4 M239.8,275.4 L307.7,275.4 M307.7,275.4 L307.7,338.2 M307.7,338.2 L511.2,338.2 M511.2,338.2 L511.2,87.11 M511.2,87.11 L579,87.11 M579,87.11 L579,338.2 M579,338.2 L579,338.2 Z" fill="rgb(0,100,0)"/></g>
+<g id="plotLines" stroke-width="2"><g clip-path="url(#plot_window)" stroke="rgb(0,0,139)" stroke-width="1"><path d="M104.1,338.2 L104.1,338.2 L104.1,149.9 L172,149.9 L172,338.2 L375.5,338.2 L375.5,87.11 L443.3,87.11 L443.4,338.2 L443.4,338.2 Z" fill="rgb(0,0,139)"/></g>
+<g clip-path="url(#plot_window)" stroke="rgb(139,0,0)" stroke-width="1"><path d="M172,338.2 L172,338.2 L172,212.7 L239.8,212.7 L239.8,338.2 L443.3,338.2 L443.4,87.11 L511.2,87.11 L511.2,338.2 L511.2,338.2 Z" fill="rgb(139,0,0)"/></g>
+<g clip-path="url(#plot_window)" stroke="rgb(0,100,0)" stroke-width="1"><path d="M239.8,338.2 L239.8,338.2 L239.8,275.4 L307.7,275.4 L307.7,338.2 L511.2,338.2 L511.2,87.11 L579,87.11 L579,338.2 L579,338.2 Z" fill="rgb(0,100,0)"/></g>
 </g>
 <g id="plotPoints" clip-path="url(#plot_window)"><g stroke="rgb(0,0,0)"></g>
 <g stroke="rgb(0,0,0)"></g>

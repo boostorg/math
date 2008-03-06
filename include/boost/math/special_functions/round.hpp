@@ -41,6 +41,7 @@ inline T round(const T& v)
 template <class T, class Policy>
 inline int iround(const T& v, const Policy& pol)
 {
+   BOOST_MATH_STD_USING
    T r = boost::math::round(v, pol);
    if(fabs(r) > (std::numeric_limits<int>::max)())
       return static_cast<int>(policies::raise_rounding_error("boost::math::iround<%1%>(%1%)", 0, v, pol));
@@ -55,6 +56,7 @@ inline int iround(const T& v)
 template <class T, class Policy>
 inline long lround(const T& v, const Policy& pol)
 {
+   BOOST_MATH_STD_USING
    T r = boost::math::round(v, pol);
    if(fabs(r) > (std::numeric_limits<long>::max)())
       return static_cast<long int>(policies::raise_rounding_error("boost::math::lround<%1%>(%1%)", 0, v, pol));
@@ -71,6 +73,7 @@ inline long lround(const T& v)
 template <class T, class Policy>
 inline long long llround(const T& v, const Policy& pol)
 {
+   BOOST_MATH_STD_USING
    T r = boost::math::round(v, pol);
    if(fabs(r) > (std::numeric_limits<long long>::max)())
       return static_cast<long long>(policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", 0, v, pol));

@@ -3,6 +3,8 @@
 
 [section:round Rounding Functions]
 
+``#include <boost/math/special_functions/round.hpp>``
+
    template <class T>
    T round(const T& v);
    
@@ -39,6 +41,8 @@ default this throws an instance of boost::math::rounding_error.
 [endsect]
 
 [section:trunc Truncation Functions]
+
+``#include <boost/math/special_functions/trunc.hpp>``
 
    template <class T>
    T trunc(const T& v);
@@ -77,6 +81,8 @@ default this throws an instance of boost::math::rounding_error.
 [endsect]
 
 [section:modf Integer and Fractional Part Splitting (modf)]
+
+``#include <boost/math/special_functions/modf.hpp>``
 
    template <class T>
    T modf(const T& v, T* ipart);
