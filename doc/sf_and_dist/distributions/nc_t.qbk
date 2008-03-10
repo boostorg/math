@@ -178,6 +178,12 @@ and in the
 [@http://reference.wolfram.com/mathematica/ref/NoncentralStudentTDistribution.html 
 Mathematica documentation].
 
+Some analytic properties of noncentral distributions
+(particularly unimodality, and monotonicity of their modes)
+are surveyed and summarized by:
+
+Andrea van Aubel & Wolfgang Gawronski, Applied Mathematics and Computation, 141 (2003) 3-12.
+
 [endsect] [/section:nc_t_dist]
 
 [/ nc_t.qbk

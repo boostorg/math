@@ -263,6 +263,12 @@ The remaining non-member functions use the following formulas:
 
 [equation nc_chi_squ_ref7]
 
+Some analytic properties of noncentral distributions
+(particularly unimodality, and monotonicity of their modes)
+are surveyed and summarized by:
+
+Andrea van Aubel & Wolfgang Gawronski, Applied Mathematics and Computation, 141 (2003) 3-12.
+
 [endsect] [/section:nc_chi_squared_dist]
 
 [/ nc_chi_squared.qbk
