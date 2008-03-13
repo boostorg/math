@@ -90,7 +90,7 @@ namespace boost{ namespace math
       RealType* result, const Policy& pol)
     {
       if((check_uniform_lower(function, lower, result, pol) == false)
-        || (check_uniform_upper(function, upper, result, pol) = false))
+        || (check_uniform_upper(function, upper, result, pol) == false))
       {
         return false;
       }
