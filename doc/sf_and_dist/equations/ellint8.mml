@@ -1,29 +1,33 @@
   <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mo>&#x220F;</mo>
-    <mfenced>
-      <mrow>
-        <mi>n</mi>
-        <mo>,</mo>
-        <mi>k</mi>
-      </mrow>
-    </mfenced>
-    <mo>=</mo>
-    <mo>&#x220F;</mo>
-    <mfenced>
-      <mrow>
-        <mi>n</mi>
-        <mo>,</mo>
+    <mrow>
+      <mo>&#x220F;</mo>
+      <mfenced>
         <mrow>
-          <mfrac>
-            <mi>&#x03C0;</mi>
-            <mn>2</mn>
-          </mfrac>
+          <mi>n</mi>
+          <mo>,</mo>
+          <mi>k</mi>
         </mrow>
-        <mo>,</mo>
-        <mi>k</mi>
-      </mrow>
-    </mfenced>
+      </mfenced>
+    </mrow>
+    <mo>=</mo>
+    <mrow>
+      <mo>&#x220F;</mo>
+      <mfenced>
+        <mrow>
+          <mi>n</mi>
+          <mo>,</mo>
+          <mrow>
+            <mfrac>
+              <mi>&#x03C0;</mi>
+              <mn>2</mn>
+            </mfrac>
+          </mrow>
+          <mo>,</mo>
+          <mi>k</mi>
+        </mrow>
+      </mfenced>
+    </mrow>
     <mo>=</mo>
     <msubsup>
       <mo>&#x222B;</mo>

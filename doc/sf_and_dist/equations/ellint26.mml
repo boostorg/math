@@ -1,13 +1,15 @@
  	<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
   <mrow>
-    <mo>&#x220F;</mo>
-    <mfenced>
-      <mrow>
-        <mi>n</mi>
-        <mo>,</mo>
-        <mi>k</mi>
-      </mrow>
-    </mfenced>
+    <mrow>
+      <mo>&#x220F;</mo>
+      <mfenced>
+        <mrow>
+          <mi>n</mi>
+          <mo>,</mo>
+          <mi>k</mi>
+        </mrow>
+      </mfenced>
+    </mrow>
     <mspace width="1em"/>
     <mo>=</mo>
     <mspace width="1em"/>
