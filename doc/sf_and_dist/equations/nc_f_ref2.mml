@@ -113,17 +113,21 @@
         </mrow>
       </mfenced>
       <mrow>
-        <mfrac>
+        <mfenced>
           <mrow>
-            <msub>
-              <mi>&#x03BD;</mi>
-              <mn>1</mn>
-            </msub>
+            <mfrac>
+              <mrow>
+                <msub>
+                  <mi>&#x03BD;</mi>
+                  <mn>1</mn>
+                </msub>
+              </mrow>
+              <mn>2</mn>
+            </mfrac>
+            <mo>+</mo>
+            <mi>k</mi>
           </mrow>
-          <mn>2</mn>
-        </mfrac>
-        <mo>+</mo>
-        <mi>k</mi>
+        </mfenced>
       </mrow>
     </msup>
     <msup>
@@ -156,44 +160,52 @@
         </mrow>
       </mfenced>
       <mrow>
-        <mfrac>
+        <mfenced>
           <mrow>
-            <mrow>
-              <msub>
-                <mi>&#x03BD;</mi>
-                <mn>1</mn>
-              </msub>
-            </mrow>
+            <mfrac>
+              <mrow>
+                <mrow>
+                  <msub>
+                    <mi>&#x03BD;</mi>
+                    <mn>1</mn>
+                  </msub>
+                </mrow>
+                <mo>+</mo>
+                <mrow>
+                  <msub>
+                    <mi>&#x03BD;</mi>
+                    <mn>2</mn>
+                  </msub>
+                </mrow>
+              </mrow>
+              <mn>2</mn>
+            </mfrac>
             <mo>+</mo>
-            <mrow>
-              <msub>
-                <mi>&#x03BD;</mi>
-                <mn>2</mn>
-              </msub>
-            </mrow>
+            <mi>k</mi>
           </mrow>
-          <mn>2</mn>
-        </mfrac>
-        <mo>+</mo>
-        <mi>k</mi>
+        </mfenced>
       </mrow>
     </msup>
     <msup>
       <mi>x</mi>
       <mrow>
-        <mfrac>
+        <mfenced>
           <mrow>
-            <msub>
-              <mi>&#x03BD;</mi>
-              <mn>1</mn>
-            </msub>
+            <mfrac>
+              <mrow>
+                <msub>
+                  <mi>&#x03BD;</mi>
+                  <mn>1</mn>
+                </msub>
+              </mrow>
+              <mn>2</mn>
+            </mfrac>
+            <mo>+</mo>
+            <mi>k</mi>
+            <mo>&#x2212;</mo>
+            <mn>1</mn>
           </mrow>
-          <mn>2</mn>
-        </mfrac>
-        <mo>+</mo>
-        <mi>k</mi>
-        <mo>&#x2212;</mo>
-        <mn>1</mn>
+        </mfenced>
       </mrow>
     </msup>
   </mrow>

@@ -27,16 +27,18 @@
               </mfenced>
             </mrow>
           </msqrt>
-          <mo>&#x220F;</mo>
-          <mfenced>
-            <mrow>
-              <mi>n</mi>
-              <mo>,</mo>
-              <mi>&#x03C6;</mi>
-              <mo>,</mo>
-              <mi>k</mi>
-            </mrow>
-          </mfenced>
+          <mrow>
+            <mo>&#x220F;</mo>
+            <mfenced>
+              <mrow>
+                <mi>n</mi>
+                <mo>,</mo>
+                <mi>&#x03C6;</mi>
+                <mo>,</mo>
+                <mi>k</mi>
+              </mrow>
+            </mfenced>
+          </mrow>
         </mtd>
         <mtd>
           <mo>=</mo>
@@ -66,16 +68,18 @@
               </mfenced>
             </mrow>
           </msqrt>
-          <mo>&#x220F;</mo>
-          <mfenced>
-            <mrow>
-              <mi>N</mi>
-              <mo>,</mo>
-              <mi>&#x03C6;</mi>
-              <mo>,</mo>
-              <mi>k</mi>
-            </mrow>
-          </mfenced>
+          <mrow>
+            <mo>&#x220F;</mo>
+            <mfenced>
+              <mrow>
+                <mi>N</mi>
+                <mo>,</mo>
+                <mi>&#x03C6;</mi>
+                <mo>,</mo>
+                <mi>k</mi>
+              </mrow>
+            </mfenced>
+          </mrow>
         </mtd>
       </mtr>
       <mtr>
