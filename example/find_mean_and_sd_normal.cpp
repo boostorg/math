@@ -205,7 +205,7 @@ the confidence intervals are depressingly wide.
 
 See [link math_toolkit.dist.stat_tut.weg.cs_eg.chi_sq_intervals Confidence Intervals on the standard deviation]
 for a worked example
-[@../../example/chi_square_std_dev_test.cpp chi_square_std_dev_test.cpp]
+[@../../../example/chi_square_std_dev_test.cpp chi_square_std_dev_test.cpp]
 of estimating these intervals.
 
 

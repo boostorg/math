@@ -124,7 +124,7 @@ is not specialised for type RealType, then you will get a compiler error
 when code tries to use these functions, /unless/ you explicitly specialise them.
 For example if the precision of RealType varies at runtime, then
 `numeric_limits` support may not be appropriate, see 
-[@../../../../../boost/math/tools/ntl.hpp boost/math/tools/ntl.hpp] for examples.
+[@../../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp] for examples.
 
 [warning
 If `std::numeric_limits<>` is *not specialized*
