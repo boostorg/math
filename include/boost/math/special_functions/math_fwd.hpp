@@ -999,6 +999,9 @@ namespace boost
    \
    template <class T>\
    inline T modf(const T& v, long* ipart){ return boost::math::modf(v, ipart, Policy()); }\
+   \
+   template <int N, class T>\
+   inline typename boost::math::tools::promote_args<T>::type pow(T v){ return boost::math::pow<N>(v, Policy()); }\
 
 #endif // BOOST_MATH_SPECIAL_MATH_FWD_HPP
 

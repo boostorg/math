@@ -603,7 +603,7 @@ namespace boost
                // Can't do a thing if one of p and q is zero:
                //
                return policies::raise_evaluation_error<RealType>(function, 
-                  "Can't find degrees of freedom when the probability is 0 or 1, only possible answer is %1%", 
+                  "Can't find non centrality parameter when the probability is 0 or 1, only possible answer is %1%", 
                   RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
             }
             non_centrality_finder<RealType, Policy> f(v, x, p < q ? p : q, p < q ? false : true);

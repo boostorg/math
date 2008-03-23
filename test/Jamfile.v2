@@ -39,6 +39,7 @@ project
     ;
 
 run hypot_test.cpp ;
+run pow_test.cpp ;
 run log1p_expm1_test.cpp ;
 run powm1_sqrtp1m1_test.cpp ;
 run special_functions_test.cpp /boost/unit_test//boost_unit_test_framework/<link>static ;

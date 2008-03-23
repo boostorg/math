@@ -245,6 +245,7 @@ void instantiate(RealType)
    long long ll;
    boost::math::modf(v1, &ll);
 #endif
+   boost::math::pow<2>(v1);
    //
    // All over again, with a policy this time:
    //
@@ -360,6 +361,7 @@ void instantiate(RealType)
    boost::math::llround(v1, pol);
    boost::math::modf(v1, &ll, pol);
 #endif
+   boost::math::pow<2>(v1, pol);
    //
    // All over again with the versions in test::
    //
@@ -474,6 +476,7 @@ void instantiate(RealType)
    test::llround(v1);
    test::modf(v1, &ll);
 #endif
+   test::pow<2>(v1);
 }
 
 

@@ -45,6 +45,8 @@ namespace boost
             // maximum of the poisson weighting term:
             //
             int k = itrunc(l2);
+            if(k == 0)
+               k = 1;
             // Starting Poisson weight:
             T pois = gamma_p_derivative(T(k+1), l2, pol);
             if(pois == 0)
@@ -74,7 +76,7 @@ namespace boost
             {
                T term = beta * pois;
                sum += term;
-               if((fabs(term/sum) < errtol) && (last_term >= term))
+               if(((fabs(term/sum) < errtol) && (last_term >= term)) || (term == 0))
                {
                   count = k - i;
                   break;
@@ -92,7 +94,7 @@ namespace boost
 
                T term = poisf * betaf;
                sum += term;
-               if(fabs(term/sum) < errtol)
+               if((fabs(term/sum) < errtol) || (term == 0))
                {
                   break;
                }
@@ -122,6 +124,8 @@ namespace boost
             // maximum of the poisson weighting term:
             //
             int k = itrunc(l2);
+            if(k == 0)
+               k = 1;
             // Starting Poisson weight:
             T pois = gamma_p_derivative(T(k+1), l2, pol);
             if(pois == 0)
@@ -154,7 +158,7 @@ namespace boost
 
                T term = poisf * betaf;
                sum += term;
-               if((fabs(term/sum) < errtol) && (last_term > term))
+               if((fabs(term/sum) < errtol) && (last_term >= term))
                {
                   count = i - k;
                   break;
@@ -774,6 +778,9 @@ namespace boost
                Policy()))
                   return (RealType)r;
 
+         if(l == 0)
+            return cdf(beta_distribution<RealType, Policy>(a, b), x);
+
          return detail::non_central_beta_cdf(x, 1 - x, a, b, l, false, Policy());
       } // cdf
 
@@ -807,6 +814,9 @@ namespace boost
                &r,
                Policy()))
                   return (RealType)r;
+
+         if(l == 0)
+            return cdf(complement(beta_distribution<RealType, Policy>(a, b), x));
 
          return detail::non_central_beta_cdf(x, 1 - x, a, b, l, true, Policy());
       } // ccdf

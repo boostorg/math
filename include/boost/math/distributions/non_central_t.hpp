@@ -13,6 +13,7 @@
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/distributions/non_central_beta.hpp> // for nc beta
 #include <boost/math/distributions/normal.hpp> // for normal CDF and quantile
+#include <boost/math/distributions/students_t.hpp>
 #include <boost/math/distributions/detail/generic_quantile.hpp> // quantile
 
 namespace boost
@@ -476,6 +477,122 @@ namespace boost
             return result;
          }
 
+#if 0
+         // 
+         // This code is disabled, since there can be multiple answers to the
+         // question, and it's not clear how to find the "right" one.
+         //
+         template <class RealType, class Policy>
+         struct t_degrees_of_freedom_finder
+         {
+            t_degrees_of_freedom_finder(
+               RealType delta_, RealType x_, RealType p_, bool c)
+               : delta(delta_), x(x_), p(p_), comp(c) {}
+
+            RealType operator()(const RealType& v)
+            {
+               non_central_t_distribution<RealType, Policy> d(v, delta);
+               return comp ?
+                  p - cdf(complement(d, x))
+                  : cdf(d, x) - p;
+            }
+         private:
+            RealType delta;
+            RealType x;
+            RealType p;
+            bool comp;
+         };
+
+         template <class RealType, class Policy>
+         inline RealType find_t_degrees_of_freedom(
+            RealType delta, RealType x, RealType p, RealType q, const Policy& pol)
+         {
+            const char* function = "non_central_t<%1%>::find_degrees_of_freedom";
+            if((p == 0) || (q == 0))
+            {
+               //
+               // Can't a thing if one of p and q is zero:
+               //
+               return policies::raise_evaluation_error<RealType>(function, 
+                  "Can't find degrees of freedom when the probability is 0 or 1, only possible answer is %1%", 
+                  RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
+            }
+            t_degrees_of_freedom_finder<RealType, Policy> f(delta, x, p < q ? p : q, p < q ? false : true);
+            tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
+            boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+            //
+            // Pick an initial guess:
+            //
+            RealType guess = 200;
+            std::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
+               f, guess, RealType(2), false, tol, max_iter, pol);
+            RealType result = ir.first + (ir.second - ir.first) / 2;
+            if(max_iter >= policies::get_max_root_iterations<Policy>())
+            {
+               policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
+                  " or there is no answer to problem.  Current best guess is %1%", result, Policy());
+            }
+            return result;
+         }
+
+         template <class RealType, class Policy>
+         struct t_non_centrality_finder
+         {
+            t_non_centrality_finder(
+               RealType v_, RealType x_, RealType p_, bool c)
+               : v(v_), x(x_), p(p_), comp(c) {}
+
+            RealType operator()(const RealType& delta)
+            {
+               non_central_t_distribution<RealType, Policy> d(v, delta);
+               return comp ?
+                  p - cdf(complement(d, x))
+                  : cdf(d, x) - p;
+            }
+         private:
+            RealType v;
+            RealType x;
+            RealType p;
+            bool comp;
+         };
+
+         template <class RealType, class Policy>
+         inline RealType find_t_non_centrality(
+            RealType v, RealType x, RealType p, RealType q, const Policy& pol)
+         {
+            const char* function = "non_central_t<%1%>::find_t_non_centrality";
+            if((p == 0) || (q == 0))
+            {
+               //
+               // Can't do a thing if one of p and q is zero:
+               //
+               return policies::raise_evaluation_error<RealType>(function, 
+                  "Can't find non centrality parameter when the probability is 0 or 1, only possible answer is %1%", 
+                  RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
+            }
+            t_non_centrality_finder<RealType, Policy> f(v, x, p < q ? p : q, p < q ? false : true);
+            tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
+            boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+            //
+            // Pick an initial guess that we know is the right side of
+            // zero:
+            //
+            RealType guess;
+            if(f(0) < 0)
+               guess = 1;
+            else
+               guess = -1;
+            std::pair<RealType, RealType> ir = tools::bracket_and_solve_root(
+               f, guess, RealType(2), false, tol, max_iter, pol);
+            RealType result = ir.first + (ir.second - ir.first) / 2;
+            if(max_iter >= policies::get_max_root_iterations<Policy>())
+            {
+               policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
+                  " or there is no answer to problem.  Current best guess is %1%", result, Policy());
+            }
+            return result;
+         }
+#endif
       } // namespace detail
 
       template <class RealType = double, class Policy = policies::policy<> >
@@ -507,6 +624,94 @@ namespace boost
          { // Private data getter function.
             return ncp;
          }
+#if 0
+         // 
+         // This code is disabled, since there can be multiple answers to the
+         // question, and it's not clear how to find the "right" one.
+         //
+         static RealType find_degrees_of_freedom(RealType delta, RealType x, RealType p)
+         {
+            const char* function = "non_central_t<%1%>::find_degrees_of_freedom";
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+            value_type result = detail::find_t_degrees_of_freedom(
+               static_cast<value_type>(delta), 
+               static_cast<value_type>(x), 
+               static_cast<value_type>(p), 
+               static_cast<value_type>(1-p), 
+               forwarding_policy());
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result, 
+               function);
+         }
+         template <class A, class B, class C>
+         static RealType find_degrees_of_freedom(const complemented3_type<A,B,C>& c)
+         {
+            const char* function = "non_central_t<%1%>::find_degrees_of_freedom";
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+            value_type result = detail::find_t_degrees_of_freedom(
+               static_cast<value_type>(c.dist), 
+               static_cast<value_type>(c.param1), 
+               static_cast<value_type>(1-c.param2), 
+               static_cast<value_type>(c.param2), 
+               forwarding_policy());
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result, 
+               function);
+         }
+         static RealType find_non_centrality(RealType v, RealType x, RealType p)
+         {
+            const char* function = "non_central_t<%1%>::find_t_non_centrality";
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+            value_type result = detail::find_t_non_centrality(
+               static_cast<value_type>(v), 
+               static_cast<value_type>(x), 
+               static_cast<value_type>(p), 
+               static_cast<value_type>(1-p), 
+               forwarding_policy());
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result, 
+               function);
+         }
+         template <class A, class B, class C>
+         static RealType find_non_centrality(const complemented3_type<A,B,C>& c)
+         {
+            const char* function = "non_central_t<%1%>::find_t_non_centrality";
+            typedef typename policies::evaluation<RealType, Policy>::type value_type;
+            typedef typename policies::normalise<
+               Policy, 
+               policies::promote_float<false>, 
+               policies::promote_double<false>, 
+               policies::discrete_quantile<>,
+               policies::assert_undefined<> >::type forwarding_policy;
+            value_type result = detail::find_t_non_centrality(
+               static_cast<value_type>(c.dist), 
+               static_cast<value_type>(c.param1), 
+               static_cast<value_type>(1-c.param2), 
+               static_cast<value_type>(c.param2), 
+               forwarding_policy());
+            return policies::checked_narrowing_cast<RealType, forwarding_policy>(
+               result, 
+               function);
+         }
+#endif
       private:
          // Data member, initialized by constructor.
          RealType v;   // degrees of freedom
@@ -774,6 +979,9 @@ namespace boost
             Policy()))
                return (RealType)r;
 
+         if(l == 0)
+            return cdf(students_t_distribution<RealType, Policy>(v), x);
+
          return policies::checked_narrowing_cast<RealType, forwarding_policy>(
             detail::non_central_t_cdf(
                static_cast<value_type>(v), 
@@ -816,6 +1024,9 @@ namespace boost
             &r,
             Policy()))
                return (RealType)r;
+
+         if(l == 0)
+            return cdf(complement(students_t_distribution<RealType, Policy>(v), x));
 
          return policies::checked_narrowing_cast<RealType, forwarding_policy>(
             detail::non_central_t_cdf(

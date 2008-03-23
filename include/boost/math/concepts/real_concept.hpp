@@ -111,6 +111,10 @@ public:
    { return -m_value; }
    real_concept const& operator+()const
    { return *this; }
+   real_concept& operator++()
+   { ++m_value;  return *this; }
+   real_concept& operator--()
+   { --m_value;  return *this; }
 
 private:
    real_concept_base_type m_value;
