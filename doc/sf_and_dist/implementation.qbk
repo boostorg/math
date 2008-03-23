@@ -207,6 +207,11 @@ However in a few cases, for example normal, where we felt it obvious,
 we have permitted argument(s) to be infinity,
 provided infinity is implemented for the realType on that implementation.
 
+Users who require special handling of infinity (or other specific value) can, 
+of course, always intercept this before calling a distribution or function
+and return their own choice of value, or other behavior.
+This will often be simpler than trying to handle the aftermath of the error policy.
+
 Overflow, underflow, denorm can be handled using __error_policy.
 
 We have also tried to catch boundary cases where the mathematical specification
