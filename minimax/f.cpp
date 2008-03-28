@@ -21,13 +21,18 @@ boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant)
    switch(variant)
    {
    case 0:
-      return boost::math::erfc(x) * x / exp(-x * x);
+      {
+      boost::math::ntl::RR x_ = sqrt(x == 0 ? 1e-80 : x);
+      return boost::math::erf(x_) / x_;
+      }
    case 1:
-      return boost::math::erf(x);
+      {
+      boost::math::ntl::RR x_ = 1 / x;
+      return boost::math::erfc(x_) * x_ / exp(-x_ * x_);
+      }
    case 2:
       {
-         boost::math::ntl::RR x_ = x == 0 ? 1e-80 : x;
-      return boost::math::erf(x_) / x_;
+      return boost::math::erfc(x) * x / exp(-x * x);
       }
    case 3:
       {
@@ -293,6 +298,17 @@ boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant)
       // Expint Ei for large x:
       {
          return (boost::math::expint(x) - x) * x * exp(-x);
+      }
+   case 26:
+      {
+         //
+         // erf_inv in range [0, 0.5]
+         //
+         boost::math::ntl::RR y = x;
+         if(y == 0)
+            y = boost::math::tools::epsilon<boost::math::ntl::RR>() / 64;
+         y = sqrt(y);
+         return boost::math::erf_inv(y) / (y);
       }
    }
    return 0;
