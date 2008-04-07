@@ -185,8 +185,9 @@ difficult to achieve this on all systems.
    implementation.  It should be possible to make this work if someone
    is prepared to offer assistance.]]
 [[IMB AIX][IBM xlc 5.3][Yes]
-   [Currently our accuracy tests are unable to be run on this platform
-   due to compiler errors in our /test/ code.  The IBM compiler group
+   [All tests pass except for our fpclassify tests which fail due to a 
+   bug in `std::numeric_limits`, the bug effects the test code, not
+   fpclassify itself.  The IBM compiler group
    are aware of the problem.]]
 ]
 
