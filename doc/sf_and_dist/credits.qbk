@@ -36,7 +36,8 @@ of this document, adding several new features en route.
 Plots of the functions and distributions were prepared in
 [@http://www.w3.org/ W3C] standard
 [@http://www.svg.org/ Scalable Vector Graphic (SVG)] format
-using a program created by Jacob Voytko during a Google 'Summer of Code'.
+using a program created by Jacob Voytko during a
+[@http://code.google.com/soc/2007/ Google Summer of Code (2007)].
 Since browser support for rendering SVG is still not universal
 (Microsoft Internet Explorer, even IE 8 beta, still lacks native SVG support
 but can be made to work with
@@ -49,10 +50,10 @@ of this library, and to all the reviewers - including Guillaume Melquiond,
 Arnaldur Gylfason, John Phillips, Stephan Tolksdorf and Jeff Garland 
 - for their many helpful comments.
 
-[endsect][/section:roadmap Roadmap]
+[endsect] [/section:credits Credits and Acknowledgements]
 
 [/ 
-  Copyright 2006 - 2008 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2007, 2008 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
