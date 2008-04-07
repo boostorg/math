@@ -100,6 +100,9 @@ must be provided by the user:
    T user_denorm_error(const char* function, const char* message, const T& val);
    
    template <class T>
+   T user_rounding_error(const char* function, const char* message, const T& val);
+   
+   template <class T>
    T user_evaluation_error(const char* function, const char* message, const T& val);
    
    }}} // namespaces
@@ -168,6 +171,15 @@ which are summarised in the following table:
       Defaults to `boost::math::policies::denorm_error<ignore_error>`
 
       When the action is ['throw_on_error] then throws a `std::underflow_error`]]
+[[Rounding Error]
+   [boost::math::policies::rounding_error<['action]>]
+      [Raised When one of the rounding functions __round, __trunc or __modf is
+      called with an argument that has no integer representation, or
+      is too large to be represented in the result type
+
+      Defaults to `boost::math::policies::rounding_error<throw_on_error>`
+
+      When the action is ['throw_on_error] then throws `boost::math::rounding_error`]]
 [[Evaluation Error]
    [boost::math::policies::evaluation_error<['action]>]
       [Raised when the result of the function is well defined and
@@ -497,6 +509,13 @@ defaults to `throw_on_error`, but can be set to any of the enumerated
 actions for error handing: `throw_on_error`, `errno_on_error`, 
 `ignore_error` or `user_error`.
 
+[h5 BOOST_MATH_ROUNDING_ERROR_POLICY]
+
+Defines what happens when a rounding error occurs, if not defined then
+defaults to `throw_on_error`, but can be set to any of the enumerated
+actions for error handing: `throw_on_error`, `errno_on_error`, 
+`ignore_error` or `user_error`.
+
 [h5 BOOST_MATH_EVALUATION_ERROR_POLICY]
 
 Defines what happens when an internal evaluation error occurs, if not defined then
@@ -674,6 +693,7 @@ compile-time container for a collection of policies:
       typedef ``['computed-from-template-arguments]`` overflow_error_type;
       typedef ``['computed-from-template-arguments]`` underflow_error_type;
       typedef ``['computed-from-template-arguments]`` denorm_error_type;
+      typedef ``['computed-from-template-arguments]`` rounding_error_type;
       typedef ``['computed-from-template-arguments]`` evaluation_error_type;
       typedef ``['computed-from-template-arguments]`` precision_type;
       typedef ``['computed-from-template-arguments]`` promote_float_type;
@@ -734,6 +754,12 @@ Specifies how underflow errors are handled, will be an instance of
 Specifies how denorm errors are handled, will be an instance of
 `boost::math::policies::denorm_error<>` with the template argument to
 `denorm_error` one of the `error_policy_type` enumerated values.
+
+   policy<...>::rounding_error_type
+   
+Specifies how rounding errors are handled, will be an instance of
+`boost::math::policies::rounding_error<>` with the template argument to
+`rounding_error` one of the `error_policy_type` enumerated values.
 
    policy<...>::evaluation_error_type
    

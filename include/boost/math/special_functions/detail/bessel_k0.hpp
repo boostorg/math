@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_BESSEL_K0_HPP
 #define BOOST_MATH_BESSEL_K0_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/assert.hpp>
@@ -114,3 +118,4 @@ T bessel_k0(T x, const Policy& pol)
 }}} // namespaces
 
 #endif // BOOST_MATH_BESSEL_K0_HPP
+

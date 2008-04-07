@@ -12,6 +12,7 @@
 #include <string>
 #include <cstring>
 #include <boost/math/tools/config.hpp>
+#include <boost/regex.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include "performance_measure.hpp"
 #include <boost/math/policies/policy.hpp>
@@ -56,6 +57,8 @@ void show_help()
       ++i;
    }
    std::cout << "Or use --all to test everything." << std::endl;
+   std::cout << "You can also specify what to test as a regular expression,\n"
+      " for example --dist.* to test all the distributions." << std::endl;
 }
 
 void run_tests()
@@ -77,14 +80,14 @@ void run_tests()
 bool add_named_test(const char* name)
 {
    bool found = false;
+   boost::regex e(name);
    std::set<test_info>::const_iterator a(all_tests().begin()), b(all_tests().end());
    while(a != b)
    {
-      if(std::strcmp(name, (*a).name) == 0)
+      if(regex_match((*a).name, e))
       {
          found = true;
          tests.insert(*a);
-         break;
       }
       ++a;
    }

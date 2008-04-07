@@ -72,12 +72,12 @@ It has the PDF:
 The following graph illustrate how the PDF varies as the success fraction 
 /p/ changes:
 
-[$../graphs/neg_binomial_pdf1.png]
+[graph negative_binomial_pdf_1]
 
 Alternatively, this graph shows how the shape of the PDF varies as
 the number of successes changes:
 
-[$../graphs/neg_binomial_pdf2.png]
+[graph negative_binomial_pdf_2]
 
 [h4 Related Distributions]
 

@@ -76,12 +76,12 @@ The following two graphs illustrate how the PDF changes depending
 upon the distributions parameters, first we'll keep the success
 fraction /p/ fixed at 0.5, and vary the sample size:
 
-[$../graphs/binomial_pdf_1.png]
+[graph binomial_pdf_1]
 
 Alternatively, we can keep the sample size fixed at N=20 and
 vary the success fraction /p/:
 
-[$../graphs/binomial_pdf_2.png]
+[graph binomial_pdf_2]
 
 [discrete_quantile_warning Binomial]
    

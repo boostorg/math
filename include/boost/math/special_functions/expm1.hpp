@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_EXPM1_INCLUDED
 #define BOOST_MATH_EXPM1_INCLUDED
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <cmath>
 #include <math.h> // platform's ::expm1
 #include <boost/limits.hpp>
@@ -265,5 +269,6 @@ inline long double expm1(long double z)
 } // namespace boost
 
 #endif // BOOST_MATH_HYPOT_INCLUDED
+
 
 

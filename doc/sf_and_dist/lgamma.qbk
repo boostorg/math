@@ -33,7 +33,7 @@ which if non-null is set on output to the sign of tgamma(z).
 
 [optional_policy]
 
-[$../graphs/lgamma.png]
+[graph lgamma]
 
 There are effectively two versions of this function internally: a fully
 generic version that is slow, but reasonably accurate, and a much more

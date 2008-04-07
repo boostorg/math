@@ -8,6 +8,7 @@
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/bessel.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
@@ -103,7 +104,7 @@ T cyl_bessel_i_int_wrapper(T v, T x)
 {
    return static_cast<T>(
       boost::math::cyl_bessel_i(
-      boost::math::tools::real_cast<int>(v), x));
+      boost::math::itrunc(v), x));
 }
 
 template <class T>

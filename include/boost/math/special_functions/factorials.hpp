@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SP_FACTORIALS_HPP
 #define BOOST_MATH_SP_FACTORIALS_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/unchecked_factorial.hpp>
@@ -159,7 +163,7 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
       // handle it, split the product up into three parts:
       //
       T xp1 = x + 1;
-      unsigned n2 = tools::real_cast<unsigned>(floor(xp1));
+      unsigned n2 = itrunc(floor(xp1), pol);
       if(n2 == xp1)
          return 0;
       T result = boost::math::tgamma_delta_ratio(xp1, -static_cast<T>(n2), pol);
@@ -222,3 +226,4 @@ inline typename tools::promote_args<RT>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SP_FACTORIALS_HPP
+

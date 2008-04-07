@@ -39,7 +39,7 @@
           </li>
 </ul></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised"></a><h5>
-<a name="id760983"></a>
+<a name="id784018"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised">Available
           Actions When an Error is Raised</a>
         </h5>
@@ -62,7 +62,7 @@
           The various enumerated values have the following meanings:
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error"></a><h6>
-<a name="id761236"></a>
+<a name="id784271"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error">throw_on_error</a>
         </h6>
 <p>
@@ -162,7 +162,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error"></a><h6>
-<a name="id761418"></a>
+<a name="id784454"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error">errno_on_error</a>
         </h6>
 <p>
@@ -263,7 +263,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.ignore_error"></a><h6>
-<a name="id761617"></a>
+<a name="id784653"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.ignore_error">ignore_error</a>
         </h6>
 <p>
@@ -364,7 +364,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.user_error"></a><h6>
-<a name="id761818"></a>
+<a name="id784854"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.user_error">user_error</a>
         </h6>
 <p>
@@ -389,6 +389,9 @@
 <span class="identifier">T</span> <span class="identifier">user_denorm_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">user_rounding_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">);</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">user_evaluation_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">);</span>
 
 <span class="special">}}}</span> <span class="comment">// namespaces
@@ -407,7 +410,7 @@
           here</a>.
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised"></a><h5>
-<a name="id762751"></a>
+<a name="id785923"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised">Kinds
           of Error Raised</a>
         </h5>
@@ -566,6 +569,34 @@
 <tr>
 <td>
                 <p>
+                  Rounding Error
+                </p>
+                </td>
+<td>
+                <p>
+                  boost::math::policies::rounding_error&lt;<span class="emphasis"><em>action</em></span>&gt;
+                </p>
+                </td>
+<td>
+                <p>
+                  Raised When one of the rounding functions <a href="../../special/rounding/round.html" title="Rounding Functions">round</a>,
+                  <a href="../../special/rounding/trunc.html" title="Truncation Functions">trunc</a>
+                  or <a href="../../special/rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">modf</a>
+                  is called with an argument that has no integer representation,
+                  or is too large to be represented in the result type
+                </p>
+                <p>
+                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">rounding_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
+                </p>
+                <p>
+                  When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
+                  <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">rounding_error</span></code>
+                </p>
+                </td>
+</tr>
+<tr>
+<td>
+                <p>
                   Evaluation Error
                 </p>
                 </td>
@@ -593,7 +624,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.examples"></a><h5>
-<a name="id763593"></a>
+<a name="id786928"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.examples">Examples</a>
         </h5>
 <p>
@@ -668,8 +699,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
+      Holin, Xiaogang Zhang and Bruno Lalande<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

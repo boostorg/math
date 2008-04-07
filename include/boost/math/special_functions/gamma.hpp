@@ -8,6 +8,10 @@
 #ifndef BOOST_MATH_SF_GAMMA_HPP
 #define BOOST_MATH_SF_GAMMA_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/config.hpp>
 #ifdef BOOST_MSVC
 # pragma warning(push)
@@ -23,12 +27,12 @@
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
-#include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/special_functions/sqrt1pm1.hpp>
 #include <boost/math/special_functions/lanczos.hpp>
@@ -161,7 +165,7 @@ T gamma_imp(T z, const Policy& pol, const L& l)
    }
    if((floor(z) == z) && (z < max_factorial<T>::value))
    {
-      result *= unchecked_factorial<T>(tools::real_cast<unsigned>(z) - 1);
+      result *= unchecked_factorial<T>(itrunc(z, pol) - 1);
    }
    else
    {
@@ -366,7 +370,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l)
    BOOST_MATH_INSTRUMENT_CODE(prefix);
    if((floor(z) == z) && (z < max_factorial<T>::value))
    {
-      prefix *= unchecked_factorial<T>(tools::real_cast<unsigned>(z) - 1);
+      prefix *= unchecked_factorial<T>(itrunc(z, pol) - 1);
    }
    else
    {
@@ -1091,7 +1095,7 @@ T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
          //
          if((z <= max_factorial<T>::value) && (z + delta <= max_factorial<T>::value))
          {
-            return unchecked_factorial<T>(tools::real_cast<unsigned>(z) - 1) / unchecked_factorial<T>(tools::real_cast<unsigned>(z + delta) - 1);
+            return unchecked_factorial<T>((unsigned)itrunc(z, pol) - 1) / unchecked_factorial<T>((unsigned)itrunc(z + delta) - 1);
          }
       }
       if(fabs(delta) < 20)
@@ -1466,6 +1470,7 @@ inline typename tools::promote_args<T1, T2>::type
 #include <boost/math/special_functions/erf.hpp>
 
 #endif // BOOST_MATH_SF_GAMMA_HPP
+
 
 
 

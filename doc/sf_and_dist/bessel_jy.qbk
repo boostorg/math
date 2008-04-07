@@ -44,12 +44,12 @@ when `x <= 0`.
 
 The following graph illustrates the cyclic nature of J[sub v]:
 
-[$../graphs/bessel_jn.png]
+[graph cyl_bessel_j]
 
 The following graph shows the behaviour of Y[sub v]: this is also
 cyclic for large /x/, but tends to -[infin][space] for small /x/:
 
-[$../graphs/bessel_yv.png]
+[graph cyl_neumann]
 
 [h4 Testing]
 

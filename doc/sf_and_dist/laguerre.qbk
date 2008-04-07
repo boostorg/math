@@ -50,7 +50,7 @@ Returns the value of the Laguerre Polynomial of order /n/ at point /x/:
 The following graph illustrates the behaviour of the first few 
 Laguerre Polynomials:
 
-[$../graphs/laguerre.png]
+[graph laguerre]
    
    template <class T>
    ``__sf_result`` laguerre(unsigned n, unsigned m, T x);

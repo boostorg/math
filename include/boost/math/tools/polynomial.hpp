@@ -6,13 +6,95 @@
 #ifndef BOOST_MATH_TOOLS_POLYNOMIAL_HPP
 #define BOOST_MATH_TOOLS_POLYNOMIAL_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/assert.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
+#include <boost/math/special_functions/binomial.hpp>
 
 #include <vector>
 
 namespace boost{ namespace math{ namespace tools{
+
+template <class T>
+T chebyshev_coefficient(unsigned n, unsigned m)
+{
+   BOOST_MATH_STD_USING
+   if(m > n)
+      return 0;
+   if((n & 1) != (m & 1))
+      return 0;
+   if(n == 0)
+      return 1;
+   T result = T(n) / 2;
+   unsigned r = n - m;
+   r /= 2;
+
+   BOOST_ASSERT(n - 2 * r == m);
+
+   if(r & 1)
+      result = -result;
+   result /= n - r;
+   result *= boost::math::binomial_coefficient<T>(n - r, r);
+   result *= ldexp(1.0f, m);
+   return result;
+}
+
+template <class Seq>
+Seq polynomial_to_chebyshev(const Seq& s)
+{
+   // Converts a Polynomial into Chebyshev form:
+   typedef typename Seq::value_type value_type;
+   typedef typename Seq::difference_type difference_type;
+   Seq result(s);
+   difference_type order = s.size() - 1;
+   difference_type even_order = order & 1 ? order - 1 : order;
+   difference_type odd_order = order & 1 ? order : order - 1;
+
+   for(difference_type i = even_order; i >= 0; i -= 2)
+   {
+      value_type val = s[i];
+      for(difference_type k = even_order; k > i; k -= 2)
+      {
+         val -= result[k] * chebyshev_coefficient<value_type>(static_cast<unsigned>(k), static_cast<unsigned>(i));
+      }
+      val /= chebyshev_coefficient<value_type>(static_cast<unsigned>(i), static_cast<unsigned>(i));
+      result[i] = val;
+   }
+   result[0] *= 2;
+
+   for(difference_type i = odd_order; i >= 0; i -= 2)
+   {
+      value_type val = s[i];
+      for(difference_type k = odd_order; k > i; k -= 2)
+      {
+         val -= result[k] * chebyshev_coefficient<value_type>(static_cast<unsigned>(k), static_cast<unsigned>(i));
+      }
+      val /= chebyshev_coefficient<value_type>(static_cast<unsigned>(i), static_cast<unsigned>(i));
+      result[i] = val;
+   }
+   return result;
+}
+
+template <class Seq, class T>
+T evaluate_chebyshev(const Seq& a, const T& x)
+{
+   // Clenshaw's formula:
+   typedef typename Seq::difference_type difference_type;
+   T yk2 = 0;
+   T yk1 = 0;
+   T yk = 0;
+   for(difference_type i = a.size() - 1; i >= 1; --i)
+   {
+      yk2 = yk1;
+      yk1 = yk;
+      yk = 2 * x * yk1 - yk2 + a[i];
+   }
+   return a[0] / 2 + yk * x - yk1;
+}
 
 template <class T>
 class polynomial
@@ -62,6 +144,10 @@ public:
    T evaluate(T z)const
    {
       return boost::math::tools::evaluate_polynomial(&m_data[0], z, m_data.size());;
+   }
+   std::vector<T> chebyshev()const
+   {
+      return polynomial_to_chebyshev(m_data);
    }
 
    // operators:
@@ -230,5 +316,6 @@ inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT,
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_POLYNOMIAL_HPP
+
 
 

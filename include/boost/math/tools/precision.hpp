@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_PRECISION_INCLUDED
 #define BOOST_MATH_TOOLS_PRECISION_INCLUDED
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/limits.hpp>
 #include <boost/assert.hpp>
 #include <boost/static_assert.hpp>
@@ -233,3 +237,4 @@ inline T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_PRECISION_INCLUDED
+

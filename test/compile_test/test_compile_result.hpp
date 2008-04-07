@@ -22,6 +22,10 @@ inline void check_result_imp(float, float){}
 inline void check_result_imp(double, double){}
 inline void check_result_imp(long double, long double){}
 inline void check_result_imp(int, int){}
+inline void check_result_imp(long, long){}
+#ifdef BOOST_HAS_LONG_LONG
+inline void check_result_imp(long long, long long){}
+#endif
 inline void check_result_imp(bool, bool){}
 
 template <class T1, class T2>

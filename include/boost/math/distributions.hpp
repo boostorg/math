@@ -24,6 +24,10 @@
 #include <boost/math/distributions/gamma.hpp>
 #include <boost/math/distributions/lognormal.hpp>
 #include <boost/math/distributions/negative_binomial.hpp>
+#include <boost/math/distributions/non_central_chi_squared.hpp>
+#include <boost/math/distributions/non_central_beta.hpp>
+#include <boost/math/distributions/non_central_f.hpp>
+#include <boost/math/distributions/non_central_t.hpp>
 #include <boost/math/distributions/normal.hpp>
 #include <boost/math/distributions/pareto.hpp>
 #include <boost/math/distributions/poisson.hpp>
@@ -32,11 +36,8 @@
 #include <boost/math/distributions/triangular.hpp>
 #include <boost/math/distributions/uniform.hpp>
 #include <boost/math/distributions/weibull.hpp>
-// find location and shape for appropriate distributions,
-// normal, cauchy, lognormal, symmetric triangular
-// Disabled for now, these are still work in progress.
-//#include <boost/math/distributions/find_scale.hpp>
-//#include <boost/math/distributions/find_location.hpp>
+#include <boost/math/distributions/find_scale.hpp>
+#include <boost/math/distributions/find_location.hpp>
 
 #endif // BOOST_MATH_DISTRIBUTIONS_HPP
 

@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SQRT1PM1
 #define BOOST_MATH_SQRT1PM1
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
@@ -37,6 +41,7 @@ inline typename tools::promote_args<T>::type sqrt1pm1(const T& val)
 } // namespace boost
 
 #endif // BOOST_MATH_SQRT1PM1
+
 
 
 

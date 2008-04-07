@@ -13,6 +13,10 @@
 #ifndef BOOST_MATH_ELLINT_RJ_HPP
 #define BOOST_MATH_ELLINT_RJ_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -172,3 +176,4 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
 }} // namespaces
 
 #endif // BOOST_MATH_ELLINT_RJ_HPP
+

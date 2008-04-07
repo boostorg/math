@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_SERIES_INCLUDED
 #define BOOST_MATH_TOOLS_SERIES_INCLUDED
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <cmath>
 #include <boost/cstdint.hpp>
 #include <boost/math/tools/config.hpp>
@@ -169,3 +173,4 @@ typename Functor::result_type kahan_sum_series(Functor& func, int bits, boost::u
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_SERIES_INCLUDED
+

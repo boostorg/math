@@ -49,7 +49,7 @@ and has a single parameter [nu][space] that specifies the number of degrees of
 freedom.  The following graph illustrates how the distribution changes
 for different values of [nu]:
 
-[$../graphs/chi_square.png]
+[graph chi_squared_pdf]
 
 [h4 Member Functions]
 
@@ -104,6 +104,11 @@ See also section on Sample sizes required in
 
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
+
+(We have followed the usual restriction of the mode to degrees of freedom >= 2,
+but note that the maximum of the pdf is actually zero for degrees of freedom from 2 down to 0,
+and provide an extended definition that would avoid a discontinuity in the mode
+as alternative code in a comment).
 
 The domain of the random variable is \[0, +[infin]\].
 

@@ -7,6 +7,10 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_IBETA_INVERSE_HPP
 #define BOOST_MATH_SPECIAL_FUNCTIONS_IBETA_INVERSE_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/tools/roots.hpp>
@@ -929,6 +933,7 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_IGAMMA_INVERSE_HPP
+
 
 
 

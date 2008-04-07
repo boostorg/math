@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_WORHAROUND_HPP
 #define BOOST_MATH_TOOLS_WORHAROUND_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/config.hpp>
 
 namespace boost{ namespace math{ namespace tools{
@@ -31,3 +35,4 @@ inline long double fmod_workaround(long double a, long double b)
 }}} // namespaces
 
 #endif // BOOST_MATH_TOOLS_WORHAROUND_HPP
+

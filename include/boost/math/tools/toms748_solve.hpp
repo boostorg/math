@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_SOLVE_ROOT_HPP
 #define BOOST_MATH_TOOLS_SOLVE_ROOT_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/config.hpp>
@@ -92,11 +96,11 @@ void bracket(F f, T& a, T& b, T c, T& fa, T& fb, T& d, T& fd)
    }
    else if(c <= a + fabs(a) * tol)
    {
-      c = a * (1 + tol);
+      c = a + fabs(a) * tol;
    }
    else if(c >= b - fabs(b) * tol)
    {
-      c = b * (1 - tol);
+      c = b - fabs(a) * tol;
    }
    //
    // OK, lets invoke f(c):
@@ -505,7 +509,7 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, T factor, bool risin
          if((max_iter - count) % 20 == 0)
             factor *= 2;
          //
-         // Now go ahead and move are guess by "factor":
+         // Now go ahead and move our guess by "factor":
          //
          a = b;
          fa = fb;
@@ -577,3 +581,4 @@ inline std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& fact
 
 
 #endif // BOOST_MATH_TOOLS_SOLVE_ROOT_HPP
+

@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_RATIONAL_HPP
 #define BOOST_MATH_TOOLS_RATIONAL_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/array.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/mpl/int.hpp>
@@ -201,6 +205,7 @@ inline V evaluate_rational(const boost::array<T,N>& a, const boost::array<U,N>& 
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_RATIONAL_HPP
+
 
 
 

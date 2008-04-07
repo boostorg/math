@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SF_CBRT_HPP
 #define BOOST_MATH_SF_CBRT_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
@@ -67,6 +71,7 @@ inline typename tools::promote_args<T>::type cbrt(T z)
 } // namespace boost
 
 #endif // BOOST_MATH_SF_CBRT_HPP
+
 
 
 

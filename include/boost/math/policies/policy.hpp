@@ -54,6 +54,9 @@ namespace policies{
 #ifndef BOOST_MATH_EVALUATION_ERROR_POLICY
 #define BOOST_MATH_EVALUATION_ERROR_POLICY throw_on_error
 #endif
+#ifndef BOOST_MATH_ROUNDING_ERROR_POLICY
+#define BOOST_MATH_ROUNDING_ERROR_POLICY throw_on_error
+#endif
 #ifndef BOOST_MATH_UNDERFLOW_ERROR_POLICY
 #define BOOST_MATH_UNDERFLOW_ERROR_POLICY ignore_error
 #endif
@@ -178,6 +181,7 @@ BOOST_MATH_META_INT(error_policy_type, overflow_error, BOOST_MATH_OVERFLOW_ERROR
 BOOST_MATH_META_INT(error_policy_type, underflow_error, BOOST_MATH_UNDERFLOW_ERROR_POLICY)
 BOOST_MATH_META_INT(error_policy_type, denorm_error, BOOST_MATH_DENORM_ERROR_POLICY)
 BOOST_MATH_META_INT(error_policy_type, evaluation_error, BOOST_MATH_EVALUATION_ERROR_POLICY)
+BOOST_MATH_META_INT(error_policy_type, rounding_error, BOOST_MATH_ROUNDING_ERROR_POLICY)
 
 //
 // Policy types for internal promotion:
@@ -398,6 +402,7 @@ public:
    typedef typename detail::find_arg<arg_list, is_underflow_error<mpl::_1>, underflow_error<> >::type underflow_error_type;
    typedef typename detail::find_arg<arg_list, is_denorm_error<mpl::_1>, denorm_error<> >::type denorm_error_type;
    typedef typename detail::find_arg<arg_list, is_evaluation_error<mpl::_1>, evaluation_error<> >::type evaluation_error_type;
+   typedef typename detail::find_arg<arg_list, is_rounding_error<mpl::_1>, rounding_error<> >::type rounding_error_type;
 private:
    //
    // Now work out the precision:
@@ -440,6 +445,7 @@ public:
    typedef underflow_error<> underflow_error_type;
    typedef denorm_error<> denorm_error_type;
    typedef evaluation_error<> evaluation_error_type;
+   typedef rounding_error<> rounding_error_type;
 #if BOOST_MATH_DIGITS10_POLICY == 0
    typedef digits2<> precision_type;
 #else
@@ -463,6 +469,7 @@ public:
    typedef underflow_error<> underflow_error_type;
    typedef denorm_error<> denorm_error_type;
    typedef evaluation_error<> evaluation_error_type;
+   typedef rounding_error<> rounding_error_type;
 #if BOOST_MATH_DIGITS10_POLICY == 0
    typedef digits2<> precision_type;
 #else
@@ -500,6 +507,7 @@ private:
    typedef typename detail::find_arg<arg_list, is_underflow_error<mpl::_1>, typename Policy::underflow_error_type >::type underflow_error_type;
    typedef typename detail::find_arg<arg_list, is_denorm_error<mpl::_1>, typename Policy::denorm_error_type >::type denorm_error_type;
    typedef typename detail::find_arg<arg_list, is_evaluation_error<mpl::_1>, typename Policy::evaluation_error_type >::type evaluation_error_type;
+   typedef typename detail::find_arg<arg_list, is_rounding_error<mpl::_1>, typename Policy::rounding_error_type >::type rounding_error_type;
    //
    // Now work out the precision:
    //
@@ -534,6 +542,7 @@ private:
       underflow_error_type,
       denorm_error_type,
       evaluation_error_type,
+      rounding_error_type,
       precision_type,
       promote_float_type,
       promote_double_type,
@@ -839,5 +848,6 @@ struct is_policy : public mpl::bool_< ::boost::math::policies::detail::is_policy
 }}} // namespaces
 
 #endif // BOOST_MATH_POLICY_HPP
+
 
 

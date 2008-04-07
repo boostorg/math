@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_LGAMMA_SMALL
 #define BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_LGAMMA_SMALL
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 namespace boost{ namespace math{ namespace detail{
 
 //
@@ -505,3 +509,4 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<0>&, const Policy& pol, co
 }}} // namespaces
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_LGAMMA_SMALL
+

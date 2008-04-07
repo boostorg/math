@@ -40,11 +40,11 @@ or real and imaginary components may have absolute values that are Rayleigh dist
 
 The following graph illustrates how the Probability density Function(pdf) varies with the shape parameter [sigma]:
 
-[$../graphs/rayleigh_pdf.png]
+[graph rayleigh_pdf]
 
 and the Cumulative Distribution Function (cdf)
 
-[$../graphs/rayleigh_cdf.png]
+[graph rayleigh_cdf]
 
 [h4 Related distributions]
 

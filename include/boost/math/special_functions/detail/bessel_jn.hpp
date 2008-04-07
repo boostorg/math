@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_BESSEL_JN_HPP
 #define BOOST_MATH_BESSEL_JN_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/detail/bessel_j0.hpp>
 #include <boost/math/special_functions/detail/bessel_j1.hpp>
 #include <boost/math/special_functions/detail/bessel_jy.hpp>
@@ -84,3 +88,4 @@ T bessel_jn(int n, T x, const Policy& pol)
 }}} // namespaces
 
 #endif // BOOST_MATH_BESSEL_JN_HPP
+

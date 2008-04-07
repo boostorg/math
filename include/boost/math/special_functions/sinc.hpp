@@ -11,6 +11,10 @@
 #define BOOST_SINC_HPP
 
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
@@ -170,3 +174,4 @@ namespace boost
 }
 
 #endif /* BOOST_SINC_HPP */
+

@@ -100,7 +100,7 @@ inline RealType pdf(const normal_distribution<RealType, Policy>& dist, const Rea
    {
      return 0; // pdf + and - infinity is zero.
    }
-   // Theis produces MSVC 4127 warnings, so the above used instead.
+   // Below produces MSVC 4127 warnings, so the above used instead.
    //if(std::numeric_limits<RealType>::has_infinity && abs(x) == std::numeric_limits<RealType>::infinity())
    //{ // pdf + and - infinity is zero.
    //  return 0;

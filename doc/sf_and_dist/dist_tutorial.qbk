@@ -158,13 +158,32 @@ example, we would write:
 
 `pdf(binomial_distribution<RealType>(n, p), k);`
 
-The distribution (effectively the random variate) is said to be 'supported' over a range that is
+The ranges of random variate values that are permitted and are supported can be 
+tested by using two functions `range` and `support`.
+
+The distribution (effectively the random variate) is said to be 'supported' 
+over a range that is
 [@http://en.wikipedia.org/wiki/Probability_distribution
  "the smallest closed set whose complement has probability zero"].
 MathWorld uses the word 'defined' for this range.
 Non-mathematicians might say it means the 'interesting' smallest range
 of random variate x that has the cdf going from zero to unity.
 Outside are uninteresting zones where the pdf is zero, and the cdf zero or unity.
+
+For most distributions, with probability distribution functions one might describe
+as 'well-behaved', we have decided that it is most useful for the supported range
+to exclude random variate values like exact zero *if the end point is discontinuous*.
+For example, the Weibull (scale 1, shape 1) distribution smoothly heads for unity
+as the random variate x declines towards zero.
+But at x = zero, the value of the pdf is suddenly exactly zero, by definition.
+If you are plotting the PDF, or otherwise calculating,
+zero is not the most useful value for the lower limit of supported, as we discovered.
+So for this, and similar distributions,
+we have decided it is most numerically useful to use
+the closest value to zero, min_value, for the limit of the supported range.  
+(The `range` remains from zero, so you will still get `pdf(weibull, 0) == 0`).
+(Exponential and gamma distributions have similarly discontinuous functions).
+
 Mathematically, the functions may make sense with an (+ or -) infinite value,
 but except for a few special cases (in the Normal and Cauchy distributions)
 this implementation limits random variates to finite values from the `max` 
@@ -172,8 +191,6 @@ to `min` for the `RealType`.
 (See [link math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity 
 Handling of Floating-Point Infinity] for rationale).
 
-The range of random variate values that is permitted and supported can be 
-tested by using two functions `range` and `support`.
 
 [note
 
@@ -365,6 +382,7 @@ Now that you have the basics, the next section looks at some worked examples.
 [include distributions/binomial_example.qbk]
 [include distributions/negative_binomial_example.qbk]
 [include distributions/normal_example.qbk]
+[include distributions/nc_chi_squared_example.qbk]
 [include distributions/error_handling_example.qbk]
 [include distributions/find_location_and_scale.qbk]
 [include distributions/nag_library.qbk]

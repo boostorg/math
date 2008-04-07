@@ -6,18 +6,24 @@
 #ifndef BOOST_MATH_SIN_PI_HPP
 #define BOOST_MATH_SIN_PI_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <cmath>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/real_cast.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/constants/constants.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
-template <class T>
-T sin_pi_imp(T x)
+template <class T, class Policy>
+T sin_pi_imp(T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
+   if(x < 0)
+      return -sin_pi(-x);
    // sin of pi*x:
    bool invert;
    if(x < 0.5)
@@ -31,7 +37,7 @@ T sin_pi_imp(T x)
       invert = false;
 
    T rem = floor(x);
-   if(tools::real_cast<int>(rem) & 1)
+   if(itrunc(rem, pol) & 1)
       invert = !invert;
    rem = x - rem;
    if(rem > 0.5f)
@@ -43,22 +49,22 @@ T sin_pi_imp(T x)
    return invert ? -rem : rem;
 }
 
-}
+} // namespace detail
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type sin_pi(T x, const Policy&)
+inline typename tools::promote_args<T>::type sin_pi(T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   return boost::math::detail::sin_pi_imp<result_type>(x);
+   return boost::math::detail::sin_pi_imp<result_type>(x, pol);
 }
 
 template <class T>
 inline typename tools::promote_args<T>::type sin_pi(T x)
 {
-   typedef typename tools::promote_args<T>::type result_type;
-   return boost::math::detail::sin_pi_imp<result_type>(x);
+   return boost::math::sin_pi(x, policies::policy<>());
 }
 
 } // namespace math
 } // namespace boost
 #endif
+

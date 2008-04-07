@@ -55,9 +55,9 @@ T user_evaluation_error(const char* , const char* , const T& )
 
 }}} // namespaces
 
+#include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
-#include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/test_exec_monitor.hpp> // for test_main
 //
 // Define some policies:

@@ -94,12 +94,20 @@ Command line options for the program are as follows:
             try a higher value if an approximation won't converge,
             or a lower value to get speedier convergence.]]
 [[x-offset val][Sets the x-offset to /val/: the approximation will
-            be generated for `f(x + X) + Y` where /X/ is the x-offset
+            be generated for `f(S * (x + X)) + Y` where /X/ is the 
+            x-offset, /S/ is the x-scale
             and /Y/ is the y-offset.  Defaults to zero.  To avoid
             rounding errors, take care to specify a value that can
             be exactly represented as a floating point number.]]
+[[x-scale val][Sets the x-scale to /val/: the approximation will
+            be generated for `f(S * (x + X)) + Y` where /S/ is the 
+            x-scale, /X/ is the x-offset
+            and /Y/ is the y-offset.  Defaults to one.  To avoid
+            rounding errors, take care to specify a value that can
+            be exactly represented as a floating point number.]]
 [[y-offset val][Sets the y-offset to /val/: the approximation will
-            be generated for `f(x + X) + Y` where /X/ is the x-offset
+            be generated for `f(S * (x + X)) + Y` where /X/ 
+            is the x-offset, /S/ is the x-scale
             and /Y/ is the y-offset.  Defaults to zero.  To avoid
             rounding errors, take care to specify a value that can
             be exactly represented as a floating point number.]]

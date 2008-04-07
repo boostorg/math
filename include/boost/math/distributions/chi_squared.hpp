@@ -1,5 +1,5 @@
 // Copyright John Maddock 2006, 2007.
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2008.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -202,10 +202,22 @@ inline RealType mode(const chi_squared_distribution<RealType, Policy>& dist)
 {
    RealType df = dist.degrees_of_freedom();
    static const char* function = "boost::math::mode(const chi_squared_distribution<%1%>&)";
-   if(df <= 2)
+   // Most sources only define mode for df >= 2,
+   // but for 0 <= df <= 2, the pdf maximum actually occurs at random variate = 0;
+   // So one could extend the definition of mode thus:
+   //if(df < 0)
+   //{
+   //   return policies::raise_domain_error<RealType>(
+   //      function,
+   //      "Chi-Squared distribution only has a mode for degrees of freedom >= 0, but got degrees of freedom = %1%.",
+   //      df, Policy());
+   //}
+   //return (df <= 2) ? 0 : df - 2;
+
+   if(df < 2)
       return policies::raise_domain_error<RealType>(
          function,
-         "The Chi-Squared distribution only has a mode for degrees of freedom >= 2, but got degrees of freedom = %1%.",
+         "Chi-Squared distribution only has a mode for degrees of freedom >= 2, but got degrees of freedom = %1%.",
          df, Policy());
    return df - 2;
 }
@@ -306,7 +318,7 @@ RealType chi_squared_distribution<RealType, Policy>::find_degrees_of_freedom(
    boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
    std::pair<RealType, RealType> r = tools::bracket_and_solve_root(f, hint, RealType(2), false, tol, max_iter, Policy());
    RealType result = r.first + (r.second - r.first) / 2;
-   if(max_iter == policies::get_max_root_iterations<Policy>())
+   if(max_iter >= policies::get_max_root_iterations<Policy>())
    {
       policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
          " either there is no answer to how many degrees of freedom are required"

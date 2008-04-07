@@ -96,6 +96,8 @@ the return type is `double` when T is an integer type, and T otherwise.
 
 [optional_policy]
 
+[graph acosh]
+
 [endsect]
 
 [section:asinh asinh]
@@ -118,6 +120,8 @@ infinity to ensure accuracy.
 
 The return type of this function is computed using the __arg_pomotion_rules:
 the return type is `double` when T is an integer type, and T otherwise.
+
+[graph asinh]
 
 [optional_policy]
 
@@ -163,6 +167,8 @@ numeric_limits<T>::epsilon().
 
 The return type of this function is computed using the __arg_pomotion_rules:
 the return type is `double` when T is an integer type, and T otherwise.
+
+[graph atanh]
 
 [endsect]
 
