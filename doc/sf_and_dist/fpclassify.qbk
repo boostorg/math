@@ -1,4 +1,4 @@
-[section:fpclass Floating Point Classification: Infinities and NaN's]
+[section:fpclass Floating-Point Classification: Infinities and NaN's]
 
 [h4 Synopsis]
 
@@ -12,16 +12,20 @@
    int fpclassify(T t);
 
    template <class T>
-   bool isfinite(T z);
+   bool isfinite(T z); // Neither infinity nor NaN.
 
    template <class T>
-   bool isinf(T t);
+   bool isinf(T t); // Infinity (+ or -).
 
    template <class T>
-   bool isnan(T t);
+   bool isnan(T t); // NaN.
 
    template <class T>
-   bool isnormal(T t);
+   bool isnormal(T t); // isfinite and not denormalised.
+   
+   #include <boost\math\special_functions\fpclassify.hpp>
+
+to use these functions.
 
 [h4 Description]
 
@@ -49,9 +53,18 @@ these as macros.  That mean that the following have differing meanings:
    // As above but with namespace qualification.
    (boost::math::isnan)(z); 
    //
-   // This will cause a compiler error is isnan is a native macro:
+   // This will cause a compiler error if isnan is a native macro:
    boost::math::isnan(z);
-   // So always use (boost::math::isnan)(z); instead. 
+   // So always use instead:
+   (boost::math::isnan)(z);
+   //
+   // You can also add a using statment,
+   // globally to a .cpp file, or to a local function in a .hpp file.
+   using boost::math::isnan;
+   // so you can write the shorter and less cluttered
+   (isnan)(z)
+   // But, as above, if isnan is a native macro, this causes a compiler error,
+   // because the macro always 'gets' the name first, unless enclosed in () brackets.
    
 Detailed descriptions for each of these functions follows: 
 
@@ -82,7 +95,7 @@ Returns true only if /z/ is plus or minus infinity.
    template <class T>
    bool isnan(T t);
 
-Returns true only if /z/ is a NaN.
+Returns true only if /z/ is a [@http://en.wikipedia.org/wiki/NaN NaN].
 
    template <class T>
    bool isnormal(T t);
@@ -92,7 +105,7 @@ Returns true only if /z/ is a normal number (not zero, infinite, NaN, or denorma
 [endsect] [/section:fpclass Floating Point Classification: Infinities and NaN's]
 
 [/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2008 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
