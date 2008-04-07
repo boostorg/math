@@ -113,7 +113,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       "Legendre Polynomials.*Large.*",      // test data group
-      "boost::math::legendre_p", 400, 200);  // test function
+      "boost::math::legendre_p", 500, 200);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -149,7 +149,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                  // test type(s)
       "Legendre Polynomials.*Large.*",      // test data group
-      "boost::math::legendre_p", 400, 200);  // test function
+      "boost::math::legendre_p", 500, 200);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -193,7 +193,11 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(int, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::legendre_p<value_type>;
+#else
    pg funcp = boost::math::legendre_p;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 
@@ -220,7 +224,11 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
 #endif
 
    typedef value_type (*pg2)(unsigned, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg2 funcp2 = boost::math::legendre_q<value_type>;
+#else
    pg2 funcp2 = boost::math::legendre_q;
+#endif
 
    //
    // test legendre_q against data:
@@ -252,7 +260,11 @@ void do_test_assoc_legendre_p(const T& data, const char* type_name, const char* 
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(int, int, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::legendre_p<value_type>;
+#else
    pg funcp = boost::math::legendre_p;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 

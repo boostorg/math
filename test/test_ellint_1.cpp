@@ -97,7 +97,11 @@ void do_test_ellint_f(T& data, const char* type_name, const char* test)
 
    std::cout << "Testing: " << test << std::endl;
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+    value_type (*fp2)(value_type, value_type) = boost::math::ellint_1<value_type, value_type>;
+#else
     value_type (*fp2)(value_type, value_type) = boost::math::ellint_1;
+#endif
     boost::math::tools::test_result<value_type> result;
 
     result = boost::math::tools::test(
@@ -120,7 +124,11 @@ void do_test_ellint_k(T& data, const char* type_name, const char* test)
 
    std::cout << "Testing: " << test << std::endl;
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   value_type (*fp1)(value_type) = boost::math::ellint_1<value_type>;
+#else
    value_type (*fp1)(value_type) = boost::math::ellint_1;
+#endif
    result = boost::math::tools::test(
       data,
       bind_func(fp1, 0),

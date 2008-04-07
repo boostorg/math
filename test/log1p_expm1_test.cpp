@@ -70,7 +70,11 @@ void do_test(const T& data, const char* type_name, const char* test_name)
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = &boost::math::log1p<value_type>;
+#else
    pg funcp = &boost::math::log1p;
+#endif
 
    boost::math::tools::test_result<value_type> result;
    std::cout << "Testing " << test_name << " with type " << type_name
@@ -78,7 +82,11 @@ void do_test(const T& data, const char* type_name, const char* test_name)
    //
    // test log1p against data:
    //
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::log1p<value_type>;
+#else
    funcp = &boost::math::log1p;
+#endif
    result = boost::math::tools::test(
       data, 
          bind_func(funcp, 0), 
@@ -88,7 +96,11 @@ void do_test(const T& data, const char* type_name, const char* test_name)
    //
    // test expm1 against data:
    //
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::expm1<value_type>;
+#else
    funcp = boost::math::expm1;
+#endif
    result = boost::math::tools::test(
       data, 
       bind_func(funcp, 0), 

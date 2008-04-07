@@ -13,12 +13,13 @@
 #include <cmath>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/tools/promotion.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace boost{ namespace math{
+namespace boost{ namespace math{ namespace detail{
 
 template <class T, class Policy>
-T sin_pi(T x, const Policy& pol)
+T sin_pi_imp(T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
    if(x < 0)
@@ -48,8 +49,17 @@ T sin_pi(T x, const Policy& pol)
    return invert ? -rem : rem;
 }
 
+} // namespace detail
+
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type sin_pi(T x, const Policy& pol)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   return boost::math::detail::sin_pi_imp<result_type>(x, pol);
+}
+
 template <class T>
-inline T sin_pi(T x)
+inline typename tools::promote_args<T>::type sin_pi(T x)
 {
    return boost::math::sin_pi(x, policies::policy<>());
 }

@@ -129,7 +129,11 @@ void do_test_ellint_rf(T& data, const char* type_name, const char* test)
 
    std::cout << "Testing: " << test << std::endl;
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+    value_type (*fp)(value_type, value_type, value_type) = boost::math::ellint_rf<value_type, value_type, value_type>;
+#else
     value_type (*fp)(value_type, value_type, value_type) = boost::math::ellint_rf;
+#endif
     boost::math::tools::test_result<value_type> result;
  
     result = boost::math::tools::test(
@@ -151,7 +155,11 @@ void do_test_ellint_rc(T& data, const char* type_name, const char* test)
 
    std::cout << "Testing: " << test << std::endl;
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+    value_type (*fp)(value_type, value_type) = boost::math::ellint_rc<value_type, value_type>;
+#else
     value_type (*fp)(value_type, value_type) = boost::math::ellint_rc;
+#endif
     boost::math::tools::test_result<value_type> result;
  
     result = boost::math::tools::test(
@@ -173,7 +181,11 @@ void do_test_ellint_rj(T& data, const char* type_name, const char* test)
 
    std::cout << "Testing: " << test << std::endl;
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+    value_type (*fp)(value_type, value_type, value_type, value_type) = boost::math::ellint_rj<value_type, value_type, value_type, value_type>;
+#else
     value_type (*fp)(value_type, value_type, value_type, value_type) = boost::math::ellint_rj;
+#endif
     boost::math::tools::test_result<value_type> result;
  
     result = boost::math::tools::test(
@@ -195,7 +207,11 @@ void do_test_ellint_rd(T& data, const char* type_name, const char* test)
 
    std::cout << "Testing: " << test << std::endl;
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+    value_type (*fp)(value_type, value_type, value_type) = boost::math::ellint_rd<value_type, value_type, value_type>;
+#else
     value_type (*fp)(value_type, value_type, value_type) = boost::math::ellint_rd;
+#endif
     boost::math::tools::test_result<value_type> result;
  
     result = boost::math::tools::test(

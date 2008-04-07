@@ -110,7 +110,11 @@ void do_test_ellint_pi3(T& data, const char* type_name, const char* test)
 
    std::cout << "Testing: " << test << std::endl;
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+    value_type (*fp2)(value_type, value_type, value_type) = boost::math::ellint_3<value_type, value_type, value_type>;
+#else
     value_type (*fp2)(value_type, value_type, value_type) = boost::math::ellint_3;
+#endif
     boost::math::tools::test_result<value_type> result;
 
     result = boost::math::tools::test(
@@ -132,7 +136,11 @@ void do_test_ellint_pi2(T& data, const char* type_name, const char* test)
 
    std::cout << "Testing: " << test << std::endl;
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+    value_type (*fp2)(value_type, value_type) = boost::math::ellint_3<value_type, value_type>;
+#else
     value_type (*fp2)(value_type, value_type) = boost::math::ellint_3;
+#endif
     boost::math::tools::test_result<value_type> result;
 
     result = boost::math::tools::test(

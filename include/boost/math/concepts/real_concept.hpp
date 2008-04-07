@@ -176,11 +176,18 @@ inline real_concept ceil(real_concept a)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 // I've seen std::fmod(long double) crash on some platforms
 // so use fmodl instead:
+#ifdef _WIN32_WCE
+//
+// Ugly workaround for macro fmodl:
+//
+inline long double call_fmodl(long double a, long double b)
+{  return fmodl(a, b); }
 inline real_concept fmod(real_concept a, real_concept b)
-{ return fmodl(a.value(), b.value()); }
+{ return call_fmodl(a.value(), b.value()); }
 #else
 inline real_concept fmod(real_concept a, real_concept b)
-{ return std::fmod(a.value(), b.value()); }
+{ return fmodl(a.value(), b.value()); }
+#endif
 #endif
 inline real_concept cosh(real_concept a)
 { return std::cosh(a.value()); }
@@ -290,7 +297,7 @@ inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_MATH_E
 }
 
 template <>
-inline concepts::real_concept epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline concepts::real_concept epsilon<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
 #ifdef __SUNPRO_CC
    return std::numeric_limits<concepts::real_concept_base_type>::epsilon();
@@ -322,11 +329,19 @@ inline int iround(const concepts::real_concept& v, const Policy& pol)
 {
    return iround(v.value(), pol);
 }
+inline int iround(const concepts::real_concept& v)
+{
+   return iround(v.value(), policies::policy<>());
+}
 
 template <class Policy>
 inline long lround(const concepts::real_concept& v, const Policy& pol)
 {
    return lround(v.value(), pol);
+}
+inline long lround(const concepts::real_concept& v)
+{
+   return lround(v.value(), policies::policy<>());
 }
 
 #ifdef BOOST_HAS_LONG_LONG
@@ -336,6 +351,10 @@ inline long long llround(const concepts::real_concept& v, const Policy& pol)
 {
    return llround(v.value(), pol);
 }
+inline long long llround(const concepts::real_concept& v)
+{
+   return llround(v.value(), policies::policy<>());
+}
 
 #endif
 
@@ -344,11 +363,19 @@ inline int itrunc(const concepts::real_concept& v, const Policy& pol)
 {
    return itrunc(v.value(), pol);
 }
+inline int itrunc(const concepts::real_concept& v)
+{
+   return itrunc(v.value(), policies::policy<>());
+}
 
 template <class Policy>
 inline long ltrunc(const concepts::real_concept& v, const Policy& pol)
 {
    return ltrunc(v.value(), pol);
+}
+inline long ltrunc(const concepts::real_concept& v)
+{
+   return ltrunc(v.value(), policies::policy<>());
 }
 
 #ifdef BOOST_HAS_LONG_LONG
@@ -357,6 +384,10 @@ template <class Policy>
 inline long long lltrunc(const concepts::real_concept& v, const Policy& pol)
 {
    return lltrunc(v.value(), pol);
+}
+inline long long lltrunc(const concepts::real_concept& v)
+{
+   return lltrunc(v.value(), policies::policy<>());
 }
 
 #endif

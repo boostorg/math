@@ -143,7 +143,11 @@ void do_test_tgamma_delta_ratio(const T& data, const char* type_name, const char
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::tgamma_delta_ratio<value_type, value_type>;
+#else
    pg funcp = boost::math::tgamma_delta_ratio;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 
@@ -172,7 +176,11 @@ void do_test_tgamma_ratio(const T& data, const char* type_name, const char* test
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::tgamma_ratio<value_type, value_type>;
+#else
    pg funcp = boost::math::tgamma_ratio;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 

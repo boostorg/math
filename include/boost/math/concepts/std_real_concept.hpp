@@ -20,9 +20,7 @@
 #include <boost/limits.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
-#include <boost/math/special_functions/round.hpp>
-#include <boost/math/special_functions/trunc.hpp>
-#include <boost/math/special_functions/modf.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 
 #include <ostream>
 #include <istream>
@@ -205,8 +203,13 @@ inline boost::math::concepts::std_real_concept tan(boost::math::concepts::std_re
 { return std::tan(a.value()); }
 inline boost::math::concepts::std_real_concept pow(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
 { return std::pow(a.value(), b.value()); }
+#if !defined(__SUNPRO_CC)
 inline boost::math::concepts::std_real_concept pow(boost::math::concepts::std_real_concept a, int b)
 { return std::pow(a.value(), b); }
+#else
+inline boost::math::concepts::std_real_concept pow(boost::math::concepts::std_real_concept a, int b)
+{ return std::pow(a.value(), static_cast<long double>(b)); }
+#endif
 inline boost::math::concepts::std_real_concept sin(boost::math::concepts::std_real_concept a)
 { return std::sin(a.value()); }
 inline boost::math::concepts::std_real_concept sinh(boost::math::concepts::std_real_concept a)
@@ -287,11 +290,19 @@ inline int iround(const concepts::std_real_concept& v, const Policy& pol)
 {
    return iround(v.value(), pol);
 }
+inline int iround(const concepts::std_real_concept& v)
+{
+   return iround(v.value(), policies::policy<>());
+}
 
 template <class Policy>
 inline long lround(const concepts::std_real_concept& v, const Policy& pol)
 {
    return lround(v.value(), pol);
+}
+inline long lround(const concepts::std_real_concept& v)
+{
+   return lround(v.value(), policies::policy<>());
 }
 
 #ifdef BOOST_HAS_LONG_LONG
@@ -301,6 +312,10 @@ inline long long llround(const concepts::std_real_concept& v, const Policy& pol)
 {
    return llround(v.value(), pol);
 }
+inline long long llround(const concepts::std_real_concept& v)
+{
+   return llround(v.value(), policies::policy<>());
+}
 
 #endif
 
@@ -309,11 +324,19 @@ inline int itrunc(const concepts::std_real_concept& v, const Policy& pol)
 {
    return itrunc(v.value(), pol);
 }
+inline int itrunc(const concepts::std_real_concept& v)
+{
+   return itrunc(v.value(), policies::policy<>());
+}
 
 template <class Policy>
 inline long ltrunc(const concepts::std_real_concept& v, const Policy& pol)
 {
    return ltrunc(v.value(), pol);
+}
+inline long ltrunc(const concepts::std_real_concept& v)
+{
+   return ltrunc(v.value(), policies::policy<>());
 }
 
 #ifdef BOOST_HAS_LONG_LONG
@@ -322,6 +345,10 @@ template <class Policy>
 inline long long lltrunc(const concepts::std_real_concept& v, const Policy& pol)
 {
    return lltrunc(v.value(), pol);
+}
+inline long long lltrunc(const concepts::std_real_concept& v)
+{
+   return lltrunc(v.value(), policies::policy<>());
 }
 
 #endif

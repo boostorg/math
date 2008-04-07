@@ -2,13 +2,9 @@
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-#include "compile_test/instantiate.hpp"
-
-void other_test()
-{
-   instantiate(double(0));
-   instantiate_mixed(double(0));
-}
-
+//
+// Basic sanity check that header <boost/math/distributions/find_scale.hpp>
+// #includes all the files that it needs to.
+//
+#include <boost/math/distributions/find_scale.hpp>
 

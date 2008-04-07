@@ -101,7 +101,11 @@ void do_test_spherical_harmonic(const T& data, const char* type_name, const char
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(unsigned, int, value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::spherical_harmonic_r<value_type, value_type>;
+#else
    pg funcp = boost::math::spherical_harmonic_r;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 
@@ -117,7 +121,11 @@ void do_test_spherical_harmonic(const T& data, const char* type_name, const char
       extract_result(4));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::spherical_harmonic_r", test_name);
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::spherical_harmonic_i<value_type, value_type>;
+#else
    funcp = boost::math::spherical_harmonic_i;
+#endif
    //
    // test Spheric Harmonic against data:
    //

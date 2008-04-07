@@ -289,7 +289,11 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::beta<value_type, value_type, value_type>;
+#else
    pg funcp = boost::math::beta;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 
@@ -305,21 +309,33 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
       extract_result(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::beta", test_name);
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::betac<value_type, value_type, value_type>;
+#else
    funcp = boost::math::betac;
+#endif
    result = boost::math::tools::test(
       data,
       bind_func(funcp, 0, 1, 2),
       extract_result(4));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::betac", test_name);
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::ibeta<value_type, value_type, value_type>;
+#else
    funcp = boost::math::ibeta;
+#endif
    result = boost::math::tools::test(
       data,
       bind_func(funcp, 0, 1, 2),
       extract_result(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibeta", test_name);
 
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::ibetac<value_type, value_type, value_type>;
+#else
    funcp = boost::math::ibetac;
+#endif
    result = boost::math::tools::test(
       data,
       bind_func(funcp, 0, 1, 2),

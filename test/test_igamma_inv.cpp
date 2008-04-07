@@ -279,7 +279,11 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::gamma_p_inv<value_type, value_type>;
+#else
    pg funcp = boost::math::gamma_p_inv;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 
@@ -297,7 +301,11 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
    //
    // test gamma_q_inv(T, T) against data:
    //
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::gamma_q_inv<value_type, value_type>;
+#else
    funcp = boost::math::gamma_q_inv;
+#endif
    result = boost::math::tools::test(
       data,
       bind_func(funcp, 0, 1),

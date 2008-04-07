@@ -17,9 +17,9 @@
 #include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
+#include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/students_t.hpp>
     using boost::math::students_t_distribution;
-#include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/tools/test.hpp> // for real_concept
 
 #include <iostream>

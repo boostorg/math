@@ -77,7 +77,11 @@ void do_test_cbrt(const T& data, const char* type_name, const char* test_name)
    typedef typename row_type::value_type value_type;
 
    typedef value_type (*pg)(value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::cbrt<value_type>;
+#else
    pg funcp = boost::math::cbrt;
+#endif
 
    boost::math::tools::test_result<value_type> result;
 

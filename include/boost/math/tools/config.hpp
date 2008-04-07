@@ -64,6 +64,10 @@
 #  define BOOST_MATH_CONTROL_FP _control87(MCW_EM,MCW_EM)
 #endif
 
+#ifdef __IBMCPP__
+#  define BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS
+#endif
+
 #if defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
 
 #  include "boost/type.hpp"
@@ -100,8 +104,9 @@
 
 #endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 
-#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
-// Sun's compiler emits a hard error if a constant underflows:
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590) || defined(__hppa)
+// Sun's compiler emits a hard error if a constant underflows,
+// as does aCC on PA-RISC:
 #  define BOOST_MATH_SMALL_CONSTANT(x) 0
 #else
 #  define BOOST_MATH_SMALL_CONSTANT(x) x

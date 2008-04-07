@@ -65,12 +65,21 @@ T user_rounding_error(const char* function, const char* message, const T& val);
 
 namespace detail
 {
+//
+// Helper function to avoid binding rvalue to non-const-reference,
+// in other words a warning suppression mechansim:
+//
+template <class Formatter, class Group>
+inline std::string do_format(Formatter f, const Group& g)
+{
+   return (f % g).str();
+}
 
 template <class E, class T>
 void raise_error(const char* function, const char* message)
 {
   if(function == 0)
-       function = "Unknown function";
+       function = "Unknown function operating on type %1%";
   if(message == 0)
        message = "Cause unknown";
 
@@ -87,9 +96,9 @@ template <class E, class T>
 void raise_error(const char* function, const char* message, const T& val)
 {
   if(function == 0)
-       function = "Unknown function";
+     function = "Unknown function operating on type %1%";
   if(message == 0)
-       message = "Cause unknown";
+     message = "Cause unknown: error caused by bad argument with value %1%";
 
   std::string msg("Error in function ");
   msg += (boost::format(function) % typeid(T).name()).str();
@@ -97,7 +106,7 @@ void raise_error(const char* function, const char* message, const T& val)
   msg += message;
 
   int prec = 2 + (boost::math::policies::digits<T, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
-  msg = (boost::format(msg) % boost::io::group(std::setprecision(prec), val)).str();
+  msg = do_format(boost::format(msg), boost::io::group(std::setprecision(prec), val));
 
   E e(msg);
   boost::throw_exception(e);
