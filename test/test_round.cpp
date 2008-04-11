@@ -39,6 +39,7 @@ T get_random()
 template <class T, class U>
 void check_within_half(T a, U u)
 {
+   BOOST_MATH_STD_USING
    if(fabs(a-u) > 0.5f)
    {
       BOOST_ERROR("Rounded result differed by more than 0.5 from the original");
@@ -60,7 +61,6 @@ template <class T, class U>
 void check_trunc_result(T a, U u)
 {
    BOOST_MATH_STD_USING
-   using ::abs;
    if(fabs(a-u) >= 1)
    {
       BOOST_ERROR("Rounded result differed by more than 1 from the original");
