@@ -96,7 +96,7 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                   // test data group
-      "[^|]*", 15000, 3000);                  // test function
+      "[^|]*", 17000, 3000);                  // test function
 
    //
    // Allow some long double error to creep into
