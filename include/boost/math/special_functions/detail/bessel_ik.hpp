@@ -10,6 +10,7 @@
 #pragma once
 #endif
 
+#include <boost/math/special_functions/round.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/constants/constants.hpp>
