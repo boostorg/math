@@ -73,7 +73,7 @@ inline bool is_nan_helper(T t, const boost::true_type&)
 #ifdef isnan
    return isnan(t);
 #else // BOOST_HAS_FPCLASSIFY
-   return (BOOST_FPCLASSIFY_PREFIX fpclassify(t) == FP_NAN);
+   return (BOOST_FPCLASSIFY_PREFIX fpclassify(t) == (int)FP_NAN);
 #endif
 }
 
@@ -200,19 +200,19 @@ template <class T>
 inline bool isfinite BOOST_NO_MACRO_EXPAND(T z)
 {
    int t = (::boost::math::fpclassify)(z);
-   return (t != FP_NAN) && (t != FP_INFINITE);
+   return (t != (int)FP_NAN) && (t != (int)FP_INFINITE);
 }
 
 template <class T>
 inline bool isinf BOOST_NO_MACRO_EXPAND(T t)
 {
-   return (::boost::math::fpclassify)(t) == FP_INFINITE;
+   return (::boost::math::fpclassify)(t) == (int)FP_INFINITE;
 }
 
 template <class T>
 inline bool isnan BOOST_NO_MACRO_EXPAND(T t)
 {
-   return (::boost::math::fpclassify)(t) == FP_NAN;
+   return (::boost::math::fpclassify)(t) == (int)FP_NAN;
 }
 #ifdef isnan
 template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return ::boost::math_detail::is_nan_helper(t, boost::true_type()); }
@@ -232,7 +232,7 @@ template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){
 template <class T>
 inline bool isnormal BOOST_NO_MACRO_EXPAND(T t)
 {
-   return (::boost::math::fpclassify)(t) == FP_NORMAL;
+   return (::boost::math::fpclassify)(t) == (int)FP_NORMAL;
 }
 
 } // namespace math
