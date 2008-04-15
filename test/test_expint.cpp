@@ -60,6 +60,36 @@ void expected_results()
    largest_type = "(long\\s+)?double";
 #endif
 
+   //
+   // On MacOS X erfc has much higher error levels than
+   // expected: given that the implementation is basically
+   // just a rational function evaluation combined with
+   // exponentiation, we conclude that exp and pow are less
+   // accurate on this platform, especially when the result 
+   // is outside the range of a double.
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                      // platform
+      "float|double|long double",    // test type(s)
+      ".*E1.*",                      // test data group
+      ".*", 30, 10);                   // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                      // platform
+      "float|double|long double",    // test type(s)
+      ".*Ei.*",                      // test data group
+      ".*", 300, 200);                   // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                      // platform
+      ".*",                          // test type(s)
+      ".*",                          // test data group
+      ".*", 40, 15);                   // test function
+
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

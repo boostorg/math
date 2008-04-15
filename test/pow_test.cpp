@@ -106,7 +106,9 @@ void test_return_types()
     BOOST_STATIC_ASSERT((is_same<BOOST_TYPEOF(pow<2>(5ul)), double>::value));
     BOOST_STATIC_ASSERT((is_same<BOOST_TYPEOF(pow<2>(6.0f)), float>::value));
     BOOST_STATIC_ASSERT((is_same<BOOST_TYPEOF(pow<2>(7.0)), double>::value));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     BOOST_STATIC_ASSERT((is_same<BOOST_TYPEOF(pow<2>(7.0l)), long double>::value));
+#endif
 };
 
 

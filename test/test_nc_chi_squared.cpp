@@ -80,6 +80,13 @@ void expected_results()
    largest_type = "(long\\s+)?double|real_concept";
 #endif
 
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Mac OS",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*medium[^|]*",                   // test data group
+      "[^|]*", 550, 100);                  // test function
    //
    // Catch all cases come last:
    //
