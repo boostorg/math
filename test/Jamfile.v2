@@ -13,7 +13,8 @@ project
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069
-      <toolset>intel:<cxxflags>-Qwd264,239
+      <toolset>intel:<cxxflags>-Qwd264
+      <toolset>intel:<cxxflags>-Qwd239
       <toolset>intel:<cxxflags>/nologo 
       <toolset>intel-linux:<cxxflags>-wd239 
       <toolset>intel:<linkflags>/nologo 
