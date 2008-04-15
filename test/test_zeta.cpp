@@ -157,11 +157,11 @@ void test_spots(T, const char* t)
 {
    std::cout << "Testing basic sanity checks for type " << t << std::endl;
    //
-   // Basic sanity checks, tolerance is either 2 or 10 epsilon 
+   // Basic sanity checks, tolerance is either 5 or 10 epsilon 
    // expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 100 *
-      (boost::is_floating_point<T>::value ? 2 : 10);
+      (boost::is_floating_point<T>::value ? 5 : 10);
    BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(0.125)), static_cast<T>(-0.63277562349869525529352526763564627152686379131122L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(1023) / static_cast<T>(1024)), static_cast<T>(-1023.4228554489429786541032870895167448906103303056L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(1025) / static_cast<T>(1024)), static_cast<T>(1024.5772867695045940578681624248887776501597556226L), tolerance);
