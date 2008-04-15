@@ -131,7 +131,11 @@ void do_test_expint(const T& data, const char* type_name, const char* test_name)
    std::cout << test_name << " with type " << type_name << std::endl;
 
    typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = expint_wrapper<value_type>;
+#else
    pg funcp = expint_wrapper;
+#endif
 
    boost::math::tools::test_result<value_type> result;
    //
@@ -172,7 +176,11 @@ void do_test_expint_Ei(const T& data, const char* type_name, const char* test_na
    std::cout << test_name << " with type " << type_name << std::endl;
 
    typedef value_type (*pg)(value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::expint<value_type>;
+#else
    pg funcp = boost::math::expint;
+#endif
 
    boost::math::tools::test_result<value_type> result;
    //

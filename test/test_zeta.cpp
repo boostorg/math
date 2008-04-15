@@ -105,7 +105,11 @@ void do_test_zeta(const T& data, const char* type_name, const char* test_name)
    std::cout << test_name << " with type " << type_name << std::endl;
 
    typedef value_type (*pg)(value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::zeta<value_type>;
+#else
    pg funcp = boost::math::zeta;
+#endif
 
    boost::math::tools::test_result<value_type> result;
    //
