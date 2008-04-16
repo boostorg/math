@@ -27,6 +27,9 @@
 #include <boost/math/special_functions/modf.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
+#if defined(__SGI_STL_PORT)
+#  include <boost/math/tools/real_cast.hpp>
+#endif
 #include <ostream>
 #include <istream>
 #include <cmath>
@@ -389,6 +392,57 @@ inline long long lltrunc(const concepts::real_concept& v)
 {
    return lltrunc(v.value(), policies::policy<>());
 }
+
+#endif
+
+#if defined(__SGI_STL_PORT)
+//
+// We shouldn't really need these type casts any more, but there are some
+// STLport iostream bugs we work around by using them....
+//
+namespace tools
+{
+// real_cast converts from T to integer and narrower floating-point types.
+
+// Convert from T to integer types.
+
+template <>
+inline unsigned int real_cast<unsigned int, concepts::real_concept>(concepts::real_concept r)
+{
+   return static_cast<unsigned int>(r.value());
+}
+
+template <>
+inline int real_cast<int, concepts::real_concept>(concepts::real_concept r)
+{
+   return static_cast<int>(r.value());
+}
+
+template <>
+inline long real_cast<long, concepts::real_concept>(concepts::real_concept r)
+{
+   return static_cast<long>(r.value());
+}
+
+// Converts from T to narrower floating-point types, float, double & long double.
+
+template <>
+inline float real_cast<float, concepts::real_concept>(concepts::real_concept r)
+{
+   return static_cast<float>(r.value());
+}
+template <>
+inline double real_cast<double, concepts::real_concept>(concepts::real_concept r)
+{
+   return static_cast<double>(r.value());
+}
+template <>
+inline long double real_cast<long double, concepts::real_concept>(concepts::real_concept r)
+{
+   return r.value();
+}
+
+} // STLPort
 
 #endif
 
