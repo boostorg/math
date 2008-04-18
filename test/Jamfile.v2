@@ -13,11 +13,8 @@ project
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069
-      <toolset>intel:<cxxflags>-Qwd264
-      <toolset>intel:<cxxflags>-Qwd239
-      <toolset>intel:<cxxflags>/nologo 
-      <toolset>intel-linux:<cxxflags>-wd239 
-      <toolset>intel:<linkflags>/nologo 
+      <toolset>intel:<cxxflags>-nologo 
+      <toolset>intel:<linkflags>-nologo 
       <toolset>msvc:<warnings>all
       <toolset>msvc:<asynch-exceptions>on
       <toolset>msvc:<cxxflags>/wd4996
@@ -490,5 +487,7 @@ run ../quaternion/quaternion_mult_incl_test.cpp
     ../../test/build//boost_unit_test_framework/<link>static ;
 
 run complex_test.cpp ;
+
+
 
 

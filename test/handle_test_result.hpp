@@ -12,6 +12,11 @@
 #include <boost/regex.hpp>
 #include <boost/test/test_tools.hpp>
 
+#if defined(BOOST_INTEL)
+#  pragma warning(disable:239)
+#  pragma warning(disable:264)
+#endif
+
 //
 // Every client of this header has to define this function,
 // and initialise the table of expected results:
