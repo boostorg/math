@@ -23,6 +23,7 @@
 #pragma once
 #endif
 
+#include <boost/math/special_functions/detail/round_fwd.hpp>
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
 #include <boost/math/policies/policy.hpp>
 #include <boost/mpl/comparison.hpp>
@@ -656,20 +657,6 @@ namespace boost
    template <class T>
    typename tools::promote_args<T>::type zeta(T s);
 
-   template <class T, class Policy>
-   T trunc(const T& v, const Policy& pol);
-   template <class T>
-   T trunc(const T& v);
-   template <class T, class Policy>
-   int itrunc(const T& v, const Policy& pol);
-   template <class T>
-   int itrunc(const T& v);
-   template <class T, class Policy>
-   long ltrunc(const T& v, const Policy& pol);
-   template <class T>
-   long ltrunc(const T& v);
-
-
     } // namespace math
 } // namespace boost
 
@@ -677,13 +664,13 @@ namespace boost
 #define BOOST_MATH_DETAIL_LL_FUNC(Policy)\
    \
    template <class T>\
-   inline T modf(const T& v, long long* ipart){ return boost::math::modf(v, ipart, Policy()); }\
+   inline T modf(const T& v, long long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
-   inline long long lltrunc(const T& v){ return boost::math::lltrunc(v, Policy()); }\
+   inline long long lltrunc(const T& v){ using boost::math::lltrunc; return lltrunc(v, Policy()); }\
    \
    template <class T>\
-   inline long long llround(const T& v){ return boost::math::llround(v, Policy()); }\
+   inline long long llround(const T& v){ using boost::math::llround; return llround(v, Policy()); }\
 
 #else
 #define BOOST_MATH_DETAIL_LL_FUNC(Policy)
@@ -988,31 +975,31 @@ namespace boost
    inline typename boost::math::tools::promote_args<T>::type zeta(T s){ return boost::math::zeta(s, Policy()); }\
    \
    template <class T>\
-   inline T round(const T& v){ return boost::math::round(v, Policy()); }\
+   inline T round(const T& v){ using boost::math::round; return round(v, Policy()); }\
    \
    template <class T>\
-   inline int iround(const T& v){ return boost::math::iround(v, Policy()); }\
+   inline int iround(const T& v){ using boost::math::iround; return iround(v, Policy()); }\
    \
    template <class T>\
-   inline long lround(const T& v){ return boost::math::lround(v, Policy()); }\
+   inline long lround(const T& v){ using boost::math::lround; return lround(v, Policy()); }\
    \
    template <class T>\
-   inline T trunc(const T& v){ return boost::math::trunc(v, Policy()); }\
+   inline T trunc(const T& v){ using boost::math::trunc; return trunc(v, Policy()); }\
    \
    template <class T>\
-   inline int itrunc(const T& v){ return boost::math::itrunc(v, Policy()); }\
+   inline int itrunc(const T& v){ using boost::math::itrunc; return itrunc(v, Policy()); }\
    \
    template <class T>\
-   inline long ltrunc(const T& v){ return boost::math::ltrunc(v, Policy()); }\
+   inline long ltrunc(const T& v){ using boost::math::ltrunc; return ltrunc(v, Policy()); }\
    \
    template <class T>\
-   inline T modf(const T& v, T* ipart){ return boost::math::modf(v, ipart, Policy()); }\
+   inline T modf(const T& v, T* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
-   inline T modf(const T& v, int* ipart){ return boost::math::modf(v, ipart, Policy()); }\
+   inline T modf(const T& v, int* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
-   inline T modf(const T& v, long* ipart){ return boost::math::modf(v, ipart, Policy()); }\
+   inline T modf(const T& v, long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <int N, class T>\
    inline typename boost::math::tools::promote_args<T>::type pow(T v){ return boost::math::pow<N>(v, Policy()); }\

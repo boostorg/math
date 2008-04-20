@@ -237,6 +237,47 @@ inline real_concept sqrt(real_concept a)
 inline real_concept tanh(real_concept a)
 { return std::tanh(a.value()); }
 
+//
+// Conversion and truncation routines:
+//
+template <class Policy>
+inline int iround(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::iround(v.value(), pol); }
+inline int iround(const concepts::real_concept& v)
+{ return boost::math::iround(v.value(), policies::policy<>()); }
+template <class Policy>
+inline long lround(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::lround(v.value(), pol); }
+inline long lround(const concepts::real_concept& v)
+{ return boost::math::lround(v.value(), policies::policy<>()); }
+
+#ifdef BOOST_HAS_LONG_LONG
+template <class Policy>
+inline long long llround(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::llround(v.value(), pol); }
+inline long long llround(const concepts::real_concept& v)
+{ return boost::math::llround(v.value(), policies::policy<>()); }
+#endif
+
+template <class Policy>
+inline int itrunc(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::itrunc(v.value(), pol); }
+inline int itrunc(const concepts::real_concept& v)
+{ return boost::math::itrunc(v.value(), policies::policy<>()); }
+template <class Policy>
+inline long ltrunc(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::ltrunc(v.value(), pol); }
+inline long ltrunc(const concepts::real_concept& v)
+{ return boost::math::ltrunc(v.value(), policies::policy<>()); }
+
+#ifdef BOOST_HAS_LONG_LONG
+template <class Policy>
+inline long long lltrunc(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::lltrunc(v.value(), pol); }
+inline long long lltrunc(const concepts::real_concept& v)
+{ return boost::math::lltrunc(v.value(), policies::policy<>()); }
+#endif
+
 // Streaming:
 template <class charT, class traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const real_concept& a)
@@ -323,77 +364,6 @@ inline int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC
 }
 
 } // namespace tools
-
-//
-// Conversion and truncation routines:
-//
-template <class Policy>
-inline int iround(const concepts::real_concept& v, const Policy& pol)
-{
-   return iround(v.value(), pol);
-}
-inline int iround(const concepts::real_concept& v)
-{
-   return iround(v.value(), policies::policy<>());
-}
-
-template <class Policy>
-inline long lround(const concepts::real_concept& v, const Policy& pol)
-{
-   return lround(v.value(), pol);
-}
-inline long lround(const concepts::real_concept& v)
-{
-   return lround(v.value(), policies::policy<>());
-}
-
-#ifdef BOOST_HAS_LONG_LONG
-
-template <class Policy>
-inline long long llround(const concepts::real_concept& v, const Policy& pol)
-{
-   return llround(v.value(), pol);
-}
-inline long long llround(const concepts::real_concept& v)
-{
-   return llround(v.value(), policies::policy<>());
-}
-
-#endif
-
-template <class Policy>
-inline int itrunc(const concepts::real_concept& v, const Policy& pol)
-{
-   return itrunc(v.value(), pol);
-}
-inline int itrunc(const concepts::real_concept& v)
-{
-   return itrunc(v.value(), policies::policy<>());
-}
-
-template <class Policy>
-inline long ltrunc(const concepts::real_concept& v, const Policy& pol)
-{
-   return ltrunc(v.value(), pol);
-}
-inline long ltrunc(const concepts::real_concept& v)
-{
-   return ltrunc(v.value(), policies::policy<>());
-}
-
-#ifdef BOOST_HAS_LONG_LONG
-
-template <class Policy>
-inline long long lltrunc(const concepts::real_concept& v, const Policy& pol)
-{
-   return lltrunc(v.value(), pol);
-}
-inline long long lltrunc(const concepts::real_concept& v)
-{
-   return lltrunc(v.value(), policies::policy<>());
-}
-
-#endif
 
 #if defined(__SGI_STL_PORT)
 //
