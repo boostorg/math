@@ -572,22 +572,18 @@
 <p>
           For <code class="computeroutput"><span class="identifier">z</span> <span class="special">&lt;=</span>
           <span class="number">0.5</span></code> then a rational approximation
-          to erf is used, based on the observation that:
+          to erf is used, based on the observation that erf is an odd function and
+          therefore erf is calculated using:
         </p>
-<pre class="programlisting"><span class="identifier">erf</span><span class="special">(</span><span class="identifier">z</span><span class="special">)/</span><span class="identifier">z</span> <span class="special">~</span> <span class="number">1.12</span><span class="special">....</span>
+<pre class="programlisting"><span class="identifier">erf</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">z</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">C</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">));</span>
 </pre>
 <p>
-          Therefore erf is calculated using:
-        </p>
-<pre class="programlisting"><span class="identifier">erf</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">z</span> <span class="special">*</span> <span class="special">(</span><span class="number">1.125F</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">z</span><span class="special">));</span>
-</pre>
-<p>
-          where the rational approximation R(z) is optimised for absolute error:
-          as long as its absolute error is small enough compared to 1.125, then any
-          round-off error incurred during the computation of R(z) will effectively
-          disappear from the result. As a result the error for erf and erfc in this
-          region is very low: the last bit is incorrect in only a very small number
-          of cases.
+          where the rational approximation R(z*z) is optimised for absolute error:
+          as long as its absolute error is small enough compared to the constant
+          C, then any round-off error incurred during the computation of R(z*z) will
+          effectively disappear from the result. As a result the error for erf and
+          erfc in this region is very low: the last bit is incorrect in only a very
+          small number of cases.
         </p>
 <p>
           For <code class="computeroutput"><span class="identifier">z</span> <span class="special">&gt;</span>
@@ -603,18 +599,27 @@
           Therefore for <code class="computeroutput"><span class="identifier">z</span> <span class="special">&gt;</span>
           <span class="number">0.5</span></code> we calculate erfc using:
         </p>
-<pre class="programlisting"><span class="identifier">erfc</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">)</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">c</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">z</span><span class="special">))</span> <span class="special">/</span> <span class="identifier">z</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">erfc</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">)</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">C</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">z</span> <span class="special">-</span> <span class="identifier">B</span><span class="special">))</span> <span class="special">/</span> <span class="identifier">z</span><span class="special">;</span>
 </pre>
 <p>
-          Again R(z) is optimised for absolute error, and the constant <code class="computeroutput"><span class="identifier">c</span></code> is the average of <code class="computeroutput"><span class="identifier">erfc</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span>
+          Again R(z - B) is optimised for absolute error, and the constant <code class="computeroutput"><span class="identifier">C</span></code> is the average of <code class="computeroutput"><span class="identifier">erfc</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span>
           <span class="special">*</span> <span class="identifier">exp</span><span class="special">(</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">)</span> <span class="special">*</span>
           <span class="identifier">z</span></code> taken at the endpoints of the
-          range. Once again, as long as the absolute error in R(z) is small compared
-          to <code class="computeroutput"><span class="identifier">c</span></code> then <code class="computeroutput"><span class="identifier">c</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code> will be correctly rounded, and the error
+          range. Once again, as long as the absolute error in R(z - B) is small compared
+          to <code class="computeroutput"><span class="identifier">c</span></code> then <code class="computeroutput"><span class="identifier">c</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">z</span>
+          <span class="special">-</span> <span class="identifier">B</span><span class="special">)</span></code> will be correctly rounded, and the error
           in the result will depend only on the accuracy of the exp function. In
           practice, in all but a very small number of cases, the error is confined
-          to the last bit of the result.
+          to the last bit of the result. The constant <code class="computeroutput"><span class="identifier">B</span></code>
+          is chosen so that the left hand end of the range of the rational approximation
+          is 0.
         </p>
+<p>
+          For large <code class="computeroutput"><span class="identifier">z</span></code> over a range
+          [a, +&#8734;] the above approximation is modified to:
+        </p>
+<pre class="programlisting"><span class="identifier">erfc</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">)</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">C</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="number">1</span> <span class="special">/</span> <span class="identifier">z</span><span class="special">))</span> <span class="special">/</span> <span class="identifier">z</span><span class="special">;</span>
+</pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
