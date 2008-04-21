@@ -80,6 +80,7 @@ void expected_results()
    largest_type = "(long\\s+)?double|real_concept";
 #endif
 
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if(boost::math::tools::digits<long double>() == 64)
    {
       //
@@ -111,6 +112,7 @@ void expected_results()
          "[^|]*large[^|]*",                // test data group
          "[^|]*", 40000, 5500);            // test function
    }
+#endif
    //
    // Catch all cases come last:
    //

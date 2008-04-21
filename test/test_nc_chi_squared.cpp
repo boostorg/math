@@ -80,6 +80,13 @@ void expected_results()
    largest_type = "(long\\s+)?double|real_concept";
 #endif
 
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Mac OS",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*medium[^|]*",                   // test data group
+      "[^|]*", 550, 100);                  // test function
    //
    // Catch all cases come last:
    //
@@ -96,7 +103,7 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                   // test data group
-      "[^|]*", 15000, 3000);                  // test function
+      "[^|]*", 17000, 3000);                  // test function
 
    //
    // Allow some long double error to creep into
@@ -312,7 +319,7 @@ void test_spots(RealType)
    // mode:
    BOOST_CHECK_CLOSE(
       mode(dist)
-      , static_cast<RealType>(17.184201184730857030170788677340294070728990862663L), sqrt(tolerance * 10));
+      , static_cast<RealType>(17.184201184730857030170788677340294070728990862663L), sqrt(tolerance * 20));
    BOOST_CHECK_CLOSE(
       median(dist), 
       quantile(

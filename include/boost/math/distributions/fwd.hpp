@@ -45,6 +45,18 @@ template <class RealType, class Policy>
 class negative_binomial_distribution;
 
 template <class RealType, class Policy>
+class non_central_chi_squared_distribution;
+
+template <class RealType, class Policy>
+class non_central_beta_distribution;
+
+template <class RealType, class Policy>
+class non_central_f_distribution;
+
+template <class RealType, class Policy>
+class non_central_t_distribution;
+
+template <class RealType, class Policy>
 class normal_distribution;
 
 template <class RealType, class Policy>

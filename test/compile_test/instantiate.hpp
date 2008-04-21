@@ -347,19 +347,25 @@ void instantiate(RealType)
    boost::math::expint(i, i, pol);
    boost::math::zeta(v1, pol);
    boost::math::zeta(i, pol);
-   boost::math::trunc(v1, pol);
-   boost::math::itrunc(v1, pol);
-   boost::math::ltrunc(v1, pol);
-   boost::math::round(v1, pol);
-   boost::math::iround(v1, pol);
-   boost::math::lround(v1, pol);
-   boost::math::modf(v1, &v1, pol);
-   boost::math::modf(v1, &i, pol);
-   boost::math::modf(v1, &l, pol);
+   //
+   // These next functions are intended to be found via ADL:
+   //
+   BOOST_MATH_STD_USING
+   trunc(v1, pol);
+   itrunc(v1, pol);
+   ltrunc(v1, pol);
+   round(v1, pol);
+   iround(v1, pol);
+   lround(v1, pol);
+   modf(v1, &v1, pol);
+   modf(v1, &i, pol);
+   modf(v1, &l, pol);
 #ifdef BOOST_HAS_LONG_LONG
-   boost::math::lltrunc(v1, pol);
-   boost::math::llround(v1, pol);
-   boost::math::modf(v1, &ll, pol);
+   using boost::math::lltrunc;
+   using boost::math::llround;
+   lltrunc(v1, pol);
+   llround(v1, pol);
+   modf(v1, &ll, pol);
 #endif
    boost::math::pow<2>(v1, pol);
    //

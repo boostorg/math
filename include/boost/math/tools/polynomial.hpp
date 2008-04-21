@@ -16,6 +16,8 @@
 #include <boost/math/special_functions/binomial.hpp>
 
 #include <vector>
+#include <ostream>
+#include <algorithm>
 
 namespace boost{ namespace math{ namespace tools{
 

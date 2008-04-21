@@ -106,7 +106,9 @@ void test_return_types()
     BOOST_STATIC_ASSERT((is_same<BOOST_TYPEOF(pow<2>(5ul)), double>::value));
     BOOST_STATIC_ASSERT((is_same<BOOST_TYPEOF(pow<2>(6.0f)), float>::value));
     BOOST_STATIC_ASSERT((is_same<BOOST_TYPEOF(pow<2>(7.0)), double>::value));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     BOOST_STATIC_ASSERT((is_same<BOOST_TYPEOF(pow<2>(7.0l)), long double>::value));
+#endif
 };
 
 
@@ -157,6 +159,7 @@ int test_main(int, char* [])
     cout << "Testing with double precision bases and negative big exponents" << endl;
     test_with_big_exponents<double, -1>();
 
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     cout << "Testing with long double precision bases and positive small exponents" << endl;
     test_with_small_exponents<long double, 1>();
     cout << "Testing with long double precision bases and negative small exponents" << endl;
@@ -176,6 +179,7 @@ int test_main(int, char* [])
     test_with_big_exponents<concepts::real_concept, 1>();
     cout << "Testing with concepts::real_concept precision bases and negative big exponents" << endl;
     test_with_big_exponents<concepts::real_concept, -1>();
+#endif
 
     test_return_types();
 

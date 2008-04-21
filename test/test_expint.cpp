@@ -60,6 +60,36 @@ void expected_results()
    largest_type = "(long\\s+)?double";
 #endif
 
+   //
+   // On MacOS X erfc has much higher error levels than
+   // expected: given that the implementation is basically
+   // just a rational function evaluation combined with
+   // exponentiation, we conclude that exp and pow are less
+   // accurate on this platform, especially when the result 
+   // is outside the range of a double.
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                      // platform
+      "float|double|long double",    // test type(s)
+      ".*E1.*",                      // test data group
+      ".*", 30, 10);                   // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                      // platform
+      "float|double|long double",    // test type(s)
+      ".*Ei.*",                      // test data group
+      ".*", 300, 200);                   // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      "Mac OS",                      // platform
+      ".*",                          // test type(s)
+      ".*",                          // test data group
+      ".*", 40, 15);                   // test function
+
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -131,7 +161,11 @@ void do_test_expint(const T& data, const char* type_name, const char* test_name)
    std::cout << test_name << " with type " << type_name << std::endl;
 
    typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = expint_wrapper<value_type>;
+#else
    pg funcp = expint_wrapper;
+#endif
 
    boost::math::tools::test_result<value_type> result;
    //
@@ -172,7 +206,11 @@ void do_test_expint_Ei(const T& data, const char* type_name, const char* test_na
    std::cout << test_name << " with type " << type_name << std::endl;
 
    typedef value_type (*pg)(value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::expint<value_type>;
+#else
    pg funcp = boost::math::expint;
+#endif
 
    boost::math::tools::test_result<value_type> result;
    //

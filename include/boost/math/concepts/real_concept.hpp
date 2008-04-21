@@ -27,6 +27,9 @@
 #include <boost/math/special_functions/modf.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
+#if defined(__SGI_STL_PORT)
+#  include <boost/math/tools/real_cast.hpp>
+#endif
 #include <ostream>
 #include <istream>
 #include <cmath>
@@ -234,6 +237,47 @@ inline real_concept sqrt(real_concept a)
 inline real_concept tanh(real_concept a)
 { return std::tanh(a.value()); }
 
+//
+// Conversion and truncation routines:
+//
+template <class Policy>
+inline int iround(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::iround(v.value(), pol); }
+inline int iround(const concepts::real_concept& v)
+{ return boost::math::iround(v.value(), policies::policy<>()); }
+template <class Policy>
+inline long lround(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::lround(v.value(), pol); }
+inline long lround(const concepts::real_concept& v)
+{ return boost::math::lround(v.value(), policies::policy<>()); }
+
+#ifdef BOOST_HAS_LONG_LONG
+template <class Policy>
+inline long long llround(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::llround(v.value(), pol); }
+inline long long llround(const concepts::real_concept& v)
+{ return boost::math::llround(v.value(), policies::policy<>()); }
+#endif
+
+template <class Policy>
+inline int itrunc(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::itrunc(v.value(), pol); }
+inline int itrunc(const concepts::real_concept& v)
+{ return boost::math::itrunc(v.value(), policies::policy<>()); }
+template <class Policy>
+inline long ltrunc(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::ltrunc(v.value(), pol); }
+inline long ltrunc(const concepts::real_concept& v)
+{ return boost::math::ltrunc(v.value(), policies::policy<>()); }
+
+#ifdef BOOST_HAS_LONG_LONG
+template <class Policy>
+inline long long lltrunc(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::lltrunc(v.value(), pol); }
+inline long long lltrunc(const concepts::real_concept& v)
+{ return boost::math::lltrunc(v.value(), policies::policy<>()); }
+#endif
+
 // Streaming:
 template <class charT, class traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const real_concept& a)
@@ -321,74 +365,54 @@ inline int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC
 
 } // namespace tools
 
+#if defined(__SGI_STL_PORT)
 //
-// Conversion and truncation routines:
+// We shouldn't really need these type casts any more, but there are some
+// STLport iostream bugs we work around by using them....
 //
-template <class Policy>
-inline int iround(const concepts::real_concept& v, const Policy& pol)
+namespace tools
 {
-   return iround(v.value(), pol);
-}
-inline int iround(const concepts::real_concept& v)
+// real_cast converts from T to integer and narrower floating-point types.
+
+// Convert from T to integer types.
+
+template <>
+inline unsigned int real_cast<unsigned int, concepts::real_concept>(concepts::real_concept r)
 {
-   return iround(v.value(), policies::policy<>());
+   return static_cast<unsigned int>(r.value());
 }
 
-template <class Policy>
-inline long lround(const concepts::real_concept& v, const Policy& pol)
+template <>
+inline int real_cast<int, concepts::real_concept>(concepts::real_concept r)
 {
-   return lround(v.value(), pol);
-}
-inline long lround(const concepts::real_concept& v)
-{
-   return lround(v.value(), policies::policy<>());
+   return static_cast<int>(r.value());
 }
 
-#ifdef BOOST_HAS_LONG_LONG
-
-template <class Policy>
-inline long long llround(const concepts::real_concept& v, const Policy& pol)
+template <>
+inline long real_cast<long, concepts::real_concept>(concepts::real_concept r)
 {
-   return llround(v.value(), pol);
-}
-inline long long llround(const concepts::real_concept& v)
-{
-   return llround(v.value(), policies::policy<>());
+   return static_cast<long>(r.value());
 }
 
-#endif
+// Converts from T to narrower floating-point types, float, double & long double.
 
-template <class Policy>
-inline int itrunc(const concepts::real_concept& v, const Policy& pol)
+template <>
+inline float real_cast<float, concepts::real_concept>(concepts::real_concept r)
 {
-   return itrunc(v.value(), pol);
+   return static_cast<float>(r.value());
 }
-inline int itrunc(const concepts::real_concept& v)
+template <>
+inline double real_cast<double, concepts::real_concept>(concepts::real_concept r)
 {
-   return itrunc(v.value(), policies::policy<>());
+   return static_cast<double>(r.value());
 }
-
-template <class Policy>
-inline long ltrunc(const concepts::real_concept& v, const Policy& pol)
+template <>
+inline long double real_cast<long double, concepts::real_concept>(concepts::real_concept r)
 {
-   return ltrunc(v.value(), pol);
-}
-inline long ltrunc(const concepts::real_concept& v)
-{
-   return ltrunc(v.value(), policies::policy<>());
+   return r.value();
 }
 
-#ifdef BOOST_HAS_LONG_LONG
-
-template <class Policy>
-inline long long lltrunc(const concepts::real_concept& v, const Policy& pol)
-{
-   return lltrunc(v.value(), pol);
-}
-inline long long lltrunc(const concepts::real_concept& v)
-{
-   return lltrunc(v.value(), policies::policy<>());
-}
+} // STLPort
 
 #endif
 

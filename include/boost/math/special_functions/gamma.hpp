@@ -152,7 +152,7 @@ T gamma_imp(T z, const Policy& pol, const L& l)
       result = -boost::math::constants::pi<T>() / result;
       if(result == 0)
          return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-      if((boost::math::fpclassify)(result) == FP_SUBNORMAL)
+      if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
          return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
       return result;
    }
@@ -352,7 +352,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l)
       result = -boost::math::constants::pi<T>() / result;
       if(result == 0)
          return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-      if((boost::math::fpclassify)(result) == FP_SUBNORMAL)
+      if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
          return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
       return result;
    }
@@ -584,7 +584,7 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
    // This error handling isn't very good: it happens after the fact
    // rather than before it...
    //
-   if((boost::math::fpclassify)(prefix) == FP_INFINITE)
+   if((boost::math::fpclassify)(prefix) == (int)FP_INFINITE)
       policies::raise_overflow_error<T>("boost::math::detail::full_igamma_prefix<%1%>(%1%, %1%)", "Result of incomplete gamma function is too large to represent.", pol);
 
    return prefix;

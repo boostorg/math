@@ -21,6 +21,7 @@
 #endif
 
 #include <boost/math/tools/user.hpp>
+#include <boost/math/special_functions/detail/round_fwd.hpp>
 
 #if defined(__CYGWIN__) || defined(__FreeBSD__) || defined(__hppa)
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
@@ -189,7 +190,14 @@
    using std::ceil;\
    using std::floor;\
    using std::log10;\
-   using std::sqrt;
+   using std::sqrt;\
+   using boost::math::round;\
+   using boost::math::iround;\
+   using boost::math::lround;\
+   using boost::math::trunc;\
+   using boost::math::itrunc;\
+   using boost::math::ltrunc;\
+   using boost::math::modf;
 
 
 namespace boost{ namespace math{

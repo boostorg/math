@@ -227,9 +227,9 @@ void test_spots(RealType)
    BOOST_MATH_STD_USING
 
    //
-   // 2 eps expressed as a persentage, otherwise the limit of the test data:
+   // 5 eps expressed as a persentage, otherwise the limit of the test data:
    //
-   RealType tol2 = (std::max)(boost::math::tools::epsilon<RealType>() * 200, RealType(1e-25));
+   RealType tol2 = (std::max)(boost::math::tools::epsilon<RealType>() * 500, RealType(1e-25));
    RealType x = 2;
    
    boost::math::non_central_f_distribution<RealType> dist(20, 15, 30);

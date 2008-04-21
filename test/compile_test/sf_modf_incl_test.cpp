@@ -40,9 +40,11 @@ void check()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::modf(l, &ll));
 #endif
+#ifdef BOOST_HAS_LONG_LONG
    check_result<float>(boost::math::modf(f, &llll));
    check_result<double>(boost::math::modf(d, &llll));
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::modf(l, &llll));
+#endif
 #endif
 }
