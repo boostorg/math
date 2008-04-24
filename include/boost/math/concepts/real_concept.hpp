@@ -416,6 +416,16 @@ inline long double real_cast<long double, concepts::real_concept>(concepts::real
 
 #endif
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
+//
+// For some strange reason ADL sometimes fails to find the 
+// correct overloads, unless we bring these declarations into scope:
+//
+using concepts::itrunc;
+using concepts::iround;
+
+#endif
+
 } // namespace math
 } // namespace boost
 

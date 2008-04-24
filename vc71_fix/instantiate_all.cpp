@@ -14,8 +14,10 @@
 // as that would lead to recursive project dependencies...
 //
 
-#include "../test/compile_test/instantiate.hpp"
+#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+#define BOOST_MATH_INSTANTIATE_MINIMUM
 #include <boost/math/concepts/real_concept.hpp>
+#include "../test/compile_test/instantiate.hpp"
 
 void some_proc()
 {

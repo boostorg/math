@@ -353,6 +353,15 @@ inline int digits<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_
 
 } // namespace tools
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
+using concepts::itrunc;
+using concepts::ltrunc;
+using concepts::lltrunc;
+using concepts::iround;
+using concepts::lround;
+using concepts::llround;
+#endif
+
 } // namespace math
 } // namespace boost
 
