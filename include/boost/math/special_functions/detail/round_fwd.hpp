@@ -33,9 +33,9 @@ namespace boost
    long ltrunc(const T& v);
 #ifdef BOOST_HAS_LONG_LONG
    template <class T, class Policy>
-   long long lltrunc(const T& v, const Policy& pol);
+   boost::long_long_type lltrunc(const T& v, const Policy& pol);
    template <class T>
-   long long lltrunc(const T& v);
+   boost::long_long_type lltrunc(const T& v);
 #endif
    template <class T, class Policy>
    T round(const T& v, const Policy& pol);
@@ -51,9 +51,9 @@ namespace boost
    long lround(const T& v);
 #ifdef BOOST_HAS_LONG_LONG
    template <class T, class Policy>
-   long long llround(const T& v, const Policy& pol);
+   boost::long_long_type llround(const T& v, const Policy& pol);
    template <class T>
-   long long llround(const T& v);
+   boost::long_long_type llround(const T& v);
 #endif
    template <class T, class Policy>
    T modf(const T& v, T* ipart, const Policy& pol);
@@ -69,9 +69,9 @@ namespace boost
    T modf(const T& v, long* ipart);
 #ifdef BOOST_HAS_LONG_LONG
    template <class T, class Policy>
-   T modf(const T& v, long long* ipart, const Policy& pol);
+   T modf(const T& v, boost::long_long_type* ipart, const Policy& pol);
    template <class T>
-   T modf(const T& v, long long* ipart);
+   T modf(const T& v, boost::long_long_type* ipart);
 #endif
 
    }

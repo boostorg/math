@@ -20,7 +20,7 @@ long double lldd;
 int ii;
 long ll;
 #ifdef BOOST_HAS_LONG_LONG
-long long llll;
+boost::long_long_type llll;
 #endif
 
 void check()

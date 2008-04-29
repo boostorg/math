@@ -664,13 +664,13 @@ namespace boost
 #define BOOST_MATH_DETAIL_LL_FUNC(Policy)\
    \
    template <class T>\
-   inline T modf(const T& v, long long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
+   inline T modf(const T& v, boost::long_long_type* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
-   inline long long lltrunc(const T& v){ using boost::math::lltrunc; return lltrunc(v, Policy()); }\
+   inline boost::long_long_type lltrunc(const T& v){ using boost::math::lltrunc; return lltrunc(v, Policy()); }\
    \
    template <class T>\
-   inline long long llround(const T& v){ using boost::math::llround; return llround(v, Policy()); }\
+   inline boost::long_long_type llround(const T& v){ using boost::math::llround; return llround(v, Policy()); }\
 
 #else
 #define BOOST_MATH_DETAIL_LL_FUNC(Policy)

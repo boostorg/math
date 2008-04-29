@@ -113,7 +113,7 @@ MyUnsigned2  dummy4;
 // Various types to test with each GCD/LCM
 typedef ::boost::mpl::list<signed char, short, int, long,
 #ifdef BOOST_HAS_LONG_LONG
- long long,
+ boost::long_long_type,
 #elif defined(BOOST_HAS_MS_INT64)
  __int64,
 #endif
@@ -121,7 +121,7 @@ typedef ::boost::mpl::list<signed char, short, int, long,
 typedef ::boost::mpl::list<unsigned char, unsigned short, unsigned,
  unsigned long,
 #ifdef BOOST_HAS_LONG_LONG
- unsigned long long,
+ boost::ulong_long_type,
 #elif defined(BOOST_HAS_MS_INT64)
  unsigned __int64,
 #endif

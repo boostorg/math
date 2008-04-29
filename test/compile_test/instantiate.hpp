@@ -245,7 +245,7 @@ void instantiate(RealType)
 #ifdef BOOST_HAS_LONG_LONG
    boost::math::lltrunc(v1);
    boost::math::llround(v1);
-   long long ll;
+   boost::long_long_type ll;
    boost::math::modf(v1, &ll);
 #endif
    boost::math::pow<2>(v1);

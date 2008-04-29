@@ -24,7 +24,7 @@ inline void check_result_imp(long double, long double){}
 inline void check_result_imp(int, int){}
 inline void check_result_imp(long, long){}
 #ifdef BOOST_HAS_LONG_LONG
-inline void check_result_imp(long long, long long){}
+inline void check_result_imp(boost::long_long_type, boost::long_long_type){}
 #endif
 inline void check_result_imp(bool, bool){}
 

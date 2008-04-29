@@ -79,11 +79,11 @@ public:
       assign_large_int(c);
    }
 #ifdef BOOST_HAS_LONG_LONG
-   RR(unsigned long long c)
+   RR(boost::ulong_long_type c)
    {
       assign_large_int(c);
    }
-   RR(long long c)
+   RR(boost::long_long_type c)
    {
       assign_large_int(c);
    }
@@ -115,8 +115,8 @@ public:
    RR& operator=(long c) { assign_large_int(c); return *this; }
    RR& operator=(unsigned long c) { assign_large_int(c); return *this; }
 #ifdef BOOST_HAS_LONG_LONG
-   RR& operator=(long long c) { assign_large_int(c); return *this; }
-   RR& operator=(unsigned long long c) { assign_large_int(c); return *this; }
+   RR& operator=(boost::long_long_type c) { assign_large_int(c); return *this; }
+   RR& operator=(boost::ulong_long_type c) { assign_large_int(c); return *this; }
 #endif
    RR& operator=(float c) { m_value = c; return *this; }
    RR& operator=(double c) { m_value = c; return *this; }

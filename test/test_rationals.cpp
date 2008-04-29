@@ -20,7 +20,7 @@ void test_spots(T t, const char* n)
    do_test_spots(t, int(0));
    do_test_spots(t, unsigned(0));
 #ifdef BOOST_HAS_LONG_LONG
-   do_test_spots(t, (unsigned long long)(0));
+   do_test_spots(t, (boost::ulong_long_type)(0));
 #endif
    do_test_spots(t, float(0));
    do_test_spots(t, T(0));

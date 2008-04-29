@@ -141,9 +141,9 @@ void test_round(T, const char* name)
       }
 
 #ifdef BOOST_HAS_LONG_LONG
-      if(abs(r) < (std::numeric_limits<long long>::max)())
+      if(abs(r) < (std::numeric_limits<boost::long_long_type>::max)())
       {
-         long long ll = boost::math::llround(arg);
+         boost::long_long_type ll = boost::math::llround(arg);
          check_within_half(arg, ll);
          ll = boost::math::lltrunc(arg);
          check_trunc_result(arg, ll);

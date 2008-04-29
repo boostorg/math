@@ -67,8 +67,8 @@ public:
    real_concept(unsigned long c) : m_value(c){}
    real_concept(long c) : m_value(c){}
 #if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX) || defined(__SUNPRO_CC)
-   real_concept(unsigned long long c) : m_value(static_cast<real_concept_base_type>(c)){}
-   real_concept(long long c) : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(boost::ulong_long_type c) : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(boost::long_long_type c) : m_value(static_cast<real_concept_base_type>(c)){}
 #elif defined(BOOST_HAS_MS_INT64)
    real_concept(unsigned __int64 c) : m_value(static_cast<real_concept_base_type>(c)){}
    real_concept(__int64 c) : m_value(static_cast<real_concept_base_type>(c)){}
@@ -91,8 +91,8 @@ public:
    real_concept& operator=(long c) { m_value = c; return *this; }
    real_concept& operator=(unsigned long c) { m_value = c; return *this; }
 #ifdef BOOST_HAS_LONG_LONG
-   real_concept& operator=(long long c) { m_value = static_cast<real_concept_base_type>(c); return *this; }
-   real_concept& operator=(unsigned long long c) { m_value = static_cast<real_concept_base_type>(c); return *this; }
+   real_concept& operator=(boost::long_long_type c) { m_value = static_cast<real_concept_base_type>(c); return *this; }
+   real_concept& operator=(boost::ulong_long_type c) { m_value = static_cast<real_concept_base_type>(c); return *this; }
 #endif
    real_concept& operator=(float c) { m_value = c; return *this; }
    real_concept& operator=(double c) { m_value = c; return *this; }
@@ -253,9 +253,9 @@ inline long lround(const concepts::real_concept& v)
 
 #ifdef BOOST_HAS_LONG_LONG
 template <class Policy>
-inline long long llround(const concepts::real_concept& v, const Policy& pol)
+inline boost::long_long_type llround(const concepts::real_concept& v, const Policy& pol)
 { return boost::math::llround(v.value(), pol); }
-inline long long llround(const concepts::real_concept& v)
+inline boost::long_long_type llround(const concepts::real_concept& v)
 { return boost::math::llround(v.value(), policies::policy<>()); }
 #endif
 
@@ -272,9 +272,9 @@ inline long ltrunc(const concepts::real_concept& v)
 
 #ifdef BOOST_HAS_LONG_LONG
 template <class Policy>
-inline long long lltrunc(const concepts::real_concept& v, const Policy& pol)
+inline boost::long_long_type lltrunc(const concepts::real_concept& v, const Policy& pol)
 { return boost::math::lltrunc(v.value(), pol); }
-inline long long lltrunc(const concepts::real_concept& v)
+inline boost::long_long_type lltrunc(const concepts::real_concept& v)
 { return boost::math::lltrunc(v.value(), policies::policy<>()); }
 #endif
 
