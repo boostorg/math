@@ -246,6 +246,7 @@ run test_negative_binomial.cpp
         : # requirements
 	      <define>TEST_REAL_CONCEPT
         : test_negative_binomial_real_concept ;
+run test_next.cpp ;
 run test_nc_chi_squared.cpp  
         : # command line
         : # input files
@@ -444,6 +445,7 @@ compile  compile_test/sf_legendre_incl_test.cpp ;
 compile  compile_test/sf_log1p_incl_test.cpp ;
 compile  compile_test/sf_math_fwd_incl_test.cpp ;
 compile  compile_test/sf_modf_incl_test.cpp ;
+compile  compile_test/sf_next_incl_test.cpp ;
 compile  compile_test/sf_powm1_incl_test.cpp ;
 compile  compile_test/sf_round_incl_test.cpp ;
 compile  compile_test/sf_sign_incl_test.cpp ;
@@ -471,4 +473,5 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_inc_test.cpp ;
+
 

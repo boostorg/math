@@ -41,6 +41,7 @@
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
