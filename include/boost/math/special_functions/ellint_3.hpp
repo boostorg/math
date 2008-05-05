@@ -32,9 +32,6 @@
 
 namespace boost { namespace math { 
    
-template <class T1, class T2, class T3, class Policy>
-typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const Policy& pol);
-   
 namespace detail{
 
 template <typename T, typename Policy>
@@ -314,7 +311,7 @@ inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 ph
 }
 
 template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi)
+typename detail::ellint_3_result<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi)
 {
    typedef typename policies::is_policy<T3>::type tag_type;
    return detail::ellint_3(k, v, phi, tag_type());

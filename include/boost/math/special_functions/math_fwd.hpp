@@ -316,8 +316,23 @@ namespace boost
    template <class T1, class T2, class Policy>
    typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol);
 
+   namespace detail{
+
+   template <class T, class U, class V>
+   struct ellint_3_result
+   {
+      typedef typename mpl::if_<
+         policies::is_policy<V>,
+         typename tools::promote_args<T, U>::type,
+         typename tools::promote_args<T, U, V>::type
+      >::type type;
+   };
+
+   } // namespace detail
+
+
    template <class T1, class T2, class T3>
-   typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi);
+   typename detail::ellint_3_result<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi);
 
    template <class T1, class T2, class T3, class Policy>
    typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const Policy& pol);
@@ -656,6 +671,13 @@ namespace boost
 
    template <class T>
    typename tools::promote_args<T>::type zeta(T s);
+
+   // pow:
+   template <int N, typename T, class Policy>
+   typename tools::promote_args<T>::type pow(T base, const Policy& policy);
+
+   template <int N, typename T>
+   typename tools::promote_args<T>::type pow(T base);
 
    // next:
    template <class T, class Policy>
