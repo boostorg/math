@@ -174,21 +174,23 @@ T float_distance(const T& a, const T& b, const Policy& pol)
    //
    // Special cases:
    //
+   if(a > b)
+      return -float_distance(b, a);
    if(a == b)
       return 0;
    if(a == 0)
-      return 1 + float_distance(boost::math::sign(b) * detail::get_smallest_value<T>(), b, pol);
+      return 1 + fabs(float_distance(boost::math::sign(b) * detail::get_smallest_value<T>(), b, pol));
    if(b == 0)
-      return 1 + float_distance(boost::math::sign(a) * detail::get_smallest_value<T>(), a, pol);
+      return 1 + fabs(float_distance(boost::math::sign(a) * detail::get_smallest_value<T>(), a, pol));
    if(boost::math::sign(a) != boost::math::sign(b))
-      return 2 + float_distance(boost::math::sign(b) * detail::get_smallest_value<T>(), b, pol)
-         + float_distance(boost::math::sign(a) * detail::get_smallest_value<T>(), a, pol);
+      return 2 + fabs(float_distance(boost::math::sign(b) * detail::get_smallest_value<T>(), b, pol))
+         + fabs(float_distance(boost::math::sign(a) * detail::get_smallest_value<T>(), a, pol));
 
    if((std::min)(fabs(a), fabs(b)) / (std::max)(fabs(a), fabs(b)) < 2 * tools::epsilon<T>())
    {
       bool biga = fabs(a) > fabs(b);
       T split = ldexp(biga ? b : a, tools::digits<T>() - 2);
-      return float_distance(a, split, pol) + float_distance(split, b, pol);
+      return fabs(float_distance(a, split, pol) + float_distance(split, b, pol));
    }
 
    BOOST_MATH_STD_USING

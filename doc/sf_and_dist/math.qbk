@@ -388,6 +388,7 @@ printer friendly PDF format].
 [include inv_hyper.qbk]
 [include rounding_func.qbk]
 [include fpclassify.qbk]
+[include float_next.qbk]
 [endsect] [/section:special Special Functions]
 
 [section:toolkit Internal Details and Tools (Experimental)]

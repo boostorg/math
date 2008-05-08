@@ -8,6 +8,10 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/next.hpp>
 
+#ifdef BOOST_MSVC
+#pragma warning(disable:4127)
+#endif
+
 template <class T>
 void test_value(const T& val, const char* name)
 {
@@ -17,15 +21,15 @@ void test_value(const T& val, const char* name)
 
    std::cout << "Testing type " << name << " with initial value " << val << std::endl;
 
-   BOOST_CHECK_EQUAL(float_distance(float_next(val), val), 1);
+   BOOST_CHECK_EQUAL(float_distance(float_next(val), val), -1);
    BOOST_CHECK(float_next(val) > val);
    BOOST_CHECK_EQUAL(float_distance(float_prior(val), val), 1);
    BOOST_CHECK(float_prior(val) < val);
-   BOOST_CHECK_EQUAL(float_distance(nextafter(val, upper), val), 1);
+   BOOST_CHECK_EQUAL(float_distance(nextafter(val, upper), val), -1);
    BOOST_CHECK(nextafter(val, upper) > val);
    BOOST_CHECK_EQUAL(float_distance(nextafter(val, lower), val), 1);
    BOOST_CHECK(nextafter(val, lower) < val);
-   BOOST_CHECK_EQUAL(float_distance(float_next(float_next(val)), val), 2);
+   BOOST_CHECK_EQUAL(float_distance(float_next(float_next(val)), val), -2);
    BOOST_CHECK_EQUAL(float_distance(float_prior(float_prior(val)), val), 2);
    BOOST_CHECK_EQUAL(float_distance(float_prior(float_next(val)), val), 0);
    BOOST_CHECK_EQUAL(float_distance(float_next(float_prior(val)), val), 0);
@@ -64,7 +68,7 @@ void test_values(const T& val, const char* name)
       test_value(-2 * std::numeric_limits<T>::denorm_min(), name);
    }
 
-   static const unsigned primes[] = {
+   static const int primes[] = {
       11,     13,     17,     19,     23,     29, 
       31,     37,     41,     43,     47,     53,     59,     61,     67,     71, 
       73,     79,     83,     89,     97,    101,    103,    107,    109,    113, 
@@ -80,12 +84,12 @@ void test_values(const T& val, const char* name)
    {
       T v1 = val;
       T v2 = val;
-      for(unsigned j = 0; j < primes[i]; ++j)
+      for(int j = 0; j < primes[i]; ++j)
       {
          v1 = boost::math::float_next(v1);
          v2 = boost::math::float_prior(v2);
       }
-      BOOST_CHECK_EQUAL(boost::math::float_distance(v1, val), primes[i]);
+      BOOST_CHECK_EQUAL(boost::math::float_distance(v1, val), -primes[i]);
       BOOST_CHECK_EQUAL(boost::math::float_distance(v2, val), primes[i]);
    }
 }

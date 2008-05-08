@@ -17,6 +17,7 @@ namespace tr1 = boost::math::tr1;
 
 void test_values(float, const char* name)
 {
+   std::cout << "Testing type " << name << std::endl;
    //
    // First the C99 math functions:
    //
@@ -648,6 +649,8 @@ void test_values(float, const char* name)
 
 void test_values(double, const char* name)
 {
+   std::cout << "Testing type " << name << std::endl;
+
    double eps = boost::math::tools::epsilon<double>();
    BOOST_CHECK_CLOSE(tr1::acosh(std::cosh(0.5)), 0.5, 500 * eps);
    BOOST_CHECK_CLOSE(tr1::asinh(std::sinh(0.5)), 0.5, 500 * eps);
@@ -964,6 +967,8 @@ void test_values(double, const char* name)
 
 void test_values(long double, const char* name)
 {
+   std::cout << "Testing type " << name << std::endl;
+
    long double eps = boost::math::tools::epsilon<long double>();
    BOOST_CHECK_CLOSE(tr1::acoshl(std::cosh(0.5L)), 0.5L, 5000 * eps);
    BOOST_CHECK_CLOSE(tr1::asinhl(std::sinh(0.5L)), 0.5L, 5000 * eps);

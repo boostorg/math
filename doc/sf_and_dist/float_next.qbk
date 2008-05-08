@@ -1,0 +1,118 @@
+[section:next_float Floating Point Representation Distance (ULP), 
+   and Moving Between Adjacent Floating Point Values]
+   
+[section:nextafter Moving to the Next Representable Value in 
+   a Specific Direction (nextafter)]
+   
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/next.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T nextafter(T val, T direction);
+   
+   }} // namespaces
+
+[h4 Description]
+
+This is an implementation of the `nextafter` function included in the C99 standard.
+
+Returns the next representable value after /x/ in the direction of /y/.  If
+`x == y` then returns /x/.  If /x/ is non-finite then returns the result of
+a __domain_error.  If there is no such value in the direction of /y/ then
+returns an __overflow_error.
+
+[endsect]
+
+[section:float_next Moving to the Next Greater Representable Value]
+   
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/next.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T float_next(T val);
+   
+   }} // namespaces
+
+[h4 Description]
+
+Returns the next representable value which is greater than /x/.  
+If /x/ is non-finite then returns the result of
+a __domain_error.  If there is no such value greater than /x/ then
+returns an __overflow_error.
+
+[endsect]
+
+[section:float_prior Moving to the Next Smaller Representable Value]
+   
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/next.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T float_prior(T val);
+   
+   }} // namespaces
+
+[h4 Description]
+
+Returns the next representable value which is less than /x/.  
+If /x/ is non-finite then returns the result of
+a __domain_error.  If there is no such value less than /x/ then
+returns an __overflow_error.
+
+[endsect]
+
+[section:float_distance Calculating the Representation Distance
+   Between Two Floating Point Values (ULP)]
+   
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/next.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class T>
+   T float_distance(T a, T b);
+   
+   }} // namespaces
+
+[h4 Description]
+
+Returns the distance between /a/ and /b/: the result is always an integer
+representing the number of distinct representations between /a/ and /b/.
+
+Note that `float_distance(a, a)` always returns 0,
+`float_distance(float_next(a), a)` always returns 1, and.
+`float_distance(float_prior(a), a)` always returns -1.
+
+The function `float_distance` is equivalent to calculating the number
+of ULP (Units in the Last Place) between /a/ and /b/ except that it 
+returns a signed value indicating whether `a > b` or not.
+
+[endsect]
+
+[endsect]
+
+[/ 
+  Copyright 2008 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
