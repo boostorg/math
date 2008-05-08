@@ -386,6 +386,15 @@ run test_policy.cpp ;
 run test_policy_2.cpp ;
 run test_policy_sf.cpp ;
 
+run test_tr1.cpp
+   ../build//boost_math_tr1
+   ../build//boost_math_tr1f
+   ../build//boost_math_tr1l 
+   ../build//boost_math_c99
+   ../build//boost_math_c99f
+   ../build//boost_math_c99l 
+   ;
+
 compile  compile_test/compl_abs_incl_test.cpp ;
 compile  compile_test/compl_acos_incl_test.cpp ;
 compile  compile_test/compl_acosh_incl_test.cpp ;
