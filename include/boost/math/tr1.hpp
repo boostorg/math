@@ -39,6 +39,60 @@ namespace boost{ namespace math{ namespace tr1{ extern "C"{
 #define BOOST_MATH_TR1_DECL
 #endif
 
+//
+// Now set up the libraries to link against:
+//
+#if !defined(BOOST_MATH_TR1_NO_LIB) && !defined(BOOST_MATH_TR1_SOURCE) \
+   && !defined(BOOST_ALL_NO_LIB) && defined(__cplusplus)
+#  define BOOST_LIB_NAME boost_math_c99
+#  if defined(BOOST_MATH_TR1_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)
+#     define BOOST_DYN_LINK
+#  endif
+#  include <boost/config/auto_link.hpp>
+#endif
+#if !defined(BOOST_MATH_TR1_NO_LIB) && !defined(BOOST_MATH_TR1_SOURCE) \
+   && !defined(BOOST_ALL_NO_LIB) && defined(__cplusplus)
+#  define BOOST_LIB_NAME boost_math_c99f
+#  if defined(BOOST_MATH_TR1_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)
+#     define BOOST_DYN_LINK
+#  endif
+#  include <boost/config/auto_link.hpp>
+#endif
+#if !defined(BOOST_MATH_TR1_NO_LIB) && !defined(BOOST_MATH_TR1_SOURCE) \
+   && !defined(BOOST_ALL_NO_LIB) && defined(__cplusplus) \
+   && !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
+#  define BOOST_LIB_NAME boost_math_c99l
+#  if defined(BOOST_MATH_TR1_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)
+#     define BOOST_DYN_LINK
+#  endif
+#  include <boost/config/auto_link.hpp>
+#endif
+#if !defined(BOOST_MATH_TR1_NO_LIB) && !defined(BOOST_MATH_TR1_SOURCE) \
+   && !defined(BOOST_ALL_NO_LIB) && defined(__cplusplus)
+#  define BOOST_LIB_NAME boost_math_tr1
+#  if defined(BOOST_MATH_TR1_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)
+#     define BOOST_DYN_LINK
+#  endif
+#  include <boost/config/auto_link.hpp>
+#endif
+#if !defined(BOOST_MATH_TR1_NO_LIB) && !defined(BOOST_MATH_TR1_SOURCE) \
+   && !defined(BOOST_ALL_NO_LIB) && defined(__cplusplus)
+#  define BOOST_LIB_NAME boost_math_tr1f
+#  if defined(BOOST_MATH_TR1_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)
+#     define BOOST_DYN_LINK
+#  endif
+#  include <boost/config/auto_link.hpp>
+#endif
+#if !defined(BOOST_MATH_TR1_NO_LIB) && !defined(BOOST_MATH_TR1_SOURCE) \
+   && !defined(BOOST_ALL_NO_LIB) && defined(__cplusplus) \
+   && !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
+#  define BOOST_LIB_NAME boost_math_tr1l
+#  if defined(BOOST_MATH_TR1_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)
+#     define BOOST_DYN_LINK
+#  endif
+#  include <boost/config/auto_link.hpp>
+#endif
+
 #ifndef FLT_EVAL_METHOD
 typedef float float_t;
 typedef double double_t;
@@ -532,37 +586,37 @@ inline typename tools::promote_args<T>::type trunc(T x)
 
 # define NO_MACRO_EXPAND /**/
 // C99 macros defined as C++ templates
-template<class T> bool BOOST_MATH_TR1_DECL signbit NO_MACRO_EXPAND(T x)
+template<class T> bool signbit NO_MACRO_EXPAND(T x)
 { BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
 template<> bool BOOST_MATH_TR1_DECL signbit<float> NO_MACRO_EXPAND(float x);
 template<> bool BOOST_MATH_TR1_DECL signbit<double> NO_MACRO_EXPAND(double x);
 template<> bool BOOST_MATH_TR1_DECL signbit<long double> NO_MACRO_EXPAND(long double x);
 
-template<class T> int BOOST_MATH_TR1_DECL fpclassify NO_MACRO_EXPAND(T x)
+template<class T> int fpclassify NO_MACRO_EXPAND(T x)
 { BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
 template<> int BOOST_MATH_TR1_DECL fpclassify<float> NO_MACRO_EXPAND(float x);
 template<> int BOOST_MATH_TR1_DECL fpclassify<double> NO_MACRO_EXPAND(double x);
 template<> int BOOST_MATH_TR1_DECL fpclassify<long double> NO_MACRO_EXPAND(long double x);
 
-template<class T> bool BOOST_MATH_TR1_DECL isfinite NO_MACRO_EXPAND(T x)
+template<class T> bool isfinite NO_MACRO_EXPAND(T x)
 { BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
 template<> bool BOOST_MATH_TR1_DECL isfinite<float> NO_MACRO_EXPAND(float x);
 template<> bool BOOST_MATH_TR1_DECL isfinite<double> NO_MACRO_EXPAND(double x);
 template<> bool BOOST_MATH_TR1_DECL isfinite<long double> NO_MACRO_EXPAND(long double x);
 
-template<class T> bool BOOST_MATH_TR1_DECL isinf NO_MACRO_EXPAND(T x)
+template<class T> bool isinf NO_MACRO_EXPAND(T x)
 { BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
 template<> bool BOOST_MATH_TR1_DECL isinf<float> NO_MACRO_EXPAND(float x);
 template<> bool BOOST_MATH_TR1_DECL isinf<double> NO_MACRO_EXPAND(double x);
 template<> bool BOOST_MATH_TR1_DECL isinf<long double> NO_MACRO_EXPAND(long double x);
 
-template<class T> bool BOOST_MATH_TR1_DECL isnan NO_MACRO_EXPAND(T x)
+template<class T> bool isnan NO_MACRO_EXPAND(T x)
 { BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
 template<> bool BOOST_MATH_TR1_DECL isnan<float> NO_MACRO_EXPAND(float x);
 template<> bool BOOST_MATH_TR1_DECL isnan<double> NO_MACRO_EXPAND(double x);
 template<> bool BOOST_MATH_TR1_DECL isnan<long double> NO_MACRO_EXPAND(long double x);
 
-template<class T> bool BOOST_MATH_TR1_DECL isnormal NO_MACRO_EXPAND(T x)
+template<class T> bool isnormal NO_MACRO_EXPAND(T x)
 { BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
 template<> bool BOOST_MATH_TR1_DECL isnormal<float> NO_MACRO_EXPAND(float x);
 template<> bool BOOST_MATH_TR1_DECL isnormal<double> NO_MACRO_EXPAND(double x);
