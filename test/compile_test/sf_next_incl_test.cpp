@@ -21,22 +21,22 @@ void check()
    check_result<long double>(boost::math::nextafter<long double>(l, l));
 #endif
 
-   check_result<float>(boost::math::next_greater<float>(f));
-   check_result<double>(boost::math::next_greater<double>(d));
+   check_result<float>(boost::math::float_next<float>(f));
+   check_result<double>(boost::math::float_next<double>(d));
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   check_result<long double>(boost::math::next_greater<long double>(l));
+   check_result<long double>(boost::math::float_next<long double>(l));
 #endif
 
-   check_result<float>(boost::math::next_less<float>(f));
-   check_result<double>(boost::math::next_less<double>(d));
+   check_result<float>(boost::math::float_prior<float>(f));
+   check_result<double>(boost::math::float_prior<double>(d));
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   check_result<long double>(boost::math::next_less<long double>(l));
+   check_result<long double>(boost::math::float_prior<long double>(l));
 #endif
 
-   check_result<float>(boost::math::edit_distance<float>(f, f));
-   check_result<double>(boost::math::edit_distance<double>(d, d));
+   check_result<float>(boost::math::float_distance<float>(f, f));
+   check_result<double>(boost::math::float_distance<double>(d, d));
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   check_result<long double>(boost::math::edit_distance<long double>(l, l));
+   check_result<long double>(boost::math::float_distance<long double>(l, l));
 #endif
 
 }

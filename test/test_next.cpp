@@ -17,20 +17,20 @@ void test_value(const T& val, const char* name)
 
    std::cout << "Testing type " << name << " with initial value " << val << std::endl;
 
-   BOOST_CHECK_EQUAL(edit_distance(next_greater(val), val), 1);
-   BOOST_CHECK(next_greater(val) > val);
-   BOOST_CHECK_EQUAL(edit_distance(next_less(val), val), 1);
-   BOOST_CHECK(next_less(val) < val);
-   BOOST_CHECK_EQUAL(edit_distance(nextafter(val, upper), val), 1);
+   BOOST_CHECK_EQUAL(float_distance(float_next(val), val), 1);
+   BOOST_CHECK(float_next(val) > val);
+   BOOST_CHECK_EQUAL(float_distance(float_prior(val), val), 1);
+   BOOST_CHECK(float_prior(val) < val);
+   BOOST_CHECK_EQUAL(float_distance(nextafter(val, upper), val), 1);
    BOOST_CHECK(nextafter(val, upper) > val);
-   BOOST_CHECK_EQUAL(edit_distance(nextafter(val, lower), val), 1);
+   BOOST_CHECK_EQUAL(float_distance(nextafter(val, lower), val), 1);
    BOOST_CHECK(nextafter(val, lower) < val);
-   BOOST_CHECK_EQUAL(edit_distance(next_greater(next_greater(val)), val), 2);
-   BOOST_CHECK_EQUAL(edit_distance(next_less(next_less(val)), val), 2);
-   BOOST_CHECK_EQUAL(edit_distance(next_less(next_greater(val)), val), 0);
-   BOOST_CHECK_EQUAL(edit_distance(next_greater(next_less(val)), val), 0);
-   BOOST_CHECK_EQUAL(next_less(next_greater(val)), val);
-   BOOST_CHECK_EQUAL(next_greater(next_less(val)), val);
+   BOOST_CHECK_EQUAL(float_distance(float_next(float_next(val)), val), 2);
+   BOOST_CHECK_EQUAL(float_distance(float_prior(float_prior(val)), val), 2);
+   BOOST_CHECK_EQUAL(float_distance(float_prior(float_next(val)), val), 0);
+   BOOST_CHECK_EQUAL(float_distance(float_next(float_prior(val)), val), 0);
+   BOOST_CHECK_EQUAL(float_prior(float_next(val)), val);
+   BOOST_CHECK_EQUAL(float_next(float_prior(val)), val);
 }
 
 template <class T>
@@ -82,17 +82,17 @@ void test_values(const T& val, const char* name)
       T v2 = val;
       for(unsigned j = 0; j < primes[i]; ++j)
       {
-         v1 = boost::math::next_greater(v1);
-         v2 = boost::math::next_less(v2);
+         v1 = boost::math::float_next(v1);
+         v2 = boost::math::float_prior(v2);
       }
-      BOOST_CHECK_EQUAL(boost::math::edit_distance(v1, val), primes[i]);
-      BOOST_CHECK_EQUAL(boost::math::edit_distance(v2, val), primes[i]);
+      BOOST_CHECK_EQUAL(boost::math::float_distance(v1, val), primes[i]);
+      BOOST_CHECK_EQUAL(boost::math::float_distance(v2, val), primes[i]);
    }
 }
 
 int test_main(int, char* [])
 {
-   std::cout << boost::math::edit_distance(1.0, 0.0) << std::endl;
+   std::cout << boost::math::float_distance(1.0, 0.0) << std::endl;
    test_values(1.0f, "float");
    test_values(1.0, "double");
    test_values(1.0L, "long double");

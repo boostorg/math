@@ -43,11 +43,11 @@ inline T get_smallest_value()
 }
 
 template <class T, class Policy>
-T next_greater(const T& val, const Policy& pol)
+T float_next(const T& val, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    int expon;
-   static const char* function = "next_greater<%1%>(%1%)";
+   static const char* function = "float_next<%1%>(%1%)";
 
    if(!(boost::math::isfinite)(val))
       return policies::raise_domain_error<T>(
@@ -70,9 +70,9 @@ T next_greater(const T& val, const Policy& pol)
 
 #ifdef BOOST_MSVC
 template <class Policy>
-inline double next_greater(const double& val, const Policy& pol)
+inline double float_next(const double& val, const Policy& pol)
 {
-   static const char* function = "next_greater<%1%>(%1%)";
+   static const char* function = "float_next<%1%>(%1%)";
 
    if(!(boost::math::isfinite)(val))
       return policies::raise_domain_error<double>(
@@ -87,17 +87,17 @@ inline double next_greater(const double& val, const Policy& pol)
 #endif
 
 template <class T>
-inline T next_greater(const T& val)
+inline T float_next(const T& val)
 {
-   return next_greater(val, policies::policy<>());
+   return float_next(val, policies::policy<>());
 }
 
 template <class T, class Policy>
-T next_less(const T& val, const Policy& pol)
+T float_prior(const T& val, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    int expon;
-   static const char* function = "next_less<%1%>(%1%)";
+   static const char* function = "float_prior<%1%>(%1%)";
 
    if(!(boost::math::isfinite)(val))
       return policies::raise_domain_error<T>(
@@ -121,9 +121,9 @@ T next_less(const T& val, const Policy& pol)
 
 #ifdef BOOST_MSVC
 template <class Policy>
-inline double next_less(const double& val, const Policy& pol)
+inline double float_prior(const double& val, const Policy& pol)
 {
-   static const char* function = "next_less<%1%>(%1%)";
+   static const char* function = "float_prior<%1%>(%1%)";
 
    if(!(boost::math::isfinite)(val))
       return policies::raise_domain_error<double>(
@@ -138,15 +138,15 @@ inline double next_less(const double& val, const Policy& pol)
 #endif
 
 template <class T>
-inline T next_less(const T& val)
+inline T float_prior(const T& val)
 {
-   return next_less(val, policies::policy<>());
+   return float_prior(val, policies::policy<>());
 }
 
 template <class T, class Policy>
 inline T nextafter(const T& val, const T& direction, const Policy& pol)
 {
-   return val < direction ? boost::math::next_greater(val, pol) : val == direction ? val : boost::math::next_less(val, pol);
+   return val < direction ? boost::math::float_next(val, pol) : val == direction ? val : boost::math::float_prior(val, pol);
 }
 
 template <class T>
@@ -156,13 +156,13 @@ inline T nextafter(const T& val, const T& direction)
 }
 
 template <class T, class Policy>
-T edit_distance(const T& a, const T& b, const Policy& pol)
+T float_distance(const T& a, const T& b, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
    // Error handling:
    //
-   static const char* function = "edit_distance<%1%>(%1%, %1%)";
+   static const char* function = "float_distance<%1%>(%1%, %1%)";
    if(!(boost::math::isfinite)(a))
       return policies::raise_domain_error<T>(
          function,
@@ -177,18 +177,18 @@ T edit_distance(const T& a, const T& b, const Policy& pol)
    if(a == b)
       return 0;
    if(a == 0)
-      return 1 + edit_distance(boost::math::sign(b) * detail::get_smallest_value<T>(), b, pol);
+      return 1 + float_distance(boost::math::sign(b) * detail::get_smallest_value<T>(), b, pol);
    if(b == 0)
-      return 1 + edit_distance(boost::math::sign(a) * detail::get_smallest_value<T>(), a, pol);
+      return 1 + float_distance(boost::math::sign(a) * detail::get_smallest_value<T>(), a, pol);
    if(boost::math::sign(a) != boost::math::sign(b))
-      return 2 + edit_distance(boost::math::sign(b) * detail::get_smallest_value<T>(), b, pol)
-         + edit_distance(boost::math::sign(a) * detail::get_smallest_value<T>(), a, pol);
+      return 2 + float_distance(boost::math::sign(b) * detail::get_smallest_value<T>(), b, pol)
+         + float_distance(boost::math::sign(a) * detail::get_smallest_value<T>(), a, pol);
 
    if((std::min)(fabs(a), fabs(b)) / (std::max)(fabs(a), fabs(b)) < 2 * tools::epsilon<T>())
    {
       bool biga = fabs(a) > fabs(b);
       T split = ldexp(biga ? b : a, tools::digits<T>() - 2);
-      return edit_distance(a, split, pol) + edit_distance(split, b, pol);
+      return float_distance(a, split, pol) + float_distance(split, b, pol);
    }
 
    BOOST_MATH_STD_USING
@@ -229,9 +229,9 @@ T edit_distance(const T& a, const T& b, const Policy& pol)
 }
 
 template <class T>
-T edit_distance(const T& a, const T& b)
+T float_distance(const T& a, const T& b)
 {
-   return boost::math::edit_distance(a, b, policies::policy<>());
+   return boost::math::float_distance(a, b, policies::policy<>());
 }
 
 }} // namespaces

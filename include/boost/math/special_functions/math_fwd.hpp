@@ -685,17 +685,17 @@ namespace boost
    template <class T>
    T nextafter(const T&, const T&);
    template <class T, class Policy>
-   T next_greater(const T&, const Policy&);
+   T float_next(const T&, const Policy&);
    template <class T>
-   T next_greater(const T&);
+   T float_next(const T&);
    template <class T, class Policy>
-   T next_less(const T&, const Policy&);
+   T float_prior(const T&, const Policy&);
    template <class T>
-   T next_less(const T&);
+   T float_prior(const T&);
    template <class T, class Policy>
-   T edit_distance(const T&, const T&, const Policy&);
+   T float_distance(const T&, const T&, const Policy&);
    template <class T>
-   T edit_distance(const T&, const T&);
+   T float_distance(const T&, const T&);
 
     } // namespace math
 } // namespace boost
@@ -1044,9 +1044,9 @@ namespace boost
    template <int N, class T>\
    inline typename boost::math::tools::promote_args<T>::type pow(T v){ return boost::math::pow<N>(v, Policy()); }\
    template <class T> T nextafter(const T& a, const T& b){ return boost::math::nextafter(a, b, Policy()); }\
-   template <class T> T next_greater(const T& a){ return boost::math::next_greater(a, Policy()); }\
-   template <class T> T next_less(const T& a){ return boost::math::next_less(a, Policy()); }\
-   template <class T> T edit_distance(const T& a, const T& b){ return boost::math::edit_distance(a, b, Policy()); }\
+   template <class T> T float_next(const T& a){ return boost::math::float_next(a, Policy()); }\
+   template <class T> T float_prior(const T& a){ return boost::math::float_prior(a, Policy()); }\
+   template <class T> T float_distance(const T& a, const T& b){ return boost::math::float_distance(a, b, Policy()); }\
 
 
 #endif // BOOST_MATH_SPECIAL_MATH_FWD_HPP

@@ -247,9 +247,9 @@ void instantiate(RealType)
 #endif
    boost::math::pow<2>(v1);
    boost::math::nextafter(v1, v1);
-   boost::math::next_greater(v1);
-   boost::math::next_less(v1);
-   boost::math::edit_distance(v1, v1);
+   boost::math::float_next(v1);
+   boost::math::float_prior(v1);
+   boost::math::float_distance(v1, v1);
    //
    // All over again, with a policy this time:
    //
@@ -373,9 +373,9 @@ void instantiate(RealType)
 #endif
    boost::math::pow<2>(v1, pol);
    boost::math::nextafter(v1, v1, pol);
-   boost::math::next_greater(v1, pol);
-   boost::math::next_less(v1, pol);
-   boost::math::edit_distance(v1, v1, pol);
+   boost::math::float_next(v1, pol);
+   boost::math::float_prior(v1, pol);
+   boost::math::float_distance(v1, v1, pol);
    //
    // All over again with the versions in test::
    //
@@ -492,9 +492,9 @@ void instantiate(RealType)
 #endif
    test::pow<2>(v1);
    test::nextafter(v1, v1);
-   test::next_greater(v1);
-   test::next_less(v1);
-   test::edit_distance(v1, v1);
+   test::float_next(v1);
+   test::float_prior(v1);
+   test::float_distance(v1, v1);
 }
 
 template <class RealType>
