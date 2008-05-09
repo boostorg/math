@@ -322,6 +322,7 @@ printer friendly PDF format].
 [section:history1 History and What's New]
 [history]
 [endsect]
+[include tr1.qbk]
 [include contact_info.qbk]
 
 [endsect] [/section:main_overview Overview]
