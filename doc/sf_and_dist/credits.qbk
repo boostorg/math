@@ -20,6 +20,8 @@ remaining editorial mistakes are his fault).
 Xiaogang Zhang worked on the Bessel functions and elliptic integrals for his
 Google Summer of Code project 2006.
 
+Bruno Lalande submitted the "compile time power of a runtime base" code.
+
 Professor Nico Temme for advice on the inverse incomplete beta function.
 
 [@http://www.shoup.net Victor Shoup for NTL], 
@@ -58,3 +60,4 @@ Arnaldur Gylfason, John Phillips, Stephan Tolksdorf and Jeff Garland
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+

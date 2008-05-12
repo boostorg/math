@@ -1,5 +1,4 @@
-[section:tr1 C99 and TR1 C Functions]
-
+[template tr1_overview[]
 Many of the special functions included in this library are also a part
 of the either the C99 standard or the [tr1].  Therefore this library
 includes a thin wrapper header `boost/math/tr1.hpp` that provides
@@ -20,6 +19,10 @@ Cons:
 * Error handling is handled via setting ::errno and returning NaN's and 
 infinities: this may be less flexible than an C++ exception based approach.
 
+[note The separate libraries are required *only* if you choose to use
+boost/math/tr1.hpp rather than some other Boost.Math header, the rest
+of Boost.Math remains header-only.]
+
 The separate libraries required in order to use tr1.hpp can be compiled 
 using bjam from within the libs/math/build directory, or from the Boost 
 root directory using the usual Boost-wide install procedure.  
@@ -38,18 +41,60 @@ named as follows:
 ]
 
 Where `<suffix>` encodes the compiler and build options used to 
-build the libraries.
+build the libraries: for example "libboost_math_tr1-vc80-mt-gd.lib"
+would be the statically linked TR1 library to use with Visual C++ 8.0, 
+in multithreading debug mode, with the DLL VC++ runtime, where as
+"boost_math_tr1-vc80-mt.lib" would be import library for the TR1 DLL
+to be used with Visual C++ 8.0 with the release multithreaded DLL
+VC++ runtime.
+Refer to the getting started guide for a 
+[@http://www.boost.org/doc/libs/1_35_0/more/getting_started/windows.html#library-naming 
+full explanation of the `<suffix>` meanings].
 
 [note
-Visual C++ users will need to define BOOST_MATH_TR1_DYN_LINK when building
-their code if they want to link against the DLL versions of these libraries
-rather than the static versions.]
+Visual C++ users will typically have the correct library variant to link 
+against selected for them by boost/math/tr1.hpp based on your compiler
+settings.
 
-There is no detailed documentation for these functions as that is 
-available elsewhere - for example as part of the relevant standards, 
-or in the [link math_toolkit.special special functions chapter] 
-of this documentation.  The
-following synopsis lists the functions that are currently supported:
+Users will need to define BOOST_MATH_TR1_DYN_LINK when building
+their code if they want to link against the DLL versions of these libraries
+rather than the static versions.
+
+Users can disable auto-linking by defining BOOST_MATH_TR1_NO_LIB when 
+building: this is typically only used when linking against a customised 
+build of the libraries.]
+
+[note Linux and Unix users will generally only have one variant of 
+these libraries installed, and can generally just link against
+-lboost_math_tr1 etc.]
+
+[h4 Usage Recomendations]
+
+This library now presents the user with a choice:
+
+* To include the header only versions of the functions and have
+an easier time linking, but a longer compile time.
+* To include the TR1 headers and link against an external library.
+
+Which option you choose depends largely on how you prefer to work
+and how your system is set up.
+
+For example a casual user who just needs the acosh function, would 
+probably be better off including `<boost/math/special_functions/acosh.hpp>`
+and using `boost::math::acosh(x)` in their code.  
+
+However, for large scale
+software development where compile times are significant, and where the
+Boost libraries are already built and installed on the system, then
+including `<boost/math/tr1.hpp>` and using `boost::math::tr1::acosh(x)`
+will speed up compile times, reduce object files sizes (since there are 
+no templates being instantiated any more), and also speed up debugging 
+runtimes - since the externally compiled libraries can be 
+compiler optimised, rather than built using full settings - the difference
+in performance between 
+[link math_toolkit.perf.getting_best 
+release and debug builds can be as much as 20 times],
+so for complex applications this can be a big win.
 
 [h4 Supported C99 Functions]
 
@@ -334,7 +379,7 @@ return type determined by the __arg_pomotion_rules.
    long double x);
 
 
-[endsect]
+]
 
 [/ 
   Copyright 2008 John Maddock and Paul A. Bristow.

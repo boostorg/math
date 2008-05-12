@@ -34,6 +34,7 @@
 [include html4_symbols.qbk] [/ just for testing]
 [/include latin1_symbols.qbk] [/ just for testing]
 [include common_overviews.qbk] [/ overviews that appear in more than one place!]
+[include tr1.qbk] [/tr1 docs also appear in more than one place!]
 [include roadmap.qbk] [/ for history]
 
 [def __effects [*Effects: ]]
@@ -183,9 +184,19 @@ and use the function's name as the link text]
 
 [/rounding]
 [def __round [link math_toolkit.special.rounding.round round]]
+[def __lround [link math_toolkit.special.rounding.round round]]
+[def __llround [link math_toolkit.special.rounding.round round]]
 [def __trunc [link math_toolkit.special.rounding.trunc trunc]]
 [def __modf [link math_toolkit.special.rounding.modf modf]]
 
+[/polynomials]
+[def __laguerre [link math_toolkit.special.sf_poly.laguerre laguerre]]
+[def __legendre [link math_toolkit.special.sf_poly.legendre legendre_p]]
+[def __hermite [link math_toolkit.special.sf_poly.hermite hermite]]
+
+[/Misc]
+[def __expint [link math_toolkit.special.expint.expint_i expint]]
+[def __spherical_harmonic [link math_toolkit.special.sf_poly.sph_harm spherical_harmonic]]
 
 
 
@@ -322,7 +333,9 @@ printer friendly PDF format].
 [section:history1 History and What's New]
 [history]
 [endsect]
-[include tr1.qbk]
+[section:tr1 C99 and TR1 C Functions]
+[tr1_overview]
+[endsect]
 [include contact_info.qbk]
 
 [endsect] [/section:main_overview Overview]
@@ -390,6 +403,15 @@ printer friendly PDF format].
 [include rounding_func.qbk]
 [include fpclassify.qbk]
 [include float_next.qbk]
+
+[section:extern_c TR1 and C99 external "C" Functions]
+[section:tr1 C99 and TR1 C Functions Overview]
+[tr1_overview]
+[endsect]
+[include c99_ref.qbk]
+[include tr1_ref.qbk]
+[endsect]
+
 [endsect] [/section:special Special Functions]
 
 [section:toolkit Internal Details and Tools (Experimental)]

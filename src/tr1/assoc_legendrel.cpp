@@ -10,5 +10,5 @@
 
 extern "C" long double BOOST_MATH_TR1_DECL assoc_legendrel(unsigned l, unsigned m, long double x)
 {
-   return c_policies::legendre_p(l, m, x);
+   return (m&1 ? -1 : 1) * c_policies::legendre_p(l, m, x);
 }

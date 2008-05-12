@@ -10,5 +10,5 @@
 
 extern "C" float BOOST_MATH_TR1_DECL assoc_legendref(unsigned l, unsigned m, float x)
 {
-   return c_policies::legendre_p(l, m, x);
+   return (m&1 ? -1 : 1) * c_policies::legendre_p(l, m, x);
 }

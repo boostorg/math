@@ -161,7 +161,7 @@ Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
   template <class T>
   ``__sf_result`` ellint_2(T k, const ``__Policy``&);
   
-Returns the complete elliptic integral of the first kind ['E(k)]:
+Returns the complete elliptic integral of the second kind ['E(k)]:
 
 [equation ellint7]
 
