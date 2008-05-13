@@ -49,11 +49,11 @@ returns an __overflow_error.
 
 [h4 Examples - nextafter]
 
-The two representations using a 32-bit float either side of unity are given by
+The two representations using a 32-bit float either side of unity are:
 ``
-The nearest & exact representation of 1.F is 1.10000000
-nextafter(1.F, 999) is                       1.00000012
-nextafter(1/f, -999) is                      0.99999994
+The nearest (exact) representation of 1.F is      1.00000000
+nextafter(1.F, 999) is                            1.00000012
+nextafter(1/f, -999) is                           0.99999994
 
 The nearest (not exact) representation of 0.1F is 0.100000001
 nextafter(0.1F, 10) is                            0.100000009
