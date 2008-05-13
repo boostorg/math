@@ -31,6 +31,7 @@ void test_value(const T& val, const char* name)
    BOOST_CHECK(nextafter(val, lower) < val);
    BOOST_CHECK_EQUAL(float_distance(float_next(float_next(val)), val), -2);
    BOOST_CHECK_EQUAL(float_distance(float_prior(float_prior(val)), val), 2);
+   BOOST_CHECK_EQUAL(float_distance(float_prior(float_prior(val)), float_next(float_next(val))), 4);
    BOOST_CHECK_EQUAL(float_distance(float_prior(float_next(val)), val), 0);
    BOOST_CHECK_EQUAL(float_distance(float_next(float_prior(val)), val), 0);
    BOOST_CHECK_EQUAL(float_prior(float_next(val)), val);
@@ -96,7 +97,6 @@ void test_values(const T& val, const char* name)
 
 int test_main(int, char* [])
 {
-   std::cout << boost::math::float_distance(1.0, 0.0) << std::endl;
    test_values(1.0f, "float");
    test_values(1.0, "double");
    test_values(1.0L, "long double");

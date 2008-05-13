@@ -185,34 +185,40 @@ T float_distance(const T& a, const T& b, const Policy& pol)
    if(boost::math::sign(a) != boost::math::sign(b))
       return 2 + fabs(float_distance(boost::math::sign(b) * detail::get_smallest_value<T>(), b, pol))
          + fabs(float_distance(boost::math::sign(a) * detail::get_smallest_value<T>(), a, pol));
+   //
+   // By the time we get here, both a and b must have the same sign, we want
+   // b > a and both postive for the following logic:
+   //
+   if(a < 0)
+      return float_distance(-b, -a);
 
-   if((std::min)(fabs(a), fabs(b)) / (std::max)(fabs(a), fabs(b)) < 2 * tools::epsilon<T>())
-   {
-      bool biga = fabs(a) > fabs(b);
-      T split = ldexp(biga ? b : a, tools::digits<T>() - 2);
-      return fabs(float_distance(a, split, pol) + float_distance(split, b, pol));
-   }
+   BOOST_ASSERT(a >= 0);
+   BOOST_ASSERT(b >= a);
 
    BOOST_MATH_STD_USING
    int expon;
    //
-   // We're going to left shift the result by the exponent of the 
-   // smaller of the two values (irrespective of sign):
-   //
-   T mv = (std::min)(fabs(a), fabs(b));
-   //
-   // Note that if mv is a denorm then the usual formula fails
+   // Note that if a is a denorm then the usual formula fails
    // because we actually have fewer than tools::digits<T>()
    // significant bits in the representation:
    //
-   frexp((boost::math::fpclassify(mv) == FP_SUBNORMAL) ? tools::min_value<T>() : mv, &expon);
+   frexp((boost::math::fpclassify(a) == FP_SUBNORMAL) ? tools::min_value<T>() : a, &expon);
+   T upper = ldexp(T(1), expon);
+   T result = 0;
    expon = tools::digits<T>() - expon;
    //
-   // Use compensated double-double addition to avoid rounding 
-   // errors in the subtraction, note this will still fail if
-   // the two values differ by many orders of magnitute:
+   // If b is greater than upper, then we *must* split the calculation
+   // as the size of the ULP changes with each order of magnitude change:
    //
-   T mb = -b;
+   if(b > upper)
+   {
+      result = float_distance(upper, b);
+   }
+   //
+   // Use compensated double-double addition to avoid rounding 
+   // errors in the subtraction:
+   //
+   T mb = -(std::min)(upper, b);
    T x = a + mb;
    T z = x - a;
    T y = (a - (x - z)) + (mb - z);
@@ -221,8 +227,7 @@ T float_distance(const T& a, const T& b, const Policy& pol)
       x = -x;
       y = -y;
    }
-   
-   T result = ldexp(x, expon) + ldexp(y, expon);
+   result += ldexp(x, expon) + ldexp(y, expon);
    //
    // Result must be an integer:
    //

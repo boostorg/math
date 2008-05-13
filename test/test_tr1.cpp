@@ -192,9 +192,9 @@ void test_values(float, const char* name)
    BOOST_CHECK_CLOSE_FRACTION(tr1::laguerref(50, static_cast<float>(4.5L)), static_cast<float>(-0.7795068145562651416494321484050019245248L), eps * 100);
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendref(4, 2, static_cast<float>(0.5L)), static_cast<float>(4.218750000000000000000000000000000000000L), eps * 100);
-   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendref(7, 5, static_cast<float>(0.5L)), static_cast<float>(-5696.789530152175143607977274672800795328L), eps * 100);
+   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendref(7, 5, static_cast<float>(0.5L)), static_cast<float>(5696.789530152175143607977274672800795328L), eps * 100);
    BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendref(4, 2, static_cast<float>(-0.5L)), static_cast<float>(4.218750000000000000000000000000000000000L), eps * 100);
-   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendref(7, 5, static_cast<float>(-0.5L)), static_cast<float>(-5696.789530152175143607977274672800795328L), eps * 100);
+   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendref(7, 5, static_cast<float>(-0.5L)), static_cast<float>(5696.789530152175143607977274672800795328L), eps * 100);
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::legendref(1, static_cast<float>(0.5L)), static_cast<float>(0.5L), eps * 100);
    BOOST_CHECK_CLOSE_FRACTION(tr1::legendref(4, static_cast<float>(0.5L)), static_cast<float>(-0.2890625000000000000000000000000000000000L), eps * 100);
@@ -434,9 +434,9 @@ void test_values(float, const char* name)
    BOOST_CHECK_CLOSE_FRACTION(tr1::laguerre(50, static_cast<float>(4.5L)), static_cast<float>(-0.7795068145562651416494321484050019245248L), eps * 100);
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(4, 2, static_cast<float>(0.5L)), static_cast<float>(4.218750000000000000000000000000000000000L), eps * 100);
-   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7, 5, static_cast<float>(0.5L)), static_cast<float>(-5696.789530152175143607977274672800795328L), eps * 100);
+   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7, 5, static_cast<float>(0.5L)), static_cast<float>(5696.789530152175143607977274672800795328L), eps * 100);
    BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(4, 2, static_cast<float>(-0.5L)), static_cast<float>(4.218750000000000000000000000000000000000L), eps * 100);
-   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7, 5, static_cast<float>(-0.5L)), static_cast<float>(-5696.789530152175143607977274672800795328L), eps * 100);
+   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7, 5, static_cast<float>(-0.5L)), static_cast<float>(5696.789530152175143607977274672800795328L), eps * 100);
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::legendre(1, static_cast<float>(0.5L)), static_cast<float>(0.5L), eps * 100);
    BOOST_CHECK_CLOSE_FRACTION(tr1::legendre(4, static_cast<float>(0.5L)), static_cast<float>(-0.2890625000000000000000000000000000000000L), eps * 100);
@@ -750,9 +750,9 @@ void test_values(double, const char* name)
    BOOST_CHECK_CLOSE_FRACTION(tr1::laguerre(50, static_cast<double>(4.5L)), static_cast<double>(-0.7795068145562651416494321484050019245248L), eps * 100);
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(4, 2, static_cast<double>(0.5L)), static_cast<double>(4.218750000000000000000000000000000000000L), eps * 100);
-   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7, 5, static_cast<double>(0.5L)), static_cast<double>(-5696.789530152175143607977274672800795328L), eps * 100);
+   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7, 5, static_cast<double>(0.5L)), static_cast<double>(5696.789530152175143607977274672800795328L), eps * 100);
    BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(4, 2, static_cast<double>(-0.5L)), static_cast<double>(4.218750000000000000000000000000000000000L), eps * 100);
-   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7, 5, static_cast<double>(-0.5L)), static_cast<double>(-5696.789530152175143607977274672800795328L), eps * 100);
+   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7, 5, static_cast<double>(-0.5L)), static_cast<double>(5696.789530152175143607977274672800795328L), eps * 100);
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::legendre(1, static_cast<double>(0.5L)), static_cast<double>(0.5L), eps * 100);
    BOOST_CHECK_CLOSE_FRACTION(tr1::legendre(4, static_cast<double>(0.5L)), static_cast<double>(-0.2890625000000000000000000000000000000000L), eps * 100);
@@ -1140,9 +1140,9 @@ void test_values(long double, const char* name)
    BOOST_CHECK_CLOSE_FRACTION(tr1::laguerrel(50L, static_cast<long double>(4.5L)), static_cast<long double>(-0.7795068145562651416494321484050019245248L), eps * 100L);
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendrel(4L, 2L, static_cast<long double>(0.5L)), static_cast<long double>(4.218750000000000000000000000000000000000L), eps * 100L);
-   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendrel(7L, 5L, static_cast<long double>(0.5L)), static_cast<long double>(-5696.789530152175143607977274672800795328L), eps * 100L);
+   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendrel(7L, 5L, static_cast<long double>(0.5L)), static_cast<long double>(5696.789530152175143607977274672800795328L), eps * 100L);
    BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendrel(4L, 2L, static_cast<long double>(-0.5L)), static_cast<long double>(4.218750000000000000000000000000000000000L), eps * 100L);
-   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendrel(7L, 5L, static_cast<long double>(-0.5L)), static_cast<long double>(-5696.789530152175143607977274672800795328L), eps * 100L);
+   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendrel(7L, 5L, static_cast<long double>(-0.5L)), static_cast<long double>(5696.789530152175143607977274672800795328L), eps * 100L);
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::legendrel(1L, static_cast<long double>(0.5L)), static_cast<long double>(0.5L), eps * 100L);
    BOOST_CHECK_CLOSE_FRACTION(tr1::legendrel(4L, static_cast<long double>(0.5L)), static_cast<long double>(-0.2890625000000000000000000000000000000000L), eps * 100L);
@@ -1382,9 +1382,9 @@ void test_values(long double, const char* name)
    BOOST_CHECK_CLOSE_FRACTION(tr1::laguerre(50L, static_cast<long double>(4.5L)), static_cast<long double>(-0.7795068145562651416494321484050019245248L), eps * 100L);
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(4L, 2L, static_cast<long double>(0.5L)), static_cast<long double>(4.218750000000000000000000000000000000000L), eps * 100L);
-   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7L, 5L, static_cast<long double>(0.5L)), static_cast<long double>(-5696.789530152175143607977274672800795328L), eps * 100L);
+   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7L, 5L, static_cast<long double>(0.5L)), static_cast<long double>(5696.789530152175143607977274672800795328L), eps * 100L);
    BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(4L, 2L, static_cast<long double>(-0.5L)), static_cast<long double>(4.218750000000000000000000000000000000000L), eps * 100L);
-   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7L, 5L, static_cast<long double>(-0.5L)), static_cast<long double>(-5696.789530152175143607977274672800795328L), eps * 100L);
+   BOOST_CHECK_CLOSE_FRACTION(tr1::assoc_legendre(7L, 5L, static_cast<long double>(-0.5L)), static_cast<long double>(5696.789530152175143607977274672800795328L), eps * 100L);
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::legendre(1L, static_cast<long double>(0.5L)), static_cast<long double>(0.5L), eps * 100L);
    BOOST_CHECK_CLOSE_FRACTION(tr1::legendre(4L, static_cast<long double>(0.5L)), static_cast<long double>(-0.2890625000000000000000000000000000000000L), eps * 100L);
