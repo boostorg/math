@@ -36,6 +36,11 @@ void test_value(const T& val, const char* name)
    BOOST_CHECK_EQUAL(float_distance(float_next(float_prior(val)), val), 0);
    BOOST_CHECK_EQUAL(float_prior(float_next(val)), val);
    BOOST_CHECK_EQUAL(float_next(float_prior(val)), val);
+
+   BOOST_CHECK_EQUAL(float_distance(float_advance(val, 4), val), -4);
+   BOOST_CHECK_EQUAL(float_distance(float_advance(val, -4), val), 4);
+   BOOST_CHECK_EQUAL(float_distance(float_advance(float_next(float_next(val)), 4), float_next(float_next(val))), -4);
+   BOOST_CHECK_EQUAL(float_distance(float_advance(float_next(float_next(val)), -4), float_next(float_next(val))), 4);
 }
 
 template <class T>
@@ -55,8 +60,11 @@ void test_values(const T& val, const char* name)
    test_value(-boost::math::tools::epsilon<T>(), name);
    test_value(boost::math::tools::min_value<T>(), name);
    test_value(-boost::math::tools::min_value<T>(), name);
-   test_value(z, name);
-   test_value(-z, name);
+   if(std::numeric_limits<T>::is_specialized)
+   {
+      test_value(z, name);
+      test_value(-z, name);
+   }
    test_value(one, name);
    test_value(-one, name);
    test_value(two, name);
@@ -92,6 +100,8 @@ void test_values(const T& val, const char* name)
       }
       BOOST_CHECK_EQUAL(boost::math::float_distance(v1, val), -primes[i]);
       BOOST_CHECK_EQUAL(boost::math::float_distance(v2, val), primes[i]);
+      BOOST_CHECK_EQUAL(boost::math::float_advance(val, primes[i]), v1);
+      BOOST_CHECK_EQUAL(boost::math::float_advance(val, -primes[i]), v2);
    }
 }
 

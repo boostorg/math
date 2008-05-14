@@ -162,6 +162,31 @@ but in practice this is unlikely to be a issue.
 [endsect] [/section:float_distance Calculating the Representation Distance
    Between Two Floating Point Values (ULP) float_distance]
 
+[section:float_advance Advancing a Floating Point Value by a Specific
+Representation Distance (ULP) float_advance]
+   
+Function float_advance advances a floating point number by a specified number
+of ULP.
+   
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/next.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template <class FPT>
+   FPT float_advance(FPT val, int distance);
+   
+   }} // namespaces
+
+[h4 Description - float_advance]
+
+Returns a floating point number /r/ such that `float_distance(val, r) == distance`.
+
+[endsect] [/section:float_advance]
+
 [endsect] [/ section:next_float Floating-Point Representation Distance (ULP), 
    and Finding Adjacent Floating-Point Values]
 

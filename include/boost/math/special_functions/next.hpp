@@ -241,6 +241,67 @@ T float_distance(const T& a, const T& b)
    return boost::math::float_distance(a, b, policies::policy<>());
 }
 
+template <class T, class Policy>
+T float_advance(T val, int distance, const Policy& pol)
+{
+   //
+   // Error handling:
+   //
+   static const char* function = "float_advance<%1%>(%1%, int)";
+   if(!(boost::math::isfinite)(val))
+      return policies::raise_domain_error<T>(
+         function,
+         "Argument val must be finite, but got %1%", val, pol);
+
+   if(val < 0)
+      return -float_advance(-val, -distance, pol);
+   if(distance == 0)
+      return val;
+   if(distance == 1)
+      return float_next(val, pol);
+   if(distance == -1)
+      return float_prior(val, pol);
+   BOOST_MATH_STD_USING
+   int expon;
+   frexp(val, &expon);
+   T limit = ldexp((distance < 0 ? T(0.5f) : T(1)), expon);
+   if(val <= tools::min_value<T>())
+   {
+      limit = sign(T(distance)) * tools::min_value<T>();
+   }
+   T limit_distance = float_distance(val, limit);
+   while(fabs(limit_distance) < abs(distance))
+   {
+      distance -= itrunc(limit_distance);
+      val = limit;
+      if(distance < 0) 
+      {
+         limit /= 2;
+         expon--;
+      }
+      else
+      {
+         limit *= 2;
+         expon++;
+      }
+      limit_distance = float_distance(val, limit);
+   }
+   if((0.5f == frexp(val, &expon)) && (distance < 0))
+      --expon;
+   T diff = 0;
+   if(val != 0)
+      diff = distance * ldexp(T(1), expon - tools::digits<T>());
+   if(diff == 0)
+      diff = distance * detail::get_smallest_value<T>();
+   return val += diff;
+}
+
+template <class T>
+inline T float_advance(const T& val, int distance)
+{
+   return boost::math::float_advance(val, distance, policies::policy<>());
+}
+
 }} // namespaces
 
 #endif // BOOST_MATH_SPECIAL_NEXT_HPP
