@@ -58,7 +58,10 @@ public:
    std_real_concept(int c) : m_value(c){}
    std_real_concept(unsigned long c) : m_value(c){}
    std_real_concept(long c) : m_value(c){}
-#if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX) || defined(__SUNPRO_CC)
+#if defined(__DECCXX) || defined(__SUNPRO_CC)
+   std_real_concept(unsigned long long c) : m_value(static_cast<std_real_concept_base_type>(c)){}
+   std_real_concept(long long c) : m_value(static_cast<std_real_concept_base_type>(c)){}
+#elif defined(BOOST_HAS_LONG_LONG)
    std_real_concept(boost::ulong_long_type c) : m_value(static_cast<std_real_concept_base_type>(c)){}
    std_real_concept(boost::long_long_type c) : m_value(static_cast<std_real_concept_base_type>(c)){}
 #endif
@@ -79,7 +82,10 @@ public:
    std_real_concept& operator=(unsigned int c) { m_value = c; return *this; }
    std_real_concept& operator=(long c) { m_value = c; return *this; }
    std_real_concept& operator=(unsigned long c) { m_value = c; return *this; }
-#if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX) || defined(__SUNPRO_CC)
+#if defined(__DECCXX) || defined(__SUNPRO_CC)
+   std_real_concept& operator=(unsigned long long c) { m_value = static_cast<std_real_concept_base_type>(c); return *this; }
+   std_real_concept& operator=(long long c) { m_value = static_cast<std_real_concept_base_type>(c); return *this; }
+#elif defined(BOOST_HAS_LONG_LONG)
    std_real_concept& operator=(boost::long_long_type c) { m_value = static_cast<std_real_concept_base_type>(c); return *this; }
    std_real_concept& operator=(boost::ulong_long_type c) { m_value = static_cast<std_real_concept_base_type>(c); return *this; }
 #endif

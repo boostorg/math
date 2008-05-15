@@ -66,7 +66,10 @@ public:
    real_concept(int c) : m_value(c){}
    real_concept(unsigned long c) : m_value(c){}
    real_concept(long c) : m_value(c){}
-#if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX) || defined(__SUNPRO_CC)
+#if defined(__DECCXX) || defined(__SUNPRO_CC)
+   real_concept(unsigned long long c) : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(long long c) : m_value(static_cast<real_concept_base_type>(c)){}
+#elif defined(BOOST_HAS_LONG_LONG)
    real_concept(boost::ulong_long_type c) : m_value(static_cast<real_concept_base_type>(c)){}
    real_concept(boost::long_long_type c) : m_value(static_cast<real_concept_base_type>(c)){}
 #elif defined(BOOST_HAS_MS_INT64)
