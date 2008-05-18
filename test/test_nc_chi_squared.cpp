@@ -319,7 +319,7 @@ void test_spots(RealType)
    // mode:
    BOOST_CHECK_CLOSE(
       mode(dist)
-      , static_cast<RealType>(17.184201184730857030170788677340294070728990862663L), sqrt(tolerance * 20));
+      , static_cast<RealType>(17.184201184730857030170788677340294070728990862663L), sqrt(tolerance * 500));
    BOOST_CHECK_CLOSE(
       median(dist), 
       quantile(
@@ -545,4 +545,5 @@ int test_main(int, char* [])
 #endif
    return 0;
 } // int test_main(int, char* [])
+
 

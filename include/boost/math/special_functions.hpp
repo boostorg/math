@@ -53,5 +53,6 @@
 #include <boost/math/special_functions/round.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/pow.hpp>
+#include <boost/math/special_functions/next.hpp>
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_HPP

@@ -246,6 +246,7 @@ run test_negative_binomial.cpp
         : # requirements
 	      <define>TEST_REAL_CONCEPT
         : test_negative_binomial_real_concept ;
+run test_next.cpp ;
 run test_nc_chi_squared.cpp  
         : # command line
         : # input files
@@ -385,6 +386,15 @@ run test_policy.cpp ;
 run test_policy_2.cpp ;
 run test_policy_sf.cpp ;
 
+run test_tr1.cpp
+   ../build//boost_math_tr1
+   ../build//boost_math_tr1f
+   ../build//boost_math_tr1l 
+   ../build//boost_math_c99
+   ../build//boost_math_c99f
+   ../build//boost_math_c99l 
+   ;
+
 compile  compile_test/compl_abs_incl_test.cpp ;
 compile  compile_test/compl_acos_incl_test.cpp ;
 compile  compile_test/compl_acosh_incl_test.cpp ;
@@ -444,6 +454,7 @@ compile  compile_test/sf_legendre_incl_test.cpp ;
 compile  compile_test/sf_log1p_incl_test.cpp ;
 compile  compile_test/sf_math_fwd_incl_test.cpp ;
 compile  compile_test/sf_modf_incl_test.cpp ;
+compile  compile_test/sf_next_incl_test.cpp ;
 compile  compile_test/sf_powm1_incl_test.cpp ;
 compile  compile_test/sf_round_incl_test.cpp ;
 compile  compile_test/sf_sign_incl_test.cpp ;
@@ -487,7 +498,4 @@ run ../quaternion/quaternion_mult_incl_test.cpp
     ../../test/build//boost_unit_test_framework/<link>static ;
 
 run complex_test.cpp ;
-
-
-
 

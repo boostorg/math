@@ -111,7 +111,6 @@ void test_return_types()
 #endif
 }
 
-
 namespace boost { namespace math { namespace policies {
 template <class T>
 T user_overflow_error(const char*, const char*, const T&)
@@ -187,4 +186,5 @@ int test_main(int, char* [])
 
     return 0;
 }
+
 
