@@ -109,7 +109,7 @@ void test_return_types()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     BOOST_STATIC_ASSERT((is_same<BOOST_TYPEOF(pow<2>(7.0l)), long double>::value));
 #endif
-};
+}
 
 
 namespace boost { namespace math { namespace policies {

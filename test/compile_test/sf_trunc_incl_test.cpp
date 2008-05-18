@@ -31,10 +31,10 @@ void check()
    check_result<long>(boost::math::ltrunc<long double>(l));
 #endif
 #ifdef BOOST_HAS_LONG_LONG
-   check_result<long long>(boost::math::lltrunc<float>(f));
-   check_result<long long>(boost::math::lltrunc<double>(d));
+   check_result<boost::long_long_type>(boost::math::lltrunc<float>(f));
+   check_result<boost::long_long_type>(boost::math::lltrunc<double>(d));
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   check_result<long long>(boost::math::lltrunc<long double>(l));
+   check_result<boost::long_long_type>(boost::math::lltrunc<long double>(l));
 #endif
 #endif
 }
