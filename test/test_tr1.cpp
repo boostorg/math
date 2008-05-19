@@ -967,6 +967,7 @@ void test_values(double, const char* name)
 
 void test_values(long double, const char* name)
 {
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    std::cout << "Testing type " << name << std::endl;
 
    long double eps = boost::math::tools::epsilon<long double>();
@@ -1593,13 +1594,16 @@ void test_values(long double, const char* name)
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::sph_legendre(3L, 2L, static_cast<long double>(0.5L)), static_cast<long double>(0.2061460599687871330692286791802688341213L), eps * 5000L);
    BOOST_CHECK_CLOSE_FRACTION(tr1::sph_legendre(40L, 15L, static_cast<long double>(0.75L)), static_cast<long double>(-0.406036847302819452666908966769096223205057182668333862900509L), eps * 5000L);
+#endif
 }
 
 int test_main(int, char* [])
 {
    test_values(1.0f, "float");
    test_values(1.0, "double");
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_values(1.0L, "long double");
+#endif
    return 0;
 }
 
