@@ -38,7 +38,7 @@ struct positive_power<0, false>
 };
 
 template <>
-struct positive_power<1, false>
+struct positive_power<1, true>
 {
     template <typename T>
     static typename tools::promote_args<T>::type result(T x)
