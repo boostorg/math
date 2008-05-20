@@ -13,6 +13,9 @@
 
 #pragma once
 
+#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error
+
 #include <boost/math/distributions/bernoulli.hpp>
 #include <boost/math/distributions/beta.hpp>
 #include <boost/math/distributions/binomial.hpp>
