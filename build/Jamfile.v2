@@ -49,7 +49,7 @@ sph_legendre
 sph_neumann
 ;
 
-compile has_long_double_support.cpp ;
+#compile has_long_double_support.cpp ;
 
 lib boost_math_tr1 : ../src/tr1/$(TR1_SOURCES).cpp
     :         
@@ -64,7 +64,7 @@ lib boost_math_tr1f : ../src/tr1/$(TR1_SOURCES)f.cpp
 lib boost_math_tr1l : ../src/tr1/$(TR1_SOURCES)l.cpp
     :         
  	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
- 	     <dependency>has_long_double_support
+ 	     #<dependency>has_long_double_support
    ;
 
 lib boost_math_c99 : ../src/tr1/$(C99_SOURCES).cpp
@@ -80,6 +80,6 @@ lib boost_math_c99f : ../src/tr1/$(C99_SOURCES)f.cpp
 lib boost_math_c99l : ../src/tr1/$(C99_SOURCES)l.cpp
     :         
  	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
- 	     <dependency>has_long_double_support
+ 	     #<dependency>has_long_double_support
    ;
 
