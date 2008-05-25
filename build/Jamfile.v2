@@ -3,6 +3,8 @@
 # (See accompanying file LICENSE_1_0.txt or copy at 
 # http://www.boost.org/LICENSE_1_0.txt.
 
+import testing ;
+
 C99_SOURCES = acosh
 asinh
 atanh
@@ -83,4 +85,6 @@ lib boost_math_c99l : ../src/tr1/$(C99_SOURCES)l.cpp
  	     <dependency>has_long_double_support
    ;
 
+
+boost-install boost_math_c99 boost_math_c99f boost_math_c99l boost_math_tr1 boost_math_tr1f boost_math_tr1l ;
 
