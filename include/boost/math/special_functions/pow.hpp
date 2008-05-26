@@ -26,60 +26,53 @@ namespace math {
 namespace detail {
 
 
-template <int N, bool odd>
-struct positive_power;
-
-template <>
-struct positive_power<0, false>
-{
-    template <typename T>
-    static typename tools::promote_args<T>::type result(T)
-    { return 1; }
-};
-
-template <>
-struct positive_power<1, false>
-{
-    template <typename T>
-    static typename tools::promote_args<T>::type result(T x)
-    { return x; }
-};
-
-template <>
-struct positive_power<2, false>
-{
-    template <typename T>
-    static typename tools::promote_args<T>::type result(T base)
-    { return base*base; }
-};
-
-template <int N, bool odd>
+template <int N, int M = N%2>
 struct positive_power
 {
     template <typename T>
     static typename tools::promote_args<T>::type result(T base)
     {
-        return base*positive_power<N-1, (N-1)%2>::result(base);
+        typename tools::promote_args<T>::type power =
+            positive_power<N/2>::result(base);
+        return power * power;
     }
 };
 
 template <int N>
-struct positive_power<N, false>
+struct positive_power<N, 1>
 {
     template <typename T>
     static typename tools::promote_args<T>::type result(T base)
     {
-        return positive_power<2, false>::result(
-                  positive_power<N/2, (N/2)%2>::result(base));
+        typename tools::promote_args<T>::type power =
+            positive_power<N/2>::result(base);
+        return base * power * power;
     }
 };
+
+template <>
+struct positive_power<0, 0>
+{
+    template <typename T>
+    static typename tools::promote_args<T>::type result(T)
+    { return T(1); }
+};
+
+template <>
+struct positive_power<1, 1>
+{
+    template <typename T>
+    static typename tools::promote_args<T>::type result(T base)
+    { return base; }
+};
+
 
 template <int N, bool>
 struct power_if_positive
 {
     template <typename T, class Policy>
     static typename tools::promote_args<T>::type result(T base, const Policy&)
-    { return positive_power<N, N%2>::result(base); }
+    { return positive_power<N>::result(base); }
 };
 
 template <int N>
@@ -98,7 +91,7 @@ struct power_if_positive<N, false>
                    );
         }
 
-        return T(1) / positive_power<-N, (-N)%2>::result(base);
+        return T(1) / positive_power<-N>::result(base);
     }
 };
 
