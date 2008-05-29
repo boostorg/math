@@ -6,6 +6,7 @@
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <math.h>  // ldexpf
 
 #ifdef TEST_STD
 #include <cmath>
