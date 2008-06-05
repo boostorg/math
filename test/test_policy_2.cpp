@@ -33,50 +33,55 @@ int test_main(int, char* [])
    BOOST_CHECK((is_same<policy<domain_error<ignore_error>, overflow_error<ignore_error> >::underflow_error_type, underflow_error<BOOST_MATH_UNDERFLOW_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<domain_error<ignore_error>, overflow_error<ignore_error> >::denorm_error_type, denorm_error<BOOST_MATH_DENORM_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<domain_error<ignore_error>, overflow_error<ignore_error> >::evaluation_error_type, evaluation_error<BOOST_MATH_EVALUATION_ERROR_POLICY> >::value));
+   BOOST_CHECK((is_same<policy<domain_error<ignore_error>, overflow_error<ignore_error> >::undeterminate_result_error_type, undeterminate_result_error<BOOST_MATH_UNDETERMINATE_RESULT_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<domain_error<ignore_error>, overflow_error<ignore_error> >::precision_type, policy<>::precision_type>::value));
    BOOST_CHECK((is_same<policy<domain_error<ignore_error>, overflow_error<ignore_error> >::promote_float_type, policy<>::promote_float_type>::value));
    BOOST_CHECK((is_same<policy<domain_error<ignore_error>, overflow_error<ignore_error> >::promote_double_type, policy<>::promote_double_type>::value));
    BOOST_CHECK((is_same<policy<domain_error<ignore_error>, overflow_error<ignore_error> >::discrete_quantile_type, policy<>::discrete_quantile_type>::value));
-   
+
    BOOST_CHECK((is_same<policy<denorm_error<throw_on_error>, domain_error<ignore_error> >::domain_error_type, domain_error<ignore_error> >::value));
    BOOST_CHECK((is_same<policy<denorm_error<throw_on_error>, domain_error<ignore_error> >::pole_error_type, pole_error<BOOST_MATH_POLE_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<denorm_error<throw_on_error>, domain_error<ignore_error> >::overflow_error_type, overflow_error<BOOST_MATH_OVERFLOW_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<denorm_error<throw_on_error>, domain_error<ignore_error> >::underflow_error_type, underflow_error<BOOST_MATH_UNDERFLOW_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<denorm_error<throw_on_error>, domain_error<ignore_error> >::denorm_error_type, denorm_error<throw_on_error> >::value));
    BOOST_CHECK((is_same<policy<denorm_error<throw_on_error>, domain_error<ignore_error> >::evaluation_error_type, evaluation_error<BOOST_MATH_EVALUATION_ERROR_POLICY> >::value));
+   BOOST_CHECK((is_same<policy<denorm_error<throw_on_error>, domain_error<ignore_error> >::undeterminate_result_error_type, undeterminate_result_error<BOOST_MATH_UNDETERMINATE_RESULT_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<denorm_error<throw_on_error>, domain_error<ignore_error> >::precision_type, policy<>::precision_type>::value));
    BOOST_CHECK((is_same<policy<denorm_error<throw_on_error>, domain_error<ignore_error> >::promote_float_type, policy<>::promote_float_type>::value));
    BOOST_CHECK((is_same<policy<denorm_error<throw_on_error>, domain_error<ignore_error> >::promote_double_type, policy<>::promote_double_type>::value));
    BOOST_CHECK((is_same<policy<denorm_error<throw_on_error>, domain_error<ignore_error> >::discrete_quantile_type, policy<>::discrete_quantile_type>::value));
-   
+
    BOOST_CHECK((is_same<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::domain_error_type, domain_error<ignore_error> >::value));
    BOOST_CHECK((is_same<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::pole_error_type, pole_error<BOOST_MATH_POLE_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::overflow_error_type, overflow_error<BOOST_MATH_OVERFLOW_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::underflow_error_type, underflow_error<BOOST_MATH_UNDERFLOW_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::denorm_error_type, denorm_error<throw_on_error> >::value));
    BOOST_CHECK((is_same<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::evaluation_error_type, evaluation_error<BOOST_MATH_EVALUATION_ERROR_POLICY> >::value));
+   BOOST_CHECK((is_same<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::undeterminate_result_error_type, undeterminate_result_error<BOOST_MATH_UNDETERMINATE_RESULT_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::precision_type, digits2<20> >::value));
    BOOST_CHECK((is_same<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::promote_float_type, promote_float<false> >::value));
    BOOST_CHECK((is_same<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::promote_double_type, policy<>::promote_double_type>::value));
    BOOST_CHECK((is_same<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::discrete_quantile_type, discrete_quantile<integer_round_down> >::value));
-   
+
    BOOST_CHECK((is_same<normalise<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> > >::type::domain_error_type, domain_error<ignore_error> >::value));
    BOOST_CHECK((is_same<normalise<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> > >::type::pole_error_type, pole_error<BOOST_MATH_POLE_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<normalise<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> > >::type::overflow_error_type, overflow_error<BOOST_MATH_OVERFLOW_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<normalise<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> > >::type::underflow_error_type, underflow_error<BOOST_MATH_UNDERFLOW_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<normalise<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> > >::type::denorm_error_type, denorm_error<throw_on_error> >::value));
    BOOST_CHECK((is_same<normalise<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> > >::type::evaluation_error_type, evaluation_error<BOOST_MATH_EVALUATION_ERROR_POLICY> >::value));
+   BOOST_CHECK((is_same<normalise<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> > >::type::undeterminate_result_error_type, undeterminate_result_error<BOOST_MATH_UNDETERMINATE_RESULT_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<normalise<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> > >::type::precision_type, digits2<20> >::value));
    BOOST_CHECK((is_same<normalise<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> > >::type::promote_float_type, promote_float<false> >::value));
    BOOST_CHECK((is_same<normalise<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> > >::type::promote_double_type, policy<>::promote_double_type>::value));
    BOOST_CHECK((is_same<normalise<policy<digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> > >::type::discrete_quantile_type, discrete_quantile<integer_round_down> >::value));
-   
+
    BOOST_CHECK((is_same<normalise<policy<>, digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::type::domain_error_type, domain_error<ignore_error> >::value));
    BOOST_CHECK((is_same<normalise<policy<>, digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error> >::type::pole_error_type, pole_error<BOOST_MATH_POLE_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<normalise<policy<>, digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error>  >::type::overflow_error_type, overflow_error<BOOST_MATH_OVERFLOW_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<normalise<policy<>, digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error>  >::type::underflow_error_type, underflow_error<BOOST_MATH_UNDERFLOW_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<normalise<policy<>, digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error>  >::type::denorm_error_type, denorm_error<throw_on_error> >::value));
    BOOST_CHECK((is_same<normalise<policy<>, digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error>  >::type::evaluation_error_type, evaluation_error<BOOST_MATH_EVALUATION_ERROR_POLICY> >::value));
+   BOOST_CHECK((is_same<normalise<policy<>, digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error>  >::type::undeterminate_result_error_type, undeterminate_result_error<BOOST_MATH_UNDETERMINATE_RESULT_ERROR_POLICY> >::value));
    BOOST_CHECK((is_same<normalise<policy<>, digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error>  >::type::precision_type, digits2<20> >::value));
    BOOST_CHECK((is_same<normalise<policy<>, digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error>  >::type::promote_float_type, promote_float<false> >::value));
    BOOST_CHECK((is_same<normalise<policy<>, digits2<20>, promote_float<false>, discrete_quantile<integer_round_down>, denorm_error<throw_on_error>, domain_error<ignore_error>  >::type::promote_double_type, policy<>::promote_double_type>::value));
@@ -88,6 +93,7 @@ int test_main(int, char* [])
    BOOST_CHECK(check_same(make_policy(promote_float<false>()), normalise<policy<promote_float<false> > >::type()));
    BOOST_CHECK(check_same(make_policy(domain_error<ignore_error>()), normalise<policy<domain_error<ignore_error> > >::type()));
    BOOST_CHECK(check_same(make_policy(pole_error<ignore_error>()), normalise<policy<pole_error<ignore_error> > >::type()));
+   BOOST_CHECK(check_same(make_policy(undeterminate_result_error<ignore_error>()), normalise<policy<undeterminate_result_error<ignore_error> > >::type()));
 
    BOOST_CHECK(check_same(make_policy(domain_error<ignore_error>()), policy<domain_error<ignore_error> >()));
    BOOST_CHECK(check_same(make_policy(domain_error<ignore_error>(), pole_error<ignore_error>()), policy<domain_error<ignore_error>, pole_error<ignore_error> >()));

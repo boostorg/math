@@ -51,14 +51,6 @@ struct positive_power<N, 1>
 };
 
 template <>
-struct positive_power<0, 0>
-{
-    template <typename T>
-    static typename tools::promote_args<T>::type result(T)
-    { return T(1); }
-};
-
-template <>
 struct positive_power<1, 1>
 {
     template <typename T>
@@ -92,6 +84,28 @@ struct power_if_positive<N, false>
         }
 
         return T(1) / positive_power<-N>::result(base);
+    }
+};
+
+template <>
+struct power_if_positive<0, true>
+{
+    template <typename T, class Policy>
+    static typename tools::promote_args<T>::type
+    result(T base, const Policy& policy)
+    {
+        if (base == 0)
+        {
+            return policies::raise_undeterminate_result_error<T>(
+                       "boost::math::pow(%1%)",
+                       "The result of pow<0>(%1%) is undetermined",
+                       base,
+                       T(1),
+                       policy
+                   );
+        }
+
+        return T(1);
     }
 };
 

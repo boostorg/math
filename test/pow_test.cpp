@@ -115,7 +115,13 @@ void test_return_types()
 namespace boost { namespace math { namespace policies {
 template <class T>
 T user_overflow_error(const char*, const char*, const T&)
-{ return 123.456; }
+{ return T(123.456); }
+}}}
+
+namespace boost { namespace math { namespace policies {
+template <class T>
+T user_undeterminate_result_error(const char*, const char*, const T&)
+{ return T(456.789); }
 }}}
 
 
@@ -128,6 +134,12 @@ void test_error_policy()
                     policy< ::boost::math::policies::overflow_error<user_error> >()
                 )
                 == 123.456);
+
+    BOOST_CHECK(pow<0>(
+                    0.0,
+                    policy< ::boost::math::policies::undeterminate_result_error<user_error> >()
+                )
+                == 456.789);
 }
 
 int test_main(int, char* [])
@@ -187,4 +199,3 @@ int test_main(int, char* [])
 
     return 0;
 }
-
