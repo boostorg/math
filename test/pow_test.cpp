@@ -120,7 +120,7 @@ T user_overflow_error(const char*, const char*, const T&)
 
 namespace boost { namespace math { namespace policies {
 template <class T>
-T user_undeterminate_result_error(const char*, const char*, const T&)
+T user_indeterminate_result_error(const char*, const char*, const T&)
 { return T(456.78); }
 }}}
 
@@ -137,7 +137,7 @@ void test_error_policy()
 
     BOOST_CHECK(pow<0>(
                     0.0,
-                    policy< ::boost::math::policies::undeterminate_result_error<user_error> >()
+                    policy< ::boost::math::policies::indeterminate_result_error<user_error> >()
                 )
                 == 456.78);
 }

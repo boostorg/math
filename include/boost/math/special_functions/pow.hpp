@@ -96,7 +96,7 @@ struct power_if_positive<0, true>
     {
         if (base == 0)
         {
-            return policies::raise_undeterminate_result_error<T>(
+            return policies::raise_indeterminate_result_error<T>(
                        "boost::math::pow(%1%)",
                        "The result of pow<0>(%1%) is undetermined",
                        base,

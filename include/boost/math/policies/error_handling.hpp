@@ -63,7 +63,7 @@ T user_evaluation_error(const char* function, const char* message, const T& val)
 template <class T>
 T user_rounding_error(const char* function, const char* message, const T& val);
 template <class T>
-T user_undeterminate_result_error(const char* function, const char* message, const T& val);
+T user_indeterminate_result_error(const char* function, const char* message, const T& val);
 
 namespace detail
 {
@@ -429,12 +429,12 @@ inline T raise_rounding_error(
 }
 
 template <class T, class R>
-inline T raise_undeterminate_result_error(
+inline T raise_indeterminate_result_error(
            const char* function, 
            const char* message, 
            const T& val, 
            const R& ,
-           const ::boost::math::policies::undeterminate_result_error< ::boost::math::policies::throw_on_error>&)
+           const ::boost::math::policies::indeterminate_result_error< ::boost::math::policies::throw_on_error>&)
 {
    raise_error<std::domain_error, T>(function, message, val);
    // we never get here:
@@ -442,12 +442,12 @@ inline T raise_undeterminate_result_error(
 }
 
 template <class T, class R>
-inline T raise_undeterminate_result_error(
+inline T raise_indeterminate_result_error(
            const char* , 
            const char* , 
            const T& , 
            const R& result, 
-           const ::boost::math::policies::undeterminate_result_error< ::boost::math::policies::ignore_error>&)
+           const ::boost::math::policies::indeterminate_result_error< ::boost::math::policies::ignore_error>&)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
@@ -455,12 +455,12 @@ inline T raise_undeterminate_result_error(
 }
 
 template <class T, class R>
-inline T raise_undeterminate_result_error(
+inline T raise_indeterminate_result_error(
            const char* , 
            const char* , 
            const T& , 
            const R& result, 
-           const ::boost::math::policies::undeterminate_result_error< ::boost::math::policies::errno_on_error>&)
+           const ::boost::math::policies::indeterminate_result_error< ::boost::math::policies::errno_on_error>&)
 {
    errno = EDOM;
    // This may or may not do the right thing, but the user asked for the error
@@ -469,14 +469,14 @@ inline T raise_undeterminate_result_error(
 }
 
 template <class T, class R>
-inline T raise_undeterminate_result_error(
+inline T raise_indeterminate_result_error(
            const char* function, 
            const char* message, 
            const T& val, 
            const R& , 
-           const ::boost::math::policies::undeterminate_result_error< ::boost::math::policies::user_error>&)
+           const ::boost::math::policies::indeterminate_result_error< ::boost::math::policies::user_error>&)
 {
-   return user_undeterminate_result_error(function, message, val);
+   return user_indeterminate_result_error(function, message, val);
 }
 
 }  // namespace detail
@@ -546,11 +546,11 @@ inline T raise_rounding_error(const char* function, const char* message, const T
 }
 
 template <class T, class R, class Policy>
-inline T raise_undeterminate_result_error(const char* function, const char* message, const T& val, const R& result, const Policy&)
+inline T raise_indeterminate_result_error(const char* function, const char* message, const T& val, const R& result, const Policy&)
 {
-   typedef typename Policy::undeterminate_result_error_type policy_type;
-   return detail::raise_undeterminate_result_error(
-      function, message ? message : "Undeterminate result with value %1%",
+   typedef typename Policy::indeterminate_result_error_type policy_type;
+   return detail::raise_indeterminate_result_error(
+      function, message ? message : "Indeterminate result with value %1%",
       val, result, policy_type());
 }
 
