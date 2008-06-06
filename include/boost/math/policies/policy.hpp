@@ -676,6 +676,13 @@ inline typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10>::ty
    return result_type();
 }
 
+template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+inline typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11>::type make_policy(const A1&, const A2&, const A3&, const A4&, const A5&, const A6&, const A7&, const A8&, const A9&, const A10&, const A11&)
+{
+   typedef typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11>::type result_type;
+   return result_type();
+}
+
 //
 // Traits class to handle internal promotion:
 //
