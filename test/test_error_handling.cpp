@@ -143,21 +143,21 @@ void test_error(T)
    BOOST_CHECK_THROW(boost::math::policies::raise_indeterminate_result_error(func, msg1, T(0.0), T(0.0), user_policy), user_defined_error);
 
    // Test with ignore_error
-   //BOOST_CHECK(boost::math::isnan(boost::math::policies::raise_domain_error(func, msg1, T(0.0), ignore_policy)));
-   //BOOST_CHECK(boost::math::isnan(boost::math::policies::raise_pole_error(func, msg1, T(0.0), ignore_policy)));
+   BOOST_CHECK(boost::math::isnan(boost::math::policies::raise_domain_error(func, msg1, T(0.0), ignore_policy)) || !std::numeric_limits<T>::has_quiet_NaN);
+   BOOST_CHECK(boost::math::isnan(boost::math::policies::raise_pole_error(func, msg1, T(0.0), ignore_policy)) || !std::numeric_limits<T>::has_quiet_NaN);
    BOOST_CHECK_EQUAL(boost::math::policies::raise_overflow_error<T>(func, msg2, ignore_policy), std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>());
    BOOST_CHECK_EQUAL(boost::math::policies::raise_underflow_error<T>(func, msg2, ignore_policy), T(0));
    BOOST_CHECK_EQUAL(boost::math::policies::raise_denorm_error<T>(func, msg2, T(1.25), ignore_policy), T(1.25));
-   //BOOST_CHECK_EQUAL(boost::math::policies::raise_evaluation_error(func, msg1, T(0.0), ignore_policy), std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>());
+   BOOST_CHECK_EQUAL(boost::math::policies::raise_evaluation_error(func, msg1, T(1.25), ignore_policy), T(1.25));
    BOOST_CHECK_EQUAL(boost::math::policies::raise_indeterminate_result_error(func, 0, T(0.0), T(12.34), ignore_policy), T(12.34));
 
    // Test with errno_on_error
-   //errno = 0;
-   //BOOST_CHECK(boost::math::isnan(boost::math::policies::raise_domain_error(func, msg1, T(0.0), errno_policy)));
-   //BOOST_CHECK(errno == EDOM);
-   //errno = 0;
-   //BOOST_CHECK(boost::math::isnan(boost::math::policies::raise_pole_error(func, msg1, T(0.0), errno_policy)));
-   //BOOST_CHECK(errno == EDOM);
+   errno = 0;
+   BOOST_CHECK(boost::math::isnan(boost::math::policies::raise_domain_error(func, msg1, T(0.0), errno_policy)) || !std::numeric_limits<T>::has_quiet_NaN);
+   BOOST_CHECK(errno == EDOM);
+   errno = 0;
+   BOOST_CHECK(boost::math::isnan(boost::math::policies::raise_pole_error(func, msg1, T(0.0), errno_policy)) || !std::numeric_limits<T>::has_quiet_NaN);
+   BOOST_CHECK(errno == EDOM);
    errno = 0;
    BOOST_CHECK_EQUAL(boost::math::policies::raise_overflow_error<T>(func, msg2, errno_policy), std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>());
    BOOST_CHECK_EQUAL(errno, ERANGE);
@@ -167,9 +167,9 @@ void test_error(T)
    errno = 0;
    BOOST_CHECK_EQUAL(boost::math::policies::raise_denorm_error<T>(func, msg2, T(1.25), errno_policy), T(1.25));
    BOOST_CHECK_EQUAL(errno, ERANGE);
-   //errno = 0;
-   //BOOST_CHECK_EQUAL(boost::math::policies::raise_evaluation_error(func, msg1, T(0.0), errno_policy), std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>());
-   //BOOST_CHECK(errno == EDOM);
+   errno = 0;
+   BOOST_CHECK_EQUAL(boost::math::policies::raise_evaluation_error(func, msg1, T(1.25), errno_policy), T(1.25));
+   BOOST_CHECK(errno == EDOM);
    errno = 0;
    BOOST_CHECK(boost::math::policies::raise_indeterminate_result_error(func, 0, T(0.0), T(12.34), errno_policy) == T(12.34));
    BOOST_CHECK_EQUAL(errno, EDOM);
@@ -182,7 +182,7 @@ int test_main(int, char* [])
    test_error(0.0F); // Test float.
    test_error(0.0); // Test double.
    test_error(0.0L); // Test long double.
-  test_error(boost::math::concepts::real_concept(0.0L)); // Test concepts.
+   test_error(boost::math::concepts::real_concept(0.0L)); // Test concepts.
    return 0;
 } // int test_main(int, char* [])
 
