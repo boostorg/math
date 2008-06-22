@@ -39,6 +39,8 @@ boost/math/policies/error_handling.hpp like this:
    T user_denorm_error(const char* function, const char* message, const T& val);
    template <class T>
    T user_evaluation_error(const char* function, const char* message, const T& val);
+   template <class T>
+   T user_indeterminate_result_error(const char* function, const char* message, const T& val);
 
    }}} // namespaces
 

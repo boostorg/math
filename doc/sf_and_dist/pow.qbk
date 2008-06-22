@@ -53,8 +53,8 @@ Only 3 different products were actually computed.
 
 [h4 Return Type]
 
-The return type of these functions is computed using the __arg_pomotion_rules
-when T1 and T2 are different types.  For example:
+The return type of these functions is computed using the __arg_pomotion_rules. 
+For example:
 
 * If T is a `float`, the return type is a `float`.
 * If T is a `long double`, the return type is a `long double`.
@@ -66,9 +66,13 @@ when T1 and T2 are different types.  For example:
 
 [h4 Error Handling]
 
-In the case where `pow` is called with a null base and a negative exponent, 
-an error occurs since this operation is a division by 0 (it equals to 1/0). 
-The error raised is an __overflow_error following the 
+Two cases of errors can occur when using `pow`:
+
+* In case of null base and negative exponent, an __overflown_error occurs since 
+this operation is a division by 0 (it equals to 1/0).
+* In case of null exponent, an indeterminate_result_error occurs since the
+result of a null power is indeterminate.
+Those errors follow the
 [@sf_and_dist/html/math_toolkit/main_overview/error_handling.html 
 general policies of error handling in Boost.Math].
 
@@ -79,6 +83,15 @@ link given above, other error handling policies can be used:
 * `errno_on_error`: Sets `::errno`  to `ERANGE` and returns `std::numeric_limits<T>::infinity()`.
 * `ignore_error`: Returns `std::numeric_limits<T>::infinity()`.
 * `user_error`: Returns the result of `boost::math::policies::user_overflow_error`: 
+   this function must be defined by the user.
+
+The default indeterminate result error policy is `ignore_error`, which for this
+function returns 1 since it's the most commonly chosen result for a power of 0.
+Here again, other error handling policies can be used:
+
+* `throw_on_error`: Throws `std::domain_error`
+* `errno_on_error`: Sets `::errno`  to `EDOM` and returns 1.
+* `user_error`: Returns the result of `boost::math::policies::user_indeterminate_result_error`:
    this function must be defined by the user.
 
 Here is an example of error handling customization where we want to 

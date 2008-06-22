@@ -45,6 +45,7 @@ Will throw one of the following exceptions, depending upon the
        [[Underflow Error][std::underflow_error]]
        [[Denorm Error][std::underflow_error]]
        [[Evaluation Error][boost::math::evaluation_error]]
+       [[Indeterminate Result Error][std::domain_error]]
     ]
 
 [h5 errno_on_error]
@@ -60,11 +61,12 @@ had been ignored:
     [[Underflow Error][ERANGE]]
     [[Denorm Error][ERANGE]]
     [[Evaluation Error][EDOM]]
+    [[Indeterminate Result Error][EDOM]]
  ]
 
 [h5 ignore_error]
 
-Will return a one of the values below depending on the error type (`::errno` is NOT changed)::
+Will return one of the values below depending on the error type (`::errno` is NOT changed)::
  [table
     [[Error Type][Returned Value]]
     [[Domain Error][std::numeric_limits<T>::quiet_NaN()]]
@@ -74,6 +76,7 @@ Will return a one of the values below depending on the error type (`::errno` is 
     [[Denorm Error][The denormalised value.]]
     [[Evaluation Error][The best guess as to the result: which
           may be significantly in error.]]
+    [[Indeterminate Result Error][Depends on the function where the error occurred]]
  ]
 
 [h5 user_error]
@@ -83,28 +86,31 @@ in boost/math/policies/error_handling.hpp, but the actual definitions
 must be provided by the user:
 
    namespace boost{ namespace math{ namespace policies{
-   
+
    template <class T>
    T user_domain_error(const char* function, const char* message, const T& val);
-   
+
    template <class T>
    T user_pole_error(const char* function, const char* message, const T& val);
-   
+
    template <class T>
    T user_overflow_error(const char* function, const char* message, const T& val);
-   
+
    template <class T>
    T user_underflow_error(const char* function, const char* message, const T& val);
-   
+
    template <class T>
    T user_denorm_error(const char* function, const char* message, const T& val);
-   
+
    template <class T>
    T user_rounding_error(const char* function, const char* message, const T& val);
-   
+
    template <class T>
    T user_evaluation_error(const char* function, const char* message, const T& val);
-   
+
+   template <class T>
+   T user_indeterminate_result_error(const char* function, const char* message, const T& val);
+
    }}} // namespaces
 
 Note that the strings ['function] and ['message] may contain "%1%" format specifiers
@@ -121,7 +127,7 @@ tutorial here].
 
 [h4 Kinds of Error Raised]                  
 
-There are five kinds of error reported by this library, 
+There are six kinds of error reported by this library,
 which are summarised in the following table:
 
 [table
@@ -189,6 +195,14 @@ which are summarised in the following table:
       to report it as a bug if it is!
 
       Defaults to `boost::math::policies::evaluation_error<throw_on_error>`
+
+      When the action is ['throw_on_error] then throws `boost::math::evaluation_error`]]
+[[Indeterminate Result Error]
+   [boost::math::policies::indeterminate_result_error<['action]>]
+      [Raised when the result of a function is not defined for the values that
+      were passed to it.
+
+      Defaults to `boost::math::policies::indeterminate_result_error<ignore_error>`
 
       When the action is ['throw_on_error] then throws `boost::math::evaluation_error`]]
 ]
@@ -684,7 +698,9 @@ compile-time container for a collection of policies:
              class A8 = default_policy,
              class A9 = default_policy,
              class A10 = default_policy,
-             class A11 = default_policy>
+             class A11 = default_policy,
+             class A12 = default_policy,
+             class A13 = default_policy>
    struct policy
    {
    public:
@@ -695,6 +711,7 @@ compile-time container for a collection of policies:
       typedef ``['computed-from-template-arguments]`` denorm_error_type;
       typedef ``['computed-from-template-arguments]`` rounding_error_type;
       typedef ``['computed-from-template-arguments]`` evaluation_error_type;
+      typedef ``['computed-from-template-arguments]`` indeterminate_result_error_type;
       typedef ``['computed-from-template-arguments]`` precision_type;
       typedef ``['computed-from-template-arguments]`` promote_float_type;
       typedef ``['computed-from-template-arguments]`` promote_double_type;
@@ -716,7 +733,9 @@ compile-time container for a collection of policies:
              class A8 = default_policy,
              class A9 = default_policy,
              class A10 = default_policy,
-             class A11 = default_policy>
+             class A11 = default_policy,
+             class A12 = default_policy,
+             class A13 = default_policy>
    struct normalise
    {
       typedef ``computed-from-template-arguments`` type;
@@ -766,6 +785,13 @@ Specifies how rounding errors are handled, will be an instance of
 Specifies how evaluation errors are handled, will be an instance of
 `boost::math::policies::evaluation_error<>` with the template argument to
 `evaluation_error` one of the `error_policy_type` enumerated values.
+
+   policy<...>::indeterminate_error_type
+
+Specifies how indeterminate result errors are handled, will be an instance of
+`boost::math::policies::indeterminate_result_error<>` with the template argument
+to `indeterminate_result_error` one of the `error_policy_type` enumerated
+values.
 
    policy<...>::precision_type
    
@@ -817,7 +843,9 @@ a normalised `policy` class.
              class A8 = default_policy,
              class A9 = default_policy,
              class A10 = default_policy,
-             class A11 = default_policy>
+             class A11 = default_policy,
+             class A12 = default_policy,
+             class A13 = default_policy>
    struct normalise
    {
       typedef ``computed-from-template-arguments`` type;
