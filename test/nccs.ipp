@@ -1,3 +1,8 @@
+//  Copyright John Maddock 2008.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 5>, 3200> nccs = {{
       { SC_(1.951913356781005859375000000000000000000), SC_(9.566968083381652832031250000000000000000e-1), SC_(2.908610105514526367187500000000000000000e-1), SC_(9.191713210042786241188236234883914114395e-2), SC_(9.080828678995721375881176376511608588560e-1) }, 
