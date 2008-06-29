@@ -8,7 +8,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
-//  01 Dec 2006  Various fixes for old compilers (Joaquín M López Muñoz)
+//  01 Dec 2006  Various fixes for old compilers (Joaquín M Lopez Munoz)
 //  10 Nov 2006  Make long long and __int64 mutually exclusive (Daryle Walker)
 //  04 Nov 2006  Use more built-in numeric types, binary-GCD (Daryle Walker)
 //  03 Nov 2006  Use custom numeric types (Daryle Walker)
