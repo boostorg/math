@@ -46,7 +46,7 @@ stop reading now!
 [[Denormalised Result][Ignores the fact that the result is denormalised, and returns it.]]
 [[Rounding Error][Throws a `boost::math::rounding_error` exception.]]
 [[Internal Evaluation Error][Throws a `boost::math::evaluation_error` exception.]]
-[[Indeterminate Result Error][Returns a result that depends on the function where the error occurred.]
+[[Indeterminate Result Error][Returns a result that depends on the function where the error occurred.]]
 [[Promotion of float to double][Does occur by default - gives full float precision results.]]
 [[Promotion of double to long double][Does occur by default if long double offers
    more precision than double.]]

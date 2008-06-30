@@ -76,6 +76,7 @@
 [def __denorm_error [link denorm_error denorm_error]]
 [def __evaluation_error [link evaluation_error evaluation_error]]
 [def __rounding_error [link rounding_error rounding_error]]
+[def __indeterminate_result_error [link indeterminate_result_error indeterminate_result_error]]
 [def __checked_narrowing_cast [link checked_narrowing_cast checked_narrowing_cast]]
 
 [def __arg_pomotion_rules [link math_toolkit.main_overview.result_type ['result type calculation rules]]]

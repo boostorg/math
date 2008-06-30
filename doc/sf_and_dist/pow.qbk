@@ -68,12 +68,12 @@ For example:
 
 Two cases of errors can occur when using `pow`:
 
-* In case of null base and negative exponent, an __overflown_error occurs since 
+* In case of null base and negative exponent, an __overflow_error occurs since 
 this operation is a division by 0 (it equals to 1/0).
-* In case of null exponent, an indeterminate_result_error occurs since the
+* In case of null exponent, an __indeterminate_result_error occurs since the
 result of a null power is indeterminate.
 Those errors follow the
-[@sf_and_dist/html/math_toolkit/main_overview/error_handling.html 
+[link math_toolkit.main_overview.error_handling 
 general policies of error handling in Boost.Math].
 
 The default overflow error policy is `throw_on_error`. A call like `pow<-2>(0)` 

@@ -127,9 +127,9 @@ with the default action for each error shown in bold:
 
 [table Possible Actions for Indeterminate Result Errors
 [[Action]   [Behaviour]]
-[[throw_on_error][[*Throws `std::domain_error`]]]
+[[throw_on_error][Throws `std::domain_error`]]
 [[errno_on_error][Sets `::errno` to `EDOM` and returns the same value as `ignore_error`.]]
-[[ignore_error][Returns a default result that depends on the function where the error occurred.]]
+[[ignore_error][[*Returns a default result that depends on the function where the error occurred.]]]
 [[user_error][Returns the result of `boost::math::policies::user_indeterminate_result_error`:
             [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
@@ -331,7 +331,11 @@ alternative default result that must be returned for ignore_error and
 errno_on_error policies, and __Policy is the current policy in use for the
 function that was called.
 
-The default policy for this function is `ignore_error`.
+The default policy for this function is `ignore_error`: note that this error
+type is reserved for situations where the result is mathematically
+undefined or indeterminate, but there is none the less a convention for what
+the result should be: for example the C99 standard specifies that the result
+of 0[super 0] is 1, even though the result is actually mathematically indeterminate.
 
 [heading [#rounding_error]Rounding Errors]
 

@@ -204,7 +204,7 @@ which are summarised in the following table:
 
       Defaults to `boost::math::policies::indeterminate_result_error<ignore_error>`
 
-      When the action is ['throw_on_error] then throws `boost::math::evaluation_error`]]
+      When the action is ['throw_on_error] then throws `std::domain_error`]]
 ]
 
 [h4 Examples]
@@ -547,6 +547,14 @@ actions for error handing: `throw_on_error`, `errno_on_error`,
 [h5 BOOST_MATH_DENORM_ERROR_POLICY]
 
 Defines what happens when a denormalisation error occurs, if not defined then
+defaults to `ignore_error`, but can be set to any of the enumerated
+actions for error handing: `throw_on_error`, `errno_on_error`, 
+`ignore_error` or `user_error`.
+
+[h5 BOOST_MATH_INDETERMINATE_RESULT_ERROR_POLICY]
+
+Defines what happens when the result is indeterminate, but where there
+is none the less a convention for the result.  If not defined then
 defaults to `ignore_error`, but can be set to any of the enumerated
 actions for error handing: `throw_on_error`, `errno_on_error`, 
 `ignore_error` or `user_error`.
