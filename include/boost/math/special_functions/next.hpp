@@ -202,7 +202,7 @@ T float_distance(const T& a, const T& b, const Policy& pol)
    // because we actually have fewer than tools::digits<T>()
    // significant bits in the representation:
    //
-   frexp((boost::math::fpclassify(a) == FP_SUBNORMAL) ? tools::min_value<T>() : a, &expon);
+   frexp(((boost::math::fpclassify)(a) == FP_SUBNORMAL) ? tools::min_value<T>() : a, &expon);
    T upper = ldexp(T(1), expon);
    T result = 0;
    expon = tools::digits<T>() - expon;

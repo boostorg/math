@@ -10,7 +10,7 @@
 
 namespace boost{ namespace math{ namespace tr1{
 
-extern "C" long double BOOST_MATH_TR1_DECL log1pl(long double x)
+extern "C" long double BOOST_MATH_TR1_DECL boost_log1pl(long double x)
 {
    return c_policies::log1p(x);
 }

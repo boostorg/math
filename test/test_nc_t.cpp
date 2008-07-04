@@ -261,7 +261,7 @@ void test_spots(RealType)
    // and the distribution of the square of the sample
    // multiple correlation coeficient.
    // Denise Benton, K. Krishnamoorthy.
-   // Computational Statistics & Data Analysis 43 (2003) 249 – 267
+   // Computational Statistics & Data Analysis 43 (2003) 249 - 267
    //
    test_spot(
       static_cast<RealType>(3),   // degrees of freedom

@@ -8,7 +8,7 @@
 #include <boost/math/special_functions/expm1.hpp>
 #include "c_policy.hpp"
 
-extern "C" double BOOST_MATH_TR1_DECL expm1(double x)
+extern "C" double BOOST_MATH_TR1_DECL boost_expm1(double x)
 {
    return c_policies::expm1(x);
 }

@@ -1,3 +1,8 @@
+//  Copyright John Maddock 2008.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 2>, 24> zeta_1_below_data = {{
       { SC_(0.02141654491424560546875), SC_(-0.5201506602793944998316548018699690797681) }, 

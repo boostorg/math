@@ -10,7 +10,7 @@
 
 namespace boost{ namespace math{ namespace tr1{
 
-extern "C" long double BOOST_MATH_TR1_DECL nextafterl(long double x, long double y)
+extern "C" long double BOOST_MATH_TR1_DECL boost_nextafterl(long double x, long double y)
 {
    return c_policies::nextafter(x, y);
 }

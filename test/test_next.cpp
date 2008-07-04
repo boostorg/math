@@ -109,8 +109,10 @@ int test_main(int, char* [])
 {
    test_values(1.0f, "float");
    test_values(1.0, "double");
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_values(1.0L, "long double");
    test_values(boost::math::concepts::real_concept(0), "real_concept");
+#endif
    return 0;
 }
 

@@ -6,6 +6,7 @@
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <math.h>  // ldexpf
 
 #ifdef TEST_STD
 #include <cmath>
@@ -18,6 +19,7 @@ namespace tr1 = boost::math::tr1;
 void test_values(float, const char* name)
 {
    std::cout << "Testing type " << name << std::endl;
+#ifndef TEST_LD
    //
    // First the C99 math functions:
    //
@@ -645,12 +647,14 @@ void test_values(float, const char* name)
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::sph_legendre(3, 2, static_cast<float>(0.5)), static_cast<float>(0.2061460599687871330692286791802688341213L), eps * 5000);
    BOOST_CHECK_CLOSE_FRACTION(tr1::sph_legendre(40, 15, static_cast<float>(0.75)), static_cast<float>(-0.406036847302819452666908966769096223205057182668333862900509L), eps * 5000);
+#endif
 }
 
 void test_values(double, const char* name)
 {
    std::cout << "Testing type " << name << std::endl;
 
+#ifndef TEST_LD
    double eps = boost::math::tools::epsilon<double>();
    BOOST_CHECK_CLOSE(tr1::acosh(std::cosh(0.5)), 0.5, 500 * eps);
    BOOST_CHECK_CLOSE(tr1::asinh(std::sinh(0.5)), 0.5, 500 * eps);
@@ -963,10 +967,13 @@ void test_values(double, const char* name)
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::sph_legendre(3, 2, static_cast<double>(0.5)), static_cast<double>(0.2061460599687871330692286791802688341213L), eps * 5000);
    BOOST_CHECK_CLOSE_FRACTION(tr1::sph_legendre(40, 15, static_cast<double>(0.75)), static_cast<double>(-0.406036847302819452666908966769096223205057182668333862900509L), eps * 5000);
+#endif
 }
 
 void test_values(long double, const char* name)
 {
+#ifdef TEST_LD
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    std::cout << "Testing type " << name << std::endl;
 
    long double eps = boost::math::tools::epsilon<long double>();
@@ -1027,14 +1034,14 @@ void test_values(long double, const char* name)
    BOOST_CHECK(tr1::roundl(2.5L) == 3.0L);
    BOOST_CHECK(tr1::roundl(2.25L) == 2.0L);
 
-   BOOST_CHECK(tr1::nextafterf(1.0L, 2.0L) > 1.0L);
-   BOOST_CHECK(tr1::nextafterf(1.0L, -2.0L) < 1.0L);
-   BOOST_CHECK(tr1::nextafterf(tr1::nextafterf(1.0L, 2.0L), -2.0L) == 1.0L);
-   BOOST_CHECK(tr1::nextafterf(tr1::nextafterf(1.0L, -2.0L), 2.0L) == 1.0L);
-   BOOST_CHECK(tr1::nextafterf(1.0L, 2.0L) > 1.0L);
-   BOOST_CHECK(tr1::nextafterf(1.0L, -2.0L) < 1.0L);
-   BOOST_CHECK(tr1::nextafterf(tr1::nextafterf(1.0L, 2.0L), -2.0L) == 1.0L);
-   BOOST_CHECK(tr1::nextafterf(tr1::nextafterf(1.0L, -2.0L), 2.0L) == 1.0L);
+   BOOST_CHECK(tr1::nextafterl(1.0L, 2.0L) > 1.0L);
+   BOOST_CHECK(tr1::nextafterl(1.0L, -2.0L) < 1.0L);
+   BOOST_CHECK(tr1::nextafterl(tr1::nextafterl(1.0L, 2.0L), -2.0L) == 1.0L);
+   BOOST_CHECK(tr1::nextafterl(tr1::nextafterl(1.0L, -2.0L), 2.0L) == 1.0L);
+   BOOST_CHECK(tr1::nextafterl(1.0L, 2.0L) > 1.0L);
+   BOOST_CHECK(tr1::nextafterl(1.0L, -2.0L) < 1.0L);
+   BOOST_CHECK(tr1::nextafterl(tr1::nextafterl(1.0L, 2.0L), -2.0L) == 1.0L);
+   BOOST_CHECK(tr1::nextafterl(tr1::nextafterl(1.0L, -2.0L), 2.0L) == 1.0L);
 
    BOOST_CHECK(tr1::truncl(2.5L) == 2.0L);
    BOOST_CHECK(tr1::truncl(2.25L) == 2.0L);
@@ -1593,13 +1600,20 @@ void test_values(long double, const char* name)
 
    BOOST_CHECK_CLOSE_FRACTION(tr1::sph_legendre(3L, 2L, static_cast<long double>(0.5L)), static_cast<long double>(0.2061460599687871330692286791802688341213L), eps * 5000L);
    BOOST_CHECK_CLOSE_FRACTION(tr1::sph_legendre(40L, 15L, static_cast<long double>(0.75L)), static_cast<long double>(-0.406036847302819452666908966769096223205057182668333862900509L), eps * 5000L);
+#endif
+#endif
 }
 
 int test_main(int, char* [])
 {
+#ifndef TEST_LD
    test_values(1.0f, "float");
    test_values(1.0, "double");
+#else
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_values(1.0L, "long double");
+#endif
+#endif
    return 0;
 }
 

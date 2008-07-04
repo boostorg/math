@@ -14,6 +14,7 @@
 #ifdef __cplusplus
 
 #include <boost/config.hpp>
+#include <boost/static_assert.hpp>
 
 namespace boost{ namespace math{ namespace tr1{ extern "C"{
 
@@ -140,9 +141,9 @@ double BOOST_MATH_TR1_DECL exp2(double x);
 float BOOST_MATH_TR1_DECL exp2f(float x);
 long double BOOST_MATH_TR1_DECL exp2l(long double x);
 #endif
-double BOOST_MATH_TR1_DECL expm1(double x);
-float BOOST_MATH_TR1_DECL expm1f(float x);
-long double BOOST_MATH_TR1_DECL expm1l(long double x);
+double BOOST_MATH_TR1_DECL boost_expm1(double x);
+float BOOST_MATH_TR1_DECL boost_expm1f(float x);
+long double BOOST_MATH_TR1_DECL boost_expm1l(long double x);
 #if 0
 double BOOST_MATH_TR1_DECL fdim(double x, double y);
 float BOOST_MATH_TR1_DECL fdimf(float x, float y);
@@ -179,9 +180,9 @@ long long BOOST_MATH_TR1_DECL llround(double x);
 long long BOOST_MATH_TR1_DECL llroundf(float x);
 long long BOOST_MATH_TR1_DECL llroundl(long double x);
 
-double BOOST_MATH_TR1_DECL log1p(double x);
-float BOOST_MATH_TR1_DECL log1pf(float x);
-long double BOOST_MATH_TR1_DECL log1pl(long double x);
+double BOOST_MATH_TR1_DECL boost_log1p(double x);
+float BOOST_MATH_TR1_DECL boost_log1pf(float x);
+long double BOOST_MATH_TR1_DECL boost_log1pl(long double x);
 #if 0
 double BOOST_MATH_TR1_DECL log2(double x);
 float BOOST_MATH_TR1_DECL log2f(float x);
@@ -205,9 +206,9 @@ double BOOST_MATH_TR1_DECL nearbyint(double x);
 float BOOST_MATH_TR1_DECL nearbyintf(float x);
 long double BOOST_MATH_TR1_DECL nearbyintl(long double x);
 #endif
-double BOOST_MATH_TR1_DECL nextafter(double x, double y);
-float BOOST_MATH_TR1_DECL nextafterf(float x, float y);
-long double BOOST_MATH_TR1_DECL nextafterl(long double x, long double y);
+double BOOST_MATH_TR1_DECL boost_nextafter(double x, double y);
+float BOOST_MATH_TR1_DECL boost_nextafterf(float x, float y);
+long double BOOST_MATH_TR1_DECL boost_nextafterl(long double x, long double y);
 
 double BOOST_MATH_TR1_DECL nexttoward(double x, long double y);
 float BOOST_MATH_TR1_DECL nexttowardf(float x, long double y);
@@ -430,6 +431,12 @@ double exp2(double x);
 float exp2f(float x);
 long double exp2l(long double x);
 #endif
+inline float expm1f(float x)
+{ return boost::math::tr1::boost_expm1f(x); }
+inline double expm1(double x)
+{ return boost::math::tr1::boost_expm1(x); }
+inline long double expm1l(long double x)
+{ return boost::math::tr1::boost_expm1l(x); }
 inline float expm1(float x)
 { return boost::math::tr1::expm1f(x); }
 inline long double expm1(long double x)
@@ -493,6 +500,12 @@ template <class T>
 inline long long llround(T x)
 { return llround(static_cast<double>(x)); }
 
+inline float log1pf(float x)
+{ return boost::math::tr1::boost_log1pf(x); }
+inline double log1p(double x)
+{ return boost::math::tr1::boost_log1p(x); }
+inline long double log1pl(long double x)
+{ return boost::math::tr1::boost_log1pl(x); }
 inline float log1p(float x)
 { return boost::math::tr1::log1pf(x); }
 inline long double log1p(long double x)
@@ -527,6 +540,12 @@ double nearbyint(double x);
 float nearbyintf(float x);
 long double nearbyintl(long double x);
 #endif
+inline float nextafterf(float x, float y)
+{ return boost::math::tr1::boost_nextafterf(x, y); }
+inline double nextafter(double x, double y)
+{ return boost::math::tr1::boost_nextafter(x, y); }
+inline long double nextafterl(long double x, long double y)
+{ return boost::math::tr1::boost_nextafterl(x, y); }
 inline float nextafter(float x, float y)
 { return boost::math::tr1::nextafterf(x, y); }
 inline long double nextafter(long double x, long double y)

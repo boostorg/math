@@ -389,10 +389,17 @@ run test_policy_sf.cpp ;
 run test_tr1.cpp
    ../build//boost_math_tr1
    ../build//boost_math_tr1f
-   ../build//boost_math_tr1l 
    ../build//boost_math_c99
    ../build//boost_math_c99f
+   ;
+
+run test_tr1.cpp
+   ../build//boost_math_tr1l 
    ../build//boost_math_c99l 
+   : : :
+   <define>TEST_LD=1
+   :
+   test_tr1_long_double
    ;
 
 compile  compile_test/compl_abs_incl_test.cpp ;

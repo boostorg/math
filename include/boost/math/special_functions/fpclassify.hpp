@@ -177,7 +177,7 @@ inline int fpclassify BOOST_NO_MACRO_EXPAND(double t)
    case _FPCLASS_SNAN /* Signaling NaN */ :
    case _FPCLASS_QNAN /* Quiet NaN */ :
       return FP_NAN;
-   case _FPCLASS_NINF /*Negative infinity ( –INF) */ :
+   case _FPCLASS_NINF /*Negative infinity ( -INF) */ :
    case _FPCLASS_PINF /* Positive infinity (+INF) */ :
       return FP_INFINITE;
    case _FPCLASS_NN /* Negative normalized non-zero */ :
@@ -186,7 +186,7 @@ inline int fpclassify BOOST_NO_MACRO_EXPAND(double t)
    case _FPCLASS_ND /* Negative denormalized */:
    case _FPCLASS_PD /* Positive denormalized */ :
       return FP_SUBNORMAL;
-   case _FPCLASS_NZ /* Negative zero ( – 0) */ :
+   case _FPCLASS_NZ /* Negative zero ( - 0) */ :
    case _FPCLASS_PZ /* Positive 0 (+0) */ :
       return FP_ZERO;
    default:

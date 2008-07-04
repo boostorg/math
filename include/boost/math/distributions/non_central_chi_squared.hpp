@@ -48,7 +48,7 @@ namespace boost
             // and the distribution of the square of the sample
             // multiple correlation coeficient.
             // D. Benton, K. Krishnamoorthy.
-            // Computational Statistics & Data Analysis 43 (2003) 249 – 267
+            // Computational Statistics & Data Analysis 43 (2003) 249 - 267
             //
             BOOST_MATH_STD_USING
 
@@ -193,7 +193,7 @@ namespace boost
             // and the distribution of the square of the sample
             // multiple correlation coeficient.
             // D. Benton, K. Krishnamoorthy.
-            // Computational Statistics & Data Analysis 43 (2003) 249 – 267
+            // Computational Statistics & Data Analysis 43 (2003) 249 - 267
             //
             // We're summing a Poisson weighting term multiplied by
             // a central chi squared distribution.

@@ -19,7 +19,7 @@ namespace boost{ namespace math{ namespace detail{
 //
 // The main method used is due to Hill:
 //
-// G. W. Hill, Algorithm 396, Student’s t-Quantiles,
+// G. W. Hill, Algorithm 396, Student's t-Quantiles,
 // Communications of the ACM, 13(10): 619-620, Oct., 1970.
 //
 template <class T, class Policy>
@@ -66,9 +66,9 @@ T inverse_students_t_hill(T ndf, T u, const Policy& pol)
 //
 // Tail and body series are due to Shaw:
 //
-// www.mth.kcl.ac.uk/˜shaww/web_page/papers/Tdistribution06.pdf
+// www.mth.kcl.ac.uk/~shaww/web_page/papers/Tdistribution06.pdf
 //
-// Shaw, W.T., 2006, "Sampling Student’s T distribution – use of
+// Shaw, W.T., 2006, "Sampling Student's T distribution - use of
 // the inverse cumulative distribution function."
 // Journal of Computational Finance, Vol 9 Issue 4, pp 37-73, Summer 2006
 //

@@ -123,8 +123,11 @@ void print_current_config()
    std::cout << "BOOST_MATH_MAX_ROOT_ITERATION_POLICY    " << BOOST_STRINGIZE(BOOST_MATH_MAX_ROOT_ITERATION_POLICY) << std::endl;
 }
 
+extern void sanity_check();
+
 int main(int argc, const char** argv)
 {
+   //sanity_check();
    try{
 
 #ifdef TEST_GSL
