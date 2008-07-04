@@ -2,16 +2,14 @@
 
 [h4 Boost-1.36.0]
 
-* Added __non_central_chi_squared_distrib.
-* Added __non_central_beta_distrib.
-* Added __non_central_F_distrib.
-* Added __non_central_T_distrib.
-* Added [link math_toolkit.special.expint Exponential Integral Functions].
-* Added __zeta Function.
-* Added [link math_toolkit.special.rounding Rounding and Truncation functions].
-* Added [link math_toolkit.special.powers.ct_pow Compile time powers of runtime bases].
-* Added [link math_toolkit.special.next_float nextafter and related functions].
-* Added separate [link math_toolkit.special.extern_c TR1 and C99 "C" language bindings].
+* Added Noncentral Chi Squared Distribution.
+* Added Noncentral Beta Distribution.
+* Added Noncentral F Distribution.
+* Added Noncentral T Distribution.
+* Added Exponential Integral Functions.
+* Added Zeta Function.
+* Added Rounding and Truncation functions.
+* Added Compile time powers of runtime bases.
 
 [h4 Boost-1.35.0: Post Review First Official Release]
 
@@ -73,7 +71,7 @@ on error rates.
 
 SVN Revisions:
 
-Sandbox and trunk last synchonised at revision: 45483.
+Sandbox and trunk last synchonised at revision: 45484.
 
 ]
 [/ 

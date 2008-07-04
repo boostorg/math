@@ -142,26 +142,29 @@ T gamma_imp(T z, const Policy& pol, const L& l)
 #endif
    static const char* function = "boost::math::tgamma<%1%>(%1%)";
 
-   if((z <= 0) && (floor(z) == z))
-      return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
-   if(z <= -20)
+   if(z <= 0)
    {
-      result = gamma_imp(-z, pol, l) * sinpx(z);
-      if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
-         return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
-      result = -boost::math::constants::pi<T>() / result;
-      if(result == 0)
-         return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-      if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
-         return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
-      return result;
-   }
+      if(floor(z) == z)
+         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
+      if(z <= -20)
+      {
+         result = gamma_imp(-z, pol, l) * sinpx(z);
+         if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
+            return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+         result = -boost::math::constants::pi<T>() / result;
+         if(result == 0)
+            return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
+         if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
+            return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
+         return result;
+      }
 
-   // shift z to > 1:
-   while(z < 1)
-   {
-      result /= z;
-      z += 1;
+      // shift z to > 1:
+      while(z < 0)
+      {
+         result /= z;
+         z += 1;
+      }
    }
    if((floor(z) == z) && (z < max_factorial<T>::value))
    {

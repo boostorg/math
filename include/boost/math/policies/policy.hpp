@@ -63,6 +63,9 @@ namespace policies{
 #ifndef BOOST_MATH_DENORM_ERROR_POLICY
 #define BOOST_MATH_DENORM_ERROR_POLICY ignore_error
 #endif
+#ifndef BOOST_MATH_INDETERMINATE_RESULT_ERROR_POLICY
+#define BOOST_MATH_INDETERMINATE_RESULT_ERROR_POLICY ignore_error
+#endif
 #ifndef BOOST_MATH_DIGITS10_POLICY
 #define BOOST_MATH_DIGITS10_POLICY 0
 #endif
@@ -182,6 +185,7 @@ BOOST_MATH_META_INT(error_policy_type, underflow_error, BOOST_MATH_UNDERFLOW_ERR
 BOOST_MATH_META_INT(error_policy_type, denorm_error, BOOST_MATH_DENORM_ERROR_POLICY)
 BOOST_MATH_META_INT(error_policy_type, evaluation_error, BOOST_MATH_EVALUATION_ERROR_POLICY)
 BOOST_MATH_META_INT(error_policy_type, rounding_error, BOOST_MATH_ROUNDING_ERROR_POLICY)
+BOOST_MATH_META_INT(error_policy_type, indeterminate_result_error, BOOST_MATH_INDETERMINATE_RESULT_ERROR_POLICY)
 
 //
 // Policy types for internal promotion:
@@ -403,6 +407,7 @@ public:
    typedef typename detail::find_arg<arg_list, is_denorm_error<mpl::_1>, denorm_error<> >::type denorm_error_type;
    typedef typename detail::find_arg<arg_list, is_evaluation_error<mpl::_1>, evaluation_error<> >::type evaluation_error_type;
    typedef typename detail::find_arg<arg_list, is_rounding_error<mpl::_1>, rounding_error<> >::type rounding_error_type;
+   typedef typename detail::find_arg<arg_list, is_indeterminate_result_error<mpl::_1>, indeterminate_result_error<> >::type indeterminate_result_error_type;
 private:
    //
    // Now work out the precision:
@@ -446,6 +451,7 @@ public:
    typedef denorm_error<> denorm_error_type;
    typedef evaluation_error<> evaluation_error_type;
    typedef rounding_error<> rounding_error_type;
+   typedef indeterminate_result_error<> indeterminate_result_error_type;
 #if BOOST_MATH_DIGITS10_POLICY == 0
    typedef digits2<> precision_type;
 #else
@@ -470,6 +476,7 @@ public:
    typedef denorm_error<> denorm_error_type;
    typedef evaluation_error<> evaluation_error_type;
    typedef rounding_error<> rounding_error_type;
+   typedef indeterminate_result_error<> indeterminate_result_error_type;
 #if BOOST_MATH_DIGITS10_POLICY == 0
    typedef digits2<> precision_type;
 #else
@@ -508,6 +515,7 @@ private:
    typedef typename detail::find_arg<arg_list, is_denorm_error<mpl::_1>, typename Policy::denorm_error_type >::type denorm_error_type;
    typedef typename detail::find_arg<arg_list, is_evaluation_error<mpl::_1>, typename Policy::evaluation_error_type >::type evaluation_error_type;
    typedef typename detail::find_arg<arg_list, is_rounding_error<mpl::_1>, typename Policy::rounding_error_type >::type rounding_error_type;
+   typedef typename detail::find_arg<arg_list, is_indeterminate_result_error<mpl::_1>, typename Policy::indeterminate_result_error_type >::type indeterminate_result_error_type;
    //
    // Now work out the precision:
    //
@@ -543,6 +551,7 @@ private:
       denorm_error_type,
       evaluation_error_type,
       rounding_error_type,
+      indeterminate_result_error_type,
       precision_type,
       promote_float_type,
       promote_double_type,
@@ -665,6 +674,13 @@ inline typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10>::ty
 { 
    typedef typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10>::type result_type;
    return result_type(); 
+}
+
+template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+inline typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11>::type make_policy(const A1&, const A2&, const A3&, const A4&, const A5&, const A6&, const A7&, const A8&, const A9&, const A10&, const A11&)
+{
+   typedef typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11>::type result_type;
+   return result_type();
 }
 
 //

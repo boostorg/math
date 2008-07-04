@@ -310,6 +310,14 @@ boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant)
          y = sqrt(y);
          return boost::math::erf_inv(y) / (y);
       }
+   case 28:
+      {
+	     // log1p over [-0.5,0.5]
+         boost::math::ntl::RR y = x;
+         if(fabs(y) < 1e-100)
+            y = (y == 0) ? 1e-100 : boost::math::sign(y) * 1e-100;
+         return (boost::math::log1p(y) - y + y * y / 2) / (y);
+      }
    }
    return 0;
 }

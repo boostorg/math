@@ -39,7 +39,7 @@
           </li>
 </ul></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised"></a><h5>
-<a name="id833817"></a>
+<a name="id834424"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised">Available
           Actions When an Error is Raised</a>
         </h5>
@@ -62,7 +62,7 @@
           The various enumerated values have the following meanings:
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error"></a><h6>
-<a name="id834069"></a>
+<a name="id834677"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error">throw_on_error</a>
         </h6>
 <p>
@@ -159,10 +159,22 @@
                 </p>
                 </td>
 </tr>
+<tr>
+<td>
+                <p>
+                  Indeterminate Result Error
+                </p>
+                </td>
+<td>
+                <p>
+                  std::domain_error
+                </p>
+                </td>
+</tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error"></a><h6>
-<a name="id834252"></a>
+<a name="id834879"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error">errno_on_error</a>
         </h6>
 <p>
@@ -260,14 +272,26 @@
                 </p>
                 </td>
 </tr>
+<tr>
+<td>
+                <p>
+                  Indeterminate Result Error
+                </p>
+                </td>
+<td>
+                <p>
+                  EDOM
+                </p>
+                </td>
+</tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.ignore_error"></a><h6>
-<a name="id834451"></a>
+<a name="id835097"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.ignore_error">ignore_error</a>
         </h6>
 <p>
-          Will return a one of the values below depending on the error type (<code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+          Will return one of the values below depending on the error type (<code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
           is NOT changed)::
         </p>
 <div class="informaltable"><table class="table">
@@ -361,10 +385,22 @@
                 </p>
                 </td>
 </tr>
+<tr>
+<td>
+                <p>
+                  Indeterminate Result Error
+                </p>
+                </td>
+<td>
+                <p>
+                  Depends on the function where the error occurred
+                </p>
+                </td>
+</tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.user_error"></a><h6>
-<a name="id834652"></a>
+<a name="id835317"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.user_error">user_error</a>
         </h6>
 <p>
@@ -394,6 +430,9 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">user_evaluation_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">);</span>
 
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">user_indeterminate_result_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">);</span>
+
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
@@ -410,12 +449,12 @@
           here</a>.
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised"></a><h5>
-<a name="id835721"></a>
+<a name="id836512"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised">Kinds
           of Error Raised</a>
         </h5>
 <p>
-          There are five kinds of error reported by this library, which are summarised
+          There are six kinds of error reported by this library, which are summarised
           in the following table:
         </p>
 <div class="informaltable"><table class="table">
@@ -621,10 +660,35 @@
                 </p>
                 </td>
 </tr>
+<tr>
+<td>
+                <p>
+                  Indeterminate Result Error
+                </p>
+                </td>
+<td>
+                <p>
+                  boost::math::policies::indeterminate_result_error&lt;<span class="emphasis"><em>action</em></span>&gt;
+                </p>
+                </td>
+<td>
+                <p>
+                  Raised when the result of a function is not defined for the values
+                  that were passed to it.
+                </p>
+                <p>
+                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">indeterminate_result_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span></code>
+                </p>
+                <p>
+                  When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
+                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
+                </p>
+                </td>
+</tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.examples"></a><h5>
-<a name="id836726"></a>
+<a name="id837644"></a>
           <a href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.examples">Examples</a>
         </h5>
 <p>

@@ -32,7 +32,7 @@
           computes the compile-time integral power of a run-time base.
         </p>
 <a name="math_toolkit.special.powers.ct_pow.synopsis"></a><h5>
-<a name="id731212"></a>
+<a name="id731450"></a>
           <a href="ct_pow.html#math_toolkit.special.powers.ct_pow.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -49,7 +49,7 @@
 <span class="special">}}</span>
 </pre>
 <a name="math_toolkit.special.powers.ct_pow.rationale_and_usage"></a><h5>
-<a name="id731575"></a>
+<a name="id731813"></a>
           <a href="ct_pow.html#math_toolkit.special.powers.ct_pow.rationale_and_usage">Rationale
           and Usage</a>
         </h5>
@@ -91,13 +91,12 @@
           Only 3 different products were actually computed.
         </p>
 <a name="math_toolkit.special.powers.ct_pow.return_type"></a><h5>
-<a name="id731980"></a>
+<a name="id732219"></a>
           <a href="ct_pow.html#math_toolkit.special.powers.ct_pow.return_type">Return Type</a>
         </h5>
 <p>
           The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
-          type calculation rules</em></span></a> when T1 and T2 are different types.
-          For example:
+          type calculation rules</em></span></a>. For example:
         </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
@@ -113,7 +112,7 @@
           </li>
 </ul></div>
 <a name="math_toolkit.special.powers.ct_pow.policies"></a><h5>
-<a name="id732108"></a>
+<a name="id732346"></a>
           <a href="ct_pow.html#math_toolkit.special.powers.ct_pow.policies">Policies</a>
         </h5>
 <p>
@@ -127,18 +126,25 @@
 <p>
         </p>
 <a name="math_toolkit.special.powers.ct_pow.error_handling"></a><h5>
-<a name="id732161"></a>
+<a name="id732399"></a>
           <a href="ct_pow.html#math_toolkit.special.powers.ct_pow.error_handling">Error
           Handling</a>
         </h5>
 <p>
-          In the case where <code class="computeroutput"><span class="identifier">pow</span></code> is
-          called with a null base and a negative exponent, an error occurs since
-          this operation is a division by 0 (it equals to 1/0). The error raised
-          is an <a href="../../main_overview/error_handling.html#overflow_error">overflow_error</a> following the
-          <a href="../../main_overview/error_handling.html" title="Error Handling">general policies
-          of error handling in Boost.Math</a>.
+          Two cases of errors can occur when using <code class="computeroutput"><span class="identifier">pow</span></code>:
         </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            In case of null base and negative exponent, an <a href="../../main_overview/error_handling.html#overflow_error">overflow_error</a>
+            occurs since this operation is a division by 0 (it equals to 1/0).
+          </li>
+<li>
+            In case of null exponent, an <a href="../../main_overview/error_handling.html#indeterminate_result_error">indeterminate_result_error</a>
+            occurs since the result of a null power is indeterminate. Those errors
+            follow the <a href="../../main_overview/error_handling.html" title="Error Handling">general
+            policies of error handling in Boost.Math</a>.
+          </li>
+</ul></div>
 <p>
           The default overflow error policy is <code class="computeroutput"><span class="identifier">throw_on_error</span></code>.
           A call like <code class="computeroutput"><span class="identifier">pow</span><span class="special">&lt;-</span><span class="number">2</span><span class="special">&gt;(</span><span class="number">0</span><span class="special">)</span></code> will thus throw a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">overflow_error</span></code>
@@ -160,6 +166,27 @@
 <code class="computeroutput"><span class="identifier">user_error</span></code>: Returns the
             result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_overflow_error</span></code>: this function
             must be defined by the user.
+          </li>
+</ul></div>
+<p>
+          The default indeterminate result error policy is <code class="computeroutput"><span class="identifier">ignore_error</span></code>,
+          which for this function returns 1 since it's the most commonly chosen result
+          for a power of 0. Here again, other error handling policies can be used:
+        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+<code class="computeroutput"><span class="identifier">throw_on_error</span></code>: Throws
+            <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
+</li>
+<li>
+<code class="computeroutput"><span class="identifier">errno_on_error</span></code>: Sets
+            <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+            to <code class="computeroutput"><span class="identifier">EDOM</span></code> and returns 1.
+          </li>
+<li>
+<code class="computeroutput"><span class="identifier">user_error</span></code>: Returns the
+            result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_indeterminate_result_error</span></code>: this
+            function must be defined by the user.
           </li>
 </ul></div>
 <p>
@@ -204,7 +231,7 @@
 <span class="keyword">double</span> <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">pow</span><span class="special">&lt;-</span><span class="number">5</span><span class="special">&gt;(</span><span class="identifier">base</span><span class="special">);</span>
 </pre>
 <a name="math_toolkit.special.powers.ct_pow.acknowledgements"></a><h5>
-<a name="id733149"></a>
+<a name="id733574"></a>
           <a href="ct_pow.html#math_toolkit.special.powers.ct_pow.acknowledgements">Acknowledgements</a>
         </h5>
 <p>
@@ -215,7 +242,7 @@
 improving the implementation.
         </p>
 <a name="math_toolkit.special.powers.ct_pow.references"></a><h5>
-<a name="id733187"></a>
+<a name="id733612"></a>
           <a href="ct_pow.html#math_toolkit.special.powers.ct_pow.references">References</a>
         </h5>
 <p>
