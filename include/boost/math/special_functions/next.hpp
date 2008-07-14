@@ -37,7 +37,7 @@ inline T get_smallest_value(mpl::false_ const&)
 template <class T>
 inline T get_smallest_value()
 {
-   return get_smallest_value<T>(mpl::bool_<std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::has_denorm>());
+   return get_smallest_value<T>(mpl::bool_<std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present)>());
 }
 
 }
