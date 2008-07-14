@@ -355,9 +355,9 @@ void test_spots(T, const char* type_name)
 {
    std::cout << "Running spot checks for type " << type_name << std::endl;
    //
-   // basic sanity checks, tolerance is 100 epsilon expressed as a percentage:
+   // basic sanity checks, tolerance is 150 epsilon expressed as a percentage:
    //
-   T tolerance = boost::math::tools::epsilon<T>() * 10000;
+   T tolerance = boost::math::tools::epsilon<T>() * 15000;
    if(tolerance < 1e-25f)
       tolerance = 1e-25f;  // limit of test data?
    BOOST_CHECK_CLOSE(::boost::math::gamma_q_inv(static_cast<T>(1)/100, static_cast<T>(1.0/128)), static_cast<T>(0.35767144525455121503672919307647515332256996883787L), tolerance);
