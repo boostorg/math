@@ -299,7 +299,7 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
    is >> v;
    a = v;
    return is;
-#elif defined(__SGI_STL_PORT)
+#elif defined(__SGI_STL_PORT) || defined(_RWSTD_VER) || defined(__LIBCOMO__)
    std::string s;
    real_concept_base_type d;
    is >> s;

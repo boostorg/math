@@ -15,32 +15,32 @@ namespace boost{ namespace math{ namespace tr1{
 
 template<> bool BOOST_MATH_TR1_DECL signbit<long double> NO_MACRO_EXPAND(long double x)
 {
-   return static_cast<bool>(boost::math::signbit(x)); 
+   return static_cast<bool>((boost::math::signbit)(x)); 
 }
 
 template<> int BOOST_MATH_TR1_DECL fpclassify<long double> NO_MACRO_EXPAND(long double x)
 {
-   return boost::math::fpclassify(x);
+   return (boost::math::fpclassify)(x);
 }
 
 template<> bool BOOST_MATH_TR1_DECL isfinite<long double> NO_MACRO_EXPAND(long double x)
 {
-   return boost::math::isfinite(x);
+   return (boost::math::isfinite)(x);
 }
 
 template<> bool BOOST_MATH_TR1_DECL isinf<long double> NO_MACRO_EXPAND(long double x)
 {
-   return boost::math::isinf(x);
+   return (boost::math::isinf)(x);
 }
 
 template<> bool BOOST_MATH_TR1_DECL isnan<long double> NO_MACRO_EXPAND(long double x)
 {
-   return boost::math::isnan(x);
+   return (boost::math::isnan)(x);
 }
 
 template<> bool BOOST_MATH_TR1_DECL isnormal<long double> NO_MACRO_EXPAND(long double x)
 {
-   return boost::math::isnormal(x);
+   return (boost::math::isnormal)(x);
 }
 
 }}}

@@ -557,7 +557,7 @@ void test_values(float, const char* name)
    BOOST_CHECK_CLOSE(tr1::ellint_2(static_cast<float>(800) / 1024, static_cast<float>(1e-05)), static_cast<float>(9.999999999898274739584436515967055859383969942432E-6), eps * 5000);
    BOOST_CHECK_CLOSE(tr1::ellint_2(static_cast<float>(100) / 1024, static_cast<float>(1e+05)), static_cast<float>(99761.153306972066658135668386691227343323331995888), eps * 5000);
    BOOST_CHECK_CLOSE(tr1::ellint_2(static_cast<float>(-0.5), static_cast<float>(1e+10)), static_cast<float>(9.3421545766487137036576748555295222252286528414669e9), eps * 5000);
-   BOOST_CHECK_CLOSE(tr1::ellint_2(static_cast<float>(400) / 1024, ldexpf(static_cast<float>(1), 66)), static_cast<float>(7.0886102721911705466476846969992069994308167515242e19), eps * 5000);
+   BOOST_CHECK_CLOSE(tr1::ellint_2(static_cast<float>(400) / 1024, static_cast<float>(ldexp(static_cast<double>(1), 66))), static_cast<float>(7.0886102721911705466476846969992069994308167515242e19), eps * 5000);
 
    BOOST_CHECK_CLOSE(tr1::ellint_3(static_cast<float>(0), static_cast<float>(1), static_cast<float>(-1)), static_cast<float>(-1.557407724654902230506974807458360173087), eps * 5000);
    BOOST_CHECK_CLOSE(tr1::ellint_3(static_cast<float>(0.4), static_cast<float>(0), static_cast<float>(-4)), static_cast<float>(-4.153623371196831087495427530365430979011), eps * 5000);
@@ -1230,7 +1230,7 @@ void test_values(long double, const char* name)
    BOOST_CHECK_CLOSE(tr1::cyl_bessel_kl(static_cast<long double>(10240L)/1024L, static_cast<long double>(1L)/1024L), static_cast<long double>(2.35522579263922076203415803966825431039900000000993410734978e38L), eps * 5000L);
    BOOST_CHECK_CLOSE(tr1::cyl_bessel_kl(static_cast<long double>(10240L)/1024L, static_cast<long double>(10L)), static_cast<long double>(0.00161425530039067002345725193091329085443750382929208307802221L), eps * 5000L);
    BOOST_CHECK_CLOSE(tr1::cyl_bessel_kl(static_cast<long double>(144793L)/1024L, static_cast<long double>(100L)), static_cast<long double>(1.39565245860302528069481472855619216759142225046370312329416e-6L), eps * 5000L);
-   BOOST_CHECK_CLOSE(tr1::cyl_bessel_kl(static_cast<long double>(144793L)/1024L, static_cast<long double>(200L)), static_cast<long double>(9.11950412043225432171915100042647230802198254567007382956336e-68L), eps * 5000L);
+   BOOST_CHECK_CLOSE(tr1::cyl_bessel_kl(static_cast<long double>(144793L)/1024L, static_cast<long double>(200L)), static_cast<long double>(9.11950412043225432171915100042647230802198254567007382956336e-68L), eps * 7000L);
 
    BOOST_CHECK_CLOSE(tr1::cyl_neumannl(static_cast<long double>(0.5L), static_cast<long double>(1L) / (1024*1024L)), static_cast<long double>(-817.033790261762580469303126467917092806755460418223776544122L), eps * 5000L);
    BOOST_CHECK_CLOSE(tr1::cyl_neumannl(static_cast<long double>(5.5L), static_cast<long double>(3.125L)), static_cast<long double>(-2.61489440328417468776474188539366752698192046890955453259866L), eps * 5000L);
@@ -1471,7 +1471,7 @@ void test_values(long double, const char* name)
    BOOST_CHECK_CLOSE(tr1::cyl_bessel_k(static_cast<long double>(10240L)/1024L, static_cast<long double>(1L)/1024L), static_cast<long double>(2.35522579263922076203415803966825431039900000000993410734978e38L), eps * 5000L);
    BOOST_CHECK_CLOSE(tr1::cyl_bessel_k(static_cast<long double>(10240L)/1024L, static_cast<long double>(10L)), static_cast<long double>(0.00161425530039067002345725193091329085443750382929208307802221L), eps * 5000L);
    BOOST_CHECK_CLOSE(tr1::cyl_bessel_k(static_cast<long double>(144793L)/1024L, static_cast<long double>(100L)), static_cast<long double>(1.39565245860302528069481472855619216759142225046370312329416e-6L), eps * 5000L);
-   BOOST_CHECK_CLOSE(tr1::cyl_bessel_k(static_cast<long double>(144793L)/1024L, static_cast<long double>(200L)), static_cast<long double>(9.11950412043225432171915100042647230802198254567007382956336e-68L), eps * 5000L);
+   BOOST_CHECK_CLOSE(tr1::cyl_bessel_k(static_cast<long double>(144793L)/1024L, static_cast<long double>(200L)), static_cast<long double>(9.11950412043225432171915100042647230802198254567007382956336e-68L), eps * 7000L);
 
    BOOST_CHECK_CLOSE(tr1::cyl_neumann(static_cast<long double>(0.5L), static_cast<long double>(1L) / (1024*1024L)), static_cast<long double>(-817.033790261762580469303126467917092806755460418223776544122L), eps * 5000L);
    BOOST_CHECK_CLOSE(tr1::cyl_neumann(static_cast<long double>(5.5L), static_cast<long double>(3.125L)), static_cast<long double>(-2.61489440328417468776474188539366752698192046890955453259866L), eps * 5000L);
