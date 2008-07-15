@@ -174,12 +174,24 @@ In the following table /r/ is an object of type `RealType`,
 [[`asin(cr1)`][RealType]]
 [[`tan(cr1)`][RealType]]
 [[`atan(cr1)`][RealType]]
+[[`fmod(cr1)`][RealType]]
+[[`round(cr1)`][RealType]]
+[[`iround(cr1)`][int]]
+[[`trunc(cr1)`][RealType]]
+[[`itrunc(cr1)`][int]]
 ]
 
 Note that the table above lists only those standard library functions known to
 be used (or likely to be used in the near future) by this library.  
-The following functions: `acos`, `atan2`, `fmod`, `cosh`, `sinh`, `tanh`, `modf` and `log10`
+The following functions: `acos`, `atan2`, `fmod`, `cosh`, `sinh`, `tanh`, `log10`,
+`lround`, `llround`, ltrunc`, `lltrunc` and `modf`
 are not currently used, but may be if further special functions are added.
+
+Note that the `round`, `trunc` and `modf` functions are not part of the
+current C++ standard: they are part of the additions added to C99 which will
+likely be in the next C++ standard.  There are Boost versions of these provided
+as a backup, and the functions are always called unqualified so that 
+argument-dependent-lookup can take place.
 
 In addition, for efficient and accurate results, a __lanczos is highly desirable.
 You may be able to adapt an existing approximation from 

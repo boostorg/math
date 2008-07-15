@@ -6,11 +6,15 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_IGAMMA_INVERSE_HPP
 #define BOOST_MATH_SPECIAL_FUNCTIONS_IGAMMA_INVERSE_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
+#include <boost/tr1/tuple.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/policies/error_handling.hpp>
-#include <boost/tr1/tuple.hpp>
 
 namespace boost{ namespace math{
 
@@ -462,5 +466,6 @@ inline typename tools::promote_args<T1, T2>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_IGAMMA_INVERSE_HPP
+
 
 

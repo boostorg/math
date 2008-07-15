@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -84,10 +84,10 @@ independent, normally distributed random
             values of &#957;:
           </p>
 <p>
-            <span class="inlinemediaobject"><img src="../../../../../graphs/chi_square.png" alt="chi_square"></span>
+            <span class="inlinemediaobject"><img src="../../../../../graphs/chi_squared_pdf.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.member_functions"></a><h5>
-<a name="id589438"></a>
+<a name="id613727"></a>
             <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -170,7 +170,7 @@ independent, normally distributed random
             NIST Engineering Statistics Handbook, Section 7.2.3.2</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.non_member_accessors"></a><h5>
-<a name="id589882"></a>
+<a name="id614172"></a>
             <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -187,10 +187,16 @@ independent, normally distributed random
             <a href="../nmp.html#math.dist.range">range</a> and <a href="../nmp.html#math.dist.support">support</a>.
           </p>
 <p>
+            (We have followed the usual restriction of the mode to degrees of freedom
+            &gt;= 2, but note that the maximum of the pdf is actually zero for degrees
+            of freedom from 2 down to 0, and provide an extended definition that
+            would avoid a discontinuity in the mode as alternative code in a comment).
+          </p>
+<p>
             The domain of the random variable is [0, +&#8734;].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.examples"></a><h5>
-<a name="id590054"></a>
+<a name="id614361"></a>
             <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.examples">Examples</a>
           </h5>
 <p>
@@ -198,7 +204,7 @@ independent, normally distributed random
             are available illustrating the use of the Chi Squared Distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.accuracy"></a><h5>
-<a name="id590094"></a>
+<a name="id614402"></a>
             <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -206,7 +212,7 @@ independent, normally distributed random
             gamma functions</a>: please refer to the accuracy data for those functions.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.implementation"></a><h5>
-<a name="id590136"></a>
+<a name="id614444"></a>
             <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -373,7 +379,7 @@ independent, normally distributed random
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.references"></a><h5>
-<a name="id590480"></a>
+<a name="id614788"></a>
             <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.references">References</a>
           </h5>
 <div class="itemizedlist"><ul type="disc">
@@ -388,8 +394,8 @@ independent, normally distributed random
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
+      Holin, Xiaogang Zhang and Bruno Lalande<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

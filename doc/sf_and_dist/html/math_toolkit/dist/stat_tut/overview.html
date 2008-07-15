@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,7 +27,7 @@
 <a name="math_toolkit.dist.stat_tut.overview"></a><a href="overview.html" title="Overview"> Overview</a>
 </h4></div></div></div>
 <a name="math_toolkit.dist.stat_tut.overview.headers_and_namespaces"></a><h5>
-<a name="id497201"></a>
+<a name="id518374"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.headers_and_namespaces">Headers
           and Namespaces</a>
         </h5>
@@ -44,7 +44,7 @@
           or &lt;boost/math/distributions.hpp&gt;
         </p>
 <a name="math_toolkit.dist.stat_tut.overview.distributions_are_objects"></a><h5>
-<a name="id497254"></a>
+<a name="id518429"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.distributions_are_objects">Distributions
           are Objects</a>
         </h5>
@@ -131,7 +131,7 @@
           and <span class="emphasis"><em>quantiles</em></span> etc for these distributions.
         </p>
 <a name="math_toolkit.dist.stat_tut.overview.generic_operations_common_to_all_distributions_are_non_member_functions"></a><h5>
-<a name="id497787"></a>
+<a name="id518961"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.generic_operations_common_to_all_distributions_are_non_member_functions">Generic
           operations common to all distributions are non-member functions</a>
         </h5>
@@ -230,23 +230,42 @@
           <code class="computeroutput"><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">n</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">);</span></code>
         </p>
 <p>
+          The ranges of random variate values that are permitted and are supported
+          can be tested by using two functions <code class="computeroutput"><span class="identifier">range</span></code>
+          and <code class="computeroutput"><span class="identifier">support</span></code>.
+        </p>
+<p>
           The distribution (effectively the random variate) is said to be 'supported'
           over a range that is <a href="http://en.wikipedia.org/wiki/Probability_distribution" target="_top">"the
           smallest closed set whose complement has probability zero"</a>.
           MathWorld uses the word 'defined' for this range. Non-mathematicians might
           say it means the 'interesting' smallest range of random variate x that
           has the cdf going from zero to unity. Outside are uninteresting zones where
-          the pdf is zero, and the cdf zero or unity. Mathematically, the functions
-          may make sense with an (+ or -) infinite value, but except for a few special
-          cases (in the Normal and Cauchy distributions) this implementation limits
-          random variates to finite values from the <code class="computeroutput"><span class="identifier">max</span></code>
-          to <code class="computeroutput"><span class="identifier">min</span></code> for the <code class="computeroutput"><span class="identifier">RealType</span></code>. (See <a href="../../backgrounders/implementation.html#math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity">Handling
-          of Floating-Point Infinity</a> for rationale).
+          the pdf is zero, and the cdf zero or unity.
         </p>
 <p>
-          The range of random variate values that is permitted and supported can
-          be tested by using two functions <code class="computeroutput"><span class="identifier">range</span></code>
-          and <code class="computeroutput"><span class="identifier">support</span></code>.
+          For most distributions, with probability distribution functions one might
+          describe as 'well-behaved', we have decided that it is most useful for
+          the supported range to exclude random variate values like exact zero <span class="bold"><strong>if the end point is discontinuous</strong></span>. For example,
+          the Weibull (scale 1, shape 1) distribution smoothly heads for unity as
+          the random variate x declines towards zero. But at x = zero, the value
+          of the pdf is suddenly exactly zero, by definition. If you are plotting
+          the PDF, or otherwise calculating, zero is not the most useful value for
+          the lower limit of supported, as we discovered. So for this, and similar
+          distributions, we have decided it is most numerically useful to use the
+          closest value to zero, min_value, for the limit of the supported range.
+          (The <code class="computeroutput"><span class="identifier">range</span></code> remains from
+          zero, so you will still get <code class="computeroutput"><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">weibull</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span>
+          <span class="special">==</span> <span class="number">0</span></code>).
+          (Exponential and gamma distributions have similarly discontinuous functions).
+        </p>
+<p>
+          Mathematically, the functions may make sense with an (+ or -) infinite
+          value, but except for a few special cases (in the Normal and Cauchy distributions)
+          this implementation limits random variates to finite values from the <code class="computeroutput"><span class="identifier">max</span></code> to <code class="computeroutput"><span class="identifier">min</span></code>
+          for the <code class="computeroutput"><span class="identifier">RealType</span></code>. (See
+          <a href="../../backgrounders/implementation.html#math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity">Handling
+          of Floating-Point Infinity</a> for rationale).
         </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
@@ -307,7 +326,7 @@
 <a name="complements"></a><p>
         </p>
 <a name="math_toolkit.dist.stat_tut.overview.complements_are_supported_too"></a><h5>
-<a name="id498520"></a>
+<a name="id519794"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.complements_are_supported_too">Complements
           are supported too</a>
         </h5>
@@ -442,7 +461,7 @@
 </td></tr>
 </table></div>
 <a name="math_toolkit.dist.stat_tut.overview.parameters_can_be_calculated"></a><h5>
-<a name="id499699"></a>
+<a name="id520977"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.parameters_can_be_calculated">Parameters
           can be calculated</a>
         </h5>
@@ -473,7 +492,7 @@
           sample size.
         </p>
 <a name="math_toolkit.dist.stat_tut.overview.summary"></a><h5>
-<a name="id499851"></a>
+<a name="id521141"></a>
           <a href="overview.html#math_toolkit.dist.stat_tut.overview.summary">Summary</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
@@ -507,8 +526,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
+      Holin, Xiaogang Zhang and Bruno Lalande<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

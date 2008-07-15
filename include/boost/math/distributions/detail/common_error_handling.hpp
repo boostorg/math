@@ -96,6 +96,60 @@ inline bool check_x(
    // leaving this test to catch any NaNs.  see Normal and cauchy for example.
 }
 
+template <class RealType, class Policy>
+inline bool check_positive_x(
+      const char* function,
+      RealType x,
+      RealType* result,
+      const Policy& pol)
+{
+   if(!(boost::math::isfinite)(x) || (x < 0))
+   {
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Random variate x is %1%, but must be finite and >= 0!", x, pol);
+      return false;
+   }
+   return true;
+   // Note that this test catches both infinity and NaN.
+   // Some special cases permit x to be infinite, so these must be tested 1st,
+   // leaving this test to catch any NaNs.  see Normal and cauchy for example.
+}
+
+template <class RealType, class Policy>
+inline bool check_non_centrality(
+      const char* function,
+      RealType ncp,
+      RealType* result,
+      const Policy& pol)
+{
+   if((ncp < 0) || !(boost::math::isfinite)(ncp))
+   { // Assume scale == 0 is NOT valid for any distribution.
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Non centrality parameter is %1%, but must be > 0 !", ncp, pol);
+      return false;
+   }
+   return true;
+}
+
+template <class RealType, class Policy>
+inline bool check_finite(
+      const char* function,
+      RealType x,
+      RealType* result,
+      const Policy& pol)
+{
+   if(!(boost::math::isfinite)(x))
+   { // Assume scale == 0 is NOT valid for any distribution.
+      *result = policies::raise_domain_error<RealType>(
+         function,
+         "Parameter is %1%, but must be finite !", x, pol);
+      return false;
+   }
+   return true;
+}
+
 } // namespace detail
 } // namespace math
 } // namespace boost

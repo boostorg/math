@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -33,7 +33,7 @@
         and reflect more the general implementation philosophy used.
       </p>
 <a name="math_toolkit.backgrounders.implementation.implemention_philosophy"></a><h5>
-<a name="id782705"></a>
+<a name="id857398"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.implemention_philosophy">Implemention
         philosophy</a>
       </h5>
@@ -85,7 +85,7 @@
         These could still provide sufficient accuracy for some speed-critical applications.
       </p>
 <a name="math_toolkit.backgrounders.implementation.accuracy_and_representation_of_test_values"></a><h5>
-<a name="id782816"></a>
+<a name="id857509"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.accuracy_and_representation_of_test_values">Accuracy
         and Representation of Test Values</a>
       </h5>
@@ -130,7 +130,7 @@
         binary value).
       </p>
 <a name="math_toolkit.backgrounders.implementation.tolerance_of_tests"></a><h5>
-<a name="id783048"></a>
+<a name="id857741"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.tolerance_of_tests">Tolerance
         of Tests</a>
       </h5>
@@ -156,7 +156,7 @@
         first that the suffix L is present, and then that the tolerance is big enough.
       </p>
 <a name="math_toolkit.backgrounders.implementation.handling_unsuitable_arguments"></a><h5>
-<a name="id783107"></a>
+<a name="id857800"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.handling_unsuitable_arguments">Handling
         Unsuitable Arguments</a>
       </h5>
@@ -242,7 +242,7 @@
         </p></td></tr>
 </table></div>
 <a name="math_toolkit.backgrounders.implementation.handling_of_functions_that_are_not_mathematically_defined"></a><h5>
-<a name="id783332"></a>
+<a name="id858025"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.handling_of_functions_that_are_not_mathematically_defined">Handling
         of Functions that are Not Mathematically defined</a>
       </h5>
@@ -276,7 +276,7 @@
         </p></td></tr>
 </table></div>
 <a name="math_toolkit.backgrounders.implementation.median_of_distributions"></a><h5>
-<a name="id783473"></a>
+<a name="id858166"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.median_of_distributions">Median
         of distributions</a>
       </h5>
@@ -309,7 +309,7 @@
         Basic Statistics.</a> give more detail, in particular for discrete distributions.
       </p>
 <a name="math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity"></a><h5>
-<a name="id783618"></a>
+<a name="id858311"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity">Handling
         of Floating-Point Infinity</a>
       </h5>
@@ -337,6 +337,12 @@
         for the realType on that implementation.
       </p>
 <p>
+        Users who require special handling of infinity (or other specific value)
+        can, of course, always intercept this before calling a distribution or function
+        and return their own choice of value, or other behavior. This will often
+        be simpler than trying to handle the aftermath of the error policy.
+      </p>
+<p>
         Overflow, underflow, denorm can be handled using <a href="../policy/pol_ref/error_handling_policies.html" title="Error Handling Policies">error
         handling policies</a>.
       </p>
@@ -347,7 +353,7 @@
         handling policies</a>.
       </p>
 <a name="math_toolkit.backgrounders.implementation.scale__shape_and_location"></a><h5>
-<a name="id783766"></a>
+<a name="id858468"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.scale__shape_and_location">Scale,
         Shape and Location</a>
       </h5>
@@ -374,7 +380,7 @@
         functions, they can be added if required.
       </p>
 <a name="math_toolkit.backgrounders.implementation.notes_on_implementation_of_specific_functions__amp__distributions"></a><h5>
-<a name="id784231"></a>
+<a name="id858934"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.notes_on_implementation_of_specific_functions__amp__distributions">Notes
         on Implementation of Specific Functions &amp; Distributions</a>
       </h5>
@@ -386,7 +392,7 @@
           0 and upper = 1 would be more suitable.
         </li></ul></div>
 <a name="math_toolkit.backgrounders.implementation.rational_approximations_used"></a><h5>
-<a name="id784271"></a>
+<a name="id858974"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.rational_approximations_used">Rational
         Approximations Used</a>
       </h5>
@@ -429,7 +435,7 @@
         to the "true" minimax solution.
       </p>
 <a name="math_toolkit.backgrounders.implementation.representation_of_mathematical_constants"></a><h5>
-<a name="id784388"></a>
+<a name="id859070"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.representation_of_mathematical_constants">Representation
         of Mathematical Constants</a>
       </h5>
@@ -490,7 +496,7 @@
 </span><span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">();</span> <span class="comment">// Context does not allow for disambiguation of overloaded function     
 </span></pre>
 <a name="math_toolkit.backgrounders.implementation.thread_safety"></a><h5>
-<a name="id784929"></a>
+<a name="id859612"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.thread_safety">Thread
         safety</a>
       </h5>
@@ -515,7 +521,7 @@
         the right thing here at some point.
       </p>
 <a name="math_toolkit.backgrounders.implementation.sources_of_test_data"></a><h5>
-<a name="id784994"></a>
+<a name="id859684"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.sources_of_test_data">Sources
         of Test Data</a>
       </h5>
@@ -559,7 +565,7 @@
         the underlying special function is known to be difficult to implement.
       </p>
 <a name="math_toolkit.backgrounders.implementation.creating_and_managing_the_equations"></a><h5>
-<a name="id785105"></a>
+<a name="id859795"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.creating_and_managing_the_equations">Creating
         and Managing the Equations</a>
       </h5>
@@ -620,6 +626,15 @@
         and a command such as:
       </p>
 <pre class="programlisting">java -jar 'C:\download\open\batik-1.7\batik-rasterizer.jar' -dpi 120 *.svg</pre>
+<p>
+        Or using Inkscape and a command such as:
+      </p>
+<pre class="programlisting">for file in *.svg; do 
+  /cygdrive/c/progra~1/Inkscape/inkscape -d 120 -e $(cygpath -a -w $(basename $file .svg).png) $(cygpath -a -w $file); 
+done</pre>
+<p>
+        Currently Inkscape seems to generate the better looking png's.
+      </p>
 <p>
         The PDF is generated into \pdf\math.pdf using a command from a shell or command
         window with current directory \math_toolkit\libs\math\doc\sf_and_dist, typically:
@@ -711,7 +726,7 @@
         HTML: this needs further investigation.
       </p>
 <a name="math_toolkit.backgrounders.implementation.producing_graphs"></a><h5>
-<a name="id785479"></a>
+<a name="id860173"></a>
         <a href="implementation.html#math_toolkit.backgrounders.implementation.producing_graphs">Producing
         Graphs</a>
       </h5>
@@ -732,8 +747,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
+      Holin, Xiaogang Zhang and Bruno Lalande<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

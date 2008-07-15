@@ -13,6 +13,10 @@
 #ifndef BOOST_MATH_SP_DETAIL_BETA_INV_AB
 #define BOOST_MATH_SP_DETAIL_BETA_INV_AB
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/cstdint.hpp>
 
@@ -315,5 +319,6 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SP_DETAIL_BETA_INV_AB
+
 
 

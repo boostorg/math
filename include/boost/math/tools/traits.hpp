@@ -21,6 +21,10 @@ as defined above, and has member functions "scale" and "location".
 #ifndef BOOST_STATS_IS_DISTRIBUTION_HPP
 #define BOOST_STATS_IS_DISTRIBUTION_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/mpl/has_xxx.hpp>
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
@@ -103,4 +107,5 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_scaled_distribution,T,::boost::math::tools::deta
 }}}
 
 #endif
+
 

@@ -18,6 +18,10 @@
 #ifndef BOOST_MATH_PROMOTION_HPP
 #define BOOST_MATH_PROMOTION_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 // Boost type traits:
 #include <boost/math/tools/config.hpp>
 #include <boost/type_traits/is_floating_point.hpp> // for boost::is_floating_point;
@@ -118,3 +122,4 @@ namespace boost
 } // namespace boost
 
 #endif // BOOST_MATH_PROMOTION_HPP
+

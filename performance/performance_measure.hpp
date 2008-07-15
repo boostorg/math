@@ -10,11 +10,19 @@
 #include <boost/timer.hpp>
 #include <cstring>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 template <class F>
 double performance_measure(F f)
 {
    unsigned count = 1;
    double time, result;
+#ifdef _WIN32
+   int old_priority = GetThreadPriority(GetCurrentThread());
+   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
+#endif
    //
    // Begin by figuring out how many times to repeat
    // the function call in order to get a measureable time:
@@ -37,7 +45,7 @@ double performance_measure(F f)
    // result, generally speaking this gives us
    // consistent results:
    //
-   for(unsigned i = 0; i < 10u;++i)
+   for(unsigned i = 0; i < 20u;++i)
    {
       boost::timer t;
       for(unsigned i = 0; i < count; ++i)
@@ -47,6 +55,9 @@ double performance_measure(F f)
          result = time;
       t.restart();
    }
+#ifdef _WIN32
+   SetThreadPriority(GetCurrentThread(), old_priority);
+#endif
    return result / count;
 }
 

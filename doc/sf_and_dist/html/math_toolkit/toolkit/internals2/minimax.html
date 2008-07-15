@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -176,18 +176,29 @@
 <dt><span class="term">x-offset val</span></dt>
 <dd><p>
               Sets the x-offset to <span class="emphasis"><em>val</em></span>: the approximation will
-              be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">Y</span></code> where <span class="emphasis"><em>X</em></span> is
-              the x-offset and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults to
-              zero. To avoid rounding errors, take care to specify a value that can
-              be exactly represented as a floating point number.
+              be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">S</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">))</span> <span class="special">+</span> <span class="identifier">Y</span></code>
+              where <span class="emphasis"><em>X</em></span> is the x-offset, <span class="emphasis"><em>S</em></span>
+              is the x-scale and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults
+              to zero. To avoid rounding errors, take care to specify a value that
+              can be exactly represented as a floating point number.
+            </p></dd>
+<dt><span class="term">x-scale val</span></dt>
+<dd><p>
+              Sets the x-scale to <span class="emphasis"><em>val</em></span>: the approximation will
+              be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">S</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">))</span> <span class="special">+</span> <span class="identifier">Y</span></code>
+              where <span class="emphasis"><em>S</em></span> is the x-scale, <span class="emphasis"><em>X</em></span>
+              is the x-offset and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults
+              to one. To avoid rounding errors, take care to specify a value that
+              can be exactly represented as a floating point number.
             </p></dd>
 <dt><span class="term">y-offset val</span></dt>
 <dd><p>
               Sets the y-offset to <span class="emphasis"><em>val</em></span>: the approximation will
-              be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">Y</span></code> where <span class="emphasis"><em>X</em></span> is
-              the x-offset and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults to
-              zero. To avoid rounding errors, take care to specify a value that can
-              be exactly represented as a floating point number.
+              be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">S</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">))</span> <span class="special">+</span> <span class="identifier">Y</span></code>
+              where <span class="emphasis"><em>X</em></span> is the x-offset, <span class="emphasis"><em>S</em></span>
+              is the x-scale and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults
+              to zero. To avoid rounding errors, take care to specify a value that
+              can be exactly represented as a floating point number.
             </p></dd>
 <dt><span class="term">y-offset auto</span></dt>
 <dd><p>
@@ -256,8 +267,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
+      Holin, Xiaogang Zhang and Bruno Lalande<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

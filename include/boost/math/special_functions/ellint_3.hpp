@@ -14,6 +14,10 @@
 #ifndef BOOST_MATH_ELLINT_3_HPP
 #define BOOST_MATH_ELLINT_3_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/ellint_rf.hpp>
 #include <boost/math/special_functions/ellint_rj.hpp>
 #include <boost/math/special_functions/ellint_1.hpp>
@@ -27,9 +31,6 @@
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
 
 namespace boost { namespace math { 
-   
-template <class T1, class T2, class T3, class Policy>
-typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const Policy& pol);
    
 namespace detail{
 
@@ -310,7 +311,7 @@ inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 ph
 }
 
 template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi)
+typename detail::ellint_3_result<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi)
 {
    typedef typename policies::is_policy<T3>::type tag_type;
    return detail::ellint_3(k, v, phi, tag_type());
@@ -325,3 +326,4 @@ inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v)
 }} // namespaces
 
 #endif // BOOST_MATH_ELLINT_3_HPP
+

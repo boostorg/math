@@ -334,7 +334,7 @@ void do_test_cyl_bessel_j(const T& data, const char* type_name, const char* test
 template <class T>
 T cyl_bessel_j_int_wrapper(T v, T x)
 {
-   return static_cast<T>(boost::math::cyl_bessel_j(boost::math::tools::real_cast<int>(v), x));
+   return static_cast<T>(boost::math::cyl_bessel_j(boost::math::itrunc(v), x));
 }
 
 

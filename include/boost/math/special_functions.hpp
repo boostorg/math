@@ -29,6 +29,7 @@
 #include <boost/math/special_functions/ellint_rf.hpp>
 #include <boost/math/special_functions/ellint_rj.hpp>
 #include <boost/math/special_functions/erf.hpp>
+#include <boost/math/special_functions/expint.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -47,5 +48,11 @@
 #include <boost/math/special_functions/sinhc.hpp>
 #include <boost/math/special_functions/spherical_harmonic.hpp>
 #include <boost/math/special_functions/sqrt1pm1.hpp>
+#include <boost/math/special_functions/zeta.hpp>
+#include <boost/math/special_functions/modf.hpp>
+#include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/special_functions/pow.hpp>
+#include <boost/math/special_functions/next.hpp>
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_HPP

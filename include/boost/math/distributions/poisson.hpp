@@ -13,7 +13,7 @@
 // events, occurrences, failures or arrivals occurring in a fixed time,
 // assuming these events occur with a known average or mean rate (lambda)
 // and are independent of the time since the last event.
-// The distribution was discovered by Siméon-Denis Poisson (1781–1840).
+// The distribution was discovered by Simeon-Denis Poisson (1781-1840).
 
 // Parameter lambda is the mean number of events in the given time interval.
 // The random variate k is the number of events, occurrences or arrivals.
@@ -38,6 +38,7 @@
 
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/gamma.hpp> // for incomplete gamma. gamma_q
+#include <boost/math/special_functions/trunc.hpp> // for incomplete gamma. gamma_q
 #include <boost/math/distributions/complement.hpp> // complements
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.

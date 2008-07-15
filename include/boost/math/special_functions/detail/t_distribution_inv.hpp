@@ -7,14 +7,20 @@
 #ifndef BOOST_MATH_SF_DETAIL_INV_T_HPP
 #define BOOST_MATH_SF_DETAIL_INV_T_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/cbrt.hpp>
+#include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
 //
 // The main method used is due to Hill:
 //
-// G. W. Hill, Algorithm 396, Student’s t-Quantiles,
+// G. W. Hill, Algorithm 396, Student's t-Quantiles,
 // Communications of the ACM, 13(10): 619-620, Oct., 1970.
 //
 template <class T, class Policy>
@@ -61,9 +67,9 @@ T inverse_students_t_hill(T ndf, T u, const Policy& pol)
 //
 // Tail and body series are due to Shaw:
 //
-// www.mth.kcl.ac.uk/˜shaww/web_page/papers/Tdistribution06.pdf
+// www.mth.kcl.ac.uk/~shaww/web_page/papers/Tdistribution06.pdf
 //
-// Shaw, W.T., 2006, "Sampling Student’s T distribution – use of
+// Shaw, W.T., 2006, "Sampling Student's T distribution - use of
 // the inverse cumulative distribution function."
 // Journal of Computational Finance, Vol 9 Issue 4, pp 37-73, Summer 2006
 //
@@ -200,7 +206,7 @@ T inverse_students_t(T df, T u, T v, const Policy& pol, bool* pexact = 0)
       //
       T tolerance = ldexp(1.0f, (2 * policies::digits<T, Policy>()) / 3);
 
-      switch(boost::math::tools::real_cast<int>(df))
+      switch(itrunc(df, Policy()))
       {
       case 1:
          {
@@ -364,7 +370,7 @@ calculate_real:
          // where we use Shaw's tail series.
          // The crossover point is roughly exponential in -df:
          //
-         T crossover = ldexp(1.0f, tools::real_cast<int>(df / -0.654f));
+         T crossover = ldexp(1.0f, iround(df / -0.654f, pol));
          if(u > crossover)
          {
             result = boost::math::detail::inverse_students_t_hill(df, u, pol);
@@ -505,5 +511,6 @@ inline T fast_students_t_quantile(T df, T p, const Policy& pol)
 }}} // namespaces
 
 #endif // BOOST_MATH_SF_DETAIL_INV_T_HPP
+
 
 

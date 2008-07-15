@@ -45,6 +45,18 @@ template <class RealType, class Policy>
 class negative_binomial_distribution;
 
 template <class RealType, class Policy>
+class non_central_chi_squared_distribution;
+
+template <class RealType, class Policy>
+class non_central_beta_distribution;
+
+template <class RealType, class Policy>
+class non_central_f_distribution;
+
+template <class RealType, class Policy>
+class non_central_t_distribution;
+
+template <class RealType, class Policy>
 class normal_distribution;
 
 template <class RealType, class Policy>
@@ -90,5 +102,9 @@ class weibull_distribution;
    typedef boost::math::triangular_distribution<Type, Policy> triangular;\
    typedef boost::math::uniform_distribution<Type, Policy> uniform;\
    typedef boost::math::weibull_distribution<Type, Policy> weibull;\
+   typedef boost::math::non_central_chi_squared_distribution<Type, Policy> non_central_chi_squared;\
+   typedef boost::math::non_central_beta_distribution<Type, Policy> non_central_beta;\
+   typedef boost::math::non_central_f_distribution<Type, Policy> non_central_f;\
+   typedef boost::math::non_central_t_distribution<Type, Policy> non_central_t;\
 
 #endif // BOOST_MATH_DISTRIBUTIONS_FWD_HPP

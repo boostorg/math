@@ -12,8 +12,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -36,11 +36,14 @@
 <div class="author"><h3 class="author">
 <span class="firstname">Xiaogang</span> <span class="surname">Zhang</span>
 </h3></div>
+<div class="author"><h3 class="author">
+<span class="firstname">Bruno</span> <span class="surname">Lalande</span>
+</h3></div>
 </div></div>
-<div><p class="copyright">Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang</p></div>
+<div><p class="copyright">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
+      Holin, Xiaogang Zhang and Bruno Lalande</p></div>
 <div><div class="legalnotice">
-<a name="id435852"></a><p>
+<a name="id445703"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -68,6 +71,7 @@
 <dt><span class="section"><a href="math_toolkit/main_overview/perf_over.html"> Performance</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/main_overview/history1.html"> History and What's
       New</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/main_overview/tr1.html"> C99 and TR1 C Functions</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/main_overview/contact.html"> Contact Info and
       Support</a></span></dt>
 </dl></dd>
@@ -93,6 +97,8 @@
           Binomial Distribution Examples</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/dist/stat_tut/weg/normal_example.html"> Normal
           Distribution Examples</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/stat_tut/weg/nccs_eg.html"> Non Central
+          Chi Squared Example</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/dist/stat_tut/weg/error_eg.html"> Error Handling
           Example</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/dist/stat_tut/weg/find_eg.html"> Find Location
@@ -132,6 +138,14 @@
           Log Normal Distribution</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/negative_binomial_dist.html">
           Negative Binomial Distribution</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/nc_beta_dist.html"> Noncentral
+          Beta Distribution</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/nc_chi_squared_dist.html">
+          Noncentral Chi-Squared Distribution</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/nc_f_dist.html"> Noncentral
+          F Distribution</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/nc_t_dist.html"> Noncentral
+          T Distribution</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/normal_dist.html"> Normal
           (Gaussian) Distribution</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/pareto.html"> Pareto
@@ -233,6 +247,15 @@
 <dt><span class="section"><a href="math_toolkit/special/ellint/ellint_3.html"> Elliptic Integrals
         of the Third Kind - Legendre Form</a></span></dt>
 </dl></dd>
+<dt><span class="section"><a href="math_toolkit/special/zetas.html"> Zeta Functions</a></span></dt>
+<dd><dl><dt><span class="section"><a href="math_toolkit/special/zetas/zeta.html"> Riemann Zeta Function</a></span></dt></dl></dd>
+<dt><span class="section"><a href="math_toolkit/special/expint.html"> Exponential Integrals</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="math_toolkit/special/expint/expint_n.html"> Exponential
+        Integral En</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/special/expint/expint_i.html"> Exponential
+        Integral Ei</a></span></dt>
+</dl></dd>
 <dt><span class="section"><a href="math_toolkit/special/powers.html"> Logs, Powers, Roots and
       Exponentials</a></span></dt>
 <dd><dl>
@@ -242,6 +265,8 @@
 <dt><span class="section"><a href="math_toolkit/special/powers/sqrt1pm1.html"> sqrt1pm1</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/special/powers/powm1.html"> powm1</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/special/powers/hypot.html"> hypot</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/special/powers/ct_pow.html"> Compile Time Power
+        of a Runtime Base</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="math_toolkit/special/sinc.html"> Sinus Cardinal and Hyperbolic
       Sinus Cardinal Functions</a></span></dt>
@@ -259,8 +284,39 @@
 <dt><span class="section"><a href="math_toolkit/special/inv_hyper/asinh.html"> asinh</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/special/inv_hyper/atanh.html"> atanh</a></span></dt>
 </dl></dd>
-<dt><span class="section"><a href="math_toolkit/special/fpclass.html"> Floating Point Classification:
+<dt><span class="section"><a href="math_toolkit/special/rounding.html"> Rounding Truncation and
+      Integer Conversion</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="math_toolkit/special/rounding/round.html"> Rounding Functions</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/special/rounding/trunc.html"> Truncation Functions</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/special/rounding/modf.html"> Integer and Fractional
+        Part Splitting (modf)</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="math_toolkit/special/fpclass.html"> Floating-Point Classification:
       Infinities and NaN's</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/special/next_float.html"> Floating-Point Representation
+      Distance (ULP), and Finding Adjacent Floating-Point Values</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="math_toolkit/special/next_float/nextafter.html"> Finding
+        the Next Representable Value in a Specific Direction (nextafter)</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/special/next_float/float_next.html"> Finding
+        the Next Greater Representable Value (float_next)</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/special/next_float/float_prior.html"> Finding
+        the Next Smaller Representable Value (float_prior)</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/special/next_float/float_distance.html"> Calculating
+        the Representation Distance Between Two Floating Point Values (ULP) float_distance</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/special/next_float/float_advance.html"> Advancing
+        a Floating Point Value by a Specific Representation Distance (ULP) float_advance</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="math_toolkit/special/extern_c.html"> TR1 and C99 external
+      "C" Functions</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="math_toolkit/special/extern_c/tr1.html"> C99 and TR1 C Functions
+        Overview</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/special/extern_c/c99.html"> C99 C Functions</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/special/extern_c/tr1_ref.html"> TR1 C Functions
+        Quick Reference</a></span></dt>
+</dl></dd>
 </dl></dd>
 <dt><span class="section"><a href="math_toolkit/toolkit.html"> Internal Details and Tools (Experimental)</a></span></dt>
 <dd><dl>
@@ -291,7 +347,7 @@
         Profiling, and Generating Test Data for Special Functions</a></span></dt>
 </dl></dd>
 </dl></dd>
-<dt><span class="section"><a href="math_toolkit/using_udt.html"> Use with User Defined Floating-Point
+<dt><span class="section"><a href="math_toolkit/using_udt.html"> Use with User-Defined Floating-Point
     Types</a></span></dt>
 <dd><dl>
 <dt><span class="section"><a href="math_toolkit/using_udt/use_ntl.html"> Using With NTL - a High-Precision
@@ -385,12 +441,12 @@
     ISBN 0-9504833-2-X 978-0-9504833-2-0, Classification 519.2-dc22
   </p>
 <p>
-    This manual is also available in <a href="http:svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf" target="_top">printer
+    This manual is also available in <a href="http://svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf" target="_top">printer
     friendly PDF format</a>.
   </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: March 15, 2008 at 13:34:43 GMT</small></p></td>
+<td align="left"><p><small>Last revised: July 04, 2008 at 17:19:33 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

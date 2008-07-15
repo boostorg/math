@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_TEST_HPP
 #define BOOST_MATH_TOOLS_TEST_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -239,4 +243,5 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
 } // namespace boost
 
 #endif
+
 

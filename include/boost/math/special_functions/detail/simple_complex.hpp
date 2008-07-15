@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SF_DETAIL_SIMPLE_COMPLEX_HPP
 #define BOOST_MATH_SF_DETAIL_SIMPLE_COMPLEX_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 namespace boost{ namespace math{ namespace detail{ namespace sc{
 
 template <class T>
@@ -164,4 +168,5 @@ inline T abs(const simple_complex<T>& c)
 }}}} // namespace
 
 #endif
+
 

@@ -43,11 +43,11 @@ parameter on the PDF, note that the range of the random
 variable remains \[0,+[infin]\] irrespective of the value of the
 location parameter:
 
-[$../graphs/lognormal1.png]
+[graph lognormal_pdf1]
 
 The next graph illustrates the effect of the scale parameter on the PDF:
 
-[$../graphs/lognormal2.png]
+[graph lognormal_pdf2]
 
 [h4 Member Functions]
 

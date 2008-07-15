@@ -13,6 +13,10 @@
 #ifndef BOOST_MATH_SP_DETAIL_GAMMA_INVA
 #define BOOST_MATH_SP_DETAIL_GAMMA_INVA
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/cstdint.hpp>
 
@@ -224,5 +228,6 @@ inline typename tools::promote_args<T1, T2>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SP_DETAIL_GAMMA_INVA
+
 
 

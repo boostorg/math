@@ -26,14 +26,14 @@
 #  define TEST_REAL_CONCEPT
 #endif
 
+#include <boost/math/concepts/real_concept.hpp> // for real_concept
+using ::boost::math::concepts::real_concept;
+
 #include <boost/math/distributions/negative_binomial.hpp> // for negative_binomial_distribution
 using boost::math::negative_binomial_distribution;
 
 #include <boost/math/special_functions/gamma.hpp>
   using boost::math::lgamma;  // log gamma
-
-#include <boost/math/concepts/real_concept.hpp> // for real_concept
-using ::boost::math::concepts::real_concept;
 
 #include <boost/test/included/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE

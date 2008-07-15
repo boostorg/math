@@ -36,6 +36,11 @@ More information can be found on the
 and [@http://en.wikipedia.org/wiki/Extreme_value_theory Extreme value theory]
 websites.
 
+The relationship of the types of extreme value distributions, of which this is but one, is
+discussed by
+[@http://www.worldscibooks.com/mathematics/p191.html Extreme Value Distributions, Theory and Applications
+Samuel Kotz & Saralees Nadarajah].
+
 The distribution has a PDF given by:
 
 f(x) = (1/scale) e[super -(x-location)/scale] e[super -e[super -(x-location)/scale]]
@@ -46,11 +51,11 @@ f(x) = e[super -x]e[super -e[super -x]]
 
 The following graph illustrates how the PDF varies with the location parameter:
 
-[$../graphs/extreme_val_dist.png]
+[graph extreme_value_pdf1]
 
 And this graph illustrates how the PDF varies with the shape parameter:
 
-[$../graphs/extreme_val_dist2.png]
+[graph extreme_value_pdf2]
 
 [h4 Member Functions]
 

@@ -16,6 +16,8 @@
 #include <boost/math/special_functions.hpp>
 #include <boost/math/concepts/distributions.hpp>
 
+#ifndef BOOST_MATH_INSTANTIATE_MINIMUM
+
 typedef boost::math::policies::policy<> test_policy;
 
 namespace test{
@@ -29,6 +31,26 @@ namespace dist_test{
 BOOST_MATH_DECLARE_DISTRIBUTIONS(double, test_policy)
 
 }
+#endif
+
+namespace boost{ namespace math{
+//
+// The non central beta doesn't define some properties,
+// define some stub methods here so that we can concept
+// check everything else:
+//
+template <class T, class Policy>
+inline T mean(const non_central_beta_distribution<T, Policy>&){ return 0; }
+template <class T, class Policy>
+inline T variance(const non_central_beta_distribution<T, Policy>&){ return 0; }
+template <class T, class Policy>
+inline T skewness(const non_central_beta_distribution<T, Policy>&){ return 0; }
+template <class T, class Policy>
+inline T kurtosis_excess(const non_central_beta_distribution<T, Policy>&){ return 0; }
+template <class T, class Policy>
+inline T kurtosis(const non_central_beta_distribution<T, Policy>&){ return 0; }
+
+}} // namespaces
 
 template <class RealType>
 void instantiate(RealType)
@@ -56,7 +78,11 @@ void instantiate(RealType)
    function_requires<DistributionConcept<triangular_distribution<RealType> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType> > >();
-
+   function_requires<DistributionConcept<non_central_chi_squared_distribution<RealType> > >();
+   function_requires<DistributionConcept<non_central_beta_distribution<RealType> > >();
+   function_requires<DistributionConcept<non_central_f_distribution<RealType> > >();
+   function_requires<DistributionConcept<non_central_t_distribution<RealType> > >();
+#ifndef BOOST_MATH_INSTANTIATE_MINIMUM
    function_requires<DistributionConcept<bernoulli_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<beta_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<binomial_distribution<RealType, test_policy> > >();
@@ -67,6 +93,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<fisher_f_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<gamma_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<lognormal_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<non_central_chi_squared_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<negative_binomial_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<normal_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<rayleigh_distribution<RealType, test_policy> > >();
@@ -76,6 +103,10 @@ void instantiate(RealType)
    function_requires<DistributionConcept<triangular_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<non_central_chi_squared_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<non_central_beta_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<non_central_f_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<non_central_t_distribution<RealType, test_policy> > >();
 
    function_requires<DistributionConcept<dist_test::bernoulli > >();
    function_requires<DistributionConcept<dist_test::beta > >();
@@ -96,7 +127,11 @@ void instantiate(RealType)
    function_requires<DistributionConcept<dist_test::triangular > >();
    function_requires<DistributionConcept<dist_test::uniform > >();
    function_requires<DistributionConcept<dist_test::weibull > >();
-
+   function_requires<DistributionConcept<dist_test::non_central_chi_squared > >();
+   function_requires<DistributionConcept<dist_test::non_central_beta > >();
+   function_requires<DistributionConcept<dist_test::non_central_f > >();
+   function_requires<DistributionConcept<dist_test::non_central_t > >();
+#endif
    int i;
    RealType v1(0.5), v2(0.5), v3(0.5);
    boost::math::tgamma(v1);
@@ -191,6 +226,34 @@ void instantiate(RealType)
    boost::math::sph_bessel(i, 1);
    boost::math::sph_neumann(i, v2);
    boost::math::sph_neumann(i, i);
+   boost::math::expint(v1);
+   boost::math::expint(i);
+   boost::math::expint(i, v2);
+   boost::math::expint(i, i);
+   boost::math::zeta(v1);
+   boost::math::zeta(i);
+   boost::math::trunc(v1);
+   boost::math::itrunc(v1);
+   boost::math::ltrunc(v1);
+   boost::math::round(v1);
+   boost::math::iround(v1);
+   boost::math::lround(v1);
+   boost::math::modf(v1, &v1);
+   boost::math::modf(v1, &i);
+   long l;
+   boost::math::modf(v1, &l);
+#ifdef BOOST_HAS_LONG_LONG
+   boost::math::lltrunc(v1);
+   boost::math::llround(v1);
+   boost::long_long_type ll;
+   boost::math::modf(v1, &ll);
+#endif
+   boost::math::pow<2>(v1);
+   boost::math::nextafter(v1, v1);
+   boost::math::float_next(v1);
+   boost::math::float_prior(v1);
+   boost::math::float_distance(v1, v1);
+#ifndef BOOST_MATH_INSTANTIATE_MINIMUM
    //
    // All over again, with a policy this time:
    //
@@ -286,6 +349,37 @@ void instantiate(RealType)
    boost::math::sph_bessel(i, 1, pol);
    boost::math::sph_neumann(i, v2, pol);
    boost::math::sph_neumann(i, i, pol);
+   boost::math::expint(v1, pol);
+   boost::math::expint(i, pol);
+   boost::math::expint(i, v2, pol);
+   boost::math::expint(i, i, pol);
+   boost::math::zeta(v1, pol);
+   boost::math::zeta(i, pol);
+   //
+   // These next functions are intended to be found via ADL:
+   //
+   BOOST_MATH_STD_USING
+   trunc(v1, pol);
+   itrunc(v1, pol);
+   ltrunc(v1, pol);
+   round(v1, pol);
+   iround(v1, pol);
+   lround(v1, pol);
+   modf(v1, &v1, pol);
+   modf(v1, &i, pol);
+   modf(v1, &l, pol);
+#ifdef BOOST_HAS_LONG_LONG
+   using boost::math::lltrunc;
+   using boost::math::llround;
+   lltrunc(v1, pol);
+   llround(v1, pol);
+   modf(v1, &ll, pol);
+#endif
+   boost::math::pow<2>(v1, pol);
+   boost::math::nextafter(v1, v1, pol);
+   boost::math::float_next(v1, pol);
+   boost::math::float_prior(v1, pol);
+   boost::math::float_distance(v1, v1, pol);
    //
    // All over again with the versions in test::
    //
@@ -380,6 +474,32 @@ void instantiate(RealType)
    test::sph_bessel(i, 1);
    test::sph_neumann(i, v2);
    test::sph_neumann(i, i);
+   test::expint(v1);
+   test::expint(i);
+   test::expint(i, v2);
+   test::expint(i, i);
+   test::zeta(v1);
+   test::zeta(i);
+   test::trunc(v1);
+   test::itrunc(v1);
+   test::ltrunc(v1);
+   test::round(v1);
+   test::iround(v1);
+   test::lround(v1);
+   test::modf(v1, &v1);
+   test::modf(v1, &i);
+   test::modf(v1, &l);
+#ifdef BOOST_HAS_LONG_LONG
+   test::lltrunc(v1);
+   test::llround(v1);
+   test::modf(v1, &ll);
+#endif
+   test::pow<2>(v1);
+   test::nextafter(v1, v1);
+   test::float_next(v1);
+   test::float_prior(v1);
+   test::float_distance(v1, v1);
+#endif
 }
 
 template <class RealType>
@@ -387,7 +507,7 @@ void instantiate_mixed(RealType)
 {
    using namespace boost;
    using namespace boost::math;
-
+#ifndef BOOST_MATH_INSTANTIATE_MINIMUM
    int i = 1;
    long l = 1;
    short s = 1;
@@ -736,7 +856,9 @@ void instantiate_mixed(RealType)
    test::sph_bessel(i, 1);
    test::sph_neumann(i, lr);
    test::sph_neumann(i, i);
+#endif
 }
 
 
 #endif // BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP
+

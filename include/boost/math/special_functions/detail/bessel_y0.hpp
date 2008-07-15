@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_BESSEL_Y0_HPP
 #define BOOST_MATH_BESSEL_Y0_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/detail/bessel_j0.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/rational.hpp>
@@ -175,3 +179,4 @@ T bessel_y0(T x, const Policy& pol)
 }}} // namespaces
 
 #endif // BOOST_MATH_BESSEL_Y0_HPP
+

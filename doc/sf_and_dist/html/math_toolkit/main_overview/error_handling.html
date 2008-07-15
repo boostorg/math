@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -27,7 +27,7 @@
 <a name="math_toolkit.main_overview.error_handling"></a><a href="error_handling.html" title="Error Handling"> Error Handling</a>
 </h3></div></div></div>
 <a name="math_toolkit.main_overview.error_handling.quick_reference"></a><h5>
-<a name="id491116"></a>
+<a name="id500960"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.quick_reference">Quick
         Reference</a>
       </h5>
@@ -75,11 +75,24 @@
 <dd><p>
             Occurs when the returned result would be a denormalised value.
           </p></dd>
+<dt><span class="term">Rounding Error</span></dt>
+<dd><p>
+            Occurs when the argument to one of the rounding functions <a href="../special/rounding/trunc.html" title="Truncation Functions">trunc</a>,
+            <a href="../special/rounding/round.html" title="Rounding Functions">round</a> and
+            <a href="../special/rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">modf</a> can not
+            be represented as an integer type, is is outide the range of the result
+            type.
+          </p></dd>
 <dt><span class="term">Evaluation Error</span></dt>
 <dd><p>
             Occurs when an internal error occured that prevented the result from
             being evaluated: this should never occur, but if it does, then it's likely
             to be due to an iterative method not converging fast enough.
+          </p></dd>
+<dt><span class="term">Indeterminate Result Error</span></dt>
+<dd><p>
+            Occurs when the result of a function is not defined for the values that
+            were passed to it.
           </p></dd>
 </dl>
 </div>
@@ -121,7 +134,7 @@
         the default action for each error shown in bold:
       </p>
 <div class="table">
-<a name="id491374"></a><p class="title"><b>Table 1. Possible Actions for Domain Errors</b></p>
+<a name="id501281"></a><p class="title"><b>Table 1. Possible Actions for Domain Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Domain Errors">
 <colgroup>
 <col>
@@ -196,7 +209,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id491690"></a><p class="title"><b>Table 2. Possible Actions for Pole Errors</b></p>
+<a name="id501598"></a><p class="title"><b>Table 2. Possible Actions for Pole Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Pole Errors">
 <colgroup>
 <col>
@@ -271,7 +284,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id492004"></a><p class="title"><b>Table 3. Possible Actions for Overflow Errors</b></p>
+<a name="id501912"></a><p class="title"><b>Table 3. Possible Actions for Overflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Overflow Errors">
 <colgroup>
 <col>
@@ -346,7 +359,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id492320"></a><p class="title"><b>Table 4. Possible Actions for Underflow Errors</b></p>
+<a name="id502228"></a><p class="title"><b>Table 4. Possible Actions for Underflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Underflow Errors">
 <colgroup>
 <col>
@@ -421,7 +434,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id492543"></a><p class="title"><b>Table 5. Possible Actions for Denorm Errors</b></p>
+<a name="id502451"></a><p class="title"><b>Table 5. Possible Actions for Denorm Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Denorm Errors">
 <colgroup>
 <col>
@@ -496,7 +509,82 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id492768"></a><p class="title"><b>Table 6. Possible Actions for Internal Evaluation
+<a name="id502676"></a><p class="title"><b>Table 6. Possible Actions for Rounding Errors</b></p>
+<div class="table-contents"><table class="table" summary="Possible Actions for Rounding Errors">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+            <p>
+              Action
+            </p>
+            </th>
+<th>
+            <p>
+              Behaviour
+            </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+            <p>
+              throw_on_error
+            </p>
+            </td>
+<td>
+            <p>
+              Throws <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">rounding_error</span></code>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              errno_on_error
+            </p>
+            </td>
+<td>
+            <p>
+              Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+              to <code class="computeroutput"><span class="identifier">ERANGE</span></code> and returns
+              an unspecified value.
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              ignore_error
+            </p>
+            </td>
+<td>
+            <p>
+              <span class="bold"><strong>Returns the an unspecified value.</strong></span>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              user_error
+            </p>
+            </td>
+<td>
+            <p>
+              Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_rounding_error</span></code>:
+              <a href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+              function must be defined by the user</a>.
+            </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<br class="table-break"><div class="table">
+<a name="id502910"></a><p class="title"><b>Table 7. Possible Actions for Internal Evaluation
       Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Internal Evaluation
       Errors">
@@ -539,7 +627,7 @@
             <p>
               Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
               to <code class="computeroutput"><span class="identifier">EDOM</span></code> and returns
-              <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">()</span></code>.
+              the closest approximation found.
             </p>
             </td>
 </tr>
@@ -551,7 +639,7 @@
             </td>
 <td>
             <p>
-              Returns <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">()</span></code>.
+              Returns the closest approximation found.
             </p>
             </td>
 </tr>
@@ -572,8 +660,86 @@
 </tbody>
 </table></div>
 </div>
+<br class="table-break"><div class="table">
+<a name="id503145"></a><p class="title"><b>Table 8. Possible Actions for Indeterminate Result
+      Errors</b></p>
+<div class="table-contents"><table class="table" summary="Possible Actions for Indeterminate Result
+      Errors">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+            <p>
+              Action
+            </p>
+            </th>
+<th>
+            <p>
+              Behaviour
+            </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+            <p>
+              throw_on_error
+            </p>
+            </td>
+<td>
+            <p>
+              Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              errno_on_error
+            </p>
+            </td>
+<td>
+            <p>
+              Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+              to <code class="computeroutput"><span class="identifier">EDOM</span></code> and returns
+              the same value as <code class="computeroutput"><span class="identifier">ignore_error</span></code>.
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              ignore_error
+            </p>
+            </td>
+<td>
+            <p>
+              <span class="bold"><strong>Returns a default result that depends on the
+              function where the error occurred.</strong></span>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              user_error
+            </p>
+            </td>
+<td>
+            <p>
+              Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_indeterminate_result_error</span></code>:
+              <a href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+              function must be defined by the user</a>.
+            </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+</div>
 <br class="table-break"><a name="math_toolkit.main_overview.error_handling.rationale"></a><h5>
-<a name="id493103"></a>
+<a name="id503391"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.rationale">Rationale</a>
       </h5>
 <p>
@@ -592,7 +758,7 @@
         </li>
 </ul></div>
 <a name="math_toolkit.main_overview.error_handling.finding_more_information"></a><h5>
-<a name="id493152"></a>
+<a name="id503440"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.finding_more_information">Finding
         More Information</a>
       </h5>
@@ -614,7 +780,7 @@
         The various kind of errors are described in more detail below.
       </p>
 <a name="domain_error"></a><a name="math_toolkit.main_overview.error_handling.domain_errors"></a><h5>
-<a name="id493247"></a>
+<a name="id503535"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.domain_errors">Domain
         Errors</a>
       </h5>
@@ -707,7 +873,7 @@
         for more details.
       </p>
 <a name="pole_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_at_a_pole"></a><h5>
-<a name="id493629"></a>
+<a name="id503917"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_at_a_pole">Evaluation
         at a pole</a>
       </h5>
@@ -746,7 +912,7 @@
         for more details.
       </p>
 <a name="overflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_overflow"></a><h5>
-<a name="id493951"></a>
+<a name="id504239"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_overflow">Numeric
         Overflow</a>
       </h5>
@@ -771,7 +937,7 @@
         doesn't support infinities, the maximum value for the type is returned.
       </p>
 <a name="underflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_underflow"></a><h5>
-<a name="id494232"></a>
+<a name="id504519"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_underflow">Numeric
         Underflow</a>
       </h5>
@@ -794,7 +960,7 @@
         an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="denorm_error"></a><a name="math_toolkit.main_overview.error_handling.denormalisation_errors"></a><h5>
-<a name="id494453"></a>
+<a name="id504741"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.denormalisation_errors">Denormalisation
         Errors</a>
       </h5>
@@ -817,7 +983,7 @@
         throws an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="evaluation_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_errors"></a><h5>
-<a name="id494690"></a>
+<a name="id504978"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_errors">Evaluation
         Errors</a>
       </h5>
@@ -853,8 +1019,74 @@
         <a href="../../../../../../format/index.html" target="_top">Boost.Format</a> documentation
         for more details.
       </p>
+<a name="indeterminate_result_error"></a><a name="math_toolkit.main_overview.error_handling.indeterminate_result_errors"></a><h5>
+<a name="id505309"></a>
+        <a href="error_handling.html#math_toolkit.main_overview.error_handling.indeterminate_result_errors">Indeterminate
+        Result Errors</a>
+      </h5>
+<p>
+        When the result of a special function is indeterminate for the value that
+        was passed to it, then the function returns the result of:
+      </p>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_overflow_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <span class="identifier">Default</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+</pre>
+<p>
+        Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating-point
+        type passed to the function, <code class="computeroutput"><span class="identifier">FunctionName</span></code>
+        is the name of the function, <code class="computeroutput"><span class="identifier">Message</span></code>
+        is an error message describing the problem, Val is the value for which the
+        result is indeterminate, Default is an alternative default result that must
+        be returned for ignore_error and errno_on_error policies, and <a href="../policy.html" title="Policies">Policy</a>
+        is the current policy in use for the function that was called.
+      </p>
+<p>
+        The default policy for this function is <code class="computeroutput"><span class="identifier">ignore_error</span></code>:
+        note that this error type is reserved for situations where the result is
+        mathematically undefined or indeterminate, but there is none the less a convention
+        for what the result should be: for example the C99 standard specifies that
+        the result of 0<sup>0</sup> is 1, even though the result is actually mathematically indeterminate.
+      </p>
+<a name="rounding_error"></a><a name="math_toolkit.main_overview.error_handling.rounding_errors"></a><h5>
+<a name="id505536"></a>
+        <a href="error_handling.html#math_toolkit.main_overview.error_handling.rounding_errors">Rounding
+        Errors</a>
+      </h5>
+<p>
+        When one of the rounding functions <a href="../special/rounding/round.html" title="Rounding Functions">round</a>,
+        <a href="../special/rounding/trunc.html" title="Truncation Functions">trunc</a> or <a href="../special/rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">modf</a> is called with an
+        argument that has no integer representation, or is too large to be represented
+        in the result type then the value returned is the result of a call to:
+      </p>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_rounding_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+</pre>
+<p>
+        Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating point
+        type passed to the function, <code class="computeroutput"><span class="identifier">FunctionName</span></code>
+        is the name of the function, <code class="computeroutput"><span class="identifier">Message</span></code>
+        is an error message describing the problem, <code class="computeroutput"><span class="identifier">Val</span></code>
+        is the erroneous argument, and <a href="../policy.html" title="Policies">Policy</a>
+        is the current policy in use for the called function.
+      </p>
+<p>
+        The default behaviour of this function is to throw a <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">rounding_error</span></code>.
+      </p>
+<p>
+        Note that in order to support information rich error messages when throwing
+        exceptions, <code class="computeroutput"><span class="identifier">Message</span></code> must
+        contain a <a href="../../../../../../format/index.html" target="_top">Boost.Format</a>
+        recognised format specifier: the argument <code class="computeroutput"><span class="identifier">val</span></code>
+        is inserted into the error message according to the specifier used.
+      </p>
+<p>
+        For example if <code class="computeroutput"><span class="identifier">Message</span></code> contains
+        a "%1%" then it is replaced by the value of <code class="computeroutput"><span class="identifier">val</span></code>
+        to the full precision of T, where as "%.3g" would contain the value
+        of <code class="computeroutput"><span class="identifier">val</span></code> to 3 digits. See the
+        <a href="../../../../../../format/index.html" target="_top">Boost.Format</a> documentation
+        for more details.
+      </p>
 <a name="checked_narrowing_cast"></a><a name="math_toolkit.main_overview.error_handling.errors_from_typecasts"></a><h5>
-<a name="id495018"></a>
+<a name="id505891"></a>
         <a href="error_handling.html#math_toolkit.main_overview.error_handling.errors_from_typecasts">Errors
         from typecasts</a>
       </h5>
@@ -877,8 +1109,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
+      Holin, Xiaogang Zhang and Bruno Lalande<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

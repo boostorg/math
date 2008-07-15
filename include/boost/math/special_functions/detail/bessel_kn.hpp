@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_BESSEL_KN_HPP
 #define BOOST_MATH_BESSEL_KN_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/detail/bessel_k0.hpp>
 #include <boost/math/special_functions/detail/bessel_k1.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -67,3 +71,4 @@ T bessel_kn(int n, T x, const Policy& pol)
 }}} // namespaces
 
 #endif // BOOST_MATH_BESSEL_KN_HPP
+

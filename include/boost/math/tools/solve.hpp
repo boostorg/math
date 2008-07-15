@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_SOLVE_HPP
 #define BOOST_MATH_TOOLS_SOLVE_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 
@@ -71,4 +75,5 @@ boost::numeric::ublas::vector<T> solve(
 }}} // namespaces
 
 #endif // BOOST_MATH_TOOLS_SOLVE_HPP
+
 

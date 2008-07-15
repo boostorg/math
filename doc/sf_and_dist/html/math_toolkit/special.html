@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -104,6 +104,15 @@
 <dt><span class="section"><a href="special/ellint/ellint_3.html"> Elliptic Integrals
         of the Third Kind - Legendre Form</a></span></dt>
 </dl></dd>
+<dt><span class="section"><a href="special/zetas.html"> Zeta Functions</a></span></dt>
+<dd><dl><dt><span class="section"><a href="special/zetas/zeta.html"> Riemann Zeta Function</a></span></dt></dl></dd>
+<dt><span class="section"><a href="special/expint.html"> Exponential Integrals</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="special/expint/expint_n.html"> Exponential
+        Integral En</a></span></dt>
+<dt><span class="section"><a href="special/expint/expint_i.html"> Exponential
+        Integral Ei</a></span></dt>
+</dl></dd>
 <dt><span class="section"><a href="special/powers.html"> Logs, Powers, Roots and
       Exponentials</a></span></dt>
 <dd><dl>
@@ -113,6 +122,8 @@
 <dt><span class="section"><a href="special/powers/sqrt1pm1.html"> sqrt1pm1</a></span></dt>
 <dt><span class="section"><a href="special/powers/powm1.html"> powm1</a></span></dt>
 <dt><span class="section"><a href="special/powers/hypot.html"> hypot</a></span></dt>
+<dt><span class="section"><a href="special/powers/ct_pow.html"> Compile Time Power
+        of a Runtime Base</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="special/sinc.html"> Sinus Cardinal and Hyperbolic
       Sinus Cardinal Functions</a></span></dt>
@@ -130,14 +141,47 @@
 <dt><span class="section"><a href="special/inv_hyper/asinh.html"> asinh</a></span></dt>
 <dt><span class="section"><a href="special/inv_hyper/atanh.html"> atanh</a></span></dt>
 </dl></dd>
-<dt><span class="section"><a href="special/fpclass.html"> Floating Point Classification:
+<dt><span class="section"><a href="special/rounding.html"> Rounding Truncation and
+      Integer Conversion</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="special/rounding/round.html"> Rounding Functions</a></span></dt>
+<dt><span class="section"><a href="special/rounding/trunc.html"> Truncation Functions</a></span></dt>
+<dt><span class="section"><a href="special/rounding/modf.html"> Integer and Fractional
+        Part Splitting (modf)</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="special/fpclass.html"> Floating-Point Classification:
       Infinities and NaN's</a></span></dt>
+<dt><span class="section"><a href="special/next_float.html"> Floating-Point Representation
+      Distance (ULP), and Finding Adjacent Floating-Point Values</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="special/next_float/nextafter.html"> Finding
+        the Next Representable Value in a Specific Direction (nextafter)</a></span></dt>
+<dt><span class="section"><a href="special/next_float/float_next.html"> Finding
+        the Next Greater Representable Value (float_next)</a></span></dt>
+<dt><span class="section"><a href="special/next_float/float_prior.html"> Finding
+        the Next Smaller Representable Value (float_prior)</a></span></dt>
+<dt><span class="section"><a href="special/next_float/float_distance.html"> Calculating
+        the Representation Distance Between Two Floating Point Values (ULP) float_distance</a></span></dt>
+<dt><span class="section"><a href="special/next_float/float_advance.html"> Advancing
+        a Floating Point Value by a Specific Representation Distance (ULP) float_advance</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="special/extern_c.html"> TR1 and C99 external
+      "C" Functions</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="special/extern_c/tr1.html"> C99 and TR1 C Functions
+        Overview</a></span></dt>
+<dt><span class="section"><a href="special/extern_c/c99.html"> C99 C Functions</a></span></dt>
+<dt><span class="section"><a href="special/extern_c/tr1_ref.html"> TR1 C Functions
+        Quick Reference</a></span></dt>
+</dl></dd>
 </dl></div>
+<p>
+    </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
+      Holin, Xiaogang Zhang and Bruno Lalande<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

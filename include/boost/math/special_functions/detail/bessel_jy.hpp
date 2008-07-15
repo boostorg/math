@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_BESSEL_JY_HPP
 #define BOOST_MATH_BESSEL_JY_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sign.hpp>
@@ -221,7 +225,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
         v = -v;                             // v is non-negative from here
         kind = need_j|need_y;               // need both for reflection formula
     }
-    n = real_cast<unsigned>(v + 0.5L);
+    n = iround(v, pol);
     u = v - n;                              // -1/2 <= u < 1/2
 
     if (x == 0)
@@ -359,3 +363,4 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
 }} // namespaces
 
 #endif // BOOST_MATH_BESSEL_JY_HPP
+

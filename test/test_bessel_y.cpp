@@ -293,7 +293,7 @@ void do_test_cyl_neumann_y(const T& data, const char* type_name, const char* tes
 template <class T>
 T cyl_neumann_int_wrapper(T v, T x)
 {
-   return static_cast<T>(boost::math::cyl_neumann(boost::math::tools::real_cast<int>(v), x));
+   return static_cast<T>(boost::math::cyl_neumann(boost::math::itrunc(v), x));
 }
 
 template <class T>

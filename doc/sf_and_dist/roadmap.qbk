@@ -1,5 +1,18 @@
 [template history[]
-[h4 Milestone 5: Post Review First Official Release]
+
+[h4 Boost-1.36.0]
+
+* Added Noncentral Chi Squared Distribution.
+* Added Noncentral Beta Distribution.
+* Added Noncentral F Distribution.
+* Added Noncentral T Distribution.
+* Added Exponential Integral Functions.
+* Added Zeta Function.
+* Added Rounding and Truncation functions.
+* Added Compile time powers of runtime bases.
+* Added SSE2 optimizations for Lanczos evaluation.
+
+[h4 Boost-1.35.0: Post Review First Official Release]
 
 * Added Policy based framework that allows fine grained control
 over function behaviour.
@@ -59,7 +72,7 @@ on error rates.
 
 SVN Revisions:
 
-Sandbox and trunk last synchonised at revision: 41065.
+Sandbox and trunk last synchonised at revision: 47084.
 
 ]
 [/ 
@@ -68,4 +81,5 @@ Sandbox and trunk last synchonised at revision: 41065.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
 

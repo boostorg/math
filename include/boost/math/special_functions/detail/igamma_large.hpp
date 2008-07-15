@@ -45,6 +45,10 @@
 #ifndef BOOST_MATH_DETAIL_IGAMMA_LARGE
 #define BOOST_MATH_DETAIL_IGAMMA_LARGE
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 namespace boost{ namespace math{ namespace detail{
 
 // This version will never be called (at runtime), it's a stub used
@@ -762,3 +766,4 @@ T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<113> const *)
 
 
 #endif // BOOST_MATH_DETAIL_IGAMMA_LARGE
+

@@ -26,9 +26,14 @@ The kinds of errors that can be raised are:
    to be represented by any other value in the type being returned by 
    the function.]]
 [[Denormalisation Error][Occurs when the returned result would be a denormalised value.]]
+[[Rounding Error][Occurs when the argument to one of the rounding functions __trunc, 
+   __round and __modf can not be represented as an integer type, is is
+   outide the range of the result type.]]
 [[Evaluation Error][Occurs when an internal error occured that prevented the
    result from being evaluated: this should never occur, but if it does, then
    it's likely to be due to an iterative method not converging fast enough.]]
+[[Indeterminate Result Error][Occurs when the result of a function is not
+   defined for the values that were passed to it.]]
 ]
 
 The action undertaken by each error condition is determined by the current
@@ -100,12 +105,32 @@ with the default action for each error shown in bold:
             this function must be defined by the user].]]
 ]
 
+[table Possible Actions for Rounding Errors
+[[Action]   [Behaviour]]
+[[throw_on_error][Throws `boost::math::rounding_error`]]
+[[errno_on_error][Sets `::errno` to `ERANGE` and returns an unspecified value.]]
+[[ignore_error][[*Returns the an unspecified value.]]]
+[[user_error][Returns the result of `boost::math::policies::user_rounding_error`: 
+            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
+            this function must be defined by the user].]]
+]
+
 [table Possible Actions for Internal Evaluation Errors
 [[Action]   [Behaviour]]
 [[throw_on_error][[*Throws `boost::math::evaluation_error`]]]
-[[errno_on_error][Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::infinity()`.]]
-[[ignore_error][Returns `std::numeric_limits<T>::infinity()`.]]
+[[errno_on_error][Sets `::errno` to `EDOM` and returns the closest approximation found.]]
+[[ignore_error][Returns the closest approximation found.]]
 [[user_error][Returns the result of `boost::math::policies::user_evaluation_error`: 
+            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
+            this function must be defined by the user].]]
+]
+
+[table Possible Actions for Indeterminate Result Errors
+[[Action]   [Behaviour]]
+[[throw_on_error][Throws `std::domain_error`]]
+[[errno_on_error][Sets `::errno` to `EDOM` and returns the same value as `ignore_error`.]]
+[[ignore_error][[*Returns a default result that depends on the function where the error occurred.]]]
+[[user_error][Returns the result of `boost::math::policies::user_indeterminate_result_error`:
             [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
@@ -281,6 +306,54 @@ and __Policy is the current policy
 in use for the called function.
 
 The default behaviour of this function is to throw a `boost::math::evaluation_error`.
+
+Note that in order to support information rich error messages when throwing
+exceptions, `Message` must contain
+a __format recognised format specifier: the argument `val` is inserted into
+the error message according to the specifier used.
+
+For example if `Message` contains a "%1%" then it is replaced by the value of
+`val` to the full precision of T, where as "%.3g" would contain the value of
+`val` to 3 digits.  See the __format documentation for more details.
+
+[heading [#indeterminate_result_error]Indeterminate Result Errors]
+
+When the result of a special function is indeterminate for the value that was
+passed to it, then the function returns the result of:
+
+   boost::math::policies::raise_overflow_error<T>(FunctionName, Message, Val, Default, __Policy);
+   
+Where
+`T` is the floating-point type passed to the function, `FunctionName` is the 
+name of the function, `Message` is an error message describing the problem,
+Val is the value for which the result is indeterminate, Default is an
+alternative default result that must be returned for ignore_error and
+errno_on_error policies, and __Policy is the current policy in use for the
+function that was called.
+
+The default policy for this function is `ignore_error`: note that this error
+type is reserved for situations where the result is mathematically
+undefined or indeterminate, but there is none the less a convention for what
+the result should be: for example the C99 standard specifies that the result
+of 0[super 0] is 1, even though the result is actually mathematically indeterminate.
+
+[heading [#rounding_error]Rounding Errors]
+
+When one of the rounding functions __round, __trunc or __modf is
+called with an argument that has no integer representation, or
+is too large to be represented in the result type then the 
+value returned is the result of a call to:
+
+   boost::math::policies::raise_rounding_error<T>(FunctionName, Message, Val, __Policy);
+   
+Where
+`T` is the floating point type passed to the function, `FunctionName` is the 
+name of the function, `Message` is an error message describing the problem,
+`Val` is the erroneous argument,
+and __Policy is the current policy
+in use for the called function.
+
+The default behaviour of this function is to throw a `boost::math::rounding_error`.
 
 Note that in order to support information rich error messages when throwing
 exceptions, `Message` must contain

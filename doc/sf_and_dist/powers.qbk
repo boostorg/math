@@ -44,6 +44,10 @@ Finally when BOOST_HAS_LOG1P is defined then the `float/double/long double`
 specializations of this template simply forward to the platform's 
 native (POSIX) implementation of this function.
 
+The following graph illustrates the behaviour of log1p:
+
+[graph log1p]
+
 [h4 Accuracy]
 
 For built in floating point types `log1p`
@@ -87,6 +91,10 @@ a series expansion when x is small (giving an accuracy of less than __te).
 Finally when BOOST_HAS_EXPM1 is defined then the `float/double/long double` 
 specializations of this template simply forward to the platform's 
 native (POSIX) implementation of this function.
+
+The following graph illustrates the behaviour of expm1:
+
+[graph expm1]
    
 [h4 Accuracy]
 
@@ -124,6 +132,10 @@ the return is `double` when /x/ is an integer type and T otherwise.
 [optional_policy]
 
 Implemented using Halley iteration.
+
+The following graph illustrates the behaviour of cbrt:
+
+[graph cbrt]
    
 [h4 Accuracy]
 
@@ -165,6 +177,10 @@ x is itself close to 1.
 
 Implemented in terms of `log1p` and `expm1`.
 
+The following graph illustrates the behaviour of sqrt1pm1:
+
+[graph sqrt1pm1]
+
 [h4 Accuracy]
 
 For built in floating-point types `sqrt1pm1`
@@ -204,6 +220,10 @@ There are two domains where this is useful: when y is very small, or when
 x is close to 1.
 
 Implemented in terms of `expm1`.
+
+The following graph illustrates the behaviour of powm1:
+
+[graph powm1]
 
 [h4 Accuracy]
 
@@ -247,6 +267,8 @@ Otherwise the result is given by:
 [equation hypot2]
 
 [endsect]
+
+[include pow.qbk]
 
 
 [endsect][/section:powers Logs, Powers, Roots and Exponentials]

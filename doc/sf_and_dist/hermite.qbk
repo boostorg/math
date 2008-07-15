@@ -40,7 +40,7 @@ Returns the value of the Hermite Polynomial of order /n/ at point /x/:
 The following graph illustrates the behaviour of the first few 
 Hermite Polynomials:
 
-[$../graphs/hermite.png]
+[graph hermite]
    
    template <class T1, class T2, class T3>
    ``__sf_result`` hermite_next(unsigned n, T1 x, T2 Hn, T3 Hnm1);

@@ -68,6 +68,47 @@ inline long double ibeta(long double a, long double b, long double x)
 #define TEST_OTHER
 #endif
 
+#ifdef TEST_BRATIO
+namespace other{
+extern "C" int bratio_(double*a, double*b, double*x, double*y, double*w, double*w1, int*ierr);
+
+inline float ibeta(float a, float b, float x)
+{
+   double a_ = a;
+   double b_ = b;
+   double x_ = x;
+   double y_ = 1-x_;
+   double w, w1;
+   int ierr = 0;
+   bratio_(&a_, &b_, &x_, &y_, &w, &w1, &ierr); 
+   return w;
+}
+inline double ibeta(double a, double b, double x)
+{ 
+   double a_ = a;
+   double b_ = b;
+   double x_ = x;
+   double y_ = 1-x_;
+   double w, w1;
+   int ierr = 0;
+   bratio_(&a_, &b_, &x_, &y_, &w, &w1, &ierr); 
+   return w;
+}
+inline long double ibeta(long double a, long double b, long double x)
+{
+   double a_ = a;
+   double b_ = b;
+   double x_ = x;
+   double y_ = 1-x_;
+   double w, w1;
+   int ierr = 0;
+   bratio_(&a_, &b_, &x_, &y_, &w, &w1, &ierr); 
+   return w;
+}
+}
+#define TEST_OTHER
+#endif
+
 #ifdef TEST_OTHER
 namespace other{
    boost::math::concepts::real_concept beta(boost::math::concepts::real_concept, boost::math::concepts::real_concept){ return 0; }

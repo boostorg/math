@@ -22,9 +22,14 @@
 
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
-#include <boost/math/tools/real_cast.hpp>
+#include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/special_functions/modf.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
+#if defined(__SGI_STL_PORT)
+#  include <boost/math/tools/real_cast.hpp>
+#endif
 #include <ostream>
 #include <istream>
 #include <cmath>
@@ -37,6 +42,12 @@ namespace boost{ namespace math{
 
 namespace concepts
 {
+
+#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   typedef double real_concept_base_type;
+#else
+   typedef long double real_concept_base_type;
+#endif
 
 class real_concept
 {
@@ -55,12 +66,15 @@ public:
    real_concept(int c) : m_value(c){}
    real_concept(unsigned long c) : m_value(c){}
    real_concept(long c) : m_value(c){}
-#if defined(BOOST_HAS_LONG_LONG) || defined(__DECCXX) || defined(__SUNPRO_CC)
-   real_concept(unsigned long long c) : m_value(static_cast<long double>(c)){}
-   real_concept(long long c) : m_value(static_cast<long double>(c)){}
+#if defined(__DECCXX) || defined(__SUNPRO_CC)
+   real_concept(unsigned long long c) : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(long long c) : m_value(static_cast<real_concept_base_type>(c)){}
+#elif defined(BOOST_HAS_LONG_LONG)
+   real_concept(boost::ulong_long_type c) : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(boost::long_long_type c) : m_value(static_cast<real_concept_base_type>(c)){}
 #elif defined(BOOST_HAS_MS_INT64)
-   real_concept(unsigned __int64 c) : m_value(static_cast<long double>(c)){}
-   real_concept(__int64 c) : m_value(static_cast<long double>(c)){}
+   real_concept(unsigned __int64 c) : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(__int64 c) : m_value(static_cast<real_concept_base_type>(c)){}
 #endif
    real_concept(float c) : m_value(c){}
    real_concept(double c) : m_value(c){}
@@ -80,15 +94,15 @@ public:
    real_concept& operator=(long c) { m_value = c; return *this; }
    real_concept& operator=(unsigned long c) { m_value = c; return *this; }
 #ifdef BOOST_HAS_LONG_LONG
-   real_concept& operator=(long long c) { m_value = static_cast<long double>(c); return *this; }
-   real_concept& operator=(unsigned long long c) { m_value = static_cast<long double>(c); return *this; }
+   real_concept& operator=(boost::long_long_type c) { m_value = static_cast<real_concept_base_type>(c); return *this; }
+   real_concept& operator=(boost::ulong_long_type c) { m_value = static_cast<real_concept_base_type>(c); return *this; }
 #endif
    real_concept& operator=(float c) { m_value = c; return *this; }
    real_concept& operator=(double c) { m_value = c; return *this; }
    real_concept& operator=(long double c) { m_value = c; return *this; }
 
    // Access:
-   long double value()const{ return m_value; }
+   real_concept_base_type value()const{ return m_value; }
 
    // Member arithmetic:
    real_concept& operator+=(const real_concept& other)
@@ -103,9 +117,13 @@ public:
    { return -m_value; }
    real_concept const& operator+()const
    { return *this; }
+   real_concept& operator++()
+   { ++m_value;  return *this; }
+   real_concept& operator--()
+   { --m_value;  return *this; }
 
 private:
-   long double m_value;
+   real_concept_base_type m_value;
 };
 
 // Non-member arithmetic:
@@ -148,40 +166,6 @@ inline bool operator > (const real_concept& a, const real_concept& b)
 inline bool operator >= (const real_concept& a, const real_concept& b)
 { return a.value() >= b.value(); }
 
-#if 0
-// Non-member mixed compare:
-template <class T>
-inline bool operator == (const T& a, const real_concept& b)
-{
-   return a == b.value();
-}
-template <class T>
-inline bool operator != (const T& a, const real_concept& b)
-{
-   return a != b.value();
-}
-template <class T>
-inline bool operator < (const T& a, const real_concept& b)
-{
-   return a < b.value();
-}
-template <class T>
-inline bool operator > (const T& a, const real_concept& b)
-{
-   return a > b.value();
-}
-template <class T>
-inline bool operator <= (const T& a, const real_concept& b)
-{
-   return a <= b.value();
-}
-template <class T>
-inline bool operator >= (const T& a, const real_concept& b)
-{
-   return a >= b.value();
-}
-#endif  // Non-member mixed compare:
-
 // Non-member functions:
 inline real_concept acos(real_concept a)
 { return std::acos(a.value()); }
@@ -196,6 +180,8 @@ inline real_concept atan2(real_concept a, real_concept b)
 inline real_concept ceil(real_concept a)
 { return std::ceil(a.value()); }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+// I've seen std::fmod(long double) crash on some platforms
+// so use fmodl instead:
 #ifdef _WIN32_WCE
 //
 // Ugly workaround for macro fmodl:
@@ -221,8 +207,8 @@ inline real_concept floor(real_concept a)
 { return std::floor(a.value()); }
 inline real_concept modf(real_concept a, real_concept* ipart)
 {
-   long double ip;
-   long double result = std::modf(a.value(), &ip);
+   real_concept_base_type ip;
+   real_concept_base_type result = std::modf(a.value(), &ip);
    *ipart = ip;
    return result;
 }
@@ -243,7 +229,7 @@ inline real_concept pow(real_concept a, int b)
 { return std::pow(a.value(), b); }
 #else
 inline real_concept pow(real_concept a, int b)
-{ return std::pow(a.value(), static_cast<long double>(b)); }
+{ return std::pow(a.value(), static_cast<real_concept_base_type>(b)); }
 #endif
 inline real_concept sin(real_concept a)
 { return std::sin(a.value()); }
@@ -253,6 +239,47 @@ inline real_concept sqrt(real_concept a)
 { return std::sqrt(a.value()); }
 inline real_concept tanh(real_concept a)
 { return std::tanh(a.value()); }
+
+//
+// Conversion and truncation routines:
+//
+template <class Policy>
+inline int iround(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::iround(v.value(), pol); }
+inline int iround(const concepts::real_concept& v)
+{ return boost::math::iround(v.value(), policies::policy<>()); }
+template <class Policy>
+inline long lround(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::lround(v.value(), pol); }
+inline long lround(const concepts::real_concept& v)
+{ return boost::math::lround(v.value(), policies::policy<>()); }
+
+#ifdef BOOST_HAS_LONG_LONG
+template <class Policy>
+inline boost::long_long_type llround(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::llround(v.value(), pol); }
+inline boost::long_long_type llround(const concepts::real_concept& v)
+{ return boost::math::llround(v.value(), policies::policy<>()); }
+#endif
+
+template <class Policy>
+inline int itrunc(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::itrunc(v.value(), pol); }
+inline int itrunc(const concepts::real_concept& v)
+{ return boost::math::itrunc(v.value(), policies::policy<>()); }
+template <class Policy>
+inline long ltrunc(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::ltrunc(v.value(), pol); }
+inline long ltrunc(const concepts::real_concept& v)
+{ return boost::math::ltrunc(v.value(), policies::policy<>()); }
+
+#ifdef BOOST_HAS_LONG_LONG
+template <class Policy>
+inline boost::long_long_type lltrunc(const concepts::real_concept& v, const Policy& pol)
+{ return boost::math::lltrunc(v.value(), pol); }
+inline boost::long_long_type lltrunc(const concepts::real_concept& v)
+{ return boost::math::lltrunc(v.value(), policies::policy<>()); }
+#endif
 
 // Streaming:
 template <class charT, class traits>
@@ -272,15 +299,15 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
    is >> v;
    a = v;
    return is;
-#elif defined(__SGI_STL_PORT)
+#elif defined(__SGI_STL_PORT) || defined(_RWSTD_VER) || defined(__LIBCOMO__)
    std::string s;
-   long double d;
+   real_concept_base_type d;
    is >> s;
    std::sscanf(s.c_str(), "%Lf", &d);
    a = d;
    return is;
 #else
-   long double v;
+   real_concept_base_type v;
    is >> v;
    a = v;
    return is;
@@ -289,6 +316,63 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
 
 } // namespace concepts
 
+namespace tools
+{
+
+template <>
+inline concepts::real_concept max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+{
+   return max_value<concepts::real_concept_base_type>();
+}
+
+template <>
+inline concepts::real_concept min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+{
+   return min_value<concepts::real_concept_base_type>();
+}
+
+template <>
+inline concepts::real_concept log_max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+{
+   return log_max_value<concepts::real_concept_base_type>();
+}
+
+template <>
+inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+{
+   return log_min_value<concepts::real_concept_base_type>();
+}
+
+template <>
+inline concepts::real_concept epsilon<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+{
+#ifdef __SUNPRO_CC
+   return std::numeric_limits<concepts::real_concept_base_type>::epsilon();
+#else
+   return tools::epsilon<concepts::real_concept_base_type>();
+#endif
+}
+
+template <>
+inline int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+{ 
+   // Assume number of significand bits is same as real_concept_base_type,
+   // unless std::numeric_limits<T>::is_specialized to provide digits.
+   return tools::digits<concepts::real_concept_base_type>();
+   // Note that if numeric_limits real concept is NOT specialized to provide digits10
+   // (or max_digits10) then the default precision of 6 decimal digits will be used
+   // by Boost test (giving misleading error messages like
+   // "difference between {9.79796} and {9.79796} exceeds 5.42101e-19%"
+   // and by Boost lexical cast and serialization causing loss of accuracy.
+}
+
+} // namespace tools
+
+#if defined(__SGI_STL_PORT)
+//
+// We shouldn't really need these type casts any more, but there are some
+// STLport iostream bugs we work around by using them....
+//
 namespace tools
 {
 // real_cast converts from T to integer and narrower floating-point types.
@@ -331,54 +415,19 @@ inline long double real_cast<long double, concepts::real_concept>(concepts::real
    return r.value();
 }
 
-template <>
-inline concepts::real_concept max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{
-   return max_value<long double>();
-}
+} // STLPort
 
-template <>
-inline concepts::real_concept min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{
-   return min_value<long double>();
-}
-
-template <>
-inline concepts::real_concept log_max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{
-   return log_max_value<long double>();
-}
-
-template <>
-inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{
-   return log_min_value<long double>();
-}
-
-template <>
-inline concepts::real_concept epsilon<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{
-#ifdef __SUNPRO_CC
-   return std::numeric_limits<long double>::epsilon();
-#else
-   return tools::epsilon<long double>();
 #endif
-}
 
-template <>
-inline int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{ 
-   // Assume number of significand bits is same as long double,
-   // unless std::numeric_limits<T>::is_specialized to provide digits.
-   return tools::digits<long double>();
-   // Note that if numeric_limits real concept is NOT specialized to provide digits10
-   // (or max_digits10) then the default precision of 6 decimal digits will be used
-   // by Boost test (giving misleading error messages like
-   // "difference between {9.79796} and {9.79796} exceeds 5.42101e-19%"
-   // and by Boost lexical cast and serialization causing loss of accuracy.
-}
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
+//
+// For some strange reason ADL sometimes fails to find the 
+// correct overloads, unless we bring these declarations into scope:
+//
+using concepts::itrunc;
+using concepts::iround;
 
-} // namespace tools
+#endif
 
 } // namespace math
 } // namespace boost

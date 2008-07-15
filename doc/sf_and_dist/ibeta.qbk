@@ -61,7 +61,7 @@ Returns the normalised incomplete beta function of a, b and x:
 
 [equation ibeta3]
 
-[$../graphs/ibeta.png]
+[graph ibeta]
 
    template <class T1, class T2, class T3>
    ``__sf_result`` ibetac(T1 a, T2 b, T3 x);

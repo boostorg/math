@@ -1,13 +1,13 @@
 [article Math Toolkit
     [quickbook 1.4]
-    [copyright 2006-2007 John Maddock, Paul A. Bristow, Hubert Holin and Xiaogang Zhang]
+    [copyright 2006, 2007, 2008 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang and Bruno Lalande]
     [purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [authors [Maddock, John], [Bristow, Paul A.], [Holin, Hubert], [Zhang, Xiaogang]]
+    [authors [Maddock, John], [Bristow, Paul A.], [Holin, Hubert], [Zhang, Xiaogang], [Lalande, Bruno]]
     [category math]
     [purpose mathematics]
     [/last-revision $Date$]
@@ -22,9 +22,19 @@
 </imageobject>
 </inlinemediaobject>''']
 
+[template graph[name]  '''<inlinemediaobject>
+<imageobject role="html">
+<imagedata align="center" fileref="../graphs/'''[name]'''.png"></imagedata>
+</imageobject>
+<imageobject role="print">
+<imagedata align="center" fileref="../graphs/'''[name]'''.svg"></imagedata>
+</imageobject>
+</inlinemediaobject>''']
+
 [include html4_symbols.qbk] [/ just for testing]
 [/include latin1_symbols.qbk] [/ just for testing]
-[include common_overviews.qbk][/ overviews that appear in more than one place!]
+[include common_overviews.qbk] [/ overviews that appear in more than one place!]
+[include tr1.qbk] [/tr1 docs also appear in more than one place!]
 [include roadmap.qbk] [/ for history]
 
 [def __effects [*Effects: ]]
@@ -65,6 +75,8 @@
 [def __underflow_error [link underflow_error underflow_error]]
 [def __denorm_error [link denorm_error denorm_error]]
 [def __evaluation_error [link evaluation_error evaluation_error]]
+[def __rounding_error [link rounding_error rounding_error]]
+[def __indeterminate_result_error [link indeterminate_result_error indeterminate_result_error]]
 [def __checked_narrowing_cast [link checked_narrowing_cast checked_narrowing_cast]]
 
 [def __arg_pomotion_rules [link math_toolkit.main_overview.result_type ['result type calculation rules]]]
@@ -162,6 +174,32 @@ and use the function's name as the link text]
 [def __sqrt1pm1 [link math_toolkit.special.powers.sqrt1pm1 sqrt1pm1]]
 [def __powm1 [link math_toolkit.special.powers.powm1 powm1]]
 [def __hypot [link math_toolkit.special.powers.hypot hypot]]
+[def __pow [link math_toolkit.special.powers.ct_pow pow]]
+
+[/zeta]
+[def __zeta [link math_toolkit.special.zetas.zeta zeta]]
+
+[/expint]
+[def __expint_i [link math_toolkit.special.expint.expint_i zeta]]
+[def __expint_n [link math_toolkit.special.expint.expint_n zeta]]
+
+[/rounding]
+[def __round [link math_toolkit.special.rounding.round round]]
+[def __lround [link math_toolkit.special.rounding.round round]]
+[def __llround [link math_toolkit.special.rounding.round round]]
+[def __trunc [link math_toolkit.special.rounding.trunc trunc]]
+[def __modf [link math_toolkit.special.rounding.modf modf]]
+
+[/polynomials]
+[def __laguerre [link math_toolkit.special.sf_poly.laguerre laguerre]]
+[def __legendre [link math_toolkit.special.sf_poly.legendre legendre_p]]
+[def __hermite [link math_toolkit.special.sf_poly.hermite hermite]]
+
+[/Misc]
+[def __expint [link math_toolkit.special.expint.expint_i expint]]
+[def __spherical_harmonic [link math_toolkit.special.sf_poly.sph_harm spherical_harmonic]]
+
+
 
 [/ distribution non-members]
 [def __cdf [link math.dist.cdf Cumulative Distribution Function]]
@@ -187,11 +225,16 @@ and use the function's name as the link text]
 [def __binomial_distrib [link math_toolkit.dist.dist_ref.dists.binomial_dist Binomial Distribution]]
 [def __cauchy_distrib [link math_toolkit.dist.dist_ref.dists.cauchy_dist Cauchy Distribution]]
 [def __chi_squared_distrib [link math_toolkit.dist.dist_ref.dists.chi_squared_dist Chi Squared Distribution]]
+[def __extreme_distrib [link math_toolkit.dist.dist_ref.dists.extreme_dist Extreme Distributions]]
 [def __exp_distrib [link math_toolkit.dist.dist_ref.dists.exp_dist Exponential Distribution]]
 [def __F_distrib [link math_toolkit.dist.dist_ref.dists.f_dist Fisher F Distribution]]
 [def __gamma_distrib [link math_toolkit.dist.dist_ref.dists.gamma_dist Gamma Distribution]]
 [def __lognormal_distrib [link math_toolkit.dist.dist_ref.dists.lognormal_dist Log-normal Distribution]]
 [def __negative_binomial_distrib [link math_toolkit.dist.dist_ref.dists.negative_binomial_dist Negative Binomial Distribution]]
+[def __non_central_chi_squared_distrib [link math_toolkit.dist.dist_ref.dists.nc_chi_squared_dist Noncentral Chi Squared Distribution]]
+[def __non_central_beta_distrib [link math_toolkit.dist.dist_ref.dists.nc_beta_dist Noncentral Beta Distribution]]
+[def __non_central_F_distrib [link math_toolkit.dist.dist_ref.dists.nc_f_dist Noncentral F Distribution]]
+[def __non_central_T_distrib [link math_toolkit.dist.dist_ref.dists.nc_t_dist Noncentral T Distribution]]
 [def __normal_distrib [link math_toolkit.dist.dist_ref.dists.normal_dist Normal Distribution]]
 [def __poisson_distrib [link math_toolkit.dist.dist_ref.dists.poisson_dist Poisson Distribution]]
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
@@ -266,7 +309,7 @@ for these distributions.
 ] [/ template discrete_quantile_warning]
 
 This manual is also available in 
-[@http:svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf 
+[@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf 
 printer friendly PDF format].
 
 [section:main_overview Overview]
@@ -291,6 +334,9 @@ printer friendly PDF format].
 [endsect]
 [section:history1 History and What's New]
 [history]
+[endsect]
+[section:tr1 C99 and TR1 C Functions]
+[tr1_overview]
 [endsect]
 [include contact_info.qbk]
 
@@ -347,10 +393,27 @@ printer friendly PDF format].
 [include ellint_legendre.qbk]
 [endsect] [/section:ellint Elliptic Integrals]
 
+[section:zetas Zeta Functions]
+[include zeta.qbk]
+[endsect]
+
+[include expint.qbk]
+
 [include powers.qbk]
 [include sinc.qbk]
 [include inv_hyper.qbk]
+[include rounding_func.qbk]
 [include fpclassify.qbk]
+[include float_next.qbk]
+
+[section:extern_c TR1 and C99 external "C" Functions]
+[section:tr1 C99 and TR1 C Functions Overview]
+[tr1_overview]
+[endsect]
+[include c99_ref.qbk]
+[include tr1_ref.qbk]
+[endsect]
+
 [endsect] [/section:special Special Functions]
 
 [section:toolkit Internal Details and Tools (Experimental)]
@@ -375,7 +438,7 @@ printer friendly PDF format].
 
 [endsect] [/section:toolkit Toolkit]
 
-[section:using_udt Use with User Defined Floating-Point Types]
+[section:using_udt Use with User-Defined Floating-Point Types]
 [include concepts.qbk]
 [endsect] [/section:using_udt Use with User Defined Floating-Point Types]
 
@@ -406,7 +469,7 @@ printer friendly PDF format].
 [endsect] [/section:status Status and Roadmap] 
 
 [/ math.qbk
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2008 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_HYPOT_INCLUDED
 #define BOOST_MATH_HYPOT_INCLUDED
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -77,5 +81,6 @@ inline typename tools::promote_args<T1, T2>::type
 } // namespace boost
 
 #endif // BOOST_MATH_HYPOT_INCLUDED
+
 
 

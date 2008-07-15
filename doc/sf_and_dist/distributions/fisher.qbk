@@ -41,7 +41,7 @@ has the PDF:
 The following graph illustrates how the PDF varies depending on the
 two degrees of freedom parameters.
 
-[$../graphs/fisher_f.png]
+[graph fisher_f_pdf]
 
 
 [h4 Member Functions]

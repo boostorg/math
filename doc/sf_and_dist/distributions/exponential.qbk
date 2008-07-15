@@ -33,7 +33,7 @@ events that happen at a constant average rate.
 The following graph shows how the distribution changes for different
 values of the rate parameter lambda:
 
-[$../graphs/exponential_dist.png]
+[graph exponential_pdf]
 
 [h4 Member Functions]
 
@@ -89,6 +89,13 @@ In the following table [lambda] is the parameter lambda of the distribution,
 * [@http://documents.wolfram.com/calccenter/Functions/ListsMatrices/Statistics/ExponentialDistribution.html Wolfram Mathematica calculator]
 * [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda3667.htm NIST Exploratory Data Analysis]
 * [@http://en.wikipedia.org/wiki/Exponential_distribution Wikipedia Exponential distribution]
+
+(See also the reference documentation for the related __extreme_distrib.)
+
+* 
+[@http://www.worldscibooks.com/mathematics/p191.html Extreme Value Distributions, Theory and Applications
+Samuel Kotz & Saralees Nadarajah]
+discuss the relationship of the types of extreme value distributions.
 
 [endsect][/section:exp_dist Exponential]
 

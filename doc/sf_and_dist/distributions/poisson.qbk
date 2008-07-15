@@ -41,7 +41,7 @@ for k events, with an expected number of events [lambda].
 
 The following graph illustrates how the PDF varies with the parameter [lambda]:
 
-[$../graphs/poisson.png]
+[graph poisson_pdf_1]
 
 [discrete_quantile_warning Poisson]
 

@@ -44,12 +44,12 @@ of spectral lines.
 The following graph shows how the distributions moves as the
 location parameter changes:
 
-[$../graphs/cauchy1.png]
+[graph cauchy_pdf1]
 
 While the following graph shows how the shape (scale) parameter alters
 the distribution:
 
-[$../graphs/cauchy2.png]
+[graph cauchy_pdf2]
 
 [h4 Member Functions]
 

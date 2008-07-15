@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_BESSEL_J1_HPP
 #define BOOST_MATH_BESSEL_J1_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/assert.hpp>
@@ -150,3 +154,4 @@ T bessel_j1(T x)
 }}} // namespaces
 
 #endif // BOOST_MATH_BESSEL_J1_HPP
+

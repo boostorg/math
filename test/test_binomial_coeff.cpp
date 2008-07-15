@@ -7,6 +7,7 @@
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/binomial.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/test.hpp>
 #include "functor.hpp"
 #include <boost/array.hpp>
@@ -94,8 +95,8 @@ template <class T>
 T binomial_wrapper(T n, T k)
 {
    return boost::math::binomial_coefficient<T>(
-      boost::math::tools::real_cast<unsigned>(n),
-      boost::math::tools::real_cast<unsigned>(k));
+      boost::math::itrunc(n),
+      boost::math::itrunc(k));
 }
 
 template <class T>

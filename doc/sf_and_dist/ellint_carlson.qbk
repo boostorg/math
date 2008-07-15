@@ -76,7 +76,7 @@ These functions return Carlson's symmetrical elliptic integrals, the functions
 have complicated behavior over all their possible domains, but the following
 graph gives an idea of their behavior:
 
-[$../graphs/ellint_c.png]
+[graph ellint_carlson]
 
 The return type of these functions is computed using the __arg_pomotion_rules
 when the arguments are of different types: otherwise the return is the same type 

@@ -11,6 +11,10 @@
 #define BOOST_SINHC_HPP
 
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
@@ -161,3 +165,4 @@ namespace boost
 }
 
 #endif /* BOOST_SINHC_HPP */
+

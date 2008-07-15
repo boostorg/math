@@ -8,6 +8,10 @@
 #ifndef BOOST_MATH_SF_GAMMA_HPP
 #define BOOST_MATH_SF_GAMMA_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/config.hpp>
 #ifdef BOOST_MSVC
 # pragma warning(push)
@@ -23,12 +27,12 @@
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
-#include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/special_functions/sqrt1pm1.hpp>
 #include <boost/math/special_functions/lanczos.hpp>
@@ -138,30 +142,33 @@ T gamma_imp(T z, const Policy& pol, const L& l)
 #endif
    static const char* function = "boost::math::tgamma<%1%>(%1%)";
 
-   if((z <= 0) && (floor(z) == z))
-      return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
-   if(z <= -20)
+   if(z <= 0)
    {
-      result = gamma_imp(-z, pol, l) * sinpx(z);
-      if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
-         return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
-      result = -boost::math::constants::pi<T>() / result;
-      if(result == 0)
-         return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-      if((boost::math::fpclassify)(result) == FP_SUBNORMAL)
-         return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
-      return result;
-   }
+      if(floor(z) == z)
+         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
+      if(z <= -20)
+      {
+         result = gamma_imp(-z, pol, l) * sinpx(z);
+         if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
+            return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+         result = -boost::math::constants::pi<T>() / result;
+         if(result == 0)
+            return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
+         if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
+            return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
+         return result;
+      }
 
-   // shift z to > 1:
-   while(z < 1)
-   {
-      result /= z;
-      z += 1;
+      // shift z to > 1:
+      while(z < 0)
+      {
+         result /= z;
+         z += 1;
+      }
    }
    if((floor(z) == z) && (z < max_factorial<T>::value))
    {
-      result *= unchecked_factorial<T>(tools::real_cast<unsigned>(z) - 1);
+      result *= unchecked_factorial<T>(itrunc(z, pol) - 1);
    }
    else
    {
@@ -348,7 +355,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l)
       result = -boost::math::constants::pi<T>() / result;
       if(result == 0)
          return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-      if((boost::math::fpclassify)(result) == FP_SUBNORMAL)
+      if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
          return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
       return result;
    }
@@ -366,7 +373,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l)
    BOOST_MATH_INSTRUMENT_CODE(prefix);
    if((floor(z) == z) && (z < max_factorial<T>::value))
    {
-      prefix *= unchecked_factorial<T>(tools::real_cast<unsigned>(z) - 1);
+      prefix *= unchecked_factorial<T>(itrunc(z, pol) - 1);
    }
    else
    {
@@ -580,7 +587,7 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
    // This error handling isn't very good: it happens after the fact
    // rather than before it...
    //
-   if((boost::math::fpclassify)(prefix) == FP_INFINITE)
+   if((boost::math::fpclassify)(prefix) == (int)FP_INFINITE)
       policies::raise_overflow_error<T>("boost::math::detail::full_igamma_prefix<%1%>(%1%, %1%)", "Result of incomplete gamma function is too large to represent.", pol);
 
    return prefix;
@@ -1091,7 +1098,7 @@ T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
          //
          if((z <= max_factorial<T>::value) && (z + delta <= max_factorial<T>::value))
          {
-            return unchecked_factorial<T>(tools::real_cast<unsigned>(z) - 1) / unchecked_factorial<T>(tools::real_cast<unsigned>(z + delta) - 1);
+            return unchecked_factorial<T>((unsigned)itrunc(z, pol) - 1) / unchecked_factorial<T>((unsigned)itrunc(z + delta) - 1);
          }
       }
       if(fabs(delta) < 20)
@@ -1466,6 +1473,7 @@ inline typename tools::promote_args<T1, T2>::type
 #include <boost/math/special_functions/erf.hpp>
 
 #endif // BOOST_MATH_SF_GAMMA_HPP
+
 
 
 

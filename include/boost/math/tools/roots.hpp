@@ -6,10 +6,15 @@
 #ifndef BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
 #define BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <utility>
 #include <cmath>
 #include <stdexcept>
 
+#include <boost/tr1/tuple.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
@@ -518,5 +523,6 @@ inline T schroeder_iterate(F f, T guess, T min, T max, int digits)
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
+
 
 

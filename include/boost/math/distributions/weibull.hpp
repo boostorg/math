@@ -111,7 +111,9 @@ inline const std::pair<RealType, RealType> support(const weibull_distribution<Re
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
    using boost::math::tools::max_value;
-   return std::pair<RealType, RealType>(0,  max_value<RealType>());
+   using boost::math::tools::min_value;
+   return std::pair<RealType, RealType>(min_value<RealType>(),  max_value<RealType>());
+   // A discontinuity at x == 0, so only support down to min_value.
 }
 
 template <class RealType, class Policy>
@@ -131,8 +133,9 @@ inline RealType pdf(const weibull_distribution<RealType, Policy>& dist, const Re
       return result;
 
    if(x == 0)
+   { // Special case, but x == min, pdf = 1 for shape = 1, 
       return 0;
-
+   }
    result = exp(-pow(x / scale, shape));
    result *= pow(x / scale, shape) * shape / x;
 
@@ -283,6 +286,8 @@ inline RealType mode(const weibull_distribution<RealType, Policy>& dist)
    {
       return result;
    }
+   if(shape <= 1)
+      return 0;
    result = scale * pow((shape - 1) / shape, 1 / shape);
    return result;
 }

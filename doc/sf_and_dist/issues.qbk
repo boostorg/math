@@ -80,6 +80,58 @@ for very high precision types (Low Priority).
 
 * Student's t Perhaps switch to normal distribution as a better approximation for very large degrees of freedom?
 
+[h4 Feature Requests]
+
+The following table lists distributions that are found in other packages
+but which are not yet present here, the more frequently the distribution
+is found, the higher the priority for implementing it:
+
+[table
+[[Distribution][R][Mathematica 6][NIST][Regress+][Matlab]]
+[/4 votes:]
+[[Logistic][X][X][-][X][X]]
+[[Hypergeometric][X][X][-][X][X]]
+
+[/3 votes:]
+[[Inverse Gausian / Inverse Normal][-][X][-][X][X]]
+[[Geometric][X][X][-][-][X]]
+
+[/2 votes:]
+[[Multinomial][X][-][-][-][X]]
+[[Tukey Lambda][X][-][X][-][-]]
+[[Half Normal / Folded Normal][-][X][-][X][-]]
+[[Chi][-][X][-][X][-]]
+[[Gumbel][-][X][-][X][-]]
+[[Discrete Uniform][-][X][-][-][X]]
+[[Log Series][-][X][-][X][-]]
+[[Nakagami (generalised Chi)][-][-][-][X][X]]
+
+[/1 vote:]
+[[Log Logistic][-][-][-][-][X]]
+[[Tukey (Studentized range)][X][-][-][-][-]]
+[[Wilcoxon rank sum][X][-][-][-][-]]
+[[Wincoxon signed rank][X][-][-][-][-]]
+[[Non-central Beta][X][-][-][-][-]]
+[[Laplace][-][X][-][-][-]]
+[[Maxwell][-][X][-][-][-]]
+[[Beta-Binomial][-][X][-][-][-]]
+[[Beta-negative Binomial][-][X][-][-][-]]
+[[Zipf][-][X][-][-][-]]
+[[Birnbaum-Saunders / Fatigue Life][-][-][X][-][-]]
+[[Double Exponential][-][-][X][-][-]]
+[[Power Normal][-][-][X][-][-]]
+[[Power Lognormal][-][-][X][-][-]]
+[[Cosine][-][-][-][X][-]]
+[[Double Gamma][-][-][-][X][-]]
+[[Double Weibul][-][-][-][X][-]]
+[[Hyperbolic Secant][-][-][-][X][-]]
+[[Laplace][-][-][-][X][-]]
+[[Semicircular][-][-][-][X][-]]
+[[Bradford][-][-][-][X][-]]
+[[Birr / Fisk][-][-][-][X][-]]
+[[Reciprocal][-][-][-][X][-]]
+]
+
 [endsect][/section:issues Known Issues, and Todo List]
 
 [/ 

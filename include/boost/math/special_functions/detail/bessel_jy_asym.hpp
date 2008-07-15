@@ -12,6 +12,10 @@
 #ifndef BOOST_MATH_SF_DETAIL_BESSEL_JY_ASYM_HPP
 #define BOOST_MATH_SF_DETAIL_BESSEL_JY_ASYM_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/factorials.hpp>
 
 namespace boost{ namespace math{ namespace detail{
@@ -295,3 +299,4 @@ T asymptotic_bessel_i_large_x(T v, T x, const Policy& pol)
 }}} // namespaces
 
 #endif
+

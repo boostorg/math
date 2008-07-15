@@ -55,7 +55,7 @@ As the number of degrees of freedom tends towards infinity, then this
 distribution approaches the normal-distribution.  The following graph
 illustrates how the PDF varies with the degrees of freedom [nu]:
 
-[$../graphs/students_t.png]
+[graph students_t_pdf]
 
 [h4 Member Functions]
 

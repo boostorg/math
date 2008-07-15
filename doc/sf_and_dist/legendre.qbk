@@ -62,7 +62,7 @@ P[sub -l-1](x) = P[sub l](x)
 The following graph illustrates the behaviour of the first few 
 Legendre Polynomials:
 
-[$../graphs/legendre_p1.png]
+[graph legendre_p]
    
    template <class T>
    ``__sf_result`` legendre_p(int l, int m, T x);
@@ -119,7 +119,7 @@ Requires -1 <= x <= 1, otherwise __domain_error is called.
 The following graph illustrates the first few Legendre functions of the
 second kind:
 
-[$../graphs/legendre_q.png]
+[graph legendre_q]
    
    template <class T1, class T2, class T3>
    ``__sf_result`` legendre_next(unsigned l, T1 x, T2 Pl, T3 Plm1);

@@ -7,6 +7,10 @@
 #ifndef BOOST_MATH_SPECIAL_LEGENDRE_HPP
 #define BOOST_MATH_SPECIAL_LEGENDRE_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/tools/config.hpp>
@@ -185,5 +189,6 @@ inline typename tools::promote_args<T>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_LEGENDRE_HPP
+
 
 

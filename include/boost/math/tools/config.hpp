@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_CONFIG_HPP
 #define BOOST_MATH_TOOLS_CONFIG_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/cstdint.hpp> // for boost::uintmax_t
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
@@ -17,6 +21,7 @@
 #endif
 
 #include <boost/math/tools/user.hpp>
+#include <boost/math/special_functions/detail/round_fwd.hpp>
 
 #if defined(__CYGWIN__) || defined(__FreeBSD__) || defined(__hppa)
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
@@ -53,6 +58,11 @@
 // your Intel compiler version has this issue or not.
 //
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#endif
+
+#if defined(BOOST_MSVC) && !defined(_WIN32_WCE)
+   // Better safe than sorry, our tests don't support hardware exceptions:
+#  define BOOST_MATH_CONTROL_FP _control87(MCW_EM,MCW_EM)
 #endif
 
 #ifdef __IBMCPP__
@@ -180,7 +190,14 @@
    using std::ceil;\
    using std::floor;\
    using std::log10;\
-   using std::sqrt;
+   using std::sqrt;\
+   using boost::math::round;\
+   using boost::math::iround;\
+   using boost::math::lround;\
+   using boost::math::trunc;\
+   using boost::math::itrunc;\
+   using boost::math::ltrunc;\
+   using boost::math::modf;
 
 
 namespace boost{ namespace math{
@@ -241,6 +258,8 @@ inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
 #endif
 
 #endif // BOOST_MATH_TOOLS_CONFIG_HPP
+
+
 
 
 

@@ -55,6 +55,8 @@ typically used when /a/ is large and /delta/ is very small.
 The return type of these functions is computed using the __arg_pomotion_rules
 when T1 and T2 are different types, otherwise the result type is simple T1.
 
+[graph tgamma_delta_ratio]
+
 [h4 Accuracy]
 
 The following table shows the peak errors (in units of epsilon) 

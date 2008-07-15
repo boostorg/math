@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Math Toolkit">
-<link rel="up" href="../using_udt.html" title="Use with User Defined Floating-Point Types">
+<link rel="up" href="../using_udt.html" title="Use with User-Defined Floating-Point Types">
 <link rel="prev" href="use_ntl.html" title="Using With NTL - a High-Precision Floating-Point Library">
 <link rel="next" href="dist_concept.html" title="Conceptual Requirements for Distribution Types">
 </head>
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -42,7 +42,7 @@
         behaves just like a built in floating point type.
       </p>
 <a name="math_toolkit.using_udt.concepts.basic_arithmetic_requirements"></a><h5>
-<a name="id733903"></a>
+<a name="id806874"></a>
         <a href="concepts.html#math_toolkit.using_udt.concepts.basic_arithmetic_requirements">Basic
         Arithmetic Requirements</a>
       </h5>
@@ -1034,7 +1034,7 @@
 </td></tr>
 </table></div>
 <a name="math_toolkit.using_udt.concepts.standard_library_support_requirements"></a><h5>
-<a name="id736971"></a>
+<a name="id809942"></a>
         <a href="concepts.html#math_toolkit.using_udt.concepts.standard_library_support_requirements">Standard
         Library Support Requirements</a>
       </h5>
@@ -1253,6 +1253,66 @@
               </p>
               </td>
 </tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">fmod</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                RealType
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">round</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                RealType
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">iround</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                int
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">trunc</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                RealType
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">itrunc</span><span class="special">(</span><span class="identifier">cr1</span><span class="special">)</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                int
+              </p>
+              </td>
+</tr>
 </tbody>
 </table></div>
 <p>
@@ -1261,9 +1321,17 @@
         following functions: <code class="computeroutput"><span class="identifier">acos</span></code>,
         <code class="computeroutput"><span class="identifier">atan2</span></code>, <code class="computeroutput"><span class="identifier">fmod</span></code>,
         <code class="computeroutput"><span class="identifier">cosh</span></code>, <code class="computeroutput"><span class="identifier">sinh</span></code>,
-        <code class="computeroutput"><span class="identifier">tanh</span></code>, <code class="computeroutput"><span class="identifier">modf</span></code>
-        and <code class="computeroutput"><span class="identifier">log10</span></code> are not currently
-        used, but may be if further special functions are added.
+        <code class="computeroutput"><span class="identifier">tanh</span></code>, <code class="computeroutput"><span class="identifier">log10</span></code>,
+        <code class="computeroutput"><span class="identifier">lround</span></code>, <code class="computeroutput"><span class="identifier">llround</span></code>,
+        ltrunc<code class="computeroutput"><span class="special">,</span> </code>lltrunc<code class="computeroutput"> <span class="keyword">and</span> </code>modf` are not currently used, but may
+        be if further special functions are added.
+      </p>
+<p>
+        Note that the <code class="computeroutput"><span class="identifier">round</span></code>, <code class="computeroutput"><span class="identifier">trunc</span></code> and <code class="computeroutput"><span class="identifier">modf</span></code>
+        functions are not part of the current C++ standard: they are part of the
+        additions added to C99 which will likely be in the next C++ standard. There
+        are Boost versions of these provided as a backup, and the functions are always
+        called unqualified so that argument-dependent-lookup can take place.
       </p>
 <p>
         In addition, for efficient and accurate results, a <a href="../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
@@ -1281,8 +1349,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
+      Holin, Xiaogang Zhang and Bruno Lalande<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -207,6 +207,11 @@ However in a few cases, for example normal, where we felt it obvious,
 we have permitted argument(s) to be infinity,
 provided infinity is implemented for the realType on that implementation.
 
+Users who require special handling of infinity (or other specific value) can, 
+of course, always intercept this before calling a distribution or function
+and return their own choice of value, or other behavior.
+This will often be simpler than trying to handle the aftermath of the error policy.
+
 Overflow, underflow, denorm can be handled using __error_policy.
 
 We have also tried to catch boundary cases where the mathematical specification
@@ -444,6 +449,14 @@ PNG files can be created from the SVG's using
 and a command such as:
 
 [pre java -jar 'C:\download\open\batik-1.7\batik-rasterizer.jar' -dpi 120 *.svg]
+
+Or using Inkscape and a command such as:
+
+[pre for file in *.svg; do 
+  /cygdrive/c/progra~1/Inkscape/inkscape -d 120 -e $(cygpath -a -w $(basename $file .svg).png) $(cygpath -a -w $file); 
+done]
+
+Currently Inkscape seems to generate the better looking png's.
 
 The PDF is generated into \pdf\math.pdf
 using a command from a shell or command window with current directory

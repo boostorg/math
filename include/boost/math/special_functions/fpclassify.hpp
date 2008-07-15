@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_FPCLASSIFY_HPP
 #define BOOST_MATH_FPCLASSIFY_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <math.h>
 #include <cmath>
 #include <boost/limits.hpp>
@@ -34,8 +38,15 @@
 #define BOOST_HAS_FPCLASSIFY
 
 #ifndef fpclassify
-#  if (defined(__GLIBCPP__) || defined(__GLIBCXX__)) && defined(_GLIBCXX_USE_C99_MATH) && !(defined(_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC) && (_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC != 0))
-#     define BOOST_FPCLASSIFY_PREFIX ::std::
+#  if (defined(__GLIBCPP__) || defined(__GLIBCXX__)) \
+         && defined(_GLIBCXX_USE_C99_MATH) \
+         && !(defined(_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC) \
+         && (_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC != 0))
+#     ifdef _STLP_VENDOR_CSTD 
+#        define BOOST_FPCLASSIFY_PREFIX ::_STLP_VENDOR_CSTD:: 
+#     else 
+#        define BOOST_FPCLASSIFY_PREFIX ::std::
+#     endif
 #  else
 #     undef BOOST_HAS_FPCLASSIFY
 #     define BOOST_FPCLASSIFY_PREFIX
@@ -69,7 +80,7 @@ inline bool is_nan_helper(T t, const boost::true_type&)
 #ifdef isnan
    return isnan(t);
 #else // BOOST_HAS_FPCLASSIFY
-   return (BOOST_FPCLASSIFY_PREFIX fpclassify(t) == FP_NAN);
+   return (BOOST_FPCLASSIFY_PREFIX fpclassify(t) == (int)FP_NAN);
 #endif
 }
 
@@ -173,7 +184,7 @@ inline int fpclassify BOOST_NO_MACRO_EXPAND(double t)
    case _FPCLASS_SNAN /* Signaling NaN */ :
    case _FPCLASS_QNAN /* Quiet NaN */ :
       return FP_NAN;
-   case _FPCLASS_NINF /*Negative infinity ( –INF) */ :
+   case _FPCLASS_NINF /*Negative infinity ( -INF) */ :
    case _FPCLASS_PINF /* Positive infinity (+INF) */ :
       return FP_INFINITE;
    case _FPCLASS_NN /* Negative normalized non-zero */ :
@@ -182,7 +193,7 @@ inline int fpclassify BOOST_NO_MACRO_EXPAND(double t)
    case _FPCLASS_ND /* Negative denormalized */:
    case _FPCLASS_PD /* Positive denormalized */ :
       return FP_SUBNORMAL;
-   case _FPCLASS_NZ /* Negative zero ( – 0) */ :
+   case _FPCLASS_NZ /* Negative zero ( - 0) */ :
    case _FPCLASS_PZ /* Positive 0 (+0) */ :
       return FP_ZERO;
    default:
@@ -196,19 +207,19 @@ template <class T>
 inline bool isfinite BOOST_NO_MACRO_EXPAND(T z)
 {
    int t = (::boost::math::fpclassify)(z);
-   return (t != FP_NAN) && (t != FP_INFINITE);
+   return (t != (int)FP_NAN) && (t != (int)FP_INFINITE);
 }
 
 template <class T>
 inline bool isinf BOOST_NO_MACRO_EXPAND(T t)
 {
-   return (::boost::math::fpclassify)(t) == FP_INFINITE;
+   return (::boost::math::fpclassify)(t) == (int)FP_INFINITE;
 }
 
 template <class T>
 inline bool isnan BOOST_NO_MACRO_EXPAND(T t)
 {
-   return (::boost::math::fpclassify)(t) == FP_NAN;
+   return (::boost::math::fpclassify)(t) == (int)FP_NAN;
 }
 #ifdef isnan
 template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return ::boost::math_detail::is_nan_helper(t, boost::true_type()); }
@@ -228,13 +239,15 @@ template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){
 template <class T>
 inline bool isnormal BOOST_NO_MACRO_EXPAND(T t)
 {
-   return (::boost::math::fpclassify)(t) == FP_NORMAL;
+   return (::boost::math::fpclassify)(t) == (int)FP_NORMAL;
 }
 
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_FPCLASSIFY_HPP
+
+
 
 
 

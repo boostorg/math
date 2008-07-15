@@ -149,7 +149,7 @@ one could do this like so:
    
 Which, when plotted, results in:
 
-[$../graphs/lgamma.png]
+[graph lgamma]
 
 [h5 Example 2: Creating Test Data]
 

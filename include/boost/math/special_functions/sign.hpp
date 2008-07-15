@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_SIGN_HPP
 #define BOOST_MATH_TOOLS_SIGN_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
@@ -35,4 +39,5 @@ inline T copysign BOOST_NO_MACRO_EXPAND(const T& x, const T& y)
 
 
 #endif // BOOST_MATH_TOOLS_SIGN_HPP
+
 

@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -61,7 +61,7 @@
           then you can do so by defining various macros in <a href="../../../../../../../../boost/math/tools/user.hpp" target="_top">boost/math/tools/user.hpp</a>.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_domain_error_policy"></a><h6>
-<a name="id769931"></a>
+<a name="id843993"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_domain_error_policy">BOOST_MATH_DOMAIN_ERROR_POLICY</a>
         </h6>
 <p>
@@ -71,7 +71,7 @@
           <code class="computeroutput"><span class="identifier">ignore_error</span></code> or <code class="computeroutput"><span class="identifier">user_error</span></code>.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_pole_error_policy"></a><h6>
-<a name="id770023"></a>
+<a name="id844085"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_pole_error_policy">BOOST_MATH_POLE_ERROR_POLICY</a>
         </h6>
 <p>
@@ -81,7 +81,7 @@
           <code class="computeroutput"><span class="identifier">ignore_error</span></code> or <code class="computeroutput"><span class="identifier">user_error</span></code>.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_overflow_error_policy"></a><h6>
-<a name="id770116"></a>
+<a name="id844178"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_overflow_error_policy">BOOST_MATH_OVERFLOW_ERROR_POLICY</a>
         </h6>
 <p>
@@ -90,8 +90,18 @@
           but can be set to any of the enumerated actions for error handing: <code class="computeroutput"><span class="identifier">throw_on_error</span></code>, <code class="computeroutput"><span class="identifier">errno_on_error</span></code>,
           <code class="computeroutput"><span class="identifier">ignore_error</span></code> or <code class="computeroutput"><span class="identifier">user_error</span></code>.
         </p>
+<a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_rounding_error_policy"></a><h6>
+<a name="id844271"></a>
+          <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_rounding_error_policy">BOOST_MATH_ROUNDING_ERROR_POLICY</a>
+        </h6>
+<p>
+          Defines what happens when a rounding error occurs, if not defined then
+          defaults to <code class="computeroutput"><span class="identifier">throw_on_error</span></code>,
+          but can be set to any of the enumerated actions for error handing: <code class="computeroutput"><span class="identifier">throw_on_error</span></code>, <code class="computeroutput"><span class="identifier">errno_on_error</span></code>,
+          <code class="computeroutput"><span class="identifier">ignore_error</span></code> or <code class="computeroutput"><span class="identifier">user_error</span></code>.
+        </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_evaluation_error_policy"></a><h6>
-<a name="id770209"></a>
+<a name="id844363"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_evaluation_error_policy">BOOST_MATH_EVALUATION_ERROR_POLICY</a>
         </h6>
 <p>
@@ -101,7 +111,7 @@
           <code class="computeroutput"><span class="identifier">ignore_error</span></code> or <code class="computeroutput"><span class="identifier">user_error</span></code>.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_underflow_error_policy"></a><h6>
-<a name="id770302"></a>
+<a name="id844456"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_underflow_error_policy">BOOST_MATH_UNDERFLOW_ERROR_POLICY</a>
         </h6>
 <p>
@@ -111,7 +121,7 @@
           <code class="computeroutput"><span class="identifier">ignore_error</span></code> or <code class="computeroutput"><span class="identifier">user_error</span></code>.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_denorm_error_policy"></a><h6>
-<a name="id770395"></a>
+<a name="id844550"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_denorm_error_policy">BOOST_MATH_DENORM_ERROR_POLICY</a>
         </h6>
 <p>
@@ -120,8 +130,19 @@
           but can be set to any of the enumerated actions for error handing: <code class="computeroutput"><span class="identifier">throw_on_error</span></code>, <code class="computeroutput"><span class="identifier">errno_on_error</span></code>,
           <code class="computeroutput"><span class="identifier">ignore_error</span></code> or <code class="computeroutput"><span class="identifier">user_error</span></code>.
         </p>
+<a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_indeterminate_result_error_policy"></a><h6>
+<a name="id844644"></a>
+          <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_indeterminate_result_error_policy">BOOST_MATH_INDETERMINATE_RESULT_ERROR_POLICY</a>
+        </h6>
+<p>
+          Defines what happens when the result is indeterminate, but where there
+          is none the less a convention for the result. If not defined then defaults
+          to <code class="computeroutput"><span class="identifier">ignore_error</span></code>, but can
+          be set to any of the enumerated actions for error handing: <code class="computeroutput"><span class="identifier">throw_on_error</span></code>, <code class="computeroutput"><span class="identifier">errno_on_error</span></code>,
+          <code class="computeroutput"><span class="identifier">ignore_error</span></code> or <code class="computeroutput"><span class="identifier">user_error</span></code>.
+        </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_digits10_policy"></a><h6>
-<a name="id770487"></a>
+<a name="id844739"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_digits10_policy">BOOST_MATH_DIGITS10_POLICY</a>
         </h6>
 <p>
@@ -132,7 +153,7 @@
           recommended that you change this from the default.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_promote_float_policy"></a><h6>
-<a name="id770536"></a>
+<a name="id844789"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_promote_float_policy">BOOST_MATH_PROMOTE_FLOAT_POLICY</a>
         </h6>
 <p>
@@ -144,7 +165,7 @@
           off.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_promote_double_policy"></a><h6>
-<a name="id770628"></a>
+<a name="id844880"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_promote_double_policy">BOOST_MATH_PROMOTE_DOUBLE_POLICY</a>
         </h6>
 <p>
@@ -156,7 +177,7 @@
           off.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_discrete_quantile_policy"></a><h6>
-<a name="id770726"></a>
+<a name="id844979"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_discrete_quantile_policy">BOOST_MATH_DISCRETE_QUANTILE_POLICY</a>
         </h6>
 <p>
@@ -167,7 +188,7 @@
           Defaults to <code class="computeroutput"><span class="identifier">integer_round_outwards</span></code>.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_assert_undefined_policy"></a><h6>
-<a name="id770843"></a>
+<a name="id845095"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_assert_undefined_policy">BOOST_MATH_ASSERT_UNDEFINED_POLICY</a>
         </h6>
 <p>
@@ -180,7 +201,7 @@
           whether or not a particular property is well defined.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_max_series_iteration_policy"></a><h6>
-<a name="id770907"></a>
+<a name="id845158"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_max_series_iteration_policy">BOOST_MATH_MAX_SERIES_ITERATION_POLICY</a>
         </h6>
 <p>
@@ -189,7 +210,7 @@
           Defaults to 1000000.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.boost_math_max_root_iteration_policy"></a><h6>
-<a name="id770949"></a>
+<a name="id845200"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.boost_math_max_root_iteration_policy">BOOST_MATH_MAX_ROOT_ITERATION_POLICY</a>
         </h6>
 <p>
@@ -198,7 +219,7 @@
           Defaults to 200.
         </p>
 <a name="math_toolkit.policy.pol_ref.policy_defaults.example"></a><h6>
-<a name="id770991"></a>
+<a name="id845241"></a>
           <a href="policy_defaults.html#math_toolkit.policy.pol_ref.policy_defaults.example">Example</a>
         </h6>
 <p>
@@ -223,8 +244,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
+      Holin, Xiaogang Zhang and Bruno Lalande<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

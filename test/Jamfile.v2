@@ -13,10 +13,8 @@ project
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069
-      <toolset>intel:<cxxflags>-Qwd264,239
-      <toolset>intel:<cxxflags>/nologo 
-      <toolset>intel-linux:<cxxflags>-wd239 
-      <toolset>intel:<linkflags>/nologo 
+      <toolset>intel:<cxxflags>-nologo 
+      <toolset>intel:<linkflags>-nologo 
       <toolset>msvc:<warnings>all
       <toolset>msvc:<asynch-exceptions>on
       <toolset>msvc:<cxxflags>/wd4996
@@ -39,11 +37,16 @@ project
     ;
 
 run hypot_test.cpp ;
+run pow_test.cpp ;
 run log1p_expm1_test.cpp ;
 run powm1_sqrtp1m1_test.cpp ;
 run special_functions_test.cpp ../../test/build//boost_unit_test_framework/<link>static ;
 run test_bernoulli.cpp ;
 run test_constants.cpp ;
+run test_bessel_j.cpp ;
+run test_bessel_y.cpp ;
+run test_bessel_i.cpp ;
+run test_bessel_k.cpp ;
 run test_beta.cpp ;
 run test_beta_dist.cpp ;
 run test_binomial.cpp  
@@ -83,6 +86,7 @@ run test_ellint_2.cpp ;
 run test_ellint_3.cpp ;
 run test_erf.cpp ;
 run test_error_handling.cpp ;
+run test_expint.cpp ;
 run test_exponential_dist.cpp ;
 run test_extreme_value.cpp ;
 run test_factorials.cpp ;
@@ -242,6 +246,80 @@ run test_negative_binomial.cpp
         : # requirements
 	      <define>TEST_REAL_CONCEPT
         : test_negative_binomial_real_concept ;
+run test_next.cpp ;
+run test_nc_chi_squared.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_nc_chi_squared_float ;
+run test_nc_chi_squared.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_nc_chi_squared_double ;
+run test_nc_chi_squared.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_nc_chi_squared_long_double ;
+run test_nc_chi_squared.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_nc_chi_squared_real_concept ;
+run test_nc_beta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_nc_beta_float ;
+run test_nc_beta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_nc_beta_double ;
+run test_nc_beta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_nc_beta_long_double ;
+run test_nc_beta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_nc_beta_real_concept ;
+run test_nc_f.cpp ;
+run test_nc_t.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_FLOAT
+        : test_nc_t_float ;
+run test_nc_t.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_DOUBLE
+        : test_nc_t_double ;
+run test_nc_t.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_LDOUBLE
+        : test_nc_t_long_double ;
+run test_nc_t.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+        : test_nc_t_real_concept ;
 run test_normal.cpp ;
 run test_pareto.cpp ;
 run test_poisson.cpp  
@@ -294,6 +372,7 @@ test_rational_instances/test_rational_real_concept5.cpp
 
 run test_remez.cpp ;
 run test_roots.cpp ;
+run test_round.cpp ;
 run test_spherical_harmonic.cpp ;
 run test_students_t.cpp ;
 run test_tgamma_ratio.cpp ;
@@ -301,14 +380,27 @@ run test_toms748_solve.cpp ;
 run test_triangular.cpp ;
 run test_uniform.cpp ;
 run test_weibull.cpp ;
+run test_zeta.cpp ;
+
 run test_policy.cpp ;
 run test_policy_2.cpp ;
 run test_policy_sf.cpp ;
 
-run test_bessel_j.cpp ;
-run test_bessel_y.cpp ;
-run test_bessel_i.cpp ;
-run test_bessel_k.cpp ;
+run test_tr1.cpp
+   ../build//boost_math_tr1
+   ../build//boost_math_tr1f
+   ../build//boost_math_c99
+   ../build//boost_math_c99f
+   ;
+
+run test_tr1.cpp
+   ../build//boost_math_tr1l 
+   ../build//boost_math_c99l 
+   : : :
+   <define>TEST_LD=1
+   :
+   test_tr1_long_double
+   ;
 
 compile  compile_test/compl_abs_incl_test.cpp ;
 compile  compile_test/compl_acos_incl_test.cpp ;
@@ -331,6 +423,10 @@ compile  compile_test/dist_fisher_f_incl_test.cpp ;
 compile  compile_test/dist_gamma_incl_test.cpp ;
 compile  compile_test/dist_lognormal_incl_test.cpp ;
 compile  compile_test/dist_neg_binom_incl_test.cpp ;
+compile  compile_test/dist_nc_chi_squ_incl_test.cpp ;
+compile  compile_test/dist_nc_beta_incl_test.cpp ;
+compile  compile_test/dist_nc_f_incl_test.cpp ;
+compile  compile_test/dist_nc_t_incl_test.cpp ;
 compile  compile_test/dist_normal_incl_test.cpp ;
 compile  compile_test/dist_poisson_incl_test.cpp ;
 compile  compile_test/dist_students_t_incl_test.cpp ;
@@ -352,6 +448,7 @@ compile  compile_test/sf_ellint_rd_incl_test.cpp ;
 compile  compile_test/sf_ellint_rf_incl_test.cpp ;
 compile  compile_test/sf_ellint_rj_incl_test.cpp ;
 compile  compile_test/sf_erf_incl_test.cpp ;
+compile  compile_test/sf_expint_incl_test.cpp ;
 compile  compile_test/sf_expm1_incl_test.cpp ;
 compile  compile_test/sf_factorials_incl_test.cpp ;
 compile  compile_test/sf_fpclassify_incl_test.cpp ;
@@ -363,13 +460,18 @@ compile  compile_test/sf_lanczos_incl_test.cpp ;
 compile  compile_test/sf_legendre_incl_test.cpp ;
 compile  compile_test/sf_log1p_incl_test.cpp ;
 compile  compile_test/sf_math_fwd_incl_test.cpp ;
+compile  compile_test/sf_modf_incl_test.cpp ;
+compile  compile_test/sf_next_incl_test.cpp ;
 compile  compile_test/sf_powm1_incl_test.cpp ;
+compile  compile_test/sf_round_incl_test.cpp ;
 compile  compile_test/sf_sign_incl_test.cpp ;
 compile  compile_test/sf_sin_pi_incl_test.cpp ;
 compile  compile_test/sf_sinc_incl_test.cpp ;
 compile  compile_test/sf_sinhc_incl_test.cpp ;
 compile  compile_test/sf_sph_harm_incl_test.cpp ;
 compile  compile_test/sf_sqrt1pm1_incl_test.cpp ;
+compile  compile_test/sf_trunc_incl_test.cpp ;
+compile  compile_test/sf_zeta_incl_test.cpp ;
 compile  compile_test/std_real_concept_check.cpp ;
 compile  compile_test/test_traits.cpp ;
 compile  compile_test/tools_config_inc_test.cpp ;
@@ -403,11 +505,4 @@ run ../quaternion/quaternion_mult_incl_test.cpp
     ../../test/build//boost_unit_test_framework/<link>static ;
 
 run complex_test.cpp ;
-
-
-
-
-
-
-
 

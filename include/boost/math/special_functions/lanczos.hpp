@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_LANCZOS
 #define BOOST_MATH_SPECIAL_FUNCTIONS_LANCZOS
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/config.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/limits.hpp>
@@ -1225,7 +1229,12 @@ struct lanczos
 } // namespace math
 } // namespace boost
 
+#if (defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__)
+#include <boost/math/special_functions/detail/lanczos_sse2.hpp>
+#endif
+
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_LANCZOS
+
 
 
 

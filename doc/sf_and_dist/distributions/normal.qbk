@@ -40,7 +40,7 @@ Given mean [mu][space] and standard deviation [sigma][space] it has the PDF:
 The variation the PDF with its parameters is illustrated
 in the following graph:
 
-[$../graphs/normal.png]
+[graph normal_pdf]
 
 [h4 Member Functions]
 

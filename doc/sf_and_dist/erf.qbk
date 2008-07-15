@@ -40,7 +40,7 @@ Returns the [@http://en.wikipedia.org/wiki/Error_function error function]
 
 [equation erf1]
 
-[$../graphs/erf1.png]
+[graph erf]
 
    template <class T>
    ``__sf_result`` erfc(T z);
@@ -52,7 +52,7 @@ Returns the complement of the [@http://functions.wolfram.com/GammaBetaErf/Erfc/ 
 
 [equation erf2]
 
-[$../graphs/erf2.png]
+[graph erfc]
 
 [h4 Accuracy]
 
@@ -169,17 +169,13 @@ When the significand (mantissa) size is recognised
 then a series of rational approximations [jm_rationals] are used.
 
 For `z <= 0.5` then a rational approximation to erf is used, based on the 
-observation that:
+observation that erf is an odd function and therefore erf is calculated using:
 
-   erf(z)/z ~ 1.12....
+   erf(z) = z * (C + R(z*z));
    
-Therefore erf is calculated using:
-
-   erf(z) = z * (1.125F + R(z));
-   
-where the rational approximation R(z) is optimised for absolute error:
-as long as its absolute error is small enough compared to 1.125, then any 
-round-off error incurred during the computation of R(z) will effectively 
+where the rational approximation R(z*z) is optimised for absolute error:
+as long as its absolute error is small enough compared to the constant C, then any 
+round-off error incurred during the computation of R(z*z) will effectively 
 disappear from the result.  As a result the error for erf and erfc in this
 region is very low: the last bit is incorrect in only a very small number of 
 cases.
@@ -192,15 +188,20 @@ for some constant c.
 
 Therefore for `z > 0.5` we calculate erfc using:
 
-   erfc(z) = exp(-z*z) * (c + R(z)) / z;
+   erfc(z) = exp(-z*z) * (C + R(z - B)) / z;
    
-Again R(z) is optimised for absolute error, and the constant `c` is
+Again R(z - B) is optimised for absolute error, and the constant `C` is
 the average of `erfc(z) * exp(z*z) * z` taken at the endpoints of the range.
-Once again, as long as the absolute error in R(z) is small
-compared to `c` then `c + R(z)` will be correctly rounded, and the error
+Once again, as long as the absolute error in R(z - B) is small
+compared to `c` then `c + R(z - B)` will be correctly rounded, and the error
 in the result will depend only on the accuracy of the exp function.  In practice,
 in all but a very small number of cases, the error is confined to the last bit
-of the result.
+of the result.  The constant `B` is chosen so that the left hand end of the range
+of the rational approximation is 0.
+
+For large `z` over a range \[a, +[infin]\] the above approximation is modified to:
+
+   erfc(z) = exp(-z*z) * (C + R(1 / z)) / z;
 
 [endsect]
 [/ :error_function The Error Functions]

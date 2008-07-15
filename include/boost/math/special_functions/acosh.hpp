@@ -10,6 +10,9 @@
 #ifndef BOOST_ACOSH_HPP
 #define BOOST_ACOSH_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
 
 #include <cmath>
 #include <boost/config.hpp>
@@ -107,6 +110,7 @@ namespace boost
 }
 
 #endif /* BOOST_ACOSH_HPP */
+
 
 
 

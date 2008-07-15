@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -51,7 +51,9 @@
           <span class="keyword">class</span> <span class="identifier">A8</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A9</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A10</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
-          <span class="keyword">class</span> <span class="identifier">A11</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">&gt;</span>
+          <span class="keyword">class</span> <span class="identifier">A11</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
+          <span class="keyword">class</span> <span class="identifier">A12</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
+          <span class="keyword">class</span> <span class="identifier">A13</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">policy</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -60,7 +62,9 @@
    <span class="keyword">typedef</span> <span class="emphasis"><em>computed-from-template-arguments</em></span> <span class="identifier">overflow_error_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="emphasis"><em>computed-from-template-arguments</em></span> <span class="identifier">underflow_error_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="emphasis"><em>computed-from-template-arguments</em></span> <span class="identifier">denorm_error_type</span><span class="special">;</span>
+   <span class="keyword">typedef</span> <span class="emphasis"><em>computed-from-template-arguments</em></span> <span class="identifier">rounding_error_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="emphasis"><em>computed-from-template-arguments</em></span> <span class="identifier">evaluation_error_type</span><span class="special">;</span>
+   <span class="keyword">typedef</span> <span class="emphasis"><em>computed-from-template-arguments</em></span> <span class="identifier">indeterminate_result_error_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="emphasis"><em>computed-from-template-arguments</em></span> <span class="identifier">precision_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="emphasis"><em>computed-from-template-arguments</em></span> <span class="identifier">promote_float_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="emphasis"><em>computed-from-template-arguments</em></span> <span class="identifier">promote_double_type</span><span class="special">;</span>
@@ -82,7 +86,9 @@
           <span class="keyword">class</span> <span class="identifier">A8</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A9</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A10</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
-          <span class="keyword">class</span> <span class="identifier">A11</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">&gt;</span>
+          <span class="keyword">class</span> <span class="identifier">A11</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
+          <span class="keyword">class</span> <span class="identifier">A12</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
+          <span class="keyword">class</span> <span class="identifier">A13</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">normalise</span>
 <span class="special">{</span>
    <span class="keyword">typedef</span> computed-from-template-arguments <span class="identifier">type</span><span class="special">;</span>
@@ -133,11 +139,28 @@
           one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
           enumerated values.
         </p>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">rounding_error_type</span>
+</pre>
+<p>
+          Specifies how rounding errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">rounding_error</span><span class="special">&lt;&gt;</span></code>
+          with the template argument to <code class="computeroutput"><span class="identifier">rounding_error</span></code>
+          one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
+          enumerated values.
+        </p>
 <pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">evaluation_error_type</span>
 </pre>
 <p>
           Specifies how evaluation errors are handled, will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">&lt;&gt;</span></code>
           with the template argument to <code class="computeroutput"><span class="identifier">evaluation_error</span></code>
+          one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
+          enumerated values.
+        </p>
+<pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">indeterminate_error_type</span>
+</pre>
+<p>
+          Specifies how indeterminate result errors are handled, will be an instance
+          of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">indeterminate_result_error</span><span class="special">&lt;&gt;</span></code>
+          with the template argument to <code class="computeroutput"><span class="identifier">indeterminate_result_error</span></code>
           one of the <code class="computeroutput"><span class="identifier">error_policy_type</span></code>
           enumerated values.
         </p>
@@ -195,7 +218,9 @@
           <span class="keyword">class</span> <span class="identifier">A8</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A9</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A10</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
-          <span class="keyword">class</span> <span class="identifier">A11</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">&gt;</span>
+          <span class="keyword">class</span> <span class="identifier">A11</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
+          <span class="keyword">class</span> <span class="identifier">A12</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
+          <span class="keyword">class</span> <span class="identifier">A13</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">normalise</span>
 <span class="special">{</span>
    <span class="keyword">typedef</span> computed-from-template-arguments <span class="identifier">type</span><span class="special">;</span>
@@ -220,8 +245,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 -2007 John Maddock, Paul A. Bristow, Hubert Holin
-      and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
+      Holin, Xiaogang Zhang and Bruno Lalande<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -6,6 +6,10 @@
 #ifndef BOOST_MATH_TOOLS_TEST_DATA_HPP
 #define BOOST_MATH_TOOLS_TEST_DATA_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
 #include <boost/math/tools/config.hpp>
 #include <boost/assert.hpp>
 #ifdef BOOST_MSVC
@@ -27,6 +31,7 @@
 
 #include <set>
 #include <vector>
+#include <iostream>
 
 #ifdef BOOST_MSVC
 #  pragma warning(push)
@@ -752,4 +757,5 @@ std::ostream& write_code(std::ostream& os,
 
 
 #endif // BOOST_MATH_TOOLS_TEST_DATA_HPP
+
 

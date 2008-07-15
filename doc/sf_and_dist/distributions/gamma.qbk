@@ -61,9 +61,9 @@ parameter], you should pass the reciprocal of the rate as the scale parameter.
 The following two graphs illustrate how the PDF of the gamma distribution
 varies as the parameters vary:
 
-[$../graphs/gamma_dist1.png]
+[graph gamma1_pdf]
 
-[$../graphs/gamma_dist2.png]
+[graph gamma2_pdf]
 
 The [*Erlang Distribution] is the same as the Gamma, but with the shape parameter
 an integer.  It is often expressed using a /rate/ rather than a /scale/ as the 

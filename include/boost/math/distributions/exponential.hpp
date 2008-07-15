@@ -89,7 +89,9 @@ inline const std::pair<RealType, RealType> support(const exponential_distributio
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
    using boost::math::tools::max_value;
-   return std::pair<RealType, RealType>(0,  max_value<RealType>());
+   using boost::math::tools::min_value;
+   return std::pair<RealType, RealType>(min_value<RealType>(),  max_value<RealType>());
+   // min_value<RealType>() to avoid a discontinuity at x = 0.
 }
 
 template <class RealType, class Policy>

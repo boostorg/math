@@ -6,6 +6,11 @@
 #ifndef BOOST_MATH_BESSEL_IK_HPP
 #define BOOST_MATH_BESSEL_IK_HPP
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
+#include <boost/math/special_functions/round.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -230,7 +235,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
         v = -v;                             // v is non-negative from here
         kind |= need_k;
     }
-    n = tools::real_cast<unsigned>(v + 0.5f);
+    n = iround(v, pol);
     u = v - n;                              // -1/2 <= u < 1/2
     BOOST_MATH_INSTRUMENT_VARIABLE(n);
     BOOST_MATH_INSTRUMENT_VARIABLE(u);
@@ -329,3 +334,4 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
 }}} // namespaces
 
 #endif // BOOST_MATH_BESSEL_IK_HPP
+
