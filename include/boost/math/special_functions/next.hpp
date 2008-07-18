@@ -37,7 +37,11 @@ inline T get_smallest_value(mpl::false_ const&)
 template <class T>
 inline T get_smallest_value()
 {
+#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1310)
+   return get_smallest_value<T>(mpl::bool_<std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == 1)>());
+#else
    return get_smallest_value<T>(mpl::bool_<std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present)>());
+#endif
 }
 
 }
