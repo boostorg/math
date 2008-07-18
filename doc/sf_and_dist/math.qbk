@@ -421,6 +421,7 @@ printer friendly PDF format].
 [include internals_overview.qbk]
 
 [section:internals1 Reused Utilities]
+[include constants.qbk]
 [include series.qbk]
 [include fraction.qbk]
 [include rational.qbk]
