@@ -8,7 +8,11 @@
 #include <boost/math/special_functions/sign.hpp>
 #include "c_policy.hpp"
 
+#if !(defined(__HP_aCC) && (__HP_aCC >= 61400))
+
 extern "C" double BOOST_MATH_TR1_DECL copysign(double x, double y)
 {
    return boost::math::copysign(x, y);
 }
+
+#endif
