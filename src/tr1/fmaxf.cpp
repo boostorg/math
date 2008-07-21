@@ -8,6 +8,8 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include "c_policy.hpp"
 
+#if !(defined(__HP_aCC) && (__HP_aCC >= 61400))
+
 extern "C" float BOOST_MATH_TR1_DECL fmaxf(float x, float y)
 {
    if((boost::math::isnan)(x))
@@ -16,3 +18,5 @@ extern "C" float BOOST_MATH_TR1_DECL fmaxf(float x, float y)
       return x;
    return (std::max)(x, y);
 }
+
+#endif
