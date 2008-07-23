@@ -23,6 +23,14 @@ void test_classify(T t, const char* type)
    T u = 2;
    BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
    BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NORMAL);
+   BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), true);
+   BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), true);
+   BOOST_CHECK_EQUAL((::boost::math::isinf)(t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), true);
+   BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), true);
    if(std::numeric_limits<T>::is_specialized)
    {
       t = (std::numeric_limits<T>::max)();
@@ -31,6 +39,14 @@ void test_classify(T t, const char* type)
       t = (std::numeric_limits<T>::min)();
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NORMAL);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), true);
    }
    if(std::numeric_limits<T>::has_denorm)
    {
@@ -39,12 +55,28 @@ void test_classify(T t, const char* type)
       {
          BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_SUBNORMAL);
          BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_SUBNORMAL);
+         BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), true);
+         BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), true);
+         BOOST_CHECK_EQUAL((::boost::math::isinf)(t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), false);
       }
       t = std::numeric_limits<T>::denorm_min();
       if((t != 0) && (t < (std::numeric_limits<T>::min)()))
       {
          BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_SUBNORMAL);
          BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_SUBNORMAL);
+         BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), true);
+         BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), true);
+         BOOST_CHECK_EQUAL((::boost::math::isinf)(t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), false);
       }
    }
    else
@@ -54,10 +86,26 @@ void test_classify(T t, const char* type)
    t = 0;
    BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_ZERO);
    BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_ZERO);
+   BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), true);
+   BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), true);
+   BOOST_CHECK_EQUAL((::boost::math::isinf)(t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), false);
    t /= -u; // create minus zero if it exists
    BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_ZERO);
    BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_ZERO);
-   // inifinity:
+   BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), true);
+   BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), true);
+   BOOST_CHECK_EQUAL((::boost::math::isinf)(t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), false);
+   BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), false);
+   // infinity:
    if(std::numeric_limits<T>::has_infinity) 
    {
       // At least one std::numeric_limits<T>::infinity)() returns zero 
@@ -65,6 +113,14 @@ void test_classify(T t, const char* type)
       t = (std::numeric_limits<T>::infinity)();
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_INFINITE);
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_INFINITE);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), false);
 #if !defined(__BORLANDC__) && !(defined(__DECCXX) && !defined(_IEEE_FP))
       // divide by zero on Borland triggers a C++ exception :-(
       // divide by zero on Compaq CXX triggers a C style signal :-(
@@ -73,10 +129,26 @@ void test_classify(T t, const char* type)
       t /= u;
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_INFINITE);
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_INFINITE);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), false);
       t = -2;
       t /= u;
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_INFINITE);
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_INFINITE);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), false);
 #else
       std::cout << "Infinities from divide by zero not tested" << std::endl;
 #endif
@@ -94,6 +166,14 @@ void test_classify(T t, const char* type)
       t = std::numeric_limits<T>::quiet_NaN();
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NAN);
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NAN);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), false);
    }
    else
    {
@@ -104,6 +184,14 @@ void test_classify(T t, const char* type)
       t = std::numeric_limits<T>::signaling_NaN();
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NAN);
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NAN);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), false);
    }
    else
    {
