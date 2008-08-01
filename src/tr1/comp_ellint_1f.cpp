@@ -1,6 +1,6 @@
 //  Copyright John Maddock 2008.
 //  Use, modification and distribution are subject to the
-//  Boost Software License, Version 1.0. (See accompanying file
+//  Boost Software License, Version 1.0.  (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #define BOOST_MATH_TR1_SOURCE
@@ -8,7 +8,7 @@
 #include <boost/math/special_functions/ellint_1.hpp>
 #include "c_policy.hpp"
 
-extern "C" float BOOST_MATH_TR1_DECL comp_ellint_1f(float x)
+extern "C" float BOOST_MATH_TR1_DECL comp_ellint_1f BOOST_PREVENT_MACRO_SUBSTITUTION(float x)
 {
-   return c_policies::ellint_1(x);
+   return c_policies::ellint_1 BOOST_PREVENT_MACRO_SUBSTITUTION(x);
 }
