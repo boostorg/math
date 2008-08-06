@@ -253,10 +253,9 @@ T lgamma_imp(T z, const Policy& pol, const L& l, int* sign = 0)
    {
       // regular evaluation:
       T zgh = static_cast<T>(z + L::g() - boost::math::constants::half<T>());
-      T l = L::lanczos_sum_expG_scaled(z);
       result = log(zgh) - 1;
       result *= z - 0.5f;
-      result += log(l);
+      result += log(L::lanczos_sum_expG_scaled(z));
    }
 
    if(sign)
