@@ -308,8 +308,8 @@ T ibeta_power_terms(T a,
       // general case:
       T b1 = (x * cgh) / agh;
       T b2 = (y * cgh) / bgh;
-      T l1 = a * log(b1);
-      T l2 = b * log(b2);
+      l1 = a * log(b1);
+      l2 = b * log(b2);
       if((l1 >= tools::log_max_value<T>())
          || (l1 <= tools::log_min_value<T>())
          || (l2 >= tools::log_max_value<T>())
