@@ -45,7 +45,7 @@
 #include <boost/mpl/greater.hpp>
 #include <boost/mpl/equal_to.hpp>
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <algorithm>
 
 #ifdef BOOST_MATH_INSTRUMENT

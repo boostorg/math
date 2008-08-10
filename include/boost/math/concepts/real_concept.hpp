@@ -32,7 +32,7 @@
 #endif
 #include <ostream>
 #include <istream>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <math.h> // fmodl
 
 #ifndef BOOST_MATH_REAL_CONCEPT_HPP

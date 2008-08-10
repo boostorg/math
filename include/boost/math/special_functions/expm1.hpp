@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <math.h> // platform's ::expm1
 #include <boost/limits.hpp>
 #include <boost/math/tools/config.hpp>

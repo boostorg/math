@@ -14,7 +14,7 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 #include <algorithm>  // for min and max
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <climits>
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
 #  include <math.h>

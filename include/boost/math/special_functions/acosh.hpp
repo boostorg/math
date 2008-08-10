@@ -14,7 +14,7 @@
 #pragma once
 #endif
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/config.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/error_handling.hpp>

@@ -20,7 +20,7 @@
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/static_assert.hpp>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 namespace boost{ namespace math{
 
