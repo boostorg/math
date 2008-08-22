@@ -1,5 +1,9 @@
 [template history[]
 
+[h4 Boost-1.37.0]
+
+* Improved accuracy and testing of the inverse hypergeometric functions.
+
 [h4 Boost-1.36.0]
 
 * Added Noncentral Chi Squared Distribution.

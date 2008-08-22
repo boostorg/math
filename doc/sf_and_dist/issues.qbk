@@ -132,6 +132,13 @@ is found, the higher the priority for implementing it:
 [[Reciprocal][-][-][-][X][-]]
 ]
 
+Also asked for more than once:
+
+* Add support for interpolated distributions, possibly combine with numeric 
+integration and differentiation.
+* Add support for bivariate and multivariate distributions: most especially the normal.
+
+
 [endsect][/section:issues Known Issues, and Todo List]
 
 [/ 
