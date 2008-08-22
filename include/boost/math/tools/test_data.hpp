@@ -328,8 +328,14 @@ private:
 template <class T>
 inline float test_data<T>::truncate_to_float(float const * pf)
 {
-   extern_val = *pf;
-   return *pf;
+   BOOST_MATH_STD_USING
+   int expon;
+   float f = floor(ldexp(frexp(*pf, &expon), 22));
+   f = ldexp(f, expon - 22);
+   return f;
+
+   //extern_val = *pf;
+   //return *pf;
 }
 
 template <class T>

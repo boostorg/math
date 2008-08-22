@@ -218,6 +218,7 @@ run test_igamma_inva.cpp
 	      <define>TEST_REAL_CONCEPT
         : test_igamma_inva_real_concept ;
 run test_instantiate1.cpp test_instantiate2.cpp ;
+run test_inv_hyp.cpp ;
 run test_laguerre.cpp ;
 run test_legendre.cpp ;
 run test_lognormal.cpp ;

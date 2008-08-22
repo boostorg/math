@@ -41,8 +41,7 @@
 </pre>
 <p>
           Computes the reciprocal of <a href="inv_hyper_over.html" title="Inverse Hyperbolic Functions Overview">the
-          hyperbolic tangent function</a>, at x. Taylor series are used at the
-          origin to ensure accuracy.
+          hyperbolic tangent function</a>, at x.
         </p>
 <p>
           </p>
@@ -75,6 +74,55 @@ denoting
         </p>
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/atanh.png" align="middle"></span>
+        </p>
+<a name="math_toolkit.special.inv_hyper.atanh.accuracy"></a><h5>
+<a name="id737838"></a>
+          <a href="atanh.html#math_toolkit.special.inv_hyper.atanh.accuracy">Accuracy</a>
+        </h5>
+<p>
+          Generally accuracy is to within 1 or 2 epsilon across all supported platforms.
+        </p>
+<a name="math_toolkit.special.inv_hyper.atanh.testing"></a><h5>
+<a name="id737867"></a>
+          <a href="atanh.html#math_toolkit.special.inv_hyper.atanh.testing">Testing</a>
+        </h5>
+<p>
+          This function is tested using a combination of random test values designed
+          to give full function coverage computed at high precision using the "naive"
+          formula:
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../equations/atanh1.png"></span>
+        </p>
+<p>
+          along with a selection of sanity check values computed using functions.wolfram.com
+          to at least 50 decimal digits.
+        </p>
+<a name="math_toolkit.special.inv_hyper.atanh.implementation"></a><h5>
+<a name="id737933"></a>
+          <a href="atanh.html#math_toolkit.special.inv_hyper.atanh.implementation">Implementation</a>
+        </h5>
+<p>
+          For sufficiently small x we can use the <a href="http://functions.wolfram.com/ElementaryFunctions/ArcTanh/06/01/03/01/" target="_top">approximation</a>:
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../equations/atanh2.png"></span>
+        </p>
+<p>
+          Otherwise the <a href="http://functions.wolfram.com/ElementaryFunctions/ArcTanh/02/" target="_top">primary
+          definition</a>:
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../equations/atanh1.png"></span>
+        </p>
+<p>
+          or it's equivalent form:
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../equations/atanh3.png"></span>
+        </p>
+<p>
+          is used.
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
