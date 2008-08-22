@@ -73,7 +73,7 @@ void expected_results()
       ".*",                          // platform
       ".*",                          // test type(s)
       ".*",                          // test data group
-      ".*", 2, 1);                   // test function
+      ".*", 4, 1);                   // test function
 
    std::cout << "Tests run with " << BOOST_COMPILER << ", " 
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
@@ -198,8 +198,23 @@ void test_spots(T, const char* t)
    //
    T tolerance = boost::math::tools::epsilon<T>() * 100 *
       (boost::is_floating_point<T>::value ? 5 : 10);
-   //BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(0.125)), static_cast<T>(-0.63277562349869525529352526763564627152686379131122L), tolerance);
-   (void)tolerance;
+   BOOST_CHECK_CLOSE(::boost::math::acosh(static_cast<T>(262145)/262144L), static_cast<T>(0.00276213498595136093375633956331651432309750291610866833462649L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::acosh(static_cast<T>(2)), static_cast<T>(1.31695789692481670862504634730796844402698197146751647976847L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::acosh(static_cast<T>(40)), static_cast<T>(4.38187034804006698696313269586603717076961771721038534547948L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::acosh(static_cast<T>(262145L)), static_cast<T>(13.1698002453253126137651962522659827810753786944786303017757L), tolerance);
+
+   BOOST_CHECK_CLOSE(::boost::math::asinh(static_cast<T>(0)), static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::asinh(static_cast<T>(1)/262145L), static_cast<T>(3.81468271375603081996185039385472561751449912305225962381803e-6L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::asinh(static_cast<T>(0.25)), static_cast<T>(0.247466461547263452944781549788359289253766903098567696469117L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::asinh(static_cast<T>(1)), static_cast<T>(0.881373587019543025232609324979792309028160328261635410753296L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::asinh(static_cast<T>(10)), static_cast<T>(2.99822295029796973884659553759645347660705805487730365573446L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::asinh(static_cast<T>(262145L)), static_cast<T>(13.1698002453325885158685460826511173257938039316922010439486L), tolerance);
+
+   BOOST_CHECK_CLOSE(::boost::math::atanh(static_cast<T>(0)), static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::atanh(static_cast<T>(1)/262145L), static_cast<T>(3.81468271378378607794264842456613940280945630999769224301574e-6L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::atanh(static_cast<T>(-1)/262145L), static_cast<T>(-3.81468271378378607794264842456613940280945630999769224301574e-6L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::atanh(static_cast<T>(0.5)), static_cast<T>(0.549306144334054845697622618461262852323745278911374725867347L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::atanh(static_cast<T>(-0.5)), static_cast<T>(-0.549306144334054845697622618461262852323745278911374725867347L), tolerance);
 }
 
 int test_main(int, char* [])

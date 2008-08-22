@@ -20,6 +20,7 @@
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/log1p.hpp>
 
 // This is the inverse of the hyperbolic cosine function.
 
