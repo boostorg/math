@@ -85,9 +85,7 @@ and can be computed as [equation special_functions_blurb18].
 
 Computes the reciprocal of (the restriction to the range of __form1) 
 [link math_toolkit.special.inv_hyper.inv_hyper_over
-the hyperbolic cosine function], at x. Values returned are positive. Generalised 
-Taylor series are used near 1 and Laurent series are used near the 
-infinity to ensure accuracy.
+the hyperbolic cosine function], at x. Values returned are positive. 
 
 If x is in the range __form2 then returns the result of __domain_error.
 
@@ -97,6 +95,45 @@ the return type is `double` when T is an integer type, and T otherwise.
 [optional_policy]
 
 [graph acosh]
+
+[h4 Accuracy]
+
+Generally accuracy is to within 1 or 2 epsilon across all supported platforms.
+
+[h4 Testing]
+
+This function is tested using a combination of random test values designed to give
+full function coverage computed at high precision using the "naive" formula:
+
+[equation acosh1]
+
+along with a selection of sanity check values
+computed using functions.wolfram.com to at least 50 decimal digits.
+
+[h4 Implementation]
+
+For sufficiently large x, we can use the 
+[@http://functions.wolfram.com/ElementaryFunctions/ArcCosh/06/01/06/01/0001/ 
+approximation]:
+
+[equation acosh2]
+
+For x sufficiently close to 1 we can use the 
+[@http://functions.wolfram.com/ElementaryFunctions/ArcCosh/06/01/04/01/0001/ 
+approximation]:
+
+[equation acosh4]
+
+Otherwise for x close to 1 we can use the following rearrangement of the
+primary definition to preserve accuracy:
+
+[equation acosh3]
+
+Otherwise the 
+[@http://functions.wolfram.com/ElementaryFunctions/ArcCosh/02/
+primary definition] is used:
+
+[equation acosh1]
 
 [endsect]
 
@@ -115,8 +152,6 @@ the return type is `double` when T is an integer type, and T otherwise.
 Computes the reciprocal of 
 [link math_toolkit.special.inv_hyper.inv_hyper_over 
 the hyperbolic sine function]. 
-Taylor series are used at the origin and Laurent series are used near the 
-infinity to ensure accuracy.
 
 The return type of this function is computed using the __arg_pomotion_rules:
 the return type is `double` when T is an integer type, and T otherwise.
@@ -124,6 +159,44 @@ the return type is `double` when T is an integer type, and T otherwise.
 [graph asinh]
 
 [optional_policy]
+
+[h4 Accuracy]
+
+Generally accuracy is to within 1 or 2 epsilon across all supported platforms.
+
+[h4 Testing]
+
+This function is tested using a combination of random test values designed to give
+full function coverage computed at high precision using the "naive" formula:
+
+[equation asinh1]
+
+along with a selection of sanity check values
+computed using functions.wolfram.com to at least 50 decimal digits.
+
+[h4 Implementation]
+
+For sufficiently large x we can use the 
+[@http://functions.wolfram.com/ElementaryFunctions/ArcSinh/06/01/06/01/0001/ 
+approximation]:
+
+[equation asinh2]
+
+While for very small x we can use the 
+[@http://functions.wolfram.com/ElementaryFunctions/ArcSinh/06/01/03/01/0001/
+approximation]:
+
+[equation asinh3]
+
+For 0.5 > x > [epsilon] the following rearrangement of the primary definition is used:
+
+[equation asinh4]
+
+Otherwise evalution is via the 
+[@http://functions.wolfram.com/ElementaryFunctions/ArcSinh/02/ 
+primary definition]:
+
+[equation asinh4]
 
 [endsect]
 
@@ -142,7 +215,6 @@ the return type is `double` when T is an integer type, and T otherwise.
 Computes the reciprocal of 
 [link math_toolkit.special.inv_hyper.inv_hyper_over
 the hyperbolic tangent function], at x. 
-Taylor series are used at the origin to ensure accuracy.
 
 [optional_policy]
 
@@ -169,6 +241,38 @@ The return type of this function is computed using the __arg_pomotion_rules:
 the return type is `double` when T is an integer type, and T otherwise.
 
 [graph atanh]
+
+[h4 Accuracy]
+
+Generally accuracy is to within 1 or 2 epsilon across all supported platforms.
+
+[h4 Testing]
+
+This function is tested using a combination of random test values designed to give
+full function coverage computed at high precision using the "naive" formula:
+
+[equation atanh1]
+
+along with a selection of sanity check values
+computed using functions.wolfram.com to at least 50 decimal digits.
+
+[h4 Implementation]
+
+For sufficiently small x we can use the 
+[@http://functions.wolfram.com/ElementaryFunctions/ArcTanh/06/01/03/01/ approximation]:
+
+[equation atanh2]
+
+Otherwise the 
+[@http://functions.wolfram.com/ElementaryFunctions/ArcTanh/02/ primary definition]:
+
+[equation atanh1]
+
+or it's equivalent form:
+
+[equation atanh3]
+
+is used.
 
 [endsect]
 
