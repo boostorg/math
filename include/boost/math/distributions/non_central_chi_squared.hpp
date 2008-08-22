@@ -113,7 +113,7 @@ namespace boost
             // *before* the largest term so that backwards iteration
             // is strictly converging.
             //
-            for(int i = k - 1; i >= 0; --i)
+            for(i = k - 1; i >= 0; --i)
             {
                T term = poisb * gamb;
                sum += term;

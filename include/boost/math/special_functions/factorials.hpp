@@ -22,7 +22,7 @@
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 
 namespace boost { namespace math
 {

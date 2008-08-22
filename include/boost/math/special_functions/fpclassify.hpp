@@ -11,7 +11,7 @@
 #endif
 
 #include <math.h>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/limits.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
@@ -38,8 +38,15 @@
 #define BOOST_HAS_FPCLASSIFY
 
 #ifndef fpclassify
-#  if (defined(__GLIBCPP__) || defined(__GLIBCXX__)) && defined(_GLIBCXX_USE_C99_MATH) && !(defined(_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC) && (_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC != 0))
-#     define BOOST_FPCLASSIFY_PREFIX ::std::
+#  if (defined(__GLIBCPP__) || defined(__GLIBCXX__)) \
+         && defined(_GLIBCXX_USE_C99_MATH) \
+         && !(defined(_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC) \
+         && (_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC != 0))
+#     ifdef _STLP_VENDOR_CSTD 
+#        define BOOST_FPCLASSIFY_PREFIX ::_STLP_VENDOR_CSTD:: 
+#     else 
+#        define BOOST_FPCLASSIFY_PREFIX ::std::
+#     endif
 #  else
 #     undef BOOST_HAS_FPCLASSIFY
 #     define BOOST_FPCLASSIFY_PREFIX
@@ -239,6 +246,7 @@ inline bool isnormal BOOST_NO_MACRO_EXPAND(T t)
 } // namespace boost
 
 #endif // BOOST_MATH_FPCLASSIFY_HPP
+
 
 
 

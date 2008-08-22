@@ -12,7 +12,7 @@
 #endif
 
 #include <utility>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/cstdint.hpp>

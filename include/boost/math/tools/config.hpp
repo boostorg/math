@@ -14,7 +14,7 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 #include <algorithm>  // for min and max
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <climits>
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
 #  include <math.h>
@@ -60,7 +60,7 @@
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
 
-#ifdef BOOST_MSVC
+#if defined(BOOST_MSVC) && !defined(_WIN32_WCE)
    // Better safe than sorry, our tests don't support hardware exceptions:
 #  define BOOST_MATH_CONTROL_FP _control87(MCW_EM,MCW_EM)
 #endif

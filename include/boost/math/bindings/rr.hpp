@@ -14,7 +14,7 @@
 
 #include <ostream>
 #include <istream>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <NTL/RR.h>
 
 #ifndef BOOST_MATH_NTL_RR_HPP

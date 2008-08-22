@@ -39,8 +39,11 @@ void test_value(const T& val, const char* name)
 
    BOOST_CHECK_EQUAL(float_distance(float_advance(val, 4), val), -4);
    BOOST_CHECK_EQUAL(float_distance(float_advance(val, -4), val), 4);
-   BOOST_CHECK_EQUAL(float_distance(float_advance(float_next(float_next(val)), 4), float_next(float_next(val))), -4);
-   BOOST_CHECK_EQUAL(float_distance(float_advance(float_next(float_next(val)), -4), float_next(float_next(val))), 4);
+   if(std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present))
+   {
+      BOOST_CHECK_EQUAL(float_distance(float_advance(float_next(float_next(val)), 4), float_next(float_next(val))), -4);
+      BOOST_CHECK_EQUAL(float_distance(float_advance(float_next(float_next(val)), -4), float_next(float_next(val))), 4);
+   }
 }
 
 template <class T>
@@ -60,7 +63,7 @@ void test_values(const T& val, const char* name)
    test_value(-boost::math::tools::epsilon<T>(), name);
    test_value(boost::math::tools::min_value<T>(), name);
    test_value(-boost::math::tools::min_value<T>(), name);
-   if(std::numeric_limits<T>::is_specialized)
+   if(std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present))
    {
       test_value(z, name);
       test_value(-z, name);
@@ -69,7 +72,7 @@ void test_values(const T& val, const char* name)
    test_value(-one, name);
    test_value(two, name);
    test_value(-two, name);
-   if(std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::has_denorm)
+   if(std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present))
    {
       test_value(std::numeric_limits<T>::denorm_min(), name);
       test_value(-std::numeric_limits<T>::denorm_min(), name);

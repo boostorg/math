@@ -12,7 +12,7 @@
 #include <iomanip>
 #include <string>
 #include <cerrno>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <stdexcept>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/policy.hpp>
