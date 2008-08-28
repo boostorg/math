@@ -57,7 +57,7 @@ namespace boost
                 else if(x < 0.5f)
                 {
                    // As below, but rearranged to preserve digits:
-                   return boost::math::log1p(x + sqrt1pm1(x * x, pol), pol);
+                   return boost::math::log1p(x + boost::math::sqrt1pm1(x * x, pol), pol);
                 }
                 else
                 {
