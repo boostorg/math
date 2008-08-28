@@ -86,7 +86,7 @@ namespace boost
        }
 
         template<typename T, typename Policy>
-        inline typename tools::promote_args<T>::type acosh(const T x, const Policy&)
+        inline typename tools::promote_args<T>::type acosh(T x, const Policy&)
         {
             typedef typename tools::promote_args<T>::type result_type;
             typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -101,7 +101,7 @@ namespace boost
               "boost::math::acosh<%1%>(%1%)");
         }
         template<typename T>
-        inline typename tools::promote_args<T>::type acosh(const T x)
+        inline typename tools::promote_args<T>::type acosh(T x)
         {
            return boost::math::acosh(x, policies::policy<>());
         }
