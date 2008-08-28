@@ -65,13 +65,27 @@ void expected_results()
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
+      "atanh.*",                     // test data group
+      ".*", 6, 2);                   // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
+      "atanh.*",                     // test data group
+      ".*", 6, 1);                   // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "real_concept",                // test type(s)
       ".*",                          // test data group
       ".*", 4, 2);                   // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      ".*",                          // test type(s)
+      largest_type,                  // test type(s)
       ".*",                          // test data group
       ".*", 4, 1);                   // test function
 
