@@ -23,7 +23,7 @@
 #include <boost/math/tools/user.hpp>
 #include <boost/math/special_functions/detail/round_fwd.hpp>
 
-#if defined(__CYGWIN__) || defined(__FreeBSD__) || defined(__hppa)
+#if defined(__CYGWIN__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__hppa)
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
