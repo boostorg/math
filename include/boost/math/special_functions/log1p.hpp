@@ -452,7 +452,7 @@ inline typename tools::promote_args<T>::type
 }
 
 template <class T>
-inline T log1pmx(T x)
+inline typename tools::promote_args<T>::type log1pmx(T x)
 {
    return log1pmx(x, policies::policy<>());
 }
