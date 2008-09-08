@@ -72,7 +72,50 @@ run test_binomial.cpp
         : # input files
         : # requirements
 	      <define>TEST_REAL_CONCEPT
-        : test_binomial_real_concept ;
+	      <define>TEST_ROUNDING=0
+        : test_binomial_real_concept0 ;
+run test_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_ROUNDING=1
+        : test_binomial_real_concept1 ;
+run test_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_ROUNDING=2
+        : test_binomial_real_concept2 ;
+run test_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_ROUNDING=3
+        : test_binomial_real_concept3 ;
+run test_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_ROUNDING=4
+        : test_binomial_real_concept4 ;
+run test_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_ROUNDING=5
+        : test_binomial_real_concept5 ;
+run test_binomial.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_ROUNDING=6
+        : test_binomial_real_concept6 ;
 run test_binomial_coeff.cpp ;
 run test_carlson.cpp ;
 run test_cauchy.cpp ;
