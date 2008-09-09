@@ -94,7 +94,7 @@ T log1p_imp(T const & x, const Policy& pol, const mpl::int_<0>&)
       return x;
    detail::log1p_series<result_type> s(x);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582)) && !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
    result_type result = tools::sum_series(s, policies::digits<result_type, Policy>(), max_iter);
 #else
    result_type zero = 0;
@@ -315,7 +315,7 @@ inline long double log1p(long double z)
 #  undef log1p
 #endif
 
-#ifdef BOOST_HAS_LOG1P
+#if defined(BOOST_HAS_LOG1P) && !(defined(__osf__) && defined(__DECCXX_VER))
 #  if (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)) \
    || ((defined(linux) || defined(__linux) || defined(__linux__)) && !defined(__SUNPRO_CC)) \
    || (defined(__hpux) && !defined(__hppa))

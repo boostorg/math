@@ -81,7 +81,7 @@ T expm1_imp(T x, const mpl::int_<0>&, const Policy& pol)
       return x;
    detail::expm1_series<T> s(x);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582)) && !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
    T result = tools::sum_series(s, policies::digits<T, Policy>(), max_iter);
 #else
    T zero = 0;
@@ -232,7 +232,7 @@ inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
 #  undef expm1
 #endif
 
-#ifdef BOOST_HAS_EXPM1
+#if defined(BOOST_HAS_EXPM1) && !(defined(__osf__) && defined(__DECCXX_VER))
 #  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
 inline float expm1(float x, const policies::policy<>&){ return ::expm1f(x); }
 inline long double expm1(long double x, const policies::policy<>&){ return ::expm1l(x); }
