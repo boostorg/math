@@ -254,17 +254,25 @@ void test_beta(T, const char* name)
    //
    std::cout << "Running sanity checks for type " << name << std::endl;
 
+#if !defined(TEST_DATA) || (TEST_DATA == 1)
 #  include "ibeta_small_data.ipp"
 
    test_inverses(ibeta_small_data);
+#endif
 
+#if !defined(TEST_DATA) || (TEST_DATA == 2)
 #  include "ibeta_data.ipp"
 
    test_inverses(ibeta_data);
+#endif
 
+#if !defined(TEST_DATA) || (TEST_DATA == 3)
 #  include "ibeta_large_data.ipp"
 
    test_inverses(ibeta_large_data);
+#endif
+
+#if !defined(TEST_REAL_CONCEPT) || defined(FULL_TEST)
 #ifndef FULL_TEST
    if(boost::is_floating_point<T>::value){
 #endif
@@ -279,6 +287,7 @@ void test_beta(T, const char* name)
    test_inverses2(ibeta_inva_data, name, "Inverse incomplete beta");
 #ifndef FULL_TEST
    }
+#endif
 #endif
 }
 

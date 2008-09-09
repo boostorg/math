@@ -162,7 +162,29 @@ run test_ibeta.cpp
         : # input files
         : # requirements
 	      <define>TEST_REAL_CONCEPT
-        : test_ibeta_real_concept ;
+	      <define>TEST_DATA=1
+        : test_ibeta_real_concept1 ;
+run test_ibeta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_DATA=2
+        : test_ibeta_real_concept2 ;
+run test_ibeta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_DATA=3
+        : test_ibeta_real_concept3 ;
+run test_ibeta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_DATA=4
+        : test_ibeta_real_concept4 ;
 run test_ibeta_inv.cpp  
         : # command line
         : # input files
@@ -186,7 +208,29 @@ run test_ibeta_inv.cpp
         : # input files
         : # requirements
 	      <define>TEST_REAL_CONCEPT
-        : test_ibeta_inv_real_concept ;
+	      <define>TEST_DATA=1
+        : test_ibeta_inv_real_concept1 ;
+run test_ibeta_inv.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_DATA=2
+        : test_ibeta_inv_real_concept2 ;
+run test_ibeta_inv.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_DATA=3
+        : test_ibeta_inv_real_concept3 ;
+run test_ibeta_inv.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_DATA=4
+        : test_ibeta_inv_real_concept4 ;
 run test_ibeta_inv_ab.cpp  
         : # command line
         : # input files
@@ -210,7 +254,22 @@ run test_ibeta_inv_ab.cpp
         : # input files
         : # requirements
 	      <define>TEST_REAL_CONCEPT
-        : test_ibeta_inv_ab_real_concept ;
+	      <define>TEST_DATA=1
+        : test_ibeta_inv_ab_real_concept1 ;
+run test_ibeta_inv_ab.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_DATA=2
+        : test_ibeta_inv_ab_real_concept2 ;
+run test_ibeta_inv_ab.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_DATA=3
+        : test_ibeta_inv_ab_real_concept3 ;
 run test_igamma.cpp ;
 run test_igamma_inv.cpp  
         : # command line
