@@ -1042,7 +1042,7 @@ namespace boost
       { // Quantile (or Percent Point) function.
          RealType v = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
-         return detail::non_central_t_quantile(v, l, p, 1-p, Policy());
+         return detail::non_central_t_quantile(v, l, p, RealType(1-p), Policy());
       } // quantile
 
       template <class RealType, class Policy>
@@ -1052,7 +1052,7 @@ namespace boost
          RealType q = c.param;
          RealType v = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
-         return detail::non_central_t_quantile(v, l, 1-q, q, Policy());
+         return detail::non_central_t_quantile(v, l, RealType(1-q), q, Policy());
       } // quantile complement.
 
    } // namespace math

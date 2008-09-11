@@ -44,7 +44,7 @@ T cos_pi_imp(T x, const Policy& pol)
       return 0;
    
    rem = cos(constants::pi<T>() * rem);
-   return invert ? -rem : rem;
+   return invert ? T(-rem) : rem;
 }
 
 } // namespace detail

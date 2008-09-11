@@ -468,14 +468,14 @@ namespace boost
       RealType guess = 0;
       RealType factor = 5;
       if(r * r * r * P * p > 0.005)
-         guess = detail::inverse_negative_binomial_cornish_fisher(r, p, 1-p, P, 1-P, Policy());
+         guess = detail::inverse_negative_binomial_cornish_fisher(r, p, RealType(1-p), P, RealType(1-P), Policy());
 
       if(guess < 10)
       {
          //
          // Cornish-Fisher Negative binomial approximation not accurate in this area:
          //
-         guess = (std::min)(r * 2, RealType(10));
+         guess = (std::min)(RealType(r * 2), RealType(10));
       }
       else
          factor = (1-P < sqrt(tools::epsilon<RealType>())) ? 2 : (guess < 20 ? 1.2f : 1.1f);
@@ -545,14 +545,14 @@ namespace boost
        RealType guess = 0;
        RealType factor = 5;
        if(r * r * r * (1-Q) * p > 0.005)
-          guess = detail::inverse_negative_binomial_cornish_fisher(r, p, 1-p, 1-Q, Q, Policy());
+          guess = detail::inverse_negative_binomial_cornish_fisher(r, p, RealType(1-p), RealType(1-Q), Q, Policy());
 
        if(guess < 10)
        {
           //
           // Cornish-Fisher Negative binomial approximation not accurate in this area:
           //
-          guess = (std::min)(r * 2, RealType(10));
+          guess = (std::min)(RealType(r * 2), RealType(10));
        }
        else
           factor = (Q < sqrt(tools::epsilon<RealType>())) ? 2 : (guess < 20 ? 1.2f : 1.1f);

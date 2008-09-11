@@ -128,7 +128,7 @@ T cyl_bessel_j_imp(T v, T x, const bessel_no_int_tag& t, const Policy& pol)
       // better have integer v:
       if(floor(v) == v)
       {
-         T r = cyl_bessel_j_imp(v, -x, t, pol);
+         T r = cyl_bessel_j_imp(v, T(-x), t, pol);
          if(iround(v, pol) & 1)
             r = -r;
          return r;
@@ -209,7 +209,7 @@ inline T sph_bessel_j_imp(unsigned n, T x, const Policy& pol)
    // Default case is just a naive evaluation of the definition:
    //
    return sqrt(constants::pi<T>() / (2 * x)) 
-      * cyl_bessel_j_imp(T(n)+T(0.5f), x, bessel_no_int_tag(), pol);
+      * cyl_bessel_j_imp(T(T(n)+T(0.5f)), x, bessel_no_int_tag(), pol);
 }
 
 template <class T, class Policy>
@@ -227,7 +227,7 @@ T cyl_bessel_i_imp(T v, T x, const Policy& pol)
       // better have integer v:
       if(floor(v) == v)
       {
-         T r = cyl_bessel_i_imp(v, -x, pol);
+         T r = cyl_bessel_i_imp(v, T(-x), pol);
          if(iround(v, pol) & 1)
             r = -r;
          return r;
@@ -380,7 +380,7 @@ inline T sph_neumann_imp(unsigned v, T x, const Policy& pol)
    if(x < 2 * tools::min_value<T>())
       return -policies::raise_overflow_error<T>(function, 0, pol);
 
-   T result = cyl_neumann_imp(T(v)+0.5f, x, bessel_no_int_tag(), pol);
+   T result = cyl_neumann_imp(T(T(v)+0.5f), x, bessel_no_int_tag(), pol);
    T tx = sqrt(constants::pi<T>() / (2 * x));
 
    if((tx > 1) && (tools::max_value<T>() / tx < result))

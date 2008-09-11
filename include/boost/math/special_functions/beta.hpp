@@ -822,7 +822,7 @@ inline T binomial_ccdf(T n, T k, T x, T y)
    BOOST_MATH_STD_USING // ADL of std names
    T result = pow(x, n);
    T term = result;
-   for(unsigned i = itrunc(n - 1); i > k; --i)
+   for(unsigned i = itrunc(T(n - 1)); i > k; --i)
    {
       term *= ((i + 1) * y) / ((n - i) * x) ;
       result += term;
@@ -874,15 +874,15 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
    {
       if(p_derivative)
       {
-         *p_derivative = (a == 1) ? 1 : (a < 1) ? tools::max_value<T>() / 2 : tools::min_value<T>() * 2;
+         *p_derivative = (a == 1) ? (T)1 : (a < 1) ? T(tools::max_value<T>() / 2) : T(tools::min_value<T>() * 2);
       }
-      return (invert ? (normalised ? 1 : boost::math::beta(a, b, pol)) : 0);
+      return (invert ? (normalised ? T(1) : boost::math::beta(a, b, pol)) : T(0));
    }
    if(x == 1)
    {
       if(p_derivative)
       {
-         *p_derivative = (b == 1) ? 1 : (b < 1) ? tools::max_value<T>() / 2 : tools::min_value<T>() * 2;
+         *p_derivative = (b == 1) ? T(1) : (b < 1) ? T(tools::max_value<T>() / 2) : T(tools::min_value<T>() * 2);
       }
       return (invert == 0 ? (normalised ? 1 : boost::math::beta(a, b, pol)) : 0);
    }
@@ -931,7 +931,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
                T prefix;
                if(!normalised)
                {
-                  prefix = rising_factorial_ratio(a+b, a, 20);
+                  prefix = rising_factorial_ratio(T(a+b), a, 20);
                }
                else
                {
@@ -939,12 +939,12 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
                }
                fract = ibeta_a_step(a, b, x, y, 20, pol, normalised, p_derivative);
                if(!invert)
-                  fract = beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, pol, normalised);
+                  fract = beta_small_b_large_a_series(T(a + 20), b, x, y, fract, prefix, pol, normalised);
                else
                {
                   fract -= (normalised ? 1 : boost::math::beta(a, b, pol));
                   invert = false;
-                  fract = -beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, pol, normalised);
+                  fract = -beta_small_b_large_a_series(T(a + 20), b, x, y, fract, prefix, pol, normalised);
                }
             }
          }
@@ -997,7 +997,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
                T prefix;
                if(!normalised)
                {
-                  prefix = rising_factorial_ratio(a+b, a, 20);
+                  prefix = rising_factorial_ratio(T(a+b), a, 20);
                }
                else
                {
@@ -1005,12 +1005,12 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
                }
                fract = ibeta_a_step(a, b, x, y, 20, pol, normalised, p_derivative);
                if(!invert)
-                  fract = beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, pol, normalised);
+                  fract = beta_small_b_large_a_series(T(a + 20), b, x, y, fract, prefix, pol, normalised);
                else
                {
                   fract -= (normalised ? 1 : boost::math::beta(a, b, pol));
                   invert = false;
-                  fract = -beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, pol, normalised);
+                  fract = -beta_small_b_large_a_series(T(a + 20), b, x, y, fract, prefix, pol, normalised);
                }
             }
          }
@@ -1060,14 +1060,14 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
          else if(a > 15)
          {
             // sidestep so we can use the series representation:
-            int n = itrunc(floor(b), pol);
+            int n = itrunc(T(floor(b)), pol);
             if(n == b)
                --n;
             T bbar = b - n;
             T prefix;
             if(!normalised)
             {
-               prefix = rising_factorial_ratio(a+bbar, bbar, n);
+               prefix = rising_factorial_ratio(T(a+bbar), bbar, n);
             }
             else
             {
@@ -1082,7 +1082,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             // the formula here for the non-normalised case is tricky to figure
             // out (for me!!), and requires two pochhammer calculations rather
             // than one, so leave it for now....
-            int n = itrunc(floor(b), pol);
+            int n = itrunc(T(floor(b)), pol);
             T bbar = b - n;
             if(bbar <= 0)
             {
@@ -1094,7 +1094,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             if(invert)
                fract -= (normalised ? 1 : boost::math::beta(a, b, pol));
             //fract = ibeta_series(a+20, bbar, x, fract, l, normalised, p_derivative, y);
-            fract = beta_small_b_large_a_series(a+20,  bbar, x, y, fract, T(1), pol, normalised);
+            fract = beta_small_b_large_a_series(T(a+20),  bbar, x, y, fract, T(1), pol, normalised);
             if(invert)
             {
                fract = -fract;
@@ -1167,7 +1167,7 @@ T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
    // Now the regular cases:
    //
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
-   T f1 = ibeta_power_terms(a, b, x, 1 - x, lanczos_type(), true, pol);
+   T f1 = ibeta_power_terms<T>(a, b, x, 1 - x, lanczos_type(), true, pol);
    T y = (1 - x) * x;
 
    if(f1 == 0)

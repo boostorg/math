@@ -75,7 +75,7 @@ T expm1_imp(T x, const mpl::int_<0>&, const Policy& pol)
    BOOST_MATH_STD_USING
 
    T a = fabs(x);
-   if(a > T(0.5L))
+   if(a > T(0.5f))
       return exp(x) - T(1);
    if(a < tools::epsilon<T>())
       return x;

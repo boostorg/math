@@ -214,11 +214,11 @@ namespace boost{ namespace math
     }
     if (x == lower)
     { // (mode - lower) == 0 which would lead to divide by zero!
-      return (mode == lower) ? 2 / (upper - lower) : 0;
+      return (mode == lower) ? 2 / (upper - lower) : RealType(0);
     }
     else if (x == upper)
     {
-      return (mode == upper) ? 2 / (upper - lower) : 0;
+      return (mode == upper) ? 2 / (upper - lower) : RealType(0);
     }
     else if (x <= mode)
     {

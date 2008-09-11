@@ -140,7 +140,7 @@ RealType quantile_imp(
       return location;
    }
    result = -scale / tan(constants::pi<RealType>() * P);
-   return complement ? location - result : location + result;
+   return complement ? RealType(location - result) : RealType(location + result);
 } // quantile
 
 } // namespace detail
