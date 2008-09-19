@@ -20,6 +20,9 @@
 // but note minor additions are needed - see ntl.diff and documentation
 // "Using With NTL - a High-Precision Floating-Point Library".
 
+#ifndef BOOST_MATH_REAL_CONCEPT_HPP
+#define BOOST_MATH_REAL_CONCEPT_HPP
+
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/math/special_functions/round.hpp>
@@ -35,8 +38,9 @@
 #include <boost/config/no_tr1/cmath.hpp>
 #include <math.h> // fmodl
 
-#ifndef BOOST_MATH_REAL_CONCEPT_HPP
-#define BOOST_MATH_REAL_CONCEPT_HPP
+#if defined(__SGI_STL_PORT) || defined(_RWSTD_VER) || defined(__LIBCOMO__)
+#  include <cstdio>
+#endif
 
 namespace boost{ namespace math{
 
