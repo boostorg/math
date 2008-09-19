@@ -191,7 +191,10 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
           sign = -1;
           rphi = constants::pi<T>() / 2 - rphi;
        }
-
+#if 0
+       //
+       // This wasn't supported but is now... probably!
+       //
        if((m > 0) && (v > 1))
        {
           //
@@ -202,6 +205,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
             function,
             "Got v = %1%, but this is only supported for 0 <= phi <= pi/2", v, pol);
        }  
+#endif
        T sinp = sin(rphi);
        T cosp = cos(rphi);
        x = cosp * cosp;
@@ -213,7 +217,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
        else
            p = x + vc * t;
        value = sign * sinp * (ellint_rf_imp(x, y, z, pol) + v * t * ellint_rj_imp(x, y, z, p, pol) / 3);
-       if(m > 0)
+       if((m > 0) && (vc > 0))
          value += m * ellint_pi_imp(v, k, vc, pol);
     }
 
