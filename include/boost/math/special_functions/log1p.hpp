@@ -330,6 +330,7 @@ inline float log1p(float x, const Policy& pol)
          "log1p<%1%>(%1%)", 0, pol);
    return ::log1pf(x); 
 }
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 template <class Policy>
 inline long double log1p(long double x, const Policy& pol)
 { 
@@ -341,6 +342,7 @@ inline long double log1p(long double x, const Policy& pol)
          "log1p<%1%>(%1%)", 0, pol);
    return ::log1pl(x); 
 }
+#endif
 #else
 template <class Policy>
 inline float log1p(float x, const Policy& pol)
