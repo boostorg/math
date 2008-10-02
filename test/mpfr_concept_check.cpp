@@ -11,9 +11,11 @@
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 #define TEST_MPFR
 
-#pragma warning(disable:4800)
-#pragma warning(disable:4512)
-#pragma warning(disable:4127)
+#ifdef _MSC_VER
+#  pragma warning(disable:4800)
+#  pragma warning(disable:4512)
+#  pragma warning(disable:4127)
+#endif
 
 #include <boost/math/bindings/mpfr.hpp>
 #include <boost/math/concepts/real_type_concept.hpp>

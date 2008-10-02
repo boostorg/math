@@ -646,7 +646,7 @@ struct lanczos61UDT
          boost::lexical_cast<T>("-0.163907874717737848669759890242660846846105433791283903651924563157080252845636658802930428e-44"),
       };
       T result = d[0];
-      for(int k = 1; k < sizeof(d)/sizeof(d[0]); ++k)
+      for(unsigned k = 1; k < sizeof(d)/sizeof(d[0]); ++k)
       {
          result += d[k]/(z+(k-1));
       }
@@ -721,7 +721,7 @@ struct lanczos61UDT
          boost::lexical_cast<T>("-0.589653534231618730406843260601322236697428143603814281282790370329151249078338470962782338e-72"),
       };
       T result = d[0];
-      for(int k = 1; k < sizeof(d)/sizeof(d[0]); ++k)
+      for(unsigned k = 1; k < sizeof(d)/sizeof(d[0]); ++k)
       {
          result += d[k]/(z+(k-1));
       }
@@ -795,7 +795,7 @@ struct lanczos61UDT
          boost::lexical_cast<T>("-0.285425405297633795767452984791738825078111150078605004958179057245980222485147999495352632e-71"),
       };
       T result = 0;
-      for(int k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
+      for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(k*dz + k*k);
       }
@@ -870,7 +870,7 @@ struct lanczos61UDT
       };
       T result = 0;
       T z = dz + 2;
-      for(int k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
+      for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
       }

@@ -52,6 +52,8 @@ sph_neumann
 ;
 
 compile has_long_double_support.cpp ;
+compile has_mpfr_class.cpp ;
+compile has_ntl_rr.cpp ;
 
 lib boost_math_tr1 : ../src/tr1/$(TR1_SOURCES).cpp
     :         

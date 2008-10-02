@@ -399,6 +399,7 @@ run test_tr1.cpp
    ../build//boost_math_c99l 
    : : :
    <define>TEST_LD=1
+   <dependency>../build//has_long_double_support
    :
    test_tr1_long_double
    ;
@@ -491,5 +492,6 @@ compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_inc_test.cpp ;
 
-
+compile ntl_concept_check.cpp : <dependency>../build//has_ntl_rr ;
+compile mpfr_concept_check.cpp : <dependency>../build//has_mpfr_class ;
 
