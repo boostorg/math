@@ -34,6 +34,7 @@ project
       # Sunpro has problems building regex as a shared lib:
       <toolset>sun:<link>static
       <define>BOOST_ALL_NO_LIB=1
+      <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
     ;
 
 run hypot_test.cpp ;
