@@ -17,6 +17,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/digamma.hpp>
 #include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/special_functions/pow.hpp>
 
 namespace boost{ namespace math{
 
@@ -416,7 +417,7 @@ inline T expint_as_series(unsigned n, T z, const Policy& pol)
       fact *= ++k;
    }
    BOOST_MATH_INSTRUMENT_VARIABLE(result)
-   result += pow(-z, (int)n - 1) 
+   result += pow(-z, static_cast<T>(n - 1)) 
       * (boost::math::digamma(static_cast<T>(n)) - log(z)) / fact;
    BOOST_MATH_INSTRUMENT_VARIABLE(result)
 

@@ -135,6 +135,14 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
    {
       std::cout << "\n    worst case at row: "
          << row << "\n    { ";
+      if(std::numeric_limits<T>::digits10)
+      {
+         std::cout << std::setprecision(std::numeric_limits<T>::digits10 + 2);
+      }
+      else
+      {
+         std::cout << std::setprecision(std::numeric_limits<long double>::digits10 + 2);
+      }
       for(unsigned i = 0; i < worst.size(); ++i)
       {
          if(i)

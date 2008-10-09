@@ -531,22 +531,22 @@ namespace boost
 
    // inverse hyperbolics:
    template<typename T>
-   typename tools::promote_args<T>::type asinh(const T x);
+   typename tools::promote_args<T>::type asinh(T x);
 
    template<typename T, class Policy>
-   typename tools::promote_args<T>::type asinh(const T x, const Policy&);
+   typename tools::promote_args<T>::type asinh(T x, const Policy&);
 
    template<typename T>
-   typename tools::promote_args<T>::type acosh(const T x);
+   typename tools::promote_args<T>::type acosh(T x);
 
    template<typename T, class Policy>
-   typename tools::promote_args<T>::type acosh(const T x, const Policy&);
+   typename tools::promote_args<T>::type acosh(T x, const Policy&);
 
    template<typename T>
-   typename tools::promote_args<T>::type atanh(const T x);
+   typename tools::promote_args<T>::type atanh(T x);
 
    template<typename T, class Policy>
-   typename tools::promote_args<T>::type atanh(const T x, const Policy&);
+   typename tools::promote_args<T>::type atanh(T x, const Policy&);
 
    namespace detail{
 

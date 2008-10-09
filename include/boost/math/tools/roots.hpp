@@ -11,7 +11,7 @@
 #endif
 
 #include <utility>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <stdexcept>
 
 #include <boost/tr1/tuple.hpp>

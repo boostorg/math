@@ -278,21 +278,29 @@ void test_beta(T, const char* name)
    // The contents are as follows, each row of data contains
    // five items, input value a, input value b, integration limits x, beta(a, b, x) and ibeta(a, b, x):
    //
+#if !defined(TEST_DATA) || (TEST_DATA == 1)
 #  include "ibeta_small_data.ipp"
 
    test_inverses(ibeta_small_data);
+#endif
 
+#if !defined(TEST_DATA) || (TEST_DATA == 2)
 #  include "ibeta_data.ipp"
 
    test_inverses(ibeta_data);
+#endif
 
+#if !defined(TEST_DATA) || (TEST_DATA == 3)
 #  include "ibeta_large_data.ipp"
 
    test_inverses(ibeta_large_data);
+#endif
 
+#if !defined(TEST_DATA) || (TEST_DATA == 4)
 #  include "ibeta_inv_data.ipp"
 
    test_inverses2(ibeta_inv_data, name, "Inverse incomplete beta");
+#endif
 }
 
 template <class T>

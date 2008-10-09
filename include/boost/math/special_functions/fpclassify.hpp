@@ -11,7 +11,7 @@
 #endif
 
 #include <math.h>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/limits.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/type_traits/is_floating_point.hpp>

@@ -18,13 +18,12 @@
 
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
-#include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
 #include <ostream>
 #include <istream>
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <math.h> // fmodl
 
 #ifndef BOOST_MATH_STD_REAL_CONCEPT_HPP
@@ -316,7 +315,11 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
 }
 
 } // namespace concepts
+}}
 
+#include <boost/math/tools/precision.hpp>
+
+namespace boost{ namespace math{
 namespace tools
 {
 
@@ -372,5 +375,6 @@ using concepts::llround;
 } // namespace boost
 
 #endif // BOOST_MATH_STD_REAL_CONCEPT_HPP
+
 
 

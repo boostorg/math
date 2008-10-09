@@ -5,6 +5,9 @@
 //
 #define BOOST_MATH_TR1_SOURCE
 #include <boost/math/tr1.hpp>
+
+#ifdef BOOST_HAS_LONG_LONG
+
 #include <boost/math/special_functions/round.hpp>
 #include "c_policy.hpp"
 
@@ -16,3 +19,5 @@ extern "C" long long BOOST_MATH_TR1_DECL llroundl BOOST_PREVENT_MACRO_SUBSTITUTI
 }
 
 }}}
+
+#endif

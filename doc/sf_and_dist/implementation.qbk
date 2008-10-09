@@ -548,17 +548,15 @@ generated HTML: this needs further investigation.
 
 [h4 Producing Graphs]
 
-Graphs were mostly produced by a very laborious process entailing output 
-of columns of values from C++ programs to a .csv file,
-use of [@http://www.rjsweb.fsnet.co.uk/graph/ RJS Graph] to arrange the display and axes,
-and output to a .ps file, followed by conversion to .png using Adobe Photoshop,
-or similar utility.  This rigmarole is *not* recommended!
+Graphs were produced in SVG format and then converted to PNG's using the same
+process as the equations.  
 
-We plan to carry out this process in a single step using the 
+The programs 
+/libs/math/doc/sf_and_dist/graphs/dist_graphs.cpp
+and /libs/math/doc/sf_and_dist/graphs/sf_graphs.cpp
+generate the SVG's directly using the 
 [@http://code.google.com/soc/2007/boost/about.html Google Summer of Code 2007]
-project of Jacob Voytko (whose work so far is at .\boost-sandbox\SOC\2007\visualization)
-that should, when completed, allow output of annotated graphs as
-Scalable Vector Graphic .svg files directly from C++ programs.
+project of Jacob Voytko (whose work so far is at .\boost-sandbox\SOC\2007\visualization).
 
 [endsect] [/section:implementation Implementation Notes]
 

@@ -12,6 +12,7 @@
 
 #include <boost/math/distributions/non_central_beta.hpp>
 #include <boost/math/distributions/detail/generic_mode.hpp>
+#include <boost/math/special_functions/pow.hpp>
 
 namespace boost
 {
@@ -253,8 +254,8 @@ namespace boost
             + 4 * (10 + m) * (-2 + m + n) * l3
             + (10 + m) * l4))
             /
-            ((-8 + m) * (-6 + m) * pow(n * (-2 + m + n)
-            + 2 * (-2 + m + n) * l + l2, 2));
+            ((-8 + m) * (-6 + m) * boost::math::pow<2>(n * (-2 + m + n)
+            + 2 * (-2 + m + n) * l + l2));
             return result;
       } // kurtosis_excess
 

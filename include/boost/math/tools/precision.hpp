@@ -232,6 +232,88 @@ inline T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
 #endif
 }
 
+namespace detail{
+
+template <class T>
+inline T root_epsilon_imp(const mpl::int_<24>&)
+{
+   return static_cast<T>(0.00034526698300124390839884978618400831996329879769945L);
+}
+
+template <class T>
+inline T root_epsilon_imp(const T*, const mpl::int_<53>&)
+{
+   return static_cast<T>(0.1490116119384765625e-7L);
+}
+
+template <class T>
+inline T root_epsilon_imp(const T*, const mpl::int_<64>&)
+{
+   return static_cast<T>(0.32927225399135962333569506281281311031656150598474e-9L);
+}
+
+template <class T>
+inline T root_epsilon_imp(const T*, const mpl::int_<113>&)
+{
+   return static_cast<T>(0.1387778780781445675529539585113525390625e-16L);
+}
+
+template <class T, class Tag>
+inline T root_epsilon_imp(const T*, const Tag&)
+{
+   BOOST_MATH_STD_USING
+   static const T r_eps = sqrt(tools::epsilon<T>());
+   return r_eps;
+}
+
+template <class T>
+inline T forth_root_epsilon_imp(const T*, const mpl::int_<24>&)
+{
+   return static_cast<T>(0.018581361171917516667460937040007436176452688944747L);
+}
+
+template <class T>
+inline T forth_root_epsilon_imp(const T*, const mpl::int_<53>&)
+{
+   return static_cast<T>(0.0001220703125L);
+}
+
+template <class T>
+inline T forth_root_epsilon_imp(const T*, const mpl::int_<64>&)
+{
+   return static_cast<T>(0.18145860519450699870567321328132261891067079047605e-4L);
+}
+
+template <class T>
+inline T forth_root_epsilon_imp(const T*, const mpl::int_<113>&)
+{
+   return static_cast<T>(0.37252902984619140625e-8L);
+}
+
+template <class T, class Tag>
+inline T forth_root_epsilon_imp(const T*, const Tag&)
+{
+   BOOST_MATH_STD_USING
+   static const T r_eps = sqrt(sqrt(tools::epsilon<T>()));
+   return r_eps;
+}
+
+}
+
+template <class T>
+inline T root_epsilon()
+{
+   typedef mpl::int_<std::numeric_limits<T>::digits> tag_type;
+   return detail::root_epsilon_imp(static_cast<T const*>(0), tag_type());
+}
+
+template <class T>
+inline T forth_root_epsilon()
+{
+   typedef mpl::int_<std::numeric_limits<T>::digits> tag_type;
+   return detail::forth_root_epsilon_imp(static_cast<T const*>(0), tag_type());
+}
+
 } // namespace tools
 } // namespace math
 } // namespace boost

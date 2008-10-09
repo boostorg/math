@@ -363,21 +363,29 @@ void test_beta(T, const char* name)
    // The contents are as follows, each row of data contains
    // five items, input value a, input value b, integration limits x, beta(a, b, x) and ibeta(a, b, x):
    //
+#if !defined(TEST_DATA) || (TEST_DATA == 1)
 #  include "ibeta_small_data.ipp"
 
    do_test_beta(ibeta_small_data, name, "Incomplete Beta Function: Small Values");
+#endif
 
+#if !defined(TEST_DATA) || (TEST_DATA == 2)
 #  include "ibeta_data.ipp"
 
    do_test_beta(ibeta_data, name, "Incomplete Beta Function: Medium Values");
 
+#endif
+#if !defined(TEST_DATA) || (TEST_DATA == 3)
 #  include "ibeta_large_data.ipp"
 
    do_test_beta(ibeta_large_data, name, "Incomplete Beta Function: Large and Diverse Values");
+#endif
 
+#if !defined(TEST_DATA) || (TEST_DATA == 4)
 #  include "ibeta_int_data.ipp"
 
    do_test_beta(ibeta_int_data, name, "Incomplete Beta Function: Small Integer Values");
+#endif
 }
 
 template <class T>

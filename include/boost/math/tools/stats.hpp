@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include <cmath>
+#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/math/tools/precision.hpp>
 
