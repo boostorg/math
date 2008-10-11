@@ -1,3 +1,10 @@
+// Copyright John Maddock 2008.
+
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
    static const boost::array<boost::array<T, 2>, 261> acosh_data = {{
       { SC_(1.000001430511474609375), SC_(0.001691455665129294448190238354291760044433) }, 
