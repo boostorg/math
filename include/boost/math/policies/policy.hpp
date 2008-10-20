@@ -603,6 +603,23 @@ struct normalise<policy<>,
    typedef policy<detail::forwarding_arg1, detail::forwarding_arg2> type;
 };
 
+template <>
+struct normalise<policy<detail::forwarding_arg1, detail::forwarding_arg2>,
+          promote_float<false>,
+          promote_double<false>,
+          discrete_quantile<>,
+          assert_undefined<>,
+          default_policy,
+          default_policy,
+          default_policy,
+          default_policy,
+          default_policy,
+          default_policy,
+          default_policy>
+{
+   typedef policy<detail::forwarding_arg1, detail::forwarding_arg2> type;
+};
+
 inline policy<> make_policy()
 { return policy<>(); }
 

@@ -1,5 +1,10 @@
 [template history[]
 
+[h4 Boost-1.38.0]
+
+* Added support for MPFR as a bignum type.
+* Added some full specializations of the policy classes to reduce compile times.
+
 [h4 Boost-1.37.0]
 
 * Improved accuracy and testing of the inverse hypergeometric functions.
