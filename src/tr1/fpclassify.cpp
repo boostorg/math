@@ -3,7 +3,10 @@
 //  Boost Software License, Version 1.0.  (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-#define BOOST_MATH_TR1_SOURCE
+#  include <pch.hpp>
+#ifndef BOOST_MATH_TR1_SOURCE
+#  define BOOST_MATH_TR1_SOURCE
+#endif
 #include <boost/math/tr1.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
@@ -42,3 +45,5 @@ template<> bool BOOST_MATH_TR1_DECL isnormal<double> BOOST_PREVENT_MACRO_SUBSTIT
 }
 
 }}}
+
+
