@@ -53,10 +53,6 @@ sph_legendre
 sph_neumann
 ;
 
-compile has_long_double_support.cpp ;
-compile has_mpfr_class.cpp ;
-compile has_ntl_rr.cpp ;
-
 lib boost_math_tr1 : ../src/tr1/$(TR1_SOURCES).cpp pch
     :         
  	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
@@ -73,7 +69,7 @@ lib boost_math_tr1l : ../src/tr1/$(TR1_SOURCES)l.cpp pch
     :         
  	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
  	     <include>../src/tr1 
- 	     <dependency>has_long_double_support
+ 	     <dependency>../config//has_long_double_support
    ;
 
 lib boost_math_c99 : ../src/tr1/$(C99_SOURCES).cpp pch
@@ -91,12 +87,14 @@ lib boost_math_c99f : ../src/tr1/$(C99_SOURCES)f.cpp pch
 lib boost_math_c99l : ../src/tr1/$(C99_SOURCES)l.cpp pch
     :         
  	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
- 	     <dependency>has_long_double_support
+ 	     <dependency>../config//has_long_double_support
  	     <include>../src/tr1 
    ;
 
 
 #boost-install boost_math_c99 boost_math_c99f boost_math_c99l boost_math_tr1 boost_math_tr1f boost_math_tr1l ;
+
+
 
 
 

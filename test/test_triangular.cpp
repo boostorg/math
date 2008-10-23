@@ -8,6 +8,8 @@
 
 // test_triangular.cpp
 
+#include <pch.hpp>
+
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4305) // truncation from 'long double' to 'float'

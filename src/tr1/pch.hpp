@@ -6,8 +6,6 @@
 #ifdef BOOST_BUILD_PCH_ENABLED
 
 #define BOOST_MATH_TR1_SOURCE
-//#include "c_policy.hpp"
 #include <boost/math/special_functions.hpp>
-//#include <boost/math/tr1.hpp>
 
 #endif
