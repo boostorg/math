@@ -57,7 +57,7 @@ namespace boost { namespace math {
     }
     
     template <class RealType, class Policy>
-    inline const std::pair<RealType, RealType> support(const logistic_distribution<RealType, Policy>& dist)
+    inline const std::pair<RealType, RealType> support(const logistic_distribution<RealType, Policy>& /* dist */)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
       using boost::math::tools::max_value;
