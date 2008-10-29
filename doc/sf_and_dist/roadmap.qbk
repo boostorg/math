@@ -4,6 +4,7 @@
 
 * Added support for MPFR as a bignum type.
 * Added some full specializations of the policy classes to reduce compile times.
+* Added logistic distribution, from Gautam Sewani's Google Summer of Code project.
 
 [h4 Boost-1.37.0]
 

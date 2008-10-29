@@ -13,6 +13,7 @@
 [include distributions/extreme_value.qbk]
 [include distributions/fisher.qbk]
 [include distributions/gamma.qbk]
+[include distributions/logistic.qbk]
 [include distributions/lognormal.qbk]
 [include distributions/negative_binomial.qbk]
 [include distributions/nc_beta.qbk]
