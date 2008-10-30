@@ -224,6 +224,7 @@ run test_instantiate1.cpp test_instantiate2.cpp ;
 run test_inv_hyp.cpp pch ;
 run test_laguerre.cpp pch ;
 run test_legendre.cpp pch ;
+run test_logistic_dist.cpp ;
 run test_lognormal.cpp ;
 run test_minima.cpp pch ;
 run test_negative_binomial.cpp 
