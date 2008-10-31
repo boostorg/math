@@ -63,14 +63,14 @@ However, the pdf and cdf support inputs of +[infin] and -[infin]
 as special cases if RealType permits.
 
 At `p=1` and `p=0`, the quantile function returns the result of 
-+__overflow_error and -__overflow_error, while the compliment 
++__overflow_error and -__overflow_error, while the complement 
 quantile function returns the result of -__overflow_error and 
 +__overflow_error respectively. 
 
 [h4 Accuracy]
 
 The logistic distribution is implemented in terms of the `std::exp` 
-and the `std::log` functions, so it's accuracy is related to the 
+and the `std::log` functions, so its accuracy is related to the 
 accurate implementations of those functions on a given platform. 
 While calculating the quantile and the inverse quantile, some 
 non-zero position values might cause catastrophic cancellation errors. 
