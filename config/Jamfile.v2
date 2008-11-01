@@ -3,10 +3,10 @@
 # (See accompanying file LICENSE_1_0.txt or copy at 
 # http://www.boost.org/LICENSE_1_0.txt.
 
-import testing ;
+obj has_long_double_support : has_long_double_support.cpp ;
+obj has_mpfr_class : has_mpfr_class.cpp ;
+obj has_ntl_rr : has_ntl_rr.cpp ;
 
-compile has_long_double_support.cpp ;
-compile has_mpfr_class.cpp ;
-compile has_ntl_rr.cpp ;
+
 
 

@@ -26,10 +26,12 @@ project
       <include>../../..
     ;
 
+run binomial_coinflip_example.cpp ;
 run binomial_confidence_limits.cpp ;
 run binomial_example3.cpp ;
-run binomial_sample_sizes.cpp ;
 run binomial_example_nag.cpp ;
+run binomial_quiz_example.cpp ;
+run binomial_sample_sizes.cpp ;
 run c_error_policy_example.cpp ;
 run chi_square_std_dev_test.cpp ;
 run distribution_construction.cpp ;
@@ -37,13 +39,18 @@ run error_handling_example.cpp ;
 run error_policies_example.cpp ;
 run error_policy_example.cpp ;
 run f_test.cpp ;
+run find_location_example.cpp ;
+run find_mean_and_sd_normal.cpp ;
+run find_root_example.cpp ;
+run find_scale_example.cpp ;
+run nc_chi_sq_example.cpp ;
 run neg_binom_confidence_limits.cpp ;
 run neg_binomial_sample_sizes.cpp ;
-# run negative_binomial_construction_examples.cpp ; delete for now
 run negative_binomial_example1.cpp ;
 run negative_binomial_example2.cpp ;
-# run negative_binomial_example3.cpp ;
+run normal_misc_examples.cpp ;
 run policy_eg_1.cpp ;
+run policy_eg_10.cpp ;
 run policy_eg_2.cpp ;
 run policy_eg_3.cpp ;
 run policy_eg_4.cpp ;
@@ -52,7 +59,6 @@ run policy_eg_6.cpp ;
 run policy_eg_7.cpp ;
 run policy_eg_8.cpp ;
 run policy_eg_9.cpp ;
-run policy_eg_10.cpp ;
 run policy_ref_snip1.cpp ;
 run policy_ref_snip10.cpp ;
 run policy_ref_snip11.cpp ;
@@ -66,13 +72,11 @@ run policy_ref_snip6.cpp ;
 run policy_ref_snip7.cpp ;
 run policy_ref_snip8.cpp ;
 run policy_ref_snip9.cpp ;
-#run statistics_functions_example1.cpp ;
 run students_t_example1.cpp ;
 run students_t_example2.cpp ;
 run students_t_example3.cpp ;
 run students_t_single_sample.cpp ;
 run students_t_two_samples.cpp ;
-
 
 
 

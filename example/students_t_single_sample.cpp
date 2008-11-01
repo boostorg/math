@@ -196,7 +196,7 @@ void single_sample_find_df(double M, double Sm, double Sd)
    //
    // Now print out the data for the table rows.
    //
-   for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
+   for(unsigned i = 1; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    {
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
@@ -408,7 +408,6 @@ Confidence       Estimated          Estimated
  Value (%)      Sample Size        Sample Size
               (one sided test)    (two sided test)
 _______________________________________________________________
-    50.000               2               2
     75.000               3               4
     90.000               7               9
     95.000              11              13

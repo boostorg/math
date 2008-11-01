@@ -509,14 +509,13 @@ Confidence       Estimated          Estimated
  Value (%)      Sample Size        Sample Size
               (one sided test)    (two sided test)
 _______________________________________________________________
-    50.000               2               3
-    75.000               4               5
-    90.000               8              10
-    95.000              12              14
-    99.000              21              23
-    99.900              36              38
-    99.990              51              54
-    99.999              67              69
+    75.000               3               4
+    90.000               7               9
+    95.000              11              13
+    99.000              20              22
+    99.900              35              37
+    99.990              50              53
+    99.999              66              68
 ''']
 
 So in this case, many more measurements would have had to be made, 

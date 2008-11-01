@@ -59,7 +59,7 @@ double data [values] = {25.06, 25.18, 24.87, 25.51, 25.34, 25.41};
 int main()
 {
    cout << "Example2 using Student's t function. ";
-#if defined(__FILE__) && defined(__TIMESTAMP__)
+#if defined(__FILE__) && defined(__TIMESTAMP__) && defined(_MSC_FULL_VER)
    cout << "  " << __FILE__ << ' ' << __TIMESTAMP__ << ' '<< _MSC_FULL_VER;
 #endif
    cout << endl;
@@ -119,6 +119,7 @@ students_t_example2 - 0 error(s), 0 warning(s)
 ========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 */
+
 
 
 
