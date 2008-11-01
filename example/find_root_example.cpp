@@ -31,87 +31,6 @@ First we need some includes to access the normal distribution
   using std::numeric_limits;
 //] //[/root_find1]
 
-namespace boost{ namespace math { namespace tools
-{
-
-template <class F, class T, class Tol>
-inline std::pair<T, T> bracket_and_solve_root(F f, // functor 
-                                              const T& guess,
-                                              const T& factor,
-                                              bool rising,
-                                              Tol tol, // binary functor specifying termination when tol(min, max) becomes true.
-                                              // eps_tolerance most suitable for this continuous function
-                                              boost::uintmax_t& max_iter); // explicit (rather than default) max iterations.
-// return interval as a pair containing result.
-
-namespace detail
-{
-
-  // Functor for finding standard deviation:
-  template <class RealType, class Policy>
-  struct standard_deviation_functor
-  {
-     standard_deviation_functor(RealType m, RealType s, RealType d)
-        : mean(m), standard_deviation(s)
-     {
-     }
-     RealType operator()(const RealType& sd)
-     { // Unary functor - the function whose root is to be found.
-        if(sd <= tools::min_value<RealType>())
-        { // 
-           return 1;
-        }
-        normal_distribution<RealType, Policy> t(mean, sd);
-        RealType qa = quantile(complement(t, alpha));
-        RealType qb = quantile(complement(t, beta));
-        qa += qb;
-        qa *= qa;
-        qa *= ratio;
-        qa -= (df + 1);
-        return qa;
-     } // operator()
-     RealType mean;
-     RealType standard_deviation;
-  }; // struct standard_deviation_functor
-} // namespace detail
-
-template <class RealType, class Policy>
-RealType normal_distribution<RealType, Policy>::find_standard_deviation(
-      RealType difference_from_mean,
-      RealType mean,
-      RealType sd,
-      RealType hint) // Best guess available - current sd if none better?
-{
-   static const char* function = "boost::math::normal_distribution<%1%>::find_standard_deviation";
-
-   // Check for domain errors:
-   RealType error_result;
-   if(false == detail::check_probability(
-      function, sd, &error_result, Policy())
-      )
-      return error_result;
-
-   if(hint <= 0)
-   { // standard deviation can never be negative.
-      hint = 1;
-   }
-
-   detail::standard_deviation_functor<RealType, Policy> f(mean, sd, difference_from_mean);
-   tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
-   boost::uintmax_t max_iter = 100;
-   std::pair<RealType, RealType> r = tools::bracket_and_solve_root(f, hint, RealType(2), false, tol, max_iter, Policy());
-   RealType result = r.first + (r.second - r.first) / 2;
-   if(max_iter == 100)
-   {
-      policies::raise_evaluation_error<RealType>(function, "Unable to locate solution in a reasonable time:"
-         " either there is no answer to how many degrees of freedom are required"
-         " or the answer is infinite.  Current best guess is %1%", result, Policy());
-   }
-   return result;
-} // find_standard_deviation
-} // namespace tools
-} // namespace math
-} // namespace boost
 
 
 int main()
@@ -231,9 +150,20 @@ But in this normal distribution case, we could be even smarter and make a direct
 }  // int main()
 
 /*
-
 Output is:
 
+//[root_find_output
 
+Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\find_root_example.exe"
+Example: Normal distribution, root finding.Percentage of packs > 3.1 is 0.158655
+fraction of packs <= 2.9 with a mean of 3 is 0.841345
+fraction of packs >= 2.9 with a mean of 3.0664 is 0.951944
+Setting the packer to 3.06449 will mean that fraction of packs >= 2.9 is 0.95
+Quantile of 0.05 = 2.83551, mean = 3, sd = 0.1
+Quantile of 0.05 = 2.91776, mean = 3, sd = 0.05
+Fraction of packs >= 2.9 with a mean of 3 and standard deviation of 0.05 is 0.97725
+Quantile of 0.05 = 2.90131, mean = 3, sd = 0.06
+Fraction of packs >= 2.9 with a mean of 3 and standard deviation of 0.06 is 0.95221
 
+//] [/root_find_output]
 */
