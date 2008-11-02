@@ -203,7 +203,7 @@ void single_sample_find_df(double M, double Sm, double Sd)
       // calculate df for single sided test:
       double df = students_t::find_degrees_of_freedom(
          fabs(M - Sm), alpha[i], alpha[i], Sd);
-      // convert to sample size:
+      // convert to sample size, always one more than the degrees of freedom:
       double size = ceil(df) + 1;
       // Print size:
       cout << fixed << setprecision(0) << setw(16) << right << size;

@@ -499,3 +499,4 @@ compile  compile_test/tools_toms748_inc_test.cpp ;
 compile ntl_concept_check.cpp : <dependency>../config//has_ntl_rr ;
 compile mpfr_concept_check.cpp : <dependency>../config//has_mpfr_class ;
 
+build-project ../example ;

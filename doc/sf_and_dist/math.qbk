@@ -331,6 +331,7 @@ printer friendly PDF format].
 [section:perf_over Performance]
 [performance_overview]
 [endsect]
+[include building.qbk]
 [section:history1 History and What's New]
 [history]
 [endsect]
