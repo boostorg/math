@@ -89,7 +89,6 @@ is found, the higher the priority for implementing it:
 [table
 [[Distribution][R][Mathematica 6][NIST][Regress+][Matlab]]
 [/4 votes:]
-[[Logistic][X][X][-][X][X]]
 [[Hypergeometric][X][X][-][X][X]]
 
 [/3 votes:]

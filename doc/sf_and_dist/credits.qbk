@@ -22,10 +22,12 @@ Google Summer of Code project 2006.
 
 Bruno Lalande submitted the "compile time power of a runtime base" code.
 
+Gautam Sewani coded the logistic distribution as part of a Google Summer of Code project 2008.
+
 Professor Nico Temme for advice on the inverse incomplete beta function.
 
 [@http://www.shoup.net Victor Shoup for NTL], 
-without which it would have much difficult to 
+without which it would have much more difficult to 
 produce high accuracy constants, and especially
 the tables of accurate values for testing.
 
