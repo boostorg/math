@@ -4,6 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <pch.hpp>
+// Need to compile in IDE PAB 31 Oct 2008
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
