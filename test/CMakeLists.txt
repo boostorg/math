@@ -1,3 +1,5 @@
+boost_additional_test_dependencies(math BOOST_DEPENDS test regex)
+
 boost_test_run(common_factor_test DEPENDS boost_unit_test_framework)
 boost_test_run(octonion_test 
   ../octonion/octonion_test.cpp
