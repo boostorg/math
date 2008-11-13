@@ -39,7 +39,7 @@ distribution does not provide the typedef:
 Instead if you want 
 a double precision gamma distribution you can use 
 
-``boost::gamma_distribution<>``]
+``boost::math::gamma_distribution<>``]
 
 For shape parameter /k/ and scale parameter [theta][space] it is defined by the
 probability density function:
