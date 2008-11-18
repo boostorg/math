@@ -109,11 +109,16 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
    T result;
 
    if(a == 1)
+   {
       result = -log(q);
+      BOOST_MATH_INSTRUMENT_VARIABLE(result);
+   }
    else if(a < 1)
    {
       T g = boost::math::tgamma(a, pol);
       T b = q * g;
+      BOOST_MATH_INSTRUMENT_VARIABLE(g);
+      BOOST_MATH_INSTRUMENT_VARIABLE(b);
       if((b > 0.6) || ((b >= 0.45) && (a >= 0.3)))
       {
          // DiDonato & Morris Eq 21:
@@ -127,12 +132,15 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
          if((b * q > 1e-8) && (q > 1e-5))
          {
             u = pow(p * g * a, 1 / a);
+            BOOST_MATH_INSTRUMENT_VARIABLE(u);
          }
          else
          {
             u = exp((-q / a) - constants::euler<T>());
+            BOOST_MATH_INSTRUMENT_VARIABLE(u);
          }
          result = u / (1 - (u / (a + 1)));
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
       else if((a < 0.3) && (b >= 0.35))
       {
@@ -140,6 +148,7 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
          T t = exp(-constants::euler<T>() - b);
          T u = t * exp(t);
          result = t * exp(u);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
       else if((b > 0.15) || (a >= 0.3))
       {
@@ -147,6 +156,7 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
          T y = -log(b);
          T u = y - (1 - a) * log(y);
          result = y - (1 - a) * log(u) - log(1 + (1 - a) / (1 + u));
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
       else if (b > 0.1)
       {
@@ -154,6 +164,7 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
          T y = -log(b);
          T u = y - (1 - a) * log(y);
          result = y - (1 - a) * log(u) - log((u * u + 2 * (3 - a) * u + (2 - a) * (3 - a)) / (u * u + (5 - a) * u + 2));
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
       else
       {
@@ -179,6 +190,7 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
          T y_3 = y_2 * y;
          T y_4 = y_2 * y_2;
          result = y + c1 + (c2 / y) + (c3 / y_2) + (c4 / y_3) + (c5 / y_4);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
    }
    else
@@ -186,26 +198,34 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
       // DiDonato and Morris Eq 31:
       T s = find_inverse_s(p, q);
 
+      BOOST_MATH_INSTRUMENT_VARIABLE(s);
+
       T s_2 = s * s;
       T s_3 = s_2 * s;
       T s_4 = s_2 * s_2;
       T s_5 = s_4 * s;
       T ra = sqrt(a);
 
+      BOOST_MATH_INSTRUMENT_VARIABLE(ra);
+
       T w = a + s * ra + (s * s -1) / 3;
       w += (s_3 - 7 * s) / (36 * ra);
       w -= (3 * s_4 + 7 * s_2 - 16) / (810 * a);
       w += (9 * s_5 + 256 * s_3 - 433 * s) / (38880 * a * ra);
 
+      BOOST_MATH_INSTRUMENT_VARIABLE(w);
+
       if((a >= 500) && (fabs(1 - w / a) < 1e-6))
       {
          result = w;
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
       else if (p > 0.5)
       {
          if(w < 3 * a)
          {
             result = w;
+            BOOST_MATH_INSTRUMENT_VARIABLE(result);
          }
          else
          {
@@ -236,12 +256,14 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
                T y_3 = y_2 * y;
                T y_4 = y_2 * y_2;
                result = y + c1 + (c2 / y) + (c3 / y_2) + (c4 / y_3) + (c5 / y_4);
+               BOOST_MATH_INSTRUMENT_VARIABLE(result);
             }
             else
             {
                // DiDonato and Morris Eq 33:
                T u = -lb + (a - 1) * log(w) - log(1 + (1 - a) / (1 + w));
                result = -lb + (a - 1) * log(u) - log(1 + (1 - a) / (1 + u));
+               BOOST_MATH_INSTRUMENT_VARIABLE(result);
             }
          }
       }
@@ -253,9 +275,12 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
          z = didonato_FN(p, a, z, 2, T(0), pol);
          z = didonato_FN(p, a, z, 3, T(0), pol);
 
+         BOOST_MATH_INSTRUMENT_VARIABLE(z);
+
          if((z <= 0.01 * (a + 1)) || (z > 0.7 * (a + 1)))
          {
             result = z;
+            BOOST_MATH_INSTRUMENT_VARIABLE(result);
          }
          else
          {
@@ -263,6 +288,7 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
             T zb = didonato_FN(p, a, z, 100, T(1e-4), pol);
             T u = log(p) + boost::math::lgamma(a + 1, pol);
             result = zb * (1 - (a * log(zb) - zb - u + log(didonato_SN(a, z, 100, T(1e-4)))) / (a - zb));
+            BOOST_MATH_INSTRUMENT_VARIABLE(result);
          }
       }
    }
@@ -349,6 +375,9 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
 
    static const char* function = "boost::math::gamma_p_inv<%1%>(%1%, %1%)";
 
+   BOOST_MATH_INSTRUMENT_VARIABLE(a);
+   BOOST_MATH_INSTRUMENT_VARIABLE(p);
+
    if(a <= 0)
       policies::raise_domain_error<T>(function, "Argument a in the incomplete gamma function inverse must be >= 0 (got a=%1%).", a, pol);
    if((p < 0) || (p > 1))
@@ -361,6 +390,7 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();
+   BOOST_MATH_INSTRUMENT_VARIABLE(guess);
    //
    // Work out how many digits to converge to, normally this is
    // 2/3 of the digits in T, but if the first derivative is very
@@ -379,6 +409,7 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
       lower,
       tools::max_value<T>(),
       digits);
+   BOOST_MATH_INSTRUMENT_VARIABLE(guess);
    if(guess == lower)
       guess = policies::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
    return guess;

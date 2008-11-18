@@ -242,13 +242,25 @@ T ibeta_power_terms(T a,
          // since one of the power terms will evaluate to a number close to 1.
          //
          if(fabs(l1) < 0.1)
+         {
             result *= exp(a * boost::math::log1p(l1, pol));
+            BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         }
          else
+         {
             result *= pow((x * cgh) / agh, a);
+            BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         }
          if(fabs(l2) < 0.1)
+         {
             result *= exp(b * boost::math::log1p(l2, pol));
+            BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         }
          else
+         {
             result *= pow((y * cgh) / bgh, b);
+            BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         }
       }
       else if((std::max)(fabs(l1), fabs(l2)) < 0.5)
       {
@@ -279,6 +291,7 @@ T ibeta_power_terms(T a,
             l3 = l1 + l3 + l3 * l1;
             l3 = a * boost::math::log1p(l3, pol);
             result *= exp(l3);
+            BOOST_MATH_INSTRUMENT_VARIABLE(result);
          }
          else
          {
@@ -286,6 +299,7 @@ T ibeta_power_terms(T a,
             l3 = l2 + l3 + l3 * l2;
             l3 = b * boost::math::log1p(l3, pol);
             result *= exp(l3);
+            BOOST_MATH_INSTRUMENT_VARIABLE(result);
          }
       }
       else if(fabs(l1) < fabs(l2))
@@ -294,6 +308,7 @@ T ibeta_power_terms(T a,
          T l = a * boost::math::log1p(l1, pol)
             + b * log((y * cgh) / bgh);
          result *= exp(l);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
       else
       {
@@ -301,6 +316,7 @@ T ibeta_power_terms(T a,
          T l = b * boost::math::log1p(l2, pol)
             + a * log((x * cgh) / agh);
          result *= exp(l);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
    }
    else
@@ -321,17 +337,21 @@ T ibeta_power_terms(T a,
             result *= pow(pow(b2, b/a) * b1, a);
          else
             result *= pow(pow(b1, a/b) * b2, b);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
       else
       {
          // finally the normal case:
          result *= pow(b1, a) * pow(b2, b);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
    }
    // combine with the leftover terms from the Lanczos approximation:
    result *= sqrt(bgh / boost::math::constants::e<T>());
    result *= sqrt(agh / cgh);
    result *= prefix;
+
+   BOOST_MATH_INSTRUMENT_VARIABLE(result);
 
    return result;
 }
@@ -624,6 +644,9 @@ template <class T, class Policy>
 T ibeta_a_step(T a, T b, T x, T y, int k, const Policy& pol, bool normalised, T* p_derivative)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
+
+   BOOST_MATH_INSTRUMENT_VARIABLE(k);
+
    T prefix = ibeta_power_terms(a, b, x, y, lanczos_type(), normalised, pol);
    if(p_derivative)
    {
@@ -662,6 +685,7 @@ inline T rising_factorial_ratio(T a, T b, int k)
    // This is only called with small k, for large k
    // it is grossly inefficient, do not use outside it's
    // intended purpose!!!
+   BOOST_MATH_INSTRUMENT_VARIABLE(k);
    if(k == 0)
       return 1;
    T result = 1;
@@ -845,6 +869,12 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
    BOOST_MATH_STD_USING // for ADL of std math functions.
 
+   BOOST_MATH_INSTRUMENT_VARIABLE(a);
+   BOOST_MATH_INSTRUMENT_VARIABLE(b);
+   BOOST_MATH_INSTRUMENT_VARIABLE(x);
+   BOOST_MATH_INSTRUMENT_VARIABLE(inv);
+   BOOST_MATH_INSTRUMENT_VARIABLE(normalised);
+
    bool invert = inv;
    T fract;
    T y = 1 - x;
@@ -894,6 +924,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
          std::swap(a, b);
          std::swap(x, y);
          invert = !invert;
+         BOOST_MATH_INSTRUMENT_VARIABLE(invert);
       }
       if((std::max)(a, b) <= 1)
       {
@@ -901,12 +932,16 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
          if((a >= (std::min)(T(0.2), b)) || (pow(x, a) <= 0.9))
          {
             if(!invert)
+            {
                fract = ibeta_series(a, b, x, T(0), lanczos_type(), normalised, p_derivative, y, pol);
+               BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+            }
             else
             {
                fract = -(normalised ? 1 : boost::math::beta(a, b, pol));
                invert = false;
                fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+               BOOST_MATH_INSTRUMENT_VARIABLE(fract);
             }
          }
          else
@@ -917,12 +952,16 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             if(y >= 0.3)
             {
                if(!invert)
+               {
                   fract = ibeta_series(a, b, x, T(0), lanczos_type(), normalised, p_derivative, y, pol);
+                  BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+               }
                else
                {
                   fract = -(normalised ? 1 : boost::math::beta(a, b, pol));
                   invert = false;
                   fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+                  BOOST_MATH_INSTRUMENT_VARIABLE(fract);
                }
             }
             else
@@ -939,12 +978,16 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
                }
                fract = ibeta_a_step(a, b, x, y, 20, pol, normalised, p_derivative);
                if(!invert)
+               {
                   fract = beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, pol, normalised);
+                  BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+               }
                else
                {
                   fract -= (normalised ? 1 : boost::math::beta(a, b, pol));
                   invert = false;
                   fract = -beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, pol, normalised);
+                  BOOST_MATH_INSTRUMENT_VARIABLE(fract);
                }
             }
          }
@@ -955,12 +998,16 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
          if((b <= 1) || ((x < 0.1) && (pow(b * x, a) <= 0.7)))
          {
             if(!invert)
+            {
                fract = ibeta_series(a, b, x, T(0), lanczos_type(), normalised, p_derivative, y, pol);
+               BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+            }
             else
             {
                fract = -(normalised ? 1 : boost::math::beta(a, b, pol));
                invert = false;
                fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+               BOOST_MATH_INSTRUMENT_VARIABLE(fract);
             }
          }
          else
@@ -972,23 +1019,31 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             if(y >= 0.3)
             {
                if(!invert)
+               {
                   fract = ibeta_series(a, b, x, T(0), lanczos_type(), normalised, p_derivative, y, pol);
+                  BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+               }
                else
                {
                   fract = -(normalised ? 1 : boost::math::beta(a, b, pol));
                   invert = false;
                   fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+                  BOOST_MATH_INSTRUMENT_VARIABLE(fract);
                }
             }
             else if(a >= 15)
             {
                if(!invert)
+               {
                   fract = beta_small_b_large_a_series(a, b, x, y, T(0), T(1), pol, normalised);
+                  BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+               }
                else
                {
                   fract = -(normalised ? 1 : boost::math::beta(a, b, pol));
                   invert = false;
                   fract = -beta_small_b_large_a_series(a, b, x, y, fract, T(1), pol, normalised);
+                  BOOST_MATH_INSTRUMENT_VARIABLE(fract);
                }
             }
             else
@@ -1004,13 +1059,18 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
                   prefix = 1;
                }
                fract = ibeta_a_step(a, b, x, y, 20, pol, normalised, p_derivative);
+               BOOST_MATH_INSTRUMENT_VARIABLE(fract);
                if(!invert)
+               {
                   fract = beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, pol, normalised);
+                  BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+               }
                else
                {
                   fract -= (normalised ? 1 : boost::math::beta(a, b, pol));
                   invert = false;
                   fract = -beta_small_b_large_a_series(a + 20, b, x, y, fract, prefix, pol, normalised);
+                  BOOST_MATH_INSTRUMENT_VARIABLE(fract);
                }
             }
          }
@@ -1033,6 +1093,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
          std::swap(a, b);
          std::swap(x, y);
          invert = !invert;
+         BOOST_MATH_INSTRUMENT_VARIABLE(invert);
       }
       
       if(b < 40)
@@ -1045,16 +1106,21 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             fract = binomial_ccdf(n, k, x, y);
             if(!normalised)
                fract *= boost::math::beta(a, b, pol);
+            BOOST_MATH_INSTRUMENT_VARIABLE(fract);
          }
          else if(b * x <= 0.7)
          {
             if(!invert)
+            {
                fract = ibeta_series(a, b, x, T(0), lanczos_type(), normalised, p_derivative, y, pol);
+               BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+            }
             else
             {
                fract = -(normalised ? 1 : boost::math::beta(a, b, pol));
                invert = false;
                fract = -ibeta_series(a, b, x, fract, lanczos_type(), normalised, p_derivative, y, pol);
+               BOOST_MATH_INSTRUMENT_VARIABLE(fract);
             }
          }
          else if(a > 15)
@@ -1076,6 +1142,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(0));
             fract = beta_small_b_large_a_series(a,  bbar, x, y, fract, T(1), pol, normalised);
             fract /= prefix;
+            BOOST_MATH_INSTRUMENT_VARIABLE(fract);
          }
          else if(normalised)
          {
@@ -1100,12 +1167,19 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
                fract = -fract;
                invert = false;
             }
+            BOOST_MATH_INSTRUMENT_VARIABLE(fract);
          }
          else
+         {
             fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
+            BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+         }
       }
       else
+      {
          fract = ibeta_fraction2(a, b, x, y, pol, normalised, p_derivative);
+         BOOST_MATH_INSTRUMENT_VARIABLE(fract);
+      }
    }
    if(p_derivative)
    {
