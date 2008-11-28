@@ -62,11 +62,11 @@
 [def __godfrey [link godfrey Godfrey]]
 [def __pugh [link pugh Pugh]]
 
-[def __caution This is now an official Boost library, but remains a library under 
-               construction, the code is fully functional and robust, but 
+[def __caution This is now an official Boost library, but remains a library under
+               construction, the code is fully functional and robust, but
                interfaces, library structure, and function and distribution names
                may still be changed without notice.]
-               
+
 [template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
 [template jm_rationals[] [link math_toolkit.backgrounders.implementation.rational_approximations_used devised by JM]]
 [def __domain_error [link domain_error domain_error]]
@@ -250,8 +250,8 @@ and use the function's name as the link text]
 [def __changing_policy_defaults [link math_toolkit.policy.pol_ref.policy_defaults changing policies defaults]]
 [def __user_error_handling [link math_toolkit.policy.pol_tutorial.user_def_err_pol user error handling]]
 
-[def __usual_accessors __cdf, __pdf, __quantile, __hazard, 
-   __chf, __mean, __median, __mode, __variance, __sd, __skewness, 
+[def __usual_accessors __cdf, __pdf, __quantile, __hazard,
+   __chf, __mean, __median, __mode, __variance, __sd, __skewness,
    __kurtosis, __kurtosis_excess, __range and __support]
 
 [def __gsl [@http://www.gnu.org/software/gsl/ GSL-1.9]]
@@ -272,18 +272,18 @@ and use the function's name as the link text]
 
 [template header_file[file] [@../../../../../[file] [file]]]
 
-[template optional_policy[] 
+[template optional_policy[]
 The final __Policy argument is optional and can be used to
-control the behaviour of the function: how it handles errors, 
-what level of precision to use etc.  Refer to the 
+control the behaviour of the function: how it handles errors,
+what level of precision to use etc.  Refer to the
 [link math_toolkit.policy policy documentation for more details].]
 
 [template discrete_quantile_warning[NAME]
 [caution
 The [NAME] distribution is a discrete distribution: internally
-functions like the `cdf` and `pdf` are treated "as if" they are continuous 
+functions like the `cdf` and `pdf` are treated "as if" they are continuous
 functions, but in reality the results returned from these functions
-only have meaning if an integer value is provided for the random variate 
+only have meaning if an integer value is provided for the random variate
 argument.
 
 The quantile function will by default return an integer result that has been
@@ -295,20 +295,20 @@ coverage will be present in the central region, and /no more than/
 the requested coverage will be present in the tails.
 
 This behaviour can be changed so that the quantile functions are rounded
-differently, or even return a real-valued result using 
+differently, or even return a real-valued result using
 [link math_toolkit.policy.pol_overview Policies].  It is strongly
-recommended that you read the tutorial 
+recommended that you read the tutorial
 [link math_toolkit.policy.pol_tutorial.understand_dis_quant
 Understanding Quantiles of Discrete Distributions] before
 using the quantile function on the [NAME] distribution.  The
-[link math_toolkit.policy.pol_ref.discrete_quant_ref reference docs] 
+[link math_toolkit.policy.pol_ref.discrete_quant_ref reference docs]
 describe how to change the rounding policy
 for these distributions.
 ] [/ caution]
 ] [/ template discrete_quantile_warning]
 
-This manual is also available in 
-[@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf 
+This manual is also available in
+[@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf
 printer friendly PDF format].
 
 [section:main_overview Overview]
@@ -335,7 +335,7 @@ printer friendly PDF format].
 [section:history1 History and What's New]
 [history]
 [endsect]
-[section:tr1 C99 and TR1 C Functions]
+[section:tr1 C99 and C++ TR1 C-style Functions]
 [tr1_overview]
 [endsect]
 [include contact_info.qbk]
@@ -467,7 +467,7 @@ printer friendly PDF format].
 [/include test_HTML4_symbols.qbk]
 [/include test_Latin1_symbols.qbk]
 
-[endsect] [/section:status Status and Roadmap] 
+[endsect] [/section:status Status and Roadmap]
 
 [/ math.qbk
   Copyright 2008 John Maddock and Paul A. Bristow.
