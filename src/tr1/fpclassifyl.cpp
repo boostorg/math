@@ -12,11 +12,16 @@
 #include <boost/math/special_functions/sign.hpp>
 #include "c_policy.hpp"
 
+#if defined (_MSC_VER)
+#  pragma warning(push)
+#  pragma warning (disable: 4800) // 'int' : forcing value to bool 'true' or 'false' (performance warning)
+#endif
+
 namespace boost{ namespace math{ namespace tr1{
 
 template<> bool BOOST_MATH_TR1_DECL signbit<long double> BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
 {
-   return static_cast<bool>((boost::math::signbit)(x)); 
+   return static_cast<bool>((boost::math::signbit)(x));
 }
 
 template<> int BOOST_MATH_TR1_DECL fpclassify<long double> BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
@@ -44,6 +49,9 @@ template<> bool BOOST_MATH_TR1_DECL isnormal<long double> BOOST_PREVENT_MACRO_SU
    return (boost::math::isnormal)(x);
 }
 
-}}}
+}}} // namespace boost{ namespace math{ namespace tr1{
 
+#if defined (_MSC_VER)
+#  pragma warning(pop)
+#endif
 
