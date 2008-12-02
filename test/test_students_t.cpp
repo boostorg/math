@@ -54,7 +54,8 @@ template <class RealType>
 void test_spots(RealType)
 {
   // Basic sanity checks
-   RealType tolerance = 1e-4; // 1e-6 (as %)
+
+   RealType tolerance = static_cast<RealType>(1e-4); // 1e-6 (as %)
    // Some tests only pass at 1e-5 because probability value is less accurate,
    // a digit in 6th decimal place, although calculated using
    // a t-distribution generator (claimed 6 decimal digits) at
