@@ -68,6 +68,7 @@
                may still be changed without notice.]
 
 [template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
+[template C99[] [@http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf C99 Standard ISO/IEC 9899:1999]]
 [template jm_rationals[] [link math_toolkit.backgrounders.implementation.rational_approximations_used devised by JM]]
 [def __domain_error [link domain_error domain_error]]
 [def __pole_error [link pole_error pole_error]]
