@@ -166,7 +166,7 @@ inline int fpclassify BOOST_NO_MACRO_EXPAND(double t)
    return BOOST_FPCLASSIFY_PREFIX fpclassify(t);
 }
 #if !defined(__CYGWIN__) && !defined(__HP_aCC) && !defined(BOOST_INTEL) \
-   && !defined(BOOST_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
+   && !defined(BOOST_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY) \
    && !(defined(__GNUC__) && !defined(BOOST_MATH_USE_C99))
 // The native fpclassify broken for long doubles with aCC
 // use portable one instead....
@@ -248,6 +248,7 @@ inline bool isnormal BOOST_NO_MACRO_EXPAND(T t)
 } // namespace boost
 
 #endif // BOOST_MATH_FPCLASSIFY_HPP
+
 
 
 
