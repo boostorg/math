@@ -50,6 +50,7 @@ void test_classify(T t, const char* type)
    }
    if(std::numeric_limits<T>::has_denorm)
    {
+      t = (std::numeric_limits<T>::min)();
       t /= 2;
       if(t != 0)
       {
