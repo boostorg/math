@@ -224,29 +224,14 @@ int fpclassify_imp BOOST_NO_MACRO_EXPAND(T x, ieee_copy_leading_bits_tag)
    return FP_NAN;
 }
 
-#if defined(BOOST_HAS_FPCLASSIFY)
-template<class T, class U> 
-inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T x, const U&)
+#if defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
+template <>
+inline int fpclassify_imp<long double> BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
 {
-   return BOOST_FPCLASSIFY_PREFIX fpclassify BOOST_NO_MACRO_EXPAND(x);
-}
-#if defined(__CYGWIN__) || defined(__HP_aCC) || defined(BOOST_INTEL) \
-   || defined(BOOST_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY) \
-   || (defined(__GNUC__) && !defined(BOOST_MATH_USE_C99))
-// The native fpclassify broken for long doubles
-// use portable one instead....
-template<class U> 
-inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(long double t, const U&)
-{
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   typedef generic_tag<std::numeric_limits<T>::is_specialized> method;
-#else
-   typedef generic_tag<false> method;
-#endif
-   return fpclassify_imp BOOST_NO_MACRO_EXPAND(t, method(), t);
+   return boost::math::detail::fpclassify_imp(t, generic_tag<true>());
 }
 #endif
-#endif
+
 }  // namespace detail
 
 template <class T>
@@ -299,6 +284,14 @@ namespace detail {
         return a != traits::exponent;
     }
 
+#if defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
+template <>
+inline bool isfinite_impl<long double> BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
+{
+   return boost::math::detail::isfinite_impl(t, generic_tag<true>());
+}
+#endif
+
 }
 
 template<class T> 
@@ -347,6 +340,14 @@ namespace detail {
         a &= traits::exponent | traits::flag;
         return (a != 0) && (a < traits::exponent);
     }
+
+#if defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
+template <>
+inline bool isnormal_impl<long double> BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
+{
+   return boost::math::detail::isnormal_impl(t, generic_tag<true>());
+}
+#endif
 
 }
 
@@ -413,6 +414,14 @@ namespace detail {
         traits::set_bits(x,0);
         return x == 0;
     }
+
+#if defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
+template <>
+inline bool isinf_impl<long double> BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
+{
+   return boost::math::detail::isinf_impl(t, generic_tag<true>());
+}
+#endif
 
 }   // namespace detail
 

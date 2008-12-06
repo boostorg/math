@@ -82,6 +82,12 @@
 #  define BOOST_MATH_USE_C99
 #endif
 
+#if defined(__CYGWIN__) || defined(__HP_aCC) || defined(BOOST_INTEL) \
+  || defined(BOOST_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY) \
+  || (defined(__GNUC__) && !defined(BOOST_MATH_USE_C99))
+#  define BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY
+#endif
+
 #if defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
 
 #  include "boost/type.hpp"
