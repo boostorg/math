@@ -539,7 +539,9 @@ struct select_native<long double>
 
 template<class T> struct fp_traits
 {
-#if (defined(BOOST_MATH_USE_C99) && (!defined(__GNUC__) || (__GNUC__ >= 4)))
+#if (defined(BOOST_MATH_USE_C99) && !(defined(__GNUC__) && (__GNUC__ < 4))) \
+   && !defined(__hpux) \
+   && !(defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__))
     typedef typename select_native<T>::type type;
 #else
     typedef BOOST_DEDUCED_TYPENAME size_to_precision<sizeof(T), ::boost::is_floating_point<T>::value>::type precision;
