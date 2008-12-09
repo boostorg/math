@@ -92,7 +92,8 @@ namespace policies{
 #define BOOST_MATH_MAX_ROOT_ITERATION_POLICY 200
 #endif
 
-#if !defined(__BORLANDC__)
+#if !defined(__BORLANDC__) \
+   && !(defined(__GNUC__) && (__GNUC__ == 3) && (__GNUC_MINOR__ <= 2))
 #define BOOST_MATH_META_INT(type, name, Default)\
    template <type N = Default> struct name : public boost::mpl::int_<N>{};\
    namespace detail{\
@@ -106,7 +107,7 @@ namespace policies{
       BOOST_STATIC_CONSTANT(bool, value = sizeof(test(static_cast<T*>(0))) == 1);\
    };\
    }\
-   template <class T> struct is_##name : public boost::mpl::bool_<detail::is_##name##_imp<T>::value>{};
+   template <class T> struct is_##name : public boost::mpl::bool_< ::boost::math::policies::detail::is_##name##_imp<T>::value>{};
 
 #define BOOST_MATH_META_BOOL(name, Default)\
    template <bool N = Default> struct name : public boost::mpl::bool_<N>{};\
@@ -121,7 +122,7 @@ namespace policies{
       BOOST_STATIC_CONSTANT(bool, value = sizeof(test(static_cast<T*>(0))) == 1);\
    };\
    }\
-   template <class T> struct is_##name : public boost::mpl::bool_<detail::is_##name##_imp<T>::value>{};
+   template <class T> struct is_##name : public boost::mpl::bool_< ::boost::math::policies::detail::is_##name##_imp<T>::value>{};
 #else
 #define BOOST_MATH_META_INT(Type, name, Default)\
    template <Type N = Default> struct name : public boost::mpl::int_<N>{};\
@@ -137,10 +138,10 @@ namespace policies{
    template <class T> struct is_##name##_imp\
    {\
       static T inst;\
-      BOOST_STATIC_CONSTANT(bool, value = sizeof(detail::is_##name##_tester<T>::test(inst)) == 1);\
+      BOOST_STATIC_CONSTANT(bool, value = sizeof( ::boost::math::policies::detail::is_##name##_tester<T>::test(inst)) == 1);\
    };\
    }\
-   template <class T> struct is_##name : public boost::mpl::bool_<detail::is_##name##_imp<T>::value>\
+   template <class T> struct is_##name : public boost::mpl::bool_< ::boost::math::policies::detail::is_##name##_imp<T>::value>\
    {\
       template <class U> struct apply{ typedef is_##name<U> type; };\
    };
@@ -159,10 +160,10 @@ namespace policies{
    template <class T> struct is_##name##_imp\
    {\
       static T inst;\
-      BOOST_STATIC_CONSTANT(bool, value = sizeof(detail::is_##name##_tester<T>::test(inst)) == 1);\
+      BOOST_STATIC_CONSTANT(bool, value = sizeof( ::boost::math::policies::detail::is_##name##_tester<T>::test(inst)) == 1);\
    };\
    }\
-   template <class T> struct is_##name : public boost::mpl::bool_<detail::is_##name##_imp<T>::value>\
+   template <class T> struct is_##name : public boost::mpl::bool_< ::boost::math::policies::detail::is_##name##_imp<T>::value>\
    {\
       template <class U> struct apply{ typedef is_##name<U> type;  };\
    };
