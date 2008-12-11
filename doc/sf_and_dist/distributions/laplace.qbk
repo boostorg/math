@@ -41,7 +41,7 @@ probability density function:
 [equation laplace_pdf]
 
 The location and scale parameters are equivalent to the mean and
-standard deviation of the logarithm of the random variable.
+standard deviation.
 
 The following graph illustrates the effect of the location
 parameter on the PDF, note that the range of the random
@@ -61,11 +61,9 @@ The next graph illustrates the effect of the scale parameter on the PDF:
 Constructs a laplace distribution with location /location/ and
 scale /scale/.
 
-The location parameter is the same as the mean of the logarithm of the
-random variate.
+The location parameter is the same as the mean of the random variate.
 
-The scale parameter is the same as the standard deviation of the
-logarithm of the random variate.
+The scale parameter is proportional to the standard deviation of the random variate.
 
 Requires that the scale parameter is greater than zero, otherwise calls
 __domain_error.
@@ -83,14 +81,12 @@ Returns the /scale/ parameter of this distribution.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
 
-The domain of the random variable is \[0,+[infin]\].
+The domain of the random variable is \[-[infin],+[infin]\].
 
 [h4 Accuracy]
 
 The laplace distribution is implemented in terms of the
-standard library log and exp functions, plus the
-[link math_toolkit.special.sf_erf.error_function error function],
-and as such should have very low error rates.
+standard library log and exp functions and as such should have very low error rates.
 
 [h4 Implementation]
 
@@ -100,17 +96,37 @@ and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Using the relation: pdf = e[super -(ln(x) - m)[super 2 ] \/ 2s[super 2 ] ] \/ (x * s * sqrt(2pi)) ]]
-[[cdf][Using the relation: p = cdf(normal_distribtion<RealType>(m, s), log(x)) ]]
-[[cdf complement][Using the relation: q = cdf(complement(normal_distribtion<RealType>(m, s), log(x))) ]]
-[[quantile][Using the relation: x = exp(quantile(normal_distribtion<RealType>(m, s), p))]]
-[[quantile from the complement][Using the relation: x = exp(quantile(complement(normal_distribtion<RealType>(m, s), q)))]]
-[[mean][e[super m + s[super 2 ] / 2 ] ]]
-[[variance][(e[super s[super 2] ] - 1) * e[super 2m + s[super 2 ] ] ]]
-[[mode][e[super m + s[super 2 ] ] ]]
-[[skewness][sqrt(e[super s[super 2] ] - 1) * (2 + e[super s[super 2] ]) ]]
-[[kurtosis][e[super 4s[super 2] ] + 2e[super 3s[super 2] ] + 3e[super 2s[super 2] ] - 3]]
-[[kurtosis excess][e[super 4s[super 2] ] + 2e[super 3s[super 2] ] + 3e[super 2s[super 2] ] - 6 ]]
+[[pdf][Using the relation: pdf = e[super -abs(x-m) \/ s] \/ (2 * s) ]]
+[[cdf][Using the relations:
+
+x <  m : p =  e[super (x-m)/s ] \/ s
+
+x >= m : p =  1 - e[super (m-x)/s ] \/ s
+]]
+[[cdf complement][Using the relation:  
+
+-x <  m : q =  e[super (-x-m)/s ] \/ s
+
+-x >= m : q =  1 - e[super (m+x)/s ] \/ s
+]]
+[[quantile][Using the relations: 
+
+p <  0.5 : x = m + s * log(2*p)
+
+p >= 0.5 : x = m - s * log(2-2*p)
+]]
+[[quantile from the complement][Using the relation: 
+
+q > 0.5: x = m + s*log(2-2*q)
+
+q <=0.5: x = m - s*log( 2*q )
+]]
+[[mean][m]]
+[[variance][2 * s[super 2] ]]
+[[mode][m]]
+[[skewness][0]]
+[[kurtosis][6]]
+[[kurtosis excess][3]]
 ]
 
 [h4 References]
