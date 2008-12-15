@@ -22,7 +22,10 @@
 /*
 
 1. If the platform is C99 compliant, then the native floating point
-classification functions are used.
+classification functions are used.  However, note that we must only
+define the functions which call std::fpclassify etc if that function
+really does exist: otherwise a compiler may reject the code even though
+the template is never instantiated.
 
 2. If the platform is not C99 compliant, and the binary format for
 a floating point type (float, double or long double) can be determined
