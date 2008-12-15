@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Spherical Bessel Functions of the First and Second Kinds</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../bessel.html" title="Bessel Functions">
 <link rel="prev" href="mbessel.html" title="Modified Bessel Functions of the First and Second Kinds">
 <link rel="next" href="../ellint.html" title="Elliptic Integrals">
@@ -24,32 +24,32 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.bessel.sph_bessel"></a><a href="sph_bessel.html" title="Spherical Bessel Functions of the First and Second Kinds"> Spherical
+<a name="math_toolkit.special.bessel.sph_bessel"></a><a class="link" href="sph_bessel.html" title="Spherical Bessel Functions of the First and Second Kinds"> Spherical
         Bessel Functions of the First and Second Kinds</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.bessel.sph_bessel.synopsis"></a><h5>
-<a name="id712112"></a>
-          <a href="sph_bessel.html#math_toolkit.special.bessel.sph_bessel.synopsis">Synopsis</a>
+<a name="id739566"></a>
+          <a class="link" href="sph_bessel.html#math_toolkit.special.bessel.sph_bessel.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_bessel</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_bessel</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_bessel</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_bessel</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_neumann</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_neumann</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_neumann</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_neumann</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <a name="math_toolkit.special.bessel.sph_bessel.description"></a><h5>
-<a name="id712621"></a>
-          <a href="sph_bessel.html#math_toolkit.special.bessel.sph_bessel.description">Description</a>
+<a name="id740075"></a>
+          <a class="link" href="sph_bessel.html#math_toolkit.special.bessel.sph_bessel.description">Description</a>
         </h5>
 <p>
-          The functions <a href="sph_bessel.html" title="Spherical Bessel Functions of the First and Second Kinds">sph_bessel</a>
-          and <a href="sph_bessel.html" title="Spherical Bessel Functions of the First and Second Kinds">sph_neumann</a>
+          The functions <a class="link" href="sph_bessel.html" title="Spherical Bessel Functions of the First and Second Kinds">sph_bessel</a>
+          and <a class="link" href="sph_bessel.html" title="Spherical Bessel Functions of the First and Second Kinds">sph_neumann</a>
           return the result of the Spherical Bessel functions of the first and second
           kinds respectively:
         </p>
@@ -66,21 +66,21 @@
           <span class="inlinemediaobject"><img src="../../../../equations/sbessel2.png"></span>
         </p>
 <p>
-          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
+          The return type of these functions is computed using the <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a> for the single argument type T.
         </p>
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title="Policies">Policy</a> argument
+            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
+            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <p>
-          The functions return the result of <a href="../../main_overview/error_handling.html#domain_error">domain_error</a>
+          The functions return the result of <a class="link" href="../../main_overview/error_handling.html#domain_error">domain_error</a>
           whenever the result is undefined or complex: this occurs when <code class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;</span> <span class="number">0</span></code>.
         </p>
 <p>
@@ -97,8 +97,8 @@ for small <span class="emphasis"><em>x</em></span>:
           <span class="inlinemediaobject"><img src="../../../../graphs/sph_neumann.png" align="middle"></span>
         </p>
 <a name="math_toolkit.special.bessel.sph_bessel.testing"></a><h5>
-<a name="id712901"></a>
-          <a href="sph_bessel.html#math_toolkit.special.bessel.sph_bessel.testing">Testing</a>
+<a name="id740354"></a>
+          <a class="link" href="sph_bessel.html#math_toolkit.special.bessel.sph_bessel.testing">Testing</a>
         </h5>
 <p>
           There are two sets of test values: spot values calculated using <a href="http://functions.wolfram.com/" target="_top">functions.wolfram.com</a>, and
@@ -106,18 +106,18 @@ for small <span class="emphasis"><em>x</em></span>:
           implementation (with all the special case handling removed).
         </p>
 <a name="math_toolkit.special.bessel.sph_bessel.accuracy"></a><h5>
-<a name="id712940"></a>
-          <a href="sph_bessel.html#math_toolkit.special.bessel.sph_bessel.accuracy">Accuracy</a>
+<a name="id740393"></a>
+          <a class="link" href="sph_bessel.html#math_toolkit.special.bessel.sph_bessel.accuracy">Accuracy</a>
         </h5>
 <p>
           Other than for some special cases, these functions are computed in terms
-          of <a href="bessel.html" title="Bessel Functions of the First and Second Kinds">cyl_bessel_j</a>
-          and <a href="bessel.html" title="Bessel Functions of the First and Second Kinds">cyl_neumann</a>:
+          of <a class="link" href="bessel.html" title="Bessel Functions of the First and Second Kinds">cyl_bessel_j</a>
+          and <a class="link" href="bessel.html" title="Bessel Functions of the First and Second Kinds">cyl_neumann</a>:
           refer to these functions for accuracy data.
         </p>
 <a name="math_toolkit.special.bessel.sph_bessel.implementation"></a><h5>
-<a name="id712990"></a>
-          <a href="sph_bessel.html#math_toolkit.special.bessel.sph_bessel.implementation">Implementation</a>
+<a name="id740443"></a>
+          <a class="link" href="sph_bessel.html#math_toolkit.special.bessel.sph_bessel.implementation">Implementation</a>
         </h5>
 <p>
           Other than error handling and a couple of special cases these functions
@@ -130,7 +130,7 @@ for small <span class="emphasis"><em>x</em></span>:
           The special cases occur for:
         </p>
 <p>
-          j<sub>0</sub>= <a href="../sinc/sinc_pi.html" title="sinc_pi">sinc_pi</a>(x)
+          j<sub>0</sub>= <a class="link" href="../sinc/sinc_pi.html" title="sinc_pi">sinc_pi</a>(x)
           = sin(x) / x
         </p>
 <p>
@@ -147,7 +147,7 @@ for small <span class="emphasis"><em>x</em></span>:
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

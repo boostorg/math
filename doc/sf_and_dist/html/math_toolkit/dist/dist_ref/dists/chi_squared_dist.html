@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Chi Squared Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="cauchy_dist.html" title="Cauchy-Lorentz Distribution">
 <link rel="next" href="exp_dist.html" title="Exponential Distribution">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist"></a><a href="chi_squared_dist.html" title="Chi Squared Distribution">
+<a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist"></a><a class="link" href="chi_squared_dist.html" title="Chi Squared Distribution">
           Chi Squared Distribution</a>
 </h5></div></div></div>
 <p>
@@ -36,12 +36,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">chi_squared_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">chi_squared_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">chi_squared</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">chi_squared_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -87,8 +87,8 @@ independent, normally distributed random
             <span class="inlinemediaobject"><img src="../../../../../graphs/chi_squared_pdf.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.member_functions"></a><h5>
-<a name="id613816"></a>
-            <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.member_functions">Member
+<a name="id641240"></a>
+            <a class="link" href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.member_functions">Member
             Functions</a>
           </h5>
 <pre class="programlisting"><span class="identifier">chi_squared_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">);</span>
@@ -98,7 +98,7 @@ independent, normally distributed random
             of freedom.
           </p>
 <p>
-            Requires v &gt; 0, otherwise calls <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
+            Requires v &gt; 0, otherwise calls <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
           </p>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
@@ -170,21 +170,21 @@ independent, normally distributed random
             NIST Engineering Statistics Handbook, Section 7.2.3.2</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.non_member_accessors"></a><h5>
-<a name="id614261"></a>
-            <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.non_member_accessors">Non-member
+<a name="id641685"></a>
+            <a class="link" href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
-            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
+            All the <a class="link" href="../nmp.html" title="Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
-            <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
-            <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
-            Function</a>, <a href="../nmp.html#math.dist.chf">Cumulative Hazard Function</a>,
-            <a href="../nmp.html#math.dist.mean">mean</a>, <a href="../nmp.html#math.dist.median">median</a>,
-            <a href="../nmp.html#math.dist.mode">mode</a>, <a href="../nmp.html#math.dist.variance">variance</a>,
-            <a href="../nmp.html#math.dist.sd">standard deviation</a>, <a href="../nmp.html#math.dist.skewness">skewness</a>,
-            <a href="../nmp.html#math.dist.kurtosis">kurtosis</a>, <a href="../nmp.html#math.dist.kurtosis_excess">kurtosis_excess</a>,
-            <a href="../nmp.html#math.dist.range">range</a> and <a href="../nmp.html#math.dist.support">support</a>.
+            <a class="link" href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
+            <a class="link" href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a class="link" href="../nmp.html#math.dist.quantile">Quantile</a>, <a class="link" href="../nmp.html#math.dist.hazard">Hazard
+            Function</a>, <a class="link" href="../nmp.html#math.dist.chf">Cumulative Hazard Function</a>,
+            <a class="link" href="../nmp.html#math.dist.mean">mean</a>, <a class="link" href="../nmp.html#math.dist.median">median</a>,
+            <a class="link" href="../nmp.html#math.dist.mode">mode</a>, <a class="link" href="../nmp.html#math.dist.variance">variance</a>,
+            <a class="link" href="../nmp.html#math.dist.sd">standard deviation</a>, <a class="link" href="../nmp.html#math.dist.skewness">skewness</a>,
+            <a class="link" href="../nmp.html#math.dist.kurtosis">kurtosis</a>, <a class="link" href="../nmp.html#math.dist.kurtosis_excess">kurtosis_excess</a>,
+            <a class="link" href="../nmp.html#math.dist.range">range</a> and <a class="link" href="../nmp.html#math.dist.support">support</a>.
           </p>
 <p>
             (We have followed the usual restriction of the mode to degrees of freedom
@@ -196,24 +196,24 @@ independent, normally distributed random
             The domain of the random variable is [0, +&#8734;].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.examples"></a><h5>
-<a name="id614450"></a>
-            <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.examples">Examples</a>
+<a name="id641874"></a>
+            <a class="link" href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.examples">Examples</a>
           </h5>
 <p>
-            Various <a href="../../stat_tut/weg/cs_eg.html" title="Chi Squared Distribution Examples">worked examples</a>
+            Various <a class="link" href="../../stat_tut/weg/cs_eg.html" title="Chi Squared Distribution Examples">worked examples</a>
             are available illustrating the use of the Chi Squared Distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.accuracy"></a><h5>
-<a name="id614491"></a>
-            <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.accuracy">Accuracy</a>
+<a name="id641914"></a>
+            <a class="link" href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.accuracy">Accuracy</a>
           </h5>
 <p>
-            The Chi-Squared distribution is implemented in terms of the <a href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">incomplete
+            The Chi-Squared distribution is implemented in terms of the <a class="link" href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">incomplete
             gamma functions</a>: please refer to the accuracy data for those functions.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.implementation"></a><h5>
-<a name="id614533"></a>
-            <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.implementation">Implementation</a>
+<a name="id641957"></a>
+            <a class="link" href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table <span class="emphasis"><em>v</em></span> is the number of degrees
@@ -247,7 +247,7 @@ independent, normally distributed random
                   </td>
 <td>
                   <p>
-                    Using the relation: pdf = <a href="../../../special/sf_gamma/gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function">gamma_p_derivative</a>(v
+                    Using the relation: pdf = <a class="link" href="../../../special/sf_gamma/gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function">gamma_p_derivative</a>(v
                     / 2, x / 2) / 2
                   </p>
                   </td>
@@ -260,7 +260,7 @@ independent, normally distributed random
                   </td>
 <td>
                   <p>
-                    Using the relation: p = <a href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(v
+                    Using the relation: p = <a class="link" href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(v
                     / 2, x / 2)
                   </p>
                   </td>
@@ -273,7 +273,7 @@ independent, normally distributed random
                   </td>
 <td>
                   <p>
-                    Using the relation: q = <a href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(v
+                    Using the relation: q = <a class="link" href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(v
                     / 2, x / 2)
                   </p>
                   </td>
@@ -286,7 +286,7 @@ independent, normally distributed random
                   </td>
 <td>
                   <p>
-                    Using the relation: x = 2 * <a href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(v
+                    Using the relation: x = 2 * <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(v
                     / 2, p)
                   </p>
                   </td>
@@ -299,7 +299,7 @@ independent, normally distributed random
                   </td>
 <td>
                   <p>
-                    Using the relation: x = 2 * <a href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(v
+                    Using the relation: x = 2 * <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(v
                     / 2, p)
                   </p>
                   </td>
@@ -379,8 +379,8 @@ independent, normally distributed random
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.chi_squared_dist.references"></a><h5>
-<a name="id614877"></a>
-            <a href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.references">References</a>
+<a name="id642301"></a>
+            <a class="link" href="chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.chi_squared_dist.references">References</a>
           </h5>
 <div class="itemizedlist"><ul type="disc">
 <li><a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda3666.htm" target="_top">NIST
@@ -395,7 +395,7 @@ independent, normally distributed random
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

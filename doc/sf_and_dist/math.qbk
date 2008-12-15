@@ -1,13 +1,13 @@
 [article Math Toolkit
     [quickbook 1.4]
-    [copyright 2006, 2007, 2008 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang and Bruno Lalande]
+    [copyright 2006, 2007, 2008 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno Lalande and Johan R&#xE5;de]
     [purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [authors [Maddock, John], [Bristow, Paul A.], [Holin, Hubert], [Zhang, Xiaogang], [Lalande, Bruno]]
+    [authors [Maddock, John], [Bristow, Paul A.], [Holin, Hubert], [Zhang, Xiaogang], [Lalande, Bruno], [R&#xE5;de, Johan]]
     [category math]
     [purpose mathematics]
     [/last-revision $Date$]

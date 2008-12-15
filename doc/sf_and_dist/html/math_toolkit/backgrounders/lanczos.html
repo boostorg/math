@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>The Lanczos Approximation</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../backgrounders.html" title="Backgrounders">
 <link rel="prev" href="relative_error.html" title="Relative Error">
 <link rel="next" href="remez.html" title="The Remez Method">
@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.backgrounders.lanczos"></a><a href="lanczos.html" title="The Lanczos Approximation"> The Lanczos Approximation</a>
+<a name="math_toolkit.backgrounders.lanczos"></a><a class="link" href="lanczos.html" title="The Lanczos Approximation"> The Lanczos Approximation</a>
 </h3></div></div></div>
 <a name="math_toolkit.backgrounders.lanczos.motivation"></a><h5>
-<a name="id862971"></a>
-        <a href="lanczos.html#math_toolkit.backgrounders.lanczos.motivation">Motivation</a>
+<a name="id890460"></a>
+        <a class="link" href="lanczos.html#math_toolkit.backgrounders.lanczos.motivation">Motivation</a>
       </h5>
 <p>
         <span class="emphasis"><em>Why base gamma and gamma-like functions on the Lanczos approximation?</em></span>
@@ -39,7 +39,7 @@
         or </a> <a href="http://mathworld.wolfram.com/LanczosApproximation.html" target="_top">Mathworld</a>)
         appears to offer no clear advantage over more traditional methods such as
         <a href="http://en.wikipedia.org/wiki/Stirling_approximation" target="_top">Stirling's
-        approximation</a>. <a href="lanczos.html#pugh">Pugh</a> carried out an extensive
+        approximation</a>. <a class="link" href="lanczos.html#pugh">Pugh</a> carried out an extensive
         comparison of the various methods available and discovered that they were
         all very similar in terms of complexity and relative error. However, the
         Lanczos approximation does have a couple of properties that make it worthy
@@ -91,15 +91,15 @@
         Of course, computing large powers is itself a notoriously hard problem, but
         even so, analytic combinations of Lanczos approximations can make the difference
         between obtaining a valid result, or simply garbage. Refer to the implementation
-        notes for the <a href="../special/sf_beta/beta_function.html" title="Beta">beta</a>
-        function for an example of this method in practice. The incomplete <a href="../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p gamma</a> and
-        <a href="../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">beta</a> functions
+        notes for the <a class="link" href="../special/sf_beta/beta_function.html" title="Beta">beta</a>
+        function for an example of this method in practice. The incomplete <a class="link" href="../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p gamma</a> and
+        <a class="link" href="../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">beta</a> functions
         use similar analytic combinations of power terms, to combine gamma and beta
         functions divided by large powers into single (simpler) expressions.
       </p>
 <a name="math_toolkit.backgrounders.lanczos.the_approximation"></a><h5>
-<a name="id863354"></a>
-        <a href="lanczos.html#math_toolkit.backgrounders.lanczos.the_approximation">The
+<a name="id890837"></a>
+        <a class="link" href="lanczos.html#math_toolkit.backgrounders.lanczos.the_approximation">The
         Approximation</a>
       </h5>
 <p>
@@ -155,20 +155,20 @@
           Some authors choose to define the sum from k=1 to N, and hence end up with
           N+1 coefficients. This happens to confuse both the following discussion
           and the code (since C++ deals with half open array ranges, rather than
-          the closed range of the sum). This convention is consistent with <a href="lanczos.html#godfrey">Godfrey</a>, but not <a href="lanczos.html#pugh">Pugh</a>,
+          the closed range of the sum). This convention is consistent with <a class="link" href="lanczos.html#godfrey">Godfrey</a>, but not <a class="link" href="lanczos.html#pugh">Pugh</a>,
           so take care when referring to the literature in this field.
         </p></td></tr>
 </table></div>
 <a name="math_toolkit.backgrounders.lanczos.computing_the_coefficients"></a><h5>
-<a name="id863617"></a>
-        <a href="lanczos.html#math_toolkit.backgrounders.lanczos.computing_the_coefficients">Computing
+<a name="id891100"></a>
+        <a class="link" href="lanczos.html#math_toolkit.backgrounders.lanczos.computing_the_coefficients">Computing
         the Coefficients</a>
       </h5>
 <p>
         The coefficients C0..CN-1 need to be computed from <span class="emphasis"><em>N</em></span>
         and <span class="emphasis"><em>g</em></span> at high precision, and then stored as part of
         the program. Calculation of the coefficients is performed via the method
-        of <a href="lanczos.html#godfrey">Godfrey</a>; let the constants be contained
+        of <a class="link" href="lanczos.html#godfrey">Godfrey</a>; let the constants be contained
         in a column vector P, then:
       </p>
 <p>
@@ -204,8 +204,8 @@
         multiplied by <span class="emphasis"><em>F</em></span> as the last step.
       </p>
 <a name="math_toolkit.backgrounders.lanczos.choosing_the_right_parameters"></a><h5>
-<a name="id863823"></a>
-        <a href="lanczos.html#math_toolkit.backgrounders.lanczos.choosing_the_right_parameters">Choosing
+<a name="id891306"></a>
+        <a class="link" href="lanczos.html#math_toolkit.backgrounders.lanczos.choosing_the_right_parameters">Choosing
         the Right Parameters</a>
       </h5>
 <p>
@@ -217,7 +217,7 @@
         terms, and to then suddenly converge with a "crunch".
       </p>
 <p>
-        <a href="lanczos.html#pugh">Pugh</a> has determined the optimal value of <span class="emphasis"><em>g</em></span>
+        <a class="link" href="lanczos.html#pugh">Pugh</a> has determined the optimal value of <span class="emphasis"><em>g</em></span>
         for <span class="emphasis"><em>N</em></span> in the range <span class="emphasis"><em>1 &lt;= N &lt;= 60</em></span>:
         unfortunately in practice choosing these values leads to cancellation errors
         in the Lanczos sum as the largest term in the (alternating) series is approximately
@@ -228,7 +228,7 @@
         computing to float precision with double precision arithmetic.
       </p>
 <div class="table">
-<a name="id863906"></a><p class="title"><b>Table 53. Optimal choices for N and g when computing with
+<a name="id891389"></a><p class="title"><b>Table 53. Optimal choices for N and g when computing with
       guard digits (source: Pugh)</b></p>
 <div class="table-contents"><table class="table" summary="Optimal choices for N and g when computing with
       guard digits (source: Pugh)">
@@ -309,11 +309,11 @@
 </table></div>
 </div>
 <br class="table-break"><p>
-        The alternative described by <a href="lanczos.html#godfrey">Godfrey</a> is to
+        The alternative described by <a class="link" href="lanczos.html#godfrey">Godfrey</a> is to
         perform an exhaustive search of the <span class="emphasis"><em>N</em></span> and <span class="emphasis"><em>g</em></span>
         parameter space to determine the optimal combination for a given <span class="emphasis"><em>p</em></span>
         digit floating-point type. Repeating this work found a good approximation
-        for double precision arithmetic (close to the one <a href="lanczos.html#godfrey">Godfrey</a>
+        for double precision arithmetic (close to the one <a class="link" href="lanczos.html#godfrey">Godfrey</a>
         found), but failed to find really good approximations for 80 or 128-bit long
         doubles. Further it was observed that the approximations obtained tended
         to optimised for the small values of z (1 &lt; z &lt; 200) used to test the
@@ -322,7 +322,7 @@
         truncation of the Lancozos series.
       </p>
 <p>
-        <a href="lanczos.html#pugh">Pugh</a> identified all the locations where the theoretical
+        <a class="link" href="lanczos.html#pugh">Pugh</a> identified all the locations where the theoretical
         error of the approximation were at a minimum, but unfortunately has published
         only the largest of these minima. However, he makes the observation that
         the minima coincide closely with the location where the first neglected term
@@ -350,8 +350,8 @@
         "sweet spots" whose theoretical error is less than the machine
         epsilon for the type being tested, yielded good approximations for all the
         types tested. The optimal values found were quite close to the best cases
-        reported by <a href="lanczos.html#pugh">Pugh</a> (just slightly larger <span class="emphasis"><em>N</em></span>
-        and slightly smaller <span class="emphasis"><em>g</em></span> for a given precision than <a href="lanczos.html#pugh">Pugh</a> reports), and even though converting to rational
+        reported by <a class="link" href="lanczos.html#pugh">Pugh</a> (just slightly larger <span class="emphasis"><em>N</em></span>
+        and slightly smaller <span class="emphasis"><em>g</em></span> for a given precision than <a class="link" href="lanczos.html#pugh">Pugh</a> reports), and even though converting to rational
         form doubles the number of stored coefficients, it should be noted that half
         of them are integers (and therefore require less storage space) and the approximations
         require a smaller <span class="emphasis"><em>N</em></span> than would otherwise be required,
@@ -371,7 +371,7 @@
         exactly matches the machine epsilon for the type in question.
       </p>
 <div class="table">
-<a name="id864228"></a><p class="title"><b>Table 54. Optimum value for N and g when computing at fixed
+<a name="id891718"></a><p class="title"><b>Table 54. Optimum value for N and g when computing at fixed
       precision</b></p>
 <div class="table-contents"><table class="table" summary="Optimum value for N and g when computing at fixed
       precision">
@@ -536,8 +536,8 @@
         is exact, and so isn't used for the gamma function.
       </p>
 <a name="math_toolkit.backgrounders.lanczos.references"></a><h5>
-<a name="id864506"></a>
-        <a href="lanczos.html#math_toolkit.backgrounders.lanczos.references">References</a>
+<a name="id891997"></a>
+        <a class="link" href="lanczos.html#math_toolkit.backgrounders.lanczos.references">References</a>
       </h5>
 <a name="godfrey"></a><a name="pugh"></a><div class="orderedlist"><ol type="1">
 <li>
@@ -562,7 +562,7 @@
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

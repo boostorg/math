@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Distribution Algorithms</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dist_ref.html" title="Statistical Distributions Reference">
 <link rel="prev" href="dists/uniform_dist.html" title="Uniform Distribution">
 <link rel="next" href="../future.html" title="Extras/Future Directions">
@@ -24,12 +24,12 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.dist.dist_ref.dist_algorithms"></a><a href="dist_algorithms.html" title="Distribution Algorithms"> Distribution
+<a name="math_toolkit.dist.dist_ref.dist_algorithms"></a><a class="link" href="dist_algorithms.html" title="Distribution Algorithms"> Distribution
         Algorithms</a>
 </h4></div></div></div>
 <a name="math_toolkit.dist.dist_ref.dist_algorithms.finding_the_location_and_scale_for_normal_and_similar_distributions"></a><h5>
-<a name="id648850"></a>
-          <a href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.finding_the_location_and_scale_for_normal_and_similar_distributions">Finding
+<a name="id676309"></a>
+          <a class="link" href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.finding_the_location_and_scale_for_normal_and_similar_distributions">Finding
           the Location and Scale for Normal and similar distributions</a>
         </h5>
 <p>
@@ -50,8 +50,8 @@
 </span><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">;</span> <span class="comment">// Will be needed by users who want to use complements.
 </span></pre>
 <a name="math_toolkit.dist.dist_ref.dist_algorithms.find_location_function"></a><h5>
-<a name="id649005"></a>
-          <a href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.find_location_function">find_location
+<a name="id676464"></a>
+          <a class="link" href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.find_location_function">find_location
           function</a>
         </h5>
 <p>
@@ -62,13 +62,13 @@
         </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span> <span class="comment">// explicit error handling policy
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span> <span class="comment">// explicit error handling policy
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">find_location</span><span class="special">(</span> <span class="comment">// For example, normal mean.
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">z</span><span class="special">,</span> <span class="comment">// location of random variable z to give probability, P(X &gt; z) == p.
 </span>  <span class="comment">// For example, a nominal minimum acceptable z, so that p * 100 % are &gt; z
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">p</span><span class="special">,</span> <span class="comment">// probability value desired at x, say 0.95 for 95% &gt; z.
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">scale</span><span class="special">,</span> <span class="comment">// scale parameter, for example, normal standard deviation.
-</span>  <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
+</span>  <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">&gt;</span>  <span class="comment">// with default policy.
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">find_location</span><span class="special">(</span> <span class="comment">// For example, normal mean.
@@ -80,8 +80,8 @@
   <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.dist.dist_ref.dist_algorithms.find_scale_function"></a><h5>
-<a name="id649626"></a>
-          <a href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.find_scale_function">find_scale
+<a name="id677085"></a>
+          <a class="link" href="dist_algorithms.html#math_toolkit.dist.dist_ref.dist_algorithms.find_scale_function">find_scale
           function</a>
         </h5>
 <p>
@@ -92,13 +92,13 @@
         </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
   <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">find_scale</span><span class="special">(</span> <span class="comment">// For example, normal mean.
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">z</span><span class="special">,</span> <span class="comment">// location of random variable z to give probability, P(X &gt; z) == p.
 </span>  <span class="comment">// For example, a nominal minimum acceptable weight z, so that p * 100 % are &gt; z
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">p</span><span class="special">,</span> <span class="comment">// probability value desired at x, say 0.95 for 95% &gt; z.
 </span>  <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">location</span><span class="special">,</span> <span class="comment">// location parameter, for example, normal distribution mean.
-</span>  <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
+</span>  <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
 
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dist</span><span class="special">&gt;</span> <span class="comment">// with default policy.
 </span>   <span class="keyword">typename</span> <span class="identifier">Dist</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">find_scale</span><span class="special">(</span> <span class="comment">// For example, normal mean.
@@ -109,20 +109,20 @@
 </span><span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
-          All argument must be finite, otherwise <a href="../../main_overview/error_handling.html#domain_error">domain_error</a>
+          All argument must be finite, otherwise <a class="link" href="../../main_overview/error_handling.html#domain_error">domain_error</a>
           is called.
         </p>
 <p>
-          Probability arguments must be [0, 1], otherwise <a href="../../main_overview/error_handling.html#domain_error">domain_error</a>
+          Probability arguments must be [0, 1], otherwise <a class="link" href="../../main_overview/error_handling.html#domain_error">domain_error</a>
           is called.
         </p>
 <p>
-          If the choice of arguments would give a negative scale, <a href="../../main_overview/error_handling.html#domain_error">domain_error</a>
+          If the choice of arguments would give a negative scale, <a class="link" href="../../main_overview/error_handling.html#domain_error">domain_error</a>
           is called, unless the policy is to ignore, when the negative (impossible)
           value of scale is returned.
         </p>
 <p>
-          <a href="../stat_tut/weg/find_eg.html" title="Find Location and Scale Examples">Find Mean and standard
+          <a class="link" href="../stat_tut/weg/find_eg.html" title="Find Location and Scale Examples">Find Mean and standard
           deviation examples</a> gives simple examples of use of both find_scale
           and find_location, and a longer example finding means and standard deviations
           of normally distributed weights to meet a specification.
@@ -131,7 +131,7 @@
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

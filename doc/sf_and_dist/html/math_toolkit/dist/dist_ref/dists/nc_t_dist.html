@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Noncentral T Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="nc_f_dist.html" title="Noncentral F Distribution">
 <link rel="next" href="normal_dist.html" title="Normal (Gaussian) Distribution">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist"></a><a href="nc_t_dist.html" title="Noncentral T Distribution"> Noncentral
+<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist"></a><a class="link" href="nc_t_dist.html" title="Noncentral T Distribution"> Noncentral
           T Distribution</a>
 </h5></div></div></div>
 <p>
@@ -36,12 +36,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">non_central_t_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">non_central_t_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">non_central_t</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">non_central_t_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -61,7 +61,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
-            The noncentral T distribution is a generalization of the <a href="students_t_dist.html" title="Students t Distribution">Students
+            The noncentral T distribution is a generalization of the <a class="link" href="students_t_dist.html" title="Students t Distribution">Students
             t Distribution</a>. Let X have a normal distribution with mean &#948; and
             variance 1, and let &#957; S<sup>2</sup> have a chi-squared distribution with degrees of
             freedom &#957;. Assume that X and S<sup>2</sup> are independent. The distribution of t<sub>&#957;</sub>(&#948;)=X/S
@@ -85,8 +85,8 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/nc_t_pdf.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.member_functions"></a><h5>
-<a name="id634884"></a>
-            <a href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.member_functions">Member
+<a name="id662332"></a>
+            <a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.member_functions">Member
             Functions</a>
           </h5>
 <pre class="programlisting"><span class="identifier">non_central_t_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">);</span>
@@ -96,7 +96,7 @@
             <span class="emphasis"><em>v</em></span> and non-centrality parameter <span class="emphasis"><em>delta</em></span>.
           </p>
 <p>
-            Requires v &gt; 0 and finite delta, otherwise calls <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
+            Requires v &gt; 0 and finite delta, otherwise calls <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
           </p>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
@@ -111,37 +111,37 @@
             which this object was constructed.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.non_member_accessors"></a><h5>
-<a name="id635078"></a>
-            <a href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.non_member_accessors">Non-member
+<a name="id662526"></a>
+            <a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
-            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
+            All the <a class="link" href="../nmp.html" title="Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
-            <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
-            <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
-            Function</a>, <a href="../nmp.html#math.dist.chf">Cumulative Hazard Function</a>,
-            <a href="../nmp.html#math.dist.mean">mean</a>, <a href="../nmp.html#math.dist.median">median</a>,
-            <a href="../nmp.html#math.dist.mode">mode</a>, <a href="../nmp.html#math.dist.variance">variance</a>,
-            <a href="../nmp.html#math.dist.sd">standard deviation</a>, <a href="../nmp.html#math.dist.skewness">skewness</a>,
-            <a href="../nmp.html#math.dist.kurtosis">kurtosis</a>, <a href="../nmp.html#math.dist.kurtosis_excess">kurtosis_excess</a>,
-            <a href="../nmp.html#math.dist.range">range</a> and <a href="../nmp.html#math.dist.support">support</a>.
+            <a class="link" href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
+            <a class="link" href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a class="link" href="../nmp.html#math.dist.quantile">Quantile</a>, <a class="link" href="../nmp.html#math.dist.hazard">Hazard
+            Function</a>, <a class="link" href="../nmp.html#math.dist.chf">Cumulative Hazard Function</a>,
+            <a class="link" href="../nmp.html#math.dist.mean">mean</a>, <a class="link" href="../nmp.html#math.dist.median">median</a>,
+            <a class="link" href="../nmp.html#math.dist.mode">mode</a>, <a class="link" href="../nmp.html#math.dist.variance">variance</a>,
+            <a class="link" href="../nmp.html#math.dist.sd">standard deviation</a>, <a class="link" href="../nmp.html#math.dist.skewness">skewness</a>,
+            <a class="link" href="../nmp.html#math.dist.kurtosis">kurtosis</a>, <a class="link" href="../nmp.html#math.dist.kurtosis_excess">kurtosis_excess</a>,
+            <a class="link" href="../nmp.html#math.dist.range">range</a> and <a class="link" href="../nmp.html#math.dist.support">support</a>.
           </p>
 <p>
             The domain of the random variable is [-&#8734;, +&#8734;].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.accuracy"></a><h5>
-<a name="id635250"></a>
-            <a href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.accuracy">Accuracy</a>
+<a name="id662698"></a>
+            <a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             The following table shows the peak errors (in units of <a href="http://en.wikipedia.org/wiki/Machine_epsilon" target="_top">epsilon</a>)
             found on various platforms with various floating-point types. Unless
             otherwise specified, any floating-point type that is narrower than the
-            one shown will have <a href="../../../backgrounders/relative_error.html#zero_error">effectively zero error</a>.
+            one shown will have <a class="link" href="../../../backgrounders/relative_error.html#zero_error">effectively zero error</a>.
           </p>
 <div class="table">
-<a name="id635290"></a><p class="title"><b>Table 15. Errors In CDF of the Noncentral T Distribution</b></p>
+<a name="id662738"></a><p class="title"><b>Table 15. Errors In CDF of the Noncentral T Distribution</b></p>
 <div class="table-contents"><table class="table" summary="Errors In CDF of the Noncentral T Distribution">
 <colgroup>
 <col>
@@ -255,8 +255,8 @@
             epsilon.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.tests"></a><h5>
-<a name="id635483"></a>
-            <a href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.tests">Tests</a>
+<a name="id662932"></a>
+            <a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.tests">Tests</a>
           </h5>
 <p>
             There are two sets of tests of this distribution: basic sanity checks
@@ -270,8 +270,8 @@
             least 50 decimal places.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.implementation"></a><h5>
-<a name="id635526"></a>
-            <a href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.implementation">Implementation</a>
+<a name="id662974"></a>
+            <a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.implementation">Implementation</a>
           </h5>
 <p>
             The CDF is computed using a modification of the method described in "Computing
@@ -312,7 +312,7 @@
             and therefore we have a means to compute either the probability or its
             complement directly without the risk of cancellation error. The crossover
             criterion for choosing whether to calculate the CDF or it's complement
-            is the same as for the <a href="nc_beta_dist.html" title="Noncentral Beta Distribution">Noncentral
+            is the same as for the <a class="link" href="nc_beta_dist.html" title="Noncentral Beta Distribution">Noncentral
             Beta Distribution</a>.
           </p>
 <p>
@@ -325,7 +325,7 @@
             Where I<sub>x</sub><sup>'</sup>(a,b) is the derivative of the incomplete beta function.
           </p>
 <p>
-            The quantile is calculated via the usual <a href="../../../toolkit/internals1/roots2.html" title="Root Finding Without Derivatives">derivative-free
+            The quantile is calculated via the usual <a class="link" href="../../../toolkit/internals1/roots2.html" title="Root Finding Without Derivatives">derivative-free
             root-finding techniques</a>, with the initial guess taken as the quantile
             of a normal approximation to the noncentral T.
           </p>
@@ -352,7 +352,7 @@
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

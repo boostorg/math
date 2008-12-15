@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Conceptual Archetypes and Testing</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../using_udt.html" title="Use with User-Defined Floating-Point Types">
 <link rel="prev" href="dist_concept.html" title="Conceptual Requirements for Distribution Types">
 <link rel="next" href="../policy.html" title="Policies">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.using_udt.archetypes"></a><a href="archetypes.html" title="Conceptual Archetypes and Testing"> Conceptual Archetypes
+<a name="math_toolkit.using_udt.archetypes"></a><a class="link" href="archetypes.html" title="Conceptual Archetypes and Testing"> Conceptual Archetypes
       and Testing</a>
 </h3></div></div></div>
 <p>
@@ -91,17 +91,17 @@
 </span></pre>
 <p>
         <code class="computeroutput"><span class="identifier">real_concept</span></code> is an archetype
-        for <a href="concepts.html" title="Conceptual Requirements for Real Number Types">user defined real types</a>,
+        for <a class="link" href="concepts.html" title="Conceptual Requirements for Real Number Types">user defined real types</a>,
         it declares it's standard library functions in it's own namespace: these
         will only be found if they are called unqualified allowing argument dependent
         lookup to locate them. In addition this type is useable at runtime: this
         allows code that would not otherwise be exercised by the built-in floating
         point types to be tested. There is no std::numeric_limits&lt;&gt; support
-        for this type, since this is not a conceptual requirement for <a href="concepts.html" title="Conceptual Requirements for Real Number Types">RealType</a>'s.
+        for this type, since this is not a conceptual requirement for <a class="link" href="concepts.html" title="Conceptual Requirements for Real Number Types">RealType</a>'s.
       </p>
 <p>
         NTL RR is an example of a type meeting the requirements that this type models,
-        but note that use of a thin wrapper class is required: refer to <a href="use_ntl.html" title="Using With NTL - a High-Precision Floating-Point Library">"Using
+        but note that use of a thin wrapper class is required: refer to <a class="link" href="use_ntl.html" title="Using With NTL - a High-Precision Floating-Point Library">"Using
         With NTL - a High-Precision Floating-Point Library"</a>.
       </p>
 <p>
@@ -130,7 +130,7 @@
 </span></pre>
 <p>
         The class template <code class="computeroutput"><span class="identifier">distribution_archetype</span></code>
-        is a model of the <a href="dist_concept.html" title="Conceptual Requirements for Distribution Types">Distribution
+        is a model of the <a class="link" href="dist_concept.html" title="Conceptual Requirements for Distribution Types">Distribution
         concept</a>.
       </p>
 <p>
@@ -141,12 +141,12 @@
 <p>
         The test program <a href="../../../../../test/compile_test/distribution_concept_check.cpp" target="_top">distribution_concept_check.cpp</a>
         is responsible for using <code class="computeroutput"><span class="identifier">DistributionConcept</span></code>
-        to verify that all the distributions in this library conform to the <a href="dist_concept.html" title="Conceptual Requirements for Distribution Types">Distribution concept</a>.
+        to verify that all the distributions in this library conform to the <a class="link" href="dist_concept.html" title="Conceptual Requirements for Distribution Types">Distribution concept</a>.
       </p>
 <p>
         The class template <code class="computeroutput"><span class="identifier">DistributionConcept</span></code>
         verifies the existence (but not proper function) of the non-member accessors
-        required by the <a href="dist_concept.html" title="Conceptual Requirements for Distribution Types">Distribution
+        required by the <a class="link" href="dist_concept.html" title="Conceptual Requirements for Distribution Types">Distribution
         concept</a>. These are checked by calls like
       </p>
 <p>
@@ -164,7 +164,7 @@
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
