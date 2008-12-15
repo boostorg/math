@@ -110,11 +110,13 @@ namespace math{
 
 namespace detail{
 
+#ifdef BOOST_MATH_USE_STD_FPCLASSIFY
 template <class T>
 inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const native_tag&)
 {
    return (std::fpclassify)(t);
 }
+#endif
 
 template <class T>
 inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const generic_tag<true>&)
@@ -224,7 +226,7 @@ int fpclassify_imp BOOST_NO_MACRO_EXPAND(T x, ieee_copy_leading_bits_tag)
    return FP_NAN;
 }
 
-#if defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
+#if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
 template <>
 inline int fpclassify_imp<long double> BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
 {
@@ -250,11 +252,13 @@ inline int fpclassify BOOST_NO_MACRO_EXPAND(T t)
 
 namespace detail {
 
+#ifdef BOOST_MATH_USE_STD_FPCLASSIFY
     template<class T> 
     inline bool isfinite_impl(T x, native_tag const&)
     {
         return (std::isfinite)(x);
     }
+#endif
 
     template<class T> 
     inline bool isfinite_impl(T x, generic_tag<true> const&)
@@ -284,7 +288,7 @@ namespace detail {
         return a != traits::exponent;
     }
 
-#if defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
+#if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
 template <>
 inline bool isfinite_impl<long double> BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
 {
@@ -307,11 +311,13 @@ inline bool (isfinite)(T x)
 
 namespace detail {
 
+#ifdef BOOST_MATH_USE_STD_FPCLASSIFY
     template<class T> 
     inline bool isnormal_impl(T x, native_tag const&)
     {
         return (std::isnormal)(x);
     }
+#endif
 
     template<class T> 
     inline bool isnormal_impl(T x, generic_tag<true> const&)
@@ -341,7 +347,7 @@ namespace detail {
         return (a != 0) && (a < traits::exponent);
     }
 
-#if defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
+#if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
 template <>
 inline bool isnormal_impl<long double> BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
 {
@@ -364,11 +370,13 @@ inline bool (isnormal)(T x)
 
 namespace detail {
 
+#ifdef BOOST_MATH_USE_STD_FPCLASSIFY
     template<class T> 
     inline bool isinf_impl(T x, native_tag const&)
     {
         return (std::isinf)(x);
     }
+#endif
 
     template<class T> 
     inline bool isinf_impl(T x, generic_tag<true> const&)
@@ -415,7 +423,7 @@ namespace detail {
         return x == 0;
     }
 
-#if defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
+#if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && defined(BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY)
 template <>
 inline bool isinf_impl<long double> BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
 {
@@ -438,11 +446,13 @@ inline bool (isinf)(T x)
 
 namespace detail {
 
+#ifdef BOOST_MATH_USE_STD_FPCLASSIFY
     template<class T> 
     inline bool isnan_impl(T x, native_tag const&)
     {
         return (std::isnan)(x);
     }
+#endif
 
     template<class T> 
     inline bool isnan_impl(T x, generic_tag<true> const&)
@@ -511,9 +521,4 @@ template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){
 } // namespace boost
 
 #endif // BOOST_MATH_FPCLASSIFY_HPP
-
-
-
-
-
 

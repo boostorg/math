@@ -537,13 +537,16 @@ struct select_native<long double>
 
 // fp_traits is a type switch that selects the right fp_traits_non_native
 
-template<class T> struct fp_traits
-{
 #if (defined(BOOST_MATH_USE_C99) && !(defined(__GNUC__) && (__GNUC__ < 4))) \
    && !defined(__hpux) \
    && !defined(__DECCXX)\
-   && !defined(__osf__)\
-   && !(defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__))
+   && !defined(__osf__)
+#  define BOOST_MATH_USE_STD_FPCLASSIFY
+#endif
+
+template<class T> struct fp_traits
+{
+#ifdef BOOST_MATH_USE_STD_FPCLASSIFY
     typedef typename select_native<T>::type type;
 #else
     typedef BOOST_DEDUCED_TYPENAME size_to_precision<sizeof(T), ::boost::is_floating_point<T>::value>::type precision;
