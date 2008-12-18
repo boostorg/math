@@ -36,7 +36,12 @@ boostbook standalone
         <xsl:param>toc.max.depth=4
         # How far down we go with TOC's
         <xsl:param>generate.section.toc.level=10
+        # Index on type:
+        <xsl:param>index.on.type=1
+        
         #<xsl:param>root.filename="sf_dist_and_tools"
+        #<xsl:param>graphicsize.extension=1
+        #<xsl:param>use.extensions=1
         
         # PDF Options:
         # TOC Generation: this is needed for FOP-0.9 and later:
