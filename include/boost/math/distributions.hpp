@@ -22,6 +22,7 @@
 #include <boost/math/distributions/extreme_value.hpp>
 #include <boost/math/distributions/fisher_f.hpp>
 #include <boost/math/distributions/gamma.hpp>
+#include <boost/math/distributions/hypergeometric.hpp>
 #include <boost/math/distributions/logistic.hpp>
 #include <boost/math/distributions/lognormal.hpp>
 #include <boost/math/distributions/negative_binomial.hpp>

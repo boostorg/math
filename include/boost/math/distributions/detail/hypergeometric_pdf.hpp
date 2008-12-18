@@ -132,6 +132,7 @@ T hypergeometric_pdf_lanczos_imp(unsigned x, unsigned r, unsigned n, unsigned N,
 template <class T, class Policy>
 T hypergeometric_pdf_lanczos_imp(unsigned x, unsigned r, unsigned n, unsigned N, const boost::math::lanczos::undefined_lanczos&, const Policy& pol)
 {
+   BOOST_MATH_STD_USING
    return exp(
       boost::math::lgamma(T(n + 1), pol)
       + boost::math::lgamma(T(r + 1), pol)

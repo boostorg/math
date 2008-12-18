@@ -83,6 +83,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<non_central_beta_distribution<RealType> > >();
    function_requires<DistributionConcept<non_central_f_distribution<RealType> > >();
    function_requires<DistributionConcept<non_central_t_distribution<RealType> > >();
+   function_requires<DistributionConcept<hypergeometric_distribution<RealType> > >();
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
    function_requires<DistributionConcept<bernoulli_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<beta_distribution<RealType, test_policy> > >();
@@ -109,6 +110,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<non_central_beta_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<non_central_f_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<non_central_t_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<hypergeometric_distribution<RealType, test_policy> > >();
 
    function_requires<DistributionConcept<dist_test::bernoulli > >();
    function_requires<DistributionConcept<dist_test::beta > >();
@@ -134,6 +136,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<dist_test::non_central_beta > >();
    function_requires<DistributionConcept<dist_test::non_central_f > >();
    function_requires<DistributionConcept<dist_test::non_central_t > >();
+   function_requires<DistributionConcept<dist_test::hypergeometric > >();
 #endif
    int i;
    RealType v1(0.5), v2(0.5), v3(0.5);

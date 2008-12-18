@@ -39,6 +39,9 @@ template <class RealType, class Policy>
 class gamma_distribution;
 
 template <class RealType, class Policy>
+class hypergeometric_distribution;
+
+template <class RealType, class Policy>
 class logistic_distribution;
 
 template <class RealType, class Policy>
@@ -110,5 +113,6 @@ class weibull_distribution;
    typedef boost::math::non_central_beta_distribution<Type, Policy> non_central_beta;\
    typedef boost::math::non_central_f_distribution<Type, Policy> non_central_f;\
    typedef boost::math::non_central_t_distribution<Type, Policy> non_central_t;\
+   typedef boost::math::hypergeometric_distribution<Type, Policy> hypergeometric;\
 
 #endif // BOOST_MATH_DISTRIBUTIONS_FWD_HPP
