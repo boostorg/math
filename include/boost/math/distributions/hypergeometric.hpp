@@ -6,6 +6,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_DISTRIBUTIONS_HYPERGEOMETRIC_HPP
+#define BOOST_MATH_DISTRIBUTIONS_HYPERGEOMETRIC_HPP
+
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/hypergeometric_pdf.hpp>
@@ -279,3 +282,9 @@ namespace boost { namespace math {
    } // RealType kurtosis_excess(const hypergeometric_distribution<RealType, Policy>& dist)
 }} // namespaces
 
+// This include must be at the end, *after* the accessors
+// for this distribution have been defined, in order to
+// keep compilers that support two-phase lookup happy.
+#include <boost/math/distributions/detail/derived_accessors.hpp>
+
+#endif // include guard

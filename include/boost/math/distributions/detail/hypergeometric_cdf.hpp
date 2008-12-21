@@ -21,7 +21,7 @@ T hypergeometric_cdf_imp(unsigned x, unsigned r, unsigned n, unsigned N, bool in
 #  pragma warning(disable:4267)
 #endif
    BOOST_MATH_STD_USING
-   T result;
+   T result = 0;
    T mean = T(r * n) / N;
    if(x < mean)
    {
@@ -40,15 +40,18 @@ T hypergeometric_cdf_imp(unsigned x, unsigned r, unsigned n, unsigned N, bool in
    else
    {
       invert = !invert;
-      ++x;
-      result = hypergeometric_pdf<T>(x, r, n, N, pol);
-      T diff = result;
       unsigned upper_limit = (std::min)(r, n);
-      while((x <= upper_limit) && (result / diff > tools::epsilon<T>()))
+      if(x != upper_limit)
       {
-         diff = (n - x) * (r - x) * diff / ((x + 1) * (N + x + 1 - n - r));
          ++x;
-         result += diff;
+         result = hypergeometric_pdf<T>(x, r, n, N, pol);
+         T diff = result;
+         while((x <= upper_limit) && (result / diff > tools::epsilon<T>()))
+         {
+            diff = (n - x) * (r - x) * diff / ((x + 1) * (N + x + 1 - n - r));
+            ++x;
+            result += diff;
+         }
       }
    }
    if(invert)

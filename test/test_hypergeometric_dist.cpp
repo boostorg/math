@@ -119,7 +119,7 @@ void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
    boost::math::hypergeometric_distribution<RealType> d(r, n, N);
 
    std::pair<unsigned, unsigned> extent = range(d);
-
+   // CDF's:
    BOOST_CHECK_CLOSE(pdf(d, x), p, tol);
    BOOST_CHECK_CLOSE(cdf(d, x), cp, tol);
    BOOST_CHECK_CLOSE(cdf(complement(d, x)), ccp, tol);
@@ -127,7 +127,11 @@ void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
    BOOST_CHECK_CLOSE(pdf(d, static_cast<RealType>(x)), p, tol);
    BOOST_CHECK_CLOSE(cdf(d, static_cast<RealType>(x)), cp, tol);
    BOOST_CHECK_CLOSE(cdf(complement(d, static_cast<RealType>(x))), ccp, tol);
-   // quantiles:
+   //
+   // Quantiles, don't bother checking these for type float
+   // as there's not enough precision in the p and q values
+   // to get back to where we started:
+   //
    if(boost::math::tools::digits<RealType>() > 50)
    {
       using namespace boost::math::policies;
@@ -141,6 +145,31 @@ void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
       BOOST_CHECK_EX(quantile(dl, cp) <= x);
       BOOST_CHECK_EX(quantile(complement(dl, ccp)) <= x);
    }
+   //
+   // Error checking of out of bounds arguments:
+   //
+   BOOST_CHECK_THROW(pdf(d, extent.second + 1), std::domain_error);
+   BOOST_CHECK_THROW(cdf(d, extent.second + 1), std::domain_error);
+   BOOST_CHECK_THROW(cdf(complement(d, extent.second + 1)), std::domain_error);
+   if(extent.first > 0)
+   {
+      BOOST_CHECK_THROW(pdf(d, extent.first - 1), std::domain_error);
+      BOOST_CHECK_THROW(cdf(d, extent.first - 1), std::domain_error);
+      BOOST_CHECK_THROW(cdf(complement(d, extent.first - 1)), std::domain_error);
+   }
+   BOOST_CHECK_THROW(quantile(d, 1.1f), std::domain_error);
+   BOOST_CHECK_THROW(quantile(complement(d, 1.1f)), std::domain_error);
+   BOOST_CHECK_THROW(quantile(d, -0.001f), std::domain_error);
+   BOOST_CHECK_THROW(quantile(complement(d, -0.001f)), std::domain_error);
+   //
+   // Checking of extreme values:
+   //
+   BOOST_CHECK_EQUAL(quantile(d, 0), extent.first);
+   BOOST_CHECK_EQUAL(quantile(d, 1), extent.second);
+   BOOST_CHECK_EQUAL(quantile(complement(d, 0)), extent.second);
+   BOOST_CHECK_EQUAL(quantile(complement(d, 1)), extent.first);
+   BOOST_CHECK_EQUAL(cdf(d, extent.second), 1);
+   BOOST_CHECK_EQUAL(cdf(complement(d, extent.second)), 0);
 }
 
 template <class RealType>
@@ -161,6 +190,12 @@ void test_spots(RealType /*T*/, const char* type_name)
    tolerance *= 50 * 100; // 50eps as a persentage
    cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
+   //
+   // These sanity check values were calculated using the online
+   // calculator at http://stattrek.com/Tables/Hypergeometric.aspx
+   // It's assumed that the test values are accurate to no more than
+   // double precision.
+   //
    test_spot(20, 200, 50, 500, static_cast<T>(0.120748236361163), static_cast<T>(0.563532430195156), static_cast<T>(1 - 0.563532430195156), tolerance);
    test_spot(53, 452, 64, 500, static_cast<T>(0.0184749573044286), static_cast<T>(0.0299118078796907), static_cast<T>(1 - 0.0299118078796907), tolerance);
    test_spot(32, 1287, 128, 5000, static_cast<T>(0.0807012167418264), static_cast<T>(0.469768774237742), static_cast<T>(1 - 0.469768774237742), tolerance);
@@ -177,6 +212,10 @@ void test_spots(RealType /*T*/, const char* type_name)
    BOOST_CHECK_CLOSE(skewness(d), static_cast<RealType>(0.048833071022952084732902910189366L), tolerance);
    BOOST_CHECK_CLOSE(kurtosis_excess(d), static_cast<RealType>(2.5155486690782804816404001878293L), tolerance);
    BOOST_CHECK_CLOSE(kurtosis(d), kurtosis_excess(d) + 3, tolerance);
+   BOOST_CHECK_EQUAL(quantile(d, 0.5f), median(d));
+
+   BOOST_CHECK_THROW(d = boost::math::hypergeometric_distribution<RealType>(501, 40, 500), std::domain_error);
+   BOOST_CHECK_THROW(d = boost::math::hypergeometric_distribution<RealType>(40, 501, 500), std::domain_error);
 }
 
 
