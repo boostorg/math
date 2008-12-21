@@ -442,7 +442,7 @@ void test_spots(RealType)
      RealType x = quantile(p1, poisson_quantile_data[i][1]);
      BOOST_CHECK_CLOSE_FRACTION(x, poisson_quantile_data[i][2], tol);
      x = quantile(complement(p1, poisson_quantile_data[i][1]));
-     BOOST_CHECK_CLOSE_FRACTION(x, poisson_quantile_data[i][3], tol);
+     BOOST_CHECK_CLOSE_FRACTION(x, poisson_quantile_data[i][3], tol * 3);
      //
      // Now with round down to integer:
      //

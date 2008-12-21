@@ -47,7 +47,7 @@ bool check_complex(const std::complex<T>& a, const std::complex<T>& b, int max_e
    //
    bool result = true;
    static const std::complex<T> zero(0);
-   static const T eps = std::pow(static_cast<T>(std::numeric_limits<T>::radix), 1 - std::numeric_limits<T>::digits);
+   static const T eps = std::pow(static_cast<T>(std::numeric_limits<T>::radix), static_cast<T>(1 - std::numeric_limits<T>::digits));
    if(a == zero)
    {
       if(b != zero)
@@ -258,7 +258,7 @@ void check_spots(const T&)
    typedef std::complex<T> ct;
    ct result;
    static const T two = 2.0;
-   T eps = std::pow(two, 1-std::numeric_limits<T>::digits); // numeric_limits<>::epsilon way too small to be useful on Darwin.
+   T eps = std::pow(two, T(1-std::numeric_limits<T>::digits)); // numeric_limits<>::epsilon way too small to be useful on Darwin.
    static const T zero = 0;
    static const T mzero = -zero;
    static const T one = 1;
