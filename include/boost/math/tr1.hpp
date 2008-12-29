@@ -171,15 +171,16 @@ int BOOST_MATH_TR1_DECL ilogbl BOOST_PREVENT_MACRO_SUBSTITUTION(long double x);
 double BOOST_MATH_TR1_DECL lgamma BOOST_PREVENT_MACRO_SUBSTITUTION(double x);
 float BOOST_MATH_TR1_DECL lgammaf BOOST_PREVENT_MACRO_SUBSTITUTION(float x);
 long double BOOST_MATH_TR1_DECL lgammal BOOST_PREVENT_MACRO_SUBSTITUTION(long double x);
+#ifdef BOOST_HAS_LONG_LONG
 #if 0
-long long BOOST_MATH_TR1_DECL llrint BOOST_PREVENT_MACRO_SUBSTITUTION(double x);
-long long BOOST_MATH_TR1_DECL llrintf BOOST_PREVENT_MACRO_SUBSTITUTION(float x);
-long long BOOST_MATH_TR1_DECL llrintl BOOST_PREVENT_MACRO_SUBSTITUTION(long double x);
+::boost::long_long_type BOOST_MATH_TR1_DECL llrint BOOST_PREVENT_MACRO_SUBSTITUTION(double x);
+::boost::long_long_type BOOST_MATH_TR1_DECL llrintf BOOST_PREVENT_MACRO_SUBSTITUTION(float x);
+::boost::long_long_type BOOST_MATH_TR1_DECL llrintl BOOST_PREVENT_MACRO_SUBSTITUTION(long double x);
 #endif
-long long BOOST_MATH_TR1_DECL llround BOOST_PREVENT_MACRO_SUBSTITUTION(double x);
-long long BOOST_MATH_TR1_DECL llroundf BOOST_PREVENT_MACRO_SUBSTITUTION(float x);
-long long BOOST_MATH_TR1_DECL llroundl BOOST_PREVENT_MACRO_SUBSTITUTION(long double x);
-
+::boost::long_long_type BOOST_MATH_TR1_DECL llround BOOST_PREVENT_MACRO_SUBSTITUTION(double x);
+::boost::long_long_type BOOST_MATH_TR1_DECL llroundf BOOST_PREVENT_MACRO_SUBSTITUTION(float x);
+::boost::long_long_type BOOST_MATH_TR1_DECL llroundl BOOST_PREVENT_MACRO_SUBSTITUTION(long double x);
+#endif
 double BOOST_MATH_TR1_DECL boost_log1p BOOST_PREVENT_MACRO_SUBSTITUTION(double x);
 float BOOST_MATH_TR1_DECL boost_log1pf BOOST_PREVENT_MACRO_SUBSTITUTION(float x);
 long double BOOST_MATH_TR1_DECL boost_log1pl BOOST_PREVENT_MACRO_SUBSTITUTION(long double x);
@@ -487,19 +488,20 @@ inline long double lgamma BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
 template <class T>
 inline typename tools::promote_args<T>::type lgamma BOOST_PREVENT_MACRO_SUBSTITUTION(T x)
 { return boost::math::tr1::lgamma BOOST_PREVENT_MACRO_SUBSTITUTION(static_cast<typename tools::promote_args<T>::type>(x)); }
+#ifdef BOOST_HAS_LONG_LONG
 #if 0
-long long llrint BOOST_PREVENT_MACRO_SUBSTITUTION(double x);
-long long llrintf BOOST_PREVENT_MACRO_SUBSTITUTION(float x);
-long long llrintl BOOST_PREVENT_MACRO_SUBSTITUTION(long double x);
+::boost::long_long_type llrint BOOST_PREVENT_MACRO_SUBSTITUTION(double x);
+::boost::long_long_type llrintf BOOST_PREVENT_MACRO_SUBSTITUTION(float x);
+::boost::long_long_type llrintl BOOST_PREVENT_MACRO_SUBSTITUTION(long double x);
 #endif
-inline long long llround BOOST_PREVENT_MACRO_SUBSTITUTION(float x)
+inline ::boost::long_long_type llround BOOST_PREVENT_MACRO_SUBSTITUTION(float x)
 { return boost::math::tr1::llroundf BOOST_PREVENT_MACRO_SUBSTITUTION(x); }
-inline long long llround BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
+inline ::boost::long_long_type llround BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
 { return boost::math::tr1::llroundl BOOST_PREVENT_MACRO_SUBSTITUTION(x); }
 template <class T>
-inline long long llround BOOST_PREVENT_MACRO_SUBSTITUTION(T x)
+inline ::boost::long_long_type llround BOOST_PREVENT_MACRO_SUBSTITUTION(T x)
 { return llround BOOST_PREVENT_MACRO_SUBSTITUTION(static_cast<double>(x)); }
-
+#endif
 inline float log1pf BOOST_PREVENT_MACRO_SUBSTITUTION(float x)
 { return boost::math::tr1::boost_log1pf BOOST_PREVENT_MACRO_SUBSTITUTION(x); }
 inline double log1p BOOST_PREVENT_MACRO_SUBSTITUTION(double x)

@@ -488,6 +488,11 @@ run test_zeta.cpp ;
 
 run test_policy.cpp ;
 run test_policy_2.cpp ;
+run test_policy_3.cpp ;
+run test_policy_4.cpp ;
+run test_policy_5.cpp ;
+run test_policy_6.cpp ;
+run test_policy_7.cpp ;
 run test_policy_sf.cpp ;
 
 run test_tr1.cpp

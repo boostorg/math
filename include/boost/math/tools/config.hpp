@@ -153,6 +153,12 @@
 #  define BOOST_MATH_POLY_METHOD 3
 #  define BOOST_MATH_RATIONAL_METHOD 3
 #  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
+#  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##.0L
+#endif
+
+#if defined(BOOST_NO_LONG_LONG) && !defined(BOOST_MATH_INT_TABLE_TYPE)
+#  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
+#  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##.0L
 #endif
 
 //
@@ -177,6 +183,10 @@
 #ifndef BOOST_MATH_INT_TABLE_TYPE
 #  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
 #endif
+#ifndef BOOST_MATH_INT_VALUE_SUFFIX
+#  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##SUF
+#endif
+
 //
 // Helper macro for controlling the FP behaviour:
 //
