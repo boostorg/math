@@ -398,7 +398,15 @@ run test_nc_beta.cpp
         : # input files
         : # requirements
 	      <define>TEST_REAL_CONCEPT
-        : test_nc_beta_real_concept ;
+	      <define>TEST_DATA=1
+        : test_nc_beta_real_concept1 ;
+run test_nc_beta.cpp  
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_REAL_CONCEPT
+	      <define>TEST_DATA=2
+        : test_nc_beta_real_concept2 ;
 run test_nc_f.cpp ;
 run test_nc_t.cpp  
         : # command line

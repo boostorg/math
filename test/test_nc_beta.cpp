@@ -393,14 +393,17 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
 template <typename T>
 void test_accuracy(T, const char* type_name)
 {
+#if !defined(TEST_DATA) || (TEST_DATA == 1)
 #include "ncbeta.ipp"
     do_test_nc_chi_squared(ncbeta, type_name, "Non Central Beta, medium parameters");
     quantile_sanity_check(ncbeta, type_name, "Non Central Beta, medium parameters");
-
+#endif
+#if !defined(TEST_DATA) || (TEST_DATA == 2)
 #include "ncbeta_big.ipp"
     do_test_nc_chi_squared(ncbeta_big, type_name, "Non Central Beta, large parameters");
     // Takes too long to run:
     // quantile_sanity_check(ncbeta_big, type_name, "Non Central Beta, large parameters");
+#endif
 }
 
 int test_main(int, char* [])
