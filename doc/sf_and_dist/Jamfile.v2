@@ -70,5 +70,6 @@ boostbook standalone
         <format>pdf:<xsl:param>draft.mode="no"
     ;
 
+install pdf-install : standalone : <location>. <install-type>PDF ;
 
 
