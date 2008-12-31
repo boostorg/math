@@ -95,7 +95,7 @@ using the quantile function on the Hypergeometric distribution.  The
 describe how to change the rounding policy
 for these distributions.
 
-However, note that the implememtation method of the quantile function 
+However, note that the implementation method of the quantile function 
 always returns an integral value, therefore attempting to use a __Policy 
 that requires (or produces) a real valued result will result in a 
 compile time error.
@@ -129,7 +129,7 @@ The PDF can be calculated directly using the formula:
 [equation hypergeometric1]
 
 However, this can only be used directly when the largest of the factorials
-is guarenteed not to overflow the floating point representation used. 
+is guaranteed not to overflow the floating point representation used. 
 This formula is used directly when `N < max_factorial<RealType>::value`
 in which case table lookup of the factorials gives a rapid and accurate
 implementation method.
@@ -163,14 +163,14 @@ numerical overflow, we use a novel recursive method which splits the
 calculation into a series of sub-products, with a new sub-product 
 started each time the next multiplication would cause either overflow 
 or underflow.  The sub-products are stored in a linked list on the 
-program stack, and combined in an order that will guarentee no overflow 
+program stack, and combined in an order that will guarantee no overflow 
 or unnecessary-underflow once the last sub-product has been calculated.
 
 This method can be used as long as N is smaller than the largest prime 
 number we have stored in our table of primes (currently 104729).  The method
 is relatively slow (calculating the exponents requires the most time), but
 requires only a small number of arithmetic operations to
-calculate the result (indeed there is no shorter method involing only basic
+calculate the result (indeed there is no shorter method involving only basic
 arithmetic once the exponents have been found), the method is therefore
 much more accurate than the alternatives.
 
