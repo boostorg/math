@@ -49,9 +49,13 @@ With these techniques, the code could be simplified.
          && defined(_GLIBCXX_USE_C99_MATH) \
          && !(defined(_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC) \
          && (_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC != 0))
-#     ifdef _STLP_VENDOR_CSTD 
-#        define BOOST_FPCLASSIFY_PREFIX ::_STLP_VENDOR_CSTD:: 
-#     else 
+#     ifdef _STLP_VENDOR_CSTD
+#        if _STLPORT_VERSION >= 0x520
+#           define BOOST_FPCLASSIFY_PREFIX ::__std_alias:: 
+#        else
+#           define BOOST_FPCLASSIFY_PREFIX ::_STLP_VENDOR_CSTD:: 
+#        endif
+#     else
 #        define BOOST_FPCLASSIFY_PREFIX ::std::
 #     endif
 #  else
@@ -113,7 +117,7 @@ inline bool is_generic_tag_false(...)
 Most processors support three different floating point precisions:
 single precision (32 bits), double precision (64 bits)
 and extended double precision (80 - 128 bits, depending on the processor)
-
+€
 Note that the C++ type long double can be implemented
 both as double precision and extended double precision.
 */
@@ -540,7 +544,8 @@ struct select_native<long double>
 #if (defined(BOOST_MATH_USE_C99) && !(defined(__GNUC__) && (__GNUC__ < 4))) \
    && !defined(__hpux) \
    && !defined(__DECCXX)\
-   && !defined(__osf__)
+   && !defined(__osf__) \
+   && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
 #  define BOOST_MATH_USE_STD_FPCLASSIFY
 #endif
 
