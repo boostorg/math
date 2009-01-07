@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Beta Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="bernoulli_dist.html" title="Bernoulli Distribution">
 <link rel="next" href="binomial_dist.html" title="Binomial Distribution">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist"></a><a href="beta_dist.html" title="Beta Distribution"> Beta
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist"></a><a class="link" href="beta_dist.html" title="Beta Distribution"> Beta
           Distribution</a>
 </h5></div></div></div>
 <p>
@@ -36,14 +36,14 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
 
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-           <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">beta_distribution</span><span class="special">;</span>
 
 <span class="comment">// typedef beta_distribution&lt;double&gt; beta;
 </span><span class="comment">// Note that this is deliberately NOT provided,
 </span><span class="comment">// to avoid a clash with the function name beta.
 </span>
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">beta_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -112,7 +112,7 @@
           </p>
 <p>
             where B(&#945;, &#946;) is the <a href="http://en.wikipedia.org/wiki/Beta_function" target="_top">beta
-            function</a>, implemented in this library as <a href="../../../special/sf_beta/beta_function.html" title="Beta">beta</a>.
+            function</a>, implemented in this library as <a class="link" href="../../../special/sf_beta/beta_function.html" title="Beta">beta</a>.
             Division by the beta function ensures that the pdf is normalized to the
             range zero to unity.
           </p>
@@ -133,13 +133,13 @@
             from the centre (where x = half).
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.member_functions"></a><h5>
-<a name="id603245"></a>
-            <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.member_functions">Member
+<a name="id630720"></a>
+            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.member_functions">Member
             Functions</a>
           </h5>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.constructor"></a><h6>
-<a name="id603271"></a>
-            <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.constructor">Constructor</a>
+<a name="id630746"></a>
+            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.constructor">Constructor</a>
           </h6>
 <pre class="programlisting"><span class="identifier">beta_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">);</span>
 </pre>
@@ -148,7 +148,7 @@
             and <span class="emphasis"><em>beta</em></span>.
           </p>
 <p>
-            Requires alpha,beta &gt; 0,otherwise <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
+            Requires alpha,beta &gt; 0,otherwise <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
             is called. Note that technically the beta distribution is defined for
             alpha,beta &gt;= 0, but it's not clear whether any program can actually
             make use of that latitude or how many of the non-member functions can
@@ -165,8 +165,8 @@
             yellow in the graph above).
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors"></a><h6>
-<a name="id603452"></a>
-            <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors">Parameter
+<a name="id630928"></a>
+            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors">Parameter
             Accessors</a>
           </h6>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
@@ -189,8 +189,8 @@
 </span><span class="identifier">assert</span><span class="special">(</span><span class="identifier">mybeta</span><span class="special">.</span><span class="identifier">beta</span><span class="special">()</span> <span class="special">==</span> <span class="number">5.</span><span class="special">);</span>   <span class="comment">// mybeta.beta()  returns 5
 </span></pre>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators"></a><h5>
-<a name="id603727"></a>
-            <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators">Parameter
+<a name="id631204"></a>
+            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators">Parameter
             Estimators</a>
           </h5>
 <p>
@@ -242,21 +242,21 @@ from presumed-known mean and variance.
             Returns the value of &#946; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions"></a><h5>
-<a name="id604362"></a>
-            <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions">Non-member
+<a name="id631838"></a>
+            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions">Non-member
             Accessor Functions</a>
           </h5>
 <p>
-            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
+            All the <a class="link" href="../nmp.html" title="Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
-            <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
-            <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
-            Function</a>, <a href="../nmp.html#math.dist.chf">Cumulative Hazard Function</a>,
-            <a href="../nmp.html#math.dist.mean">mean</a>, <a href="../nmp.html#math.dist.median">median</a>,
-            <a href="../nmp.html#math.dist.mode">mode</a>, <a href="../nmp.html#math.dist.variance">variance</a>,
-            <a href="../nmp.html#math.dist.sd">standard deviation</a>, <a href="../nmp.html#math.dist.skewness">skewness</a>,
-            <a href="../nmp.html#math.dist.kurtosis">kurtosis</a>, <a href="../nmp.html#math.dist.kurtosis_excess">kurtosis_excess</a>,
-            <a href="../nmp.html#math.dist.range">range</a> and <a href="../nmp.html#math.dist.support">support</a>.
+            <a class="link" href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
+            <a class="link" href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a class="link" href="../nmp.html#math.dist.quantile">Quantile</a>, <a class="link" href="../nmp.html#math.dist.hazard">Hazard
+            Function</a>, <a class="link" href="../nmp.html#math.dist.chf">Cumulative Hazard Function</a>,
+            <a class="link" href="../nmp.html#math.dist.mean">mean</a>, <a class="link" href="../nmp.html#math.dist.median">median</a>,
+            <a class="link" href="../nmp.html#math.dist.mode">mode</a>, <a class="link" href="../nmp.html#math.dist.variance">variance</a>,
+            <a class="link" href="../nmp.html#math.dist.sd">standard deviation</a>, <a class="link" href="../nmp.html#math.dist.skewness">skewness</a>,
+            <a class="link" href="../nmp.html#math.dist.kurtosis">kurtosis</a>, <a class="link" href="../nmp.html#math.dist.kurtosis_excess">kurtosis_excess</a>,
+            <a class="link" href="../nmp.html#math.dist.range">range</a> and <a class="link" href="../nmp.html#math.dist.support">support</a>.
           </p>
 <p>
             The formulae for calculating these are shown in the table below, and
@@ -264,8 +264,8 @@ from presumed-known mean and variance.
             Mathworld</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.applications"></a><h5>
-<a name="id604540"></a>
-            <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.applications">Applications</a>
+<a name="id632016"></a>
+            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.applications">Applications</a>
           </h5>
 <p>
             The beta distribution can be used to model events constrained to take
@@ -277,8 +277,8 @@ from presumed-known mean and variance.
             statistical inference</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions"></a><h5>
-<a name="id604586"></a>
-            <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions">Related
+<a name="id632062"></a>
+            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions">Related
             distributions</a>
           </h5>
 <p>
@@ -299,24 +299,24 @@ from presumed-known mean and variance.
             distributed between 0 and 1. The cumulative probability from 0 to x is
             thus the probability that the j-th highest value is less than x. Or it
             is the probability that that at least i of the random variables are less
-            than x, a probability given by summing over the <a href="binomial_dist.html" title="Binomial Distribution">Binomial
+            than x, a probability given by summing over the <a class="link" href="binomial_dist.html" title="Binomial Distribution">Binomial
             Distribution</a> with its p parameter set to x.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.accuracy"></a><h5>
-<a name="id604674"></a>
-            <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.accuracy">Accuracy</a>
+<a name="id632151"></a>
+            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.accuracy">Accuracy</a>
           </h5>
 <p>
-            This distribution is implemented using the <a href="../../../special/sf_beta/beta_function.html" title="Beta">beta
-            functions</a> <a href="../../../special/sf_beta/beta_function.html" title="Beta">beta</a>
-            and <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">incomplete
-            beta functions</a> <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
-            and <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>;
+            This distribution is implemented using the <a class="link" href="../../../special/sf_beta/beta_function.html" title="Beta">beta
+            functions</a> <a class="link" href="../../../special/sf_beta/beta_function.html" title="Beta">beta</a>
+            and <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">incomplete
+            beta functions</a> <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
+            and <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>;
             please refer to these functions for information on accuracy.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.implementation"></a><h5>
-<a name="id604754"></a>
-            <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.implementation">Implementation</a>
+<a name="id632230"></a>
+            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
@@ -352,7 +352,7 @@ from presumed-known mean and variance.
                     f(x;&#945;,&#946;) = x<sup>&#945; - 1</sup> (1 - x)<sup>&#946; -1</sup> / B(&#945;, &#946;)
                   </p>
                   <p>
-                    Implemented using <a href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(a,
+                    Implemented using <a class="link" href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(a,
                     b, x).
                   </p>
                   </td>
@@ -365,7 +365,7 @@ from presumed-known mean and variance.
                   </td>
 <td>
                   <p>
-                    Using the incomplete beta function <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(a,
+                    Using the incomplete beta function <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(a,
                     b, x)
                   </p>
                   </td>
@@ -378,7 +378,7 @@ from presumed-known mean and variance.
                   </td>
 <td>
                   <p>
-                    <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(a,
+                    <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(a,
                     b, x)
                   </p>
                   </td>
@@ -391,7 +391,7 @@ from presumed-known mean and variance.
                   </td>
 <td>
                   <p>
-                    Using the inverse incomplete beta function <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>(a,
+                    Using the inverse incomplete beta function <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>(a,
                     b, p)
                   </p>
                   </td>
@@ -404,7 +404,7 @@ from presumed-known mean and variance.
                   </td>
 <td>
                   <p>
-                    <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>(a,
+                    <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>(a,
                     b, q)
                   </p>
                   </td>
@@ -560,8 +560,8 @@ from presumed-known mean and variance.
                     Implemented in terms of the inverse incomplete beta functions
                   </p>
                   <p>
-                    <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inva</a>,
-                    and <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_invb</a>
+                    <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inva</a>,
+                    and <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_invb</a>
                     respectively.
                   </p>
                   </td>
@@ -597,8 +597,8 @@ from presumed-known mean and variance.
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.references"></a><h5>
-<a name="id606051"></a>
-            <a href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.references">References</a>
+<a name="id633527"></a>
+            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.references">References</a>
           </h5>
 <p>
             <a href="http://en.wikipedia.org/wiki/Beta_distribution" target="_top">Wikipedia
@@ -616,7 +616,7 @@ from presumed-known mean and variance.
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

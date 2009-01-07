@@ -1,5 +1,11 @@
 [template history[]
 
+[h4 Boost-1.38.0]
+
+* Added Johan R'''&#xE5;'''de's optimised floating point classification routines.
+* Fixed code so that it compiles in GCC's -pedantic mode (bug report 
+[@https://svn.boost.org/trac/boost/ticket/1451 #1451]).
+
 [h4 Boost-1.37.0]
 
 * Improved accuracy and testing of the inverse hypergeometric functions.

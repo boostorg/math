@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Binomial Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="beta_dist.html" title="Beta Distribution">
 <link rel="next" href="cauchy_dist.html" title="Cauchy-Lorentz Distribution">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist"></a><a href="binomial_dist.html" title="Binomial Distribution">
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist"></a><a class="link" href="binomial_dist.html" title="Binomial Distribution">
           Binomial Distribution</a>
 </h5></div></div></div>
 <p>
@@ -36,12 +36,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">binomial_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">binomial_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">binomial</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">binomial_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -155,10 +155,10 @@
               </p>
 <p>
                 This behaviour can be changed so that the quantile functions are
-                rounded differently, or even return a real-valued result using <a href="../../../policy/pol_overview.html" title="Policy Overview">Policies</a>. It is
-                strongly recommended that you read the tutorial <a href="../../../policy/pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
+                rounded differently, or even return a real-valued result using <a class="link" href="../../../policy/pol_overview.html" title="Policy Overview">Policies</a>. It is
+                strongly recommended that you read the tutorial <a class="link" href="../../../policy/pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
                 Quantiles of Discrete Distributions</a> before using the quantile
-                function on the Binomial distribution. The <a href="../../../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
+                function on the Binomial distribution. The <a class="link" href="../../../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
                 docs</a> describe how to change the rounding policy for these
                 distributions.
               </p>
@@ -167,13 +167,13 @@
 <p>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions"></a><h5>
-<a name="id607381"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions">Member
+<a name="id634857"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions">Member
             Functions</a>
           </h5>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.construct"></a><h6>
-<a name="id607406"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.construct">Construct</a>
+<a name="id634883"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.construct">Construct</a>
           </h6>
 <pre class="programlisting"><span class="identifier">binomial_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
@@ -186,11 +186,11 @@
             <span class="identifier">p</span> <span class="special">&lt;=</span>
             <span class="number">1</span></code>, and <code class="computeroutput"><span class="identifier">n</span>
             <span class="special">&gt;=</span> <span class="number">0</span></code>,
-            otherwise calls <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
+            otherwise calls <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accessors"></a><h6>
-<a name="id607567"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accessors">Accessors</a>
+<a name="id635044"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accessors">Accessors</a>
           </h6>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
@@ -205,8 +205,8 @@
             was constructed.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction"></a><h6>
-<a name="id607683"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction">Lower
+<a name="id635159"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction">Lower
             Bound on the Success Fraction</a>
           </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
@@ -252,7 +252,7 @@
                     <span class="identifier">n</span><span class="special">,</span> <span class="identifier">k</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
 </pre>
 <p>
-            <a href="../../stat_tut/weg/binom_eg/binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">See
+            <a class="link" href="../../stat_tut/weg/binom_eg/binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">See
             worked example.</a>
           </p>
 <p>
@@ -311,8 +311,8 @@
             limits illustrated in the case of the binomial. Biometrika 26 404-413.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction"></a><h6>
-<a name="id608314"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction">Upper
+<a name="id635812"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction">Upper
             Bound on the Success Fraction</a>
           </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
@@ -359,7 +359,7 @@
                     <span class="identifier">n</span><span class="special">,</span> <span class="identifier">k</span><span class="special">,</span> <span class="number">0.05</span><span class="special">);</span>
 </pre>
 <p>
-            <a href="../../stat_tut/weg/binom_eg/binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">See
+            <a class="link" href="../../stat_tut/weg/binom_eg/binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">See
             worked example.</a>
           </p>
 <div class="note"><table border="0" summary="Note">
@@ -383,14 +383,14 @@
               by passing &#945; = 0.025 to each of the functions.
             </p>
 <p>
-              <a href="../../stat_tut/weg/binom_eg/binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">See
+              <a class="link" href="../../stat_tut/weg/binom_eg/binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution">See
               worked example.</a>
             </p>
 </td></tr>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes"></a><h6>
-<a name="id608754"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes">Estimating
+<a name="id636252"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes">Estimating
             the Number of Trials Required for a Certain Number of Successes</a>
           </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span>
@@ -431,8 +431,8 @@
             of seeing 10 events that occur with frequency one half.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes"></a><h6>
-<a name="id609027"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes">Estimating
+<a name="id636526"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes">Estimating
             the Maximum Number of Trials to Ensure no more than a Certain Number
             of Successes</a>
           </h6>
@@ -475,28 +475,28 @@
             frequency. This is typically used in failure analysis.
           </p>
 <p>
-            <a href="../../stat_tut/weg/binom_eg/binom_size_eg.html" title="Estimating Sample Sizes for a Binomial Distribution.">See
+            <a class="link" href="../../stat_tut/weg/binom_eg/binom_size_eg.html" title="Estimating Sample Sizes for a Binomial Distribution.">See
             Worked Example.</a>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors"></a><h5>
-<a name="id609319"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors">Non-member
+<a name="id636818"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
-            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
+            All the <a class="link" href="../nmp.html" title="Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
-            <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
-            <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
-            Function</a>, <a href="../nmp.html#math.dist.chf">Cumulative Hazard Function</a>,
-            <a href="../nmp.html#math.dist.mean">mean</a>, <a href="../nmp.html#math.dist.median">median</a>,
-            <a href="../nmp.html#math.dist.mode">mode</a>, <a href="../nmp.html#math.dist.variance">variance</a>,
-            <a href="../nmp.html#math.dist.sd">standard deviation</a>, <a href="../nmp.html#math.dist.skewness">skewness</a>,
-            <a href="../nmp.html#math.dist.kurtosis">kurtosis</a>, <a href="../nmp.html#math.dist.kurtosis_excess">kurtosis_excess</a>,
-            <a href="../nmp.html#math.dist.range">range</a> and <a href="../nmp.html#math.dist.support">support</a>.
+            <a class="link" href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
+            <a class="link" href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a class="link" href="../nmp.html#math.dist.quantile">Quantile</a>, <a class="link" href="../nmp.html#math.dist.hazard">Hazard
+            Function</a>, <a class="link" href="../nmp.html#math.dist.chf">Cumulative Hazard Function</a>,
+            <a class="link" href="../nmp.html#math.dist.mean">mean</a>, <a class="link" href="../nmp.html#math.dist.median">median</a>,
+            <a class="link" href="../nmp.html#math.dist.mode">mode</a>, <a class="link" href="../nmp.html#math.dist.variance">variance</a>,
+            <a class="link" href="../nmp.html#math.dist.sd">standard deviation</a>, <a class="link" href="../nmp.html#math.dist.skewness">skewness</a>,
+            <a class="link" href="../nmp.html#math.dist.kurtosis">kurtosis</a>, <a class="link" href="../nmp.html#math.dist.kurtosis_excess">kurtosis_excess</a>,
+            <a class="link" href="../nmp.html#math.dist.range">range</a> and <a class="link" href="../nmp.html#math.dist.support">support</a>.
           </p>
 <p>
-            The domain for the random variable <span class="emphasis"><em>k</em></span> is <code class="computeroutput"><span class="number">0</span> <span class="special">&lt;=</span> <span class="identifier">k</span> <span class="special">&lt;=</span> <span class="identifier">N</span></code>, otherwise a <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
+            The domain for the random variable <span class="emphasis"><em>k</em></span> is <code class="computeroutput"><span class="number">0</span> <span class="special">&lt;=</span> <span class="identifier">k</span> <span class="special">&lt;=</span> <span class="identifier">N</span></code>, otherwise a <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
             is returned.
           </p>
 <p>
@@ -504,7 +504,7 @@
             in the context of this distribution:
           </p>
 <div class="table">
-<a name="id609532"></a><p class="title"><b>Table 11. Meaning of the non-member accessors</b></p>
+<a name="id637031"></a><p class="title"><b>Table 11. Meaning of the non-member accessors</b></p>
 <div class="table-contents"><table class="table" summary="Meaning of the non-member accessors">
 <colgroup>
 <col>
@@ -526,7 +526,7 @@
 <tr>
 <td>
                 <p>
-                  <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>
+                  <a class="link" href="../nmp.html#math.dist.pdf">Probability Density Function</a>
                 </p>
                 </td>
 <td>
@@ -544,7 +544,7 @@
 <tr>
 <td>
                 <p>
-                  <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>
+                  <a class="link" href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>
                 </p>
                 </td>
 <td>
@@ -563,7 +563,7 @@
 <tr>
 <td>
                 <p>
-                  <a href="../nmp.html#math.dist.ccdf">Complement of the Cumulative Distribution
+                  <a class="link" href="../nmp.html#math.dist.ccdf">Complement of the Cumulative Distribution
                   Function</a>
                 </p>
                 </td>
@@ -583,7 +583,7 @@
 <tr>
 <td>
                 <p>
-                  <a href="../nmp.html#math.dist.quantile">Quantile</a>
+                  <a class="link" href="../nmp.html#math.dist.quantile">Quantile</a>
                 </p>
                 </td>
 <td>
@@ -604,7 +604,7 @@
 <tr>
 <td>
                 <p>
-                  <a href="../nmp.html#math.dist.quantile_c">Quantile from the complement
+                  <a class="link" href="../nmp.html#math.dist.quantile_c">Quantile from the complement
                   of the probability</a>
                 </p>
                 </td>
@@ -627,26 +627,26 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.examples"></a><h5>
-<a name="id610092"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.examples">Examples</a>
+<a name="id637597"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.examples">Examples</a>
           </h5>
 <p>
-            Various <a href="../../stat_tut/weg/binom_eg.html" title="Binomial Distribution Examples">worked
+            Various <a class="link" href="../../stat_tut/weg/binom_eg.html" title="Binomial Distribution Examples">worked
             examples</a> are available illustrating the use of the binomial distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy"></a><h5>
-<a name="id610132"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy">Accuracy</a>
+<a name="id637637"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             This distribution is implemented using the incomplete beta functions
-            <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
-            and <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>,
+            <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
+            and <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>,
             please refer to these functions for information on accuracy.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.implementation"></a><h5>
-<a name="id610182"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.implementation">Implementation</a>
+<a name="id637686"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table <span class="emphasis"><em>p</em></span> is the probability that
@@ -680,7 +680,7 @@
                   </td>
 <td>
                   <p>
-                    Implementation is in terms of <a href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>:
+                    Implementation is in terms of <a class="link" href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>:
                     if <sub>n</sub>C<sub>k </sub> is the binomial coefficient of a and b, then we have:
                   </p>
                   <p>
@@ -691,7 +691,7 @@
                     <span class="special">(</span><span class="identifier">n</span><span class="special">+</span><span class="number">1</span><span class="special">)</span></code>
                   </p>
                   <p>
-                    The function <a href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>
+                    The function <a class="link" href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>
                     is used here, since it has already been optimised for the lowest
                     possible error - indeed this is really just a thin wrapper around
                     part of the internals of the incomplete beta function.
@@ -716,7 +716,7 @@
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">p</span> <span class="special">=</span> <span class="identifier">I</span><span class="special">[</span><span class="identifier">sub</span> <span class="number">1</span><span class="special">-</span><span class="identifier">p</span><span class="special">](</span><span class="identifier">n</span> <span class="special">-</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">k</span> <span class="special">+</span> <span class="number">1</span><span class="special">)</span>
   <span class="special">=</span> <span class="number">1</span> <span class="special">-</span> <span class="identifier">I</span><span class="special">[</span><span class="identifier">sub</span> <span class="identifier">p</span><span class="special">](</span><span class="identifier">k</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">n</span> <span class="special">-</span> <span class="identifier">k</span><span class="special">)</span>
-  <span class="special">=</span> <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a><span class="special">(</span><span class="identifier">k</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">n</span> <span class="special">-</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span></pre>
+  <span class="special">=</span> <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a><span class="special">(</span><span class="identifier">k</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">n</span> <span class="special">-</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span></pre>
 <p>
                   </p>
                   <p>
@@ -732,7 +732,7 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: q = <a href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(k
+                    Using the relation: q = <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(k
                     + 1, n - k, p)
                   </p>
                   <p>
@@ -751,7 +751,7 @@
                     Since the cdf is non-linear in variate <span class="emphasis"><em>k</em></span>
                     none of the inverse incomplete beta functions can be used here.
                     Instead the quantile is found numerically using a derivative
-                    free method (<a href="../../../toolkit/internals1/roots2.html" title="Root Finding Without Derivatives">TOMS
+                    free method (<a class="link" href="../../../toolkit/internals1/roots2.html" title="Root Finding Without Derivatives">TOMS
                     Algorithm 748</a>).
                   </p>
                   </td>
@@ -876,9 +876,9 @@
                     <code class="computeroutput"><span class="identifier">find_lower_bound_on_p</span></code>
                     and <code class="computeroutput"><span class="identifier">find_number_of_trials</span></code>
                     are implemented in terms of the inverse incomplete beta functions
-                    <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>,
-                    <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>,
-                    and <a href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_invb</a>
+                    <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>,
+                    <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>,
+                    and <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_invb</a>
                     respectively
                   </p>
                   </td>
@@ -886,8 +886,8 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.references"></a><h5>
-<a name="id611521"></a>
-            <a href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.references">References</a>
+<a name="id639025"></a>
+            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.references">References</a>
           </h5>
 <div class="itemizedlist"><ul type="disc">
 <li>
@@ -908,7 +908,7 @@
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

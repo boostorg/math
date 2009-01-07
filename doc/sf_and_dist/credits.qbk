@@ -22,6 +22,9 @@ Google Summer of Code project 2006.
 
 Bruno Lalande submitted the "compile time power of a runtime base" code.
 
+Johan R'''&#xE5;'''de wrote the optimised floating point classification
+code.
+
 Professor Nico Temme for advice on the inverse incomplete beta function.
 
 [@http://www.shoup.net Victor Shoup for NTL], 

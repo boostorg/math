@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Legendre (and Associated) Polynomials</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="../sf_poly.html" title="Polynomials">
 <link rel="next" href="laguerre.html" title="Laguerre (and Associated) Polynomials">
@@ -24,12 +24,12 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.sf_poly.legendre"></a><a href="legendre.html" title="Legendre (and Associated) Polynomials"> Legendre (and
+<a name="math_toolkit.special.sf_poly.legendre"></a><a class="link" href="legendre.html" title="Legendre (and Associated) Polynomials"> Legendre (and
         Associated) Polynomials</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.sf_poly.legendre.synopsis"></a><h5>
-<a name="id690022"></a>
-          <a href="legendre.html#math_toolkit.special.sf_poly.legendre.synopsis">Synopsis</a>
+<a name="id717527"></a>
+          <a class="link" href="legendre.html#math_toolkit.special.sf_poly.legendre.synopsis">Synopsis</a>
         </h5>
 <p>
           
@@ -41,34 +41,34 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
-
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
-
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_q</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_q</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_q</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_q</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Pl</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Plm1</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Pl</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Plm1</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Pl</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Plm1</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Pl</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Plm1</span><span class="special">);</span>
 
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
-          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
+          The return type of these functions is computed using the <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a>: note than when there is a single
           template argument the result is the same type as that argument or <code class="computeroutput"><span class="keyword">double</span></code> if the template argument is an integer
           type.
@@ -76,22 +76,22 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title="Policies">Policy</a> argument
+            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
+            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <a name="math_toolkit.special.sf_poly.legendre.description"></a><h5>
-<a name="id691199"></a>
-          <a href="legendre.html#math_toolkit.special.sf_poly.legendre.description">Description</a>
+<a name="id718703"></a>
+          <a class="link" href="legendre.html#math_toolkit.special.sf_poly.legendre.description">Description</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the Legendre Polynomial of the first kind:
@@ -100,7 +100,7 @@
           <span class="inlinemediaobject"><img src="../../../../equations/legendre_0.png"></span>
         </p>
 <p>
-          Requires -1 &lt;= x &lt;= 1, otherwise returns the result of <a href="../../main_overview/error_handling.html#domain_error">domain_error</a>.
+          Requires -1 &lt;= x &lt;= 1, otherwise returns the result of <a class="link" href="../../main_overview/error_handling.html#domain_error">domain_error</a>.
         </p>
 <p>
           Negative orders are handled via the reflection formula:
@@ -116,10 +116,10 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/legendre_p.png" align="middle"></span>
         </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">l</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">l</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">l</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_p</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">l</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the associated Legendre polynomial of the first kind:
@@ -128,7 +128,7 @@
           <span class="inlinemediaobject"><img src="../../../../equations/legendre_1.png"></span>
         </p>
 <p>
-          Requires -1 &lt;= x &lt;= 1, otherwise returns the result of <a href="../../main_overview/error_handling.html#domain_error">domain_error</a>.
+          Requires -1 &lt;= x &lt;= 1, otherwise returns the result of <a class="link" href="../../main_overview/error_handling.html#domain_error">domain_error</a>.
         </p>
 <p>
           Negative values of <span class="emphasis"><em>l</em></span> and <span class="emphasis"><em>m</em></span> are
@@ -171,10 +171,10 @@
 </td></tr>
 </table></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_q</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_q</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_q</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_q</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the value of the Legendre polynomial that is the second solution
@@ -184,7 +184,7 @@
           <span class="inlinemediaobject"><img src="../../../../equations/legendre_2.png"></span>
         </p>
 <p>
-          Requires -1 &lt;= x &lt;= 1, otherwise <a href="../../main_overview/error_handling.html#domain_error">domain_error</a>
+          Requires -1 &lt;= x &lt;= 1, otherwise <a class="link" href="../../main_overview/error_handling.html#domain_error">domain_error</a>
           is called.
         </p>
 <p>
@@ -195,7 +195,7 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/legendre_q.png" align="middle"></span>
         </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Pl</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Plm1</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Pl</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Plm1</span><span class="special">);</span>
 </pre>
 <p>
           Implements the three term recurrence relation for the Legendre polynomials,
@@ -242,7 +242,7 @@
 </dl>
 </div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Pl</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Plm1</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">legendre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Pl</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Plm1</span><span class="special">);</span>
 </pre>
 <p>
           Implements the three term recurrence relation for the Associated Legendre
@@ -292,17 +292,17 @@
 </dl>
 </div>
 <a name="math_toolkit.special.sf_poly.legendre.accuracy"></a><h5>
-<a name="id693646"></a>
-          <a href="legendre.html#math_toolkit.special.sf_poly.legendre.accuracy">Accuracy</a>
+<a name="id721151"></a>
+          <a class="link" href="legendre.html#math_toolkit.special.sf_poly.legendre.accuracy">Accuracy</a>
         </h5>
 <p>
           The following table shows peak errors (in units of epsilon) for various
           domains of input arguments. Note that only results for the widest floating
-          point type on the system are given as narrower types have <a href="../../backgrounders/relative_error.html#zero_error">effectively
+          point type on the system are given as narrower types have <a class="link" href="../../backgrounders/relative_error.html#zero_error">effectively
           zero error</a>.
         </p>
 <div class="table">
-<a name="id693677"></a><p class="title"><b>Table 29. Peak Errors In the Legendre P Function</b></p>
+<a name="id721182"></a><p class="title"><b>Table 29. Peak Errors In the Legendre P Function</b></p>
 <div class="table-contents"><table class="table" summary="Peak Errors In the Legendre P Function">
 <colgroup>
 <col>
@@ -431,7 +431,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id693875"></a><p class="title"><b>Table 30. Peak Errors In the Associated Legendre
+<a name="id721380"></a><p class="title"><b>Table 30. Peak Errors In the Associated Legendre
         P Function</b></p>
 <div class="table-contents"><table class="table" summary="Peak Errors In the Associated Legendre
         P Function">
@@ -533,7 +533,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id694033"></a><p class="title"><b>Table 31. Peak Errors In the Legendre Q Function</b></p>
+<a name="id721538"></a><p class="title"><b>Table 31. Peak Errors In the Legendre Q Function</b></p>
 <div class="table-contents"><table class="table" summary="Peak Errors In the Legendre Q Function">
 <colgroup>
 <col>
@@ -675,8 +675,8 @@
           given here.
         </p>
 <a name="math_toolkit.special.sf_poly.legendre.testing"></a><h5>
-<a name="id694259"></a>
-          <a href="legendre.html#math_toolkit.special.sf_poly.legendre.testing">Testing</a>
+<a name="id721764"></a>
+          <a class="link" href="legendre.html#math_toolkit.special.sf_poly.legendre.testing">Testing</a>
         </h5>
 <p>
           A mixture of spot tests of values calculated using functions.wolfram.com,
@@ -685,8 +685,8 @@
           precision.
         </p>
 <a name="math_toolkit.special.sf_poly.legendre.implementation"></a><h5>
-<a name="id694298"></a>
-          <a href="legendre.html#math_toolkit.special.sf_poly.legendre.implementation">Implementation</a>
+<a name="id721803"></a>
+          <a class="link" href="legendre.html#math_toolkit.special.sf_poly.legendre.implementation">Implementation</a>
         </h5>
 <p>
           These functions are implemented using the stable three term recurrence
@@ -697,7 +697,7 @@
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

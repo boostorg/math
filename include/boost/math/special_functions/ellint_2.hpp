@@ -75,7 +75,7 @@ T ellint_e_imp(T phi, T k, const Policy& pol)
        // so rewritten to use fmod instead:
        //
        T rphi = boost::math::tools::fmod_workaround(phi, constants::pi<T>() / 2);
-       T m = 2 * (phi - rphi) / constants::pi<T>();
+       T m = floor((2 * phi) / constants::pi<T>());
        int s = 1;
        if(boost::math::tools::fmod_workaround(m, T(2)) > 0.5)
        {

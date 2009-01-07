@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Error Handling</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../main_overview.html" title="Overview">
 <link rel="prev" href="result_type.html" title="Calculation of the Type of the Result">
 <link rel="next" href="compilers_overview.html" title="Compilers">
@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.main_overview.error_handling"></a><a href="error_handling.html" title="Error Handling"> Error Handling</a>
+<a name="math_toolkit.main_overview.error_handling"></a><a class="link" href="error_handling.html" title="Error Handling"> Error Handling</a>
 </h3></div></div></div>
 <a name="math_toolkit.main_overview.error_handling.quick_reference"></a><h5>
-<a name="id501001"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.quick_reference">Quick
+<a name="id528440"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.quick_reference">Quick
         Reference</a>
       </h5>
 <p>
@@ -55,7 +55,7 @@
 <dt><span class="term">Pole Error</span></dt>
 <dd><p>
             Occurs when the particular arguments cause the function to be evaluated
-            at a pole with no well defined residual value. For example if <a href="../special/sf_gamma/tgamma.html" title="Gamma">tgamma</a>
+            at a pole with no well defined residual value. For example if <a class="link" href="../special/sf_gamma/tgamma.html" title="Gamma">tgamma</a>
             is evaluated at exactly -2, the function approaches different limiting
             values depending upon whether you approach from just above or just below
             -2. Hence the function has no well defined value at this point and a
@@ -77,9 +77,9 @@
           </p></dd>
 <dt><span class="term">Rounding Error</span></dt>
 <dd><p>
-            Occurs when the argument to one of the rounding functions <a href="../special/rounding/trunc.html" title="Truncation Functions">trunc</a>,
-            <a href="../special/rounding/round.html" title="Rounding Functions">round</a> and
-            <a href="../special/rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">modf</a> can not
+            Occurs when the argument to one of the rounding functions <a class="link" href="../special/rounding/trunc.html" title="Truncation Functions">trunc</a>,
+            <a class="link" href="../special/rounding/round.html" title="Rounding Functions">round</a> and
+            <a class="link" href="../special/rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">modf</a> can not
             be represented as an integer type, is is outide the range of the result
             type.
           </p></dd>
@@ -98,7 +98,7 @@
 </div>
 <p>
         The action undertaken by each error condition is determined by the current
-        <a href="../policy.html" title="Policies">Policy</a> in effect. This can be
+        <a class="link" href="../policy.html" title="Policies">Policy</a> in effect. This can be
         changed program-wide by setting some configuration macros, or at namespace
         scope, or at the call site (by specifying a specific policy in the function
         call).
@@ -124,7 +124,7 @@
           </p></dd>
 <dt><span class="term">user_error</span></dt>
 <dd><p>
-            Calls a <a href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">user-supplied
+            Calls a <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">user-supplied
             error handler</a>.
           </p></dd>
 </dl>
@@ -134,7 +134,7 @@
         the default action for each error shown in bold:
       </p>
 <div class="table">
-<a name="id501321"></a><p class="title"><b>Table 1. Possible Actions for Domain Errors</b></p>
+<a name="id528760"></a><p class="title"><b>Table 1. Possible Actions for Domain Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Domain Errors">
 <colgroup>
 <col>
@@ -200,7 +200,7 @@
 <td>
             <p>
               Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_domain_error</span></code>:
-              <a href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
               function must be defined by the user</a>.
             </p>
             </td>
@@ -209,7 +209,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id501638"></a><p class="title"><b>Table 2. Possible Actions for Pole Errors</b></p>
+<a name="id529078"></a><p class="title"><b>Table 2. Possible Actions for Pole Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Pole Errors">
 <colgroup>
 <col>
@@ -275,7 +275,7 @@
 <td>
             <p>
               Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_pole_error</span></code>:
-              <a href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
               function must be defined by the user</a>.
             </p>
             </td>
@@ -284,7 +284,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id501952"></a><p class="title"><b>Table 3. Possible Actions for Overflow Errors</b></p>
+<a name="id529392"></a><p class="title"><b>Table 3. Possible Actions for Overflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Overflow Errors">
 <colgroup>
 <col>
@@ -350,7 +350,7 @@
 <td>
             <p>
               Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_overflow_error</span></code>:
-              <a href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
               function must be defined by the user</a>.
             </p>
             </td>
@@ -359,7 +359,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id502268"></a><p class="title"><b>Table 4. Possible Actions for Underflow Errors</b></p>
+<a name="id529707"></a><p class="title"><b>Table 4. Possible Actions for Underflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Underflow Errors">
 <colgroup>
 <col>
@@ -425,7 +425,7 @@
 <td>
             <p>
               Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_underflow_error</span></code>:
-              <a href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
               function must be defined by the user</a>.
             </p>
             </td>
@@ -434,7 +434,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id502492"></a><p class="title"><b>Table 5. Possible Actions for Denorm Errors</b></p>
+<a name="id529931"></a><p class="title"><b>Table 5. Possible Actions for Denorm Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Denorm Errors">
 <colgroup>
 <col>
@@ -500,7 +500,7 @@
 <td>
             <p>
               Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_denorm_error</span></code>:
-              <a href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
               function must be defined by the user</a>.
             </p>
             </td>
@@ -509,7 +509,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id502716"></a><p class="title"><b>Table 6. Possible Actions for Rounding Errors</b></p>
+<a name="id530156"></a><p class="title"><b>Table 6. Possible Actions for Rounding Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Rounding Errors">
 <colgroup>
 <col>
@@ -575,7 +575,7 @@
 <td>
             <p>
               Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_rounding_error</span></code>:
-              <a href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
               function must be defined by the user</a>.
             </p>
             </td>
@@ -584,7 +584,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id502950"></a><p class="title"><b>Table 7. Possible Actions for Internal Evaluation
+<a name="id530390"></a><p class="title"><b>Table 7. Possible Actions for Internal Evaluation
       Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Internal Evaluation
       Errors">
@@ -652,7 +652,7 @@
 <td>
             <p>
               Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_evaluation_error</span></code>:
-              <a href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
               function must be defined by the user</a>.
             </p>
             </td>
@@ -661,7 +661,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id503185"></a><p class="title"><b>Table 8. Possible Actions for Indeterminate Result
+<a name="id530625"></a><p class="title"><b>Table 8. Possible Actions for Indeterminate Result
       Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Indeterminate Result
       Errors">
@@ -730,7 +730,7 @@
 <td>
             <p>
               Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_indeterminate_result_error</span></code>:
-              <a href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
               function must be defined by the user</a>.
             </p>
             </td>
@@ -739,8 +739,8 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.main_overview.error_handling.rationale"></a><h5>
-<a name="id503431"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.rationale">Rationale</a>
+<a name="id530871"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.rationale">Rationale</a>
       </h5>
 <p>
         The flexibility of the current implementation should be reasonably obvious,
@@ -758,30 +758,30 @@
         </li>
 </ul></div>
 <a name="math_toolkit.main_overview.error_handling.finding_more_information"></a><h5>
-<a name="id503481"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.finding_more_information">Finding
+<a name="id530920"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.finding_more_information">Finding
         More Information</a>
       </h5>
 <p>
-        There are some pre-processor macro defines that can be used to <a href="../policy/pol_ref/policy_defaults.html" title="Using macros to Change the Policy Defaults">change
-        the policy defaults</a>. See also the <a href="../policy.html" title="Policies">policy
+        There are some pre-processor macro defines that can be used to <a class="link" href="../policy/pol_ref/policy_defaults.html" title="Using macros to Change the Policy Defaults">change
+        the policy defaults</a>. See also the <a class="link" href="../policy.html" title="Policies">policy
         section</a>.
       </p>
 <p>
-        An example is at the Policy tutorial in <a href="../policy/pol_tutorial/changing_policy_defaults.html" title="Changing the Policy Defaults">Changing
+        An example is at the Policy tutorial in <a class="link" href="../policy/pol_tutorial/changing_policy_defaults.html" title="Changing the Policy Defaults">Changing
         the Policy Defaults</a>.
       </p>
 <p>
         Full source code of this typical example of passing a 'bad' argument (negative
-        degrees of freedom) to Student's t distribution is <a href="../dist/stat_tut/weg/error_eg.html" title="Error Handling Example">in
+        degrees of freedom) to Student's t distribution is <a class="link" href="../dist/stat_tut/weg/error_eg.html" title="Error Handling Example">in
         the error handling example</a>.
       </p>
 <p>
         The various kind of errors are described in more detail below.
       </p>
 <a name="domain_error"></a><a name="math_toolkit.main_overview.error_handling.domain_errors"></a><h5>
-<a name="id503575"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.domain_errors">Domain
+<a name="id531015"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.domain_errors">Domain
         Errors</a>
       </h5>
 <p>
@@ -789,19 +789,19 @@
         values for which that function is defined, then the function returns the
         result of:
       </p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_domain_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_domain_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a class="link" href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating-point
         type passed to the function, <code class="computeroutput"><span class="identifier">FunctionName</span></code>
         is the name of the function, <code class="computeroutput"><span class="identifier">Message</span></code>
         is an error message describing the problem, Val is the value that was out
-        of range, and <a href="../policy.html" title="Policies">Policy</a> is the current
+        of range, and <a class="link" href="../policy.html" title="Policies">Policy</a> is the current
         policy in use for the function that was called.
       </p>
 <p>
         The default policy behaviour of this function is to throw a std::domain_error
-        C++ exception. But if the <a href="../policy.html" title="Policies">Policy</a>
+        C++ exception. But if the <a class="link" href="../policy.html" title="Policies">Policy</a>
         is to ignore the error, or set global ::errno, then a NaN will be returned.
       </p>
 <p>
@@ -873,27 +873,27 @@
         for more details.
       </p>
 <a name="pole_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_at_a_pole"></a><h5>
-<a name="id503958"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_at_a_pole">Evaluation
+<a name="id531397"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_at_a_pole">Evaluation
         at a pole</a>
       </h5>
 <p>
         When a special function is passed an argument that is at a pole without a
         well defined residual value, then the function returns the result of:
       </p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_pole_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_pole_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a class="link" href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating point
         type passed to the function, <code class="computeroutput"><span class="identifier">FunctionName</span></code>
         is the name of the function, <code class="computeroutput"><span class="identifier">Message</span></code>
         is an error message describing the problem, <code class="computeroutput"><span class="identifier">Val</span></code>
-        is the value of the argument that is at a pole, and <a href="../policy.html" title="Policies">Policy</a>
+        is the value of the argument that is at a pole, and <a class="link" href="../policy.html" title="Policies">Policy</a>
         is the current policy in use for the function that was called.
       </p>
 <p>
         The default behaviour of this function is to throw a std::domain_error exception.
-        But <a href="../policy/pol_ref/error_handling_policies.html" title="Error Handling Policies">error
+        But <a class="link" href="../policy/pol_ref/error_handling_policies.html" title="Error Handling Policies">error
         handling policies</a> can be used to change this, for example to <code class="computeroutput"><span class="identifier">ignore_error</span></code> and return NaN.
       </p>
 <p>
@@ -912,21 +912,21 @@
         for more details.
       </p>
 <a name="overflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_overflow"></a><h5>
-<a name="id504279"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_overflow">Numeric
+<a name="id531719"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_overflow">Numeric
         Overflow</a>
       </h5>
 <p>
         When the result of a special function is too large to fit in the argument
         floating-point type, then the function returns the result of:
       </p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_overflow_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_overflow_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a class="link" href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating-point
         type passed to the function, <code class="computeroutput"><span class="identifier">FunctionName</span></code>
         is the name of the function, <code class="computeroutput"><span class="identifier">Message</span></code>
-        is an error message describing the problem, and <a href="../policy.html" title="Policies">Policy</a>
+        is an error message describing the problem, and <a class="link" href="../policy.html" title="Policies">Policy</a>
         is the current policy in use for the function that was called.
       </p>
 <p>
@@ -937,21 +937,21 @@
         doesn't support infinities, the maximum value for the type is returned.
       </p>
 <a name="underflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_underflow"></a><h5>
-<a name="id504560"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_underflow">Numeric
+<a name="id531999"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_underflow">Numeric
         Underflow</a>
       </h5>
 <p>
         If the result of a special function is known to be non-zero, but the calculated
         result underflows to zero, then the function returns the result of:
       </p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_underflow_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_underflow_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a class="link" href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating point
         type passed to the function, <code class="computeroutput"><span class="identifier">FunctionName</span></code>
         is the name of the function, <code class="computeroutput"><span class="identifier">Message</span></code>
-        is an error message describing the problem, and <a href="../policy.html" title="Policies">Policy</a>
+        is an error message describing the problem, and <a class="link" href="../policy.html" title="Policies">Policy</a>
         is the current policy in use for the called function.
       </p>
 <p>
@@ -960,21 +960,21 @@
         an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="denorm_error"></a><a name="math_toolkit.main_overview.error_handling.denormalisation_errors"></a><h5>
-<a name="id504782"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.denormalisation_errors">Denormalisation
+<a name="id532221"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.denormalisation_errors">Denormalisation
         Errors</a>
       </h5>
 <p>
         If the result of a special function is a denormalised value <span class="emphasis"><em>z</em></span>
         then the function returns the result of:
       </p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_denorm_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_denorm_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <a class="link" href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating point
         type passed to the function, <code class="computeroutput"><span class="identifier">FunctionName</span></code>
         is the name of the function, <code class="computeroutput"><span class="identifier">Message</span></code>
-        is an error message describing the problem, and <a href="../policy.html" title="Policies">Policy</a>
+        is an error message describing the problem, and <a class="link" href="../policy.html" title="Policies">Policy</a>
         is the current policy in use for the called function.
       </p>
 <p>
@@ -983,22 +983,22 @@
         throws an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="evaluation_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_errors"></a><h5>
-<a name="id505019"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_errors">Evaluation
+<a name="id532458"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_errors">Evaluation
         Errors</a>
       </h5>
 <p>
         When a special function calculates a result that is known to be erroneous,
         or where the result is incalculable then it calls:
       </p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_evaluation_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_evaluation_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a class="link" href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating point
         type passed to the function, <code class="computeroutput"><span class="identifier">FunctionName</span></code>
         is the name of the function, <code class="computeroutput"><span class="identifier">Message</span></code>
         is an error message describing the problem, <code class="computeroutput"><span class="identifier">Val</span></code>
-        is the erroneous value, and <a href="../policy.html" title="Policies">Policy</a>
+        is the erroneous value, and <a class="link" href="../policy.html" title="Policies">Policy</a>
         is the current policy in use for the called function.
       </p>
 <p>
@@ -1020,15 +1020,15 @@
         for more details.
       </p>
 <a name="indeterminate_result_error"></a><a name="math_toolkit.main_overview.error_handling.indeterminate_result_errors"></a><h5>
-<a name="id505350"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.indeterminate_result_errors">Indeterminate
+<a name="id532789"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.indeterminate_result_errors">Indeterminate
         Result Errors</a>
       </h5>
 <p>
         When the result of a special function is indeterminate for the value that
         was passed to it, then the function returns the result of:
       </p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_overflow_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <span class="identifier">Default</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_overflow_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <span class="identifier">Default</span><span class="special">,</span> <a class="link" href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating-point
@@ -1036,7 +1036,7 @@
         is the name of the function, <code class="computeroutput"><span class="identifier">Message</span></code>
         is an error message describing the problem, Val is the value for which the
         result is indeterminate, Default is an alternative default result that must
-        be returned for ignore_error and errno_on_error policies, and <a href="../policy.html" title="Policies">Policy</a>
+        be returned for ignore_error and errno_on_error policies, and <a class="link" href="../policy.html" title="Policies">Policy</a>
         is the current policy in use for the function that was called.
       </p>
 <p>
@@ -1047,24 +1047,24 @@
         the result of 0<sup>0</sup> is 1, even though the result is actually mathematically indeterminate.
       </p>
 <a name="rounding_error"></a><a name="math_toolkit.main_overview.error_handling.rounding_errors"></a><h5>
-<a name="id505577"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.rounding_errors">Rounding
+<a name="id533016"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.rounding_errors">Rounding
         Errors</a>
       </h5>
 <p>
-        When one of the rounding functions <a href="../special/rounding/round.html" title="Rounding Functions">round</a>,
-        <a href="../special/rounding/trunc.html" title="Truncation Functions">trunc</a> or <a href="../special/rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">modf</a> is called with an
+        When one of the rounding functions <a class="link" href="../special/rounding/round.html" title="Rounding Functions">round</a>,
+        <a class="link" href="../special/rounding/trunc.html" title="Truncation Functions">trunc</a> or <a class="link" href="../special/rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">modf</a> is called with an
         argument that has no integer representation, or is too large to be represented
         in the result type then the value returned is the result of a call to:
       </p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_rounding_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">raise_rounding_error</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">FunctionName</span><span class="special">,</span> <span class="identifier">Message</span><span class="special">,</span> <span class="identifier">Val</span><span class="special">,</span> <a class="link" href="../policy.html" title="Policies">Policy</a><span class="special">);</span>
 </pre>
 <p>
         Where <code class="computeroutput"><span class="identifier">T</span></code> is the floating point
         type passed to the function, <code class="computeroutput"><span class="identifier">FunctionName</span></code>
         is the name of the function, <code class="computeroutput"><span class="identifier">Message</span></code>
         is an error message describing the problem, <code class="computeroutput"><span class="identifier">Val</span></code>
-        is the erroneous argument, and <a href="../policy.html" title="Policies">Policy</a>
+        is the erroneous argument, and <a class="link" href="../policy.html" title="Policies">Policy</a>
         is the current policy in use for the called function.
       </p>
 <p>
@@ -1086,8 +1086,8 @@
         for more details.
       </p>
 <a name="checked_narrowing_cast"></a><a name="math_toolkit.main_overview.error_handling.errors_from_typecasts"></a><h5>
-<a name="id505931"></a>
-        <a href="error_handling.html#math_toolkit.main_overview.error_handling.errors_from_typecasts">Errors
+<a name="id533371"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.errors_from_typecasts">Errors
         from typecasts</a>
       </h5>
 <p>
@@ -1098,19 +1098,19 @@
         occur not during evaluation, but when converting the result to the narrower
         result type. The function:
       </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../policy.html" title="Policies">Policy</a><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Policies">Policy</a><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">checked_narrowing_cast</span><span class="special">(</span><span class="identifier">U</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">);</span>
 </pre>
 <p>
         Is used to perform these conversions, and will call the error handlers listed
-        above on <a href="error_handling.html#overflow_error">overflow</a>, <a href="error_handling.html#underflow_error">underflow</a>
-        or <a href="error_handling.html#denorm_error">denormalisation</a>.
+        above on <a class="link" href="error_handling.html#overflow_error">overflow</a>, <a class="link" href="error_handling.html#underflow_error">underflow</a>
+        or <a class="link" href="error_handling.html#denorm_error">denormalisation</a>.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

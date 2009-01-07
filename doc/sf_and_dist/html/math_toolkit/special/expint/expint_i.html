@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Exponential Integral Ei</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../expint.html" title="Exponential Integrals">
 <link rel="prev" href="expint_n.html" title="Exponential Integral En">
 <link rel="next" href="../powers.html" title="Logs, Powers, Roots and Exponentials">
@@ -24,12 +24,12 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.expint.expint_i"></a><a href="expint_i.html" title="Exponential Integral Ei"> Exponential
+<a name="math_toolkit.special.expint.expint_i"></a><a class="link" href="expint_i.html" title="Exponential Integral Ei"> Exponential
         Integral Ei</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.expint.expint_i.synopsis"></a><h5>
-<a name="id726532"></a>
-          <a href="expint_i.html#math_toolkit.special.expint.expint_i.synopsis">Synopsis</a>
+<a name="id754032"></a>
+          <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.synopsis">Synopsis</a>
         </h5>
 <p>
           
@@ -41,36 +41,36 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
-          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
+          The return type of these functions is computed using the <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a>: the return type is <code class="computeroutput"><span class="keyword">double</span></code> if T is an integer type, and T otherwise.
         </p>
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title="Policies">Policy</a> argument
+            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
+            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <a name="math_toolkit.special.expint.expint_i.description"></a><h5>
-<a name="id726908"></a>
-          <a href="expint_i.html#math_toolkit.special.expint.expint_i.description">Description</a>
+<a name="id754408"></a>
+          <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.description">Description</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the <a href="http://mathworld.wolfram.com/ExponentialIntegral.html" target="_top">exponential
@@ -83,19 +83,19 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/expint_i.png" align="middle"></span>
         </p>
 <a name="math_toolkit.special.expint.expint_i.accuracy"></a><h5>
-<a name="id727186"></a>
-          <a href="expint_i.html#math_toolkit.special.expint.expint_i.accuracy">Accuracy</a>
+<a name="id754685"></a>
+          <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.accuracy">Accuracy</a>
         </h5>
 <p>
           The following table shows the peak errors (in units of epsilon) found on
           various platforms with various floating point types, along with comparisons
           to Cody's SPECFUN implementation and the <a href="http://www.gnu.org/software/gsl/" target="_top">GSL-1.9</a>
           library. Unless otherwise specified any floating point type that is narrower
-          than the one shown will have <a href="../../backgrounders/relative_error.html#zero_error">effectively zero
+          than the one shown will have <a class="link" href="../../backgrounders/relative_error.html#zero_error">effectively zero
           error</a>.
         </p>
 <div class="table">
-<a name="id727225"></a><p class="title"><b>Table 46. Errors In the Function expint(z)</b></p>
+<a name="id754725"></a><p class="title"><b>Table 46. Errors In the Function expint(z)</b></p>
 <div class="table-contents"><table class="table" summary="Errors In the Function expint(z)">
 <colgroup>
 <col>
@@ -207,8 +207,8 @@
           slightly over the range [4,6].
         </p>
 <a name="math_toolkit.special.expint.expint_i.testing"></a><h5>
-<a name="id727409"></a>
-          <a href="expint_i.html#math_toolkit.special.expint.expint_i.testing">Testing</a>
+<a name="id754909"></a>
+          <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.testing">Testing</a>
         </h5>
 <p>
           The tests for these functions come in two parts: basic sanity checks use
@@ -222,11 +222,11 @@
           check.
         </p>
 <a name="math_toolkit.special.expint.expint_i.implementation"></a><h5>
-<a name="id727462"></a>
-          <a href="expint_i.html#math_toolkit.special.expint.expint_i.implementation">Implementation</a>
+<a name="id754962"></a>
+          <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.implementation">Implementation</a>
         </h5>
 <p>
-          For x &lt; 0 this function just calls <a href="expint_n.html" title="Exponential Integral En">zeta</a>(1,
+          For x &lt; 0 this function just calls <a class="link" href="expint_n.html" title="Exponential Integral En">zeta</a>(1,
           -x): which in turn is implemented in terms of rational approximations when
           the type of x has 113 or fewer bits of precision.
         </p>
@@ -238,7 +238,7 @@
         </p>
 <p>
           However, when the precision of the argument type is known at compile time
-          and is 113 bits or less, then rational approximations <a href="../../backgrounders/implementation.html#math_toolkit.backgrounders.implementation.rational_approximations_used">devised
+          and is 113 bits or less, then rational approximations <a class="link" href="../../backgrounders/implementation.html#math_toolkit.backgrounders.implementation.rational_approximations_used">devised
           by JM</a> are used.
         </p>
 <p>
@@ -253,7 +253,7 @@
           [-1,1]. Note that while the rational approximation over [0,6] converges
           rapidly to the minimax solution it is rather ill-conditioned in practice.
           Cody and Thacher
-          <sup>[<a name="id727601" href="#ftn.id727601">1</a>]</sup>
+          <sup>[<a name="id755101" href="#ftn.id755101" class="footnote">1</a>]</sup>
           experienced the same issue and converted the polynomials into Chebeshev
           form to ensure stable computation. By experiment we found that the polynomials
           are just as stable in polynomial as Chebyshev form, <span class="emphasis"><em>provided</em></span>
@@ -284,7 +284,7 @@
         </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id727601" href="#id727601">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id755101" href="#id755101" class="para">1</a>] </sup>
               W. J. Cody and H. C. Thacher, Jr., Rational Chebyshev approximations
               for the exponential integral E<sub>1</sub>(x), Math. Comp. 22 (1968), 641-649,
               and W. J. Cody and H. C. Thacher, Jr., Chebyshev approximations for
@@ -295,7 +295,7 @@
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

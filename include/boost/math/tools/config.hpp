@@ -70,6 +70,24 @@
 #  define BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS
 #endif
 
+#if (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901))
+#  define BOOST_MATH_USE_C99
+#endif
+
+#if (defined(__hpux) && !defined(__hppa))
+#  define BOOST_MATH_USE_C99
+#endif
+
+#if defined(__GNUC__) && defined(_GLIBCXX_USE_C99)
+#  define BOOST_MATH_USE_C99
+#endif
+
+#if defined(__CYGWIN__) || defined(__HP_aCC) || defined(BOOST_INTEL) \
+  || defined(BOOST_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY) \
+  || (defined(__GNUC__) && !defined(BOOST_MATH_USE_C99))
+#  define BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY
+#endif
+
 #if defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
 
 #  include "boost/type.hpp"
@@ -135,6 +153,12 @@
 #  define BOOST_MATH_POLY_METHOD 3
 #  define BOOST_MATH_RATIONAL_METHOD 3
 #  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
+#  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##.0L
+#endif
+
+#if defined(BOOST_NO_LONG_LONG) && !defined(BOOST_MATH_INT_TABLE_TYPE)
+#  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
+#  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##.0L
 #endif
 
 //
@@ -159,6 +183,10 @@
 #ifndef BOOST_MATH_INT_TABLE_TYPE
 #  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
 #endif
+#ifndef BOOST_MATH_INT_VALUE_SUFFIX
+#  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##SUF
+#endif
+
 //
 // Helper macro for controlling the FP behaviour:
 //
@@ -219,7 +247,7 @@ inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
 } // namespace tools
 }} // namespace boost namespace math
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__QNX__) || defined(__IBMCPP__)
 
    #include <fenv.h>
 

@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Rising Factorial</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../factorials.html" title="Factorials and Binomial Coefficients">
 <link rel="prev" href="sf_double_factorial.html" title="Double Factorial">
 <link rel="next" href="sf_falling_factorial.html" title="Falling Factorial">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.factorials.sf_rising_factorial"></a><a href="sf_rising_factorial.html" title="Rising Factorial">
+<a name="math_toolkit.special.factorials.sf_rising_factorial"></a><a class="link" href="sf_rising_factorial.html" title="Rising Factorial">
         Rising Factorial</a>
 </h4></div></div></div>
 <p>
@@ -37,10 +37,10 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">rising_factorial</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">i</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">rising_factorial</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">i</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">rising_factorial</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">rising_factorial</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
@@ -63,44 +63,44 @@
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title="Policies">Policy</a> argument
+            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
+            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <p>
-          May return the result of <a href="../../main_overview/error_handling.html#overflow_error">overflow_error</a>
+          May return the result of <a class="link" href="../../main_overview/error_handling.html#overflow_error">overflow_error</a>
           if the result is too large to represent in type T.
         </p>
 <p>
-          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
+          The return type of these functions is computed using the <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a>: the type of the result is <code class="computeroutput"><span class="keyword">double</span></code> if T is an integer type, otherwise
           the type of the result is T.
         </p>
 <a name="math_toolkit.special.factorials.sf_rising_factorial.accuracy"></a><h5>
-<a name="id669818"></a>
-          <a href="sf_rising_factorial.html#math_toolkit.special.factorials.sf_rising_factorial.accuracy">Accuracy</a>
+<a name="id697330"></a>
+          <a class="link" href="sf_rising_factorial.html#math_toolkit.special.factorials.sf_rising_factorial.accuracy">Accuracy</a>
         </h5>
 <p>
-          The accuracy will be the same as the <a href="../sf_gamma/gamma_ratios.html" title="Ratios of Gamma Functions">tgamma_delta_ratio</a>
+          The accuracy will be the same as the <a class="link" href="../sf_gamma/gamma_ratios.html" title="Ratios of Gamma Functions">tgamma_delta_ratio</a>
           function.
         </p>
 <a name="math_toolkit.special.factorials.sf_rising_factorial.testing"></a><h5>
-<a name="id669856"></a>
-          <a href="sf_rising_factorial.html#math_toolkit.special.factorials.sf_rising_factorial.testing">Testing</a>
+<a name="id697367"></a>
+          <a class="link" href="sf_rising_factorial.html#math_toolkit.special.factorials.sf_rising_factorial.testing">Testing</a>
         </h5>
 <p>
           The spot tests for the rising factorials use data generated by functions.wolfram.com.
         </p>
 <a name="math_toolkit.special.factorials.sf_rising_factorial.implementation"></a><h5>
-<a name="id669888"></a>
-          <a href="sf_rising_factorial.html#math_toolkit.special.factorials.sf_rising_factorial.implementation">Implementation</a>
+<a name="id697399"></a>
+          <a class="link" href="sf_rising_factorial.html#math_toolkit.special.factorials.sf_rising_factorial.implementation">Implementation</a>
         </h5>
 <p>
           Rising and falling factorials are implemented as ratios of gamma functions
-          using <a href="../sf_gamma/gamma_ratios.html" title="Ratios of Gamma Functions">tgamma_delta_ratio</a>.
+          using <a class="link" href="../sf_gamma/gamma_ratios.html" title="Ratios of Gamma Functions">tgamma_delta_ratio</a>.
           Optimisations for small integer arguments are handled internally by that
           function.
         </p>
@@ -108,7 +108,7 @@
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

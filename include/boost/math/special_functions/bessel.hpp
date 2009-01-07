@@ -307,6 +307,10 @@ template <class T, class Policy>
 inline T cyl_neumann_imp(T v, T x, const bessel_no_int_tag&, const Policy& pol)
 {
    static const char* function = "boost::math::cyl_neumann<%1%>(%1%,%1%)";
+
+   BOOST_MATH_INSTRUMENT_VARIABLE(v);
+   BOOST_MATH_INSTRUMENT_VARIABLE(x);
+
    if(x <= 0)
    {
       return (v == 0) && (x == 0) ?
@@ -332,6 +336,10 @@ inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& po
 {
    BOOST_MATH_STD_USING
    typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
+
+   BOOST_MATH_INSTRUMENT_VARIABLE(v);
+   BOOST_MATH_INSTRUMENT_VARIABLE(x);
+
    if(floor(v) == v)
    {
       if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
@@ -339,12 +347,19 @@ inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& po
          T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);
          if((v < 0) && (itrunc(v, pol) & 1))
             r = -r;
+         BOOST_MATH_INSTRUMENT_VARIABLE(r);
          return r;
       }
       else
-         return bessel_yn(itrunc(v, pol), x, pol);
+      {
+         T r = bessel_yn(itrunc(v, pol), x, pol);
+         BOOST_MATH_INSTRUMENT_VARIABLE(r);
+         return r;
+      }
    }
-   return cyl_neumann_imp<T>(v, x, bessel_no_int_tag(), pol);
+   T r = cyl_neumann_imp<T>(v, x, bessel_no_int_tag(), pol);
+   BOOST_MATH_INSTRUMENT_VARIABLE(r);
+   return r;
 }
 
 template <class T, class Policy>
@@ -352,6 +367,10 @@ inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
+
+   BOOST_MATH_INSTRUMENT_VARIABLE(v);
+   BOOST_MATH_INSTRUMENT_VARIABLE(x);
+
    if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
    {
       T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);

@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Normal (Gaussian) Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="nc_t_dist.html" title="Noncentral T Distribution">
 <link rel="next" href="pareto.html" title="Pareto Distribution">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.normal_dist"></a><a href="normal_dist.html" title="Normal (Gaussian) Distribution"> Normal
+<a name="math_toolkit.dist.dist_ref.dists.normal_dist"></a><a class="link" href="normal_dist.html" title="Normal (Gaussian) Distribution"> Normal
           (Gaussian) Distribution</a>
 </h5></div></div></div>
 <p>
@@ -36,12 +36,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
    
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
-          <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">normal_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">normal_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">normal</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">normal_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -79,8 +79,8 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/normal_pdf.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.normal_dist.member_functions"></a><h5>
-<a name="id636531"></a>
-            <a href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.member_functions">Member
+<a name="id664056"></a>
+            <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.member_functions">Member
             Functions</a>
           </h5>
 <pre class="programlisting"><span class="identifier">normal_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">sd</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
@@ -90,7 +90,7 @@
             and standard deviation <span class="emphasis"><em>sd</em></span>.
           </p>
 <p>
-            Requires sd &gt; 0, otherwise <a href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
+            Requires sd &gt; 0, otherwise <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
             is called.
           </p>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">mean</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
@@ -109,21 +109,21 @@
             be used generically).
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.normal_dist.non_member_accessors"></a><h5>
-<a name="id636805"></a>
-            <a href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.non_member_accessors">Non-member
+<a name="id664330"></a>
+            <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
-            All the <a href="../nmp.html" title="Non-Member Properties">usual non-member
+            All the <a class="link" href="../nmp.html" title="Non-Member Properties">usual non-member
             accessor functions</a> that are generic to all distributions are supported:
-            <a href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
-            <a href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a href="../nmp.html#math.dist.quantile">Quantile</a>, <a href="../nmp.html#math.dist.hazard">Hazard
-            Function</a>, <a href="../nmp.html#math.dist.chf">Cumulative Hazard Function</a>,
-            <a href="../nmp.html#math.dist.mean">mean</a>, <a href="../nmp.html#math.dist.median">median</a>,
-            <a href="../nmp.html#math.dist.mode">mode</a>, <a href="../nmp.html#math.dist.variance">variance</a>,
-            <a href="../nmp.html#math.dist.sd">standard deviation</a>, <a href="../nmp.html#math.dist.skewness">skewness</a>,
-            <a href="../nmp.html#math.dist.kurtosis">kurtosis</a>, <a href="../nmp.html#math.dist.kurtosis_excess">kurtosis_excess</a>,
-            <a href="../nmp.html#math.dist.range">range</a> and <a href="../nmp.html#math.dist.support">support</a>.
+            <a class="link" href="../nmp.html#math.dist.cdf">Cumulative Distribution Function</a>,
+            <a class="link" href="../nmp.html#math.dist.pdf">Probability Density Function</a>, <a class="link" href="../nmp.html#math.dist.quantile">Quantile</a>, <a class="link" href="../nmp.html#math.dist.hazard">Hazard
+            Function</a>, <a class="link" href="../nmp.html#math.dist.chf">Cumulative Hazard Function</a>,
+            <a class="link" href="../nmp.html#math.dist.mean">mean</a>, <a class="link" href="../nmp.html#math.dist.median">median</a>,
+            <a class="link" href="../nmp.html#math.dist.mode">mode</a>, <a class="link" href="../nmp.html#math.dist.variance">variance</a>,
+            <a class="link" href="../nmp.html#math.dist.sd">standard deviation</a>, <a class="link" href="../nmp.html#math.dist.skewness">skewness</a>,
+            <a class="link" href="../nmp.html#math.dist.kurtosis">kurtosis</a>, <a class="link" href="../nmp.html#math.dist.kurtosis_excess">kurtosis_excess</a>,
+            <a class="link" href="../nmp.html#math.dist.range">range</a> and <a class="link" href="../nmp.html#math.dist.support">support</a>.
           </p>
 <p>
             The domain of the random variable is [-[max_value], +[min_value]]. However,
@@ -131,16 +131,16 @@
             and complement cdf -&#8734; = 1 and +&#8734; = 0, if RealType permits.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.normal_dist.accuracy"></a><h5>
-<a name="id636982"></a>
-            <a href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.accuracy">Accuracy</a>
+<a name="id664507"></a>
+            <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.accuracy">Accuracy</a>
           </h5>
 <p>
-            The normal distribution is implemented in terms of the <a href="../../../special/sf_erf/error_function.html" title="Error Functions">error
+            The normal distribution is implemented in terms of the <a class="link" href="../../../special/sf_erf/error_function.html" title="Error Functions">error
             function</a>, and as such should have very low error rates.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.normal_dist.implementation"></a><h5>
-<a name="id637022"></a>
-            <a href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.implementation">Implementation</a>
+<a name="id664547"></a>
+            <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table <span class="emphasis"><em>m</em></span> is the mean of the distribution,
@@ -184,7 +184,7 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: p = 0.5 * <a href="../../../special/sf_erf/error_function.html" title="Error Functions">erfc</a>(-(x-m)/(s*sqrt(2)))
+                    Using the relation: p = 0.5 * <a class="link" href="../../../special/sf_erf/error_function.html" title="Error Functions">erfc</a>(-(x-m)/(s*sqrt(2)))
                   </p>
                   </td>
 </tr>
@@ -196,7 +196,7 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: q = 0.5 * <a href="../../../special/sf_erf/error_function.html" title="Error Functions">erfc</a>((x-m)/(s*sqrt(2)))
+                    Using the relation: q = 0.5 * <a class="link" href="../../../special/sf_erf/error_function.html" title="Error Functions">erfc</a>((x-m)/(s*sqrt(2)))
                   </p>
                   </td>
 </tr>
@@ -208,7 +208,7 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: x = m - s * sqrt(2) * <a href="../../../special/sf_erf/error_inv.html" title="Error Function Inverses">erfc_inv</a>(2*p)
+                    Using the relation: x = m - s * sqrt(2) * <a class="link" href="../../../special/sf_erf/error_inv.html" title="Error Function Inverses">erfc_inv</a>(2*p)
                   </p>
                   </td>
 </tr>
@@ -220,7 +220,7 @@
                   </td>
 <td>
                   <p>
-                    Using the relation: x = m + s * sqrt(2) * <a href="../../../special/sf_erf/error_inv.html" title="Error Function Inverses">erfc_inv</a>(2*p)
+                    Using the relation: x = m + s * sqrt(2) * <a class="link" href="../../../special/sf_erf/error_inv.html" title="Error Function Inverses">erfc_inv</a>(2*p)
                   </p>
                   </td>
 </tr>
@@ -290,7 +290,7 @@
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

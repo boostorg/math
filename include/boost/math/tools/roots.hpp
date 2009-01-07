@@ -297,6 +297,11 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
       delta2 = delta1;
       delta1 = delta;
       std::tr1::tie(f0, f1, f2) = f(result);
+
+      BOOST_MATH_INSTRUMENT_VARIABLE(f0);
+      BOOST_MATH_INSTRUMENT_VARIABLE(f1);
+      BOOST_MATH_INSTRUMENT_VARIABLE(f2);
+      
       if(0 == f0)
          break;
       if((f1 == 0) && (f2 == 0))
@@ -313,6 +318,10 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
          {
             T denom = 2 * f0;
             T num = 2 * f1 - f0 * (f2 / f1);
+
+            BOOST_MATH_INSTRUMENT_VARIABLE(denom);
+            BOOST_MATH_INSTRUMENT_VARIABLE(num);
+
             if((fabs(num) < 1) && (fabs(denom) >= fabs(num) * tools::max_value<T>()))
             {
                // possible overflow, use Newton step:
@@ -340,9 +349,11 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
          // reset delta2 so that this branch will *not* be taken on the
          // next iteration:
          delta2 = delta * 3;
+         BOOST_MATH_INSTRUMENT_VARIABLE(delta);
       }
       guess = result;
       result -= delta;
+      BOOST_MATH_INSTRUMENT_VARIABLE(result);
 
       // check for out of bounds step:
       if(result < min)
@@ -398,13 +409,6 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
 
 #ifdef BOOST_MATH_INSTRUMENT
    std::cout << "Halley iteration, final count = " << max_iter << std::endl;
-
-   static boost::uintmax_t max_count = 0;
-   if(max_iter > max_count)
-   {
-      max_count = max_iter;
-      std::cout << "Maximum iterations: " << max_iter << std::endl;
-   }
 #endif
 
    return result;

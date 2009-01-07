@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Exponential Integral En</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../expint.html" title="Exponential Integrals">
 <link rel="prev" href="../expint.html" title="Exponential Integrals">
 <link rel="next" href="expint_i.html" title="Exponential Integral Ei">
@@ -24,12 +24,12 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.expint.expint_n"></a><a href="expint_n.html" title="Exponential Integral En"> Exponential
+<a name="math_toolkit.special.expint.expint_n"></a><a class="link" href="expint_n.html" title="Exponential Integral En"> Exponential
         Integral En</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.expint.expint_n.synopsis"></a><h5>
-<a name="id725207"></a>
-          <a href="expint_n.html#math_toolkit.special.expint.expint_n.synopsis">Synopsis</a>
+<a name="id752707"></a>
+          <a class="link" href="expint_n.html#math_toolkit.special.expint.expint_n.synopsis">Synopsis</a>
         </h5>
 <p>
           
@@ -41,36 +41,36 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
-          The return type of these functions is computed using the <a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
+          The return type of these functions is computed using the <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
           type calculation rules</em></span></a>: the return type is <code class="computeroutput"><span class="keyword">double</span></code> if T is an integer type, and T otherwise.
         </p>
 <p>
           </p>
 <p>
-            The final <a href="../../policy.html" title="Policies">Policy</a> argument
+            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
             is optional and can be used to control the behaviour of the function:
             how it handles errors, what level of precision to use etc. Refer to the
-            <a href="../../policy.html" title="Policies">policy documentation for more details</a>.
+            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
           </p>
 <p>
         </p>
 <a name="math_toolkit.special.expint.expint_n.description"></a><h5>
-<a name="id725617"></a>
-          <a href="expint_n.html#math_toolkit.special.expint.expint_n.description">Description</a>
+<a name="id753117"></a>
+          <a class="link" href="expint_n.html#math_toolkit.special.expint.expint_n.description">Description</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
-<a href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
           Returns the <a href="http://mathworld.wolfram.com/En-Function.html" target="_top">exponential
@@ -83,18 +83,18 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/expint2.png" align="middle"></span>
         </p>
 <a name="math_toolkit.special.expint.expint_n.accuracy"></a><h5>
-<a name="id725930"></a>
-          <a href="expint_n.html#math_toolkit.special.expint.expint_n.accuracy">Accuracy</a>
+<a name="id753429"></a>
+          <a class="link" href="expint_n.html#math_toolkit.special.expint.expint_n.accuracy">Accuracy</a>
         </h5>
 <p>
           The following table shows the peak errors (in units of epsilon) found on
           various platforms with various floating point types, along with comparisons
           to the <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> library.
           Unless otherwise specified any floating point type that is narrower than
-          the one shown will have <a href="../../backgrounders/relative_error.html#zero_error">effectively zero error</a>.
+          the one shown will have <a class="link" href="../../backgrounders/relative_error.html#zero_error">effectively zero error</a>.
         </p>
 <div class="table">
-<a name="id725969"></a><p class="title"><b>Table 45. Errors In the Function expint(n, z)</b></p>
+<a name="id753469"></a><p class="title"><b>Table 45. Errors In the Function expint(n, z)</b></p>
 <div class="table-contents"><table class="table" summary="Errors In the Function expint(n, z)">
 <colgroup>
 <col>
@@ -225,8 +225,8 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.special.expint.expint_n.testing"></a><h5>
-<a name="id726187"></a>
-          <a href="expint_n.html#math_toolkit.special.expint.expint_n.testing">Testing</a>
+<a name="id753686"></a>
+          <a class="link" href="expint_n.html#math_toolkit.special.expint.expint_n.testing">Testing</a>
         </h5>
 <p>
           The tests for these functions come in two parts: basic sanity checks use
@@ -240,8 +240,8 @@
           check.
         </p>
 <a name="math_toolkit.special.expint.expint_n.implementation"></a><h5>
-<a name="id726240"></a>
-          <a href="expint_n.html#math_toolkit.special.expint.expint_n.implementation">Implementation</a>
+<a name="id753739"></a>
+          <a class="link" href="expint_n.html#math_toolkit.special.expint.expint_n.implementation">Implementation</a>
         </h5>
 <p>
           The generic version of this function uses the continued fraction:
@@ -260,7 +260,7 @@
         </p>
 <p>
           Where the precision of <span class="emphasis"><em>x</em></span> is known at compile time
-          and is 113 bits or fewer in precision, then rational approximations <a href="../../backgrounders/implementation.html#math_toolkit.backgrounders.implementation.rational_approximations_used">devised
+          and is 113 bits or fewer in precision, then rational approximations <a class="link" href="../../backgrounders/implementation.html#math_toolkit.backgrounders.implementation.rational_approximations_used">devised
           by JM</a> are used for the <code class="computeroutput"><span class="identifier">n</span>
           <span class="special">==</span> <span class="number">1</span></code>
           case.
@@ -288,7 +288,7 @@
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

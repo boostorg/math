@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Polynomial and Rational Function Evaluation</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../../index.html" title="Math Toolkit">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../internals1.html" title="Reused Utilities">
 <link rel="prev" href="cf.html" title="Continued Fraction Evaluation">
 <link rel="next" href="roots.html" title="Root Finding With Derivatives">
@@ -24,12 +24,12 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.toolkit.internals1.rational"></a><a href="rational.html" title="Polynomial and Rational Function Evaluation"> Polynomial
+<a name="math_toolkit.toolkit.internals1.rational"></a><a class="link" href="rational.html" title="Polynomial and Rational Function Evaluation"> Polynomial
         and Rational Function Evaluation</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.rational.synopsis"></a><h5>
-<a name="id777248"></a>
-          <a href="rational.html#math_toolkit.toolkit.internals1.rational.synopsis">synopsis</a>
+<a name="id804751"></a>
+          <a class="link" href="rational.html#math_toolkit.toolkit.internals1.rational.synopsis">synopsis</a>
         </h5>
 <p>
           
@@ -79,8 +79,8 @@
 <span class="identifier">V</span> <span class="identifier">evaluate_rational</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">*</span> <span class="identifier">num</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">U</span><span class="special">*</span> <span class="identifier">denom</span><span class="special">,</span> <span class="identifier">V</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">count</span><span class="special">);</span>
 </pre>
 <a name="math_toolkit.toolkit.internals1.rational.description"></a><h5>
-<a name="id779372"></a>
-          <a href="rational.html#math_toolkit.toolkit.internals1.rational.description">Description</a>
+<a name="id806875"></a>
+          <a class="link" href="rational.html#math_toolkit.toolkit.internals1.rational.description">Description</a>
         </h5>
 <p>
           Each of the functions come in three variants: a pair of overloaded functions
@@ -193,8 +193,8 @@
           evaluation with compile-time array sizes may offer slightly better performance.
         </p>
 <a name="math_toolkit.toolkit.internals1.rational.implementation"></a><h5>
-<a name="id781836"></a>
-          <a href="rational.html#math_toolkit.toolkit.internals1.rational.implementation">Implementation</a>
+<a name="id809340"></a>
+          <a class="link" href="rational.html#math_toolkit.toolkit.internals1.rational.implementation">Implementation</a>
         </h5>
 <p>
           Polynomials are evaluated by <a href="http://en.wikipedia.org/wiki/Horner_algorithm" target="_top">Horners
@@ -213,17 +213,17 @@
           Both the polynomial and rational function evaluation algorithms can be
           tuned using various configuration macros to provide optimal performance
           for a particular combination of compiler and platform. This includes support
-          for second-order Horner's methods. The various options are <a href="../../perf/tuning.html" title="Performance Tuning Macros">documented
+          for second-order Horner's methods. The various options are <a class="link" href="../../perf/tuning.html" title="Performance Tuning Macros">documented
           here</a>. However, the performance benefits to be gained from these
           are marginal on most current hardware, consequently it's best to run the
-          <a href="../../perf/perf_test_app.html" title="The Performance Test Application">performance test application</a>
+          <a class="link" href="../../perf/perf_test_app.html" title="The Performance Test Application">performance test application</a>
           before changing the default settings.
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang and Bruno Lalande<p>
+      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

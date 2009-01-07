@@ -15,10 +15,46 @@
 #pragma warning(disable: 4127) //  conditional expression is constant
 #endif
 
+const char* method_name(const boost::math::detail::native_tag&)
+{
+   return "Native";
+}
+
+const char* method_name(const boost::math::detail::generic_tag<true>&)
+{
+   return "Generic (with numeric limits)";
+}
+
+const char* method_name(const boost::math::detail::generic_tag<false>&)
+{
+   return "Generic (without numeric limits)";
+}
+
+const char* method_name(const boost::math::detail::ieee_tag&)
+{
+   return "IEEE std";
+}
+
+const char* method_name(const boost::math::detail::ieee_copy_all_bits_tag&)
+{
+   return "IEEE std, copy all bits";
+}
+
+const char* method_name(const boost::math::detail::ieee_copy_leading_bits_tag&)
+{
+   return "IEEE std, copy leading bits";
+}
+
 template <class T>
 void test_classify(T t, const char* type)
 {
    std::cout << "Testing type " << type << std::endl;
+
+   typedef typename boost::math::detail::fp_traits<T>::type traits;
+   typedef typename traits::method method;
+
+   std::cout << "Evaluation method = " << method_name(method()) << std::endl;   
+
    t = 2;
    T u = 2;
    BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
@@ -50,6 +86,7 @@ void test_classify(T t, const char* type)
    }
    if(std::numeric_limits<T>::has_denorm)
    {
+      t = (std::numeric_limits<T>::min)();
       t /= 2;
       if(t != 0)
       {
