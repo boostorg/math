@@ -42,10 +42,17 @@ CDF of the hypergeometric distribution.
 the hypergeometric distribution is strictly discrete: it can not be
 extended to real valued arguments of it's parameters or random variable.]
 
-The following graph shows how the distribution changes as the
-parameters change:
+The following graph shows how the distribution changes as the proportion
+of "defective" items changes, while keeping the population and sample sizes
+constant:
 
-[graph hypergeometic_pdf]
+[graph hypergeometric_pdf_1]
+
+Note that since the distribution is symmetrical in parameters /n/ and /r/, if we
+change the sample size and keep the population and proportion "defective" the same
+then we obtain basically the same graphs:
+
+[graph hypergeometric_pdf_2]
 
 [h4 Member Functions]
 

@@ -38,6 +38,9 @@ struct is_discrete_distribution<boost::math::negative_binomial_distribution<T,P>
 template<class T, class P>
 struct is_discrete_distribution<boost::math::poisson_distribution<T,P> > 
    : public boost::mpl::true_{};
+template<class T, class P>
+struct is_discrete_distribution<boost::math::hypergeometric_distribution<T,P> > 
+   : public boost::mpl::true_{};
 
 
 template <class Dist>
@@ -579,5 +582,23 @@ int main()
    poisson_plotter.add(boost::math::poisson_distribution<>(10), "&#x3BB;=10");
    poisson_plotter.add(boost::math::poisson_distribution<>(20), "&#x3BB;=50");
    poisson_plotter.plot("Poisson Distribution PDF", "poisson_pdf_1.svg");
+
+   distribution_plotter<boost::math::hypergeometric_distribution<> > 
+      hypergeometric_plotter;
+   hypergeometric_plotter.add(boost::math::hypergeometric_distribution<>(30, 50, 500), "N=500, r=50, n=30");
+   hypergeometric_plotter.add(boost::math::hypergeometric_distribution<>(30, 100, 500), "N=500, r=100, n=30");
+   hypergeometric_plotter.add(boost::math::hypergeometric_distribution<>(30, 250, 500), "N=500, r=250, n=30");
+   hypergeometric_plotter.add(boost::math::hypergeometric_distribution<>(30, 400, 500), "N=500, r=400, n=30");
+   hypergeometric_plotter.add(boost::math::hypergeometric_distribution<>(30, 450, 500), "N=500, r=450, n=30");
+   hypergeometric_plotter.plot("Hypergeometric Distribution PDF", "hypergeometric_pdf_1.svg");
+
+   distribution_plotter<boost::math::hypergeometric_distribution<> > 
+      hypergeometric_plotter2;
+   hypergeometric_plotter2.add(boost::math::hypergeometric_distribution<>(50, 50, 500), "N=500, r=50, n=50");
+   hypergeometric_plotter2.add(boost::math::hypergeometric_distribution<>(100, 50, 500), "N=500, r=50, n=100");
+   hypergeometric_plotter2.add(boost::math::hypergeometric_distribution<>(250, 50, 500), "N=500, r=50, n=250");
+   hypergeometric_plotter2.add(boost::math::hypergeometric_distribution<>(400, 50, 500), "N=500, r=50, n=400");
+   hypergeometric_plotter2.add(boost::math::hypergeometric_distribution<>(450, 50, 500), "N=500, r=50, n=450");
+   hypergeometric_plotter2.plot("Hypergeometric Distribution PDF", "hypergeometric_pdf_2.svg");
 
 }
