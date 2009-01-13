@@ -105,9 +105,9 @@
 
 #endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 
-#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590) || defined(__hppa)
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590) || defined(__hppa) || defined(__GNUC__)
 // Sun's compiler emits a hard error if a constant underflows,
-// as does aCC on PA-RISC:
+// as does aCC on PA-RISC, while gcc issues a large number of warnings:
 #  define BOOST_MATH_SMALL_CONSTANT(x) 0
 #else
 #  define BOOST_MATH_SMALL_CONSTANT(x) x

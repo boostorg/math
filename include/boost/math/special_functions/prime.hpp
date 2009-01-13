@@ -22,9 +22,9 @@ namespace boost{ namespace math{
       // That gives us the first 10000 primes with the largest
       // being 104729:
       //
-      static const int b1 = 53;
-      static const int b2 = 6541;
-      static const int b3 = 10000;
+      static const unsigned b1 = 53;
+      static const unsigned b2 = 6541;
+      static const unsigned b3 = 10000;
       static const boost::array<unsigned char, 54> a1 = {
          2u, 3u, 5u, 7u, 11u, 13u, 17u, 19u, 23u, 29u, 31u, 
          37u, 41u, 43u, 47u, 53u, 59u, 61u, 67u, 71u, 73u, 
