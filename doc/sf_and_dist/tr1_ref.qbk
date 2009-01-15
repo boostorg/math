@@ -4,7 +4,7 @@
 [h4 Supported TR1 Functions]
 
    namespace boost{ namespace math{ namespace tr1{ extern "C"{
-      
+
    // [5.2.1.1] associated Laguerre polynomials:
    double assoc_laguerre(unsigned n, unsigned m, double x);
    float assoc_laguerref(unsigned n, unsigned m, float x);
@@ -111,14 +111,14 @@
    double sph_neumann(unsigned n, double x);
    float sph_neumannf(unsigned n, float x);
    long double sph_neumannl(unsigned n, long double x);
-   
+
    }}}} // namespaces
-   
+
 In addition sufficient additional overloads of the `double` versions of the
 above functions are provided, so that calling the function with any mixture
 of `float`, `double`, `long double`, or /integer/ arguments is supported, with the
 return type determined by the __arg_pomotion_rules.
-   
+
 For example:
 
    expintf(2.0f);  // float version, returns float.
@@ -134,7 +134,7 @@ For example:
    double assoc_laguerre(unsigned n, unsigned m, double x);
    float assoc_laguerref(unsigned n, unsigned m, float x);
    long double assoc_laguerrel(unsigned n, unsigned m, long double x);
-   
+
 The assoc_laguerre functions return:
 
 [equation laguerre_1]
@@ -156,7 +156,7 @@ See also __legendre for the full template (header only) version of this function
    double beta(double x, double y);
    float betaf(float x, float y);
    long double betal(long double x, long double y);
-   
+
 Returns the beta function of /x/ and /y/:
 
 [equation beta1]
@@ -344,7 +344,7 @@ See also __sph_bessel for the full template (header only) version of this functi
    double sph_legendre(unsigned l, unsigned m, double theta);
    float sph_legendref(unsigned l, unsigned m, float theta);
    long double sph_legendrel(unsigned l, unsigned m, long double theta);
-   
+
 Returns the spherical associated Legendre function of /l/, /m/ and /theta/:
 
 [equation spherical_3]
@@ -377,15 +377,15 @@ See also __sph_bessel for the full template (header only) version of this functi
    float hypergf(float a, float b, float c, float x);
    long double hypergl(long double a, long double b, long double c,
    long double x);
-   
-[note Thes two functions are not implemented as they are not believed
+
+[note These two functions are not implemented as they are not believed
 to be numerically stable.]
 
 
 [endsect]
 
-[/ 
-  Copyright 2008 John Maddock and Paul A. Bristow.
+[/
+  Copyright 2008, 2009 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
