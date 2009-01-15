@@ -134,7 +134,8 @@ becoming meaningless for N >= 10[super 15].
 There are three sets of tests: our implementation is tested against a table of values
 produced by Mathematica's implementation of this distribution, we also sanity check
 our implementation against some spot values computed using the online calculator
-here [@ ].  Finally we test accuracy against some high precision test data using
+here [@http://stattrek.com/Tables/Hypergeometric.aspx http://stattrek.com/Tables/Hypergeometric.aspx].  
+Finally we test accuracy against some high precision test data using
 this implementation and NTL::RR.
 
 [h4 Implementation]
