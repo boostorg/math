@@ -1,4 +1,4 @@
-// Copyright John Maddock 
+// Copyright John Maddock 2008
 // Copyright Paul A. Bristow 
 // Copyright Gautam Sewani
 
@@ -60,6 +60,20 @@
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
+      "real_concept",                // test type(s)
+      "Random.*",                    // test data group
+      ".*", 250000000, 25000000);    // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
+      "Random.*",                    // test data group
+      ".*", 10000000, 5000000);      // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
       ".*", 50, 20);                 // test function
@@ -81,6 +95,20 @@ T pdf_tester(T r, T n, T N, T x)
 {
    boost::math::hypergeometric_distribution<T> d(make_unsigned(r), make_unsigned(n), make_unsigned(N));
    return pdf(d, x);
+}
+
+template <class T>
+T cdf_tester(T r, T n, T N, T x)
+{
+   boost::math::hypergeometric_distribution<T> d(make_unsigned(r), make_unsigned(n), make_unsigned(N));
+   return cdf(d, x);
+}
+
+template <class T>
+T ccdf_tester(T r, T n, T N, T x)
+{
+   boost::math::hypergeometric_distribution<T> d(make_unsigned(r), make_unsigned(n), make_unsigned(N));
+   return cdf(complement(d, x));
 }
 
 template <class T>
@@ -109,6 +137,36 @@ void do_test_hypergeometric(const T& data, const char* type_name, const char* te
       bind_func(funcp, 0, 1, 2, 3), 
       extract_result(4));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric PDF", test_name);
+
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = cdf_tester<value_type>;
+#else
+   funcp = cdf_tester;
+#endif
+
+   //
+   // test hypergeometric against data:
+   //
+   result = boost::math::tools::test(
+      data, 
+      bind_func(funcp, 0, 1, 2, 3), 
+      extract_result(5));
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric CDF", test_name);
+
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = ccdf_tester<value_type>;
+#else
+   funcp = ccdf_tester;
+#endif
+
+   //
+   // test hypergeometric against data:
+   //
+   result = boost::math::tools::test(
+      data, 
+      bind_func(funcp, 0, 1, 2, 3), 
+      extract_result(6));
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric CDF complement", test_name);
    std::cout << std::endl;
 }
 
@@ -181,6 +239,15 @@ void test_spots(RealType /*T*/, const char* type_name)
 #define T RealType
 #include "hypergeometric_test_data.ipp"
    do_test_hypergeometric(hypergeometric_test_data, type_name, "Mathematica data");
+
+   if(boost::is_floating_point<RealType>::value)
+   {
+      //
+      // Don't test this for real_concept: it's too slow!!!
+      //
+#include "hypergeometric_dist_data2.ipp"
+      do_test_hypergeometric(hypergeometric_dist_data2, type_name, "Random large data");
+   }
 
    RealType tolerance = (std::max)(
       static_cast<RealType>(2e-16L),    // limit of test data

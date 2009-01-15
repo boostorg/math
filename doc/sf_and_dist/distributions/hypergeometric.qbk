@@ -119,7 +119,7 @@ precision.
 
 For larger N such that `N < boost::math::prime(boost::math::max_prime)` 
 then only basic arithmetic is required for the calculation
-and the accuracy is typically < 100 epsilon.  This takes care of N
+and the accuracy is typically < 20 epsilon.  This takes care of N
 up to 104729.
 
 For `N > boost::math::prime(boost::math::max_prime)` then accuracy quickly
@@ -128,6 +128,14 @@ degrades, with 5 or 6 decimal digits being lost for N = 110000.
 In general for very large N, the user should expect to loose log[sub 10]N
 decimal digits of precision during the calculation, with the results 
 becoming meaningless for N >= 10[super 15].
+
+[h4 Testing]
+
+There are three sets of tests: our implementation is tested against a table of values
+produced by Mathematica's implementation of this distribution, we also sanity check
+our implementation against some spot values computed using the online calculator
+here [@ ].  Finally we test accuracy against some high precision test data using
+this implementation and NTL::RR.
 
 [h4 Implementation]
 
