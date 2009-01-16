@@ -1,4 +1,6 @@
 //  Copyright John Maddock 2007-8.
+//  Copyright Paul A. bristow 2009
+
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -13,6 +15,10 @@
 #include <boost/math/bindings/rr.hpp>
 #include <boost/math/concepts/real_type_concept.hpp>
 #include "compile_test/instantiate.hpp"
+
+#ifdef _MSC_VER
+#  pragma warning (disable : 4100) // unreferenced formal parameter
+#endif
 
 void foo()
 {
