@@ -1,3 +1,9 @@
+/*!
+  \file fpclassify.hpp
+  \brief Classify floating-point value as normal, subnormal, zero, infinite, or NaN.
+  \version 1.0
+  \author John Maddock
+ */
 //  Copyright John Maddock 2005-2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -42,9 +48,9 @@
          && defined(_GLIBCXX_USE_C99_MATH) \
          && !(defined(_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC) \
          && (_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC != 0))
-#     ifdef _STLP_VENDOR_CSTD 
-#        define BOOST_FPCLASSIFY_PREFIX ::_STLP_VENDOR_CSTD:: 
-#     else 
+#     ifdef _STLP_VENDOR_CSTD
+#        define BOOST_FPCLASSIFY_PREFIX ::_STLP_VENDOR_CSTD::
+#     else
 #        define BOOST_FPCLASSIFY_PREFIX ::std::
 #     endif
 #  else
@@ -64,7 +70,7 @@
 
 #endif
 
-namespace boost{ 
+namespace boost{
 
 #if defined(BOOST_HAS_FPCLASSIFY) || defined(isnan)
 //
@@ -135,7 +141,7 @@ inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const mpl::true_&)
 template <class T>
 inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const mpl::false_&)
 {
-   // 
+   //
    // An unknown type with no numeric_limits support,
    // so what are we supposed to do we do here?
    //
@@ -205,20 +211,20 @@ inline int fpclassify BOOST_NO_MACRO_EXPAND(double t)
 
 template <class T>
 inline bool isfinite BOOST_NO_MACRO_EXPAND(T z)
-{
+{ //!< \brief return true if floating-point type t is finite.
    int t = (::boost::math::fpclassify)(z);
    return (t != (int)FP_NAN) && (t != (int)FP_INFINITE);
 }
 
 template <class T>
 inline bool isinf BOOST_NO_MACRO_EXPAND(T t)
-{
+{//!< \brief return true if floating-point type t is infinite.
    return (::boost::math::fpclassify)(t) == (int)FP_INFINITE;
 }
 
 template <class T>
 inline bool isnan BOOST_NO_MACRO_EXPAND(T t)
-{
+{//!< \brief return true if floating-point type t is NaN (Not A Number).
    return (::boost::math::fpclassify)(t) == (int)FP_NAN;
 }
 #ifdef isnan
@@ -227,7 +233,7 @@ template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return ::
 template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return ::boost::math_detail::is_nan_helper(t, boost::true_type()); }
 #elif defined(BOOST_MSVC)
 #  pragma warning(push)
-#  pragma warning(disable: 4800) // forcing value to bool 'true' or 'false' 
+#  pragma warning(disable: 4800) // forcing value to bool 'true' or 'false'
 #  pragma warning(disable: 4244) // conversion from 'long double' to 'double',
 // No possible loss of data because they are same size.
 template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return _isnan(t); }
