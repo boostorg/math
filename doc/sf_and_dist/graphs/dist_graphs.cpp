@@ -333,6 +333,15 @@ int main()
    normal_plotter.add(boost::math::normal(1, 1), "&#x3BC; = 1, &#x3C3; = 1");
    normal_plotter.plot("Normal Distribution PDF", "normal_pdf.svg");
 
+   distribution_plotter<boost::math::laplace> 
+      laplace_plotter;
+   laplace_plotter.add(boost::math::laplace(0, 1), "&#x3BC; = 0, &#x3C3; = 1");
+   laplace_plotter.add(boost::math::laplace(0, 0.5), "&#x3BC; = 0, &#x3C3; = 0.5");
+   laplace_plotter.add(boost::math::laplace(0, 2), "&#x3BC; = 0, &#x3C3; = 2");
+   laplace_plotter.add(boost::math::laplace(-1, 1), "&#x3BC; = -1, &#x3C3; = 1");
+   laplace_plotter.add(boost::math::laplace(1, 1), "&#x3BC; = 1, &#x3C3; = 1");
+   laplace_plotter.plot("Laplace Distribution PDF", "laplace_pdf.svg");
+
    distribution_plotter<boost::math::non_central_chi_squared> 
       nc_cs_plotter;
    nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 0), "v=20, &#x3BB;=0");
