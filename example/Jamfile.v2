@@ -7,8 +7,8 @@
 # bring in the rules for testing
 import testing ;
 
-project 
-    : requirements 
+project
+    : requirements
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070
@@ -16,13 +16,13 @@ project
       <toolset>msvc:<warnings>all
       <toolset>msvc:<asynch-exceptions>on
       <toolset>msvc:<cxxflags>/wd4996
-      <toolset>msvc:<cxxflags>/wd4512 
-      <toolset>msvc:<cxxflags>/wd4610 
-      <toolset>msvc:<cxxflags>/wd4510 
-      <toolset>msvc:<cxxflags>/wd4127 
-      <toolset>msvc:<cxxflags>/wd4701 
-      <toolset>msvc:<cxxflags>/wd4127 
-      <toolset>msvc:<cxxflags>/wd4305 
+      <toolset>msvc:<cxxflags>/wd4512
+      <toolset>msvc:<cxxflags>/wd4610
+      <toolset>msvc:<cxxflags>/wd4510
+      <toolset>msvc:<cxxflags>/wd4127
+      <toolset>msvc:<cxxflags>/wd4701
+      <toolset>msvc:<cxxflags>/wd4127
+      <toolset>msvc:<cxxflags>/wd4305
       <include>../../..
     ;
 
@@ -43,6 +43,7 @@ run find_location_example.cpp ;
 run find_mean_and_sd_normal.cpp ;
 run find_root_example.cpp ;
 run find_scale_example.cpp ;
+run laplace_example.cpp ;
 run nc_chi_sq_example.cpp ;
 run neg_binom_confidence_limits.cpp ;
 run neg_binomial_sample_sizes.cpp ;
