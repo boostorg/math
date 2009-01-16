@@ -7,17 +7,19 @@ using quickbook ;
 
 path-constant images_location : html ;
 
+path-constant boost-root : [ get-boost-path ] ;
+
 xml math : math.qbk ;
 boostbook standalone
     :
         math
     :
         # Path for links to Boost:
-        <xsl:param>boost.root=../../../../../../../trunk
+        <xsl:param>boost.root=file://$(boost-root:T)
         # Path for libraries index:
-        <xsl:param>boost.libraries=$(boost-root)/libs/libraries.htm
+        <xsl:param>boost.libraries=file://$(boost-root:T)/libs/libraries.htm
         # Use the main Boost stylesheet:
-        <xsl:param>html.stylesheet=../../../../../../../trunk/doc/html/boostbook.css
+        <xsl:param>html.stylesheet=file://$(boost-root:T)/doc/html/boostbook.css
         
         # Some general style settings:
         <xsl:param>table.footnote.number.format=1
@@ -71,5 +73,7 @@ boostbook standalone
     ;
 
 install pdf-install : standalone : <location>. <install-type>PDF ;
+
+
 
 

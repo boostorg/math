@@ -53,8 +53,9 @@ project math-toolkit
 
 
 
-
-
-
+rule get-boost-path
+{
+   return $(boost-root) ;
+}
 
 
