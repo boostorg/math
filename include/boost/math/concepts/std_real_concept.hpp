@@ -18,7 +18,6 @@
 
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
-#include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
@@ -226,6 +225,11 @@ inline boost::math::concepts::std_real_concept tanh(boost::math::concepts::std_r
 { return std::tanh(a.value()); }
 
 } // namespace std
+
+#include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/special_functions/modf.hpp>
+#include <boost/math/tools/precision.hpp>
 
 namespace boost{ namespace math{ namespace concepts{
 

@@ -27,7 +27,7 @@ namespace boost { namespace math {
       typedef Policy policy_type;
 
       hypergeometric_distribution(unsigned r, unsigned n, unsigned N) // Constructor.
-         : m_r(r), m_n(n), m_N(N)
+         : m_n(n), m_N(N), m_r(r)
       {
          static const char* function = "boost::math::hypergeometric_distribution<%1%>::hypergeometric_distribution";
          RealType ret;
@@ -111,7 +111,7 @@ namespace boost { namespace math {
    }
 
    template <class RealType, class Policy>
-   inline const std::pair<RealType, RealType> support(const hypergeometric_distribution<RealType, Policy>& d)
+   inline const std::pair<unsigned, unsigned> support(const hypergeometric_distribution<RealType, Policy>& d)
    { 
       return range(d);
    }
