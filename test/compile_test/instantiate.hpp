@@ -68,6 +68,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<extreme_value_distribution<RealType> > >();
    function_requires<DistributionConcept<fisher_f_distribution<RealType> > >();
    function_requires<DistributionConcept<gamma_distribution<RealType> > >();
+   function_requires<DistributionConcept<laplace_distribution<RealType> > >();
    function_requires<DistributionConcept<logistic_distribution<RealType> > >();
    function_requires<DistributionConcept<lognormal_distribution<RealType> > >();
    function_requires<DistributionConcept<negative_binomial_distribution<RealType> > >();

@@ -211,7 +211,7 @@ namespace boost { namespace math {
       if (false == dist.check_params(function, &result)) return result;
       if(false == detail::check_probability(function, p, &result, Policy())) return result;
 
-      return static_cast<RealType>(detail::hypergeometric_quantile(p, 1 - p, dist.sample_count(), dist.defective(), dist.total(), Policy()));
+      return static_cast<RealType>(detail::hypergeometric_quantile(p, RealType(1 - p), dist.sample_count(), dist.defective(), dist.total(), Policy()));
    } // quantile
 
    template <class RealType, class Policy>
@@ -225,7 +225,7 @@ namespace boost { namespace math {
       if (false == c.dist.check_params(function, &result)) return result;
       if(false == detail::check_probability(function, c.param, &result, Policy())) return result;
 
-      return static_cast<RealType>(detail::hypergeometric_quantile(1 - c.param, c.param, c.dist.sample_count(), c.dist.defective(), c.dist.total(), Policy()));
+      return static_cast<RealType>(detail::hypergeometric_quantile(RealType(1 - c.param), c.param, c.dist.sample_count(), c.dist.defective(), c.dist.total(), Policy()));
    } // quantile
 
    template <class RealType, class Policy>

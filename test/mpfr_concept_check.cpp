@@ -1,3 +1,4 @@
+
 //  Copyright John Maddock 2007-8.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -15,6 +16,7 @@
 #  pragma warning(disable:4800)
 #  pragma warning(disable:4512)
 #  pragma warning(disable:4127)
+#  pragma warning(disable:4512)
 #endif
 
 #include <boost/math/bindings/mpfr.hpp>

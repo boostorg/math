@@ -7,6 +7,11 @@
 
 # bring in the rules for testing
 import testing ;
+import modules ;
+import path ;
+
+local ntl-path = [ modules.peek : NTL_PATH ] ;
+local gmp_path = [ modules.peek : GMP_PATH ] ;
 
 project  
     : requirements 
@@ -35,6 +40,8 @@ project
       <toolset>sun:<link>static
       <define>BOOST_ALL_NO_LIB=1
       <include>.
+      <include>$(ntl-path)/include
+      <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx
     ;
 
 cpp-pch pch : pch.hpp ;

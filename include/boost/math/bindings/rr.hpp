@@ -827,7 +827,7 @@ namespace ntl{
 namespace detail{
 
 template <class Policy>
-ntl::RR digamma_imp(ntl::RR x, const mpl::int_<0>* t, const Policy& pol)
+ntl::RR digamma_imp(ntl::RR x, const mpl::int_<0>* , const Policy& pol)
 {
    //
    // This handles reflection of negative arguments, and all our
