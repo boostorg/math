@@ -72,9 +72,9 @@ quantile function returns the result of -__overflow_error and
 The logistic distribution is implemented in terms of the `std::exp` 
 and the `std::log` functions, so its accuracy is related to the 
 accurate implementations of those functions on a given platform. 
-While calculating the quantile and the inverse quantile, some 
-non-zero position values might cause catastrophic cancellation errors. 
-In such cases, only a low /absolute error/ can be guarenteed.
+When calculating the quantile with a non-zero /position/ parameter 
+catastrophic cancellation errors can occur: 
+in such cases, only a low /absolute error/ can be guarenteed.
 
 [h4 Implementation]
 
@@ -100,3 +100,4 @@ In such cases, only a low /absolute error/ can be guarenteed.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
