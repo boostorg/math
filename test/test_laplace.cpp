@@ -1,6 +1,6 @@
 //  Copyright Thijs van den Berg, 2008.
 //  Copyright John Maddock 2008.
-//  Copyright Paul A. Bristow 2008.
+//  Copyright Paul A. Bristow 2008, 2009.
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -298,7 +298,6 @@ void test_cdf_quantile_symmetry()
    }
 }
 
-
 template <class RealType>
 void test_hazard_pdf_cdf_symmetry()
 {
@@ -401,8 +400,7 @@ void test_mmm_moments()
                static_cast<RealType>(3),
 			      tolerance);
          }
-}
-
+} // template <class RealType> void test_mmm_moments()
 
 template <class RealType>
 void test_complemented()
@@ -440,17 +438,18 @@ void test_complemented()
 		         tolerance);
          }
       }
-}
-
+} // void test_complemented()
 
 template <class RealType>
 void test_bad_dist_parameters()
 {
+   // Check that can generate laplace distribution using both convenience methods:
+   laplace_distribution<double> lp1(0.5); // Using default RealType double.
+   boost::math::laplace lp2(0.5); // Using typedef. 
+
    BOOST_CHECK_THROW(boost::math::laplace_distribution<RealType> lbad1(0, 0), std::domain_error);
    BOOST_CHECK_THROW(boost::math::laplace_distribution<RealType> lbad2(0, -1), std::domain_error);
 }
-
-
 
 template <class RealType>
 void test_extreme_function_arguments()
@@ -477,13 +476,11 @@ void test_extreme_function_arguments()
    BOOST_CHECK_EQUAL( quantile(L2, 1), +std::numeric_limits<RealType>::infinity() );
 }
 
-
 BOOST_AUTO_TEST_CASE( vs_GNU_Octave )
 {
    test_pdf_cdf_ocatave<float>();
    test_pdf_cdf_ocatave<double>();
 }
-
 
 BOOST_AUTO_TEST_CASE( cdf_quantile_symmetry )
 {
@@ -498,13 +495,11 @@ BOOST_AUTO_TEST_CASE( hazard_pdf_cdf_symmetry )
    test_hazard_pdf_cdf_symmetry<double>();
 }
 
-
 BOOST_AUTO_TEST_CASE( location_scale_symmetry )
 {
    test_location_scale_symmetry<float>();
    test_location_scale_symmetry<double>();
 }
-
 
 BOOST_AUTO_TEST_CASE( mmm_moments )
 {
@@ -561,10 +556,15 @@ Press any key to continue . . .
 
 Release Multi-threaded (/MT)
 
+Compiling...
+test_laplace.cpp
+Linking...
+Generating code
+Finished generating code
+Embedding manifest...
+Autorun "j:\Cpp\MathToolkit\test\Math_test\release\test_laplace.exe"
 Running 8 test cases...
-
 *** No errors detected
-Press any key to continue . . .
 
 
 */
