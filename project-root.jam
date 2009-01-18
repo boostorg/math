@@ -15,7 +15,7 @@ path-constant top : . ;
 import modules ;
 import path ;
 
-local boost-root = [ modules.peek : BOOST_ROOT ] ;
+boost-root = [ modules.peek : BOOST_ROOT ] ;
 local math-header-include = $(top)/../.. ;
 
 if ! $(boost-root)
