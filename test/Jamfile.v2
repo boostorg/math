@@ -106,6 +106,7 @@ run test_fisher_f.cpp ;
 run test_gamma.cpp pch ;
 run test_gamma_dist.cpp pch ;
 run test_hermite.cpp pch ;
+run test_hypergeometric_dist.cpp ;
 run test_ibeta.cpp  pch 
         : # command line
         : # input files
@@ -228,6 +229,7 @@ run test_igamma_inva.cpp  pch
 	      <define>TEST_REAL_CONCEPT
         : test_igamma_inva_real_concept ;
 run test_instantiate1.cpp test_instantiate2.cpp ;
+run test_laplace.cpp /boost/unit_test//boost_unit_test_framework/<link>static ;
 run test_inv_hyp.cpp pch ;
 run test_laguerre.cpp pch ;
 run test_legendre.cpp pch ;
