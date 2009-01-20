@@ -55,6 +55,27 @@
 #else
    largest_type = "(long\\s+)?double";
 #endif
+   if((boost::math::tools::digits<long double>() > boost::math::tools::digits<double>())
+      && (boost::math::tools::digits<long double>() < 100))
+   {
+      //
+      // Some split of errors from long double into double:
+      //
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         "Random.*",                    // test data group
+         ".*", 1500, 1500);      // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         ".*",                    // test data group
+         ".*", 10, 10);      // test function
+   }
 
    add_expected_result(
       ".*",                          // compiler
@@ -170,6 +191,55 @@ void do_test_hypergeometric(const T& data, const char* type_name, const char* te
    std::cout << std::endl;
 }
 
+template <class T>
+void do_test_hypergeometric_quantile(const T& data, const char* type_name, const char* test_name)
+{
+   typedef typename T::value_type row_type;
+   typedef typename row_type::value_type value_type;
+
+   std::cout << "Checking quantiles with " << test_name << " with type " << type_name
+      << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+
+   if(boost::math::tools::digits<value_type>() > 50)
+   {
+      for(unsigned i = 0; i < data.size(); ++i)
+      {
+         using namespace boost::math::policies;
+
+         unsigned r = make_unsigned(data[i][0]);
+         unsigned n = make_unsigned(data[i][1]);
+         unsigned N = make_unsigned(data[i][2]);
+         unsigned x = make_unsigned(data[i][3]);
+         value_type cp = data[i][5];
+         value_type ccp = data[i][6];
+#if 0
+         boost::math::hypergeometric_distribution<RealType, 
+            policy<discrete_quantile<integer_round_up> > > du(r, n, N);
+
+         BOOST_CHECK_EX(quantile(du, cp) >= x);
+         BOOST_CHECK_EX(quantile(complement(du, ccp)) >= x);
+
+         boost::math::hypergeometric_distribution<RealType, 
+            policy<discrete_quantile<integer_round_down> > > dl(r, n, N);
+         BOOST_CHECK_EX(quantile(dl, cp) <= x);
+         BOOST_CHECK_EX(quantile(complement(dl, ccp)) <= x);
+#endif
+         boost::math::hypergeometric_distribution<value_type, 
+            policy<discrete_quantile<integer_round_nearest> > > dn(r, n, N);
+
+         if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
+         {
+            BOOST_CHECK_EX(quantile(dn, cp) == x);
+         }
+         if((ccp < 0.9) && (ccp > boost::math::tools::min_value<value_type>()))
+         {
+            BOOST_CHECK_EX(quantile(complement(dn, ccp)) == x);
+         }
+      }
+   }
+}
+
+
 template <class RealType>
 void test_spot(unsigned x, unsigned n, unsigned r, unsigned N, 
                RealType p, RealType cp, RealType ccp, RealType tol)
@@ -193,8 +263,10 @@ void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
    if(boost::math::tools::digits<RealType>() > 50)
    {
       using namespace boost::math::policies;
+#if 0
       boost::math::hypergeometric_distribution<RealType, 
          policy<discrete_quantile<integer_round_up> > > du(r, n, N);
+
       BOOST_CHECK_EX(quantile(du, cp) >= x);
       BOOST_CHECK_EX(quantile(complement(du, ccp)) >= x);
 
@@ -202,6 +274,12 @@ void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
          policy<discrete_quantile<integer_round_down> > > dl(r, n, N);
       BOOST_CHECK_EX(quantile(dl, cp) <= x);
       BOOST_CHECK_EX(quantile(complement(dl, ccp)) <= x);
+#endif
+      boost::math::hypergeometric_distribution<RealType, 
+         policy<discrete_quantile<integer_round_nearest> > > dn(r, n, N);
+
+      BOOST_CHECK_EX(quantile(dn, cp) == x);
+      BOOST_CHECK_EX(quantile(complement(dn, ccp)) == x);
    }
    //
    // Error checking of out of bounds arguments:
@@ -240,13 +318,22 @@ void test_spots(RealType /*T*/, const char* type_name)
 #include "hypergeometric_test_data.ipp"
    do_test_hypergeometric(hypergeometric_test_data, type_name, "Mathematica data");
 
+#include "hypergeometric_dist_data2.ipp"
    if(boost::is_floating_point<RealType>::value)
    {
       //
       // Don't test this for real_concept: it's too slow!!!
       //
-#include "hypergeometric_dist_data2.ipp"
       do_test_hypergeometric(hypergeometric_dist_data2, type_name, "Random large data");
+   }
+
+   do_test_hypergeometric_quantile(hypergeometric_test_data, type_name, "Mathematica data");
+   if(boost::is_floating_point<RealType>::value)
+   {
+      //
+      // Don't test this for real_concept: it's too slow!!!
+      //
+      do_test_hypergeometric_quantile(hypergeometric_dist_data2, type_name, "Random large data");
    }
 
    RealType tolerance = (std::max)(

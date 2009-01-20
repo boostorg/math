@@ -45,7 +45,7 @@ private:
 };
 
 template <class T, class Lanczos, class Policy>
-T hypergeometric_pdf_lanczos_imp(unsigned x, unsigned r, unsigned n, unsigned N, const Lanczos&, const Policy&)
+T hypergeometric_pdf_lanczos_imp(T /*dummy*/, unsigned x, unsigned r, unsigned n, unsigned N, const Lanczos&, const Policy&)
 {
    BOOST_MATH_STD_USING
 
@@ -130,7 +130,7 @@ T hypergeometric_pdf_lanczos_imp(unsigned x, unsigned r, unsigned n, unsigned N,
 }
 
 template <class T, class Policy>
-T hypergeometric_pdf_lanczos_imp(unsigned x, unsigned r, unsigned n, unsigned N, const boost::math::lanczos::undefined_lanczos&, const Policy& pol)
+T hypergeometric_pdf_lanczos_imp(T /*dummy*/, unsigned x, unsigned r, unsigned n, unsigned N, const boost::math::lanczos::undefined_lanczos&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    return exp(
@@ -378,7 +378,7 @@ inline typename tools::promote_args<T>::type
       // (almost as quick as using logarithmic evaluation in terms of lgamma)
       // but only a few digits better in accuracy than using lgamma:
       //
-      result = detail::hypergeometric_pdf_lanczos_imp<value_type>(x, r, n, N, evaluation_type(), forwarding_policy());
+      result = detail::hypergeometric_pdf_lanczos_imp(value_type(), x, r, n, N, evaluation_type(), forwarding_policy());
    }
 
    if(result > 1)
