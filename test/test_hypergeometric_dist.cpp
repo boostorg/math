@@ -36,7 +36,7 @@
       }\
    }
 
-   void expected_results()
+void expected_results()
 {
    //
    // Define the max and mean errors expected for
@@ -135,6 +135,12 @@ T ccdf_tester(T r, T n, T N, T x)
 template <class T>
 void do_test_hypergeometric(const T& data, const char* type_name, const char* test_name)
 {
+   // warning suppression:
+   (void)data;
+   (void)type_name;
+   (void)test_name;
+
+#if !defined(TEST_QUANT) || (TEST_QUANT == 0)
    typedef typename T::value_type row_type;
    typedef typename row_type::value_type value_type;
 
@@ -189,6 +195,7 @@ void do_test_hypergeometric(const T& data, const char* type_name, const char* te
       extract_result(6));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric CDF complement", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class T>
@@ -212,18 +219,42 @@ void do_test_hypergeometric_quantile(const T& data, const char* type_name, const
          unsigned x = make_unsigned(data[i][3]);
          value_type cp = data[i][5];
          value_type ccp = data[i][6];
-#if 0
-         boost::math::hypergeometric_distribution<RealType, 
+         //
+         // A bit of warning supression:
+         //
+         (void)x;
+         (void)n;
+         (void)r;
+         (void)N;
+         (void)cp;
+         (void)ccp;
+
+#if !defined(TEST_QUANT) || (TEST_QUANT == 1)
+         boost::math::hypergeometric_distribution<value_type, 
             policy<discrete_quantile<integer_round_up> > > du(r, n, N);
 
-         BOOST_CHECK_EX(quantile(du, cp) >= x);
-         BOOST_CHECK_EX(quantile(complement(du, ccp)) >= x);
-
-         boost::math::hypergeometric_distribution<RealType, 
-            policy<discrete_quantile<integer_round_down> > > dl(r, n, N);
-         BOOST_CHECK_EX(quantile(dl, cp) <= x);
-         BOOST_CHECK_EX(quantile(complement(dl, ccp)) <= x);
+         if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
+         {
+            BOOST_CHECK_EX(quantile(du, cp) >= x);
+         }
+         if((ccp < 0.9) && (ccp > boost::math::tools::min_value<value_type>()))
+         {
+            BOOST_CHECK_EX(quantile(complement(du, ccp)) >= x);
+         }
 #endif
+#if !defined(TEST_QUANT) || (TEST_QUANT == 2)
+         boost::math::hypergeometric_distribution<value_type, 
+            policy<discrete_quantile<integer_round_down> > > dl(r, n, N);
+         if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
+         {
+            BOOST_CHECK_EX(quantile(dl, cp) <= x);
+         }
+         if((ccp < 0.9) && (ccp > boost::math::tools::min_value<value_type>()))
+         {
+            BOOST_CHECK_EX(quantile(complement(dl, ccp)) <= x);
+         }
+#endif
+#if !defined(TEST_QUANT) || (TEST_QUANT == 3)
          boost::math::hypergeometric_distribution<value_type, 
             policy<discrete_quantile<integer_round_nearest> > > dn(r, n, N);
 
@@ -235,6 +266,61 @@ void do_test_hypergeometric_quantile(const T& data, const char* type_name, const
          {
             BOOST_CHECK_EX(quantile(complement(dn, ccp)) == x);
          }
+#endif
+#if !defined(TEST_QUANT) || (TEST_QUANT == 4)
+         boost::math::hypergeometric_distribution<value_type, 
+            policy<discrete_quantile<integer_round_outwards> > > dou(r, n, N);
+
+         if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
+         {
+            if(cp < 0.5)
+            {
+               BOOST_CHECK_EX(quantile(dou, cp) <= x);
+            }
+            else
+            {
+               BOOST_CHECK_EX(quantile(dou, cp) >= x);
+            }
+         }
+         if((ccp < 0.9) && (ccp > boost::math::tools::min_value<value_type>()))
+         {
+            if(ccp < 0.5)
+            {
+               BOOST_CHECK_EX(quantile(complement(dou, ccp)) >= x);
+            }
+            else
+            {
+               BOOST_CHECK_EX(quantile(complement(dou, ccp)) <= x);
+            }
+         }
+#endif
+#if !defined(TEST_QUANT) || (TEST_QUANT == 5)
+         boost::math::hypergeometric_distribution<value_type, 
+            policy<discrete_quantile<integer_round_inwards> > > di(r, n, N);
+
+         if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
+         {
+            if(cp < 0.5)
+            {
+               BOOST_CHECK_EX(quantile(di, cp) >= x);
+            }
+            else
+            {
+               BOOST_CHECK_EX(quantile(di, cp) <= x);
+            }
+         }
+         if((ccp < 0.9) && (ccp > boost::math::tools::min_value<value_type>()))
+         {
+            if(ccp < 0.5)
+            {
+               BOOST_CHECK_EX(quantile(complement(di, ccp)) <= x);
+            }
+            else
+            {
+               BOOST_CHECK_EX(quantile(complement(di, ccp)) >= x);
+            }
+         }
+#endif
       }
    }
 }
@@ -244,6 +330,18 @@ template <class RealType>
 void test_spot(unsigned x, unsigned n, unsigned r, unsigned N, 
                RealType p, RealType cp, RealType ccp, RealType tol)
 {
+   //
+   // A bit of warning supression:
+   //
+   (void)x;
+   (void)n;
+   (void)r;
+   (void)N;
+   (void)p;
+   (void)cp;
+   (void)ccp;
+   (void)tol;
+#if !defined(TEST_QUANT) || (TEST_QUANT == 0)
    boost::math::hypergeometric_distribution<RealType> d(r, n, N);
 
    std::pair<unsigned, unsigned> extent = range(d);
@@ -263,7 +361,7 @@ void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
    if(boost::math::tools::digits<RealType>() > 50)
    {
       using namespace boost::math::policies;
-#if 0
+
       boost::math::hypergeometric_distribution<RealType, 
          policy<discrete_quantile<integer_round_up> > > du(r, n, N);
 
@@ -274,7 +372,7 @@ void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
          policy<discrete_quantile<integer_round_down> > > dl(r, n, N);
       BOOST_CHECK_EX(quantile(dl, cp) <= x);
       BOOST_CHECK_EX(quantile(complement(dl, ccp)) <= x);
-#endif
+
       boost::math::hypergeometric_distribution<RealType, 
          policy<discrete_quantile<integer_round_nearest> > > dn(r, n, N);
 
@@ -306,6 +404,7 @@ void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
    BOOST_CHECK_EQUAL(quantile(complement(d, 1)), extent.first);
    BOOST_CHECK_EQUAL(cdf(d, extent.second), 1);
    BOOST_CHECK_EQUAL(cdf(complement(d, extent.second)), 0);
+#endif
 }
 
 template <class RealType>

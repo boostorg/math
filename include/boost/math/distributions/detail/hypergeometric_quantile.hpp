@@ -14,77 +14,77 @@
 namespace boost{ namespace math{ namespace detail{
 
 template <class T>
-inline unsigned round_x_from_p(unsigned x, T p, T cum, T /*fudge_factor*/, const policies::discrete_quantile<policies::integer_round_down>&)
+inline unsigned round_x_from_p(unsigned x, T p, T cum, T fudge_factor, unsigned lbound, unsigned /*ubound*/, const policies::discrete_quantile<policies::integer_round_down>&)
 {
-   if(p < cum)
+   if((p < cum * fudge_factor) && (x != lbound))
       return --x;
    return x;
 }
 
 template <class T>
-inline unsigned round_x_from_p(unsigned x, T p, T cum, T /*fudge_factor*/, const policies::discrete_quantile<policies::integer_round_up>&)
+inline unsigned round_x_from_p(unsigned x, T p, T cum, T fudge_factor, unsigned /*lbound*/, unsigned ubound, const policies::discrete_quantile<policies::integer_round_up>&)
 {
-   if(cum < p)
+   if((cum < p * fudge_factor) && (x != ubound))
       return ++x;
    return x;
 }
 
 template <class T>
-inline unsigned round_x_from_p(unsigned x, T p, T cum, T fudge_factor, const policies::discrete_quantile<policies::integer_round_inwards>&)
+inline unsigned round_x_from_p(unsigned x, T p, T cum, T fudge_factor, unsigned lbound, unsigned ubound, const policies::discrete_quantile<policies::integer_round_inwards>&)
 {
    if(p >= 0.5)
-      return round_x_from_p(x, p, cum, fudge_factor, policies::discrete_quantile<policies::integer_round_down>());
-   return round_x_from_p(x, p, cum, fudge_factor, policies::discrete_quantile<policies::integer_round_up>());
+      return round_x_from_p(x, p, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_down>());
+   return round_x_from_p(x, p, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_up>());
 }
 
 template <class T>
-inline unsigned round_x_from_p(unsigned x, T p, T cum, T fudge_factor, const policies::discrete_quantile<policies::integer_round_outwards>&)
+inline unsigned round_x_from_p(unsigned x, T p, T cum, T fudge_factor, unsigned lbound, unsigned ubound, const policies::discrete_quantile<policies::integer_round_outwards>&)
 {
    if(p >= 0.5)
-      return round_x_from_p(x, p, cum, fudge_factor, policies::discrete_quantile<policies::integer_round_up>());
-   return round_x_from_p(x, p, cum, fudge_factor, policies::discrete_quantile<policies::integer_round_down>());
+      return round_x_from_p(x, p, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_up>());
+   return round_x_from_p(x, p, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_down>());
 }
 
 template <class T>
-inline unsigned round_x_from_p(unsigned x, T /*p*/, T /*cum*/, T /*fudge_factor*/, const policies::discrete_quantile<policies::integer_round_nearest>&)
+inline unsigned round_x_from_p(unsigned x, T /*p*/, T /*cum*/, T /*fudge_factor*/, unsigned /*lbound*/, unsigned /*ubound*/, const policies::discrete_quantile<policies::integer_round_nearest>&)
 {
    return x;
 }
 
 template <class T>
-inline unsigned round_x_from_q(unsigned x, T q, T cum, T /*fudge_factor*/, const policies::discrete_quantile<policies::integer_round_down>&)
+inline unsigned round_x_from_q(unsigned x, T q, T cum, T fudge_factor, unsigned lbound, unsigned /*ubound*/, const policies::discrete_quantile<policies::integer_round_down>&)
 {
-   if(q > cum)
+   if((q * fudge_factor > cum) && (x != lbound))
       return --x;
    return x;
 }
 
 template <class T>
-inline unsigned round_x_from_q(unsigned x, T q, T cum, T /*fudge_factor*/, const policies::discrete_quantile<policies::integer_round_up>&)
+inline unsigned round_x_from_q(unsigned x, T q, T cum, T fudge_factor, unsigned /*lbound*/, unsigned ubound, const policies::discrete_quantile<policies::integer_round_up>&)
 {
-   if(q < cum)
-      return --x;
+   if((q < cum * fudge_factor) && (x != ubound))
+      return ++x;
    return x;
 }
 
 template <class T>
-inline unsigned round_x_from_q(unsigned x, T q, T cum, T fudge_factor, const policies::discrete_quantile<policies::integer_round_inwards>&)
+inline unsigned round_x_from_q(unsigned x, T q, T cum, T fudge_factor, unsigned lbound, unsigned ubound, const policies::discrete_quantile<policies::integer_round_inwards>&)
 {
    if(q < 0.5)
-      return round_x_from_q(x, q, cum, fudge_factor, policies::discrete_quantile<policies::integer_round_down>());
-   return round_x_from_q(x, q, cum, fudge_factor, policies::discrete_quantile<policies::integer_round_up>());
+      return round_x_from_q(x, q, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_down>());
+   return round_x_from_q(x, q, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_up>());
 }
 
 template <class T>
-inline unsigned round_x_from_q(unsigned x, T q, T cum, T fudge_factor, const policies::discrete_quantile<policies::integer_round_outwards>&)
+inline unsigned round_x_from_q(unsigned x, T q, T cum, T fudge_factor, unsigned lbound, unsigned ubound, const policies::discrete_quantile<policies::integer_round_outwards>&)
 {
    if(q >= 0.5)
-      return round_x_from_q(x, q, cum, fudge_factor, policies::discrete_quantile<policies::integer_round_down>());
-   return round_x_from_q(x, q, cum, fudge_factor, policies::discrete_quantile<policies::integer_round_up>());
+      return round_x_from_q(x, q, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_down>());
+   return round_x_from_q(x, q, cum, fudge_factor, lbound, ubound, policies::discrete_quantile<policies::integer_round_up>());
 }
 
 template <class T>
-inline unsigned round_x_from_q(unsigned x, T /*q*/, T /*cum*/, T /*fudge_factor*/, const policies::discrete_quantile<policies::integer_round_nearest>&)
+inline unsigned round_x_from_q(unsigned x, T /*q*/, T /*cum*/, T /*fudge_factor*/, unsigned /*lbound*/, unsigned /*ubound*/, const policies::discrete_quantile<policies::integer_round_nearest>&)
 {
    return x;
 }
@@ -99,10 +99,12 @@ unsigned hypergeometric_quantile_imp(T p, T q, unsigned r, unsigned n, unsigned 
    typedef typename Policy::discrete_quantile_type discrete_quantile_type;
    BOOST_MATH_STD_USING
    T result;
-   T fudge_factor = 1 + tools::epsilon<T>() * 50;
+   T fudge_factor = 1 + tools::epsilon<T>() * ((N <= boost::math::prime(boost::math::max_prime - 1)) ? 50 : N);
+   unsigned base = static_cast<unsigned>((std::max)(0, (int)(n + r) - (int)(N)));
+   unsigned lim = (std::min)(r, n);
+
    if(p <= 0.5)
    {
-      unsigned base = static_cast<unsigned>((std::max)(0, (int)(n + r) - (int)(N)));
       unsigned x = base;
       result = hypergeometric_pdf<T>(x, r, n, N, pol);
       T diff = result;
@@ -116,11 +118,10 @@ unsigned hypergeometric_quantile_imp(T p, T q, unsigned r, unsigned n, unsigned 
          ++x;
          result += diff;
       }
-      return x == base ? x : round_x_from_p(x, p, result, fudge_factor, discrete_quantile_type());
+      return round_x_from_p(x, p, result, fudge_factor, base, lim, discrete_quantile_type());
    }
    else
    {
-      unsigned lim = (std::min)(r, n);
       unsigned x = lim;
       result = 0;
       T diff = hypergeometric_pdf<T>(x, r, n, N, pol);
@@ -132,7 +133,7 @@ unsigned hypergeometric_quantile_imp(T p, T q, unsigned r, unsigned n, unsigned 
             : hypergeometric_pdf<T>(x - 1, r, n, N, pol);
          --x;
       }
-      return x == lim ? x : round_x_from_q(x, q, result, fudge_factor, discrete_quantile_type());
+      return round_x_from_q(x, q, result, fudge_factor, base, lim, discrete_quantile_type());
    }
 #ifdef BOOST_MSVC
 #  pragma warning(pop)

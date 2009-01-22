@@ -106,7 +106,42 @@ run test_fisher_f.cpp ;
 run test_gamma.cpp pch ;
 run test_gamma_dist.cpp pch ;
 run test_hermite.cpp pch ;
-run test_hypergeometric_dist.cpp ;
+run test_hypergeometric_dist.cpp
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_QUANT=0
+        : test_hypergeometric_dist0 ;
+run test_hypergeometric_dist.cpp
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_QUANT=1
+        : test_hypergeometric_dist1 ;
+run test_hypergeometric_dist.cpp
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_QUANT=2
+        : test_hypergeometric_dist2 ;
+run test_hypergeometric_dist.cpp
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_QUANT=3
+        : test_hypergeometric_dist3 ;
+run test_hypergeometric_dist.cpp
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_QUANT=4
+        : test_hypergeometric_dist4 ;
+run test_hypergeometric_dist.cpp
+        : # command line
+        : # input files
+        : # requirements
+	      <define>TEST_QUANT=5
+        : test_hypergeometric_dist5 ;
 run test_ibeta.cpp  pch 
         : # command line
         : # input files
