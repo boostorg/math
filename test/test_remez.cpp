@@ -10,6 +10,7 @@
 #  pragma warning(disable : 4267) // conversion from 'size_t' to 'const unsigned int', possible loss of data
 #  pragma warning(disable : 4180) // qualifier applied to function type has no meaning; ignored
 #  pragma warning(disable : 4224) // nonstandard extension used : formal parameter 'function_ptr' was previously defined as a type
+#  pragma warning(disable : 4100) // unreferenced formal parameter (in ublas/functional)
 #endif
 
 #include <boost/math/tools/remez.hpp>

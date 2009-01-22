@@ -20,7 +20,7 @@ template <class T>
 T get_random()
 {
    //
-   // Fill all the bits in T with random values, 
+   // Fill all the bits in T with random values,
    // likewise set the exponent to a random value
    // that will still fit inside a T, and always
    // have a remainder as well as an integer part.
@@ -108,7 +108,7 @@ void check_modf_result(T a, T fract, U ipart)
 }
 
 template <class T>
-void test_round(T, const char* name)
+void test_round(T, const char* /* name */)
 {
    BOOST_MATH_STD_USING
 
@@ -131,7 +131,7 @@ void test_round(T, const char* name)
          r = boost::math::modf(arg, &i);
          check_modf_result(arg, r, i);
       }
-      
+
       if(abs(r) < (std::numeric_limits<long>::max)())
       {
          long l = boost::math::lround(arg);
