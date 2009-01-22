@@ -17,6 +17,7 @@
 #  pragma warning(disable:4512)
 #  pragma warning(disable:4127)
 #  pragma warning(disable:4512)
+#  pragma warning(disable:4503) // decorated name length exceeded, name was truncated
 #endif
 
 #include <boost/math/bindings/mpfr.hpp>

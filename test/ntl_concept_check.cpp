@@ -10,15 +10,16 @@
 // conceptual requirements, and that we can instantiate
 // all our distributions and special functions on this type.
 //
+
+#ifdef _MSC_VER
+#  pragma warning (disable : 4100) // unreferenced formal parameter
+#endif
+
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 
 #include <boost/math/bindings/rr.hpp>
 #include <boost/math/concepts/real_type_concept.hpp>
 #include "compile_test/instantiate.hpp"
-
-#ifdef _MSC_VER
-#  pragma warning (disable : 4100) // unreferenced formal parameter
-#endif
 
 void foo()
 {
