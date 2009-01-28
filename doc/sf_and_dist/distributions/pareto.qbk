@@ -77,10 +77,11 @@ The supported domain of the random variable is \[scale, [infin]\].
 
 [h4 Accuracy]
 
-The pareto distribution is implemented in terms of the
+The Pareto distribution is implemented in terms of the
 standard library `exp` functions plus __expm1
-and as such should have very low error rates
-except when probability is very close to unity.
+and so should have very small errors, usually only a few epsilon.
+
+If probability is near to unity (or the complement of a probability near zero) see also __why_complements.
 
 [h4 Implementation]
 
