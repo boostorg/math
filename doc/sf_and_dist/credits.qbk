@@ -7,13 +7,13 @@ John Maddock started this library, the beta, gamma, erf, polynomial,
 and factorial functions are his, as is the "Toolkit" section, and many
 of the statistical distributions.
 
-Paul A. Bristow threw down the challenge in 
-[@http://www2.open-std.org/JTC1/SC22/WG21/docs/papers/2004/n1668.pdf 
-A Proposal to add Mathematical Functions for Statistics to the C++ 
+Paul A. Bristow threw down the challenge in
+[@http://www2.open-std.org/JTC1/SC22/WG21/docs/papers/2004/n1668.pdf
+A Proposal to add Mathematical Functions for Statistics to the C++
 Standard Library] to add the key math functions, especially those essential for
-statistics. After JM accepted and solved the difficult problems, 
+statistics. After JM accepted and solved the difficult problems,
 not only numerically, but in full C++ template style, PAB
-implemented a few of the statistical distributions. PAB also tirelessly 
+implemented a few of the statistical distributions. PAB also tirelessly
 proof-read everything that JM threw at him (so that all
 remaining editorial mistakes are his fault).
 
@@ -24,16 +24,18 @@ Bruno Lalande submitted the "compile time power of a runtime base" code.
 
 Gautam Sewani coded the logistic distribution as part of a Google Summer of Code project 2008.
 
+M. A. (Thijs) van den Berg coded the Laplace distribution.
+(Thijs has also threatened to implement some multivariate distributions).
+
 Professor Nico Temme for advice on the inverse incomplete beta function.
 
-[@http://www.shoup.net Victor Shoup for NTL], 
-without which it would have much more difficult to 
+[@http://www.shoup.net Victor Shoup for NTL],
+without which it would have much more difficult to
 produce high accuracy constants, and especially
 the tables of accurate values for testing.
 
-We are grateful to Joel Guzman for helping us stress-test
-his 
-[@http://www.boost.org/tools/quickbook/index.htm Boost.Quickbook] 
+We are grateful to Joel Guzman for helping us stress-test his
+[@http://www.boost.org/tools/quickbook/index.htm Boost.Quickbook]
 program used to generate the html and pdf versions
 of this document, adding several new features en route.
 
@@ -47,17 +49,17 @@ Since browser support for rendering SVG is still not universal
 but can be made to work with
 [@http://www.adobe.com/svg/viewer/install/ Adobe's free SVG viewer] plugin),
 so the SVG files were batch converted to JPEG using
-[@http://www.inkscape.org/ Inkscape]. 
+[@http://www.inkscape.org/ Inkscape].
 
 We are also indebted to Matthias Schabel for managing the formal Boost-review
 of this library, and to all the reviewers - including Guillaume Melquiond,
-Arnaldur Gylfason, John Phillips, Stephan Tolksdorf and Jeff Garland 
+Arnaldur Gylfason, John Phillips, Stephan Tolksdorf and Jeff Garland
 - for their many helpful comments.
 
 [endsect] [/section:credits Credits and Acknowledgements]
 
-[/ 
-  Copyright 2006, 2007, 2008 John Maddock and Paul A. Bristow.
+[/
+  Copyright 2006, 2007, 2008, 2009 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
