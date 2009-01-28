@@ -1,5 +1,16 @@
-//  (C) Copyright John Maddock 2008.
-//  Copyright Paul A. Bristow 2008
+/*! \file dist_graphs.cpp
+    \brief Produces Scalable Vector Graphic (.svg) files for all distributions.
+    \details These files can be viewed using most browsers,
+    though MS Internet Explorer requires a plugin from Adobe.
+    These file can be converted to .png using Inkscape
+    (see www.inkscape.org) Export Bit option which by default produces
+    a Portable Network Graphic file with that same filename but .png suffix instead of .svg.
+    Using Python, generate.sh does this conversion automatically for all .svg files in a folder.
+
+    \author John Maddock and Paul A. Bristow
+  */
+//  Copyright John Maddock 2008.
+//  Copyright Paul A. Bristow 2008, 2009
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -23,30 +34,30 @@
 #include <string>
 
 template <class Dist>
-struct is_discrete_distribution 
+struct is_discrete_distribution
    : public boost::mpl::false_{};
 
 template<class T, class P>
-struct is_discrete_distribution<boost::math::bernoulli_distribution<T,P> > 
+struct is_discrete_distribution<boost::math::bernoulli_distribution<T,P> >
    : public boost::mpl::true_{};
 template<class T, class P>
-struct is_discrete_distribution<boost::math::binomial_distribution<T,P> > 
+struct is_discrete_distribution<boost::math::binomial_distribution<T,P> >
    : public boost::mpl::true_{};
 template<class T, class P>
-struct is_discrete_distribution<boost::math::negative_binomial_distribution<T,P> > 
+struct is_discrete_distribution<boost::math::negative_binomial_distribution<T,P> >
    : public boost::mpl::true_{};
 template<class T, class P>
-struct is_discrete_distribution<boost::math::poisson_distribution<T,P> > 
+struct is_discrete_distribution<boost::math::poisson_distribution<T,P> >
    : public boost::mpl::true_{};
 template<class T, class P>
-struct is_discrete_distribution<boost::math::hypergeometric_distribution<T,P> > 
+struct is_discrete_distribution<boost::math::hypergeometric_distribution<T,P> >
    : public boost::mpl::true_{};
 
 
 template <class Dist>
 struct value_finder
 {
-   value_finder(Dist const& d, typename Dist::value_type v) 
+   value_finder(Dist const& d, typename Dist::value_type v)
       : m_dist(d), m_value(v) {}
 
    inline typename Dist::value_type operator()(const typename Dist::value_type& x)
@@ -82,9 +93,9 @@ public:
       //
       double mod;
       try
-      { 
-         mod = mode(d); 
-      } 
+      {
+         mod = mode(d);
+      }
       catch(const std::domain_error& )
       {
          mod = a;
@@ -99,7 +110,7 @@ public:
       double peek_y = pdf(d, mod);
       double min_y = peek_y / 20;
       //
-      // If the extent is "infinite" then find out how large it 
+      // If the extent is "infinite" then find out how large it
       // has to be for the PDF to decay to min_y:
       //
       if(a <= -(std::numeric_limits<double>::max)())
@@ -133,7 +144,7 @@ public:
       }
       //
       // Recalculate peek_y and location of mod so that
-      // it's not too close to one end of the graph: 
+      // it's not too close to one end of the graph:
       // otherwise we may be shooting off to infinity.
       //
       if(!is_discrete_distribution<Dist>::value)
@@ -160,7 +171,7 @@ public:
       }
       else
       {
-         if(a < m_min_x) 
+         if(a < m_min_x)
             m_min_x = a;
          if(b > m_max_x)
             m_max_x = b;
@@ -171,7 +182,7 @@ public:
    {
       using namespace boost::svg;
 
-      static const svg_color colors[5] = 
+      static const svg_color colors[5] =
       {
          darkblue,
          darkred,
@@ -294,7 +305,7 @@ public:
                .line_color(colors[color_index])
                .line_width(1.)
                .shape(none)
-               .area_fill(colors[color_index]); 
+               .area_fill(colors[color_index]);
             ++color_index;
             color_index = color_index % (sizeof(colors)/sizeof(colors[0]));
          }
@@ -310,21 +321,21 @@ private:
 
 int main()
 {
-   distribution_plotter<boost::math::gamma_distribution<> > 
+   distribution_plotter<boost::math::gamma_distribution<> >
       gamma_plotter;
    gamma_plotter.add(boost::math::gamma_distribution<>(1), "shape = 0.5");
    gamma_plotter.add(boost::math::gamma_distribution<>(2), "shape = 1");
    gamma_plotter.add(boost::math::gamma_distribution<>(4), "shape = 3");
    gamma_plotter.plot("Gamma Distribution PDF With Scale = 1", "gamma1_pdf.svg");
 
-   distribution_plotter<boost::math::gamma_distribution<> > 
+   distribution_plotter<boost::math::gamma_distribution<> >
       gamma_plotter2;
    gamma_plotter2.add(boost::math::gamma_distribution<>(2, 0.5), "scale = 2");
    gamma_plotter2.add(boost::math::gamma_distribution<>(2, 1), "scale = 0.5");
    gamma_plotter2.add(boost::math::gamma_distribution<>(2, 2), "scale = 2");
    gamma_plotter2.plot("Gamma Distribution PDF With Shape = 2", "gamma2_pdf.svg");
 
-   distribution_plotter<boost::math::normal> 
+   distribution_plotter<boost::math::normal>
       normal_plotter;
    normal_plotter.add(boost::math::normal(0, 1), "&#x3BC; = 0, &#x3C3; = 1");
    normal_plotter.add(boost::math::normal(0, 0.5), "&#x3BC; = 0, &#x3C3; = 0.5");
@@ -333,7 +344,7 @@ int main()
    normal_plotter.add(boost::math::normal(1, 1), "&#x3BC; = 1, &#x3C3; = 1");
    normal_plotter.plot("Normal Distribution PDF", "normal_pdf.svg");
 
-   distribution_plotter<boost::math::laplace> 
+   distribution_plotter<boost::math::laplace>
       laplace_plotter;
    laplace_plotter.add(boost::math::laplace(0, 1), "&#x3BC; = 0, &#x3C3; = 1");
    laplace_plotter.add(boost::math::laplace(0, 0.5), "&#x3BC; = 0, &#x3C3; = 0.5");
@@ -342,7 +353,7 @@ int main()
    laplace_plotter.add(boost::math::laplace(1, 1), "&#x3BC; = 1, &#x3C3; = 1");
    laplace_plotter.plot("Laplace Distribution PDF", "laplace_pdf.svg");
 
-   distribution_plotter<boost::math::non_central_chi_squared> 
+   distribution_plotter<boost::math::non_central_chi_squared>
       nc_cs_plotter;
    nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 0), "v=20, &#x3BB;=0");
    nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 1), "v=20, &#x3BB;=1");
@@ -352,7 +363,7 @@ int main()
    nc_cs_plotter.add(boost::math::non_central_chi_squared(20, 100), "v=20, &#x3BB;=100");
    nc_cs_plotter.plot("Non Central Chi Squared PDF", "nccs_pdf.svg");
 
-   distribution_plotter<boost::math::non_central_beta> 
+   distribution_plotter<boost::math::non_central_beta>
       nc_beta_plotter;
    nc_beta_plotter.add(boost::math::non_central_beta(10, 15, 0), "&#x3B1;=10, &#x3B2;=15, &#x3B4;=0");
    nc_beta_plotter.add(boost::math::non_central_beta(10, 15, 1), "&#x3B1;=10, &#x3B2;=15, &#x3B4;=1");
@@ -362,7 +373,7 @@ int main()
    nc_beta_plotter.add(boost::math::non_central_beta(10, 15, 100), "&#x3B1;=10, &#x3B2;=15, &#x3B4;=100");
    nc_beta_plotter.plot("Non Central Beta PDF", "nc_beta_pdf.svg");
 
-   distribution_plotter<boost::math::non_central_f> 
+   distribution_plotter<boost::math::non_central_f>
       nc_f_plotter;
    nc_f_plotter.add(boost::math::non_central_f(10, 20, 0), "v1=10, v2=20, &#x3BB;=0");
    nc_f_plotter.add(boost::math::non_central_f(10, 20, 1), "v1=10, v2=20, &#x3BB;=1");
@@ -372,7 +383,7 @@ int main()
    nc_f_plotter.add(boost::math::non_central_f(10, 20, 100), "v1=10, v2=20, &#x3BB;=100");
    nc_f_plotter.plot("Non Central F PDF", "nc_f_pdf.svg");
 
-   distribution_plotter<boost::math::non_central_t> 
+   distribution_plotter<boost::math::non_central_t>
       nc_t_plotter;
    nc_t_plotter.add(boost::math::non_central_t(10, -10), "v=10, &#x3B4;=-10");
    nc_t_plotter.add(boost::math::non_central_t(10, -5), "v=10, &#x3B4;=-5");
@@ -381,7 +392,7 @@ int main()
    nc_t_plotter.add(boost::math::non_central_t(10, 10), "v=10, &#x3B4;=10");
    nc_t_plotter.plot("Non Central T PDF", "nc_t_pdf.svg");
 
-   distribution_plotter<boost::math::beta_distribution<> > 
+   distribution_plotter<boost::math::beta_distribution<> >
       beta_plotter;
    beta_plotter.add(boost::math::beta_distribution<>(0.5, 0.5), "alpha=0.5, beta=0.5");
    beta_plotter.add(boost::math::beta_distribution<>(5, 1), "alpha=5, beta=1");
@@ -390,21 +401,21 @@ int main()
    beta_plotter.add(boost::math::beta_distribution<>(2, 5), "alpha=2, beta=5");
    beta_plotter.plot("Beta Distribution PDF", "beta_pdf.svg");
 
-   distribution_plotter<boost::math::cauchy_distribution<> > 
+   distribution_plotter<boost::math::cauchy_distribution<> >
       cauchy_plotter;
    cauchy_plotter.add(boost::math::cauchy_distribution<>(-5, 1), "location = -5");
    cauchy_plotter.add(boost::math::cauchy_distribution<>(0, 1), "location = 0");
    cauchy_plotter.add(boost::math::cauchy_distribution<>(5, 1), "location = 5");
    cauchy_plotter.plot("Cauchy Distribution PDF (scale = 1)", "cauchy_pdf1.svg");
 
-   distribution_plotter<boost::math::cauchy_distribution<> > 
+   distribution_plotter<boost::math::cauchy_distribution<> >
       cauchy_plotter2;
    cauchy_plotter2.add(boost::math::cauchy_distribution<>(0, 0.5), "scale = 0.5");
    cauchy_plotter2.add(boost::math::cauchy_distribution<>(0, 1), "scale = 1");
    cauchy_plotter2.add(boost::math::cauchy_distribution<>(0, 2), "scale = 2");
    cauchy_plotter2.plot("Cauchy Distribution PDF (location = 0)", "cauchy_pdf2.svg");
 
-   distribution_plotter<boost::math::chi_squared_distribution<> > 
+   distribution_plotter<boost::math::chi_squared_distribution<> >
       chi_squared_plotter;
    //chi_squared_plotter.add(boost::math::chi_squared_distribution<>(1), "v=1");
    chi_squared_plotter.add(boost::math::chi_squared_distribution<>(2), "v=2");
@@ -412,28 +423,28 @@ int main()
    chi_squared_plotter.add(boost::math::chi_squared_distribution<>(10), "v=10");
    chi_squared_plotter.plot("Chi Squared Distribution PDF", "chi_squared_pdf.svg");
 
-   distribution_plotter<boost::math::exponential_distribution<> > 
+   distribution_plotter<boost::math::exponential_distribution<> >
       exponential_plotter;
    exponential_plotter.add(boost::math::exponential_distribution<>(0.5), "&#x3BB;=1");
    exponential_plotter.add(boost::math::exponential_distribution<>(1), "&#x3BB;=2");
    exponential_plotter.add(boost::math::exponential_distribution<>(2), "&#x3BB;=5");
    exponential_plotter.plot("Exponential Distribution PDF", "exponential_pdf.svg");
 
-   distribution_plotter<boost::math::extreme_value_distribution<> > 
+   distribution_plotter<boost::math::extreme_value_distribution<> >
       extreme_value_plotter;
    extreme_value_plotter.add(boost::math::extreme_value_distribution<>(-5), "location=1");
    extreme_value_plotter.add(boost::math::extreme_value_distribution<>(0), "location=2");
    extreme_value_plotter.add(boost::math::extreme_value_distribution<>(5), "location=5");
    extreme_value_plotter.plot("Extreme Value Distribution PDF (shape=1)", "extreme_value_pdf1.svg");
 
-   distribution_plotter<boost::math::extreme_value_distribution<> > 
+   distribution_plotter<boost::math::extreme_value_distribution<> >
       extreme_value_plotter2;
    extreme_value_plotter2.add(boost::math::extreme_value_distribution<>(0, 0.5), "shape=0.5");
    extreme_value_plotter2.add(boost::math::extreme_value_distribution<>(0, 1), "shape=1");
    extreme_value_plotter2.add(boost::math::extreme_value_distribution<>(0, 2), "shape=2");
    extreme_value_plotter2.plot("Extreme Value Distribution PDF (location=0)", "extreme_value_pdf2.svg");
 
-   distribution_plotter<boost::math::fisher_f_distribution<> > 
+   distribution_plotter<boost::math::fisher_f_distribution<> >
       fisher_f_plotter;
    fisher_f_plotter.add(boost::math::fisher_f_distribution<>(4, 4), "n=4, m=4");
    fisher_f_plotter.add(boost::math::fisher_f_distribution<>(10, 4), "n=10, m=4");
@@ -441,35 +452,35 @@ int main()
    fisher_f_plotter.add(boost::math::fisher_f_distribution<>(4, 10), "n=4, m=10");
    fisher_f_plotter.plot("F Distribution PDF", "fisher_f_pdf.svg");
 
-   distribution_plotter<boost::math::lognormal_distribution<> > 
+   distribution_plotter<boost::math::lognormal_distribution<> >
       lognormal_plotter;
    lognormal_plotter.add(boost::math::lognormal_distribution<>(-1), "location=-1");
    lognormal_plotter.add(boost::math::lognormal_distribution<>(0), "location=0");
    lognormal_plotter.add(boost::math::lognormal_distribution<>(1), "location=1");
    lognormal_plotter.plot("Lognormal Distribution PDF (scale=1)", "lognormal_pdf1.svg");
 
-   distribution_plotter<boost::math::lognormal_distribution<> > 
+   distribution_plotter<boost::math::lognormal_distribution<> >
       lognormal_plotter2;
    lognormal_plotter2.add(boost::math::lognormal_distribution<>(0, 0.5), "scale=0.5");
    lognormal_plotter2.add(boost::math::lognormal_distribution<>(0, 1), "scale=1");
    lognormal_plotter2.add(boost::math::lognormal_distribution<>(0, 2), "scale=2");
    lognormal_plotter2.plot("Lognormal Distribution PDF (location=0)", "lognormal_pdf2.svg");
 
-   distribution_plotter<boost::math::pareto_distribution<> > 
-      pareto_plotter;
-   pareto_plotter.add(boost::math::pareto_distribution<>(1), "location=1");
-   pareto_plotter.add(boost::math::pareto_distribution<>(2), "location=2");
-   pareto_plotter.add(boost::math::pareto_distribution<>(3), "location=3");
-   pareto_plotter.plot("Pareto Distribution PDF (scale=1)", "pareto_pdf1.svg");
+   distribution_plotter<boost::math::pareto_distribution<> >
+      pareto_plotter; // Rely on 2nd parameter shape = 1 default.
+   pareto_plotter.add(boost::math::pareto_distribution<>(1), "scale=1");
+   pareto_plotter.add(boost::math::pareto_distribution<>(2), "scale=2");
+   pareto_plotter.add(boost::math::pareto_distribution<>(3), "scale=3");
+   pareto_plotter.plot("Pareto Distribution PDF (shape=1)", "pareto_pdf1.svg");
 
-   distribution_plotter<boost::math::pareto_distribution<> > 
+   distribution_plotter<boost::math::pareto_distribution<> >
       pareto_plotter2;
-   pareto_plotter2.add(boost::math::pareto_distribution<>(1, 0.5), "scale=0.5");
-   pareto_plotter2.add(boost::math::pareto_distribution<>(1, 1), "scale=1");
-   pareto_plotter2.add(boost::math::pareto_distribution<>(1, 2), "scale=2");
-   pareto_plotter2.plot("Pareto Distribution PDF (location=1)", "pareto_pdf2.svg");
+   pareto_plotter2.add(boost::math::pareto_distribution<>(1, 0.5), "shape=0.5");
+   pareto_plotter2.add(boost::math::pareto_distribution<>(1, 1), "shape=1");
+   pareto_plotter2.add(boost::math::pareto_distribution<>(1, 2), "shape=2");
+   pareto_plotter2.plot("Pareto Distribution PDF (scale=1)", "pareto_pdf2.svg");
 
-   distribution_plotter<boost::math::rayleigh_distribution<> > 
+   distribution_plotter<boost::math::rayleigh_distribution<> >
       rayleigh_plotter;
    rayleigh_plotter.add(boost::math::rayleigh_distribution<>(0.5), "&#x3C3;=0.5");
    rayleigh_plotter.add(boost::math::rayleigh_distribution<>(1), "&#x3C3;=1");
@@ -478,7 +489,7 @@ int main()
    rayleigh_plotter.add(boost::math::rayleigh_distribution<>(10), "&#x3C3;=10");
    rayleigh_plotter.plot("Rayleigh Distribution PDF", "rayleigh_pdf.svg");
 
-   distribution_plotter<boost::math::rayleigh_distribution<> > 
+   distribution_plotter<boost::math::rayleigh_distribution<> >
       rayleigh_cdf_plotter(false);
    rayleigh_cdf_plotter.add(boost::math::rayleigh_distribution<>(0.5), "&#x3C3;=0.5");
    rayleigh_cdf_plotter.add(boost::math::rayleigh_distribution<>(1), "&#x3C3;=1");
@@ -487,7 +498,7 @@ int main()
    rayleigh_cdf_plotter.add(boost::math::rayleigh_distribution<>(10), "&#x3C3;=10");
    rayleigh_cdf_plotter.plot("Rayleigh Distribution CDF", "rayleigh_cdf.svg");
 
-   distribution_plotter<boost::math::triangular_distribution<> > 
+   distribution_plotter<boost::math::triangular_distribution<> >
       triangular_plotter;
    triangular_plotter.add(boost::math::triangular_distribution<>(-1,0,1), "{-1,0,1}");
    triangular_plotter.add(boost::math::triangular_distribution<>(0,1,1), "{0,1,1}");
@@ -496,7 +507,7 @@ int main()
    triangular_plotter.add(boost::math::triangular_distribution<>(-2,0,3), "{-2,0,3}");
    triangular_plotter.plot("Triangular Distribution PDF", "triangular_pdf.svg");
 
-   distribution_plotter<boost::math::triangular_distribution<> > 
+   distribution_plotter<boost::math::triangular_distribution<> >
       triangular_cdf_plotter(false);
    triangular_cdf_plotter.add(boost::math::triangular_distribution<>(-1,0,1), "{-1,0,1}");
    triangular_cdf_plotter.add(boost::math::triangular_distribution<>(0,1,1), "{0,1,1}");
@@ -505,14 +516,14 @@ int main()
    triangular_cdf_plotter.add(boost::math::triangular_distribution<>(-2,0,3), "{-2,0,3}");
    triangular_cdf_plotter.plot("Triangular Distribution CDF", "triangular_cdf.svg");
 
-   distribution_plotter<boost::math::students_t_distribution<> > 
+   distribution_plotter<boost::math::students_t_distribution<> >
       students_t_plotter;
    students_t_plotter.add(boost::math::students_t_distribution<>(1), "v=1");
    students_t_plotter.add(boost::math::students_t_distribution<>(5), "v=5");
    students_t_plotter.add(boost::math::students_t_distribution<>(30), "v=30");
    students_t_plotter.plot("Students T Distribution PDF", "students_t_pdf.svg");
 
-   distribution_plotter<boost::math::weibull_distribution<> > 
+   distribution_plotter<boost::math::weibull_distribution<> >
       weibull_plotter;
    weibull_plotter.add(boost::math::weibull_distribution<>(0.75), "shape=0.75");
    weibull_plotter.add(boost::math::weibull_distribution<>(1), "shape=1");
@@ -520,14 +531,14 @@ int main()
    weibull_plotter.add(boost::math::weibull_distribution<>(10), "shape=10");
    weibull_plotter.plot("Weibull Distribution PDF (scale=1)", "weibull_pdf1.svg");
 
-   distribution_plotter<boost::math::weibull_distribution<> > 
+   distribution_plotter<boost::math::weibull_distribution<> >
       weibull_plotter2;
    weibull_plotter2.add(boost::math::weibull_distribution<>(3, 0.5), "scale=0.5");
    weibull_plotter2.add(boost::math::weibull_distribution<>(3, 1), "scale=1");
    weibull_plotter2.add(boost::math::weibull_distribution<>(3, 2), "scale=2");
    weibull_plotter2.plot("Weibull Distribution PDF (shape=3)", "weibull_pdf2.svg");
 
-   distribution_plotter<boost::math::uniform_distribution<> > 
+   distribution_plotter<boost::math::uniform_distribution<> >
       uniform_plotter;
    uniform_plotter.add(boost::math::uniform_distribution<>(0, 1), "{0,1}");
    uniform_plotter.add(boost::math::uniform_distribution<>(0, 3), "{0,3}");
@@ -535,7 +546,7 @@ int main()
    uniform_plotter.add(boost::math::uniform_distribution<>(-1, 1), "{-1,1}");
    uniform_plotter.plot("Uniform Distribution PDF", "uniform_pdf.svg");
 
-   distribution_plotter<boost::math::uniform_distribution<> > 
+   distribution_plotter<boost::math::uniform_distribution<> >
       uniform_cdf_plotter(false);
    uniform_cdf_plotter.add(boost::math::uniform_distribution<>(0, 1), "{0,1}");
    uniform_cdf_plotter.add(boost::math::uniform_distribution<>(0, 3), "{0,3}");
@@ -543,56 +554,56 @@ int main()
    uniform_cdf_plotter.add(boost::math::uniform_distribution<>(-1, 1), "{-1,1}");
    uniform_cdf_plotter.plot("Uniform Distribution CDF", "uniform_cdf.svg");
 
-   distribution_plotter<boost::math::bernoulli_distribution<> > 
+   distribution_plotter<boost::math::bernoulli_distribution<> >
       bernoulli_plotter;
    bernoulli_plotter.add(boost::math::bernoulli_distribution<>(0.25), "p=0.25");
    bernoulli_plotter.add(boost::math::bernoulli_distribution<>(0.5), "p=0.5");
    bernoulli_plotter.add(boost::math::bernoulli_distribution<>(0.75), "p=0.75");
    bernoulli_plotter.plot("Bernoulli Distribution PDF", "bernoulli_pdf.svg");
 
-   distribution_plotter<boost::math::bernoulli_distribution<> > 
+   distribution_plotter<boost::math::bernoulli_distribution<> >
       bernoulli_cdf_plotter(false);
    bernoulli_cdf_plotter.add(boost::math::bernoulli_distribution<>(0.25), "p=0.25");
    bernoulli_cdf_plotter.add(boost::math::bernoulli_distribution<>(0.5), "p=0.5");
    bernoulli_cdf_plotter.add(boost::math::bernoulli_distribution<>(0.75), "p=0.75");
    bernoulli_cdf_plotter.plot("Bernoulli Distribution CDF", "bernoulli_cdf.svg");
 
-   distribution_plotter<boost::math::binomial_distribution<> > 
+   distribution_plotter<boost::math::binomial_distribution<> >
       binomial_plotter;
    binomial_plotter.add(boost::math::binomial_distribution<>(5, 0.5), "n=5 p=0.5");
    binomial_plotter.add(boost::math::binomial_distribution<>(20, 0.5), "n=20 p=0.5");
    binomial_plotter.add(boost::math::binomial_distribution<>(50, 0.5), "n=50 p=0.5");
    binomial_plotter.plot("Binomial Distribution PDF", "binomial_pdf_1.svg");
 
-   distribution_plotter<boost::math::binomial_distribution<> > 
+   distribution_plotter<boost::math::binomial_distribution<> >
       binomial_plotter2;
    binomial_plotter2.add(boost::math::binomial_distribution<>(20, 0.1), "n=20 p=0.1");
    binomial_plotter2.add(boost::math::binomial_distribution<>(20, 0.5), "n=20 p=0.5");
    binomial_plotter2.add(boost::math::binomial_distribution<>(20, 0.9), "n=20 p=0.9");
    binomial_plotter2.plot("Binomial Distribution PDF", "binomial_pdf_2.svg");
-   
-   distribution_plotter<boost::math::negative_binomial_distribution<> > 
+
+   distribution_plotter<boost::math::negative_binomial_distribution<> >
       negative_binomial_plotter;
    negative_binomial_plotter.add(boost::math::negative_binomial_distribution<>(20, 0.25), "n=20 p=0.25");
    negative_binomial_plotter.add(boost::math::negative_binomial_distribution<>(20, 0.5), "n=20 p=0.5");
    negative_binomial_plotter.add(boost::math::negative_binomial_distribution<>(20, 0.75), "n=20 p=0.75");
    negative_binomial_plotter.plot("Negative Binomial Distribution PDF", "negative_binomial_pdf_1.svg");
 
-   distribution_plotter<boost::math::negative_binomial_distribution<> > 
+   distribution_plotter<boost::math::negative_binomial_distribution<> >
       negative_binomial_plotter2;
    negative_binomial_plotter2.add(boost::math::negative_binomial_distribution<>(10, 0.5), "n=10 p=0.5");
    negative_binomial_plotter2.add(boost::math::negative_binomial_distribution<>(20, 0.5), "n=40 p=0.5");
    negative_binomial_plotter2.add(boost::math::negative_binomial_distribution<>(70, 0.5), "n=70 p=0.5");
    negative_binomial_plotter2.plot("Negative Binomial Distribution PDF", "negative_binomial_pdf_2.svg");
 
-   distribution_plotter<boost::math::poisson_distribution<> > 
+   distribution_plotter<boost::math::poisson_distribution<> >
       poisson_plotter;
    poisson_plotter.add(boost::math::poisson_distribution<>(5), "&#x3BB;=1");
    poisson_plotter.add(boost::math::poisson_distribution<>(10), "&#x3BB;=10");
    poisson_plotter.add(boost::math::poisson_distribution<>(20), "&#x3BB;=50");
    poisson_plotter.plot("Poisson Distribution PDF", "poisson_pdf_1.svg");
 
-   distribution_plotter<boost::math::hypergeometric_distribution<> > 
+   distribution_plotter<boost::math::hypergeometric_distribution<> >
       hypergeometric_plotter;
    hypergeometric_plotter.add(boost::math::hypergeometric_distribution<>(30, 50, 500), "N=500, r=50, n=30");
    hypergeometric_plotter.add(boost::math::hypergeometric_distribution<>(30, 100, 500), "N=500, r=100, n=30");
@@ -601,7 +612,7 @@ int main()
    hypergeometric_plotter.add(boost::math::hypergeometric_distribution<>(30, 450, 500), "N=500, r=450, n=30");
    hypergeometric_plotter.plot("Hypergeometric Distribution PDF", "hypergeometric_pdf_1.svg");
 
-   distribution_plotter<boost::math::hypergeometric_distribution<> > 
+   distribution_plotter<boost::math::hypergeometric_distribution<> >
       hypergeometric_plotter2;
    hypergeometric_plotter2.add(boost::math::hypergeometric_distribution<>(50, 50, 500), "N=500, r=50, n=50");
    hypergeometric_plotter2.add(boost::math::hypergeometric_distribution<>(100, 50, 500), "N=500, r=50, n=100");
