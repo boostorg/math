@@ -266,8 +266,8 @@ namespace detail {
     template<class T> 
     inline bool isfinite_impl(T x, generic_tag<true> const&)
     {
-        return x >= -std::numeric_limits<T>::max()
-            && x <= std::numeric_limits<T>::max();
+        return x >= -(std::numeric_limits<T>::max)()
+            && x <= (std::numeric_limits<T>::max)();
     }
 
     template<class T> 
@@ -326,8 +326,8 @@ namespace detail {
     inline bool isnormal_impl(T x, generic_tag<true> const&)
     {
         if(x < 0) x = -x;
-        return x >= std::numeric_limits<T>::min()
-            && x <= std::numeric_limits<T>::max();
+        return x >= (std::numeric_limits<T>::min)()
+            && x <= (std::numeric_limits<T>::max)();
     }
 
     template<class T> 
