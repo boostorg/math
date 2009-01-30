@@ -51,14 +51,13 @@ namespace boost
             T pois = gamma_p_derivative(T(k+1), l2, pol);
             if(pois == 0)
                return init_val;
+            // recurance term:
+            T xterm;
             // Starting beta term:
             T beta = x < y 
-               ? ibeta(a + k, b, x, pol)
-               : ibetac(b, a + k, y, pol);
-            // recurance term:
-            T xterm = x < y
-               ? ibeta_derivative(a + k, b, x, pol)
-               : ibeta_derivative(b, a + k, y, pol);
+               ? detail::ibeta_imp(T(a + k), b, x, pol, false, true, &xterm)
+               : detail::ibeta_imp(b, T(a + k), y, pol, true, true, &xterm);
+
             xterm *= y / (a + b + k - 1);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
@@ -130,14 +129,13 @@ namespace boost
             T pois = gamma_p_derivative(T(k+1), l2, pol);
             if(pois == 0)
                return init_val;
+            // recurance term:
+            T xterm;
             // Starting beta term:
             T beta = x < y
-               ? ibetac(a + k, b, x, pol)
-               : ibeta(b, a + k, y, pol);
-            // recurance term:
-            T xterm = x < y 
-               ? ibeta_derivative(a + k, b, x, pol)
-               : ibeta_derivative(b, a + k, y, pol);
+               ? detail::ibeta_imp(T(a + k), b, x, pol, true, true, &xterm)
+               : detail::ibeta_imp(b, T(a + k), y, pol, false, true, &xterm);
+
             xterm *= y / (a + b + k - 1);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;

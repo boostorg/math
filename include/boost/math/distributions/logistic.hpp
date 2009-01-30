@@ -169,7 +169,7 @@ namespace boost { namespace math {
        //return location - scale*log1p((1-2*p)/p);
 
        //return -scale*log(1/p-1) + location;
-       return location - scale * log1p((1 / p) - 2);
+       return location - scale * log((1 - p) / p);
      } // RealType quantile(const logistic_distribution<RealType, Policy>& dist, const RealType& p)
     
     template <class RealType, class Policy>
@@ -228,7 +228,7 @@ namespace boost { namespace math {
        }
        //Expressions to try 
        //return location+scale*log((1-q)/q);
-       return location + scale * log1p((1 - 2 * q) / q);
+       return location + scale * log((1 - q) / q);
 
        //return location-scale*log(q/(1-q));
        //return location-scale*log1p((2*q-1)/(1-q));

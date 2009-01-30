@@ -29,6 +29,7 @@ std::map<std::string, double> times;
 std::set<test_info> tests;
 double total = 0;
 int call_count = 0;
+bool compiler_prefix = false;
 
 std::set<test_info>& all_tests()
 {
@@ -69,8 +70,24 @@ void run_tests()
    std::set<test_info>::const_iterator i, j;
    for(i = tests.begin(), j = tests.end(); i != j; ++i)
    {
+      std::string name;
+      if(compiler_prefix)
+      {
+#if defined(BOOST_MSVC) && !defined(_DEBUG) && !defined(__ICL)
+         name = "msvc-";
+#elif defined(BOOST_MSVC) && defined(_DEBUG) && !defined(__ICL)
+         name = "msvc-debug-";
+#elif defined(__GNUC__)
+         name = "gcc-";
+#elif defined(__ICL)
+         name = "intel-";
+#elif defined(__ICC)
+         name = "intel-linux-";
+#endif
+      }
+      name += i->name;
       set_call_count(1);
-      std::cout << "Testing " << std::left << std::setw(40) << i->name << std::flush;
+      std::cout << "Testing " << std::left << std::setw(50) << name << std::flush;
       double time = performance_measure(i->proc) - reference_time;
       time /= call_count;
       std::cout << std::setprecision(3) << std::scientific << time << std::endl;
@@ -171,6 +188,10 @@ int main(int argc, const char** argv)
                tests.insert(*a);
                ++a;
             }
+         }
+         else if(std::strcmp(argv[i], "--compiler-prefix") == 0)
+         {
+            compiler_prefix = true;
          }
          else
          {
