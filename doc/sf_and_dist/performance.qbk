@@ -301,7 +301,7 @@ R-2.8.1 compiled in "standalone mode" with MinGW-4.3
 [[__negative_binomial_distrib Quantile][[perf msvc-dist-negative_binomial-quantile..[para *1.00*][para (2.311e-005s)]]][[perf msvc-dist-nbinom-R-quantile..[para 16.03[footnote The R library appears to use a linear-search strategy, that can perform very badly in a small number of pathological cases, but may or may not be more efficient in "typical" cases]][para (3.704e-004s)]]]]
 
 [[__non_central_chi_squared_distrib CDF][[perf msvc-dist-non_central_chi_squared-cdf..[para *1.00*][para (4.274e-006s)]]][[perf msvc-dist-nchisq-R-cdf..[para 34.09][para (1.457e-004s)]]]]
-[[__non_central_chi_squared_distrib Quantile][[perf msvc-dist-non_central_chi_squared-quantile..[para *1.00*][para (3.528e-004s)]]][[perf msvc-dist-nchisq-R-quantile..[para 75.71][para (2.671e-002s)]]]]
+[[__non_central_chi_squared_distrib Quantile][[perf msvc-dist-non_central_chi_squared-quantile..[para *1.00*][para (3.528e-004s)]]][[perf msvc-dist-nchisq-R-quantile..[para 75.71[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]][para (2.671e-002s)]]]]
 [[__non_central_F_distrib CDF][[perf msvc-dist-non_central_f-cdf..[para *1.00*][para (1.182e-005s)]]][[perf msvc-dist-nf-R-cdf..[para 1.51][para (1.781e-005s)]]]]
 [[__non_central_F_distrib Quantile][[perf msvc-dist-non_central_f-quantile..[para *1.00*][para (4.822e-004s)]]][[perf msvc-dist-nf-R-quantile..[para 3.99][para (1.924e-003s)]]]]
 [[__non_central_t_distrib CDF][[perf msvc-dist-non_central_t-cdf..[para 3.58][para (1.937e-005s)]]][[perf msvc-dist-nt-R-cdf..[para *1.00*][para (5.411e-006s)]]]]
@@ -319,37 +319,51 @@ R-2.8.1 compiled in "standalone mode" with MinGW-4.3
 
 [heading Comparison to the R Statistical Library on Linux]
 
-All the results were measured on a 2.8GHz Intel Pentium 4, 2Gb RAM, Mandriva Linux
-machine, with the test program and R-2.5.0 compiled with GNU G++ 4.2.0.
+All the results were measured on a 2.0GHz Intel T5800 Core 2 Duo, 4Gb RAM, Ubuntu Linux 8.1
+machine, with the test program and R-2.8.1 compiled with GNU G++ 4.3.2 using -O3.
 
 [table A Comparison to the R Statistical Library on Linux
 [[Statistical Function][Boost][R]]
-[[__beta_distrib CDF][[perf gcc-4_2-dist-beta-cdf..[para 1.71][para (3.508e-006s)]]][[perf gcc-4_2-dist-beta-R-cdf..[para *1.00*][para (2.050e-006s)]]]]
-[[__beta_distrib Quantile][[perf gcc-4_2-dist-beta-quantile..[para *1.00*][para (1.294e-005s)]]][[perf gcc-4_2-dist-beta-R-quantile..[para 44.06[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]][para (5.701e-004s)]]]]
-[[__binomial_distrib CDF][[perf gcc-4_2-dist-binomial-cdf..[para 1.22][para (1.342e-006s)]]][[perf gcc-4_2-dist-binom-R-cdf..[para *1.00*][para (1.104e-006s)]]]]
-[[__binomial_distrib Quantile][[perf gcc-4_2-dist-binomial-quantile..[para 1.36][para (7.083e-006s)]]][[perf gcc-4_2-dist-binom-R-quantile..[para *1.00*][para (5.194e-006s)]]]]
-[[__cauchy_distrib CDF][[perf gcc-4_2-dist-cauchy-cdf..[para *1.00*][para (1.372e-007s)]]][[perf gcc-4_2-dist-cauchy-R-cdf..[para 1.47][para (2.017e-007s)]]]]
-[[__cauchy_distrib Quantile][[perf gcc-4_2-dist-cauchy-quantile..[para *1.00*][para (1.542e-007s)]]][[perf gcc-4_2-dist-cauchy-R-quantile..[para 1.14][para (1.752e-007s)]]]]
-[[__chi_squared_distrib CDF][[perf gcc-4_2-dist-chi_squared-cdf..[para 1.04][para (1.820e-006s)]]][[perf gcc-4_2-dist-chisq-R-cdf..[para *1.00*][para (1.753e-006s)]]]]
-[[__chi_squared_distrib Quantile][[perf gcc-4_2-dist-chi_squared-quantile..[para 1.39][para (9.345e-006s)]]][[perf gcc-4_2-dist-chisq-R-quantile..[para *1.00*][para (6.728e-006s)]]]]
-[[__exp_distrib CDF][[perf gcc-4_2-dist-exponential-cdf..[para *1.00*][para (2.195e-007s)]]][[perf gcc-4_2-dist-exp-R-cdf..[para 1.17][para (2.561e-007s)]]]]
-[[__exp_distrib Quantile][[perf gcc-4_2-dist-exponential-quantile..[para *1.00*][para (1.123e-007s)]]][[perf gcc-4_2-dist-exp-R-quantile..[para 1.03][para (1.155e-007s)]]]]
-[[__F_distrib CDF][[perf gcc-4_2-dist-fisher_f-cdf..[para *1.00*][para (2.744e-006s)]]][[perf gcc-4_2-dist-f-R-cdf..[para 1.08][para (2.970e-006s)]]]]
-[[__F_distrib Quantile][[perf gcc-4_2-dist-fisher_f-quantile..[para 1.14][para (1.550e-005s)]]][[perf gcc-4_2-dist-f-R-quantile..[para *1.00*][para (1.359e-005s)]]]]
-[[__gamma_distrib CDF][[perf gcc-4_2-dist-gamma-cdf..[para 1.29][para (2.578e-006s)]]][[perf gcc-4_2-dist-gamma-R-cdf..[para *1.00*][para (1.992e-006s)]]]]
-[[__gamma_distrib Quantile][[perf gcc-4_2-dist-gamma-quantile..[para 1.77][para (1.020e-005s)]]][[perf gcc-4_2-dist-gamma-R-quantile..[para *1.00*][para (5.757e-006s)]]]] 
-[[__lognormal_distrib CDF][[perf gcc-4_2-dist-lognormal-cdf..[para *1.00*][para (1.782e-007s)]]][[perf gcc-4_2-dist-lnorm-R-cdf..[para 2.00][para (3.564e-007s)]]]]
-[[__lognormal_distrib Quantile][[perf gcc-4_2-dist-lognormal-quantile..[para *1.00*][para (7.093e-007s)]]][[perf gcc-4_2-dist-lnorm-R-quantile..[para 1.07][para (7.607e-007s)]]]]
-[[__negative_binomial_distrib CDF][[perf gcc-4_2-dist-negative_binomial-cdf..[para 1.03][para (2.209e-006s)]]][[perf gcc-4_2-dist-nbinom-R-cdf..[para *1.00*][para (2.141e-006s)]]]]
-[[__negative_binomial_distrib Quantile][[perf gcc-4_2-dist-negative_binomial-quantile..[para *1.00*][para (1.826e-005s)]]][[perf gcc-4_2-dist-nbinom-R-quantile..[para 30.07[footnote The R library appears to use a linear-search strategy, that can perform very badly in a small number of pathological cases, but may or may not be more efficient in "typical" cases]][para (5.490e-004s)]]]]
-[[__normal_distrib CDF][[perf gcc-4_2-dist-normal-cdf..[para *1.00*][para (8.542e-008s)]]][[perf gcc-4_2-dist-norm-R-cdf..[para 2.09][para (1.782e-007s)]]]]
-[[__normal_distrib Quantile][[perf gcc-4_2-dist-normal-quantile..[para *1.00*][para (1.362e-007s)]]][[perf gcc-4_2-dist-norm-R-quantile..[para 1.26][para (1.722e-007s)]]]]
-[[__poisson_distrib CDF][[perf gcc-4_2-dist-poisson-cdf..[para 1.10][para (1.953e-006s)]]][[perf gcc-4_2-dist-pois-R-cdf..[para *1.00*][para (1.775e-006s)]]]]
-[[__poisson_distrib][[perf gcc-4_2-dist-poisson-quantile..[para 1.12][para (4.214e-006s)]]][[perf gcc-4_2-dist-pois-R-quantile..[para *1.00*][para (3.752e-006s)]]]]
-[[__students_t_distrib CDF][[perf gcc-4_2-dist-students_t-cdf..[para 1.55][para (2.441e-006s)]]][[perf gcc-4_2-dist-t-R-cdf..[para *1.00*][para (1.576e-006s)]]]]
-[[__students_t_distrib Quantile][[perf gcc-4_2-dist-students_t-quantile..[para 1.33][para (3.972e-006s)]]][[perf gcc-4_2-dist-t-R-quantile..[para *1.00*][para (2.990e-006s)]]]]
-[[__weibull_distrib CDF][[perf gcc-4_2-dist-weibull-cdf..[para *1.00*][para (6.640e-007s)]]][[perf gcc-4_2-dist-weibull-R-cdf..[para 1.06][para (7.031e-007s)]]]]
-[[__weibull_distrib Quantile][[perf gcc-4_2-dist-weibull-quantile..[para *1.00*][para (7.504e-007s)]]][[perf gcc-4_2-dist-weibull-R-quantile..[para 1.03][para (7.710e-007s)]]]]
+[[__beta_distrib CDF][[perf gcc-4_3_2-dist-beta-cdf..[para 2.35][para (3.371e-006s)]]][[perf gcc-4_3_2-dist-beta-R-cdf..[para *1.00*][para (1.435e-006s)]]]]
+[[__beta_distrib Quantile][[perf gcc-4_3_2-dist-beta-quantile..[para *1.00*][para (1.093e-005s)]]][[perf gcc-4_3_2-dist-beta-R-quantile..[para 31.61[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]][para (3.455e-004s)]]]]
+[[__binomial_distrib CDF][[perf gcc-4_3_2-dist-binomial-cdf..[para 1.33][para (8.835e-007s)]]][[perf gcc-4_3_2-dist-binom-R-cdf..[para *1.00*][para (6.626e-007s)]]]]
+[[__binomial_distrib Quantile][[perf gcc-4_3_2-dist-binomial-quantile..[para 1.73][para (6.532e-006s)]]][[perf gcc-4_3_2-dist-binom-R-quantile..[para *1.00*][para (3.777e-006s)]]]]
+[[__cauchy_distrib CDF][[perf gcc-4_3_2-dist-cauchy-cdf..[para 1.23][para (1.856e-007s)]]][[perf gcc-4_3_2-dist-cauchy-R-cdf..[para *1.00*][para (1.513e-007s)]]]]
+[[__cauchy_distrib Quantile][[perf gcc-4_3_2-dist-cauchy-quantile..[para 1.46][para (2.009e-007s)]]][[perf gcc-4_3_2-dist-cauchy-R-quantile..[para *1.00*][para (1.378e-007s)]]]]
+[[__chi_squared_distrib CDF][[perf gcc-4_3_2-dist-chi_squared-cdf..[para 1.25][para (1.354e-006s)]]][[perf gcc-4_3_2-dist-chisq-R-cdf..[para *1.00*][para (1.087e-006s)]]]]
+[[__chi_squared_distrib Quantile][[perf gcc-4_3_2-dist-chi_squared-quantile..[para 1.80][para (9.906e-006s)]]][[perf gcc-4_3_2-dist-chisq-R-quantile..[para *1.00*][para (5.514e-006s)]]]]
+[[__exp_distrib CDF][[perf gcc-4_3_2-dist-exponential-cdf..[para *1.00*][para (1.250e-007s)]]][[perf gcc-4_3_2-dist-exp-R-cdf..[para 1.29][para (1.616e-007s)]]]]
+[[__exp_distrib Quantile][[perf gcc-4_3_2-dist-exponential-quantile..[para 1.02][para (9.310e-008s)]]][[perf gcc-4_3_2-dist-exp-R-quantile..[para *1.00*][para (9.149e-008s)]]]]
+[[__F_distrib CDF][[perf gcc-4_3_2-dist-fisher_f-cdf..[para 1.65][para (2.292e-006s)]]][[perf gcc-4_3_2-dist-f-R-cdf..[para *1.00*][para (1.388e-006s)]]]]
+[[__F_distrib Quantile][[perf gcc-4_3_2-dist-fisher_f-quantile..[para 1.78][para (1.740e-005s)]]][[perf gcc-4_3_2-dist-f-R-quantile..[para *1.00*][para (9.787e-006s)]]]]
+[[__gamma_distrib CDF][[perf gcc-4_3_2-dist-gamma-cdf..[para 1.48][para (1.816e-006s)]]][[perf gcc-4_3_2-dist-gamma-R-cdf..[para *1.00*][para (1.230e-006s)]]]]
+[[__gamma_distrib Quantile][[perf gcc-4_3_2-dist-gamma-quantile..[para *1.00*][para (8.553e-006s)]]][[perf gcc-4_3_2-dist-gamma-R-quantile..[para 1.62][para (1.382e-005s)]]]] 
+
+[[__hypergeometric_distrib CDF][[perf gcc-4_3_2-dist-hypergeometric-cdf..[para 2.25[footnote This result is somewhat misleading: for small values of the parameters there is  virtually no difference between the two libraries, but for large values the Boost implementation is /much/ slower, albeit with much improved precision.]][para (3.308e-007s)]]][[perf gcc-4_3_2-dist-hypergeo-R-cdf..[para *1.00*][para (1.467e-007s)]]]]
+[[__hypergeometric_distrib Quantile][[perf gcc-4_3_2-dist-hypergeometric-quantile..[para *1.00*][para (6.179e-007s)]]][[perf gcc-4_3_2-dist-hypergeo-R-quantile..[para 3.24][para (2.002e-006s)]]]] 
+[[__logistic_distrib CDF][[perf gcc-4_3_2-dist-logistic-cdf..[para *1.00*][para (1.172e-007s)]]][[perf gcc-4_3_2-dist-logis-R-cdf..[para 2.08][para (2.441e-007s)]]]]
+[[__logistic_distrib Quantile][[perf gcc-4_3_2-dist-logistic-quantile..[para 1.15][para (1.362e-007s)]]][[perf gcc-4_3_2-dist-logis-R-quantile..[para *1.00*][para (1.182e-007s)]]]] 
+
+[[__lognormal_distrib CDF][[perf gcc-4_3_2-dist-lognormal-cdf..[para *1.00*][para (2.124e-007s)]]][[perf gcc-4_3_2-dist-lnorm-R-cdf..[para 1.13][para (2.392e-007s)]]]]
+[[__lognormal_distrib Quantile][[perf gcc-4_3_2-dist-lognormal-quantile..[para 3.16][para (1.460e-006s)]]][[perf gcc-4_3_2-dist-lnorm-R-quantile..[para *1.00*][para (4.626e-007s)]]]]
+[[__negative_binomial_distrib CDF][[perf gcc-4_3_2-dist-negative_binomial-cdf..[para 1.27][para (1.665e-006s)]]][[perf gcc-4_3_2-dist-nbinom-R-cdf..[para *1.00*][para (1.308e-006s)]]]]
+[[__negative_binomial_distrib Quantile][[perf gcc-4_3_2-dist-negative_binomial-quantile..[para *1.00*][para (1.794e-005s)]]][[perf gcc-4_3_2-dist-nbinom-R-quantile..[para 22.46[footnote The R library appears to use a linear-search strategy, that can perform very badly in a small number of pathological cases, but may or may not be more efficient in "typical" cases]][para (4.029e-004s)]]]]
+
+[[__non_central_chi_squared_distrib CDF][[perf gcc-4_3_2-dist-non_central_chi_squared-cdf..[para *1.00*][para (1.085e-005s)]]][[perf gcc-4_3_2-dist-nchisq-R-cdf..[para 13.52][para (1.467e-004s)]]]]
+[[__non_central_chi_squared_distrib Quantile][[perf gcc-4_3_2-dist-non_central_chi_squared-quantile..[para *1.00*][para (2.031e-003s)]]][[perf gcc-4_3_2-dist-nchisq-R-quantile..[para 15.65[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]][para (3.179e-002s)]]]]
+[[__non_central_F_distrib CDF][[perf gcc-4_3_2-dist-non_central_f-cdf..[para 7.14][para (6.198e-005s)]]][[perf gcc-4_3_2-dist-nf-R-cdf..[para *1.00*][para (8.678e-006s)]]]]
+[[__non_central_F_distrib Quantile][[perf gcc-4_3_2-dist-non_central_f-quantile..[para *1.00*][para (7.947e-004s)]]][[perf gcc-4_3_2-dist-nf-R-quantile..[para 1.21][para (9.622e-004s)]]]]
+[[__non_central_t_distrib CDF][[perf gcc-4_3_2-dist-non_central_t-cdf..[para 5.70][para (3.461e-005s)]]][[perf gcc-4_3_2-dist-nt-R-cdf..[para *1.00*][para (6.069e-006s)]]]]
+[[__non_central_t_distrib Quantile][[perf gcc-4_3_2-dist-non_central_t-quantile..[para 1.80][para (9.308e-004s)]]][[perf gcc-4_3_2-dist-nt-R-quantile..[para *1.00*[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]][para (5.176e-004s)]]]]
+
+[[__normal_distrib CDF][[perf gcc-4_3_2-dist-normal-cdf..[para *1.00*][para (1.245e-007s)]]][[perf gcc-4_3_2-dist-norm-R-cdf..[para 1.04][para (1.294e-007s)]]]]
+[[__normal_distrib Quantile][[perf gcc-4_3_2-dist-normal-quantile..[para 1.59][para (2.364e-007s)]]][[perf gcc-4_3_2-dist-norm-R-quantile..[para *1.00*][para (1.490e-007s)]]]]
+[[__poisson_distrib CDF][[perf gcc-4_3_2-dist-poisson-cdf..[para 1.22][para (1.354e-006s)]]][[perf gcc-4_3_2-dist-pois-R-cdf..[para *1.00*][para (1.110e-006s)]]]]
+[[__poisson_distrib][[perf gcc-4_3_2-dist-poisson-quantile..[para 1.38][para (3.752e-006s)]]][[perf gcc-4_3_2-dist-pois-R-quantile..[para *1.00*][para (2.724e-006s)]]]]
+[[__students_t_distrib CDF][[perf gcc-4_3_2-dist-students_t-cdf..[para 2.32][para (2.108e-006s)]]][[perf gcc-4_3_2-dist-t-R-cdf..[para *1.00*][para (9.099e-007s)]]]]
+[[__students_t_distrib Quantile][[perf gcc-4_3_2-dist-students_t-quantile..[para 1.21][para (4.018e-006s)]]][[perf gcc-4_3_2-dist-t-R-quantile..[para *1.00*][para (3.317e-006s)]]]]
+[[__weibull_distrib CDF][[perf gcc-4_3_2-dist-weibull-cdf..[para 1.04][para (3.955e-007s)]]][[perf gcc-4_3_2-dist-weibull-R-cdf..[para *1.00*][para (3.808e-007s)]]]]
+[[__weibull_distrib Quantile][[perf gcc-4_3_2-dist-weibull-quantile..[para 1.06][para (4.472e-007s)]]][[perf gcc-4_3_2-dist-weibull-R-quantile..[para *1.00*][para (4.215e-007s)]]]]
 ]
 
 [endsect]
@@ -381,6 +395,11 @@ __policy_section you want to test set as the default.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
+
+
+
+
 
 
 

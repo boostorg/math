@@ -37,10 +37,14 @@ int main(int argc, const char* argv[])
    //
    extra_text["msvc-dist-beta-R-quantile"] = "[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]";
    extra_text["msvc-dist-nbinom-R-quantile"] = "[footnote The R library appears to use a linear-search strategy, that can perform very badly in a small number of pathological cases, but may or may not be more efficient in \"typical\" cases]";
-   extra_text["gcc-4_2-dist-beta-R-quantile"] = "[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]";
-   extra_text["gcc-4_2-dist-nbinom-R-quantile"] = "[footnote The R library appears to use a linear-search strategy, that can perform very badly in a small number of pathological cases, but may or may not be more efficient in \"typical\" cases]";
+   extra_text["gcc-4_3_2-dist-beta-R-quantile"] = "[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]";
+   extra_text["gcc-4_3_2-dist-nbinom-R-quantile"] = "[footnote The R library appears to use a linear-search strategy, that can perform very badly in a small number of pathological cases, but may or may not be more efficient in \"typical\" cases]";
    extra_text["msvc-dist-hypergeometric-cdf"] = "[footnote This result is somewhat misleading: for small values of the parameters there is  virtually no difference between the two libraries, but for large values the Boost implementation is /much/ slower, albeit with much improved precision.]";
    extra_text["msvc-dist-nt-R-quantile"] = "[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]";
+   extra_text["msvc-dist-nchisq-R-quantile"] = "[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]";
+   extra_text["gcc-4_3_2-dist-hypergeometric-cdf"] = "[footnote This result is somewhat misleading: for small values of the parameters there is  virtually no difference between the two libraries, but for large values the Boost implementation is /much/ slower, albeit with much improved precision.]";
+   extra_text["gcc-4_3_2-dist-nt-R-quantile"] = "[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]";
+   extra_text["gcc-4_3_2-dist-nchisq-R-quantile"] = "[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]";
    
    boost::regex e("^Testing\\s+(\\S+)\\s+(\\S+)");
    std::string f;
