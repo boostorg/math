@@ -450,7 +450,9 @@ void test_bessel(T, const char* name)
         SC_(1), SC_(10667654)/(1024*1024), SC_(1.24591331097191900488116495350277530373473085499043086981229e-7),
     };
 
-    static const boost::array<boost::array<T, 3>, 14> jn_data = {
+    static const boost::array<boost::array<T, 3>, 15> jn_data = {
+        // This first one is a modified test case from https://svn.boost.org/trac/boost/ticket/2733
+        SC_(-1), SC_(1.25), SC_(-0.510623260319880467069474837274910375352924050139633057168856),
         SC_(2), SC_(0), SC_(0),
         SC_(2), SC_(1e-02), SC_(1.249989583365885362413250958437642113452e-05),
         SC_(5), SC_(10), SC_(-0.2340615281867936404436949416457777864635),
