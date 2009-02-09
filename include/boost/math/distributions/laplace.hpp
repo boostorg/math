@@ -7,8 +7,10 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // This module implements the Laplace distribution.
+// Weisstein, Eric W. "Laplace Distribution." From MathWorld--A Wolfram Web Resource.
+// http://mathworld.wolfram.com/LaplaceDistribution.html
 // http://en.wikipedia.org/wiki/Laplace_distribution
-// 
+//
 // Abramowitz and Stegun 1972, p 930
 // http://www.math.sfu.ca/~cbm/aands/page_930.htm
 
@@ -47,14 +49,14 @@ public:
    // Public functions
    // ----------------------------------
 
-   RealType location() const 
-   { 
-      return m_location; 
+   RealType location() const
+   {
+      return m_location;
    }
 
-   RealType scale() const 
-   { 
-      return m_scale; 
+   RealType scale() const
+   {
+      return m_scale;
    }
 
    bool check_parameters(const char* function, RealType* result) const
@@ -64,7 +66,7 @@ public:
          return true;
    }
 
-   
+
 private:
    RealType m_location;
    RealType m_scale;
@@ -107,7 +109,7 @@ inline RealType pdf(const laplace_distribution<RealType, Policy>& dist, const Re
    if (false == detail::check_x(function, x, &result, Policy())) return result;
 
    // Special pdf values
-   if((boost::math::isinf)(x)) 
+   if((boost::math::isinf)(x))
       return 0; // pdf + and - infinity is zero.
 
    // General case
@@ -146,9 +148,9 @@ inline RealType cdf(const laplace_distribution<RealType, Policy>& dist, const Re
    RealType scale( dist.scale() );
    RealType location( dist.location() );
 
-   if (x < location) 
+   if (x < location)
       result = exp( (x-location)/scale )/2;
-   else 
+   else
       result = 1 - exp( (location-x)/scale )/2;
 
    return result;
@@ -174,9 +176,9 @@ inline RealType quantile(const laplace_distribution<RealType, Policy>& dist, con
    RealType scale( dist.scale() );
    RealType location( dist.location() );
 
-   if (p - 0.5 < 0.0) 
+   if (p - 0.5 < 0.0)
       result = location + scale*log( static_cast<RealType>(p*2) );
-   else 
+   else
       result = location - scale*log( static_cast<RealType>(-p*2 + 2) );
 
    return result;
@@ -207,11 +209,11 @@ inline RealType cdf(const complemented2_type<laplace_distribution<RealType, Poli
    }
 
    // Cdf interval value
-   if (-x < location) 
+   if (-x < location)
       result = exp( (-x-location)/scale )/2;
-   else 
+   else
       result = 1 - exp( (location+x)/scale )/2;
- 
+
    return result;
 } // cdf complement
 
@@ -231,17 +233,17 @@ inline RealType quantile(const complemented2_type<laplace_distribution<RealType,
    const char* function = "quantile(const complemented2_type<laplace_distribution<%1%>, %1%>&)";
    if(false == detail::check_probability(function, q, &result, Policy())) return result;
 
-   
+
    // extreme values
    if(q == 0) return std::numeric_limits<RealType>::infinity();
    if(q == 1) return -std::numeric_limits<RealType>::infinity();
 
-   if (0.5 - q < 0.0) 
+   if (0.5 - q < 0.0)
       result = location + scale*log( static_cast<RealType>(-q*2 + 2) );
-   else 
+   else
       result = location - scale*log( static_cast<RealType>(q*2) );
 
-   
+
    return result;
 } // quantile
 
