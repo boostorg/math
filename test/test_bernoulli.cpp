@@ -10,6 +10,12 @@
 
 // Basic sanity test for Bernoulli Cumulative Distribution Function.
 
+#ifdef _MSC_VER
+#  pragma warning (disable : 4535) // calling _set_se_translator() requires /EHa
+#  pragma warning (disable : 4244) // converion possible loss of data
+#  pragma warning (disable : 4996) // 'putenv': The POSIX name for this item is deprecated
+#endif
+
 // Default domain error policy is
 // #define BOOST_MATH_DOMAIN_ERROR_POLICY throw_on_error
 

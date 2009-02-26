@@ -274,6 +274,8 @@ BOOST_MATH_DISTRIBUTION1_TEST(chi_squared, int_values, real_values, probabilitie
 BOOST_MATH_DISTRIBUTION1_TEST(exponential, real_values, real_values, probabilities)
 BOOST_MATH_DISTRIBUTION2_TEST(fisher_f, int_values, int_values, real_values, probabilities)
 BOOST_MATH_DISTRIBUTION2_TEST(gamma, real_values, real_values, real_values, probabilities)
+BOOST_MATH_DISTRIBUTION3_TEST(hypergeometric, small_int_values, small_int_values, small_int_values, small_int_values, probabilities)
+BOOST_MATH_DISTRIBUTION2_TEST(logistic, real_values, real_values, real_values, probabilities)
 BOOST_MATH_DISTRIBUTION2_TEST(lognormal, real_values, real_values, real_values, probabilities)
 BOOST_MATH_DISTRIBUTION2_TEST(negative_binomial, int_values, probabilities, int_values, probabilities)
 BOOST_MATH_DISTRIBUTION2_TEST(normal, real_values, real_values, real_values, probabilities)
@@ -494,6 +496,33 @@ double qnchisq(double, double, double, int, int)
       set_call_count(a_size * c_size);\
    }
 
+double qhypergeo(double r, double n, double N, double p, int i, int j)
+{
+   if(r > N)
+      return std::numeric_limits<double>::quiet_NaN();
+   double nr = r;
+   double nb = N - r;
+   return qhyper(nr, nb, n, p, i, j);
+}
+
+double phypergeo(double r, double n, double N, double k, int i, int j)
+{
+   if((r > N) || (k > n) || (k > r))
+      return std::numeric_limits<double>::quiet_NaN();
+   double nr = r;
+   double nb = N - r;
+   return phyper(nr, nb, n, k, i, j);
+}
+
+double dhypergeo(double r, double n, double N, double k, int i)
+{
+   if((r > N) || (k > n) || (k > r))
+      return std::numeric_limits<double>::quiet_NaN();
+   double nr = r;
+   double nb = N - r;
+   return dhyper(nr, nb, n, k, i);
+}
+
 BOOST_MATH_R_DISTRIBUTION2_TEST(beta, probabilities, probabilities, probabilities, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(binom, int_values, probabilities, int_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(cauchy, int_values, real_values, int_values, probabilities)
@@ -501,6 +530,8 @@ BOOST_MATH_R_DISTRIBUTION1_TEST(chisq, int_values, real_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION1_TEST(exp, real_values, real_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(f, int_values, int_values, real_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(gamma, real_values, real_values, real_values, probabilities)
+BOOST_MATH_R_DISTRIBUTION3_TEST(hypergeo, small_int_values, small_int_values, small_int_values, small_int_values, probabilities)
+BOOST_MATH_R_DISTRIBUTION2_TEST(logis, real_values, real_values, real_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(lnorm, real_values, real_values, real_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(nbinom, int_values, probabilities, int_values, probabilities)
 BOOST_MATH_R_DISTRIBUTION2_TEST(norm, real_values, real_values, real_values, probabilities)

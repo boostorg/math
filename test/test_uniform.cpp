@@ -8,6 +8,8 @@
 
 // test_uniform.cpp
 
+#include <pch.hpp>
+
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4100) // unreferenced formal parameter.

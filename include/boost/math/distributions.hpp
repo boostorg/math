@@ -1,5 +1,5 @@
 //  Copyright John Maddock 2006, 2007.
-//  Copyright Paul A. Bristow 2006, 2007.
+//  Copyright Paul A. Bristow 2006, 2007, 2009.
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -22,6 +22,9 @@
 #include <boost/math/distributions/extreme_value.hpp>
 #include <boost/math/distributions/fisher_f.hpp>
 #include <boost/math/distributions/gamma.hpp>
+#include <boost/math/distributions/hypergeometric.hpp>
+#include <boost/math/distributions/laplace.hpp>
+#include <boost/math/distributions/logistic.hpp>
 #include <boost/math/distributions/lognormal.hpp>
 #include <boost/math/distributions/negative_binomial.hpp>
 #include <boost/math/distributions/non_central_chi_squared.hpp>

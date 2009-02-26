@@ -257,11 +257,6 @@ would be complex).
 
 [optional_policy]
 
-[caution In addition, the region where ['n > 1] and [phi][space] ['is not in the range]
-\[0, [pi]\/2\] is currently unsupported and returns the result of __domain_error.
-For this reason it is recomended that you keep [phi][space] inside its "natural" range
-of \[0, [pi]\/2\].]
-
   template <class T1, class T2>
   ``__sf_result`` ellint_3(T1 k, T2 n);
   
@@ -275,7 +270,7 @@ Returns the complete elliptic integral of the first kind ['[Pi](n, k)]:
 Requires ['-1 <= k <= 1] and ['n < 1], otherwise returns the 
 result of __domain_error (outside this range the result would be complex).
 
-[opitonal_policy]
+[optional_policy]
 
 [heading Accuracy]
 
@@ -322,7 +317,13 @@ Then the relations:
 
 ['[Pi](n, -[phi], k) = -[Pi](n, [phi], k)]
 
-['[Pi](n, [phi]+m[pi], k) = [Pi](n, [phi], k) + 2m[Pi](n, k)]
+['[Pi](n, [phi]+m[pi], k) = [Pi](n, [phi], k) + 2m[Pi](n, k) ; n <= 1]
+
+['[Pi](n, [phi]+m[pi], k) = [Pi](n, [phi], k) ; n > 1] 
+[footnote I haven't been able to find a literature reference for this
+relation, but it appears to be the convention used by Mathematica.
+Intuitively the first ['2 * m * [Pi](n, k)] terms cancel out as the
+derivative alternates between +[infin] and -[infin].]
 
 are used to move [phi][space] to the range \[0, [pi]\/2\].
 
@@ -334,10 +335,5 @@ using the relations:
 and
 
 [equation ellint26]
-
-The remaining problem area occurs when n > 1 and [phi][space] is outside
-the range \[0, [pi]\/2\].  In this range the reduction formula for
-large [phi][space] can no longer be applied.  Likewise the identities 17.7.7/8
-in A&S for reducing n to the range \[0,1\] appear to be no longer applicable.
 
 [endsect]

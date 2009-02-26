@@ -286,6 +286,8 @@ Returns /x/ truncated to the nearest integer.
 
 See also __trunc for the full template (header only) version of this function.
 
+See also [@http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1124.pdf C99 ISO Standard]
+
 [endsect]
 
 [/ 

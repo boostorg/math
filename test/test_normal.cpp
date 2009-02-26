@@ -15,6 +15,8 @@
 // From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/NormalDistribution.html
 
+#include <pch.hpp>
+
 #ifdef _MSC_VER
 #pragma warning (disable: 4127) // conditional expression is constant
 // caused by using   if(std::numeric_limits<RealType>::has_infinity)

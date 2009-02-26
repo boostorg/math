@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>History and What's New</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../status.html" title="Library Status">
 <link rel="prev" href="../status.html" title="Library Status">
@@ -27,10 +27,44 @@
 <a name="math_toolkit.status.history1"></a><a class="link" href="history1.html" title="History and What's New"> History and What's New</a>
 </h3></div></div></div>
 <p>
+        <a name="math_toolkit.status.history1.boost_1_39_0"></a>
+        </p>
+<h5>
+<a name="id1152372"></a>
+          <a class="link" href="history1.html#math_toolkit.status.history1.boost_1_39_0">Boost-1.39.0</a>
+        </h5>
+<p>
+        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            Added support for MPFR as a bignum type.
+          </li>
+<li>
+            Added some full specializations of the policy classes to reduce compile
+            times.
+          </li>
+<li>
+            Added logistic and hypergeometric distributions, from Gautam Sewani's
+            Google Summer of Code project.
+          </li>
+<li>
+            Added Laplace distribution submitted by Thijs van den Berg.
+          </li>
+<li>
+            Updated performance test code to include new distributions, and improved
+            the performance of the non-central distributions.
+          </li>
+<li>
+            Added SSE2 optimised <a class="link" href="../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
+            approximation</a> code, from Gautam Sewani's Google Summer of Code
+            project.
+          </li>
+</ul></div>
+<p>
         <a name="math_toolkit.status.history1.boost_1_38_0"></a>
         </p>
 <h5>
-<a name="id893847"></a>
+<a name="id1152415"></a>
           <a class="link" href="history1.html#math_toolkit.status.history1.boost_1_38_0">Boost-1.38.0</a>
         </h5>
 <p>
@@ -47,7 +81,7 @@
         <a name="math_toolkit.status.history1.boost_1_37_0"></a>
         </p>
 <h5>
-<a name="id893894"></a>
+<a name="id1152444"></a>
           <a class="link" href="history1.html#math_toolkit.status.history1.boost_1_37_0">Boost-1.37.0</a>
         </h5>
 <p>
@@ -59,7 +93,7 @@
         <a name="math_toolkit.status.history1.boost_1_36_0"></a>
         </p>
 <h5>
-<a name="id893927"></a>
+<a name="id1152464"></a>
           <a class="link" href="history1.html#math_toolkit.status.history1.boost_1_36_0">Boost-1.36.0</a>
         </h5>
 <p>
@@ -97,7 +131,7 @@
         <a name="math_toolkit.status.history1.boost_1_35_0__post_review_first_official_release"></a>
         </p>
 <h5>
-<a name="id894000"></a>
+<a name="id1152518"></a>
           <a class="link" href="history1.html#math_toolkit.status.history1.boost_1_35_0__post_review_first_official_release">Boost-1.35.0:
           Post Review First Official Release</a>
         </h5>
@@ -134,7 +168,7 @@
         <a name="math_toolkit.status.history1.milestone_4__second_review_candidate__1st_march_2007_"></a>
         </p>
 <h5>
-<a name="id894102"></a>
+<a name="id1152582"></a>
           <a class="link" href="history1.html#math_toolkit.status.history1.milestone_4__second_review_candidate__1st_march_2007_">Milestone
           4: Second Review Candidate (1st March 2007)</a>
         </h5>
@@ -153,7 +187,7 @@
         <a name="math_toolkit.status.history1.milestone_3__first_review_candidate__31st_dec_2006_"></a>
         </p>
 <h5>
-<a name="id894144"></a>
+<a name="id1152607"></a>
           <a class="link" href="history1.html#math_toolkit.status.history1.milestone_3__first_review_candidate__31st_dec_2006_">Milestone
           3: First Review Candidate (31st Dec 2006)</a>
         </h5>
@@ -186,7 +220,7 @@
         <a name="math_toolkit.status.history1.milestone_2__released_september_10th_2006"></a>
         </p>
 <h5>
-<a name="id894209"></a>
+<a name="id1152646"></a>
           <a class="link" href="history1.html#math_toolkit.status.history1.milestone_2__released_september_10th_2006">Milestone
           2: Released September 10th 2006</a>
         </h5>
@@ -227,7 +261,7 @@
         <a name="math_toolkit.status.history1.milestone_1__released_march_31st_2006"></a>
         </p>
 <h5>
-<a name="id894286"></a>
+<a name="id1152697"></a>
           <a class="link" href="history1.html#math_toolkit.status.history1.milestone_1__released_march_31st_2006">Milestone
           1: Released March 31st 2006</a>
         </h5>
@@ -262,15 +296,16 @@
 <p>
         </p>
 <p>
-          Sandbox and trunk last synchonised at revision: 448300.
+          Sandbox and trunk last synchonised at revision: 48300.
         </p>
 <p>
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan Råde, Gautam Sewani
+      and Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

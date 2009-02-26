@@ -14,16 +14,57 @@ replacement for the "real" NTL::RR that adds some syntactic sugar to keep
 this library happy, plus some of the standard library functions not implemented
 in NTL.
 
-Finally there is a high precision __lanczos suitable for use with `boost::math::ntl::RR`,
-used at 1000-bit precision in 
-[@../../../tools/ntl_rr_lanczos.hpp libs/math/tools/ntl_rr_lanczos.hpp].  
-The approximation has a theoretical precision of > 90 decimal digits, 
-and an experimental precision of > 100 decimal digits.  To use that 
-approximation, just include that header before any of the special 
-function headers (if you don't use it, you'll get a slower, but
-fully generic implementation for all of the gamma-like functions).
+For those functions that are based upon the __lanczos, the bindings
+defines a series of approximations with up to 61 terms and accuracy
+up to approximately 3e-113.  This therefore sets the upper limit for accuracy
+to the majority of functions defined this library when used with `NTL::RR`.
+
+There is a concept checking test program for NTL support 
+[@../../../../../libs/math/test/ntl_concept_check.cpp here].
 
 [endsect][/section:use_ntl Using With NTL - a High Precision Floating-Point Library]
+
+[section:use_mpfr Using With MPFR / GMP - a High-Precision Floating-Point Library]
+
+The special functions and tools in this library can be used with
+[@http://www.mpfr.org MPFR (an arbitrary precision number type based on the GMP library)],
+via the bindings in [@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp].
+
+In order to use these binings you will need to have installed [@http://www.mpfr.org MPFR]
+plus it's dependency the [@http://gmplib.org GMP library] and the C++ wrapper for MPFR known as
+[@http://math.berkeley.edu/~wilken/code/gmpfrxx/ gmpfrxx (or mpfr_class)].
+
+Unfortunately `mpfr_class` doesn't quite satisfy our conceptual requirements,
+so there is a very thin set of additional interfaces and some helper traits defined in
+[@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp] that you
+should use in place of including 'gmpfrxx.h' directly.  The existing mpfr_class is 
+then usable unchanged once this header is included, so it's performance-enhancing
+expression templates are preserved and fully supported by this library:
+
+   #include <boost/math/bindings/mpfr.hpp>
+   #include <boost/math/special_functions/gamma.hpp>
+
+   int main()
+   {
+      mpfr_class::set_dprec(500); // 500 bit precision
+      //
+      // Note that the argument to tgamma is an expression template,
+      // that's just fine here:
+      //
+      mpfr_class v = boost::math::tgamma(sqrt(mpfr_class(2)));
+      std::cout << std::setprecision(50) << v << std::endl;
+   }
+   
+
+For those functions that are based upon the __lanczos, the bindings
+defines a series of approximations with up to 61 terms and accuracy
+up to approximately 3e-113.  This therefore sets the upper limit for accuracy
+to the majority of functions defined this library when used with `mpfr_class`.
+
+There is a concept checking test program for mpfr support 
+[@../../../../../libs/math/test/mpfr_concept_check.cpp here].
+
+[endsect][/section:use_mpfr Using With MPFR / GMP - a High-Precision Floating-Point Library]
 
 [section:concepts Conceptual Requirements for Real Number Types]
 

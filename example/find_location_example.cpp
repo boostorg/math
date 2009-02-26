@@ -1,6 +1,6 @@
 // find_location.cpp
 
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2008.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -13,6 +13,10 @@
 // Note that this file contains Quickbook mark-up as well as code
 // and comments, don't change any of the special comment mark-ups!
 
+#ifdef _MSC_VER
+#  pragma warning(disable: 4180) // qualifier has no effect (in fusion).
+#endif
+
 //[find_location1
 /*`
 First we need some includes to access the normal distribution,
@@ -24,7 +28,9 @@ the algorithms to find location (and some std output of course).
 #include <boost/math/distributions/cauchy.hpp> // for cauchy_distribution
   using boost::math::cauchy; // typedef provides default type is double.
 #include <boost/math/distributions/find_location.hpp>
-  using boost::math::find_location;
+  using boost::math::find_location; // for mean
+#include <boost/math/distributions/find_scale.hpp>
+  using boost::math::find_scale; // for standard devation
   using boost::math::complement; // Needed if you want to use the complement version.
   using boost::math::policies::policy;
 
@@ -151,8 +157,6 @@ but, [link why_complements to avoid loss of accuracy], use the complement versio
   }
   return 0;
 }  // int main()
-
-
 
 //[find_location_example_output
 /*`

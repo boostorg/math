@@ -16,6 +16,11 @@ namespace tr1 = std::tr1;
 namespace tr1 = boost::math::tr1;
 #endif
 
+#ifdef _MSC_VER
+#  pragma warning (disable : 4100) // unreferenced formal parameter
+// Can't just comment parameter out because reference or not depends on macro define.
+#endif
+
 void test_values(float, const char* name)
 {
    std::cout << "Testing type " << name << std::endl;

@@ -12,7 +12,12 @@ test_gamma.cpp
 test_ibeta.cpp
 test_igamma.cpp
 test_polynomial.cpp
-test_reference.cpp ;
+test_reference.cpp 
+test_lanczos.cpp  /boost/regex//boost_regex
+: 
+    <define>BOOST_ALL_NO_LIB
+    <link>static
+;
 
 install dist-bin
     :

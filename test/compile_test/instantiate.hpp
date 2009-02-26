@@ -68,6 +68,8 @@ void instantiate(RealType)
    function_requires<DistributionConcept<extreme_value_distribution<RealType> > >();
    function_requires<DistributionConcept<fisher_f_distribution<RealType> > >();
    function_requires<DistributionConcept<gamma_distribution<RealType> > >();
+   function_requires<DistributionConcept<laplace_distribution<RealType> > >();
+   function_requires<DistributionConcept<logistic_distribution<RealType> > >();
    function_requires<DistributionConcept<lognormal_distribution<RealType> > >();
    function_requires<DistributionConcept<negative_binomial_distribution<RealType> > >();
    function_requires<DistributionConcept<normal_distribution<RealType> > >();
@@ -82,6 +84,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<non_central_beta_distribution<RealType> > >();
    function_requires<DistributionConcept<non_central_f_distribution<RealType> > >();
    function_requires<DistributionConcept<non_central_t_distribution<RealType> > >();
+   function_requires<DistributionConcept<hypergeometric_distribution<RealType> > >();
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
    function_requires<DistributionConcept<bernoulli_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<beta_distribution<RealType, test_policy> > >();
@@ -92,6 +95,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<extreme_value_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<fisher_f_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<gamma_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<logistic_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<lognormal_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<non_central_chi_squared_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<negative_binomial_distribution<RealType, test_policy> > >();
@@ -107,6 +111,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<non_central_beta_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<non_central_f_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<non_central_t_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<hypergeometric_distribution<RealType, test_policy> > >();
 
    function_requires<DistributionConcept<dist_test::bernoulli > >();
    function_requires<DistributionConcept<dist_test::beta > >();
@@ -117,6 +122,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<dist_test::extreme_value > >();
    function_requires<DistributionConcept<dist_test::fisher_f > >();
    function_requires<DistributionConcept<dist_test::gamma > >();
+   function_requires<DistributionConcept<dist_test::logistic > >();
    function_requires<DistributionConcept<dist_test::lognormal > >();
    function_requires<DistributionConcept<dist_test::negative_binomial > >();
    function_requires<DistributionConcept<dist_test::normal > >();
@@ -131,6 +137,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<dist_test::non_central_beta > >();
    function_requires<DistributionConcept<dist_test::non_central_f > >();
    function_requires<DistributionConcept<dist_test::non_central_t > >();
+   function_requires<DistributionConcept<dist_test::hypergeometric > >();
 #endif
    int i;
    RealType v1(0.5), v2(0.5), v3(0.5);

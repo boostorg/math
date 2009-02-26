@@ -226,6 +226,11 @@ inline boost::math::concepts::std_real_concept tanh(boost::math::concepts::std_r
 
 } // namespace std
 
+#include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/special_functions/modf.hpp>
+#include <boost/math/tools/precision.hpp>
+
 namespace boost{ namespace math{ namespace concepts{
 
 //
@@ -375,6 +380,7 @@ using concepts::llround;
 } // namespace boost
 
 #endif // BOOST_MATH_STD_REAL_CONCEPT_HPP
+
 
 
 

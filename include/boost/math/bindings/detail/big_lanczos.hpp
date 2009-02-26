@@ -1,14 +1,15 @@
-//  (C) Copyright John Maddock 2006.
+//  (C) Copyright John Maddock 2006-8.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_LARGE_LANCZOS_HPP
-#define BOOST_LARGE_LANCZOS_HPP
+#ifndef BOOST_BIG_LANCZOS_HPP
+#define BOOST_BIG_LANCZOS_HPP
 
-#include <boost/math/bindings/rr.hpp>
 #include <boost/math/special_functions/lanczos.hpp>
 #include <boost/lexical_cast.hpp>
+
+namespace boost{ namespace math{ namespace lanczos{
 
 struct lanczos13UDT
 {
@@ -174,29 +175,29 @@ struct lanczos22UDT
          boost::lexical_cast<T>("1167.501919472435718934219997431551246996"),
          boost::lexical_cast<T>("2.50662827463100050241576528481104525333"),
       };
-      static const boost::uint64_t denom[22] = {
-         (0uLL),
-         (2432902008176640000uLL),
-         (8752948036761600000uLL),
-         (13803759753640704000uLL),
-         (12870931245150988800uLL),
-         (8037811822645051776uLL),
-         (3599979517947607200uLL),
-         (1206647803780373360uLL),
-         (311333643161390640uLL),
-         (63030812099294896uLL),
-         (10142299865511450uLL),
-         (1307535010540395uLL),
-         (135585182899530uLL),
-         (11310276995381uLL),
-         (756111184500uLL),
-         (40171771630uLL),
-         (1672280820uLL),
-         (53327946uLL),
-         (1256850uLL),
-         (20615uLL),
-         (210uLL),
-         (1uLL),
+      static const T denom[22] = {
+         boost::lexical_cast<T>("0"),
+         boost::lexical_cast<T>("2432902008176640000"),
+         boost::lexical_cast<T>("8752948036761600000"),
+         boost::lexical_cast<T>("13803759753640704000"),
+         boost::lexical_cast<T>("12870931245150988800"),
+         boost::lexical_cast<T>("8037811822645051776"),
+         boost::lexical_cast<T>("3599979517947607200"),
+         boost::lexical_cast<T>("1206647803780373360"),
+         boost::lexical_cast<T>("311333643161390640"),
+         boost::lexical_cast<T>("63030812099294896"),
+         boost::lexical_cast<T>("10142299865511450"),
+         boost::lexical_cast<T>("1307535010540395"),
+         boost::lexical_cast<T>("135585182899530"),
+         boost::lexical_cast<T>("11310276995381"),
+         boost::lexical_cast<T>("756111184500"),
+         boost::lexical_cast<T>("40171771630"),
+         boost::lexical_cast<T>("1672280820"),
+         boost::lexical_cast<T>("53327946"),
+         boost::lexical_cast<T>("1256850"),
+         boost::lexical_cast<T>("20615"),
+         boost::lexical_cast<T>("210"),
+         boost::lexical_cast<T>("1"),
       };
       return boost::math::tools::evaluate_rational(num, denom, z, 22);
    }
@@ -228,29 +229,29 @@ struct lanczos22UDT
          boost::lexical_cast<T>("0.1753839324538447655939518484052327068859e-6"),
          boost::lexical_cast<T>("0.3765495513732730583386223384116545391759e-9"),
       };
-      static const boost::uint64_t denom[22] = {
-         (0uLL),
-         (2432902008176640000uLL),
-         (8752948036761600000uLL),
-         (13803759753640704000uLL),
-         (12870931245150988800uLL),
-         (8037811822645051776uLL),
-         (3599979517947607200uLL),
-         (1206647803780373360uLL),
-         (311333643161390640uLL),
-         (63030812099294896uLL),
-         (10142299865511450uLL),
-         (1307535010540395uLL),
-         (135585182899530uLL),
-         (11310276995381uLL),
-         (756111184500uLL),
-         (40171771630uLL),
-         (1672280820uLL),
-         (53327946uLL),
-         (1256850uLL),
-         (20615uLL),
-         (210uLL),
-         (1uLL),
+      static const T denom[22] = {
+         boost::lexical_cast<T>("0"),
+         boost::lexical_cast<T>("2432902008176640000"),
+         boost::lexical_cast<T>("8752948036761600000"),
+         boost::lexical_cast<T>("13803759753640704000"),
+         boost::lexical_cast<T>("12870931245150988800"),
+         boost::lexical_cast<T>("8037811822645051776"),
+         boost::lexical_cast<T>("3599979517947607200"),
+         boost::lexical_cast<T>("1206647803780373360"),
+         boost::lexical_cast<T>("311333643161390640"),
+         boost::lexical_cast<T>("63030812099294896"),
+         boost::lexical_cast<T>("10142299865511450"),
+         boost::lexical_cast<T>("1307535010540395"),
+         boost::lexical_cast<T>("135585182899530"),
+         boost::lexical_cast<T>("11310276995381"),
+         boost::lexical_cast<T>("756111184500"),
+         boost::lexical_cast<T>("40171771630"),
+         boost::lexical_cast<T>("1672280820"),
+         boost::lexical_cast<T>("53327946"),
+         boost::lexical_cast<T>("1256850"),
+         boost::lexical_cast<T>("20615"),
+         boost::lexical_cast<T>("210"),
+         boost::lexical_cast<T>("1"),
       };
       return boost::math::tools::evaluate_rational(num, denom, z, 22);
    }
@@ -645,7 +646,7 @@ struct lanczos61UDT
          boost::lexical_cast<T>("-0.163907874717737848669759890242660846846105433791283903651924563157080252845636658802930428e-44"),
       };
       T result = d[0];
-      for(int k = 1; k < sizeof(d)/sizeof(d[0]); ++k)
+      for(unsigned k = 1; k < sizeof(d)/sizeof(d[0]); ++k)
       {
          result += d[k]/(z+(k-1));
       }
@@ -720,7 +721,7 @@ struct lanczos61UDT
          boost::lexical_cast<T>("-0.589653534231618730406843260601322236697428143603814281282790370329151249078338470962782338e-72"),
       };
       T result = d[0];
-      for(int k = 1; k < sizeof(d)/sizeof(d[0]); ++k)
+      for(unsigned k = 1; k < sizeof(d)/sizeof(d[0]); ++k)
       {
          result += d[k]/(z+(k-1));
       }
@@ -794,7 +795,7 @@ struct lanczos61UDT
          boost::lexical_cast<T>("-0.285425405297633795767452984791738825078111150078605004958179057245980222485147999495352632e-71"),
       };
       T result = 0;
-      for(int k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
+      for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(k*dz + k*k);
       }
@@ -869,7 +870,7 @@ struct lanczos61UDT
       };
       T result = 0;
       T z = dz + 2;
-      for(int k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
+      for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
       }
@@ -879,23 +880,7 @@ struct lanczos61UDT
    static double g(){ return 63.19215200000000010049916454590857028961181640625; }
 };
 
-namespace boost{ namespace math{ namespace lanczos{
-
-template<class Policy>
-struct lanczos<boost::math::ntl::RR, Policy>
-{
-#ifdef L13
-   typedef lanczos13UDT type;
-#elif defined(L22)
-   typedef lanczos22UDT type;
-#elif defined(L31)
-   typedef lanczos31UDT type;
-#else
-   typedef lanczos61UDT type;
-#endif
-};
-
-}}}
+}}} // namespaces
 
 #endif
 

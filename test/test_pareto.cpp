@@ -1,4 +1,4 @@
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2009.
 // Copyright John Maddock 2006.
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -14,8 +14,12 @@
 // From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/paretoDistribution.html
 
+
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
+# pragma warning (disable : 4996) // POSIX name for this item is deprecated
+# pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'arg' was previously defined as a type
+# pragma warning (disable : 4180) // qualifier applied to function type has no meaning; ignored
 #  pragma warning(disable: 4100) // unreferenced formal parameter.
 #endif
 
@@ -35,31 +39,31 @@
   using std::numeric_limits;
 
   template <class RealType>
-  void check_pareto(RealType location, RealType shape, RealType x, RealType p, RealType q, RealType tol)
+  void check_pareto(RealType scale, RealType shape, RealType x, RealType p, RealType q, RealType tol)
   {
     BOOST_CHECK_CLOSE_FRACTION(
       ::boost::math::cdf(
-      pareto_distribution<RealType>(location, shape),   // distribution.
+      pareto_distribution<RealType>(scale, shape),   // distribution.
       x),                                            // random variable.
       p,                                             // probability.
       tol);                                          // tolerance eps.
     BOOST_CHECK_CLOSE_FRACTION(
       ::boost::math::cdf(
       complement(
-      pareto_distribution<RealType>(location, shape),   // distribution.
+      pareto_distribution<RealType>(scale, shape),   // distribution.
       x)),                                           // random variable.
       q,                                             // probability complement.
       tol);                                          // tolerance eps.
     BOOST_CHECK_CLOSE_FRACTION(
       ::boost::math::quantile(
-      pareto_distribution<RealType>(location, shape),   // distribution.
+      pareto_distribution<RealType>(scale, shape),   // distribution.
       p),                                            // probability.
       x,                                             // random variable.
       tol);                                          // tolerance eps.
     BOOST_CHECK_CLOSE_FRACTION(
       ::boost::math::quantile(
       complement(
-      pareto_distribution<RealType>(location, shape),    // distribution.
+      pareto_distribution<RealType>(scale, shape),    // distribution.
       q)),                                        // probability complement.
       x,                                             // random variable.
       tol);                                          // tolerance eps.
@@ -71,7 +75,7 @@ void test_spots(RealType)
    // Basic sanity checks.
    //
    // Tolerance are based on units of epsilon, but capped at
-   // double precision, since that's the limit of out test data:
+   // double precision, since that's the limit of our test data:
    //
    RealType tol = (std::max)((RealType)boost::math::tools::epsilon<double>(), boost::math::tools::epsilon<RealType>());
    RealType tol5eps = tol * 5;
@@ -80,7 +84,7 @@ void test_spots(RealType)
    RealType tol1000eps = tol * 1000;
 
    check_pareto(
-      static_cast<RealType>(1.1L), // 
+      static_cast<RealType>(1.1L), //
       static_cast<RealType>(5.5L),
       static_cast<RealType>(2.2L),
       static_cast<RealType>(0.97790291308792L),
@@ -103,7 +107,7 @@ void test_spots(RealType)
       static_cast<RealType>(0.00197237779302972L),
       tol1000eps);
 
-   // Example from 23.3 page 259 
+   // Example from 23.3 page 259
    check_pareto(
       static_cast<RealType>(2.30444301457005L),
       static_cast<RealType>(4),
@@ -134,46 +138,46 @@ void test_spots(RealType)
    // pdf for shapes 1, 2 & 3 (exact)
    BOOST_CHECK_CLOSE_FRACTION(
       pdf(pareto_distribution<RealType>(1, 1), 1),
-      static_cast<RealType>(1), // 
+      static_cast<RealType>(1), //
       tol5eps);
 
     BOOST_CHECK_CLOSE_FRACTION(   pdf(pareto_distribution<RealType>(1, 2), 1),
-      static_cast<RealType>(2), // 
+      static_cast<RealType>(2), //
       tol5eps);
 
      BOOST_CHECK_CLOSE_FRACTION(   pdf(pareto_distribution<RealType>(1, 3), 1),
-      static_cast<RealType>(3), // 
+      static_cast<RealType>(3), //
       tol5eps);
 
    // cdf
-   BOOST_CHECK_EQUAL( // x = location
-      cdf(pareto_distribution<RealType>(1, 1), 1), 
+   BOOST_CHECK_EQUAL( // x = scale
+      cdf(pareto_distribution<RealType>(1, 1), 1),
       static_cast<RealType>(0) );
 
    // Compare with values from StatCalc K. Krishnamoorthy,  ISBN 1-58488-635-8 eq 23.1.3
    BOOST_CHECK_CLOSE_FRACTION( // small x
-      cdf(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4)), 
+      cdf(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4)),
       static_cast<RealType>(0.929570372227626L), tol5eps);
 
    BOOST_CHECK_CLOSE_FRACTION( // small x
-      cdf(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4)), 
+      cdf(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4)),
       static_cast<RealType>(1 - 0.0704296277723743L), tol5eps);
 
    BOOST_CHECK_CLOSE_FRACTION( // small x
-      cdf(complement(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4))), 
+      cdf(complement(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4))),
       static_cast<RealType>(0.0704296277723743L), tol5eps);
 
    // quantile
-   BOOST_CHECK_EQUAL( // x = location
-      quantile(pareto_distribution<RealType>(1, 1), 0), 
+   BOOST_CHECK_EQUAL( // x = scale
+      quantile(pareto_distribution<RealType>(1, 1), 0),
       static_cast<RealType>(1) );
 
-   BOOST_CHECK_EQUAL( // x = location
-      quantile(complement(pareto_distribution<RealType>(1, 1), 1)), 
+   BOOST_CHECK_EQUAL( // x = scale
+      quantile(complement(pareto_distribution<RealType>(1, 1), 1)),
       static_cast<RealType>(1) );
 
    BOOST_CHECK_CLOSE_FRACTION( // small x
-      cdf(complement(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4))), 
+      cdf(complement(pareto_distribution<RealType>(2, 5), static_cast<RealType>(3.4))),
       static_cast<RealType>(0.0704296277723743L), tol5eps);
 
     using namespace std; // ADL of std names.
@@ -187,8 +191,8 @@ void test_spots(RealType)
        mean(pareto15), static_cast<RealType>(1.25), tol5eps); // 1.25 == 5/4
     BOOST_CHECK_EQUAL(
        mean(pareto15), static_cast<RealType>(1.25)); // 1.25 == 5/4 (expect exact so check equal)
- 
-    pareto_distribution<RealType> p12(1, 2); // 
+
+    pareto_distribution<RealType> p12(1, 2); //
     BOOST_CHECK_EQUAL(
        mean(p12), static_cast<RealType>(2)); // Exactly two.
 
@@ -235,22 +239,22 @@ int test_main(int, char* [])
   // Check that can generate pareto distribution using the two convenience methods:
    boost::math::pareto myp1(1., 1); // Using typedef
    pareto_distribution<> myp2(1., 1); // Using default RealType double.
-  boost::math::pareto pareto11; // Use default values (location = 1, shape = 1).
+  boost::math::pareto pareto11; // Use default values (scale = 1, shape = 1).
   // Note NOT pareto11() as the compiler will interpret as a function!
    // Basic sanity-check spot values.
 
-  BOOST_CHECK_EQUAL(pareto11.location(), 1); // Check defaults again.
+  BOOST_CHECK_EQUAL(pareto11.scale(), 1); // Check defaults again.
   BOOST_CHECK_EQUAL(pareto11.shape(), 1);
-  BOOST_CHECK_EQUAL(myp1.location(), 1); 
+  BOOST_CHECK_EQUAL(myp1.scale(), 1);
   BOOST_CHECK_EQUAL(myp1.shape(), 1);
-  BOOST_CHECK_EQUAL(myp2.location(), 1);
+  BOOST_CHECK_EQUAL(myp2.scale(), 1);
   BOOST_CHECK_EQUAL(myp2.shape(), 1);
 
   // Test range and support using double only,
   // because it supports numeric_limits max for pseudo-infinity.
   BOOST_CHECK_EQUAL(range(myp2).first, 0); // range 0 to +infinity
   BOOST_CHECK_EQUAL(range(myp2).second, (numeric_limits<double>::max)());
-  BOOST_CHECK_EQUAL(support(myp2).first, myp2.location()); // support location to + infinity.
+  BOOST_CHECK_EQUAL(support(myp2).first, myp2.scale()); // support scale to + infinity.
   BOOST_CHECK_EQUAL(support(myp2).second, (numeric_limits<double>::max)());
 
   // Check some bad parameters to the distribution.
@@ -279,9 +283,9 @@ int test_main(int, char* [])
   BOOST_CHECK_THROW(cdf(pareto11, +std::numeric_limits<double>::infinity()), std::domain_error); // x = + infinity
   BOOST_CHECK_THROW(cdf(pareto11, -std::numeric_limits<double>::infinity()), std::domain_error); // x = - infinity
 
-  BOOST_CHECK_EQUAL(pdf(pareto11, 0.5), 0); // x < location but > 0
+  BOOST_CHECK_EQUAL(pdf(pareto11, 0.5), 0); // x < scale but > 0
   BOOST_CHECK_EQUAL(pdf(pareto11, (std::numeric_limits<double>::min)()), 0); // x almost zero but > 0
-  BOOST_CHECK_EQUAL(pdf(pareto11, 1), 1); // x == location, result == shape == 1
+  BOOST_CHECK_EQUAL(pdf(pareto11, 1), 1); // x == scale, result == shape == 1
   BOOST_CHECK_EQUAL(pdf(pareto11, +(std::numeric_limits<double>::max)()), 0); // x = +max, pdf has fallen to zero.
 
   BOOST_CHECK_THROW(pdf(pareto11, 0), std::domain_error); // x == 0
@@ -289,13 +293,13 @@ int test_main(int, char* [])
   BOOST_CHECK_THROW(pdf(pareto11, -(std::numeric_limits<double>::max)()), std::domain_error); // x = - max
   BOOST_CHECK_THROW(pdf(pareto11, -(std::numeric_limits<double>::min)()), std::domain_error); // x = - min
 
-  BOOST_CHECK_EQUAL(cdf(pareto11, 1), 0); // x == location, cdf = zero.
+  BOOST_CHECK_EQUAL(cdf(pareto11, 1), 0); // x == scale, cdf = zero.
   BOOST_CHECK_EQUAL(cdf(pareto11, +(std::numeric_limits<double>::max)()), 1); // x = + max, cdf = unity.
 
   BOOST_CHECK_THROW(cdf(pareto11, 0), std::domain_error); // x == 0
   BOOST_CHECK_THROW(cdf(pareto11, -(std::numeric_limits<double>::min)()), std::domain_error); // x = - min,
   BOOST_CHECK_THROW(cdf(pareto11, -(std::numeric_limits<double>::max)()), std::domain_error); // x = - max,
- 
+
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tol5eps = 0.0001 %
   test_spots(0.0); // Test double. OK at decdigits 7, tol5eps = 1e07 %

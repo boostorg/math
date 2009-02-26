@@ -196,14 +196,14 @@ void single_sample_find_df(double M, double Sm, double Sd)
    //
    // Now print out the data for the table rows.
    //
-   for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
+   for(unsigned i = 1; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    {
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate df for single sided test:
       double df = students_t::find_degrees_of_freedom(
          fabs(M - Sm), alpha[i], alpha[i], Sd);
-      // convert to sample size:
+      // convert to sample size, always one more than the degrees of freedom:
       double size = ceil(df) + 1;
       // Print size:
       cout << fixed << setprecision(0) << setw(16) << right << size;
@@ -408,7 +408,6 @@ Confidence       Estimated          Estimated
  Value (%)      Sample Size        Sample Size
               (one sided test)    (two sided test)
 _______________________________________________________________
-    50.000               2               2
     75.000               3               4
     90.000               7               9
     95.000              11              13

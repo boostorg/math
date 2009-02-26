@@ -1,0 +1,20 @@
+# copyright John Maddock 2008
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt.
+
+import modules ;
+import path ;
+
+local ntl-path = [ modules.peek : NTL_PATH ] ;
+local gmp_path = [ modules.peek : GMP_PATH ] ;
+
+obj has_long_double_support : has_long_double_support.cpp ;
+obj has_mpfr_class : has_mpfr_class.cpp :
+      <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx ;
+obj has_ntl_rr : has_ntl_rr.cpp : <include>$(ntl-path)/include ;
+
+
+
+
+

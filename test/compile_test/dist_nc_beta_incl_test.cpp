@@ -17,19 +17,34 @@
 namespace boost{ namespace math{
 
 template <class T, class Policy>
-T mean(const non_central_beta_distribution<T, Policy>&);
+T mean(const non_central_beta_distribution<T, Policy>&)
+{
+   return 0;
+}
 
 template <class T, class Policy>
-T variance(const non_central_beta_distribution<T, Policy>&);
+T variance(const non_central_beta_distribution<T, Policy>&)
+{
+   return 0;
+}
 
 template <class T, class Policy>
-T skewness(const non_central_beta_distribution<T, Policy>&);
+T skewness(const non_central_beta_distribution<T, Policy>&)
+{
+   return 0;
+}
 
 template <class T, class Policy>
-T kurtosis(const non_central_beta_distribution<T, Policy>&);
+T kurtosis(const non_central_beta_distribution<T, Policy>&)
+{
+   return 0;
+}
 
 template <class T, class Policy>
-T kurtosis_excess(const non_central_beta_distribution<T, Policy>&);
+T kurtosis_excess(const non_central_beta_distribution<T, Policy>&)
+{
+   return 0;
+}
 
 }}
 

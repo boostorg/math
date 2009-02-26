@@ -604,6 +604,23 @@ struct normalise<policy<>,
    typedef policy<detail::forwarding_arg1, detail::forwarding_arg2> type;
 };
 
+template <>
+struct normalise<policy<detail::forwarding_arg1, detail::forwarding_arg2>,
+          promote_float<false>,
+          promote_double<false>,
+          discrete_quantile<>,
+          assert_undefined<>,
+          default_policy,
+          default_policy,
+          default_policy,
+          default_policy,
+          default_policy,
+          default_policy,
+          default_policy>
+{
+   typedef policy<detail::forwarding_arg1, detail::forwarding_arg2> type;
+};
+
 inline policy<> make_policy()
 { return policy<>(); }
 
@@ -815,7 +832,7 @@ inline int digits_imp(mpl::false_ const&)
 } // namespace detail
 
 template <class T, class Policy>
-inline int digits()
+inline int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
 {
    typedef mpl::bool_< std::numeric_limits<T>::is_specialized > tag_type;
    return detail::digits_imp<T, Policy>(tag_type());

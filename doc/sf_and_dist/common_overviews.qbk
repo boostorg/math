@@ -61,7 +61,7 @@ of breed" algorithms as many other libraries: the principle difference
 is that this library is implemented in C++ - taking advantage of all
 the abstraction mechanisms that C++ offers - where as most traditional
 numeric libraries are implemented in C or FORTRAN.  Traditionally
-languages such as C or FORTAN are perceived as easier to optimise
+languages such as C or FORTRAN are perceived as easier to optimise
 than more complex languages like C++, so in a sense this library
 provides a good test of current compiler technology, and the 
 "abstraction penalty" - if any - of C++ compared to other languages.

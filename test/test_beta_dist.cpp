@@ -1,7 +1,7 @@
 // test_beta_dist.cpp
 
 // Copyright John Maddock 2006.
-// Copyright  Paul A. Bristow 2007.
+// Copyright  Paul A. Bristow 2007, 2009.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -28,6 +28,9 @@
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
+# pragma warning (disable : 4996) // POSIX name for this item is deprecated
+# pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'arg' was previously defined as a type
+# pragma warning (disable : 4180) // qualifier applied to function type has no meaning; ignored
 #endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept

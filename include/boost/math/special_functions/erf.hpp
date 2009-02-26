@@ -122,9 +122,9 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
    if(z < 0)
    {
       if(!invert)
-         return -erf_imp(-z, invert, pol, t);
+         return -erf_imp(T(-z), invert, pol, t);
       else
-         return 1 + erf_imp(-z, false, pol, t);
+         return 1 + erf_imp(T(-z), false, pol, t);
    }
 
    T result;

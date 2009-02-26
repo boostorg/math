@@ -1,13 +1,13 @@
 [article Math Toolkit
     [quickbook 1.4]
-    [copyright 2006, 2007, 2008 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno Lalande and Johan R&#xE5;de]
+    [copyright 2006, 2007, 2008, 2009 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#xE5;de, Gautam Sewani and Thijs van den Berg]
     [purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [authors [Maddock, John], [Bristow, Paul A.], [Holin, Hubert], [Zhang, Xiaogang], [Lalande, Bruno], [R&#xE5;de, Johan]]
+    [authors [Maddock, John], [Bristow, Paul A.], [Holin, Hubert], [Zhang, Xiaogang], [Lalande, Bruno], [R&#xE5;de, Johan], [Sewani, Gautam], [van den Berg, Thijs]]
     [category math]
     [purpose mathematics]
     [/last-revision $Date$]
@@ -62,12 +62,13 @@
 [def __godfrey [link godfrey Godfrey]]
 [def __pugh [link pugh Pugh]]
 
-[def __caution This is now an official Boost library, but remains a library under 
-               construction, the code is fully functional and robust, but 
+[def __caution This is now an official Boost library, but remains a library under
+               construction, the code is fully functional and robust, but
                interfaces, library structure, and function and distribution names
                may still be changed without notice.]
-               
+
 [template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
+[template C99[] [@http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf C99 Standard ISO/IEC 9899:1999]]
 [template jm_rationals[] [link math_toolkit.backgrounders.implementation.rational_approximations_used devised by JM]]
 [def __domain_error [link domain_error domain_error]]
 [def __pole_error [link pole_error pole_error]]
@@ -200,7 +201,6 @@ and use the function's name as the link text]
 [def __spherical_harmonic [link math_toolkit.special.sf_poly.sph_harm spherical_harmonic]]
 
 
-
 [/ distribution non-members]
 [def __cdf [link math.dist.cdf Cumulative Distribution Function]]
 [def __pdf [link math.dist.pdf Probability Density Function]]
@@ -229,12 +229,16 @@ and use the function's name as the link text]
 [def __exp_distrib [link math_toolkit.dist.dist_ref.dists.exp_dist Exponential Distribution]]
 [def __F_distrib [link math_toolkit.dist.dist_ref.dists.f_dist Fisher F Distribution]]
 [def __gamma_distrib [link math_toolkit.dist.dist_ref.dists.gamma_dist Gamma Distribution]]
+[def __hypergeometric_distrib [link math_toolkit.dist.dist_ref.dists.hypergeometric_dist Hypergeometric Distribution]]
+[def __laplace_distrib [link math_toolkit.dist.dist_ref.dists.laplace_dist Laplace Distribution]]
+[def __logistic_distrib [link math_toolkit.dist.dist_ref.dists.logistic_dist Logistic Distribution]]
 [def __lognormal_distrib [link math_toolkit.dist.dist_ref.dists.lognormal_dist Log-normal Distribution]]
 [def __negative_binomial_distrib [link math_toolkit.dist.dist_ref.dists.negative_binomial_dist Negative Binomial Distribution]]
 [def __non_central_chi_squared_distrib [link math_toolkit.dist.dist_ref.dists.nc_chi_squared_dist Noncentral Chi Squared Distribution]]
 [def __non_central_beta_distrib [link math_toolkit.dist.dist_ref.dists.nc_beta_dist Noncentral Beta Distribution]]
 [def __non_central_F_distrib [link math_toolkit.dist.dist_ref.dists.nc_f_dist Noncentral F Distribution]]
 [def __non_central_T_distrib [link math_toolkit.dist.dist_ref.dists.nc_t_dist Noncentral T Distribution]]
+[def __non_central_t_distrib [link math_toolkit.dist.dist_ref.dists.nc_t_dist noncentral T distribution]]
 [def __normal_distrib [link math_toolkit.dist.dist_ref.dists.normal_dist Normal Distribution]]
 [def __poisson_distrib [link math_toolkit.dist.dist_ref.dists.poisson_dist Poisson Distribution]]
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
@@ -251,8 +255,8 @@ and use the function's name as the link text]
 [def __changing_policy_defaults [link math_toolkit.policy.pol_ref.policy_defaults changing policies defaults]]
 [def __user_error_handling [link math_toolkit.policy.pol_tutorial.user_def_err_pol user error handling]]
 
-[def __usual_accessors __cdf, __pdf, __quantile, __hazard, 
-   __chf, __mean, __median, __mode, __variance, __sd, __skewness, 
+[def __usual_accessors __cdf, __pdf, __quantile, __hazard,
+   __chf, __mean, __median, __mode, __variance, __sd, __skewness,
    __kurtosis, __kurtosis_excess, __range and __support]
 
 [def __gsl [@http://www.gnu.org/software/gsl/ GSL-1.9]]
@@ -273,18 +277,18 @@ and use the function's name as the link text]
 
 [template header_file[file] [@../../../../../[file] [file]]]
 
-[template optional_policy[] 
+[template optional_policy[]
 The final __Policy argument is optional and can be used to
-control the behaviour of the function: how it handles errors, 
-what level of precision to use etc.  Refer to the 
+control the behaviour of the function: how it handles errors,
+what level of precision to use etc.  Refer to the
 [link math_toolkit.policy policy documentation for more details].]
 
 [template discrete_quantile_warning[NAME]
 [caution
 The [NAME] distribution is a discrete distribution: internally
-functions like the `cdf` and `pdf` are treated "as if" they are continuous 
+functions like the `cdf` and `pdf` are treated "as if" they are continuous
 functions, but in reality the results returned from these functions
-only have meaning if an integer value is provided for the random variate 
+only have meaning if an integer value is provided for the random variate
 argument.
 
 The quantile function will by default return an integer result that has been
@@ -296,13 +300,13 @@ coverage will be present in the central region, and /no more than/
 the requested coverage will be present in the tails.
 
 This behaviour can be changed so that the quantile functions are rounded
-differently, or even return a real-valued result using 
+differently, or even return a real-valued result using
 [link math_toolkit.policy.pol_overview Policies].  It is strongly
-recommended that you read the tutorial 
+recommended that you read the tutorial
 [link math_toolkit.policy.pol_tutorial.understand_dis_quant
 Understanding Quantiles of Discrete Distributions] before
 using the quantile function on the [NAME] distribution.  The
-[link math_toolkit.policy.pol_ref.discrete_quant_ref reference docs] 
+[link math_toolkit.policy.pol_ref.discrete_quant_ref reference docs]
 describe how to change the rounding policy
 for these distributions.
 ] [/ caution]
@@ -332,10 +336,11 @@ printer friendly PDF format].
 [section:perf_over Performance]
 [performance_overview]
 [endsect]
+[include building.qbk]
 [section:history1 History and What's New]
 [history]
 [endsect]
-[section:tr1 C99 and TR1 C Functions]
+[section:tr1 C99 and C++ TR1 C-style Functions]
 [tr1_overview]
 [endsect]
 [include contact_info.qbk]
@@ -467,7 +472,7 @@ printer friendly PDF format].
 [/include test_HTML4_symbols.qbk]
 [/include test_Latin1_symbols.qbk]
 
-[endsect] [/section:status Status and Roadmap] 
+[endsect] [/section:status Status and Roadmap]
 
 [/ math.qbk
   Copyright 2008 John Maddock and Paul A. Bristow.
