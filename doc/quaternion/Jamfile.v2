@@ -62,7 +62,6 @@ boostbook standalone
         <format>pdf:<xsl:param>use.role.for.mediaobject=1 
         <format>pdf:<xsl:param>preferred.mediaobject.role=print
         <format>pdf:<xsl:param>img.src.path=$(images_location)/
-        <format>pdf:<xsl:param>admon.graphics.path=$(images_location)/../../svg-admon/
         <format>pdf:<xsl:param>draft.mode="no"
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/math/doc/quaternion/html
     ;
