@@ -117,7 +117,7 @@ inline bool is_generic_tag_false(...)
 Most processors support three different floating point precisions:
 single precision (32 bits), double precision (64 bits)
 and extended double precision (80 - 128 bits, depending on the processor)
-€
+
 Note that the C++ type long double can be implemented
 both as double precision and extended double precision.
 */
