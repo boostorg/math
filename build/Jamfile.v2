@@ -4,6 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt.
 
 import testing ;
+import pch ;
 
 cpp-pch pch : ../src/tr1/pch.hpp : <include>../src/tr1 <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1 ; 
 
