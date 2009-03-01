@@ -9,6 +9,7 @@
 import testing ;
 import modules ;
 import path ;
+import pch ;
 
 local ntl-path = [ modules.peek : NTL_PATH ] ;
 local gmp_path = [ modules.peek : GMP_PATH ] ;
@@ -746,4 +747,6 @@ compile ntl_concept_check.cpp : <dependency>../config//has_ntl_rr ;
 compile mpfr_concept_check.cpp : <dependency>../config//has_mpfr_class ;
 
 build-project ../example ;
+
+
 
