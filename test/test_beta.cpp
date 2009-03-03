@@ -5,16 +5,16 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <pch.hpp>
+
 #ifdef _MSC_VER
 # pragma warning (disable : 4996) // POSIX name for this item is deprecated
 # pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'arg' was previously defined as a type
 # pragma warning (disable : 4180) // qualifier applied to function type has no meaning; ignored
 #endif
 
-#include <pch.hpp>
-
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/tools/stats.hpp>

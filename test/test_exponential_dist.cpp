@@ -12,7 +12,7 @@
 #include <boost/math/distributions/exponential.hpp>
     using boost::math::exponential_distribution;
 
-#include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
+#include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <iostream>

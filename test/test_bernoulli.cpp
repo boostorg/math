@@ -25,7 +25,7 @@ using ::boost::math::concepts::real_concept;
 #include <boost/math/distributions/bernoulli.hpp> // for bernoulli_distribution
 using boost::math::bernoulli_distribution;
 
-#include <boost/test/included/test_exec_monitor.hpp> // for test_main
+#include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION, BOOST_CHECK_EQUAL...
 
 #include <iostream>

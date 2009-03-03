@@ -11,7 +11,7 @@
 #include <boost/math/distributions/logistic.hpp>
     using boost::math::logistic_distribution;
 
-#include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
+#include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 

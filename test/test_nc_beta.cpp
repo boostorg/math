@@ -23,7 +23,9 @@
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/non_central_beta.hpp> // for chi_squared_distribution
 #include <boost/math/distributions/poisson.hpp> // for chi_squared_distribution
-#include <boost/test/included/test_exec_monitor.hpp> // for test_main
+#include <boost/test/test_exec_monitor.hpp> // for test_main
+#include <boost/test/results_collector.hpp>
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
 
 #include "functor.hpp"
@@ -138,7 +140,7 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "[^|]*", 10000, 2000);             // test function
+      "[^|]*", 20000, 2000);             // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.

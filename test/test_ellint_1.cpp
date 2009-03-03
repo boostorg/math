@@ -14,7 +14,7 @@
 #endif
 
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/ellint_1.hpp>
 #include <boost/array.hpp>

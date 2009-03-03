@@ -15,7 +15,7 @@ using ::boost::math::concepts::real_concept;
 using boost::math::chi_squared_distribution;
 using boost::math::chi_squared;
 
-#include <boost/test/included/test_exec_monitor.hpp> // for test_main
+#include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
 
 #include <iostream>

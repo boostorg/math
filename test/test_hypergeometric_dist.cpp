@@ -11,7 +11,9 @@
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/hypergeometric.hpp>
 
-#include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
+#include <boost/test/test_exec_monitor.hpp> // Boost.Test
+#include <boost/test/results_collector.hpp>
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <iostream>

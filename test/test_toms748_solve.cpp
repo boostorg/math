@@ -5,7 +5,7 @@
 
 #include <pch.hpp>
 
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/math/tools/toms748_solve.hpp>

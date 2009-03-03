@@ -60,6 +60,14 @@
 //
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
+#if defined(unix) && defined(__INTEL_COMPILER)
+//
+// Intel compiler has sporadic issues compiling std::fpclassify depending on
+// the exact OS version used.  Use our own code for this as we know it works
+// well on Intel processors:
+//
+#define BOOST_MATH_DISABLE_STD_FPCLASSIFY
+#endif
 
 #if defined(BOOST_MSVC) && !defined(_WIN32_WCE)
    // Better safe than sorry, our tests don't support hardware exceptions:

@@ -40,7 +40,7 @@ using ::boost::math::concepts::real_concept;
 using boost::math::beta_distribution;
 using boost::math::beta;
 
-#include <boost/test/included/test_exec_monitor.hpp> // for test_main
+#include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION
 
 #include <iostream>

@@ -11,7 +11,7 @@
 #include <boost/limits.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4127) //  conditional expression is constant

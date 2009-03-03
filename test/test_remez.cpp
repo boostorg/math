@@ -14,7 +14,7 @@
 #endif
 
 #include <boost/math/tools/remez.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 

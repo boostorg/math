@@ -8,7 +8,7 @@
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/tools/stats.hpp>

@@ -6,7 +6,7 @@
 #include <pch.hpp>
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/hypot.hpp>
 
