@@ -110,7 +110,7 @@ unsigned hypergeometric_quantile_imp(T p, T q, unsigned r, unsigned n, unsigned 
       T diff = result;
       while(result < p)
       {
-         diff = (diff > tools::min_value<T>()) 
+         diff = (diff > tools::min_value<T>() * 8) 
             ? T(n - x) * T(r - x) * diff / (T(x + 1) * T(N + x + 1 - n - r))
             : hypergeometric_pdf<T>(x + 1, r, n, N, pol);
          if(result + diff / 2 > p)
@@ -128,7 +128,7 @@ unsigned hypergeometric_quantile_imp(T p, T q, unsigned r, unsigned n, unsigned 
       while(result + diff / 2 < q)
       {
          result += diff;
-         diff = (diff > tools::min_value<T>())
+         diff = (diff > tools::min_value<T>() * 8)
             ? x * T(N + x - n - r) * diff / (T(1 + n - x) * T(1 + r - x))
             : hypergeometric_pdf<T>(x - 1, r, n, N, pol);
          --x;
