@@ -73,12 +73,14 @@ int main()
 
   cout << "quantile(my_students_t(), 0.); = " << quantile(my_students_t(-1), 0.F) << endl; // 'bad' argument negative, so expect NaN.
 
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   // Construct a (0, 1) normal distribution that ignores all errors,
   // returning NaN, infinity, zero, or best guess,
   // and NOT setting errno.
   normal_distribution<long double, my_ignoreall_policy> my_normal2(0.L, 1.L); // explicit parameters for distribution.
   cout << "quantile(my_normal2(), 0.); = " << quantile(my_normal2, 0.01) << endl; // argument 0.01, so result finite.
   cout << "quantile(my_normal2(), 0.); = " << quantile(my_normal2, 0.) << endl; // argument zero, so expect infinity.
+#endif
 
   return 0;
 }
