@@ -93,7 +93,7 @@ void expected_results()
       "linux",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*medium[^|]*",               // test data group
-      "[^|]*", 600, 200);                // test function
+      "[^|]*", 1000, 200);                // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

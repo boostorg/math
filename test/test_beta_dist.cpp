@@ -131,7 +131,7 @@ void test_spots(RealType)
    cout << "std::numeric_limits::epsilon = " << std::numeric_limits<RealType>::epsilon() <<endl;
    cout << "epsilon = " << tolerance;
 
-   tolerance *= 1000; // Note: NO * 100 because is fraction, NOT %.
+   tolerance *= 100000; // Note: NO * 100 because is fraction, NOT %.
    cout  << ", Tolerance = " << tolerance * 100 << "%." << endl;
 
   // RealType teneps = boost::math::tools::epsilon<RealType>() * 10;

@@ -230,7 +230,7 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "(?i).*small.*",                  // test data group
-      ".*", 60, 10);  // test function
+      ".*", 90, 25);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -252,7 +252,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "(?i).*small.*",                      // test data group
-      ".*", 60, 15);  // test function
+      ".*", 90, 25);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

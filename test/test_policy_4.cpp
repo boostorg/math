@@ -9,6 +9,7 @@
 #include <boost/math/policies/policy.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/test/test_exec_monitor.hpp> // for test_main
+#include <iostream>
 
 template <class P1, class P2>
 bool check_same(const P1&, const P2&)

@@ -80,14 +80,14 @@ void expected_results()
       ".*",                          // platform
       "(long\\s+)?double",           // test type(s)
       "Beta Function: Medium.*",     // test data group
-      "boost::math::beta", 130, 35); // test function
+      "boost::math::beta", 160, 35); // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "(long\\s+)?double",           // test type(s)
       "Beta Function: Divergent.*",  // test data group
-      "boost::math::beta", 20, 6);   // test function
+      "boost::math::beta", 30, 6);   // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

@@ -107,14 +107,14 @@ void expected_results()
          "[^|]*",                          // platform
          largest_type,                     // test type(s)
          "[^|]*medium[^|]*",               // test data group
-         "[^|]*", 900, 500);               // test function
+         "[^|]*", 1200, 500);               // test function
       add_expected_result(
          "[^|]*",                          // compiler
          "[^|]*",                          // stdlib
          "[^|]*",                          // platform
          largest_type,                     // test type(s)
          "[^|]*large[^|]*",                // test data group
-         "[^|]*", 40000, 5500);            // test function
+         "[^|]*", 40000, 6000);            // test function
    }
 #endif
    //

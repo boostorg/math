@@ -69,14 +69,14 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*large.*",                   // test data group
-      ".*", 200, 100);               // test function
+      ".*", 250, 100);               // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*",                          // test data group
-      ".*", 100, 30);                 // test function
+      ".*", 150, 30);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
