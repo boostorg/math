@@ -172,7 +172,11 @@ inline T integer_power(const T& x, int ex)
       return boost::math::pow<8>(x);
    }
    BOOST_MATH_STD_USING
+#ifdef __SUNPRO_CC
+   return pow(x, T(ex));
+#else
    return pow(x, ex);
+#endif
 }
 template <class T>
 struct hypergeometric_pdf_prime_loop_result_entry

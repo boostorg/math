@@ -101,7 +101,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       "Beta Function: Medium.*",     // test data group
-      "boost::math::beta", 130, 35);  // test function
+      "boost::math::beta", 150, 40); // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
