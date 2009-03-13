@@ -21,7 +21,7 @@ namespace boost{ namespace math{ namespace detail{
 #  pragma warning(disable:4267)
 #endif
       BOOST_MATH_STD_USING
-         T result = 0;
+      T result = 0;
       T mode = floor(T(r + 1) * T(n + 1) / (N + 2));
       if(x < mode)
       {
@@ -72,7 +72,7 @@ namespace boost{ namespace math{ namespace detail{
    inline T hypergeometric_cdf(unsigned x, unsigned r, unsigned n, unsigned N, bool invert, const Policy&)
    {
       BOOST_FPU_EXCEPTION_GUARD
-         typedef typename tools::promote_args<T>::type result_type;
+      typedef typename tools::promote_args<T>::type result_type;
       typedef typename policies::evaluation<result_type, Policy>::type value_type;
       typedef typename policies::normalise<
          Policy, 

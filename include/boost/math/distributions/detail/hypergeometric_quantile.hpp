@@ -17,7 +17,10 @@ template <class T>
 inline unsigned round_x_from_p(unsigned x, T p, T cum, T fudge_factor, unsigned lbound, unsigned /*ubound*/, const policies::discrete_quantile<policies::integer_round_down>&)
 {
    if((p < cum * fudge_factor) && (x != lbound))
+   {
+      BOOST_MATH_INSTRUMENT_VARIABLE(x-1);
       return --x;
+   }
    return x;
 }
 
@@ -25,7 +28,10 @@ template <class T>
 inline unsigned round_x_from_p(unsigned x, T p, T cum, T fudge_factor, unsigned /*lbound*/, unsigned ubound, const policies::discrete_quantile<policies::integer_round_up>&)
 {
    if((cum < p * fudge_factor) && (x != ubound))
+   {
+      BOOST_MATH_INSTRUMENT_VARIABLE(x+1);
       return ++x;
+   }
    return x;
 }
 
@@ -55,7 +61,10 @@ template <class T>
 inline unsigned round_x_from_q(unsigned x, T q, T cum, T fudge_factor, unsigned lbound, unsigned /*ubound*/, const policies::discrete_quantile<policies::integer_round_down>&)
 {
    if((q * fudge_factor > cum) && (x != lbound))
+   {
+      BOOST_MATH_INSTRUMENT_VARIABLE(x-1);
       return --x;
+   }
    return x;
 }
 
@@ -63,7 +72,10 @@ template <class T>
 inline unsigned round_x_from_q(unsigned x, T q, T cum, T fudge_factor, unsigned /*lbound*/, unsigned ubound, const policies::discrete_quantile<policies::integer_round_up>&)
 {
    if((q < cum * fudge_factor) && (x != ubound))
+   {
+      BOOST_MATH_INSTRUMENT_VARIABLE(x+1);
       return ++x;
+   }
    return x;
 }
 
@@ -98,10 +110,20 @@ unsigned hypergeometric_quantile_imp(T p, T q, unsigned r, unsigned n, unsigned 
 #endif
    typedef typename Policy::discrete_quantile_type discrete_quantile_type;
    BOOST_MATH_STD_USING
+   BOOST_FPU_EXCEPTION_GUARD
    T result;
    T fudge_factor = 1 + tools::epsilon<T>() * ((N <= boost::math::prime(boost::math::max_prime - 1)) ? 50 : 2 * N);
    unsigned base = static_cast<unsigned>((std::max)(0, (int)(n + r) - (int)(N)));
    unsigned lim = (std::min)(r, n);
+
+   BOOST_MATH_INSTRUMENT_VARIABLE(p);
+   BOOST_MATH_INSTRUMENT_VARIABLE(q);
+   BOOST_MATH_INSTRUMENT_VARIABLE(r);
+   BOOST_MATH_INSTRUMENT_VARIABLE(n);
+   BOOST_MATH_INSTRUMENT_VARIABLE(N);
+   BOOST_MATH_INSTRUMENT_VARIABLE(fudge_factor);
+   BOOST_MATH_INSTRUMENT_VARIABLE(base);
+   BOOST_MATH_INSTRUMENT_VARIABLE(lim);
 
    if(p <= 0.5)
    {
@@ -117,6 +139,14 @@ unsigned hypergeometric_quantile_imp(T p, T q, unsigned r, unsigned n, unsigned 
             break;
          ++x;
          result += diff;
+#ifdef BOOST_MATH_INSTRUMENT
+         if(diff != 0)
+         {
+            BOOST_MATH_INSTRUMENT_VARIABLE(x);
+            BOOST_MATH_INSTRUMENT_VARIABLE(diff);
+            BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         }
+#endif
       }
       return round_x_from_p(x, p, result, fudge_factor, base, lim, discrete_quantile_type());
    }
@@ -132,6 +162,14 @@ unsigned hypergeometric_quantile_imp(T p, T q, unsigned r, unsigned n, unsigned 
             ? x * T(N + x - n - r) * diff / (T(1 + n - x) * T(1 + r - x))
             : hypergeometric_pdf<T>(x - 1, r, n, N, pol);
          --x;
+#ifdef BOOST_MATH_INSTRUMENT
+         if(diff != 0)
+         {
+            BOOST_MATH_INSTRUMENT_VARIABLE(x);
+            BOOST_MATH_INSTRUMENT_VARIABLE(diff);
+            BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         }
+#endif
       }
       return round_x_from_q(x, q, result, fudge_factor, base, lim, discrete_quantile_type());
    }
