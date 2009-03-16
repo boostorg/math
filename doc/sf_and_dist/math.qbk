@@ -185,11 +185,11 @@ and use the function's name as the link text]
 [def __expint_n [link math_toolkit.special.expint.expint_n zeta]]
 
 [/rounding]
-[def __round [link math_toolkit.special.rounding.round round]]
-[def __lround [link math_toolkit.special.rounding.round round]]
-[def __llround [link math_toolkit.special.rounding.round round]]
-[def __trunc [link math_toolkit.special.rounding.trunc trunc]]
-[def __modf [link math_toolkit.special.rounding.modf modf]]
+[def __round [link math_toolkit.utils.rounding.round round]]
+[def __lround [link math_toolkit.utils.rounding.round round]]
+[def __llround [link math_toolkit.utils.rounding.round round]]
+[def __trunc [link math_toolkit.utils.rounding.trunc trunc]]
+[def __modf [link math_toolkit.utils.rounding.modf modf]]
 
 [/polynomials]
 [def __laguerre [link math_toolkit.special.sf_poly.laguerre laguerre]]
@@ -407,9 +407,15 @@ printer friendly PDF format].
 [include powers.qbk]
 [include sinc.qbk]
 [include inv_hyper.qbk]
+
+[endsect] [/section:special Special Functions]
+
+[section:utils Floating Point Utilities]
 [include rounding_func.qbk]
 [include fpclassify.qbk]
+[include sign.qbk]
 [include float_next.qbk]
+[endsect]
 
 [section:extern_c TR1 and C99 external "C" Functions]
 [section:tr1 C99 and TR1 C Functions Overview]
@@ -418,8 +424,6 @@ printer friendly PDF format].
 [include c99_ref.qbk]
 [include tr1_ref.qbk]
 [endsect]
-
-[endsect] [/section:special Special Functions]
 
 [section:toolkit Internal Details and Tools (Experimental)]
 

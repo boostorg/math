@@ -603,6 +603,7 @@ run test_roots.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_round.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_spherical_harmonic.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_students_t.cpp ../../test/build//boost_test_exec_monitor ;
+run test_sign.cpp ../../test/build//boost_test_exec_monitor ;
 run test_tgamma_ratio.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_toms748_solve.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_triangular.cpp pch ../../test/build//boost_test_exec_monitor ;

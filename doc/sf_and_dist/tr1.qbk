@@ -99,7 +99,7 @@ so for complex applications this can be a big win.
 
 [h4 Supported C99 Functions]
 
-See also the [link math_toolkit.special.extern_c.c99 
+See also the [link math_toolkit.extern_c.c99 
 quick reference guide for these functions].
 
    namespace boost{ namespace math{ namespace tr1{ extern "C"{
@@ -191,7 +191,7 @@ quick reference guide for these functions].
    
 [h4 Supported TR1 Functions]
 
-See also the [link math_toolkit.special.extern_c.tr1 
+See also the [link math_toolkit.extern_c.tr1 
 quick reference guide for these functions].
 
    namespace boost{ namespace math{ namespace tr1{ extern "C"{

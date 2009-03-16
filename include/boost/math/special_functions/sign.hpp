@@ -12,26 +12,79 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/detail/fp_traits.hpp>
 
 namespace boost{ namespace math{ 
+
+namespace detail {
+
+#ifdef BOOST_MATH_USE_STD_FPCLASSIFY
+    template<class T> 
+    inline bool signbit_impl(T x, native_tag const&)
+    {
+        return (std::signbit)(x);
+    }
+#endif
+
+    template<class T> 
+    inline bool signbit_impl(T x, generic_tag<true> const&)
+    {
+        return x < 0;
+    }
+
+    template<class T> 
+    inline bool signbit_impl(T x, generic_tag<false> const&)
+    {
+        return x < 0;
+    }
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning (disable:4800)
+#endif
+    template<class T> 
+    inline bool signbit_impl(T x, ieee_copy_all_bits_tag const&)
+    {
+        typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
+
+        BOOST_DEDUCED_TYPENAME traits::bits a;
+        traits::get_bits(x,a);
+        return static_cast<bool>(a & traits::sign);
+    }
+
+    template<class T> 
+    inline bool signbit_impl(T x, ieee_copy_leading_bits_tag const&)
+    {
+        typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
+
+        BOOST_DEDUCED_TYPENAME traits::bits a;
+        traits::get_bits(x,a);
+
+        return static_cast<bool>(a & traits::sign);
+    }
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+}   // namespace detail
+
+template<class T> bool (signbit)(T x)
+{ //!< \brief return true if floating-point type t is NaN (Not A Number).
+   typedef typename detail::fp_traits<T>::type traits;
+   typedef typename traits::method method;
+   typedef typename boost::is_floating_point<T>::type fp_tag;
+   return detail::signbit_impl(x, method());
+}
 
 template <class T>
 inline int sign BOOST_NO_MACRO_EXPAND(const T& z)
 {
-   return (z == 0) ? 0 : (z < 0) ? -1 : 1;
-}
-
-template <class T>
-inline int signbit BOOST_NO_MACRO_EXPAND(const T& z)
-{
-   return (z < 0) ? 1 : 0;
+   return (z == 0) ? 0 : signbit(z) ? -1 : 1;
 }
 
 template <class T>
 inline T copysign BOOST_NO_MACRO_EXPAND(const T& x, const T& y)
 {
    BOOST_MATH_STD_USING
-   return fabs(x) * boost::math::sign(y);
+      return fabs(x) * (boost::math::signbit(y) ? -1 : 1);
 }
 
 } // namespace math

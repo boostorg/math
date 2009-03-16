@@ -5,7 +5,7 @@
 The first thing you need to ask yourself is "Do I need to build anything at all?"
 as the bulk of this library is header only: meaning you can use it just by
 #including the necessary header(s). Refer to
-[link math_toolkit.special.extern_c C99 and C++ TR1 C-style Functions]
+[link math_toolkit.extern_c C99 and C++ TR1 C-style Functions]
 for pros and cons of using
 the TR1 components as opposed to the header only ones.
 
