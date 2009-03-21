@@ -20,53 +20,47 @@ namespace detail {
 
 #ifdef BOOST_MATH_USE_STD_FPCLASSIFY
     template<class T> 
-    inline bool signbit_impl(T x, native_tag const&)
+    inline int signbit_impl(T x, native_tag const&)
     {
         return (std::signbit)(x);
     }
 #endif
 
     template<class T> 
-    inline bool signbit_impl(T x, generic_tag<true> const&)
+    inline int signbit_impl(T x, generic_tag<true> const&)
     {
         return x < 0;
     }
 
     template<class T> 
-    inline bool signbit_impl(T x, generic_tag<false> const&)
+    inline int signbit_impl(T x, generic_tag<false> const&)
     {
         return x < 0;
     }
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning (disable:4800)
-#endif
+
     template<class T> 
-    inline bool signbit_impl(T x, ieee_copy_all_bits_tag const&)
+    inline int signbit_impl(T x, ieee_copy_all_bits_tag const&)
     {
         typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
 
         BOOST_DEDUCED_TYPENAME traits::bits a;
         traits::get_bits(x,a);
-        return static_cast<bool>(a & traits::sign);
+        return a & traits::sign ? 1 : 0;
     }
 
     template<class T> 
-    inline bool signbit_impl(T x, ieee_copy_leading_bits_tag const&)
+    inline int signbit_impl(T x, ieee_copy_leading_bits_tag const&)
     {
         typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
 
         BOOST_DEDUCED_TYPENAME traits::bits a;
         traits::get_bits(x,a);
 
-        return static_cast<bool>(a & traits::sign);
+        return a & traits::sign ? 1 : 0;
     }
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
 }   // namespace detail
 
-template<class T> bool (signbit)(T x)
+template<class T> int (signbit)(T x)
 { //!< \brief return true if floating-point type t is NaN (Not A Number).
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;

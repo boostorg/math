@@ -244,8 +244,12 @@ T cyl_bessel_i_imp(T v, T x, const Policy& pol)
    if(v == 0.5f)
    {
       // common special case, note try and avoid overflow in exp(x):
-      T e = exp(x / 2);
-      return e * (e / sqrt(2 * x * constants::pi<T>()));
+      if(x >= tools::log_max_value<T>())
+      {
+         T e = exp(x / 2);
+         return e * (e / sqrt(2 * x * constants::pi<T>()));
+      }
+      return sqrt(2 / (x * constants::pi<T>())) * sinh(x);
    }
    if(policies::digits<T, Policy>() <= 64)
    {
