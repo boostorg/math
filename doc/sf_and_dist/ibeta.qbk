@@ -3,7 +3,7 @@
 [h4 Synopsis]
 
 ``
-#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/beta.hpp>
 ``
 
    namespace boost{ namespace math{
