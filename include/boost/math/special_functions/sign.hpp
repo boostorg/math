@@ -71,14 +71,14 @@ template<class T> int (signbit)(T x)
 template <class T>
 inline int sign BOOST_NO_MACRO_EXPAND(const T& z)
 {
-   return (z == 0) ? 0 : signbit(z) ? -1 : 1;
+   return (z == 0) ? 0 : (boost::math::signbit)(z) ? -1 : 1;
 }
 
 template <class T>
 inline T copysign BOOST_NO_MACRO_EXPAND(const T& x, const T& y)
 {
    BOOST_MATH_STD_USING
-      return fabs(x) * (boost::math::signbit(y) ? -1 : 1);
+      return fabs(x) * ((boost::math::signbit)(y) ? -1 : 1);
 }
 
 } // namespace math
