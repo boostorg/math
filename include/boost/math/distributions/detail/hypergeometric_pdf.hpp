@@ -107,6 +107,8 @@ T hypergeometric_pdf_lanczos_imp(T /*dummy*/, unsigned x, unsigned r, unsigned n
    T result = pow(bases[sorted_indexes[0]] * exp(static_cast<T>(base_e_factors[sorted_indexes[0]])), exponents[sorted_indexes[0]]);
    for(unsigned i = 1; (i < 9) && (exponents[sorted_indexes[i]] > 0); ++i)
    {
+      if(result == 0)
+         return 0; // short circuit further evaluation
       if(exponents[sorted_indexes[i]] == 1)
          result *= bases[sorted_indexes[i]] * exp(static_cast<T>(base_e_factors[sorted_indexes[i]]));
       else if(exponents[sorted_indexes[i]] == 0.5f)
