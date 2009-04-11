@@ -280,9 +280,11 @@ inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
    } // namespace detail
    }} // namespaces
 
-   #define BOOST_FPU_EXCEPTION_GUARD boost::math::detail::fpu_guard local_guard_object;
+#  define BOOST_FPU_EXCEPTION_GUARD boost::math::detail::fpu_guard local_guard_object;
+#  define BOOST_MATH_INSTRUMENT_FPU do{ fexcept_t cpu_flags; fegetexceptflag(&cpu_flags, FE_ALL_EXCEPT); BOOST_MATH_INSTRUMENT_VARIABLE(cpu_flags); } while(0); 
 #else // All other platforms.
-  #define BOOST_FPU_EXCEPTION_GUARD
+#  define BOOST_FPU_EXCEPTION_GUARD
+#  define BOOST_MATH_INSTRUMENT_FPU
 #endif
 
 #ifdef BOOST_MATH_INSTRUMENT

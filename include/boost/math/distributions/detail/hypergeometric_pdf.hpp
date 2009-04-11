@@ -82,6 +82,10 @@ T hypergeometric_pdf_lanczos_imp(T /*dummy*/, unsigned x, unsigned r, unsigned n
    do{
       exponents[sorted_indexes[0]] -= exponents[sorted_indexes[1]];
       bases[sorted_indexes[1]] *= bases[sorted_indexes[0]];
+      if((bases[sorted_indexes[1]] < tools::min_value<T>()) && (exponents[sorted_indexes[1]] != 0))
+      {
+         return 0;
+      }
       base_e_factors[sorted_indexes[1]] += base_e_factors[sorted_indexes[0]];
       bubble_down_one(sorted_indexes, sorted_indexes + 9, sort_functor<T>(exponents));
    }while(exponents[sorted_indexes[1]] > 1);
@@ -104,10 +108,30 @@ T hypergeometric_pdf_lanczos_imp(T /*dummy*/, unsigned x, unsigned r, unsigned n
       --j;
    }
 
-   T result = pow(bases[sorted_indexes[0]] * exp(static_cast<T>(base_e_factors[sorted_indexes[0]])), exponents[sorted_indexes[0]]);
+#ifdef BOOST_MATH_INSTRUMENT
+   BOOST_MATH_INSTRUMENT_FPU
+   for(unsigned i = 0; i < 9; ++i)
+   {
+      BOOST_MATH_INSTRUMENT_VARIABLE(i);
+      BOOST_MATH_INSTRUMENT_VARIABLE(bases[i]);
+      BOOST_MATH_INSTRUMENT_VARIABLE(exponents[i]);
+      BOOST_MATH_INSTRUMENT_VARIABLE(base_e_factors[i]);
+      BOOST_MATH_INSTRUMENT_VARIABLE(sorted_indexes[i]);
+   }
+#endif
+
+   T result;
+   BOOST_MATH_INSTRUMENT_VARIABLE(bases[sorted_indexes[0]] * exp(static_cast<T>(base_e_factors[sorted_indexes[0]])));
+   BOOST_MATH_INSTRUMENT_VARIABLE(exponents[sorted_indexes[0]]);
+   {
+      BOOST_FPU_EXCEPTION_GUARD
+      result = pow(bases[sorted_indexes[0]] * exp(static_cast<T>(base_e_factors[sorted_indexes[0]])), exponents[sorted_indexes[0]]);
+   }
+   BOOST_MATH_INSTRUMENT_VARIABLE(result);
    for(unsigned i = 1; (i < 9) && (exponents[sorted_indexes[i]] > 0); ++i)
    {
-      if(result == 0)
+      BOOST_FPU_EXCEPTION_GUARD
+      if(result < tools::min_value<T>())
          return 0; // short circuit further evaluation
       if(exponents[sorted_indexes[i]] == 1)
          result *= bases[sorted_indexes[i]] * exp(static_cast<T>(base_e_factors[sorted_indexes[i]]));
@@ -115,6 +139,8 @@ T hypergeometric_pdf_lanczos_imp(T /*dummy*/, unsigned x, unsigned r, unsigned n
          result *= sqrt(bases[sorted_indexes[i]] * exp(static_cast<T>(base_e_factors[sorted_indexes[i]])));
       else
          result *= pow(bases[sorted_indexes[i]] * exp(static_cast<T>(base_e_factors[sorted_indexes[i]])), exponents[sorted_indexes[i]]);
+   
+      BOOST_MATH_INSTRUMENT_VARIABLE(result);
    }
 
    result *= Lanczos::lanczos_sum_expG_scaled(static_cast<T>(n + 1))
@@ -128,6 +154,7 @@ T hypergeometric_pdf_lanczos_imp(T /*dummy*/, unsigned x, unsigned r, unsigned n
          * Lanczos::lanczos_sum_expG_scaled(static_cast<T>(r - x + 1))
          * Lanczos::lanczos_sum_expG_scaled(static_cast<T>(N - n - r + x + 1)));
    
+   BOOST_MATH_INSTRUMENT_VARIABLE(result);
    return result;
 }
 
