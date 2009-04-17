@@ -25,55 +25,55 @@ void test_spots(RealType /*T*/, const char* type_name)
    RealType a = 0;
    RealType b = 1;
    RealType c = -1;
-   BOOST_CHECK_EQUAL(boost::math::signbit(a), 0);
-   BOOST_CHECK_EQUAL(boost::math::sign(a), 0);
-   BOOST_CHECK_EQUAL(boost::math::copysign(b, a), RealType(1));
-   BOOST_CHECK_EQUAL(boost::math::copysign(c, a), RealType(1));
+   BOOST_CHECK_EQUAL((boost::math::signbit)(a), 0);
+   BOOST_CHECK_EQUAL((boost::math::sign)(a), 0);
+   BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(1));
+   BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(1));
    a = 1;
-   BOOST_CHECK_EQUAL(boost::math::signbit(a), 0);
-   BOOST_CHECK_EQUAL(boost::math::sign(a), 1);
-   BOOST_CHECK_EQUAL(boost::math::copysign(b, a), RealType(1));
-   BOOST_CHECK_EQUAL(boost::math::copysign(c, a), RealType(1));
+   BOOST_CHECK_EQUAL((boost::math::signbit)(a), 0);
+   BOOST_CHECK_EQUAL((boost::math::sign)(a), 1);
+   BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(1));
+   BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(1));
    a = -1;
-   BOOST_CHECK(boost::math::signbit(a) != 0);
-   BOOST_CHECK_EQUAL(boost::math::sign(a), -1);
-   BOOST_CHECK_EQUAL(boost::math::copysign(b, a), RealType(-1));
-   BOOST_CHECK_EQUAL(boost::math::copysign(c, a), RealType(-1));
+   BOOST_CHECK((boost::math::signbit)(a) != 0);
+   BOOST_CHECK_EQUAL((boost::math::sign)(a), -1);
+   BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(-1));
+   BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(-1));
    a = boost::math::tools::max_value<RealType>();
-   BOOST_CHECK_EQUAL(boost::math::signbit(a), 0);
-   BOOST_CHECK_EQUAL(boost::math::sign(a), 1);
-   BOOST_CHECK_EQUAL(boost::math::copysign(b, a), RealType(1));
-   BOOST_CHECK_EQUAL(boost::math::copysign(c, a), RealType(1));
+   BOOST_CHECK_EQUAL((boost::math::signbit)(a), 0);
+   BOOST_CHECK_EQUAL((boost::math::sign)(a), 1);
+   BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(1));
+   BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(1));
    a = -boost::math::tools::max_value<RealType>();
-   BOOST_CHECK(boost::math::signbit(a) != 0);
-   BOOST_CHECK_EQUAL(boost::math::sign(a), -1);
-   BOOST_CHECK_EQUAL(boost::math::copysign(b, a), RealType(-1));
-   BOOST_CHECK_EQUAL(boost::math::copysign(c, a), RealType(-1));
+   BOOST_CHECK((boost::math::signbit)(a) != 0);
+   BOOST_CHECK_EQUAL((boost::math::sign)(a), -1);
+   BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(-1));
+   BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(-1));
    if(std::numeric_limits<RealType>::has_infinity)
    {
       a = std::numeric_limits<RealType>::infinity();
-      BOOST_CHECK_EQUAL(boost::math::signbit(a), 0);
-      BOOST_CHECK_EQUAL(boost::math::sign(a), 1);
-      BOOST_CHECK_EQUAL(boost::math::copysign(b, a), RealType(1));
-      BOOST_CHECK_EQUAL(boost::math::copysign(c, a), RealType(1));
+      BOOST_CHECK_EQUAL((boost::math::signbit)(a), 0);
+      BOOST_CHECK_EQUAL((boost::math::sign)(a), 1);
+      BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(1));
+      BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(1));
       a = -std::numeric_limits<RealType>::infinity();
-      BOOST_CHECK(boost::math::signbit(a) != 0);
-      BOOST_CHECK_EQUAL(boost::math::sign(a), -1);
-      BOOST_CHECK_EQUAL(boost::math::copysign(b, a), RealType(-1));
-      BOOST_CHECK_EQUAL(boost::math::copysign(c, a), RealType(-1));
+      BOOST_CHECK((boost::math::signbit)(a) != 0);
+      BOOST_CHECK_EQUAL((boost::math::sign)(a), -1);
+      BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(-1));
+      BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(-1));
    }
    if(std::numeric_limits<RealType>::has_quiet_NaN)
    {
       a = std::numeric_limits<RealType>::quiet_NaN();
-      BOOST_CHECK_EQUAL(boost::math::signbit(a), 0);
-      BOOST_CHECK_EQUAL(boost::math::sign(a), 1);
-      BOOST_CHECK_EQUAL(boost::math::copysign(b, a), RealType(1));
-      BOOST_CHECK_EQUAL(boost::math::copysign(c, a), RealType(1));
+      BOOST_CHECK_EQUAL((boost::math::signbit)(a), 0);
+      BOOST_CHECK_EQUAL((boost::math::sign)(a), 1);
+      BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(1));
+      BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(1));
       a = -std::numeric_limits<RealType>::quiet_NaN();
-      BOOST_CHECK(boost::math::signbit(a) != 0);
-      BOOST_CHECK_EQUAL(boost::math::sign(a), -1);
-      BOOST_CHECK_EQUAL(boost::math::copysign(b, a), RealType(-1));
-      BOOST_CHECK_EQUAL(boost::math::copysign(c, a), RealType(-1));
+      BOOST_CHECK((boost::math::signbit)(a) != 0);
+      BOOST_CHECK_EQUAL((boost::math::sign)(a), -1);
+      BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(-1));
+      BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(-1));
    }
 }
 

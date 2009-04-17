@@ -618,6 +618,7 @@ run test_policy_4.cpp ../../test/build//boost_test_exec_monitor ;
 run test_policy_5.cpp ../../test/build//boost_test_exec_monitor ;
 run test_policy_6.cpp ../../test/build//boost_test_exec_monitor ;
 run test_policy_7.cpp ../../test/build//boost_test_exec_monitor ;
+run test_policy_8.cpp ../../test/build//boost_test_exec_monitor ;
 run test_policy_sf.cpp ../../test/build//boost_test_exec_monitor ;
 
 run test_tr1.cpp
