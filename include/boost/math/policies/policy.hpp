@@ -285,13 +285,13 @@ char test_is_default_arg(const default_policy*);
 template <class T>
 struct is_valid_policy_imp 
 {
-   BOOST_STATIC_CONSTANT(bool, value = sizeof(test_is_valid_arg(static_cast<T*>(0))) == 1);
+   BOOST_STATIC_CONSTANT(bool, value = sizeof(::boost::math::policies::detail::test_is_valid_arg(static_cast<T*>(0))) == 1);
 };
 
 template <class T>
 struct is_default_policy_imp
 {
-   BOOST_STATIC_CONSTANT(bool, value = sizeof(test_is_default_arg(static_cast<T*>(0))) == 1);
+   BOOST_STATIC_CONSTANT(bool, value = sizeof(::boost::math::policies::detail::test_is_default_arg(static_cast<T*>(0))) == 1);
 };
 
 template <class T> struct is_valid_policy 
@@ -871,7 +871,7 @@ double test_is_policy(...);
 template <class P>
 struct is_policy_imp
 {
-   BOOST_STATIC_CONSTANT(bool, value = (sizeof(test_is_policy(static_cast<P*>(0))) == 1));
+   BOOST_STATIC_CONSTANT(bool, value = (sizeof(::boost::math::policies::detail::test_is_policy(static_cast<P*>(0))) == 1));
 };
 
 }
