@@ -267,10 +267,12 @@ inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
 #if defined(BOOST_HAS_EXPM1) && !(defined(__osf__) && defined(__DECCXX_VER))
 #  ifdef BOOST_MATH_USE_C99
 inline float expm1(float x, const policies::policy<>&){ return ::expm1f(x); }
+#     ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline long double expm1(long double x, const policies::policy<>&){ return ::expm1l(x); }
-#else
+#     endif
+#  else
 inline float expm1(float x, const policies::policy<>&){ return ::expm1(x); }
-#endif
+#  endif
 inline double expm1(double x, const policies::policy<>&){ return ::expm1(x); }
 #endif
 
