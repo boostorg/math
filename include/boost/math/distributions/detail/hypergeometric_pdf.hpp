@@ -416,11 +416,11 @@ inline typename tools::promote_args<T>::type
 
    if(result > 1)
    {
-	   result = 1;
+      result = 1;
    }
    if(result < 0)
    {
-	   result = 0;
+      result = 0;
    }
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(result, "boost::math::hypergeometric_pdf<%1%>(%1%,%1%,%1%,%1%)");

@@ -51,8 +51,8 @@ at compile time, then the following algorithm is used:
 
         Otherwise the number is normal.
 
-	This algorithm works for the IEEE 754 representation,
-	and also for several non IEEE 754 formats.
+        This algorithm works for the IEEE 754 representation,
+        and also for several non IEEE 754 formats.
 
     Most formats have the structure
         sign bit + exponent bits + significand bits.
@@ -60,8 +60,8 @@ at compile time, then the following algorithm is used:
     A few have the structure
         sign bit + exponent bits + flag bit + significand bits.
     The flag bit is 0 for zero and subnormal numbers,
-	and 1 for normal numbers and NaN.
-	It is 0 (Motorola 68K) or 1 (Intel) for infinity.
+        and 1 for normal numbers and NaN.
+        It is 0 (Motorola 68K) or 1 (Intel) for infinity.
 
     To get the bits, the four or eight most significant bytes are copied
     into an uint32_t or uint64_t and bit masks are applied.

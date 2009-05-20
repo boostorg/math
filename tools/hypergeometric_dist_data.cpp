@@ -24,48 +24,48 @@ std::tr1::mt19937 rnd;
 struct hypergeometric_generator
 {
    std::tr1::tuple<
-	   boost::math::ntl::RR, 
-	   boost::math::ntl::RR, 
-	   boost::math::ntl::RR, 
-	   boost::math::ntl::RR, 
-	   boost::math::ntl::RR,
-	   boost::math::ntl::RR,
-	   boost::math::ntl::RR> operator()(boost::math::ntl::RR rN, boost::math::ntl::RR rr, boost::math::ntl::RR rn)
+      boost::math::ntl::RR, 
+      boost::math::ntl::RR, 
+      boost::math::ntl::RR, 
+      boost::math::ntl::RR, 
+      boost::math::ntl::RR,
+      boost::math::ntl::RR,
+      boost::math::ntl::RR> operator()(boost::math::ntl::RR rN, boost::math::ntl::RR rr, boost::math::ntl::RR rn)
    {
-	   using namespace std;
-	   using namespace boost;
-	   using namespace boost::math;
+      using namespace std;
+      using namespace boost;
+      using namespace boost::math;
 
-	   if((rr > rN) || (rr < rn))
-		   throw std::domain_error("");
+      if((rr > rN) || (rr < rn))
+         throw std::domain_error("");
 
-	   try{
-		   int N = itrunc(rN);
-		   int r = itrunc(rr);
-		   int n = itrunc(rn);
-		   uniform_int<> ui((std::max)(0, n + r - N), (std::min)(n, r));
-		   int k = ui(rnd);
+      try{
+         int N = itrunc(rN);
+         int r = itrunc(rr);
+         int n = itrunc(rn);
+         uniform_int<> ui((std::max)(0, n + r - N), (std::min)(n, r));
+         int k = ui(rnd);
 
-		   hypergeometric_distribution<ntl::RR> d(r, n, N);
+         hypergeometric_distribution<ntl::RR> d(r, n, N);
 
-		   ntl::RR p = pdf(d, k);
-		   if((p == 1) || (p == 0))
-		   {
-			   // trivial case, don't clutter up our table with it:
-			   throw std::domain_error("");
-		   }
-		   ntl::RR c = cdf(d, k);
-		   ntl::RR cc = cdf(complement(d, k));
+         ntl::RR p = pdf(d, k);
+         if((p == 1) || (p == 0))
+         {
+            // trivial case, don't clutter up our table with it:
+            throw std::domain_error("");
+         }
+         ntl::RR c = cdf(d, k);
+         ntl::RR cc = cdf(complement(d, k));
 
-		   std::cout << "N = " << N << " r = " << r << " n = " << n << " PDF = " << p << " CDF = " << c << " CCDF = " << cc << std::endl;
+         std::cout << "N = " << N << " r = " << r << " n = " << n << " PDF = " << p << " CDF = " << c << " CCDF = " << cc << std::endl;
 
-		   return tr1::make_tuple(r, n, N, k, p, c, cc);
-	   }
-	   catch(const std::exception& e)
-	   {
-		   std::cout << e.what() << std::endl;
-		   throw std::domain_error("");
-	   }
+         return tr1::make_tuple(r, n, N, k, p, c, cc);
+      }
+      catch(const std::exception& e)
+      {
+         std::cout << e.what() << std::endl;
+         throw std::domain_error("");
+      }
    }
 };
 

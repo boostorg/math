@@ -27,7 +27,7 @@ Test 3: test_hazard_pdf_cdf_symmetry()
          Checks the relation between hazard, pdf and cdf.
          hazard = pdf/(1-cdf)
 
-		
+
 Test 4: test_location_scale_symmetry()
          Checks the pdf, cdf invariant for translation and scaling invariant
                  cdf(x,location,scale) = cdf( (x-location)/scale, 0, 1)
@@ -292,7 +292,7 @@ void test_cdf_quantile_symmetry()
    
    for (int i=0; i<7; ++i)
    {
-	   RealType x( static_cast<RealType>(xtest[i]) );
+      RealType x( static_cast<RealType>(xtest[i]) );
       RealType x2( quantile(laplace_distribution<RealType>(), cdf(laplace_distribution<RealType>(), x)) );
       BOOST_CHECK_CLOSE( x, x2, tolerance);
    }
@@ -327,22 +327,22 @@ void test_location_scale_symmetry()
 
    for (int xi=0; xi<7; ++xi)
       for (int li=0; li<7; ++li)
-	      for (int si=0; si<3; ++si)
+         for (int si=0; si<3; ++si)
          {
             RealType x( static_cast<RealType>(xtest[xi]) );
             RealType l( static_cast<RealType>(ltest[li]) );
             RealType s( static_cast<RealType>(stest[si]) );
             RealType x0( (x-l)/s );
 
-			   BOOST_CHECK_CLOSE( 
-			      pdf(laplace_distribution<RealType>(l,s), x) * s,
-			      pdf(laplace_distribution<RealType>(), x0),
-			      tolerance);
+            BOOST_CHECK_CLOSE( 
+               pdf(laplace_distribution<RealType>(l,s), x) * s,
+               pdf(laplace_distribution<RealType>(), x0),
+               tolerance);
 
-			   BOOST_CHECK_CLOSE( 
-			      cdf(laplace_distribution<RealType>(l,s), x),
-			      cdf(laplace_distribution<RealType>(), x0),
-			      tolerance);
+            BOOST_CHECK_CLOSE( 
+               cdf(laplace_distribution<RealType>(l,s), x),
+               cdf(laplace_distribution<RealType>(), x0),
+               tolerance);
 
          }
 }
@@ -358,47 +358,47 @@ void test_mmm_moments()
 
    for (int xi=0; xi<7; ++xi)
       for (int li=0; li<7; ++li)
-	      for (int si=0; si<3; ++si)
+         for (int si=0; si<3; ++si)
          {
             //RealType x( static_cast<RealType>(xtest[xi]) );
             RealType l( static_cast<RealType>(ltest[li]) );
             RealType s( static_cast<RealType>(stest[si]) );
 
             BOOST_CHECK_CLOSE( 
-			      mean( laplace_distribution<RealType>(l,s) ),
+               mean( laplace_distribution<RealType>(l,s) ),
                l,
-			      tolerance);
+               tolerance);
 
             BOOST_CHECK_CLOSE( 
-			      median( laplace_distribution<RealType>(l,s) ),
+               median( laplace_distribution<RealType>(l,s) ),
                l,
-			      tolerance);
+               tolerance);
 
             BOOST_CHECK_CLOSE( 
-			      mode( laplace_distribution<RealType>(l,s) ),
+               mode( laplace_distribution<RealType>(l,s) ),
                l,
-			      tolerance);
+               tolerance);
 
 
             BOOST_CHECK_CLOSE( 
-			      standard_deviation( laplace_distribution<RealType>(l,s) ),
+               standard_deviation( laplace_distribution<RealType>(l,s) ),
                static_cast<RealType>( s * boost::math::constants::root_two<RealType>() ),
-			      tolerance);
+               tolerance);
 
             BOOST_CHECK_CLOSE( 
-			      skewness( laplace_distribution<RealType>(l,s) ),
+               skewness( laplace_distribution<RealType>(l,s) ),
                static_cast<RealType>(0),
-			      tolerance);
+               tolerance);
 
             BOOST_CHECK_CLOSE( 
-			      kurtosis( laplace_distribution<RealType>(l,s) ),
+               kurtosis( laplace_distribution<RealType>(l,s) ),
                static_cast<RealType>(6),
-			      tolerance);
+               tolerance);
 
             BOOST_CHECK_CLOSE( 
-			      kurtosis_excess( laplace_distribution<RealType>(l,s) ),
+               kurtosis_excess( laplace_distribution<RealType>(l,s) ),
                static_cast<RealType>(3),
-			      tolerance);
+               tolerance);
          }
 } // template <class RealType> void test_mmm_moments()
 
@@ -413,7 +413,7 @@ void test_complemented()
    const float stest[3] = {  0.5, 1.0, 2.0 };
 
    for (int li=0; li<7; ++li)
-	   for (int si=0; si<3; ++si)
+      for (int si=0; si<3; ++si)
       {
          RealType l( static_cast<RealType>(ltest[li]) );
          RealType s( static_cast<RealType>(stest[si]) );
@@ -423,9 +423,9 @@ void test_complemented()
             RealType x( static_cast<RealType>(xtest[xi]) );
 
             BOOST_CHECK_CLOSE( 
-		         cdf(complement(laplace_distribution<RealType>(l,s), -x)), 
+               cdf(complement(laplace_distribution<RealType>(l,s), -x)), 
                cdf(laplace_distribution<RealType>(l,s), x),
-		         tolerance);
+               tolerance);
          }
 
          for (int pi=0; pi<5; ++pi)
@@ -433,9 +433,9 @@ void test_complemented()
             RealType p( static_cast<RealType>(ptest[pi]) );
 
             BOOST_CHECK_CLOSE( 
-		         quantile(complement(laplace_distribution<RealType>(l,s), 1-p )), 
+               quantile(complement(laplace_distribution<RealType>(l,s), 1-p )), 
                quantile(laplace_distribution<RealType>(l,s), p),
-		         tolerance);
+               tolerance);
          }
       }
 } // void test_complemented()

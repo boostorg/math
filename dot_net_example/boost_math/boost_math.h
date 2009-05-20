@@ -152,10 +152,10 @@ namespace boost_math {
       Distribution m_dist;
    };
 
-	public ref class any_distribution
-	{
-	  public:
-		// Added methods for this class here.
+   public ref class any_distribution
+   {
+     public:
+      // Added methods for this class here.
       any_distribution(int t, double arg1, double arg2, double arg3);
       ~any_distribution()
       {
@@ -324,5 +324,5 @@ namespace boost_math {
          pimpl = p;
       }
       any_imp* pimpl;
-	};
+   };
 }
