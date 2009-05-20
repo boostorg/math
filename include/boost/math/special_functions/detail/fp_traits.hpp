@@ -242,7 +242,7 @@ template<> struct fp_traits_non_native<double, double_precision>
 
 #endif
 
-#endif	// #ifndef BOOST_FPCLASSIFY_VAX_FORMAT
+#endif  // #ifndef BOOST_FPCLASSIFY_VAX_FORMAT
 
 // long double (64 bits) -------------------------------------------------------
 
