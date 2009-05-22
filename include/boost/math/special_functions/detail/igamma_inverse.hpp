@@ -229,7 +229,7 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
          }
          else
          {
-            T D = (std::max)(T(2), a * (a - 1));
+            T D = (std::max)(T(2), T(a * (a - 1)));
             T lg = boost::math::lgamma(a, pol);
             T lb = log(q) + lg;
             if(lb < -D * 2.3)
@@ -386,7 +386,7 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
       return tools::max_value<T>();
    if(p == 0)
       return 0;
-   T guess = detail::find_inverse_gamma(a, p, 1 - p, pol);
+   T guess = detail::find_inverse_gamma<T>(a, p, 1 - p, pol);
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();
@@ -430,7 +430,7 @@ T gamma_q_inv_imp(T a, T q, const Policy& pol)
       return tools::max_value<T>();
    if(q == 1)
       return 0;
-   T guess = detail::find_inverse_gamma(a, 1 - q, q, pol);
+   T guess = detail::find_inverse_gamma<T>(a, 1 - q, q, pol);
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();

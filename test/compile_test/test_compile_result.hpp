@@ -42,6 +42,18 @@ inline void check_result(T2)
    return check_result_imp(a, b);
 }
 
+union max_align_type
+{
+   char c;
+   short s;
+   int i;
+   long l;
+   double d;
+   long double ld;
+#ifdef BOOST_HAS_LONG_LONG
+   long long ll;
+#endif
+};
 
 template <class Distribution>
 struct DistributionConcept
@@ -115,7 +127,15 @@ struct DistributionConcept
       check_result<value_type>(chf(dist, li));
    }
 private:
-   static Distribution* get_object_p();
+   static void* storage()
+   {
+      static max_align_type storage[sizeof(Distribution)];
+      return storage;
+   }
+   static Distribution* get_object_p()
+   {
+      return static_cast<Distribution*>(storage());
+   }
    static Distribution& get_object()
    {
       // will never get called:

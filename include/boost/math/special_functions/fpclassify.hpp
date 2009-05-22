@@ -18,6 +18,12 @@
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/fp_traits.hpp>
+/*!
+  \file fpclassify.hpp
+  \brief Classify floating-point value as normal, subnormal, zero, infinite, or NaN.
+  \version 1.0
+  \author John Maddock
+ */
 
 /*
 
@@ -303,7 +309,7 @@ inline bool isfinite_impl<long double> BOOST_NO_MACRO_EXPAND(long double t, cons
 
 template<class T> 
 inline bool (isfinite)(T x)
-{
+{ //!< \brief return true if floating-point type t is finite.
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;
    typedef typename boost::is_floating_point<T>::type fp_tag;
@@ -507,7 +513,7 @@ namespace detail {
 }   // namespace detail
 
 template<class T> bool (isnan)(T x)
-{
+{ //!< \brief return true if floating-point type t is NaN (Not A Number).
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;
    typedef typename boost::is_floating_point<T>::type fp_tag;

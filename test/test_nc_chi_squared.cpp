@@ -7,6 +7,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <pch.hpp>
+
 #ifdef _MSC_VER
 #pragma warning (disable:4127 4512)
 #endif
@@ -21,7 +23,9 @@
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/non_central_chi_squared.hpp> // for chi_squared_distribution
 #include <boost/math/special_functions/cbrt.hpp> // for chi_squared_distribution
-#include <boost/test/included/test_exec_monitor.hpp> // for test_main
+#include <boost/test/test_exec_monitor.hpp> // for test_main
+#include <boost/test/results_collector.hpp>
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
 
 #include "functor.hpp"

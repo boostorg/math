@@ -13,6 +13,8 @@
 // Default domain error policy is
 // #define BOOST_MATH_DOMAIN_ERROR_POLICY throw_on_error
 
+#include <pch.hpp>
+
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/normal.hpp> // for normal_distribution
   using boost::math::normal; // Default type double.
@@ -27,7 +29,7 @@
 #include <boost/math/policies/policy.hpp>
   using boost::math::policies::policy;
 
-#include <boost/test/included/test_exec_monitor.hpp> // for test_main
+#include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION, BOOST_CHECK_EQUAL...
 
 #include <iostream>

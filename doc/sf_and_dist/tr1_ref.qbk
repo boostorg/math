@@ -378,14 +378,14 @@ See also __sph_bessel for the full template (header only) version of this functi
    long double hypergl(long double a, long double b, long double c,
    long double x);
    
-[note Thes two functions are not implemented as they are not believed
+[note These two functions are not implemented as they are not believed
 to be numerically stable.]
 
 
 [endsect]
 
 [/ 
-  Copyright 2008 John Maddock and Paul A. Bristow.
+  Copyright 2008, 2009 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

@@ -128,7 +128,7 @@ typename Dist::value_type
          else
          {
             b = a;
-            a = (std::max)(b - 1, value_type(0));
+            a = (std::max)(value_type(b - 1), value_type(0));
             if(a < min_bound)
                a = min_bound;
             fa = f(a);
@@ -158,7 +158,7 @@ typename Dist::value_type
       }
       else
       {
-         b = (std::max)(a - adder, value_type(0));
+         b = (std::max)(value_type(a - adder), value_type(0));
          if(b < min_bound)
             b = min_bound;
       }
@@ -182,7 +182,7 @@ typename Dist::value_type
          }
          else
          {
-            b = (std::max)(a - adder, value_type(0));
+            b = (std::max)(value_type(a - adder), value_type(0));
             if(b < min_bound)
                b = min_bound;
          }
@@ -330,7 +330,7 @@ inline typename Dist::value_type
          dist, 
          p, 
          q,
-         (guess < 1 ? value_type(1) : floor(guess)), 
+         (guess < 1 ? value_type(1) : (value_type)floor(guess)), 
          multiplier, 
          adder, 
          tools::equal_floor(),
@@ -340,7 +340,7 @@ inline typename Dist::value_type
       dist, 
       p, 
       q,
-      ceil(guess), 
+      (value_type)ceil(guess), 
       multiplier, 
       adder, 
       tools::equal_ceil(),

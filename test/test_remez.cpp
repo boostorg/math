@@ -4,14 +4,17 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <pch.hpp>
+
 #ifdef _MSC_VER
 #  pragma warning(disable : 4267) // conversion from 'size_t' to 'const unsigned int', possible loss of data
 #  pragma warning(disable : 4180) // qualifier applied to function type has no meaning; ignored
 #  pragma warning(disable : 4224) // nonstandard extension used : formal parameter 'function_ptr' was previously defined as a type
+#  pragma warning(disable : 4100) // unreferenced formal parameter (in ublas/functional)
 #endif
 
 #include <boost/math/tools/remez.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 

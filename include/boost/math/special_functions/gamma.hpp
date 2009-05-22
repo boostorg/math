@@ -44,6 +44,7 @@
 #include <boost/assert.hpp>
 #include <boost/mpl/greater.hpp>
 #include <boost/mpl/equal_to.hpp>
+#include <boost/mpl/greater.hpp>
 
 #include <boost/config/no_tr1/cmath.hpp>
 #include <algorithm>
@@ -148,7 +149,7 @@ T gamma_imp(T z, const Policy& pol, const L& l)
          return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
       if(z <= -20)
       {
-         result = gamma_imp(-z, pol, l) * sinpx(z);
+         result = gamma_imp(T(-z), pol, l) * sinpx(z);
          if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
             return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
          result = -boost::math::constants::pi<T>() / result;
@@ -236,13 +237,19 @@ T lgamma_imp(T z, const Policy& pol, const L& l, int* sign = 0)
    {
       typedef typename policies::precision<T, Policy>::type precision_type;
       typedef typename mpl::if_<
-         mpl::less_equal<precision_type, mpl::int_<64> >,
+         mpl::and_<
+            mpl::less_equal<precision_type, mpl::int_<64> >, 
+            mpl::greater<precision_type, mpl::int_<0> > 
+         >,
          mpl::int_<64>,
          typename mpl::if_<
-            mpl::less_equal<precision_type, mpl::int_<113> >,
+            mpl::and_<
+               mpl::less_equal<precision_type, mpl::int_<113> >,
+               mpl::greater<precision_type, mpl::int_<0> > 
+            >,
             mpl::int_<113>, mpl::int_<0> >::type
           >::type tag_type;
-      result = lgamma_small_imp(z, z - 1, z - 2, tag_type(), pol, l);
+      result = lgamma_small_imp<T>(z, z - 1, z - 2, tag_type(), pol, l);
    }
    else if((z >= 3) && (z < 100))
    {
@@ -465,7 +472,7 @@ T tgammap1m1_imp(T dz, Policy const& pol, const L& l)
       {
          // Use expm1 on lgamma:
          result = boost::math::expm1(-boost::math::log1p(dz, pol) 
-            + lgamma_small_imp(dz+2, dz + 1, dz, tag_type(), pol, l));
+            + lgamma_small_imp<T>(dz+2, dz + 1, dz, tag_type(), pol, l));
          BOOST_MATH_INSTRUMENT_CODE(result);
       }
    }
@@ -474,7 +481,7 @@ T tgammap1m1_imp(T dz, Policy const& pol, const L& l)
       if(dz < 2)
       {
          // Use expm1 on lgamma:
-         result = boost::math::expm1(lgamma_small_imp(dz+1, dz, dz-1, tag_type(), pol, l), pol);
+         result = boost::math::expm1(lgamma_small_imp<T>(dz+1, dz, dz-1, tag_type(), pol, l), pol);
          BOOST_MATH_INSTRUMENT_CODE(result);
       }
       else
@@ -1097,7 +1104,7 @@ T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
          //
          if((z <= max_factorial<T>::value) && (z + delta <= max_factorial<T>::value))
          {
-            return unchecked_factorial<T>((unsigned)itrunc(z, pol) - 1) / unchecked_factorial<T>((unsigned)itrunc(z + delta) - 1);
+            return unchecked_factorial<T>((unsigned)itrunc(z, pol) - 1) / unchecked_factorial<T>((unsigned)itrunc(T(z + delta)) - 1);
          }
       }
       if(fabs(delta) < 20)
@@ -1187,7 +1194,7 @@ inline typename tools::promote_args<T>::type
 
 template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type
-   tgamma(T1 a, T2 z, const Policy& pol, const mpl::false_)
+   tgamma(T1 a, T2 z, const Policy&, const mpl::false_)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -1223,7 +1230,7 @@ inline typename tools::promote_args<T>::type
 
 template <class T, class Policy>
 inline typename tools::promote_args<T>::type 
-   lgamma(T z, int* sign, const Policy& pol)
+   lgamma(T z, int* sign, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
@@ -1309,7 +1316,7 @@ inline typename tools::promote_args<T1, T2>::type
 //
 template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type
-   tgamma_lower(T1 a, T2 z, const Policy& pol)
+   tgamma_lower(T1 a, T2 z, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -1367,7 +1374,7 @@ inline typename tools::promote_args<T1, T2>::type
 //
 template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type
-   gamma_p(T1 a, T2 z, const Policy& pol)
+   gamma_p(T1 a, T2 z, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -1417,7 +1424,7 @@ inline typename tools::promote_args<T1, T2>::type
 }
 template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type 
-   tgamma_ratio(T1 a, T2 b, const Policy& pol)
+   tgamma_ratio(T1 a, T2 b, const Policy&)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -1428,7 +1435,7 @@ inline typename tools::promote_args<T1, T2>::type
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b) - static_cast<value_type>(a), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
+   return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(static_cast<value_type>(b) - static_cast<value_type>(a)), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type 
@@ -1439,7 +1446,7 @@ inline typename tools::promote_args<T1, T2>::type
 
 template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type 
-   gamma_p_derivative(T1 a, T2 x, const Policy& pol)
+   gamma_p_derivative(T1 a, T2 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2>::type result_type;

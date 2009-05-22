@@ -163,7 +163,7 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
       // handle it, split the product up into three parts:
       //
       T xp1 = x + 1;
-      unsigned n2 = itrunc(floor(xp1), pol);
+      unsigned n2 = itrunc((T)floor(xp1), pol);
       if(n2 == xp1)
          return 0;
       T result = boost::math::tgamma_delta_ratio(xp1, -static_cast<T>(n2), pol);

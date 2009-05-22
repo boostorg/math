@@ -3,11 +3,15 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <pch.hpp>
+
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/results_collector.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/tools/roots.hpp>
+#include <boost/test/results_collector.hpp>
+#include <boost/test/unit_test.hpp>
 #include <boost/array.hpp>
 
 #define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \

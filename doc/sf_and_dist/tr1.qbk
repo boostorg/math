@@ -1,6 +1,6 @@
 [template tr1_overview[]
 Many of the special functions included in this library are also a part
-of the either the C99 standard or the [tr1].  Therefore this library
+of the either the [C99] or the [tr1].  Therefore this library
 includes a thin wrapper header `boost/math/tr1.hpp` that provides
 compatibility with these two standards.
 
@@ -9,8 +9,9 @@ There are various pros and cons to using the library in this way:
 Pros:
 
 * The header to include is lightweight (i.e. fast to compile).
-* The functions have extern "C" linkage, and so are usable from other languages.
-* Standard compatibility.
+* The functions have extern "C" linkage,
+  and so are usable from other languages (not just C and C++).
+* C99 and C++ TR1 Standard compatibility.
 
 Cons:
 
@@ -98,7 +99,7 @@ so for complex applications this can be a big win.
 
 [h4 Supported C99 Functions]
 
-See also the [link math_toolkit.special.extern_c.c99 
+See also the [link math_toolkit.extern_c.c99 
 quick reference guide for these functions].
 
    namespace boost{ namespace math{ namespace tr1{ extern "C"{
@@ -190,7 +191,7 @@ quick reference guide for these functions].
    
 [h4 Supported TR1 Functions]
 
-See also the [link math_toolkit.special.extern_c.tr1 
+See also the [link math_toolkit.extern_c.tr1 
 quick reference guide for these functions].
 
    namespace boost{ namespace math{ namespace tr1{ extern "C"{
@@ -393,4 +394,5 @@ return type determined by the __arg_pomotion_rules.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
 

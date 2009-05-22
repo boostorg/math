@@ -60,6 +60,14 @@
 //
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
+#if defined(unix) && defined(__INTEL_COMPILER)
+//
+// Intel compiler has sporadic issues compiling std::fpclassify depending on
+// the exact OS version used.  Use our own code for this as we know it works
+// well on Intel processors:
+//
+#define BOOST_MATH_DISABLE_STD_FPCLASSIFY
+#endif
 
 #if defined(BOOST_MSVC) && !defined(_WIN32_WCE)
    // Better safe than sorry, our tests don't support hardware exceptions:
@@ -124,9 +132,9 @@
 
 #endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 
-#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590) || defined(__hppa)
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590) || defined(__hppa) || defined(__GNUC__)
 // Sun's compiler emits a hard error if a constant underflows,
-// as does aCC on PA-RISC:
+// as does aCC on PA-RISC, while gcc issues a large number of warnings:
 #  define BOOST_MATH_SMALL_CONSTANT(x) 0
 #else
 #  define BOOST_MATH_SMALL_CONSTANT(x) x
@@ -272,9 +280,11 @@ inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
    } // namespace detail
    }} // namespaces
 
-   #define BOOST_FPU_EXCEPTION_GUARD boost::math::detail::fpu_guard local_guard_object;
+#  define BOOST_FPU_EXCEPTION_GUARD boost::math::detail::fpu_guard local_guard_object;
+#  define BOOST_MATH_INSTRUMENT_FPU do{ fexcept_t cpu_flags; fegetexceptflag(&cpu_flags, FE_ALL_EXCEPT); BOOST_MATH_INSTRUMENT_VARIABLE(cpu_flags); } while(0); 
 #else // All other platforms.
-  #define BOOST_FPU_EXCEPTION_GUARD
+#  define BOOST_FPU_EXCEPTION_GUARD
+#  define BOOST_MATH_INSTRUMENT_FPU
 #endif
 
 #ifdef BOOST_MATH_INSTRUMENT

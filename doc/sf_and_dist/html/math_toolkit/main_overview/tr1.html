@@ -1,9 +1,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>C99 and TR1 C Functions</title>
+<title>C99 and C++ TR1 C-style Functions</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../main_overview.html" title="Overview">
 <link rel="prev" href="history1.html" title="History and What's New">
@@ -24,13 +24,15 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.main_overview.tr1"></a><a class="link" href="tr1.html" title="C99 and TR1 C Functions"> C99 and TR1 C Functions</a>
+<a name="math_toolkit.main_overview.tr1"></a><a class="link" href="tr1.html" title="C99 and C++ TR1 C-style Functions"> C99 and C++ TR1 C-style
+      Functions</a>
 </h3></div></div></div>
 <p>
         </p>
 <p>
           Many of the special functions included in this library are also a part
-          of the either the C99 standard or the <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf" target="_top">Technical
+          of the either the <a href="http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf" target="_top">C99
+          Standard ISO/IEC 9899:1999</a> or the <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf" target="_top">Technical
           Report on C++ Library Extensions</a>. Therefore this library includes
           a thin wrapper header <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tr1</span><span class="special">.</span><span class="identifier">hpp</span></code>
           that provides compatibility with these two standards.
@@ -53,10 +55,10 @@
           </li>
 <li>
             The functions have extern "C" linkage, and so are usable from
-            other languages.
+            other languages (not just C and C++).
           </li>
 <li>
-            Standard compatibility.
+            C99 and C++ TR1 Standard compatibility.
           </li>
 </ul></div>
 <p>
@@ -284,7 +286,7 @@
         <a name="math_toolkit.main_overview.tr1.usage_recomendations"></a>
         </p>
 <h5>
-<a name="id536107"></a>
+<a name="id779090"></a>
           <a class="link" href="tr1.html#math_toolkit.main_overview.tr1.usage_recomendations">Usage
           Recomendations</a>
         </h5>
@@ -336,14 +338,14 @@
         <a name="math_toolkit.main_overview.tr1.supported_c99_functions"></a>
         </p>
 <h5>
-<a name="id536398"></a>
+<a name="id779286"></a>
           <a class="link" href="tr1.html#math_toolkit.main_overview.tr1.supported_c99_functions">Supported
           C99 Functions</a>
         </h5>
 <p>
         </p>
 <p>
-          See also the <a class="link" href="../special/extern_c/c99.html" title="C99 C Functions">quick reference
+          See also the <a class="link" href="../extern_c/c99.html" title="C99 C Functions">quick reference
           guide for these functions</a>.
         </p>
 <p>
@@ -440,14 +442,14 @@
         <a name="math_toolkit.main_overview.tr1.supported_tr1_functions"></a>
         </p>
 <h5>
-<a name="id539199"></a>
+<a name="id782248"></a>
           <a class="link" href="tr1.html#math_toolkit.main_overview.tr1.supported_tr1_functions">Supported
           TR1 Functions</a>
         </h5>
 <p>
         </p>
 <p>
-          See also the <a class="link" href="../special/extern_c/tr1.html" title="C99 and TR1 C Functions Overview">quick reference
+          See also the <a class="link" href="../extern_c/tr1.html" title="C99 and TR1 C Functions Overview">quick reference
           guide for these functions</a>.
         </p>
 <p>
@@ -579,7 +581,7 @@
         <a name="math_toolkit.main_overview.tr1.currently_unsupported_c99_functions"></a>
         </p>
 <h5>
-<a name="id543049"></a>
+<a name="id786221"></a>
           <a class="link" href="tr1.html#math_toolkit.main_overview.tr1.currently_unsupported_c99_functions">Currently
           Unsupported C99 Functions</a>
         </h5>
@@ -650,7 +652,7 @@
         <a name="math_toolkit.main_overview.tr1.currently_unsupported_tr1_functions"></a>
         </p>
 <h5>
-<a name="id545261"></a>
+<a name="id788434"></a>
           <a class="link" href="tr1.html#math_toolkit.main_overview.tr1.currently_unsupported_tr1_functions">Currently
           Unsupported TR1 Functions</a>
         </h5>
@@ -673,8 +675,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan Råde, Gautam Sewani
+      and Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

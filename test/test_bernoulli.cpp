@@ -10,6 +10,12 @@
 
 // Basic sanity test for Bernoulli Cumulative Distribution Function.
 
+#ifdef _MSC_VER
+#  pragma warning (disable : 4535) // calling _set_se_translator() requires /EHa
+#  pragma warning (disable : 4244) // converion possible loss of data
+#  pragma warning (disable : 4996) // 'putenv': The POSIX name for this item is deprecated
+#endif
+
 // Default domain error policy is
 // #define BOOST_MATH_DOMAIN_ERROR_POLICY throw_on_error
 
@@ -19,7 +25,7 @@ using ::boost::math::concepts::real_concept;
 #include <boost/math/distributions/bernoulli.hpp> // for bernoulli_distribution
 using boost::math::bernoulli_distribution;
 
-#include <boost/test/included/test_exec_monitor.hpp> // for test_main
+#include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION, BOOST_CHECK_EQUAL...
 
 #include <iostream>

@@ -1,5 +1,17 @@
 [template history[]
 
+[h4 Boost-1.40.0]
+
+* Added support for MPFR as a bignum type.
+* Added some full specializations of the policy classes to reduce compile times.
+* Added logistic and hypergeometric distributions, from Gautam Sewani's Google Summer of Code project.
+* Added Laplace distribution submitted by Thijs van den Berg.
+* Updated performance test code to include new distributions, and improved the performance of the non-central distributions.
+* Added SSE2 optimised __lanczos code, from Gautam Sewani's Google Summer of Code project.
+* Fixed bug in cyl_bessel_i that used an incorrect approximation for [nu] = 0.5, also effects the non-central
+   Chi Square Distribution when [nu] = 3, see bug report [@https://svn.boost.org/trac/boost/ticket/2877 #2877].
+* Fixed minor bugs [@https://svn.boost.org/trac/boost/ticket/2873 #2873].
+
 [h4 Boost-1.38.0]
 
 * Added Johan R'''&#xE5;'''de's optimised floating point classification routines.
@@ -82,7 +94,7 @@ on error rates.
 
 SVN Revisions:
 
-Sandbox and trunk last synchonised at revision: 448300.
+Sandbox and trunk last synchonised at revision: 51455.
 
 ]
 [/ 

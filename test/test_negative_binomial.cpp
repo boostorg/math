@@ -35,7 +35,7 @@ using boost::math::negative_binomial_distribution;
 #include <boost/math/special_functions/gamma.hpp>
   using boost::math::lgamma;  // log gamma
 
-#include <boost/test/included/test_exec_monitor.hpp> // for test_main
+#include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
 
 #include <iostream>
@@ -197,7 +197,7 @@ void test_spots(RealType)
   RealType tolerance = (std::max)
     (boost::math::tools::epsilon<RealType>(),
     static_cast<RealType>(std::numeric_limits<double>::epsilon()));
-  tolerance *= 100 * 1000;
+  tolerance *= 100 * 100000.0f;
 
   cout << "Tolerance = " << tolerance << "%." << endl;
 

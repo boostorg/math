@@ -1,12 +1,20 @@
 // Copyright John Maddock 2006.
-// Copyright Paul A. Bristow 2007
+// Copyright Paul A. Bristow 2007, 2009
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <pch.hpp>
+
+#ifdef _MSC_VER
+# pragma warning (disable : 4996) // POSIX name for this item is deprecated
+# pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'arg' was previously defined as a type
+# pragma warning (disable : 4180) // qualifier applied to function type has no meaning; ignored
+#endif
+
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/tools/stats.hpp>
@@ -72,14 +80,14 @@ void expected_results()
       ".*",                          // platform
       "(long\\s+)?double",           // test type(s)
       "Beta Function: Medium.*",     // test data group
-      "boost::math::beta", 130, 35); // test function
+      "boost::math::beta", 160, 35); // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "(long\\s+)?double",           // test type(s)
       "Beta Function: Divergent.*",  // test data group
-      "boost::math::beta", 20, 6);   // test function
+      "boost::math::beta", 30, 6);   // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -93,7 +101,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       "Beta Function: Medium.*",     // test data group
-      "boost::math::beta", 130, 35);  // test function
+      "boost::math::beta", 150, 40); // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

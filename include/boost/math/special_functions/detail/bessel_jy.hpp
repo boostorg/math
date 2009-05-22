@@ -55,12 +55,12 @@ int temme_jy(T v, T x, T* Y, T* Y1, const Policy& pol)
     sigma = -a * v;
     d = abs(sigma) < tools::epsilon<T>() ?
         T(1) : sinh(sigma) / sigma;
-    e = abs(v) < tools::epsilon<T>() ? v*pi<T>()*pi<T>() / 2
-        : 2 * spv2 * spv2 / v;
+    e = abs(v) < tools::epsilon<T>() ? T(v*pi<T>()*pi<T>() / 2)
+        : T(2 * spv2 * spv2 / v);
 
-    T g1 = (v == 0) ? -euler<T>() : (gp - gm) / ((1 + gp) * (1 + gm) * 2 * v);
+    T g1 = (v == 0) ? T(-euler<T>()) : T((gp - gm) / ((1 + gp) * (1 + gm) * 2 * v));
     T g2 = (2 + gp + gm) / ((1 + gp) * (1 + gm) * 2);
-    T vspv = (fabs(v) < tools::epsilon<T>()) ? 1/constants::pi<T>() : v / spv;
+    T vspv = (fabs(v) < tools::epsilon<T>()) ? T(1/constants::pi<T>()) : T(v / spv);
     f = (g1 * cosh(sigma) - g2 * a * d) * 2 * vspv;
 
     p = vspv / (xp * (1 + gm));
@@ -118,7 +118,7 @@ int CF1_jy(T v, T x, T* fv, int* sign, const Policy& pol)
     tolerance = 2 * tools::epsilon<T>();
     tiny = sqrt(tools::min_value<T>());
     C = f = tiny;                           // b0 = 0, replace with tiny
-    D = 0.0L;
+    D = 0;
     for (k = 1; k < policies::get_max_series_iterations<Policy>() * 100; k++)
     {
         a = -1;
@@ -131,7 +131,7 @@ int CF1_jy(T v, T x, T* fv, int* sign, const Policy& pol)
         delta = C * D;
         f *= delta;
         if (D < 0) { s = -s; }
-        if (abs(delta - 1.0L) < tolerance) 
+        if (abs(delta - 1) < tolerance) 
         { break; }
     }
     policies::check_series_iterations("boost::math::bessel_jy<%1%>(%1%,%1%) in CF1_jy", k / 100, pol);
@@ -158,7 +158,7 @@ int CF2_jy(T v, T x, T* p, T* q, const Policy& pol)
     typedef typename complex_trait<T>::type complex_type;
 
     complex_type C, D, f, a, b, delta, one(1);
-    T tiny, zero(0.0L);
+    T tiny, zero(0);
     unsigned long k;
 
     // |x| >= |v|, CF2_jy converges rapidly
@@ -169,7 +169,7 @@ int CF2_jy(T v, T x, T* p, T* q, const Policy& pol)
     // Lentz, Applied Optics, vol 15, 668 (1976)
     T tolerance = 2 * tools::epsilon<T>();
     tiny = sqrt(tools::min_value<T>());
-    C = f = complex_type(-0.5f/x, 1.0L);
+    C = f = complex_type(-0.5f/x, 1);
     D = 0;
     for (k = 1; k < policies::get_max_series_iterations<Policy>(); k++)
     {
@@ -289,7 +289,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
            if(kind&need_y)
            {
               Yu = asymptotic_bessel_y_large_x_2(u, x);
-              Yu1 = asymptotic_bessel_y_large_x_2(u + 1, x);
+              Yu1 = asymptotic_bessel_y_large_x_2(T(u + 1), x);
            }
            else
               Yu = std::numeric_limits<T>::quiet_NaN(); // any value will do, we're not using it.

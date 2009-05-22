@@ -1049,6 +1049,7 @@ namespace boost
    template <class T> T float_prior(const T& a){ return boost::math::float_prior(a, Policy()); }\
    template <class T> T float_distance(const T& a, const T& b){ return boost::math::float_distance(a, b, Policy()); }\
 
+
 #endif // BOOST_MATH_SPECIAL_MATH_FWD_HPP
 
 

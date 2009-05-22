@@ -437,7 +437,7 @@ T expint_imp(unsigned n, T z, const Policy& pol, const Tag& tag)
    if(z < 0)
       return policies::raise_domain_error<T>(function, "Function requires z >= 0 but got %1%.", z, pol);
    if(z == 0)
-      return n == 1 ? policies::raise_overflow_error<T>(function, 0, pol) : 1 / (static_cast<T>(n - 1));
+      return n == 1 ? policies::raise_overflow_error<T>(function, 0, pol) : T(1 / (static_cast<T>(n - 1)));
 
    T result;
 
@@ -505,7 +505,7 @@ T expint_i_imp(T z, const Policy& pol, const Tag& tag)
 {
    static const char* function = "boost::math::expint<%1%>(%1%)";
    if(z < 0)
-      return -expint_imp(1, -z, pol, tag);
+      return -expint_imp(1, T(-z), pol, tag);
    if(z == 0)
       return -policies::raise_overflow_error<T>(function, 0, pol);
    return expint_i_as_series(z, pol);

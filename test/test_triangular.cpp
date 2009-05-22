@@ -8,13 +8,15 @@
 
 // test_triangular.cpp
 
+#include <pch.hpp>
+
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4305) // truncation from 'long double' to 'float'
 #endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
-#include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
+#include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/triangular.hpp>

@@ -15,8 +15,10 @@
 // From MathWorld--A Wolfram Web Resource. 
 // http://mathworld.wolfram.com/GammaDistribution.html
 
+#include <pch.hpp>
+
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
-#include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
+#include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/gamma.hpp>

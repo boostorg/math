@@ -162,6 +162,7 @@ struct DistributionConcept
       v = quantile(complement(dist, d));
       v = hazard(dist, d);
       v = chf(dist, d);
+#ifndef TEST_MPFR
       long double ld = 1;
       v = cdf(dist, ld);
       v = cdf(complement(dist, ld));
@@ -170,6 +171,7 @@ struct DistributionConcept
       v = quantile(complement(dist, ld));
       v = hazard(dist, ld);
       v = chf(dist, ld);
+#endif
       int i = 1;
       v = cdf(dist, i);
       v = cdf(complement(dist, i));

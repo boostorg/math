@@ -39,4 +39,10 @@ void check()
    check_result<long double>(boost::math::float_distance<long double>(l, l));
 #endif
 
+   check_result<float>(boost::math::float_advance<float>(f, 2));
+   check_result<double>(boost::math::float_advance<double>(d, 2));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   check_result<long double>(boost::math::float_advance<long double>(l, 2));
+#endif
+
 }

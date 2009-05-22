@@ -479,7 +479,7 @@ namespace boost
       if(z < 1)
          guess = z;
       else
-         guess = boost::math::detail::inverse_poisson_cornish_fisher(z, p, 1-p, Policy());
+         guess = boost::math::detail::inverse_poisson_cornish_fisher(z, p, RealType(1-p), Policy());
       if(z > 5)
       {
          if(z > 1000)
@@ -547,7 +547,7 @@ namespace boost
       if(z < 1)
          guess = z;
       else
-         guess = boost::math::detail::inverse_poisson_cornish_fisher(z, 1-q, q, Policy());
+         guess = boost::math::detail::inverse_poisson_cornish_fisher(z, RealType(1-q), q, Policy());
       if(z > 5)
       {
          if(z > 1000)

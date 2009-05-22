@@ -28,14 +28,9 @@ T bessel_jn(int n, T x, const Policy& pol)
 
     BOOST_MATH_STD_USING
 
-    if (n == 0)
-    {
-        return bessel_j0(x);
-    }
-    if (n == 1)
-    {
-        return bessel_j1(x);
-    }
+    //
+    // Reflection has to come first:
+    //
     if (n < 0)
     {
         factor = (n & 0x1) ? -1 : 1;  // J_{-n}(z) = (-1)^n J_n(z)
@@ -45,12 +40,24 @@ T bessel_jn(int n, T x, const Policy& pol)
     {
         factor = 1;
     }
+    //
+    // Special cases:
+    //
+    if (n == 0)
+    {
+        return factor * bessel_j0(x);
+    }
+    if (n == 1)
+    {
+        return factor * bessel_j1(x);
+    }
 
     if (x == 0)                             // n >= 2
     {
         return static_cast<T>(0);
     }
 
+    BOOST_ASSERT(n > 1);
     if (n < abs(x))                         // forward recurrence
     {
         prev = bessel_j0(x);

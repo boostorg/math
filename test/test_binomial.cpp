@@ -29,7 +29,7 @@ using ::boost::math::concepts::real_concept;
 #include <boost/math/distributions/binomial.hpp> // for binomial_distribution
 using boost::math::binomial_distribution;
 
-#include <boost/test/included/test_exec_monitor.hpp> // for test_main
+#include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
 
 #include <iostream>

@@ -8,8 +8,10 @@
 
 // test_constants.cpp
 
+#include <pch.hpp>
+
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
-#include <boost/test/included/test_exec_monitor.hpp> // Boost.Test
+#include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/math/constants/constants.hpp>

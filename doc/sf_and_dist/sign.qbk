@@ -1,0 +1,46 @@
+[section:sign_functions Sign Manipulation Functions]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/sign.hpp>
+``
+
+   namespace boost{ namespace math{
+   
+   template<class T> 
+   int signbit(T x);
+   
+   template <class T>
+   inline int sign (const T& z);
+
+   template <class T>
+   inline T copysign (const T& x, const T& y);
+   
+   }} // namespaces
+
+[h4 Description]
+
+   template<class T> 
+   int signbit(T x);
+
+Returns a non-zero value if the sign bit is set in variable /x/, otherwise `0`.
+   
+   template <class T>
+   inline int sign (const T& z);
+   
+Returns `1` if `x > 0`, `-1` if `x < 0`, and `0` if x is zero.
+
+   template <class T>
+   inline T copysign (const T& x, const T& y);
+
+Sets the sign of /x/ to be the same as the sign of /y/.
+
+[endsect][/section:sign_functions Sign Manipulation Functions]
+[/ 
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+

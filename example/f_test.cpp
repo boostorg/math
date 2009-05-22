@@ -1,5 +1,5 @@
 // Copyright John Maddock 2006
-// Copyright Paul A. Bristow 2007
+// Copyright Paul A. Bristow 2007, 2008
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -10,6 +10,7 @@
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
 #  pragma warning(disable: 4510) // default constructor could not be generated.
 #  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
+#  pragma warning(disable: 4180) // qualifier has no effect (in fusion).
 #endif
 
 #include <iostream>

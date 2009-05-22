@@ -49,9 +49,13 @@ With these techniques, the code could be simplified.
          && defined(_GLIBCXX_USE_C99_MATH) \
          && !(defined(_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC) \
          && (_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC != 0))
-#     ifdef _STLP_VENDOR_CSTD 
-#        define BOOST_FPCLASSIFY_PREFIX ::_STLP_VENDOR_CSTD:: 
-#     else 
+#     ifdef _STLP_VENDOR_CSTD
+#        if _STLPORT_VERSION >= 0x520
+#           define BOOST_FPCLASSIFY_PREFIX ::__std_alias:: 
+#        else
+#           define BOOST_FPCLASSIFY_PREFIX ::_STLP_VENDOR_CSTD:: 
+#        endif
+#     else
 #        define BOOST_FPCLASSIFY_PREFIX ::std::
 #     endif
 #  else
@@ -540,13 +544,14 @@ struct select_native<long double>
 #if (defined(BOOST_MATH_USE_C99) && !(defined(__GNUC__) && (__GNUC__ < 4))) \
    && !defined(__hpux) \
    && !defined(__DECCXX)\
-   && !defined(__osf__)
+   && !defined(__osf__) \
+   && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
 #  define BOOST_MATH_USE_STD_FPCLASSIFY
 #endif
 
 template<class T> struct fp_traits
 {
-#ifdef BOOST_MATH_USE_STD_FPCLASSIFY
+#if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && !defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY)
     typedef typename select_native<T>::type type;
 #else
     typedef BOOST_DEDUCED_TYPENAME size_to_precision<sizeof(T), ::boost::is_floating_point<T>::value>::type precision;

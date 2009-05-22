@@ -39,6 +39,15 @@ template <class RealType, class Policy>
 class gamma_distribution;
 
 template <class RealType, class Policy>
+class hypergeometric_distribution;
+
+template <class RealType, class Policy>
+class laplace_distribution;
+
+template <class RealType, class Policy>
+class logistic_distribution;
+
+template <class RealType, class Policy>
 class lognormal_distribution;
 
 template <class RealType, class Policy>
@@ -92,6 +101,8 @@ class weibull_distribution;
    typedef boost::math::extreme_value_distribution<Type, Policy> extreme_value;\
    typedef boost::math::fisher_f_distribution<Type, Policy> fisher_f;\
    typedef boost::math::gamma_distribution<Type, Policy> gamma;\
+   typedef boost::math::laplace_distribution<Type, Policy> laplace;\
+   typedef boost::math::logistic_distribution<Type, Policy> logistic;\
    typedef boost::math::lognormal_distribution<Type, Policy> lognormal;\
    typedef boost::math::negative_binomial_distribution<Type, Policy> negative_binomial;\
    typedef boost::math::normal_distribution<Type, Policy> normal;\
@@ -106,5 +117,6 @@ class weibull_distribution;
    typedef boost::math::non_central_beta_distribution<Type, Policy> non_central_beta;\
    typedef boost::math::non_central_f_distribution<Type, Policy> non_central_f;\
    typedef boost::math::non_central_t_distribution<Type, Policy> non_central_t;\
+   typedef boost::math::hypergeometric_distribution<Type, Policy> hypergeometric;\
 
 #endif // BOOST_MATH_DISTRIBUTIONS_FWD_HPP

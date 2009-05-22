@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Math Toolkit</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8125">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="index.html" title="Math Toolkit">
 <link rel="next" href="math_toolkit/main_overview.html" title="Overview">
 </head>
@@ -42,11 +42,18 @@
 <div class="author"><h3 class="author">
 <span class="firstname">Johan</span> <span class="surname">Råde</span>
 </h3></div>
+<div class="author"><h3 class="author">
+<span class="firstname">Gautam</span> <span class="surname">Sewani</span>
+</h3></div>
+<div class="author"><h3 class="author">
+<span class="firstname">Thijs</span> <span class="surname">van den Berg</span>
+</h3></div>
 </div></div>
-<div><p class="copyright">Copyright © 2006 , 2007, 2008 John Maddock, Paul A. Bristow, Hubert
-      Holin, Xiaogang Zhang, Bruno Lalande and Johan Råde</p></div>
+<div><p class="copyright">Copyright © 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan Råde, Gautam Sewani
+      and Thijs van den Berg</p></div>
 <div><div class="legalnotice">
-<a name="id527114"></a><p>
+<a name="id761748"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -72,9 +79,12 @@
       and Policies</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/main_overview/threads.html"> Thread Safety</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/main_overview/perf_over.html"> Performance</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/main_overview/building.html"> If and How to Build
+      the Library and its Examples and Tests</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/main_overview/history1.html"> History and What's
       New</a></span></dt>
-<dt><span class="section"><a href="math_toolkit/main_overview/tr1.html"> C99 and TR1 C Functions</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/main_overview/tr1.html"> C99 and C++ TR1 C-style
+      Functions</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/main_overview/contact.html"> Contact Info and
       Support</a></span></dt>
 </dl></dd>
@@ -83,7 +93,20 @@
 <dt><span class="section"><a href="math_toolkit/dist/stat_tut.html"> Statistical Distributions
       Tutorial</a></span></dt>
 <dd><dl>
-<dt><span class="section"><a href="math_toolkit/dist/stat_tut/overview.html"> Overview</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/stat_tut/overview.html"> Overview of Distributions</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="math_toolkit/dist/stat_tut/overview/headers.html"> Headers
+          and Namespaces</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/stat_tut/overview/objects.html"> Distributions
+          are Objects</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/stat_tut/overview/generic.html"> Generic
+          operations common to all distributions are non-member functions</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/stat_tut/overview/complements.html">
+          Complements are supported too - and when to use them</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/stat_tut/overview/parameters.html">
+          Parameters can be calculated</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/stat_tut/overview/summary.html"> Summary</a></span></dt>
+</dl></dd>
 <dt><span class="section"><a href="math_toolkit/dist/stat_tut/weg.html"> Worked Examples</a></span></dt>
 <dd><dl>
 <dt><span class="section"><a href="math_toolkit/dist/stat_tut/weg/dist_construct_eg.html">
@@ -108,6 +131,8 @@
           and Scale Examples</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/dist/stat_tut/weg/nag_library.html"> Comparison
           with C, R, FORTRAN-style Free Functions</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/stat_tut/weg/c_sharp.html"> Using the
+          Distributions from Within C#</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="math_toolkit/dist/stat_tut/variates.html"> Random Variates
         and Distribution Parameters</a></span></dt>
@@ -137,6 +162,12 @@
 <dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/f_dist.html"> F Distribution</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/gamma_dist.html"> Gamma
           (and Erlang) Distribution</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/hypergeometric_dist.html">
+          Hypergeometric Distribution</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/laplace_dist.html"> Laplace
+          Distribution</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/logistic_dist.html">
+          Logistic Distribution</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/lognormal_dist.html">
           Log Normal Distribution</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/dist/dist_ref/dists/negative_binomial_dist.html">
@@ -287,39 +318,43 @@
 <dt><span class="section"><a href="math_toolkit/special/inv_hyper/asinh.html"> asinh</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/special/inv_hyper/atanh.html"> atanh</a></span></dt>
 </dl></dd>
-<dt><span class="section"><a href="math_toolkit/special/rounding.html"> Rounding Truncation and
+</dl></dd>
+<dt><span class="section"><a href="math_toolkit/utils.html"> Floating Point Utilities</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="math_toolkit/utils/rounding.html"> Rounding Truncation and
       Integer Conversion</a></span></dt>
 <dd><dl>
-<dt><span class="section"><a href="math_toolkit/special/rounding/round.html"> Rounding Functions</a></span></dt>
-<dt><span class="section"><a href="math_toolkit/special/rounding/trunc.html"> Truncation Functions</a></span></dt>
-<dt><span class="section"><a href="math_toolkit/special/rounding/modf.html"> Integer and Fractional
+<dt><span class="section"><a href="math_toolkit/utils/rounding/round.html"> Rounding Functions</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/utils/rounding/trunc.html"> Truncation Functions</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/utils/rounding/modf.html"> Integer and Fractional
         Part Splitting (modf)</a></span></dt>
 </dl></dd>
-<dt><span class="section"><a href="math_toolkit/special/fpclass.html"> Floating-Point Classification:
+<dt><span class="section"><a href="math_toolkit/utils/fpclass.html"> Floating-Point Classification:
       Infinities and NaN's</a></span></dt>
-<dt><span class="section"><a href="math_toolkit/special/next_float.html"> Floating-Point Representation
+<dt><span class="section"><a href="math_toolkit/utils/sign_functions.html"> Sign Manipulation
+      Functions</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/utils/next_float.html"> Floating-Point Representation
       Distance (ULP), and Finding Adjacent Floating-Point Values</a></span></dt>
 <dd><dl>
-<dt><span class="section"><a href="math_toolkit/special/next_float/nextafter.html"> Finding
-        the Next Representable Value in a Specific Direction (nextafter)</a></span></dt>
-<dt><span class="section"><a href="math_toolkit/special/next_float/float_next.html"> Finding
+<dt><span class="section"><a href="math_toolkit/utils/next_float/nextafter.html"> Finding the
+        Next Representable Value in a Specific Direction (nextafter)</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/utils/next_float/float_next.html"> Finding
         the Next Greater Representable Value (float_next)</a></span></dt>
-<dt><span class="section"><a href="math_toolkit/special/next_float/float_prior.html"> Finding
+<dt><span class="section"><a href="math_toolkit/utils/next_float/float_prior.html"> Finding
         the Next Smaller Representable Value (float_prior)</a></span></dt>
-<dt><span class="section"><a href="math_toolkit/special/next_float/float_distance.html"> Calculating
+<dt><span class="section"><a href="math_toolkit/utils/next_float/float_distance.html"> Calculating
         the Representation Distance Between Two Floating Point Values (ULP) float_distance</a></span></dt>
-<dt><span class="section"><a href="math_toolkit/special/next_float/float_advance.html"> Advancing
+<dt><span class="section"><a href="math_toolkit/utils/next_float/float_advance.html"> Advancing
         a Floating Point Value by a Specific Representation Distance (ULP) float_advance</a></span></dt>
 </dl></dd>
-<dt><span class="section"><a href="math_toolkit/special/extern_c.html"> TR1 and C99 external
-      "C" Functions</a></span></dt>
-<dd><dl>
-<dt><span class="section"><a href="math_toolkit/special/extern_c/tr1.html"> C99 and TR1 C Functions
-        Overview</a></span></dt>
-<dt><span class="section"><a href="math_toolkit/special/extern_c/c99.html"> C99 C Functions</a></span></dt>
-<dt><span class="section"><a href="math_toolkit/special/extern_c/tr1_ref.html"> TR1 C Functions
-        Quick Reference</a></span></dt>
 </dl></dd>
+<dt><span class="section"><a href="math_toolkit/extern_c.html"> TR1 and C99 external "C"
+    Functions</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="math_toolkit/extern_c/tr1.html"> C99 and TR1 C Functions Overview</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/extern_c/c99.html"> C99 C Functions</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/extern_c/tr1_ref.html"> TR1 C Functions Quick
+      Reference</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="math_toolkit/toolkit.html"> Internal Details and Tools (Experimental)</a></span></dt>
 <dd><dl>
@@ -357,6 +392,8 @@
 <dd><dl>
 <dt><span class="section"><a href="math_toolkit/using_udt/use_ntl.html"> Using With NTL - a High-Precision
       Floating-Point Library</a></span></dt>
+<dt><span class="section"><a href="math_toolkit/using_udt/use_mpfr.html"> Using With MPFR / GMP
+      - a High-Precision Floating-Point Library</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/using_udt/concepts.html"> Conceptual Requirements
       for Real Number Types</a></span></dt>
 <dt><span class="section"><a href="math_toolkit/using_udt/dist_concept.html"> Conceptual Requirements
@@ -451,7 +488,7 @@
   </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: December 29, 2008 at 16:50:38 GMT</small></p></td>
+<td align="left"><p><small>Last revised: May 22, 2009 at 11:23:00 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

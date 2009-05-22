@@ -3,6 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <pch.hpp>
+
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #  pragma warning(disable: 4245) // int/unsigned int conversion
@@ -12,7 +14,7 @@
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/gamma.hpp>
@@ -138,7 +140,7 @@ void test_spots(T)
       static_cast<T>(3.35010902064291983728782493133164809108646650368560147505884e-27L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::rising_factorial(static_cast<T>(-30.25), 21),
-      static_cast<T>(-9.76168312768123676601980433377916854311706629232503473758698e26L), tolerance);
+      static_cast<T>(-9.76168312768123676601980433377916854311706629232503473758698e26L), tolerance * 2);
    BOOST_CHECK_CLOSE(
       ::boost::math::rising_factorial(static_cast<T>(-30.25), -21),
       static_cast<T>(-1.50079704000923674318934280259377728203516775215430875839823e-34L), 2 * tolerance);

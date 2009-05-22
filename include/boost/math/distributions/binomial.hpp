@@ -649,13 +649,13 @@ namespace boost
       template <class RealType, class Policy>
       inline RealType quantile(const binomial_distribution<RealType, Policy>& dist, const RealType& p)
       {
-         return binomial_detail::quantile_imp(dist, p, 1-p);
+         return binomial_detail::quantile_imp(dist, p, RealType(1-p));
       } // quantile
 
       template <class RealType, class Policy>
       RealType quantile(const complemented2_type<binomial_distribution<RealType, Policy>, RealType>& c)
       {
-         return binomial_detail::quantile_imp(c.dist, 1-c.param, c.param);
+         return binomial_detail::quantile_imp(c.dist, RealType(1-c.param), c.param);
       } // quantile
 
       template <class RealType, class Policy>

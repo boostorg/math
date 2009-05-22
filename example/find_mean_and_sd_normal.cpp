@@ -380,7 +380,9 @@ The scale can be variation in dispensing or uncertainty in measurement.
 
 Output is:
 
-Find_location and find_scale examples.
+//[normal_find_location_and_scale_output
+
+Find_location (mean) and find_scale (standard deviation) examples.
 Percentage of packs > 3.1 is 15.8655
 Fraction of packs <= 2.9 with a mean of 3 is 0.841345
 Fraction of packs >= 2.9 with a mean of 3.06449 is 0.950005
@@ -401,6 +403,8 @@ find_scale<normal>(minimum_weight, under_fraction, packs.mean()); 0.0607957
 find_scale<normal>(minimum_weight, under_fraction, packs.mean()); 0.0607957
 find_scale<normal>(complement(minimum_weight, over_fraction, packs.mean())); 0.0607957
 Fraction of packs >= 2.9 with a mean of 3 and standard deviation of 0.0607957 is 0.95
+
+//] [/normal_find_location_and_scale_eg_output]
 
 */
 

@@ -3,8 +3,10 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <pch.hpp> 
+
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/special_functions/trunc.hpp>
@@ -67,14 +69,14 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*large.*",                   // test data group
-      ".*", 200, 100);               // test function
+      ".*", 250, 100);               // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*",                          // test data group
-      ".*", 100, 30);                 // test function
+      ".*", 150, 30);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
