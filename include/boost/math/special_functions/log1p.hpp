@@ -384,7 +384,7 @@ inline double log1p(double x, const Policy& pol)
    if(u == 1.0) 
       return x; 
    else
-      return log(u)*(x/(u-1.0));
+      return ::log(u)*(x/(u-1.0));
 }
 template <class Policy>
 inline float log1p(float x, const Policy& pol)
@@ -404,7 +404,7 @@ inline long double log1p(long double x, const Policy& pol)
    if(u == 1.0) 
       return x; 
    else
-      return log(u)*(x/(u-1.0));
+      return ::logl(u)*(x/(u-1.0));
 }
 #endif
 
