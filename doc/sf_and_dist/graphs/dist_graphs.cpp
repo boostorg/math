@@ -198,7 +198,8 @@ public:
       }
 
       svg_2d_plot plot;
-      plot.image_size(750, 400);
+      plot.image_x_size(750);
+      plot.image_y_size(400);
       plot.coord_precision(4); // Avoids any visible steps.
       plot.title_font_size(20);
       plot.legend_title_font_size(15);
@@ -323,15 +324,15 @@ int main()
 {
    distribution_plotter<boost::math::gamma_distribution<> >
       gamma_plotter;
-   gamma_plotter.add(boost::math::gamma_distribution<>(1), "shape = 0.5");
-   gamma_plotter.add(boost::math::gamma_distribution<>(2), "shape = 1");
-   gamma_plotter.add(boost::math::gamma_distribution<>(4), "shape = 3");
+   gamma_plotter.add(boost::math::gamma_distribution<>(0.75), "shape = 0.75");
+   gamma_plotter.add(boost::math::gamma_distribution<>(1), "shape = 1");
+   gamma_plotter.add(boost::math::gamma_distribution<>(3), "shape = 3");
    gamma_plotter.plot("Gamma Distribution PDF With Scale = 1", "gamma1_pdf.svg");
 
    distribution_plotter<boost::math::gamma_distribution<> >
       gamma_plotter2;
-   gamma_plotter2.add(boost::math::gamma_distribution<>(2, 0.5), "scale = 2");
-   gamma_plotter2.add(boost::math::gamma_distribution<>(2, 1), "scale = 0.5");
+   gamma_plotter2.add(boost::math::gamma_distribution<>(2, 0.5), "scale = 0.5");
+   gamma_plotter2.add(boost::math::gamma_distribution<>(2, 1), "scale = 1");
    gamma_plotter2.add(boost::math::gamma_distribution<>(2, 2), "scale = 2");
    gamma_plotter2.plot("Gamma Distribution PDF With Shape = 2", "gamma2_pdf.svg");
 
@@ -425,15 +426,15 @@ int main()
 
    distribution_plotter<boost::math::exponential_distribution<> >
       exponential_plotter;
-   exponential_plotter.add(boost::math::exponential_distribution<>(0.5), "&#x3BB;=1");
-   exponential_plotter.add(boost::math::exponential_distribution<>(1), "&#x3BB;=2");
-   exponential_plotter.add(boost::math::exponential_distribution<>(2), "&#x3BB;=5");
+   exponential_plotter.add(boost::math::exponential_distribution<>(0.5), "&#x3BB;=0.5");
+   exponential_plotter.add(boost::math::exponential_distribution<>(1), "&#x3BB;=1");
+   exponential_plotter.add(boost::math::exponential_distribution<>(2), "&#x3BB;=2");
    exponential_plotter.plot("Exponential Distribution PDF", "exponential_pdf.svg");
 
    distribution_plotter<boost::math::extreme_value_distribution<> >
       extreme_value_plotter;
-   extreme_value_plotter.add(boost::math::extreme_value_distribution<>(-5), "location=1");
-   extreme_value_plotter.add(boost::math::extreme_value_distribution<>(0), "location=2");
+   extreme_value_plotter.add(boost::math::extreme_value_distribution<>(-5), "location=-5");
+   extreme_value_plotter.add(boost::math::extreme_value_distribution<>(0), "location=0");
    extreme_value_plotter.add(boost::math::extreme_value_distribution<>(5), "location=5");
    extreme_value_plotter.plot("Extreme Value Distribution PDF (shape=1)", "extreme_value_pdf1.svg");
 
@@ -592,15 +593,15 @@ int main()
    distribution_plotter<boost::math::negative_binomial_distribution<> >
       negative_binomial_plotter2;
    negative_binomial_plotter2.add(boost::math::negative_binomial_distribution<>(10, 0.5), "n=10 p=0.5");
-   negative_binomial_plotter2.add(boost::math::negative_binomial_distribution<>(20, 0.5), "n=40 p=0.5");
+   negative_binomial_plotter2.add(boost::math::negative_binomial_distribution<>(20, 0.5), "n=20 p=0.5");
    negative_binomial_plotter2.add(boost::math::negative_binomial_distribution<>(70, 0.5), "n=70 p=0.5");
    negative_binomial_plotter2.plot("Negative Binomial Distribution PDF", "negative_binomial_pdf_2.svg");
 
    distribution_plotter<boost::math::poisson_distribution<> >
       poisson_plotter;
-   poisson_plotter.add(boost::math::poisson_distribution<>(5), "&#x3BB;=1");
+   poisson_plotter.add(boost::math::poisson_distribution<>(5), "&#x3BB;=5");
    poisson_plotter.add(boost::math::poisson_distribution<>(10), "&#x3BB;=10");
-   poisson_plotter.add(boost::math::poisson_distribution<>(20), "&#x3BB;=50");
+   poisson_plotter.add(boost::math::poisson_distribution<>(20), "&#x3BB;=20");
    poisson_plotter.plot("Poisson Distribution PDF", "poisson_pdf_1.svg");
 
    distribution_plotter<boost::math::hypergeometric_distribution<> >

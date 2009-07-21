@@ -121,7 +121,8 @@ public:
       };
 
       svg_2d_plot plot;
-      plot.image_size(600, 400);
+      plot.image_x_size(600);
+      plot.image_y_size(400);
       plot.copyright_holder("John Maddock").copyright_date("2008").boost_license_on(true);
       plot.coord_precision(4); // Could be 3 for smaller plots?
       plot.title(title).title_font_size(20).title_on(true);
@@ -416,7 +417,7 @@ int main()
    plot.clear();
    plot.add(boost::bind(f3, 9, 1, _1), 0, 1, "a = 9, b = 1");
    plot.add(boost::bind(f3, 7, 2, _1), 0, 1, "a = 7, b = 2");
-   plot.add(boost::bind(f3, 5, 5, _1), 0, 1, "a = 1, b = 1");
+   plot.add(boost::bind(f3, 5, 5, _1), 0, 1, "a = 5, b = 5");
    plot.add(boost::bind(f3, 2, 7, _1), 0, 1, "a = 2, b = 7");
    plot.add(boost::bind(f3, 1, 9, _1), 0, 1, "a = 1, b = 9");
    plot.plot("ibeta", "ibeta.svg", "z", "ibeta(a, b, z)");
