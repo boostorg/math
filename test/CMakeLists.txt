@@ -1,3 +1,9 @@
+#
+# Copyright Troy D. Straszheim
+#
+# Distributed under the Boost Software License, Version 1.0.
+# See http://www.boost.org/LICENSE_1_0.txt
+#
 boost_additional_test_dependencies(math BOOST_DEPENDS test regex)
 
 boost_test_run(common_factor_test DEPENDS boost_unit_test_framework)
