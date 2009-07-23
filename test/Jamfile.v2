@@ -32,6 +32,7 @@ project
       <toolset>msvc:<cxxflags>/wd4127 
       <toolset>msvc:<cxxflags>/wd4701 # needed for lexical cast - temporary.
       <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
+      <toolset>msvc-7.1:<pch>off
       <toolset>borland:<link>static
       <toolset>borland:<runtime-link>static
       # <toolset>msvc:<cxxflags>/wd4506 has no effect?
