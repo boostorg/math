@@ -42,7 +42,7 @@
         behaves just like a built in floating point type.
       </p>
 <a name="math_toolkit.using_udt.concepts.basic_arithmetic_requirements"></a><h5>
-<a name="id1081031"></a>
+<a name="id991131"></a>
         <a class="link" href="concepts.html#math_toolkit.using_udt.concepts.basic_arithmetic_requirements">Basic
         Arithmetic Requirements</a>
       </h5>
@@ -1034,7 +1034,7 @@
 </td></tr>
 </table></div>
 <a name="math_toolkit.using_udt.concepts.standard_library_support_requirements"></a><h5>
-<a name="id1084545"></a>
+<a name="id994646"></a>
         <a class="link" href="concepts.html#math_toolkit.using_udt.concepts.standard_library_support_requirements">Standard
         Library Support Requirements</a>
       </h5>
@@ -1337,11 +1337,11 @@
         In addition, for efficient and accurate results, a <a class="link" href="../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
         approximation</a> is highly desirable. You may be able to adapt an existing
         approximation from <a href="../../../../../../../boost/math/special_functions/lanczos.hpp" target="_top">boost/math/special_functions/lanczos.hpp</a>
-        or <a href="../../../../../tools/ntl_rr_lanczos.hpp" target="_top">libs/math/tools/ntl_rr_lanczos.hpp</a>:
-        you will need change static_cast's to lexical_cast's, and the constants to
-        <span class="emphasis"><em>strings</em></span> (in order to ensure the coefficients aren't
-        truncated to long double) and then specialise <code class="computeroutput"><span class="identifier">lanczos_traits</span></code>
-        for type T. Otherwise you may have to hack <a href="../../../../../tools/lanczos_generator.cpp" target="_top">libs/math/tools/lanczos_generator.cpp</a>
+        or <a href="../../../../../../../boost/math/bindings/detail/big_lanczos.hpp" target="_top">boost/math/bindings/detail/big_lanczos.hpp</a>:
+        in the former case you will need change static_cast's to lexical_cast's,
+        and the constants to <span class="emphasis"><em>strings</em></span> (in order to ensure the
+        coefficients aren't truncated to long double) and then specialise <code class="computeroutput"><span class="identifier">lanczos_traits</span></code> for type T. Otherwise you
+        may have to hack <a href="../../../../../tools/lanczos_generator.cpp" target="_top">libs/math/tools/lanczos_generator.cpp</a>
         to find a suitable approximation for your RealType. The code will still compile
         if you don't do this, but both accuracy and efficiency will be greatly compromised
         in any function that makes use of the gamma/beta/erf family of functions.
