@@ -238,8 +238,9 @@ In addition, for efficient and accurate results, a __lanczos is highly desirable
 You may be able to adapt an existing approximation from 
 [@../../../../../boost/math/special_functions/lanczos.hpp
 boost/math/special_functions/lanczos.hpp] or
-[@../../../tools/ntl_rr_lanczos.hpp libs/math/tools/ntl_rr_lanczos.hpp]: 
-you will need change
+[@../../../../../boost/math/bindings/detail/big_lanczos.hpp 
+boost/math/bindings/detail/big_lanczos.hpp]: 
+in the former case you will need change
 static_cast's to lexical_cast's, and the constants to /strings/ 
 (in order to ensure the coefficients aren't truncated to long double)
 and then specialise `lanczos_traits` for type T.  Otherwise you may have to hack 
@@ -417,6 +418,7 @@ there too.)
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
 
 
 
