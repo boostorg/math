@@ -315,6 +315,29 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
       bind_func(funcp, 0, 1),
       extract_result(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_q_inv", test_name);
+#ifdef TEST_OTHER
+   if(boost::is_floating_point<value_type>::value)
+   {
+      funcp = other::gamma_p_inv;
+      //
+      // test gamma_p_inv(T, T) against data:
+      //
+      result = boost::math::tools::test(
+         data,
+         bind_func(funcp, 0, 1),
+         extract_result(2));
+      handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_p_inv", test_name);
+      //
+      // test gamma_q_inv(T, T) against data:
+      //
+      funcp = other::gamma_q_inv;
+      result = boost::math::tools::test(
+         data,
+         bind_func(funcp, 0, 1),
+         extract_result(3));
+      handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_q_inv", test_name);
+   }
+#endif
 }
 
 template <class T>

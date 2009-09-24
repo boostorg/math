@@ -733,22 +733,26 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
 // Upper gamma fraction for very small a:
 //
 template <class T, class Policy>
-inline T tgamma_small_upper_part(T a, T x, const Policy& pol)
+inline T tgamma_small_upper_part(T a, T x, const Policy& pol, T* pgam = 0)
 {
    BOOST_MATH_STD_USING  // ADL of std functions.
    //
    // Compute the full upper fraction (Q) when a is very small:
    //
    T result;
-   result = boost::math::tgamma1pm1(a, pol) - boost::math::powm1(x, a, pol);
+   result = boost::math::tgamma1pm1(a, pol);
+   if(pgam)
+      *pgam = (result + 1) / a;
+   T p = boost::math::powm1(x, a, pol);
+   result -= p;
    result /= a;
    detail::small_gamma2_series<T> s(a, x);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    T zero = 0;
-   result -= pow(x, a) * tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter, zero);
+   result -= (p + 1) * tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter, zero);
 #else
-   result -= pow(x, a) * tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter);
+   result -= (p + 1) * tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter);
 #endif
    policies::check_series_iterations("boost::math::tgamma_small_upper_part<%1%>(%1%, %1%)", max_iter, pol);
    return result;
@@ -877,9 +881,10 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       {
          // Compute Q:
          invert = !invert;
-         result = tgamma_small_upper_part(a, x, pol);
+         T g;
+         result = tgamma_small_upper_part(a, x, pol, &g);
          if(normalised)
-            result /= boost::math::tgamma(a, pol);
+            result /= g;
          if(p_derivative)
             *p_derivative = regularised_gamma_prefix(a, x, pol, lanczos_type());
       }
@@ -887,9 +892,9 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
    else if(x < 1.1)
    {
       //
-      // Changover here occurs when P ~ 0.6 or Q ~ 0.4:
+      // Changover here occurs when P ~ 0.75 or Q ~ 0.25:
       //
-      if(x * 1.1f < a)
+      if(x * 0.75f < a)
       {
          // Compute P:
          result = normalised ? regularised_gamma_prefix(a, x, pol, lanczos_type()) : full_igamma_prefix(a, x, pol);
@@ -902,9 +907,10 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       {
          // Compute Q:
          invert = !invert;
-         result = tgamma_small_upper_part(a, x, pol);
+         T g;
+         result = tgamma_small_upper_part(a, x, pol, &g);
          if(normalised)
-            result /= boost::math::tgamma(a, pol);
+            result /= g;
          if(p_derivative)
             *p_derivative = regularised_gamma_prefix(a, x, pol, lanczos_type());
       }
@@ -981,11 +987,14 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
          // Regular case where the result will not be too close to 0.5.
          //
          // Changeover here occurs at P ~ Q ~ 0.5
+         // Note that series computation of P is about x2 faster than continued fraction
+         // calculation of Q, so try and use the CF only when really necessary, especially
+         // for small x.
          //
          result = normalised ? regularised_gamma_prefix(a, x, pol, lanczos_type()) : full_igamma_prefix(a, x, pol);
          if(p_derivative)
             *p_derivative = result;
-         if(x < a)
+         if(x - (1 / (3 * x)) < a)
          {
             // Compute P:
             if(result != 0)
@@ -1001,6 +1010,8 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       }
    }
 
+   if(normalised && (result > 1))
+      result = 1;
    if(invert)
    {
       T gam = normalised ? 1 : boost::math::tgamma(a, pol);

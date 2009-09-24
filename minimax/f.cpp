@@ -4,8 +4,8 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define L22
-#include "../tools/ntl_rr_lanczos.hpp"
-#include "../tools/ntl_rr_digamma.hpp"
+//#include "../tools/ntl_rr_lanczos.hpp"
+//#include "../tools/ntl_rr_digamma.hpp"
 #include <boost/math/bindings/rr.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/special_functions.hpp>
