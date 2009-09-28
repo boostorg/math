@@ -20,7 +20,7 @@ namespace boost{ namespace math{ namespace tools{
 // Simple series summation come first:
 //
 template <class Functor>
-typename Functor::result_type sum_series(Functor& func, int bits)
+inline typename Functor::result_type sum_series(Functor& func, int bits)
 {
    BOOST_MATH_STD_USING
 
@@ -38,7 +38,7 @@ typename Functor::result_type sum_series(Functor& func, int bits)
 }
 
 template <class Functor>
-typename Functor::result_type sum_series(Functor& func, int bits, boost::uintmax_t& max_terms)
+inline typename Functor::result_type sum_series(Functor& func, int bits, boost::uintmax_t& max_terms)
 {
    BOOST_MATH_STD_USING
 
@@ -62,7 +62,7 @@ typename Functor::result_type sum_series(Functor& func, int bits, boost::uintmax
 }
 
 template <class Functor, class U>
-typename Functor::result_type sum_series(Functor& func, int bits, U init_value)
+inline typename Functor::result_type sum_series(Functor& func, int bits, U init_value)
 {
    BOOST_MATH_STD_USING
 
@@ -81,7 +81,7 @@ typename Functor::result_type sum_series(Functor& func, int bits, U init_value)
 }
 
 template <class Functor, class U>
-typename Functor::result_type sum_series(Functor& func, int bits, boost::uintmax_t& max_terms, U init_value)
+inline typename Functor::result_type sum_series(Functor& func, int bits, boost::uintmax_t& max_terms, U init_value)
 {
    BOOST_MATH_STD_USING
 
@@ -117,7 +117,7 @@ typename Functor::result_type sum_series(Functor& func, int bits, boost::uintmax
 // in any case the result is still much better than a naive summation.
 //
 template <class Functor>
-typename Functor::result_type kahan_sum_series(Functor& func, int bits)
+inline typename Functor::result_type kahan_sum_series(Functor& func, int bits)
 {
    BOOST_MATH_STD_USING
 
@@ -140,7 +140,7 @@ typename Functor::result_type kahan_sum_series(Functor& func, int bits)
 }
 
 template <class Functor>
-typename Functor::result_type kahan_sum_series(Functor& func, int bits, boost::uintmax_t& max_terms)
+inline typename Functor::result_type kahan_sum_series(Functor& func, int bits, boost::uintmax_t& max_terms)
 {
    BOOST_MATH_STD_USING
 

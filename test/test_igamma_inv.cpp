@@ -326,7 +326,7 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
          data,
          bind_func(funcp, 0, 1),
          extract_result(2));
-      handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_p_inv", test_name);
+      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_q");
       //
       // test gamma_q_inv(T, T) against data:
       //
@@ -335,7 +335,7 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
          data,
          bind_func(funcp, 0, 1),
          extract_result(3));
-      handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_q_inv", test_name);
+      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_q");
    }
 #endif
 }
