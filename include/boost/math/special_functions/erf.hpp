@@ -133,7 +133,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
    {
       detail::erf_asympt_series_t<T> s(z);
       boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-      result = boost::math::tools::sum_series(s, policies::digits<T, Policy>(), max_iter, 1);
+      result = boost::math::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, 1);
       policies::check_series_iterations("boost::math::erf<%1%>(%1%, %1%)", max_iter, pol);
    }
    else
@@ -160,7 +160,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
          invert = !invert;
          result = z * exp(-x);
          result /= sqrt(boost::math::constants::pi<T>());
-         result *= upper_gamma_fraction(T(0.5f), x, policies::digits<T, Policy>());
+         result *= upper_gamma_fraction(T(0.5f), x, policies::get_epsilon<T, Policy>());
       }
    }
    if(invert)

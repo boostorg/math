@@ -90,10 +90,10 @@ T expm1_imp(T x, const mpl::int_<0>&, const Policy& pol)
    detail::expm1_series<T> s(x);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582)) && !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
-   T result = tools::sum_series(s, policies::digits<T, Policy>(), max_iter);
+   T result = tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter);
 #else
    T zero = 0;
-   T result = tools::sum_series(s, policies::digits<T, Policy>(), max_iter, zero);
+   T result = tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, zero);
 #endif
    policies::check_series_iterations("boost::math::expm1<%1%>(%1%)", max_iter, pol);
    return result;

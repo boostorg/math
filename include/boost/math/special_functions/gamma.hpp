@@ -296,13 +296,13 @@ public:
 };
 
 template <class T>
-inline T upper_gamma_fraction(T a, T z, int bits)
+inline T upper_gamma_fraction(T a, T z, T eps)
 {
    // Multiply result by z^a * e^-z to get the full
    // upper incomplete integral.  Divide by tgamma(z)
    // to normalise.
    upper_incomplete_gamma_fract<T> f(a, z);
-   return 1 / (z - a + 1 + boost::math::tools::continued_fraction_a(f, bits));
+   return 1 / (z - a + 1 + boost::math::tools::continued_fraction_a(f, eps));
 }
 
 template <class T>
@@ -331,8 +331,8 @@ inline T lower_gamma_series(T a, T z, const Policy& pol, T init_value = 0)
    // to get the normalised value.
    lower_incomplete_gamma_series<T> s(a, z);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-   int bits = policies::digits<T, Policy>();
-   T result = boost::math::tools::sum_series(s, bits, max_iter, init_value);
+   T factor = policies::get_epsilon<T, Policy>();
+   T result = boost::math::tools::sum_series(s, factor, max_iter, init_value);
    policies::check_series_iterations("boost::math::detail::lower_gamma_series<%1%>(%1%)", max_iter, pol);
    return result;
 }
@@ -382,7 +382,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l)
       BOOST_MATH_INSTRUMENT_CODE(prefix);
       T sum = detail::lower_gamma_series(z, z, pol) / z;
       BOOST_MATH_INSTRUMENT_CODE(sum);
-      sum += detail::upper_gamma_fraction(z, z, ::boost::math::policies::digits<T, Policy>());
+      sum += detail::upper_gamma_fraction(z, z, ::boost::math::policies::get_epsilon<T, Policy>());
       BOOST_MATH_INSTRUMENT_CODE(sum);
       if(fabs(tools::max_value<T>() / prefix) < fabs(sum))
          return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
@@ -421,7 +421,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l, int*si
       T limit = (std::max)(z+1, T(10));
       T prefix = z * log(limit) - limit;
       T sum = detail::lower_gamma_series(z, limit, pol) / z;
-      sum += detail::upper_gamma_fraction(z, limit, ::boost::math::policies::digits<T, Policy>());
+      sum += detail::upper_gamma_fraction(z, limit, ::boost::math::policies::get_epsilon<T, Policy>());
       result = log(sum) + prefix;
    }
    if(sign)
@@ -686,7 +686,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
 
    T limit = (std::max)(T(10), a);
    T sum = detail::lower_gamma_series(a, limit, pol) / a;
-   sum += detail::upper_gamma_fraction(a, limit, ::boost::math::policies::digits<T, Policy>());
+   sum += detail::upper_gamma_fraction(a, limit, ::boost::math::policies::get_epsilon<T, Policy>());
 
    if(a < 10)
    {
@@ -747,7 +747,7 @@ inline T tgamma_small_upper_part(T a, T x, const Policy& pol, T* pgam = 0, bool 
    if(pderivative)
       *pderivative = p / (*pgam * exp(x));
    T init_value = invert ? *pgam : 0;
-   result = -p * tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter, (init_value - result) / p);
+   result = -p * tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, (init_value - result) / p);
    policies::check_series_iterations("boost::math::tgamma_small_upper_part<%1%>(%1%, %1%)", max_iter, pol);
    if(invert)
       result = -result;
@@ -1011,7 +1011,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
          if(p_derivative)
             *p_derivative = result;
          if(result != 0)
-            result *= upper_gamma_fraction(a, x, policies::digits<T, Policy>());
+            result *= upper_gamma_fraction(a, x, policies::get_epsilon<T, Policy>());
          break;
       }
    case 5:
@@ -1126,9 +1126,9 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const lanczos:
    }
    prefix *= pow(constants::e<T>() / zd, delta);
    T sum = detail::lower_gamma_series(z, z, pol) / z;
-   sum += detail::upper_gamma_fraction(z, z, ::boost::math::policies::digits<T, Policy>());
+   sum += detail::upper_gamma_fraction(z, z, ::boost::math::policies::get_epsilon<T, Policy>());
    T sumd = detail::lower_gamma_series(zd, zd, pol) / zd;
-   sumd += detail::upper_gamma_fraction(zd, zd, ::boost::math::policies::digits<T, Policy>());
+   sumd += detail::upper_gamma_fraction(zd, zd, ::boost::math::policies::get_epsilon<T, Policy>());
    sum /= sumd;
    if(fabs(tools::max_value<T>() / prefix) < fabs(sum))
       return policies::raise_overflow_error<T>("boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)", "Result of tgamma is too large to represent.", pol);
