@@ -32,7 +32,7 @@ namespace detail
    };
 
 template <class T, class Policy>
-T cbrt_imp(T z, const Policy&)
+T cbrt_imp(T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    int i_exp, sign(1);
@@ -49,7 +49,10 @@ T cbrt_imp(T z, const Policy&)
    T max = static_cast<T>(ldexp(2.0, i_exp/3));
    T guess = static_cast<T>(ldexp(1.0, i_exp/3));
    int digits = (policies::digits<T, Policy>()) / 2;
-   return sign * tools::halley_iterate(detail::cbrt_functor<T>(z), guess, min, max, digits);
+   boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+   guess = sign * tools::halley_iterate(detail::cbrt_functor<T>(z), guess, min, max, digits, max_iter);
+   policies::check_root_iterations("boost::math::cbrt<%1%>", max_iter, pol);
+   return guess;
 }
 
 } // namespace detail

@@ -346,6 +346,8 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
       {
          // last two steps haven't converged, try bisection:
          delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
+         if(fabs(delta) > result)
+            delta = sign(delta) * result; // protect against huge jumps!
          // reset delta2 so that this branch will *not* be taken on the
          // next iteration:
          delta2 = delta * 3;

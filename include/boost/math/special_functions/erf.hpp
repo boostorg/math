@@ -197,13 +197,16 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
       //
       // We're going to calculate erf:
       //
-      if(z == 0)
+      if(z < 1e-10)
       {
-         result = T(0);
-      }
-      else if(z < 1e-10)
-      {
-         result = static_cast<T>(z * 1.125f + z * 0.003379167095512573896158903121545171688L);
+         if(z == 0)
+         {
+            result = T(0);
+         }
+         else
+         {
+            result = static_cast<T>(z * 1.125f + z * 0.003379167095512573896158903121545171688L);
+         }
       }
       else
       {
@@ -227,10 +230,11 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
             0.00858571925074406212772L,
             0.000370900071787748000569L,
          };
-         result = z * (Y + tools::evaluate_polynomial(P, z * z) / tools::evaluate_polynomial(Q, z * z));
+         T zz = z * z;
+         result = z * (Y + tools::evaluate_polynomial(P, zz) / tools::evaluate_polynomial(Q, zz));
       }
    }
-   else if((z < 14) || ((z < 28) && invert))
+   else if(invert ? (z < 28) : (z < 5.8f))
    {
       //
       // We'll be calculating erfc:
@@ -425,7 +429,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
          result = z * (Y + tools::evaluate_polynomial(P, z * z) / tools::evaluate_polynomial(Q, z * z));
       }
    }
-   else if((z < 110) || ((z < 110) && invert))  // TODO FIXME!!!
+   else if(invert ? (z < 110) : (z < 6.4f))
    {
       //
       // We'll be calculating erfc:
@@ -634,7 +638,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
          result = z * (Y + tools::evaluate_polynomial(P, z * z) / tools::evaluate_polynomial(Q, z * z));
       }
    }
-   else if((z < 9) || ((z < 110) && invert))
+   else if(invert ? (z < 110) : (z < 8.65f))
    {
       //
       // We'll be calculating erfc:
