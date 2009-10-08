@@ -287,25 +287,3 @@ BOOST_MATH_PERFORMANCE_TEST(igamma_inv_test, "igamma_inv-dcd")
 
 #endif
 
-double x = 0.165048161769598689119220580323599278926849365234375e-11;
-double y = 0.165048164480104120332981665342231281101703643798828125e-13;
-
-BOOST_MATH_PERFORMANCE_TEST(igamma_scrap, "igamma_scrap")
-{
-   //double result = boost::math::gamma_q(x, y);
-   double result = igamma_evaluate2(igamma_small_data);
-   //result += dcd::gamma_p(x, y);
-
-   consume_result(result);
-   set_call_count(1);
-}
-
-BOOST_MATH_PERFORMANCE_TEST(igamma_scrap, "igamma_scrap-dcd")
-{
-   //double result = dcd::gamma_q(x, y);
-   double result = igamma_evaluate2_dcd(igamma_small_data);
-
-   consume_result(result);
-   set_call_count(1);
-}
-

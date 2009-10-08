@@ -107,3 +107,30 @@ BOOST_MATH_PERFORMANCE_TEST(erf_test, "erf-gsl")
 #endif
 
 
+#ifdef TEST_DCDFLIB
+#include <dcdflib.h>
+
+template <std::size_t N>
+double erf_evaluate2_dcd(const boost::array<boost::array<T, 3>, N>& data)
+{
+   double result = 0;
+   for(unsigned i = 0; i < N; ++i)
+   {
+      double x = data[i][0];
+      result += error_f(&x);
+   }
+   return result;
+}
+
+BOOST_MATH_PERFORMANCE_TEST(erf_test_dcd, "erf-dcd")
+{
+   double result = erf_evaluate2_dcd(erf_data);
+   result += erf_evaluate2_dcd(erf_large_data);
+   result += erf_evaluate2_dcd(erf_small_data);
+
+   consume_result(result);
+   set_call_count((sizeof(erf_data) + sizeof(erf_large_data) + sizeof(erf_small_data)) / sizeof(erf_data[0]));
+}
+
+#endif
+

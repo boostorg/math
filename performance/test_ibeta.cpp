@@ -189,3 +189,40 @@ BOOST_MATH_PERFORMANCE_TEST(ibeta_test, "ibeta-gsl")
 
 #endif
 
+#ifdef TEST_DCDFLIB
+#include <dcdflib.h>
+
+template <std::size_t N>
+double ibeta_evaluate2_dcd(const boost::array<boost::array<T, 7>, N>& data)
+{
+   double result = 0;
+   for(unsigned i = 0; i < N; ++i)
+   {
+      double a = data[i][0];
+      double b = data[i][1];
+      double x = data[i][2];
+      double y = 1 - x;
+      double w, w1;
+      int ierr;
+      beta_inc (&a, &b, &x, &y, &w, &w1, &ierr);
+      result += w;
+   }
+   return result;
+}
+
+BOOST_MATH_PERFORMANCE_TEST(ibeta_test_dcd, "ibeta-dcd")
+{
+   double result = ibeta_evaluate2_dcd(ibeta_data);
+   result += ibeta_evaluate2_dcd(ibeta_int_data);
+   result += ibeta_evaluate2_dcd(ibeta_large_data);
+   result += ibeta_evaluate2_dcd(ibeta_small_data);
+
+   consume_result(result);
+   set_call_count(
+      (sizeof(ibeta_data) 
+      + sizeof(ibeta_int_data) 
+      + sizeof(ibeta_large_data)
+      + sizeof(ibeta_small_data)) / sizeof(ibeta_data[0]));
+}
+
+#endif

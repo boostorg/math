@@ -651,3 +651,290 @@ BOOST_MATH_CEPHES_DISTRIBUTION2_TEST(f, int_values, int_values, real_values, pro
 
 #endif
 
+#ifdef TEST_DCDFLIB
+#include <dcdflib.h>
+
+void cdfbeta( int *which, double *p, double *q, double *x, double *a, double *b, int *status, double *bound)
+{
+   double y = 1 - *x;
+   cdfbet(which, p, q, x, &y, a, b, status, bound);
+}
+
+void cdfbinomial( int *which, double *p, double *q, double *x, double *a, double *b, int *status, double *bound)
+{
+   double y = 1 - *x;
+   double cb = 1 - *b;
+   cdfbet(which, p, q, x, a, b, &cb, status, bound);
+}
+
+void cdfnegative_binomial( int *which, double *p, double *q, double *x, double *a, double *b, int *status, double *bound)
+{
+   double y = 1 - *x;
+   double cb = 1 - *b;
+   cdfnbn(which, p, q, x, a, b, &cb, status, bound);
+}
+
+void cdfchi_squared( int *which, double *p, double *q, double *x, double *a, int *status, double *bound)
+{
+   cdfchi(which, p, q, x, a, status, bound);
+}
+
+void cdfnon_central_chi_squared( int *which, double *p, double *q, double *x, double *a, double *b, int *status, double *bound)
+{
+   cdfchn(which, p, q, x, a, b, status, bound);
+}
+
+namespace boost{ namespace math{
+
+   template <class T = double> struct f_distribution : public fisher_f_distribution<T> 
+   { f_distribution(T a, T b) : fisher_f_distribution(a, b) {} };
+   template <class T = double> 
+   struct fnc_distribution : public non_central_f_distribution<T> 
+   { fnc_distribution(T a, T b, T c) : non_central_f_distribution(a, b, c) {} };
+   template <class T = double> struct gam_distribution : public gamma_distribution<T> 
+   { gam_distribution(T a, T b) : gamma_distribution(a, b) {} };
+   template <class T = double> struct nor_distribution : public normal_distribution<T> 
+   { nor_distribution(T a, T b) : normal_distribution(a, b) {} };
+   template <class T = double> struct poi_distribution : public poisson_distribution<T> 
+   { poi_distribution(T a) : poisson_distribution(a) {} };
+   template <class T = double> struct t_distribution : public students_t_distribution<T> 
+   { t_distribution(T a) : students_t_distribution(a) {} };
+
+   template <class T>
+   T cdf(const f_distribution<T>& d, const T& r){  return cdf(static_cast<fisher_f_distribution<T> >(d), r);  }
+   template <class T>
+   T quantile(const f_distribution<T>& d, const T& r){  return quantile(static_cast<fisher_f_distribution<T> >(d), r);  }
+   template <class T>
+   T cdf(const fnc_distribution<T>& d, const T& r){  return cdf(static_cast<non_central_f_distribution<T> >(d), r);  }
+   template <class T>
+   T quantile(const fnc_distribution<T>& d, const T& r){  return quantile(static_cast<non_central_f_distribution<T> >(d), r);  }
+   template <class T>
+   T cdf(const gam_distribution<T>& d, const T& r){  return cdf(static_cast<gamma_distribution<T> >(d), r);  }
+   template <class T>
+   T quantile(const gam_distribution<T>& d, const T& r){  return quantile(static_cast<gamma_distribution<T> >(d), r);  }
+   template <class T>
+   T cdf(const nor_distribution<T>& d, const T& r){  return cdf(static_cast<normal_distribution<T> >(d), r);  }
+   template <class T>
+   T quantile(const nor_distribution<T>& d, const T& r){  return quantile(static_cast<normal_distribution<T> >(d), r);  }
+   template <class T>
+   T cdf(const poi_distribution<T>& d, const T& r){  return cdf(static_cast<poisson_distribution<T> >(d), r);  }
+   template <class T>
+   T quantile(const poi_distribution<T>& d, const T& r){  return quantile(static_cast<poisson_distribution<T> >(d), r);  }
+   template <class T>
+   T cdf(const t_distribution<T>& d, const T& r){  return cdf(static_cast<students_t_distribution<T> >(d), r);  }
+   template <class T>
+   T quantile(const t_distribution<T>& d, const T& r){  return quantile(static_cast<students_t_distribution<T> >(d), r);  }
+
+}}
+
+bool check_near(double a, double b)
+{
+   bool r = ((fabs(a) <= 1e-7) || (fabs(b) <= 1e-7)) ? (fabs(a-b) < 1e-7) : fabs((a - b) / a) < 1e-5;
+   return r;
+}
+
+#define BOOST_MATH_DCD_DISTRIBUTION3_TEST(name, param1_table, param2_table, param3_table, random_variable_table, probability_table) \
+   BOOST_MATH_PERFORMANCE_TEST(BOOST_JOIN(dcd_dist, name), "dist-" BOOST_STRINGIZE(name) "-dcd-cdf")\
+   {\
+   double result = 0;\
+   unsigned a_size = sizeof(param1_table)/sizeof(param1_table[0]);\
+   unsigned b_size = sizeof(param2_table)/sizeof(param2_table[0]);\
+   unsigned c_size = sizeof(param3_table)/sizeof(param3_table[0]);\
+   unsigned d_size = sizeof(random_variable_table)/sizeof(random_variable_table[0]);\
+   \
+   for(unsigned i = 0; i < a_size; ++i)\
+   {\
+      for(unsigned j = 0; j < b_size; ++j)\
+      {\
+         for(unsigned k = 0; k < c_size; ++k)\
+         {\
+            for(unsigned l = 0; l < d_size; ++l)\
+            {\
+               int which = 1;\
+               double p; double q; \
+               double rv = random_variable_table[l];\
+               double a = param1_table[i];\
+               double b = param2_table[j];\
+               double c = param3_table[k];\
+               int status = 0;\
+               double bound = 0;\
+               BOOST_JOIN(cdf, name)(&which, &p, &q, &rv, &a, &b, &c, &status, &bound);\
+               result += p;\
+               BOOST_ASSERT(\
+                  (status != 0) || check_near(p, \
+                             cdf(boost::math:: BOOST_JOIN(name, _distribution) <>(param1_table[i], param2_table[j], param3_table[k]), random_variable_table[l])\
+               ));\
+            }\
+         }\
+      }\
+   }\
+   \
+   consume_result(result);\
+   set_call_count(a_size * b_size * c_size * d_size);\
+   }\
+   BOOST_MATH_PERFORMANCE_TEST(BOOST_JOIN(dcd_dist_quant, name), "dist-" BOOST_STRINGIZE(name) "-dcd-quantile")\
+   {\
+      double result = 0;\
+      unsigned a_size = sizeof(param1_table)/sizeof(param1_table[0]);\
+      unsigned b_size = sizeof(param2_table)/sizeof(param2_table[0]);\
+      unsigned c_size = sizeof(param3_table)/sizeof(param3_table[0]);\
+      unsigned d_size = sizeof(probability_table)/sizeof(probability_table[0]);\
+      \
+      for(unsigned i = 0; i < a_size; ++i)\
+      {\
+         for(unsigned j = 0; j < b_size; ++j)\
+         {\
+            for(unsigned k = 0; k < c_size; ++k)\
+            {\
+               for(unsigned l = 0; l < d_size; ++l)\
+               {\
+                  int which = 2;\
+                  double p = probability_table[l];\
+                  double q = 1 - p; \
+                  double rv;\
+                  double a = param1_table[i];\
+                  double b = param2_table[j];\
+                  double c = param3_table[k];\
+                  int status = 0;\
+                  double bound = 0;\
+                  BOOST_JOIN(cdf, name)(&which, &p, &q, &rv, &a, &b, &c, &status, &bound);\
+                  result += rv;\
+                  BOOST_ASSERT((status != 0) || (p > 0.99) || check_near(rv, quantile(boost::math:: BOOST_JOIN(name, _distribution) <>(param1_table[i], param2_table[j], param3_table[k]), probability_table[l])));\
+               }\
+            }\
+         }\
+      }\
+      \
+      consume_result(result);\
+      set_call_count(a_size * b_size * c_size * d_size);\
+   }
+
+#define BOOST_MATH_DCD_DISTRIBUTION2_TEST(name, param1_table, param2_table, random_variable_table, probability_table) \
+   BOOST_MATH_PERFORMANCE_TEST(BOOST_JOIN(dcd_dist, name), "dist-" BOOST_STRINGIZE(name) "-dcd-cdf")\
+   {\
+   double result = 0;\
+   unsigned a_size = sizeof(param1_table)/sizeof(param1_table[0]);\
+   unsigned b_size = sizeof(param2_table)/sizeof(param2_table[0]);\
+   unsigned c_size = sizeof(random_variable_table)/sizeof(random_variable_table[0]);\
+   \
+   for(unsigned i = 0; i < a_size; ++i)\
+   {\
+      for(unsigned j = 0; j < b_size; ++j)\
+      {\
+         for(unsigned k = 0; k < c_size; ++k)\
+         {\
+            int which = 1;\
+            double p; double q; \
+            double rv = random_variable_table[k];\
+            double a = param1_table[i];\
+            double b = param2_table[j];\
+            int status = 0;\
+            double bound = 0;\
+            BOOST_JOIN(cdf, name)(&which, &p, &q, &rv, &a, &b, &status, &bound);\
+            result += p;\
+            BOOST_ASSERT((status != 0) || check_near(p, cdf(boost::math:: BOOST_JOIN(name, _distribution) <>(param1_table[i], param2_table[j]), random_variable_table[k])));\
+         }\
+      }\
+   }\
+   \
+   consume_result(result);\
+   set_call_count(a_size * b_size * c_size);\
+   }\
+   BOOST_MATH_PERFORMANCE_TEST(BOOST_JOIN(dcd_dist_quant, name), "dist-" BOOST_STRINGIZE(name) "-dcd-quantile")\
+   {\
+      double result = 0;\
+      unsigned a_size = sizeof(param1_table)/sizeof(param1_table[0]);\
+      unsigned b_size = sizeof(param2_table)/sizeof(param2_table[0]);\
+      unsigned c_size = sizeof(probability_table)/sizeof(probability_table[0]);\
+      \
+      for(unsigned i = 0; i < a_size; ++i)\
+      {\
+         for(unsigned j = 0; j < b_size; ++j)\
+         {\
+            for(unsigned k = 0; k < c_size; ++k)\
+            {\
+               int which = 2;\
+               double p = probability_table[k];\
+               double q = 1 - p; \
+               double rv;\
+               double a = param1_table[i];\
+               double b = param2_table[j];\
+               int status = 0;\
+               double bound = 0;\
+               BOOST_JOIN(cdf, name)(&which, &p, &q, &rv, &a, &b, &status, &bound);\
+               result += rv;\
+               BOOST_ASSERT((status != 0) || (p > 0.99) || check_near(rv, quantile(boost::math:: BOOST_JOIN(name, _distribution) <>(param1_table[i], param2_table[j]), probability_table[k])));\
+            }\
+         }\
+      }\
+      \
+      consume_result(result);\
+      set_call_count(a_size * b_size * c_size);\
+   }
+
+#define BOOST_MATH_DCD_DISTRIBUTION1_TEST(name, param1_table, random_variable_table, probability_table) \
+   BOOST_MATH_PERFORMANCE_TEST(BOOST_JOIN(dcd_dist, name), "dist-" BOOST_STRINGIZE(name) "-dcd-cdf")\
+   {\
+   double result = 0;\
+   unsigned a_size = sizeof(param1_table)/sizeof(param1_table[0]);\
+   unsigned c_size = sizeof(random_variable_table)/sizeof(random_variable_table[0]);\
+   \
+   for(unsigned i = 0; i < a_size; ++i)\
+   {\
+         for(unsigned k = 0; k < c_size; ++k)\
+         {\
+            int which = 1;\
+            double p; double q; \
+            double rv = random_variable_table[k];\
+            double a = param1_table[i];\
+            int status = 0;\
+            double bound = 0;\
+            BOOST_JOIN(cdf, name)(&which, &p, &q, &rv, &a, &status, &bound);\
+            result += p;\
+            BOOST_ASSERT((status != 0) || check_near(p, cdf(boost::math:: BOOST_JOIN(name, _distribution) <>(param1_table[i]), random_variable_table[k])));\
+         }\
+   }\
+   \
+   consume_result(result);\
+   set_call_count(a_size * c_size);\
+   }\
+   BOOST_MATH_PERFORMANCE_TEST(BOOST_JOIN(dcd_dist_quant, name), "dist-" BOOST_STRINGIZE(name) "-dcd-quantile")\
+   {\
+      double result = 0;\
+      unsigned a_size = sizeof(param1_table)/sizeof(param1_table[0]);\
+      unsigned c_size = sizeof(probability_table)/sizeof(probability_table[0]);\
+      \
+      for(unsigned i = 0; i < a_size; ++i)\
+      {\
+            for(unsigned k = 0; k < c_size; ++k)\
+            {\
+               int which = 2;\
+               double p = probability_table[k];\
+               double q = 1 - p; \
+               double rv;\
+               double a = param1_table[i];\
+               int status = 0;\
+               double bound = 0;\
+               BOOST_JOIN(cdf, name)(&which, &p, &q, &rv, &a, &status, &bound);\
+               result += rv;\
+               BOOST_ASSERT((status != 0) || (p > 0.99) || check_near(rv, quantile(boost::math:: BOOST_JOIN(name, _distribution) <>(param1_table[i]), probability_table[k])));\
+            }\
+      }\
+      \
+      consume_result(result);\
+      set_call_count(a_size * c_size);\
+   }
+
+BOOST_MATH_DCD_DISTRIBUTION2_TEST(beta, probabilities, probabilities, probabilities, probabilities) // ??
+BOOST_MATH_DCD_DISTRIBUTION2_TEST(binomial, int_values, probabilities, int_values, probabilities) // OK ish
+BOOST_MATH_DCD_DISTRIBUTION1_TEST(chi_squared, int_values, real_values, probabilities) // OK
+BOOST_MATH_DCD_DISTRIBUTION2_TEST(non_central_chi_squared, int_values, int_values, real_values, probabilities) // Error rates quite high for DCD version?
+BOOST_MATH_DCD_DISTRIBUTION2_TEST(f, int_values, int_values, real_values, probabilities) // OK
+BOOST_MATH_DCD_DISTRIBUTION3_TEST(fnc, int_values, int_values, real_values, real_values, probabilities) // Error rates quite high for DCD version?
+BOOST_MATH_DCD_DISTRIBUTION2_TEST(gam, real_values, real_values, real_values, probabilities) // ??
+BOOST_MATH_DCD_DISTRIBUTION2_TEST(negative_binomial, int_values, probabilities, int_values, probabilities) // OK
+BOOST_MATH_DCD_DISTRIBUTION2_TEST(nor, real_values, real_values, real_values, probabilities) // OK
+BOOST_MATH_DCD_DISTRIBUTION1_TEST(poi, real_values, int_values, probabilities) // OK
+BOOST_MATH_DCD_DISTRIBUTION1_TEST(t, int_values, real_values, probabilities) // OK
+
+#endif
