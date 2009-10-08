@@ -34,7 +34,7 @@ namespace boost
             // Variables come first:
             //
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-            T errtol = ldexp(1.0f, -boost::math::policies::digits<T, Policy>());
+            T errtol = policies::get_epsilon<T, Policy>();
             T d2 = delta * delta / 2;
             //
             // k is the starting point for iteration, and is the
@@ -104,7 +104,7 @@ namespace boost
             // Variables come first:
             //
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-            T errtol = ldexp(1.0f, -boost::math::policies::digits<T, Policy>());
+            T errtol = boost::math::policies::get_epsilon<T, Policy>();
             T d2 = delta * delta / 2;
             //
             // k is the starting point for iteration, and is the
@@ -319,7 +319,7 @@ namespace boost
             // Variables come first:
             //
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-            T errtol = ldexp(1.0f, -boost::math::policies::digits<T, Policy>());
+            T errtol = boost::math::policies::get_epsilon<T, Policy>();
             T d2 = delta * delta / 2;
             //
             // k is the starting point for iteration, and is the

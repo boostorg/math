@@ -63,7 +63,7 @@ namespace boost
             T del = f / 2;
             T y = x / 2;
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-            T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
+            T errtol = boost::math::policies::get_epsilon<T, Policy>();
             T sum = init_sum;
             //
             // k is the starting location for iteration, we'll
@@ -158,7 +158,7 @@ namespace boost
                return sum;
 
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-            T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
+            T errtol = boost::math::policies::get_epsilon<T, Policy>();
 
             int i;
             T lterm(0), term(0);
@@ -203,7 +203,7 @@ namespace boost
             if(y == 0)
                return 0;
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-            T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
+            T errtol = boost::math::policies::get_epsilon<T, Policy>();
             T errorf(0), errorb(0);
 
             T x = y / 2;
@@ -289,7 +289,7 @@ namespace boost
             //
             BOOST_MATH_STD_USING
             boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-            T errtol = ldexp(1.0, -boost::math::policies::digits<T, Policy>());
+            T errtol = boost::math::policies::get_epsilon<T, Policy>();
             T x2 = x / 2;
             T n2 = n / 2;
             T l2 = lambda / 2;
