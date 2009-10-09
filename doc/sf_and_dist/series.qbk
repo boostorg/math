@@ -8,6 +8,15 @@
 
    namespace boost{ namespace math{ namespace tools{
    
+   template <class Functor, class U, class V>
+   inline typename Functor::result_type sum_series(Functor& func, const U& tolerance, boost::uintmax_t& max_terms, const V& init_value);
+   
+   template <class Functor, class U, class V>
+   inline typename Functor::result_type sum_series(Functor& func, const U& tolerance, boost::uintmax_t& max_terms);
+
+   //
+   // The following interfaces are now deprecated:
+   //   
    template <class Functor>
    typename Functor::result_type sum_series(Functor& func, int bits);
    
@@ -37,11 +46,13 @@ Each of the algorithms takes a nullary-function object as the first argument:
 the function object will be repeatedly invoked to pull successive terms from
 the series being summed.  
 
-The second argument is the number of binary bits of 
-precision required, summation will stop when the next term is too small to
-have any effect on the first /bits/ bits of the result.
+The second argument is the precision required, 
+summation will stop when the next term is less than
+/tolerance/ times the result.  The deprecated versions of sum_series
+take an integer number of bits here - internally they just convert this to
+a tolerance and forward the call.
 
-The optional third argument /max_terms/ sets an upper limit on the number
+The third argument /max_terms/ sets an upper limit on the number
 of terms of the series to evaluate. In addition, on exit the function will
 set /max_terms/ to the actual number of terms of the series that were 
 evaluated: this is particularly useful for profiling the convergence
@@ -112,11 +123,12 @@ Implementing log(1+x) is now fairly trivial:
       // We really should add some error checking on x here!
       assert(std::fabs(x) < 1);
       
-      // construct the series functor:
+      // Construct the series functor:
       log1p_series<T> s(x);
-      // and add it up, with enough digits for full machine precision
-      // plus a couple more for luck.... !
-      return tools::sum_series(s, tools::digits(x) + 2);
+      // Set a limit on how many iterations we permit:
+      boost::uintmax_t max_iter = 1000;
+      // Add it up, with enough precision for full machine precision:
+      return tools::sum_series(s, std::numeric_limits<T>::epsilon(), max_iter);
    }
 
 [endsect][/section Series Evaluation]

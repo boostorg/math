@@ -3,13 +3,14 @@
 // but are changed infrequently.
 
 // Copyright John Maddock 2007.
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2009
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// Laplace added Aug 2009 PAB
 
 #pragma once
 
@@ -25,6 +26,7 @@
 #include <boost/math/distributions/extreme_value.hpp>
 #include <boost/math/distributions/fisher_f.hpp>
 #include <boost/math/distributions/gamma.hpp>
+#include <boost/math/distributions/laplace.hpp>
 #include <boost/math/distributions/lognormal.hpp>
 #include <boost/math/distributions/negative_binomial.hpp>
 #include <boost/math/distributions/normal.hpp>

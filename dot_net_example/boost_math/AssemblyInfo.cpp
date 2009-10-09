@@ -16,7 +16,7 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("jmc")];
 [assembly:AssemblyProductAttribute("boost_math")];
-[assembly:AssemblyCopyrightAttribute("Copyright (c) jmc 2007")];
+[assembly:AssemblyCopyrightAttribute("Copyright (c) jmc 2007, 2009")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
@@ -31,7 +31,7 @@ using namespace System::Security::Permissions;
 // You can specify all the value or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly:AssemblyVersionAttribute("1.0.*")];
+[assembly:AssemblyVersionAttribute("1.1.*")];
 
 [assembly:ComVisible(false)];
 

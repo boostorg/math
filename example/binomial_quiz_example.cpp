@@ -1,4 +1,4 @@
-// Copyright Paul A. Bristow 2007
+// Copyright Paul A. Bristow 2007, 2009
 // Copyright John Maddock 2006
 
 // Use, modification and distribution are subject to the
@@ -48,20 +48,19 @@ int main()
 //[binomial_quiz_example2
 /*`
 The number of correct answers, X, is distributed as a binomial random variable
-with binomial distribution parameters: questions n = 16 and success fraction probability p = 0.25.
+with binomial distribution parameters: questions n and success fraction probability p.
 So we construct a binomial distribution:
 */
   int questions = 16; // All the questions in the quiz.
   int answers = 4; // Possible answers to each question.
-  double success_fraction = (double)answers / (double)questions; // If a random guess.
-  // Caution:  = answers / questions would be zero (because they are integers)!
+  double success_fraction = 1. / answers; // If a random guess, p = 1/4 = 0.25.
   binomial quiz(questions, success_fraction);
 /*`
 and display the distribution parameters we used thus:
 */
   cout << "In a quiz with " << quiz.trials()
     << " questions and with a probability of guessing right of "
-    << quiz.success_fraction() * 100 << " %" 
+    << quiz.success_fraction() * 100 << " %"
     << " or 1 in " << static_cast<int>(1. / quiz.success_fraction()) << endl;
 /*`
 Show a few probabilities of just guessing:
@@ -70,14 +69,17 @@ Show a few probabilities of just guessing:
   cout << "Probability of getting exactly one right is " << pdf(quiz, 1) << endl;
   cout << "Probability of getting exactly two right is " << pdf(quiz, 2) << endl;
   int pass_score = 11;
-  cout << "Probability of getting exactly " << pass_score << " answers right by chance is " 
+  cout << "Probability of getting exactly " << pass_score << " answers right by chance is "
+    << pdf(quiz, pass_score) << endl;
+  cout << "Probability of getting all " << questions << " answers right by chance is "
     << pdf(quiz, questions) << endl;
 /*`
 [pre
 Probability of getting none right is 0.0100226
 Probability of getting exactly one right is 0.0534538
 Probability of getting exactly two right is 0.133635
-Probability of getting exactly 11 answers right by chance is 2.32831e-010
+Probability of getting exactly 11 right is 0.000247132
+Probability of getting exactly all 16 answers right by chance is 2.32831e-010
 ]
 These don't give any encouragement to guessers!
 
@@ -111,7 +113,7 @@ Guessed Probability
 15      1.11759e-008
 16      2.32831e-010
 ]
-Then we can add the probabilities of some 'exactly right' like this: 
+Then we can add the probabilities of some 'exactly right' like this:
 */
   cout << "Probability of getting none or one right is " << pdf(quiz, 0) + pdf(quiz, 1) << endl;
 
@@ -127,7 +129,7 @@ to use the Cumulative Distribution Function (cdf) instead:
 [pre
 Probability of getting none or one right is 0.0634764
 ]
-Since the cdf is inclusive, we can get the probability of getting up to 10 right ( <= ) 
+Since the cdf is inclusive, we can get the probability of getting up to 10 right ( <= )
 */
   cout << "Probability of getting <= 10 right (to fail) is " << cdf(quiz, 10) << endl;
 /*`
@@ -151,7 +153,7 @@ Probability of getting > 10 right (to pass) is 0.000285239
 ]
 And we can check that these two, <= 10 and > 10,  add up to unity.
 */
-BOOST_ASSERT((cdf(quiz, 10) + cdf(complement(quiz, 10))) == 1.); 
+BOOST_ASSERT((cdf(quiz, 10) + cdf(complement(quiz, 10))) == 1.);
 /*`
 If we want a < rather than a <= test, because the CDF is inclusive, we must subtract one from the score.
 */
@@ -164,11 +166,11 @@ Probability of getting less than 11 (< 11) answers right by guessing is 0.999715
 ]
 and similarly to get a >= rather than a > test
 we also need to subtract one from the score (and can again check the sum is unity).
-This is because if the cdf is /inclusive/, 
+This is because if the cdf is /inclusive/,
 then its complement must be /exclusive/ otherwise there would be one possible
 outcome counted twice!
 */
-  cout << "Probability of getting at least " << pass_score 
+  cout << "Probability of getting at least " << pass_score
     << "(>= " << pass_score << ") answers right by guessing is "
     << cdf(complement(quiz, pass_score-1))
     << ", only 1 in " << 1/cdf(complement(quiz, pass_score-1)) << endl;
@@ -269,13 +271,13 @@ Probability of getting between 3 and 5 answers right by guessing is 0.6132
 ]
 And we can also try a few more combinations of high and low choices:
 */
-  low = 1; high = 6; 
+  low = 1; high = 6;
   cout << "Probability of getting between " << low << " and " << high << " answers right by guessing is "
     <<  cdf(quiz, high) - cdf(quiz, low - 1) << endl; // 1 and 6 P= 0.91042
-  low = 1; high = 8; 
+  low = 1; high = 8;
   cout << "Probability of getting between " << low << " and " << high << " answers right by guessing is "
     <<  cdf(quiz, high) - cdf(quiz, low - 1) << endl; // 1 <= x 8 P = 0.9825
-  low = 4; high = 4; 
+  low = 4; high = 4;
   cout << "Probability of getting between " << low << " and " << high << " answers right by guessing is "
     <<  cdf(quiz, high) - cdf(quiz, low - 1) << endl; // 4 <= x 4 P = 0.22520
 
@@ -292,7 +294,7 @@ Using moments of the distribution, we can say more about the spread of results f
   cout << "Standard deviation is " << standard_deviation(quiz) << endl;
   cout << "So about 2/3 will lie within 1 standard deviation and get between "
     <<  ceil(mean(quiz) - standard_deviation(quiz))  << " and "
-    << floor(mean(quiz) + standard_deviation(quiz)) << " correct." << endl; 
+    << floor(mean(quiz) + standard_deviation(quiz)) << " correct." << endl;
   cout << "Mode (the most frequent) is " << mode(quiz) << endl;
   cout << "Skewness is " << skewness(quiz) << endl;
 
@@ -308,19 +310,19 @@ Skewness is 0.2887
 The quantiles (percentiles or percentage points) for a few probability levels:
 */
   cout << "Quartiles " << quantile(quiz, 0.25) << " to "
-    << quantile(complement(quiz, 0.25)) << endl; // Quartiles 
-  cout << "1 standard deviation " << quantile(quiz, 0.33) << " to " 
-    << quantile(quiz, 0.67) << endl; // 1 sd 
+    << quantile(complement(quiz, 0.25)) << endl; // Quartiles
+  cout << "1 standard deviation " << quantile(quiz, 0.33) << " to "
+    << quantile(quiz, 0.67) << endl; // 1 sd
   cout << "Deciles " << quantile(quiz, 0.1)  << " to "
-    << quantile(complement(quiz, 0.1))<< endl; // Deciles 
+    << quantile(complement(quiz, 0.1))<< endl; // Deciles
   cout << "5 to 95% " << quantile(quiz, 0.05)  << " to "
     << quantile(complement(quiz, 0.05))<< endl; // 5 to 95%
   cout << "2.5 to 97.5% " << quantile(quiz, 0.025) << " to "
-    <<  quantile(complement(quiz, 0.025)) << endl; // 2.5 to 97.5% 
+    <<  quantile(complement(quiz, 0.025)) << endl; // 2.5 to 97.5%
   cout << "2 to 98% " << quantile(quiz, 0.02)  << " to "
     << quantile(complement(quiz, 0.02)) << endl; //  2 to 98%
 
-  cout << "If guessing then percentiles 1 to 99% will get " << quantile(quiz, 0.01) 
+  cout << "If guessing then percentiles 1 to 99% will get " << quantile(quiz, 0.01)
     << " to " << quantile(complement(quiz, 0.01)) << " right." << endl;
 /*`
 Notice that these output integral values because the default policy is `integer_round_outwards`.
@@ -354,7 +356,7 @@ We could control the policy for *all* distributions by
   at the head of the program would make this policy apply
 to this *one, and only*, translation unit.
 
-Or we can now create a (typedef for) policy that has discrete quantiles real 
+Or we can now create a (typedef for) policy that has discrete quantiles real
 (here avoiding any 'using namespaces ...' statements):
 */
   using boost::math::policies::policy;
@@ -376,7 +378,7 @@ And use this to show some quantiles - that now have real rather than integer val
 */
   cout << "Quartiles " << quantile(quiz, 0.25) << " to "
     << quantile(complement(quiz_real, 0.25)) << endl; // Quartiles 2 to 4.6212
-  cout << "1 standard deviation " << quantile(quiz_real, 0.33) << " to " 
+  cout << "1 standard deviation " << quantile(quiz_real, 0.33) << " to "
     << quantile(quiz_real, 0.67) << endl; // 1 sd 2.6654 4.194
   cout << "Deciles " << quantile(quiz_real, 0.1)  << " to "
     << quantile(complement(quiz_real, 0.1))<< endl; // Deciles 1.3487 5.7583
@@ -387,7 +389,7 @@ And use this to show some quantiles - that now have real rather than integer val
   cout << "2 to 98% " << quantile(quiz_real, 0.02)  << " to "
     << quantile(complement(quiz_real, 0.02)) << endl; //  2 to 98% 0.31311 7.7880
 
-  cout << "If guessing, then percentiles 1 to 99% will get " << quantile(quiz_real, 0.01) 
+  cout << "If guessing, then percentiles 1 to 99% will get " << quantile(quiz_real, 0.01)
     << " to " << quantile(complement(quiz_real, 0.01)) << " right." << endl;
 /*`
 [pre
@@ -407,7 +409,7 @@ If guessing then percentiles 1 to 99% will get 0 to 7.788 right.
   catch(const std::exception& e)
   { // Always useful to include try & catch blocks because
     // default policies are to throw exceptions on arguments that cause
-    // errors like underflow, overflow. 
+    // errors like underflow, overflow.
     // Lacking try & catch blocks, the program will abort without a message below,
     // which may give some helpful clues as to the cause of the exception.
     std::cout <<
@@ -422,12 +424,14 @@ If guessing then percentiles 1 to 99% will get 0 to 7.788 right.
 
 Output is:
 
+BAutorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\binomial_quiz_example.exe"
 Binomial distribution example - guessing in a quiz.
 In a quiz with 16 questions and with a probability of guessing right of 25 % or 1 in 4
 Probability of getting none right is 0.0100226
 Probability of getting exactly one right is 0.0534538
 Probability of getting exactly two right is 0.133635
-Probability of getting exactly 11 answers right by chance is 2.32831e-010
+Probability of getting exactly 11 answers right by chance is 0.000247132
+Probability of getting all 16 answers right by chance is 2.32831e-010
 Guessed Probability
  0      0.0100226
  1      0.0534538
@@ -472,7 +476,7 @@ Guessed OK   Probability
 14           0.9999999886
 15           0.9999999998
 16           1
-At least (>=)
+At least (>)
 Guessed OK   Probability
  0           0.9899774042
  1           0.9365235602
