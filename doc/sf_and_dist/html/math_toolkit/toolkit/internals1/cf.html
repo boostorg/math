@@ -28,7 +28,7 @@
         Evaluation</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.cf.synopsis"></a><h5>
-<a name="id954960"></a>
+<a name="id1054851"></a>
           <a class="link" href="cf.html#math_toolkit.toolkit.internals1.cf.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -40,7 +40,26 @@
         </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Gen</span><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Gen</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
+<span class="keyword">typename</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">fraction_traits</span><span class="special">&lt;</span><span class="identifier">Gen</span><span class="special">&gt;::</span><span class="identifier">result_type</span> 
+   <span class="identifier">continued_fraction_b</span><span class="special">(</span><span class="identifier">Gen</span><span class="special">&amp;</span> <span class="identifier">g</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">tolerance</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_terms</span><span class="special">)</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Gen</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
+<span class="keyword">typename</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">fraction_traits</span><span class="special">&lt;</span><span class="identifier">Gen</span><span class="special">&gt;::</span><span class="identifier">result_type</span> 
+   <span class="identifier">continued_fraction_b</span><span class="special">(</span><span class="identifier">Gen</span><span class="special">&amp;</span> <span class="identifier">g</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">tolerance</span><span class="special">)</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Gen</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
+<span class="keyword">typename</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">fraction_traits</span><span class="special">&lt;</span><span class="identifier">Gen</span><span class="special">&gt;::</span><span class="identifier">result_type</span> 
+   <span class="identifier">continued_fraction_a</span><span class="special">(</span><span class="identifier">Gen</span><span class="special">&amp;</span> <span class="identifier">g</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">tolerance</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_terms</span><span class="special">)</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Gen</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
+<span class="keyword">typename</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">fraction_traits</span><span class="special">&lt;</span><span class="identifier">Gen</span><span class="special">&gt;::</span><span class="identifier">result_type</span> 
+   <span class="identifier">continued_fraction_a</span><span class="special">(</span><span class="identifier">Gen</span><span class="special">&amp;</span> <span class="identifier">g</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">tolerance</span><span class="special">)</span>
+
+<span class="comment">//
+</span><span class="comment">// These interfaces are present for legacy reasons, and are now deprecated:
+</span><span class="comment">//
+</span><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Gen</span><span class="special">&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">fraction_traits</span><span class="special">&lt;</span><span class="identifier">Gen</span><span class="special">&gt;::</span><span class="identifier">result_type</span> 
    <span class="identifier">continued_fraction_b</span><span class="special">(</span><span class="identifier">Gen</span><span class="special">&amp;</span> <span class="identifier">g</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">bits</span><span class="special">);</span>
 
@@ -59,7 +78,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals1.cf.description"></a><h5>
-<a name="id955486"></a>
+<a name="id1055888"></a>
           <a class="link" href="cf.html#math_toolkit.toolkit.internals1.cf.description">Description</a>
         </h5>
 <p>
@@ -144,10 +163,12 @@
 </tbody>
 </table></div>
 <p>
-          In all the continued fraction evaluation functions the <span class="emphasis"><em>bits</em></span>
-          parameter is the number of bits precision desired in the result, evaluation
-          of the fraction will continue until the last term evaluated leaves the
-          first <span class="emphasis"><em>bits</em></span> bits in the result unchanged.
+          In all the continued fraction evaluation functions the <span class="emphasis"><em>tolerance</em></span>
+          parameter is the precision desired in the result, evaluation of the fraction
+          will continue until the last term evaluated leaves the relative error in
+          the result less than <span class="emphasis"><em>tolerance</em></span>. The deprecated interfaces
+          take a number of digits precision here, internally they just convert this
+          to a tolerance and forward call.
         </p>
 <p>
           If the optional <span class="emphasis"><em>max_terms</em></span> parameter is specified then
@@ -157,7 +178,7 @@
           a continued fraction for convergence.
         </p>
 <a name="math_toolkit.toolkit.internals1.cf.implementation"></a><h5>
-<a name="id955694"></a>
+<a name="id1056096"></a>
           <a class="link" href="cf.html#math_toolkit.toolkit.internals1.cf.implementation">Implementation</a>
         </h5>
 <p>
@@ -167,7 +188,7 @@
           Lentz, W.J. 1976, Applied Optics, vol. 15, pp. 668-671.
         </p>
 <a name="math_toolkit.toolkit.internals1.cf.examples"></a><h5>
-<a name="id955710"></a>
+<a name="id1056112"></a>
           <a class="link" href="cf.html#math_toolkit.toolkit.internals1.cf.examples">Examples</a>
         </h5>
 <p>
@@ -197,7 +218,7 @@
         </p>
 <pre class="programlisting"><span class="identifier">continued_fraction_a</span><span class="special">(</span>
    <span class="identifier">golden_ratio_fraction</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;(),</span>
-   <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">digits</span><span class="special">);</span>
+   <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">());</span>
 </pre>
 <p>
           It's more usual though to have to define both the <span class="emphasis"><em>a</em></span>'s
@@ -239,7 +260,7 @@
 <span class="identifier">T</span> <span class="identifier">tan</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">a</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="identifier">tan_fraction</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">fract</span><span class="special">(</span><span class="identifier">a</span><span class="special">);</span>
-   <span class="keyword">return</span> <span class="identifier">a</span> <span class="special">/</span> <span class="identifier">continued_fraction_b</span><span class="special">(</span><span class="identifier">fract</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span><span class="special">);</span>
+   <span class="keyword">return</span> <span class="identifier">a</span> <span class="special">/</span> <span class="identifier">continued_fraction_b</span><span class="special">(</span><span class="identifier">fract</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">());</span>
 <span class="special">}</span>
 </pre>
 <p>
