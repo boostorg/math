@@ -62,6 +62,7 @@ void test_spots(RealType /*T*/, const char* type_name)
       BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(-1));
       BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(-1));
    }
+#if !defined(__SUNPRO_CC) && !defined(BOOST_INTEL)
    if(std::numeric_limits<RealType>::has_quiet_NaN)
    {
       a = std::numeric_limits<RealType>::quiet_NaN();
@@ -75,6 +76,7 @@ void test_spots(RealType /*T*/, const char* type_name)
       BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(-1));
       BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(-1));
    }
+#endif
 }
 
 
