@@ -251,14 +251,14 @@ The lower incomplete gamma is computed from its series representation:
 4) [equation igamma8]
 
 Or by subtraction of the upper integral from either [Gamma](a) or 1
-when /x > a and x > 1.1/.
+when /x - (1/(3x)) > a and x > 1.1/.
 
 The upper integral is computed from Legendre's continued fraction representation:
 
 5) [equation igamma9]
 
-When /x > 1.1/ or by subtraction of the lower integral from either [Gamma](a) or 1
-when /x < a/.
+When /(x > 1.1)/ or by subtraction of the lower integral from either [Gamma](a) or 1
+when /x - (1/(3x))  < a/.
 
 For /x < 1.1/ computation of the upper integral is more complex as the continued 
 fraction representation is unstable in this area.  However there is another 
@@ -279,9 +279,9 @@ That therefore imposes a similar limit on the precision of this
 function in this region.
 
 For /x < 1.1/ the crossover point where the result is ~0.5 no longer
-occurs for /x ~ y/.  Using /x * 1.1 < a/ as the crossover criterion
+occurs for /x ~ y/.  Using /x * 0.75 < a/ as the crossover criterion
 for /0.5 < x <= 1.1/ keeps the maximum value computed (whether
-it's the upper or lower interval) to around 0.6.   Likewise for
+it's the upper or lower interval) to around 0.75.   Likewise for
 /x <= 0.5/ then using /-0.4 / log(x) < a/ as the crossover criterion
 keeps the maximum value computed to around 0.7
 (whether it's the upper or lower interval).

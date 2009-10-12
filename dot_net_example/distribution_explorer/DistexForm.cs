@@ -45,7 +45,7 @@ namespace distribution_explorer
         distexSplash frmSplash = new distexSplash();
         frmSplash.Show();
         frmSplash.Update();
-        // Now load our data while the splash is showing:    
+        // Now load our data while the splash is showing:
         if (boost_math.any_distribution.size() <= 0)
         {
           MessageBox.Show("Problem loading any distributions, size = " + boost_math.any_distribution.size().ToString());
@@ -276,7 +276,7 @@ namespace distribution_explorer
       }
       catch (SystemException se)
       {
-          MessageBox.Show(se.Message + 
+          MessageBox.Show(se.Message +
               " Please check the distribution's parameters and try again.", "Distribution Error");
           this.propertiesTab.SelectedIndex = 0;
           e.Cancel = true;
@@ -574,7 +574,7 @@ namespace distribution_explorer
       "\nFor more information, including downloads see " +
       "\nhttp://boost-consulting.com/vault/index.php?action=downloadfile&filename=math_toolkit.html&directory=Math%20-%20Numerics&" +
       "\n(Note that .NET framework 2.0 and VCredist are requirements for this program.)" +
-      "\n\nCopyright John Maddock & Paul A. Bristow 2007";
+      "\n\nCopyright John Maddock & Paul A. Bristow 2007, 2009";
 
       MessageBox.Show("Statistical Distribution Explorer\n" + helpText);
     }

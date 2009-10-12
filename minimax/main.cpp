@@ -409,11 +409,11 @@ void do_test_n(T, const char* name, unsigned count)
       std::string msg = "Max Error found at ";
       msg += name;
       msg += " precision = ";
-      msg.append(62 - 17 - msg.size(), ' ');
+      //msg.append(62 - 17 - msg.size(), ' ');
       std::cout << msg << "Poly: " << std::setprecision(6) 
-         << std::setw(15) << std::left 
+         //<< std::setw(15) << std::left 
          << boost::math::tools::real_cast<T>(max_error) 
-         << "Cheb: " << boost::math::tools::real_cast<T>(max_cheb_error) << std::endl;
+         << " Cheb: " << boost::math::tools::real_cast<T>(max_cheb_error) << std::endl;
    }
    else
    {

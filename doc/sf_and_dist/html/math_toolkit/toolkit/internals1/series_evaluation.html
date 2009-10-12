@@ -28,7 +28,7 @@
         Series Evaluation</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.series_evaluation.synopsis"></a><h5>
-<a name="id936139"></a>
+<a name="id1051377"></a>
           <a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -40,7 +40,16 @@
         </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Functor</span><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Functor</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">V</span><span class="special">&gt;</span>
+<span class="keyword">inline</span> <span class="keyword">typename</span> <span class="identifier">Functor</span><span class="special">::</span><span class="identifier">result_type</span> <span class="identifier">sum_series</span><span class="special">(</span><span class="identifier">Functor</span><span class="special">&amp;</span> <span class="identifier">func</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">tolerance</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_terms</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">V</span><span class="special">&amp;</span> <span class="identifier">init_value</span><span class="special">);</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Functor</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">V</span><span class="special">&gt;</span>
+<span class="keyword">inline</span> <span class="keyword">typename</span> <span class="identifier">Functor</span><span class="special">::</span><span class="identifier">result_type</span> <span class="identifier">sum_series</span><span class="special">(</span><span class="identifier">Functor</span><span class="special">&amp;</span> <span class="identifier">func</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">tolerance</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_terms</span><span class="special">);</span>
+
+<span class="comment">//
+</span><span class="comment">// The following interfaces are now deprecated:
+</span><span class="comment">//   
+</span><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Functor</span><span class="special">&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">Functor</span><span class="special">::</span><span class="identifier">result_type</span> <span class="identifier">sum_series</span><span class="special">(</span><span class="identifier">Functor</span><span class="special">&amp;</span> <span class="identifier">func</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">bits</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Functor</span><span class="special">&gt;</span>
@@ -61,7 +70,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals1.series_evaluation.description"></a><h5>
-<a name="id937386"></a>
+<a name="id1054164"></a>
           <a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.description">Description</a>
         </h5>
 <p>
@@ -74,16 +83,17 @@
           from the series being summed.
         </p>
 <p>
-          The second argument is the number of binary bits of precision required,
-          summation will stop when the next term is too small to have any effect
-          on the first <span class="emphasis"><em>bits</em></span> bits of the result.
+          The second argument is the precision required, summation will stop when
+          the next term is less than <span class="emphasis"><em>tolerance</em></span> times the result.
+          The deprecated versions of sum_series take an integer number of bits here
+          - internally they just convert this to a tolerance and forward the call.
         </p>
 <p>
-          The optional third argument <span class="emphasis"><em>max_terms</em></span> sets an upper
-          limit on the number of terms of the series to evaluate. In addition, on
-          exit the function will set <span class="emphasis"><em>max_terms</em></span> to the actual
-          number of terms of the series that were evaluated: this is particularly
-          useful for profiling the convergence properties of a new series.
+          The third argument <span class="emphasis"><em>max_terms</em></span> sets an upper limit on
+          the number of terms of the series to evaluate. In addition, on exit the
+          function will set <span class="emphasis"><em>max_terms</em></span> to the actual number of
+          terms of the series that were evaluated: this is particularly useful for
+          profiling the convergence properties of a new series.
         </p>
 <p>
           The final optional argument <span class="emphasis"><em>init_value</em></span> is the initial
@@ -117,7 +127,7 @@
           summation in this way.
         </p>
 <a name="math_toolkit.toolkit.internals1.series_evaluation.example"></a><h5>
-<a name="id937477"></a>
+<a name="id1054255"></a>
           <a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.example">Example</a>
         </h5>
 <p>
@@ -165,11 +175,12 @@
    <span class="comment">// We really should add some error checking on x here!
 </span>   <span class="identifier">assert</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">fabs</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">&lt;</span> <span class="number">1</span><span class="special">);</span>
    
-   <span class="comment">// construct the series functor:
+   <span class="comment">// Construct the series functor:
 </span>   <span class="identifier">log1p_series</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">s</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
-   <span class="comment">// and add it up, with enough digits for full machine precision
-</span>   <span class="comment">// plus a couple more for luck.... !
-</span>   <span class="keyword">return</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">sum_series</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">digits</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">+</span> <span class="number">2</span><span class="special">);</span>
+   <span class="comment">// Set a limit on how many iterations we permit:
+</span>   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span> <span class="identifier">max_iter</span> <span class="special">=</span> <span class="number">1000</span><span class="special">;</span>
+   <span class="comment">// Add it up, with enough precision for full machine precision:
+</span>   <span class="keyword">return</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">sum_series</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">(),</span> <span class="identifier">max_iter</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 </div>

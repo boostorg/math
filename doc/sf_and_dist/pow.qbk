@@ -70,8 +70,8 @@ Two cases of errors can occur when using `pow`:
 
 * In case of null base and negative exponent, an __overflow_error occurs since 
 this operation is a division by 0 (it equals to 1/0).
-* In case of null exponent, an __indeterminate_result_error occurs since the
-result of a null power is indeterminate.
+* In case of null base and null exponent, an __indeterminate_result_error
+occurs since the result of this operation is indeterminate.
 Those errors follow the
 [link math_toolkit.main_overview.error_handling 
 general policies of error handling in Boost.Math].

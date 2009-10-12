@@ -94,9 +94,9 @@ inline T bessel_j_small_z_series(T v, T x, const Policy& pol)
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    T zero = 0;
-   T result = boost::math::tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter, zero);
+   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
 #else
-   T result = boost::math::tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter);
+   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
 #endif
    policies::check_series_iterations("boost::math::bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return result;
@@ -110,9 +110,9 @@ inline T sph_bessel_j_small_z_series(unsigned v, T x, const Policy& pol)
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
    T zero = 0;
-   T result = boost::math::tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter, zero);
+   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
 #else
-   T result = boost::math::tools::sum_series(s, boost::math::policies::digits<T, Policy>(), max_iter);
+   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
 #endif
    policies::check_series_iterations("boost::math::sph_bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return result * sqrt(constants::pi<T>() / 4);

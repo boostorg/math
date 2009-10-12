@@ -198,3 +198,69 @@ BOOST_MATH_PERFORMANCE_TEST(lgamma_test, "lgamma-gsl")
 
 #endif
 
+#ifdef TEST_DCDFLIB
+#include <dcdflib.h>
+
+template <std::size_t N>
+double gamma_evaluate2_dcd(const boost::array<boost::array<T, 3>, N>& data)
+{
+   double result = 0;
+   for(unsigned i = 0; i < N; ++i)
+   {
+      double x = data[i][0];
+      result += gamma_x(&x);
+   }
+   return result;
+}
+
+BOOST_MATH_PERFORMANCE_TEST(gamma_test_dcd, "gamma-dcd")
+{
+   double result = gamma_evaluate2_dcd(factorials);
+   result += gamma_evaluate2_dcd(near_1);
+   result += gamma_evaluate2_dcd(near_2);
+   result += gamma_evaluate2_dcd(near_0);
+   result += gamma_evaluate2_dcd(near_m10);
+   result += gamma_evaluate2_dcd(near_m55);
+
+   consume_result(result);
+   set_call_count(
+      (sizeof(factorials) 
+      + sizeof(near_1) 
+      + sizeof(near_2)
+      + sizeof(near_0)
+      + sizeof(near_m10)
+      + sizeof(near_m55)) / sizeof(factorials[0]));
+}
+
+template <std::size_t N>
+double lgamma_evaluate2_dcd(const boost::array<boost::array<T, 3>, N>& data)
+{
+   double result = 0;
+   for(unsigned i = 0; i < N; ++i)
+   {
+      double x = data[i][0];
+      result += gamma_log(&x);
+   }
+   return result;
+}
+
+BOOST_MATH_PERFORMANCE_TEST(lgamma_test_dcd, "lgamma-dcd")
+{
+   double result = lgamma_evaluate2_dcd(factorials);
+   result += lgamma_evaluate2_dcd(near_1);
+   result += lgamma_evaluate2_dcd(near_2);
+   result += lgamma_evaluate2_dcd(near_0);
+   result += lgamma_evaluate2_dcd(near_m10);
+   result += lgamma_evaluate2_dcd(near_m55);
+
+   consume_result(result);
+   set_call_count(
+      (sizeof(factorials) 
+      + sizeof(near_1) 
+      + sizeof(near_2)
+      + sizeof(near_0)
+      + sizeof(near_m10)
+      + sizeof(near_m55)) / sizeof(factorials[0]));
+}
+
+#endif

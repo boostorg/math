@@ -162,12 +162,117 @@ inline long double gamma_p(long double x, long double y)
 }
 #endif
 
+#ifdef TEST_DCDFLIB
+#define TEST_OTHER
+#include <dcdflib.h>
+
+namespace other{
+float tgamma(float z)
+{
+   double v = z;
+   return (float)gamma_x(&v);
+}
+double tgamma(double z)
+{
+   return gamma_x(&z);
+}
+long double tgamma(long double z)
+{
+   double v = z;
+   return gamma_x(&v);
+}
+float lgamma(float z)
+{
+   double v = z;
+   return (float)gamma_log(&v);
+}
+double lgamma(double z)
+{
+   double v = z;
+   return gamma_log(&v);
+}
+long double lgamma(long double z)
+{
+   double v = z;
+   return gamma_log(&v);
+}
+inline double gamma_q(double x, double y)
+{ 
+   double ans, qans;
+   int i = 0;
+   gamma_inc (&x, &y, &ans, &qans, &i); 
+   return qans;
+}
+inline float gamma_q(float x, float y)
+{ 
+   return (float)gamma_q((double)x, (double)y); 
+}
+inline long double gamma_q(long double x, long double y)
+{ 
+   return gamma_q((double)x, (double)y); 
+}
+inline double gamma_p(double x, double y)
+{ 
+   double ans, qans;
+   int i = 0;
+   gamma_inc (&x, &y, &ans, &qans, &i); 
+   return ans;
+}
+inline float gamma_p(float x, float y)
+{ 
+   return (float)gamma_p((double)x, (double)y); 
+}
+inline long double gamma_p(long double x, long double y)
+{ 
+   return gamma_p((double)x, (double)y); 
+}
+
+inline double gamma_q_inv(double x, double y)
+{ 
+   double ans, p, nul;
+   int i = 0;
+   p = 1 - y;
+   nul = 0;
+   gamma_inc_inv (&x, &ans, &nul, &p, &y, &i); 
+   return ans;
+}
+inline float gamma_q_inv(float x, float y)
+{ 
+   return (float)gamma_q_inv((double)x, (double)y); 
+}
+inline long double gamma_q_inv(long double x, long double y)
+{ 
+   return gamma_q_inv((double)x, (double)y); 
+}
+inline double gamma_p_inv(double x, double y)
+{ 
+   double ans, p, nul;
+   int i = 0;
+   p = 1 - y;
+   nul = 0;
+   gamma_inc_inv (&x, &ans, &nul, &y, &p, &i); 
+   return ans;
+}
+inline float gamma_p_inv(float x, float y)
+{ 
+   return (float)gamma_p_inv((double)x, (double)y); 
+}
+inline long double gamma_p_inv(long double x, long double y)
+{ 
+   return gamma_p_inv((double)x, (double)y); 
+}
+
+}
+#endif
+
 #ifdef TEST_OTHER
 namespace other{
    boost::math::concepts::real_concept tgamma(boost::math::concepts::real_concept){ return 0; }
    boost::math::concepts::real_concept lgamma(boost::math::concepts::real_concept){ return 0; }
    boost::math::concepts::real_concept gamma_q(boost::math::concepts::real_concept, boost::math::concepts::real_concept){ return 0; }
    boost::math::concepts::real_concept gamma_p(boost::math::concepts::real_concept, boost::math::concepts::real_concept){ return 0; }
+   boost::math::concepts::real_concept gamma_p_inv(boost::math::concepts::real_concept x, boost::math::concepts::real_concept y){ return 0; }
+   boost::math::concepts::real_concept gamma_q_inv(boost::math::concepts::real_concept x, boost::math::concepts::real_concept y){ return 0; }
 }
 #endif
 

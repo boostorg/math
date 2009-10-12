@@ -54,7 +54,7 @@ namespace distribution_explorer
             // 
             this.labelApplicationVersion.BackColor = System.Drawing.SystemColors.Control;
             this.labelApplicationVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelApplicationVersion.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+          this.labelApplicationVersion.ForeColor = System.Drawing.SystemColors.ControlText;
             this.labelApplicationVersion.Location = new System.Drawing.Point(315, 184);
             this.labelApplicationVersion.Name = "labelApplicationVersion";
             this.labelApplicationVersion.Size = new System.Drawing.Size(320, 20);
@@ -67,7 +67,7 @@ namespace distribution_explorer
             // 
             this.labelApplicationCopyright.BackColor = System.Drawing.SystemColors.Control;
             this.labelApplicationCopyright.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.labelApplicationCopyright.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+          this.labelApplicationCopyright.ForeColor = System.Drawing.SystemColors.ControlText;
             this.labelApplicationCopyright.Location = new System.Drawing.Point(72, 214);
             this.labelApplicationCopyright.Name = "labelApplicationCopyright";
             this.labelApplicationCopyright.Size = new System.Drawing.Size(563, 20);
@@ -78,7 +78,7 @@ namespace distribution_explorer
             // labelApplicationDescription
             // 
             this.labelApplicationDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.labelApplicationDescription.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+          this.labelApplicationDescription.ForeColor = System.Drawing.SystemColors.ControlText;
             this.labelApplicationDescription.Location = new System.Drawing.Point(27, 234);
             this.labelApplicationDescription.Name = "labelApplicationDescription";
             this.labelApplicationDescription.Size = new System.Drawing.Size(608, 29);
@@ -105,7 +105,7 @@ namespace distribution_explorer
             // 
             // distexSplash
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
+          this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(669, 276);

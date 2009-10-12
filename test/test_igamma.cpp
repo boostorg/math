@@ -361,7 +361,7 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       bind_func(funcp, 0, 1),
       extract_result(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_q", test_name);
-#if defined(TEST_CEPHES) || defined(TEST_GSL)
+#if defined(TEST_OTHER)
    //
    // test other gamma_q(T, T) against data:
    //
@@ -388,7 +388,7 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       bind_func(funcp, 0, 1),
       extract_result(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_p", test_name);
-#if defined(TEST_CEPHES) || defined(TEST_GSL)
+#if defined(TEST_OTHER)
    //
    // test other gamma_p(T, T) against data:
    //

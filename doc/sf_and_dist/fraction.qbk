@@ -8,6 +8,25 @@
 
    namespace boost{ namespace math{ namespace tools{
    
+   template <class Gen, class U>
+   typename detail::fraction_traits<Gen>::result_type 
+      continued_fraction_b(Gen& g, const U& tolerance, boost::uintmax_t& max_terms)
+
+   template <class Gen, class U>
+   typename detail::fraction_traits<Gen>::result_type 
+      continued_fraction_b(Gen& g, const U& tolerance)
+
+   template <class Gen, class U>
+   typename detail::fraction_traits<Gen>::result_type 
+      continued_fraction_a(Gen& g, const U& tolerance, boost::uintmax_t& max_terms)
+
+   template <class Gen, class U>
+   typename detail::fraction_traits<Gen>::result_type 
+      continued_fraction_a(Gen& g, const U& tolerance)
+
+   //
+   // These interfaces are present for legacy reasons, and are now deprecated:
+   //
    template <class Gen>
    typename detail::fraction_traits<Gen>::result_type 
       continued_fraction_b(Gen& g, int bits);
@@ -59,10 +78,11 @@ Each time this operator is called then the next pair of /a/ and /b/
     are assumed to 1.]]
 ]
 
-In all the continued fraction evaluation functions the /bits/ parameter is the
-number of bits precision desired in the result, evaluation of the fraction will
-continue until the last term evaluated leaves the first /bits/ bits in the result 
-unchanged.
+In all the continued fraction evaluation functions the /tolerance/ parameter is the
+precision desired in the result, evaluation of the fraction will
+continue until the last term evaluated leaves the relative error in the result
+less than /tolerance/.  The deprecated interfaces take a number of digits precision
+here, internally they just convert this to a tolerance and forward call.
 
 If the optional /max_terms/ parameter is specified then no more than /max_terms/ 
 calls to the generator will be made, and on output, 
@@ -102,7 +122,7 @@ The golden ratio can then be computed to double precision using:
 
    continued_fraction_a(
       golden_ratio_fraction<double>(),
-      std::numeric_limits<double>::digits);
+      std::numeric_limits<double>::epsilon());
 
 It's more usual though to have to define both the /a/'s and the /b/'s
 when evaluating special functions by continued fractions, for example
@@ -139,7 +159,7 @@ will be negative.  The tangent function can now be evaluated using:
    T tan(T a)
    {
       tan_fraction<T> fract(a);
-      return a / continued_fraction_b(fract, std::numeric_limits<T>::digits);
+      return a / continued_fraction_b(fract, std::numeric_limits<T>::epsilon());
    }
 
 Notice that this time we're using the "_b" suffixed version to evaluate

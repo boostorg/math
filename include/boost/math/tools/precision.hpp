@@ -221,7 +221,7 @@ inline T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
 }
 
 template <class T>
-inline T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
+inline T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T))
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::epsilon<T>(mpl::bool_< ::std::numeric_limits<T>::is_specialized>());

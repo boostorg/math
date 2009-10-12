@@ -93,7 +93,7 @@ inline T didonato_FN(T p, T a, T x, unsigned N, T tolerance, const Policy& pol)
 }
 
 template <class T, class Policy>
-T find_inverse_gamma(T a, T p, T q, const Policy& pol)
+T find_inverse_gamma(T a, T p, T q, const Policy& pol, bool* p_has_10_digits)
 {
    //
    // In order to understand what's going on here, you will
@@ -107,6 +107,7 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
    BOOST_MATH_STD_USING
 
    T result;
+   *p_has_10_digits = false;
 
    if(a == 1)
    {
@@ -191,6 +192,8 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
          T y_4 = y_2 * y_2;
          result = y + c1 + (c2 / y) + (c3 / y_2) + (c4 / y_3) + (c5 / y_4);
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         if(b < 1e-28f)
+            *p_has_10_digits = true;
       }
    }
    else
@@ -218,6 +221,7 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
       if((a >= 500) && (fabs(1 - w / a) < 1e-6))
       {
          result = w;
+         *p_has_10_digits = true;
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
       else if (p > 0.5)
@@ -269,25 +273,37 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol)
       }
       else
       {
+         T z = w;
+         T ap1 = a + 1;
+         if(w < 0.15f * ap1)
+         {
          // DiDonato and Morris Eq 35:
-         T z = didonato_FN(p, a, w, 0, T(0), pol);
-         z = didonato_FN(p, a, z, 2, T(0), pol);
-         z = didonato_FN(p, a, z, 2, T(0), pol);
-         z = didonato_FN(p, a, z, 3, T(0), pol);
-
+            T v = log(p) + boost::math::lgamma(ap1, pol);
+            T s = 1;
+            z = exp((v + w) / a);
+            s = boost::math::log1p(z / ap1 * (1 + z / (a + 2)));
+            z = exp((v + z - s) / a);
+            z = exp((v + z - s) / a);
+            s = boost::math::log1p(z / ap1 * (1 + z / (a + 2) * (1 + z / (a + 3))));
+            z = exp((v + z - s) / a);
          BOOST_MATH_INSTRUMENT_VARIABLE(z);
+         }
 
-         if((z <= 0.01 * (a + 1)) || (z > 0.7 * (a + 1)))
+         if((z <= 0.01 * ap1) || (z > 0.7 * ap1))
          {
             result = z;
+            if(z <= 0.002 * ap1)
+               *p_has_10_digits = true;
             BOOST_MATH_INSTRUMENT_VARIABLE(result);
          }
          else
          {
             // DiDonato and Morris Eq 36:
-            T zb = didonato_FN(p, a, z, 100, T(1e-4), pol);
-            T u = log(p) + boost::math::lgamma(a + 1, pol);
-            result = zb * (1 - (a * log(zb) - zb - u + log(didonato_SN(a, z, 100, T(1e-4)))) / (a - zb));
+            T ls = log(didonato_SN(a, z, 100, T(1e-4)));
+            T v = log(p) + boost::math::lgamma(ap1, pol);
+            z = exp((v + z - ls) / a);
+            result = z * (1 - (a * log(z) - z - v + ls) / (a - z));
+
             BOOST_MATH_INSTRUMENT_VARIABLE(result);
          }
       }
@@ -386,7 +402,10 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
       return tools::max_value<T>();
    if(p == 0)
       return 0;
-   T guess = detail::find_inverse_gamma<T>(a, p, 1 - p, pol);
+   bool has_10_digits;
+   T guess = detail::find_inverse_gamma<T>(a, p, 1 - p, pol, &has_10_digits);
+   if((policies::digits<T, Policy>() <= 36) && has_10_digits)
+      return guess;
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();
@@ -397,18 +416,31 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
    // large convergence is slow, so we'll bump it up to full 
    // precision to prevent premature termination of the root-finding routine.
    //
-   unsigned digits = (policies::digits<T, Policy>() * 2) / 3;
+   unsigned digits = policies::digits<T, Policy>();
+   if(digits < 30)
+   {
+      digits *= 2;
+      digits /= 3;
+   }
+   else
+   {
+      digits /= 2;
+      digits -= 1;
+   }
    if((a < 0.125) && (fabs(gamma_p_derivative(a, guess, pol)) > 1 / sqrt(tools::epsilon<T>())))
       digits = policies::digits<T, Policy>() - 2;
    //
    // Go ahead and iterate:
    //
+   boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
    guess = tools::halley_iterate(
       detail::gamma_p_inverse_func<T, Policy>(a, p, false),
       guess,
       lower,
       tools::max_value<T>(),
-      digits);
+      digits,
+      max_iter);
+   policies::check_root_iterations(function, max_iter, pol);
    BOOST_MATH_INSTRUMENT_VARIABLE(guess);
    if(guess == lower)
       guess = policies::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
@@ -430,7 +462,10 @@ T gamma_q_inv_imp(T a, T q, const Policy& pol)
       return tools::max_value<T>();
    if(q == 1)
       return 0;
-   T guess = detail::find_inverse_gamma<T>(a, 1 - q, q, pol);
+   bool has_10_digits;
+   T guess = detail::find_inverse_gamma<T>(a, 1 - q, q, pol, &has_10_digits);
+   if((policies::digits<T, Policy>() <= 36) && has_10_digits)
+      return guess;
    T lower = tools::min_value<T>();
    if(guess <= lower)
       guess = tools::min_value<T>();
@@ -440,18 +475,31 @@ T gamma_q_inv_imp(T a, T q, const Policy& pol)
    // large convergence is slow, so we'll bump it up to full 
    // precision to prevent premature termination of the root-finding routine.
    //
-   unsigned digits = (policies::digits<T, Policy>() * 2) / 3;
+   unsigned digits = policies::digits<T, Policy>();
+   if(digits < 30)
+   {
+      digits *= 2;
+      digits /= 3;
+   }
+   else
+   {
+      digits /= 2;
+      digits -= 1;
+   }
    if((a < 0.125) && (fabs(gamma_p_derivative(a, guess, pol)) > 1 / sqrt(tools::epsilon<T>())))
       digits = policies::digits<T, Policy>();
    //
    // Go ahead and iterate:
    //
+   boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
    guess = tools::halley_iterate(
       detail::gamma_p_inverse_func<T, Policy>(a, q, true),
       guess,
       lower,
       tools::max_value<T>(),
-      digits);
+      digits,
+      max_iter);
+   policies::check_root_iterations(function, max_iter, pol);
    if(guess == lower)
       guess = policies::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
    return guess;

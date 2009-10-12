@@ -15,14 +15,14 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0D3B689DA99C021319E15DA429A7AC74"
-        "OwnerKey" = "8:_E013438B00CC4DFFB5C0037F77E7EF5E"
+        "MsmKey" = "8:_7AA4A02E12A14CC8876E6AB8FDE0B75E"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7AA4A02E12A14CC8876E6AB8FDE0B75E"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_CAB578E889B9DB0C72DF603D9321F8AC"
+        "OwnerKey" = "8:_E013438B00CC4DFFB5C0037F77E7EF5E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -40,7 +40,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0D3B689DA99C021319E15DA429A7AC74"
+        "OwnerKey" = "8:_CAB578E889B9DB0C72DF603D9321F8AC"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -133,14 +133,34 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0D3B689DA99C021319E15DA429A7AC74"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7AA4A02E12A14CC8876E6AB8FDE0B75E"
+            {
+            "SourcePath" = "8:..\\distribution_explorer\\IconToolkit.ico"
+            "TargetName" = "8:IconToolkit.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_F87FA158010448FEB415000E5BB2673E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CAB578E889B9DB0C72DF603D9321F8AC"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:boost_math, Version=1.0.2596.30154, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:boost_math, Version=1.1.3517.21485, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_0D3B689DA99C021319E15DA429A7AC74"
+                    "_CAB578E889B9DB0C72DF603D9321F8AC"
                     {
                     "Name" = "8:boost_math.dll"
                     "Attributes" = "3:512"
@@ -162,26 +182,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7AA4A02E12A14CC8876E6AB8FDE0B75E"
-            {
-            "SourcePath" = "8:..\\distribution_explorer\\IconToolkit.ico"
-            "TargetName" = "8:IconToolkit.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_F87FA158010448FEB415000E5BB2673E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
         }
@@ -234,19 +234,20 @@
         "MsiBootstrapper"
         {
         "LangId" = "3:0"
+        "RequiresElevation" = "11:FALSE"
         }
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Distex"
-        "ProductCode" = "8:{30457BAC-C1B0-41F7-AEB7-751070AE49E9}"
-        "PackageCode" = "8:{36D856ED-5403-4130-87F3-E8CD301BE8DE}"
+        "ProductCode" = "8:{552F94DB-DB2D-42FA-8D56-9BE2C1D92B8F}"
+        "PackageCode" = "8:{6AABF60D-ABA2-4DF9-81F7-AD8DE5A60E03}"
         "UpgradeCode" = "8:{DB0FCB69-2AFF-4EFE-B2F9-1ADA0638268C}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:hetp"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -359,18 +360,32 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2641B34529B845CD9A1AB3D9A60EDE38"
+            {
+            "Name" = "8:Statistics Distribution Explorer"
+            "Arguments" = "8:"
+            "Description" = "8:Application to explorer Statistical Distributions, calculating properties, CDF, PDF and Quantiles."
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_E013438B00CC4DFFB5C0037F77E7EF5E"
+            "Folder" = "8:_3F469C1B4FEF46A9A569F4176BB2A913"
+            "WorkingFolder" = "8:_F87FA158010448FEB415000E5BB2673E"
+            "Icon" = "8:_7AA4A02E12A14CC8876E6AB8FDE0B75E"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_4E776FEE302743C3948F2A0446DA8410"
             {
-            "Name" = "8:Shortcut to statistics istribution_explorer"
+            "Name" = "8:Statistical Distribution Explorer"
             "Arguments" = "8:"
-            "Description" = "8:"
+            "Description" = "8:Application to exploreStatistical Distributions, calculating properties, CDF, PDF and Quantiles."
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
             "Target" = "8:_E013438B00CC4DFFB5C0037F77E7EF5E"
             "Folder" = "8:_ED435DEC29544BFEA50D525C67F26E01"
             "WorkingFolder" = "8:_F87FA158010448FEB415000E5BB2673E"
-            "Icon" = "8:"
+            "Icon" = "8:_7AA4A02E12A14CC8876E6AB8FDE0B75E"
             "Feature" = "8:"
             }
         }
