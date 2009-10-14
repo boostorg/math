@@ -153,7 +153,7 @@
 // Tune performance options for specific compilers:
 //
 #ifdef BOOST_MSVC
-#  define BOOST_MATH_POLY_METHOD 3
+#  define BOOST_MATH_POLY_METHOD 2
 #elif defined(BOOST_INTEL)
 #  define BOOST_MATH_POLY_METHOD 2
 #  define BOOST_MATH_RATIONAL_METHOD 2
