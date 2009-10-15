@@ -143,6 +143,7 @@ double igamma_inv_evaluate_cephes(const boost::array<boost::array<T, 6>, N>& dat
 // This test does not run to completion, gets stuck
 // in infinite loop inside cephes....
 //
+#if 0
 BOOST_MATH_PERFORMANCE_TEST(igamma_inv_test, "igamma_inv-cephes")
 {
    double result = igamma_inv_evaluate_cephes(igamma_big_data);
@@ -157,6 +158,8 @@ BOOST_MATH_PERFORMANCE_TEST(igamma_inv_test, "igamma_inv-cephes")
       + sizeof(igamma_med_data)
       + sizeof(igamma_small_data)) / sizeof(igamma_big_data[0]));
 }
+#endif
+
 #endif
 
 #ifdef TEST_GSL

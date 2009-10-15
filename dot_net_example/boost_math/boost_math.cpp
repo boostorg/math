@@ -51,16 +51,16 @@ any_distribution::any_distribution(int t, double arg1, double arg2, double arg3)
    case 5:
       this->reset(new concrete_distribution<boost::math::exponential>(boost::math::exponential(arg1)));
       break;
-    case 6:
+   case 6:
       this->reset(new concrete_distribution<boost::math::extreme_value>(boost::math::extreme_value(arg1)));
       break;
-    case 7:
+   case 7:
       this->reset(new concrete_distribution<boost::math::fisher_f >(boost::math::fisher_f(arg1, arg2)));
       break;
-  case 8:
+   case 8:
       this->reset(new concrete_distribution<boost::math::gamma_distribution<> >(boost::math::gamma_distribution<>(arg1, arg2)));
       break;
-  case 9:
+   case 9:
       this->reset(new concrete_distribution<boost::math::laplace_distribution<> >(boost::math::laplace_distribution<>(arg1, arg2)));
       break;
    case 10:
