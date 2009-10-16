@@ -687,18 +687,18 @@ void cdfnon_central_chi_squared( int *which, double *p, double *q, double *x, do
 namespace boost{ namespace math{
 
    template <class T = double> struct f_distribution : public fisher_f_distribution<T> 
-   { f_distribution(T a, T b) : fisher_f_distribution(a, b) {} };
+   { f_distribution(T a, T b) : fisher_f_distribution<T>(a, b) {} };
    template <class T = double> 
    struct fnc_distribution : public non_central_f_distribution<T> 
-   { fnc_distribution(T a, T b, T c) : non_central_f_distribution(a, b, c) {} };
+   { fnc_distribution(T a, T b, T c) : non_central_f_distribution<T>(a, b, c) {} };
    template <class T = double> struct gam_distribution : public gamma_distribution<T> 
-   { gam_distribution(T a, T b) : gamma_distribution(a, b) {} };
+   { gam_distribution(T a, T b) : gamma_distribution<T>(a, b) {} };
    template <class T = double> struct nor_distribution : public normal_distribution<T> 
-   { nor_distribution(T a, T b) : normal_distribution(a, b) {} };
+   { nor_distribution(T a, T b) : normal_distribution<T>(a, b) {} };
    template <class T = double> struct poi_distribution : public poisson_distribution<T> 
-   { poi_distribution(T a) : poisson_distribution(a) {} };
+   { poi_distribution(T a) : poisson_distribution<T>(a) {} };
    template <class T = double> struct t_distribution : public students_t_distribution<T> 
-   { t_distribution(T a) : students_t_distribution(a) {} };
+   { t_distribution(T a) : students_t_distribution<T>(a) {} };
 
    template <class T>
    T cdf(const f_distribution<T>& d, const T& r){  return cdf(static_cast<fisher_f_distribution<T> >(d), r);  }
