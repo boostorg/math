@@ -44,7 +44,12 @@ applications should use the normalised (or
 [@http://mathworld.wolfram.com/RegularizedBetaFunction.html regularized]
 ) versions (ibeta and ibetac).
 
-All of these functions require /a > 0/, /b > 0/ and /0 <= x <= 1/.
+All of these functions require /0 <= x <= 1/.
+
+The normalized functions __ibeta and __ibetac require /a,b >= 0/, and in addition that
+not both /a/ and /b/ are zero.
+
+The functions __beta and __betac require /a,b > 0/.
 
 The return type of these functions is computed using the __arg_pomotion_rules
 when T1, T2 and T3 are different types.
