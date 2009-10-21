@@ -884,21 +884,30 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
    if(p_derivative)
       *p_derivative = -1; // value not set.
 
+   if((x < 0) || (x > 1))
+      policies::raise_domain_error<T>(function, "Parameter x outside the range [0,1] in the incomplete beta function (got x=%1%).", x, pol);
+
    if(normalised)
    {
       // extend to a few very special cases:
-      if((a == 0) && (b != 0))
-         return inv ? 0 : 1;
+      if(a == 0)
+      {
+         if(b == 0)
+            policies::raise_domain_error<T>(function, "The arguments a and b to the incomplete beta function cannot both be zero, with x=%1%.", x, pol);
+         if(b > 0)
+            return inv ? 0 : 1;
+      }
       else if(b == 0)
-         return inv ? 1 : 0;
+      {
+         if(a > 0)
+            return inv ? 1 : 0;
+      }
    }
 
    if(a <= 0)
-      policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be greater than zero (got a=%1%).", a, pol);
+      policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be >= zero (got a=%1%).", a, pol);
    if(b <= 0)
-      policies::raise_domain_error<T>(function, "The argument b to the incomplete beta function must be greater than zero (got b=%1%).", b, pol);
-   if((x < 0) || (x > 1))
-      policies::raise_domain_error<T>(function, "Parameter x outside the range [0,1] in the incomplete beta function (got x=%1%).", x, pol);
+      policies::raise_domain_error<T>(function, "The argument b to the incomplete beta function must be >= zero (got b=%1%).", b, pol);
 
    if(x == 0)
    {
