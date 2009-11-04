@@ -859,7 +859,7 @@ namespace detail{
 template <class T, class Digits, class Small, class Default>
 struct series_factor_calc
 {
-   static const T get()
+   static T get()
    {
       return ldexp(T(1.0), 1 - Digits::value);
    }
@@ -868,7 +868,7 @@ struct series_factor_calc
 template <class T, class Digits>
 struct series_factor_calc<T, Digits, mpl::true_, mpl::true_>
 {
-   static const T get()
+   static T get()
    {
       return boost::math::tools::epsilon<T>();
    }
@@ -876,7 +876,7 @@ struct series_factor_calc<T, Digits, mpl::true_, mpl::true_>
 template <class T, class Digits>
 struct series_factor_calc<T, Digits, mpl::true_, mpl::false_>
 {
-   static const T get()
+   static T get()
    {
       static const boost::uintmax_t v = static_cast<boost::uintmax_t>(1u) << (Digits::value - 1);
       return 1 / static_cast<T>(v);
@@ -885,7 +885,7 @@ struct series_factor_calc<T, Digits, mpl::true_, mpl::false_>
 template <class T, class Digits>
 struct series_factor_calc<T, Digits, mpl::false_, mpl::true_>
 {
-   static const T get()
+   static T get()
    {
       return boost::math::tools::epsilon<T>();
    }
