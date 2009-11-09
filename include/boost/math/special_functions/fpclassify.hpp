@@ -390,6 +390,7 @@ namespace detail {
     template<class T> 
     inline bool isinf_impl(T x, generic_tag<true> const&)
     {
+        (void)x; // in case the compiler thinks that x is unused because std::numeric_limits<T>::has_infinity is false
         return std::numeric_limits<T>::has_infinity 
             && ( x == std::numeric_limits<T>::infinity()
                  || x == -std::numeric_limits<T>::infinity());
