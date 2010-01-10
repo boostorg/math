@@ -1048,7 +1048,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
             *p_derivative = regularised_gamma_prefix(a, x, pol, lanczos_type());
          break;
       }
-         }
+   }
 
    if(normalised && (result > 1))
       result = 1;

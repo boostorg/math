@@ -277,7 +277,7 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol, bool* p_has_10_digits)
          T ap1 = a + 1;
          if(w < 0.15f * ap1)
          {
-         // DiDonato and Morris Eq 35:
+            // DiDonato and Morris Eq 35:
             T v = log(p) + boost::math::lgamma(ap1, pol);
             T s = 1;
             z = exp((v + w) / a);
@@ -286,7 +286,7 @@ T find_inverse_gamma(T a, T p, T q, const Policy& pol, bool* p_has_10_digits)
             z = exp((v + z - s) / a);
             s = boost::math::log1p(z / ap1 * (1 + z / (a + 2) * (1 + z / (a + 3))));
             z = exp((v + z - s) / a);
-         BOOST_MATH_INSTRUMENT_VARIABLE(z);
+            BOOST_MATH_INSTRUMENT_VARIABLE(z);
          }
 
          if((z <= 0.01 * ap1) || (z > 0.7 * ap1))

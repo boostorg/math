@@ -199,14 +199,14 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
       //
       if(z < 1e-10)
       {
-      if(z == 0)
-      {
-         result = T(0);
-      }
+         if(z == 0)
+         {
+            result = T(0);
+         }
          else
-      {
-         result = static_cast<T>(z * 1.125f + z * 0.003379167095512573896158903121545171688L);
-      }
+         {
+            result = static_cast<T>(z * 1.125f + z * 0.003379167095512573896158903121545171688L);
+         }
       }
       else
       {
