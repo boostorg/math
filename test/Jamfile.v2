@@ -19,8 +19,8 @@ project
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069
-      <toolset>intel:<cxxflags>-nologo 
-      <toolset>intel:<linkflags>-nologo 
+      <toolset>intel-win:<cxxflags>-nologo 
+      <toolset>intel-win:<linkflags>-nologo 
       #<toolset>intel-linux:<pch>off
       <toolset>intel-darwin:<pch>off
       <toolset>msvc:<warnings>all
@@ -641,6 +641,8 @@ run test_tr1.cpp
    test_tr1_long_double
    ;
    
+run test_long_double_support.cpp ../../test/build//boost_test_exec_monitor ;
+
 run  compile_test/compl_abs_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/compl_acos_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/compl_acosh_incl_test.cpp compile_test/main.cpp ;
