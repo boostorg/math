@@ -24,6 +24,8 @@
 #include "functor.hpp"
 #include "handle_test_result.hpp"
 
+#include <boost/math/tools/config.hpp>
+
 void expected_results()
 {
    //
@@ -42,8 +44,8 @@ void expected_results()
       ".*", 50, 20);                 // test function
 }
 
-template <class A, class T>
-void do_test_std_function(const A& data, const char* type_name, const char* function_name, const char* test_name, T (*proc)(T), const char* inv_function_name = 0, T (*inv_proc)(T) = 0)
+template <class A>
+void do_test_std_function(const A& data, const char* type_name, const char* function_name, const char* test_name, long double (*proc)(long double), const char* inv_function_name = 0, long double (*inv_proc)(long double) = 0)
 {
    // warning suppression:
    (void)data;
@@ -73,17 +75,16 @@ void do_test_std_function(const A& data, const char* type_name, const char* func
 }
 
 
-template <class RealType>
-void test_spots(RealType /*T*/, const char* type_name)
+void test_spots()
 {
    // Basic sanity checks.
    // Test data taken from functions.wolfram.com
-   RealType (*unary_proc)(RealType);
-   RealType (*inv_unary_proc)(RealType);
+   long double (*unary_proc)(long double);
+   long double (*inv_unary_proc)(long double);
    //
    // COS:
    //
-   boost::array<boost::array<RealType, 2>, 4> cos_test_data = {
+   boost::array<boost::array<long double, 2>, 4> cos_test_data = {
        0, 1,
        0.125L, 0.992197667229329053149096907788250869543327304736601263468910L,
        1.125L, 0.431176516798666176551969042921689826840697850225767471037314L,
@@ -91,14 +92,14 @@ void test_spots(RealType /*T*/, const char* type_name)
    };
    unary_proc = std::cos;
    inv_unary_proc = std::acos;
-   do_test_std_function(cos_test_data, type_name, "std::cos", "Mathematica data", unary_proc, "std::acos", inv_unary_proc);
+   do_test_std_function(cos_test_data, "long double", "std::cos", "Mathematica data", unary_proc, "std::acos", inv_unary_proc);
    unary_proc = ::cosl;
    inv_unary_proc = ::acosl;
-   do_test_std_function(cos_test_data, type_name, "::cosl", "Mathematica data", unary_proc, "::acosl", inv_unary_proc);
+   do_test_std_function(cos_test_data, "long double", "::cosl", "Mathematica data", unary_proc, "::acosl", inv_unary_proc);
    //
    // SIN:
    //
-   boost::array<boost::array<RealType, 2>, 6> sin_test_data = {
+   boost::array<boost::array<long double, 2>, 6> sin_test_data = {
        0, 0,
        0.125L, 0.124674733385227689957442708712108467587834905641679257885515L,
        -0.125L, -0.124674733385227689957442708712108467587834905641679257885515L,
@@ -108,14 +109,14 @@ void test_spots(RealType /*T*/, const char* type_name)
    };
    unary_proc = std::sin;
    inv_unary_proc = std::asin;
-   do_test_std_function(sin_test_data, type_name, "std::sin", "Mathematica data", unary_proc, "std::asin", inv_unary_proc);
+   do_test_std_function(sin_test_data, "long double", "std::sin", "Mathematica data", unary_proc, "std::asin", inv_unary_proc);
    unary_proc = ::sinl;
    inv_unary_proc = ::asinl;
-   do_test_std_function(sin_test_data, type_name, "::sinl", "Mathematica data", unary_proc, "::asinl", inv_unary_proc);
+   do_test_std_function(sin_test_data, "long double", "::sinl", "Mathematica data", unary_proc, "::asinl", inv_unary_proc);
    //
    // TAN:
    //
-   boost::array<boost::array<RealType, 2>, 7> tan_test_data = {
+   boost::array<boost::array<long double, 2>, 7> tan_test_data = {
        0, 0,
        0.125L, 0.125655136575130967792678218629774000758665763892225542668867L,
        -0.125L, -0.125655136575130967792678218629774000758665763892225542668867L,
@@ -130,14 +131,14 @@ void test_spots(RealType /*T*/, const char* type_name)
    };
    unary_proc = std::tan;
    inv_unary_proc = std::atan;
-   do_test_std_function(tan_test_data, type_name, "std::tan", "Mathematica data", unary_proc, "std::atan", inv_unary_proc);
+   do_test_std_function(tan_test_data, "long double", "std::tan", "Mathematica data", unary_proc, "std::atan", inv_unary_proc);
    unary_proc = ::tanl;
    inv_unary_proc = ::atanl;
-   do_test_std_function(tan_test_data, type_name, "::tanl", "Mathematica data", unary_proc, "::atanl", inv_unary_proc);
+   do_test_std_function(tan_test_data, "long double", "::tanl", "Mathematica data", unary_proc, "::atanl", inv_unary_proc);
    //
    // EXP:
    //
-   boost::array<boost::array<RealType, 2>, 16> exp_test_data = {
+   boost::array<boost::array<long double, 2>, 16> exp_test_data = {
        0, 1,
        0.125L, 1.13314845306682631682900722781179387256550313174518162591282L,
        -0.125L, 0.882496902584595402864892143229050736222004824990650741770309L,
@@ -166,14 +167,14 @@ void test_spots(RealType /*T*/, const char* type_name)
    };
    unary_proc = std::exp;
    inv_unary_proc = std::log;
-   do_test_std_function(exp_test_data, type_name, "std::exp", "Mathematica data", unary_proc, "std::log", inv_unary_proc);
+   do_test_std_function(exp_test_data, "long double", "std::exp", "Mathematica data", unary_proc, "std::log", inv_unary_proc);
    unary_proc = ::expl;
    inv_unary_proc = ::logl;
-   do_test_std_function(exp_test_data, type_name, "::expl", "Mathematica data", unary_proc, "::logl", inv_unary_proc);
+   do_test_std_function(exp_test_data, "long double", "::expl", "Mathematica data", unary_proc, "::logl", inv_unary_proc);
    //
    // SQRT:
    //
-   boost::array<boost::array<RealType, 2>, 8> sqrt_test_data = {
+   boost::array<boost::array<long double, 2>, 8> sqrt_test_data = {
        1, 1,
        0.125L, 0.353553390593273762200422181052424519642417968844237018294170L,
        1.125L, 1.06066017177982128660126654315727355892725390653271105488251L,
@@ -191,25 +192,25 @@ void test_spots(RealType /*T*/, const char* type_name)
    };
    unary_proc = std::sqrt;
    inv_unary_proc = 0;
-   do_test_std_function(sqrt_test_data, type_name, "std::sqrt", "Mathematica data", unary_proc, "", inv_unary_proc);
+   do_test_std_function(sqrt_test_data, "long double", "std::sqrt", "Mathematica data", unary_proc, "", inv_unary_proc);
    unary_proc = ::sqrtl;
-   do_test_std_function(sqrt_test_data, type_name, "::sqrtl", "Mathematica data", unary_proc, "", inv_unary_proc);
+   do_test_std_function(sqrt_test_data, "long double", "::sqrtl", "Mathematica data", unary_proc, "", inv_unary_proc);
 }
 
 
 int test_main(int, char* [])
 {
    expected_results();
+   std::cout << "Running tests with BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS "
+#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+      "defined."
+#else
+      "not defined."
+#endif
+      << std::endl;
    // Basic sanity-check spot values.
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   test_spots(0.0L, "long double"); // Test long double.
-#else
-   std::cout << "<note>The long double tests have been disabled on this platform "
-      "either because the long double overloads of the usual math functions are "
-      "not available at all, or because they are too inaccurate for these tests "
-      "to pass.</note>" << std::cout;
-#endif
+   test_spots(); // Test long double.
 
    return 0;
 } // int test_main(int, char* [])
