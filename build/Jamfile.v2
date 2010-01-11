@@ -6,6 +6,15 @@
 import testing ;
 import pch ;
 
+project  
+    : requirements 
+      <toolset>intel-win:<cxxflags>-nologo 
+      <toolset>intel-win:<linkflags>-nologo 
+      #<toolset>intel-linux:<pch>off
+      <toolset>intel-darwin:<pch>off
+      <toolset>msvc-7.1:<pch>off
+    ;
+
 cpp-pch pch : ../src/tr1/pch.hpp : <include>../src/tr1 <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1 ; 
 
 C99_SOURCES = acosh
