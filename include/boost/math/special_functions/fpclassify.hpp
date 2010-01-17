@@ -106,7 +106,7 @@ inline bool is_nan_helper(T t, const boost::true_type&)
 }
 
 template <class T>
-inline bool is_nan_helper(T t, const boost::false_type&)
+inline bool is_nan_helper(T, const boost::false_type&)
 {
    return false;
 }

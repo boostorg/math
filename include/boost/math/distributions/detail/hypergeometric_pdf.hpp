@@ -327,7 +327,7 @@ T hypergeometric_pdf_prime_loop_imp(hypergeometric_pdf_prime_loop_data& data, hy
 template <class T, class Policy>
 inline T hypergeometric_pdf_prime_imp(unsigned x, unsigned r, unsigned n, unsigned N, const Policy&)
 {
-   hypergeometric_pdf_prime_loop_result_entry<T> result = { 1 };
+   hypergeometric_pdf_prime_loop_result_entry<T> result = { 1, 0 };
    hypergeometric_pdf_prime_loop_data data = { x, r, n, N, 0, prime(0) };
    return hypergeometric_pdf_prime_loop_imp<T>(data, result);
 }

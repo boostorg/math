@@ -19,7 +19,7 @@
    using std::setprecision;
 
 template <class RealType>
-void test_spots(RealType /*T*/, const char* type_name)
+void test_spots(RealType /*T*/, const char* /*type_name*/)
 {
    // Basic sanity checks.
    RealType a = 0;
