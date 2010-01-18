@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/zeta.hpp>
 #include "c_policy.hpp"
 
-extern "C" long double BOOST_MATH_TR1_DECL riemann_zetal BOOST_PREVENT_MACRO_SUBSTITUTION(long double x)
+extern "C" long double BOOST_MATH_TR1_DECL riemann_zetal BOOST_PREVENT_MACRO_SUBSTITUTION(long double x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::zeta BOOST_PREVENT_MACRO_SUBSTITUTION(x);
 }

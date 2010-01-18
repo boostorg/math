@@ -13,7 +13,7 @@
 
 #if !(defined(__HP_aCC) && (__HP_aCC >= 61400))
 
-extern "C" double BOOST_MATH_TR1_DECL copysign BOOST_PREVENT_MACRO_SUBSTITUTION(double x, double y)
+extern "C" double BOOST_MATH_TR1_DECL copysign BOOST_PREVENT_MACRO_SUBSTITUTION(double x, double y) BOOST_MATH_C99_THROW_SPEC
 {
    return boost::math::copysign BOOST_PREVENT_MACRO_SUBSTITUTION(x, y);
 }

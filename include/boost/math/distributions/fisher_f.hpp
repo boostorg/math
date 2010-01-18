@@ -177,7 +177,9 @@ inline RealType quantile(const fisher_f_distribution<RealType, Policy>& dist, co
             function, p, &error_result, Policy()))
       return error_result;
 
-   RealType x, y;
+   // With optimizations turned on, gcc wrongly warns about y being used 
+   // uninitializated unless we initialize it to something:
+   RealType x, y(0);
 
    x = boost::math::ibeta_inv(df1 / 2, df2 / 2, p, &y, Policy());
 

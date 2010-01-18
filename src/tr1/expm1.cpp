@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/expm1.hpp>
 #include "c_policy.hpp"
 
-extern "C" double BOOST_MATH_TR1_DECL boost_expm1 BOOST_PREVENT_MACRO_SUBSTITUTION(double x)
+extern "C" double BOOST_MATH_TR1_DECL boost_expm1 BOOST_PREVENT_MACRO_SUBSTITUTION(double x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::expm1 BOOST_PREVENT_MACRO_SUBSTITUTION(x);
 }

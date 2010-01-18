@@ -13,7 +13,7 @@
 
 #if !(defined(__HP_aCC) && (__HP_aCC >= 61400))
 
-extern "C" float BOOST_MATH_TR1_DECL fmaxf BOOST_PREVENT_MACRO_SUBSTITUTION(float x, float y)
+extern "C" float BOOST_MATH_TR1_DECL fmaxf BOOST_PREVENT_MACRO_SUBSTITUTION(float x, float y) BOOST_MATH_C99_THROW_SPEC
 {
    if((boost::math::isnan)(x))
       return y;
