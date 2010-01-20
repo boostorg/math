@@ -23,7 +23,7 @@ long ll;
 boost::long_long_type llll;
 #endif
 
-void check()
+void compile_and_link_test()
 {
    check_result<float>(boost::math::modf(f, &ff));
    check_result<double>(boost::math::modf(d, &dd));

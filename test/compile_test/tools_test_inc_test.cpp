@@ -17,7 +17,7 @@ inline void check_result_imp(boost::math::tools::test_result<double>, boost::mat
 #include "test_compile_result.hpp"
 
 
-void check()
+void compile_and_link_test()
 {
    check_result<float>(boost::math::tools::relative_error<float>(f, f));
 

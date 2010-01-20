@@ -13,7 +13,7 @@
 //
 #include "test_compile_result.hpp"
 
-void check()
+void compile_and_link_test()
 {
    check_result<float>(boost::math::legendre_p<float>(i, f));
    check_result<double>(boost::math::legendre_p<double>(i, d));

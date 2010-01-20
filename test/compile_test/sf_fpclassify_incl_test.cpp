@@ -13,7 +13,7 @@
 //
 #include "test_compile_result.hpp"
 
-void check()
+void compile_and_link_test()
 {
    check_result<int>(boost::math::fpclassify BOOST_NO_MACRO_EXPAND<float>(f));
    check_result<int>(boost::math::fpclassify BOOST_NO_MACRO_EXPAND<double>(d));

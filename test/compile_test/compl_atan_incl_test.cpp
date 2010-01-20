@@ -16,7 +16,7 @@ inline void check_result_imp(std::complex<long double>, std::complex<long double
 
 
 
-void check()
+void compile_and_link_test()
 {
    check_result<std::complex<float> >(boost::math::atan(std::complex<float>()));
    check_result<std::complex<double> >(boost::math::atan(std::complex<double>()));

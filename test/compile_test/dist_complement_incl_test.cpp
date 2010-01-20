@@ -13,7 +13,7 @@
 //
 #include "test_compile_result.hpp"
 
-void check()
+void compile_and_link_test()
 {
    boost::math::complement(f, f);
    boost::math::complement(f, f, d);

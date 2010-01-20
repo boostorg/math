@@ -13,7 +13,7 @@
 //
 #include "test_compile_result.hpp"
 
-void check()
+void compile_and_link_test()
 {
    check_result<float>(boost::math::cyl_bessel_j<float>(f, f));
    check_result<double>(boost::math::cyl_bessel_j<double>(d, d));

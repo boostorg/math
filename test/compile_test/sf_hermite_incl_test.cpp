@@ -13,7 +13,7 @@
 //
 #include "test_compile_result.hpp"
 
-void check()
+void compile_and_link_test()
 {
    check_result<float>(boost::math::hermite<float>(u, f));
    check_result<double>(boost::math::hermite<double>(u, d));

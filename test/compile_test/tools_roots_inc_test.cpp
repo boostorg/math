@@ -17,7 +17,7 @@ inline void check_result_imp(std::pair<long double, long double>, std::pair<long
 
 #include "test_compile_result.hpp"
 
-void check()
+void compile_and_link_test()
 {
    typedef double (*F)(double);
    typedef std::pair<double, double> (*F2)(double);

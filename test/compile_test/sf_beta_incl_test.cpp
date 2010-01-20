@@ -13,7 +13,7 @@
 //
 #include "test_compile_result.hpp"
 
-void check()
+void compile_and_link_test()
 {
    check_result<float>(boost::math::beta<float, float>(f, f));
    check_result<double>(boost::math::beta<double>(d, d));

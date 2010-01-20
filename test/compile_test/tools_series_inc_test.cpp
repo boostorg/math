@@ -23,7 +23,7 @@ struct Functor
 Functor func;
 boost::uintmax_t uim = 0;
 
-void check()
+void compile_and_link_test()
 {
    check_result<Functor::result_type>(boost::math::tools::sum_series<Functor>(func, i));
    check_result<Functor::result_type>(boost::math::tools::sum_series<Functor>(func, i, uim));
