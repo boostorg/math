@@ -97,4 +97,88 @@ BOOST_MATH_PERFORMANCE_TEST(expm1_test_dcd, "expm1-dcd")
 
 #endif
 
+#ifdef TEST_GSL
+
+#include <gsl/gsl_sf.h>
+
+template <std::size_t N>
+double log1p_evaluate_gsl(const boost::array<boost::array<T, 3>, N>& data)
+{
+   double result = 0;
+   for(unsigned i = 0; i < N; ++i)
+      result += gsl_sf_log_1plusx(data[i][0]);
+   return result;
+}
+
+BOOST_MATH_PERFORMANCE_TEST(log1p_test, "log1p-gsl")
+{
+   double result = log1p_evaluate_gsl(log1p_expm1_data);
+
+   consume_result(result);
+   set_call_count(
+      (sizeof(log1p_expm1_data)) / sizeof(log1p_expm1_data[0]));
+}
+
+template <std::size_t N>
+double expm1_evaluate_gsl(const boost::array<boost::array<T, 3>, N>& data)
+{
+   double result = 0;
+   for(unsigned i = 0; i < N; ++i)
+      result += gsl_sf_expm1(data[i][0]);
+   return result;
+}
+
+BOOST_MATH_PERFORMANCE_TEST(expm1_test, "expm1-gsl")
+{
+   double result = expm1_evaluate_gsl(log1p_expm1_data);
+
+   consume_result(result);
+   set_call_count(
+      (sizeof(log1p_expm1_data)) / sizeof(log1p_expm1_data[0]));
+}
+
+#endif
+
+#ifdef TEST_CEPHES
+
+extern "C" double expm1(double);
+extern "C" double log1p(double);
+
+template <std::size_t N>
+double log1p_evaluate_cephes(const boost::array<boost::array<T, 3>, N>& data)
+{
+   double result = 0;
+   for(unsigned i = 0; i < N; ++i)
+      result += ::log1p(data[i][0]);
+   return result;
+}
+
+BOOST_MATH_PERFORMANCE_TEST(log1p_test, "log1p-cephes")
+{
+   double result = log1p_evaluate_cephes(log1p_expm1_data);
+
+   consume_result(result);
+   set_call_count(
+      (sizeof(log1p_expm1_data)) / sizeof(log1p_expm1_data[0]));
+}
+
+template <std::size_t N>
+double expm1_evaluate_cephes(const boost::array<boost::array<T, 3>, N>& data)
+{
+   double result = 0;
+   for(unsigned i = 0; i < N; ++i)
+      result += ::expm1(data[i][0]);
+   return result;
+}
+
+BOOST_MATH_PERFORMANCE_TEST(expm1_test, "expm1-cephes")
+{
+   double result = expm1_evaluate_cephes(log1p_expm1_data);
+
+   consume_result(result);
+   set_call_count(
+      (sizeof(log1p_expm1_data)) / sizeof(log1p_expm1_data[0]));
+}
+
+#endif
 

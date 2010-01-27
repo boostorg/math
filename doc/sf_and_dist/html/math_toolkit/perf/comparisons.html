@@ -1,6 +1,6 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Comparisons to Other Open Source Libraries</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
@@ -46,7 +46,7 @@
         </p></td></tr>
 </table></div>
 <a name="math_toolkit.perf.comparisons.comparison_to_gsl_1_13_and_cephes"></a><h5>
-<a name="id1150948"></a>
+<a name="id1142574"></a>
         <a class="link" href="comparisons.html#math_toolkit.perf.comparisons.comparison_to_gsl_1_13_and_cephes">Comparison
         to GSL-1.13 and Cephes</a>
       </h5>
@@ -85,6 +85,104 @@
               </th>
 </tr></thead>
 <tbody>
+<tr>
+<td>
+              <p>
+                <a class="link" href="../special/powers/cbrt.html" title="cbrt">cbrt</a>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(4.873e-007s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                N/A
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(6.699e-007s)</p>
+<p>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <a class="link" href="../special/powers/log1p.html" title="log1p">log1p</a>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(1.664e-007s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(2.677e-007s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(1.189e-007s)</p>
+<p>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <a class="link" href="../special/powers/expm1.html" title="expm1">expm1</a>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(8.760e-008s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(1.248e-007s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(8.169e-008s)</p>
+<p>
+              </p>
+              </td>
+</tr>
 <tr>
 <td>
               <p>
@@ -156,6 +254,41 @@
 <tr>
 <td>
               <p>
+                <a class="link" href="../special/sf_erf/error_function.html" title="Error Functions">erf</a>
+                and <a class="link" href="../special/sf_erf/error_function.html" title="Error Functions">erfc</a>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(1.483e-007s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(7.052e-007s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(1.722e-007s)</p>
+<p>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 <a class="link" href="../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>
                 and <a class="link" href="../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>
               </p>
@@ -212,7 +345,7 @@
 <td>
               <p>
                 +INF
-                <sup>[<a name="id1151227" href="#ftn.id1151227" class="footnote">1</a>]</sup>
+                <sup>[<a name="id1143098" href="#ftn.id1143098" class="footnote">1</a>]</sup>
               </p>
               </td>
 </tr>
@@ -282,14 +415,158 @@
               </p>
               </td>
 </tr>
+<tr>
+<td>
+              <p>
+                <a class="link" href="../special/bessel/bessel.html" title="Bessel Functions of the First and Second Kinds">cyl_bessel_j</a>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p>17.89
+                <sup>[<a name="id1143247" href="#ftn.id1143247" class="footnote">2</a>]</sup>
+                </p>
+<p> </p>
+<p>(4.248e-005s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(5.214e-006s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(2.374e-006s)</p>
+<p>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <a class="link" href="../special/bessel/mbessel.html" title="Modified Bessel Functions of the First and Second Kinds">cyl_bessel_i</a>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(5.924e-006s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(4.487e-006s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(4.823e-006s)</p>
+<p>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <a class="link" href="../special/bessel/mbessel.html" title="Modified Bessel Functions of the First and Second Kinds">cyl_bessel_k</a>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(2.783e-006s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(3.927e-006s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                N/A
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <a class="link" href="../special/bessel/bessel.html" title="Bessel Functions of the First and Second Kinds">cyl_neumann</a>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(4.465e-006s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(1.230e-005s)</p>
+<p>
+              </p>
+              </td>
+<td>
+              <p>
+                </p>
+<p><span class="bold"><strong>1.00</strong></span></p>
+<p> </p>
+<p>(4.977e-006s)</p>
+<p>
+              </p>
+              </td>
+</tr>
 </tbody>
-<tbody class="footnotes"><tr><td colspan="4"><div class="footnote"><p><sup>[<a name="ftn.id1151227" href="#id1151227" class="para">1</a>] </sup>
+<tbody class="footnotes"><tr><td colspan="4">
+<div class="footnote"><p><sup>[<a name="ftn.id1143098" href="#id1143098" class="para">1</a>] </sup>
                     Cephes gets stuck in an infinite loop while trying to execute
                     our test cases.
-                  </p></div></td></tr></tbody>
+                  </p></div>
+<div class="footnote"><p><sup>[<a name="ftn.id1143247" href="#id1143247" class="para">2</a>] </sup>
+                    The performance here is dominated by a few cases where the parameters
+                    grow very large: faster asymptotic expansions are available,
+                    but are of limited (or even frankly terrible) precision. The
+                    same issue effects all of our Bessel function implementations,
+                    but doesn't necessarily show in the current performance data.
+                    More investigation is needed here.
+                  </p></div>
+</td></tr></tbody>
 </table></div>
 <a name="math_toolkit.perf.comparisons.comparison_to_the_r_and_dcdflib_statistical_libraries_on_windows"></a><h5>
-<a name="id1151363"></a>
+<a name="id1143479"></a>
         <a class="link" href="comparisons.html#math_toolkit.perf.comparisons.comparison_to_the_r_and_dcdflib_statistical_libraries_on_windows">Comparison
         to the R and DCDFLIB Statistical Libraries on Windows</a>
       </h5>
@@ -300,7 +577,7 @@
         (R-2.9.2 appears not to be buildable with Visual C++).
       </p>
 <div class="table">
-<a name="id1151376"></a><p class="title"><b>Table 51. A Comparison to the R Statistical Library on Windows
+<a name="id1143492"></a><p class="title"><b>Table&#160;51.&#160;A Comparison to the R Statistical Library on Windows
       XP</b></p>
 <div class="table-contents"><table class="table" summary="A Comparison to the R Statistical Library on Windows
       XP">
@@ -388,7 +665,7 @@
             <p>
               </p>
 <p>67.66
-              <sup>[<a name="id1151516" href="#ftn.id1151516" class="footnote">1</a>]</sup>
+              <sup>[<a name="id1143632" href="#ftn.id1143632" class="footnote">1</a>]</sup>
               </p>
 <p> </p>
 <p>(3.366e-004s)</p>
@@ -820,7 +1097,7 @@
             <p>
               </p>
 <p>3.60
-              <sup>[<a name="id1152230" href="#ftn.id1152230" class="footnote">2</a>]</sup>
+              <sup>[<a name="id1144347" href="#ftn.id1144347" class="footnote">2</a>]</sup>
               </p>
 <p> </p>
 <p>(5.987e-007s)</p>
@@ -1052,7 +1329,7 @@
             <p>
               </p>
 <p>43.43
-              <sup>[<a name="id1153710" href="#ftn.id1153710" class="footnote">3</a>]</sup>
+              <sup>[<a name="id1144733" href="#ftn.id1144733" class="footnote">3</a>]</sup>
               </p>
 <p> </p>
 <p>(3.732e-004s)</p>
@@ -1124,7 +1401,7 @@
             <p>
               </p>
 <p>393.90
-              <sup>[<a name="id1153830" href="#ftn.id1153830" class="footnote">4</a>]</sup>
+              <sup>[<a name="id1144853" href="#ftn.id1144853" class="footnote">4</a>]</sup>
               </p>
 <p> </p>
 <p>(2.673e-002s)</p>
@@ -1262,7 +1539,7 @@
             <p>
               </p>
 <p><span class="bold"><strong>1.00</strong></span>
-              <sup>[<a name="id1154068" href="#ftn.id1154068" class="footnote">5</a>]</sup>
+              <sup>[<a name="id1145092" href="#ftn.id1145092" class="footnote">5</a>]</sup>
               </p>
 <p> </p>
 <p>(4.411e-004s)</p>
@@ -1549,28 +1826,28 @@
 </tr>
 </tbody>
 <tbody class="footnotes"><tr><td colspan="4">
-<div class="footnote"><p><sup>[<a name="ftn.id1151516" href="#id1151516" class="para">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1143632" href="#id1143632" class="para">1</a>] </sup>
                   There are a small number of our test cases where the R library
                   fails to converge on a result: these tend to dominate the performance
                   result.
                 </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1152230" href="#id1152230" class="para">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1144347" href="#id1144347" class="para">2</a>] </sup>
                   This result is somewhat misleading: for small values of the parameters
                   there is virtually no difference between the two libraries, but
                   for large values the Boost implementation is <span class="emphasis"><em>much</em></span>
                   slower, albeit with much improved precision.
                 </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1153710" href="#id1153710" class="para">3</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1144733" href="#id1144733" class="para">3</a>] </sup>
                   The R library appears to use a linear-search strategy, that can
                   perform very badly in a small number of pathological cases, but
                   may or may not be more efficient in "typical" cases
                 </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1153830" href="#id1153830" class="para">4</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1144853" href="#id1144853" class="para">4</a>] </sup>
                   There are a small number of our test cases where the R library
                   fails to converge on a result: these tend to dominate the performance
                   result.
                 </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1154068" href="#id1154068" class="para">5</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1145092" href="#id1145092" class="para">5</a>] </sup>
                   There are a small number of our test cases where the R library
                   fails to converge on a result: these tend to dominate the performance
                   result.
@@ -1579,7 +1856,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.perf.comparisons.comparison_to_the_r_statistical_library_on_linux"></a><h5>
-<a name="id1154544"></a>
+<a name="id1145567"></a>
         <a class="link" href="comparisons.html#math_toolkit.perf.comparisons.comparison_to_the_r_statistical_library_on_linux">Comparison
         to the R Statistical Library on Linux</a>
       </h5>
@@ -1589,7 +1866,7 @@
         G++ 4.3.3 using -O3 -DNDEBUG=1.
       </p>
 <div class="table">
-<a name="id1154558"></a><p class="title"><b>Table 52. A Comparison to the R Statistical Library on Linux</b></p>
+<a name="id1145582"></a><p class="title"><b>Table&#160;52.&#160;A Comparison to the R Statistical Library on Linux</b></p>
 <div class="table-contents"><table class="table" summary="A Comparison to the R Statistical Library on Linux">
 <colgroup>
 <col>
@@ -1675,7 +1952,7 @@
             <p>
               </p>
 <p>30.51
-              <sup>[<a name="id1154697" href="#ftn.id1154697" class="footnote">1</a>]</sup>
+              <sup>[<a name="id1145721" href="#ftn.id1145721" class="footnote">1</a>]</sup>
               </p>
 <p> </p>
 <p>(3.616e-004s)</p>
@@ -2107,7 +2384,7 @@
             <p>
               </p>
 <p>2.20
-              <sup>[<a name="id1155409" href="#ftn.id1155409" class="footnote">2</a>]</sup>
+              <sup>[<a name="id1147798" href="#ftn.id1147798" class="footnote">2</a>]</sup>
               </p>
 <p> </p>
 <p>(3.522e-007s)</p>
@@ -2339,7 +2616,7 @@
             <p>
               </p>
 <p>25.92
-              <sup>[<a name="id1155798" href="#ftn.id1155798" class="footnote">3</a>]</sup>
+              <sup>[<a name="id1148187" href="#ftn.id1148187" class="footnote">3</a>]</sup>
               </p>
 <p> </p>
 <p>(4.407e-004s)</p>
@@ -2411,7 +2688,7 @@
             <p>
               </p>
 <p>144.91
-              <sup>[<a name="id1156191" href="#ftn.id1156191" class="footnote">4</a>]</sup>
+              <sup>[<a name="id1148307" href="#ftn.id1148307" class="footnote">4</a>]</sup>
               </p>
 <p> </p>
 <p>(3.214e-002s)</p>
@@ -2549,7 +2826,7 @@
             <p>
               </p>
 <p><span class="bold"><strong>1.00</strong></span>
-              <sup>[<a name="id1156425" href="#ftn.id1156425" class="footnote">5</a>]</sup>
+              <sup>[<a name="id1148541" href="#ftn.id1148541" class="footnote">5</a>]</sup>
               </p>
 <p> </p>
 <p>(5.916e-004s)</p>
@@ -2836,28 +3113,28 @@
 </tr>
 </tbody>
 <tbody class="footnotes"><tr><td colspan="4">
-<div class="footnote"><p><sup>[<a name="ftn.id1154697" href="#id1154697" class="para">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1145721" href="#id1145721" class="para">1</a>] </sup>
                   There are a small number of our test cases where the R library
                   fails to converge on a result: these tend to dominate the performance
                   result.
                 </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1155409" href="#id1155409" class="para">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1147798" href="#id1147798" class="para">2</a>] </sup>
                   This result is somewhat misleading: for small values of the parameters
                   there is virtually no difference between the two libraries, but
                   for large values the Boost implementation is <span class="emphasis"><em>much</em></span>
                   slower, albeit with much improved precision.
                 </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1155798" href="#id1155798" class="para">3</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1148187" href="#id1148187" class="para">3</a>] </sup>
                   The R library appears to use a linear-search strategy, that can
                   perform very badly in a small number of pathological cases, but
                   may or may not be more efficient in "typical" cases
                 </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1156191" href="#id1156191" class="para">4</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1148307" href="#id1148307" class="para">4</a>] </sup>
                   There are a small number of our test cases where the R library
                   fails to converge on a result: these tend to dominate the performance
                   result.
                 </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1156425" href="#id1156425" class="para">5</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1148541" href="#id1148541" class="para">5</a>] </sup>
                   There are a small number of our test cases where the R library
                   fails to converge on a result: these tend to dominate the performance
                   result.
@@ -2869,8 +3146,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan Råde, Gautam Sewani
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
       and Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
