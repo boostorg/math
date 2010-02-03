@@ -40,16 +40,13 @@ probability density function:
 The location and scale parameters are equivalent to the mean and
 standard deviation of the normal or Gaussian distribution.
 
-The following graph illustrates the effect of the location
-parameter [mu][space] on the PDF. Note that the range of the random
+The following graph illustrates the effect of the 
+parameters [mu][space] and [sigma][space] on the PDF. 
+Note that the range of the random
 variable remains \[-[infin],+[infin]\] irrespective of the value of the
 location parameter:
 
-[graph laplace_pdf_mu]
-
-The next graph illustrates the effect of the scale parameter [sigma][space] on the PDF:
-
-[graph laplace_pdf_sigma]
+[graph laplace_pdf]
 
 [h4 Member Functions]
 
