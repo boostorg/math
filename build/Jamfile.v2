@@ -70,7 +70,7 @@ import configure ;
 import property ;
 import property-set ;
 
-exe long_double_check : ../src/long_double_check.cpp ;
+obj long_double_check : ../config/has_long_double_support.cpp ;
 explicit long_double_check ;
 
 local .long-double-reported ;
