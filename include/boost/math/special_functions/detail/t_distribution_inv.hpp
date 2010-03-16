@@ -430,7 +430,7 @@ inline T fast_students_t_quantile_imp(T df, T p, const Policy& pol, const mpl::f
    // required precision so not so fast:
    //
    T probability = (p > 0.5) ? 1 - p : p;
-   T t, x, y;
+   T t, x, y(0);
    x = ibeta_inv(df / 2, T(0.5), 2 * probability, &y, pol);
    if(df * y > tools::max_value<T>() * x)
       t = policies::raise_overflow_error<T>("boost::math::students_t_quantile<%1%>(%1%,%1%)", 0, pol);

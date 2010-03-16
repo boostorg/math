@@ -41,7 +41,7 @@ namespace boost{ namespace math{ namespace tools{
 
 }}}
 
-void check()
+void compile_and_link_test()
 {
    check_result<float>(boost::math::find_location<test_distribution<float> >(f, f, f, boost::math::policies::policy<>()));
    check_result<double>(boost::math::find_location<test_distribution<double> >(d, d, d, boost::math::policies::policy<>()));

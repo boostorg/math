@@ -13,7 +13,7 @@
 //
 #include "test_compile_result.hpp"
 
-void check()
+void compile_and_link_test()
 {
    check_result<float>(boost::math::ellint_3<float>(f, f));
    check_result<double>(boost::math::ellint_3<double>(d, d));

@@ -49,8 +49,8 @@ quite large.
          Release settings: /Ox /arch:SSE2
          ]]
 
-[[__erf][[perf msvc-debug-erf..[para 16.65][para (1.028e-006s)]]][[perf msvc-erf..[para *1.00*][para (6.173e-008s)]]]]
-[[__erf_inv][[perf msvc-debug-erf_inv..[para 19.28][para (1.215e-006s)]]][[perf msvc-erf_inv..[para *1.00*][para (6.302e-008s)]]]]
+[[__erf][[perf msvc-debug-erf..[para 16.65][para (1.028e-006s)]]][[perf msvc-erf..[para *1.00*][para (1.483e-007s)]]]]
+[[__erf_inv][[perf msvc-debug-erf_inv..[para 19.28][para (1.215e-006s)]]][[perf msvc-erf_inv..[para *1.00*][para (4.888e-007s)]]]]
 [[__ibeta and __ibetac][[perf msvc-debug-ibeta..[para 8.32][para (1.540e-005s)]]][[perf msvc-ibeta..[para *1.00*][para (1.852e-006s)]]]]
 [[__ibeta_inv and __ibetac_inv][[perf msvc-debug-ibeta_inv..[para 10.25][para (7.492e-005s)]]][[perf msvc-ibeta_inv..[para *1.00*][para (7.311e-006s)]]]]
 [[__ibeta_inva, __ibetac_inva, __ibeta_invb and __ibetac_invb][[perf msvc-debug-ibeta_invab..[para 8.57][para (2.441e-004s)]]][[perf msvc-ibeta_invab..[para *1.00*][para (2.847e-005s)]]]]
@@ -84,8 +84,8 @@ demands (thankfully GCC-4.x is somewhat better in this respect).
       
       ( /O3 )
       ]]
-[[__erf][[perf intel-erf..[para *1.00*][para (4.118e-008s)]]][[perf msvc-erf..[para 1.50][para (6.173e-008s)]]][[perf gcc-erf..[para 3.24][para (1.336e-007s)]]]]
-[[__erf_inv][[perf intel-erf_inv..[para *1.00*][para (4.439e-008s)]]][[perf msvc-erf_inv..[para 1.42][para (6.302e-008s)]]][[perf gcc-erf_inv..[para 7.88][para (3.500e-007s)]]]]
+[[__erf][[perf intel-erf..[para *1.00*][para (4.118e-008s)]]][[perf msvc-erf..[para *1.00*][para (1.483e-007s)]]][[perf gcc-erf..[para 3.24][para (1.336e-007s)]]]]
+[[__erf_inv][[perf intel-erf_inv..[para *1.00*][para (4.439e-008s)]]][[perf msvc-erf_inv..[para *1.00*][para (4.888e-007s)]]][[perf gcc-erf_inv..[para 7.88][para (3.500e-007s)]]]]
 [[__ibeta and __ibetac][[perf intel-ibeta..[para *1.00*][para (1.631e-006s)]]][[perf msvc-ibeta..[para 1.14][para (1.852e-006s)]]][[perf gcc-ibeta..[para 3.05][para (4.975e-006s)]]]]
 [[__ibeta_inv and __ibetac_inv][[perf intel-ibeta_inv..[para *1.00*][para (6.133e-006s)]]][[perf msvc-ibeta_inv..[para 1.19][para (7.311e-006s)]]][[perf gcc-ibeta_inv..[para 2.60][para (1.597e-005s)]]]]
 [[__ibeta_inva, __ibetac_inva, __ibeta_invb and __ibetac_invb][[perf intel-ibeta_invab..[para *1.00*][para (2.453e-005s)]]][[perf msvc-ibeta_invab..[para 1.16][para (2.847e-005s)]]][[perf gcc-ibeta_invab..[para 2.83][para (6.947e-005s)]]]]
@@ -257,12 +257,65 @@ machine, with the test program compiled with Microsoft Visual C++ 2009 using the
 
 [table
 [[Function][Boost][GSL-1.9][Cephes]]
-[[__tgamma][[perf msvc-gamma..[para 1.80][para (2.997e-007s)]]][[perf msvc-gamma-gsl..[para 1.54][para (2.569e-007s)]]][[perf msvc-gamma-cephes..[para *1.00*][para (1.666e-007s)]]]]
-[[__lgamma][[perf msvc-lgamma..[para 2.20][para (3.045e-007s)]]][[perf msvc-lgamma-gsl..[para 4.14][para (5.713e-007s)]]][[perf msvc-lgamma-cephes..[para *1.00*][para (1.381e-007s)]]]]
-[[__gamma_p and __gamma_q][[perf msvc-igamma..[para *1.00*][para (6.182e-007s)]]][[perf msvc-igamma-gsl..[para 3.57][para (2.209e-006s)]]][[perf msvc-igamma-cephes..[para 4.29][para (2.651e-006s)]]]]
-[[__gamma_p_inv and __gamma_q_inv][[perf msvc-igamma_inv..[para *1.00*][para (1.943e-006s)]]][N\/A][+INF [footnote Cephes gets stuck in an infinite loop while trying to execute our test cases.]]]
-[[__ibeta and __ibetac][[perf msvc-ibeta..[para *1.00*][para (1.670e-006s)]]][[perf msvc-ibeta-cephes..[para 1.16][para (1.935e-006s)]]][[perf msvc-ibeta-cephes..[para 1.16][para (1.935e-006s)]]]]
-[[__ibeta_inv and __ibetac_inv][[perf msvc-ibeta_inv..[para *1.00*][para (6.075e-006s)]]][N\/A][[perf msvc-ibeta_inv-cephes..[para 2.45][para (1.489e-005s)]]]]
+[[__cbrt]
+   [[perf msvc-cbrt..[para *1.00*][para (4.873e-007s)]]]
+   [N\/A]
+   [[perf msvc-cbrt-cephes..[para *1.00*][para (6.699e-007s)]]]]
+[[__log1p]
+   [[perf msvc-log1p..[para *1.00*][para (1.664e-007s)]]]
+   [[perf msvc-log1p-gsl..[para *1.00*][para (2.677e-007s)]]]
+   [[perf msvc-log1p-cephes..[para *1.00*][para (1.189e-007s)]]]]
+[[__expm1]
+   [[perf msvc-expm1..[para *1.00*][para (8.760e-008s)]]]
+   [[perf msvc-expm1-gsl..[para *1.00*][para (1.248e-007s)]]]
+   [[perf msvc-expm1-cephes..[para *1.00*][para (8.169e-008s)]]]]
+[[__tgamma]
+   [[perf msvc-gamma..[para 1.80][para (2.997e-007s)]]]
+   [[perf msvc-gamma-gsl..[para 1.54][para (2.569e-007s)]]]
+   [[perf msvc-gamma-cephes..[para *1.00*][para (1.666e-007s)]]]]
+[[__lgamma]
+   [[perf msvc-lgamma..[para 2.20][para (3.045e-007s)]]]
+   [[perf msvc-lgamma-gsl..[para 4.14][para (5.713e-007s)]]]
+   [[perf msvc-lgamma-cephes..[para *1.00*][para (1.381e-007s)]]]]
+[[__erf and __erfc]
+   [[perf msvc-erf..[para *1.00*][para (1.483e-007s)]]]
+   [[perf msvc-erf-gsl..[para *1.00*][para (7.052e-007s)]]]
+   [[perf msvc-erf-cephes..[para *1.00*][para (1.722e-007s)]]]]
+[[__gamma_p and __gamma_q]
+   [[perf msvc-igamma..[para *1.00*][para (6.182e-007s)]]]
+   [[perf msvc-igamma-gsl..[para 3.57][para (2.209e-006s)]]]
+   [[perf msvc-igamma-cephes..[para 4.29][para (2.651e-006s)]]]]
+[[__gamma_p_inv and __gamma_q_inv]
+   [[perf msvc-igamma_inv..[para *1.00*][para (1.943e-006s)]]]
+   [N\/A]
+   [+INF [footnote Cephes gets stuck in an infinite loop while trying to execute our test cases.]]]
+[[__ibeta and __ibetac]
+   [[perf msvc-ibeta..[para *1.00*][para (1.670e-006s)]]]
+   [[perf msvc-ibeta-cephes..[para 1.16][para (1.935e-006s)]]]
+   [[perf msvc-ibeta-cephes..[para 1.16][para (1.935e-006s)]]]]
+[[__ibeta_inv and __ibetac_inv]
+   [[perf msvc-ibeta_inv..[para *1.00*][para (6.075e-006s)]]]
+   [N\/A]
+   [[perf msvc-ibeta_inv-cephes..[para 2.45][para (1.489e-005s)]]]]
+[[__cyl_bessel_j]
+   [[perf msvc-cyl_bessel_j..[para 17.89[footnote The performance here is dominated by a few cases where the parameters grow very large:
+   faster asymptotic expansions are available, but are of limited (or even frankly terrible) precision.  The same issue
+   effects all of our Bessel function implementations, but doesn't necessarily show in the current performance data.
+   More investigation is needed here.]][para (4.248e-005s)]]]
+   [[perf msvc-cyl_bessel_j-gsl..[para *1.00*][para (5.214e-006s)]]]
+   [[perf msvc-cyl_bessel_j-cephes..[para *1.00*][para (2.374e-006s)]]]]
+[[__cyl_bessel_i]
+   [[perf msvc-cyl_bessel_i..[para *1.00*][para (5.924e-006s)]]]
+   [[perf msvc-cyl_bessel_i-gsl..[para *1.00*][para (4.487e-006s)]]]
+   [[perf msvc-cyl_bessel_i-cephes..[para *1.00*][para (4.823e-006s)]]]]
+[[__cyl_bessel_k]
+   [[perf msvc-cyl_bessel_k..[para *1.00*][para (2.783e-006s)]]]
+   [[perf msvc-cyl_bessel_k-gsl..[para *1.00*][para (3.927e-006s)]]]
+   [N\/A]]
+[[__cyl_neumann]
+   [[perf msvc-cyl_neumann..[para *1.00*][para (4.465e-006s)]]]
+   [[perf msvc-cyl_neumann-gsl..[para *1.00*][para (1.230e-005s)]]]
+   [[perf msvc-cyl_neumann-cephes..[para *1.00*][para (4.977e-006s)]]]]
 ]
 
 [heading Comparison to the R and DCDFLIB Statistical Libraries on Windows]
@@ -394,6 +447,8 @@ __policy_section you want to test set as the default.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
+
 
 
 

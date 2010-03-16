@@ -7,13 +7,14 @@
 exe math_performance : 
 distributions.cpp
 main.cpp
+test_cbrt.cpp
 test_erf.cpp
 test_gamma.cpp
 test_ibeta.cpp
 test_igamma.cpp
 test_polynomial.cpp
 test_reference.cpp 
-test_lanczos.cpp  /boost/regex//boost_regex
+/boost/regex//boost_regex
 : 
     <define>BOOST_ALL_NO_LIB
     <link>static

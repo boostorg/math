@@ -318,6 +318,11 @@ boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant)
             y = (y == 0) ? 1e-100 : boost::math::sign(y) * 1e-100;
          return (boost::math::log1p(y) - y + y * y / 2) / (y);
       }
+   case 29:
+      {
+         // cbrt over [0.5, 1]
+         return boost::math::cbrt(x);
+      }
    }
    return 0;
 }

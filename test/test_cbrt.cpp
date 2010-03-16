@@ -58,6 +58,13 @@ void expected_results()
       "long double",                  // test type(s)
       ".*",                   // test data group
       ".*", 10, 6);                 // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "(long )?double|real_concept", // test type(s)
+      ".*",                   // test data group
+      ".*", 2, 2);                 // test function
 }
 
 struct negative_cbrt

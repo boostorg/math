@@ -19,7 +19,7 @@ inline void check_result_imp(std::complex<long double>, std::complex<long double
 
 
 
-void check()
+void compile_and_link_test()
 {
    check_result<std::complex<float> >(boost::math::spherical_harmonic<float>(u, i, f, f));
    check_result<std::complex<double> >(boost::math::spherical_harmonic<double>(u, i, d, d));

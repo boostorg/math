@@ -55,7 +55,7 @@ T kurtosis_excess(const non_central_beta_distribution<T, Policy>&)
 //
 #include "test_compile_result.hpp"
 
-void check()
+void compile_and_link_test()
 {
    TEST_DIST_FUNC(non_central_beta)
 }

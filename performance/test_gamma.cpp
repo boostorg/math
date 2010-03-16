@@ -69,6 +69,24 @@ BOOST_MATH_PERFORMANCE_TEST(lgamma_test, "lgamma")
       + sizeof(near_m55)) / sizeof(factorials[0]));
 }
 
+template <std::size_t N>
+double tgamma1pm1_evaluate2(const boost::array<boost::array<T, 2>, N>& data)
+{
+   double result = 0;
+   for(unsigned i = 0; i < N; ++i)
+      result += boost::math::tgamma1pm1(data[i][0]);
+   return result;
+}
+
+BOOST_MATH_PERFORMANCE_TEST(gamma1pm1_test, "tgamma1pm1")
+{
+   double result = tgamma1pm1_evaluate2(gammap1m1_data);
+
+   consume_result(result);
+   set_call_count(
+      sizeof(gammap1m1_data) / sizeof(gammap1m1_data[0]));
+}
+
 #ifdef TEST_CEPHES
 
 extern "C" {

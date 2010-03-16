@@ -19,7 +19,7 @@ double erf_evaluate2(const boost::array<boost::array<T, 3>, N>& data)
 {
    double result = 0;
    for(unsigned i = 0; i < N; ++i)
-      result += boost::math::erf(data[i][0]);
+      result += boost::math::erf(data[i][0]) * boost::math::erfc(data[i][0]);
    return result;
 }
 
@@ -30,7 +30,7 @@ BOOST_MATH_PERFORMANCE_TEST(erf_test, "erf")
    result += erf_evaluate2(erf_small_data);
 
    consume_result(result);
-   set_call_count((sizeof(erf_data) + sizeof(erf_large_data) + sizeof(erf_small_data)) / sizeof(erf_data[0]));
+   set_call_count(2 * (sizeof(erf_data) + sizeof(erf_large_data) + sizeof(erf_small_data)) / sizeof(erf_data[0]));
 }
 
 template <std::size_t N>
@@ -57,6 +57,7 @@ BOOST_MATH_PERFORMANCE_TEST(erf_inv_test, "erf_inv")
 extern "C" {
 
 double erf(double);
+double erfc(double);
 
 }
 
@@ -65,7 +66,7 @@ double erf_evaluate_cephes(const boost::array<boost::array<T, 3>, N>& data)
 {
    double result = 0;
    for(unsigned i = 0; i < N; ++i)
-      result += erf(data[i][0]);
+      result += erf(data[i][0]) * erfc(data[i][0]);
    return result;
 }
 
@@ -76,7 +77,7 @@ BOOST_MATH_PERFORMANCE_TEST(erf_test, "erf-cephes")
    result += erf_evaluate_cephes(erf_small_data);
 
    consume_result(result);
-   set_call_count((sizeof(erf_data) + sizeof(erf_large_data) + sizeof(erf_small_data)) / sizeof(erf_data[0]));
+   set_call_count(2 * (sizeof(erf_data) + sizeof(erf_large_data) + sizeof(erf_small_data)) / sizeof(erf_data[0]));
 }
 
 #endif
@@ -90,7 +91,7 @@ double erf_evaluate_gsl(const boost::array<boost::array<T, 3>, N>& data)
 {
    double result = 0;
    for(unsigned i = 0; i < N; ++i)
-      result += gsl_sf_erf (data[i][0]);
+      result += gsl_sf_erf(data[i][0]) * gsl_sf_erfc(data[i][0]);
    return result;
 }
 
@@ -101,7 +102,7 @@ BOOST_MATH_PERFORMANCE_TEST(erf_test, "erf-gsl")
    result += erf_evaluate_gsl(erf_small_data);
 
    consume_result(result);
-   set_call_count((sizeof(erf_data) + sizeof(erf_large_data) + sizeof(erf_small_data)) / sizeof(erf_data[0]));
+   set_call_count(2 * (sizeof(erf_data) + sizeof(erf_large_data) + sizeof(erf_small_data)) / sizeof(erf_data[0]));
 }
 
 #endif
@@ -113,11 +114,12 @@ BOOST_MATH_PERFORMANCE_TEST(erf_test, "erf-gsl")
 template <std::size_t N>
 double erf_evaluate2_dcd(const boost::array<boost::array<T, 3>, N>& data)
 {
+   int scale = 0;
    double result = 0;
    for(unsigned i = 0; i < N; ++i)
    {
       double x = data[i][0];
-      result += error_f(&x);
+      result += error_f(&x) + error_fc(&scale, &x);
    }
    return result;
 }
@@ -129,7 +131,7 @@ BOOST_MATH_PERFORMANCE_TEST(erf_test_dcd, "erf-dcd")
    result += erf_evaluate2_dcd(erf_small_data);
 
    consume_result(result);
-   set_call_count((sizeof(erf_data) + sizeof(erf_large_data) + sizeof(erf_small_data)) / sizeof(erf_data[0]));
+   set_call_count(2 * (sizeof(erf_data) + sizeof(erf_large_data) + sizeof(erf_small_data)) / sizeof(erf_data[0]));
 }
 
 #endif

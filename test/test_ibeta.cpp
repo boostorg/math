@@ -536,6 +536,25 @@ void test_spots(T)
          static_cast<T>(3),
          static_cast<T>(0.5)),
          pow(static_cast<T>(0.5), static_cast<T>(2)) * pow(static_cast<T>(0.5), static_cast<T>(1)) / boost::math::beta(static_cast<T>(2), static_cast<T>(3)), tolerance);
+
+   //
+   // Special cases and error handling:
+   //
+   BOOST_CHECK_EQUAL(::boost::math::ibeta(static_cast<T>(0), static_cast<T>(2), static_cast<T>(0.5)), static_cast<T>(1));
+   BOOST_CHECK_EQUAL(::boost::math::ibeta(static_cast<T>(3), static_cast<T>(0), static_cast<T>(0.5)), static_cast<T>(0));
+   BOOST_CHECK_EQUAL(::boost::math::ibetac(static_cast<T>(0), static_cast<T>(2), static_cast<T>(0.5)), static_cast<T>(0));
+   BOOST_CHECK_EQUAL(::boost::math::ibetac(static_cast<T>(4), static_cast<T>(0), static_cast<T>(0.5)), static_cast<T>(1));
+
+   BOOST_CHECK_THROW(::boost::math::beta(static_cast<T>(0), static_cast<T>(2), static_cast<T>(0.5)), std::domain_error);
+   BOOST_CHECK_THROW(::boost::math::beta(static_cast<T>(3), static_cast<T>(0), static_cast<T>(0.5)), std::domain_error);
+   BOOST_CHECK_THROW(::boost::math::betac(static_cast<T>(0), static_cast<T>(2), static_cast<T>(0.5)), std::domain_error);
+   BOOST_CHECK_THROW(::boost::math::betac(static_cast<T>(4), static_cast<T>(0), static_cast<T>(0.5)), std::domain_error);
+
+   BOOST_CHECK_THROW(::boost::math::ibetac(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0.5)), std::domain_error);
+   BOOST_CHECK_THROW(::boost::math::ibetac(static_cast<T>(-1), static_cast<T>(2), static_cast<T>(0.5)), std::domain_error);
+   BOOST_CHECK_THROW(::boost::math::ibetac(static_cast<T>(2), static_cast<T>(-2), static_cast<T>(0.5)), std::domain_error);
+   BOOST_CHECK_THROW(::boost::math::ibetac(static_cast<T>(2), static_cast<T>(2), static_cast<T>(-0.5)), std::domain_error);
+   BOOST_CHECK_THROW(::boost::math::ibetac(static_cast<T>(2), static_cast<T>(2), static_cast<T>(1.5)), std::domain_error);
 }
 
 int test_main(int, char* [])

@@ -1,4 +1,4 @@
-// negative_binomial_example3.cpp
+// normal_misc_examples.cpp
 
 // Copyright Paul A. Bristow 2007.
 

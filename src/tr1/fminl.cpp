@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include "c_policy.hpp"
 
-extern "C" long double BOOST_MATH_TR1_DECL fminl BOOST_PREVENT_MACRO_SUBSTITUTION(long double x, long double y)
+extern "C" long double BOOST_MATH_TR1_DECL fminl BOOST_PREVENT_MACRO_SUBSTITUTION(long double x, long double y) BOOST_MATH_C99_THROW_SPEC
 {
    if((boost::math::isnan)(x))
       return y;

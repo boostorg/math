@@ -16,7 +16,7 @@ inline void check_result_imp(std::complex<long double>, std::complex<long double
 
 
 
-void check()
+void compile_and_link_test()
 {
    check_result<float >(boost::math::fabs(std::complex<float>()));
    check_result<double >(boost::math::fabs(std::complex<double>()));

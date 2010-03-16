@@ -274,6 +274,7 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
 template <class T>
 void test_beta(T, const char* name)
 {
+   (void)name;
    //
    // The actual test data is rather verbose, so it's in a separate file
    //
