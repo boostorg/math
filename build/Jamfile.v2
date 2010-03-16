@@ -69,88 +69,51 @@ import project ;
 import configure ;
 import property ;
 import property-set ;
+import targets ;
 
 obj long_double_check : ../config/has_long_double_support.cpp ;
 explicit long_double_check ;
-
-local .long-double-reported ;
-project = [ project.current ] ;
-
-rule long-double-configure ( properties * )
-{
-    local disabled ;
-    if [ option.get disable-long-double : : yes ]
-    {
-        disabled = true ;
-    }
-    else
-    {                
-        # The presence of long double depends only on toolset. 
-        local toolset = [ property.select <toolset> : $(properties) ] ;
-        local ps = [ property-set.create $(toolset) ] ;
-        local ap = [ $(ps).as-path ] ;
-    
-        if ! [ configure.builds long_double_check : $(project) : $(ps) 
-          : "long double support" ]
-         {       
-              if ! $(.long-double-reported)
-              {
-                  configure.log-component-configuration math :
-                    "long long not available, skipping boost_math_tr1l/boost_math_c99l" ;
-                  .long-double-reported = true ;
-              }        
-              disabled = true ;
-         }
-    }
-    if $(disabled)
-    {        
-        return <build>no ;
-    }    
-}
-
-long-double-opts = <conditional>@long-double-configure ;
- 	
+        
 # Library targets
 lib boost_math_tr1 : ../src/tr1/$(TR1_SOURCES).cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <include>../src/tr1
    ;
 
 lib boost_math_tr1f : ../src/tr1/$(TR1_SOURCES)f.cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <include>../src/tr1
    ;
 
 lib boost_math_tr1l : ../src/tr1/$(TR1_SOURCES)l.cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <dependency>../config//has_long_double_support
          <include>../src/tr1
-         $(long-double-opts)
+         [ check-target-builds long_double_check : : <build>no ]
    ;
 
 lib boost_math_c99 : ../src/tr1/$(C99_SOURCES).cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <include>../src/tr1
    ;
 
 lib boost_math_c99f : ../src/tr1/$(C99_SOURCES)f.cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <include>../src/tr1
    ;
 
 lib boost_math_c99l : ../src/tr1/$(C99_SOURCES)l.cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <dependency>../config//has_long_double_support
          <include>../src/tr1
-         $(long-double-opts)
+         [ check-target-builds long_double_check : : <build>no ]
    ;
-
 
 boost-install boost_math_c99 boost_math_c99f boost_math_c99l boost_math_tr1 boost_math_tr1f boost_math_tr1l ;
 
