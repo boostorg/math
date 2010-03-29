@@ -155,7 +155,7 @@ rising_factorial(x, i) = [Gamma](x + i) / [Gamma](x);
 
 or
 
-rising_factorial(x, i) = x(x+1)(x+2)(x+3)...(x+i)
+rising_factorial(x, i) = x(x+1)(x+2)(x+3)...(x+i-1)
                           
 Note that both /x/ and /i/ can be negative as well as positive.
 
@@ -299,3 +299,4 @@ and
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
