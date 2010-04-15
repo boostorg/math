@@ -92,7 +92,7 @@ lib boost_math_tr1l : ../src/tr1/$(TR1_SOURCES)l.cpp pch
          <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <dependency>../config//has_long_double_support
          <include>../src/tr1
-         [ check-target-builds long_double_check : : <build>no ]
+         [ check-target-builds ../config//has_long_double_support : : <build>no ]
    ;
 
 lib boost_math_c99 : ../src/tr1/$(C99_SOURCES).cpp pch
@@ -112,7 +112,7 @@ lib boost_math_c99l : ../src/tr1/$(C99_SOURCES)l.cpp pch
          <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <dependency>../config//has_long_double_support
          <include>../src/tr1
-         [ check-target-builds long_double_check : : <build>no ]
+         [ check-target-builds ../config//has_long_double_support : : <build>no ]
    ;
 
 boost-install boost_math_c99 boost_math_c99f boost_math_c99l boost_math_tr1 boost_math_tr1f boost_math_tr1l ;

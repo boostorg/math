@@ -14,7 +14,9 @@ obj has_mpfr_class : has_mpfr_class.cpp :
       <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx ;
 obj has_ntl_rr : has_ntl_rr.cpp : <include>$(ntl-path)/include ;
 
-
+explicit has_long_double_support ;
+explicit has_mpfr_class ;
+explicit has_ntl_rr ;
 
 
 
