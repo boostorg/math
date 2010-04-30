@@ -74,7 +74,6 @@ T log1p_imp(T const & x, const Policy& pol, const mpl::int_<0>&)
 { // The function returns the natural logarithm of 1 + x.
    typedef typename tools::promote_args<T>::type result_type;
    BOOST_MATH_STD_USING
-   using std::abs;
 
    static const char* function = "boost::math::log1p<%1%>(%1%)";
 

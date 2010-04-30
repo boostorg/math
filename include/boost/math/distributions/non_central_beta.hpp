@@ -591,7 +591,6 @@ namespace boost
                Policy()))
                   return (RealType)r;
 
-            BOOST_MATH_STD_USING
             if(l == 0)
                return pdf(boost::math::beta_distribution<RealType, Policy>(dist.alpha(), dist.beta()), x);
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
