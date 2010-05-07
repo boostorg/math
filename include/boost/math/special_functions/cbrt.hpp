@@ -24,11 +24,16 @@ namespace boost{ namespace math{
 namespace detail
 {
 
+struct big_int_type
+{
+   operator boost::uintmax_t()const;
+};
+
 template <class T>
 struct largest_cbrt_int_type
 {
    typedef typename mpl::if_<
-      boost::is_convertible<boost::uintmax_t, T>,
+      boost::is_convertible<big_int_type, T>,
       boost::uintmax_t,
       unsigned int
    >::type type;
