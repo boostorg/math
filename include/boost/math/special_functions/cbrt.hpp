@@ -158,7 +158,8 @@ template <class T, class Policy>
 inline typename tools::promote_args<T>::type cbrt(T z, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   return detail::cbrt_imp(result_type(z), pol);
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return static_cast<result_type>(detail::cbrt_imp(value_type(z), pol));
 }
 
 template <class T>
