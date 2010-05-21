@@ -109,7 +109,8 @@ default this throws an instance of boost::math::rounding_error.
    T modf(const T& v, long long* ipart, const Policy&);
 
 The `modf` functions store the integer part of /v/ in `*ipart` 
-and return the fractional part of /v/.
+and return the fractional part of /v/.  The sign of the integer
+and fractional parts are the same as the sign of /v/.
 
 If the argument /v/ is either non-finite or else outside the range
 of the result type, then returns the result of __rounding_error: by

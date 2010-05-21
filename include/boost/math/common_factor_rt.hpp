@@ -78,8 +78,8 @@ namespace detail
     RingType
     gcd_euclidean
     (
-        RingType  a,
-        RingType  b
+        RingType a,
+        RingType b
     )
     {
         // Avoid repeated construction
@@ -116,7 +116,7 @@ namespace detail
         IntegerType const  zero = static_cast<IntegerType>( 0 );
         IntegerType const  result = gcd_euclidean( a, b );
 
-        return ( result < zero ) ? -result : result;
+        return ( result < zero ) ? static_cast<IntegerType>(-result) : result;
     }
 
     // Greatest common divisor for unsigned binary integers
@@ -212,7 +212,7 @@ namespace detail
         IntegerType const  zero = static_cast<IntegerType>( 0 );
         IntegerType const  result = lcm_euclidean( a, b );
 
-        return ( result < zero ) ? -result : result;
+        return ( result < zero ) ? static_cast<IntegerType>(-result) : result;
     }
 
     // Function objects to find the best way of computing GCD or LCM

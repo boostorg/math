@@ -6,6 +6,15 @@
 import testing ;
 import pch ;
 
+project  
+    : requirements 
+      <toolset>intel-win:<cxxflags>-nologo 
+      <toolset>intel-win:<linkflags>-nologo 
+      #<toolset>intel-linux:<pch>off
+      <toolset>intel-darwin:<pch>off
+      <toolset>msvc-7.1:<pch>off
+    ;
+
 cpp-pch pch : ../src/tr1/pch.hpp : <include>../src/tr1 <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1 ; 
 
 C99_SOURCES = acosh
@@ -54,51 +63,57 @@ sph_legendre
 sph_neumann
 ;
 
-if --disable-long-double in [ modules.peek : ARGV ] 
-{ 
-   long-double-opts = <build>no ; 
-} 
- 	
+# Configure checks.
+
+import project ;
+import configure ;
+import property ;
+import property-set ;
+import targets ;
+
+obj long_double_check : ../config/has_long_double_support.cpp ;
+explicit long_double_check ;
+        
+# Library targets
 lib boost_math_tr1 : ../src/tr1/$(TR1_SOURCES).cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <include>../src/tr1
    ;
 
 lib boost_math_tr1f : ../src/tr1/$(TR1_SOURCES)f.cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <include>../src/tr1
    ;
 
 lib boost_math_tr1l : ../src/tr1/$(TR1_SOURCES)l.cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <dependency>../config//has_long_double_support
          <include>../src/tr1
-         $(long-double-opts)
+         [ check-target-builds ../config//has_long_double_support : : <build>no ]
    ;
 
 lib boost_math_c99 : ../src/tr1/$(C99_SOURCES).cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <include>../src/tr1
    ;
 
 lib boost_math_c99f : ../src/tr1/$(C99_SOURCES)f.cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <include>../src/tr1
    ;
 
 lib boost_math_c99l : ../src/tr1/$(C99_SOURCES)l.cpp pch
     :         
- 	     <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
+         <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1
          <dependency>../config//has_long_double_support
          <include>../src/tr1
-         $(long-double-opts)
+         [ check-target-builds ../config//has_long_double_support : : <build>no ]
    ;
-
 
 boost-install boost_math_c99 boost_math_c99f boost_math_c99l boost_math_tr1 boost_math_tr1f boost_math_tr1l ;
 

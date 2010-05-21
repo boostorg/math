@@ -48,6 +48,12 @@ void check_within_half(T a, U u)
       std::cerr << "Values were: " << std::setprecision(35) << std::setw(40)
          << std::left << a << u << std::endl;
    }
+   if((fabs(a - u) == 0.5f) && (fabs(static_cast<T>(u)) < fabs(a)))
+   {
+      BOOST_ERROR("Rounded result was towards zero with boost::round");
+      std::cerr << "Values were: " << std::setprecision(35) << std::setw(40)
+         << std::left << a << u << std::endl;
+   }
 }
 
 //
@@ -72,6 +78,12 @@ void check_trunc_result(T a, U u)
    if(abs(a) < safe_abs(u))
    {
       BOOST_ERROR("Truncated result had larger absolute value than the original");
+      std::cerr << "Values were: " << std::setprecision(35) << std::setw(40)
+         << std::left << a << u << std::endl;
+   }
+   if(fabs(static_cast<T>(u)) > fabs(a))
+   {
+      BOOST_ERROR("Rounded result was away from zero with boost::trunc");
       std::cerr << "Values were: " << std::setprecision(35) << std::setw(40)
          << std::left << a << u << std::endl;
    }
@@ -108,9 +120,11 @@ void check_modf_result(T a, T fract, U ipart)
 }
 
 template <class T>
-void test_round(T, const char* /* name */)
+void test_round(T, const char* name )
 {
    BOOST_MATH_STD_USING
+
+   std::cout << "Testing rounding with type " << name << std::endl;
 
    for(int i = 0; i < 1000; ++i)
    {
@@ -223,7 +237,7 @@ int test_main(int, char* [])
    test_round(0.1, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_round(0.1L, "long double");
-   //test_round(boost::math::concepts::real_concept(0.1), "real_concept");
+   test_round(boost::math::concepts::real_concept(0.1), "real_concept");
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "

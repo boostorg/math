@@ -485,7 +485,6 @@ namespace boost
                Policy()))
                   return (RealType)r;
 
-         BOOST_MATH_STD_USING
          if(l == 0)
             return pdf(boost::math::chi_squared_distribution<RealType, forwarding_policy>(dist.degrees_of_freedom()), x);
 

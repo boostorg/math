@@ -636,7 +636,7 @@ run test_tr1.cpp
    ../../test/build//boost_test_exec_monitor 
    : : :
    <define>TEST_LD=1
-   <dependency>../config//has_long_double_support
+   [ check-target-builds ../config//has_long_double_support : : <build>no ]
    :
    test_tr1_long_double
    ;
@@ -750,8 +750,9 @@ run ../quaternion/quaternion_mult_incl_test.cpp
 
 run complex_test.cpp ../../test/build//boost_test_exec_monitor ;
 
-compile ntl_concept_check.cpp : <dependency>../config//has_ntl_rr ;
-compile mpfr_concept_check.cpp : <dependency>../config//has_mpfr_class ;
+compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] ;
+compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] ;
+compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] ;
 
 build-project ../example ;
 
