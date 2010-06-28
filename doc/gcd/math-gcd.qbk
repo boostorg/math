@@ -44,10 +44,12 @@ programming problems.
       IntegerType  gcd( IntegerType const &a, IntegerType const &b );
    template < typename IntegerType >
       IntegerType  lcm( IntegerType const &a, IntegerType const &b );
+      
+   typedef ``['see-below]`` static_gcd_type;
 
-   template < unsigned long Value1, unsigned long Value2 >
+   template < static_gcd_type Value1, static_gcd_type Value2 >
       struct static_gcd;
-   template < unsigned long Value1, unsigned long Value2 >
+   template < static_gcd_type Value1, static_gcd_type Value2 >
       struct static_lcm;
 
    }
@@ -145,25 +147,31 @@ gcd_evaluator and lcm_evaluator class templates, respectively.
 
 [*Header: ] [@../../../../../boost/math/common_factor_ct.hpp <boost/math/common_factor_ct.hpp>]
 
-   template < unsigned long Value1, unsigned long Value2 >
-   struct boost::math::static_gcd
+   typedef ``['unspecified]`` static_gcd_type;
+
+   template < static_gcd_type Value1, static_gcd_type Value2 >
+   struct boost::math::static_gcd : public mpl::integral_c<static_gcd_type, implementation_defined>
    {
-      static unsigned long const  value = implementation_defined;
    };
 
-   template < unsigned long Value1, unsigned long Value2 >
-   struct boost::math::static_lcm
+   template < static_gcd_type Value1, static_gcd_type Value2 >
+   struct boost::math::static_lcm : public mpl::integral_c<static_gcd_type, implementation_defined>
    {
-      static unsigned long const  value = implementation_defined;
    };
+   
+The type `static_gcd_type` is the widest unsigned-integer-type that is supported 
+for use in integral-constant-expressions by the compiler.  Usually this
+the same type as `boost::uintmax_t`, but may fall back to being `unsigned long`
+for some older compilers.
 
 The boost::math::static_gcd and boost::math::static_lcm class templates 
-take two value-based template parameters of the unsigned long type 
-and have a single static constant data member, value, of that same type. 
-The value of that member is the greatest common factor or least 
+take two value-based template parameters of the ['static_gcd_type] type 
+and inherit from the type `boost::mpl::integral_c`. 
+Inherited from the base class, they have a member /value/ 
+that is the greatest common factor or least 
 common multiple, respectively, of the template arguments. 
 A compile-time error will occur if the least common multiple 
-is beyond the range of an unsigned long.
+is beyond the range of `static_gcd_type`.
 
 [h3 Example]
 
