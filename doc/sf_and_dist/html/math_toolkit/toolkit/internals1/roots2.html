@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Root Finding Without Derivatives</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../internals1.html" title="Reused Utilities">
 <link rel="prev" href="roots.html" title="Root Finding With Derivatives">
@@ -20,15 +20,15 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="roots.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="minima.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="roots.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="minima.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.toolkit.internals1.roots2"></a><a class="link" href="roots2.html" title="Root Finding Without Derivatives"> Root Finding
         Without Derivatives</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.roots2.synopsis"></a><h5>
-<a name="id1075335"></a>
+<a name="id1022483"></a>
           <a class="link" href="roots2.html#math_toolkit.toolkit.internals1.roots2.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -141,7 +141,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals1.roots2.description"></a><h5>
-<a name="id1078416"></a>
+<a name="id1024811"></a>
           <a class="link" href="roots2.html#math_toolkit.toolkit.internals1.roots2.description">Description</a>
         </h5>
 <p>
@@ -209,31 +209,32 @@
 <dl>
 <dt><span class="term">f</span></dt>
 <dd><p>
-              A unary functor which is the function whose root is to be found.
-            </p></dd>
+                A unary functor which is the function whose root is to be found.
+              </p></dd>
 <dt><span class="term">min</span></dt>
 <dd><p>
-              The left bracket of the interval known to contain the root.
-            </p></dd>
+                The left bracket of the interval known to contain the root.
+              </p></dd>
 <dt><span class="term">max</span></dt>
 <dd><p>
-              The right bracket of the interval known to contain the root. It is
-              a precondition that <span class="emphasis"><em>min &lt; max</em></span> and <span class="emphasis"><em>f(min)*f(max)
-              &lt;= 0</em></span>, the function signals evaluation error if these
-              preconditions are violated. The action taken is controlled by the evaluation
-              error policy. A best guess may be returned, perhaps significantly wrong.
-            </p></dd>
+                The right bracket of the interval known to contain the root. It is
+                a precondition that <span class="emphasis"><em>min &lt; max</em></span> and <span class="emphasis"><em>f(min)*f(max)
+                &lt;= 0</em></span>, the function signals evaluation error if these
+                preconditions are violated. The action taken is controlled by the
+                evaluation error policy. A best guess may be returned, perhaps significantly
+                wrong.
+              </p></dd>
 <dt><span class="term">tol</span></dt>
 <dd><p>
-              A binary functor that specifies the termination condition: the function
-              will return the current brackets enclosing the root when <span class="emphasis"><em>tol(min,max)</em></span>
-              becomes true.
-            </p></dd>
+                A binary functor that specifies the termination condition: the function
+                will return the current brackets enclosing the root when <span class="emphasis"><em>tol(min,max)</em></span>
+                becomes true.
+              </p></dd>
 <dt><span class="term">max_iter</span></dt>
 <dd><p>
-              The maximum number of invocations of <span class="emphasis"><em>f(x)</em></span> to make
-              while searching for the root.
-            </p></dd>
+                The maximum number of invocations of <span class="emphasis"><em>f(x)</em></span> to
+                make while searching for the root.
+              </p></dd>
 </dl>
 </div>
 <p>
@@ -307,40 +308,41 @@
 <dl>
 <dt><span class="term">f</span></dt>
 <dd><p>
-              A unary functor that is the function whose root is to be solved. f(x)
-              must be uniformly increasing or decreasing on <span class="emphasis"><em>x</em></span>.
-            </p></dd>
+                A unary functor that is the function whose root is to be solved.
+                f(x) must be uniformly increasing or decreasing on <span class="emphasis"><em>x</em></span>.
+              </p></dd>
 <dt><span class="term">guess</span></dt>
 <dd><p>
-              An initial approximation to the root
-            </p></dd>
+                An initial approximation to the root
+              </p></dd>
 <dt><span class="term">factor</span></dt>
 <dd><p>
-              A scaling factor that is used to bracket the root: the value <span class="emphasis"><em>guess</em></span>
-              is multiplied (or divided as appropriate) by <span class="emphasis"><em>factor</em></span>
-              until two values are found that bracket the root. A value such as 2
-              is a typical choice for <span class="emphasis"><em>factor</em></span>.
-            </p></dd>
+                A scaling factor that is used to bracket the root: the value <span class="emphasis"><em>guess</em></span>
+                is multiplied (or divided as appropriate) by <span class="emphasis"><em>factor</em></span>
+                until two values are found that bracket the root. A value such as
+                2 is a typical choice for <span class="emphasis"><em>factor</em></span>.
+              </p></dd>
 <dt><span class="term">rising</span></dt>
 <dd><p>
-              Set to <span class="emphasis"><em>true</em></span> if <span class="emphasis"><em>f(x)</em></span> is rising
-              on <span class="emphasis"><em>x</em></span> and <span class="emphasis"><em>false</em></span> if <span class="emphasis"><em>f(x)</em></span>
-              is falling on <span class="emphasis"><em>x</em></span>. This value is used along with
-              the result of <span class="emphasis"><em>f(guess)</em></span> to determine if <span class="emphasis"><em>guess</em></span>
-              is above or below the root.
-            </p></dd>
+                Set to <span class="emphasis"><em>true</em></span> if <span class="emphasis"><em>f(x)</em></span> is
+                rising on <span class="emphasis"><em>x</em></span> and <span class="emphasis"><em>false</em></span> if
+                <span class="emphasis"><em>f(x)</em></span> is falling on <span class="emphasis"><em>x</em></span>. This
+                value is used along with the result of <span class="emphasis"><em>f(guess)</em></span>
+                to determine if <span class="emphasis"><em>guess</em></span> is above or below the
+                root.
+              </p></dd>
 <dt><span class="term">tol</span></dt>
 <dd><p>
-              A binary functor that determines the termination condition for the
-              search for the root. <span class="emphasis"><em>tol</em></span> is passed the current
-              brackets at each step, when it returns true then the current brackets
-              are returned as the result.
-            </p></dd>
+                A binary functor that determines the termination condition for the
+                search for the root. <span class="emphasis"><em>tol</em></span> is passed the current
+                brackets at each step, when it returns true then the current brackets
+                are returned as the result.
+              </p></dd>
 <dt><span class="term">max_iter</span></dt>
 <dd><p>
-              The maximum number of function invocations to perform in the search
-              for the root.
-            </p></dd>
+                The maximum number of function invocations to perform in the search
+                for the root.
+              </p></dd>
 </dl>
 </div>
 <p>
@@ -434,42 +436,42 @@
 <dl>
 <dt><span class="term">f</span></dt>
 <dd><p>
-              A unary functor that is the function whose root is to be solved. f(x)
-              need not be uniformly increasing or decreasing on <span class="emphasis"><em>x</em></span>
-              and may have multiple roots.
-            </p></dd>
+                A unary functor that is the function whose root is to be solved.
+                f(x) need not be uniformly increasing or decreasing on <span class="emphasis"><em>x</em></span>
+                and may have multiple roots.
+              </p></dd>
 <dt><span class="term">a</span></dt>
 <dd><p>
-              The lower bound for the initial bracket of the root.
-            </p></dd>
+                The lower bound for the initial bracket of the root.
+              </p></dd>
 <dt><span class="term">b</span></dt>
 <dd><p>
-              The upper bound for the initial bracket of the root. It is a precondition
-              that <span class="emphasis"><em>a &lt; b</em></span> and that <span class="emphasis"><em>a</em></span>
-              and <span class="emphasis"><em>b</em></span> bracket the root to find so that <span class="emphasis"><em>f(a)*f(b)
-              &lt; 0</em></span>.
-            </p></dd>
+                The upper bound for the initial bracket of the root. It is a precondition
+                that <span class="emphasis"><em>a &lt; b</em></span> and that <span class="emphasis"><em>a</em></span>
+                and <span class="emphasis"><em>b</em></span> bracket the root to find so that <span class="emphasis"><em>f(a)*f(b)
+                &lt; 0</em></span>.
+              </p></dd>
 <dt><span class="term">fa</span></dt>
 <dd><p>
-              Optional: the value of <span class="emphasis"><em>f(a)</em></span>.
-            </p></dd>
+                Optional: the value of <span class="emphasis"><em>f(a)</em></span>.
+              </p></dd>
 <dt><span class="term">fb</span></dt>
 <dd><p>
-              Optional: the value of <span class="emphasis"><em>f(b)</em></span>.
-            </p></dd>
+                Optional: the value of <span class="emphasis"><em>f(b)</em></span>.
+              </p></dd>
 <dt><span class="term">tol</span></dt>
 <dd><p>
-              A binary functor that determines the termination condition for the
-              search for the root. <span class="emphasis"><em>tol</em></span> is passed the current
-              brackets at each step, when it returns true then the current brackets
-              are returned as the result.
-            </p></dd>
+                A binary functor that determines the termination condition for the
+                search for the root. <span class="emphasis"><em>tol</em></span> is passed the current
+                brackets at each step, when it returns true then the current brackets
+                are returned as the result.
+              </p></dd>
 <dt><span class="term">max_iter</span></dt>
 <dd><p>
-              The maximum number of function invocations to perform in the search
-              for the root. On exit <span class="emphasis"><em>max_iter</em></span> is set to actual
-              number of function invocations used.
-            </p></dd>
+                The maximum number of function invocations to perform in the search
+                for the root. On exit <span class="emphasis"><em>max_iter</em></span> is set to actual
+                number of function invocations used.
+              </p></dd>
 </dl>
 </div>
 <p>
@@ -559,7 +561,7 @@
           as soon as both ends of the interval round to the same nearest integer.
         </p>
 <a name="math_toolkit.toolkit.internals1.roots2.implementation"></a><h5>
-<a name="id1082350"></a>
+<a name="id1028768"></a>
           <a class="link" href="roots2.html#math_toolkit.toolkit.internals1.roots2.implementation">Implementation</a>
         </h5>
 <p>
@@ -587,7 +589,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="roots.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="minima.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="roots.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="minima.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

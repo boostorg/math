@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Incomplete Gamma Function Inverses</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="igamma.html" title="Incomplete Gamma Functions">
@@ -20,15 +20,15 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="igamma.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_gamma.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="gamma_derivatives.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="igamma.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_gamma.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="gamma_derivatives.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.sf_gamma.igamma_inv"></a><a class="link" href="igamma_inv.html" title="Incomplete Gamma Function Inverses"> Incomplete
         Gamma Function Inverses</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.sf_gamma.igamma_inv.synopsis"></a><h5>
-<a name="id951270"></a>
+<a name="id914657"></a>
           <a class="link" href="igamma_inv.html#math_toolkit.special.sf_gamma.igamma_inv.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -67,7 +67,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.sf_gamma.igamma_inv.description"></a><h5>
-<a name="id952076"></a>
+<a name="id915634"></a>
           <a class="link" href="igamma_inv.html#math_toolkit.special.sf_gamma.igamma_inv.description">Description</a>
         </h5>
 <p>
@@ -94,7 +94,7 @@
         </p>
 <div class="tip"><table border="0" summary="Tip">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../../../../doc/html/images/tip.png"></td>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../../../../doc/src/images/tip.png"></td>
 <th align="left">Tip</th>
 </tr>
 <tr><td align="left" valign="top">
@@ -173,7 +173,7 @@
           0</em></span>.
         </p>
 <a name="math_toolkit.special.sf_gamma.igamma_inv.accuracy"></a><h5>
-<a name="id953253"></a>
+<a name="id916867"></a>
           <a class="link" href="igamma_inv.html#math_toolkit.special.sf_gamma.igamma_inv.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -187,30 +187,31 @@
           functions.
         </p>
 <a name="math_toolkit.special.sf_gamma.igamma_inv.testing"></a><h5>
-<a name="id953280"></a>
+<a name="id916916"></a>
           <a class="link" href="igamma_inv.html#math_toolkit.special.sf_gamma.igamma_inv.testing">Testing</a>
         </h5>
 <p>
           There are two sets of tests:
         </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-            Basic sanity checks attempt to "round-trip" from <span class="emphasis"><em>a</em></span>
-            and <span class="emphasis"><em>x</em></span> to <span class="emphasis"><em>p</em></span> or <span class="emphasis"><em>q</em></span>
-            and back again. These tests have quite generous tolerances: in general
-            both the incomplete gamma, and its inverses, change so rapidly that round
-            tripping to more than a couple of significant digits isn't possible.
-            This is especially true when <span class="emphasis"><em>p</em></span> or <span class="emphasis"><em>q</em></span>
-            is very near one: in this case there isn't enough "information content"
-            in the input to the inverse function to get back where you started.
-          </li>
-<li>
-            Accuracy checks using high precision test values. These measure the accuracy
-            of the result, given exact input values.
-          </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+              Basic sanity checks attempt to "round-trip" from <span class="emphasis"><em>a</em></span>
+              and <span class="emphasis"><em>x</em></span> to <span class="emphasis"><em>p</em></span> or <span class="emphasis"><em>q</em></span>
+              and back again. These tests have quite generous tolerances: in general
+              both the incomplete gamma, and its inverses, change so rapidly that
+              round tripping to more than a couple of significant digits isn't possible.
+              This is especially true when <span class="emphasis"><em>p</em></span> or <span class="emphasis"><em>q</em></span>
+              is very near one: in this case there isn't enough "information
+              content" in the input to the inverse function to get back where
+              you started.
+            </li>
+<li class="listitem">
+              Accuracy checks using high precision test values. These measure the
+              accuracy of the result, given exact input values.
+            </li>
 </ul></div>
 <a name="math_toolkit.special.sf_gamma.igamma_inv.implementation"></a><h5>
-<a name="id953330"></a>
+<a name="id916991"></a>
           <a class="link" href="igamma_inv.html#math_toolkit.special.sf_gamma.igamma_inv.implementation">Implementation</a>
         </h5>
 <p>
@@ -259,7 +260,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="igamma.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_gamma.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="gamma_derivatives.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="igamma.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_gamma.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="gamma_derivatives.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

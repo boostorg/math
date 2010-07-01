@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Pareto Distribution</title>
-<link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="normal_dist.html" title="Normal (Gaussian) Distribution">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="normal_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="poisson_dist.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="normal_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="poisson_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.dist_ref.dists.pareto"></a><a class="link" href="pareto.html" title="Pareto Distribution"> Pareto
           Distribution</a>
@@ -87,12 +87,12 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/pareto_pdf2.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.pareto.related_distributions"></a><h5>
-<a name="id924420"></a>
+<a name="id890250"></a>
             <a class="link" href="pareto.html#math_toolkit.dist.dist_ref.dists.pareto.related_distributions">Related
             distributions</a>
           </h5>
 <a name="math_toolkit.dist.dist_ref.dists.pareto.member_functions"></a><h5>
-<a name="id924438"></a>
+<a name="id890350"></a>
             <a class="link" href="pareto.html#math_toolkit.dist.dist_ref.dists.pareto.member_functions">Member
             Functions</a>
           </h5>
@@ -118,7 +118,7 @@
             Returns the <span class="emphasis"><em>shape</em></span> parameter of this distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.pareto.non_member_accessors"></a><h5>
-<a name="id924606"></a>
+<a name="id890552"></a>
             <a class="link" href="pareto.html#math_toolkit.dist.dist_ref.dists.pareto.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -138,7 +138,7 @@
             The supported domain of the random variable is [scale, &#8734;].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.pareto.accuracy"></a><h5>
-<a name="id924705"></a>
+<a name="id890691"></a>
             <a class="link" href="pareto.html#math_toolkit.dist.dist_ref.dists.pareto.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -151,7 +151,7 @@
             zero) see also <a class="link" href="../../stat_tut/overview/complements.html#why_complements">why complements?</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.pareto.implementation"></a><h5>
-<a name="id924742"></a>
+<a name="id890762"></a>
             <a class="link" href="pareto.html#math_toolkit.dist.dist_ref.dists.pareto.implementation">Implementation</a>
           </h5>
 <p>
@@ -167,172 +167,176 @@
 </colgroup>
 <thead><tr>
 <th>
-                  <p>
-                    Function
-                  </p>
+                    <p>
+                      Function
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Implementation Notes
-                  </p>
+                    <p>
+                      Implementation Notes
+                    </p>
                   </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                  <p>
-                    pdf
-                  </p>
+                    <p>
+                      pdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: pdf p = &#945;&#946;<sup>&#945;</sup>/x<sup>&#945; +1</sup>
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    cdf
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: cdf p = 1 - (&#946; / x)<sup>&#945;</sup>
-                  </p>
+                    <p>
+                      Using the relation: pdf p = &#945;&#946;<sup>&#945;</sup>/x<sup>&#945; +1</sup>
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    cdf complement
-                  </p>
+                    <p>
+                      cdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: q = 1 - p = -(&#946; / x)<sup>&#945;</sup>
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    quantile
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: x = &#946; / (1 - p)<sup>1/&#945;</sup>
-                  </p>
+                    <p>
+                      Using the relation: cdf p = 1 - (&#946; / x)<sup>&#945;</sup>
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    quantile from the complement
-                  </p>
+                    <p>
+                      cdf complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: x = &#946; / (q)<sup>1/&#945;</sup>
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    mean
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    &#945;&#946; / (&#946; - 1)
-                  </p>
+                    <p>
+                      Using the relation: q = 1 - p = -(&#946; / x)<sup>&#945;</sup>
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    variance
-                  </p>
+                    <p>
+                      quantile
+                    </p>
                   </td>
 <td>
-                  <p>
-                    &#946;&#945;<sup>2</sup> / (&#946; - 1)<sup>2</sup> (&#946; - 2)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    mode
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    &#945;
-                  </p>
+                    <p>
+                      Using the relation: x = &#946; / (1 - p)<sup>1/&#945;</sup>
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    skewness
-                  </p>
+                    <p>
+                      quantile from the complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Refer to <a href="http://mathworld.wolfram.com/ParetoDistribution.html" target="_top">Weisstein,
-                    Eric W. "Pareto Distribution." From MathWorld--A Wolfram
-                    Web Resource.</a>
-                  </p>
+                    <p>
+                      Using the relation: x = &#946; / (q)<sup>1/&#945;</sup>
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    kurtosis
-                  </p>
+                    <p>
+                      mean
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Refer to <a href="http://mathworld.wolfram.com/ParetoDistribution.html" target="_top">Weisstein,
-                    Eric W. "Pareto Distribution." From MathWorld--A Wolfram
-                    Web Resource.</a>
-                  </p>
+                    <p>
+                      &#945;&#946; / (&#946; - 1)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    kurtosis excess
-                  </p>
+                    <p>
+                      variance
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Refer to <a href="http://mathworld.wolfram.com/ParetoDistribution.html" target="_top">Weisstein,
-                    Eric W. "pareto Distribution." From MathWorld--A Wolfram
-                    Web Resource.</a>
-                  </p>
+                    <p>
+                      &#946;&#945;<sup>2</sup> / (&#946; - 1)<sup>2</sup> (&#946; - 2)
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      mode
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      &#945;
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      skewness
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      Refer to <a href="http://mathworld.wolfram.com/ParetoDistribution.html" target="_top">Weisstein,
+                      Eric W. "Pareto Distribution." From MathWorld--A
+                      Wolfram Web Resource.</a>
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      Refer to <a href="http://mathworld.wolfram.com/ParetoDistribution.html" target="_top">Weisstein,
+                      Eric W. "Pareto Distribution." From MathWorld--A
+                      Wolfram Web Resource.</a>
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis excess
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      Refer to <a href="http://mathworld.wolfram.com/ParetoDistribution.html" target="_top">Weisstein,
+                      Eric W. "pareto Distribution." From MathWorld--A
+                      Wolfram Web Resource.</a>
+                    </p>
                   </td>
 </tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.pareto.references"></a><h5>
-<a name="id925067"></a>
+<a name="id891369"></a>
             <a class="link" href="pareto.html#math_toolkit.dist.dist_ref.dists.pareto.references">References</a>
           </h5>
-<div class="itemizedlist"><ul type="disc">
-<li><a href="http://en.wikipedia.org/wiki/pareto_distribution" target="_top">Pareto
-              Distribution</a></li>
-<li><a href="http://mathworld.wolfram.com/paretoDistribution.html" target="_top">Weisstein,
-              Eric W. "Pareto Distribution." From MathWorld--A Wolfram
-              Web Resource.</a></li>
-<li>
-              Handbook of Statistical Distributions with Applications, K Krishnamoorthy,
-              ISBN 1-58488-635-8, Chapter 23, pp 257 - 267. (Note the meaning of
-              a and b is reversed in Wolfram and Krishnamoorthy).
-            </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+                <a href="http://en.wikipedia.org/wiki/pareto_distribution" target="_top">Pareto
+                Distribution</a>
+              </li>
+<li class="listitem">
+                <a href="http://mathworld.wolfram.com/paretoDistribution.html" target="_top">Weisstein,
+                Eric W. "Pareto Distribution." From MathWorld--A Wolfram
+                Web Resource.</a>
+              </li>
+<li class="listitem">
+                Handbook of Statistical Distributions with Applications, K Krishnamoorthy,
+                ISBN 1-58488-635-8, Chapter 23, pp 257 - 267. (Note the meaning of
+                a and b is reversed in Wolfram and Krishnamoorthy).
+              </li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
@@ -347,7 +351,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="normal_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="poisson_dist.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="normal_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="poisson_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

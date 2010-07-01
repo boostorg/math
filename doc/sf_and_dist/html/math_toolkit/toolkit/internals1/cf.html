@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Continued Fraction Evaluation</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../internals1.html" title="Reused Utilities">
 <link rel="prev" href="series_evaluation.html" title="Series Evaluation">
@@ -20,15 +20,15 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="series_evaluation.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="rational.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="series_evaluation.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="rational.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.toolkit.internals1.cf"></a><a class="link" href="cf.html" title="Continued Fraction Evaluation"> Continued Fraction
         Evaluation</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.cf.synopsis"></a><h5>
-<a name="id1064169"></a>
+<a name="id1012284"></a>
           <a class="link" href="cf.html#math_toolkit.toolkit.internals1.cf.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -78,7 +78,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals1.cf.description"></a><h5>
-<a name="id1065201"></a>
+<a name="id1013791"></a>
           <a class="link" href="cf.html#math_toolkit.toolkit.internals1.cf.description">Description</a>
         </h5>
 <p>
@@ -116,48 +116,48 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Expression
-                </p>
+                  <p>
+                    Expression
+                  </p>
                 </th>
 <th>
-                <p>
-                  Description
-                </p>
+                  <p>
+                    Description
+                  </p>
                 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                <p>
-                  Gen::result_type
-                </p>
+                  <p>
+                    Gen::result_type
+                  </p>
                 </td>
 <td>
-                <p>
-                  The type that is the result of invoking operator(). This can be
-                  either an arithmetic type, or a std::pair&lt;&gt; of arithmetic
-                  types.
-                </p>
+                  <p>
+                    The type that is the result of invoking operator(). This can
+                    be either an arithmetic type, or a std::pair&lt;&gt; of arithmetic
+                    types.
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  g()
-                </p>
+                  <p>
+                    g()
+                  </p>
                 </td>
 <td>
-                <p>
-                  Returns an object of type Gen::result_type.
-                </p>
-                <p>
-                  Each time this operator is called then the next pair of <span class="emphasis"><em>a</em></span>
-                  and <span class="emphasis"><em>b</em></span> values is returned. Or, if result_type
-                  is an arithmetic type, then the next <span class="emphasis"><em>b</em></span> value
-                  is returned and all the <span class="emphasis"><em>a</em></span> values are assumed
-                  to 1.
-                </p>
+                  <p>
+                    Returns an object of type Gen::result_type.
+                  </p>
+                  <p>
+                    Each time this operator is called then the next pair of <span class="emphasis"><em>a</em></span>
+                    and <span class="emphasis"><em>b</em></span> values is returned. Or, if result_type
+                    is an arithmetic type, then the next <span class="emphasis"><em>b</em></span> value
+                    is returned and all the <span class="emphasis"><em>a</em></span> values are assumed
+                    to 1.
+                  </p>
                 </td>
 </tr>
 </tbody>
@@ -178,7 +178,7 @@
           a continued fraction for convergence.
         </p>
 <a name="math_toolkit.toolkit.internals1.cf.implementation"></a><h5>
-<a name="id1065408"></a>
+<a name="id1013949"></a>
           <a class="link" href="cf.html#math_toolkit.toolkit.internals1.cf.implementation">Implementation</a>
         </h5>
 <p>
@@ -188,7 +188,7 @@
           Lentz, W.J. 1976, Applied Optics, vol. 15, pp. 668-671.
         </p>
 <a name="math_toolkit.toolkit.internals1.cf.examples"></a><h5>
-<a name="id1065425"></a>
+<a name="id1014077"></a>
           <a class="link" href="cf.html#math_toolkit.toolkit.internals1.cf.examples">Examples</a>
         </h5>
 <p>
@@ -281,7 +281,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="series_evaluation.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="rational.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="series_evaluation.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="rational.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

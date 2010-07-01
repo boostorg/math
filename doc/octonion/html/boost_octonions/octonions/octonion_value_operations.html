@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Octonion Value Operations</title>
-<link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../index.html" title="Boost.Octonions">
+<link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../../index.html" title="Boost.Octonions">
 <link rel="up" href="../octonions.html" title="Octonions">
 <link rel="prev" href="non_mem.html" title="Octonion Non-Member Operators">
 <link rel="next" href="oct_create.html" title="Octonion Creation Functions">
@@ -20,16 +20,16 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="non_mem.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../octonions.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="oct_create.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="non_mem.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../octonions.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="oct_create.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_octonions.octonions.octonion_value_operations"></a><a href="octonion_value_operations.html" title="Octonion Value Operations">Octonion
+<a name="boost_octonions.octonions.octonion_value_operations"></a><a class="link" href="octonion_value_operations.html" title="Octonion Value Operations">Octonion
       Value Operations</a>
 </h3></div></div></div>
 <a name="boost_octonions.octonions.octonion_value_operations.real_and_unreal"></a><h5>
-<a name="id542093"></a>
-        <a href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.real_and_unreal">Real
+<a name="id797506"></a>
+        <a class="link" href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.real_and_unreal">Real
         and Unreal</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">T</span>  <span class="identifier">real</span><span class="special">(</span><span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">o</span><span class="special">);</span>
@@ -41,8 +41,8 @@
         respectively.
       </p>
 <a name="boost_octonions.octonions.octonion_value_operations.conj"></a><h5>
-<a name="id542373"></a>
-        <a href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.conj">conj</a>
+<a name="id797753"></a>
+        <a class="link" href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.conj">conj</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">conj</span><span class="special">(</span><span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">o</span><span class="special">);</span>
 </pre>
@@ -50,8 +50,8 @@
         This returns the conjugate of the octonion.
       </p>
 <a name="boost_octonions.octonions.octonion_value_operations.sup"></a><h5>
-<a name="id542512"></a>
-        <a href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.sup">sup</a>
+<a name="id797875"></a>
+        <a class="link" href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.sup">sup</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">T</span>   <span class="identifier">sup</span><span class="special">(</span><span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">o</span><span class="special">);</span>
 </pre>
@@ -59,8 +59,8 @@
         This return the sup norm (the greatest among <code class="computeroutput"><span class="identifier">abs</span><span class="special">(</span><span class="identifier">o</span><span class="special">.</span><span class="identifier">R_component_1</span><span class="special">())...</span><span class="identifier">abs</span><span class="special">(</span><span class="identifier">o</span><span class="special">.</span><span class="identifier">R_component_8</span><span class="special">()))</span></code> of the octonion.
       </p>
 <a name="boost_octonions.octonions.octonion_value_operations.l1"></a><h5>
-<a name="id542700"></a>
-        <a href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.l1">l1</a>
+<a name="id798041"></a>
+        <a class="link" href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.l1">l1</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">T</span>   <span class="identifier">l1</span><span class="special">(</span><span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">o</span><span class="special">);</span>
 </pre>
@@ -68,8 +68,8 @@
         This return the l1 norm (<code class="computeroutput"><span class="identifier">abs</span><span class="special">(</span><span class="identifier">o</span><span class="special">.</span><span class="identifier">R_component_1</span><span class="special">())+...+</span><span class="identifier">abs</span><span class="special">(</span><span class="identifier">o</span><span class="special">.</span><span class="identifier">R_component_8</span><span class="special">())</span></code>) of the octonion.
       </p>
 <a name="boost_octonions.octonions.octonion_value_operations.abs"></a><h5>
-<a name="id542888"></a>
-        <a href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.abs">abs</a>
+<a name="id798208"></a>
+        <a class="link" href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.abs">abs</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">T</span>   <span class="identifier">abs</span><span class="special">(</span><span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">o</span><span class="special">);</span>
 </pre>
@@ -77,8 +77,8 @@
         This return the magnitude (Euclidian norm) of the octonion.
       </p>
 <a name="boost_octonions.octonions.octonion_value_operations.norm"></a><h5>
-<a name="id543009"></a>
-        <a href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.norm">norm</a>
+<a name="id798316"></a>
+        <a class="link" href="octonion_value_operations.html#boost_octonions.octonions.octonion_value_operations.norm">norm</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">T</span>  <span class="identifier">norm</span><span class="special">(</span><span class="identifier">octonion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span><span class="keyword">const</span>  <span class="special">&amp;</span> <span class="identifier">o</span><span class="special">);</span>
 </pre>
@@ -92,7 +92,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2001 -2003 Hubert Holin<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001 -2003 Hubert Holin<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -100,7 +100,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="non_mem.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../octonions.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="oct_create.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="non_mem.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../octonions.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="oct_create.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

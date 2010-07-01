@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Changing the Policy Defaults</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
 <link rel="prev" href="policy_usage.html" title="So How are Policies Used Anyway?">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="policy_usage.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../pol_tutorial.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="ad_hoc_dist_policies.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="policy_usage.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../pol_tutorial.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="ad_hoc_dist_policies.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.policy.pol_tutorial.changing_policy_defaults"></a><a class="link" href="changing_policy_defaults.html" title="Changing the Policy Defaults">
         Changing the Policy Defaults</a>
@@ -39,7 +39,7 @@
         </p>
 <div class="tip"><table border="0" summary="Tip">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../../../../doc/html/images/tip.png"></td>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../../../../doc/src/images/tip.png"></td>
 <th align="left">Tip</th>
 </tr>
 <tr><td align="left" valign="top">
@@ -85,7 +85,7 @@
         </p>
 <div class="important"><table border="0" summary="Important">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../../../../../../../doc/html/images/important.png"></td>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../../../../../../../doc/src/images/important.png"></td>
 <th align="left">Important</th>
 </tr>
 <tr><td align="left" valign="top">
@@ -102,26 +102,27 @@
 <p>
           That means there are only two safe ways to use these macros:
         </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-            Edit them in <a href="../../../../../../../../boost/math/tools/user.hpp" target="_top">boost/math/tools/user.hpp</a>,
-            so that the defaults are set on an installation-wide basis. Unfortunately
-            this may not be convenient if you are using a pre-installed Boost distribution
-            (on Linux for example).
-          </li>
-<li>
-            Set the defines in your project's Makefile or build environment, so that
-            they are set uniformly across all translation units.
-          </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+              Edit them in <a href="../../../../../../../../boost/math/tools/user.hpp" target="_top">boost/math/tools/user.hpp</a>,
+              so that the defaults are set on an installation-wide basis. Unfortunately
+              this may not be convenient if you are using a pre-installed Boost distribution
+              (on Linux for example).
+            </li>
+<li class="listitem">
+              Set the defines in your project's Makefile or build environment, so
+              that they are set uniformly across all translation units.
+            </li>
 </ul></div>
 <p>
           What you should <span class="bold"><strong>not</strong></span> do is:
         </p>
-<div class="itemizedlist"><ul type="disc"><li>
-            Set the defines in the source file using <code class="computeroutput"><span class="preprocessor">#define</span></code>
-            as doing so almost certainly will break your program, unless you're absolutely
-            certain that the program is restricted to a single translation unit.
-          </li></ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+              Set the defines in the source file using <code class="computeroutput"><span class="preprocessor">#define</span></code>
+              as doing so almost certainly will break your program, unless you're
+              absolutely certain that the program is restricted to a single translation
+              unit.
+            </li></ul></div>
 <p>
           And, yes, you will find examples in our test programs where we break this
           rule: but only because we know there will always be a single translation
@@ -326,7 +327,7 @@ errno is set to: 33
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="policy_usage.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../pol_tutorial.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="ad_hoc_dist_policies.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="policy_usage.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../pol_tutorial.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="ad_hoc_dist_policies.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

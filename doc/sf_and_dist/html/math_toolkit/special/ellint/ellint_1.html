@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Elliptic Integrals of the First Kind - Legendre Form</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../ellint.html" title="Elliptic Integrals">
 <link rel="prev" href="ellint_carlson.html" title="Elliptic Integrals - Carlson Form">
@@ -20,15 +20,15 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="ellint_carlson.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ellint.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="ellint_2.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="ellint_carlson.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ellint.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="ellint_2.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.ellint.ellint_1"></a><a class="link" href="ellint_1.html" title="Elliptic Integrals of the First Kind - Legendre Form"> Elliptic Integrals
         of the First Kind - Legendre Form</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.ellint.ellint_1.synopsis"></a><h6>
-<a name="id1005364"></a>
+<a name="id960022"></a>
           <a class="link" href="ellint_1.html#math_toolkit.special.ellint.ellint_1.synopsis">Synopsis</a>
         </h6>
 <p>
@@ -55,7 +55,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.ellint.ellint_1.description"></a><h6>
-<a name="id1005768"></a>
+<a name="id960519"></a>
           <a class="link" href="ellint_1.html#math_toolkit.special.ellint.ellint_1.description">Description</a>
         </h6>
 <p>
@@ -123,7 +123,7 @@
 <p>
         </p>
 <a name="math_toolkit.special.ellint.ellint_1.accuracy"></a><h6>
-<a name="id1006233"></a>
+<a name="id961376"></a>
           <a class="link" href="ellint_1.html#math_toolkit.special.ellint.ellint_1.accuracy">Accuracy</a>
         </h6>
 <p>
@@ -134,10 +134,8 @@
           All values are relative errors in units of epsilon.
         </p>
 <div class="table">
-<a name="id1006251"></a><p class="title"><b>Table&#160;41.&#160;Errors Rates in the Elliptic Integrals of the
-        First Kind</b></p>
-<div class="table-contents"><table class="table" summary="Errors Rates in the Elliptic Integrals of the
-        First Kind">
+<a name="id961406"></a><p class="title"><b>Table&#160;41.&#160;Errors Rates in the Elliptic Integrals of the First Kind</b></p>
+<div class="table-contents"><table class="table" summary="Errors Rates in the Elliptic Integrals of the First Kind">
 <colgroup>
 <col>
 <col>
@@ -146,98 +144,98 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Significand Size
-              </p>
-              </th>
+                  <p>
+                    Significand Size
+                  </p>
+                </th>
 <th>
-              <p>
-                Platform and Compiler
-              </p>
-              </th>
+                  <p>
+                    Platform and Compiler
+                  </p>
+                </th>
 <th>
-              <p>
-                F(&#966;, k)
-              </p>
-              </th>
+                  <p>
+                    F(&#966;, k)
+                  </p>
+                </th>
 <th>
-              <p>
-                K(k)
-              </p>
-              </th>
+                  <p>
+                    K(k)
+                  </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                53
-              </p>
-              </td>
+                  <p>
+                    53
+                  </p>
+                </td>
 <td>
-              <p>
-                Win32 / Visual C++ 8.0
-              </p>
-              </td>
+                  <p>
+                    Win32 / Visual C++ 8.0
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=3 Mean=0.8
-              </p>
-              </td>
+                  <p>
+                    Peak=3 Mean=0.8
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=1.8 Mean=0.7
-              </p>
-              </td>
+                  <p>
+                    Peak=1.8 Mean=0.7
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                Red Hat Linux / G++ 3.4
-              </p>
-              </td>
+                  <p>
+                    Red Hat Linux / G++ 3.4
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=2.6 Mean=1.7
-              </p>
-              </td>
+                  <p>
+                    Peak=2.6 Mean=1.7
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=2.2 Mean=1.8
-              </p>
-              </td>
+                  <p>
+                    Peak=2.2 Mean=1.8
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                113
-              </p>
-              </td>
+                  <p>
+                    113
+                  </p>
+                </td>
 <td>
-              <p>
-                HP-UX / HP aCC 6
-              </p>
-              </td>
+                  <p>
+                    HP-UX / HP aCC 6
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=4.6 Mean=1.5
-              </p>
-              </td>
+                  <p>
+                    Peak=4.6 Mean=1.5
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=3.7 Mean=1.5
-              </p>
-              </td>
+                  <p>
+                    Peak=3.7 Mean=1.5
+                  </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.special.ellint.ellint_1.testing"></a><h6>
-<a name="id1006390"></a>
+<a name="id961566"></a>
           <a class="link" href="ellint_1.html#math_toolkit.special.ellint.ellint_1.testing">Testing</a>
         </h6>
 <p>
@@ -247,7 +245,7 @@
           this implementation.
         </p>
 <a name="math_toolkit.special.ellint.ellint_1.implementation"></a><h6>
-<a name="id1006412"></a>
+<a name="id961601"></a>
           <a class="link" href="ellint_1.html#math_toolkit.special.ellint.ellint_1.implementation">Implementation</a>
         </h6>
 <p>
@@ -276,7 +274,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="ellint_carlson.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ellint.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="ellint_2.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="ellint_carlson.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ellint.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="ellint_2.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

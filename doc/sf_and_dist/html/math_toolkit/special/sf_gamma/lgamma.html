@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Log Gamma</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="tgamma.html" title="Gamma">
@@ -20,14 +20,14 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="tgamma.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_gamma.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="digamma.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="tgamma.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_gamma.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="digamma.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.sf_gamma.lgamma"></a><a class="link" href="lgamma.html" title="Log Gamma"> Log Gamma</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.sf_gamma.lgamma.synopsis"></a><h5>
-<a name="id941252"></a>
+<a name="id904825"></a>
           <a class="link" href="lgamma.html#math_toolkit.special.sf_gamma.lgamma.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -54,7 +54,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.sf_gamma.lgamma.description"></a><h5>
-<a name="id941862"></a>
+<a name="id905297"></a>
           <a class="link" href="lgamma.html#math_toolkit.special.sf_gamma.lgamma.description">Description</a>
         </h5>
 <p>
@@ -98,7 +98,7 @@
           T otherwise.
         </p>
 <a name="math_toolkit.special.sf_gamma.lgamma.accuracy"></a><h5>
-<a name="id941989"></a>
+<a name="id905480"></a>
           <a class="link" href="lgamma.html#math_toolkit.special.sf_gamma.lgamma.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -127,229 +127,229 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Significand Size
-                </p>
+                  <p>
+                    Significand Size
+                  </p>
                 </th>
 <th>
-                <p>
-                  Platform and Compiler
-                </p>
+                  <p>
+                    Platform and Compiler
+                  </p>
                 </th>
 <th>
-                <p>
-                  Factorials and Half factorials
-                </p>
+                  <p>
+                    Factorials and Half factorials
+                  </p>
                 </th>
 <th>
-                <p>
-                  Values Near Zero
-                </p>
+                  <p>
+                    Values Near Zero
+                  </p>
                 </th>
 <th>
-                <p>
-                  Values Near 1 or 2
-                </p>
+                  <p>
+                    Values Near 1 or 2
+                  </p>
                 </th>
 <th>
-                <p>
-                  Values Near a Negative Pole
-                </p>
+                  <p>
+                    Values Near a Negative Pole
+                  </p>
                 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                <p>
-                  53
-                </p>
+                  <p>
+                    53
+                  </p>
                 </td>
 <td>
-                <p>
-                  Win32 Visual C++ 8
-                </p>
+                  <p>
+                    Win32 Visual C++ 8
+                  </p>
                 </td>
 <td>
-                <p>
-                  Peak=0.88 Mean=0.14
-                </p>
-                <p>
-                  (GSL=33) (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>=1.5)
-                </p>
+                  <p>
+                    Peak=0.88 Mean=0.14
+                  </p>
+                  <p>
+                    (GSL=33) (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>=1.5)
+                  </p>
                 </td>
 <td>
-                <p>
-                  Peak=0.96 Mean=0.46
-                </p>
-                <p>
-                  (GSL=5.2) (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>=1.1)
-                </p>
+                  <p>
+                    Peak=0.96 Mean=0.46
+                  </p>
+                  <p>
+                    (GSL=5.2) (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>=1.1)
+                  </p>
                 </td>
 <td>
-                <p>
-                  Peak=0.86 Mean=0.46
-                </p>
-                <p>
-                  (GSL=1168) (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>~500000)
-                </p>
+                  <p>
+                    Peak=0.86 Mean=0.46
+                  </p>
+                  <p>
+                    (GSL=1168) (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>~500000)
+                  </p>
                 </td>
 <td>
-                <p>
-                  Peak=4.2 Mean=1.3
-                </p>
-                <p>
-                  (GSL=25) (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>=1.6)
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  64
-                </p>
-                </td>
-<td>
-                <p>
-                  Linux IA32 / GCC
-                </p>
-                </td>
-<td>
-                <p>
-                  Peak=1.9 Mean=0.43
-                </p>
-                <p>
-                  (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                  Peak=1.7 Mean=0.49)
-                </p>
-                </td>
-<td>
-                <p>
-                  Peak=1.4 Mean=0.57
-                </p>
-                <p>
-                  (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                  Peak= 0.96 Mean=0.54)
-                </p>
-                </td>
-<td>
-                <p>
-                  Peak=0.86 Mean=0.35
-                </p>
-                <p>
-                  (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                  Peak=0.74 Mean=0.26)
-                </p>
-                </td>
-<td>
-                <p>
-                  Peak=6.0 Mean=1.8
-                </p>
-                <p>
-                  (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                  Peak=3.0 Mean=0.86)
-                </p>
+                  <p>
+                    Peak=4.2 Mean=1.3
+                  </p>
+                  <p>
+                    (GSL=25) (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>=1.6)
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  64
-                </p>
+                  <p>
+                    64
+                  </p>
                 </td>
 <td>
-                <p>
-                  Linux IA64 / GCC
-                </p>
+                  <p>
+                    Linux IA32 / GCC
+                  </p>
                 </td>
 <td>
-                <p>
-                  Peak=0.99 Mean=0.12
-                </p>
-                <p>
-                  (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                  Peak 0)
-                </p>
+                  <p>
+                    Peak=1.9 Mean=0.43
+                  </p>
+                  <p>
+                    (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=1.7 Mean=0.49)
+                  </p>
                 </td>
 <td>
-                <p>
-                  Pek=1.2 Mean=0.6
-                </p>
-                <p>
-                  (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                  Peak 0)
-                </p>
+                  <p>
+                    Peak=1.4 Mean=0.57
+                  </p>
+                  <p>
+                    (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak= 0.96 Mean=0.54)
+                  </p>
                 </td>
 <td>
-                <p>
-                  Peak=0.86 Mean=0.16
-                </p>
-                <p>
-                  (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                  Peak 0)
-                </p>
+                  <p>
+                    Peak=0.86 Mean=0.35
+                  </p>
+                  <p>
+                    (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=0.74 Mean=0.26)
+                  </p>
                 </td>
 <td>
-                <p>
-                  Peak=2.3 Mean=0.69
-                </p>
-                <p>
-                  (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                  Peak 0)
-                </p>
+                  <p>
+                    Peak=6.0 Mean=1.8
+                  </p>
+                  <p>
+                    (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=3.0 Mean=0.86)
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  113
-                </p>
+                  <p>
+                    64
+                  </p>
                 </td>
 <td>
-                <p>
-                  HPUX IA64, aCC A.06.06
-                </p>
+                  <p>
+                    Linux IA64 / GCC
+                  </p>
                 </td>
 <td>
-                <p>
-                  Peak=0.96 Mean=0.13
-                </p>
-                <p>
-                  (<a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
-                  C Library</a> Peak 0)
-                </p>
+                  <p>
+                    Peak=0.99 Mean=0.12
+                  </p>
+                  <p>
+                    (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak 0)
+                  </p>
                 </td>
 <td>
-                <p>
-                  Peak=0.99 Mean=0.53
-                </p>
-                <p>
-                  (<a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
-                  C Library</a> Peak 0)
-                </p>
+                  <p>
+                    Pek=1.2 Mean=0.6
+                  </p>
+                  <p>
+                    (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak 0)
+                  </p>
                 </td>
 <td>
-                <p>
-                  Peak=0.9 Mean=0.4
-                </p>
-                <p>
-                  (<a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
-                  C Library</a> Peak 0)
-                </p>
+                  <p>
+                    Peak=0.86 Mean=0.16
+                  </p>
+                  <p>
+                    (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak 0)
+                  </p>
                 </td>
 <td>
-                <p>
-                  Peak=3.0 Mean=0.9
-                </p>
-                <p>
-                  (<a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
-                  C Library</a> Peak 0)
-                </p>
+                  <p>
+                    Peak=2.3 Mean=0.69
+                  </p>
+                  <p>
+                    (<a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak 0)
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    113
+                  </p>
+                </td>
+<td>
+                  <p>
+                    HPUX IA64, aCC A.06.06
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Peak=0.96 Mean=0.13
+                  </p>
+                  <p>
+                    (<a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
+                    C Library</a> Peak 0)
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Peak=0.99 Mean=0.53
+                  </p>
+                  <p>
+                    (<a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
+                    C Library</a> Peak 0)
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Peak=0.9 Mean=0.4
+                  </p>
+                  <p>
+                    (<a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
+                    C Library</a> Peak 0)
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Peak=3.0 Mean=0.9
+                  </p>
+                  <p>
+                    (<a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
+                    C Library</a> Peak 0)
+                  </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.special.sf_gamma.lgamma.testing"></a><h5>
-<a name="id942394"></a>
+<a name="id905977"></a>
           <a class="link" href="lgamma.html#math_toolkit.special.sf_gamma.lgamma.testing">Testing</a>
         </h5>
 <p>
@@ -360,7 +360,7 @@
           Random tests in key problem areas are also used.
         </p>
 <a name="math_toolkit.special.sf_gamma.lgamma.implementation"></a><h5>
-<a name="id942415"></a>
+<a name="id906008"></a>
           <a class="link" href="lgamma.html#math_toolkit.special.sf_gamma.lgamma.implementation">Implementation</a>
         </h5>
 <p>
@@ -482,7 +482,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="tgamma.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_gamma.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="digamma.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="tgamma.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_gamma.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="digamma.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Error Handling Policies</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../pol_ref.html" title="Policy Reference">
 <link rel="prev" href="../pol_ref.html" title="Policy Reference">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../pol_ref.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../pol_ref.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="internal_promotion.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../pol_ref.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../pol_ref.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="internal_promotion.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.policy.pol_ref.error_handling_policies"></a><a class="link" href="error_handling_policies.html" title="Error Handling Policies">
         Error Handling Policies</a>
@@ -30,16 +30,16 @@
 <p>
           There are two orthogonal aspects to error handling:
         </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-            What to do (if anything) with the error.
-          </li>
-<li>
-            What kind of error is being raised.
-          </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+              What to do (if anything) with the error.
+            </li>
+<li class="listitem">
+              What kind of error is being raised.
+            </li>
 </ul></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised"></a><h5>
-<a name="id1126142"></a>
+<a name="id1069251"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised">Available
           Actions When an Error is Raised</a>
         </h5>
@@ -62,7 +62,7 @@
           The various enumerated values have the following meanings:
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error"></a><h6>
-<a name="id1126323"></a>
+<a name="id1069475"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error">throw_on_error</a>
         </h6>
 <p>
@@ -76,105 +76,105 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Error Type
-                </p>
+                  <p>
+                    Error Type
+                  </p>
                 </th>
 <th>
-                <p>
-                  Exception
-                </p>
+                  <p>
+                    Exception
+                  </p>
                 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                <p>
-                  Domain Error
-                </p>
+                  <p>
+                    Domain Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  std::domain_error
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Pole Error
-                </p>
-                </td>
-<td>
-                <p>
-                  std::domain_error
-                </p>
+                  <p>
+                    std::domain_error
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Overflow Error
-                </p>
+                  <p>
+                    Pole Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  std::overflow_error
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Underflow Error
-                </p>
-                </td>
-<td>
-                <p>
-                  std::underflow_error
-                </p>
+                  <p>
+                    std::domain_error
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Denorm Error
-                </p>
+                  <p>
+                    Overflow Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  std::underflow_error
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Evaluation Error
-                </p>
-                </td>
-<td>
-                <p>
-                  boost::math::evaluation_error
-                </p>
+                  <p>
+                    std::overflow_error
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Indeterminate Result Error
-                </p>
+                  <p>
+                    Underflow Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  std::domain_error
-                </p>
+                  <p>
+                    std::underflow_error
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Denorm Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    std::underflow_error
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Evaluation Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    boost::math::evaluation_error
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Indeterminate Result Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    std::domain_error
+                  </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error"></a><h6>
-<a name="id1127618"></a>
+<a name="id1069666"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error">errno_on_error</a>
         </h6>
 <p>
@@ -189,105 +189,105 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Error Type
-                </p>
+                  <p>
+                    Error Type
+                  </p>
                 </th>
 <th>
-                <p>
-                  errno value
-                </p>
+                  <p>
+                    errno value
+                  </p>
                 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                <p>
-                  Domain Error
-                </p>
+                  <p>
+                    Domain Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  EDOM
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Pole Error
-                </p>
-                </td>
-<td>
-                <p>
-                  EDOM
-                </p>
+                  <p>
+                    EDOM
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Overflow Error
-                </p>
+                  <p>
+                    Pole Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  ERANGE
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Underflow Error
-                </p>
-                </td>
-<td>
-                <p>
-                  ERANGE
-                </p>
+                  <p>
+                    EDOM
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Denorm Error
-                </p>
+                  <p>
+                    Overflow Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  ERANGE
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Evaluation Error
-                </p>
-                </td>
-<td>
-                <p>
-                  EDOM
-                </p>
+                  <p>
+                    ERANGE
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Indeterminate Result Error
-                </p>
+                  <p>
+                    Underflow Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  EDOM
-                </p>
+                  <p>
+                    ERANGE
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Denorm Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    ERANGE
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Evaluation Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    EDOM
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Indeterminate Result Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    EDOM
+                  </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.ignore_error"></a><h6>
-<a name="id1127798"></a>
+<a name="id1069870"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.ignore_error">ignore_error</a>
         </h6>
 <p>
@@ -301,106 +301,106 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Error Type
-                </p>
+                  <p>
+                    Error Type
+                  </p>
                 </th>
 <th>
-                <p>
-                  Returned Value
-                </p>
+                  <p>
+                    Returned Value
+                  </p>
                 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                <p>
-                  Domain Error
-                </p>
+                  <p>
+                    Domain Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  std::numeric_limits&lt;T&gt;::quiet_NaN()
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Pole Error
-                </p>
-                </td>
-<td>
-                <p>
-                  std::numeric_limits&lt;T&gt;::quiet_NaN()
-                </p>
+                  <p>
+                    std::numeric_limits&lt;T&gt;::quiet_NaN()
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Overflow Error
-                </p>
+                  <p>
+                    Pole Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  std::numeric_limits&lt;T&gt;::infinity()
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Underflow Error
-                </p>
-                </td>
-<td>
-                <p>
-                  0
-                </p>
+                  <p>
+                    std::numeric_limits&lt;T&gt;::quiet_NaN()
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Denorm Error
-                </p>
+                  <p>
+                    Overflow Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  The denormalised value.
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Evaluation Error
-                </p>
-                </td>
-<td>
-                <p>
-                  The best guess as to the result: which may be significantly in
-                  error.
-                </p>
+                  <p>
+                    std::numeric_limits&lt;T&gt;::infinity()
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Indeterminate Result Error
-                </p>
+                  <p>
+                    Underflow Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  Depends on the function where the error occurred
-                </p>
+                  <p>
+                    0
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Denorm Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    The denormalised value.
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Evaluation Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    The best guess as to the result: which may be significantly in
+                    error.
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Indeterminate Result Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Depends on the function where the error occurred
+                  </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.user_error"></a><h6>
-<a name="id1127981"></a>
+<a name="id1070076"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.user_error">user_error</a>
         </h6>
 <p>
@@ -449,7 +449,7 @@
           here</a>.
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised"></a><h5>
-<a name="id1128872"></a>
+<a name="id1071137"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised">Kinds
           of Error Raised</a>
         </h5>
@@ -465,230 +465,231 @@
 </colgroup>
 <thead><tr>
 <th>
-                <p>
-                  Error Type
-                </p>
+                  <p>
+                    Error Type
+                  </p>
                 </th>
 <th>
-                <p>
-                  Policy Class
-                </p>
+                  <p>
+                    Policy Class
+                  </p>
                 </th>
 <th>
-                <p>
-                  Description
-                </p>
+                  <p>
+                    Description
+                  </p>
                 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                <p>
-                  Domain Error
-                </p>
+                  <p>
+                    Domain Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  boost::math::policies::domain_error&lt;<span class="emphasis"><em>action</em></span>&gt;
-                </p>
+                  <p>
+                    boost::math::policies::domain_error&lt;<span class="emphasis"><em>action</em></span>&gt;
+                  </p>
                 </td>
 <td>
-                <p>
-                  Raised when more or more arguments are outside the defined range
-                  of the function.
-                </p>
-                <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
-                </p>
-                <p>
-                  When the action is set to <span class="emphasis"><em>throw_on_error</em></span> then
-                  throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Pole Error
-                </p>
-                </td>
-<td>
-                <p>
-                  boost::math::policies::pole_error&lt;<span class="emphasis"><em>action</em></span>&gt;
-                </p>
-                </td>
-<td>
-                <p>
-                  Raised when more or more arguments would cause the function to
-                  be evaluated at a pole.
-                </p>
-                <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">pole_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
-                </p>
-                <p>
-                  When the action is <span class="emphasis"><em>throw_on_error</em></span> then throw
-                  a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
-                </p>
+                  <p>
+                    Raised when more or more arguments are outside the defined range
+                    of the function.
+                  </p>
+                  <p>
+                    Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
+                  </p>
+                  <p>
+                    When the action is set to <span class="emphasis"><em>throw_on_error</em></span>
+                    then throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Overflow Error
-                </p>
+                  <p>
+                    Pole Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  boost::math::policies::overflow_error&lt;<span class="emphasis"><em>action</em></span>&gt;
-                </p>
+                  <p>
+                    boost::math::policies::pole_error&lt;<span class="emphasis"><em>action</em></span>&gt;
+                  </p>
                 </td>
 <td>
-                <p>
-                  Raised when the result of the function is outside the representable
-                  range of the floating point type used.
-                </p>
-                <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>.
-                </p>
-                <p>
-                  When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
-                  a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">overflow_error</span></code>.
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Underflow Error
-                </p>
-                </td>
-<td>
-                <p>
-                  boost::math::policies::underflow_error&lt;<span class="emphasis"><em>action</em></span>&gt;
-                </p>
-                </td>
-<td>
-                <p>
-                  Raised when the result of the function is too small to be represented
-                  in the floating point type used.
-                </p>
-                <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">underflow_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span></code>
-                </p>
-                <p>
-                  When the specified action is <span class="emphasis"><em>throw_on_error</em></span>
-                  then throws a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code>
-                </p>
+                  <p>
+                    Raised when more or more arguments would cause the function to
+                    be evaluated at a pole.
+                  </p>
+                  <p>
+                    Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">pole_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
+                  </p>
+                  <p>
+                    When the action is <span class="emphasis"><em>throw_on_error</em></span> then throw
+                    a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Denorm Error
-                </p>
+                  <p>
+                    Overflow Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  boost::math::policies::denorm_error&lt;<span class="emphasis"><em>action</em></span>&gt;
-                </p>
+                  <p>
+                    boost::math::policies::overflow_error&lt;<span class="emphasis"><em>action</em></span>&gt;
+                  </p>
                 </td>
 <td>
-                <p>
-                  Raised when the result of the function is a denormalised value.
-                </p>
-                <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">denorm_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span></code>
-                </p>
-                <p>
-                  When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
-                  a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code>
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  Rounding Error
-                </p>
-                </td>
-<td>
-                <p>
-                  boost::math::policies::rounding_error&lt;<span class="emphasis"><em>action</em></span>&gt;
-                </p>
-                </td>
-<td>
-                <p>
-                  Raised When one of the rounding functions <a class="link" href="../../utils/rounding/round.html" title="Rounding Functions">round</a>,
-                  <a class="link" href="../../utils/rounding/trunc.html" title="Truncation Functions">trunc</a>
-                  or <a class="link" href="../../utils/rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">modf</a>
-                  is called with an argument that has no integer representation,
-                  or is too large to be represented in the result type
-                </p>
-                <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">rounding_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
-                </p>
-                <p>
-                  When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
-                  <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">rounding_error</span></code>
-                </p>
+                  <p>
+                    Raised when the result of the function is outside the representable
+                    range of the floating point type used.
+                  </p>
+                  <p>
+                    Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>.
+                  </p>
+                  <p>
+                    When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
+                    a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">overflow_error</span></code>.
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Evaluation Error
-                </p>
+                  <p>
+                    Underflow Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  boost::math::policies::evaluation_error&lt;<span class="emphasis"><em>action</em></span>&gt;
-                </p>
+                  <p>
+                    boost::math::policies::underflow_error&lt;<span class="emphasis"><em>action</em></span>&gt;
+                  </p>
                 </td>
 <td>
-                <p>
-                  Raised when the result of the function is well defined and finite,
-                  but we were unable to compute it. Typically this occurs when an
-                  iterative method fails to converge. Of course ideally this error
-                  should never be raised: feel free to report it as a bug if it is!
-                </p>
-                <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
-                </p>
-                <p>
-                  When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
-                  <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">evaluation_error</span></code>
-                </p>
+                  <p>
+                    Raised when the result of the function is too small to be represented
+                    in the floating point type used.
+                  </p>
+                  <p>
+                    Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">underflow_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span></code>
+                  </p>
+                  <p>
+                    When the specified action is <span class="emphasis"><em>throw_on_error</em></span>
+                    then throws a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code>
+                  </p>
                 </td>
 </tr>
 <tr>
 <td>
-                <p>
-                  Indeterminate Result Error
-                </p>
+                  <p>
+                    Denorm Error
+                  </p>
                 </td>
 <td>
-                <p>
-                  boost::math::policies::indeterminate_result_error&lt;<span class="emphasis"><em>action</em></span>&gt;
-                </p>
+                  <p>
+                    boost::math::policies::denorm_error&lt;<span class="emphasis"><em>action</em></span>&gt;
+                  </p>
                 </td>
 <td>
-                <p>
-                  Raised when the result of a function is not defined for the values
-                  that were passed to it.
-                </p>
-                <p>
-                  Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">indeterminate_result_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span></code>
-                </p>
-                <p>
-                  When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
-                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
-                </p>
+                  <p>
+                    Raised when the result of the function is a denormalised value.
+                  </p>
+                  <p>
+                    Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">denorm_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span></code>
+                  </p>
+                  <p>
+                    When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
+                    a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Rounding Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    boost::math::policies::rounding_error&lt;<span class="emphasis"><em>action</em></span>&gt;
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Raised When one of the rounding functions <a class="link" href="../../utils/rounding/round.html" title="Rounding Functions">round</a>,
+                    <a class="link" href="../../utils/rounding/trunc.html" title="Truncation Functions">trunc</a>
+                    or <a class="link" href="../../utils/rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">modf</a>
+                    is called with an argument that has no integer representation,
+                    or is too large to be represented in the result type
+                  </p>
+                  <p>
+                    Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">rounding_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
+                  </p>
+                  <p>
+                    When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
+                    <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">rounding_error</span></code>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Evaluation Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    boost::math::policies::evaluation_error&lt;<span class="emphasis"><em>action</em></span>&gt;
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Raised when the result of the function is well defined and finite,
+                    but we were unable to compute it. Typically this occurs when
+                    an iterative method fails to converge. Of course ideally this
+                    error should never be raised: feel free to report it as a bug
+                    if it is!
+                  </p>
+                  <p>
+                    Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">throw_on_error</span><span class="special">&gt;</span></code>
+                  </p>
+                  <p>
+                    When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
+                    <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">evaluation_error</span></code>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Indeterminate Result Error
+                  </p>
+                </td>
+<td>
+                  <p>
+                    boost::math::policies::indeterminate_result_error&lt;<span class="emphasis"><em>action</em></span>&gt;
+                  </p>
+                </td>
+<td>
+                  <p>
+                    Raised when the result of a function is not defined for the values
+                    that were passed to it.
+                  </p>
+                  <p>
+                    Defaults to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">indeterminate_result_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span></code>
+                  </p>
+                  <p>
+                    When the action is <span class="emphasis"><em>throw_on_error</em></span> then throws
+                    <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
+                  </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.examples"></a><h5>
-<a name="id1129691"></a>
+<a name="id1072158"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.examples">Examples</a>
         </h5>
 <p>
@@ -773,7 +774,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../pol_ref.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../pol_ref.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="internal_promotion.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../pol_ref.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../pol_ref.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="internal_promotion.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

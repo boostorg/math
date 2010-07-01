@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Poisson Distribution</title>
-<link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="pareto.html" title="Pareto Distribution">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="pareto.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="rayleigh.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="pareto.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="rayleigh.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.dist_ref.dists.poisson_dist"></a><a class="link" href="poisson_dist.html" title="Poisson Distribution"> Poisson
           Distribution</a>
@@ -86,7 +86,7 @@
             </p>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../../../doc/html/images/caution.png"></td>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../../../doc/src/images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
 <tr><td align="left" valign="top">
@@ -122,7 +122,7 @@
 <p>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.poisson_dist.member_functions"></a><h5>
-<a name="id925589"></a>
+<a name="id892046"></a>
             <a class="link" href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -137,7 +137,7 @@
             Returns the <span class="emphasis"><em>mean</em></span> of this distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.poisson_dist.non_member_accessors"></a><h5>
-<a name="id925678"></a>
+<a name="id892157"></a>
             <a class="link" href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -157,7 +157,7 @@
             The domain of the random variable is [0, &#8734;].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.poisson_dist.accuracy"></a><h5>
-<a name="id925775"></a>
+<a name="id892305"></a>
             <a class="link" href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -171,7 +171,7 @@
             using an iterative method with a lower tolerance to avoid excessive computation.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.poisson_dist.implementation"></a><h5>
-<a name="id925804"></a>
+<a name="id892356"></a>
             <a class="link" href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -186,139 +186,139 @@
 </colgroup>
 <thead><tr>
 <th>
-                  <p>
-                    Function
-                  </p>
+                    <p>
+                      Function
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Implementation Notes
-                  </p>
+                    <p>
+                      Implementation Notes
+                    </p>
                   </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                  <p>
-                    pdf
-                  </p>
+                    <p>
+                      pdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: pdf = e<sup>-&#955;</sup> &#955;<sup>k</sup> / k!
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    cdf
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: p = &#915;(k+1, &#955;) / k! = <a class="link" href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(k+1,
-                    &#955;)
-                  </p>
+                    <p>
+                      Using the relation: pdf = e<sup>-&#955;</sup> &#955;<sup>k</sup> / k!
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    cdf complement
-                  </p>
+                    <p>
+                      cdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: q = <a class="link" href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(k+1,
-                    &#955;)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    quantile
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: k = <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inva</a>(&#955;,
-                    p) - 1
-                  </p>
+                    <p>
+                      Using the relation: p = &#915;(k+1, &#955;) / k! = <a class="link" href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(k+1,
+                      &#955;)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    quantile from the complement
-                  </p>
+                    <p>
+                      cdf complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: k = <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inva</a>(&#955;,
-                    q) - 1
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    mean
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    &#955;
-                  </p>
+                    <p>
+                      Using the relation: q = <a class="link" href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(k+1,
+                      &#955;)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    mode
-                  </p>
+                    <p>
+                      quantile
+                    </p>
                   </td>
 <td>
-                  <p>
-                    floor (&#955;) or &#8970;&#955;&#8971;
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    skewness
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    1/&#8730;&#955;
-                  </p>
+                    <p>
+                      Using the relation: k = <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inva</a>(&#955;,
+                      p) - 1
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    kurtosis
-                  </p>
+                    <p>
+                      quantile from the complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    3 + 1/&#955;
-                  </p>
+                    <p>
+                      Using the relation: k = <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inva</a>(&#955;,
+                      q) - 1
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    kurtosis excess
-                  </p>
+                    <p>
+                      mean
+                    </p>
                   </td>
 <td>
-                  <p>
-                    1/&#955;
-                  </p>
+                    <p>
+                      &#955;
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      mode
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      floor (&#955;) or &#8970;&#955;&#8971;
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      skewness
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      1/&#8730;&#955;
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      3 + 1/&#955;
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis excess
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      1/&#955;
+                    </p>
                   </td>
 </tr>
 </tbody>
@@ -336,7 +336,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="pareto.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="rayleigh.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="pareto.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="rayleigh.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
