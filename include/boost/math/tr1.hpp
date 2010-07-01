@@ -22,7 +22,6 @@ namespace boost{ namespace math{ namespace tr1{ extern "C"{
 
 #endif // __cplusplus
 
-#ifdef BOOST_HAS_DECLSPEC // defined in config system
 // we need to import/export our code only if the user has specifically
 // asked for it by defining either BOOST_ALL_DYN_LINK if they want all boost
 // libraries to be dynamically linked, or BOOST_MATH_TR1_DYN_LINK
@@ -30,17 +29,13 @@ namespace boost{ namespace math{ namespace tr1{ extern "C"{
 #if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_MATH_TR1_DYN_LINK)
 // export if this is our own source, otherwise import:
 #ifdef BOOST_MATH_TR1_SOURCE
-# define BOOST_MATH_TR1_DECL __declspec(dllexport)
+# define BOOST_MATH_TR1_DECL BOOST_SYMBOL_EXPORT
 #else
-# define BOOST_MATH_TR1_DECL __declspec(dllimport)
+# define BOOST_MATH_TR1_DECL BOOST_SYMBOL_IMPORT
 #endif  // BOOST_MATH_TR1_SOURCE
+#else
+#  define BOOST_MATH_TR1_DECL
 #endif  // DYN_LINK
-#endif  // BOOST_HAS_DECLSPEC
-//
-// if BOOST_MATH_TR1_DECL isn't defined yet define it now:
-#ifndef BOOST_MATH_TR1_DECL
-#define BOOST_MATH_TR1_DECL
-#endif
 //
 // Set any throw specifications on the C99 extern "C" functions - these have to be
 // the same as used in the std lib if any.
