@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Error Handling</title>
-<link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../main_overview.html" title="Overview">
 <link rel="prev" href="result_type.html" title="Calculation of the Type of the Result">
@@ -20,27 +20,27 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="result_type.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../main_overview.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="compilers_overview.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="result_type.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../main_overview.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="compilers_overview.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.main_overview.error_handling"></a><a class="link" href="error_handling.html" title="Error Handling"> Error Handling</a>
 </h3></div></div></div>
 <a name="math_toolkit.main_overview.error_handling.quick_reference"></a><h5>
-<a name="id781757"></a>
+<a name="id761595"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.quick_reference">Quick
         Reference</a>
       </h5>
 <p>
         Handling of errors by this library is split into two orthogonal parts:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-          What kind of error has been raised?
-        </li>
-<li>
-          What should be done when the error is raised?
-        </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+            What kind of error has been raised?
+          </li>
+<li class="listitem">
+            What should be done when the error is raised?
+          </li>
 </ul></div>
 <p>
         The kinds of errors that can be raised are:
@@ -50,48 +50,50 @@
 <dl>
 <dt><span class="term">Domain Error</span></dt>
 <dd><p>
-            Occurs when one or more arguments to a function are out of range.
-          </p></dd>
+              Occurs when one or more arguments to a function are out of range.
+            </p></dd>
 <dt><span class="term">Pole Error</span></dt>
 <dd><p>
-            Occurs when the particular arguments cause the function to be evaluated
-            at a pole with no well defined residual value. For example if <a class="link" href="../special/sf_gamma/tgamma.html" title="Gamma">tgamma</a>
-            is evaluated at exactly -2, the function approaches different limiting
-            values depending upon whether you approach from just above or just below
-            -2. Hence the function has no well defined value at this point and a
-            Pole Error will be raised.
-          </p></dd>
+              Occurs when the particular arguments cause the function to be evaluated
+              at a pole with no well defined residual value. For example if <a class="link" href="../special/sf_gamma/tgamma.html" title="Gamma">tgamma</a> is evaluated
+              at exactly -2, the function approaches different limiting values depending
+              upon whether you approach from just above or just below -2. Hence the
+              function has no well defined value at this point and a Pole Error will
+              be raised.
+            </p></dd>
 <dt><span class="term">Overflow Error</span></dt>
 <dd><p>
-            Occurs when the result is either infinite, or too large to represent
-            in the numeric type being returned by the function.
-          </p></dd>
+              Occurs when the result is either infinite, or too large to represent
+              in the numeric type being returned by the function.
+            </p></dd>
 <dt><span class="term">Underflow Error</span></dt>
 <dd><p>
-            Occurs when the result is not zero, but is too small to be represented
-            by any other value in the type being returned by the function.
-          </p></dd>
+              Occurs when the result is not zero, but is too small to be represented
+              by any other value in the type being returned by the function.
+            </p></dd>
 <dt><span class="term">Denormalisation Error</span></dt>
 <dd><p>
-            Occurs when the returned result would be a denormalised value.
-          </p></dd>
+              Occurs when the returned result would be a denormalised value.
+            </p></dd>
 <dt><span class="term">Rounding Error</span></dt>
 <dd><p>
-            Occurs when the argument to one of the rounding functions <a class="link" href="../utils/rounding/trunc.html" title="Truncation Functions">trunc</a>,
-            <a class="link" href="../utils/rounding/round.html" title="Rounding Functions">round</a> and <a class="link" href="../utils/rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">modf</a> can not be represented
-            as an integer type, is is outide the range of the result type.
-          </p></dd>
+              Occurs when the argument to one of the rounding functions <a class="link" href="../utils/rounding/trunc.html" title="Truncation Functions">trunc</a>,
+              <a class="link" href="../utils/rounding/round.html" title="Rounding Functions">round</a> and
+              <a class="link" href="../utils/rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">modf</a> can not
+              be represented as an integer type, is is outide the range of the result
+              type.
+            </p></dd>
 <dt><span class="term">Evaluation Error</span></dt>
 <dd><p>
-            Occurs when an internal error occured that prevented the result from
-            being evaluated: this should never occur, but if it does, then it's likely
-            to be due to an iterative method not converging fast enough.
-          </p></dd>
+              Occurs when an internal error occured that prevented the result from
+              being evaluated: this should never occur, but if it does, then it's
+              likely to be due to an iterative method not converging fast enough.
+            </p></dd>
 <dt><span class="term">Indeterminate Result Error</span></dt>
 <dd><p>
-            Occurs when the result of a function is not defined for the values that
-            were passed to it.
-          </p></dd>
+              Occurs when the result of a function is not defined for the values
+              that were passed to it.
+            </p></dd>
 </dl>
 </div>
 <p>
@@ -109,22 +111,22 @@
 <dl>
 <dt><span class="term">throw_on_error</span></dt>
 <dd><p>
-            Throws the exception most appropriate to the error condition.
-          </p></dd>
+              Throws the exception most appropriate to the error condition.
+            </p></dd>
 <dt><span class="term">errno_on_error</span></dt>
 <dd><p>
-            Sets ::errno to an appropriate value, and then returns the most appropriate
-            result
-          </p></dd>
+              Sets ::errno to an appropriate value, and then returns the most appropriate
+              result
+            </p></dd>
 <dt><span class="term">ignore_error</span></dt>
 <dd><p>
-            Ignores the error and simply the returns the most appropriate result.
-          </p></dd>
+              Ignores the error and simply the returns the most appropriate result.
+            </p></dd>
 <dt><span class="term">user_error</span></dt>
 <dd><p>
-            Calls a <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">user-supplied
-            error handler</a>.
-          </p></dd>
+              Calls a <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">user-supplied
+              error handler</a>.
+            </p></dd>
 </dl>
 </div>
 <p>
@@ -132,7 +134,7 @@
         the default action for each error shown in bold:
       </p>
 <div class="table">
-<a name="id781998"></a><p class="title"><b>Table&#160;1.&#160;Possible Actions for Domain Errors</b></p>
+<a name="id761891"></a><p class="title"><b>Table&#160;1.&#160;Possible Actions for Domain Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Domain Errors">
 <colgroup>
 <col>
@@ -140,74 +142,74 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Action
-            </p>
-            </th>
+                <p>
+                  Action
+                </p>
+              </th>
 <th>
-            <p>
-              Behaviour
-            </p>
-            </th>
+                <p>
+                  Behaviour
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              throw_on_error
-            </p>
-            </td>
+                <p>
+                  throw_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="bold"><strong>Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code></strong></span>
-            </p>
-            </td>
+                <p>
+                  <span class="bold"><strong>Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code></strong></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              errno_on_error
-            </p>
-            </td>
+                <p>
+                  errno_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
-              to <code class="computeroutput"><span class="identifier">EDOM</span></code> and returns
-              <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+                  to <code class="computeroutput"><span class="identifier">EDOM</span></code> and returns
+                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              ignore_error
-            </p>
-            </td>
+                <p>
+                  ignore_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  Returns <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              user_error
-            </p>
-            </td>
+                <p>
+                  user_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_domain_error</span></code>:
-              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
-              function must be defined by the user</a>.
-            </p>
-            </td>
+                <p>
+                  Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_domain_error</span></code>:
+                  <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+                  function must be defined by the user</a>.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id782237"></a><p class="title"><b>Table&#160;2.&#160;Possible Actions for Pole Errors</b></p>
+<a name="id762152"></a><p class="title"><b>Table&#160;2.&#160;Possible Actions for Pole Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Pole Errors">
 <colgroup>
 <col>
@@ -215,74 +217,74 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Action
-            </p>
-            </th>
+                <p>
+                  Action
+                </p>
+              </th>
 <th>
-            <p>
-              Behaviour
-            </p>
-            </th>
+                <p>
+                  Behaviour
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              throw_on_error
-            </p>
-            </td>
+                <p>
+                  throw_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="bold"><strong>Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code></strong></span>
-            </p>
-            </td>
+                <p>
+                  <span class="bold"><strong>Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code></strong></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              errno_on_error
-            </p>
-            </td>
+                <p>
+                  errno_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
-              to <code class="computeroutput"><span class="identifier">EDOM</span></code> and returns
-              <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+                  to <code class="computeroutput"><span class="identifier">EDOM</span></code> and returns
+                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              ignore_error
-            </p>
-            </td>
+                <p>
+                  ignore_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  Returns <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              user_error
-            </p>
-            </td>
+                <p>
+                  user_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_pole_error</span></code>:
-              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
-              function must be defined by the user</a>.
-            </p>
-            </td>
+                <p>
+                  Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_pole_error</span></code>:
+                  <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+                  function must be defined by the user</a>.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id782476"></a><p class="title"><b>Table&#160;3.&#160;Possible Actions for Overflow Errors</b></p>
+<a name="id762411"></a><p class="title"><b>Table&#160;3.&#160;Possible Actions for Overflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Overflow Errors">
 <colgroup>
 <col>
@@ -290,74 +292,74 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Action
-            </p>
-            </th>
+                <p>
+                  Action
+                </p>
+              </th>
 <th>
-            <p>
-              Behaviour
-            </p>
-            </th>
+                <p>
+                  Behaviour
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              throw_on_error
-            </p>
-            </td>
+                <p>
+                  throw_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="bold"><strong>Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">overflow_error</span></code></strong></span>
-            </p>
-            </td>
+                <p>
+                  <span class="bold"><strong>Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">overflow_error</span></code></strong></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              errno_on_error
-            </p>
-            </td>
+                <p>
+                  errno_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
-              to <code class="computeroutput"><span class="identifier">ERANGE</span></code> and returns
-              <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+                  to <code class="computeroutput"><span class="identifier">ERANGE</span></code> and returns
+                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              ignore_error
-            </p>
-            </td>
+                <p>
+                  ignore_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">()</span></code>
-            </p>
-            </td>
+                <p>
+                  Returns <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">()</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              user_error
-            </p>
-            </td>
+                <p>
+                  user_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_overflow_error</span></code>:
-              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
-              function must be defined by the user</a>.
-            </p>
-            </td>
+                <p>
+                  Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_overflow_error</span></code>:
+                  <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+                  function must be defined by the user</a>.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id782715"></a><p class="title"><b>Table&#160;4.&#160;Possible Actions for Underflow Errors</b></p>
+<a name="id762670"></a><p class="title"><b>Table&#160;4.&#160;Possible Actions for Underflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Underflow Errors">
 <colgroup>
 <col>
@@ -365,74 +367,74 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Action
-            </p>
-            </th>
+                <p>
+                  Action
+                </p>
+              </th>
 <th>
-            <p>
-              Behaviour
-            </p>
-            </th>
+                <p>
+                  Behaviour
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              throw_on_error
-            </p>
-            </td>
+                <p>
+                  throw_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code>
-            </p>
-            </td>
+                <p>
+                  Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              errno_on_error
-            </p>
-            </td>
+                <p>
+                  errno_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
-              to <code class="computeroutput"><span class="identifier">ERANGE</span></code> and returns
-              0.
-            </p>
-            </td>
+                <p>
+                  Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+                  to <code class="computeroutput"><span class="identifier">ERANGE</span></code> and returns
+                  0.
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              ignore_error
-            </p>
-            </td>
+                <p>
+                  ignore_error
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="bold"><strong>Returns 0</strong></span>
-            </p>
-            </td>
+                <p>
+                  <span class="bold"><strong>Returns 0</strong></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              user_error
-            </p>
-            </td>
+                <p>
+                  user_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_underflow_error</span></code>:
-              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
-              function must be defined by the user</a>.
-            </p>
-            </td>
+                <p>
+                  Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_underflow_error</span></code>:
+                  <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+                  function must be defined by the user</a>.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id783437"></a><p class="title"><b>Table&#160;5.&#160;Possible Actions for Denorm Errors</b></p>
+<a name="id762859"></a><p class="title"><b>Table&#160;5.&#160;Possible Actions for Denorm Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Denorm Errors">
 <colgroup>
 <col>
@@ -440,74 +442,74 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Action
-            </p>
-            </th>
+                <p>
+                  Action
+                </p>
+              </th>
 <th>
-            <p>
-              Behaviour
-            </p>
-            </th>
+                <p>
+                  Behaviour
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              throw_on_error
-            </p>
-            </td>
+                <p>
+                  throw_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code>
-            </p>
-            </td>
+                <p>
+                  Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              errno_on_error
-            </p>
-            </td>
+                <p>
+                  errno_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
-              to <code class="computeroutput"><span class="identifier">ERANGE</span></code> and returns
-              the denormalised value.
-            </p>
-            </td>
+                <p>
+                  Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+                  to <code class="computeroutput"><span class="identifier">ERANGE</span></code> and returns
+                  the denormalised value.
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              ignore_error
-            </p>
-            </td>
+                <p>
+                  ignore_error
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="bold"><strong>Returns the denormalised value.</strong></span>
-            </p>
-            </td>
+                <p>
+                  <span class="bold"><strong>Returns the denormalised value.</strong></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              user_error
-            </p>
-            </td>
+                <p>
+                  user_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_denorm_error</span></code>:
-              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
-              function must be defined by the user</a>.
-            </p>
-            </td>
+                <p>
+                  Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_denorm_error</span></code>:
+                  <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+                  function must be defined by the user</a>.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id783613"></a><p class="title"><b>Table&#160;6.&#160;Possible Actions for Rounding Errors</b></p>
+<a name="id763049"></a><p class="title"><b>Table&#160;6.&#160;Possible Actions for Rounding Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Rounding Errors">
 <colgroup>
 <col>
@@ -515,229 +517,225 @@
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Action
-            </p>
-            </th>
+                <p>
+                  Action
+                </p>
+              </th>
 <th>
-            <p>
-              Behaviour
-            </p>
-            </th>
+                <p>
+                  Behaviour
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              throw_on_error
-            </p>
-            </td>
+                <p>
+                  throw_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Throws <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">rounding_error</span></code>
-            </p>
-            </td>
+                <p>
+                  Throws <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">rounding_error</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              errno_on_error
-            </p>
-            </td>
+                <p>
+                  errno_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
-              to <code class="computeroutput"><span class="identifier">ERANGE</span></code> and returns
-              an unspecified value.
-            </p>
-            </td>
+                <p>
+                  Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+                  to <code class="computeroutput"><span class="identifier">ERANGE</span></code> and returns
+                  an unspecified value.
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              ignore_error
-            </p>
-            </td>
+                <p>
+                  ignore_error
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="bold"><strong>Returns the an unspecified value.</strong></span>
-            </p>
-            </td>
+                <p>
+                  <span class="bold"><strong>Returns the an unspecified value.</strong></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              user_error
-            </p>
-            </td>
+                <p>
+                  user_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_rounding_error</span></code>:
-              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
-              function must be defined by the user</a>.
-            </p>
-            </td>
+                <p>
+                  Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_rounding_error</span></code>:
+                  <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+                  function must be defined by the user</a>.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id783797"></a><p class="title"><b>Table&#160;7.&#160;Possible Actions for Internal Evaluation
-      Errors</b></p>
-<div class="table-contents"><table class="table" summary="Possible Actions for Internal Evaluation
-      Errors">
+<a name="id763247"></a><p class="title"><b>Table&#160;7.&#160;Possible Actions for Internal Evaluation Errors</b></p>
+<div class="table-contents"><table class="table" summary="Possible Actions for Internal Evaluation Errors">
 <colgroup>
 <col>
 <col>
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Action
-            </p>
-            </th>
+                <p>
+                  Action
+                </p>
+              </th>
 <th>
-            <p>
-              Behaviour
-            </p>
-            </th>
+                <p>
+                  Behaviour
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              throw_on_error
-            </p>
-            </td>
+                <p>
+                  throw_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="bold"><strong>Throws <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">evaluation_error</span></code></strong></span>
-            </p>
-            </td>
+                <p>
+                  <span class="bold"><strong>Throws <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">evaluation_error</span></code></strong></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              errno_on_error
-            </p>
-            </td>
+                <p>
+                  errno_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
-              to <code class="computeroutput"><span class="identifier">EDOM</span></code> and returns
-              the closest approximation found.
-            </p>
-            </td>
+                <p>
+                  Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+                  to <code class="computeroutput"><span class="identifier">EDOM</span></code> and returns
+                  the closest approximation found.
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              ignore_error
-            </p>
-            </td>
+                <p>
+                  ignore_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns the closest approximation found.
-            </p>
-            </td>
+                <p>
+                  Returns the closest approximation found.
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              user_error
-            </p>
-            </td>
+                <p>
+                  user_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_evaluation_error</span></code>:
-              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
-              function must be defined by the user</a>.
-            </p>
-            </td>
+                <p>
+                  Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_evaluation_error</span></code>:
+                  <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+                  function must be defined by the user</a>.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id783978"></a><p class="title"><b>Table&#160;8.&#160;Possible Actions for Indeterminate Result
-      Errors</b></p>
-<div class="table-contents"><table class="table" summary="Possible Actions for Indeterminate Result
-      Errors">
+<a name="id763445"></a><p class="title"><b>Table&#160;8.&#160;Possible Actions for Indeterminate Result Errors</b></p>
+<div class="table-contents"><table class="table" summary="Possible Actions for Indeterminate Result Errors">
 <colgroup>
 <col>
 <col>
 </colgroup>
 <thead><tr>
 <th>
-            <p>
-              Action
-            </p>
-            </th>
+                <p>
+                  Action
+                </p>
+              </th>
 <th>
-            <p>
-              Behaviour
-            </p>
-            </th>
+                <p>
+                  Behaviour
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-            <p>
-              throw_on_error
-            </p>
-            </td>
+                <p>
+                  throw_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
-            </p>
-            </td>
+                <p>
+                  Throws <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              errno_on_error
-            </p>
-            </td>
+                <p>
+                  errno_on_error
+                </p>
+              </td>
 <td>
-            <p>
-              Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
-              to <code class="computeroutput"><span class="identifier">EDOM</span></code> and returns
-              the same value as <code class="computeroutput"><span class="identifier">ignore_error</span></code>.
-            </p>
-            </td>
+                <p>
+                  Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+                  to <code class="computeroutput"><span class="identifier">EDOM</span></code> and returns
+                  the same value as <code class="computeroutput"><span class="identifier">ignore_error</span></code>.
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              ignore_error
-            </p>
-            </td>
+                <p>
+                  ignore_error
+                </p>
+              </td>
 <td>
-            <p>
-              <span class="bold"><strong>Returns a default result that depends on the
-              function where the error occurred.</strong></span>
-            </p>
-            </td>
+                <p>
+                  <span class="bold"><strong>Returns a default result that depends on
+                  the function where the error occurred.</strong></span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-            <p>
-              user_error
-            </p>
-            </td>
+                <p>
+                  user_error
+                </p>
+              </td>
 <td>
-            <p>
-              Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_indeterminate_result_error</span></code>:
-              <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
-              function must be defined by the user</a>.
-            </p>
-            </td>
+                <p>
+                  Returns the result of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">user_indeterminate_result_error</span></code>:
+                  <a class="link" href="../policy/pol_tutorial/user_def_err_pol.html" title="Calling User Defined Error Handlers">this
+                  function must be defined by the user</a>.
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.main_overview.error_handling.rationale"></a><h5>
-<a name="id784164"></a>
+<a name="id763651"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.rationale">Rationale</a>
       </h5>
 <p>
@@ -745,18 +743,18 @@
         the default behaviours were chosen based on feedback during the formal review
         of this library. It was felt that:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-          Genuine errors should be flagged with exceptions rather than following
-          C-compatible behaviour and setting ::errno.
-        </li>
-<li>
-          Numeric underflow and denormalised results were not considered to be fatal
-          errors in most cases, so it was felt that these should be ignored.
-        </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+            Genuine errors should be flagged with exceptions rather than following
+            C-compatible behaviour and setting ::errno.
+          </li>
+<li class="listitem">
+            Numeric underflow and denormalised results were not considered to be
+            fatal errors in most cases, so it was felt that these should be ignored.
+          </li>
 </ul></div>
 <a name="math_toolkit.main_overview.error_handling.finding_more_information"></a><h5>
-<a name="id784191"></a>
+<a name="id763700"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.finding_more_information">Finding
         More Information</a>
       </h5>
@@ -778,7 +776,7 @@
         The various kind of errors are described in more detail below.
       </p>
 <a name="domain_error"></a><a name="math_toolkit.main_overview.error_handling.domain_errors"></a><h5>
-<a name="id784244"></a>
+<a name="id763770"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.domain_errors">Domain
         Errors</a>
       </h5>
@@ -808,53 +806,32 @@
         Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph
         6</a>:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>"Each of the functions declared above shall return a NaN
+          (Not a Number) if any argument value is a NaN, but it shall not report
+          a domain error. Otherwise, each of the functions declared above shall report
+          a domain error for just those argument values for which:</em></span>
+        </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote">
 <p>
-          </p>
+          <span class="emphasis"><em>"the function description's Returns clause explicitly specifies
+          a domain, and those arguments fall outside the specified domain; or</em></span>
+        </p>
 <p>
-            <span class="emphasis"><em>"Each of the functions declared above shall return a NaN
-            (Not a Number) if any argument value is a NaN, but it shall not report
-            a domain error. Otherwise, each of the functions declared above shall
-            report a domain error for just those argument values for which:</em></span>
-          </p>
+          <span class="emphasis"><em>"the corresponding mathematical function value has a non-zero
+          imaginary component; or</em></span>
+        </p>
 <p>
+          <span class="emphasis"><em>"the corresponding mathematical function is not mathematically
+          defined.</em></span>
         </p>
 </blockquote></div>
-<div class="blockquote"><blockquote class="blockquote">
-<p>
-          </p>
-<p>
-            <span class="emphasis"><em>"the function description's Returns clause explicitly
-            specifies a domain, and those arguments fall outside the specified domain;
-            or</em></span>
-          </p>
-<p>
-          </p>
-<p>
-            <span class="emphasis"><em>"the corresponding mathematical function value has a non-zero
-            imaginary component; or</em></span>
-          </p>
-<p>
-          </p>
-<p>
-            <span class="emphasis"><em>"the corresponding mathematical function is not mathematically
-            defined.</em></span>
-          </p>
-<p>
-        </p>
-</blockquote></div>
-<div class="blockquote"><blockquote class="blockquote">
-<p>
-          </p>
-<p>
-            <span class="emphasis"><em>"Note 2: A mathematical function is mathematically defined
-            for a given set of argument values if it is explicitly defined for that
-            set of argument values or if its limiting value exists and does not depend
-            on the direction of approach."</em></span>
-          </p>
-<p>
-        </p>
-</blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>"Note 2: A mathematical function is mathematically defined
+          for a given set of argument values if it is explicitly defined for that
+          set of argument values or if its limiting value exists and does not depend
+          on the direction of approach."</em></span>
+        </p></blockquote></div>
 <p>
         Note that in order to support information-rich error messages when throwing
         exceptions, <code class="computeroutput"><span class="identifier">Message</span></code> must
@@ -871,7 +848,7 @@
         for more details.
       </p>
 <a name="pole_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_at_a_pole"></a><h5>
-<a name="id784503"></a>
+<a name="id764067"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_at_a_pole">Evaluation
         at a pole</a>
       </h5>
@@ -910,7 +887,7 @@
         for more details.
       </p>
 <a name="overflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_overflow"></a><h5>
-<a name="id784711"></a>
+<a name="id764307"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_overflow">Numeric
         Overflow</a>
       </h5>
@@ -935,7 +912,7 @@
         doesn't support infinities, the maximum value for the type is returned.
       </p>
 <a name="underflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_underflow"></a><h5>
-<a name="id784899"></a>
+<a name="id764519"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_underflow">Numeric
         Underflow</a>
       </h5>
@@ -958,7 +935,7 @@
         an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="denorm_error"></a><a name="math_toolkit.main_overview.error_handling.denormalisation_errors"></a><h5>
-<a name="id785045"></a>
+<a name="id764686"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.denormalisation_errors">Denormalisation
         Errors</a>
       </h5>
@@ -981,7 +958,7 @@
         throws an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="evaluation_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_errors"></a><h5>
-<a name="id785207"></a>
+<a name="id764866"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_errors">Evaluation
         Errors</a>
       </h5>
@@ -1018,7 +995,7 @@
         for more details.
       </p>
 <a name="indeterminate_result_error"></a><a name="math_toolkit.main_overview.error_handling.indeterminate_result_errors"></a><h5>
-<a name="id785421"></a>
+<a name="id765114"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.indeterminate_result_errors">Indeterminate
         Result Errors</a>
       </h5>
@@ -1045,7 +1022,7 @@
         the result of 0<sup>0</sup> is 1, even though the result is actually mathematically indeterminate.
       </p>
 <a name="rounding_error"></a><a name="math_toolkit.main_overview.error_handling.rounding_errors"></a><h5>
-<a name="id786664"></a>
+<a name="id765293"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.rounding_errors">Rounding
         Errors</a>
       </h5>
@@ -1085,7 +1062,7 @@
         for more details.
       </p>
 <a name="checked_narrowing_cast"></a><a name="math_toolkit.main_overview.error_handling.errors_from_typecasts"></a><h5>
-<a name="id786896"></a>
+<a name="id765562"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.errors_from_typecasts">Errors
         from typecasts</a>
       </h5>
@@ -1118,7 +1095,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="result_type.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../main_overview.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="compilers_overview.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="result_type.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../main_overview.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="compilers_overview.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

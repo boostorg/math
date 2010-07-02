@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Minimax Approximations and the Remez Algorithm</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../internals2.html" title="Testing and Development">
 <link rel="prev" href="polynomials.html" title="Polynomials">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="polynomials.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals2.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="error_test.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="polynomials.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals2.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="error_test.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.toolkit.internals2.minimax"></a><a class="link" href="minimax.html" title="Minimax Approximations and the Remez Algorithm"> Minimax Approximations
         and the Remez Algorithm</a>
@@ -55,12 +55,13 @@
 <dl>
 <dt><span class="term">main.cpp</span></dt>
 <dd><p>
-              Contains the command line parser, and all the calls to the Remez code.
-            </p></dd>
+                Contains the command line parser, and all the calls to the Remez
+                code.
+              </p></dd>
 <dt><span class="term">f.cpp</span></dt>
 <dd><p>
-              Contains the function to approximate.
-            </p></dd>
+                Contains the function to approximate.
+              </p></dd>
 </dl>
 </div>
 <p>
@@ -110,158 +111,160 @@
 <dl>
 <dt><span class="term">variant N</span></dt>
 <dd><p>
-              Sets the current function variant to N. This allows multiple functions
-              that are to be approximated to be compiled into the same executable.
-              Defaults to 0.
-            </p></dd>
+                Sets the current function variant to N. This allows multiple functions
+                that are to be approximated to be compiled into the same executable.
+                Defaults to 0.
+              </p></dd>
 <dt><span class="term">range a b</span></dt>
 <dd><p>
-              Sets the domain for the approximation to the range [a,b], defaults
-              to [0,1].
-            </p></dd>
+                Sets the domain for the approximation to the range [a,b], defaults
+                to [0,1].
+              </p></dd>
 <dt><span class="term">relative</span></dt>
 <dd><p>
-              Sets the Remez code to optimise for relative error. This is the default
-              at program startup. Note that relative error can only be used if f(x)
-              has no roots over the range being optimised.
-            </p></dd>
+                Sets the Remez code to optimise for relative error. This is the default
+                at program startup. Note that relative error can only be used if
+                f(x) has no roots over the range being optimised.
+              </p></dd>
 <dt><span class="term">absolute</span></dt>
 <dd><p>
-              Sets the Remez code to optimise for absolute error.
-            </p></dd>
+                Sets the Remez code to optimise for absolute error.
+              </p></dd>
 <dt><span class="term">pin [true|false]</span></dt>
 <dd><p>
-              "Pins" the code so that the rational approximation passes
-              through the origin. Obviously only set this to <span class="emphasis"><em>true</em></span>
-              if R(0) must be zero. This is typically used when trying to preserve
-              a root at [0,0] while also optimising for relative error.
-            </p></dd>
+                "Pins" the code so that the rational approximation passes
+                through the origin. Obviously only set this to <span class="emphasis"><em>true</em></span>
+                if R(0) must be zero. This is typically used when trying to preserve
+                a root at [0,0] while also optimising for relative error.
+              </p></dd>
 <dt><span class="term">order N D</span></dt>
 <dd><p>
-              Sets the order of the approximation to <span class="emphasis"><em>N</em></span> in the
-              numerator and <span class="emphasis"><em>D</em></span> in the denominator. If <span class="emphasis"><em>D</em></span>
-              is zero then the result will be a polynomial approximation. There will
-              be N+D+2 coefficients in total, the first coefficient of the numerator
-              is zero if <span class="emphasis"><em>pin</em></span> was set to true, and the first
-              coefficient of the denominator is always one.
-            </p></dd>
+                Sets the order of the approximation to <span class="emphasis"><em>N</em></span> in
+                the numerator and <span class="emphasis"><em>D</em></span> in the denominator. If
+                <span class="emphasis"><em>D</em></span> is zero then the result will be a polynomial
+                approximation. There will be N+D+2 coefficients in total, the first
+                coefficient of the numerator is zero if <span class="emphasis"><em>pin</em></span>
+                was set to true, and the first coefficient of the denominator is
+                always one.
+              </p></dd>
 <dt><span class="term">working-precision N</span></dt>
 <dd><p>
-              Sets the working precision of NTL::RR to <span class="emphasis"><em>N</em></span> binary
-              digits. Defaults to 250.
-            </p></dd>
+                Sets the working precision of NTL::RR to <span class="emphasis"><em>N</em></span> binary
+                digits. Defaults to 250.
+              </p></dd>
 <dt><span class="term">target-precision N</span></dt>
 <dd><p>
-              Sets the precision of printed output to <span class="emphasis"><em>N</em></span> binary
-              digits: set to the same number of digits as the type that will be used
-              to evaluate the approximation. Defaults to 53 (for double precision).
-            </p></dd>
+                Sets the precision of printed output to <span class="emphasis"><em>N</em></span> binary
+                digits: set to the same number of digits as the type that will be
+                used to evaluate the approximation. Defaults to 53 (for double precision).
+              </p></dd>
 <dt><span class="term">skew val</span></dt>
 <dd><p>
-              "Skews" the initial interpolated control points towards one
-              end or the other of the range. Positive values skew the initial control
-              points towards the left hand side of the range, and negative values
-              towards the right hand side. If an approximation won't converge (a
-              common situation) try adjusting the skew parameter until the first
-              step yields the smallest possible error. <span class="emphasis"><em>val</em></span> should
-              be in the range [-100,+100], the default is zero.
-            </p></dd>
+                "Skews" the initial interpolated control points towards
+                one end or the other of the range. Positive values skew the initial
+                control points towards the left hand side of the range, and negative
+                values towards the right hand side. If an approximation won't converge
+                (a common situation) try adjusting the skew parameter until the first
+                step yields the smallest possible error. <span class="emphasis"><em>val</em></span>
+                should be in the range [-100,+100], the default is zero.
+              </p></dd>
 <dt><span class="term">brake val</span></dt>
 <dd><p>
-              Sets a brake on each step so that the change in the control points
-              is braked by <span class="emphasis"><em>val%</em></span>. Defaults to 50, try a higher
-              value if an approximation won't converge, or a lower value to get speedier
-              convergence.
-            </p></dd>
+                Sets a brake on each step so that the change in the control points
+                is braked by <span class="emphasis"><em>val%</em></span>. Defaults to 50, try a higher
+                value if an approximation won't converge, or a lower value to get
+                speedier convergence.
+              </p></dd>
 <dt><span class="term">x-offset val</span></dt>
 <dd><p>
-              Sets the x-offset to <span class="emphasis"><em>val</em></span>: the approximation will
-              be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">S</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">))</span> <span class="special">+</span> <span class="identifier">Y</span></code>
-              where <span class="emphasis"><em>X</em></span> is the x-offset, <span class="emphasis"><em>S</em></span>
-              is the x-scale and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults
-              to zero. To avoid rounding errors, take care to specify a value that
-              can be exactly represented as a floating point number.
-            </p></dd>
+                Sets the x-offset to <span class="emphasis"><em>val</em></span>: the approximation
+                will be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">S</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">))</span> <span class="special">+</span> <span class="identifier">Y</span></code>
+                where <span class="emphasis"><em>X</em></span> is the x-offset, <span class="emphasis"><em>S</em></span>
+                is the x-scale and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults
+                to zero. To avoid rounding errors, take care to specify a value that
+                can be exactly represented as a floating point number.
+              </p></dd>
 <dt><span class="term">x-scale val</span></dt>
 <dd><p>
-              Sets the x-scale to <span class="emphasis"><em>val</em></span>: the approximation will
-              be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">S</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">))</span> <span class="special">+</span> <span class="identifier">Y</span></code>
-              where <span class="emphasis"><em>S</em></span> is the x-scale, <span class="emphasis"><em>X</em></span>
-              is the x-offset and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults
-              to one. To avoid rounding errors, take care to specify a value that
-              can be exactly represented as a floating point number.
-            </p></dd>
+                Sets the x-scale to <span class="emphasis"><em>val</em></span>: the approximation will
+                be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">S</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">))</span> <span class="special">+</span> <span class="identifier">Y</span></code>
+                where <span class="emphasis"><em>S</em></span> is the x-scale, <span class="emphasis"><em>X</em></span>
+                is the x-offset and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults
+                to one. To avoid rounding errors, take care to specify a value that
+                can be exactly represented as a floating point number.
+              </p></dd>
 <dt><span class="term">y-offset val</span></dt>
 <dd><p>
-              Sets the y-offset to <span class="emphasis"><em>val</em></span>: the approximation will
-              be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">S</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">))</span> <span class="special">+</span> <span class="identifier">Y</span></code>
-              where <span class="emphasis"><em>X</em></span> is the x-offset, <span class="emphasis"><em>S</em></span>
-              is the x-scale and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults
-              to zero. To avoid rounding errors, take care to specify a value that
-              can be exactly represented as a floating point number.
-            </p></dd>
+                Sets the y-offset to <span class="emphasis"><em>val</em></span>: the approximation
+                will be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">S</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">))</span> <span class="special">+</span> <span class="identifier">Y</span></code>
+                where <span class="emphasis"><em>X</em></span> is the x-offset, <span class="emphasis"><em>S</em></span>
+                is the x-scale and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults
+                to zero. To avoid rounding errors, take care to specify a value that
+                can be exactly represented as a floating point number.
+              </p></dd>
 <dt><span class="term">y-offset auto</span></dt>
 <dd><p>
-              Sets the y-offset to the average value of f(x) evaluated at the two
-              endpoints of the range plus the midpoint of the range. The calculated
-              value is deliberately truncated to <span class="emphasis"><em>float</em></span> precision
-              (and should be stored as a <span class="emphasis"><em>float</em></span> in your code).
-              The approximation will be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">Y</span></code> where <span class="emphasis"><em>X</em></span> is
-              the x-offset and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults to
-              zero.
-            </p></dd>
+                Sets the y-offset to the average value of f(x) evaluated at the two
+                endpoints of the range plus the midpoint of the range. The calculated
+                value is deliberately truncated to <span class="emphasis"><em>float</em></span> precision
+                (and should be stored as a <span class="emphasis"><em>float</em></span> in your code).
+                The approximation will be generated for <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">X</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">Y</span></code> where <span class="emphasis"><em>X</em></span>
+                is the x-offset and <span class="emphasis"><em>Y</em></span> is the y-offset. Defaults
+                to zero.
+              </p></dd>
 <dt><span class="term">graph N</span></dt>
 <dd><p>
-              Prints N evaluations of f(x) at evenly spaced points over the range
-              being optimised. If unspecified then <span class="emphasis"><em>N</em></span> defaults
-              to 3. Use to check that f(x) is indeed smooth over the range of interest.
-            </p></dd>
+                Prints N evaluations of f(x) at evenly spaced points over the range
+                being optimised. If unspecified then <span class="emphasis"><em>N</em></span> defaults
+                to 3. Use to check that f(x) is indeed smooth over the range of interest.
+              </p></dd>
 <dt><span class="term">step N</span></dt>
 <dd><p>
-              Performs <span class="emphasis"><em>N</em></span> steps, or one step if <span class="emphasis"><em>N</em></span>
-              is unspecified. After each step prints: the peek error at the extrema
-              of the error function of the approximation, the theoretical error term
-              solved for on the last step, and the maximum relative change in the
-              location of the Chebyshev control points. The approximation is converged
-              on the minimax solution when the two error terms are (approximately)
-              equal, and the change in the control points has decreased to a suitably
-              small value.
-            </p></dd>
+                Performs <span class="emphasis"><em>N</em></span> steps, or one step if <span class="emphasis"><em>N</em></span>
+                is unspecified. After each step prints: the peek error at the extrema
+                of the error function of the approximation, the theoretical error
+                term solved for on the last step, and the maximum relative change
+                in the location of the Chebyshev control points. The approximation
+                is converged on the minimax solution when the two error terms are
+                (approximately) equal, and the change in the control points has decreased
+                to a suitably small value.
+              </p></dd>
 <dt><span class="term">test [float|double|long]</span></dt>
 <dd><p>
-              Tests the current approximation at float, double, or long double precision.
-              Useful to check for rounding errors in evaluating the approximation
-              at fixed precision. Tests are conducted at the extrema of the error
-              function of the approximation, and at the zeros of the error function.
-            </p></dd>
+                Tests the current approximation at float, double, or long double
+                precision. Useful to check for rounding errors in evaluating the
+                approximation at fixed precision. Tests are conducted at the extrema
+                of the error function of the approximation, and at the zeros of the
+                error function.
+              </p></dd>
 <dt><span class="term">test [float|double|long] N</span></dt>
 <dd><p>
-              Tests the current approximation at float, double, or long double precision.
-              Useful to check for rounding errors in evaluating the approximation
-              at fixed precision. Tests are conducted at N evenly spaced points over
-              the range of the approximation. If none of [float|double|long] are
-              specified then tests using NTL::RR, this can be used to obtain the
-              error function of the approximation.
-            </p></dd>
+                Tests the current approximation at float, double, or long double
+                precision. Useful to check for rounding errors in evaluating the
+                approximation at fixed precision. Tests are conducted at N evenly
+                spaced points over the range of the approximation. If none of [float|double|long]
+                are specified then tests using NTL::RR, this can be used to obtain
+                the error function of the approximation.
+              </p></dd>
 <dt><span class="term">rescale a b</span></dt>
 <dd><p>
-              Takes the current Chebeshev control points, and rescales them over
-              a new interval [a,b]. Sometimes this can be used to obtain starting
-              control points for an approximation that can not otherwise be converged.
-            </p></dd>
+                Takes the current Chebeshev control points, and rescales them over
+                a new interval [a,b]. Sometimes this can be used to obtain starting
+                control points for an approximation that can not otherwise be converged.
+              </p></dd>
 <dt><span class="term">rotate</span></dt>
 <dd><p>
-              Moves one term from the numerator to the denominator, but keeps the
-              Chebyshev control points the same. Sometimes this can be used to obtain
-              starting control points for an approximation that can not otherwise
-              be converged.
-            </p></dd>
+                Moves one term from the numerator to the denominator, but keeps the
+                Chebyshev control points the same. Sometimes this can be used to
+                obtain starting control points for an approximation that can not
+                otherwise be converged.
+              </p></dd>
 <dt><span class="term">info</span></dt>
 <dd><p>
-              Prints out the current approximation: the location of the zeros of
-              the error function, the location of the Chebyshev control points, the
-              x and y offsets, and of course the coefficients of the polynomials.
-            </p></dd>
+                Prints out the current approximation: the location of the zeros of
+                the error function, the location of the Chebyshev control points,
+                the x and y offsets, and of course the coefficients of the polynomials.
+              </p></dd>
 </dl>
 </div>
 </div>
@@ -277,7 +280,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="polynomials.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals2.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="error_test.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="polynomials.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals2.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="error_test.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Quaternion Non-Member Operators</title>
-<link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
-<link rel="start" href="../../index.html" title="Boost.Quaternions">
+<link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../../index.html" title="Boost.Quaternions">
 <link rel="up" href="../quaternions.html" title="Quaternions">
 <link rel="prev" href="mem_fun.html" title="Quaternion Member Functions">
 <link rel="next" href="value_op.html" title="Quaternion Value Operations">
@@ -20,16 +20,16 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="mem_fun.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../quaternions.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="value_op.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="mem_fun.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../quaternions.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="value_op.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_quaternions.quaternions.non_mem"></a><a href="non_mem.html" title="Quaternion Non-Member Operators"> Quaternion Non-Member
+<a name="boost_quaternions.quaternions.non_mem"></a><a class="link" href="non_mem.html" title="Quaternion Non-Member Operators"> Quaternion Non-Member
       Operators</a>
 </h3></div></div></div>
 <a name="boost_quaternions.quaternions.non_mem.unary_plus"></a><h5>
-<a name="id521094"></a>
-        <a href="non_mem.html#boost_quaternions.quaternions.non_mem.unary_plus">Unary Plus</a>
+<a name="id778695"></a>
+        <a class="link" href="non_mem.html#boost_quaternions.quaternions.non_mem.unary_plus">Unary Plus</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>	
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">q</span><span class="special">);</span>
@@ -38,8 +38,8 @@
         This unary operator simply returns q.
       </p>
 <a name="boost_quaternions.quaternions.non_mem.unary_minus"></a><h5>
-<a name="id521239"></a>
-        <a href="non_mem.html#boost_quaternions.quaternions.non_mem.unary_minus">Unary Minus</a>
+<a name="id778824"></a>
+        <a class="link" href="non_mem.html#boost_quaternions.quaternions.non_mem.unary_minus">Unary Minus</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span> <span class="special">-</span> <span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">q</span><span class="special">);</span>
@@ -48,8 +48,8 @@
         This unary operator returns the opposite of q.
       </p>
 <a name="boost_quaternions.quaternions.non_mem.binary_addition_operators"></a><h5>
-<a name="id521385"></a>
-        <a href="non_mem.html#boost_quaternions.quaternions.non_mem.binary_addition_operators">Binary
+<a name="id778952"></a>
+        <a class="link" href="non_mem.html#boost_quaternions.quaternions.non_mem.binary_addition_operators">Binary
         Addition Operators</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>	<span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>	<span class="keyword">operator</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
@@ -63,8 +63,8 @@
         <span class="identifier">rhs</span></code>.
       </p>
 <a name="boost_quaternions.quaternions.non_mem.binary_subtraction_operators"></a><h5>
-<a name="id522245"></a>
-        <a href="non_mem.html#boost_quaternions.quaternions.non_mem.binary_subtraction_operators">Binary
+<a name="id779712"></a>
+        <a class="link" href="non_mem.html#boost_quaternions.quaternions.non_mem.binary_subtraction_operators">Binary
         Subtraction Operators</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>	<span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>	<span class="keyword">operator</span> <span class="special">-</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
@@ -78,8 +78,8 @@
         <span class="identifier">rhs</span></code>.
       </p>
 <a name="boost_quaternions.quaternions.non_mem.binary_multiplication_operators"></a><h5>
-<a name="id523106"></a>
-        <a href="non_mem.html#boost_quaternions.quaternions.non_mem.binary_multiplication_operators">Binary
+<a name="id780472"></a>
+        <a class="link" href="non_mem.html#boost_quaternions.quaternions.non_mem.binary_multiplication_operators">Binary
         Multiplication Operators</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>	<span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>	<span class="keyword">operator</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
@@ -93,8 +93,8 @@
         <span class="identifier">rhs</span></code>.
       </p>
 <a name="boost_quaternions.quaternions.non_mem.binary_division_operators"></a><h5>
-<a name="id523967"></a>
-        <a href="non_mem.html#boost_quaternions.quaternions.non_mem.binary_division_operators">Binary
+<a name="id781229"></a>
+        <a class="link" href="non_mem.html#boost_quaternions.quaternions.non_mem.binary_division_operators">Binary
         Division Operators</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>	<span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>	<span class="keyword">operator</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
@@ -109,8 +109,8 @@
         to divide by zero...
       </p>
 <a name="boost_quaternions.quaternions.non_mem.equality_operators"></a><h5>
-<a name="id524827"></a>
-        <a href="non_mem.html#boost_quaternions.quaternions.non_mem.equality_operators">Equality
+<a name="id781988"></a>
+        <a class="link" href="non_mem.html#boost_quaternions.quaternions.non_mem.equality_operators">Equality
         Operators</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>	<span class="keyword">bool</span>	<span class="keyword">operator</span> <span class="special">==</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
@@ -125,8 +125,8 @@
         with any floating-type entity, this is essentially meaningless.
       </p>
 <a name="boost_quaternions.quaternions.non_mem.inequality_operators"></a><h5>
-<a name="id525637"></a>
-        <a href="non_mem.html#boost_quaternions.quaternions.non_mem.inequality_operators">Inequality
+<a name="id782704"></a>
+        <a class="link" href="non_mem.html#boost_quaternions.quaternions.non_mem.inequality_operators">Inequality
         Operators</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>	<span class="keyword">bool</span>	<span class="keyword">operator</span> <span class="special">!=</span> <span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
@@ -141,8 +141,8 @@
         false. As with any floating-type entity, this is essentially meaningless.
       </p>
 <a name="boost_quaternions.quaternions.non_mem.stream_extractor"></a><h5>
-<a name="id526447"></a>
-        <a href="non_mem.html#boost_quaternions.quaternions.non_mem.stream_extractor">Stream
+<a name="id783419"></a>
+        <a class="link" href="non_mem.html#boost_quaternions.quaternions.non_mem.stream_extractor">Stream
         Extractor</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
@@ -173,8 +173,8 @@
         complex numbers which happen to have imaginary parts equal to zero).
       </p>
 <a name="boost_quaternions.quaternions.non_mem.stream_inserter"></a><h5>
-<a name="id526824"></a>
-        <a href="non_mem.html#boost_quaternions.quaternions.non_mem.stream_inserter">Stream
+<a name="id783748"></a>
+        <a class="link" href="non_mem.html#boost_quaternions.quaternions.non_mem.stream_inserter">Stream
         Inserter</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
@@ -206,7 +206,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2001 -2003 Hubert Holin<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001 -2003 Hubert Holin<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -214,7 +214,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="mem_fun.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../quaternions.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="value_op.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="mem_fun.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../quaternions.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="value_op.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Logistic Distribution</title>
-<link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="laplace_dist.html" title="Laplace Distribution">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="laplace_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="lognormal_dist.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="laplace_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="lognormal_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.dist_ref.dists.logistic_dist"></a><a class="link" href="logistic_dist.html" title="Logistic Distribution">
           Logistic Distribution</a>
@@ -72,7 +72,7 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/logistic_pdf.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.logistic_dist.member_functions"></a><h5>
-<a name="id907548"></a>
+<a name="id874399"></a>
             <a class="link" href="logistic_dist.html#math_toolkit.dist.dist_ref.dists.logistic_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -98,7 +98,7 @@
             Returns the scale of this distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.logistic_dist.non_member_accessors"></a><h5>
-<a name="id907778"></a>
+<a name="id874602"></a>
             <a class="link" href="logistic_dist.html#math_toolkit.dist.dist_ref.dists.logistic_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -128,7 +128,7 @@ as special cases if RealType
             and +<a class="link" href="../../../main_overview/error_handling.html#overflow_error">overflow_error</a> respectively.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.logistic_dist.accuracy"></a><h5>
-<a name="id907928"></a>
+<a name="id874826"></a>
             <a class="link" href="logistic_dist.html#math_toolkit.dist.dist_ref.dists.logistic_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -140,7 +140,7 @@ as special cases if RealType
             error</em></span> can be guarenteed.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.logistic_dist.implementation"></a><h5>
-<a name="id907983"></a>
+<a name="id874902"></a>
             <a class="link" href="logistic_dist.html#math_toolkit.dist.dist_ref.dists.logistic_dist.implementation">Implementation</a>
           </h5>
 <div class="informaltable"><table class="table">
@@ -150,135 +150,135 @@ as special cases if RealType
 </colgroup>
 <thead><tr>
 <th>
-                  <p>
-                    Function
-                  </p>
+                    <p>
+                      Function
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Implementation Notes
-                  </p>
+                    <p>
+                      Implementation Notes
+                    </p>
                   </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                  <p>
-                    pdf
-                  </p>
+                    <p>
+                      pdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: pdf = e<sup>-(x-u)/s</sup> / (s*(1+e<sup>-(x-u)/s</sup>)<sup>2</sup>)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    cdf
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: p = 1/(1+e<sup>-(x-u)/s</sup>)
-                  </p>
+                    <p>
+                      Using the relation: pdf = e<sup>-(x-u)/s</sup> / (s*(1+e<sup>-(x-u)/s</sup>)<sup>2</sup>)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    cdf complement
-                  </p>
+                    <p>
+                      cdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: q = 1/(1+e<sup>(x-u)/s</sup>)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    quantile
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: x = u - s*log(1/p-1)
-                  </p>
+                    <p>
+                      Using the relation: p = 1/(1+e<sup>-(x-u)/s</sup>)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    quantile from the complement
-                  </p>
+                    <p>
+                      cdf complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: x = u + s*log(p/1-p)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    mean
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    u
-                  </p>
+                    <p>
+                      Using the relation: q = 1/(1+e<sup>(x-u)/s</sup>)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    mode
-                  </p>
+                    <p>
+                      quantile
+                    </p>
                   </td>
 <td>
-                  <p>
-                    The same as the mean.
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    skewness
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    0
-                  </p>
+                    <p>
+                      Using the relation: x = u - s*log(1/p-1)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    kurtosis excess
-                  </p>
+                    <p>
+                      quantile from the complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    6/5
-                  </p>
+                    <p>
+                      Using the relation: x = u + s*log(p/1-p)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    variance
-                  </p>
+                    <p>
+                      mean
+                    </p>
                   </td>
 <td>
-                  <p>
-                    (&#960;*s)<sup>2</sup> / 3
-                  </p>
+                    <p>
+                      u
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      mode
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      The same as the mean.
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      skewness
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      0
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis excess
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      6/5
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      variance
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      (&#960;*s)<sup>2</sup> / 3
+                    </p>
                   </td>
 </tr>
 </tbody>
@@ -296,7 +296,7 @@ as special cases if RealType
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="laplace_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="lognormal_dist.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="laplace_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="lognormal_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

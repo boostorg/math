@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Modified Bessel Functions of the First and Second Kinds</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../bessel.html" title="Bessel Functions">
 <link rel="prev" href="bessel.html" title="Bessel Functions of the First and Second Kinds">
@@ -20,15 +20,15 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="bessel.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="sph_bessel.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="bessel.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="sph_bessel.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.bessel.mbessel"></a><a class="link" href="mbessel.html" title="Modified Bessel Functions of the First and Second Kinds"> Modified Bessel
         Functions of the First and Second Kinds</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.bessel.mbessel.synopsis"></a><h5>
-<a name="id997962"></a>
+<a name="id952339"></a>
           <a class="link" href="mbessel.html#math_toolkit.special.bessel.mbessel.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
@@ -44,7 +44,7 @@
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_k</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <a name="math_toolkit.special.bessel.mbessel.description"></a><h5>
-<a name="id998329"></a>
+<a name="id952789"></a>
           <a class="link" href="mbessel.html#math_toolkit.special.bessel.mbessel.description">Description</a>
         </h5>
 <p>
@@ -109,7 +109,7 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/cyl_bessel_k.png" align="middle"></span>
         </p>
 <a name="math_toolkit.special.bessel.mbessel.testing"></a><h5>
-<a name="id998602"></a>
+<a name="id953134"></a>
           <a class="link" href="mbessel.html#math_toolkit.special.bessel.mbessel.testing">Testing</a>
         </h5>
 <p>
@@ -118,7 +118,7 @@
           (with all the special case handling removed).
         </p>
 <a name="math_toolkit.special.bessel.mbessel.accuracy"></a><h5>
-<a name="id998623"></a>
+<a name="id953168"></a>
           <a class="link" href="mbessel.html#math_toolkit.special.bessel.mbessel.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -129,7 +129,7 @@
           zero error</a>. All values are relative errors in units of epsilon.
         </p>
 <div class="table">
-<a name="id998647"></a><p class="title"><b>Table&#160;38.&#160;Errors Rates in cyl_bessel_i</b></p>
+<a name="id953204"></a><p class="title"><b>Table&#160;38.&#160;Errors Rates in cyl_bessel_i</b></p>
 <div class="table-contents"><table class="table" summary="Errors Rates in cyl_bessel_i">
 <colgroup>
 <col>
@@ -138,95 +138,95 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Significand Size
-              </p>
-              </th>
+                  <p>
+                    Significand Size
+                  </p>
+                </th>
 <th>
-              <p>
-                Platform and Compiler
-              </p>
-              </th>
+                  <p>
+                    Platform and Compiler
+                  </p>
+                </th>
 <th>
-              <p>
-                I<sub>v</sub>
-              </p>
-              </th>
+                  <p>
+                    I<sub>v</sub>
+                  </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                53
-              </p>
-              </td>
+                  <p>
+                    53
+                  </p>
+                </td>
 <td>
-              <p>
-                Win32 / Visual C++ 8.0
-              </p>
-              </td>
+                  <p>
+                    Win32 / Visual C++ 8.0
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=10 Mean=3.4 GSL Peak=6000
-              </p>
-              </td>
+                  <p>
+                    Peak=10 Mean=3.4 GSL Peak=6000
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                Red Hat Linux IA64 / G++ 3.4
-              </p>
-              </td>
+                  <p>
+                    Red Hat Linux IA64 / G++ 3.4
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=11 Mean=3
-              </p>
-              </td>
+                  <p>
+                    Peak=11 Mean=3
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                SUSE Linux AMD64 / G++ 4.1
-              </p>
-              </td>
+                  <p>
+                    SUSE Linux AMD64 / G++ 4.1
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=11 Mean=4
-              </p>
-              </td>
+                  <p>
+                    Peak=11 Mean=4
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                113
-              </p>
-              </td>
+                  <p>
+                    113
+                  </p>
+                </td>
 <td>
-              <p>
-                HP-UX / HP aCC 6
-              </p>
-              </td>
+                  <p>
+                    HP-UX / HP aCC 6
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=15 Mean=4
-              </p>
-              </td>
+                  <p>
+                    Peak=15 Mean=4
+                  </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id998789"></a><p class="title"><b>Table&#160;39.&#160;Errors Rates in cyl_bessel_k</b></p>
+<a name="id953355"></a><p class="title"><b>Table&#160;39.&#160;Errors Rates in cyl_bessel_k</b></p>
 <div class="table-contents"><table class="table" summary="Errors Rates in cyl_bessel_k">
 <colgroup>
 <col>
@@ -235,98 +235,98 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Significand Size
-              </p>
-              </th>
+                  <p>
+                    Significand Size
+                  </p>
+                </th>
 <th>
-              <p>
-                Platform and Compiler
-              </p>
-              </th>
+                  <p>
+                    Platform and Compiler
+                  </p>
+                </th>
 <th>
-              <p>
-                K<sub>v</sub>
-              </p>
-              </th>
+                  <p>
+                    K<sub>v</sub>
+                  </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                53
-              </p>
-              </td>
+                  <p>
+                    53
+                  </p>
+                </td>
 <td>
-              <p>
-                Win32 / Visual C++ 8.0
-              </p>
-              </td>
+                  <p>
+                    Win32 / Visual C++ 8.0
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=9 Mean=2
-              </p>
-              <p>
-                GSL Peak=9
-              </p>
-              </td>
+                  <p>
+                    Peak=9 Mean=2
+                  </p>
+                  <p>
+                    GSL Peak=9
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                Red Hat Linux IA64 / G++ 3.4
-              </p>
-              </td>
+                  <p>
+                    Red Hat Linux IA64 / G++ 3.4
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=10 Mean=2
-              </p>
-              </td>
+                  <p>
+                    Peak=10 Mean=2
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                SUSE Linux AMD64 / G++ 4.1
-              </p>
-              </td>
+                  <p>
+                    SUSE Linux AMD64 / G++ 4.1
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=10 Mean=2
-              </p>
-              </td>
+                  <p>
+                    Peak=10 Mean=2
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                113
-              </p>
-              </td>
+                  <p>
+                    113
+                  </p>
+                </td>
 <td>
-              <p>
-                HP-UX / HP aCC 6
-              </p>
-              </td>
+                  <p>
+                    HP-UX / HP aCC 6
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=12 Mean=5
-              </p>
-              </td>
+                  <p>
+                    Peak=12 Mean=5
+                  </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.special.bessel.mbessel.implementation"></a><h5>
-<a name="id998936"></a>
+<a name="id953517"></a>
           <a class="link" href="mbessel.html#math_toolkit.special.bessel.mbessel.implementation">Implementation</a>
         </h5>
 <p>
@@ -344,16 +344,16 @@
           The 0 and 1 cases use minimax rational approximations on finite and infinite
           intervals. The coefficients are from:
         </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-            J.M. Blair and C.A. Edwards, <span class="emphasis"><em>Stable rational minimax approximations
-            to the modified Bessel functions I_0(x) and I_1(x)</em></span>, Atomic
-            Energy of Canada Limited Report 4928, Chalk River, 1974.
-          </li>
-<li>
-            S. Moshier, <span class="emphasis"><em>Methods and Programs for Mathematical Functions</em></span>,
-            Ellis Horwood Ltd, Chichester, 1989.
-          </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+              J.M. Blair and C.A. Edwards, <span class="emphasis"><em>Stable rational minimax approximations
+              to the modified Bessel functions I_0(x) and I_1(x)</em></span>, Atomic
+              Energy of Canada Limited Report 4928, Chalk River, 1974.
+            </li>
+<li class="listitem">
+              S. Moshier, <span class="emphasis"><em>Methods and Programs for Mathematical Functions</em></span>,
+              Ellis Horwood Ltd, Chichester, 1989.
+            </li>
 </ul></div>
 <p>
           While the 0.5 case is a simple trigonometric function:
@@ -479,7 +479,7 @@ are also computed by recursions (involving gamma functions), but
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="bessel.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="sph_bessel.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="bessel.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="sph_bessel.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

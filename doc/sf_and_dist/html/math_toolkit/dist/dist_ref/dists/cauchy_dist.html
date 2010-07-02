@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Cauchy-Lorentz Distribution</title>
-<link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="binomial_dist.html" title="Binomial Distribution">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="binomial_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="chi_squared_dist.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="binomial_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="chi_squared_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.dist_ref.dists.cauchy_dist"></a><a class="link" href="cauchy_dist.html" title="Cauchy-Lorentz Distribution"> Cauchy-Lorentz
           Distribution</a>
@@ -88,7 +88,7 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/cauchy_pdf2.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.member_functions"></a><h5>
-<a name="id893445"></a>
+<a name="id862513"></a>
             <a class="link" href="cauchy_dist.html#math_toolkit.dist.dist_ref.dists.cauchy_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -114,7 +114,7 @@
             Returns the scale parameter of the distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.non_member_accessors"></a><h5>
-<a name="id893592"></a>
+<a name="id862699"></a>
             <a class="link" href="cauchy_dist.html#math_toolkit.dist.dist_ref.dists.cauchy_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -133,11 +133,8 @@
 <p>
             Note however that the Cauchy distribution does not have a mean, standard
             deviation, etc. See <a class="link" href="../../../policy/pol_ref/assert_undefined.html" title="Mathematically Undefined Function Policies">mathematically
-            undefined function</a>
-          </p>
-<p>
-            to control whether these should fail to compile with a BOOST_STATIC_ASSERTION_FAILURE,
-            which is the default.
+            undefined function</a> to control whether these should fail to compile
+            with a BOOST_STATIC_ASSERTION_FAILURE, which is the default.
           </p>
 <p>
             Alternately, the functions <a class="link" href="../nmp.html#math.dist.mean">mean</a>,
@@ -151,7 +148,7 @@
             The domain of the random variable is [-[max_value], +[min_value]].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.accuracy"></a><h5>
-<a name="id893739"></a>
+<a name="id862918"></a>
             <a class="link" href="cauchy_dist.html#math_toolkit.dist.dist_ref.dists.cauchy_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -160,7 +157,7 @@
             have very low error rates.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.implementation"></a><h5>
-<a name="id893772"></a>
+<a name="id862968"></a>
             <a class="link" href="cauchy_dist.html#math_toolkit.dist.dist_ref.dists.cauchy_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -175,118 +172,124 @@
 </colgroup>
 <thead><tr>
 <th>
-                  <p>
-                    Function
-                  </p>
+                    <p>
+                      Function
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Implementation Notes
-                  </p>
+                    <p>
+                      Implementation Notes
+                    </p>
                   </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                  <p>
-                    pdf
-                  </p>
+                    <p>
+                      pdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: pdf = 1 / (&#960; * &#947; * (1 + ((x - x<sub>0 </sub>) / &#947;)<sup>2</sup>)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    cdf and its complement
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    The cdf is normally given by:
-                  </p>
-                  <p>
-                    p = 0.5 + atan(x)/&#960;
-                  </p>
-                  <p>
-                    But that suffers from cancellation error as x -&gt; -&#8734;. So recall
-                    that for <code class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;</span>
-                    <span class="number">0</span></code>:
-                  </p>
-                  <p>
-                    atan(x) = -&#960;/2 - atan(1/x)
-                  </p>
-                  <p>
-                    Substituting into the above we get:
-                  </p>
-                  <p>
-                    p = -atan(1/x) ; x &lt; 0
-                  </p>
-                  <p>
-                    So the procedure is to calculate the cdf for -fabs(x) using the
-                    above formula. Note that to factor in the location and scale
-                    parameters you must substitute (x - x<sub>0 </sub>) / &#947; for x in the above.
-                  </p>
-                  <p>
-                    This procedure yields the smaller of <span class="emphasis"><em>p</em></span> and
-                    <span class="emphasis"><em>q</em></span>, so the result may need subtracting from
-                    1 depending on whether we want the complement or not, and whether
-                    <span class="emphasis"><em>x</em></span> is less than x<sub>0 </sub> or not.
-                  </p>
+                    <p>
+                      Using the relation: pdf = 1 / (&#960; * &#947; * (1 + ((x - x<sub>0 </sub>) / &#947;)<sup>2</sup>)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    quantile
-                  </p>
+                    <p>
+                      cdf and its complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    The same procedure is used irrespective of whether we're starting
-                    from the probability or it's complement. First the argument
-                    <span class="emphasis"><em>p</em></span> is reduced to the range [-0.5, 0.5], then
-                    the relation
-                  </p>
-                  <p>
-                    x = x<sub>0 </sub> &#177; &#947; / tan(&#960; * p)
-                  </p>
-                  <p>
-                    is used to obtain the result. Whether we're adding or subtracting
-                    from x<sub>0 </sub> is determined by whether we're starting from the complement
-                    or not.
-                  </p>
+                    <p>
+                      The cdf is normally given by:
+                    </p>
+                    <p>
+                      p = 0.5 + atan(x)/&#960;
+                    </p>
+                    <p>
+                      But that suffers from cancellation error as x -&gt; -&#8734;. So recall
+                      that for <code class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;</span> <span class="number">0</span></code>:
+                    </p>
+                    <p>
+                      atan(x) = -&#960;/2 - atan(1/x)
+                    </p>
+                    <p>
+                      Substituting into the above we get:
+                    </p>
+                    <p>
+                      p = -atan(1/x) ; x &lt; 0
+                    </p>
+                    <p>
+                      So the procedure is to calculate the cdf for -fabs(x) using
+                      the above formula. Note that to factor in the location and
+                      scale parameters you must substitute (x - x<sub>0 </sub>) / &#947; for x in the
+                      above.
+                    </p>
+                    <p>
+                      This procedure yields the smaller of <span class="emphasis"><em>p</em></span>
+                      and <span class="emphasis"><em>q</em></span>, so the result may need subtracting
+                      from 1 depending on whether we want the complement or not,
+                      and whether <span class="emphasis"><em>x</em></span> is less than x<sub>0 </sub> or not.
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    mode
-                  </p>
+                    <p>
+                      quantile
+                    </p>
                   </td>
 <td>
-                  <p>
-                    The location parameter.
-                  </p>
+                    <p>
+                      The same procedure is used irrespective of whether we're starting
+                      from the probability or it's complement. First the argument
+                      <span class="emphasis"><em>p</em></span> is reduced to the range [-0.5, 0.5],
+                      then the relation
+                    </p>
+                    <p>
+                      x = x<sub>0 </sub> &#177; &#947; / tan(&#960; * p)
+                    </p>
+                    <p>
+                      is used to obtain the result. Whether we're adding or subtracting
+                      from x<sub>0 </sub> is determined by whether we're starting from the complement
+                      or not.
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      mode
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      The location parameter.
+                    </p>
                   </td>
 </tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.cauchy_dist.references"></a><h5>
-<a name="id893997"></a>
+<a name="id863237"></a>
             <a class="link" href="cauchy_dist.html#math_toolkit.dist.dist_ref.dists.cauchy_dist.references">References</a>
           </h5>
-<div class="itemizedlist"><ul type="disc">
-<li><a href="http://en.wikipedia.org/wiki/Cauchy_distribution" target="_top">Cauchy-Lorentz
-              distribution</a></li>
-<li><a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda3663.htm" target="_top">NIST
-              Exploratory Data Analysis</a></li>
-<li><a href="http://mathworld.wolfram.com/CauchyDistribution.html" target="_top">Weisstein,
-              Eric W. "Cauchy Distribution." From MathWorld--A Wolfram
-              Web Resource.</a></li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+                <a href="http://en.wikipedia.org/wiki/Cauchy_distribution" target="_top">Cauchy-Lorentz
+                distribution</a>
+              </li>
+<li class="listitem">
+                <a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda3663.htm" target="_top">NIST
+                Exploratory Data Analysis</a>
+              </li>
+<li class="listitem">
+                <a href="http://mathworld.wolfram.com/CauchyDistribution.html" target="_top">Weisstein,
+                Eric W. "Cauchy Distribution." From MathWorld--A Wolfram
+                Web Resource.</a>
+              </li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
@@ -301,7 +304,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="binomial_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="chi_squared_dist.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="binomial_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="chi_squared_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Floating-Point Classification: Infinities and NaN's</title>
-<link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../utils.html" title="Floating Point Utilities">
 <link rel="prev" href="rounding/modf.html" title="Integer and Fractional Part Splitting (modf)">
@@ -20,15 +20,15 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="rounding/modf.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="sign_functions.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="rounding/modf.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="sign_functions.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.utils.fpclass"></a><a class="link" href="fpclass.html" title="Floating-Point Classification: Infinities and NaN's"> Floating-Point Classification:
       Infinities and NaN's</a>
 </h3></div></div></div>
 <a name="math_toolkit.utils.fpclass.synopsis"></a><h5>
-<a name="id1028139"></a>
+<a name="id980510"></a>
         <a class="link" href="fpclass.html#math_toolkit.utils.fpclass.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">FP_ZERO</span>        <span class="comment">/* implementation specific value */</span>
@@ -58,7 +58,7 @@
         to use these functions.
       </p>
 <a name="math_toolkit.utils.fpclass.description"></a><h5>
-<a name="id1028530"></a>
+<a name="id980980"></a>
         <a class="link" href="fpclass.html#math_toolkit.utils.fpclass.description">Description</a>
       </h5>
 <p>
@@ -117,76 +117,76 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                fpclassify value
-              </p>
+                <p>
+                  fpclassify value
+                </p>
               </th>
 <th>
-              <p>
-                class of t.
-              </p>
+                <p>
+                  class of t.
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                FP_ZERO
-              </p>
+                <p>
+                  FP_ZERO
+                </p>
               </td>
 <td>
-              <p>
-                If <span class="emphasis"><em>t</em></span> is zero.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                FP_NORMAL
-              </p>
-              </td>
-<td>
-              <p>
-                If <span class="emphasis"><em>t</em></span> is a non-zero, non-denormalised finite
-                value.
-              </p>
+                <p>
+                  If <span class="emphasis"><em>t</em></span> is zero.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                FP_INFINITE
-              </p>
+                <p>
+                  FP_NORMAL
+                </p>
               </td>
 <td>
-              <p>
-                If <span class="emphasis"><em>t</em></span> is plus or minus infinity.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                FP_NAN
-              </p>
-              </td>
-<td>
-              <p>
-                If <span class="emphasis"><em>t</em></span> is a NaN.
-              </p>
+                <p>
+                  If <span class="emphasis"><em>t</em></span> is a non-zero, non-denormalised finite
+                  value.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                FP_SUBNORMAL
-              </p>
+                <p>
+                  FP_INFINITE
+                </p>
               </td>
 <td>
-              <p>
-                If <span class="emphasis"><em>t</em></span> is a denormalised number.
-              </p>
+                <p>
+                  If <span class="emphasis"><em>t</em></span> is plus or minus infinity.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  FP_NAN
+                </p>
+              </td>
+<td>
+                <p>
+                  If <span class="emphasis"><em>t</em></span> is a NaN.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  FP_SUBNORMAL
+                </p>
+              </td>
+<td>
+                <p>
+                  If <span class="emphasis"><em>t</em></span> is a denormalised number.
+                </p>
               </td>
 </tr>
 </tbody>
@@ -229,7 +229,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="rounding/modf.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="sign_functions.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="rounding/modf.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="sign_functions.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

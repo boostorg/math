@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>F Distribution</title>
-<link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="extreme_dist.html" title="Extreme Value Distribution">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="extreme_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="gamma_dist.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="extreme_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="gamma_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.dist_ref.dists.f_dist"></a><a class="link" href="f_dist.html" title="F Distribution"> F Distribution</a>
 </h5></div></div></div>
@@ -80,7 +80,7 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/fisher_f_pdf.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.f_dist.member_functions"></a><h5>
-<a name="id898063"></a>
+<a name="id867979"></a>
             <a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -106,7 +106,7 @@
             Returns the denominator degrees of freedom parameter of the distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.f_dist.non_member_accessors"></a><h5>
-<a name="id898216"></a>
+<a name="id868168"></a>
             <a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -126,7 +126,7 @@
             The domain of the random variable is [0, +&#8734;].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.f_dist.examples"></a><h5>
-<a name="id898316"></a>
+<a name="id868317"></a>
             <a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.examples">Examples</a>
           </h5>
 <p>
@@ -134,7 +134,7 @@
             are available illustrating the use of the F Distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.f_dist.accuracy"></a><h5>
-<a name="id898337"></a>
+<a name="id868352"></a>
             <a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -143,7 +143,7 @@
             refer to those functions for accuracy data.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.f_dist.implementation"></a><h5>
-<a name="id898364"></a>
+<a name="id868397"></a>
             <a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -159,263 +159,267 @@
 </colgroup>
 <thead><tr>
 <th>
-                  <p>
-                    Function
-                  </p>
+                    <p>
+                      Function
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Implementation Notes
-                  </p>
+                    <p>
+                      Implementation Notes
+                    </p>
                   </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                  <p>
-                    pdf
-                  </p>
+                    <p>
+                      pdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    The usual form of the PDF is given by:
-                  </p>
-                  <p>
-                    <span class="inlinemediaobject"><img src="../../../../../equations/fisher_pdf.png"></span>
-                  </p>
-                  <p>
-                    However, that form is hard to evaluate directly without incurring
-                    problems with either accuracy or numeric overflow.
-                  </p>
-                  <p>
-                    Direct differentiation of the CDF expressed in terms of the incomplete
-                    beta function
-                  </p>
-                  <p>
-                    led to the following two formulas:
-                  </p>
-                  <p>
-                    f<sub>v1,v2</sub>(x) = y * <a class="link" href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(v2
-                    / 2, v1 / 2, v2 / (v2 + v1 * x))
-                  </p>
-                  <p>
-                    with y = (v2 * v1) / ((v2 + v1 * x) * (v2 + v1 * x))
-                  </p>
-                  <p>
-                    and
-                  </p>
-                  <p>
-                    f<sub>v1,v2</sub>(x) = y * <a class="link" href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(v1
-                    / 2, v2 / 2, v1 * x / (v2 + v1 * x))
-                  </p>
-                  <p>
-                    with y = (z * v1 - x * v1 * v1) / z<sup>2</sup>
-                  </p>
-                  <p>
-                    and z = v2 + v1 * x
-                  </p>
-                  <p>
-                    The first of these is used for v1 * x &gt; v2, otherwise the
-                    second is used.
-                  </p>
-                  <p>
-                    The aim is to keep the <span class="emphasis"><em>x</em></span> argument to <a class="link" href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>
-                    away from 1 to avoid rounding error.
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    cdf
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relations:
-                  </p>
-                  <p>
-                    p = <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(v1
-                    / 2, v2 / 2, v1 * x / (v2 + v1 * x))
-                  </p>
-                  <p>
-                    and
-                  </p>
-                  <p>
-                    p = <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(v2
-                    / 2, v1 / 2, v2 / (v2 + v1 * x))
-                  </p>
-                  <p>
-                    The first is used for v1 * x &gt; v2, otherwise the second is
-                    used.
-                  </p>
-                  <p>
-                    The aim is to keep the <span class="emphasis"><em>x</em></span> argument to <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
-                    well away from 1 to avoid rounding error.
-                  </p>
+                    <p>
+                      The usual form of the PDF is given by:
+                    </p>
+                    <p>
+                      <span class="inlinemediaobject"><img src="../../../../../equations/fisher_pdf.png"></span>
+                    </p>
+                    <p>
+                      However, that form is hard to evaluate directly without incurring
+                      problems with either accuracy or numeric overflow.
+                    </p>
+                    <p>
+                      Direct differentiation of the CDF expressed in terms of the
+                      incomplete beta function
+                    </p>
+                    <p>
+                      led to the following two formulas:
+                    </p>
+                    <p>
+                      f<sub>v1,v2</sub>(x) = y * <a class="link" href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(v2
+                      / 2, v1 / 2, v2 / (v2 + v1 * x))
+                    </p>
+                    <p>
+                      with y = (v2 * v1) / ((v2 + v1 * x) * (v2 + v1 * x))
+                    </p>
+                    <p>
+                      and
+                    </p>
+                    <p>
+                      f<sub>v1,v2</sub>(x) = y * <a class="link" href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(v1
+                      / 2, v2 / 2, v1 * x / (v2 + v1 * x))
+                    </p>
+                    <p>
+                      with y = (z * v1 - x * v1 * v1) / z<sup>2</sup>
+                    </p>
+                    <p>
+                      and z = v2 + v1 * x
+                    </p>
+                    <p>
+                      The first of these is used for v1 * x &gt; v2, otherwise the
+                      second is used.
+                    </p>
+                    <p>
+                      The aim is to keep the <span class="emphasis"><em>x</em></span> argument to
+                      <a class="link" href="../../../special/sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>
+                      away from 1 to avoid rounding error.
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    cdf complement
-                  </p>
+                    <p>
+                      cdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relations:
-                  </p>
-                  <p>
-                    p = <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(v1
-                    / 2, v2 / 2, v1 * x / (v2 + v1 * x))
-                  </p>
-                  <p>
-                    and
-                  </p>
-                  <p>
-                    p = <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(v2
-                    / 2, v1 / 2, v2 / (v2 + v1 * x))
-                  </p>
-                  <p>
-                    The first is used for v1 * x &lt; v2, otherwise the second is
-                    used.
-                  </p>
-                  <p>
-                    The aim is to keep the <span class="emphasis"><em>x</em></span> argument to <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
-                    well away from 1 to avoid rounding error.
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    quantile
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation:
-                  </p>
-                  <p>
-                    x = v2 * a / (v1 * b)
-                  </p>
-                  <p>
-                    where:
-                  </p>
-                  <p>
-                    a = <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>(v1
-                    / 2, v2 / 2, p)
-                  </p>
-                  <p>
-                    and
-                  </p>
-                  <p>
-                    b = 1 - a
-                  </p>
-                  <p>
-                    Quantities <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
-                    are both computed by <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>
-                    without the subtraction implied above.
-                  </p>
+                    <p>
+                      Using the relations:
+                    </p>
+                    <p>
+                      p = <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(v1
+                      / 2, v2 / 2, v1 * x / (v2 + v1 * x))
+                    </p>
+                    <p>
+                      and
+                    </p>
+                    <p>
+                      p = <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(v2
+                      / 2, v1 / 2, v2 / (v2 + v1 * x))
+                    </p>
+                    <p>
+                      The first is used for v1 * x &gt; v2, otherwise the second
+                      is used.
+                    </p>
+                    <p>
+                      The aim is to keep the <span class="emphasis"><em>x</em></span> argument to
+                      <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
+                      well away from 1 to avoid rounding error.
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    quantile
-                  </p>
-                  <p>
-                    from the complement
-                  </p>
+                    <p>
+                      cdf complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation:
-                  </p>
-                  <p>
-                    x = v2 * a / (v1 * b)
-                  </p>
-                  <p>
-                    where
-                  </p>
-                  <p>
-                    a = <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>(v1
-                    / 2, v2 / 2, p)
-                  </p>
-                  <p>
-                    and
-                  </p>
-                  <p>
-                    b = 1 - a
-                  </p>
-                  <p>
-                    Quantities <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
-                    are both computed by <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>
-                    without the subtraction implied above.
-                  </p>
+                    <p>
+                      Using the relations:
+                    </p>
+                    <p>
+                      p = <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(v1
+                      / 2, v2 / 2, v1 * x / (v2 + v1 * x))
+                    </p>
+                    <p>
+                      and
+                    </p>
+                    <p>
+                      p = <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(v2
+                      / 2, v1 / 2, v2 / (v2 + v1 * x))
+                    </p>
+                    <p>
+                      The first is used for v1 * x &lt; v2, otherwise the second
+                      is used.
+                    </p>
+                    <p>
+                      The aim is to keep the <span class="emphasis"><em>x</em></span> argument to
+                      <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>
+                      well away from 1 to avoid rounding error.
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    mean
-                  </p>
+                    <p>
+                      quantile
+                    </p>
                   </td>
 <td>
-                  <p>
-                    v2 / (v2 - 2)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    variance
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    2 * v2<sup>2 </sup> * (v1 + v2 - 2) / (v1 * (v2 - 2) * (v2 - 2) * (v2 - 4))
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    mode
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    v2 * (v1 - 2) / (v1 * (v2 + 2))
-                  </p>
+                    <p>
+                      Using the relation:
+                    </p>
+                    <p>
+                      x = v2 * a / (v1 * b)
+                    </p>
+                    <p>
+                      where:
+                    </p>
+                    <p>
+                      a = <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>(v1
+                      / 2, v2 / 2, p)
+                    </p>
+                    <p>
+                      and
+                    </p>
+                    <p>
+                      b = 1 - a
+                    </p>
+                    <p>
+                      Quantities <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
+                      are both computed by <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>
+                      without the subtraction implied above.
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    skewness
-                  </p>
+                    <p>
+                      quantile
+                    </p>
+                    <p>
+                      from the complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    2 * (v2 + 2 * v1 - 2) * sqrt((2 * v2 - 8) / (v1 * (v2 + v1 -
-                    2))) / (v2 - 6)
-                  </p>
+                    <p>
+                      Using the relation:
+                    </p>
+                    <p>
+                      x = v2 * a / (v1 * b)
+                    </p>
+                    <p>
+                      where
+                    </p>
+                    <p>
+                      a = <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>(v1
+                      / 2, v2 / 2, p)
+                    </p>
+                    <p>
+                      and
+                    </p>
+                    <p>
+                      b = 1 - a
+                    </p>
+                    <p>
+                      Quantities <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
+                      are both computed by <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>
+                      without the subtraction implied above.
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    kurtosis and kurtosis excess
-                  </p>
+                    <p>
+                      mean
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Refer to, <a href="http://mathworld.wolfram.com/F-Distribution.html" target="_top">Weisstein,
-                    Eric W. "F-Distribution." From MathWorld--A Wolfram
-                    Web Resource.</a>
-                  </p>
+                    <p>
+                      v2 / (v2 - 2)
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      variance
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      2 * v2<sup>2 </sup> * (v1 + v2 - 2) / (v1 * (v2 - 2) * (v2 - 2) * (v2 -
+                      4))
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      mode
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      v2 * (v1 - 2) / (v1 * (v2 + 2))
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      skewness
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      2 * (v2 + 2 * v1 - 2) * sqrt((2 * v2 - 8) / (v1 * (v2 + v1
+                      - 2))) / (v2 - 6)
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis and kurtosis excess
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      Refer to, <a href="http://mathworld.wolfram.com/F-Distribution.html" target="_top">Weisstein,
+                      Eric W. "F-Distribution." From MathWorld--A Wolfram
+                      Web Resource.</a>
+                    </p>
                   </td>
 </tr>
 </tbody>
@@ -433,7 +437,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="extreme_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="gamma_dist.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="extreme_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="gamma_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

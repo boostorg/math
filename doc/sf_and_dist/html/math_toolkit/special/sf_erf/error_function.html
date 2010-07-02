@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Error Functions</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../sf_erf.html" title="Error Functions">
 <link rel="prev" href="../sf_erf.html" title="Error Functions">
@@ -20,15 +20,15 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../sf_erf.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_erf.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="error_inv.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../sf_erf.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_erf.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="error_inv.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.sf_erf.error_function"></a><a class="link" href="error_function.html" title="Error Functions"> Error
         Functions</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.sf_erf.error_function.synopsis"></a><h5>
-<a name="id973351"></a>
+<a name="id933622"></a>
           <a class="link" href="error_function.html#math_toolkit.special.sf_erf.error_function.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -69,7 +69,7 @@
 <p>
         </p>
 <a name="math_toolkit.special.sf_erf.error_function.description"></a><h5>
-<a name="id973733"></a>
+<a name="id934108"></a>
           <a class="link" href="error_function.html#math_toolkit.special.sf_erf.error_function.description">Description</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -106,7 +106,7 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/erfc.png" align="middle"></span>
         </p>
 <a name="math_toolkit.special.sf_erf.error_function.accuracy"></a><h5>
-<a name="id974121"></a>
+<a name="id934584"></a>
           <a class="link" href="error_function.html#math_toolkit.special.sf_erf.error_function.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -119,7 +119,7 @@
           the one shown will have <a class="link" href="../../backgrounders/relative_error.html#zero_error">effectively zero error</a>.
         </p>
 <div class="table">
-<a name="id974158"></a><p class="title"><b>Table&#160;27.&#160;Errors In the Function erf(z)</b></p>
+<a name="id934639"></a><p class="title"><b>Table&#160;27.&#160;Errors In the Function erf(z)</b></p>
 <div class="table-contents"><table class="table" summary="Errors In the Function erf(z)">
 <colgroup>
 <col>
@@ -130,202 +130,202 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Significand Size
-              </p>
-              </th>
+                  <p>
+                    Significand Size
+                  </p>
+                </th>
 <th>
-              <p>
-                Platform and Compiler
-              </p>
-              </th>
+                  <p>
+                    Platform and Compiler
+                  </p>
+                </th>
 <th>
-              <p>
-                z &lt; 0.5
-              </p>
-              </th>
+                  <p>
+                    z &lt; 0.5
+                  </p>
+                </th>
 <th>
-              <p>
-                0.5 &lt; z &lt; 8
-              </p>
-              </th>
+                  <p>
+                    0.5 &lt; z &lt; 8
+                  </p>
+                </th>
 <th>
-              <p>
-                z &gt; 8
-              </p>
-              </th>
+                  <p>
+                    z &gt; 8
+                  </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                53
-              </p>
-              </td>
+                  <p>
+                    53
+                  </p>
+                </td>
 <td>
-              <p>
-                Win32, Visual C++ 8
-              </p>
-              </td>
+                  <p>
+                    Win32, Visual C++ 8
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0 Mean=0
-              </p>
-              <p>
-                GSL Peak=2.0 Mean=0.3
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=1.1
-                Mean=0.7
-              </p>
-              </td>
+                  <p>
+                    Peak=0 Mean=0
+                  </p>
+                  <p>
+                    GSL Peak=2.0 Mean=0.3
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=1.1
+                    Mean=0.7
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0.9 Mean=0.09
-              </p>
-              <p>
-                GSL Peak=2.3 Mean=0.3
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=1.3
-                Mean=0.2
-              </p>
-              </td>
+                  <p>
+                    Peak=0.9 Mean=0.09
+                  </p>
+                  <p>
+                    GSL Peak=2.3 Mean=0.3
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=1.3
+                    Mean=0.2
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0 Mean=0
-              </p>
-              <p>
-                GSL Peak=0 Mean=0
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=0
-                Mean=0
-              </p>
-              </td>
+                  <p>
+                    Peak=0 Mean=0
+                  </p>
+                  <p>
+                    GSL Peak=0 Mean=0
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=0
+                    Mean=0
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                RedHat Linux IA32, gcc-3.3
-              </p>
-              </td>
+                  <p>
+                    RedHat Linux IA32, gcc-3.3
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0.7 Mean=0.07
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=0.9 Mean=0.2
-              </p>
-              </td>
+                  <p>
+                    Peak=0.7 Mean=0.07
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=0.9 Mean=0.2
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0.9 Mean=0.2
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=0.9 Mean=0.07
-              </p>
-              </td>
+                  <p>
+                    Peak=0.9 Mean=0.2
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=0.9 Mean=0.07
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0 Mean=0
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=0 Mean=0
-              </p>
-              </td>
+                  <p>
+                    Peak=0 Mean=0
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=0 Mean=0
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                Redhat Linux IA64, gcc-3.4.4
-              </p>
-              </td>
+                  <p>
+                    Redhat Linux IA64, gcc-3.4.4
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0.7 Mean=0.07
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=0 Mean=0
-              </p>
-              </td>
+                  <p>
+                    Peak=0.7 Mean=0.07
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=0 Mean=0
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0.9 Mean=0.1
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=0.5 Mean=0.03
-              </p>
-              </td>
+                  <p>
+                    Peak=0.9 Mean=0.1
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=0.5 Mean=0.03
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0 Mean=0
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=0 Mean=0
-              </p>
-              </td>
+                  <p>
+                    Peak=0 Mean=0
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=0 Mean=0
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                113
-              </p>
-              </td>
+                  <p>
+                    113
+                  </p>
+                </td>
 <td>
-              <p>
-                HPUX IA64, aCC A.06.06
-              </p>
-              </td>
+                  <p>
+                    HPUX IA64, aCC A.06.06
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0.8 Mean=0.1
-              </p>
-              <p>
-                <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX C
-                Library</a> Lib Peak=0.9 Mean=0.2
-              </p>
-              </td>
+                  <p>
+                    Peak=0.8 Mean=0.1
+                  </p>
+                  <p>
+                    <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
+                    C Library</a> Lib Peak=0.9 Mean=0.2
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0.9 Mean=0.1
-              </p>
-              <p>
-                <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX C
-                Library</a> Lib Peak=0.5 Mean=0.02
-              </p>
-              </td>
+                  <p>
+                    Peak=0.9 Mean=0.1
+                  </p>
+                  <p>
+                    <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
+                    C Library</a> Lib Peak=0.5 Mean=0.02
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0 Mean=0
-              </p>
-              <p>
-                <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX C
-                Library</a> Lib Peak=0 Mean=0
-              </p>
-              </td>
+                  <p>
+                    Peak=0 Mean=0
+                  </p>
+                  <p>
+                    <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
+                    C Library</a> Lib Peak=0 Mean=0
+                  </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id975210"></a><p class="title"><b>Table&#160;28.&#160;Errors In the Function erfc(z)</b></p>
+<a name="id934999"></a><p class="title"><b>Table&#160;28.&#160;Errors In the Function erfc(z)</b></p>
 <div class="table-contents"><table class="table" summary="Errors In the Function erfc(z)">
 <colgroup>
 <col>
@@ -336,202 +336,202 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Significand Size
-              </p>
-              </th>
+                  <p>
+                    Significand Size
+                  </p>
+                </th>
 <th>
-              <p>
-                Platform and Compiler
-              </p>
-              </th>
+                  <p>
+                    Platform and Compiler
+                  </p>
+                </th>
 <th>
-              <p>
-                z &lt; 0.5
-              </p>
-              </th>
+                  <p>
+                    z &lt; 0.5
+                  </p>
+                </th>
 <th>
-              <p>
-                0.5 &lt; z &lt; 8
-              </p>
-              </th>
+                  <p>
+                    0.5 &lt; z &lt; 8
+                  </p>
+                </th>
 <th>
-              <p>
-                z &gt; 8
-              </p>
-              </th>
+                  <p>
+                    z &gt; 8
+                  </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                53
-              </p>
-              </td>
+                  <p>
+                    53
+                  </p>
+                </td>
 <td>
-              <p>
-                Win32, Visual C++ 8
-              </p>
-              </td>
+                  <p>
+                    Win32, Visual C++ 8
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0.7 Mean=0.06
-              </p>
-              <p>
-                GSL Peak=1.0 Mean=0.4
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=0.7
-                Mean=0.06
-              </p>
-              </td>
+                  <p>
+                    Peak=0.7 Mean=0.06
+                  </p>
+                  <p>
+                    GSL Peak=1.0 Mean=0.4
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=0.7
+                    Mean=0.06
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0.99 Mean=0.3
-              </p>
-              <p>
-                GSL Peak=2.6 Mean=0.6
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=3.6
-                Mean=0.7
-              </p>
-              </td>
+                  <p>
+                    Peak=0.99 Mean=0.3
+                  </p>
+                  <p>
+                    GSL Peak=2.6 Mean=0.6
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=3.6
+                    Mean=0.7
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=1.0 Mean=0.2
-              </p>
-              <p>
-                GSL Peak=3.9 Mean=0.4
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=2.7
-                Mean=0.4
-              </p>
-              </td>
+                  <p>
+                    Peak=1.0 Mean=0.2
+                  </p>
+                  <p>
+                    GSL Peak=3.9 Mean=0.4
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=2.7
+                    Mean=0.4
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                RedHat Linux IA32, gcc-3.3
-              </p>
-              </td>
+                  <p>
+                    RedHat Linux IA32, gcc-3.3
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0 Mean=0
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=0 Mean=0
-              </p>
-              </td>
+                  <p>
+                    Peak=0 Mean=0
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=0 Mean=0
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=1.4 Mean=0.3
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=1.3 Mean=0.3
-              </p>
-              </td>
+                  <p>
+                    Peak=1.4 Mean=0.3
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=1.3 Mean=0.3
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=1.6 Mean=0.4
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=1.3 Mean=0.4
-              </p>
-              </td>
+                  <p>
+                    Peak=1.6 Mean=0.4
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=1.3 Mean=0.4
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                Redhat Linux IA64, gcc-3.4.4
-              </p>
-              </td>
+                  <p>
+                    Redhat Linux IA64, gcc-3.4.4
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0 Mean=0
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=0 Mean=0
-              </p>
-              </td>
+                  <p>
+                    Peak=0 Mean=0
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=0 Mean=0
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=1.4 Mean=0.3
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=0 Mean=0
-              </p>
-              </td>
+                  <p>
+                    Peak=1.4 Mean=0.3
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=0 Mean=0
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=1.5 Mean=0.4
-              </p>
-              <p>
-                <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
-                Peak=0 Mean=0
-              </p>
-              </td>
+                  <p>
+                    Peak=1.5 Mean=0.4
+                  </p>
+                  <p>
+                    <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>
+                    Peak=0 Mean=0
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                113
-              </p>
-              </td>
+                  <p>
+                    113
+                  </p>
+                </td>
 <td>
-              <p>
-                HPUX IA64, aCC A.06.06
-              </p>
-              </td>
+                  <p>
+                    HPUX IA64, aCC A.06.06
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=0 Mean=0
-              </p>
-              <p>
-                <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX C
-                Library</a> Peak=0 Mean=0
-              </p>
-              </td>
+                  <p>
+                    Peak=0 Mean=0
+                  </p>
+                  <p>
+                    <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
+                    C Library</a> Peak=0 Mean=0
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=1.5 Mean=0.3
-              </p>
-              <p>
-                <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX C
-                Library</a> Peak=0.9 Mean=0.08
-              </p>
-              </td>
+                  <p>
+                    Peak=1.5 Mean=0.3
+                  </p>
+                  <p>
+                    <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
+                    C Library</a> Peak=0.9 Mean=0.08
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=1.6 Mean=0.4
-              </p>
-              <p>
-                <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX C
-                Library</a> Peak=0.9 Mean=0.1
-              </p>
-              </td>
+                  <p>
+                    Peak=1.6 Mean=0.4
+                  </p>
+                  <p>
+                    <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
+                    C Library</a> Peak=0.9 Mean=0.1
+                  </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.special.sf_erf.error_function.testing"></a><h5>
-<a name="id975522"></a>
+<a name="id935366"></a>
           <a class="link" href="error_function.html#math_toolkit.special.sf_erf.error_function.testing">Testing</a>
         </h5>
 <p>
@@ -546,7 +546,7 @@
           check.
         </p>
 <a name="math_toolkit.special.sf_erf.error_function.implementation"></a><h5>
-<a name="id975551"></a>
+<a name="id935414"></a>
           <a class="link" href="error_function.html#math_toolkit.special.sf_erf.error_function.implementation">Implementation</a>
         </h5>
 <p>
@@ -633,7 +633,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../sf_erf.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_erf.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="error_inv.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../sf_erf.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_erf.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="error_inv.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

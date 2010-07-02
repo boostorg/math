@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Beta</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../sf_beta.html" title="Beta Functions">
 <link rel="prev" href="../sf_beta.html" title="Beta Functions">
@@ -20,14 +20,14 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../sf_beta.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_beta.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="ibeta_function.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../sf_beta.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_beta.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="ibeta_function.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.sf_beta.beta_function"></a><a class="link" href="beta_function.html" title="Beta"> Beta</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.sf_beta.beta_function.synopsis"></a><h5>
-<a name="id958157"></a>
+<a name="id920616"></a>
           <a class="link" href="beta_function.html#math_toolkit.special.sf_beta.beta_function.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -48,7 +48,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.sf_beta.beta_function.description"></a><h5>
-<a name="id958437"></a>
+<a name="id920960"></a>
           <a class="link" href="beta_function.html#math_toolkit.special.sf_beta.beta_function.description">Description</a>
         </h5>
 <p>
@@ -86,7 +86,7 @@
           type calculation rules</em></span></a> when T1 and T2 are different types.
         </p>
 <a name="math_toolkit.special.sf_beta.beta_function.accuracy"></a><h5>
-<a name="id958548"></a>
+<a name="id921120"></a>
           <a class="link" href="beta_function.html#math_toolkit.special.sf_beta.beta_function.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -98,7 +98,7 @@
           zero error</a>.
         </p>
 <div class="table">
-<a name="id958576"></a><p class="title"><b>Table&#160;22.&#160;Peak Errors In the Beta Function</b></p>
+<a name="id921162"></a><p class="title"><b>Table&#160;22.&#160;Peak Errors In the Beta Function</b></p>
 <div class="table-contents"><table class="table" summary="Peak Errors In the Beta Function">
 <colgroup>
 <col>
@@ -108,132 +108,132 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Significand Size
-              </p>
-              </th>
+                  <p>
+                    Significand Size
+                  </p>
+                </th>
 <th>
-              <p>
-                Platform and Compiler
-              </p>
-              </th>
+                  <p>
+                    Platform and Compiler
+                  </p>
+                </th>
 <th>
-              <p>
-                Errors in range
-              </p>
-              <p>
-                0.4 &lt; a,b &lt; 100
-              </p>
-              </th>
+                  <p>
+                    Errors in range
+                  </p>
+                  <p>
+                    0.4 &lt; a,b &lt; 100
+                  </p>
+                </th>
 <th>
-              <p>
-                Errors in range
-              </p>
-              <p>
-                1e-6 &lt; a,b &lt; 36
-              </p>
-              </th>
+                  <p>
+                    Errors in range
+                  </p>
+                  <p>
+                    1e-6 &lt; a,b &lt; 36
+                  </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                53
-              </p>
-              </td>
+                  <p>
+                    53
+                  </p>
+                </td>
 <td>
-              <p>
-                Win32, Visual C++ 8
-              </p>
-              </td>
+                  <p>
+                    Win32, Visual C++ 8
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=99 Mean=22
-              </p>
-              <p>
-                (GSL Peak=1178 Mean=238)
-              </p>
-              <p>
-                (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>=1612)
-              </p>
-              </td>
+                  <p>
+                    Peak=99 Mean=22
+                  </p>
+                  <p>
+                    (GSL Peak=1178 Mean=238)
+                  </p>
+                  <p>
+                    (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>=1612)
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=10.7 Mean=2.6
-              </p>
-              <p>
-                (GSL Peak=12 Mean=2.0)
-              </p>
-              <p>
-                (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>=174)
-              </p>
-              </td>
+                  <p>
+                    Peak=10.7 Mean=2.6
+                  </p>
+                  <p>
+                    (GSL Peak=12 Mean=2.0)
+                  </p>
+                  <p>
+                    (<a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>=174)
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                Red Hat Linux IA32, g++ 3.4.4
-              </p>
-              </td>
+                  <p>
+                    Red Hat Linux IA32, g++ 3.4.4
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=112.1 Mean=26.9
-              </p>
-              </td>
+                  <p>
+                    Peak=112.1 Mean=26.9
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=15.8 Mean=3.6
-              </p>
-              </td>
+                  <p>
+                    Peak=15.8 Mean=3.6
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                Red Hat Linux IA64, g++ 3.4.4
-              </p>
-              </td>
+                  <p>
+                    Red Hat Linux IA64, g++ 3.4.4
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=61.4 Mean=19.5
-              </p>
-              </td>
+                  <p>
+                    Peak=61.4 Mean=19.5
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=12.2 Mean=3.6
-              </p>
-              </td>
+                  <p>
+                    Peak=12.2 Mean=3.6
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                113
-              </p>
-              </td>
+                  <p>
+                    113
+                  </p>
+                </td>
 <td>
-              <p>
-                HPUX IA64, aCC A.06.06
-              </p>
-              </td>
+                  <p>
+                    HPUX IA64, aCC A.06.06
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=42.03 Mean=13.94
-              </p>
-              </td>
+                  <p>
+                    Peak=42.03 Mean=13.94
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=9.8 Mean=3.1
-              </p>
-              </td>
+                  <p>
+                    Peak=9.8 Mean=3.1
+                  </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
@@ -244,7 +244,7 @@
           very small.
         </p>
 <a name="math_toolkit.special.sf_beta.beta_function.testing"></a><h5>
-<a name="id958782"></a>
+<a name="id921401"></a>
           <a class="link" href="beta_function.html#math_toolkit.special.sf_beta.beta_function.testing">Testing</a>
         </h5>
 <p>
@@ -253,7 +253,7 @@
           at 1000-bit precision.
         </p>
 <a name="math_toolkit.special.sf_beta.beta_function.implementation"></a><h5>
-<a name="id959148"></a>
+<a name="id921436"></a>
           <a class="link" href="beta_function.html#math_toolkit.special.sf_beta.beta_function.implementation">Implementation</a>
         </h5>
 <p>
@@ -329,7 +329,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../sf_beta.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_beta.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="ibeta_function.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../sf_beta.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_beta.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="ibeta_function.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

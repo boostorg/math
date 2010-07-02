@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Conceptual Requirements for Distribution Types</title>
-<link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../using_udt.html" title="Use with User-Defined Floating-Point Types">
 <link rel="prev" href="concepts.html" title="Conceptual Requirements for Real Number Types">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="concepts.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../using_udt.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="archetypes.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="concepts.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../using_udt.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="archetypes.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.using_udt.dist_concept"></a><a class="link" href="dist_concept.html" title="Conceptual Requirements for Distribution Types"> Conceptual Requirements
       for Distribution Types</a>
@@ -50,330 +50,331 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Expression
-              </p>
+                <p>
+                  Expression
+                </p>
               </th>
 <th>
-              <p>
-                Result Type
-              </p>
+                <p>
+                  Result Type
+                </p>
               </th>
 <th>
-              <p>
-                Notes
-              </p>
+                <p>
+                  Notes
+                </p>
               </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                DistributionType::value_type
-              </p>
+                <p>
+                  DistributionType::value_type
+                </p>
               </td>
 <td>
-              <p>
-                RealType
-              </p>
+                <p>
+                  RealType
+                </p>
               </td>
 <td>
-              <p>
-                The real-number type <span class="emphasis"><em>RealType</em></span> upon which the
-                distribution operates.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                DistributionType::policy_type
-              </p>
-              </td>
-<td>
-              <p>
-                RealType
-              </p>
-              </td>
-<td>
-              <p>
-                The <a class="link" href="../policy.html" title="Policies">Policy</a> to use when
-                evaluating functions that depend on this distribution.
-              </p>
+                <p>
+                  The real-number type <span class="emphasis"><em>RealType</em></span> upon which the
+                  distribution operates.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                d = cd
-              </p>
+                <p>
+                  DistributionType::policy_type
+                </p>
               </td>
 <td>
-              <p>
-                Distribution&amp;
-              </p>
+                <p>
+                  RealType
+                </p>
               </td>
 <td>
-              <p>
-                Distribution types are assignable.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Distribution(cd)
-              </p>
-              </td>
-<td>
-              <p>
-                Distribution
-              </p>
-              </td>
-<td>
-              <p>
-                Distribution types are copy constructible.
-              </p>
+                <p>
+                  The <a class="link" href="../policy.html" title="Policies">Policy</a> to use when
+                  evaluating functions that depend on this distribution.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                pdf(cd, cr)
-              </p>
+                <p>
+                  d = cd
+                </p>
               </td>
 <td>
-              <p>
-                RealType
-              </p>
+                <p>
+                  Distribution&amp;
+                </p>
               </td>
 <td>
-              <p>
-                Returns the PDF of the distribution.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cdf(cd, cr)
-              </p>
-              </td>
-<td>
-              <p>
-                RealType
-              </p>
-              </td>
-<td>
-              <p>
-                Returns the CDF of the distribution.
-              </p>
+                <p>
+                  Distribution types are assignable.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                cdf(complement(cd, cr))
-              </p>
+                <p>
+                  Distribution(cd)
+                </p>
               </td>
 <td>
-              <p>
-                RealType
-              </p>
+                <p>
+                  Distribution
+                </p>
               </td>
 <td>
-              <p>
-                Returns the complement of the CDF of the distribution, the same as:
-                <code class="computeroutput"><span class="number">1</span><span class="special">-</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">cd</span><span class="special">,</span> <span class="identifier">cr</span><span class="special">)</span></code>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                quantile(cd, cr)
-              </p>
-              </td>
-<td>
-              <p>
-                RealType
-              </p>
-              </td>
-<td>
-              <p>
-                Returns the quantile of the distribution.
-              </p>
+                <p>
+                  Distribution types are copy constructible.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                quantile(complement(cd, cr))
-              </p>
+                <p>
+                  pdf(cd, cr)
+                </p>
               </td>
 <td>
-              <p>
-                RealType
-              </p>
+                <p>
+                  RealType
+                </p>
               </td>
 <td>
-              <p>
-                Returns the quantile of the distribution, starting from the complement
-                of the probability, the same as: <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">cd</span><span class="special">,</span> <span class="number">1</span><span class="special">-</span><span class="identifier">cr</span><span class="special">)</span></code>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                chf(cd, cr)
-              </p>
-              </td>
-<td>
-              <p>
-                RealType
-              </p>
-              </td>
-<td>
-              <p>
-                Returns the cumulative hazard function of the distribution.
-              </p>
+                <p>
+                  Returns the PDF of the distribution.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                hazard(cd, cr)
-              </p>
+                <p>
+                  cdf(cd, cr)
+                </p>
               </td>
 <td>
-              <p>
-                RealType
-              </p>
+                <p>
+                  RealType
+                </p>
               </td>
 <td>
-              <p>
-                Returns the hazard function of the distribution.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                kurtosis(cd)
-              </p>
-              </td>
-<td>
-              <p>
-                RealType
-              </p>
-              </td>
-<td>
-              <p>
-                Returns the kurtosis of the distribution.
-              </p>
+                <p>
+                  Returns the CDF of the distribution.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                kurtosis_excess(cd)
-              </p>
+                <p>
+                  cdf(complement(cd, cr))
+                </p>
               </td>
 <td>
-              <p>
-                RealType
-              </p>
+                <p>
+                  RealType
+                </p>
               </td>
 <td>
-              <p>
-                Returns the kurtosis excess of the distribution.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                mean(cd)
-              </p>
-              </td>
-<td>
-              <p>
-                RealType
-              </p>
-              </td>
-<td>
-              <p>
-                Returns the mean of the distribution.
-              </p>
+                <p>
+                  Returns the complement of the CDF of the distribution, the same
+                  as: <code class="computeroutput"><span class="number">1</span><span class="special">-</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">cd</span><span class="special">,</span>
+                  <span class="identifier">cr</span><span class="special">)</span></code>
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                mode(cd)
-              </p>
+                <p>
+                  quantile(cd, cr)
+                </p>
               </td>
 <td>
-              <p>
-                RealType
-              </p>
+                <p>
+                  RealType
+                </p>
               </td>
 <td>
-              <p>
-                Returns the mode of the distribution.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                skewness(cd)
-              </p>
-              </td>
-<td>
-              <p>
-                RealType
-              </p>
-              </td>
-<td>
-              <p>
-                Returns the skewness of the distribution.
-              </p>
+                <p>
+                  Returns the quantile of the distribution.
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                standard_deviation(cd)
-              </p>
+                <p>
+                  quantile(complement(cd, cr))
+                </p>
               </td>
 <td>
-              <p>
-                RealType
-              </p>
+                <p>
+                  RealType
+                </p>
               </td>
 <td>
-              <p>
-                Returns the standard deviation of the distribution.
-              </p>
+                <p>
+                  Returns the quantile of the distribution, starting from the complement
+                  of the probability, the same as: <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">cd</span><span class="special">,</span> <span class="number">1</span><span class="special">-</span><span class="identifier">cr</span><span class="special">)</span></code>
+                </p>
               </td>
 </tr>
 <tr>
 <td>
-              <p>
-                variance(cd)
-              </p>
+                <p>
+                  chf(cd, cr)
+                </p>
               </td>
 <td>
-              <p>
-                RealType
-              </p>
+                <p>
+                  RealType
+                </p>
               </td>
 <td>
-              <p>
-                Returns the variance of the distribution.
-              </p>
+                <p>
+                  Returns the cumulative hazard function of the distribution.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  hazard(cd, cr)
+                </p>
+              </td>
+<td>
+                <p>
+                  RealType
+                </p>
+              </td>
+<td>
+                <p>
+                  Returns the hazard function of the distribution.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  kurtosis(cd)
+                </p>
+              </td>
+<td>
+                <p>
+                  RealType
+                </p>
+              </td>
+<td>
+                <p>
+                  Returns the kurtosis of the distribution.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  kurtosis_excess(cd)
+                </p>
+              </td>
+<td>
+                <p>
+                  RealType
+                </p>
+              </td>
+<td>
+                <p>
+                  Returns the kurtosis excess of the distribution.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  mean(cd)
+                </p>
+              </td>
+<td>
+                <p>
+                  RealType
+                </p>
+              </td>
+<td>
+                <p>
+                  Returns the mean of the distribution.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  mode(cd)
+                </p>
+              </td>
+<td>
+                <p>
+                  RealType
+                </p>
+              </td>
+<td>
+                <p>
+                  Returns the mode of the distribution.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  skewness(cd)
+                </p>
+              </td>
+<td>
+                <p>
+                  RealType
+                </p>
+              </td>
+<td>
+                <p>
+                  Returns the skewness of the distribution.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  standard_deviation(cd)
+                </p>
+              </td>
+<td>
+                <p>
+                  RealType
+                </p>
+              </td>
+<td>
+                <p>
+                  Returns the standard deviation of the distribution.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  variance(cd)
+                </p>
+              </td>
+<td>
+                <p>
+                  RealType
+                </p>
+              </td>
+<td>
+                <p>
+                  Returns the variance of the distribution.
+                </p>
               </td>
 </tr>
 </tbody>
@@ -391,7 +392,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="concepts.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../using_udt.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="archetypes.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="concepts.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../using_udt.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="archetypes.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

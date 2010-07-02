@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Bessel Functions of the First and Second Kinds</title>
-<link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../bessel.html" title="Bessel Functions">
 <link rel="prev" href="bessel_over.html" title="Bessel Function Overview">
@@ -20,15 +20,15 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="bessel_over.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="mbessel.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="bessel_over.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="mbessel.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.bessel.bessel"></a><a class="link" href="bessel.html" title="Bessel Functions of the First and Second Kinds"> Bessel Functions
         of the First and Second Kinds</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.bessel.bessel.synopsis"></a><h5>
-<a name="id995411"></a>
+<a name="id950038"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
@@ -44,7 +44,7 @@
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_neumann</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <a name="math_toolkit.special.bessel.bessel.description"></a><h5>
-<a name="id995778"></a>
+<a name="id950488"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.description">Description</a>
         </h5>
 <p>
@@ -110,7 +110,7 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/cyl_neumann.png" align="middle"></span>
         </p>
 <a name="math_toolkit.special.bessel.bessel.testing"></a><h5>
-<a name="id996062"></a>
+<a name="id950845"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.testing">Testing</a>
         </h5>
 <p>
@@ -119,7 +119,7 @@
           (with all the special case handling removed).
         </p>
 <a name="math_toolkit.special.bessel.bessel.accuracy"></a><h5>
-<a name="id996084"></a>
+<a name="id950880"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -135,7 +135,7 @@
           zero error</a>. All values are relative errors in units of epsilon.
         </p>
 <div class="table">
-<a name="id996116"></a><p class="title"><b>Table&#160;36.&#160;Errors Rates in cyl_bessel_j</b></p>
+<a name="id950931"></a><p class="title"><b>Table&#160;36.&#160;Errors Rates in cyl_bessel_j</b></p>
 <div class="table-contents"><table class="table" summary="Errors Rates in cyl_bessel_j">
 <colgroup>
 <col>
@@ -146,165 +146,165 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Significand Size
-              </p>
-              </th>
+                  <p>
+                    Significand Size
+                  </p>
+                </th>
 <th>
-              <p>
-                Platform and Compiler
-              </p>
-              </th>
+                  <p>
+                    Platform and Compiler
+                  </p>
+                </th>
 <th>
-              <p>
-                J<sub>0</sub> and J<sub>1</sub>
-              </p>
-              </th>
+                  <p>
+                    J<sub>0</sub> and J<sub>1</sub>
+                  </p>
+                </th>
 <th>
-              <p>
-                J<sub>v</sub>
-              </p>
-              </th>
+                  <p>
+                    J<sub>v</sub>
+                  </p>
+                </th>
 <th>
-              <p>
-                J<sub>v</sub> (large values of x &gt; 1000)
-              </p>
-              </th>
+                  <p>
+                    J<sub>v</sub> (large values of x &gt; 1000)
+                  </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                53
-              </p>
-              </td>
+                  <p>
+                    53
+                  </p>
+                </td>
 <td>
-              <p>
-                Win32 / Visual C++ 8.0
-              </p>
-              </td>
+                  <p>
+                    Win32 / Visual C++ 8.0
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=2.5 Mean=1.1
-              </p>
-              <p>
-                GSL Peak=6.6
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=2.5
-                Mean=1.1
-              </p>
-              </td>
+                  <p>
+                    Peak=2.5 Mean=1.1
+                  </p>
+                  <p>
+                    GSL Peak=6.6
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=2.5
+                    Mean=1.1
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=11 Mean=2.2
-              </p>
-              <p>
-                GSL Peak=11
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=17
-                Mean=2.5
-              </p>
-              </td>
+                  <p>
+                    Peak=11 Mean=2.2
+                  </p>
+                  <p>
+                    GSL Peak=11
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=17
+                    Mean=2.5
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=413 Mean=110
-              </p>
-              <p>
-                GSL Peak=6x10<sup>11</sup>
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=2x10<sup>5</sup>
-              </p>
-              </td>
+                  <p>
+                    Peak=413 Mean=110
+                  </p>
+                  <p>
+                    GSL Peak=6x10<sup>11</sup>
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=2x10<sup>5</sup>
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                Red Hat Linux IA64 / G++ 3.4
-              </p>
-              </td>
+                  <p>
+                    Red Hat Linux IA64 / G++ 3.4
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=7 Mean=3
-              </p>
-              </td>
+                  <p>
+                    Peak=7 Mean=3
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=117 Mean=10
-              </p>
-              </td>
+                  <p>
+                    Peak=117 Mean=10
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=2x10<sup>4</sup> Mean=6x10<sup>3</sup>
-              </p>
-              </td>
+                  <p>
+                    Peak=2x10<sup>4</sup> Mean=6x10<sup>3</sup>
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                SUSE Linux AMD64 / G++ 4.1
-              </p>
-              </td>
+                  <p>
+                    SUSE Linux AMD64 / G++ 4.1
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=7 Mean=3
-              </p>
-              </td>
+                  <p>
+                    Peak=7 Mean=3
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=400 Mean=40
-              </p>
-              </td>
+                  <p>
+                    Peak=400 Mean=40
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=2x10<sup>4</sup> Mean=1x10<sup>4</sup>
-              </p>
-              </td>
+                  <p>
+                    Peak=2x10<sup>4</sup> Mean=1x10<sup>4</sup>
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                113
-              </p>
-              </td>
+                  <p>
+                    113
+                  </p>
+                </td>
 <td>
-              <p>
-                HP-UX / HP aCC 6
-              </p>
-              </td>
+                  <p>
+                    HP-UX / HP aCC 6
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=14 Mean=6
-              </p>
-              </td>
+                  <p>
+                    Peak=14 Mean=6
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=29 Mean=3
-              </p>
-              </td>
+                  <p>
+                    Peak=29 Mean=3
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=2700 Mean=450
-              </p>
-              </td>
+                  <p>
+                    Peak=2700 Mean=450
+                  </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id997006"></a><p class="title"><b>Table&#160;37.&#160;Errors Rates in cyl_neumann</b></p>
+<a name="id951228"></a><p class="title"><b>Table&#160;37.&#160;Errors Rates in cyl_neumann</b></p>
 <div class="table-contents"><table class="table" summary="Errors Rates in cyl_neumann">
 <colgroup>
 <col>
@@ -315,159 +315,159 @@
 </colgroup>
 <thead><tr>
 <th>
-              <p>
-                Significand Size
-              </p>
-              </th>
+                  <p>
+                    Significand Size
+                  </p>
+                </th>
 <th>
-              <p>
-                Platform and Compiler
-              </p>
-              </th>
+                  <p>
+                    Platform and Compiler
+                  </p>
+                </th>
 <th>
-              <p>
-                J<sub>0</sub> and J<sub>1</sub>
-              </p>
-              </th>
+                  <p>
+                    J<sub>0</sub> and J<sub>1</sub>
+                  </p>
+                </th>
 <th>
-              <p>
-                J<sub>n</sub> (integer orders)
-              </p>
-              </th>
+                  <p>
+                    J<sub>n</sub> (integer orders)
+                  </p>
+                </th>
 <th>
-              <p>
-                J<sub>v</sub> (fractional orders)
-              </p>
-              </th>
+                  <p>
+                    J<sub>v</sub> (fractional orders)
+                  </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-              <p>
-                53
-              </p>
-              </td>
+                  <p>
+                    53
+                  </p>
+                </td>
 <td>
-              <p>
-                Win32 / Visual C++ 8.0
-              </p>
-              </td>
+                  <p>
+                    Win32 / Visual C++ 8.0
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=330 Mean=54
-              </p>
-              <p>
-                GSL Peak=34 Mean=9
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=330
-                Mean=54
-              </p>
-              </td>
+                  <p>
+                    Peak=330 Mean=54
+                  </p>
+                  <p>
+                    GSL Peak=34 Mean=9
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=330
+                    Mean=54
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=923 Mean=83
-              </p>
-              <p>
-                GSL Peak=500 Mean=54
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=923
-                Mean=83
-              </p>
-              </td>
+                  <p>
+                    Peak=923 Mean=83
+                  </p>
+                  <p>
+                    GSL Peak=500 Mean=54
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=923
+                    Mean=83
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=561 Mean=36
-              </p>
-              <p>
-                GSL Peak=1.4x10<sup>6</sup> Mean=7x10<sup>4</sup>
-              </p>
-              <p>
-                <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=+INF
-              </p>
-              </td>
+                  <p>
+                    Peak=561 Mean=36
+                  </p>
+                  <p>
+                    GSL Peak=1.4x10<sup>6</sup> Mean=7x10<sup>4</sup>
+                  </p>
+                  <p>
+                    <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=+INF
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                Red Hat Linux IA64 / G++ 3.4
-              </p>
-              </td>
+                  <p>
+                    Red Hat Linux IA64 / G++ 3.4
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=470 Mean=56
-              </p>
-              </td>
+                  <p>
+                    Peak=470 Mean=56
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=843 Mean=51
-              </p>
-              </td>
+                  <p>
+                    Peak=843 Mean=51
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=741 Mean=51
-              </p>
-              </td>
+                  <p>
+                    Peak=741 Mean=51
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                64
-              </p>
-              </td>
+                  <p>
+                    64
+                  </p>
+                </td>
 <td>
-              <p>
-                SUSE Linux AMD64 / G++ 4.1
-              </p>
-              </td>
+                  <p>
+                    SUSE Linux AMD64 / G++ 4.1
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=1300 Mean=424
-              </p>
-              </td>
+                  <p>
+                    Peak=1300 Mean=424
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=2x10<sup>4</sup> Mean=8x10<sup>3</sup>
-              </p>
-              </td>
+                  <p>
+                    Peak=2x10<sup>4</sup> Mean=8x10<sup>3</sup>
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=1x10<sup>5</sup> Mean=6x10<sup>3</sup>
-              </p>
-              </td>
+                  <p>
+                    Peak=1x10<sup>5</sup> Mean=6x10<sup>3</sup>
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
-              <p>
-                113
-              </p>
-              </td>
+                  <p>
+                    113
+                  </p>
+                </td>
 <td>
-              <p>
-                HP-UX / HP aCC 6
-              </p>
-              </td>
+                  <p>
+                    HP-UX / HP aCC 6
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=180 Mean=63
-              </p>
-              </td>
+                  <p>
+                    Peak=180 Mean=63
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=340 Mean=150
-              </p>
-              </td>
+                  <p>
+                    Peak=340 Mean=150
+                  </p>
+                </td>
 <td>
-              <p>
-                Peak=2x10<sup>4</sup> Mean=1200
-              </p>
-              </td>
+                  <p>
+                    Peak=2x10<sup>4</sup> Mean=1200
+                  </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
@@ -494,7 +494,7 @@
           were found.
         </p>
 <a name="math_toolkit.special.bessel.bessel.implementation"></a><h5>
-<a name="id997349"></a>
+<a name="id951633"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.implementation">Implementation</a>
         </h5>
 <p>
@@ -667,7 +667,7 @@ are also computed by recursions (involving gamma functions), but
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="bessel_over.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="mbessel.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="bessel_over.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="mbessel.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

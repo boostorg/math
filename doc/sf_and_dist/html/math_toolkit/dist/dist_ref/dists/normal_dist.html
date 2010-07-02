@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Normal (Gaussian) Distribution</title>
-<link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="nc_t_dist.html" title="Noncentral T Distribution">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="nc_t_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="pareto.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="nc_t_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="pareto.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.dist_ref.dists.normal_dist"></a><a class="link" href="normal_dist.html" title="Normal (Gaussian) Distribution"> Normal
           (Gaussian) Distribution</a>
@@ -79,7 +79,7 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/normal_pdf.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.normal_dist.member_functions"></a><h5>
-<a name="id923329"></a>
+<a name="id888981"></a>
             <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -109,7 +109,7 @@
             be used generically).
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.normal_dist.non_member_accessors"></a><h5>
-<a name="id923524"></a>
+<a name="id889224"></a>
             <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -131,7 +131,7 @@
             and complement cdf -&#8734; = 1 and +&#8734; = 0, if RealType permits.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.normal_dist.accuracy"></a><h5>
-<a name="id923622"></a>
+<a name="id889362"></a>
             <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -139,7 +139,7 @@
             function</a>, and as such should have very low error rates.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.normal_dist.implementation"></a><h5>
-<a name="id923647"></a>
+<a name="id889406"></a>
             <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -153,135 +153,135 @@
 </colgroup>
 <thead><tr>
 <th>
-                  <p>
-                    Function
-                  </p>
+                    <p>
+                      Function
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Implementation Notes
-                  </p>
+                    <p>
+                      Implementation Notes
+                    </p>
                   </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                  <p>
-                    pdf
-                  </p>
+                    <p>
+                      pdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: pdf = e<sup>-(x-m)<sup>2</sup>/(2s<sup>2</sup>)</sup> / (s * sqrt(2*pi))
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    cdf
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: p = 0.5 * <a class="link" href="../../../special/sf_erf/error_function.html" title="Error Functions">erfc</a>(-(x-m)/(s*sqrt(2)))
-                  </p>
+                    <p>
+                      Using the relation: pdf = e<sup>-(x-m)<sup>2</sup>/(2s<sup>2</sup>)</sup> / (s * sqrt(2*pi))
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    cdf complement
-                  </p>
+                    <p>
+                      cdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: q = 0.5 * <a class="link" href="../../../special/sf_erf/error_function.html" title="Error Functions">erfc</a>((x-m)/(s*sqrt(2)))
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    quantile
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: x = m - s * sqrt(2) * <a class="link" href="../../../special/sf_erf/error_inv.html" title="Error Function Inverses">erfc_inv</a>(2*p)
-                  </p>
+                    <p>
+                      Using the relation: p = 0.5 * <a class="link" href="../../../special/sf_erf/error_function.html" title="Error Functions">erfc</a>(-(x-m)/(s*sqrt(2)))
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    quantile from the complement
-                  </p>
+                    <p>
+                      cdf complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: x = m + s * sqrt(2) * <a class="link" href="../../../special/sf_erf/error_inv.html" title="Error Function Inverses">erfc_inv</a>(2*p)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    mean and standard deviation
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    The same as <code class="computeroutput"><span class="identifier">dist</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span></code> and <code class="computeroutput"><span class="identifier">dist</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span></code>
-                  </p>
+                    <p>
+                      Using the relation: q = 0.5 * <a class="link" href="../../../special/sf_erf/error_function.html" title="Error Functions">erfc</a>((x-m)/(s*sqrt(2)))
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    mode
-                  </p>
+                    <p>
+                      quantile
+                    </p>
                   </td>
 <td>
-                  <p>
-                    The same as the mean.
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    skewness
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    0
-                  </p>
+                    <p>
+                      Using the relation: x = m - s * sqrt(2) * <a class="link" href="../../../special/sf_erf/error_inv.html" title="Error Function Inverses">erfc_inv</a>(2*p)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    kurtosis
-                  </p>
+                    <p>
+                      quantile from the complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    3
-                  </p>
+                    <p>
+                      Using the relation: x = m + s * sqrt(2) * <a class="link" href="../../../special/sf_erf/error_inv.html" title="Error Function Inverses">erfc_inv</a>(2*p)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    kurtosis excess
-                  </p>
+                    <p>
+                      mean and standard deviation
+                    </p>
                   </td>
 <td>
-                  <p>
-                    0
-                  </p>
+                    <p>
+                      The same as <code class="computeroutput"><span class="identifier">dist</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span></code> and <code class="computeroutput"><span class="identifier">dist</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span></code>
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      mode
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      The same as the mean.
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      skewness
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      0
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      3
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis excess
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      0
+                    </p>
                   </td>
 </tr>
 </tbody>
@@ -299,7 +299,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="nc_t_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="pareto.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="nc_t_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="pareto.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

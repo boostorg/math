@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Gamma (and Erlang) Distribution</title>
-<link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="f_dist.html" title="F Distribution">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="f_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="hypergeometric_dist.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="f_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="hypergeometric_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.dist_ref.dists.gamma_dist"></a><a class="link" href="gamma_dist.html" title="Gamma (and Erlang) Distribution"> Gamma
           (and Erlang) Distribution</a>
@@ -65,7 +65,7 @@
           </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../doc/html/images/note.png"></td>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../doc/src/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
 <tr><td align="left" valign="top">
@@ -137,7 +137,7 @@
             than a dedicated Erlang Distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.gamma_dist.member_functions"></a><h5>
-<a name="id901333"></a>
+<a name="id869693"></a>
             <a class="link" href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -162,7 +162,7 @@
             Returns the <span class="emphasis"><em>scale</em></span> parameter of this distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.gamma_dist.non_member_accessors"></a><h5>
-<a name="id901478"></a>
+<a name="id869873"></a>
             <a class="link" href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -182,7 +182,7 @@
             The domain of the random variable is [0,+&#8734;].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.gamma_dist.accuracy"></a><h5>
-<a name="id901575"></a>
+<a name="id870021"></a>
             <a class="link" href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -194,7 +194,7 @@
             refer to the accuracy data for those functions for more information.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.gamma_dist.implementation"></a><h5>
-<a name="id901614"></a>
+<a name="id870083"></a>
             <a class="link" href="gamma_dist.html#math_toolkit.dist.dist_ref.dists.gamma_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -210,152 +210,152 @@
 </colgroup>
 <thead><tr>
 <th>
-                  <p>
-                    Function
-                  </p>
+                    <p>
+                      Function
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Implementation Notes
-                  </p>
+                    <p>
+                      Implementation Notes
+                    </p>
                   </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                  <p>
-                    pdf
-                  </p>
+                    <p>
+                      pdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: pdf = <a class="link" href="../../../special/sf_gamma/gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function">gamma_p_derivative</a>(k,
-                    x / &#952;) / &#952;
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    cdf
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: p = <a class="link" href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(k,
-                    x / &#952;)
-                  </p>
+                    <p>
+                      Using the relation: pdf = <a class="link" href="../../../special/sf_gamma/gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function">gamma_p_derivative</a>(k,
+                      x / &#952;) / &#952;
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    cdf complement
-                  </p>
+                    <p>
+                      cdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: q = <a class="link" href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(k,
-                    x / &#952;)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    quantile
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: x = &#952;* <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(k,
-                    p)
-                  </p>
+                    <p>
+                      Using the relation: p = <a class="link" href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(k,
+                      x / &#952;)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    quantile from the complement
-                  </p>
+                    <p>
+                      cdf complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: x = &#952;* <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(k,
-                    p)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    mean
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    k&#952;
-                  </p>
+                    <p>
+                      Using the relation: q = <a class="link" href="../../../special/sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(k,
+                      x / &#952;)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    variance
-                  </p>
+                    <p>
+                      quantile
+                    </p>
                   </td>
 <td>
-                  <p>
-                    k&#952;<sup>2</sup>
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    mode
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    (k-1)&#952; for <span class="emphasis"><em>k&gt;1</em></span> otherwise a <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
-                  </p>
+                    <p>
+                      Using the relation: x = &#952;* <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(k,
+                      p)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    skewness
-                  </p>
+                    <p>
+                      quantile from the complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    2 / sqrt(k)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    kurtosis
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    3 + 6 / k
-                  </p>
+                    <p>
+                      Using the relation: x = &#952;* <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(k,
+                      p)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    kurtosis excess
-                  </p>
+                    <p>
+                      mean
+                    </p>
                   </td>
 <td>
-                  <p>
-                    6 / k
-                  </p>
+                    <p>
+                      k&#952;
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      variance
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      k&#952;<sup>2</sup>
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      mode
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      (k-1)&#952; for <span class="emphasis"><em>k&gt;1</em></span> otherwise a <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      skewness
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      2 / sqrt(k)
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      3 + 6 / k
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis excess
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      6 / k
+                    </p>
                   </td>
 </tr>
 </tbody>
@@ -373,7 +373,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="f_dist.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="hypergeometric_dist.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="f_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="hypergeometric_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

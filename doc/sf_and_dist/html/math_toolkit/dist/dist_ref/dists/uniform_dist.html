@@ -2,8 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Uniform Distribution</title>
-<link rel="stylesheet" href="../../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="weibull.html" title="Weibull Distribution">
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="weibull.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../dist_algorithms.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="weibull.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../dist_algorithms.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.dist_ref.dists.uniform_dist"></a><a class="link" href="uniform_dist.html" title="Uniform Distribution"> Uniform
           Distribution</a>
@@ -67,20 +67,20 @@
 <p>
             f(x) =
           </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
-              1 / (upper - lower) for lower &lt; x &lt; upper
-            </li>
-<li>
-              zero for x &lt; lower or x &gt; upper
-            </li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+                1 / (upper - lower) for lower &lt; x &lt; upper
+              </li>
+<li class="listitem">
+                zero for x &lt; lower or x &gt; upper
+              </li>
 </ul></div>
 <p>
             and in this implementation:
           </p>
-<div class="itemizedlist"><ul type="disc"><li>
-              1 / (upper - lower) for x = lower or x = upper
-            </li></ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+                1 / (upper - lower) for x = lower or x = upper
+              </li></ul></div>
 <p>
             The choice of x = lower or x = upper is made because statistical use
             of this distribution judged is most likely: the method of maximum likelihood
@@ -117,7 +117,7 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/uniform_cdf.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.uniform_dist.member_functions"></a><h5>
-<a name="id936044"></a>
+<a name="id899619"></a>
             <a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -144,7 +144,7 @@
             Returns the <span class="emphasis"><em>upper</em></span> parameter of this distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.uniform_dist.non_member_accessors"></a><h5>
-<a name="id936209"></a>
+<a name="id899824"></a>
             <a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -165,7 +165,7 @@
             range is only <span class="emphasis"><em>lower</em></span> &lt;= x &lt;= <span class="emphasis"><em>upper</em></span>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.uniform_dist.accuracy"></a><h5>
-<a name="id936314"></a>
+<a name="id899979"></a>
             <a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -173,7 +173,7 @@
             and so should have errors within an epsilon or two.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.uniform_dist.implementation"></a><h5>
-<a name="id936333"></a>
+<a name="id900007"></a>
             <a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -189,164 +189,170 @@
 </colgroup>
 <thead><tr>
 <th>
-                  <p>
-                    Function
-                  </p>
+                    <p>
+                      Function
+                    </p>
                   </th>
 <th>
-                  <p>
-                    Implementation Notes
-                  </p>
+                    <p>
+                      Implementation Notes
+                    </p>
                   </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                  <p>
-                    pdf
-                  </p>
+                    <p>
+                      pdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: pdf = 0 for x &lt; a, 1 / (b - a) for a &lt;=
-                    x &lt;= b, 0 for x &gt; b
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    cdf
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: cdf = 0 for x &lt; a, (x - a) / (b - a) for
-                    a &lt;= x &lt;= b, 1 for x &gt; b
-                  </p>
+                    <p>
+                      Using the relation: pdf = 0 for x &lt; a, 1 / (b - a) for a
+                      &lt;= x &lt;= b, 0 for x &gt; b
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    cdf complement
-                  </p>
+                    <p>
+                      cdf
+                    </p>
                   </td>
 <td>
-                  <p>
-                    Using the relation: q = 1 - p, (b - x) / (b - a)
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    quantile
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    Using the relation: x = p * (b - a) + a;
-                  </p>
+                    <p>
+                      Using the relation: cdf = 0 for x &lt; a, (x - a) / (b - a)
+                      for a &lt;= x &lt;= b, 1 for x &gt; b
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    quantile from the complement
-                  </p>
+                    <p>
+                      cdf complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    x = -q * (b - a) + b
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    mean
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    (a + b) / 2
-                  </p>
+                    <p>
+                      Using the relation: q = 1 - p, (b - x) / (b - a)
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    variance
-                  </p>
+                    <p>
+                      quantile
+                    </p>
                   </td>
 <td>
-                  <p>
-                    (b - a) <sup>2</sup> / 12
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    mode
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    any value in [a, b] but a is chosen. (Would NaN be better?)
-                  </p>
+                    <p>
+                      Using the relation: x = p * (b - a) + a;
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    skewness
-                  </p>
+                    <p>
+                      quantile from the complement
+                    </p>
                   </td>
 <td>
-                  <p>
-                    0
-                  </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                  <p>
-                    kurtosis excess
-                  </p>
-                  </td>
-<td>
-                  <p>
-                    -6/5 = -1.2 exactly. (kurtosis - 3)
-                  </p>
+                    <p>
+                      x = -q * (b - a) + b
+                    </p>
                   </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    kurtosis
-                  </p>
+                    <p>
+                      mean
+                    </p>
                   </td>
 <td>
-                  <p>
-                    9/5
-                  </p>
+                    <p>
+                      (a + b) / 2
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      variance
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      (b - a) <sup>2</sup> / 12
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      mode
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      any value in [a, b] but a is chosen. (Would NaN be better?)
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      skewness
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      0
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis excess
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      -6/5 = -1.2 exactly. (kurtosis - 3)
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
+                      kurtosis
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      9/5
+                    </p>
                   </td>
 </tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.uniform_dist.references"></a><h5>
-<a name="id936597"></a>
+<a name="id900092"></a>
             <a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.references">References</a>
           </h5>
-<div class="itemizedlist"><ul type="disc">
-<li><a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">Wikpedia
-              continuous uniform distribution</a></li>
-<li><a href="http://mathworld.wolfram.com/UniformDistribution.html" target="_top">Weisstein,
-              Weisstein, Eric W. "Uniform Distribution." From MathWorld--A
-              Wolfram Web Resource.</a></li>
-<li><a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda3662.htm" target="_top">http://www.itl.nist.gov/div898/handbook/eda/section3/eda3662.htm</a></li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+                <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">Wikpedia
+                continuous uniform distribution</a>
+              </li>
+<li class="listitem">
+                <a href="http://mathworld.wolfram.com/UniformDistribution.html" target="_top">Weisstein,
+                Weisstein, Eric W. "Uniform Distribution." From MathWorld--A
+                Wolfram Web Resource.</a>
+              </li>
+<li class="listitem">
+                <a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda3662.htm" target="_top">http://www.itl.nist.gov/div898/handbook/eda/section3/eda3662.htm</a>
+              </li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
@@ -361,7 +367,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="weibull.html"><img src="../../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../dist_algorithms.html"><img src="../../../../../../../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="p" href="weibull.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../dist_algorithms.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
