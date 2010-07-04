@@ -19,6 +19,7 @@
 
 #include <boost/config.hpp>  // for BOOST_NESTED_TEMPLATE, etc.
 #include <boost/limits.hpp>  // for std::numeric_limits
+#include <climits>           // for CHAR_MIN
 #include <boost/detail/workaround.hpp>
 
 
@@ -312,6 +313,10 @@ namespace detail
     BOOST_PRIVATE_GCD_UF( unsigned __int64 );
 #endif
 
+#if CHAR_MIN == 0
+    BOOST_PRIVATE_GCD_UF( char ); // char is unsigned
+#endif
+
 #undef BOOST_PRIVATE_GCD_UF
 
 #define BOOST_PRIVATE_GCD_SF( St, Ut )                            \
@@ -326,7 +331,9 @@ namespace detail
     BOOST_PRIVATE_GCD_SF( int, unsigned );
     BOOST_PRIVATE_GCD_SF( long, unsigned long );
 
-    BOOST_PRIVATE_GCD_SF( char, unsigned char ); // should work even if unsigned
+#if CHAR_MIN < 0
+    BOOST_PRIVATE_GCD_SF( char, unsigned char ); // char is signed
+#endif
 
 #ifdef BOOST_HAS_LONG_LONG
     BOOST_PRIVATE_GCD_SF( boost::long_long_type, boost::ulong_long_type );
