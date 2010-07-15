@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>The Lanczos Approximation</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../backgrounders.html" title="Backgrounders">
 <link rel="prev" href="relative_error.html" title="Relative Error">
@@ -22,12 +22,12 @@
 <div class="spirit-nav">
 <a accesskey="p" href="relative_error.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../backgrounders.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="remez.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.backgrounders.lanczos"></a><a class="link" href="lanczos.html" title="The Lanczos Approximation"> The Lanczos Approximation</a>
 </h3></div></div></div>
 <a name="math_toolkit.backgrounders.lanczos.motivation"></a><h5>
-<a name="id1095332"></a>
+<a name="id1281435"></a>
         <a class="link" href="lanczos.html#math_toolkit.backgrounders.lanczos.motivation">Motivation</a>
       </h5>
 <p>
@@ -45,8 +45,8 @@
         Lanczos approximation does have a couple of properties that make it worthy
         of further consideration:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
             The approximation has an easy to compute truncation error that holds
             for all <span class="emphasis"><em>z &gt; 0</em></span>. In practice that means we can
             use the same approximation for all <span class="emphasis"><em>z &gt; 0</em></span>, and
@@ -54,7 +54,7 @@
             the truncation error will <span class="emphasis"><em>at worst</em></span> be bounded by
             some finite value.
           </li>
-<li class="listitem">
+<li>
             The approximation has a form that is particularly amenable to analytic
             manipulation, in particular ratios of gamma or gamma-like functions are
             particularly easy to compute without resorting to logarithms.
@@ -99,7 +99,7 @@
         functions divided by large powers into single (simpler) expressions.
       </p>
 <a name="math_toolkit.backgrounders.lanczos.the_approximation"></a><h5>
-<a name="id1095672"></a>
+<a name="id1281693"></a>
         <a class="link" href="lanczos.html#math_toolkit.backgrounders.lanczos.the_approximation">The
         Approximation</a>
       </h5>
@@ -161,7 +161,7 @@
         </p></td></tr>
 </table></div>
 <a name="math_toolkit.backgrounders.lanczos.computing_the_coefficients"></a><h5>
-<a name="id1095908"></a>
+<a name="id1281885"></a>
         <a class="link" href="lanczos.html#math_toolkit.backgrounders.lanczos.computing_the_coefficients">Computing
         the Coefficients</a>
       </h5>
@@ -205,7 +205,7 @@
         multiplied by <span class="emphasis"><em>F</em></span> as the last step.
       </p>
 <a name="math_toolkit.backgrounders.lanczos.choosing_the_right_parameters"></a><h5>
-<a name="id1096092"></a>
+<a name="id1282042"></a>
         <a class="link" href="lanczos.html#math_toolkit.backgrounders.lanczos.choosing_the_right_parameters">Choosing
         the Right Parameters</a>
       </h5>
@@ -229,7 +229,7 @@
         computing to float precision with double precision arithmetic.
       </p>
 <div class="table">
-<a name="id1096168"></a><p class="title"><b>Table&#160;53.&#160;Optimal choices for N and g when computing with guard digits (source:
+<a name="id1282096"></a><p class="title"><b>Table&#160;53.&#160;Optimal choices for N and g when computing with guard digits (source:
         Pugh)</b></p>
 <div class="table-contents"><table class="table" summary="Optimal choices for N and g when computing with guard digits (source:
         Pugh)">
@@ -372,7 +372,7 @@
         exactly matches the machine epsilon for the type in question.
       </p>
 <div class="table">
-<a name="id1096444"></a><p class="title"><b>Table&#160;54.&#160;Optimum value for N and g when computing at fixed precision</b></p>
+<a name="id1282318"></a><p class="title"><b>Table&#160;54.&#160;Optimum value for N and g when computing at fixed precision</b></p>
 <div class="table-contents"><table class="table" summary="Optimum value for N and g when computing at fixed precision">
 <colgroup>
 <col>
@@ -535,24 +535,24 @@
         is exact, and so isn't used for the gamma function.
       </p>
 <a name="math_toolkit.backgrounders.lanczos.references"></a><h5>
-<a name="id1096414"></a>
+<a name="id1282578"></a>
         <a class="link" href="lanczos.html#math_toolkit.backgrounders.lanczos.references">References</a>
       </h5>
-<a name="godfrey"></a><a name="pugh"></a><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem">
+<a name="godfrey"></a><a name="pugh"></a><div class="orderedlist"><ol type="1">
+<li>
             Paul Godfrey, <a href="http://my.fit.edu/~gabdo/gamma.txt" target="_top">"A
             note on the computation of the convergent Lanczos complex Gamma approximation"</a>.
           </li>
-<li class="listitem">
+<li>
             Glendon Ralph Pugh, <a href="http://bh0.physics.ubc.ca/People/matt/Doc/ThesesOthers/Phd/pugh.pdf" target="_top">"An
             Analysis of the Lanczos Gamma Approximation"</a>, PhD Thesis
             November 2004.
           </li>
-<li class="listitem">
+<li>
             Viktor T. Toth, <a href="http://www.rskey.org/gamma.htm" target="_top">"Calculators
             and the Gamma Function"</a>.
           </li>
-<li class="listitem">
+<li>
             Mathworld, <a href="http://mathworld.wolfram.com/LanczosApproximation.html" target="_top">The
             Lanczos Approximation</a>.
           </li>

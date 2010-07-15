@@ -1,5 +1,9 @@
 [template history[]
 
+[h4 Boost-1.44.0]
+
+* Fixed incorrect range and support for Rayleigh distribution.
+
 [h4 Boost-1.41.0]
 
 * Significantly improved performance for the incomplete gamma function and it's inverse.
