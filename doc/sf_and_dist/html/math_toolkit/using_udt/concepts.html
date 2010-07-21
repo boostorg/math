@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Conceptual Requirements for Real Number Types</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../using_udt.html" title="Use with User-Defined Floating-Point Types">
 <link rel="prev" href="use_mpfr.html" title="Using With MPFR / GMP - a High-Precision Floating-Point Library">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="use_mpfr.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../using_udt.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="dist_concept.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.using_udt.concepts"></a><a class="link" href="concepts.html" title="Conceptual Requirements for Real Number Types"> Conceptual Requirements
       for Real Number Types</a>
@@ -42,7 +42,7 @@
         behaves just like a built in floating point type.
       </p>
 <a name="math_toolkit.using_udt.concepts.basic_arithmetic_requirements"></a><h5>
-<a name="id1044061"></a>
+<a name="id1225620"></a>
         <a class="link" href="concepts.html#math_toolkit.using_udt.concepts.basic_arithmetic_requirements">Basic
         Arithmetic Requirements</a>
       </h5>
@@ -977,21 +977,21 @@
 <p>
         Note that:
       </p>
-<div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem">
+<div class="orderedlist"><ol type="1">
+<li>
             The functions <code class="computeroutput"><span class="identifier">log_max_value</span></code>
             and <code class="computeroutput"><span class="identifier">log_min_value</span></code> can
             be synthesised from the others, and so no explicit specialisation is
             required.
           </li>
-<li class="listitem">
+<li>
             The function <code class="computeroutput"><span class="identifier">epsilon</span></code>
             can be synthesised from the others, so no explicit specialisation is
             required provided the precision of RealType does not vary at runtime
             (see the header <a href="../../../../../../../boost/math/bindings/rr.hpp" target="_top">boost/math/bindings/rr.hpp</a>
             for an example where the precision does vary at runtime).
           </li>
-<li class="listitem">
+<li>
             The functions <code class="computeroutput"><span class="identifier">digits</span></code>,
             <code class="computeroutput"><span class="identifier">max_value</span></code> and <code class="computeroutput"><span class="identifier">min_value</span></code>, all get synthesised automatically
             from <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span></code>. However, if <code class="computeroutput"><span class="identifier">numeric_limits</span></code> is not specialised for
@@ -1035,7 +1035,7 @@
 </td></tr>
 </table></div>
 <a name="math_toolkit.using_udt.concepts.standard_library_support_requirements"></a><h5>
-<a name="id1046906"></a>
+<a name="id1229867"></a>
         <a class="link" href="concepts.html#math_toolkit.using_udt.concepts.standard_library_support_requirements">Standard
         Library Support Requirements</a>
       </h5>

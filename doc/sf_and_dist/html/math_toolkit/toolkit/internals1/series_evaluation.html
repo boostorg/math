@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Series Evaluation</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../internals1.html" title="Reused Utilities">
 <link rel="prev" href="constants.html" title="Numeric Constants">
@@ -22,13 +22,13 @@
 <div class="spirit-nav">
 <a accesskey="p" href="constants.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cf.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.toolkit.internals1.series_evaluation"></a><a class="link" href="series_evaluation.html" title="Series Evaluation">
         Series Evaluation</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.series_evaluation.synopsis"></a><h5>
-<a name="id1010226"></a>
+<a name="id1189130"></a>
           <a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -70,7 +70,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals1.series_evaluation.description"></a><h5>
-<a name="id1011430"></a>
+<a name="id1190142"></a>
           <a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.description">Description</a>
         </h5>
 <p>
@@ -100,14 +100,14 @@
           value of the sum to which the terms of the series should be added. This
           is useful in two situations:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
               Where the first value of the series has a different formula to successive
               terms. In this case the first value in the series can be passed as
               the last argument and the logic of the function object can then be
               simplified to return subsequent terms.
             </li>
-<li class="listitem">
+<li>
               Where the series is being added (or subtracted) from some other value:
               termination of the series will likely occur much more rapidly if that
               other value is passed as the last argument. For example, there are
@@ -127,7 +127,7 @@
           summation in this way.
         </p>
 <a name="math_toolkit.toolkit.internals1.series_evaluation.example"></a><h5>
-<a name="id1011574"></a>
+<a name="id1190240"></a>
           <a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.example">Example</a>
         </h5>
 <p>

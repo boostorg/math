@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Additional Implementation Notes</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../backgrounders.html" title="Backgrounders">
 <link rel="prev" href="../backgrounders.html" title="Backgrounders">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="../backgrounders.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../backgrounders.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="relative_error.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.backgrounders.implementation"></a><a class="link" href="implementation.html" title="Additional Implementation Notes"> Additional
       Implementation Notes</a>
@@ -33,7 +33,7 @@
         and reflect more the general implementation philosophy used.
       </p>
 <a name="math_toolkit.backgrounders.implementation.implemention_philosophy"></a><h5>
-<a name="id1092528"></a>
+<a name="id1279266"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.implemention_philosophy">Implemention
         philosophy</a>
       </h5>
@@ -85,7 +85,7 @@
         These could still provide sufficient accuracy for some speed-critical applications.
       </p>
 <a name="math_toolkit.backgrounders.implementation.accuracy_and_representation_of_test_values"></a><h5>
-<a name="id1092631"></a>
+<a name="id1279330"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.accuracy_and_representation_of_test_values">Accuracy
         and Representation of Test Values</a>
       </h5>
@@ -130,18 +130,18 @@
         binary value).
       </p>
 <a name="math_toolkit.backgrounders.implementation.tolerance_of_tests"></a><h5>
-<a name="id1092820"></a>
+<a name="id1279474"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.tolerance_of_tests">Tolerance
         of Tests</a>
       </h5>
 <p>
         The tolerances need to be set to the maximum of:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
             Some epsilon value.
           </li>
-<li class="listitem">
+<li>
             The accuracy of the data (often only near 64-bit double).
           </li>
 </ul></div>
@@ -156,7 +156,7 @@
         first that the suffix L is present, and then that the tolerance is big enough.
       </p>
 <a name="math_toolkit.backgrounders.implementation.handling_unsuitable_arguments"></a><h5>
-<a name="id1092882"></a>
+<a name="id1279518"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.handling_unsuitable_arguments">Handling
         Unsuitable Arguments</a>
       </h5>
@@ -166,7 +166,7 @@
         it is proposed that signalling a domain error is mandatory when the argument
         would give an mathematically undefined result.
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul type="disc"><li>
             Guideline 1
           </li></ul></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -183,7 +183,7 @@
           a domain error whenever evaluated with argument values for which the mathematical
           function is undefined.
         </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul type="disc"><li>
             Guideline 2
           </li></ul></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -224,7 +224,7 @@
         </p></td></tr>
 </table></div>
 <a name="math_toolkit.backgrounders.implementation.handling_of_functions_that_are_not_mathematically_defined"></a><h5>
-<a name="id1093073"></a>
+<a name="id1279648"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.handling_of_functions_that_are_not_mathematically_defined">Handling
         of Functions that are Not Mathematically defined</a>
       </h5>
@@ -258,7 +258,7 @@
         </p></td></tr>
 </table></div>
 <a name="math_toolkit.backgrounders.implementation.median_of_distributions"></a><h5>
-<a name="id1093197"></a>
+<a name="id1279733"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.median_of_distributions">Median
         of distributions</a>
       </h5>
@@ -291,7 +291,7 @@
         Basic Statistics.</a> give more detail, in particular for discrete distributions.
       </p>
 <a name="math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity"></a><h5>
-<a name="id1093328"></a>
+<a name="id1279830"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity">Handling
         of Floating-Point Infinity</a>
       </h5>
@@ -335,7 +335,7 @@
         handling policies</a>.
       </p>
 <a name="math_toolkit.backgrounders.implementation.scale__shape_and_location"></a><h5>
-<a name="id1093470"></a>
+<a name="id1279916"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.scale__shape_and_location">Scale,
         Shape and Location</a>
       </h5>
@@ -362,11 +362,11 @@
         functions, they can be added if required.
       </p>
 <a name="math_toolkit.backgrounders.implementation.notes_on_implementation_of_specific_functions__amp__distributions"></a><h5>
-<a name="id1093880"></a>
+<a name="id1280251"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.notes_on_implementation_of_specific_functions__amp__distributions">Notes
         on Implementation of Specific Functions &amp; Distributions</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul type="disc"><li>
             Default parameters for the Triangular Distribution. We are uncertain
             about the best default parameters. Some sources suggest that the Standard
             Triangular Distribution has lower = 0, mode = half and upper = 1. However
@@ -374,7 +374,7 @@
             lower = -1, mode = 0 and upper = 1 would be more suitable.
           </li></ul></div>
 <a name="math_toolkit.backgrounders.implementation.rational_approximations_used"></a><h5>
-<a name="id1093922"></a>
+<a name="id1280275"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.rational_approximations_used">Rational
         Approximations Used</a>
       </h5>
@@ -417,7 +417,7 @@
         to the "true" minimax solution.
       </p>
 <a name="math_toolkit.backgrounders.implementation.representation_of_mathematical_constants"></a><h5>
-<a name="id1094010"></a>
+<a name="id1280320"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.representation_of_mathematical_constants">Representation
         of Mathematical Constants</a>
       </h5>
@@ -478,7 +478,7 @@
 </span><span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">();</span> <span class="comment">// Context does not allow for disambiguation of overloaded function
 </span></pre>
 <a name="math_toolkit.backgrounders.implementation.thread_safety"></a><h5>
-<a name="id1094488"></a>
+<a name="id1280865"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.thread_safety">Thread
         safety</a>
       </h5>
@@ -503,7 +503,7 @@
         the right thing here at some point.
       </p>
 <a name="math_toolkit.backgrounders.implementation.sources_of_test_data"></a><h5>
-<a name="id1094549"></a>
+<a name="id1280901"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.sources_of_test_data">Sources
         of Test Data</a>
       </h5>
@@ -541,7 +541,7 @@
         the underlying special function is known to be difficult to implement.
       </p>
 <a name="math_toolkit.backgrounders.implementation.creating_and_managing_the_equations"></a><h5>
-<a name="id1094648"></a>
+<a name="id1280964"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.creating_and_managing_the_equations">Creating
         and Managing the Equations</a>
       </h5>
@@ -713,7 +713,7 @@ done</pre>
         HTML: this needs further investigation.
       </p>
 <a name="math_toolkit.backgrounders.implementation.producing_graphs"></a><h5>
-<a name="id1095018"></a>
+<a name="id1281210"></a>
         <a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.producing_graphs">Producing
         Graphs</a>
       </h5>

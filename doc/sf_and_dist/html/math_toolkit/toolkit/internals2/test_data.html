@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Graphing, Profiling, and Generating Test Data for Special Functions</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../internals2.html" title="Testing and Development">
 <link rel="prev" href="error_test.html" title="Relative Error and Testing">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="error_test.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals2.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../../using_udt.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.toolkit.internals2.test_data"></a><a class="link" href="test_data.html" title="Graphing, Profiling, and Generating Test Data for Special Functions"> Graphing,
         Profiling, and Generating Test Data for Special Functions</a>
@@ -32,21 +32,21 @@
           associated helper functions are designed so that in just a few lines of
           code you should be able to:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
               Profile a continued fraction, or infinite series for convergence and
               accuracy.
             </li>
-<li class="listitem">
+<li>
               Generate csv data from a special function that can be imported into
               your favorite graphing program (or spreadsheet) for further analysis.
             </li>
-<li class="listitem">
+<li>
               Generate high precision test data.
             </li>
 </ul></div>
 <a name="math_toolkit.toolkit.internals2.test_data.synopsis"></a><h5>
-<a name="id1035410"></a>
+<a name="id1215643"></a>
           <a class="link" href="test_data.html#math_toolkit.toolkit.internals2.test_data.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span><span class="special">{</span>
@@ -147,7 +147,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals2.test_data.description"></a><h5>
-<a name="id1037984"></a>
+<a name="id1218971"></a>
           <a class="link" href="test_data.html#math_toolkit.toolkit.internals2.test_data.description">Description</a>
         </h5>
 <p>
@@ -156,28 +156,28 @@
 <p>
           The functionality of test_data is split into the following parts:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
               A functor that implements the function for which data is being generated:
               this is the bit you have to write.
             </li>
-<li class="listitem">
+<li>
               One of more parameters that are to be passed to the functor, these
               are described in fairly abstract terms: give me N points distributed
               like <span class="emphasis"><em>this</em></span> etc.
             </li>
-<li class="listitem">
+<li>
               The class test_data, that takes the functor and descriptions of the
               parameters and computes how ever many output points have been requested,
               these are stored in a sorted container.
             </li>
-<li class="listitem">
+<li>
               Routines to iterate over the test_data container and output the data
               in either csv format, or as C++ source code (as a table using Boost.Array).
             </li>
 </ul></div>
 <a name="math_toolkit.toolkit.internals2.test_data.example_1__output_data_for_graph_plotting"></a><h6>
-<a name="id1038064"></a>
+<a name="id1219028"></a>
           <a class="link" href="test_data.html#math_toolkit.toolkit.internals2.test_data.example_1__output_data_for_graph_plotting">Example
           1: Output Data for Graph Plotting</a>
         </h6>
@@ -211,7 +211,7 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/lgamma.png" align="middle"></span>
         </p>
 <a name="math_toolkit.toolkit.internals2.test_data.example_2__creating_test_data"></a><h6>
-<a name="id1038557"></a>
+<a name="id1219432"></a>
           <a class="link" href="test_data.html#math_toolkit.toolkit.internals2.test_data.example_2__creating_test_data">Example
           2: Creating Test Data</a>
         </h6>
@@ -353,14 +353,14 @@
 <p>
           The first #define serves two purposes:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
               It reduces the file sizes considerably: all those <code class="computeroutput"><span class="keyword">static_cast</span></code>'s
               add up to a lot of bytes otherwise (they are needed to suppress compiler
               warnings when <code class="computeroutput"><span class="identifier">T</span></code> is
               narrower than a <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>).
             </li>
-<li class="listitem">
+<li>
               It provides a useful customisation point: for example if we were testing
               a user-defined type that has more precision than a <code class="computeroutput"><span class="keyword">long</span>
               <span class="keyword">double</span></code> we could change it to:
@@ -375,7 +375,7 @@
           used by default as it's rather hard on the compiler when the table is large.
         </p>
 <a name="math_toolkit.toolkit.internals2.test_data.example_3__profiling_a_continued_fraction_for_convergence_and_accuracy"></a><h6>
-<a name="id1040745"></a>
+<a name="id1222348"></a>
           <a class="link" href="test_data.html#math_toolkit.toolkit.internals2.test_data.example_3__profiling_a_continued_fraction_for_convergence_and_accuracy">Example
           3: Profiling a Continued Fraction for Convergence and Accuracy</a>
         </h6>
@@ -481,7 +481,7 @@
           of a and z.
         </p>
 <a name="math_toolkit.toolkit.internals2.test_data.reference"></a><h5>
-<a name="id1042721"></a>
+<a name="id1224568"></a>
           <a class="link" href="test_data.html#math_toolkit.toolkit.internals2.test_data.reference">reference</a>
         </h5>
 <a name="test_data_reference"></a><p>
