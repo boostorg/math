@@ -143,8 +143,8 @@ T inverse_students_t_body_series(T df, T u, const Policy& pol)
    // Figure out what the coefficients are, note these depend
    // only on the degrees of freedom (Eq 57 of Shaw):
    //
-   c[2] = 0.16666666666666666667 + 0.16666666666666666667 / df;
    T in = 1 / df;
+   c[2] = 0.16666666666666666667 + 0.16666666666666666667 * in;
    c[3] = (0.0083333333333333333333 * in 
       + 0.066666666666666666667) * in 
       + 0.058333333333333333333;
