@@ -40,8 +40,11 @@ project
       <include>../../..
       <source>../../regex/build//boost_regex
       <link>shared:<define>BOOST_REGEX_DYN_LINK=1
-      # Sunpro has problems building regex as a shared lib:
+      # Sunpro and cygwin/Mingw have problems building regex as a shared lib:
       <toolset>sun:<link>static
+	   <toolset>gcc-mw:<link>static
+	   <toolset>gcc-mingw:<link>static
+      <toolset>gcc-cygwin:<link>static
       <define>BOOST_ALL_NO_LIB=1
       <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
       <include>.
