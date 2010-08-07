@@ -3,6 +3,8 @@
 [h4 Boost-1.44.0]
 
 * Fixed incorrect range and support for Rayleigh distribution.
+* Fixed numerical error in the quantile of the Student's T distribution: the function was
+returning garbage values for non-integer degrees of freedom between 2 and 3.
 
 [h4 Boost-1.41.0]
 

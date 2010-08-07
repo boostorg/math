@@ -255,6 +255,98 @@ void test_spots(RealType)
          static_cast<RealType>(-6.96455673428326), // t
          tolerance);
 
+      //
+      // Some special tests to exercise the double-precision approximations
+      // to the quantile:
+      //
+      // tolerance is 50 eps expressed as a persent:
+      //
+      tolerance = boost::math::tools::epsilon<RealType>() * 5000;
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(2.00390625L),                     // degrees_of_freedom.
+         static_cast<RealType>(0.5625L)),                                    //  probability.
+         static_cast<RealType>(0.178133131573788108465134803511798566L),     // t.
+         tolerance);      
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(1L),                              // degrees_of_freedom.
+         static_cast<RealType>(0.03125L)),                                   //  probability.
+         static_cast<RealType>(-10.1531703876088604621071476634194722L),     // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(1L),                            // degrees_of_freedom.
+         static_cast<RealType>(0.875L)),                                   //  probability.
+         static_cast<RealType>(2.41421356237309504880168872421390942L),    // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(2L),                              // degrees_of_freedom.
+         static_cast<RealType>(0.03125L)),                                   //  probability.
+         static_cast<RealType>(-3.81000381000571500952501666878143315L),     // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(2L),                            // degrees_of_freedom.
+         static_cast<RealType>(0.875L)),                                   //  probability.
+         static_cast<RealType>(1.60356745147454630810732088527854144L),    // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(4L),                              // degrees_of_freedom.
+         static_cast<RealType>(0.03125L)),                                   //  probability.
+         static_cast<RealType>(-2.56208431914409044861223047927635034L),     // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(4L),                            // degrees_of_freedom.
+         static_cast<RealType>(0.875L)),                                   //  probability.
+         static_cast<RealType>(1.34439755550909142430681981315923574L),    // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(6L),                              // degrees_of_freedom.
+         static_cast<RealType>(0.03125L)),                                   //  probability.
+         static_cast<RealType>(-2.28348667906973065861212495010082952L),     // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(6L),                            // degrees_of_freedom.
+         static_cast<RealType>(0.875L)),                                   //  probability.
+         static_cast<RealType>(1.27334930914664286821103236660071906L),    // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(8L),                              // degrees_of_freedom.
+         static_cast<RealType>(0.03125L)),                                   //  probability.
+         static_cast<RealType>(-2.16296475406014719458642055768894376L),     // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(8L),                            // degrees_of_freedom.
+         static_cast<RealType>(0.875L)),                                   //  probability.
+         static_cast<RealType>(1.24031826078267310637634677726479038L),    // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(10L),                             // degrees_of_freedom.
+         static_cast<RealType>(0.03125L)),                                   //  probability.
+         static_cast<RealType>(-2.09596136475109350926340169211429572L),     // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(10L),                         // degrees_of_freedom.
+         static_cast<RealType>(0.875L)),                                 //  probability.
+         static_cast<RealType>(1.2212553950039221407185188573696834L),   // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(2.125L),                          // degrees_of_freedom.
+         static_cast<RealType>(0.03125L)),                                   //  probability.
+         static_cast<RealType>(-3.62246031671091980110493455859296532L),     // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(2.125L),                        // degrees_of_freedom.
+         static_cast<RealType>(0.875L)),                                   //  probability.
+         static_cast<RealType>(1.56905270993307293450392958697861969L),    // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(3L),                              // degrees_of_freedom.
+         static_cast<RealType>(0.03125L)),                                   //  probability.
+         static_cast<RealType>(-2.90004411882995814036141778367917946L),     // t.
+         tolerance);
+      BOOST_CHECK_CLOSE(boost::math::quantile(
+         students_t_distribution<RealType>(3L),                            // degrees_of_freedom.
+         static_cast<RealType>(0.875L)),                                   //  probability.
+         static_cast<RealType>(1.42262528146180931868169289781115099L),    // t.
+         tolerance);
 
   // Student's t pdf tests.
   // for PDF checks, use 100 eps tolerance expressed as a percent:
