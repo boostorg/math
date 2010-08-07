@@ -7,7 +7,7 @@
 #
 # Paths to tools come first, change these to match your system:
 #
-math2svg='d:\download\open\SVGMath-0.3.1\math2svg.py'
+math2svg='m:\download\open\SVGMath-0.3.1\math2svg.py'
 python=/cygdrive/c/Python26/python.exe
 inkscape=/cygdrive/c/progra~1/Inkscape/inkscape
 # Image DPI:
@@ -26,6 +26,7 @@ for mmlfile in $*; do
 	$inkscape -d $dpi -e $(cygpath -a -w $pngfile) $(cygpath -a -w $svgfile)
 	rm $tempfile
 done
+
 
 
 
