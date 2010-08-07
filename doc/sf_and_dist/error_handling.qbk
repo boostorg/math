@@ -27,7 +27,7 @@ The kinds of errors that can be raised are:
    the function.]]
 [[Denormalisation Error][Occurs when the returned result would be a denormalised value.]]
 [[Rounding Error][Occurs when the argument to one of the rounding functions __trunc, 
-   __round and __modf can not be represented as an integer type, is is
+   __round and __modf can not be represented as an integer type, is
    outide the range of the result type.]]
 [[Evaluation Error][Occurs when an internal error occured that prevented the
    result from being evaluated: this should never occur, but if it does, then
