@@ -490,7 +490,7 @@ You can make a local change by placing a macro definition *before*
 a function or distribution #include.
 
 [caution There is a danger of One-Definition-Rule violations if you 
-add ad-hock macros to more than one source files: these must be set the same in *every 
+add ad-hoc macros to more than one source files: these must be set the same in *every 
 translation unit*.]
 
 [caution If you place it after the #include it will have no effect,
