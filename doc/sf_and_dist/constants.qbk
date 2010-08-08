@@ -30,7 +30,7 @@
 
 The header `boost/math/constants/constants.hpp` contains some numeric constants
 that we have found useful in the development of this library.  New constants are 
-added on an ad-hock basis based on need.
+added on an ad-hoc basis based on need.
 
 Usage is like this:
 	
