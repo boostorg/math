@@ -1,4 +1,6 @@
-// Copyright Paul A. Bristow 2007.
+// fwd.hpp Forward declarations of Boost.Math distributions.
+
+// Copyright Paul A. Bristow 2007, 2010.
 // Copyright John Maddock 2007.
 
 // Use, modification and distribution are subject to the
