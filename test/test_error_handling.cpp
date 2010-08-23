@@ -240,5 +240,73 @@ Error in function boost::math::test_function<class boost::math::concepts::real_c
 Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Internal Evaluation Error, best value so far was 1.25
 *** No errors detected
 
+VS 2010
+------ Rebuild All started: Project: test_error_handling, Configuration: Release Win32 ------
+  test_error_handling.cpp
+  Generating code
+  Finished generating code
+  test_error_handling.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Release\test_error_handling.exe
+  Running 1 test case...
+  Error in function boost::math::test_function<float>(float, float, float): Error while handling value 0
+  Error in function boost::math::test_function<float>(float, float, float): Domain Error evaluating function at 0
+  Error in function boost::math::test_function<float>(float, float, float): Error while handling value 0
+  Error in function boost::math::test_function<float>(float, float, float): Evaluation of function at pole 0
+  Error in function boost::math::test_function<float>(float, float, float): Error message goes here...
+  Error in function boost::math::test_function<float>(float, float, float): Overflow Error
+  Error in function boost::math::test_function<float>(float, float, float): Error message goes here...
+  Error in function boost::math::test_function<float>(float, float, float): Underflow Error
+  Error in function boost::math::test_function<float>(float, float, float): Error message goes here...
+  Error in function boost::math::test_function<float>(float, float, float): Denorm Error
+  Error in function boost::math::test_function<float>(float, float, float): Error while handling value 1.25
+  Error in function boost::math::test_function<float>(float, float, float): Internal Evaluation Error, best value so far was 1.25
+  Error in function boost::math::test_function<float>(float, float, float): Error while handling value 1.25
+  Error in function boost::math::test_function<float>(float, float, float): Indeterminate result with value 1.25
+  Error in function boost::math::test_function<double>(double, double, double): Error while handling value 0
+  Error in function boost::math::test_function<double>(double, double, double): Domain Error evaluating function at 0
+  Error in function boost::math::test_function<double>(double, double, double): Error while handling value 0
+  Error in function boost::math::test_function<double>(double, double, double): Evaluation of function at pole 0
+  Error in function boost::math::test_function<double>(double, double, double): Error message goes here...
+  Error in function boost::math::test_function<double>(double, double, double): Overflow Error
+  Error in function boost::math::test_function<double>(double, double, double): Error message goes here...
+  Error in function boost::math::test_function<double>(double, double, double): Underflow Error
+  Error in function boost::math::test_function<double>(double, double, double): Error message goes here...
+  Error in function boost::math::test_function<double>(double, double, double): Denorm Error
+  Error in function boost::math::test_function<double>(double, double, double): Error while handling value 1.25
+  Error in function boost::math::test_function<double>(double, double, double): Internal Evaluation Error, best value so far was 1.25
+  Error in function boost::math::test_function<double>(double, double, double): Error while handling value 1.25
+  Error in function boost::math::test_function<double>(double, double, double): Indeterminate result with value 1.25
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Error while handling value 0
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Domain Error evaluating function at 0
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Error while handling value 0
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Evaluation of function at pole 0
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Error message goes here...
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Overflow Error
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Error message goes here...
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Underflow Error
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Error message goes here...
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Denorm Error
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Error while handling value 1.25
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Internal Evaluation Error, best value so far was 1.25
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Error while handling value 1.25
+  Error in function boost::math::test_function<long double>(long double, long double, long double): Indeterminate result with value 1.25
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Error while handling value 0
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Domain Error evaluating function at 0
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Error while handling value 0
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Evaluation of function at pole 0
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Error message goes here...
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Overflow Error
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Error message goes here...
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Underflow Error
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Error message goes here...
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Denorm Error
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Error while handling value 1.25
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Internal Evaluation Error, best value so far was 1.25
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Error while handling value 1.25
+  
+  *** No errors detected
+  Error in function boost::math::test_function<class boost::math::concepts::real_concept>(class boost::math::concepts::real_concept, class boost::math::concepts::real_concept, class boost::math::concepts::real_concept): Indeterminate result with value 1.25
+========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
+
+
 */
 
