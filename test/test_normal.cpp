@@ -1,4 +1,4 @@
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2010.
 // Copyright John Maddock 2007.
 
 // Use, modification and distribution are subject to the
@@ -15,7 +15,7 @@
 // From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/NormalDistribution.html
 
-#include <pch.hpp>
+#include <pch.hpp> // include directory libs/math/src/tr1/ is needed.
 
 #ifdef _MSC_VER
 #pragma warning (disable: 4127) // conditional expression is constant
@@ -325,6 +325,43 @@ Tolerance for type double is 0.01 %
 Tolerance for type long double is 0.01 %
 Tolerance for type class boost::math::concepts::real_concept is 0.01 %
 *** No errors detected
+
+
+
+
+------ Build started: Project: test_normal, Configuration: Release Win32 ------
+  test_normal.cpp
+  Generating code
+  Finished generating code
+  test_normal.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Release\test_normal.exe
+  Running 1 test case...
+  Tolerance for type float is 0.01 %
+  Tolerance for type double is 0.01 %
+  Tolerance for type long double is 0.01 %
+  Tolerance for type class boost::math::concepts::real_concept is 0.01 %
+  
+  *** No errors detected
+  Detected memory leaks!
+  Dumping objects ->
+  {2413} normal block at 0x00321190, 42 bytes long.
+   Data: <class boost::mat> 63 6C 61 73 73 20 62 6F 6F 73 74 3A 3A 6D 61 74 
+  {2412} normal block at 0x003231F0, 8 bytes long.
+   Data: <  2  22 > 90 11 32 00 98 32 32 00 
+  {1824} normal block at 0x00323180, 12 bytes long.
+   Data: <long double > 6C 6F 6E 67 20 64 6F 75 62 6C 65 00 
+  {1823} normal block at 0x00323298, 8 bytes long.
+   Data: < 12 `22 > 80 31 32 00 60 32 32 00 
+  {1227} normal block at 0x00323148, 7 bytes long.
+   Data: <double > 64 6F 75 62 6C 65 00 
+  {1226} normal block at 0x00323260, 8 bytes long.
+   Data: <H12  02 > 48 31 32 00 A0 30 32 00 
+  {633} normal block at 0x003230D8, 6 bytes long.
+   Data: <float > 66 6C 6F 61 74 00 
+  {632} normal block at 0x003230A0, 8 bytes long.
+   Data: < 02     > D8 30 32 00 00 00 00 00 
+  Object dump complete.
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
 
 */
 
