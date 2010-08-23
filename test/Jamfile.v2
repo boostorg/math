@@ -1,9 +1,11 @@
-# Copyright Daryle Walker, Hubert Holin, John Maddock and Paul A. Bristow 2006 - 2007
+# Copyright Daryle Walker, Hubert Holin, John Maddock 2006 - 2007
+# copyright Paul A. Bristow 2006 - 2010
 # Distributed under the Boost Software License, Version 1.0. 
 # (See accompanying file LICENSE_1_0.txt or copy at 
 # http://www.boost.org/LICENSE_1_0.txt.
 # \math_toolkit\libs\math\test\jamfile.v2
-# Runs all math toolkit tests, functions & distributions.
+# Runs all math toolkit tests, functions & distributions,
+# and build math examples.
 
 # bring in the rules for testing
 import testing ;
@@ -42,8 +44,8 @@ project
       <link>shared:<define>BOOST_REGEX_DYN_LINK=1
       # Sunpro and cygwin/Mingw have problems building regex as a shared lib:
       <toolset>sun:<link>static
-	   <toolset>gcc-mw:<link>static
-	   <toolset>gcc-mingw:<link>static
+	    <toolset>gcc-mw:<link>static
+	    <toolset>gcc-mingw:<link>static
       <toolset>gcc-cygwin:<link>static
       <define>BOOST_ALL_NO_LIB=1
       <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
@@ -418,6 +420,9 @@ run test_igamma_inva.cpp  pch ../../test/build//boost_test_exec_monitor
 	      <toolset>intel:<pch>off
         : test_igamma_inva_real_concept ;
 run test_instantiate1.cpp test_instantiate2.cpp ;
+
+run test_inverse_gamma_distribution.cpp ../../test/build//boost_test_exec_monitor ;
+
 run test_laplace.cpp ../../test/build//boost_unit_test_framework/<link>static ;
 run test_inv_hyp.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_laguerre.cpp pch ../../test/build//boost_test_exec_monitor ;
