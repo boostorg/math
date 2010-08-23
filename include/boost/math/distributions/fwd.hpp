@@ -44,6 +44,9 @@ template <class RealType, class Policy>
 class hypergeometric_distribution;
 
 template <class RealType, class Policy>
+class inverse_gamma_distribution;
+
+template <class RealType, class Policy>
 class laplace_distribution;
 
 template <class RealType, class Policy>
