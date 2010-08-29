@@ -19,6 +19,8 @@ provides a few worked examples of applying the library to statistical tests.
 
 All the code in this library is inside namespace boost::math.
 
+[note Some math function names are also used in namespace std so including <random> could cause ambiguity.]
+
 In order to use a distribution /my_distribution/ you will need to include
 either the header <boost/math/distributions/my_distribution.hpp> or
 the "include everything" header: <boost/math/distributions.hpp>.
@@ -63,7 +65,12 @@ in which case using the default template arguments - `RealType = double` -
 is nearly as convenient).
 Probably 95% of uses are covered by these typedefs:
 
-   using namespace boost::math;
+   // using namespace boost::math; // Avoid potential ambiguity with names in std <random>
+   // Safer to declare specific functions with using statement(s):
+
+   using boost::math::beta_distribution;
+   using boost::math::binomial_distribution;
+   using boost::math::students_t;
 
    // Construct a students_t distribution with 4 degrees of freedom:
    students_t d1(4);
@@ -412,6 +419,7 @@ Now that you have the basics, the next section looks at some worked examples.
 [include distributions/binomial_example.qbk]
 [include distributions/negative_binomial_example.qbk]
 [include distributions/normal_example.qbk]
+[include distributions/inverse_gamma_example.qbk]
 [include distributions/nc_chi_squared_example.qbk]
 [include distributions/error_handling_example.qbk]
 [include distributions/find_location_and_scale.qbk]
@@ -424,7 +432,7 @@ Now that you have the basics, the next section looks at some worked examples.
 [endsect] [/ section:stat_tut Statistical Distributions Tutorial]
 
 [/ dist_tutorial.qbk
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
