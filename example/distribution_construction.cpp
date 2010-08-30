@@ -1,6 +1,6 @@
 // distribution_construction.cpp
 
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2010.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -39,9 +39,6 @@ Several examples of constructing distributions follow:
 */
 //] [/distribution_construction1 end of Quickbook in C++ markup]
 
-
-
-
 int main()
 {
 //[distribution_construction2
@@ -51,15 +48,16 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
 */
   boost::math::negative_binomial_distribution<double> mydist0(8., 0.25);
   /*`
-  But this is inconveniently long, so by writing
+  But this is inconveniently long, so we might be tempted to write
   */
-  using namespace boost::math;
+  using namespace boost::math; 
   /*`
-  or
+  but this might risk ambiguity with names in std random so *much better* is
+  explicit 'using boost::math:: ' ... statements like
   */
   using boost::math::negative_binomial_distribution;
   /*`
-  we can reduce typing.
+  and we can still reduce typing.
 
   Since the vast majority of applications use will be using double precision,
   the template argument to the distribution (RealType) defaults
