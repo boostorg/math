@@ -1,5 +1,6 @@
 // Copyright John Maddock 2006.
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2010
+
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -12,27 +13,25 @@
 #endif
 
 #include <iostream>
+using std::cout; using std::endl;
+using std::left; using std::fixed; using std::right; using std::scientific;
 #include <iomanip>
+using std::setw;
+using std::setprecision;
+
 #include <boost/math/distributions/students_t.hpp>
+   using boost::math::students_t;
+
 
 void two_samples_t_test_equal_sd(
-        double Sm1,
-        double Sd1,
-        unsigned Sn1,
-        double Sm2,
-        double Sd2,
-        unsigned Sn2,
-        double alpha)
+        double Sm1, // Sm1 = Sample Mean 1.
+        double Sd1,   // Sd1 = Sample Standard Deviation 1.
+        unsigned Sn1,   // Sn1 = Sample Size 1.
+        double Sm2,   // Sm2 = Sample Mean 2.
+        double Sd2,   // Sd2 = Sample Standard Deviation 2.
+        unsigned Sn2,   // Sn2 = Sample Size 2.
+        double alpha)   // alpha = Significance Level.
 {
-   //
-   // Sm1 = Sample Mean 1.
-   // Sd1 = Sample Standard Deviation 1.
-   // Sn1 = Sample Size 1.
-   // Sm2 = Sample Mean 2.
-   // Sd2 = Sample Standard Deviation 2.
-   // Sn2 = Sample Size 2.
-   // alpha = Significance Level.
-   //
    // A Students t test applied to two sets of data.
    // We are testing the null hypothesis that the two
    // samples have the same mean and that any difference
@@ -40,7 +39,9 @@ void two_samples_t_test_equal_sd(
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda353.htm
    //
    using namespace std;
-   using namespace boost::math;
+   // using namespace boost::math;
+
+   using boost::math::students_t;
 
    // Print header:
    cout <<
@@ -99,31 +100,22 @@ void two_samples_t_test_equal_sd(
 }
 
 void two_samples_t_test_unequal_sd(
-        double Sm1,
-        double Sd1,
-        unsigned Sn1,
-        double Sm2,
-        double Sd2,
-        unsigned Sn2,
-        double alpha)
+        double Sm1,   // Sm1 = Sample Mean 1.
+        double Sd1,   // Sd1 = Sample Standard Deviation 1.
+        unsigned Sn1,   // Sn1 = Sample Size 1.
+        double Sm2,   // Sm2 = Sample Mean 2.
+        double Sd2,   // Sd2 = Sample Standard Deviation 2.
+        unsigned Sn2,   // Sn2 = Sample Size 2.
+        double alpha)   // alpha = Significance Level.
 {
-   //
-   // Sm1 = Sample Mean 1.
-   // Sd1 = Sample Standard Deviation 1.
-   // Sn1 = Sample Size 1.
-   // Sm2 = Sample Mean 2.
-   // Sd2 = Sample Standard Deviation 2.
-   // Sn2 = Sample Size 2.
-   // alpha = Significance Level.
-   //
    // A Students t test applied to two sets of data.
    // We are testing the null hypothesis that the two
-   // samples have the same mean and that any difference
-   // if due to chance.
+   // samples have the same mean and 
+   // that any difference is due to chance.
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda353.htm
    //
    using namespace std;
-   using namespace boost::math;
+   using boost::math::students_t;
 
    // Print header:
    cout <<
@@ -202,60 +194,58 @@ int main()
 
 /*
 Output is
+------ Rebuild All started: Project: students_t_two_samples, Configuration: Release Win32 ------
+  students_t_two_samples.cpp
+  Generating code
+  Finished generating code
+  students_t_two_samples.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Release\students_t_two_samples.exe
+  _______________________________________________
+  Student t test for two samples (equal variances)
+  _______________________________________________
+  
+  Number of Observations (Sample 1)                      =  249
+  Sample 1 Mean                                          =  20.145
+  Sample 1 Standard Deviation                            =  6.4147
+  Number of Observations (Sample 2)                      =  79
+  Sample 2 Mean                                          =  30.481
+  Sample 2 Standard Deviation                            =  6.1077
+  Degrees of Freedom                                     =  326
+  Pooled Standard Deviation                              =  326
+  T Statistic                                            =  -12.621
+  Probability that difference is due to chance           =  5.273e-030
+  
+  Results for Alternative Hypothesis and alpha           =  0.0500
+  
+  Alternative Hypothesis              Conclusion
+  Sample 1 Mean != Sample 2 Mean       NOT REJECTED
+  Sample 1 Mean <  Sample 2 Mean       NOT REJECTED
+  Sample 1 Mean >  Sample 2 Mean       REJECTED
+  
+  
+  _________________________________________________
+  Student t test for two samples (unequal variances)
+  _________________________________________________
+  
+  Number of Observations (Sample 1)                      =  249
+  Sample 1 Mean                                          =  20.14458
+  Sample 1 Standard Deviation                            =  6.41470
+  Number of Observations (Sample 2)                      =  79
+  Sample 2 Mean                                          =  30.48101
+  Sample 2 Standard Deviation                            =  6.10771
+  Degrees of Freedom                                     =  136.87499
+  T Statistic                                            =  -12.94627
+  Probability that difference is due to chance           =  1.571e-025
+  
+  Results for Alternative Hypothesis and alpha           =  0.0500
+  
+  Alternative Hypothesis              Conclusion
+  Sample 1 Mean != Sample 2 Mean       NOT REJECTED
+  Sample 1 Mean <  Sample 2 Mean       NOT REJECTED
+  Sample 1 Mean >  Sample 2 Mean       REJECTED
+  
+  
+========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
 
------- Build started: Project: students_t_two_samples, Configuration: Debug Win32 ------
-Compiling...
-students_t_two_samples.cpp
-Linking...
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\students_t_two_samples.exe"
-_______________________________________________
-Student t test for two samples (equal variances)
-_______________________________________________
-
-Number of Observations (Sample 1)                      =  249
-Sample 1 Mean                                          =  20.145
-Sample 1 Standard Deviation                            =  6.4147
-Number of Observations (Sample 2)                      =  79
-Sample 2 Mean                                          =  30.481
-Sample 2 Standard Deviation                            =  6.1077
-Degrees of Freedom                                     =  326
-Pooled Standard Deviation                              =  326
-T Statistic                                            =  -12.621
-Probability that difference is due to chance           =  5.273e-030
-
-Results for Alternative Hypothesis and alpha           =  0.0500
-
-Alternative Hypothesis              Conclusion
-Sample 1 Mean != Sample 2 Mean       NOT REJECTED
-Sample 1 Mean <  Sample 2 Mean       NOT REJECTED
-Sample 1 Mean >  Sample 2 Mean       REJECTED
-
-
-_________________________________________________
-Student t test for two samples (unequal variances)
-_________________________________________________
-
-Number of Observations (Sample 1)                      =  249
-Sample 1 Mean                                          =  20.14458
-Sample 1 Standard Deviation                            =  6.41470
-Number of Observations (Sample 2)                      =  79
-Sample 2 Mean                                          =  30.48101
-Sample 2 Standard Deviation                            =  6.10771
-Degrees of Freedom                                     =  136.87499
-T Statistic                                            =  -12.94627
-Probability that difference is due to chance           =  1.571e-025
-
-Results for Alternative Hypothesis and alpha           =  0.0500
-
-Alternative Hypothesis              Conclusion
-Sample 1 Mean != Sample 2 Mean       NOT REJECTED
-Sample 1 Mean <  Sample 2 Mean       NOT REJECTED
-Sample 1 Mean >  Sample 2 Mean       REJECTED
-
-Build Time 0:03
-Build log was saved at "file://i:\boost-06-05-03-1300\libs\math\test\Math_test\students_t_two_samples\Debug\BuildLog.htm"
-students_t_two_samples - 0 error(s), 0 warning(s)
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
 
 */
 
