@@ -1,6 +1,6 @@
 // C_error_policy_example.cpp
 
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2010.
 // Copyright John Maddock 2007.
 
 // Use, modification and distribution are subject to the
@@ -27,7 +27,7 @@ using boost::math::policies::errno_on_error;
 //using boost::math::policies::ignore_error;
 
 //using namespace boost::math::policies;
-//using namespace boost::math;
+//using namespace boost::math; // avoid potential ambiuity with std:: <random>
 
 // Define a policy:
 typedef policy<
@@ -67,8 +67,13 @@ int main()
 
 Output
 
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\c_error_policy_example.exe"
-tgamma(4., C_error_policy() = 6
-tgamma(4., make_policy( ...) = 6
+  c_error_policy_example.cpp
+  Generating code
+  Finished generating code
+  c_error_policy_example.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Release\c_error_policy_example.exe
+  tgamma(4., C_error_policy() = 6
+  tgamma(4., make_policy( ...) = 6
+  tgamma(4., C_error_policy() = 6
+  tgamma(4., make_policy( ...) = 6
 
 */
