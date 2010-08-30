@@ -1,4 +1,6 @@
-// (C) Copyright John Maddock 2006
+// Copyright John Maddock 2006
+// Copyright Paul A. Bristow 2010
+
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -11,7 +13,11 @@
 #endif
 
 #include <iostream>
+using std::cout; using std::endl;
 #include <iomanip>
+using std::fixed; using std::left; using std::right; using std::right; using std::setw;
+using std::setprecision;
+
 #include <boost/math/distributions/binomial.hpp>
 
 void find_max_sample_size(double p, unsigned successes)
@@ -25,8 +31,9 @@ void find_max_sample_size(double p, unsigned successes)
    // A typical use would be failure analysis, where you want
    // zero or fewer "successes" with some probability.
    //
-   using namespace std;
-   using namespace boost::math;
+   // using namespace boost::math;
+   // Avoid potential binomial_distribution name ambiguity with std <random>
+   using boost::math::binomial_distribution;
 
    // Print out general info:
    cout <<
@@ -74,3 +81,96 @@ int main()
    return 0;
 }
 
+
+/*
+
+Output:
+
+  binomial_sample_sizes.cpp
+  binomial_sample_sizes_example.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Debug\binomial_sample_sizes_example.exe
+  ________________________
+  Maximum Number of Trials
+  ________________________
+  
+  Success ratio                           =  0.001
+  Maximum Number of "successes" permitted =  0
+  
+  
+  ____________________________
+  Confidence        Max Number
+   Value (%)        Of Trials 
+  ____________________________
+      50.000            692
+      75.000            287
+      90.000            105
+      95.000             51
+      99.000             10
+      99.900              0
+      99.990              0
+      99.999              0
+  
+  ________________________
+  Maximum Number of Trials
+  ________________________
+  
+  Success ratio                           =  0.0001000
+  Maximum Number of "successes" permitted =  0
+  
+  
+  ____________________________
+  Confidence        Max Number
+   Value (%)        Of Trials 
+  ____________________________
+      50.000           6931
+      75.000           2876
+      90.000           1053
+      95.000            512
+      99.000            100
+      99.900             10
+      99.990              0
+      99.999              0
+  
+  ________________________
+  Maximum Number of Trials
+  ________________________
+  
+  Success ratio                           =  0.0000100
+  Maximum Number of "successes" permitted =  0
+  
+  
+  ____________________________
+  Confidence        Max Number
+   Value (%)        Of Trials 
+  ____________________________
+      50.000          69314
+      75.000          28768
+      90.000          10535
+      95.000           5129
+      99.000           1005
+      99.900            100
+      99.990             10
+      99.999              1
+  
+  ________________________
+  Maximum Number of Trials
+  ________________________
+  
+  Success ratio                           =  0.0000010
+  Maximum Number of "successes" permitted =  0
+  
+  
+  ____________________________
+  Confidence        Max Number
+   Value (%)        Of Trials 
+  ____________________________
+      50.000         693146
+      75.000         287681
+      90.000         105360
+      95.000          51293
+      99.000          10050
+      99.900           1000
+      99.990            100
+      99.999             10
+  
+
+*/
