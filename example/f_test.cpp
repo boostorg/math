@@ -1,5 +1,5 @@
 // Copyright John Maddock 2006
-// Copyright Paul A. Bristow 2007, 2008
+// Copyright Paul A. Bristow 2007, 2008, 2010
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -10,11 +10,16 @@
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
 #  pragma warning(disable: 4510) // default constructor could not be generated.
 #  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
-#  pragma warning(disable: 4180) // qualifier has no effect (in fusion).
+#  pragma warning(disable: 4180) // qualifier has no effect (in Fusion).
 #endif
 
 #include <iostream>
+using std::cout; using std::endl;
+using std::left; using std::fixed; using std::right; using std::scientific;
 #include <iomanip>
+using std::setw;
+using std::setprecision;
+
 #include <boost/math/distributions/fisher_f.hpp>
 
 void f_test(
@@ -33,8 +38,8 @@ void f_test(
    // difference is not down to chance.
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda359.htm
    //
-   using namespace std;
-   using namespace boost::math;
+   // Avoid "using namespace boost::math;" because of potential name ambiguity.
+   using boost::math::fisher_f;
 
    // Print header:
    cout <<
@@ -126,60 +131,120 @@ int main()
 
 Output:
 
-____________________________________
-F test for equal standard deviations
-____________________________________
-
-Sample 1:
-Number of Observations                                 =  240
-Sample Standard Deviation                              =  65.549
-
-Sample 2:
-Number of Observations                                 =  240
-Sample Standard Deviation                              =  61.854
-
-Test Statistic                                         =  1.123
-
-CDF of test statistic:                                 =  8.148e-001
-Upper Critical Value at alpha:                         =  1.238e+000
-Upper Critical Value at alpha/2:                       =  1.289e+000
-Lower Critical Value at alpha:                         =  8.080e-001
-Lower Critical Value at alpha/2:                       =  7.756e-001
-
-Results for Alternative Hypothesis and alpha           =  0.0500
-
-Alternative Hypothesis                                    Conclusion
-Standard deviations are unequal (two sided test)          REJECTED
-Standard deviation 1 is less than standard deviation 2    REJECTED
-Standard deviation 1 is greater than standard deviation 2 REJECTED
-
-
-____________________________________
-F test for equal standard deviations
-____________________________________
-
-Sample 1:
-Number of Observations                                 =  11.00000
-Sample Standard Deviation                              =  4.90820
-
-Sample 2:
-Number of Observations                                 =  9.00000
-Sample Standard Deviation                              =  2.58740
-
-Test Statistic                                         =  3.59847
-
-CDF of test statistic:                                 =  9.589e-001
-Upper Critical Value at alpha:                         =  3.347e+000
-Upper Critical Value at alpha/2:                       =  4.295e+000
-Lower Critical Value at alpha:                         =  3.256e-001
-Lower Critical Value at alpha/2:                       =  2.594e-001
-
-Results for Alternative Hypothesis and alpha           =  0.0500
-
-Alternative Hypothesis                                    Conclusion
-Standard deviations are unequal (two sided test)          REJECTED
-Standard deviation 1 is less than standard deviation 2    REJECTED
-Standard deviation 1 is greater than standard deviation 2 NOT REJECTED
+  f_test.cpp
+  F-test_example1.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Debug\F_test_example1.exe
+  ____________________________________
+  F test for equal standard deviations
+  ____________________________________
+  
+  Sample 1:
+  Number of Observations                                 =  240
+  Sample Standard Deviation                              =  65.549
+  
+  Sample 2:
+  Number of Observations                                 =  240
+  Sample Standard Deviation                              =  61.854
+  
+  Test Statistic                                         =  1.123
+  
+  CDF of test statistic:                                 =  8.148e-001
+  Upper Critical Value at alpha:                         =  1.238e+000
+  Upper Critical Value at alpha/2:                       =  1.289e+000
+  Lower Critical Value at alpha:                         =  8.080e-001
+  Lower Critical Value at alpha/2:                       =  7.756e-001
+  
+  Results for Alternative Hypothesis and alpha           =  0.0500
+  
+  Alternative Hypothesis                                    Conclusion
+  Standard deviations are unequal (two sided test)          REJECTED
+  Standard deviation 1 is less than standard deviation 2    REJECTED
+  Standard deviation 1 is greater than standard deviation 2 REJECTED
+  
+  
+  ____________________________________
+  F test for equal standard deviations
+  ____________________________________
+  
+  Sample 1:
+  Number of Observations                                 =  11.00000
+  Sample Standard Deviation                              =  4.90820
+  
+  Sample 2:
+  Number of Observations                                 =  9.00000
+  Sample Standard Deviation                              =  2.58740
+  
+  Test Statistic                                         =  3.59847
+  
+  CDF of test statistic:                                 =  9.589e-001
+  Upper Critical Value at alpha:                         =  3.347e+000
+  Upper Critical Value at alpha/2:                       =  4.295e+000
+  Lower Critical Value at alpha:                         =  3.256e-001
+  Lower Critical Value at alpha/2:                       =  2.594e-001
+  
+  Results for Alternative Hypothesis and alpha           =  0.0500
+  
+  Alternative Hypothesis                                    Conclusion
+  Standard deviations are unequal (two sided test)          REJECTED
+  Standard deviation 1 is less than standard deviation 2    REJECTED
+  Standard deviation 1 is greater than standard deviation 2 NOT REJECTED
+  
+  
+  ____________________________________
+  F test for equal standard deviations
+  ____________________________________
+  
+  Sample 1:
+  Number of Observations                                 =  240
+  Sample Standard Deviation                              =  65.549
+  
+  Sample 2:
+  Number of Observations                                 =  240
+  Sample Standard Deviation                              =  61.854
+  
+  Test Statistic                                         =  1.123
+  
+  CDF of test statistic:                                 =  8.148e-001
+  Upper Critical Value at alpha:                         =  1.238e+000
+  Upper Critical Value at alpha/2:                       =  1.289e+000
+  Lower Critical Value at alpha:                         =  8.080e-001
+  Lower Critical Value at alpha/2:                       =  7.756e-001
+  
+  Results for Alternative Hypothesis and alpha           =  0.0500
+  
+  Alternative Hypothesis                                    Conclusion
+  Standard deviations are unequal (two sided test)          REJECTED
+  Standard deviation 1 is less than standard deviation 2    REJECTED
+  Standard deviation 1 is greater than standard deviation 2 REJECTED
+  
+  
+  ____________________________________
+  F test for equal standard deviations
+  ____________________________________
+  
+  Sample 1:
+  Number of Observations                                 =  11.00000
+  Sample Standard Deviation                              =  4.90820
+  
+  Sample 2:
+  Number of Observations                                 =  9.00000
+  Sample Standard Deviation                              =  2.58740
+  
+  Test Statistic                                         =  3.59847
+  
+  CDF of test statistic:                                 =  9.589e-001
+  Upper Critical Value at alpha:                         =  3.347e+000
+  Upper Critical Value at alpha/2:                       =  4.295e+000
+  Lower Critical Value at alpha:                         =  3.256e-001
+  Lower Critical Value at alpha/2:                       =  2.594e-001
+  
+  Results for Alternative Hypothesis and alpha           =  0.0500
+  
+  Alternative Hypothesis                                    Conclusion
+  Standard deviations are unequal (two sided test)          REJECTED
+  Standard deviation 1 is less than standard deviation 2    REJECTED
+  Standard deviation 1 is greater than standard deviation 2 NOT REJECTED
+  
+ 
 
 */
 
