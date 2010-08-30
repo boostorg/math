@@ -1,5 +1,5 @@
 // Copyright John Maddock 2006, 2007
-// Copyright Paul A. Bristow 2007
+// Copyright Paul A. Bristow 2010
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -12,8 +12,8 @@ using std::left; using std::fixed; using std::right; using std::scientific;
 #include <iomanip>
 using std::setw;
 using std::setprecision;
-#include <boost/math/distributions/chi_squared.hpp>
 
+#include <boost/math/distributions/chi_squared.hpp>
 
 void confidence_limits_on_std_deviation(
         double Sd,    // Sample Standard Deviation
@@ -31,7 +31,7 @@ void confidence_limits_on_std_deviation(
    // contains the true standard deviation or it does not.
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda358.htm
 
-  // using namespace boost::math;
+   // using namespace boost::math; // potential name ambiguity with std <random>
    using boost::math::chi_squared;
    using boost::math::quantile;
    using boost::math::complement;
