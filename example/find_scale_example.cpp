@@ -1,6 +1,6 @@
 // find_scale.cpp
 
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2010.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.

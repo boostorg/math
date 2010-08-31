@@ -1,6 +1,6 @@
 // laplace_example.cpp
 
-// Copyright Paul A. Bristow 2008.
+// Copyright Paul A. Bristow 2008, 2010.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -128,7 +128,6 @@ is 0.05 = 1 - 0.95 (for a one-sided test), so we can write
   return 0;
 }  // int main()
 
-
 /*
 
 Output is:
@@ -165,7 +164,6 @@ Area for laplace z = 2 is 0.932332
 95% of laplace area has a z below 2.30259
 95% of gaussian area has a z between 1.95996 and -1.95996
 95% of laplace area has a z between 2.99573 and -2.99573
-
 
 */
 

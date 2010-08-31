@@ -1,4 +1,5 @@
 // Copyright John Maddock 2008
+// Copyright Paul A. Bristow 2010
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -24,7 +25,12 @@ First we need some includes to access the non-central chi squared distribution
 */
 
 #include <boost/math/distributions/non_central_chi_squared.hpp>
+using boost::math::chi_squared;
+boost::math::non_central_chi_squared;
+
 #include <iostream>
+using std::cout; using std::endl;
+using std::setprecision;
 
 int main()
 {

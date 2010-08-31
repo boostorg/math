@@ -1,7 +1,7 @@
 // neg_binomial_confidence_limits.cpp
 
 // Copyright John Maddock 2006
-// Copyright Paul A. Bristow 2007
+// Copyright Paul A. Bristow 2007, 2010
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
