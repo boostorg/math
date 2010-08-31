@@ -1,5 +1,5 @@
 //  Copyright John Maddock 2007.
-// Copyright Paul A. Bristow 2010
+//  Copyright Paul A. Bristow 2010
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -17,13 +17,12 @@ using std::cout; using std::endl;
 #include <exception>
 using std::domain_error;
 
-
 //[policy_ref_snip13
 
 #include <boost/math/distributions/cauchy.hpp>
 
 namespace myspace
-{ // using namespace boost::math::policies; // May be convenientin myspace.
+{ // using namespace boost::math::policies; // May be convenient in myspace.
 
   // Define a policy called my_policy to use.
   using boost::math::policies::policy;
@@ -42,15 +41,16 @@ BOOST_MATH_DECLARE_DISTRIBUTIONS(double, my_policy)
 // Now we can use myspace::cauchy etc, which will use policy
 // myspace::mypolicy:
 //
-// This compiles but raises a domain error at runtime.
+// This compiles but throws a domain error exception at runtime.
 // (Caution, if you omit the try'n'catch blocks, it will just terminate,
-// giving no clues as to why.  So try'n'catch blocks are strongly recommended.
+// giving no clues as to why! 
+// So try'n'catch blocks are very strongly recommended.
 
 void test_cauchy()
 {
    try
    {
-      double d = mean(myspace::cauchy());
+      double d = mean(myspace::cauchy());  // Cauchy does not have a mean!
    }
    catch(const domain_error& e)
    {
@@ -58,7 +58,7 @@ void test_cauchy()
    }
 }
 
-//]
+//] //[/policy_ref_snip13]
 
 int main()
 {
