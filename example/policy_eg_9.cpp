@@ -1,4 +1,5 @@
 //  Copyright John Maddock 2007.
+//  Copyright Paul A. Bristow 2010
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,6 +8,7 @@
 // and comments, don't change any of the special comment mark-ups!
 
 #include <iostream>
+using std::cout; using std::endl;
 
 //[policy_eg_9
 
@@ -49,14 +51,11 @@ As before we'll include the headers we need first:
 
 */
 
-#include <iostream>
 #include <boost/math/special_functions.hpp>
 
 /*`
-
 Next we'll implement the error handlers for each type of error, 
 starting with domain errors:
-
 */
 
 namespace boost{ namespace math{ namespace policies{
@@ -213,13 +212,12 @@ T user_evaluation_error(const char* function, const char* message, const T& val)
 
 
 /*`
-
 Now we'll need to define a suitable policy that will call these handlers,
 and define some forwarding functions that make use of the policy:
-
 */
 
-namespace{
+namespace
+{
 
 using namespace boost::math::policies;
 
@@ -237,8 +235,7 @@ BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(user_error_policy)
 } // close unnamed namespace
 
 /*`
-
-We now have a set of forwarding functions defined in an unnamed namespace
+We now have a set of forwarding functions, defined in an unnamed namespace,
 that all look something like this:
 
 ``
@@ -253,28 +250,27 @@ inline typename boost::math::tools::promote_args<RT>::type
 So that when we call `tgamma(z)` we really end up calling
 `boost::math::tgamma(z, user_error_policy())`, and any
 errors will get directed to our own error handlers:
-
 */
 
 
 int main()
 {
    // Raise a domain error:
-   std::cout << "Result of erf_inv(-10) is: "
-      << erf_inv(-10) << std::endl << std::endl;
+   cout << "Result of erf_inv(-10) is: "
+      << erf_inv(-10) << std::endl << endl;
    // Raise a pole error:
-   std::cout << "Result of tgamma(-10) is: "
-      << tgamma(-10) << std::endl << std::endl;
+   cout << "Result of tgamma(-10) is: "
+      << tgamma(-10) << std::endl << endl;
    // Raise an overflow error:
-   std::cout << "Result of tgamma(3000) is: "
-      << tgamma(3000) << std::endl << std::endl;
+   cout << "Result of tgamma(3000) is: "
+      << tgamma(3000) << std::endl << endl;
    // Raise an underflow error:
-   std::cout << "Result of tgamma(-190.5) is: "
-      << tgamma(-190.5) << std::endl << std::endl;
+   cout << "Result of tgamma(-190.5) is: "
+      << tgamma(-190.5) << std::endl << endl;
    // Unfortunately we can't predicably raise a denormalised
    // result, nor can we raise an evaluation error in this example
    // since these should never really occur!
-}
+} // int main()
 
 /*`
 
@@ -309,8 +305,6 @@ sub-routines each of which may have it's own error handling.  For example
 `tgamma(-190.5)` is implemented in terms of `tgamma(190.5)` - which overflows -
 the reflection formula for `tgamma` then notices that it's dividing by
 infinity and underflows.
-
 */
 
-//]
-
+//] //[/policy_eg_9]
