@@ -1,6 +1,6 @@
 // find_root_example.cpp
 
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2010.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -29,10 +29,11 @@ First we need some includes to access the normal distribution
   using std::setw; using std::setprecision;
 #include <limits>
   using std::numeric_limits;
+#include <stdexcept>
+  using std::exception;
+
 //] //[/root_find1]
-
-
-
+  
 int main()
 {
   cout << "Example: Normal distribution, root finding.";

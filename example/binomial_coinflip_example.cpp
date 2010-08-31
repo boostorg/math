@@ -1,4 +1,4 @@
-// Copyright Paul A. 2007
+// Copyright Paul A. 2007, 2010
 // Copyright John Maddock 2006
 
 // Use, modification and distribution are subject to the

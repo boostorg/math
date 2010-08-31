@@ -1,6 +1,7 @@
-# \math_toolkit\libs\math\example\jamfile.v2
+# \libs\math\example\jamfile.v2
 # Runs statistics examples
-# Copyright 2007 John Maddock and Paul A. Bristow.
+# Copyright 2007 John Maddock
+# Copyright Paul A. Bristow 2007, 2010.
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -28,7 +29,6 @@ project
 
 run binomial_coinflip_example.cpp ;
 run binomial_confidence_limits.cpp ;
-run binomial_example3.cpp ;
 run binomial_example_nag.cpp ;
 run binomial_quiz_example.cpp ;
 run binomial_sample_sizes.cpp ;
