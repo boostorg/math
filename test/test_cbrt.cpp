@@ -1,9 +1,15 @@
-//  (C) Copyright John Maddock 2006.
+//  Copyright John Maddock 2006.
+//  Copyright Paul A. Bristow 2010
+
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <pch.hpp>
+#ifdef _MSC_VER
+#  pragma warning (disable : 4224)
+#endif
+
+#include <pch.hpp> // include \libs\math\src\
 
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/test_exec_monitor.hpp>
@@ -126,7 +132,7 @@ template <class T>
 void test_cbrt(T, const char* name)
 {
    //
-   // The actual test data is rather verbose, so it's in a separate file
+   // The actual test data is rather verbose, so it's in a separate file.
    //
    // The contents are as follows, each row of data contains
    // three items, input value a, input value b and erf(a, b):
