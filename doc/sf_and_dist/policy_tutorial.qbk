@@ -288,7 +288,7 @@ alternate policies present in other translation units:
 
 [policy_eg_5]
 
-Handling the statistical distributions is very similar except that now
+Handling policies for the statistical distributions is very similar except that now
 the macro BOOST_MATH_DECLARE_DISTRIBUTIONS accepts two parameters: the
 floating point type to use, and the policy type to apply.  For example:
 
@@ -306,7 +306,7 @@ class template, but without the "_distribution" suffix.
 [policy_eg_6]
 
 [note
-There is an important limitation to note: you can not use the macros
+There is an important limitation to note: you can [*not*] use the macros
 BOOST_MATH_DECLARE_DISTRIBUTIONS and BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS
 ['in the same namespace],  as doing so creates ambiguities between functions
 and distributions of the same name.

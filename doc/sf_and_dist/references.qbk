@@ -31,7 +31,7 @@ The Wolfram Research Documentation Center is a collection of online reference ma
 Statistical Distributions (Wiley Series in Probability & Statistics) (Paperback)
 by N.A.J. Hastings, Brian Peacock, Merran Evans, ISBN: 0471371246, Wiley 2000.
 
-[@http://www.worldscibooks.com/mathematics/p191.html EXTREME VALUE DISTRIBUTIONS, Theory and Applications]
+[@http://www.worldscibooks.com/mathematics/p191.html Extreme Value Distributions, Theory and Applications]
 Samuel Kotz & Saralees Nadarajah, ISBN 978-1-86094-224-2 & 1-86094-224-5 Oct 2000,
 Chapter 1.2 discusses the various extreme value distributions.
 
@@ -61,7 +61,7 @@ DCDFLIB is a library of C++ routines, using double precision arithmetic, for eva
 
 [@http://www.softintegration.com/docs/package/chnagstat/ http://www.softintegration.com/docs/package/chnagstat/]
 
-[@http://www.nag.com/numeric/numerical_libraries.asp NAG ]libraries.
+[@http://www.nag.com/numeric/numerical_libraries.asp NAG] libraries.
 
 [@http://www.mathcad.com MathCAD]
 
@@ -74,6 +74,10 @@ William J Cody, Software Manual for the Elementary Functions, Prentice-Hall (198
 Nico Temme, Special Functions, An Introduction to the Classical Functions of Mathematical Physics, Wiley, ISBN: 0471-11313-1 (1996) who also gave valueable advice.
 
 [@http://www.cas.lancs.ac.uk/glossary_v1.1/prob.html#probdistn Statistics Glossary], Valerie Easton and John H. McColl.
+
+[__R]
+
+For use of R, Jim Albert, Bayesian Computation with R,  ISBN 978-0-387-71384-7.
 
 [endsect] [/section:references References]
 [/ 

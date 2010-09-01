@@ -109,6 +109,10 @@ and can be instantiated with the help of the reserved name `students_t`(for `Rea
    
    student_t mydist(10);
    
+[note Some distribution names are also used in std random library,
+so to avoid the risk of ambiguity it is better to make explicit using declarations,
+for example: `using boost::math::students_t_distribution`]
+   
 Functions not intended for use by applications are in `boost::math::detail`.
 
 Functions that may have more general use, like `digits` 
