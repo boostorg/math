@@ -8,9 +8,10 @@
 // Note that this file contains quickbook mark-up as well as code
 // and comments, don't change any of the special comment mark-ups!
 
-//[policy_ref_snip9
 #include <iostream>
 using std::cout; using std::endl;
+
+//[policy_ref_snip9
 
 #include <boost/math/special_functions/gamma.hpp>
 using boost::math::tgamma;
@@ -23,6 +24,7 @@ typedef policy<digits10<5> > my_pol_5; // Define a new, non-default, policy
 
 int main()
 {
+  cout.precision(5); // To only show 5 (hopefully) accurate decimal digits.
   double t = tgamma(12, my_pol_5()); // Apply the 5 decimal digits accuracy policy to use of tgamma.
   cout << "tgamma(12, my_pol_5() = " << t << endl;
 }
@@ -30,5 +32,5 @@ int main()
 /*
 
 Output:
-    tgamma(12, my_pol_5() = 3.99168e+007
+     tgamma(12, my_pol_5() = 3.9917e+007
 */

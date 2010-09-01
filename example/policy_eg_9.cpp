@@ -8,12 +8,11 @@
 // and comments, don't change any of the special comment mark-ups!
 
 #include <iostream>
-using std::cout; using std::endl;
+using std::cout; using std::endl; using std::cerr;
 
 //[policy_eg_9
 
 /*`
-
 The previous example was all well and good, but the custom error handlers
 didn't really do much of any use.  In this example we'll implement all
 the custom handlers and show how the information provided to them can be
@@ -54,33 +53,36 @@ As before we'll include the headers we need first:
 #include <boost/math/special_functions.hpp>
 
 /*`
-Next we'll implement the error handlers for each type of error, 
+Next we'll implement our own error handlers for each type of error, 
 starting with domain errors:
 */
 
-namespace boost{ namespace math{ namespace policies{
+namespace boost{ namespace math{
+namespace policies
+{
 
 template <class T>
 T user_domain_error(const char* function, const char* message, const T& val)
 {
    /*`
-   We'll begin with a bit of defensive programming:
+   We'll begin with a bit of defensive programming in case function or message are empty:
    */
    if(function == 0)
        function = "Unknown function with arguments of type %1%";
    if(message == 0)
        message = "Cause unknown with bad argument %1%";
    /*`
-   Next we'll format the name of the function with the name of type T:
+   Next we'll format the name of the function with the name of type T, perhaps double:
    */
    std::string msg("Error in function ");
    msg += (boost::format(function) % typeid(T).name()).str();
    /*`
    Then likewise format the error message with the value of parameter /val/,
-   making sure we output all the digits of /val/:
+   making sure we output all the potentially significant digits of /val/:
    */
    msg += ": \n";
    int prec = 2 + (std::numeric_limits<T>::digits * 30103UL) / 100000UL;
+   // int prec = std::numeric_limits<T>::max_digits10; //  For C++0X Standard Library
    msg += (boost::format(message) % boost::io::group(std::setprecision(prec), val)).str();
    /*`
    Now we just have to do something with the message, we could throw an 
@@ -190,7 +192,7 @@ T user_evaluation_error(const char* function, const char* message, const T& val)
    if(function == 0)
        function = "Unknown function with arguments of type %1%";
    if(message == 0)
-       message = "An internal evaluation error occured with "
+       message = "An internal evaluation error occurred with "
                   "the best value calculated so far of %1%";
 
    std::string msg("Error in function ");
@@ -198,6 +200,7 @@ T user_evaluation_error(const char* function, const char* message, const T& val)
 
    msg += ": \n";
    int prec = 2 + (std::numeric_limits<T>::digits * 30103UL) / 100000UL;
+   // int prec = std::numeric_limits<T>::max_digits10; // For C++0X Standard Library
    msg += (boost::format(message) % boost::io::group(std::setprecision(prec), val)).str();
 
    std::cerr << msg << std::endl;
@@ -208,7 +211,8 @@ T user_evaluation_error(const char* function, const char* message, const T& val)
    return std::numeric_limits<T>::quiet_NaN();
 }
 
-}}} // namespaces
+} // policies
+}} // boost::math
 
 
 /*`
@@ -217,7 +221,7 @@ and define some forwarding functions that make use of the policy:
 */
 
 namespace
-{
+{ // unnamed.
 
 using namespace boost::math::policies;
 
@@ -232,7 +236,7 @@ typedef policy<
 
 BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(user_error_policy)
 
-} // close unnamed namespace
+} // unnamed namespace
 
 /*`
 We now have a set of forwarding functions, defined in an unnamed namespace,
@@ -251,7 +255,6 @@ So that when we call `tgamma(z)` we really end up calling
 `boost::math::tgamma(z, user_error_policy())`, and any
 errors will get directed to our own error handlers:
 */
-
 
 int main()
 {
@@ -303,8 +306,8 @@ than once, or for more than one handler to be called: this is an artefact
 of the fact that many functions are implemented in terms of one or more
 sub-routines each of which may have it's own error handling.  For example
 `tgamma(-190.5)` is implemented in terms of `tgamma(190.5)` - which overflows -
-the reflection formula for `tgamma` then notices that it's dividing by
-infinity and underflows.
+the reflection formula for `tgamma` then notices that it is dividing by
+infinity and so underflows.
 */
 
 //] //[/policy_eg_9]

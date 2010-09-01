@@ -1,5 +1,5 @@
 //  Copyright John Maddock 2007.
-//  Copyright Paul A. Bristow 2007.
+//  Copyright Paul A. Bristow 2010.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -15,16 +15,16 @@
 //[policy_ref_snip4
 
 #include <boost/math/distributions/normal.hpp>
+using boost::math::normal_distribution;
 
 using namespace boost::math::policies;
-using namespace boost::math;
 
 // Define a policy:
 typedef policy<
       promote_float<false>
       > my_policy;
 
-// Define the distribution:
+// Define the new normal distribution using my_policy:
 typedef normal_distribution<float, my_policy> my_norm;
 
 // Get a quantile:
@@ -33,8 +33,9 @@ float q = quantile(my_norm(), 0.05f);
 //] [policy_ref_snip4]
 
 #include <iostream>
+using std::cout; using std::endl;
 
 int main()
 {
-   std::cout << q << std::endl;
+   cout << " quantile(my_norm(), 0.05f) = " << q << endl; //   -1.64485
 }

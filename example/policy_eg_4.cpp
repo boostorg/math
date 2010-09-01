@@ -21,7 +21,7 @@ We'll begin by including the needed header:
 */
 
 #include <boost/math/special_functions.hpp>
-using boost::math::tgamma;
+//using boost::math::tgamma; // Not needed because using C::tgamma.
 
 /*`
 Open up the "C" namespace that we'll use for our functions, and
@@ -75,12 +75,11 @@ So that when we call `C::tgamma(z)`, we really end up calling
 `boost::math::tgamma(z, C::c_policy())`:
 */
 
-
 int main()
 {
    errno = 0;
    cout << "Result of tgamma(30000) is: "
-      << C::tgamma(30000) << endl;
+      << C::tgamma(30000) << endl; // Note using C::tgamma
    cout << "errno = " << errno << endl; // errno = 34
    cout << "Result of tgamma(-10) is: "
       << C::tgamma(-10) << endl;
