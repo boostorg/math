@@ -103,11 +103,8 @@ and /q = 1-p/.
 [[quantile from the complement][Using the relation: x = [theta][space]* __gamma_q_inv(k, p) ]]
 [[mean][k[theta] ]]
 [[variance][k[theta][super 2] ]]
-[[mode][(k-1)[theta][space] for ['k>1] otherwise a __domain_error ]]
-[[skewness][2 / sqrt(k) ]for['k>2] otherwise a __domain_error ] ]
-[[kurtosis][3 + 6 / k]['k>3] otherwise a __domain_error ]]
-[[kurtosis excess][6 / k ]['k>3] otherwise a __domain_error ]]
-]
+[[mode][otherwise a __domain_error ]]
+] [/table]
 
 [endsect][/section:inverse_gamma_dist Inverse Gamma Distribution]
 
