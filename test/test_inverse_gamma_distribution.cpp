@@ -8,7 +8,6 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-
 #ifdef _MSC_VER
 #  pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'type' was previously defined as a type
 // in Boost.test and lexical_cast
@@ -23,13 +22,13 @@ using ::boost::math::concepts::real_concept;
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION
 
 #include <boost/math/distributions/inverse_gamma.hpp> // for inverse_gamma_distribution
-
-#include <boost/math/special_functions/gamma.hpp> // for tgamma for naive pdf.
-
 using boost::math::inverse_gamma_distribution;
 using  ::boost::math::inverse_gamma;
 //  using  ::boost::math::cdf;
 //  using  ::boost::math::pdf;
+
+#include <boost/math/special_functions/gamma.hpp> 
+using boost::math::tgamma; // for naive pdf.
 
 #include <iostream>
 using std::cout;
