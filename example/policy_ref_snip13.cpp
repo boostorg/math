@@ -14,7 +14,7 @@
 #include <iostream>
 using std::cout; using std::endl;
 
-#include <exception>
+#include <stdexcept>
 using std::domain_error;
 
 //[policy_ref_snip13
@@ -52,7 +52,7 @@ void test_cauchy()
    {
       double d = mean(myspace::cauchy());  // Cauchy does not have a mean!
    }
-   catch(const domain_error& e)
+   catch(const std::domain_error& e)
    {
       cout << e.what() << endl;
    }
