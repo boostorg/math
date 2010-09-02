@@ -26,7 +26,7 @@ First we need some includes to access the non-central chi squared distribution
 
 #include <boost/math/distributions/non_central_chi_squared.hpp>
 using boost::math::chi_squared;
-boost::math::non_central_chi_squared;
+using boost::math::non_central_chi_squared;
 
 #include <iostream>
 using std::cout; using std::endl;
@@ -38,12 +38,12 @@ int main()
    Create a table of the power of the [chi][super 2] test at
    5% significance level, start with a table header:
    */
-   std::cout << "[table\n[[[nu]]";
+   cout << "[table\n[[[nu]]";
    for(int lam = 2; lam <= 20; lam += 2)
    {
-      std::cout << "[[lambda]=" << lam << "]";
+      cout << "[[lambda]=" << lam << "]";
    }
-   std::cout << "]\n";
+   cout << "]\n";
 
    /*`
    (Note: the enclosing [] brackets are to format as a table in Boost.Quickbook).
@@ -54,26 +54,26 @@ int main()
 
    for(int n = 2; n <= 20; ++n)
    {
-      std::cout << "[[" << n << "]";
+      cout << "[[" << n << "]";
       for(int lam = 2; lam <= 20; lam += 2)
       {
          /*`
          Calculate the [chi][super 2] statistic for a 5% significance:
          */
-         double cs = quantile(complement(boost::math::chi_squared(n), 0.05));
+         double cs = quantile(complement(chi_squared(n), 0.05));
          /*`
          The power of the test is given by the complement of the CDF
          of the non-central [chi][super 2] distribution:
          */
-         double beta = cdf(complement(boost::math::non_central_chi_squared(n, lam), cs));
+         double beta = cdf(complement(non_central_chi_squared(n, lam), cs));
          /*`
          Then output the cell value:
          */
-         std::cout << "[" << std::setprecision(3) << beta << "]";
+         cout << "[" << setprecision(3) << beta << "]";
       }
-      std::cout << "]" << std::endl;
+      cout << "]" << endl;
    }
-   std::cout << "]" << std::endl;
+   cout << "]" << endl;
 }
 
 /*`
