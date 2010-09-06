@@ -200,6 +200,9 @@ and use the function's name as the link text]
 [def __expint [link math_toolkit.special.expint.expint_i expint]]
 [def __spherical_harmonic [link math_toolkit.special.sf_poly.sph_harm spherical_harmonic]]
 
+[/tools]
+[def __tuple [link math_toolkit.toolkit.internals1.tuples boost::math::tuple]]
+
 
 [/ distribution non-members]
 [def __cdf [link math.dist.cdf Cumulative Distribution Function]]
@@ -437,6 +440,7 @@ printer friendly PDF format].
 [include roots.qbk]
 [include roots_without_derivatives.qbk]
 [include minima.qbk]
+[include tuple.qbk]
 [endsect] [/section:internals1 Reused Utilities]
 
 [section:internals2 Testing and Development]

@@ -15,9 +15,9 @@ using namespace std;
 
 struct data_generator
 {
-   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR z)
+   boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR z)
    {
-      return std::tr1::make_tuple(boost::math::log1p(z), boost::math::expm1(z));
+      return boost::math::make_tuple(boost::math::log1p(z), boost::math::expm1(z));
    }
 };
 

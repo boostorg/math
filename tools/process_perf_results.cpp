@@ -63,7 +63,8 @@ int main(int argc, const char* argv[])
    // Load quickbook file:
    //
    std::ifstream is(argv[argc-1]);
-   std::ofstream os(std::string(argv[argc-1]).append(".bak").c_str());
+   std::string bak_file = std::string(argv[argc-1]).append(".bak");
+   std::ofstream os(bak_file.c_str());
    e.assign(
       "\\[perf\\s+([^\\s.]+)"
       "(?:"

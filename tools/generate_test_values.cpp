@@ -7,7 +7,7 @@
 #  define NTL_STD_CXX
 #endif
 
-#include <ntl/RR.h>
+#include <NTL/RR.h>
 #include <iostream>
 #include <iomanip>
 

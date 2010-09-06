@@ -6,10 +6,8 @@
 #include <boost/math/bindings/rr.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/tools/test.hpp>
-#include <fstream>
-
 #include <boost/math/tools/test_data.hpp>
+#include <fstream>
 
 using namespace boost::math::tools;
 

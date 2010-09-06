@@ -26,12 +26,12 @@ float truncate_to_float(float const * pf)
 
 
 template<class T>
-std::tr1::tuple<T, T, T, T, T, T> spherical_harmonic_data(T i)
+boost::math::tuple<T, T, T, T, T, T> spherical_harmonic_data(T i)
 {
    static tr1::mt19937 r;
 
    int n = real_cast<int>(floor(i));
-   tr1::uniform_int<> ui(0, (std::min)(n, 40));
+   std::tr1::uniform_int<> ui(0, (std::min)(n, 40));
    int m = ui(r);
    
    std::tr1::uniform_real<float> ur(-2*constants::pi<float>(), 2*constants::pi<float>());
@@ -42,7 +42,7 @@ std::tr1::tuple<T, T, T, T, T, T> spherical_harmonic_data(T i)
 
    T r1 = spherical_harmonic_r(n, m, theta, phi);
    T r2 = spherical_harmonic_i(n, m, theta, phi);
-   return std::tr1::make_tuple(n, m, theta, phi, r1, r2);
+   return boost::math::make_tuple(n, m, theta, phi, r1, r2);
 }
 
 int test_main(int argc, char*argv [])

@@ -50,24 +50,27 @@
             
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="comment">//using boost::math::tgamma;
+</span><span class="comment">// Need not declare using boost::math::tgamma here,
+</span><span class="comment">// because will define tgamma in myspace using macro below.
+</span>
+<span class="keyword">namespace</span> <span class="identifier">myspace</span>
+<span class="special">{</span>
+  <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 
-<span class="keyword">namespace</span> <span class="identifier">myspace</span><span class="special">{</span>
+  <span class="comment">// Define a policy that does not throw on overflow:
+</span>  <span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
 
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
-
-<span class="comment">// Define a policy that does not throw on overflow:
-</span><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
-
-<span class="comment">// Define the special functions in this scope to use the policy:   
-</span><span class="identifier">BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS</span><span class="special">(</span><span class="identifier">my_policy</span><span class="special">)</span>
-
+  <span class="comment">// Define the special functions in this scope to use the policy:   
+</span>  <span class="identifier">BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS</span><span class="special">(</span><span class="identifier">my_policy</span><span class="special">)</span>
 <span class="special">}</span>
 
-<span class="comment">//
-</span><span class="comment">// Now we can use myspace::tgamma etc.
+<span class="comment">// Now we can use myspace::tgamma etc.
 </span><span class="comment">// They will automatically use "my_policy":
 </span><span class="comment">//
-</span><span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="identifier">myspace</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="number">30.0</span><span class="special">);</span> <span class="comment">// will not throw on overflow
+</span><span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="identifier">myspace</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="number">30.0</span><span class="special">);</span> <span class="comment">// Will *not* throw on overflow,
+</span><span class="comment">// despite the large value of factorial 30 = 265252859812191058636308480000000
+</span><span class="comment">// unlike default policy boost::math::tgamma;
 </span>
 </pre>
 <p>
@@ -102,33 +105,40 @@
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">cauchy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
-<span class="keyword">namespace</span> <span class="identifier">myspace</span><span class="special">{</span>
+<span class="keyword">namespace</span> <span class="identifier">myspace</span>
+<span class="special">{</span> <span class="comment">// using namespace boost::math::policies; // May be convenient in myspace.
+</span>
+  <span class="comment">// Define a policy called my_policy to use.
+</span>  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">;</span>
+  
+<span class="comment">// In this case we want all the distribution accessor functions to compile,
+</span><span class="comment">// even if they are mathematically undefined, so
+</span><span class="comment">// make the policy assert_undefined.
+</span>  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">assert_undefined</span><span class="special">;</span>
 
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
+<span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">assert_undefined</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
 
-<span class="comment">// Define a policy to use, in this case we want all the distribution
-</span><span class="comment">// accessor functions to compile, even if they are mathematically
-</span><span class="comment">// undefined:
-</span><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">assert_undefined</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
-
-<span class="identifier">BOOST_MATH_DECLARE_DISTRIBUTIONS</span><span class="special">(</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">)</span>
-
-<span class="special">}</span>
-
+<span class="comment">// Finally apply this policy to type double.
+</span><span class="identifier">BOOST_MATH_DECLARE_DISTRIBUTIONS</span><span class="special">(</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">)</span>
+<span class="special">}</span> <span class="comment">// namespace myspace
+</span>
 <span class="comment">// Now we can use myspace::cauchy etc, which will use policy
 </span><span class="comment">// myspace::mypolicy:
 </span><span class="comment">//
-</span><span class="comment">// This compiles but raises a domain error at runtime:
-</span><span class="comment">//
-</span><span class="keyword">void</span> <span class="identifier">test_cauchy</span><span class="special">()</span>
+</span><span class="comment">// This compiles but throws a domain error exception at runtime.
+</span><span class="comment">// (Caution, if you omit the try'n'catch blocks, it will just terminate,
+</span><span class="comment">// giving no clues as to why! 
+</span><span class="comment">// So try'n'catch blocks are very strongly recommended.
+</span>
+<span class="keyword">void</span> <span class="identifier">test_cauchy</span><span class="special">()</span>
 <span class="special">{</span>
    <span class="keyword">try</span>
    <span class="special">{</span>
-      <span class="keyword">double</span> <span class="identifier">d</span> <span class="special">=</span> <span class="identifier">mean</span><span class="special">(</span><span class="identifier">myspace</span><span class="special">::</span><span class="identifier">cauchy</span><span class="special">());</span>
-   <span class="special">}</span>
+      <span class="keyword">double</span> <span class="identifier">d</span> <span class="special">=</span> <span class="identifier">mean</span><span class="special">(</span><span class="identifier">myspace</span><span class="special">::</span><span class="identifier">cauchy</span><span class="special">());</span>  <span class="comment">// Cauchy does not have a mean!
+</span>   <span class="special">}</span>
    <span class="keyword">catch</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span>
    <span class="special">{</span>
-      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">what</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+      <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">what</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="special">}</span>
 <span class="special">}</span>
 
@@ -151,9 +161,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
-      and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

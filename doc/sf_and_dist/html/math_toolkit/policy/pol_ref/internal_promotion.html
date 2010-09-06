@@ -84,7 +84,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.internal_promotion.examples"></a><h5>
-<a name="id1333217"></a>
+<a name="id1372662"></a>
           <a class="link" href="internal_promotion.html#math_toolkit.policy.pol_ref.internal_promotion.examples">Examples</a>
         </h5>
 <p>
@@ -100,17 +100,18 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
 
-<span class="comment">// Define a policy:
+<span class="comment">// Define a new policy *not* internally promoting RealType to double:
 </span><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
       <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> 
       <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
       
-<span class="comment">// Call the function:
+<span class="comment">// Call the function, applying the new policy:
 </span><span class="keyword">double</span> <span class="identifier">t1</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">some_value</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">());</span>
 
-<span class="comment">// Alternatively we could use make_policy and define everything at the call site:
+<span class="comment">// Alternatively we could use helper function make_policy,
+</span><span class="comment">// and concisely define everything at the call site:
 </span><span class="keyword">double</span> <span class="identifier">t2</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">some_value</span><span class="special">,</span> <span class="identifier">make_policy</span><span class="special">(</span><span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;()));</span>
 
 </pre>
@@ -128,16 +129,16 @@
             
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">;</span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 
 <span class="comment">// Define a policy:
 </span><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
       <span class="identifier">promote_float</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span>
       <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
 
-<span class="comment">// Define the distribution:
+<span class="comment">// Define the new normal distribution using my_policy:
 </span><span class="keyword">typedef</span> <span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">my_norm</span><span class="special">;</span>
 
 <span class="comment">// Get a quantile:
@@ -151,9 +152,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
-      and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

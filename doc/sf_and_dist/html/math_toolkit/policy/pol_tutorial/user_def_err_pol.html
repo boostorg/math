@@ -63,34 +63,36 @@
           </p>
 <p>
             So out first job is to include the header we want to use, and then provide
-            definitions for the user-defined error handlers we want to use:
+            definitions for our user-defined error handlers that we want to use.
+            We only provide our special domain and pole error handlers, other errors
+            use the default.
           </p>
 <p>
           </p>
 <p>
             
 </p>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">policies</span><span class="special">{</span>
-
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">user_domain_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
+<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span>
 <span class="special">{</span>
-   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cerr</span> <span class="special">&lt;&lt;</span> <span class="string">"Domain Error."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-   <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">();</span>
-<span class="special">}</span>
+  <span class="keyword">namespace</span> <span class="identifier">policies</span>
+  <span class="special">{</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+    <span class="identifier">T</span> <span class="identifier">user_domain_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
+    <span class="special">{</span> <span class="comment">// Ignoring function, message and val for this example, perhaps unhelpfully.
+</span>       <span class="identifier">cerr</span> <span class="special">&lt;&lt;</span> <span class="string">"Domain Error!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+       <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">();</span>
+    <span class="special">}</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">user_pole_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
-<span class="special">{</span>
-   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cerr</span> <span class="special">&lt;&lt;</span> <span class="string">"Pole Error."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-   <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">();</span>
-<span class="special">}</span>
-
-
-<span class="special">}}}</span> <span class="comment">// namespaces</span></pre>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+    <span class="identifier">T</span> <span class="identifier">user_pole_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
+    <span class="special">{</span> <span class="comment">// Ignoring function, message and val for this example, perhaps unhelpfully.
+</span>       <span class="identifier">cerr</span> <span class="special">&lt;&lt;</span> <span class="string">"Pole Error!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+       <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">();</span>
+    <span class="special">}</span>
+  <span class="special">}</span> <span class="comment">// namespace policies
+</span><span class="special">}}</span> <span class="comment">// namespace boost{ namespace math</span></pre>
 <p>
           </p>
 <p>
@@ -142,7 +144,7 @@
           </p>
 <p>
             So that when we call <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code> we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">user_error_policy</span><span class="special">())</span></code>,
-            and any errors will get directed to our own error handlers:
+            and any errors will get directed to our own error handlers.
           </p>
 <p>
           </p>
@@ -151,10 +153,10 @@
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
-   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of erf_inv(-10) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">erf_inv</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of erf_inv(-10) is: "</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">erf_inv</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="special">}</span></pre>
 <p>
           </p>
@@ -166,10 +168,10 @@
 <p>
           
 </p>
-<pre class="programlisting">Domain Error.
-Result of erf_inv(-10) is: 1.#QNAN
-Pole Error.
-Result of tgamma(-10) is: 1.#QNAN
+<pre class="programlisting">Domain Error!
+  Pole Error!
+  Result of erf_inv(-10) is: 1.#QNAN
+  Result of tgamma(-10) is: 1.#QNAN
 </pre>
 <p>
         </p>
@@ -238,14 +240,13 @@ Result of tgamma(-10) is: 1.#QNAN
 <p>
             
 </p>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
 <p>
           </p>
 <p>
-            Next we'll implement the error handlers for each type of error, starting
+            Next we'll implement our own error handlers for each type of error, starting
             with domain errors:
           </p>
 <p>
@@ -253,7 +254,9 @@ Result of tgamma(-10) is: 1.#QNAN
 <p>
             
 </p>
-<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">policies</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+<span class="keyword">namespace</span> <span class="identifier">policies</span>
+<span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">user_domain_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
@@ -263,7 +266,8 @@ Result of tgamma(-10) is: 1.#QNAN
 <p>
           </p>
 <p>
-            We'll begin with a bit of defensive programming:
+            We'll begin with a bit of defensive programming in case function or message
+            are empty:
           </p>
 <p>
           </p>
@@ -279,7 +283,8 @@ Result of tgamma(-10) is: 1.#QNAN
 <p>
           </p>
 <p>
-            Next we'll format the name of the function with the name of type T:
+            Next we'll format the name of the function with the name of type T, perhaps
+            double:
           </p>
 <p>
           </p>
@@ -294,7 +299,7 @@ Result of tgamma(-10) is: 1.#QNAN
           </p>
 <p>
             Then likewise format the error message with the value of parameter <span class="emphasis"><em>val</em></span>,
-            making sure we output all the digits of <span class="emphasis"><em>val</em></span>:
+            making sure we output all the potentially significant digits of <span class="emphasis"><em>val</em></span>:
           </p>
 <p>
           </p>
@@ -303,7 +308,8 @@ Result of tgamma(-10) is: 1.#QNAN
 </p>
 <pre class="programlisting"><span class="identifier">msg</span> <span class="special">+=</span> <span class="string">": \n"</span><span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">prec</span> <span class="special">=</span> <span class="number">2</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span> <span class="special">*</span> <span class="number">30103UL</span><span class="special">)</span> <span class="special">/</span> <span class="number">100000UL</span><span class="special">;</span>
-<span class="identifier">msg</span> <span class="special">+=</span> <span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">format</span><span class="special">(</span><span class="identifier">message</span><span class="special">)</span> <span class="special">%</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">io</span><span class="special">::</span><span class="identifier">group</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">setprecision</span><span class="special">(</span><span class="identifier">prec</span><span class="special">),</span> <span class="identifier">val</span><span class="special">)).</span><span class="identifier">str</span><span class="special">();</span></pre>
+<span class="comment">// int prec = std::numeric_limits&lt;T&gt;::max_digits10; //  For C++0X Standard Library
+</span><span class="identifier">msg</span> <span class="special">+=</span> <span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">format</span><span class="special">(</span><span class="identifier">message</span><span class="special">)</span> <span class="special">%</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">io</span><span class="special">::</span><span class="identifier">group</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">setprecision</span><span class="special">(</span><span class="identifier">prec</span><span class="special">),</span> <span class="identifier">val</span><span class="special">)).</span><span class="identifier">str</span><span class="special">();</span></pre>
 <p>
           </p>
 <p>
@@ -467,7 +473,7 @@ Result of tgamma(-10) is: 1.#QNAN
    <span class="keyword">if</span><span class="special">(</span><span class="identifier">function</span> <span class="special">==</span> <span class="number">0</span><span class="special">)</span>
        <span class="identifier">function</span> <span class="special">=</span> <span class="string">"Unknown function with arguments of type %1%"</span><span class="special">;</span>
    <span class="keyword">if</span><span class="special">(</span><span class="identifier">message</span> <span class="special">==</span> <span class="number">0</span><span class="special">)</span>
-       <span class="identifier">message</span> <span class="special">=</span> <span class="string">"An internal evaluation error occured with "</span>
+       <span class="identifier">message</span> <span class="special">=</span> <span class="string">"An internal evaluation error occurred with "</span>
                   <span class="string">"the best value calculated so far of %1%"</span><span class="special">;</span>
 
    <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">msg</span><span class="special">(</span><span class="string">"Error in function "</span><span class="special">);</span>
@@ -475,7 +481,8 @@ Result of tgamma(-10) is: 1.#QNAN
 
    <span class="identifier">msg</span> <span class="special">+=</span> <span class="string">": \n"</span><span class="special">;</span>
    <span class="keyword">int</span> <span class="identifier">prec</span> <span class="special">=</span> <span class="number">2</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span> <span class="special">*</span> <span class="number">30103UL</span><span class="special">)</span> <span class="special">/</span> <span class="number">100000UL</span><span class="special">;</span>
-   <span class="identifier">msg</span> <span class="special">+=</span> <span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">format</span><span class="special">(</span><span class="identifier">message</span><span class="special">)</span> <span class="special">%</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">io</span><span class="special">::</span><span class="identifier">group</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">setprecision</span><span class="special">(</span><span class="identifier">prec</span><span class="special">),</span> <span class="identifier">val</span><span class="special">)).</span><span class="identifier">str</span><span class="special">();</span>
+   <span class="comment">// int prec = std::numeric_limits&lt;T&gt;::max_digits10; // For C++0X Standard Library
+</span>   <span class="identifier">msg</span> <span class="special">+=</span> <span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">format</span><span class="special">(</span><span class="identifier">message</span><span class="special">)</span> <span class="special">%</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">io</span><span class="special">::</span><span class="identifier">group</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">setprecision</span><span class="special">(</span><span class="identifier">prec</span><span class="special">),</span> <span class="identifier">val</span><span class="special">)).</span><span class="identifier">str</span><span class="special">();</span>
 
    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cerr</span> <span class="special">&lt;&lt;</span> <span class="identifier">msg</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 
@@ -485,7 +492,8 @@ Result of tgamma(-10) is: 1.#QNAN
 </span>   <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">();</span>
 <span class="special">}</span>
 
-<span class="special">}}}</span> <span class="comment">// namespaces</span></pre>
+<span class="special">}</span> <span class="comment">// policies
+</span><span class="special">}}</span> <span class="comment">// boost::math</span></pre>
 <p>
           </p>
 <p>
@@ -499,8 +507,9 @@ Result of tgamma(-10) is: 1.#QNAN
 <p>
             
 </p>
-<pre class="programlisting"><span class="keyword">namespace</span><span class="special">{</span>
-
+<pre class="programlisting"><span class="keyword">namespace</span>
+<span class="special">{</span> <span class="comment">// unnamed.
+</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
@@ -514,13 +523,13 @@ Result of tgamma(-10) is: 1.#QNAN
 
 <span class="identifier">BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS</span><span class="special">(</span><span class="identifier">user_error_policy</span><span class="special">)</span>
 
-<span class="special">}</span> <span class="comment">// close unnamed namespace</span></pre>
+<span class="special">}</span> <span class="comment">// unnamed namespace</span></pre>
 <p>
           </p>
 <p>
           </p>
 <p>
-            We now have a set of forwarding functions defined in an unnamed namespace
+            We now have a set of forwarding functions, defined in an unnamed namespace,
             that all look something like this:
           </p>
 <p>
@@ -551,21 +560,21 @@ Result of tgamma(-10) is: 1.#QNAN
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
    <span class="comment">// Raise a domain error:
-</span>   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of erf_inv(-10) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">erf_inv</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+</span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of erf_inv(-10) is: "</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">erf_inv</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="comment">// Raise a pole error:
-</span>   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+</span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="comment">// Raise an overflow error:
-</span>   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(3000) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="number">3000</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+</span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(3000) is: "</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="number">3000</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="comment">// Raise an underflow error:
-</span>   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-190.5) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(-</span><span class="number">190.5</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+</span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-190.5) is: "</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(-</span><span class="number">190.5</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="comment">// Unfortunately we can't predicably raise a denormalised
 </span>   <span class="comment">// result, nor can we raise an evaluation error in this example
 </span>   <span class="comment">// since these should never really occur!
-</span><span class="special">}</span></pre>
+</span><span class="special">}</span> <span class="comment">// int main()</span></pre>
 <p>
           </p>
 <p>
@@ -606,16 +615,16 @@ Result of tgamma(-190.5) is: 0
             For example <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(-</span><span class="number">190.5</span><span class="special">)</span></code>
             is implemented in terms of <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="number">190.5</span><span class="special">)</span></code> - which overflows - the reflection formula
             for <code class="computeroutput"><span class="identifier">tgamma</span></code> then notices
-            that it's dividing by infinity and underflows.
+            that it is dividing by infinity and so underflows.
           </p>
 <p>
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
-      and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

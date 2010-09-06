@@ -12,8 +12,8 @@
 //
 #include <fstream>
 
+#include <boost/math/bindings/rr.hpp>
 #include <boost/math/tools/test_data.hpp>
-#include "ntl_rr_lanczos.hpp"
 
 #include <boost/math/special_functions/bessel.hpp>
 

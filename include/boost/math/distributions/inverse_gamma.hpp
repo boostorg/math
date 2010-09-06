@@ -123,7 +123,7 @@ private:
 typedef inverse_gamma_distribution<double> inverse_gamma;
 // typedef - but potential clash with name of inverse gamma *function*.
 // but there is a typedef for gamma
-//    typedef boost::math::gamma_distribution<Type, Policy> gamma;\
+//    typedef boost::math::gamma_distribution<Type, Policy> gamma;
 
 template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const inverse_gamma_distribution<RealType, Policy>& /* dist */)

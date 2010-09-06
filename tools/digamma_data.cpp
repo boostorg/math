@@ -3,9 +3,9 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "ntl_rr_digamma.hpp"
+#include <boost/math/bindings/rr.hpp>
+#include <boost/math/special_functions/digamma.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
-#include <boost/math/tools/test.hpp>
 #include <fstream>
 
 #include <boost/math/tools/test_data.hpp>
@@ -44,7 +44,7 @@ int test_main(int argc, char*argv [])
    do{
       if(0 == get_user_parameter_info(arg1, "z"))
          return 1;
-      data.insert(&boost::math::digamma, arg1);
+      data.insert(&boost::math::digamma<boost::math::ntl::RR>, arg1);
 
       std::cout << "Any more data [y/n]?";
       std::getline(std::cin, line);

@@ -23,7 +23,7 @@ std::tr1::mt19937 rnd;
 
 struct hypergeometric_generator
 {
-   std::tr1::tuple<
+   boost::math::tuple<
       boost::math::ntl::RR, 
       boost::math::ntl::RR, 
       boost::math::ntl::RR, 
@@ -43,7 +43,7 @@ struct hypergeometric_generator
          int N = itrunc(rN);
          int r = itrunc(rr);
          int n = itrunc(rn);
-         uniform_int<> ui((std::max)(0, n + r - N), (std::min)(n, r));
+         boost::uniform_int<> ui((std::max)(0, n + r - N), (std::min)(n, r));
          int k = ui(rnd);
 
          hypergeometric_distribution<ntl::RR> d(r, n, N);
@@ -59,7 +59,7 @@ struct hypergeometric_generator
 
          std::cout << "N = " << N << " r = " << r << " n = " << n << " PDF = " << p << " CDF = " << c << " CCDF = " << cc << std::endl;
 
-         return tr1::make_tuple(r, n, N, k, p, c, cc);
+         return boost::math::make_tuple(r, n, N, k, p, c, cc);
       }
       catch(const std::exception& e)
       {

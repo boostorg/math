@@ -11,12 +11,10 @@
 
 #include <boost/math/tools/test_data.hpp>
 
-#include "ntl_rr_lanczos.hpp"
-
 using namespace boost::math::tools;
 using namespace std;
 
-std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> 
+boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR> 
    tgamma_ratio(const boost::math::ntl::RR& a, const boost::math::ntl::RR& delta)
 {
    if(delta > a)
@@ -27,7 +25,7 @@ std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR>
    if((r1 > (std::numeric_limits<float>::max)()) || (r2 > (std::numeric_limits<float>::max)()))
       throw std::domain_error("");
 
-   return std::tr1::make_tuple(r1, r2);
+   return boost::math::make_tuple(r1, r2);
 }
 
 boost::math::ntl::RR tgamma_ratio2(const boost::math::ntl::RR& a, const boost::math::ntl::RR& b)

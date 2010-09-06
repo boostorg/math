@@ -21,7 +21,7 @@ float truncate_to_float(float const * pf)
    return *pf;
 }
 
-std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rf_data(boost::math::ntl::RR n)
+boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rf_data(boost::math::ntl::RR n)
 {
    static std::tr1::mt19937 r;
    std::tr1::uniform_real<float> ur(0, 1);
@@ -37,10 +37,10 @@ std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR
    boost::math::ntl::RR zr(truncate_to_float(&z));
 
    boost::math::ntl::RR result = boost::math::ellint_rf(xr, yr, zr);
-   return std::tr1::make_tuple(xr, yr, zr, result);
+   return boost::math::make_tuple(xr, yr, zr, result);
 }
 
-std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rc_data(boost::math::ntl::RR n)
+boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rc_data(boost::math::ntl::RR n)
 {
    static std::tr1::mt19937 r;
    std::tr1::uniform_real<float> ur(0, 1);
@@ -53,10 +53,10 @@ std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR
    boost::math::ntl::RR yr(truncate_to_float(&y));
 
    boost::math::ntl::RR result = boost::math::ellint_rc(xr, yr);
-   return std::tr1::make_tuple(xr, yr, result);
+   return boost::math::make_tuple(xr, yr, result);
 }
 
-std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rj_data(boost::math::ntl::RR n)
+boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rj_data(boost::math::ntl::RR n)
 {
    static std::tr1::mt19937 r;
    std::tr1::uniform_real<float> ur(0, 1);
@@ -78,10 +78,10 @@ std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR
    boost::math::ellint_rj(x, y, z, p);
 
    boost::math::ntl::RR result = boost::math::ellint_rj(xr, yr, zr, pr);
-   return std::tr1::make_tuple(xr, yr, zr, pr, result);
+   return boost::math::make_tuple(xr, yr, zr, pr, result);
 }
 
-std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rd_data(boost::math::ntl::RR n)
+boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> generate_rd_data(boost::math::ntl::RR n)
 {
    static std::tr1::mt19937 r;
    std::tr1::uniform_real<float> ur(0, 1);
@@ -97,7 +97,7 @@ std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR
    boost::math::ntl::RR zr(truncate_to_float(&z));
 
    boost::math::ntl::RR result = boost::math::ellint_rd(xr, yr, zr);
-   return std::tr1::make_tuple(xr, yr, zr, result);
+   return boost::math::make_tuple(xr, yr, zr, result);
 }
 
 int test_main(int argc, char*argv [])
