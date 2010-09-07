@@ -34,7 +34,6 @@ namespace boost{ namespace math
 namespace detail
 {
 
-  // Previous version without op and limit
 template <class RealType, class Policy>
 inline bool check_inverse_gamma_shape(
       const char* function, // inverse_gamma
@@ -54,7 +53,7 @@ inline bool check_inverse_gamma_shape(
       return false;
    }
    return true;
-} //
+} //bool check_inverse_gamma_shape
 
 template <class RealType, class Policy>
 inline bool check_inverse_gamma_x(
@@ -82,7 +81,7 @@ inline bool check_inverse_gamma(
    return check_scale(function, scale, result, pol)
      && check_inverse_gamma_shape(function, shape,
      result, pol);
-}
+} // bool check_inverse_gamma
 
 } // namespace detail
 
@@ -119,11 +118,12 @@ private:
    RealType m_scale;     // distribution scale
 };
 
-
 typedef inverse_gamma_distribution<double> inverse_gamma;
 // typedef - but potential clash with name of inverse gamma *function*.
 // but there is a typedef for gamma
-//    typedef boost::math::gamma_distribution<Type, Policy> gamma;
+//   typedef boost::math::gamma_distribution<Type, Policy> gamma;
+
+// Allow random variable x to be zero, treated as a special case (unlike some definitions).
 
 template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
@@ -153,15 +153,17 @@ inline RealType pdf(const inverse_gamma_distribution<RealType, Policy>& dist, co
 
    RealType result;
    if(false == detail::check_inverse_gamma(function, scale, shape, &result, Policy()))
+   { // distribution parameters bad.
       return result;
-   if(false == detail::check_inverse_gamma_x(function, x, &result, Policy()))
-      return result;
-
+   } 
    if(x == 0)
-   {
+   { // Treat random variate zero as a special case.
       return 0;
    }
-
+   else if(false == detail::check_inverse_gamma_x(function, x, &result, Policy()))
+   { // x bad.
+      return result;
+   }
    result = gamma_p_derivative(shape, scale / x, Policy()) * scale / (x * x);
    // better than naive
    // result = (pow(scale, shape) * pow(x, (-shape -1)) * exp(-scale/x) ) / tgamma(shape);
@@ -180,10 +182,17 @@ inline RealType cdf(const inverse_gamma_distribution<RealType, Policy>& dist, co
 
    RealType result;
    if(false == detail::check_inverse_gamma(function, scale, shape, &result, Policy()))
+   { // distribution parameters bad.
       return result;
-   if(false == detail::check_inverse_gamma_x(function, x, &result, Policy()))
+   }
+   if (x == 0)
+   { // Treat zero as a special case.
+     return 0;
+   }
+   else if(false == detail::check_inverse_gamma_x(function, x, &result, Policy()))
+   { // x bad
       return result;
-
+   }
    result = boost::math::gamma_q(shape, scale / x, Policy());
    // result = tgamma(shape, scale / x) / tgamma(shape);
    return result;
@@ -204,10 +213,10 @@ inline RealType quantile(const inverse_gamma_distribution<RealType, Policy>& dis
       return result;
    if(false == detail::check_probability(function, p, &result, Policy()))
       return result;
-
    if(p == 1)
+   {
       return policies::raise_overflow_error<RealType>(function, 0, Policy());
-
+   }
    result = scale / gamma_q_inv(shape, p, Policy());
    return result;
 }
@@ -251,8 +260,9 @@ inline RealType quantile(const complemented2_type<inverse_gamma_distribution<Rea
       return result;
 
    if(q == 0)
+   {
       return policies::raise_overflow_error<RealType>(function, 0, Policy());
-
+   }
    result = scale / gamma_p_inv(shape, q, Policy());
    return result;
 }
@@ -277,7 +287,7 @@ inline RealType mean(const inverse_gamma_distribution<RealType, Policy>& dist)
    {
      result = policies::raise_domain_error<RealType>(
        function,
-       "Shape parameter is %1%, but for a defined mean must be > 1", shape, Policy());
+       "Shape parameter is %1%, but for a defined mean it must be > 1", shape, Policy());
      return result;
    }
   result = scale / (shape - 1);
@@ -303,7 +313,7 @@ inline RealType variance(const inverse_gamma_distribution<RealType, Policy>& dis
    {
      result = policies::raise_domain_error<RealType>(
        function,
-       "Shape parameter is %1%, but for a defined variance must be > 2", shape, Policy());
+       "Shape parameter is %1%, but for a defined variance it must be > 2", shape, Policy());
      return result;
    }
    result = (scale * scale) / ((shape - 1) * (shape -1) * (shape -2));
@@ -356,7 +366,7 @@ inline RealType skewness(const inverse_gamma_distribution<RealType, Policy>& dis
    {
      result = policies::raise_domain_error<RealType>(
        function,
-       "Shape parameter is %1%, but for a defined skewness must be > 3", shape, Policy());
+       "Shape parameter is %1%, but for a defined skewness it must be > 3", shape, Policy());
      return result;
    }
    result = (4 * sqrt(shape - 2) ) / (shape - 3);
@@ -382,7 +392,7 @@ inline RealType kurtosis_excess(const inverse_gamma_distribution<RealType, Polic
    {
      result = policies::raise_domain_error<RealType>(
        function,
-       "Shape parameter is %1%, but for a defined kurtosis must be > 4", shape, Policy());
+       "Shape parameter is %1%, but for a defined kurtosis it must be > 4", shape, Policy());
      return result;
    }
    result = (30 * shape - 66) / ((shape - 3) * (shape - 4));
@@ -406,7 +416,7 @@ inline RealType kurtosis(const inverse_gamma_distribution<RealType, Policy>& dis
    {
      result = policies::raise_domain_error<RealType>(
        function,
-       "Shape parameter is %1%, but for a defined kurtosis excess must be > 4", shape, Policy());
+       "Shape parameter is %1%, but for a defined kurtosis excess it must be > 4", shape, Policy());
      return result;
    }
   return kurtosis_excess(dist) + 3;
