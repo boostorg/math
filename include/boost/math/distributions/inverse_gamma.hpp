@@ -1,7 +1,7 @@
 // inverse_gamma.hpp
 
-//  Copyright John Maddock 2006 - 2010.
 //  Copyright Paul A. Bristow 2010.
+//  Copyright John Maddock 2010.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -164,7 +164,23 @@ inline RealType pdf(const inverse_gamma_distribution<RealType, Policy>& dist, co
    { // x bad.
       return result;
    }
-   result = gamma_p_derivative(shape, scale / x, Policy()) * scale / (x * x);
+   result = gamma_p_derivative(shape, scale / x, Policy()) * scale;
+   if(0 != result)
+   {
+      if(x < 0)
+      {
+         // x * x may under or overflow, likewise our result,
+         // so be extra careful about the arithmetic:
+         RealType lim = tools::max_value<RealType>() * x;
+         if(lim < result)
+            return policies::raise_overflow_error<RealType, Policy>(function, "PDF is infinite.", Policy());
+         result /= x;
+         if(lim < result)
+            return policies::raise_overflow_error<RealType, Policy>(function, "PDF is infinite.", Policy());
+         result /= x;
+      }
+      result /= (x * x);
+   }
    // better than naive
    // result = (pow(scale, shape) * pow(x, (-shape -1)) * exp(-scale/x) ) / tgamma(shape);
    return result;
@@ -217,7 +233,10 @@ inline RealType quantile(const inverse_gamma_distribution<RealType, Policy>& dis
    {
       return policies::raise_overflow_error<RealType>(function, 0, Policy());
    }
-   result = scale / gamma_q_inv(shape, p, Policy());
+   result = gamma_q_inv(shape, p, Policy());
+   if((result < 1) && (result * tools::max_value<RealType>() < scale))
+      return policies::raise_overflow_error<RealType, Policy>(function, "Value of random variable in inverse gamma distribution quantile is infinite.", Policy());
+   result = scale / result;
    return result;
 }
 
@@ -263,7 +282,10 @@ inline RealType quantile(const complemented2_type<inverse_gamma_distribution<Rea
    {
       return policies::raise_overflow_error<RealType>(function, 0, Policy());
    }
-   result = scale / gamma_p_inv(shape, q, Policy());
+   result = gamma_p_inv(shape, q, Policy());
+   if((result < 1) && (result * tools::max_value<RealType>() < scale))
+      return policies::raise_overflow_error<RealType, Policy>(function, "Value of random variable in inverse gamma distribution quantile is infinite.", Policy());
+   result = scale / result;
    return result;
 }
 

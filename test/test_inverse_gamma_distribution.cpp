@@ -228,20 +228,24 @@ void test_spots(RealType)
 
   // Special and limit cases:
 
-  RealType mx = (std::numeric_limits<RealType>::max)();
-  RealType mi = (std::numeric_limits<RealType>::min)();
+  if(std::numeric_limits<RealType>::is_specialized)
+  {
+    RealType mx = (std::numeric_limits<RealType>::max)();
+    RealType mi = (std::numeric_limits<RealType>::min)();
 
-  BOOST_CHECK_EQUAL(
-  pdf(inverse_gamma_distribution<RealType>(1),
-    static_cast<RealType>(mx)), // max()
-    static_cast<RealType>(0)
-    );
+     BOOST_CHECK_EQUAL(
+     pdf(inverse_gamma_distribution<RealType>(1),
+       static_cast<RealType>(mx)), // max()
+       static_cast<RealType>(0)
+       );
 
-  BOOST_CHECK_EQUAL(
-  pdf(inverse_gamma_distribution<RealType>(1),
-    static_cast<RealType>(mi)), // min()
-    static_cast<RealType>(0)
-    );
+     BOOST_CHECK_EQUAL(
+     pdf(inverse_gamma_distribution<RealType>(1),
+       static_cast<RealType>(mi)), // min()
+       static_cast<RealType>(0)
+       );
+
+  }
 
   BOOST_CHECK_EQUAL(
     pdf(inverse_gamma_distribution<RealType>(1), static_cast<RealType>(0)), static_cast<RealType>(0));
