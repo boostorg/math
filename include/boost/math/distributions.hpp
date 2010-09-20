@@ -23,6 +23,7 @@
 #include <boost/math/distributions/fisher_f.hpp>
 #include <boost/math/distributions/gamma.hpp>
 #include <boost/math/distributions/hypergeometric.hpp>
+#include <boost/math/distributions/inverse_chi_squared.hpp>
 #include <boost/math/distributions/inverse_gamma.hpp>
 #include <boost/math/distributions/laplace.hpp>
 #include <boost/math/distributions/logistic.hpp>
