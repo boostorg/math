@@ -202,7 +202,7 @@ inline RealType cdf(const complemented2_type<inverse_chi_squared_distribution<Re
    // Error check:
    RealType error_result;
    if(false == detail::check_df(
-         function, degrees_of_freedom, &error_result, Policy()))
+         function, df, &error_result, Policy()))
       return error_result;
 
    if((x < 0) || !(boost::math::isfinite)(x))
