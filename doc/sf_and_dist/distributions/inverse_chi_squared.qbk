@@ -58,7 +58,7 @@ See [@http://en.wikipedia.org/wiki/Conjugate_prior conjugate priors including a 
 See also __inverse_gamma_distrib and __chi_squared_distrib.
 
 The inverse_chi_squared distribution is a psecial case of a inverse_gamma distribution
-with nu (degrees_of_freedom) shape ([alpha]) and scale ([beta]) where
+with [nu] (degrees_of_freedom) shape ([alpha]) and scale ([beta]) where
 
 __spaces [alpha]= [nu] /2 and [beta] = [frac12].
 
@@ -94,7 +94,7 @@ varies for a few values of parameters [nu] and [xi]:
    inverse_chi_squared_distribution(RealType df = 1, RealType scale); // Explicitly scaled.
 
 Constructs an inverse chi_squared distribution with [nu] degrees of freedom ['df],
-and scale ['scale] with default value 1/df (1/[nu].
+and scale ['scale] with default value 1\/df.
 
 Requires that the degrees of freedom [nu] parameter is greater than zero, otherwise calls
 __domain_error.
@@ -143,11 +143,11 @@ are used for the inverse gamma function: [alpha] = [nu]/2 and [beta] = [nu] * [x
 [[quantile from the complement][Using the relation: x = [alpha][space]/ __gamma_p_inv([alpha], q) ]]
 [[mode][[nu] * [xi] / ([nu] + 2) ]]
 [[median][no closed form analytic equation is known, but is evaluated as quantile(0.5)]]
-[[mean][1 / ([nu] - 1) for [nu] > 2, else a __domain_error]]
+[[mean][[nu][xi] / ([nu] - 2) for [nu] > 2, else a __domain_error]]
 [[variance][2 [nu][pow2] [xi][pow2] / (([nu] -2)[pow2] ([nu] -4)) for [nu] >4, else a __domain_error]]
 [[skewness][4 [sqrt]2 [sqrt]([nu]-4) /([nu]-6) for [nu] >6, else a __domain_error ]]
-[[kurtosis_excess][12 * (5[nu] - 22) / ([nu] - 6) * ([nu] - 8) for [nu] >8, else a __domain_error]]
-[[kurtosis][3 + 12 * (5[nu] - 22) / ([nu] - 6) * ([nu]-8) for [nu] >8, else a __domain_error]]
+[[kurtosis_excess][12 * (5[nu] - 22) / (([nu] - 6) * ([nu] - 8)) for [nu] >8, else a __domain_error]]
+[[kurtosis][3 + 12 * (5[nu] - 22) / (([nu] - 6) * ([nu]-8)) for [nu] >8, else a __domain_error]]
 ] [/table]
 
 [h4 References]

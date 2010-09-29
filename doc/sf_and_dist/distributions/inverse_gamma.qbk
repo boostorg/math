@@ -113,9 +113,9 @@ and /q = 1-p/.
 [[mode][[beta] / ([alpha] + 1) ]]
 [[median][no analytic equation is known, but is evaluated as quantile(0.5)]]
 [[mean][[beta] / ([alpha] - 1) for [alpha] > 1, else a __domain_error]]
-[[variance][([beta] * [beta]) / ([alpha] - 1) * ([alpha] - 1) * ([alpha] - 2) for [alpha] >2, else a __domain_error]]
+[[variance][([beta] * [beta]) / (([alpha] - 1) * ([alpha] - 1) * ([alpha] - 2)) for [alpha] >2, else a __domain_error]]
 [[skewness][4 * sqrt ([alpha] -2) / ([alpha] -3) for [alpha] >3, else a __domain_error]]
-[[kurtosis_excess][(30 * [alpha] - 66) / ([alpha]-3)*([alpha] - 4)) for [alpha] >4, else a __domain_error]]
+[[kurtosis_excess][(30 * [alpha] - 66) / (([alpha]-3)*([alpha] - 4)) for [alpha] >4, else a __domain_error]]
 ] [/table]
 
 [endsect][/section:inverse_gamma_dist Inverse Gamma Distribution]
