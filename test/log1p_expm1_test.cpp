@@ -1,9 +1,13 @@
-//  (C) Copyright John Maddock 2005.
+//  Copyright John Maddock 2005.
+//  Copyright Paul A. Bristow 2010
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <pch.hpp>
+#include <pch.hpp> // include \libs\math\src\tr1\
+
+// Requires MS extensions permitted or fails to link.
+
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
