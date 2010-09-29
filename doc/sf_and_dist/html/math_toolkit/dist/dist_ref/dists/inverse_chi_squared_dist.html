@@ -24,8 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist"></a><a class="link" href="inverse_chi_squared_dist.html" title="Inverse Chi Squared Distribution">Inverse
-          Chi Squared Distribution</a>
+<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist"></a><a class="link" href="inverse_chi_squared_dist.html" title="Inverse Chi Squared Distribution">
+          Inverse Chi Squared Distribution</a>
 </h5></div></div></div>
 <p>
             
@@ -123,7 +123,7 @@
           </p>
 <p>
             The inverse_chi_squared distribution is a psecial case of a inverse_gamma
-            distribution with nu (degrees_of_freedom) shape (&#945;) and scale (&#946;) where
+            distribution with &#957; (degrees_of_freedom) shape (&#945;) and scale (&#946;) where
           </p>
 <p>
             &#8192; &#945;= &#957; /2 and &#946; = &#189;.
@@ -184,7 +184,7 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/inverse_chi_squared_cdf.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.member_functions"></a><h5>
-<a name="id1013289"></a>
+<a name="id1157648"></a>
             <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -194,7 +194,7 @@
 <p>
             Constructs an inverse chi_squared distribution with &#957; degrees of freedom
             <span class="emphasis"><em>df</em></span>, and scale <span class="emphasis"><em>scale</em></span> with default
-            value 1<span class="emphasis"><em>df (1</em></span>&#957;.
+            value 1/df.
           </p>
 <p>
             Requires that the degrees of freedom &#957; parameter is greater than zero,
@@ -211,7 +211,7 @@
             Returns the scale &#958; parameter of this distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors"></a><h5>
-<a name="id1013464"></a>
+<a name="id1157856"></a>
             <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -241,7 +241,7 @@
             </p></td></tr>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.accuracy"></a><h5>
-<a name="id1013569"></a>
+<a name="id1157960"></a>
             <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -257,7 +257,7 @@
             iteration is involved, as for the estimation of degrees of freedom.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.implementation"></a><h5>
-<a name="id1013609"></a>
+<a name="id1158001"></a>
             <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -383,7 +383,7 @@
                   </td>
 <td>
                     <p>
-                      1 / (&#957; - 1) for &#957; &gt; 2, else a <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
+                      &#957;&#958; / (&#957; - 2) for &#957; &gt; 2, else a <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
                     </p>
                   </td>
 </tr>
@@ -419,7 +419,7 @@
                   </td>
 <td>
                     <p>
-                      12 * (5&#957; - 22) / (&#957; - 6) * (&#957; - 8) for &#957; &gt;8, else a <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
+                      12 * (5&#957; - 22) / ((&#957; - 6) * (&#957; - 8)) for &#957; &gt;8, else a <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
                     </p>
                   </td>
 </tr>
@@ -431,14 +431,14 @@
                   </td>
 <td>
                     <p>
-                      3 + 12 * (5&#957; - 22) / (&#957; - 6) * (&#957;-8) for &#957; &gt;8, else a <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
+                      3 + 12 * (5&#957; - 22) / ((&#957; - 6) * (&#957;-8)) for &#957; &gt;8, else a <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>
                     </p>
                   </td>
 </tr>
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.references"></a><h5>
-<a name="id1013938"></a>
+<a name="id1158330"></a>
             <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.references">References</a>
           </h5>
 <div class="orderedlist"><ol type="1">

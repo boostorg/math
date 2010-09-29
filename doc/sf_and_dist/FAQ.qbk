@@ -5,7 +5,7 @@ Nearly all are provided, and many more like mean, skewness, quantiles, complemen
 but Boost.Math makes full use of C++, and it looks a bit different. 
 But do not panic! See section on construction and the many examples.
 Briefly, the distribution is constructed with the parameters (like location and scale) 
-(things after the | in representation like P(X=k|n, p) or ; in a common represention of pdf f(x; [mu][sigma][super [2]). 
+(things after the | in representation like P(X=k|n, p) or ; in a common represention of pdf f(x; [mu][sigma][super 2]). 
 Functions like pdf, cdf are called with the name of that distribution and the random variate often called x or k.
 For example, `normal my_norm(0, 1);  pdf(my_norm, 2.0);` [br]
 # ['I'm allegic to reading manuals and prefer to learn from examples.][br]

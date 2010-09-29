@@ -24,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf"></a><a class="link" href="neg_binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for the Negative Binomial Distribution">Calculating
-            Confidence Limits on the Frequency of Occurrence for the Negative Binomial
-            Distribution</a>
+<a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf"></a><a class="link" href="neg_binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for the Negative Binomial Distribution">
+            Calculating Confidence Limits on the Frequency of Occurrence for the
+            Negative Binomial Distribution</a>
 </h6></div></div></div>
 <p>
               Imagine you have a process that follows a negative binomial distribution:
@@ -55,11 +55,15 @@
               illustrates their use.
             </p>
 <p>
-              First we need some includes to access the negative binomial distribution
-              (and some basic std output of course).
-            </p>
+              </p>
 <p>
-              
+                First we need some includes to access the negative binomial distribution
+                (and some basic std output of course).
+              </p>
+<p>
+              </p>
+<p>
+                
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial</span><span class="special">;</span>
@@ -70,28 +74,39 @@
 <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">setprecision</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">setw</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">left</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">fixed</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">right</span><span class="special">;</span></pre>
 <p>
-            </p>
+              </p>
 <p>
-              First define a table of significance levels: these are the probabilities
-              that the true occurrence frequency lies outside the calculated interval:
-            </p>
+              </p>
 <p>
-              
+                First define a table of significance levels: these are the probabilities
+                that the true occurrence frequency lies outside the calculated interval:
+              </p>
+<p>
+              </p>
+<p>
+                
 </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span></pre>
 <p>
-            </p>
+              </p>
 <p>
-              Confidence value as % is (1 - alpha) * 100, so alpha 0.05 == 95% confidence
-              that the true occurence frequency lies <span class="bold"><strong>inside</strong></span>
-              the calculated interval.
-            </p>
+              </p>
 <p>
-              We need a function to calculate and print confidence limits for an
-              observed frequency of occurrence that follows a negative binomial distribution.
-            </p>
+                Confidence value as % is (1 - alpha) * 100, so alpha 0.05 == 95%
+                confidence that the true occurence frequency lies <span class="bold"><strong>inside</strong></span>
+                the calculated interval.
+              </p>
 <p>
-              
+              </p>
+<p>
+                We need a function to calculate and print confidence limits for an
+                observed frequency of occurrence that follows a negative binomial
+                distribution.
+              </p>
+<p>
+              </p>
+<p>
+                
 </p>
 <pre class="programlisting"><span class="keyword">void</span> <span class="identifier">confidence_limits_on_frequency</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">trials</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">successes</span><span class="special">)</span>
 <span class="special">{</span>
@@ -117,21 +132,25 @@
            <span class="string">" Value (%)        Limit          Limit\n"</span>
            <span class="string">"___________________________________________\n"</span><span class="special">;</span></pre>
 <p>
-            </p>
+              </p>
 <p>
-              And now for the important part - the bounds themselves. For each value
-              of <span class="emphasis"><em>alpha</em></span>, we call <code class="computeroutput"><span class="identifier">find_lower_bound_on_p</span></code>
-              and <code class="computeroutput"><span class="identifier">find_upper_bound_on_p</span></code>
-              to obtain lower and upper bounds respectively. Note that since we are
-              calculating a two-sided interval, we must divide the value of alpha
-              in two. Had we been calculating a single-sided interval, for example:
-              <span class="emphasis"><em>"Calculate a lower bound so that we are P% sure that
-              the true occurrence frequency is greater than some value"</em></span>
-              then we would <span class="bold"><strong>not</strong></span> have divided by
-              two.
-            </p>
+              </p>
 <p>
-              
+                And now for the important part - the bounds themselves. For each
+                value of <span class="emphasis"><em>alpha</em></span>, we call <code class="computeroutput"><span class="identifier">find_lower_bound_on_p</span></code>
+                and <code class="computeroutput"><span class="identifier">find_upper_bound_on_p</span></code>
+                to obtain lower and upper bounds respectively. Note that since we
+                are calculating a two-sided interval, we must divide the value of
+                alpha in two. Had we been calculating a single-sided interval, for
+                example: <span class="emphasis"><em>"Calculate a lower bound so that we are P%
+                sure that the true occurrence frequency is greater than some value"</em></span>
+                then we would <span class="bold"><strong>not</strong></span> have divided by
+                two.
+              </p>
+<p>
+              </p>
+<p>
+                
 </p>
 <pre class="programlisting">   <span class="comment">// Now print out the upper and lower limits for the alpha table values.
 </span>   <span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
@@ -148,13 +167,17 @@
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="special">}</span> <span class="comment">// void confidence_limits_on_frequency(unsigned trials, unsigned successes)</span></pre>
 <p>
-            </p>
+              </p>
 <p>
-              And then call confidence_limits_on_frequency with increasing numbers
-              of trials, but always the same success fraction 0.1, or 1 in 10.
-            </p>
+              </p>
 <p>
-              
+                And then call confidence_limits_on_frequency with increasing numbers
+                of trials, but always the same success fraction 0.1, or 1 in 10.
+              </p>
+<p>
+              </p>
+<p>
+                
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
@@ -167,7 +190,7 @@
 </span>
 </pre>
 <p>
-            </p>
+              </p>
 <p>
               Let's see some sample output for a 1 in 10 success ratio, first for
               a mere 20 trials:
