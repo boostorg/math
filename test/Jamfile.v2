@@ -422,6 +422,7 @@ run test_igamma_inva.cpp  pch ../../test/build//boost_test_exec_monitor
 run test_instantiate1.cpp test_instantiate2.cpp ;
 
 run test_inverse_gamma_distribution.cpp ../../test/build//boost_test_exec_monitor ;
+run test_inverse_chi_squared_distribution.cpp ../../test/build//boost_test_exec_monitor ;
 
 run test_laplace.cpp ../../test/build//boost_unit_test_framework/<link>static ;
 run test_inv_hyp.cpp pch ../../test/build//boost_test_exec_monitor ;
