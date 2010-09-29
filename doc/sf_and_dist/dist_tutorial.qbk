@@ -435,7 +435,7 @@ Now that you have the basics, the next section looks at some worked examples.
 [include distributions/binomial_example.qbk]
 [include distributions/negative_binomial_example.qbk]
 [include distributions/normal_example.qbk]
-[include distributions/inverse_gamma_example.qbk]
+[/include distributions/inverse_gamma_example.qbk]
 [include distributions/nc_chi_squared_example.qbk]
 [include distributions/error_handling_example.qbk]
 [include distributions/find_location_and_scale.qbk]
