@@ -75,7 +75,7 @@ or you can write `inverse_chi_squared my_invchisqr(2, 3);`]
 For degrees of freedom parameter [nu] and scale parameter [xi],
 it is defined by the probability density function (PDF):
 
-__spaces f(x;[nu], [xi]) = 2 [super -[nu]/2] e[super(-1/2x] x [super(-1-[nu]/2)] / [Gamma]([nu]/2)
+__spaces f(x;[nu], [xi]) = 2 [super -[nu]/2] e[super(-1/2x)] x [super(-1-[nu]/2)] / [Gamma]([nu]/2)
 
 and Cumulative Density Function (CDF)
 
