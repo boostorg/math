@@ -45,7 +45,8 @@ boost/math/policies/error_handling.hpp like this:
 
 So out first job is to include the header we want to use, and then
 provide definitions for our user-defined error handlers that we want to use.
-We only provide our special domain and pole error handlers, other errors use the default.
+We only provide our special domain and pole error handlers;
+other errors like overflow and underflow use the default.
 */
 
 #include <boost/math/special_functions.hpp>

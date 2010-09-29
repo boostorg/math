@@ -10,6 +10,7 @@
 
 #include <iostream>
 using std::cout;  using std::endl;
+#include <cerrno> // for ::errno
 
 //[policy_eg_4
 
@@ -17,7 +18,7 @@ using std::cout;  using std::endl;
 Suppose we want `C::foo()` to behave in a C-compatible way and set
 `::errno` on error rather than throwing any exceptions.
 
-We'll begin by including the needed header:
+We'll begin by including the needed header for our function:
 */
 
 #include <boost/math/special_functions.hpp>
@@ -25,14 +26,14 @@ We'll begin by including the needed header:
 
 /*`
 Open up the "C" namespace that we'll use for our functions, and
-define the policy type we want: in this case one that sets
+define the policy type we want: in this case a C-style one that sets
 ::errno and returns a standard value, rather than throwing exceptions.
 
 Any policies we don't specify here will inherit the defaults.
 */
 
 namespace C
-{
+{ // To hold our C-style policy.
   //using namespace boost::math::policies; or explicitly:
   using boost::math::policies::policy;
 

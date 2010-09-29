@@ -30,6 +30,8 @@
    using std::cout;
    using std::endl;
 
+// using namespace boost::math::policies; or
+
 using boost::math::policies::policy;
 // Possible errors
 using boost::math::policies::overflow_error;
@@ -38,7 +40,6 @@ using boost::math::policies::domain_error;
 using boost::math::policies::pole_error;
 using boost::math::policies::denorm_error;
 using boost::math::policies::evaluation_error;
-
 using boost::math::policies::ignore_error;
 
 // Define a custom policy to ignore just overflow:

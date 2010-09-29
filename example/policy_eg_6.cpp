@@ -9,6 +9,7 @@
 
 #include <iostream>
 using std::cout;  using std::endl;
+#include <cerrno> // for ::errno
 
 //[policy_eg_6
 
@@ -27,9 +28,9 @@ We'll begin by including the needed header for all the distributions:
 
 /*`
 
-Open up an appropriate namespace for our distributions, and
-define the policy type we want.  Any policies we don't
-specify here will inherit the defaults:
+Open up an appropriate namespace, calling it `my_distributions`,
+for our distributions, and define the policy type we want.
+Any policies we don't specify here will inherit the defaults:
 
 */
 
@@ -79,22 +80,22 @@ int main()
 {
    // Construct distribution with something we know will overflow
   // (using double rather than if promoted to long double):
-   my_distributions::normal norm(10, 2); 
+   my_distributions::normal norm(10, 2);
 
    errno = 0;
-   cout << "Result of quantile(norm, 0) is: " 
+   cout << "Result of quantile(norm, 0) is: "
       << quantile(norm, 0) << endl; // -infinity.
    cout << "errno = " << errno << endl;
    errno = 0;
-   cout << "Result of quantile(norm, 1) is: " 
+   cout << "Result of quantile(norm, 1) is: "
       << quantile(norm, 1) << endl; // +infinity.
    cout << "errno = " << errno << endl;
 
    // Now try a discrete distribution.
    my_distributions::binomial binom(20, 0.25);
-   cout << "Result of quantile(binom, 0.05) is: " 
+   cout << "Result of quantile(binom, 0.05) is: "
       << quantile(binom, 0.05) << endl; // To check we get integer results.
-   cout << "Result of quantile(complement(binom, 0.05)) is: " 
+   cout << "Result of quantile(complement(binom, 0.05)) is: "
       << quantile(complement(binom, 0.05)) << endl;
 }
 
@@ -111,7 +112,7 @@ Result of quantile(binom, 0.05) is: 1
 Result of quantile(complement(binom, 0.05)) is: 8
 ]
 
-This mechanism is particularly useful when we want to define a 
+This mechanism is particularly useful when we want to define a
 project-wide policy, and don't want to modify the Boost source
 or set  project wide build macros (possibly fragile and easy to forget).
 

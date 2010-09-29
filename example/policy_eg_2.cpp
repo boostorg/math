@@ -6,6 +6,7 @@
 
 #include <iostream>
 using std::cout; using std::endl;
+#include <cerrno> // for ::errno
 
 //[policy_eg_2
 

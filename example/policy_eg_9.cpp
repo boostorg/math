@@ -22,8 +22,8 @@ Each error handler has the general form:
 
    template <class T>
    T user_``['error_type]``(
-      const char* function, 
-      const char* message, 
+      const char* function,
+      const char* message,
       const T& val);
 
 and accepts three arguments:
@@ -32,7 +32,7 @@ and accepts three arguments:
 [[const char* function]
    [The name of the function that raised the error, this string
    contains one or more %1% format specifiers that should be
-   replaced by the name of type T.]]
+   replaced by the name of real type T, like float or double.]]
 [[const char* message]
    [A message associated with the error, normally this
    contains a %1% format specifier that should be replaced with
@@ -53,7 +53,7 @@ As before we'll include the headers we need first:
 #include <boost/math/special_functions.hpp>
 
 /*`
-Next we'll implement our own error handlers for each type of error, 
+Next we'll implement our own error handlers for each type of error,
 starting with domain errors:
 */
 
@@ -85,7 +85,7 @@ T user_domain_error(const char* function, const char* message, const T& val)
    // int prec = std::numeric_limits<T>::max_digits10; //  For C++0X Standard Library
    msg += (boost::format(message) % boost::io::group(std::setprecision(prec), val)).str();
    /*`
-   Now we just have to do something with the message, we could throw an 
+   Now we just have to do something with the message, we could throw an
    exception, but for the purposes of this example we'll just dump the message
    to std::cerr:
    */
@@ -97,7 +97,7 @@ T user_domain_error(const char* function, const char* message, const T& val)
 }
 
 /*`
-Pole errors are essentially a special case of domain errors, 
+Pole errors are essentially a special case of domain errors,
 so in this example we'll just return the result of a domain error:
 */
 
@@ -126,9 +126,9 @@ T user_overflow_error(const char* function, const char* message, const T& val)
    msg += message;
 
    std::cerr << msg << std::endl;
-   
+
    // Value passed to the function is an infinity, just return it:
-   return val; 
+   return val;
 }
 
 /*`
@@ -150,9 +150,9 @@ T user_underflow_error(const char* function, const char* message, const T& val)
    msg += message;
 
    std::cerr << msg << std::endl;
-   
+
    // Value passed to the function is zero, just return it:
-   return val; 
+   return val;
 }
 
 /*`
@@ -174,13 +174,13 @@ T user_denorm_error(const char* function, const char* message, const T& val)
    msg += message;
 
    std::cerr << msg << std::endl;
-   
+
    // Value passed to the function is denormalised, just return it:
-   return val; 
+   return val;
 }
 
 /*`
-Which leaves us with evaluation errors, these occur when an internal
+Which leaves us with evaluation errors: these occur when an internal
 error occurs that prevents the function being fully evaluated.
 The parameter /val/ contains the closest approximation to the result
 found so far:
@@ -205,9 +205,8 @@ T user_evaluation_error(const char* function, const char* message, const T& val)
 
    std::cerr << msg << std::endl;
 
-   // What do we return here?  This is generally a fatal error,
-   // that should never occur, just return a NaN for the purposes
-   // of the example:
+   // What do we return here?  This is generally a fatal error, that should never occur,
+   // so we just return a NaN for the purposes of the example:
    return std::numeric_limits<T>::quiet_NaN();
 }
 

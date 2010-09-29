@@ -76,10 +76,10 @@ void confidence_limits_on_std_deviation(
 
 void confidence_limits_on_std_deviation_alpha(
         double Sd,    // Sample Standard Deviation
-        double alpha  // confidence 
-        )   
+        double alpha  // confidence
+        )
 {  // Calculate confidence intervals for the standard deviation.
-   // for the alpha parameter, for a range number of observations, 
+   // for the alpha parameter, for a range number of observations,
    // from a mere 2 up to a million.
    // O. L. Davies, Statistical Methods in Research and Production, ISBN 0 05 002437 X,
    // 4.33 Page 68, Table H, pp 452 459.
@@ -111,7 +111,7 @@ void confidence_limits_on_std_deviation_alpha(
      unsigned int N = obs[i]; // Observations
      // Start by declaring the distribution with the appropriate :
      chi_squared dist(N - 1);
-     
+
      // Now print out the data for the table row.
       cout << fixed << setprecision(3) << setw(10) << right << N;
       // Calculate limits: (alpha /2 because it is a two-sided (upper and lower limit) test.
@@ -244,17 +244,17 @@ void chi_squared_sample_sized(
    {
       // Confidence value:
       cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
-      // calculate df for a lower single-sided test:
+      // Calculate df for a lower single-sided test:
       double df = chi_squared::find_degrees_of_freedom(
          -diff, alpha[i], alpha[i], variance);
-      // convert to sample size:
+      // Convert to integral sample size (df is a floating point value in this implementation):
       double size = ceil(df) + 1;
       // Print size:
       cout << fixed << setprecision(0) << setw(16) << right << size;
-      // calculate df for an upper single-sided test:
+      // Calculate df for an upper single-sided test:
       df = chi_squared::find_degrees_of_freedom(
          diff, alpha[i], alpha[i], variance);
-      // convert to sample size:
+      // Convert to integral sample size:
       size = ceil(df) + 1;
       // Print size:
       cout << fixed << setprecision(0) << setw(16) << right << size << endl;

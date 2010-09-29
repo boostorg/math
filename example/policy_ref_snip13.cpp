@@ -42,8 +42,8 @@ BOOST_MATH_DECLARE_DISTRIBUTIONS(double, my_policy)
 // myspace::mypolicy:
 //
 // This compiles but throws a domain error exception at runtime.
-// (Caution, if you omit the try'n'catch blocks, it will just terminate,
-// giving no clues as to why! 
+// Caution! If you omit the try'n'catch blocks, 
+// it will just silently terminate, giving no clues as to why! 
 // So try'n'catch blocks are very strongly recommended.
 
 void test_cauchy()

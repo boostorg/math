@@ -1,6 +1,6 @@
 // example_error_handling.cpp
 
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2010.
 // Copyright John Maddock 2007.
 
 // Use, modification and distribution are subject to the
@@ -10,6 +10,11 @@
 
 // Note that this file contains quickbook markup as well as code
 // and comments, don't change any of the special comment markups!
+
+// Optional macro definitions described in text below:
+//   #define BOOST_MATH_DOMAIN_ERROR_POLICY ignore_error
+//   #define BOOST_MATH_DOMAIN_ERROR_POLICY errno_on_error
+//   #define BOOST_MATH_DOMAIN_ERROR_POLICY is set to: throw_on_error
 
 //[error_handling_example
 /*`
@@ -59,11 +64,9 @@ We'll begin our sample program with the needed includes:
    using std::exception;
 
 /*`
-
 Next we'll define the program's main() to call the student's t
-distribution with an invalid degrees of freedom parameter, the program
-is set up to handle either an exception or a NaN:
-
+distribution with an invalid degrees of freedom parameter,
+the program is set up to handle either an exception or a NaN:
 */
 
 int main()
@@ -77,14 +80,17 @@ int main()
 
    try
    {
-      errno = 0;
-      students_t dist(degrees_of_freedom); // exception is thrown here if enabled
+      errno = 0; // Clear/reset.
+      students_t dist(degrees_of_freedom); // exception is thrown here if enabled.
       double p = cdf(dist, t);
-      // test for error reported by other means:
+      // Test for error reported by other means:
       if((boost::math::isnan)(p))
       {
          cout << "cdf returned a NaN!" << endl;
-         cout << "errno is set to: " << errno << endl;
+         if (errno != 0)
+         { // So errno has been set.
+           cout << "errno is set to: " << errno << endl;
+         }
       }
       else
          cout << "Probability of Student's t is " << p << endl;
@@ -94,14 +100,13 @@ int main()
       std::cout <<
          "\n""Message from thrown exception was:\n   " << e.what() << std::endl;
    }
-
    return 0;
 } // int main()
 
 /*`
 
 Here's what the program output looks like with a default build
-(one that does throw exceptions):
+(one that *does throw exceptions*):
 
 [pre
 Example error handling using Student's t function.
@@ -122,14 +127,13 @@ Now the program output is:
 Example error handling using Student's t function.
 BOOST_MATH_DOMAIN_ERROR_POLICY is set to: ignore_error
 cdf returned a NaN!
-errno is set to: 0
 ]
 
 And finally let's build with:
 
    #define BOOST_MATH_DOMAIN_ERROR_POLICY errno_on_error
 
-Which gives the output:
+Which gives the output show errno:
 
 [pre
 Example error handling using Student's t function.
