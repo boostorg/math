@@ -65,6 +65,7 @@ T user_indeterminate_result_error(const char* , const char* , const T& )
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/test/test_exec_monitor.hpp> // for test_main
+#include <cerrno> // for errno
 //
 // Define some policies:
 //
