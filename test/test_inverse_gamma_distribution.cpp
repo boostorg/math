@@ -92,8 +92,8 @@ void test_spots(RealType)
   // Basic sanity checks, test data is to six decimal places only
   // so set tolerance to 0.000001 expressed as a percentage = 0.0001%.
 
-  RealType tolerance = 0.000001f * 100;
-  cout << "Tolerance = " << tolerance << "%." << endl;
+  RealType tolerance = 0.000001f; // as fraction.
+  cout << "Tolerance = " << tolerance * 100 << "%." << endl;
 
 // This test values from output from R provided by Thomas Mang.
   test_spot(static_cast<RealType>(2), static_cast<RealType>(1), // shape, scale
@@ -108,7 +108,7 @@ void test_spots(RealType)
   static_cast<RealType>( 0.5), // x
   static_cast<RealType>(0.82415241749687074L), // pdf
   static_cast<RealType>(0.60648042700409865L), // cdf
-  static_cast<RealType>(1 - 0.60648042700409865), // cdf complement
+  static_cast<RealType>(1 - 0.60648042700409865L), // cdf complement
   tolerance  // tol
   );
 
@@ -116,20 +116,18 @@ void test_spots(RealType)
   static_cast<RealType>(0.5), // x
   static_cast<RealType>(0.00000000068343206235379223), // pdf
   static_cast<RealType>(0.99999999997242739L), // cdf
-  static_cast<RealType>(1 - 0.99999999997242739), // cdf complement
+  static_cast<RealType>(1 - 0.99999999997242739L), // cdf complement
   tolerance  // tol
   );
-
 
   test_spot(static_cast<RealType>(1.593), static_cast<RealType>(1), // shape, scale
   static_cast<RealType>(1.977), // x
   static_cast<RealType>(0.11535946773398653L), // pdf
   static_cast<RealType>(0.82449794420341549L), // cdf
-  static_cast<RealType>(1 - 0.82449794420341549), // cdf complement
+  static_cast<RealType>(1 - 0.82449794420341549L), // cdf complement
   tolerance  // tol
   );
-
-
+  
   test_spot(static_cast<RealType>(6.666), static_cast<RealType>(1.411), // shape, scale
   static_cast<RealType>(5), // x
   static_cast<RealType>(0.000000084415758206386872), // pdf
@@ -137,7 +135,6 @@ void test_spots(RealType)
   static_cast<RealType>(1 - 0.99999993427280998L), // cdf complement
   tolerance  // tol
   );
-
 
   // Check some bad parameters to the distribution,
   BOOST_CHECK_THROW(boost::math::inverse_gamma_distribution<RealType> igbad1(-1, 0), std::domain_error); // negative shape.
@@ -177,7 +174,7 @@ void test_spots(RealType)
       tolerance);
   }   // Spot checks for parameters:
 
-  RealType tol_5eps = boost::math::tools::epsilon<RealType>() * 5; // 5 eps as a fraction.
+  RealType tol_few_eps = boost::math::tools::epsilon<RealType>() * 5; // 5 eps as a fraction.
   inverse_gamma_distribution<RealType> dist51(5, 1);
   inverse_gamma_distribution<RealType> dist52(5, 2);
   inverse_gamma_distribution<RealType> dist31(3, 1);
@@ -189,42 +186,37 @@ void test_spots(RealType)
   using namespace boost::math;
 
   //  mean, variance etc
-  BOOST_CHECK_CLOSE_FRACTION(mean(dist52), static_cast<RealType>(0.5), tol_5eps);
-  BOOST_CHECK_CLOSE_FRACTION(mean(dist111), static_cast<RealType>(0.1L), tol_5eps);
+  BOOST_CHECK_CLOSE_FRACTION(mean(dist52), static_cast<RealType>(0.5), tol_few_eps);
+  BOOST_CHECK_CLOSE_FRACTION(mean(dist111), static_cast<RealType>(0.1L), tol_few_eps);
   inverse_gamma_distribution<RealType> igamma41(static_cast<RealType>(4.), static_cast<RealType>(1.) );
-  BOOST_CHECK_CLOSE_FRACTION(mean(igamma41), static_cast<RealType>(0.3333333333333333333333333333333333333333333333333333333L), tol_5eps);
-
-
+  BOOST_CHECK_CLOSE_FRACTION(mean(igamma41), static_cast<RealType>(0.3333333333333333333333333333333333333333333333333333333L), tol_few_eps);
   // variance:
-  BOOST_CHECK_CLOSE_FRACTION(variance(dist51), static_cast<RealType>(0.0208333333333333333333333333333333333333333333333333L), tol_5eps);
-  BOOST_CHECK_CLOSE_FRACTION(variance(dist31), static_cast<RealType>(0.25), tol_5eps);
-  BOOST_CHECK_CLOSE_FRACTION(variance(dist111), static_cast<RealType>(0.001111111111111111111111111111111111111111111111111L), tol_5eps);
+  BOOST_CHECK_CLOSE_FRACTION(variance(dist51), static_cast<RealType>(0.0208333333333333333333333333333333333333333333333333L), tol_few_eps);
+  BOOST_CHECK_CLOSE_FRACTION(variance(dist31), static_cast<RealType>(0.25), tol_few_eps);
+  BOOST_CHECK_CLOSE_FRACTION(variance(dist111), static_cast<RealType>(0.001111111111111111111111111111111111111111111111111L), tol_few_eps);
   // std deviation:
-  BOOST_CHECK_CLOSE_FRACTION(standard_deviation(dist31), static_cast<RealType>(0.5), tol_5eps);
-  BOOST_CHECK_CLOSE_FRACTION(standard_deviation(dist111), static_cast<RealType>(0.0333333333333333333333333333333333333333333333333L), tol_5eps);
+  BOOST_CHECK_CLOSE_FRACTION(standard_deviation(dist31), static_cast<RealType>(0.5), tol_few_eps);
+  BOOST_CHECK_CLOSE_FRACTION(standard_deviation(dist111), static_cast<RealType>(0.0333333333333333333333333333333333333333333333333L), tol_few_eps);
   // hazard:
-  BOOST_CHECK_CLOSE_FRACTION(hazard(dist51, x), pdf(dist51, x) / cdf(complement(dist51, x)), tol_5eps);
+  BOOST_CHECK_CLOSE_FRACTION(hazard(dist51, x), pdf(dist51, x) / cdf(complement(dist51, x)), tol_few_eps);
  //  cumulative hazard:
-  BOOST_CHECK_CLOSE_FRACTION(chf(dist51, x), -log(cdf(complement(dist51, x))), tol_5eps);
+  BOOST_CHECK_CLOSE_FRACTION(chf(dist51, x), -log(cdf(complement(dist51, x))), tol_few_eps);
   // coefficient_of_variation:
-  BOOST_CHECK_CLOSE_FRACTION(coefficient_of_variation(dist51), standard_deviation(dist51) / mean(dist51), tol_5eps);
+  BOOST_CHECK_CLOSE_FRACTION(coefficient_of_variation(dist51), standard_deviation(dist51) / mean(dist51), tol_few_eps);
   // mode:
-  BOOST_CHECK_CLOSE_FRACTION(mode(dist51), static_cast<RealType>(0.166666666666666666666666666666666666666666666666666L), tol_5eps);
-
-  //BOOST_CHECK_CLOSE_FRACTION(median(dist52), static_cast<RealType>(0), tol_5eps);
-  // need an exact median?  Failing that a loop back test.
-
-   BOOST_CHECK_CLOSE_FRACTION(cdf(dist111, median(dist111)), 0.5, tol_5eps);
-
-
+  BOOST_CHECK_CLOSE_FRACTION(mode(dist51), static_cast<RealType>(0.166666666666666666666666666666666666666666666666666L), tol_few_eps);
+  // median
+  //BOOST_CHECK_CLOSE_FRACTION(median(dist52), static_cast<RealType>(0), tol_few_eps);
+  // Useful to have an exact median?  Failing that use a loop back test.
+   BOOST_CHECK_CLOSE_FRACTION(cdf(dist111, median(dist111)), 0.5, tol_few_eps);
   // skewness:
-  BOOST_CHECK_CLOSE_FRACTION(skewness(dist111), static_cast<RealType>(1.5), tol_5eps);
+  BOOST_CHECK_CLOSE_FRACTION(skewness(dist111), static_cast<RealType>(1.5), tol_few_eps);
    //kurtosis:
-  BOOST_CHECK_CLOSE_FRACTION(kurtosis(dist51), static_cast<RealType>(42 + 3), tol_5eps);
+  BOOST_CHECK_CLOSE_FRACTION(kurtosis(dist51), static_cast<RealType>(42 + 3), tol_few_eps);
   // kurtosis excess:
-  BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(dist51), static_cast<RealType>(42), tol_5eps);
+  BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(dist51), static_cast<RealType>(42), tol_few_eps);
 
-    tol_5eps = boost::math::tools::epsilon<RealType>() * 5; // 5 eps as a percentage.
+  tol_few_eps = boost::math::tools::epsilon<RealType>() * 3; // 3 eps as a percentage.
 
   // Special and limit cases:
 
