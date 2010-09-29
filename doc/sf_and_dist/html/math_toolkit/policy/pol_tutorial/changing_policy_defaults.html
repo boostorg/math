@@ -24,8 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_tutorial.changing_policy_defaults"></a><a class="link" href="changing_policy_defaults.html" title="Changing the Policy Defaults">
-        Changing the Policy Defaults</a>
+<a name="math_toolkit.policy.pol_tutorial.changing_policy_defaults"></a><a class="link" href="changing_policy_defaults.html" title="Changing the Policy Defaults">Changing
+        the Policy Defaults</a>
 </h4></div></div></div>
 <p>
           The default policies used by the library are changed by the usual configuration
@@ -33,8 +33,8 @@
         </p>
 <p>
           For example, passing <code class="computeroutput"><span class="special">-</span><span class="identifier">DBOOST_MATH_DOMAIN_ERROR_POLICY</span><span class="special">=</span><span class="identifier">errno_on_error</span></code>
-          to your compiler will cause domain errors to set <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code> and return a NaN rather than the
-          usual default behaviour of throwing a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
+          to your compiler will cause domain errors to set <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code> and return a <a href="http://en.wikipedia.org/wiki/NaN" target="_top">NaN</a>
+          rather than the usual default behaviour of throwing a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span></code>
           exception.
         </p>
 <div class="tip"><table border="0" summary="Tip">
@@ -66,7 +66,7 @@
 <p>
           </p>
 <p>
-            may be ignored.
+            <span class="bold"><strong>may be ignored</strong></span>.
           </p>
 <p>
             The compiler command line shows:
@@ -129,68 +129,42 @@
           unit only: <span class="emphasis"><em>don't say that you weren't warned!</em></span>
         </p>
 <p>
-          </p>
+          The following example demonstrates the effect of setting the macro BOOST_MATH_DOMAIN_ERROR_POLICY
+          when an invalid argument is encountered. For the purposes of this example,
+          we'll pass a negative degrees of freedom parameter to the student's t distribution.
+        </p>
 <p>
-            The following example demonstrates the effect of setting the macro BOOST_MATH_DOMAIN_ERROR_POLICY
-            when an invalid argument is encountered. For the purposes of this example,
-            we'll pass a negative degrees of freedom parameter to the student's t
-            distribution.
-          </p>
-<p>
-          </p>
-<p>
-            Since we know that this is a single file program we could just add:
-          </p>
-<p>
-          
-</p>
+          Since we know that this is a single file program we could just add:
+        </p>
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">ignore_error</span>
 </pre>
 <p>
-          </p>
-<p>
-            to the top of the source file to change the default policy to one that
-            simply returns a NaN when a domain error occurs. Alternatively we could
-            use:
-          </p>
-<p>
-          
-</p>
+          to the top of the source file to change the default policy to one that
+          simply returns a NaN when a domain error occurs. Alternatively we could
+          use:
+        </p>
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">errno_on_error</span>
 </pre>
 <p>
-          </p>
+          To ensure the <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+          is set when a domain error occurs as well as returning a NaN.
+        </p>
 <p>
-            To ensure the <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
-            is set when a domain error occurs as well as returning a NaN.
-          </p>
-<p>
-          </p>
-<p>
-            This is safe provided the program consists of a single translation unit
-            <span class="emphasis"><em>and</em></span> we place the define <span class="emphasis"><em>before</em></span>
-            any #includes. Note that should we add the define after the includes
-            then it will have no effect! A warning such as:
-          </p>
-<p>
-          
-</p>
+          This is safe provided the program consists of a single translation unit
+          <span class="emphasis"><em>and</em></span> we place the define <span class="emphasis"><em>before</em></span>
+          any #includes. Note that should we add the define after the includes then
+          it will have no effect! A warning such as:
+        </p>
 <pre class="programlisting">warning C4005: 'BOOST_MATH_OVERFLOW_ERROR_POLICY' : macro redefinition</pre>
 <p>
-          </p>
+          is a certain sign that it will <span class="emphasis"><em>not</em></span> have the desired
+          effect.
+        </p>
 <p>
-            is a certain sign that it will <span class="emphasis"><em>not</em></span> have the desired
-            effect.
-          </p>
+          We'll begin our sample program with the needed includes:
+        </p>
 <p>
-          </p>
-<p>
-            We'll begin our sample program with the needed includes:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="comment">// Boost
 </span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -204,18 +178,14 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">stdexcept</span><span class="special">&gt;</span>
    <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exception</span><span class="special">;</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Next we'll define the program's main() to call the student's t distribution
+          with an invalid degrees of freedom parameter, the program is set up to
+          handle either an exception or a NaN:
+        </p>
 <p>
-            Next we'll define the program's main() to call the student's t distribution
-            with an invalid degrees of freedom parameter, the program is set up to
-            handle either an exception or a NaN:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
@@ -228,14 +198,17 @@
 
    <span class="keyword">try</span>
    <span class="special">{</span>
-      <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
-      <span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">degrees_of_freedom</span><span class="special">);</span> <span class="comment">// exception is thrown here if enabled
+      <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="comment">// Clear/reset.
+</span>      <span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">degrees_of_freedom</span><span class="special">);</span> <span class="comment">// exception is thrown here if enabled.
 </span>      <span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">t</span><span class="special">);</span>
-      <span class="comment">// test for error reported by other means:
+      <span class="comment">// Test for error reported by other means:
 </span>      <span class="keyword">if</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">isnan</span><span class="special">)(</span><span class="identifier">p</span><span class="special">))</span>
       <span class="special">{</span>
          <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"cdf returned a NaN!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-         <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno is set to: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+         <span class="keyword">if</span> <span class="special">(</span><span class="identifier">errno</span> <span class="special">!=</span> <span class="number">0</span><span class="special">)</span>
+         <span class="special">{</span> <span class="comment">// So errno has been set.
+</span>           <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno is set to: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+         <span class="special">}</span>
       <span class="special">}</span>
       <span class="keyword">else</span>
          <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of Student's t is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">p</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -245,20 +218,14 @@
       <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span>
          <span class="string">"\n"</span><span class="string">"Message from thrown exception was:\n   "</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">what</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
    <span class="special">}</span>
-
    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span> <span class="comment">// int main()</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
-<p>
-            Here's what the program output looks like with a default build (one that
-            does throw exceptions):
-          </p>
-<p>
-          
-</p>
+          Here's what the program output looks like with a default build (one that
+          <span class="bold"><strong>does throw exceptions</strong></span>):
+        </p>
 <pre class="programlisting">Example error handling using Student's t function.
 BOOST_MATH_DOMAIN_ERROR_POLICY is set to: throw_on_error
 
@@ -267,53 +234,30 @@ Message from thrown exception was:
    Degrees of freedom argument is -1, but must be &gt; 0 !
 </pre>
 <p>
-          </p>
-<p>
-            Alternatively let's build with:
-          </p>
-<p>
-          
-</p>
+          Alternatively let's build with:
+        </p>
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">ignore_error</span>
 </pre>
 <p>
-          </p>
-<p>
-            Now the program output is:
-          </p>
-<p>
-          
-</p>
+          Now the program output is:
+        </p>
 <pre class="programlisting">Example error handling using Student's t function.
 BOOST_MATH_DOMAIN_ERROR_POLICY is set to: ignore_error
 cdf returned a NaN!
-errno is set to: 0
 </pre>
 <p>
-          </p>
-<p>
-            And finally let's build with:
-          </p>
-<p>
-          
-</p>
+          And finally let's build with:
+        </p>
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">errno_on_error</span>
 </pre>
 <p>
-          </p>
-<p>
-            Which gives the output:
-          </p>
-<p>
-          
-</p>
+          Which gives the output show errno:
+        </p>
 <pre class="programlisting">Example error handling using Student's t function.
 BOOST_MATH_DOMAIN_ERROR_POLICY is set to: errno_on_error
 cdf returned a NaN!
 errno is set to: 33
 </pre>
-<p>
-        </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

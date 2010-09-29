@@ -1,7 +1,7 @@
 [section:nmp Non-Member Properties]
 
 Properties that are common to all distributions are accessed via non-member 
-getter functions.  This allows more of these functions to be added over time
+getter functions: non-membership allows more of these functions to be added over time,
 as the need arises.  Unfortunately the literature uses many different and
 confusing names to refer to a rather small number of actual concepts; refer
 to the [link concept_index concept index] to find the property you 
@@ -70,7 +70,7 @@ to the integral from -infinity to x of the __pdf.
 This function may return a __domain_error if the random variable is outside
 the defined range for the distribution.
 
-For example the following graph shows the cdf for the
+For example, the following graph shows the cdf for the
 normal distribution:
 
 [$../graphs/cdf.png]
@@ -98,7 +98,7 @@ function in a call to `complement`, for example:
    // print survival function for x=2.0:
    std::cout << cdf(complement(norm, 2.0)) << std::endl;
 
-For example the following graph shows the __complement of the cdf for the
+For example, the following graph shows the __complement of the cdf for the
 normal distribution:
 
 [$../graphs/survival.png]
@@ -180,11 +180,11 @@ variate takes the value x.
 This function may return a __domain_error if the random variable is outside
 the defined range for the distribution.
 
-For example for a standard normal distribution the pdf looks like this:
+For example, for a standard normal distribution the pdf looks like this:
 
 [$../graphs/pdf.png]
 
-[h4 [#math.dist.range]range]
+[h4 [#math.dist.range]Range]
 
    template<class RealType, class ``__Policy``>
    std::pair<RealType, RealType> range(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist);

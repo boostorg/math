@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.bessel.mbessel"></a><a class="link" href="mbessel.html" title="Modified Bessel Functions of the First and Second Kinds"> Modified Bessel
+<a name="math_toolkit.special.bessel.mbessel"></a><a class="link" href="mbessel.html" title="Modified Bessel Functions of the First and Second Kinds">Modified Bessel
         Functions of the First and Second Kinds</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.bessel.mbessel.synopsis"></a><h5>
-<a name="id1237028"></a>
+<a name="id1109360"></a>
           <a class="link" href="mbessel.html#math_toolkit.special.bessel.mbessel.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
@@ -44,7 +44,7 @@
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_k</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <a name="math_toolkit.special.bessel.mbessel.description"></a><h5>
-<a name="id1237395"></a>
+<a name="id1109727"></a>
           <a class="link" href="mbessel.html#math_toolkit.special.bessel.mbessel.description">Description</a>
         </h5>
 <p>
@@ -75,14 +75,9 @@
           is an integer.
         </p>
 <p>
-          </p>
-<p>
-            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
-            is optional and can be used to control the behaviour of the function:
-            how it handles errors, what level of precision to use etc. Refer to the
-            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
-          </p>
-<p>
+          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
+          optional and can be used to control the behaviour of the function: how
+          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
 <p>
           The functions return the result of <a class="link" href="../../main_overview/error_handling.html#domain_error">domain_error</a>
@@ -109,7 +104,7 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/cyl_bessel_k.png" align="middle"></span>
         </p>
 <a name="math_toolkit.special.bessel.mbessel.testing"></a><h5>
-<a name="id1237667"></a>
+<a name="id1109996"></a>
           <a class="link" href="mbessel.html#math_toolkit.special.bessel.mbessel.testing">Testing</a>
         </h5>
 <p>
@@ -118,7 +113,7 @@
           (with all the special case handling removed).
         </p>
 <a name="math_toolkit.special.bessel.mbessel.accuracy"></a><h5>
-<a name="id1237689"></a>
+<a name="id1110018"></a>
           <a class="link" href="mbessel.html#math_toolkit.special.bessel.mbessel.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -326,19 +321,19 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.special.bessel.mbessel.implementation"></a><h5>
-<a name="id1238032"></a>
+<a name="id1110361"></a>
           <a class="link" href="mbessel.html#math_toolkit.special.bessel.mbessel.implementation">Implementation</a>
         </h5>
 <p>
           The following are handled as special cases first:
         </p>
 <p>
-          When computing I<sub>v</sub> for <span class="emphasis"><em>x &lt; 0</em></span>, then &#957; must be an integer
-          or a domain error occurs. If &#957; is an integer, then the function is odd if
-          &#957; is odd and even if &#957; is even, and we can reflect to <span class="emphasis"><em>x &gt; 0</em></span>.
+          When computing I<sub>v</sub> &#8203; for <span class="emphasis"><em>x &lt; 0</em></span>, then &#957; &#8203; must be an integer
+          or a domain error occurs. If &#957; &#8203; is an integer, then the function is odd if
+          &#957; &#8203; is odd and even if &#957; &#8203; is even, and we can reflect to <span class="emphasis"><em>x &gt; 0</em></span>.
         </p>
 <p>
-          For I<sub>v</sub> with v equal to 0, 1 or 0.5 are handled as special cases.
+          For I<sub>v</sub> &#8203; with v equal to 0, 1 or 0.5 are handled as special cases.
         </p>
 <p>
           The 0 and 1 cases use minimax rational approximations on finite and infinite
@@ -362,20 +357,20 @@
           I<sub>0.5</sub>(x) = sqrt(2 / &#960;x) * sinh(x)
         </p>
 <p>
-          For K<sub>v</sub> with <span class="emphasis"><em>v</em></span> an integer, the result is calculated
+          For K<sub>v</sub> &#8203; with <span class="emphasis"><em>v</em></span> an integer, the result is calculated
           using the recurrence relation:
         </p>
 <p>
           <span class="inlinemediaobject"><img src="../../../../equations/mbessel5.png"></span>
         </p>
 <p>
-          starting from K<sub>0</sub> and K<sub>1</sub> which are calculated using rational the approximations
+          starting from K<sub>0</sub> &#8203; and K<sub>1</sub> &#8203; which are calculated using rational the approximations
           above. These rational approximations are accurate to around 19 digits,
           and are therefore only used when T has no more than 64 binary digits of
           precision.
         </p>
 <p>
-          In the general case, we first normalize &#957; to [<code class="literal">0, [inf</code>])
+          In the general case, we first normalize &#957; &#8203; to [<code class="literal">0, [inf</code>])
           with the help of the reflection formulae:
         </p>
 <p>
@@ -385,7 +380,7 @@
           <span class="inlinemediaobject"><img src="../../../../equations/mbessel10.png"></span>
         </p>
 <p>
-          Let &#956; = &#957; - floor(&#957; + 1/2), then &#956; is the fractional part of &#957; such that |&#956;| &lt;=
+          Let &#956; &#8203; = &#957; - floor(&#957; + 1/2), then &#956; &#8203; is the fractional part of &#957; &#8203; such that |&#956;| &lt;=
           1/2 (we need this for convergence later). The idea is to calculate K<sub>&#956;</sub>(x)
           and K<sub>&#956;+1</sub>(x), and use them to obtain I<sub>&#957;</sub>(x) and K<sub>&#957;</sub>(x).
         </p>
@@ -422,7 +417,7 @@
 <p>
           When <span class="emphasis"><em>x</em></span> is large (<span class="emphasis"><em>x</em></span> &gt; 2), both
           continued fractions converge (CF1 may be slow for really large <span class="emphasis"><em>x</em></span>).
-          K<sub>&#956;</sub> and K<sub>&#956;+1</sub>
+          K<sub>&#956;</sub> &#8203; and K<sub>&#956;+1</sub> &#8203;
 can be calculated by
         </p>
 <p>
@@ -455,7 +450,7 @@ can be calculated by
           <span class="inlinemediaobject"><img src="../../../../equations/mbessel16.png"></span>
         </p>
 <p>
-          f<sub>k</sub> and h<sub>k</sub>
+          f<sub>k</sub> &#8203; and h<sub>k</sub> &#8203;
 are also computed by recursions (involving gamma functions), but
           the formulas are a little complicated, readers are referred to N.M. Temme,
           <span class="emphasis"><em>On the numerical evaluation of the modified Bessel function of

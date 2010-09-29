@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../pol_ref.html" title="Policy Reference">
-<link rel="prev" href="internal_promotion.html" title="Internal Promotion Policies">
+<link rel="prev" href="internal_promotion.html" title="Internal Floating-point Promotion Policies">
 <link rel="next" href="discrete_quant_ref.html" title="Discrete Quantile Policies">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_ref.assert_undefined"></a><a class="link" href="assert_undefined.html" title="Mathematically Undefined Function Policies"> Mathematically
+<a name="math_toolkit.policy.pol_ref.assert_undefined"></a><a class="link" href="assert_undefined.html" title="Mathematically Undefined Function Policies">Mathematically
         Undefined Function Policies</a>
 </h4></div></div></div>
 <p>
@@ -33,7 +33,8 @@
           for certain distributions, but defined for others.
         </p>
 <p>
-          For example, the Cauchy distribution does not have a mean, so what should
+          For example, the Cauchy distribution does not have a meaningful mean, so
+          what should
         </p>
 <pre class="programlisting"><span class="identifier">mean</span><span class="special">(</span><span class="identifier">cauchy</span><span class="special">&lt;&gt;());</span>
 </pre>

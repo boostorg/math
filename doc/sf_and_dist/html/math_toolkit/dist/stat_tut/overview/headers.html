@@ -24,31 +24,41 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.stat_tut.overview.headers"></a><a class="link" href="headers.html" title="Headers and Namespaces"> Headers
+<a name="math_toolkit.dist.stat_tut.overview.headers"></a><a class="link" href="headers.html" title="Headers and Namespaces">Headers
           and Namespaces</a>
 </h5></div></div></div>
 <p>
             All the code in this library is inside namespace boost::math.
           </p>
-<div class="note"><table border="0" summary="Note">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../doc/src/images/note.png"></td>
-<th align="left">Note</th>
-</tr>
-<tr><td align="left" valign="top"><p>
-              Some math function names are also used in namespace std so including
-              &lt;random&gt; could cause ambiguity.
-            </p></td></tr>
-</table></div>
 <p>
             In order to use a distribution <span class="emphasis"><em>my_distribution</em></span> you
             will need to include either the header &lt;boost/math/distributions/my_distribution.hpp&gt;
-            or the "include everything" header: &lt;boost/math/distributions.hpp&gt;.
+            or the "include all the distributions" header: &lt;boost/math/distributions.hpp&gt;.
           </p>
 <p>
             For example, to use the Students-t distribution include either &lt;boost/math/distributions/students_t.hpp&gt;
             or &lt;boost/math/distributions.hpp&gt;
           </p>
+<p>
+            You also need to bring distribution names into scope, perhaps with a
+            <code class="computeroutput"><span class="keyword">using</span> <span class="keyword">namespace</span>
+            <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span></code>
+            declaration,
+          </p>
+<p>
+            or specific <code class="computeroutput"><span class="keyword">using</span></code> declarations
+            like <code class="computeroutput"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span></code> (<span class="bold"><strong>recommended</strong></span>).
+          </p>
+<div class="caution"><table border="0" summary="Caution">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../../../doc/src/images/caution.png"></td>
+<th align="left">Caution</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+              Some math function names are also used in namespace std so including
+              &lt;random&gt; could cause ambiguity!
+            </p></td></tr>
+</table></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

@@ -9,7 +9,7 @@ control:
 
 * What action to take when an error occurs.
 * What happens when you call a function that is mathematically undefined
-(for example if you ask for the mean of a Cauchy distribution).
+(for example, if you ask for the mean of a Cauchy distribution).
 * What happens when you ask for a quantile of a discrete distribution.
 * Whether the library is allowed to internally promote `float` to `double`
 and `double` to `long double` in order to improve precision.
@@ -34,9 +34,10 @@ compile-time-container of user-selected policies (sometimes called a type-list):
 
 [section:policy_tut_defaults Policies Have Sensible Defaults]
 
-Most of the time you can just ignore the policy framework, the defaults for 
-the various policies are as follows, if these work OK for you then you can
-stop reading now!
+Most of the time you can just ignore the policy framework.
+
+['*The defaults for the various policies are as follows,
+if these work OK for you then you can stop reading now!]
 
 [variablelist
 [[Domain Error][Throws a `std::domain_error` exception.]]
@@ -115,7 +116,7 @@ The default policies used by the library are changed by the usual
 configuration macro method.
 
 For example, passing `-DBOOST_MATH_DOMAIN_ERROR_POLICY=errno_on_error` to
-your compiler will cause domain errors to set `::errno` and return a NaN
+your compiler will cause domain errors to set `::errno` and return a __NaN
 rather than the usual default behaviour of throwing a `std::domain_error`
 exception.
 
@@ -131,7 +132,7 @@ that may mean that the equivalent definitions in source code:
 ``#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error``
   
-may be ignored.
+*may be ignored*.
 
 The compiler command line shows:
 
@@ -174,8 +175,9 @@ translation unit only: ['don't say that you weren't warned!]
 [section:ad_hoc_dist_policies Setting Policies for Distributions on an Ad Hoc Basis]
 
 All of the statistical distributions in this library are class templates
-that accept two template parameters, both with sensible defaults, for
-example:
+that accept two template parameters:
+real type (float, double ...) and policy (how to handle exceptional events),
+both with sensible defaults, for example:
 
    namespace boost{ namespace math{
    
@@ -264,8 +266,8 @@ to be used once only:
 [section:namespace_policies Setting Policies at Namespace or Translation Unit Scope]
 
 Sometimes what you want to do is just change a set of policies within 
-the current scope: the one thing you should not do in this situation
-is use the configuration macros, as this can lead to "One Definition
+the current scope: *the one thing you should not do in this situation
+is use the configuration macros*, as this can lead to "One Definition
 Rule" violations.  Instead this library provides a pair of macros
 especially for this purpose.
 
@@ -273,7 +275,8 @@ Let's consider the special functions first: we can declare a set of
 forwarding functions that all use a specific policy using the
 macro BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(['Policy]).  This
 macro should be used either inside a unique namespace set aside for the 
-purpose, or an unnamed namespace if you just want the functions
+purpose (for example, a C namespace for a C-style policy),
+or an unnamed namespace if you just want the functions
 visible in global scope for the current file only.  
 
 [import ../../example/policy_eg_4.cpp]
@@ -306,9 +309,9 @@ class template, but without the "_distribution" suffix.
 [policy_eg_6]
 
 [note
-There is an important limitation to note: you can [*not*] use the macros
+There is an important limitation to note: you can *not use the macros
 BOOST_MATH_DECLARE_DISTRIBUTIONS and BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS
-['in the same namespace],  as doing so creates ambiguities between functions
+['in the same namespace]*,  as doing so creates ambiguities between functions
 and distributions of the same name.
 ]
 

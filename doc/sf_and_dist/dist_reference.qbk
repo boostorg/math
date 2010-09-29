@@ -13,6 +13,7 @@
 [include distributions/extreme_value.qbk]
 [include distributions/fisher.qbk]
 [include distributions/gamma.qbk]
+[include distributions/inverse_chi_squared.qbk]
 [include distributions/inverse_gamma.qbk]
 [include distributions/hypergeometric.qbk]
 [include distributions/laplace.qbk]

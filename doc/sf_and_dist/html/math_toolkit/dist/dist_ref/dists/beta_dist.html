@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist"></a><a class="link" href="beta_dist.html" title="Beta Distribution"> Beta
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist"></a><a class="link" href="beta_dist.html" title="Beta Distribution">Beta
           Distribution</a>
 </h5></div></div></div>
 <p>
@@ -125,20 +125,19 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/beta_pdf.png" align="middle"></span>
           </p>
 <p>
-            If &#945; = &#946; = 1, then it is a &#8203;
-<a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">uniform
+            If &#945; = &#946; = 1, then it is a __space <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">uniform
             distribution</a>, equal to unity in the entire interval x = 0 to
-            1. If &#945; &#8203; and &#946; &#8203; are &lt; 1, then the pdf is U-shaped. If &#945; != &#946;, then the shape
-            is asymmetric and could be approximated by a triangle whose apex is away
-            from the centre (where x = half).
+            1. If &#945; __space and &#946; __space are &lt; 1, then the pdf is U-shaped. If &#945; !=
+            &#946;, then the shape is asymmetric and could be approximated by a triangle
+            whose apex is away from the centre (where x = half).
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.member_functions"></a><h5>
-<a name="id1122674"></a>
+<a name="id991768"></a>
             <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.member_functions">Member
             Functions</a>
           </h5>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.constructor"></a><h6>
-<a name="id1122689"></a>
+<a name="id992876"></a>
             <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.constructor">Constructor</a>
           </h6>
 <pre class="programlisting"><span class="identifier">beta_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">);</span>
@@ -165,7 +164,7 @@
             yellow in the graph above).
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors"></a><h6>
-<a name="id1122804"></a>
+<a name="id992992"></a>
             <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors">Parameter
             Accessors</a>
           </h6>
@@ -189,7 +188,7 @@
 </span><span class="identifier">assert</span><span class="special">(</span><span class="identifier">mybeta</span><span class="special">.</span><span class="identifier">beta</span><span class="special">()</span> <span class="special">==</span> <span class="number">5.</span><span class="special">);</span>   <span class="comment">// mybeta.beta()  returns 5
 </span></pre>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators"></a><h5>
-<a name="id1123006"></a>
+<a name="id993193"></a>
             <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators">Parameter
             Estimators</a>
           </h5>
@@ -197,15 +196,15 @@
             Two pairs of parameter estimators are provided.
           </p>
 <p>
-            One estimates either &#945; &#8203; or &#946; &#8203; 
-from presumed-known mean and variance.
+            One estimates either &#945; __space or &#946; __space from presumed-known mean and
+            variance.
           </p>
 <p>
-            The other pair estimates either &#945; &#8203; or &#946; &#8203; from the cdf and x.
+            The other pair estimates either &#945; __space or &#946; __space from the cdf and x.
           </p>
 <p>
-            It is also possible to estimate &#945; &#8203; and &#946; &#8203; from 'known' mode &amp; quantile.
-            For example, calculators are provided by the <a href="http://www.ausvet.com.au/pprev/content.php?page=PPscript" target="_top">Pooled
+            It is also possible to estimate &#945; __space and &#946; __space from 'known' mode
+            &amp; quantile. For example, calculators are provided by the <a href="http://www.ausvet.com.au/pprev/content.php?page=PPscript" target="_top">Pooled
             Prevalence Calculator</a> and <a href="http://www.epi.ucdavis.edu/diagnostictests/betabuster.html" target="_top">Beta
             Buster</a> but this is not yet implemented here.
           </p>
@@ -214,7 +213,7 @@ from presumed-known mean and variance.
 </span>  <span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">);</span> <span class="comment">// Expected value of variance.
 </span></pre>
 <p>
-            Returns the unique value of &#945; that corresponds to a beta distribution with
+            Returns the unique value of &#945; &#8203; that corresponds to a beta distribution with
             mean <span class="emphasis"><em>mean</em></span> and variance <span class="emphasis"><em>variance</em></span>.
           </p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
@@ -222,7 +221,7 @@ from presumed-known mean and variance.
 </span>  <span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">);</span> <span class="comment">// Expected value of variance.
 </span></pre>
 <p>
-            Returns the unique value of &#946; that corresponds to a beta distribution with
+            Returns the unique value of &#946; &#8203; that corresponds to a beta distribution with
             mean <span class="emphasis"><em>mean</em></span> and variance <span class="emphasis"><em>variance</em></span>.
           </p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_alpha</span><span class="special">(</span>
@@ -231,7 +230,7 @@ from presumed-known mean and variance.
 </span>  <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// probability cdf
 </span></pre>
 <p>
-            Returns the value of &#945; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
+            Returns the value of &#945; &#8203; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
           </p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
   <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="comment">// alpha.
@@ -239,10 +238,10 @@ from presumed-known mean and variance.
 </span>  <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// probability cdf.
 </span></pre>
 <p>
-            Returns the value of &#946; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
+            Returns the value of &#946; &#8203; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions"></a><h5>
-<a name="id1123456"></a>
+<a name="id993643"></a>
             <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions">Non-member
             Accessor Functions</a>
           </h5>
@@ -264,7 +263,7 @@ from presumed-known mean and variance.
             Mathworld</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.applications"></a><h5>
-<a name="id1123558"></a>
+<a name="id993745"></a>
             <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.applications">Applications</a>
           </h5>
 <p>
@@ -277,12 +276,12 @@ from presumed-known mean and variance.
             statistical inference</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions"></a><h5>
-<a name="id1123583"></a>
+<a name="id993770"></a>
             <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions">Related
             distributions</a>
           </h5>
 <p>
-            The beta distribution with both &#945;  &#8203; and &#946; = 1 follows a <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">uniform
+            The beta distribution with both &#945;  __space and &#946; = 1 follows a <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">uniform
             distribution</a>.
           </p>
 <p>
@@ -291,19 +290,20 @@ from presumed-known mean and variance.
           </p>
 <p>
             The <a href="http://en.wikipedia.org/wiki/Binomial_distribution" target="_top">binomial
-            distribution</a> is closely related when &#945;  &#8203; and &#946;  &#8203; are integers.
+            distribution</a> is closely related when &#945;  __space and &#946;  __space are
+            integers.
           </p>
 <p>
-            With integer values of &#945;  &#8203; and &#946;  &#8203; the distribution B(i, j) is that of the j-th
-            highest of a sample of i + j + 1 independent random variables uniformly
-            distributed between 0 and 1. The cumulative probability from 0 to x is
-            thus the probability that the j-th highest value is less than x. Or it
-            is the probability that that at least i of the random variables are less
-            than x, a probability given by summing over the <a class="link" href="binomial_dist.html" title="Binomial Distribution">Binomial
+            With integer values of &#945;  __space and &#946;  __space the distribution B(i, j) is
+            that of the j-th highest of a sample of i + j + 1 independent random
+            variables uniformly distributed between 0 and 1. The cumulative probability
+            from 0 to x is thus the probability that the j-th highest value is less
+            than x. Or it is the probability that that at least i of the random variables
+            are less than x, a probability given by summing over the <a class="link" href="binomial_dist.html" title="Binomial Distribution">Binomial
             Distribution</a> with its p parameter set to x.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.accuracy"></a><h5>
-<a name="id1123630"></a>
+<a name="id993817"></a>
             <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -315,12 +315,12 @@ from presumed-known mean and variance.
             please refer to these functions for information on accuracy.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.implementation"></a><h5>
-<a name="id1123674"></a>
+<a name="id993862"></a>
             <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
-            are the parameters &#945; and &#946;, <span class="emphasis"><em>x</em></span> is the random variable,
+            are the parameters &#945; &#8203; and &#946;, <span class="emphasis"><em>x</em></span> is the random variable,
             <span class="emphasis"><em>p</em></span> is the probability and <span class="emphasis"><em>q = 1-p</em></span>.
           </p>
 <div class="informaltable"><table class="table">
@@ -500,8 +500,6 @@ from presumed-known mean and variance.
                     </p>
                   </td>
 <td>
-                    <p>
-                    </p>
                   </td>
 </tr>
 <tr>
@@ -596,7 +594,7 @@ from presumed-known mean and variance.
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.beta_dist.references"></a><h5>
-<a name="id1125297"></a>
+<a name="id994885"></a>
             <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.references">References</a>
           </h5>
 <p>

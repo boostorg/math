@@ -76,8 +76,23 @@ Nico Temme, Special Functions, An Introduction to the Classical Functions of Mat
 [@http://www.cas.lancs.ac.uk/glossary_v1.1/prob.html#probdistn Statistics Glossary], Valerie Easton and John H. McColl.
 
 [__R]
+R Development Core Team (2010). R: A language and environment for
+statistical computing. R Foundation for Statistical Computing,
+Vienna, Austria. ISBN 3-900051-07-0, URL http://www.R-project.org.
 
-For use of R, Jim Albert, Bayesian Computation with R,  ISBN 978-0-387-71384-7.
+For use of R, see:
+
+Jim Albert, Bayesian Computation with R,  ISBN 978-0-387-71384-7.
+
+[@http://www.quantnet.com/cplusplus-statistical-distributions-boost 
+C++ Statistical Distributions in Boost - QuantNetwork forum]
+discusses using Boost.Math in finance.
+
+[@http://www.quantnet.com/boost-and-computational-finance/ Quantnet Boost and computational finance].
+Robert Demming & Daniel J. Duffy, Introduction to the C++ Boost Libraries - Volume I - Foundations
+and Volume II  ISBN 978-94-91028-01-4,  Advanced Libraries and Applications, ISBN 978-94-91028-02-1
+(to be published in 2011).
+discusses application of Boost.Math, especially in finance.]
 
 [endsect] [/section:references References]
 [/ 

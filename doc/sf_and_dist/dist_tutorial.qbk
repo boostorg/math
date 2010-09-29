@@ -1,4 +1,4 @@
-[/ def names end in distrib to avoid clashes]
+[/ def names all end in distrib to avoid clashes with names of functions]
 [def __binomial_distrib [link math_toolkit.dist.dist_ref.dists.binomial_dist Binomial Distribution]]
 [def __chi_squared_distrib [link math_toolkit.dist.dist_ref.dists.chi_squared_dist Chi Squared Distribution]]
 [def __normal_distrib [link math_toolkit.dist.dist_ref.dists.normal_dist Normal Distribution]]
@@ -19,15 +19,21 @@ provides a few worked examples of applying the library to statistical tests.
 
 All the code in this library is inside namespace boost::math.
 
-[note Some math function names are also used in namespace std so including <random> could cause ambiguity.]
 
 In order to use a distribution /my_distribution/ you will need to include
 either the header <boost/math/distributions/my_distribution.hpp> or
-the "include everything" header: <boost/math/distributions.hpp>.
+the "include all the distributions" header: <boost/math/distributions.hpp>.
 
 For example, to use the Students-t distribution include either
 <boost/math/distributions/students_t.hpp> or
 <boost/math/distributions.hpp>
+
+You also need to bring distribution names into scope,
+perhaps with a `using namespace boost::math;` declaration,
+
+or specific  `using` declarations like `using boost::math::normal;` (*recommended*).
+
+[caution Some math function names are also used in namespace std so including <random> could cause ambiguity!]
 
 [endsect] [/ section:headers Headers and Namespaces]
 
@@ -143,26 +149,36 @@ efficient algorithms available that are specific to random number generation.
 ] [/tip Random numbers that approximate Quantiles of Distributions]
 
 For example, the binomial distribution has two parameters:
-n (the number of trials) and p (the probability of success on one trial).
+n (the number of trials) and p (the probability of success on any one trial).
 
 The `binomial_distribution` constructor therefore has two parameters:
 
 `binomial_distribution(RealType n, RealType p);`
 
-For this distribution the random variate is k: the number of successes observed.
+For this distribution the __random_variate is k: the number of successes observed.
 The probability density\/mass function (pdf) is therefore written as ['f(k; n, p)].
 
 [note
 
 [*Random Variates and Distribution Parameters]
 
-[@http://en.wikipedia.org/wiki/Random_variate Random variates]
+The concept of a __random_variable is closely linked to the term __random_variate:
+a random variate is a particular value (outcome) of a random variable.
 and [@http://en.wikipedia.org/wiki/Parameter distribution parameters]
-are conventionally distinguished (for example in Wikipedia and Wolfram MathWorld
-by placing a semi-colon (or sometimes vertical bar)
-after the random variate (whose value you 'choose'),
-to separate the variate from the parameter(s) that defines the shape of the distribution.
+are conventionally distinguished (for example in Wikipedia and Wolfram MathWorld)
+by placing a semi-colon or vertical bar)
+/after/ the __random_variable (whose value you 'choose'),
+to separate the variate from the parameter(s) that defines the shape of the distribution.[br]
+For example, the binomial distribution probability distribution function (PDF) is written as
+['f(k| n, p)] = Pr(K = k|n, p) = probability of observing k successes out of n trials.
+K is the __random_variable, k is the __random_variate, 
+the parameters are n (trials) and p (probability).
 ] [/tip Random Variates and Distribution Parameters]
+
+[note  By convention, __random_variate are lower case, usually k is integral, x if real, and
+__random_variable are upper case, K if integral, X if real.  But this implementation treats
+all as floating point values `RealType`, so if you really want an integral result,
+you must round: see note on Discrete Probability Distributions below for details.] 
 
 As noted above the non-member function `pdf` has one parameter for the distribution object,
 and a second for the random variate.  So taking our binomial distribution
@@ -170,10 +186,10 @@ example, we would write:
 
 `pdf(binomial_distribution<RealType>(n, p), k);`
 
-The ranges of random variate values that are permitted and are supported can be
+The ranges of __random_variate values that are permitted and are supported can be
 tested by using two functions `range` and `support`.
 
-The distribution (effectively the random variate) is said to be 'supported'
+The distribution (effectively the __random_variate) is said to be 'supported'
 over a range that is
 [@http://en.wikipedia.org/wiki/Probability_distribution
  "the smallest closed set whose complement has probability zero"].
@@ -184,7 +200,7 @@ Outside are uninteresting zones where the pdf is zero, and the cdf zero or unity
 
 For most distributions, with probability distribution functions one might describe
 as 'well-behaved', we have decided that it is most useful for the supported range
-to exclude random variate values like exact zero *if the end point is discontinuous*.
+to *exclude* random variate values like exact zero *if the end point is discontinuous*.
 For example, the Weibull (scale 1, shape 1) distribution smoothly heads for unity
 as the random variate x declines towards zero.
 But at x = zero, the value of the pdf is suddenly exactly zero, by definition.

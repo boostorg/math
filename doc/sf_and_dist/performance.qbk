@@ -29,6 +29,9 @@ all the appropriate corner cases.  They do not necessarily represent
 "typical" usage: whatever that may be!
 ]
 
+[note Since these tests were run, most compilers have improved their code optimisation,
+and processor speeds have improved too, so these results are known to be out of date.]
+
 [endsect]
 
 [section:getting_best Getting the Best Performance from this Library]

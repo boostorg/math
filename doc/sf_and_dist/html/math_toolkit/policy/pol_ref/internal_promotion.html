@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Internal Promotion Policies</title>
+<title>Internal Floating-point Promotion Policies</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
@@ -24,15 +24,16 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_ref.internal_promotion"></a><a class="link" href="internal_promotion.html" title="Internal Promotion Policies"> Internal
-        Promotion Policies</a>
+<a name="math_toolkit.policy.pol_ref.internal_promotion"></a><a class="link" href="internal_promotion.html" title="Internal Floating-point Promotion Policies">Internal
+        Floating-point Promotion Policies</a>
 </h4></div></div></div>
 <p>
           Normally when evaluating a function at say <code class="computeroutput"><span class="keyword">float</span></code>
           precision, maximal accuracy is assured by conducting the calculation at
           <code class="computeroutput"><span class="keyword">double</span></code> precision internally,
-          and then rounding the result. There are two policies that effect whether
-          internal promotion takes place or not:
+          and then rounding the result. There are two policies that control whether
+          internal promotion to a higher precision floating-point type takes place,
+          or not:
         </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -84,7 +85,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.internal_promotion.examples"></a><h5>
-<a name="id1372662"></a>
+<a name="id1245139"></a>
           <a class="link" href="internal_promotion.html#math_toolkit.policy.pol_ref.internal_promotion.examples">Examples</a>
         </h5>
 <p>
@@ -93,9 +94,7 @@
           <span class="keyword">double</span></code>, then we could use:
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
@@ -116,17 +115,13 @@
 
 </pre>
 <p>
-          </p>
-<p>
         </p>
 <p>
           Alternatively, suppose we want a distribution to perform calculations without
           promoting <code class="computeroutput"><span class="keyword">float</span></code> to <code class="computeroutput"><span class="keyword">double</span></code>, then we could use:
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">;</span>
@@ -145,8 +140,6 @@
 </span><span class="keyword">float</span> <span class="identifier">q</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">my_norm</span><span class="special">(),</span> <span class="number">0.05f</span><span class="special">);</span>
 
 </pre>
-<p>
-          </p>
 <p>
         </p>
 </div>

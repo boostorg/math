@@ -11,6 +11,8 @@
     [/last-revision $Date$]
 ]
 
+[/ \u00E5 = Latin small letter A wiht ring above doesn't seem to work in authors]
+
 [template equation[name]  '''<inlinemediaobject>
 <imageobject role="html">
 <imagedata fileref="../equations/'''[name]'''.png"></imagedata>
@@ -29,7 +31,9 @@
 </imageobject>
 </inlinemediaobject>''']
 
-[include html4_symbols.qbk] [/ just for testing]
+[include html4_symbols.qbk]
+[/include math_symbols.qbk]
+
 [/include latin1_symbols.qbk] [/ just for testing]
 [include common_overviews.qbk] [/ overviews that appear in more than one place!]
 [include tr1.qbk] [/tr1 docs also appear in more than one place!]
@@ -37,8 +41,8 @@
 
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
-[def __exm1 '''<code>e<superscript>x</superscript> - 1</code>''']
-[def __ex '''<code>e<superscript>x</superscript></code>''']
+[def __exm1 '''<code>e<superscript>x</superscript> - 1</code>'''] [/e^x -1]
+[def __ex '''<code>e<superscript>x</superscript></code>'''] [/e^x]
 [def __te '''2&#x025B;''']  [/small Latin letter open e]
 
 [def __ceilR '''&#x2309;''']
@@ -51,16 +55,7 @@
 [def __eacute '''&#233;''']
 [def __quarter '''&#x00BC;''']
 [def __nearequal '''&#x224A;''']
-[def __quarter '''&#x00BC;''']
-[def __space '''&#8203;''']
-
-[def __NTL_RR [@http://shoup.net/ntl/doc/RR.txt NTL::RR]]
-[def __NTL_quad_float [@http://shoup.net/ntl/doc/quad_float.txt NTL::quad_float]]
-
-[def __R [@http://www.r-project.org/ The R Project for Statistical Computing]]
-
-[def __godfrey [link godfrey Godfrey]]
-[def __pugh [link pugh Pugh]]
+[def __spaces '''&#x2000;'''] [/spaces - useful for an indent.]
 
 [def __caution This is now an official Boost library, but remains a library under
                construction, the code is fully functional and robust, but
@@ -70,6 +65,7 @@
 [template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
 [template C99[] [@http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf C99 Standard ISO/IEC 9899:1999]]
 [template jm_rationals[] [link math_toolkit.backgrounders.implementation.rational_approximations_used devised by JM]]
+
 [def __domain_error [link domain_error domain_error]]
 [def __pole_error [link pole_error pole_error]]
 [def __overflow_error [link overflow_error overflow_error]]
@@ -203,7 +199,6 @@ and use the function's name as the link text]
 [/tools]
 [def __tuple [link math_toolkit.toolkit.internals1.tuples boost::math::tuple]]
 
-
 [/ distribution non-members]
 [def __cdf [link math.dist.cdf Cumulative Distribution Function]]
 [def __pdf [link math.dist.pdf Probability Density Function]]
@@ -233,6 +228,8 @@ and use the function's name as the link text]
 [def __F_distrib [link math_toolkit.dist.dist_ref.dists.f_dist Fisher F Distribution]]
 [def __gamma_distrib [link math_toolkit.dist.dist_ref.dists.gamma_dist Gamma Distribution]]
 [def __hypergeometric_distrib [link math_toolkit.dist.dist_ref.dists.hypergeometric_dist Hypergeometric Distribution]]
+[def __inverse_gamma_distrib [link math_toolkit.dist.dist_ref.dists.inverse_gamma_dist Inverse Gamma Distribution]]
+[def __inverse_chi_squared_distrib [link math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist Inverse chi squared Distribution]]
 [def __laplace_distrib [link math_toolkit.dist.dist_ref.dists.laplace_dist Laplace Distribution]]
 [def __logistic_distrib [link math_toolkit.dist.dist_ref.dists.logistic_dist Logistic Distribution]]
 [def __lognormal_distrib [link math_toolkit.dist.dist_ref.dists.lognormal_dist Log-normal Distribution]]
@@ -257,6 +254,12 @@ and use the function's name as the link text]
 [def __error_policy [link math_toolkit.policy.pol_ref.error_handling_policies error handling policies]]
 [def __changing_policy_defaults [link math_toolkit.policy.pol_ref.policy_defaults changing policies defaults]]
 [def __user_error_handling [link math_toolkit.policy.pol_tutorial.user_def_err_pol user error handling]]
+[def __promotion_policy [link math_toolkit.policy.pol_ref.internal_promotion internal promotion policy]]
+[def __precision_policy [link math_toolkit.policy.pol_ref.precision_pol precision policy]]
+
+[def __random_variate [@http://en.wikipedia.org/wiki/Random_variate random variate]]
+[def __random_variable [@http://en.wikipedia.org/wiki/Random_variable random variable]]
+[def __probability_distribution [@[@http://en.wikipedia.org/wiki/Probability_distribution probability_distribution]]
 
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard,
    __chf, __mean, __median, __mode, __variance, __sd, __skewness,
@@ -266,10 +269,23 @@ and use the function's name as the link text]
 [def __glibc [@http://www.gnu.org/software/libc/ GNU C Lib]]
 [def __hpc [@http://docs.hp.com/en/B9106-90010/index.html HP-UX C Library]]
 [def __cephes [@http://www.netlib.org/cephes/ Cephes]]
+[def __NTL [@http://www.shoup.net/ntl/ NTL A Library for doing Number Theory]]
+[def __NTL_RR [@http://shoup.net/ntl/doc/RR.txt NTL::RR]]
+[def __NTL_quad_float [@http://shoup.net/ntl/doc/quad_float.txt NTL::quad_float]]
+[def __R [@http://www.r-project.org/ The R Project for Statistical Computing]]
+[def __godfrey [link godfrey Godfrey]]
+[def __pugh [link pugh Pugh]]
+[def __NaN [@http://en.wikipedia.org/wiki/NaN NaN]]
+[def __errno [@http://en.wikipedia.org/wiki/Errno `::errno`]]
+[def __Mathworld [@http://mathworld.wolfram.com Wolfram MathWorld]]
+[def __Mathematica [@http://www.wolfram.com/products/mathematica/index.html Wolfram Mathematica]]
+
 
 
 [def __why_complements [link why_complements why complements?]]
 [def __complements [link complements complements]]
+[def __performance [link math_toolkit.perf performance]]
+[def __building [link math_toolkit.main_overview.building building libraries]]
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
@@ -317,12 +333,14 @@ for these distributions.
 
 This manual is also available in 
 [@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf 
-printer friendly PDF format].
+printer friendly PDF format],
+and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
+
 
 [section:main_overview Overview]
 
 [include overview.qbk]
-[include structure.qbk] [/getting about]
+[include structure.qbk] [/getting about, directory and file structure.]
 
 [include result_type_calc.qbk]
 [include error_handling.qbk]
@@ -346,13 +364,14 @@ printer friendly PDF format].
 [section:tr1 C99 and C++ TR1 C-style Functions]
 [tr1_overview]
 [endsect]
+[include faq.qbk]
 [include contact_info.qbk]
 
 [endsect] [/section:main_overview Overview]
 
 [section:dist Statistical Distributions and Functions]
 [include dist_tutorial.qbk]
-[include dist_reference.qbk]
+[include dist_reference.qbk] [/includes all individual distribution.qbk files] 
 [endsect] [/section:dist Statistical Distributions and Functions]
 
 [section:special Special Functions]
@@ -446,7 +465,7 @@ printer friendly PDF format].
 [section:internals2 Testing and Development]
 [include polynomial.qbk]
 [include minimax.qbk]
-[include relative_error.qbk]
+[include relative_error.qbk] [/ uncertainty of floating-point calculations.]
 [include test_data.qbk]
 [endsect] [/section:internals2 Testing and Development]
 
@@ -466,7 +485,7 @@ printer friendly PDF format].
 [include lanczos.qbk]
 [include remez.qbk]
 [include references.qbk]
-[endsect] [/section:backgrounds Backgrounders]
+[endsect] [/section:backgrounders Backgrounders]
 
 [section:status Library Status]
 [section:history1 History and What's New]

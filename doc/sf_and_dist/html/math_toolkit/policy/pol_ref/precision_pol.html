@@ -24,14 +24,15 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_ref.precision_pol"></a><a class="link" href="precision_pol.html" title="Precision Policies"> Precision
+<a name="math_toolkit.policy.pol_ref.precision_pol"></a><a class="link" href="precision_pol.html" title="Precision Policies">Precision
         Policies</a>
 </h4></div></div></div>
 <p>
           There are two equivalent policies that effect the <span class="emphasis"><em>working precision</em></span>
           used to calculate results, these policies both default to 0 - meaning calculate
           to the maximum precision available in the type being used - but can be
-          set to other values to cause lower levels of precision to be used.
+          set to other values to cause lower levels of precision to be used. One
+          might want to trade precision for evaluation speed.
         </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">policies</span><span class="special">{</span>
 
@@ -59,9 +60,7 @@
           to approximately 5 decimal digits using:
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
@@ -72,16 +71,12 @@
 </span><span class="comment">// to calculate tgamma to accuracy of approximately 5 decimal digits.
 </span></pre>
 <p>
-          </p>
-<p>
         </p>
 <p>
-          Or again using <span class="emphasis"><em>make_policy</em></span>:
+          Or again using helper function <code class="computeroutput"><span class="identifier">make_policy</span></code>:
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
@@ -92,16 +87,12 @@
 </span>
 </pre>
 <p>
-          </p>
-<p>
         </p>
 <p>
           And for a quantile of a distribution to approximately 25-bit precision:
         </p>
 <p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">;</span>
@@ -115,8 +106,6 @@
       <span class="number">0.05</span><span class="special">);</span> <span class="comment">// 5% quantile.
 </span>
 </pre>
-<p>
-          </p>
 <p>
         </p>
 </div>

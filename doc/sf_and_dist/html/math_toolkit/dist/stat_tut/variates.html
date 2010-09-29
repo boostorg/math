@@ -24,23 +24,24 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.dist.stat_tut.variates"></a><a class="link" href="variates.html" title="Random Variates and Distribution Parameters"> Random Variates
+<a name="math_toolkit.dist.stat_tut.variates"></a><a class="link" href="variates.html" title="Random Variates and Distribution Parameters">Random Variates
         and Distribution Parameters</a>
 </h4></div></div></div>
 <p>
           <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">Random variates</a>
           and <a href="http://en.wikipedia.org/wiki/Parameter" target="_top">distribution parameters</a>
           are conventionally distinguished (for example in Wikipedia and Wolfram
-          MathWorld by placing a semi-colon after the random variate (whose value
-          you 'choose'), to separate the variate from the parameter(s) that defines
-          the shape of the distribution.
+          MathWorld by placing a semi-colon after the <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">random
+          variate</a> (whose value you 'choose'), to separate the variate from
+          the parameter(s) that defines the shape of the distribution.
         </p>
 <p>
           For example, the binomial distribution has two parameters: n (the number
           of trials) and p (the probability of success on one trial). It also has
-          the random variate <span class="emphasis"><em>k</em></span>: the number of successes observed.
-          This means the probability density/mass function (pdf) is written as <span class="emphasis"><em>f(k;
-          n, p)</em></span>.
+          the <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">random variate</a>
+          <span class="emphasis"><em>k</em></span>: the number of successes observed. This means the
+          probability density/mass function (pdf) is written as <span class="emphasis"><em>f(k; n,
+          p)</em></span>.
         </p>
 <p>
           Translating this into code the <code class="computeroutput"><span class="identifier">binomial_distribution</span></code>
@@ -51,8 +52,9 @@
 <p>
           While the function <code class="computeroutput"><span class="identifier">pdf</span></code>
           has one argument specifying the distribution type (which includes it's
-          parameters, if any), and a second argument for the random variate. So taking
-          our binomial distribution example, we would write:
+          parameters, if any), and a second argument for the <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">random
+          variate</a>. So taking our binomial distribution example, we would
+          write:
         </p>
 <pre class="programlisting"><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">n</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">);</span>
 </pre>

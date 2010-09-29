@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>If and How to Build the Library and its Examples and Tests</title>
+<title>If and How to Build a Boost.Math Library, and its Examples and Tests</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Math Toolkit">
@@ -24,20 +24,27 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.main_overview.building"></a><a class="link" href="building.html" title="If and How to Build the Library and its Examples and Tests"> If and How to Build
-      the Library and its Examples and Tests</a>
+<a name="math_toolkit.main_overview.building"></a><a class="link" href="building.html" title="If and How to Build a Boost.Math Library, and its Examples and Tests">If and How to Build
+      a Boost.Math Library, and its Examples and Tests</a>
 </h3></div></div></div>
-<a name="math_toolkit.main_overview.building.building_the_library"></a><h5>
-<a name="id1024316"></a>
-        <a class="link" href="building.html#math_toolkit.main_overview.building.building_the_library">Building
-        the Library</a>
+<a name="math_toolkit.main_overview.building.building_a_library__shared__dynamic__dll_or_static__lib_"></a><h5>
+<a name="id893176"></a>
+        <a class="link" href="building.html#math_toolkit.main_overview.building.building_a_library__shared__dynamic__dll_or_static__lib_">Building
+        a Library (shared, dynamic .dll or static .lib)</a>
       </h5>
 <p>
         The first thing you need to ask yourself is "Do I need to build anything
         at all?" as the bulk of this library is header only: meaning you can
-        use it just by #including the necessary header(s). Refer to <a class="link" href="../extern_c.html" title='TR1 and C99 external "C" Functions'>C99
-        and C++ TR1 C-style Functions</a> for pros and cons of using the TR1 components
-        as opposed to the header only ones.
+        use it just by #including the necessary header(s).
+      </p>
+<p>
+        For most simple uses, including a header (or few) is best for compile time
+        and program size.
+      </p>
+<p>
+        Refer to <a class="link" href="../extern_c.html" title='TR1 and C99 external "C" Functions'>C99 and C++ TR1 C-style Functions</a>
+        for pros and cons of using the TR1 components as opposed to the header only
+        ones.
       </p>
 <p>
         The <span class="emphasis"><em>only</em></span> time you <span class="emphasis"><em>need</em></span> to build
@@ -49,7 +56,7 @@
 <pre class="programlisting"><span class="identifier">bjam</span> <span class="identifier">toolset</span><span class="special">=</span><span class="identifier">gcc</span> <span class="special">--</span><span class="identifier">with</span><span class="special">-</span><span class="identifier">math</span> <span class="identifier">install</span>
 </pre>
 <p>
-        will do the job on Linux, while:
+        that will do the job on Linux, while:
       </p>
 <pre class="programlisting"><span class="identifier">bjam</span> <span class="identifier">toolset</span><span class="special">=</span><span class="identifier">msvc</span> <span class="special">--</span><span class="identifier">with</span><span class="special">-</span><span class="identifier">math</span> <span class="special">--</span><span class="identifier">build</span><span class="special">-</span><span class="identifier">type</span><span class="special">=</span><span class="identifier">complete</span> <span class="identifier">stage</span>
 </pre>
@@ -93,7 +100,7 @@
         building the sources. Boost.Build will do this automatically when appropriate.
       </p>
 <a name="math_toolkit.main_overview.building.building_the_examples"></a><h5>
-<a name="id1024761"></a>
+<a name="id893626"></a>
         <a class="link" href="building.html#math_toolkit.main_overview.building.building_the_examples">Building
         the Examples</a>
       </h5>
@@ -104,7 +111,7 @@
         the Boost headers are in your compilers #include search path.
       </p>
 <a name="math_toolkit.main_overview.building.building_the_tests"></a><h5>
-<a name="id1024802"></a>
+<a name="id893666"></a>
         <a class="link" href="building.html#math_toolkit.main_overview.building.building_the_tests">Building
         the Tests</a>
       </h5>

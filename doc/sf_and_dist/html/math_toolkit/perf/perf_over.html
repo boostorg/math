@@ -24,56 +24,44 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.perf.perf_over"></a><a class="link" href="perf_over.html" title="Performance Overview"> Performance Overview</a>
+<a name="math_toolkit.perf.perf_over"></a><a class="link" href="perf_over.html" title="Performance Overview">Performance Overview</a>
 </h3></div></div></div>
 <p>
-        </p>
+        By and large the performance of this library should be acceptable for most
+        needs. However, you should note that this library's primary emphasis is on
+        accuracy and numerical stability, and <span class="emphasis"><em>not</em></span> speed.
+      </p>
 <p>
-          By and large the performance of this library should be acceptable for most
-          needs. However, you should note that the library's primary emphasis is
-          on accuracy and numerical stability, and <span class="emphasis"><em>not</em></span> speed.
-        </p>
+        In terms of the algorithms used, this library aims to use the same "best
+        of breed" algorithms as many other libraries: the principle difference
+        is that this library is implemented in C++ - taking advantage of all the
+        abstraction mechanisms that C++ offers - where as most traditional numeric
+        libraries are implemented in C or FORTRAN. Traditionally languages such as
+        C or FORTRAN are perceived as easier to optimise than more complex languages
+        like C++, so in a sense this library provides a good test of current compiler
+        technology, and the "abstraction penalty" - if any - of C++ compared
+        to other languages.
+      </p>
 <p>
-        </p>
-<p>
-          In terms of the algorithms used, this library aims to use the same "best
-          of breed" algorithms as many other libraries: the principle difference
-          is that this library is implemented in C++ - taking advantage of all the
-          abstraction mechanisms that C++ offers - where as most traditional numeric
-          libraries are implemented in C or FORTRAN. Traditionally languages such
-          as C or FORTRAN are perceived as easier to optimise than more complex languages
-          like C++, so in a sense this library provides a good test of current compiler
-          technology, and the "abstraction penalty" - if any - of C++ compared
-          to other languages.
-        </p>
-<p>
-        </p>
-<p>
-          The two most important things you can do to ensure the best performance
-          from this library are:
-        </p>
-<p>
-        </p>
+        The two most important things you can do to ensure the best performance from
+        this library are:
+      </p>
 <div class="orderedlist"><ol type="1">
 <li>
-              Turn on your compilers optimisations: the difference between "release"
-              and "debug" builds can easily be a <a class="link" href="getting_best.html" title="Getting the Best Performance from this Library">factor
-              of 20</a>.
-            </li>
+            Turn on your compilers optimisations: the difference between "release"
+            and "debug" builds can easily be a <a class="link" href="getting_best.html" title="Getting the Best Performance from this Library">factor
+            of 20</a>.
+          </li>
 <li>
-              Pick your compiler carefully: <a class="link" href="comp_compilers.html" title="Comparing Compilers">performance
-              differences of up to 8 fold</a> have been found between some windows
-              compilers for example.
-            </li>
+            Pick your compiler carefully: <a class="link" href="comp_compilers.html" title="Comparing Compilers">performance
+            differences of up to 8 fold</a> have been found between some Windows
+            compilers for example.
+          </li>
 </ol></div>
 <p>
-        </p>
-<p>
-          The <a class="link" href="../perf.html" title="Performance">performance section</a> contains
-          more information on the performance of this library, what you can do to
-          fine tune it, and how this library compares to some other open source alternatives.
-        </p>
-<p>
+        The <a class="link" href="../perf.html" title="Performance">performance section</a> contains
+        more information on the performance of this library, what you can do to fine
+        tune it, and how this library compares to some other open source alternatives.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

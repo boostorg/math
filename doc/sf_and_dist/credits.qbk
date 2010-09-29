@@ -30,6 +30,9 @@ Gautam Sewani coded the logistic distribution as part of a Google Summer of Code
 M. A. (Thijs) van den Berg coded the Laplace distribution.
 (Thijs has also threatened to implement some multivariate distributions).
 
+Thomas Mang requested the inverse gamma in chi squared distributions
+for Bayesian applications and helped in their implementation.
+
 Professor Nico Temme for advice on the inverse incomplete beta function.
 
 [@http://www.shoup.net Victor Shoup for NTL],
@@ -41,6 +44,10 @@ We are grateful to Joel Guzman for helping us stress-test his
 [@http://www.boost.org/tools/quickbook/index.htm Boost.Quickbook]
 program used to generate the html and pdf versions
 of this document, adding several new features en route.
+
+Thanks to Mark Coleman and Georgi Boshnakov for spot test values
+from __Mathematica, and of course,
+to Eric Weissten for nurturing __Mathworld, an invaluable resource. 
 
 Plots of the functions and distributions were prepared in
 [@http://www.w3.org/ W3C] standard
@@ -62,7 +69,7 @@ Arnaldur Gylfason, John Phillips, Stephan Tolksdorf and Jeff Garland
 [endsect] [/section:credits Credits and Acknowledgements]
 
 [/
-  Copyright 2006, 2007, 2008, 2009 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2007, 2008, 2009, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

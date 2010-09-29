@@ -54,7 +54,7 @@ appropriate result]]
 ]
 
 The following tables show all the permutations of errors and actions, 
-with the default action for each error shown in bold:
+with the *default action for each error shown in bold*:
 
 [table Possible Actions for Domain Errors
 [[Action]         [Behaviour]]
@@ -136,14 +136,19 @@ with the default action for each error shown in bold:
             this function must be defined by the user].]]
 ]
 
+All these error conditions are in namespace boost::math::policies,
+made available, for example, a by namespace declaration
+using `namespace boost::math::policies;` or individual using declarations
+`using boost::math::policies::overflow_error;`.
+
 [heading Rationale]
 
-The flexibility of the current implementation should be reasonably obvious, the
+The flexibility of the current implementation should be reasonably obvious: the
 default behaviours were chosen based on feedback during the formal review of 
 this library.  It was felt that: 
 
 * Genuine errors should be flagged with exceptions
-rather than following C-compatible behaviour and setting ::errno.
+rather than following C-compatible behaviour and setting `::errno`.
 * Numeric underflow and denormalised results were not considered to be
 fatal errors in most cases, so it was felt that these should be ignored.
 
@@ -180,7 +185,7 @@ in use for the function that was called.
 
 The default policy behaviour of this function is to throw a 
 std::domain_error C++ exception.  But if the __Policy is to ignore
-the error, or set global ::errno, then a NaN will be returned.
+the error, or set global `::errno`, then a NaN will be returned.
 
 This behaviour is chosen to assist compatibility with the behaviour of 
 ['ISO/IEC 9899:1999 Programming languages - C]
@@ -328,8 +333,8 @@ Where
 `T` is the floating-point type passed to the function, `FunctionName` is the 
 name of the function, `Message` is an error message describing the problem,
 Val is the value for which the result is indeterminate, Default is an
-alternative default result that must be returned for ignore_error and
-errno_on_error policies, and __Policy is the current policy in use for the
+alternative default result that must be returned for `ignore_error` and
+`errno_on_erro` policies, and __Policy is the current policy in use for the
 function that was called.
 
 The default policy for this function is `ignore_error`: note that this error
@@ -351,8 +356,7 @@ Where
 `T` is the floating point type passed to the function, `FunctionName` is the 
 name of the function, `Message` is an error message describing the problem,
 `Val` is the erroneous argument,
-and __Policy is the current policy
-in use for the called function.
+and __Policy is the current policy in use for the called function.
 
 The default behaviour of this function is to throw a `boost::math::rounding_error`.
 
@@ -384,7 +388,7 @@ listed above on [link overflow_error overflow],
 [endsect][/section:error_handling Error Handling]
 
 [/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006 - 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

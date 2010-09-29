@@ -3,7 +3,8 @@
 [h4 Boost-1.45.0]
 
 * Added warnings about potential ambiguity with std random library in distribution and function names.
-* Added inverse gamma distribution at request of Thomas Mang.
+* Added inverse gamma distribution and inverse chi_square and scaled inverse chi_square.
+* Editorial revision of documentation, and added FAQ.
 
 [h4 Boost-1.44.0]
 
@@ -109,11 +110,11 @@ on error rates.
 
 SVN Revisions:
 
-Sandbox and trunk last synchonised at revision: 56669.
+Sandbox and trunk last synchonised at revision: .
 
 ]
 [/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006 - 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
