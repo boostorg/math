@@ -1,5 +1,5 @@
 // Copyright John Maddock 2006, 2007.
-// Copyright Paul A. Bristow 2008.
+// Copyright Paul A. Bristow 2008, 2010.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -267,7 +267,9 @@ template <class RealType, class Policy>
 struct df_estimator
 {
    df_estimator(RealType a, RealType b, RealType variance, RealType delta)
-      : alpha(a), beta(b), ratio(delta/variance) {}
+      : alpha(a), beta(b), ratio(delta/variance)
+   { // Constructor
+   }
 
    RealType operator()(const RealType& df)
    {
@@ -282,14 +284,16 @@ struct df_estimator
          result = cdf(cs, quantile(complement(cs, alpha)) / r) - beta;
       }
       else
-      {
+      { // ratio <= 0
          RealType r = 1 + ratio;
          result = cdf(complement(cs, quantile(cs, alpha) / r)) - beta;
       }
       return result;
    }
 private:
-   RealType alpha, beta, ratio;
+   RealType alpha;
+   RealType beta;
+   RealType ratio; // Difference from variance / variance, so fractional.
 };
 
 } // namespace detail
@@ -305,18 +309,23 @@ RealType chi_squared_distribution<RealType, Policy>::find_degrees_of_freedom(
    static const char* function = "boost::math::chi_squared_distribution<%1%>::find_degrees_of_freedom(%1%,%1%,%1%,%1%,%1%)";
    // Check for domain errors:
    RealType error_result;
-   if(false == detail::check_probability(
-         function, alpha, &error_result, Policy())
-         && detail::check_probability(function, beta, &error_result, Policy()))
+   if(false ==
+     detail::check_probability(function, alpha, &error_result, Policy())
+     && detail::check_probability(function, beta, &error_result, Policy()))
+   { // Either probability is outside 0 to 1.
       return error_result;
+   }
 
    if(hint <= 0)
+   { // No hint given, so guess df = 1.
       hint = 1;
+   }
 
    detail::df_estimator<RealType, Policy> f(alpha, beta, variance, difference_from_variance);
    tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
    boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
-   std::pair<RealType, RealType> r = tools::bracket_and_solve_root(f, hint, RealType(2), false, tol, max_iter, Policy());
+   std::pair<RealType, RealType> r =
+     tools::bracket_and_solve_root(f, hint, RealType(2), false, tol, max_iter, Policy());
    RealType result = r.first + (r.second - r.first) / 2;
    if(max_iter >= policies::get_max_root_iterations<Policy>())
    {
