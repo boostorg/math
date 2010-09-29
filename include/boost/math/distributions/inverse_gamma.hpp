@@ -73,14 +73,13 @@ inline bool check_inverse_gamma_x(
 
 template <class RealType, class Policy>
 inline bool check_inverse_gamma(
-      const char* function,
+      const char* function, // TODO swap these over, so shape is first.
       RealType scale,  // scale aka beta
       RealType shape, // shape aka alpha
       RealType* result, const Policy& pol)
 {
    return check_scale(function, scale, result, pol)
-     && check_inverse_gamma_shape(function, shape,
-     result, pol);
+     && check_inverse_gamma_shape(function, shape, result, pol);
 } // bool check_inverse_gamma
 
 } // namespace detail
@@ -210,7 +209,7 @@ inline RealType cdf(const inverse_gamma_distribution<RealType, Policy>& dist, co
       return result;
    }
    result = boost::math::gamma_q(shape, scale / x, Policy());
-   // result = tgamma(shape, scale / x) / tgamma(shape);
+   // result = tgamma(shape, scale / x) / tgamma(shape); // naive using tgamma
    return result;
 } // cdf
 
@@ -218,6 +217,7 @@ template <class RealType, class Policy>
 inline RealType quantile(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
+   using boost::math::gamma_q_inv;
 
    static const char* function = "boost::math::quantile(const inverse_gamma_distribution<%1%>&, %1%)";
 
@@ -414,7 +414,7 @@ inline RealType kurtosis_excess(const inverse_gamma_distribution<RealType, Polic
    {
      result = policies::raise_domain_error<RealType>(
        function,
-       "Shape parameter is %1%, but for a defined kurtosis it must be > 4", shape, Policy());
+       "Shape parameter is %1%, but for a defined kurtosis excess it must be > 4", shape, Policy());
      return result;
    }
    result = (30 * shape - 66) / ((shape - 3) * (shape - 4));
@@ -438,7 +438,7 @@ inline RealType kurtosis(const inverse_gamma_distribution<RealType, Policy>& dis
    {
      result = policies::raise_domain_error<RealType>(
        function,
-       "Shape parameter is %1%, but for a defined kurtosis excess it must be > 4", shape, Policy());
+       "Shape parameter is %1%, but for a defined kurtosis it must be > 4", shape, Policy());
      return result;
    }
   return kurtosis_excess(dist) + 3;
