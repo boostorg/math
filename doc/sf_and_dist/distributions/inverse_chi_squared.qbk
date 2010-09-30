@@ -57,7 +57,7 @@ See [@http://en.wikipedia.org/wiki/Conjugate_prior conjugate priors including a 
 
 See also __inverse_gamma_distrib and __chi_squared_distrib.
 
-The inverse_chi_squared distribution is a psecial case of a inverse_gamma distribution
+The inverse_chi_squared distribution is a special case of a inverse_gamma distribution
 with [nu] (degrees_of_freedom) shape ([alpha]) and scale ([beta]) where
 
 __spaces [alpha]= [nu] /2 and [beta] = [frac12].
@@ -72,14 +72,23 @@ If you want a `double` precision inverse_chi_squared distribution you can use
 
 or you can write `inverse_chi_squared my_invchisqr(2, 3);`]
 
-For degrees of freedom parameter [nu] and scale parameter [xi],
-it is defined by the probability density function (PDF):
+For degrees of freedom parameter [nu],
+the (*unscaled*) inverse chi_squared distribution is defined by the probability density function (PDF):
 
-__spaces f(x;[nu], [xi]) = 2 [super -[nu]/2] e[super(-1/2x)] x [super(-1-[nu]/2)] / [Gamma]([nu]/2)
+__spaces f(x;[nu]) = 2[super -[nu]/2] x[super -[nu]/2-1] e[super -1/2x] / [Gamma]([nu]/2)
 
 and Cumulative Density Function (CDF)
 
-__spaces  F(x;[nu], [xi]) = [Gamma]( [nu] /2, [nu][xi]/2x) / [Gamma]([nu] /2)
+__spaces  F(x;[nu]) = [Gamma]([nu]/2, 1/2x) / [Gamma]([nu]/2)
+
+For degrees of freedom parameter [nu] and scale parameter [xi],
+the *scaled* inverse chi_squared distribution is defined by the probability density function (PDF):
+
+__spaces f(x;[nu], [xi]) = ([xi][nu]/2)[super [nu]/2] e[super -[nu][xi]/2x] x[super -1-[nu]/2] / [Gamma]([nu]/2)
+
+and Cumulative Density Function (CDF)
+
+__spaces  F(x;[nu], [xi]) = [Gamma]([nu]/2, [nu][xi]/2x) / [Gamma]([nu]/2)
 
 The following graphs illustrate how the PDF and CDF of the inverse chi_squared distribution
 varies for a few values of parameters [nu] and [xi]:
