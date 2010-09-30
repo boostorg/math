@@ -369,7 +369,7 @@ int test_main(int, char* [])
   BOOST_CHECK_EQUAL(ichsq32.scale(), 2); // scale  == 2
   
   inverse_chi_squared ichsq11(1, 1); // Using explicit degrees_of_freedom parameter, and default scale = 1).
-  BOOST_CHECK_EQUAL(mode(ichsq11), 0.33333333333333333333333333333333333333333L);
+  BOOST_CHECK_CLOSE_FRACTION(mode(ichsq11), 0.33333333333333333333333333333333333333333L, tol4eps);
   // (1 * 1)/ (1 + 2) = 1/3 using Wikipedia nu * xi /(nu + 2)
   BOOST_CHECK_EQUAL(ichsq11.degrees_of_freedom(), 1.); // df == 1 (default).
   BOOST_CHECK_EQUAL(ichsq11.scale(), 1.); // scale == 1.

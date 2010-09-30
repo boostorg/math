@@ -671,6 +671,8 @@ run  compile_test/dist_find_location_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/dist_find_scale_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/dist_fisher_f_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/dist_gamma_incl_test.cpp compile_test/main.cpp ;
+run  compile_test/dist_inv_gamma_incl_test.cpp compile_test/main.cpp ;
+run  compile_test/dist_inv_chi_sq_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/dist_hypergeo_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/dist_laplace_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/dist_logistic_incl_test.cpp compile_test/main.cpp ;

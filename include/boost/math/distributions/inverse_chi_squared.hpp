@@ -142,7 +142,9 @@ RealType pdf(const inverse_chi_squared_distribution<RealType, Policy>& dist, con
    // RealType shape = df /2; // inv_gamma shape
    // RealType scale = df * scale/2; // inv_gamma scale
    // RealType result = gamma_p_derivative(shape, scale / x, Policy()) * scale / (x * x);
-   RealType result = gamma_p_derivative(df/2, df * scale/2 / x, Policy()) * df * scale/2 / (x * x);
+   RealType result = gamma_p_derivative(df/2, df * scale/2 / x, Policy()) * df * scale/2;
+   if(result != 0) // prevent 0 / 0:
+      result /= (x * x);
    return result;
 } // pdf
 
@@ -200,7 +202,10 @@ inline RealType quantile(const inverse_chi_squared_distribution<RealType, Policy
    // RealType shape = df /2; // inv_gamma shape,
    // RealType scale = df * scale/2; // inv_gamma scale,
    // result = scale / gamma_q_inv(shape, p, Policy());
-      RealType result = df * scale/2 / gamma_q_inv(df /2, p, Policy());
+      RealType result = gamma_q_inv(df /2, p, Policy());
+      if(result == 0)
+         return policies::raise_overflow_error<RealType, Policy>(function, "Random variable is infinite.", Policy());
+      result = df * (scale / 2) / result;
       return result;
 } // quantile
 
@@ -257,7 +262,11 @@ inline RealType quantile(const complemented2_type<inverse_chi_squared_distributi
    // RealType shape = df /2; // inv_gamma shape,
    // RealType scale = df * scale/2; // inv_gamma scale,
    // result = scale / gamma_p_inv(shape, q, Policy());  // using inv_gamma.
-   return (df * scale / 2) / gamma_p_inv(df/2, q, Policy());
+   RealType result = gamma_p_inv(df/2, q, Policy());
+   if(result == 0)
+      return policies::raise_overflow_error<RealType, Policy>(function, "Random variable is infinite.", Policy());
+   result = (df * scale / 2) / result;
+   return result;
 } // quantile(const complement
 
 template <class RealType, class Policy>
