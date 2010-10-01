@@ -142,7 +142,10 @@ RealType pdf(const inverse_chi_squared_distribution<RealType, Policy>& dist, con
    // RealType shape = df /2; // inv_gamma shape
    // RealType scale = df * scale/2; // inv_gamma scale
    // RealType result = gamma_p_derivative(shape, scale / x, Policy()) * scale / (x * x);
-   RealType result = gamma_p_derivative(df/2, df * scale/2 / x, Policy()) * df * scale/2;
+   RealType result = df * scale/2 / x;
+   if(result < tools::min_value<RealType>())
+      return 0; // Random variable is near enough infinite.
+   result = gamma_p_derivative(df/2, result, Policy()) * df * scale/2;
    if(result != 0) // prevent 0 / 0:
       result /= (x * x);
    return result;

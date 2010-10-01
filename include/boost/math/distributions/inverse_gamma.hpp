@@ -163,7 +163,10 @@ inline RealType pdf(const inverse_gamma_distribution<RealType, Policy>& dist, co
    { // x bad.
       return result;
    }
-   result = gamma_p_derivative(shape, scale / x, Policy()) * scale;
+   result = scale / x;
+   if(result < tools::min_value<RealType>())
+      return 0;  // random variable is infinite or so close as to make no difference.
+   result = gamma_p_derivative(shape, result, Policy()) * scale;
    if(0 != result)
    {
       if(x < 0)
