@@ -184,7 +184,6 @@ void test_spots(RealType)
   inverse_chi_squared_distribution<RealType> dist111(11, 1);
   // 11 mean 0.10000000000000001, variance  0.0011111111111111111, sd 0.033333333333333333
 
-  RealType x = static_cast<RealType>(0.125);
   using namespace std; // ADL of std names.
   using namespace boost::math;
   
